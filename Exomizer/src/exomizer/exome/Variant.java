@@ -1,13 +1,15 @@
 package exomizer.exome;
 
+import java.util.ArrayList;
 
 import exomizer.common.Constants;
+import exomizer.filter.ITriage;
 
-/* A class that will be use to
-   hold information about the individual variants as parsed from 
-   the VCF file.
-   
-*/
+/* A class that is used to hold information about the individual variants 
+ *  as parsed from the VCF file.
+ * @author peter.robinson@charite.de
+ * @date 22.08.2012
+ */
 public class Variant implements Comparable<Variant>, Constants {
     
     
@@ -20,33 +22,31 @@ public class Variant implements Comparable<Variant>, Constants {
     /** Variant sequence (called "ALT", alternate, in VCF files). */
     private String var;
     /**  genotype (See exomizer.common.Constants for the integer constants used to represent the genotypes). */
-    private byte genotype;
+    private byte genotype=GENOTYPE_NOT_INITIALIZED;
     /** Quality of variant call, taken from QUAL column of VCF file. */
-    private float quality;
+    private float genotype_quality;
     /** Variant type (assigned by annovar, See exomizer.common.Constants) */
     private byte variantType=VARIANT_TYPE_UNKNOWN;
     /** Number of reads associated with variant call (since we are using a short, this is max 32,767) */
     private short nReads=0;
+    /** HGVS gene symbol */
+    private String genename=null;
+    /** Refseq id, if available */
+    private String refseq_mrna=null;
     /** A representative String for the nucleotide mutation */
     private String nucleotideMutation=null;
     /** A representative String for the amino acid mutation if applicable */
     private String aaMutation=null;
     /** A list of results of filtering applied to this variant. */
-    private ArrayList<IVariantTriage> triage=null;
+    private ArrayList<ITriage> triage=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
 
    
 
-    private int vtype=UNKNOWN;
-    private String genename=null;
-    private String refseq_mrna=null;
-    private String exon=null;
-    private String cds_mutation=null;
-    private String aa_mutation=null;
-    /** one of GENOTYPE_HOMOZYGOUS_REF,GENOTYPE_HOMOZYGOUS_VAR, GENOTYPE_HETEROZYGOUS or GENOTYPE_UNKNOWN */
-    private int genotype= GENOTYPE_NOT_INITIALIZED;
-    private int genotype_quality = GENOTYPE_UNKNOWN;
+ 
+   
+  
    
 
 
@@ -70,7 +70,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param r Reference nucleotide
      * @param var variant (alt) nucleotide
     */
-    public SNV(String c, int p, String r, String var) {
+    public Variant(String c, int p, String r, String var) {
 	this.chrom = make_chrom_int(c);
 	this.pos=p;
 	this.ref = r;
@@ -83,15 +83,19 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param var variant (alt) nucleotide
      * @param annot arbitrary annotation data
     */
-    public SNV(String c, int p, String r, String var,String vcf_line) {
+    public Variant(String c, int p, String r, String var,String vcf_line) {
 	this(c,p,r,var);
 	this.vcf_line = vcf_line;
     }
 
-    public Integer getChromosomeAsInteger()
-    {
-	return new Integer(this.chrom);
-    }
+
+    public void set_homozygous_alt() { this.genotype = GENOTYPE_HOMOZYGOUS_ALT; }
+    public void set_heterozygous() { this.genotype = GENOTYPE_HETEROZYGOUS; }
+    public void set_homozygous_ref() { this.genotype = GENOTYPE_HOMOZYGOUS_REF; }
+    public void set_predicted_non_missense_path() { this.is_non_SNV_patho = true; }
+    public void set_variant_type(int t) { this.vtype=t; }
+    public void set_genotype_quality(int q) { this.genotype_quality = q; }
+
 
     public int get_position() { return pos; }
     public String get_ref_nucleotide() { return ref; }
@@ -108,13 +112,11 @@ public class Variant implements Comparable<Variant>, Constants {
 
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
 
-    public void set_homozygous_alt() { this.genotype = GENOTYPE_HOMOZYGOUS_ALT; }
-    public void set_heterozygous() { this.genotype = GENOTYPE_HETEROZYGOUS; }
-    public void set_homozygous_ref() { this.genotype = GENOTYPE_HOMOZYGOUS_REF; }
+   
+
+    public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
     
-    public void set_predicted_non_missense_path() { this.is_non_SNV_patho = true; }
-    public void set_variant_type(int t) { this.vtype=t; }
-    public void set_genotype_quality(int q) { this.genotype_quality = q; }
+   
     public boolean passes_genotype_quality_threshold(int threshold) { return this.genotype_quality >= threshold; }
     public int get_genotype_quality() { return this.genotype_quality; }
     public String get_genotype_as_string() {
@@ -247,11 +249,11 @@ public class Variant implements Comparable<Variant>, Constants {
      * Sort based on chromosome and position.
      */
     @Override
-    public int compareTo(SNV other) {
-	if (other.chrom>this.chrom) return -1;
-	else if (other.chrom<this.chrom) return 1;
-	else if (other.pos > this.pos) return -1;
-	else if (other.pos < this.pos) return 1;
+    public int compareTo(Variant other) {
+	if (other.chromosome > this.chromosome) return -1;
+	else if (other.chromosome < this.chromosome) return 1;
+	else if (other.position > this.position) return -1;
+	else if (other.position < this.position) return 1;
 	else return 0;
     }
 }

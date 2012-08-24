@@ -9,7 +9,7 @@ package exomizer.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  */
-public interface NSFP_Constants {
+public interface Constants {
     /* 1) Chromosomes */
     public static final byte X_CHROMOSOME = 23;
     public static final byte Y_CHROMOSOME = 24;
