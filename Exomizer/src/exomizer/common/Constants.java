@@ -33,7 +33,7 @@ public interface Constants {
     public static final byte INTRONIC = 8;
     public static final byte MISSENSE = 9;
     public static final byte ncRNA_EXONIC = 10;
-    public static final byte ncRNA_BYTERONIC = 11;
+    public static final byte ncRNA_INTRONIC = 11;
     public static final byte ncRNA_SPLICING = 12;
     public static final byte ncRNA_UTR3 = 13;
     public static final byte ncRNA_UTR5 = 14;

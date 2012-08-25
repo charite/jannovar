@@ -1,48 +1,64 @@
-package nsfp.snv;
+package exomizer.exome;
 
 import java.util.ArrayList;
 
-import nsfp.NSFP;
+
+import exomizer.exome.Variant;
+
 /**
  * This class is meant to allow filtering for autosomal recessive or dominant patterns in the data.
  */
 public class Gene {
+    /** A list of all of the variants that affect this gene. */
+    private ArrayList<Variant> variant_list=null;
 
-    private ArrayList<NSFP> nsfp_list=null;
-
-    public Gene(NSFP nsfp) {
-	nsfp_list = new ArrayList<NSFP>();
-	nsfp_list.add(nsfp);
+    /**
+     * Construct the gene by adding the first variant that affects the gene. If the current gene
+     * has additional variants, they will be added using the function add_variant.
+     * @param var A variant located in this gene.
+     */
+    public Gene(Variant var) {
+	variant_list = new ArrayList<Variant>();
+	variant_list.add(var);
     }
 
-    public void add_nsfp(NSFP nsfp) {
-	nsfp_list.add(nsfp);
+    /**
+     * This function adds additional variants to the current gene. The variants have been identified by parsing
+     * the VCF file.
+     * @param var A Variant affecting the current gene.
+     */
+    public void addVariant(Variant var) {
+	this.variant_list.add(var);
     }
 
-    public ArrayList<NSFP> get_NFSP_list() { return nsfp_list; }
+    /**
+     * @return A list of all variants in the VCF file that affect this gene.
+     */
+    public ArrayList<Variant> get_variant_list() { return variant_list; }
 
-    /** Return true if the variants for this gene are consistent with AR
-	inheritance. */
+    /** @return true if the variants for this gene are consistent with autosomal recessive
+	inheritance, otherwise false. */
     public boolean is_consistent_with_recessive() {
-	if (nsfp_list.size()>1) return true; /* compound heterozygous */
-	for (NSFP n : nsfp_list) {
-	    if (n.is_homozygous_alt()) return true; 
+	if (variant_list.size()>1) return true; /* compound heterozygous */
+	for (Variant v : variant_list) {
+	    if (v.is_homozygous_alt()) return true; 
 	}
 	return false;
     }
-
+    /** @return true if the variants for this gene are consistent with autosomal dominant
+	inheritance, otherwise false. */
     public boolean is_consistent_with_dominant() {
-	for (NSFP n : nsfp_list) {
-	    if (n.is_heterozygous()) return true; 
+	for (Variant v : variant_list) {
+	    if (v.is_heterozygous()) return true; 
 	}
 	return false;
     }
-
+    /** @return true if the variants for this gene are consistent with X chromosomal
+	inheritance, otherwise false. */
     public boolean is_consistent_with_X() {
-	if (nsfp_list.size()==0) return false;
-	NSFP nsfp = nsfp_list.get(0);
-	return nsfp.is_X_chromosomal();
-
+	if (variant_list.size()==0) return false;
+	Variant v = variant_list.get(0); 
+	return v.is_X_chromosomal();// is true if the gene is X chromosomal.
     }
 
     
