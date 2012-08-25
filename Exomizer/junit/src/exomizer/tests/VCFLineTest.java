@@ -7,6 +7,7 @@ package exomizer.tests;
 
 import exomizer.io.VCFLine;
 import exomizer.common.Constants;
+import exomizer.exception.VCFParseException;
 
 import junit.framework.Assert;
 
@@ -35,7 +36,7 @@ public class VCFLineTest implements Constants {
 
 
     @Test
-	public void testMissenseLineConstruction() 
+	public void testMissenseLineConstruction()  throws VCFParseException 
 	{
 	    VCFLine line = new VCFLine(line1);
 	    
@@ -47,7 +48,7 @@ public class VCFLineTest implements Constants {
 	}
 
     @Test
-	public void testMissenseVariantType()
+	public void testMissenseVariantType() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line1);
 	byte vtype = line.get_variant_type_as_byte();
@@ -55,7 +56,7 @@ public class VCFLineTest implements Constants {
     }
    
      @Test
-	public void testMissenseGenotype()
+	public void testMissenseGenotype() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -69,7 +70,7 @@ public class VCFLineTest implements Constants {
     }
 
      @Test
-	 public void testMissenseGetGenename()
+	 public void testMissenseGetGenename() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line1);
 	String name = line.get_genename();
@@ -77,7 +78,7 @@ public class VCFLineTest implements Constants {
     }
     
     @Test
-	 public void testMissenseGetNucleotideMutation()
+	 public void testMissenseGetNucleotideMutation() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -87,7 +88,7 @@ public class VCFLineTest implements Constants {
     }
 
      @Test
-	 public void testMissenseGetAAMutation()
+	 public void testMissenseGetAAMutation() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -97,7 +98,7 @@ public class VCFLineTest implements Constants {
     }
 
     @Test
-	public void testMissenseGetGenotypeQuality()
+	public void testMissenseGetGenotypeQuality() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line1);
 	float q = line.get_variant_quality();
@@ -108,7 +109,7 @@ public class VCFLineTest implements Constants {
 
 
     @Test
-	public void testNonsenseLineConstruction() 
+	public void testNonsenseLineConstruction()  throws VCFParseException 
 	{
 	    VCFLine line = new VCFLine(line2);
 	    
@@ -122,7 +123,7 @@ public class VCFLineTest implements Constants {
 
 
  @Test
-	public void testNonsenseVariantType()
+	public void testNonsenseVariantType() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line2);
 	byte vtype = line.get_variant_type_as_byte();
@@ -130,7 +131,7 @@ public class VCFLineTest implements Constants {
     }
    
      @Test
-	public void testNonsenseGenotype()
+	public void testNonsenseGenotype() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -144,7 +145,7 @@ public class VCFLineTest implements Constants {
     }
 
      @Test
-	 public void testNonsenseGetGenename()
+	 public void testNonsenseGetGenename() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line2);
 	String name = line.get_genename();
@@ -153,7 +154,7 @@ public class VCFLineTest implements Constants {
     
 
   @Test
-	 public void testNonsenseGetNucleotideMutation()
+	 public void testNonsenseGetNucleotideMutation() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -163,7 +164,7 @@ public class VCFLineTest implements Constants {
     }
 
      @Test
-	 public void testNonsenseGetAAMutation()
+	 public void testNonsenseGetAAMutation()  throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -173,7 +174,7 @@ public class VCFLineTest implements Constants {
     }
 
     @Test
-	public void testNonsenseGetGenotypeQuality()
+	public void testNonsenseGetGenotypeQuality() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line2);
 	float q = line.get_variant_quality();
@@ -182,14 +183,9 @@ public class VCFLineTest implements Constants {
     }
 
 
-   
-  
-
-
-
 
     @Test
-	public void testIntronicLineConstruction() 
+	public void testIntronicLineConstruction() throws VCFParseException 
 	{
 	    VCFLine line = new VCFLine(line3);
 	    
@@ -203,7 +199,7 @@ public class VCFLineTest implements Constants {
 
 
  @Test
-	public void testIntronicVariantType()
+	public void testIntronicVariantType() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line3);
 	byte vtype = line.get_variant_type_as_byte();
@@ -211,7 +207,7 @@ public class VCFLineTest implements Constants {
     }
    
      @Test
-	public void testIntronicGenotype()
+	public void testIntronicGenotype() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -225,7 +221,7 @@ public class VCFLineTest implements Constants {
     }
 
      @Test
-	 public void testIntronicGetGenename()
+	 public void testIntronicGetGenename() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line3);
 	String name = line.get_genename();
@@ -234,7 +230,7 @@ public class VCFLineTest implements Constants {
     
 
   @Test
-	 public void testIntronicGetNucleotideMutation()
+	 public void testIntronicGetNucleotideMutation() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -244,7 +240,7 @@ public class VCFLineTest implements Constants {
     }
 
      @Test
-	 public void testIntronicGetAAMutation()
+	 public void testIntronicGetAAMutation() throws VCFParseException 
     {
 	VCFLine.set_has_format(true); 
 	VCFLine.set_sample_begin_index(9);
@@ -254,12 +250,46 @@ public class VCFLineTest implements Constants {
     }
 
     @Test
-	public void testIntronicGetGenotypeQuality()
+	public void testIntronicGetGenotypeQuality() throws VCFParseException 
     {
 	VCFLine line = new VCFLine(line3);
 	float q = line.get_variant_quality();
 	Assert.assertEquals(163,q,EPSILON);
 
+    }
+
+    // The following tests that the expected Exceptions are thrown.
+
+     private String badline1="chr1	.	.	T	C	33.7	.	"+
+	"EFFECT=missense;HGVS=OR4F5:NM_001005484:exon1:c.479T>C:p.L160P,;DP=7;VDB=0.0399;"+
+	"AF1=0.7867;AC1=10;DP4=1,0,0,5;MQ=31;FQ=6.48;PV4=0.17,1e-05,0.013,1	GT:PL:GQ	"+
+	"1/1:0,0,0:3	1/1:20,3,0:5	0/1:0,3,41:5";
+
+    private String badline2 ="chr9	125391241	.	G	A	999	.	"+
+	"EFFECT=stopit;HGVS=OR1B1:NM_001004450:exon1:c.574C>T:p.R192X,;DP=64;VDB=0.0324;"+
+	"AF1=0.4991;G3=2.124e-08,1,1.458e-37;HWE=0.00397;AC1=6;DP4=34,13,11,5;MQ=57;FQ=999;PV4=0.76,1,1,1	"+
+	"GT:PL:GQ	0/1:17,0,193:20	0/1:82,0,114:85	0/1:49,0,204:52";
+
+      private String badline3 = "chr20	44352740	.	G	.	163	.	"+
+	"EFFECT=intronic;HGVS=SPINT4;DP=89;VDB=0.0115;AF1=0.5831;G3=2.72e-09,0.8334,0.1666;HWE=0.0467;"+
+	"AC1=7;DP4=0,22,0,58;MQ=60;FQ=166;PV4=1,2.5e-106,0.19,1	GT:PL:GQ	0/1:34,0,93:38	0/1:39,0,93:43	"+
+	"0/1:21,0,164:25";
+
+
+
+    @Test(expected =  VCFParseException.class)  
+	public void shouldChokeOnMalformedVCFLine1() throws VCFParseException {
+	VCFLine line = new VCFLine(badline1);
+    }
+
+     @Test(expected =  VCFParseException.class)  
+	public void shouldChokeOnMalformedVCFLine2() throws VCFParseException {
+	VCFLine line = new VCFLine(badline2);
+    }
+
+      @Test(expected =  VCFParseException.class)  
+	public void shouldChokeOnMalformedVCFLine3() throws VCFParseException {
+	VCFLine line = new VCFLine(badline3);
     }
 
 }
