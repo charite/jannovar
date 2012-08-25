@@ -24,7 +24,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /**  genotype (See exomizer.common.Constants for the integer constants used to represent the genotypes). */
     private byte genotype=GENOTYPE_NOT_INITIALIZED;
     /** Quality of variant call, taken from QUAL column of VCF file. */
-    private float genotype_quality;
+    private float variant_quality;
     /** Variant type (assigned by annovar)
      *
      *	@see  exomizer.common.Constants */
@@ -40,7 +40,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /** A representative String for the amino acid mutation if applicable */
     private String aaMutation=null;
     /** A list of results of filtering applied to this variant. */
-    private ArrayList<ITriage> triage=null;
+    private ArrayList<ITriage> triage_list=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
 
@@ -59,6 +59,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.position=p;
 	this.ref = r;
 	this.var = var;
+	this.triage_list = new ArrayList<ITriage> ();
     }
     /**
      * @param c The chromosome (note: X=23, Y=24)
@@ -85,9 +86,9 @@ public class Variant implements Comparable<Variant>, Constants {
     public void set_predicted_non_missense_path() { this.is_non_SNV_patho = true; }
     /** Set the type of the variant to one of the 25 types defined by the annovar annotations. */
     public void set_variant_type(byte t) { this.variantType=t; }
-    public void set_genotype_quality(int q) { this.genotype_quality = q; }
+    public void set_variant_quality(int q) { this.variant_quality = q; }
 
-
+    public void addFilterTriage(ITriage t){ this.triage_list.add(t); }
    
     // ###########   GETTERS ######################### //
     private boolean is_non_SNV_patho = false;
@@ -112,8 +113,8 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
     
    
-    public boolean passes_genotype_quality_threshold(int threshold) { return this.genotype_quality >= threshold; }
-    public float get_genotype_quality() { return this.genotype_quality; }
+    public boolean passes_variant_quality_threshold(int threshold) { return this.variant_quality >= threshold; }
+    public float get_variant_quality() { return this.variant_quality; }
     public String get_genotype_as_string() {
 	switch(this.genotype) {
 	case GENOTYPE_NOT_INITIALIZED: return "genotype not initialized";

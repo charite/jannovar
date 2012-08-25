@@ -57,8 +57,11 @@ public interface Constants {
     public static final int MUT_TASTER_WITH_PRED = 202;
     public static final int VARTYPE_IDX = 203;
     public static final int GENOTYPE_QUALITY = 204;
-
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
+
+
+    public static final int UNINITIALIZED_INT = -10;
+    public static final float UNINITIALIZED_FLOAT = -10;
 
 
 }
