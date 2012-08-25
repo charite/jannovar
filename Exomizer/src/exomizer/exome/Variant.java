@@ -102,6 +102,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_heterozygous() { return this.genotype == GENOTYPE_HETEROZYGOUS; }
     public boolean is_unknown_genotype() { return this.genotype ==GENOTYPE_UNKNOWN; }
     public boolean genotype_not_initialized() { return this.genotype == GENOTYPE_NOT_INITIALIZED; }
+    public boolean is_missense_variant() { return this.variantType == MISSENSE; }
    
     public char ref_as_char() { return ref.charAt(0); }
     public char var_as_char() { return var.charAt(0); }
