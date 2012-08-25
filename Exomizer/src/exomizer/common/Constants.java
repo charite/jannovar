@@ -49,7 +49,16 @@ public interface Constants {
     public static final byte UTR3 = 24;
     public static final byte UTR5 = 25;
 
-    
+     /** The following constants are flags that
+	cause a specially formated field to be displayed in the HTML table. */
+    public static final int GENOMIC_VAR = 101;
+    public static final int POLYPHEN_WITH_PRED = 200;
+    public static final int SIFT_WITH_PRED = 201;
+    public static final int MUT_TASTER_WITH_PRED = 202;
+    public static final int VARTYPE_IDX = 203;
+    public static final int GENOTYPE_QUALITY = 204;
+
+    public static final int THOUSAND_GENOMES_AF_AC = 1000;
 
 
 }
