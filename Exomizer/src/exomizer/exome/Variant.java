@@ -108,6 +108,8 @@ public class Variant implements Comparable<Variant>, Constants {
     public char var_as_char() { return var.charAt(0); }
 
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
+    /** Return the list of "ITriage objects that represent the result of filtering */
+    public ArrayList<ITriage> get_triage_list() { return this.triage_list; }
 
    
 
@@ -118,11 +120,11 @@ public class Variant implements Comparable<Variant>, Constants {
     public float get_variant_quality() { return this.variant_quality; }
     public String get_genotype_as_string() {
 	switch(this.genotype) {
-	case GENOTYPE_NOT_INITIALIZED: return "genotype not initialized";
-	case GENOTYPE_HOMOZYGOUS_REF: return "homozygous ref";
-	case GENOTYPE_HOMOZYGOUS_ALT: return "homozygous alt";
-	case GENOTYPE_HETEROZYGOUS: return "heterozygous";
-	case GENOTYPE_UNKNOWN: return  "genotype unknown";
+	case GENOTYPE_NOT_INITIALIZED: return "not initialized";
+	case GENOTYPE_HOMOZYGOUS_REF: return "hom. ref";
+	case GENOTYPE_HOMOZYGOUS_ALT: return "hom. alt";
+	case GENOTYPE_HETEROZYGOUS: return "het.";
+	case GENOTYPE_UNKNOWN: return  "unknown";
 	}
 	return "?";
     }
@@ -133,7 +135,13 @@ public class Variant implements Comparable<Variant>, Constants {
      */
     public int get_chromosome() { return chromosome; }
 
-  
+    public String get_chromosomal_mutation() {
+	StringBuilder sb = new StringBuilder();
+	sb.append( get_chrom_string() );
+	sb.append(":g.");
+	sb.append(this.position + ref + ">" + var);
+	return sb.toString();
+    }
 
     /**
      * @return an String representation of the chromosome (e.g., chr3, chrX).

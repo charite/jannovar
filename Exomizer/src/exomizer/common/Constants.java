@@ -63,6 +63,8 @@ public interface Constants {
     public static final int PATHOGENICITY_FILTER = 206;
     /** Flag to output results of filtering against frequency with Thousand Genomes and ESP data. */
     public static final int FREQUENCY_FILTER = 207;
+    /** Flag to represent results of filtering against an inheritance pattern. */
+    public static final int INHERITANCE_PATTERN_FILTER = 208;
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
 
 
