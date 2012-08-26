@@ -67,9 +67,14 @@ public interface Constants {
     public static final int INHERITANCE_PATTERN_FILTER = 208;
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
 
-
+    /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;
+    /** Flag for an float value that has not been initialized. */
     public static final float UNINITIALIZED_FLOAT = -10;
+    /** Flag for an integer field that could not be parsed correctly */
+    public static final int NOPARSE = -5; 
+    /** Flag for a float field that could not be parsed correctly */
+    public static final float NOPARSE_FLOAT = -5f;
 
 
 }
