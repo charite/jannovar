@@ -49,7 +49,7 @@ public interface Constants {
     public static final byte UTR3 = 24;
     public static final byte UTR5 = 25;
 
-     /** The following constants are flags that
+     /* The following constants are flags that
 	cause a specially formated field to be displayed in the HTML table. */
     public static final int GENOMIC_VAR = 101;
     public static final int POLYPHEN_WITH_PRED = 200;
@@ -57,6 +57,12 @@ public interface Constants {
     public static final int MUT_TASTER_WITH_PRED = 202;
     public static final int VARTYPE_IDX = 203;
     public static final int GENOTYPE_QUALITY = 204;
+    /**  Flag for output field representing the QUAL column of the VCF file. */
+    public static final int VARIANT_QUALITY = 205;
+    /** Flag to output results of filtering against polyphen, SIFT, and mutation taster. */
+    public static final int PATHOGENICITY_FILTER = 206;
+    /** Flag to output results of filtering against frequency with Thousand Genomes and ESP data. */
+    public static final int FREQUENCY_FILTER = 207;
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
 
 
