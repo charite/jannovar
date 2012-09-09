@@ -13,6 +13,8 @@
     <path id="classpath">
       <pathelement location="./" />
       <pathelement location="../Exomizer.jar" />
+      <pathelement location="../NSFP2SQL.jar" />
+      <pathelement location="../ESP2SQL.jar" />
       <pathelement location="../lib/junit-4.10.jar" />
     </path>
   </target>
@@ -38,6 +40,21 @@
       </batchtest>
     </junit>
   </target>
+
+<!-- use this target to run just one test class, named below -->
+  <target name="sql"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes" 
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+      <test name="exomizer.tests.NSFP2SQLDumpParserTest"/>
+    </junit>
+  </target>
+
+
 
 
 <target name="clean" 
