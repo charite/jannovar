@@ -9,8 +9,8 @@ package exomizer.exception;
  * note. In any case, we want to terminate gracefully so that it is possible
  * to print an HTML error message for users if say there are major problems with
  * the input format.
- * @author Peter Robinson <peter.robinson@charite.de>
- * @date August 22,2012
+ * @author Peter Robinson
+ * @version 0.01 (August 22,2012)
  */
 public class ExomizerException extends Exception {
 

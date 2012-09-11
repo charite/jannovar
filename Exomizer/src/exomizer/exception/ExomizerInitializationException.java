@@ -3,8 +3,8 @@ package exomizer.exception;
 
 /**
  * Exception that occurs during parsing of VCF files.
- * @author Peter Robinson <peter.robinson@charite.de>
- * @date August 22,2012
+ * @author Peter Robinson
+ * @version 0.01 (August 22,2012)
  */
 public class ExomizerInitializationException extends ExomizerException {
 
