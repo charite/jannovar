@@ -49,6 +49,16 @@ public interface Constants {
     public static final byte UTR3 = 24;
     public static final byte UTR5 = 25;
 
+    /* 4) Index of fields of the DP4 (depth) from the VCF file:
+       ref-forward bases, ref-reverse, alt-forward and alt-reverse bases
+    */
+    public static final int N_REF_FORWARD_BASES=0;
+    public static final int N_REF_REVERSE_BASES=1;
+    public static final int N_ALT_FORWARD_BASES=2;
+    public static final int N_ALT_REVERSE_BASES=3;
+      
+
+
      /* The following constants are flags that
 	cause a specially formated field to be displayed in the HTML table. */
     public static final int GENOMIC_VAR = 101;

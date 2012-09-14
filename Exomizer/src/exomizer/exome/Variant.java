@@ -23,8 +23,10 @@ public class Variant implements Comparable<Variant>, Constants {
     private String var;
     /**  genotype (See exomizer.common.Constants for the integer constants used to represent the genotypes). */
     private byte genotype=GENOTYPE_NOT_INITIALIZED;
-    /** Quality of variant call, taken from QUAL column of VCF file. */
+    /** Quality of variant call, taken from QUAL column of VCF file, with QUAL=-10log<SUB>10</SUB> prob(call in ALT is wrong). */
     private float variant_quality;
+    /** DP4: Number=4,Type=Integer,Description="# high-quality ref-forward bases, ref-reverse, alt-forward and alt-reverse bases"*/
+    private int[] DP4;
     /** Variant type (assigned by annovar)
      *
      *	@see  exomizer.common.Constants */
@@ -128,6 +130,16 @@ public class Variant implements Comparable<Variant>, Constants {
 	}
 	return "?";
     }
+
+    public void setDP4(int[] dp4) {
+	if (dp4.length != 4) { 
+	    System.err.println("Error, length of DP4 array for initializing Variant was not 4 but " + dp4.length);
+	    System.exit(1);
+	}
+	this.DP4 = new int[4];
+	for (int i=0;i<4;++i) DP4[i] = dp4[i];
+    }
+    public int[] getDP4() { return this.DP4; }
 
     public String get_position_as_string() { return Integer.toString(this.position); }
     /**
