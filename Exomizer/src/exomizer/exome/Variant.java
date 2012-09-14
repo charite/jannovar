@@ -192,11 +192,14 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return corresponding integer (e.g., 3, 23).
      */
     public byte convertChromosomeStringToByteValue(String c) {
-	//System.out.println(" make_chrom_int c = " + c);
 	if (c.startsWith("chr")) c = c.substring(3);
 	if (c.equals("X") ) return 23;
+	if (c.equals("23")) return 23;
 	if (c.equals("Y") ) return 24;
+	if (c.equals("24")) return 24;
 	if (c.equals("M") ) return 25;
+	if (c.equals("MT") ) return 25;
+	if (c.equals("25") ) return 25;
 	Byte i = null;
 	try {
 	    i = Byte.parseByte(c);
