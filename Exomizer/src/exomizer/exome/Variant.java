@@ -68,7 +68,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param p Position of the variant
      * @param r Reference nucleotide
      * @param var variant (alt) nucleotide
-     * @param annot arbitrary annotation data
+     * @param vcf_line A copy of the original VCF line.
     */
     public Variant(String c, int p, String r, String var,String vcf_line) {
 	this(c,p,r,var);
