@@ -16,6 +16,7 @@
       <pathelement location="../NSFP2SQL.jar" />
       <pathelement location="../ESP2SQL.jar" />
       <pathelement location="../lib/junit-4.10.jar" />
+      <pathelement location="../lib/log4j-1.2.17.jar"/>
     </path>
   </target>
   
@@ -51,6 +52,19 @@
       <classpath path="${build.classes}" />
       <formatter type="plain" usefile="off"/>
       <test name="exomizer.tests.NSFP2SQLDumpParserTest"/>
+    </junit>
+  </target>
+
+<!-- use this target to run just one test class, named below -->
+  <target name="anno"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes"
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+      <test name="exomizer.tests.UCSCKGParserTest"/>
     </junit>
   </target>
 
