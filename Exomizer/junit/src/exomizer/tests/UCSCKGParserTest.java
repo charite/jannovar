@@ -31,7 +31,7 @@ public class UCSCKGParserTest implements Constants {
 	PrintStream ps = new PrintStream(new FileOutputStream(tmp));
 	ps.append("uc009vis.3	chr1	-	14361	16765	14361	14361	4	14361,14969,15795,16606,	14829,15038,15942,16765,		uc009vis.3\n");
 	ps.close();
-	String mypath="/home/peter/data/ucsc/knownGene.txt";
+	String mypath="/home/peter/data/ucsc";
 	//parser = new UCSCKGParser(tmp.getAbsolutePath());
 	parser = new UCSCKGParser(mypath);
 	
