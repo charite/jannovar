@@ -26,7 +26,7 @@ public class UCSCKGParserTest implements Constants {
     private ArrayList<KGLine> knownGeneList=null;
 
     /** The following are the indices in the array list of the genes to be tested. */
-    public static final int UC009VIS=0;
+    public static final int UC009VIS=2;
     public static final int UC001ZWX=1;
 
     @Before public void setUp() throws IOException {
@@ -55,7 +55,7 @@ public class UCSCKGParserTest implements Constants {
      *uc009vis.3 is the gene WASH7P and has a lenght of 843 nt. */
     @Test public void test_uc009vis_ExonCount() {
 	KGLine kgl = knownGeneList.get(UC009VIS);
-	int N = kgl.getExonCount();//getMRNALength();
+	int N = kgl.getExonCount();
 	Assert.assertEquals(4,N);
 
     }
