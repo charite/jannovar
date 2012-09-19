@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 import exomizer.io.KGLine;
 import exomizer.io.UCSCKGParser;
@@ -16,21 +16,21 @@ import exomizer.common.Constants;
 
 
 import org.junit.Test;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import junit.framework.Assert;
 
 
 public class UCSCKGParserTest implements Constants {
 
-    private UCSCKGParser parser = null;
-    private ArrayList<KGLine> knownGeneList=null;
+    private static UCSCKGParser parser = null;
+   
+    private static HashMap<String,KGLine> knownGeneMap=null;
 
     /** The following are the indices in the array list of the genes to be tested. */
     public static final int UC009VIS=2;
     public static final int UC001ZWX=1;
 
-    @Before public void setUp() throws IOException {
-	System.out.println("ABout");
+    @BeforeClass public static void setUp() throws IOException {
 	File tmp = File.createTempFile("ucsckg-test","ucsckg-test");
 	PrintStream ps = new PrintStream(new FileOutputStream(tmp));
 	ps.append("uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,		uc021olp.1\n");
@@ -38,62 +38,88 @@ public class UCSCKGParserTest implements Constants {
 
 	ps.append("uc009vis.3	chr1	-	14361	16765	14361	14361	4	14361,14969,15795,16606,	14829,15038,15942,16765,		uc009vis.3\n");
 	ps.append("uc009viv.2	chr1	-	14406	29370	14406	14406	7	14406,16857,17232,17605,17914,24737,29320,	16765,17055,17368,17742,18061,24891,29370,		uc009viv.2\n");
+	ps.append("uc003xub.3	chr8	-	61177380	61193954	61178438	61193706	3	61177380,61192247,61193606,	61178608,61192439,61193954,	NP_004047	uc003xub.3\n");
 	ps.close();
-	//String mypath="/home/peter/data/ucsc/knownGene.txt";
+	String mypath="/home/peter/data/ucsc/knownGene.txt";
+	knownGeneMap = new HashMap<String,KGLine>();
+
+
 	parser = new UCSCKGParser(tmp.getAbsolutePath());
 	parser.parseFile();
-	this.knownGeneList = parser.getKnownGeneList();
+	ArrayList<KGLine> knownGeneList = parser.getKnownGeneList();
+
+	for (KGLine k : knownGeneList) {
+	    String name = k.getUCSCID();
+	    knownGeneMap.put(name,k);
+	}
+	
     }
 
-    @Test public void testSizeOfKGList() {
-
-	int N = this.knownGeneList.size();
-	Assert.assertEquals(4,N);	  
+    @Test public void testSizeOfKnownGeneMap() {
+	int N = knownGeneMap.size();
+	Assert.assertEquals(5,N);	  
     }
 
     /**
-     *uc009vis.3 is the gene WASH7P and has a lenght of 843 nt. */
+     *uc009vis.3 is the gene WASH7P and has four exons */
     @Test public void test_uc009vis_ExonCount() {
-	KGLine kgl = knownGeneList.get(UC009VIS);
+	KGLine kgl = knownGeneMap.get("uc009vis.3");
+	if (kgl==null) {
+	    Assert.fail("Could not find uc009vis.3");
+	}
 	int N = kgl.getExonCount();
 	Assert.assertEquals(4,N);
 
     }
 
+    /** uc009vis.3 is the pseudogene WASH7P; the CDS Start is the same as teh CDS end, which is a signal that this
+	gene is not a protein coding gene. */
     @Test public void test_uc009visCDSSize() {
-	KGLine kgl = knownGeneList.get(UC009VIS);
+	KGLine kgl = knownGeneMap.get("uc009vis.3");
 	int ORFsize = kgl.getCDSLength();
-	Assert.assertEquals(378,ORFsize);
-
+	Assert.assertEquals(0,ORFsize);
     }
 
-
+    /** uc009vis.3 is the pseudogene WASH7P; according to the knownGene file, its RNA size must be 843.
+	There is a discrepancy on the website. */
     @Test public void test_uc009vis_mRNASize() {
-	KGLine kgl = knownGeneList.get(UC009VIS);
+	KGLine kgl = knownGeneMap.get("uc009vis.3");
 	int N = kgl.getMRNALength();
-	Assert.assertEquals(2303,N);
+	Assert.assertEquals(843,N);
     }
 
     @Test public void test_uc001zwx_ExonCount() {
-	KGLine kgl = knownGeneList.get(UC001ZWX);
+	KGLine kgl = knownGeneMap.get("uc001zwx.2");
 	int N = kgl.getExonCount();
 	Assert.assertEquals(66,N);
     }
 
     @Test public void test_uc001zwxCDSSize() {
-	KGLine kgl = knownGeneList.get(UC001ZWX);
+	KGLine kgl = knownGeneMap.get("uc001zwx.2");
 	int ORFsize = kgl.getCDSLength();
 	Assert.assertEquals(8616,ORFsize);
 
     }
 
      @Test public void test_uc001zwxMRNASize() {
-	KGLine kgl = knownGeneList.get(UC001ZWX);
+	KGLine kgl = knownGeneMap.get("uc001zwx.2");
 	int size = kgl.getMRNALength();
 	Assert.assertEquals(11695,size);
-
     }
 
+    /** uc003xub.3 is CA8 */
+    @Test public void test_CA8_MRNASize() {
+	KGLine kgl = knownGeneMap.get("uc003xub.3");
+	int size = kgl.getMRNALength();
+	Assert.assertEquals(1768,size);
+    }
+
+    /** uc003xub.3 is CA8 */
+    @Test public void test_CA8_CDSSize() {
+	KGLine kgl = knownGeneMap.get("uc003xub.3");
+	int size = kgl.getCDSLength();
+	Assert.assertEquals(462,size);
+    }
 
 }
 
