@@ -112,7 +112,14 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
     /** Return the list of "ITriage objects that represent the result of filtering */
     public ArrayList<ITriage> get_triage_list() { return this.triage_list; }
-
+     /**
+     * @return an integer representation of the chromosome  (note: X=23, Y=24).
+     */
+    public int get_chromosome() { return chromosome; }
+    /**
+     * @return an byte representation of the chromosome, e.g., 1,2,...,22 (note: X=23, Y=24, MT=25).
+     */
+    public byte getChromosomeAsByte() { return (byte)chromosome; }
    
 
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
@@ -142,10 +149,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public int[] getDP4() { return this.DP4; }
 
     public String get_position_as_string() { return Integer.toString(this.position); }
-    /**
-     * @return an integer representation of the chromosome  (note: X=23, Y=24).
-     */
-    public int get_chromosome() { return chromosome; }
+   
 
     public String get_chromosomal_mutation() {
 	StringBuilder sb = new StringBuilder();
