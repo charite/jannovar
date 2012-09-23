@@ -3,6 +3,8 @@ package exomizer.reference;
 
 import java.util.TreeMap;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.HashMap;
 
 import exomizer.io.KGLine;
 
@@ -33,6 +35,8 @@ public class Chromosome {
     private static final int SPAN = 5;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
     private static final int NEARGENE = 1000;
+    /** Number of nucleotides away from exon/intron boundary to be considered as potential splicing mutation. */
+    public final static int SPLICING_THRESHOLD=2;
     
 
     public Chromosome(byte c) {
@@ -93,6 +97,12 @@ public class Chromosome {
 	HashSet<Integer> upstream = new HashSet<Integer>();
 	HashSet<Integer> downstream = new HashSet<Integer>();
 	HashSet<Integer> ncRNA = new HashSet<Integer>();
+	HashSet<Integer> splicing = new HashSet<Integer>();
+
+	HashSet<Integer> utr5 = new HashSet<Integer>();
+	HashSet<Integer> utr3 = new HashSet<Integer>();
+	HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
+	HashSet<Integer> exonic = new HashMap<Integer,String>();
 	// Define start and end positions of variant
 	int start = position;
 	int end = start + ref.length() - 1;
@@ -211,16 +221,98 @@ public class Chromosome {
 		int cumlenintron = 0; // cumulative length of introns at a given exon
 		int cumlenexon=0; // cumulative length of exons at a given exon
 		int rcdsstart=0; // start of CDS within reference RNA sequence.
-		int rvarstart=0; // start of variant within reference RNA sequence
-		int rvarend=0; //end of variant within reference RNA sequence
+		int rvarstart=-1; // start of variant within reference RNA sequence
+		int rvarend=-1; //end of variant within reference RNA sequence
 		boolean foundexonic=false; // have we found the variant to lie in an exon yet?
 		if (kgl.isPlusStrand()) {
-		    for (int k=0; k< exonCount;++k) {
+		    for (int k=0; k< exoncount;++k) {
 			if (k>0)
 			    cumlenintron += kgl.getLengthOfIntron(k);
-			cumlenexon += kgl.getExonLength(k);
-			if (cdsstart >= kgl.getExonStart(k))
+			cumlenexon += kgl.getLengthOfExon(k);
+			if (cdsstart >= kgl.getExonStart(k)) {
+			    /* Calculate CDS start within mRNA sequence accurately
+			       by taking intron length into account.
+			       TODO: Put this into KGLine */
+			    rcdsstart = cdsstart - txstart - cumlenintron + 1;
+			    if (cdsstart <= kgl.getExonEnd(k)) {
+				/* "cdsstart" is thus contained within this exon */
+				cumlenexon = kgl.getExonEnd(k) - cdsstart + 1;
+			    }
+			}
+			if (isSpliceVariant(kgl,start,end,ref,alt,k)) {
+			    splicing.add(iter); //////
+			    /* I am unsure what this comment in annovar is supposed to mean:
+			       if name2 is already a splicing variant, but its detailed annotation 
+			       (like c150-2A>G) is not available, 
+			       and if this splicing leads to amino acid change (rather than UTR change) */
+			    if (start == end && start >= cdsstart) { /* single-nucleotide variant */
+				int exonend = kgl.getExonEnd(k);
+				int exonstart = kgl.getExonStart(k);
+				if (start >= exonstart -SPLICING_THRESHOLD  && start < exonstart) {
+				    /*  #------*-<---->------- mutation located right in front of exon */
+				    cumlenexon -= (exonend - exonstart);
+				    /*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
+				    String anno = String.format("exon:%d:c.%d-%d%s>%s",k+1,cumlenexon,exonstart-start,ref,alt);
+				    splicing_anno.put(iter,anno);
+				} else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
+				    /* #-------<---->-*--------<-->-- mutation right after exon end */
+				    String anno = String.format("exon%d:c.%d+%d$s>$s",k+1,cumlenexon,start-exonend,ref,alt);
+				    //$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
+				    splicing_anno.put(iter,anno);
+				}
+			    }
+			}
+			/* Finished with splicing calculation */
+			if (start < kgl.getExonStart(k)) {
+			    if (end >= kgl.getExonStart(k)) {	/* Variation starts 5' to exon and ends within exon */ 
+				rvarstart = kgl.getExonStart(k)-txstart-cumlenintron+1;
+				for (int m=k;m<exoncount-1;++m) {
+				    if (m>k) {
+					cumlenintron +=  getLengthOfIntron(m);
+				    }
+				    if (end < kgl.getExonStart(m) ) {
+					/* #query           --------
+					   #gene     <--**---******---****---->
+					*/
+					rvarend = kgl.getExonEnd(m-1) - txstart - cumlenintron + 1 + kgl.getLengthOfIntron(m);
+					break;
+				    } else if (end <= kgl.getExonEnd(m) ) {
+					/*#query           -----------
+					  #gene     <--**---******---****---->
+					*/
+					rvarend = end-txstart-cumlenintron+1;
+					break;
+				    }
+	
+				} /* for (int m.... */
+				if (rvarend<0) { /* i.e., rvarend has not be initialized yet */
+				    rvarend = txend-txstart-cumlenintron+1;
+				    /* if this value is longer than transcript length, 
+				       it suggests whole gene deletion. */
+				}
+				/* here the trick begins to differentiate UTR versus coding exonic */
 
+				if (end < cdsstart) {	
+				    /* usually disrupt/change 5' UTR region, unless the UTR
+				       per se is also separated by introns
+				       #query  ----
+				       #gene     <--*---*->
+				    */
+				    utr5.add(iter);  /* positive strand for UTR5 */
+				} elsif (start > cdsend) {
+				    /* disrupt/change 3' UTR region 
+				       #query             ----
+				       #gene     <--*---*->
+				    */
+				    utr3.add(iter); /* positive strand for UTR3 */
+				} else {									
+				    //$exonic{$name2}++;
+				    exonic.put(iter,"TODO-got mutation");
+				    not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];	
+	  #refseq CDS start, refseq variant start. obs is non-zero (obs is specified by user)
+	  }
+	$foundgenic++;
+	last;
 		    }
 
 		}
@@ -241,6 +333,83 @@ public class Chromosome {
 
     }
 
+    
+
+   
+
+    /**
+     * Determine if the variant under consideration represents a splice variant, defined as 
+     * being in the SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so,
+     * return true, otherwise, return false.
+     * @param k Exon number in gene represented by kgl
+     * @param kgl Gene to be checked for splice mutation for current chromosomeal variant.
+     */
+    private boolean isSpliceVariant(KGLine kgl, int start, int end, String ref, String alt, int k) {
+	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns */
+	int exonend = kgl.getExonEnd(k);
+	int exonstart = kgl.getExonStart(k);
+	if (k==0 && start >= exonend-SPLICING_THRESHOLD+1 && start <= exonend+SPLICING_THRESHOLD) {
+	    /* variation is located right after (3' to) first exon. For instance, if 
+	       SPLICING_THRESHOLD is 2, we get the last two nucleotides of the first (zeroth)
+	       exon and the first 2 nucleotides of the following intron*/
+	    return true;
+	} else if (k == kgl.getExonCount()-1 && start >= exonstart - SPLICING_THRESHOLD 
+		   && start <= exonstart + SPLICING_THRESHOLD -1) {
+	    /* variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD
+	       nucleotides of the exon/intron boundary */
+	    return true;
+	} else if (k>0 && k < kgl.getExonCount()-1) {
+	    /* interior exon */
+	    if (start >= exonstart -SPLICING_THRESHOLD && start <= exonstart + SPLICING_THRESHOLD - 1)
+		/* variation is located at 5' end of exon in splicing region */
+		return true;
+	    else if (start >= exonend - SPLICING_THRESHOLD + 1 &&  start <= exonend + SPLICING_THRESHOLD)
+		/* variation is located at 3' end of exon in splicing region */
+		return true;
+	}
+	/* Now repeat the above calculations for "end", the end position of the variation.
+	* TODO: in many cases, start==end, this calculation is then superfluous. Refactor.*/
+	if (k==0 && end >= exonend-SPLICING_THRESHOLD+1 && end <= exonend+SPLICING_THRESHOLD) {
+	    /* variation is located right after (3' to) first exon. For instance, if 
+	       SPLICING_THRESHOLD is 2, we get the last two nucleotides of the first (zeroth)
+	       exon and the first 2 nucleotides of the following intron*/
+	    return true;
+	} else if (k == kgl.getExonCount()-1 && end >= exonstart - SPLICING_THRESHOLD 
+		   && end <= exonstart + SPLICING_THRESHOLD -1) {
+	    /* variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD
+	       nucleotides of the exon/intron boundary */
+	    return true;
+	} else if (k>0 && k < kgl.getExonCount()-1) {
+	    /* interior exon */
+	    if (end >= exonstart -SPLICING_THRESHOLD && end <= exonstart + SPLICING_THRESHOLD - 1)
+		/* variation is located at 5' end of exon in splicing region */
+		return true;
+	    else if (end >= exonend - SPLICING_THRESHOLD + 1 &&  end <= exonend + SPLICING_THRESHOLD)
+		/* variation is located at 3' end of exon in splicing region */
+		return true;
+	}
+	/* Check whether start/end are different and overlap with splice region. */
+	if (k==0 && start <= exonend && end >= exonend) {
+	    /* first exon, start is 5' to exon/intron boundry and end is 3' to boundary */
+	    return true;
+	} else if (k == kgl.getExonCount()-1 && start <= exonstart && end >= exonstart) {
+	    /* last exon, start is 5' to exon/intron boundry and end is 3' to boundary */
+	    return true;
+	} else if (k>0 && k < kgl.getExonCount() -1) {
+	     /* interior exon */
+	    if (start <= exonstart && end >= exonstart) {
+		/* variant overlaps 5' exon/intron boundary */
+		return true;
+	    } else if (start <= exonend && end >= exonend) {
+		/* variant overlaps 3' exon/intron boundary */
+		return true;
+	    }
+	}
+	return false; /* This variant does not lead to a splicing mutation */
+    }
+
+
 
 
 }
+/* EoF*/
