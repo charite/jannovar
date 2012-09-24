@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class takes a variant position that is located within an exon and provides a corresponding annotation.
@@ -36,46 +37,12 @@ public class ExonicVariantAnnotator {
     
     public ExonicVariantAnnotator(String fastapath) {
 	initializeMaps();
-	readFASTAsequences(fastapath);
+
 
     }
 
 
-    /**
-     * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt}
-     * Note that the UCSC sequences are all in lower case, but we convert them
-     * here to all upper case letters to simplify processing in other places of this program.
-     * @param fastapath full path to knownGeneMrna.txt file.
-     */
-    public void readFASTAsequences(String fastapath) {
-	fasta = new HashMap<String,String> ();
-
-	try{
-	    FileInputStream fstream = new FileInputStream(fastapath);
-	    DataInputStream in = new DataInputStream(fstream);
-	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-	    String line;
-	   
-	    while ((line = br.readLine()) != null)   {
-		String A[] = line.split("\t");
-		if (A.length != 2) {
-		    System.err.println("Bad format for UCSC KnownGeneMrna.txt file:\n" + line);
-		    System.err.println("Got " + A.length + " fields instead of the expected 2");
-		    System.err.println("Fix problem in UCSC file before continueing");
-		    System.exit(1);
-		}
-		fasta.put(A[0],A[1].toUpperCase()); // Name, sequence
-	    }
-	} catch (FileNotFoundException fnfe) {
-	    System.out.println("Could not find file: " + fastapath);
-	    System.out.println(fnfe);
-	    System.exit(1);
-	} catch (IOException e) {
-	    System.out.println("Exception while parsing UCSC KnownGene FASTA file at \"" + fastapath + "\"");
-	    System.err.println(e);
-	    System.exit(1);
-	}
-    }
+   
 
 
     /**

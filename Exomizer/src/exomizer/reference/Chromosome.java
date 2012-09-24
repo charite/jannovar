@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.HashSet;
 import java.util.HashMap;
 
-import exomizer.io.KGLine;
+
 
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
- * It is intended to be used together with the KGLine input class to make 
+ * It is intended to be used together with the KnownGene class to make 
  * a list of gene models that will be used to annotate chromosomal variants.
  * The genes are stored in a TreeMap (A Java implementation of the red-black
  * tree), allowing them to be found quickly on the basis of the position of 
@@ -30,7 +30,7 @@ public class Chromosome {
     /** Alternative String for Chromosome. USe for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
     /** TreeMap with all of the genes ({@link exomizer.io.KGLine KGLine} objects) of this chromosome. */
-    private TreeMap<Integer,KGLine> geneTreeMap=null;
+    private TreeMap<Integer,KnownGene> geneTreeMap=null;
     /** The number of keys (gene 5' positions) to search in either direction. */
     private static final int SPAN = 5;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
@@ -41,15 +41,15 @@ public class Chromosome {
 
     public Chromosome(byte c) {
 	this.chromosome = c;
-	this.geneTreeMap = new TreeMap<Integer,KGLine>();
+	this.geneTreeMap = new TreeMap<Integer,KnownGene>();
     }
 
     /**
      * Add a gene model to this chromosome. 
      */
-    public void addGene(KGLine kgl) {
-	int pos = kgl.getTXStart();
-	this.geneTreeMap.put(pos,kgl);
+    public void addGene(KnownGene kg) {
+	int pos = kg.getTXStart();
+	this.geneTreeMap.put(pos,kg);
     }
 
     /**
@@ -102,13 +102,13 @@ public class Chromosome {
 	HashSet<Integer> utr5 = new HashSet<Integer>();
 	HashSet<Integer> utr3 = new HashSet<Integer>();
 	HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
-	HashSet<Integer> exonic = new HashMap<Integer,String>();
+	HashMap<Integer,String> exonic = new HashMap<Integer,String>();
 	// Define start and end positions of variant
 	int start = position;
 	int end = start + ref.length() - 1;
 	
 	Integer midpos=null, leftpos=null, rightpos=null;
-	Map.Entry<Integer,KGLine> entr = this.geneTreeMap.ceilingEntry(position);
+	Map.Entry<Integer,KnownGene> entr = this.geneTreeMap.ceilingEntry(position);
 	if (entr == null) {
 	    entr = this.geneTreeMap.floorEntry(position);
 	}
@@ -146,7 +146,7 @@ public class Chromosome {
 	Integer iter = leftpos;
 	while ( iter != rightpos ) {
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
-	    KGLine kgl = this.geneTreeMap.get(iter);
+	    KnownGene kgl = this.geneTreeMap.get(iter);
 	    // 	($name, $dbstrand, $txstart, $txend, $cdsstart, $cdsend, $exonstart, $exonend, $name2)
 	    char dbstrand = kgl.getStrand();
 	    String name = kgl.getUCSCID();
@@ -268,7 +268,7 @@ public class Chromosome {
 				rvarstart = kgl.getExonStart(k)-txstart-cumlenintron+1;
 				for (int m=k;m<exoncount-1;++m) {
 				    if (m>k) {
-					cumlenintron +=  getLengthOfIntron(m);
+					cumlenintron +=  kgl.getLengthOfIntron(m);
 				    }
 				    if (end < kgl.getExonStart(m) ) {
 					/* #query           --------
@@ -299,7 +299,7 @@ public class Chromosome {
 				       #gene     <--*---*->
 				    */
 				    utr5.add(iter);  /* positive strand for UTR5 */
-				} elsif (start > cdsend) {
+				} else if (start > cdsend) {
 				    /* disrupt/change 3' UTR region 
 				       #query             ----
 				       #gene     <--*---*->
@@ -308,29 +308,21 @@ public class Chromosome {
 				} else {									
 				    //$exonic{$name2}++;
 				    exonic.put(iter,"TODO-got mutation");
-				    not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];	
-	  #refseq CDS start, refseq variant start. obs is non-zero (obs is specified by user)
-	  }
-	$foundgenic++;
-	last;
-		    }
+				    if (! currentGeneIsNonCoding && alt != null && alt.length()>0) {
+					// push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];	
+					; // TODO
+				    }
+				    foundgenic=true;
+				    break;
+				}
+			    } /* if end >= kgl.getExonStart(k)   */
+			} /* if (start < kgl.getExonStart(k)) */
 
-		}
+		    } /* iterator over exons */
+		} /* if is plus strand */
+	    } /* if not found genic */
 
-
-
-	    }
-
-
-
-	} // while (iter != rightpos
-
-
-
-
-
-
-
+	}// while (iter != rightpos
     }
 
     
@@ -342,9 +334,9 @@ public class Chromosome {
      * being in the SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so,
      * return true, otherwise, return false.
      * @param k Exon number in gene represented by kgl
-     * @param kgl Gene to be checked for splice mutation for current chromosomeal variant.
+     * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
      */
-    private boolean isSpliceVariant(KGLine kgl, int start, int end, String ref, String alt, int k) {
+    private boolean isSpliceVariant(KnownGene kgl, int start, int end, String ref, String alt, int k) {
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns */
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);
