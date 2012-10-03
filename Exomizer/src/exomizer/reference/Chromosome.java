@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 
 
-
+import exomizer.reference.KnownGene;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
@@ -20,8 +20,15 @@ import java.util.HashMap;
  * variants and to find the correct gene in the cases of complex regions of the
  * chromosome with one gene located in the intron of the next or with overlapping
  * genes. 
+ * <P>
+ * Note that this class contains some of the annotation functions of Annovar. It was not
+ * attempted to reimplement all of the copious functionality of that nice program,
+ * just enough to annotate variants found in VCF files. Some notes in particular
+ * <UL>
+ * <LI> The -seq_padding functionality of annovar was ignored
+ * </UL>
  * @author Peter N Robinson
- * @version 0.01 (Sept. 19, 2012)
+ * @version 0.02 (Oct. 3, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -264,52 +271,61 @@ public class Chromosome {
 			}
 			/* Finished with splicing calculation */
 			if (start < kgl.getExonStart(k)) {
-			    if (end >= kgl.getExonStart(k)) {	/* Variation starts 5' to exon and ends within exon */ 
-				rvarstart = kgl.getExonStart(k)-txstart-cumlenintron+1;
-				for (int m=k;m<exoncount-1;++m) {
-				    if (m>k) {
-					cumlenintron +=  kgl.getLengthOfIntron(m);
-				    }
-				    if (end < kgl.getExonStart(m) ) {
+			    if (end >= kgl.getExonStart(k)) {	
+					/* Overlap: Variation starts 5' to exon and ends within exon */ 
+					/* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
+					rvarstart = kgl.getExonStart(k)-txstart-cumlenintron+1;
+					/* 2) Get the end position of the variant w.r.t. the transcript (rvarend) */
+					for (int m=k;m<exoncount-1;++m) {
+						if (m>k) {
+							cumlenintron +=  kgl.getLengthOfIntron(m);
+						}
+						if (end < kgl.getExonStart(m) ) {
 					/* #query           --------
 					   #gene     <--**---******---****---->
 					*/
-					rvarend = kgl.getExonEnd(m-1) - txstart - cumlenintron + 1 + kgl.getLengthOfIntron(m);
-					break;
-				    } else if (end <= kgl.getExonEnd(m) ) {
-					/*#query           -----------
-					  #gene     <--**---******---****---->
-					*/
-					rvarend = end-txstart-cumlenintron+1;
-					break;
-				    }
-	
-				} /* for (int m.... */
-				if (rvarend<0) { /* i.e., rvarend has not be initialized yet */
-				    rvarend = txend-txstart-cumlenintron+1;
-				    /* if this value is longer than transcript length, 
-				       it suggests whole gene deletion. */
-				}
-				/* here the trick begins to differentiate UTR versus coding exonic */
-
-				if (end < cdsstart) {	
-				    /* usually disrupt/change 5' UTR region, unless the UTR
-				       per se is also separated by introns
+						rvarend = kgl.getExonEnd(m-1) - txstart - cumlenintron + 1 + kgl.getLengthOfIntron(m);
+						break;
+						} else if (end <= kgl.getExonEnd(m) ) {
+						/*	#query           -----------
+							#gene     <--**---******---****---->
+						*/
+							rvarend = end-txstart-cumlenintron+1;
+							break;
+						}
+					} /* for (int m=k.... */
+					if (rvarend<0) { /* i.e., rvarend has not be initialized yet */
+						rvarend = txend-txstart-cumlenintron+1;
+						/* if this value is longer than transcript length, 
+						it suggests whole gene deletion. */
+					}
+					/* When we get here, we know rvarstart and rvarend */
+					/* here the trick begins to differentiate UTR versus coding exonic */
+					if (end < cdsstart) {	
+				    /* 3) Variant disrupts/changes 5' UTR region.
+				     * Rarely, if the 5' UTR is also separated by introns, the variant 
+				     * is more complex.
 				       #query  ----
 				       #gene     <--*---*->
 				    */
 				    utr5.add(iter);  /* positive strand for UTR5 */
-				} else if (start > cdsend) {
-				    /* disrupt/change 3' UTR region 
+					} else if (start > cdsend) {
+				    /* t4) he variant disrupts/changes 3' UTR region 
 				       #query             ----
 				       #gene     <--*---*->
 				    */
 				    utr3.add(iter); /* positive strand for UTR3 */
-				} else {									
+				} else {	
+					/*  5) If we get here, the variant is located within an exon */								
 				    //$exonic{$name2}++;
 				    exonic.put(iter,"TODO-got mutation");
 				    if (! currentGeneIsNonCoding && alt != null && alt.length()>0) {
-					// push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];	
+						/* Annovar puts all exonic variants into an array and annotates them later
+						 * we will instead get the annotation right here and add it to the
+						 * exonic HashMap.
+						push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
+						*/
+						String exonicAnnotation = annotateExonicVariants();	
 					; // TODO
 				    }
 				    foundgenic=true;
@@ -327,7 +343,88 @@ public class Chromosome {
 
     
 
-   
+	/**
+	 * Corresponds to Annvar function 
+	 * sub annotateExonicVariants {
+	 * 	my ($refseqvar, $geneidmap, $cdslen, $mrnalen) = @_;
+	 *   (...)
+	 * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
+	 * annovar holds cDNA sequences of the mRNAs. In this implementation,
+	 * the KnownGene objects already have this information.
+	 * Finally, the $refseqvar in Annovar has the following pieces of information
+	 * my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};
+	 * Note that refcdsstart and refstrand are contained in the KnownGene objects
+	 * $index is used in Annovar as the overall index of the variant ($i in the outer for loop
+	 * of newprocessNextQueryBatchByGene). Not needed in our implementation.
+	 * $exonpos is the number (one-based) of the exon in which the variant was found.
+	 * $nextline is the entire Annovar-formated line with information about the variant.
+	 * In contrast to annovar, this function does one annotation at a time
+	 * Note that the information in $geneidmap, cdslen, and $mrnalen
+	 * is contained within the KnownGene objects already
+	 * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
+	 * @param refvarend The end position of the variant with respect to the CDS of the mRNA
+	 * @param start chromosomal start position of variant
+	 * @param end chromosomal end position of variant
+	 * @param ref sequence of reference
+	 * @param var sequence of variant (in annovar: $obs)
+	 * @param exonNumber Number (one-based) of affected exon.
+	 * @param kgl Gene in which variant was localized to one of the exons 
+	 */
+   private String annotateExonicVariants(int refvarstart, int refvarend, 
+		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) {
+	   /*  Annovar declarations:
+	    * my ($wtnt3, $wtnt3_after, @wtnt3, $varnt3, $wtaa, $wtaa_after, $varaa, $varpos);		
+	    * #wtaa_after is the aa after the wtaa
+			my ($chr, $start, $end, $ref, $obs);
+		    my $canno;
+
+            my ($pre_pad, $post_pad, $wt_aa_pad, $var_aa_pad);  # Hold padded seq
+            my $refcdsend = $cdslen->{$seqid} + $refcdsstart - 1;  # the end of the CDS
+
+			my @nextline = split (/\s+/, $nextline);
+			* ($chr, $start, $end, $ref, $obs) = @nextline[@avcolumn];
+			($ref, $obs) = (uc $ref, uc $obs);
+			$zerostart and $start++;
+			$chr =~ s/^chr//;
+			* 
+			* */
+			/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
+			int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
+			int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
+			// Needed to complete codon following end of multibase ref seq.
+			/* The following checks for database errors where the position of the variant in
+			 * the reference sequence is given as longer the actual length of the transcript.*/
+			if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
+				String s = String.format("Potential database error: %s, refvarstart=%d, frame_s=%d, seq len=%d\n",
+						kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
+				return s;
+			}
+			/*
+			
+			@wtnt3 = split (//, $wtnt3);
+			if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) {			#some times there are database annotation errors (example: chr17:3,141,674-3,141,683), so the last coding frame is not complete and as a result, the cDNA sequence is not complete
+				$function->{$index}{unknown} = "UNKNOWN";
+				next;
+			}
+			* */
+			String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
+				/* wtnt3_after = Sequence of codon right after the variant */
+			String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
+			/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
+			 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
+			if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
+				String s = String.format("Potential database error: %s, wtnt3-length: %d",
+					kgl.getKnownGeneID(), wtnt3.length());
+				return s;
+			}
+			/*annovar line 1079 */
+			if (kgl.isMinusStrand()) {
+				var = revcom(var);
+				ref = revcom(ref);
+			}
+										
+	   
+   }
 
     /**
      * Determine if the variant under consideration represents a splice variant, defined as 
@@ -400,7 +497,29 @@ public class Chromosome {
 	return false; /* This variant does not lead to a splicing mutation */
     }
 
-
+	/**
+	 * Return the reverse complement version of a DNA string in upper case.
+	 * Note that no checking is done in this code since the parse code checks
+	 * for valid DNA and upper-cases the input. This code will break if these
+	 * assumptions are not valid.
+	 * @param sq original, upper-case cDNA string
+	 * @return reverse complement version of the input string sq.
+	*/
+	private String revcom(String sq) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = sq.length()-1;i>=0;i--) {
+			char c = sq.charAt(i);
+			char match=0;
+			switch(c) {
+				case 'A': match='T'; break;
+				case 'C': match='G'; break;
+				case 'G': match='C'; break;
+				case 'T': match='A'; break;
+			}
+			if (match>0) sb.append(match);
+		}
+		return sb.toString();
+	}
 
 
 }

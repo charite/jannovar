@@ -10,6 +10,12 @@ import  exomizer.exception.KGParseException;
  * explanation of the structure of individual lines. Note that for now, we are not including
  * scaffolds such as chr4_ctg9_hap1 in the parsed lines (they throw an {@link exomizer.exception.KGParseException} and
  * are discarded by {@link exomizer.io.UCSCKGParser}). Consider implementing a more flexible parse in the future (TODO).
+ * <P>
+ * Some details about the implementation
+ * <UL>
+ * <LI>If we cannot find a cDNA sequence, we report "UNKNOWN" for mutations in this gene since it is impossible
+ * to check the exact mutation position etc.
+ * </UL>
  * @author Peter N Robinson
  * @version 0.01
  */
@@ -32,6 +38,8 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     private int cdsStart;
     /** CDS end position of gene. */
     private int cdsEnd;
+    /** Position of start of CDS within the mRNA transcript. */
+    private int rcdsStart;
     /** Number of exons of the gene */
     private byte exonCount;
     /** Start positions of each of the exons of this transcript */
@@ -103,6 +111,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	parseExonStartsAndEnds(A[8],A[9]);
 	calculateMRNALength();
 	calculateCDSLength();
+	calculateRefCDSStart();
     }
 
 
@@ -112,11 +121,47 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * thus the calculation is end-start+1 for each exon.
      */
     private void calculateMRNALength() {
-	this.mRNAlength = 0;
-	for (int i=0;i<this.exonCount;++i) {
-	    mRNAlength += this.exonEnds[i] - this.exonStarts[i] + 1;
-	}
+		this.mRNAlength = 0;
+		for (int i=0;i<this.exonCount;++i) {
+			mRNAlength += this.exonEnds[i] - this.exonStarts[i] + 1;
+		}
     }
+    
+	/**
+	 * Calculate the position of the CDS start (i.e., the start codon) within the entire transcript,
+	 * essentially equal to the length of the 5' UTR plus one. If the 5' UTR contains
+	 * one or more introns, then we compensate for this by the cumlenintron calculation
+	 * (see the code).
+	 */
+    private void calculateRefCDSStart() {
+		int cumlenintron = 0; // cumulative length of introns at a given exon
+		this.rcdsStart=0; // start of CDS within reference RNA sequence.
+		if (this.isPlusStrand()) {
+		    for (int k=0; k< this.exonCount;++k) {
+				if (k>0)
+					cumlenintron += this.getLengthOfIntron(k);
+				if (this.cdsStart >= this.getExonStart(k)) {
+					/* Calculate CDS start within mRNA sequence accurately
+					by taking intron length into account. */
+					this.rcdsstart = this.cdsStart - this.txStart - cumlenintron + 1;
+					break;
+				}
+			}
+		} else { /* i.e., minus strand */
+			for (int k = this.exonCount-1; k>=0; k--) {
+				if (k < this.exonCount-1) {
+					cumlenintron += this.getLengthOfIntron(k);//($exonstart[$k+1]-$exonend[$k]-1);
+				}
+							
+				if (cdsend <= this.getExonEnd(k)) {		
+					//calculate CDS start accurately by considering intron length
+					this.rcdsStart = this.txEnd-this.cdsEnd-cumlenintron+1;
+					break;			
+				}
+			}
+		}
+	}
+    
 
     /**
      * 	Calculates the length of the coding sequence based on the exon starts/stop. 
@@ -171,8 +216,13 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public int getCDSEnd() { return this.cdsEnd; }
     public int getMRNALength() { return this.mRNAlength; }
     public int getCDSLength() { return this.CDSlength;}
+    /** Return length of the actual cDNA sequence (rather than the length calculated from the exon positions,
+     * which should however be the same. Can use for sanity checking. */
+    public int getActualSequenceLength() { return this.sequence.length();}
     public int getExonCount() { return this.exonCount; }
     public byte getChromosome() { return this.chromosome; }
+	/** Return position of CDS (start codon) in entire mRNA transcript. */
+    public int getRefCDSStart() { return this.rcdsStart;}
     /** @return The UCSC Gene ID, e.g., uc021olp.1. */
     public String getKnownGeneID() { return this.kgID; }
     /** @return '+' for Watson strand and '-' for Crick strand. */
@@ -181,6 +231,50 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public boolean isPlusStrand() { return this.strand == '+'; }
     /** @return true if strand is '-' */
     public boolean isMinusStrand() { return this.strand == '-'; }
+    /** This function is valid for exonic variants. It extracts the 
+     * three nucleotides from the reference sequence that contain the
+     * first nucleotide of the position of the variant
+     * <P>
+     * In annovar: $wtnt3 = substr ($refseqhash->{$seqid}, $refvarstart-$fs-1, 3);
+     * @param refvarstart Position of first nucleotide of variant in cDNA sequence
+     * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
+     */
+    public String getWTCodonNucleotides(int refvarstart, int frame_s){
+		int start = refvarstart - frame_s - 1;
+		/* Substract one to get back to zero-based numbering.
+		 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
+		 */
+		 return this.sequence(start, start+3); /* for + strand */
+	}
+	
+	/** This function is valid for exonic variants. It extracts the 
+     * three nucleotides from the reference sequence that are directly
+     * 3' to the codon that contains the
+     * first nucleotide of the position of the variant. If that was the 
+     * last codon, the return ""; the empty string.
+     * <P>
+     * In annovar: $wtnt3 = substr ($refseqhash->{$seqid}, $refvarstart-$fs-1, 3);
+     * √if (length ($refseqhash->{$seqid}) >= $refvarstart-$fs+3) {	#going into UTR
+				$wtnt3_after = substr ($refseqhash->{$seqid}, $refvarstart-$fs+2, 3);
+			} else {
+				$wtnt3_after = '';					#last amino acid in the sequence without UTR (extremely rare situation) (example: 17        53588444        53588444        -       T       414     hetero)
+			}
+     * @param refvarstart Position of first nucleotide of variant in cDNA sequence
+     * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
+     */
+    public String getWTCodonNucleotidesAfterVariant(int refvarstart, int frame_s){
+		if (getActualSequenceLength() >= refvarstart - frame_s + 3) {
+			/* i.e., there is at least one codon 3' to codon in which variant begins */
+			int start = refvarstart - frame_s + 2;
+			/* Note add only 2 to convert back to zero-based numbering! */
+			return this.sequence.substring(start,start+3);
+		} else {
+			return "";
+		}
+		/* NOTE ABOVE IS FOR + STRAND TODO */
+		
+	}
+    
     /**
      * Calculates the length of the k'th intron, where k is a zero-based number.
      * Note that intron 1 begins after exon 1, so there are n-1 introns in a gene
