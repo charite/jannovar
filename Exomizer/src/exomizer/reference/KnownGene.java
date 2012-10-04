@@ -15,6 +15,7 @@ import  exomizer.exception.KGParseException;
  * <UL>
  * <LI>If we cannot find a cDNA sequence, we report "UNKNOWN" for mutations in this gene since it is impossible
  * to check the exact mutation position etc.
+ * <LI>In annovar, $name
  * </UL>
  * @author Peter N Robinson
  * @version 0.01
@@ -25,6 +26,9 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     /** Name of gene using UCSC knownGene id (for instance, uc011nca.2). For now, keep the
 	version as part of the name. */
     private String kgID=null;
+    /** Gene symbol of the known Gene. Can be null for some genes. Note that in annovar, $name2 corresponds to the
+     * geneSymbol if available, otherwise the kgID is used.*/
+    private String geneSymbol=null;
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
      TODO. Add more flexible way of dealing with scaffolds etc.*/
     private byte chromosome;
@@ -143,7 +147,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 				if (this.cdsStart >= this.getExonStart(k)) {
 					/* Calculate CDS start within mRNA sequence accurately
 					by taking intron length into account. */
-					this.rcdsstart = this.cdsStart - this.txStart - cumlenintron + 1;
+					this.rcdsStart = this.cdsStart - this.txStart - cumlenintron + 1;
 					break;
 				}
 			}
@@ -153,7 +157,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 					cumlenintron += this.getLengthOfIntron(k);//($exonstart[$k+1]-$exonend[$k]-1);
 				}
 							
-				if (cdsend <= this.getExonEnd(k)) {		
+				if (this.cdsEnd <= this.getExonEnd(k)) {		
 					//calculate CDS start accurately by considering intron length
 					this.rcdsStart = this.txEnd-this.cdsEnd-cumlenintron+1;
 					break;			
@@ -218,7 +222,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public int getCDSLength() { return this.CDSlength;}
     /** Return length of the actual cDNA sequence (rather than the length calculated from the exon positions,
      * which should however be the same. Can use for sanity checking. */
-    public int getActualSequenceLength() { return this.sequence.length();}
+    public int getActualSequenceLength() { return this.sequence.length(); }
     public int getExonCount() { return this.exonCount; }
     public byte getChromosome() { return this.chromosome; }
 	/** Return position of CDS (start codon) in entire mRNA transcript. */
@@ -231,6 +235,19 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public boolean isPlusStrand() { return this.strand == '+'; }
     /** @return true if strand is '-' */
     public boolean isMinusStrand() { return this.strand == '-'; }
+    /** Return the ucsc kg id, this corresponds to $name in annovar
+     * @return name of this transcript, a UCSC knownGene id. */
+     public String getName() { return this.kgID; }
+     /** Return the gene symbol, corresponds to $name2 in annovar
+      * @return genesymbol of this known gene transcript (if available, otherwise the kgID). */
+      public String getName2() { 
+			if (this.geneSymbol != null) 
+				return this.geneSymbol;
+			else
+				return this.kgID;
+       }
+    
+    
     /** This function is valid for exonic variants. It extracts the 
      * three nucleotides from the reference sequence that contain the
      * first nucleotide of the position of the variant
@@ -244,7 +261,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 		/* Substract one to get back to zero-based numbering.
 		 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
 		 */
-		 return this.sequence(start, start+3); /* for + strand */
+		 return this.sequence.substring(start, start+3); /* for + strand */
 	}
 	
 	/** This function is valid for exonic variants. It extracts the 

@@ -12,18 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This class takes a variant position that is located within an exon and provides a corresponding annotation.
- * The code is based on the perl script {@code annotate_variation.pl} from Annovar.
- * The logic of this program is based loosely on the logic of Annovar. In brief,
- * <OL>
- * <LI>Read in all FASTA files for UCSC knownGenes
- * <LI>For each variant to be annotated, we expect to get the following information: my ($refcdsstart, $refvarstart, 
- $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};
- * </OL>
+ * This class helps to translate DNA sequences.
  * @author Peter N Robinson
- * @version 0.01 (Sept. 22, 2012)
+ * @version 0.02 (Oct. 4, 2012)
  */
-public class ExonicVariantAnnotator {
+public class Translator {
     /** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
     private HashMap<String,String> codon1=null;
     /** Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code) */
@@ -33,15 +26,49 @@ public class ExonicVariantAnnotator {
     /** Sequences of known gene mRNAs. Key, a UCSC identified such as uc010nxr.1; value: A cDNA sequence in
 	lower case letters, such as "cttgccgtcag..." */
     private HashMap<String,String> fasta=null;
+    
+    private static Translator translator=null;
 
     
-    public ExonicVariantAnnotator(String fastapath) {
-	initializeMaps();
-
-
+    private Translator() {
+		initializeMaps();
     }
+    
+    /** Factory method to get reference to Translator. */
+    static public Translator getTranslator() {
+		if (Translator.translator == null) {
+			Translator.translator = new Translator();
+		}
+		return Translator.translator;
+	}
 
-
+	/**
+	 * Translates a DNA sequence. Assume the sequence is upper case with no ambiguous bases.
+	 * @param dnaseq A DNA sequence that is to be translated
+	 * @return corresonding aminoacid sequence
+	 */
+	public String translateDNA(String dnaseq) {
+		StringBuilder aminoAcidSeq = new StringBuilder();
+		int len = dnaseq.length();
+		if (! (len%3 == 0) ) {
+			System.err.println("Translator.java, error: dnaseq len not a multiple of 3");
+			System.err.println("Sequence: " + dnaseq);
+			System.err.println("Todo throw exception here");
+			System.exit(1);
+		}
+		for (int i=0; i<len; i += 3) {
+			String nt3 = dnaseq.substring(i,i+3);
+			String aa = this.codon1.get(nt3);
+			if (aa == null) {
+				System.err.println("Translator.java, error: could not find nt3: " + nt3);
+				System.err.println("Sequence: " + dnaseq);
+				System.err.println("Todo throw exception here");
+				System.exit(1);
+			}
+			aminoAcidSeq.append(aa);
+		}
+		return aminoAcidSeq.toString();
+	}
    
 
 
