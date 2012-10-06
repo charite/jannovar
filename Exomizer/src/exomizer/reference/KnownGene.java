@@ -16,6 +16,9 @@ import  exomizer.exception.KGParseException;
  * <LI>If we cannot find a cDNA sequence, we report "UNKNOWN" for mutations in this gene since it is impossible
  * to check the exact mutation position etc.
  * <LI>In annovar, $name
+ * <LI> Note that the UCSC knownGene file has some strange entries. For instance, uc021ser.1 on chr14 has 4461 exons, but there is
+ * no corresponding sequence in the knownGeneMrna file.
+ * 
  * </UL>
  * @author Peter N Robinson
  * @version 0.01
@@ -62,7 +65,23 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     /**
      * The constructur parses a single line of the knownGene.txt file. </BR>
      * 	"uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,		uc021olp.1
-     */
+	* <P>
+	* The fields of the file are tab separated and have the following structure:
+	* <UL>
+	* <LI> 0: name (UCSC known gene id, e.g., "uc021olp.1"	
+	* <LI> 1: chromosome, e.g., "chr1"
+	* <LI> 2: strand, e.g., "-"
+	* <LI> 3: transcription start, e.g., "38674705"
+	* <LI> 4: transcription end, e.g., "38680439"
+	* <LI> 5: CDS start, e.g., "38677458"
+	* <LI> 6: CDS end, e.g., "38678111"
+	* <LI> 7: exon count, e.g., "4"
+	* <LI> 8: exonstarts, e.g., "38674705,38677405,38677769,38680388,"
+	* <LI> 9: exonends, e.g., "38676494,38677494,38678123,38680439,"
+	* <LI> 10: name, again (?), e.g., "uc021olp.1"
+	* </UL>
+	* @param line A single line of the UCSC knownGene.txt file
+	*/
     public KnownGene(String line) throws KGParseException {
 	String A[] = line.split("\t");
 	if (A.length != NFIELDS) {
@@ -302,9 +321,9 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @return length of the k<superscript>th</superscript> intron (returns zero if k is 0)
      */
     public int getLengthOfIntron(int k){
-	if (k==0) return 0;
-	if (k>=this.exonCount) return 0;
-	return exonStarts[k] - exonEnds[k-1] - 1;
+		if (k==0) return 0;
+		if (k>=this.exonCount) return 0;
+		return exonStarts[k] - exonEnds[k-1] - 1;
     }
 
 
@@ -342,8 +361,15 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @param seq cDNA sequence of this knownGene transcript. 
      */
     public void setSequence(String seq) {
-	this.sequence = seq;
+		this.sequence = seq;
     }
+    
+    /**
+     * Sets the gene symbol. This method is intended to be used while parsing
+     * the UCSC kgXref.txt file. By comparing the ucscid, we identify the corresponding transcript.
+     * @param sym Gene symbol corresponding to this knownGene
+     */
+     public void setGeneSymbol(String sym) { this.geneSymbol = sym; }
 
 
 

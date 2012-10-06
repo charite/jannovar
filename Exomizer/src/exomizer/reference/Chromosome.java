@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 
 import exomizer.reference.KnownGene;
@@ -62,6 +63,85 @@ public class Chromosome {
 	int pos = kg.getTXStart();
 	this.geneTreeMap.put(pos,kg);
     }
+    
+    
+    /**
+     * In annovar, genomic bins are used to determine which genes to search
+     * for variants. This is prefere
+     * <P>
+     * The position of the variant can be either within a gene ("genic") or between
+     * two genes. Given some complexities of genomic architecture, this is not always a simple
+     * question to answer (e.g., overlapping genes or location of one gene in an intron of
+     * another gene). Annovar's manswer to this is to use "bins" of 100,000 nucleotides and to
+     * search over all bins until either a genic match is found or the two neighboring genes
+     * are found. We instead us a Java TreeMap, which is an implementation of a red-black tree. The TreeMap method
+     * {@code} ceilingEntry(K key)} returns a key-value mapping associated with the least key greater than or equal 
+     * to the given key, or null if there is no such key. We use this to get an entry in the TreeMap that is close
+     * to the position of the sought after variant. If this method returns null, we search with {@code floorEntry}. Then,
+     * we use the key returned by this together with the methods {@code higherKey} and {@code lowerKey} to get
+     * keys in the tree map that span a range of SPAN entries. We then search amongst these entries much the same as
+     * Annovar does in its bins.
+     * <P>
+     * The strategy is to put the KnownGene nearest to position at index 0 of the ArrayList that is to be returned. 
+     * Then, we add up to SPAN genes on each side, going out centrifugally. This
+     * will increase the probability that only one gene has to be tested, and if not reduce the total number.
+     * @param position the Position of the mutation on the current chromosome.
+     * @return list of KnownGenes that are candidates for being affected by variant at this position
+     */
+    private ArrayList<KnownGene> getBinRange(int position) {
+		ArrayList<KnownGene> kgList = new ArrayList<KnownGene>();
+		KnownGene currentKG=null;
+		
+		Integer midpos=null, leftpos=null, rightpos=null;
+		Map.Entry<Integer,KnownGene> entrL = this.geneTreeMap.ceilingEntry(position);
+		Map.Entry<Integer,KnownGene> entrR = null;
+		if (entrL == null) {
+			entrL = this.geneTreeMap.floorEntry(position);
+		}
+		if (entrL == null) {
+			System.err.println("Error: Could not get either floor or ceiling for variant at position " + position
+			       + " on chromosome " + 	this.chromosome );
+			System.exit(1);
+		}
+		midpos = entrL.getKey();
+		currentKG = entrL.getValue();
+		kgList.add(currentKG);
+
+		leftpos = midpos;
+		rightpos = midpos;
+		for (int i = SPAN; i>0; i--) {
+			entrL = this.geneTreeMap.lowerEntry(leftpos);
+			entrR = this.geneTreeMap.higherEntry(rightpos);
+			Integer iL = entrL.getKey();
+			
+			if (iL != null) {
+				currentKG = entrL.getValue();
+				kgList.add(currentKG);
+				leftpos = iL;
+			} /* Note that if iL==null then there are no more positions on 5'
+				* end of the chromosome, leftpos is now the lowest of this chromosome,
+				* just do nothing here.
+				*/
+			Integer iR = entrR.getKey();
+			if (iR != null) {
+				currentKG = entrR.getValue();
+				kgList.add(currentKG);
+				rightpos = iR;
+			} /* Note that if iR==null, then there are no more positions on
+				* the 3' end of the chromosome, rightpos is thus the higest of
+				* this chromosome. Just do nothing here (the for loop will
+				* then get the rest of the leftpos and not do anything here).
+				*/
+		}
+		
+	
+		/* When we get here, leftpos, midpos, and rightpos define a range of positions on this
+			Chromosome at which we want to search. midpos is the most likely location of the 
+			gene corresponding to our variant, but theoretically the genes corresponding to 
+			the variant could be located at other places in the range. */
+		System.out.println(String.format("Left, mid, right: %d/%d/%d",leftpos,midpos,rightpos));
+		return kgList;
+	}
 
     /**
      * @return Number of genes contained in this chromosome.
@@ -75,202 +155,156 @@ public class Chromosome {
      * and we are provided the coordinates on that chromosome.
      * <P>
      * The strategy for finding annotations is based on the perl code in Annovar.
-     * Roughly spekaing, we take the following steps in this method in order to find out whether the
+     * Roughly speaking, we take the following steps in this method in order to find out whether the
      * variant is genic or intergenic and identify the involved genes (which are stored in the {@link #geneTreeMap} object of this class).
      * Then, other functions are called to characterize the precise variant.
      * <OL>
-     * <LI>The position of the variant can be either within a gene ("genic") or between
-     * two genes. Given some complexities of genomic architecture, this is not always a simple
-     * question to answer (e.g., overlapping genes or location of one gene in an intron of
-     * another gene). Annovar's manswer to this is to use "bins" of 100,000 nucleotides and to
-     * search over all bins until either a genic match is found or the two neighboring genes
-     * are found. We instead us a Java TreeMap, which is an implementation of a red-black tree. The TreeMap method
-     * {@code} ceilingEntry(K key)} returns a key-value mapping associated with the least key greater than or equal 
-     * to the given key, or null if there is no such key. We use this to get an entry in the TreeMap that is close
-     * to the position of the sought after variant. If this method returns null, we search with {@code floorEntry}. Then,
-     * we use the key returned by this together with the methods {@code higherKey} and {@code lowerKey} to get
-     * keys in the tree map that span a range of SPAN entries. We then search amongst these entries much the same as
-     * Annovar does in its bins.</LI>
+     * <LI>Use the method {@link #getBinRage} to get the range of KnownGenes to be tested.s</LI>
      * </OL>
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
     public void getAnnotation(int position,String ref, String alt) {
-	System.out.println(String.format("getAnnotation for %d ref: \"%s\" alt \"%s\"",position,ref,alt));
+		System.out.println(String.format("getAnnotation for %d ref: \"%s\" alt \"%s\"",position,ref,alt));
+		int distL=Integer.MAX_VALUE; // distance to closest gene on left (5') side of variant (annovar: $distl)
+		int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
+		int genePositionL; // position of closest gene on left (5') side of variant (annovar: $genel)
+		int genePositionR; // position of closest gene on right (3') side of variant (annovar: $gener)
 
-
-	int distL=Integer.MAX_VALUE; // distance to closest gene on left (5') side of variant (annovar: $distl)
-	int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
-	int genePositionL; // position of closest gene on left (5') side of variant (annovar: $genel)
-	int genePositionR; // position of closest gene on right (3') side of variant (annovar: $gener)
-	boolean foundgenic=false; //variant already found in genic region (between start and end position of a gene)
-	HashSet<Integer> upstream = new HashSet<Integer>();
-	HashSet<Integer> downstream = new HashSet<Integer>();
-	HashSet<Integer> ncRNA = new HashSet<Integer>();
-	HashSet<Integer> splicing = new HashSet<Integer>();
-
-	HashSet<Integer> utr5 = new HashSet<Integer>();
-	HashSet<Integer> utr3 = new HashSet<Integer>();
-	HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
-	HashMap<Integer,String> exonic = new HashMap<Integer,String>();
-	// Define start and end positions of variant
-	int start = position;
-	int end = start + ref.length() - 1;
 	
-	Integer midpos=null, leftpos=null, rightpos=null;
-	Map.Entry<Integer,KnownGene> entr = this.geneTreeMap.ceilingEntry(position);
-	if (entr == null) {
-	    entr = this.geneTreeMap.floorEntry(position);
-	}
-	if (entr == null) {
-	    System.err.println("Error: Could not get either floor or ceiling for variant at position " + position
-			       + " on chromosome " + 	this.chromosome );
-	    System.exit(1);
-	}
-	midpos = entr.getKey();
+		HashSet<Integer> upstream = new HashSet<Integer>();
+		HashSet<Integer> downstream = new HashSet<Integer>();
+		HashSet<Integer> ncRNA = new HashSet<Integer>();
+		HashSet<Integer> splicing = new HashSet<Integer>();
 
-	leftpos = midpos;
-	for (int i = SPAN; i>0; i--) {
-	    entr = this.geneTreeMap.lowerEntry(leftpos);
-	    Integer ii = entr.getKey();
-	    if (ii == null) 
-		break; // no more positions, leftpos is now the lowest of this chromosome
-	    else
-		leftpos = ii;
-	}
-	rightpos = midpos;
-	for (int i = SPAN; i>0; i--) {
-	    entr = this.geneTreeMap.higherEntry(rightpos);
-	    Integer ii = entr.getKey();
-	    if (ii == null) 
-		break; // no more positions, rightpos is now the highest of this chromosome
-	    else
-		rightpos = ii;
-	}
-	/* When we get here, leftpos, midpos, and rightpos define a range of positions on this
-	   Chromosome at which we want to search. midpos is the most likely location of the 
-	   gene corresponding to our variant, but theoretically the genes corresponding to 
-	   the variant could be located at other places in the range. */
-	System.out.println(String.format("Left, mid, right: %d/%d/%d",leftpos,midpos,rightpos));
+		HashSet<Integer> utr5 = new HashSet<Integer>();
+		HashSet<Integer> utr3 = new HashSet<Integer>();
+		HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
+		HashMap<Integer,String> exonic = new HashMap<Integer,String>();
+		// Define start and end positions of variant
+		int start = position;
+		int end = start + ref.length() - 1;
+	
+		boolean foundgenic=false; //variant already found in genic region (between start and end position of a gene)
 
-	Integer iter = leftpos;
-	while ( iter != rightpos ) {
-	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
-	    KnownGene kgl = this.geneTreeMap.get(iter);
+		/** Get KnownGenes that are located in vicinity of position. */
+		ArrayList<KnownGene> candidateGenes = getBinRange(position);
+
+		for (KnownGene kgl : candidateGenes) {
+			boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
+	    
 	    // 	($name, $dbstrand, $txstart, $txend, $cdsstart, $cdsend, $exonstart, $exonend, $name2)
-	    char dbstrand = kgl.getStrand();
-	    String name = kgl.getKnownGeneID();
-	    int txstart = kgl.getTXStart();
-	    int txend   = kgl.getTXEnd();
-	    int cdsstart = kgl.getCDSStart();
-	    int cdsend = kgl.getCDSEnd();
-	    int exoncount = kgl.getExonCount();
-	    if (! foundgenic) {  //this variant has not hit a genic region yet
-		// "start"  of variant is 3' to "txend" of this gene
-		if (start > txend) {
-		    if (distL > (start - txend) ) {
-			distL = start - txend; // distance to nearest gene to "left" side.
-			genePositionL = iter; // Key of this gene in this.geneTreeMap
-		    }
-		    //	defined $distl or $distl = $start-$txend and $genel=$name2;
-		    //$distl > $start-$txend and $distl = $start-$txend and $genel=$name2;	#identify left closest gene
-		}
-		if (end < txstart) {
-		    if (distR > (txstart - end) ) {
-			distR = txstart - end;
-			genePositionR = iter;
-			// defined $distr or $distr = $txstart-$end and $gener=$name2;
-			// $distr > $txstart-$end and $distr = $txstart-$end and $gener=$name2;	#identify right closest gene
-		    }
-		}
-	    }
-	    // When we arrive here, we may have adjusted the distR etc.
-	    if (end < txstart) {  // "end" of variant is 5' to "txstart" of gene
-		//variant ---
-		//gene		<-*----*->
-		if (foundgenic) {
-		    /* We have already found a gene such that this variant is genic. The variant
-		       is 5' to the current gene. Therefore, there is no overlap and we can stop
-		       the search. In annovar: $foundgenic and last; (found right bin) */
-		    break;
-		}
-		if (end > txstart - NEARGENE) { 
-		    // we are near to upstream/downstream gene.
-		    if (dbstrand == '+') 
-			upstream.add(iter);
-		    else
-			downstream.add(iter); 
-		} else {
-		    /* we are NOT near to upstream/downstream gene. and thus 
-		       transcript is too far away from end, we can end the search
-		       for the best bin/gene location. */
-		    break; /* Break out for loop over iter */
-		}
-	    } else if (start > txend) {
-		/* i.e., "start" is 3' to "txend" of gene */
-		if (! foundgenic && start < txend + NEARGENE)
-		    // we are near to upstream/downstream gene.
-		    if (dbstrand == '+') 
-			upstream.add(iter);
-		    else
-			downstream.add(iter); 
-	    } else {
-		/* We now must be in a genic region */
-		if (! kgl.isCodingGene() ) {
-		    /* this is either noncoding RNA or maybe bad annotation in UCSC */
-		    if (start >= txstart &&  start <= txend || 
-			end >= txstart &&  end <= txend      ||
-			start <= txstart && end >= txend) {
-			ncRNA.add(iter);
-			foundgenic=true;
-		    }
-		    currentGeneIsNonCoding = true;
-		    // TODO Annovar code sets cdsstart/cdsend to txstart/txend here.
-		    // Do we need this?
-		}
-		int cumlenintron = 0; // cumulative length of introns at a given exon
-		int cumlenexon=0; // cumulative length of exons at a given exon
-		int rcdsstart=0; // start of CDS within reference RNA sequence.
-		int rvarstart=-1; // start of variant within reference RNA sequence
-		int rvarend=-1; //end of variant within reference RNA sequence
-		boolean foundexonic=false; // have we found the variant to lie in an exon yet?
-		if (kgl.isPlusStrand()) {
-		    for (int k=0; k< exoncount;++k) {
-			if (k>0)
-			    cumlenintron += kgl.getLengthOfIntron(k);
-			cumlenexon += kgl.getLengthOfExon(k);
-			if (cdsstart >= kgl.getExonStart(k)) {
-			    /* Calculate CDS start within mRNA sequence accurately
-			       by taking intron length into account.
-			       TODO: Put this into KGLine */
-			    rcdsstart = cdsstart - txstart - cumlenintron + 1;
-			    if (cdsstart <= kgl.getExonEnd(k)) {
-				/* "cdsstart" is thus contained within this exon */
-				cumlenexon = kgl.getExonEnd(k) - cdsstart + 1;
-			    }
+			char dbstrand = kgl.getStrand();
+			String name = kgl.getKnownGeneID();
+			int txstart = kgl.getTXStart();
+			int txend   = kgl.getTXEnd();
+			int cdsstart = kgl.getCDSStart();
+			int cdsend = kgl.getCDSEnd();
+			int exoncount = kgl.getExonCount();
+			String name2 = kgl.getName2();
+			System.out.println("Got KG Name=" + name + ": " + kgl.getName2());
+			if (! foundgenic) {  //this variant has not hit a genic region yet
+							// "start"  of variant is 3' to "txend" of this gene
+				if (start > txend) {
+					if (distL > (start - txend) ) {
+						distL = start - txend; // distance to nearest gene to "left" side.
+						genePositionL = txstart; // Key of this gene in this.geneTreeMap
+					}
+					//	defined $distl or $distl = $start-$txend and $genel=$name2;
+					//$distl > $start-$txend and $distl = $start-$txend and $genel=$name2;	#identify left closest gene
+				}
+				if (end < txstart) {
+					if (distR > (txstart - end) ) {
+						distR = txstart - end;
+						genePositionR = iter;
+					// defined $distr or $distr = $txstart-$end and $gener=$name2;
+					// $distr > $txstart-$end and $distr = $txstart-$end and $gener=$name2;	#identify right closest gene
+					}
+				}
 			}
-			if (isSpliceVariant(kgl,start,end,ref,alt,k)) {
-			    splicing.add(iter); //////
+			// When we arrive here, we may have adjusted the distR etc.
+			if (end < txstart) {  // "end" of variant is 5' to "txstart" of gene
+			//variant ---
+			//gene		<-*----*->
+			if (foundgenic) {
+				/* We have already found a gene such that this variant is genic. The variant
+					is 5' to the current gene. Therefore, there is no overlap and we can stop
+					the search. In annovar: $foundgenic and last; (found right bin) */
+				break;
+			}
+			if (end > txstart - NEARGENE) { 
+				// we are near to upstream/downstream gene.
+				if (dbstrand == '+') 
+					upstream.add(txstart);
+				else
+					downstream.add(txstart); 
+			} else {
+				/* we are NOT near to upstream/downstream gene. and thus 
+				transcript is too far away from end, we can end the search
+				for the best bin/gene location. */
+				break; /* Break out for loop over iter */
+			}
+		} else if (start > txend) {
+			/* i.e., "start" is 3' to "txend" of gene */
+			if (! foundgenic && start < txend + NEARGENE)
+				// we are near to upstream/downstream gene.
+				if (dbstrand == '+') 
+					upstream.add(txstart);
+				else
+					downstream.add(txstart); 
+			} else {
+			/* We now must be in a genic region */
+				if (! kgl.isCodingGene() ) {
+				/* this is either noncoding RNA or maybe bad annotation in UCSC */
+				if (start >= txstart &&  start <= txend ||   /* start is within transcript */
+					end >= txstart &&  end <= txend      ||  /* end is within transcript */
+					start <= txstart && end >= txend) {      /* variant completely contains transcript */
+						ncRNA.add(txstart);
+						foundgenic=true;
+				}
+				currentGeneIsNonCoding = true;
+				// TODO Annovar code sets cdsstart/cdsend to txstart/txend here.
+				// Do we need this?
+				}
+			int cumlenintron = 0; // cumulative length of introns at a given exon
+			int cumlenexon=0; // cumulative length of exons at a given exon
+			int rcdsstart=0; // start of CDS within reference RNA sequence.
+			int rvarstart=-1; // start of variant within reference RNA sequence
+			int rvarend=-1; //end of variant within reference RNA sequence
+			boolean foundexonic=false; // have we found the variant to lie in an exon yet?
+			rcdsstart = kgl.getRefCDSStart();
+			if (kgl.isPlusStrand()) {
+				for (int k=0; k< exoncount;++k) {
+					if (k>0)
+						cumlenintron += kgl.getLengthOfIntron(k);
+					cumlenexon += kgl.getLengthOfExon(k);
+					if (cdsstart >= kgl.getExonStart(k) && cdsstart <= kgl.getExonEnd(k)) {
+						/* "cdsstart" is thus contained within this exon */
+						cumlenexon = kgl.getExonEnd(k) - cdsstart + 1;
+					}
+				}
+				if (isSpliceVariant(kgl,start,end,ref,alt,k)) {
+					splicing.add(txstart); //////
 			    /* I am unsure what this comment in annovar is supposed to mean:
 			       if name2 is already a splicing variant, but its detailed annotation 
 			       (like c150-2A>G) is not available, 
 			       and if this splicing leads to amino acid change (rather than UTR change) */
 			    if (start == end && start >= cdsstart) { /* single-nucleotide variant */
-				int exonend = kgl.getExonEnd(k);
-				int exonstart = kgl.getExonStart(k);
-				if (start >= exonstart -SPLICING_THRESHOLD  && start < exonstart) {
-				    /*  #------*-<---->------- mutation located right in front of exon */
-				    cumlenexon -= (exonend - exonstart);
-				    /*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
-				    String anno = String.format("exon:%d:c.%d-%d%s>%s",k+1,cumlenexon,exonstart-start,ref,alt);
-				    splicing_anno.put(iter,anno);
-				} else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
-				    /* #-------<---->-*--------<-->-- mutation right after exon end */
-				    String anno = String.format("exon%d:c.%d+%d$s>$s",k+1,cumlenexon,start-exonend,ref,alt);
-				    //$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
-				    splicing_anno.put(iter,anno);
-				}
+					int exonend = kgl.getExonEnd(k);
+					int exonstart = kgl.getExonStart(k);
+					if (start >= exonstart -SPLICING_THRESHOLD  && start < exonstart) {
+						/*  #------*-<---->------- mutation located right in front of exon */
+						cumlenexon -= (exonend - exonstart);
+						/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
+						String anno = String.format("exon:%d:c.%d-%d%s>%s",k+1,cumlenexon,exonstart-start,ref,alt);
+						splicing_anno.put(txstart,anno);
+					} else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
+						/* #-------<---->-*--------<-->-- mutation right after exon end */
+						String anno = String.format("exon%d:c.%d+%d$s>$s",k+1,cumlenexon,start-exonend,ref,alt);
+						//$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
+						splicing_anno.put(txstart,anno);
+					}
 			    }
 			}
 			/* Finished with splicing calculation */
@@ -330,7 +364,8 @@ public class Chromosome {
 						push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
 						*/
 						/* Note k in the following is the number (zero-based) of affected exon */
-						String exonicAnnotation = annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);	
+						String exonicAnnotation = annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
+						System.out.println("Exonic annotation: " + exonicAnnotation);	
 						
 					; // TODO
 				    }
@@ -343,7 +378,7 @@ public class Chromosome {
 		    } /* iterator over exons */
 		} /* if is plus strand */
 	    } /* if not found genic */
-
+		
 	}// while (iter != rightpos
     }
 
