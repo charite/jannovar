@@ -184,7 +184,72 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 			}
 		}
 	}
-    
+
+
+
+    /**
+     * This functionality appears in several forms in annovar. Essentially, we want to use the
+     * information contained in the gene model to calculate the start position of the variant
+     * within the coding sequence. It seems easier to concentrate that functionality in this
+     * class rather than in client code.
+     * <P>
+     * The basic functionality depends on the intron and exons lengths and the exon in which
+     * the variant is found.
+     * Note in Annovar we have two variants
+     * <UL>
+     * <LI>{@code  rvarstart = kgl.getExonStart(k)-txstart-cumlenintron+1;}. This is for variants located at least
+     * partially in the flanking intron sequence, we take the first exon position)
+     * <LI>
+     * <P>
+     * @param varstart The start position of the variant on the chromosome (can be the actual start position or
+     the start of the exon for variants that are )
+     * @param cumlenintron The cumulative length of then intron sequences (This has
+     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandCodingSequenceAnnotation getPlusStrandCodingSequenceAnnotation}
+     * or the corresponding function for the negative strand).
+     */
+    public int getRVarStart(int varstart, int cumlenintron) {
+	int rvarstart = varstart-this.txStart-cumlenintron+1;
+	return rvarstart;
+
+    }
+
+    /** 
+     * @param end The position of the end of the mutation on the chromosome
+     * @param k The exon number in which we have found the variant
+     * @param cumlenintron The cumulative length of then intron sequences (This has
+     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandCodingSequenceAnnotation getPlusStrandCodingSequenceAnnotation}
+     * or the corresponding function for the negative strand).
+     * TODO FOr minus strand!
+     */
+    public int getRVarEnd(int end, int k,int cumlenintron) {
+	int rvarend=-1;
+	for (int m=k;m<this.exonCount-1;++m) {
+	    if (m>k) {
+		cumlenintron +=  this.getLengthOfIntron(m);
+	    }
+	    if (end < this.getExonStart(m) ) {
+		/* #query           --------
+		   #gene     <--**---******---****---->
+		*/
+		rvarend = this.getExonEnd(m-1) - this.txStart - cumlenintron + 1 + this.getLengthOfIntron(m);
+		break;
+	    } else if (end <= this.getExonEnd(m) ) {
+		/*	#query           -----------
+			#gene     <--**---******---****---->
+		*/
+		rvarend = end-this.txStart-cumlenintron+1;
+		break;
+	    }
+	} 
+	if (rvarend<0) { /* i.e., rvarend has not be initialized yet */
+	    rvarend = this.txEnd-this.txStart-cumlenintron+1;
+	    /* if this value is longer than transcript length, 
+	       it suggests whole gene deletion. */
+	}
+	return rvarend;
+    }
+
+	
 
     /**
      * 	Calculates the length of the coding sequence based on the exon starts/stop. 
