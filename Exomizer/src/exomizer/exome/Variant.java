@@ -119,7 +119,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /**
      * @return an byte representation of the chromosome, e.g., 1,2,...,22 (note: X=23, Y=24, MT=25).
      */
-    public byte getChromosomeAsByte() { return (byte)chromosome; }
+    public byte getChromosomeAsByte() { return chromosome; }
    
 
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }

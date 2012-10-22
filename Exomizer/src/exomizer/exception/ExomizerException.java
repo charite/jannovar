@@ -15,6 +15,8 @@ package exomizer.exception;
 public class ExomizerException extends Exception {
 
     private String mistake=null;
+    
+    public static final long serialVersionUID = 1L;
 
     public ExomizerException() {
 	super();

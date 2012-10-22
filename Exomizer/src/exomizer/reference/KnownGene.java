@@ -59,7 +59,8 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     private int CDSlength;
     /** cDNA sequence of the spliced RNA of this known gene transcript. */
     private String sequence=null;
-
+    /** Class version (for serialization).*/
+    public static final long serialVersionUID = 1L;
 
 
     /**

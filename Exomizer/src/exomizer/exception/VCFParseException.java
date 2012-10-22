@@ -9,6 +9,8 @@ package exomizer.exception;
  */
 public class VCFParseException extends ExomizerException {
 
+    public static final long serialVersionUID = 1L;
+
     public VCFParseException() {
 	super("Unknown exception during parsing of VCF File");
     }

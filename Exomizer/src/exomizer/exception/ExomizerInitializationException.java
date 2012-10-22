@@ -8,6 +8,8 @@ package exomizer.exception;
  */
 public class ExomizerInitializationException extends ExomizerException {
 
+    public static final long serialVersionUID = 1L;
+
     public ExomizerInitializationException() {
 	super("Unknown exception during initialization of Exomizer");
     }

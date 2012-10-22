@@ -19,8 +19,8 @@ package exomizer.reference;
  * @version 0.01 (6 October 2012)
  */
 public class Annotation {
-    public String variantType=null;
-    public String variantAnnotation=null;
+    private String variantType=null;
+    private String variantAnnotation=null;
 
     public String getType() { return this.variantType; }
 
@@ -29,6 +29,9 @@ public class Annotation {
 	this.variantType=type;
 	this.variantAnnotation=anno;
     }
+
+    public String getVariantType() { return this.variantType; }
+    public String getVariantAnnotation() { return this.variantAnnotation; }
 
 
 

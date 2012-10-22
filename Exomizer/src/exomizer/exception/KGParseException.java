@@ -9,6 +9,8 @@ package exomizer.exception;
  */
 public class KGParseException extends ExomizerException {
 
+    public static final long serialVersionUID = 1L;
+
     public KGParseException() {
 	super("Unknown exception during parsing of UCSC Known Gene File");
     }
