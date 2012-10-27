@@ -36,7 +36,7 @@ public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
      TODO. Add more flexible way of dealing with scaffolds etc.*/
     private byte chromosome;
-    /** Alternative String for Chromosome. USe for scaffolds and "random" chromosomes. TODO: Refactor */
+    /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
     /** TreeMap with all of the genes ({@link exomizer.reference.KnownGene KnownGene} objects) of this chromosome. The key is an
      Integer value representing the transcription start site (txstart) of the transcript.*/
@@ -63,6 +63,14 @@ public class Chromosome {
     public void addGene(KnownGene kg) {
 	int pos = kg.getTXStart();
 	this.geneTreeMap.put(pos,kg);
+    }
+
+    /**
+     * @return String representation of name of chromosome, e.g., chr2
+     */
+    public String getChromosomeName() {
+	if (chromosomeString != null) return chromosomeString;
+	else return String.format("chr%d",chromosome);
     }
     
     
@@ -175,6 +183,8 @@ public class Chromosome {
 	int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
 	int genePositionL; // position of closest gene on left (5') side of variant (annovar: $genel)
 	int genePositionR; // position of closest gene on right (3') side of variant (annovar: $gener)
+	KnownGene leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
+	KnownGene rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
 	
 	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 
@@ -211,27 +221,30 @@ public class Chromosome {
 	    System.out.println("Got KG Name=" + name + ": " + kgl.getName2() + " strand:" + kgl.getStrand());
 	    if (! foundgenic) {  //this variant has not hit a genic region yet
 		// "start"  of variant is 3' to "txend" of this gene
-		if (start > txend) {
-		    if (distL > (start - txend) ) {
-			distL = start - txend; // distance to nearest gene to "left" side.
-			genePositionL = txstart; // Key of this gene in this.geneTreeMap
+		if (kgl.isThreePrimeToGene(start)) {
+		    if (rightNeighbor==null) {
+			rightNeighbor=kgl;
+		    } else { // already have a 3' neighbor. Get the closest one
+			int dist = kgl.getDistanceToThreePrimeTerminus(start);
+			int prev = rightNeighbor.getDistanceToThreePrimeTerminus(start);
+			if (dist < prev)
+			    rightNeighbor = kgl;
 		    }
-		    /* annovar: #identify left closest gene
-		     * defined $distl or $distl = $start-$txend and $genel=$name2;
-		     * $distl > $start-$txend and $distl = $start-$txend and $genel=$name2; */
 		}
-		if (end < txstart) {
-		    if (distR > (txstart - end) ) {
-			distR = txstart - end;
-			genePositionR = txstart;
-			/* annovar: #identify right closest gene
-			 * defined $distr or $distr = $txstart-$end and $gener=$name2;
-			 * $distr > $txstart-$end and $distr = $txstart-$end and $gener=$name2;	*/
+		// "end" of variant is 5' to txStart of gene
+		if (kgl.isFivePrimeToGene(end)) {
+		    if (leftNeighbor == null) {
+			leftNeighbor = kgl;
+		    } else {
+			int dist = kgl.getDistanceToFivePrimeTerminus(end);
+			int prev = rightNeighbor.getDistanceToFiveePrimeTerminus(end);
+			if (dist < prev)
+			    leftNeighbor = kgl;
 		    }
 		}
 	    }
-	    // When we arrive here, we may have adjusted the distR etc.
-	    if (end < txstart) {  // "end" of variant is 5' to "txstart" of gene
+	   
+	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
 		if (foundgenic) {
@@ -240,25 +253,16 @@ public class Chromosome {
 		       the search. In annovar: $foundgenic and last; (found right bin) */
 		    break;
 		}
-		if (end > txstart - NEARGENE) { 
-		    // we are near to upstream/downstream gene.
-		    if (kgl.isPlusStrand()) {
-			/* in Annovar: $upstream{$name2}++; */
-			annotation_list.add(new Annotation("upstream", name2)); 
-		    } else {
-			/* in Annovar: $downstream{$name2}++; */
-			annotation_list.add(new Annotation("downstream", name2)); 
-		    }
-		} else {
-		    /* we are NOT near to upstream/downstream gene. and thus 
-		       transcript is too far away from end.
-		       Note that annovar has "last" here, which would correspond to "break" in Java.
-		       However, we have arranged the KnownGenes to be tested so that they zig zag from nearest on
-		       5' and alternatingly next nearest on 3'. Thus, if we break, we might miss the
-		       gene on the other side. Instead, we will "continue"; this will rarely be a problem
-		       for typical exome sequences, most are close to genes.*/
-		    continue; /* Go to next KnownGene in for loop. */
-		}
+	
+	    } else {
+		/* we are NOT near to upstream/downstream gene. and thus 
+		   transcript is too far away from end.
+		   Note that annovar has "last" here, which would correspond to "break" in Java.
+		   However, we have arranged the KnownGenes to be tested so that they zig zag from nearest on
+		   5' and alternatingly next nearest on 3'. Thus, if we break, we might miss the
+		   gene on the other side. Instead, we will "continue"; this will rarely be a problem
+		   for typical exome sequences, most are close to genes.*/
+		continue; /* Go to next KnownGene in for loop. */
 	    } else if (start > txend) {
 		/* i.e., "start" is 3' to "txend" of gene */
 		if (! foundgenic && start < txend + NEARGENE)
@@ -298,6 +302,38 @@ public class Chromosome {
 	    //	} /* if not found genic */
 	
 	}/* for (KnownGene kgl : candidateGenes) */
+	/** If we arrive here and there are no annotations in the list, then
+	    we should at least have a rightNeighbor and a leftNeighbor. 
+	    We first check if one of these is upstream or downstream.
+	    If not, then we have an intergenic variant. */
+	if (annotation_list.isEmpty()) {
+	    if (leftNeighbor != null) {
+		if (leftNeighbor.isNearThreePrimeEnd(start,NEARGENE)) {
+		    if (leftNeighbor.isPlusStrand())
+			annotation_list.add(new Annotation("downstream", leftNeighbor.getName2())); 
+		    else
+			 annotation_list.add(new Annotation("upstream", leftNeighbor.getName2())); 
+		} else if (leftNeighbor.isNearFivePrimeEnd(start,NEARGENE)) {
+		    if (leftNeighbor.isPlusStrand())
+			annotation_list.add(new Annotation("upstream", leftNeighbor.getName2())); 
+		    else
+			annotation_list.add(new Annotation("downstream", leftNeighbor.getName2())); 
+		}
+	    }
+	    if (rightNeighbor != null) {
+		if (rightNeighbor.isNearThreePrimeEnd(start,NEARGENE)) {
+		    if (rightNeighbor.isPlusStrand())
+			annotation_list.add(new Annotation("downstream", rightNeighbor.getName2())); 
+		    else
+			annotation_list.add(new Annotation("upstream", rightNeighbor.getName2())); 
+		} else if (rightNeighbor.isNearFivePrimeEnd(start,NEARGENE)) {
+		    if (rightNeighbor.isPlusStrand())
+			annotation_list.add(new Annotation("upstream", rightNeighbor.getName2())); 
+		    else
+			annotation_list.add(new Annotation("downstream", rightNeighbor.getName2())); 
+		}
+	    }
+	}
 	return annotation_list;
     }
 

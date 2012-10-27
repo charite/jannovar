@@ -250,6 +250,64 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	return rvarend;
     }
 
+    /**
+     * Checks is the position passed to the function lies 3' to the gene on the chromosome.
+     * @param pos position of the variant along the current chromosome
+     * @return true if position is 3' to the end (txEnd) of this gene.
+     */
+    public boolean isThreePrimeToGene(int pos) {
+	return (pos > this.txEnd);
+    }
+
+    /**
+     * Checks is the position passed to the function lies 5' to the gene on the chromosome.
+     * @param pos position of the variant along the current chromosome
+     * @return true if position is 5' to the end (txStart) of this gene.
+     */
+    public boolean isFivePrimeToGene(int pos) {
+	return (pos < this.txStart);
+    }
+
+
+    /**
+     * Calculates whether the position given by {@code pos} is within
+     * {@code threshold} of the 5' end (txStart) of the gene.
+     */
+    public boolean isNearFivePrimeEnd(int pos,int threshold) {
+	if (pos > this.txStart - threshold)
+	    return true;
+	else 
+	    return false;
+    }
+
+    /**
+     * Calculates whether the position given by {@code pos} is within
+     * {@code threshold} of the 3' end (txEnd) of the gene.
+     */
+    public boolean isNearThreePrimeEnd(int pos,int threshold) {
+	if (pos > this.txEnd - threshold)
+	    return true;
+	else 
+	    return false;
+    }
+
+    /**
+     * @param pos position of a variant along the chromosome
+     * @return distance of pos to 3' end of the gene (txEnd)
+     */
+    public int getDistanceToThreePrimeTerminus(int pos) {
+	return pos - txend; 
+    }
+
+     /**
+     * @param pos position of a variant along the chromosome
+     * @return distance of pos to 5' end of the gene (txStart)
+     */
+    public int getDistanceToFivePrimeTerminus(int pos) {
+	return this.txStart - pos; 
+    }
+    
+
 	
 
     /**
