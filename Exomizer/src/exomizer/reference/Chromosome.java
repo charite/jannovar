@@ -208,7 +208,7 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    System.out.println("Got KG Name=" + name + ": " + kgl.getName2());
+	    System.out.println("Got KG Name=" + name + ": " + kgl.getName2() + " strand:" + kgl.getStrand());
 	    if (! foundgenic) {  //this variant has not hit a genic region yet
 		// "start"  of variant is 3' to "txend" of this gene
 		if (start > txend) {
