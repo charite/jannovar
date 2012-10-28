@@ -73,6 +73,95 @@ public class Annotation implements Constants {
 	return ann;
     }
 
+
+
+    public static Annotation createUpDownstreamAnnotation(KnownGene kg, int pos) {
+	Annotation ann = new Annotation();
+	ann.variantAnnotation = String.format("HGVS=%s", kg.getName2());
+	if (kg.isFivePrimeToGene(pos)) {
+	    if (kg.isPlusStrand()) {
+		ann.varType=UPSTREAM;
+	    } else {
+		ann.varType=DOWNSTREAM;
+	    }
+	} else if (kg.isThreePrimeToGene(pos)) {
+	    if (kg.isMinusStrand()) {
+		ann.varType=UPSTREAM;
+	    } else {
+		ann.varType=DOWNSTREAM;
+	    }
+	}
+	return ann;
+    }
+
+    public static Annotation createNonCodingExonicRnaAnnotation(String name2) {
+	Annotation ann = new Annotation();
+	ann.varType = ncRNA_EXONIC;
+	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	return ann;
+    }
+
+
+    /**
+     * This factory method does little more than assign the annotation
+     * string passed as an argument and to set the varType to SPLICING.
+     * For now, it seems more convenient to calculate the annotation
+     * string in client code.
+     */
+    public static Annotation createSplicingAnnotation(String anno) {
+	Annotation ann = new Annotation();
+	ann.varType = SPLICING;
+	ann.variantAnnotation = anno;
+	return ann;
+    }
+
+
+    public static Annotation createUTR5Annotation(String name2) {
+	Annotation ann = new Annotation();
+	ann.varType = UTR5;
+	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	return ann;
+
+    }
+
+    public static Annotation createUTR3Annotation(String name2) {
+	Annotation ann = new Annotation();
+	ann.varType = UTR3;
+	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	return ann;
+
+    }
+
+     public static Annotation createIntronicAnnotation(String name2) {
+	Annotation ann = new Annotation();
+	ann.varType = INTRONIC;
+	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	return ann;
+     }
+
+    /**
+     * Use this factory method for annotations that probably represent database
+     * errors or bugs and require manual checking.
+     */
+     public static Annotation createErrorAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType =  POSSIBLY_ERRONEOUS;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+     /**
+     * Use this factory method for annotations of non-frameshift deletion mutations.
+     */
+     public static Annotation createNonFrameshiftDeletionAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = NON_FS_DELETION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+
+
     /**
      * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
      */
@@ -85,15 +174,33 @@ public class Annotation implements Constants {
 	String s="";
 	switch(this.varType) {
 	case INTERGENIC: s="INTERGENIC";break;
-	default: s="NOT IMPLEMENTED YET, CHECK Annotation.java";
+	case DOWNSTREAM: s="DOWNSTREAM";break;
+	case INTRONIC: s="INTRONIC";break;
+	case UPSTREAM: s="UPSTREAM"; break;
+	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
+	case SPLICING: s="SPLICING"; break;
+	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
+	case UTR5: s="UTR5"; break;
+	case UTR3: s="UTR3"; break;
+	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",varType);
 	}
 	return s;
     }
     public String getVariantAnnotation() { return this.variantAnnotation; }
 
 
-
-
-
-
+    /** Return true if this is a genic mutation
+     * TODO: COmplete me!!!
+     */
+    public boolean isGenic() {
+	switch(this.varType) {
+	case ncRNA_EXONIC: return true;
+	case SPLICING:return true;
+	case UTR5:return true;
+	case UTR3:return true;
+	case EXONIC: return true;
+	case INTRONIC: return true;
+	default: return false;
+	}
+    }
 }

@@ -200,14 +200,76 @@ public class AnnotatorTest implements Constants {
      /**
      * The variant is
      * <P>
-     * chr15	23264927		A	C
+     * chr15	23577570 C	T		
      * <P>
      * annovar's annotation is intergenic;HGVS=GOLGA8IP(dist=2184),HERC2P2(dist=17338)	
      */
      @Test public void testIntergenicVar5() {
 	 byte chr = 15;
-	int pos = 23264927;
+	int pos = 23577570;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    int N = anno_list.size();
+	    //Assert.assertEquals(1,N);
+	    Annotation ann = anno_list.get(0);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(DOWNSTREAM,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("HGVS=DQ595648",annot);
+	    
+	}
+
+     }
+
+     /**
+     * The variant is
+     * <P>
+     * 	15	25307562	25307562	A	G		
+     * <P>
+     * annovar's annotation is ncRNA_exonic	SNORD116-5	
+     */
+     @Test public void testNcRNAVar1() {
+	  byte chr = 15;
+	int pos = 25307562;
 	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    int N = anno_list.size();
+	    Assert.assertEquals(1,N);
+	    Annotation ann = anno_list.get(0);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("HGVS=SNORD116-5",annot);
+	    
+	}
+     }
+
+
+
+
+
+    
+    /**
+     * The variant is
+     * <P>
+     * 	18	32398340	32398340	T	C
+     * <P>
+     * annovar's annotation is EFFECT=UTR5;HGVS=DTNA	
+     */
+     @Test public void testUTR5Var1() {
+	  byte chr = 18;
+	int pos = 32398340;
+	String ref = "T";
 	String alt = "C";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
@@ -218,15 +280,12 @@ public class AnnotatorTest implements Constants {
 	    Assert.assertEquals(1,N);
 	    Annotation ann = anno_list.get(0);
 	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    Assert.assertEquals(UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=HGVS=GOLGA8IP(dist=2184),HERC2P2(dist=17338)",annot);
+	    Assert.assertEquals("HGVS=DTNA",annot);
 	    
 	}
-
      }
-
-
 
 
 
