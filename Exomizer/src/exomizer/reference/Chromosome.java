@@ -645,11 +645,12 @@ public class Chromosome {
 		   /* Annovar: "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "X,";	
 		      #changed fsdel to nfsdel on 2011feb19 */
 		   } else {	 /* stop codon is lost */
-		       String annotation = String.format("%s:%s:exon%d:%s:p.X%d%s,",kgl.getName2(),kgl.getName(),
+		       String stoploss_ann = String.format("%s:%s:exon%d:%s:p.X%d%s,",kgl.getName2(),kgl.getName(),
 						     exonNumber,canno,aavarpos,varaa);
 		       /* $function->{$index}{stoploss} .= 
 		      "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "$varaa,"; */
-		       annotation_list.add(new Annotation("stoploss",annotation));
+		       Annotation ann = Annotation.createStopLossAnnotation(stoploss_ann);
+		       annotation_list.add(ann);
 		   }
 	       } else {
 		   if (varaa.contains("*")) { /* new stop codon created */

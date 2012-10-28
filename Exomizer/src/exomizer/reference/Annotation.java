@@ -160,6 +160,16 @@ public class Annotation implements Constants {
 	return ann;
      }
 
+    /**
+     * Use this factory method for annotations of non-frameshift deletion mutations.
+     */
+     public static Annotation createStopLossAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = STOPLOSS;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
 
 
     /**
@@ -179,6 +189,7 @@ public class Annotation implements Constants {
 	case UPSTREAM: s="UPSTREAM"; break;
 	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
 	case SPLICING: s="SPLICING"; break;
+	case STOPLOSS: s="STOPLOSS"; break;
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
