@@ -121,8 +121,11 @@ public class Chromosome {
 	for (int i = SPAN; i>0; i--) {
 	    entrL = this.geneTreeMap.lowerEntry(leftpos);
 	    entrR = this.geneTreeMap.higherEntry(rightpos);
-	    Integer iL = entrL.getKey();
-	    
+	    /* Note that entrL may be null if this variant is located 5' to the 
+	       first gene on this chromosome. */
+	    Integer iL = null;
+	    if (entrL != null)
+		iL = entrL.getKey();
 	    if (iL != null) {
 		currentKG = entrL.getValue();
 		kgList.add(currentKG);
@@ -131,7 +134,9 @@ public class Chromosome {
 	       * end of the chromosome, leftpos is now the lowest of this chromosome,
 	       * just do nothing here.
 	       */
-	    Integer iR = entrR.getKey();
+	    Integer iR = null;
+	    if (entrR != null)
+		iR = entrR.getKey();
 	    if (iR != null) {
 		currentKG = entrR.getValue();
 		kgList.add(currentKG);
@@ -147,8 +152,11 @@ public class Chromosome {
 	/* When we get here, leftpos, midpos, and rightpos define a range of positions on this
 	   Chromosome at which we want to search. midpos is the most likely location of the 
 	   gene corresponding to our variant, but theoretically the genes corresponding to 
-	   the variant could be located at other places in the range. */
-	System.out.println(String.format("Left, mid, right: %d/%d/%d",leftpos,midpos,rightpos));
+	   the variant could be located at other places in the range.We return kgList, an
+	   array list of knownGene objects that surround the position of the variant, and
+	   will now be used by the function getAnnotations to calculate the annotation of the
+	   variant.*/
+	//System.out.println(String.format("Left, mid, right: %d/%d/%d",leftpos,midpos,rightpos));
 	return kgList;
     }
 
@@ -179,12 +187,19 @@ public class Chromosome {
      */
     public ArrayList<Annotation> getAnnotation(int position,String ref, String alt) {
 	System.out.println(String.format("getAnnotation for %d ref: \"%s\" alt \"%s\"",position,ref,alt));
-	int distL=Integer.MAX_VALUE; // distance to closest gene on left (5') side of variant (annovar: $distl)
-	int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
-	int genePositionL; // position of closest gene on left (5') side of variant (annovar: $genel)
-	int genePositionR; // position of closest gene on right (3') side of variant (annovar: $gener)
+	//int distL=Integer.MAX_VALUE; // distance to closest gene on left (5') side of variant (annovar: $distl)
+	//int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
+	//int genePositionL; // position of closest gene on left (5') side of variant (annovar: $genel)
+	//int genePositionR; // position of closest gene on right (3') side of variant (annovar: $gener)
 	KnownGene leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	KnownGene rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
+	/* Note, the following two variables are use to know when we can stop the search: we have already found
+	   a 5' and a 3' neighboring gene surrounding the variant. Annovar goes 5' to 3', but we are going
+	   centrifugally away from the position of the variant when deciding which gene to test next. Therefore,
+	   we need a slightly different strategy to decide whedn to quit the search (In annovar, the search is
+	   stopped when we have already found an intragenidc mutation and we hit a gene that is 3' to the variant).*/
+	boolean foundFivePrimeNeighbor=false;
+	boolean foundThreePrimeNeighbor=false;
 	
 	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 
@@ -220,58 +235,47 @@ public class Chromosome {
 	    String name2 = kgl.getName2();
 	    System.out.println("Got KG Name=" + name + ": " + kgl.getName2() + " strand:" + kgl.getStrand());
 	    if (! foundgenic) {  //this variant has not hit a genic region yet
-		// "start"  of variant is 3' to "txend" of this gene
+		// "start"  of variant is 3' to "txend" of this gene, thus the gene is a LEFT neighbor to the var
 		if (kgl.isThreePrimeToGene(start)) {
-		    if (rightNeighbor==null) {
-			rightNeighbor=kgl;
+		    if (leftNeighbor==null) {
+			leftNeighbor=kgl;
 		    } else { // already have a 3' neighbor. Get the closest one
 			int dist = kgl.getDistanceToThreePrimeTerminus(start);
-			int prev = rightNeighbor.getDistanceToThreePrimeTerminus(start);
-			if (dist < prev)
-			    rightNeighbor = kgl;
-		    }
-		}
-		// "end" of variant is 5' to txStart of gene
-		if (kgl.isFivePrimeToGene(end)) {
-		    if (leftNeighbor == null) {
-			leftNeighbor = kgl;
-		    } else {
-			int dist = kgl.getDistanceToFivePrimeTerminus(end);
-			int prev = rightNeighbor.getDistanceToFiveePrimeTerminus(end);
+			int prev = leftNeighbor.getDistanceToThreePrimeTerminus(start);
 			if (dist < prev)
 			    leftNeighbor = kgl;
 		    }
 		}
+		// "end" of variant is 5' to txStart of gene, thus the gene is a RIGHT neighbor to the var
+		if (kgl.isFivePrimeToGene(end)) {
+		    if (rightNeighbor == null) {
+			rightNeighbor = kgl;
+		    } else {
+			int dist = kgl.getDistanceToFivePrimeTerminus(end);
+			int prev = rightNeighbor.getDistanceToFivePrimeTerminus(end);
+			if (dist < prev)
+			    rightNeighbor = kgl;
+		    }
+		}
 	    }
+	    /* When we get here, leftNeighbor and rightNeighbor are the closest 5' and 3' genes to
+	       the variant to date. They may be null if we have already found a gene in which the variant is
+	       located */
 	   
 	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
-		if (foundgenic) {
-		    /* We have already found a gene such that this variant is genic. The variant
-		       is 5' to the current gene. Therefore, there is no overlap and we can stop
-		       the search. In annovar: $foundgenic and last; (found right bin) */
-		    break;
-		}
-	
-	    } else {
-		/* we are NOT near to upstream/downstream gene. and thus 
-		   transcript is too far away from end.
-		   Note that annovar has "last" here, which would correspond to "break" in Java.
-		   However, we have arranged the KnownGenes to be tested so that they zig zag from nearest on
-		   5' and alternatingly next nearest on 3'. Thus, if we break, we might miss the
-		   gene on the other side. Instead, we will "continue"; this will rarely be a problem
-		   for typical exome sequences, most are close to genes.*/
-		continue; /* Go to next KnownGene in for loop. */
-	    } else if (start > txend) {
+		foundThreePrimeNeighbor=true; /* gene is 3' neighbor */
+		if (foundgenic) break;
+		/* We have already found a gene such that this variant is genic. */
+		else if (foundFivePrimeNeighbor) break; /* we have found genes outside of the variant on 5' and 3' sides */
+		else continue; /* go to next round, continue search */
+	    } else if (kgl.isThreePrimeToGene(start) ) {
 		/* i.e., "start" is 3' to "txend" of gene */
-		if (! foundgenic && start < txend + NEARGENE)
-		    // we are near to upstream/downstream gene.
-		    if (kgl.isPlusStrand() ) {
-			annotation_list.add(new Annotation("upstream", name2)); 
-		    } else {
-			annotation_list.add(new Annotation("downstream", name2)); 
-		    }
+		foundFivePrimeNeighbor=true; /* gene is 5' neighbor to var */
+		if (foundgenic) break;
+		else if (foundThreePrimeNeighbor) break;  /* we have found genes outside of the variant on 5' and 3' sides */
+		else continue;  /* go to next round, continue search */
 	    } else {
 		/* We now must be in a genic region */
 		if (! kgl.isCodingGene() ) {
@@ -332,6 +336,13 @@ public class Chromosome {
 		    else
 			annotation_list.add(new Annotation("downstream", rightNeighbor.getName2())); 
 		}
+	    }
+	    /* If we get here, and annotation_list is still empty, then the variant is not
+	       nearby to any gene (i.e., it is not upstream/downstream). Therefore, the variant
+	       is intergenic */
+	    if (annotation_list.isEmpty()) {
+		Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start);
+		annotation_list.add(ann);
 	    }
 	}
 	return annotation_list;

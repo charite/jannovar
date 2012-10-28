@@ -158,33 +158,33 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	 * (see the code).
 	 */
     private void calculateRefCDSStart() {
-		int cumlenintron = 0; // cumulative length of introns at a given exon
-		this.rcdsStart=0; // start of CDS within reference RNA sequence.
-		if (this.isPlusStrand()) {
-		    for (int k=0; k< this.exonCount;++k) {
-				if (k>0)
-					cumlenintron += this.getLengthOfIntron(k);
-				if (this.cdsStart >= this.getExonStart(k)) {
-					/* Calculate CDS start within mRNA sequence accurately
-					by taking intron length into account. */
-					this.rcdsStart = this.cdsStart - this.txStart - cumlenintron + 1;
-					break;
-				}
-			}
-		} else { /* i.e., minus strand */
-			for (int k = this.exonCount-1; k>=0; k--) {
-				if (k < this.exonCount-1) {
-					cumlenintron += this.getLengthOfIntron(k);//($exonstart[$k+1]-$exonend[$k]-1);
-				}
-							
-				if (this.cdsEnd <= this.getExonEnd(k)) {		
-					//calculate CDS start accurately by considering intron length
-					this.rcdsStart = this.txEnd-this.cdsEnd-cumlenintron+1;
-					break;			
-				}
-			}
+	int cumlenintron = 0; // cumulative length of introns at a given exon
+	this.rcdsStart=0; // start of CDS within reference RNA sequence.
+	if (this.isPlusStrand()) {
+	    for (int k=0; k< this.exonCount;++k) {
+		if (k>0)
+		    cumlenintron += this.getLengthOfIntron(k);
+		if (this.cdsStart >= this.getExonStart(k)) {
+		    /* Calculate CDS start within mRNA sequence accurately
+		       by taking intron length into account. */
+		    this.rcdsStart = this.cdsStart - this.txStart - cumlenintron + 1;
+		    break;
 		}
+	    }
+	} else { /* i.e., minus strand */
+	    for (int k = this.exonCount-1; k>=0; k--) {
+		if (k < this.exonCount-1) {
+		    cumlenintron += this.getLengthOfIntron(k);//($exonstart[$k+1]-$exonend[$k]-1);
+		}
+		
+		if (this.cdsEnd <= this.getExonEnd(k)) {		
+		    //calculate CDS start accurately by considering intron length
+		    this.rcdsStart = this.txEnd-this.cdsEnd-cumlenintron+1;
+		    break;			
+		}
+	    }
 	}
+    }
 
 
 
@@ -270,22 +270,33 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 
 
     /**
-     * Calculates whether the position given by {@code pos} is within
+     * Calculates whether the position given by {@code pos} is 5' to
+     * the start of the gene (i.e., txStart) and also within
      * {@code threshold} of the 5' end (txStart) of the gene.
+     * @param pos position of variant (end) on current chromosome
+     * @param threshold Threshold distance to be considered upstream/downstream (set in Chromosome, should be 1000 nt)
+     * @return true if variant is extragenic but within threshold of 5' end of gene (i.e., txStart)
      */
     public boolean isNearFivePrimeEnd(int pos,int threshold) {
-	if (pos > this.txStart - threshold)
+	int distance = this.txStart - pos;
+	if (distance <= 0) return false; /* variant is not 5' to gene start */
+	if (distance < threshold)
 	    return true;
 	else 
 	    return false;
     }
 
     /**
-     * Calculates whether the position given by {@code pos} is within
+     * Calculates whether the position given by {@code pos} is 3' to the
+     * end of the gene (i.e., txEnd) and also within
      * {@code threshold} of the 3' end (txEnd) of the gene.
      */
     public boolean isNearThreePrimeEnd(int pos,int threshold) {
-	if (pos > this.txEnd - threshold)
+	int distance = pos - this.txEnd;
+	if (distance <= 0) return false; /* variant is not 3' to gene, but 5' to it or within it! */
+	System.out.println("Threshold: " + threshold + ", pos=" + pos + " txEnd=" + txEnd);
+	System.out.println(String.format("pos - this.txEnd  =%d; threshold=%d",pos - this.txEnd , threshold));
+	if (distance <  threshold)
 	    return true;
 	else 
 	    return false;
@@ -296,7 +307,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @return distance of pos to 3' end of the gene (txEnd)
      */
     public int getDistanceToThreePrimeTerminus(int pos) {
-	return pos - txend; 
+	return pos - this.txEnd; 
     }
 
      /**

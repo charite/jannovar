@@ -13,6 +13,7 @@
     <path id="classpath">
       <pathelement location="./" />
       <pathelement location="../Exomizer.jar" />
+      <pathelement location="../Annotator.jar" />
       <pathelement location="../NSFP2SQL.jar" />
       <pathelement location="../ESP2SQL.jar" />
       <pathelement location="../lib/junit-4.10.jar" />
@@ -60,11 +61,13 @@
 	  depends="compile">
     <junit printsummary="yes" 
 	   fork="yes"
+	   showoutput="yes"
+	   maxmemory="1024M"
 	   haltonfailure="no">
        <classpath refid="classpath" />
       <classpath path="${build.classes}" />
       <formatter type="plain" usefile="off"/>
-      <test name="exomizer.tests.UCSCKGParserTest"/>
+      <test name="exomizer.tests.AnnotatorTest"/>
     </junit>
   </target>
 
