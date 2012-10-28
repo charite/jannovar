@@ -197,9 +197,37 @@ public class AnnotatorTest implements Constants {
 
      }
 
+     /**
+     * The variant is
+     * <P>
+     * chr15	23264927		A	C
+     * <P>
+     * annovar's annotation is intergenic;HGVS=GOLGA8IP(dist=2184),HERC2P2(dist=17338)	
+     */
+     @Test public void testIntergenicVar5() {
+	 byte chr = 15;
+	int pos = 23264927;
+	String ref = "A";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    int N = anno_list.size();
+	    Assert.assertEquals(1,N);
+	    Annotation ann = anno_list.get(0);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTERGENIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("HGVS=HGVS=GOLGA8IP(dist=2184),HERC2P2(dist=17338)",annot);
+	    
+	}
+
+     }
 
 
-    
+
 
 
 
