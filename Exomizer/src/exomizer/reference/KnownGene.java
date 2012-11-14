@@ -256,6 +256,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @return true if position is 3' to the end (txEnd) of this gene.
      */
     public boolean isThreePrimeToGene(int pos) {
+	System.out.println(String.format("isThreePrimeToGene: pos=%d, txEnd=%d",pos,txEnd));
 	return (pos > this.txEnd);
     }
 

@@ -287,7 +287,30 @@ public class AnnotatorTest implements Constants {
 	}
      }
 
+    /**
+       1	43300921	43300921	C	G	EFFECT=intronic;HGVS=ERMAP;D
+    */
+     @Test public void testIntronicVar1() {
+	 byte chr = 1;
+	 int pos = 43300921;
+	 String ref = "C";
+	 String alt ="G";
 
+	 Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    int N = anno_list.size();
+	    Assert.assertEquals(1,N);
+	    Annotation ann = anno_list.get(0);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("HGVS=ERMAP",annot);
+	}
+	    
 
+     }
 
 }

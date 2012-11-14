@@ -223,7 +223,7 @@ public class Chromosome {
 	
 	for (KnownGene kgl : candidateGenes) {
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
-	    
+	    System.out.println("Bla LOOKING AT KGL " + kgl.getName2());
 	    // 	($name, $dbstrand, $txstart, $txend, $cdsstart, $cdsend, $exonstart, $exonend, $name2)
 	    //char dbstrand = kgl.getStrand();
 	    String name = kgl.getKnownGeneID();
@@ -261,10 +261,12 @@ public class Chromosome {
 	    /* When we get here, leftNeighbor and rightNeighbor are the closest 5' and 3' genes to
 	       the variant to date. They may be null if we have already found a gene in which the variant is
 	       located */
-	   
+	   	System.out.println("bla before ifs");
+		System.out.println("bla txStart:" + kgl.getTXStart());
 	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
+		System.out.println("bla is 5' to gene");
 		foundThreePrimeNeighbor=true; /* gene is 3' neighbor */
 		if (foundgenic) break;
 		/* We have already found a gene such that this variant is genic. */
@@ -272,12 +274,18 @@ public class Chromosome {
 		else continue; /* go to next round, continue search */
 	    } else if (kgl.isThreePrimeToGene(start) ) {
 		/* i.e., "start" is 3' to "txend" of gene */
+		System.out.println("bla is 3' to gene");
+		System.out.println("kgl txStart: " + kgl.getTXStart());
+		System.out.println("kgl txEnd: " + kgl.getTXEnd());
+
+
 		foundFivePrimeNeighbor=true; /* gene is 5' neighbor to var */
 		if (foundgenic) break;
 		else if (foundThreePrimeNeighbor) break;  /* we have found genes outside of the variant on 5' and 3' sides */
 		else continue;  /* go to next round, continue search */
 	    } else {
 		/* We now must be in a genic region */
+		System.out.println("bla in genic region");
 		if (! kgl.isCodingGene() ) {
 		    /* this is either noncoding RNA or maybe bad annotation in UCSC */
 		    if (start >= txstart &&  start <= txend ||   /* start is within transcript */
@@ -299,6 +307,8 @@ public class Chromosome {
 			    foundgenic=true;
 			annotation_list.add(a);
 		    }
+		} else if (kgl.isMinusStrand()) {
+		    System.out.println("Warning: " + kgl.getName2() + " is minus strand genic (not yet implemented)");
 		}
 	    }
 
@@ -369,6 +379,7 @@ public class Chromosome {
 	rcdsstart = kgl.getRefCDSStart();
 
 	for (int k=0; k< exoncount;++k) {
+	    System.out.println("BLA getPlusStrandCodingSequenceAnnotation");
 	    if (k>0)
 		cumlenintron += kgl.getLengthOfIntron(k);
 	    cumlenexon += kgl.getLengthOfExon(k);
@@ -462,6 +473,7 @@ public class Chromosome {
 		} else if (k>0 && start > kgl.getExonEnd(k-1)) {  /* i.e., variant is intronic */
 		    /* Annovar: $intronic{$name2}++; $foundgenic++; last; */
 		    Annotation ann = Annotation.createIntronicAnnotation(name2);
+		    System.out.println("INTRON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		    annotation_list.add(ann);
 		    break;
 		}
