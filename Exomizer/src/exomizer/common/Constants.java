@@ -76,6 +76,8 @@ public interface Constants {
     public static final int FREQUENCY_FILTER = 207;
     /** Flag to represent results of filtering against an inheritance pattern. */
     public static final int INHERITANCE_PATTERN_FILTER = 208;
+    /** Flag to represent results of filtering against phenotype data */
+    public static final int PHENODIGM_FILTER = 209;
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
 
     /** Flag for an integer value that has not been initialized. */
