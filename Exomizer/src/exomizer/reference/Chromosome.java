@@ -206,7 +206,7 @@ public class Chromosome {
 	
 
 
-	HashSet<Integer> splicing = new HashSet<Integer>();
+	//HashSet<Integer> splicing = new HashSet<Integer>();
 	
 	HashSet<Integer> utr5 = new HashSet<Integer>();
 	HashSet<Integer> utr3 = new HashSet<Integer>();
@@ -405,7 +405,8 @@ public class Chromosome {
 			/*  #------*-<---->------- mutation located right in front of exon */
 			cumlenexon -= (exonend - exonstart);
 			/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
-			String anno = String.format("exon:%d:c.%d-%d%s>%s",k+1,cumlenexon,exonstart-start,ref,alt);
+			String anno = String.format("HGVS=%s(%s:exon:%d:c.%d-%d%s>%s)",kgl.getName2(),kgl.getName(),
+						    k+1,cumlenexon,exonstart-start,ref,alt);
 			Annotation ann = Annotation.createSplicingAnnotation(anno);
 			annotation_list.add(ann);
 			/* Annovar:$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon-" . ($exonstart[$k]-$start) . "$ref>$obs,"; */
