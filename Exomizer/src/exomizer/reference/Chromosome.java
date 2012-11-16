@@ -208,10 +208,10 @@ public class Chromosome {
 
 	//HashSet<Integer> splicing = new HashSet<Integer>();
 	
-	HashSet<Integer> utr5 = new HashSet<Integer>();
-	HashSet<Integer> utr3 = new HashSet<Integer>();
-	HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
-	HashMap<Integer,String> exonic = new HashMap<Integer,String>();
+	//HashSet<Integer> utr5 = new HashSet<Integer>();
+	//HashSet<Integer> utr3 = new HashSet<Integer>();
+	//HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
+	//HashMap<Integer,String> exonic = new HashMap<Integer,String>();
 	// Define start and end positions of variant
 	int start = position;
 	int end = start + ref.length() - 1;
@@ -223,7 +223,6 @@ public class Chromosome {
 	
 	for (KnownGene kgl : candidateGenes) {
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
-	    System.out.println("Bla LOOKING AT KGL " + kgl.getName2());
 	    // 	($name, $dbstrand, $txstart, $txend, $cdsstart, $cdsend, $exonstart, $exonend, $name2)
 	    //char dbstrand = kgl.getStrand();
 	    String name = kgl.getKnownGeneID();
@@ -233,7 +232,7 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    System.out.println("Got KG Name=" + name + ": " + kgl.getName2() + " strand:" + kgl.getStrand());
+	    System.out.println("\tBla LOOKING AT KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
 	    if (! foundgenic) {  //this variant has not hit a genic region yet
 		// "start"  of variant is 3' to "txend" of this gene, thus the gene is a LEFT neighbor to the var
 		if (kgl.isThreePrimeToGene(start)) {
@@ -261,8 +260,7 @@ public class Chromosome {
 	    /* When we get here, leftNeighbor and rightNeighbor are the closest 5' and 3' genes to
 	       the variant to date. They may be null if we have already found a gene in which the variant is
 	       located */
-	   	System.out.println("bla before ifs");
-		System.out.println("bla txStart:" + kgl.getTXStart());
+	    System.out.println(String.format("\tbla %s, txStart:%d, before ifs:", kgl.getName2(), kgl.getTXStart()));
 	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
@@ -563,6 +561,9 @@ public class Chromosome {
    private ArrayList<Annotation> annotateExonicVariants(int refvarstart, int refvarend, 
 		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) {
        ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+
+       System.out.println("bla annotateExonicVariants start = " + refvarstart);
+
        /*  Annovar declarations:
 	* my ($wtnt3, $wtnt3_after, @wtnt3, $varnt3, $wtaa, $wtaa_after, $varaa, $varpos);		
 	* #wtaa_after is the aa after the wtaa

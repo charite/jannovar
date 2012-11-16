@@ -64,7 +64,7 @@ public class AnnotatorTest implements Constants {
             c.printStackTrace();
             System.exit(1);
         }
-	System.out.println("Done deserialization, size of map is " + kgMap.size());
+	//System.out.println("Done deserialization, size of map is " + kgMap.size());
 	chromosomeMap = new HashMap<Byte,Chromosome> ();
 	System.out.println("Adding KGs to Chromosomes");
 	System.out.println("Number of KGs is " + kgMap.size());
