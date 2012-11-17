@@ -31,7 +31,7 @@ public class Translator {
 
     
     private Translator() {
-		initializeMaps();
+	initializeMaps();
     }
     
     /** Factory method to get reference to Translator. */

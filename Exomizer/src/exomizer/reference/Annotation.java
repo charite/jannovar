@@ -33,6 +33,8 @@ public class Annotation implements Constants {
     public Annotation(String type, String anno) {
 	this.variantType=type;
 	this.variantAnnotation=anno;
+	System.out.println("TYPE = " + type + " anno=" + anno);
+	System.exit(1);
     }
 
     /** This constructor is intended to be used only by static factory methods. */
@@ -124,10 +126,10 @@ public class Annotation implements Constants {
 
     }
 
-    public static Annotation createUTR3Annotation(String name2) {
+    public static Annotation createUTR3Annotation(String genesymbol, String accession) {
 	Annotation ann = new Annotation();
 	ann.varType = UTR3;
-	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	ann.variantAnnotation = String.format("HGVS=%s;%s", genesymbol,accession);
 	return ann;
 
     }
@@ -170,8 +172,41 @@ public class Annotation implements Constants {
 	return ann;
      }
 
+     /**
+     * Use this factory method for annotations of non-frameshift deletion mutations.
+     */
+     public static Annotation createStopGainAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = STOPGAIN;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+     /**
+     * Use this factory method for annotations of frameshift deletion mutations.
+     */
+     public static Annotation createFrameshiftDelAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = FS_DELETION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
 
 
+    public static Annotation createSynonymousSNVAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = SYNONYMOUS;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+     public static Annotation createMissenseSNVAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = MISSENSE;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+    
     /**
      * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
      */
@@ -190,10 +225,12 @@ public class Annotation implements Constants {
 	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
 	case SPLICING: s="SPLICING"; break;
 	case STOPLOSS: s="STOPLOSS"; break;
+	case STOPGAIN: s="STOPGAIN"; break;
+	case SYNONYMOUS: s="SYNONYMOUS"; break;
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
-	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",varType);
+	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d) annot:%s",varType,variantAnnotation);
 	}
 	return s;
     }

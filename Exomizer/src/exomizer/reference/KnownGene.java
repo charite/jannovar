@@ -256,7 +256,8 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @return true if position is 3' to the end (txEnd) of this gene.
      */
     public boolean isThreePrimeToGene(int pos) {
-	System.out.println(String.format("isThreePrimeToGene: pos=%d, txEnd=%d",pos,txEnd));
+	System.out.print(String.format("\t[KnownGene.java]: variant isThreePrimeToGene: pos=%d, txStart=%d, txEnd=%d",pos,txStart,txEnd));
+	if (pos > txEnd) System.out.println(" true"); else System.out.println(" false");
 	return (pos > this.txEnd);
     }
 
@@ -412,12 +413,19 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
      */
     public String getWTCodonNucleotides(int refvarstart, int frame_s){
-		int start = refvarstart - frame_s - 1;
-		/* Substract one to get back to zero-based numbering.
-		 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
-		 */
-		 return this.sequence.substring(start, start+3); /* for + strand */
-	}
+	int start = refvarstart - frame_s - 1;
+	/* Substract one to get back to zero-based numbering.
+	 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
+	 */
+	System.out.println("KnownGene.java: getWTCodonNucleotides");
+	System.out.println("print surroundings of codon");
+	System.out.println(String.format("refvarstart:%d  frame_s:%d",refvarstart,frame_s));
+	System.out.println("CDS start: " + cdsStart + " txStart= " + txStart + ", aug=" + (cdsStart - txStart + 1));
+	System.out.println("-30 +30: " + sequence.substring(start-30, start+30));
+
+
+	return this.sequence.substring(start, start+3); /* for + strand */
+    }
 	
 	/** This function is valid for exonic variants. It extracts the 
      * three nucleotides from the reference sequence that are directly

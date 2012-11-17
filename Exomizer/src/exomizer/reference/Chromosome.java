@@ -10,6 +10,14 @@ import java.util.ArrayList;
 
 import exomizer.reference.KnownGene;
 import exomizer.reference.Translator;
+import exomizer.exception.AnnotationException;
+
+/** The following classes contain static functions used to calculate the 
+    annotations for certain classes of mutation. These functions are put into
+    separate classes just to keep things tidy and comprehensible in this class.
+*/
+import exomizer.annotation.DeletionAnnotation;
+import exomizer.annotation.SingleNucleotideSubstitution;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
@@ -23,6 +31,11 @@ import exomizer.reference.Translator;
  * chromosome with one gene located in the intron of the next or with overlapping
  * genes. 
  * <P>
+ * Note that the key of the tree map corresponds to the 5' most position of the KnownGene. The value is a list
+ * (ArrayList) of {@link exomizer.reference.KnownGene KnownGene} objects. 
+ * This is because multiple KnownGenes may share the same transcription
+ * start (e.g., multiple splice forms of the same gene).
+ * <P>
  * Note that this class contains some of the annotation functions of Annovar. It was not
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. Some notes in particular
@@ -30,7 +43,7 @@ import exomizer.reference.Translator;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.02 (Oct. 3, 2012)
+ * @version 0.03 (Nov. 15, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -39,8 +52,10 @@ public class Chromosome {
     /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
     /** TreeMap with all of the genes ({@link exomizer.reference.KnownGene KnownGene} objects) of this chromosome. The key is an
-     Integer value representing the transcription start site (txstart) of the transcript.*/
-    private TreeMap<Integer,KnownGene> geneTreeMap=null;
+     Integer value representing the transcription start site (txstart) of the transcript. Note that we need to
+     use an Array of KnownGenes because there can be multiple KnownGenes that share the same transcription start site.
+     (e.g., multiple isoforms of the same gene).*/
+    private TreeMap<Integer,ArrayList<KnownGene>> geneTreeMap=null;
     /** The number of keys (gene 5' positions) to search in either direction. */
     private static final int SPAN = 5;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
@@ -53,7 +68,7 @@ public class Chromosome {
 
     public Chromosome(byte c) {
 	this.chromosome = c;
-	this.geneTreeMap = new TreeMap<Integer,KnownGene>();
+	this.geneTreeMap = new TreeMap<Integer,ArrayList<KnownGene>>();
 	this.translator = Translator.getTranslator();
     }
 
@@ -62,7 +77,18 @@ public class Chromosome {
      */
     public void addGene(KnownGene kg) {
 	int pos = kg.getTXStart();
-	this.geneTreeMap.put(pos,kg);
+	ArrayList<KnownGene> lst = null;
+	/* 1. There is already a KnownGene with this txStart */
+	if (this.geneTreeMap.containsKey(pos)) {
+	    lst = geneTreeMap.get(pos);
+	    lst.add(kg);
+	}
+	/* 2. This is the first knownGene with this txStart */
+	else {
+	    lst =  new 	ArrayList<KnownGene>();
+	    lst.add(kg);
+	    this.geneTreeMap.put(pos,lst);
+	}
     }
 
     /**
@@ -98,12 +124,13 @@ public class Chromosome {
      * @return list of KnownGenes that are candidates for being affected by variant at this position
      */
     private ArrayList<KnownGene> getBinRange(int position) {
-	ArrayList<KnownGene> kgList = new ArrayList<KnownGene>();
+	ArrayList<KnownGene> kgList = new ArrayList<KnownGene>(); /* list of KnownGenes in range. */
 	KnownGene currentKG=null;
+	ArrayList<KnownGene> currentKGlist=null;
 	
 	Integer midpos=null, leftpos=null, rightpos=null;
-	Map.Entry<Integer,KnownGene> entrL = this.geneTreeMap.ceilingEntry(position);
-	Map.Entry<Integer,KnownGene> entrR = null;
+	Map.Entry<Integer,ArrayList<KnownGene>> entrL = this.geneTreeMap.ceilingEntry(position);
+	Map.Entry<Integer,ArrayList<KnownGene>> entrR = null;
 	if (entrL == null) {
 	    entrL = this.geneTreeMap.floorEntry(position);
 	}
@@ -113,8 +140,9 @@ public class Chromosome {
 	    System.exit(1);
 	}
 	midpos = entrL.getKey();
-	currentKG = entrL.getValue();
-	kgList.add(currentKG);
+	currentKGlist = entrL.getValue();
+	for (KnownGene KG : currentKGlist)
+	    kgList.add(KG);
 	
 	leftpos = midpos;
 	rightpos = midpos;
@@ -127,8 +155,9 @@ public class Chromosome {
 	    if (entrL != null)
 		iL = entrL.getKey();
 	    if (iL != null) {
-		currentKG = entrL.getValue();
-		kgList.add(currentKG);
+		currentKGlist = entrL.getValue();
+		for (KnownGene KG : currentKGlist)
+		    kgList.add(KG);
 		leftpos = iL;
 	    } /* Note that if iL==null then there are no more positions on 5'
 	       * end of the chromosome, leftpos is now the lowest of this chromosome,
@@ -138,8 +167,9 @@ public class Chromosome {
 	    if (entrR != null)
 		iR = entrR.getKey();
 	    if (iR != null) {
-		currentKG = entrR.getValue();
-		kgList.add(currentKG);
+		currentKGlist = entrR.getValue();
+		for ( KnownGene KG : currentKGlist)
+		    kgList.add(KG);
 		rightpos = iR;
 	    } /* Note that if iR==null, then there are no more positions on
 	       * the 3' end of the chromosome, rightpos is thus the higest of
@@ -185,7 +215,7 @@ public class Chromosome {
      * @return a list of {@link exomizer.reference.Annotation Annotation} objects corresponding to the mutation described by the object 
      * (often just one annotation, but potentially multiple ones).
      */
-    public ArrayList<Annotation> getAnnotation(int position,String ref, String alt) {
+    public ArrayList<Annotation> getAnnotation(int position,String ref, String alt) throws AnnotationException {
 	System.out.println(String.format("getAnnotation for %d ref: \"%s\" alt \"%s\"",position,ref,alt));
 	//int distL=Integer.MAX_VALUE; // distance to closest gene on left (5') side of variant (annovar: $distl)
 	//int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
@@ -200,18 +230,11 @@ public class Chromosome {
 	   stopped when we have already found an intragenidc mutation and we hit a gene that is 3' to the variant).*/
 	boolean foundFivePrimeNeighbor=false;
 	boolean foundThreePrimeNeighbor=false;
+
+	AnnotatedVar annovar = new AnnotatedVar();
 	
 	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 
-	
-
-
-	//HashSet<Integer> splicing = new HashSet<Integer>();
-	
-	//HashSet<Integer> utr5 = new HashSet<Integer>();
-	//HashSet<Integer> utr3 = new HashSet<Integer>();
-	//HashMap<Integer,String> splicing_anno = new HashMap<Integer,String>();
-	//HashMap<Integer,String> exonic = new HashMap<Integer,String>();
 	// Define start and end positions of variant
 	int start = position;
 	int end = start + ref.length() - 1;
@@ -224,7 +247,6 @@ public class Chromosome {
 	for (KnownGene kgl : candidateGenes) {
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
 	    // 	($name, $dbstrand, $txstart, $txend, $cdsstart, $cdsend, $exonstart, $exonend, $name2)
-	    //char dbstrand = kgl.getStrand();
 	    String name = kgl.getKnownGeneID();
 	    int txstart = kgl.getTXStart();
 	    int txend   = kgl.getTXEnd();
@@ -232,8 +254,13 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    System.out.println("\tBla LOOKING AT KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
-	    if (! foundgenic) {  //this variant has not hit a genic region yet
+	    System.out.println("Bla LOOKING AT KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
+	    /* ***************************************************************************************** *
+	     * The following code block is executed if the variant has not hit a genic region yet and    *
+	     * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
+	     * This information is useful for "intergenic" variants.                                     *
+	     * ***************************************************************************************** */
+	    if (! foundgenic) {  //this variant has 
 		// "start"  of variant is 3' to "txend" of this gene, thus the gene is a LEFT neighbor to the var
 		if (kgl.isThreePrimeToGene(start)) {
 		    if (leftNeighbor==null) {
@@ -258,29 +285,30 @@ public class Chromosome {
 		}
 	    }
 	    /* When we get here, leftNeighbor and rightNeighbor are the closest 5' and 3' genes to
-	       the variant to date. They may be null if we have already found a gene in which the variant is
-	       located */
-	    System.out.println(String.format("\tbla %s, txStart:%d, before ifs:", kgl.getName2(), kgl.getTXStart()));
+	       the variant to date. They may be null if we have already found a "genic" variant. */
+	    System.out.println(String.format("\tbla %s, txStart:%d, about to check for 5'/3'/genic location:", kgl.getName2(), kgl.getTXStart()));
 	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
-		System.out.println("bla is 5' to gene");
+		System.out.println(String.format("\tbla Variant at %d is 5' to gene: %s",start,kgl.getName2()));
 		foundThreePrimeNeighbor=true; /* gene is 3' neighbor */
 		if (foundgenic) break;
 		/* We have already found a gene such that this variant is genic. */
-		else if (foundFivePrimeNeighbor) break; /* we have found genes outside of the variant on 5' and 3' sides */
+		else if (foundFivePrimeNeighbor) continue; /* we have found genes outside of the variant on 5' and 3' sides */
 		else continue; /* go to next round, continue search */
 	    } else if (kgl.isThreePrimeToGene(start) ) {
 		/* i.e., "start" is 3' to "txend" of gene */
-		System.out.println("bla is 3' to gene");
-		System.out.println("kgl txStart: " + kgl.getTXStart());
-		System.out.println("kgl txEnd: " + kgl.getTXEnd());
-
+		System.out.println(String.format("\tbla Variant at %d is 3' to gene: %s",start,kgl.getName2()));
+	
 
 		foundFivePrimeNeighbor=true; /* gene is 5' neighbor to var */
-		if (foundgenic) break;
-		else if (foundThreePrimeNeighbor) break;  /* we have found genes outside of the variant on 5' and 3' sides */
-		else continue;  /* go to next round, continue search */
+		if (foundgenic) { System.out.println("found genic is true"); break; }
+		else if (foundThreePrimeNeighbor) { System.out.println("foudn 3' neighbior true");
+		    continue;  /* we have found genes outside of the variant on 5' and 3' sides */
+		}
+		else {
+		    	System.out.println("\tbla about to continue to next round");continue;  /* go to next round, continue search */
+		}
 	    } else {
 		/* We now must be in a genic region */
 		System.out.println("bla in genic region");
@@ -353,9 +381,10 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public ArrayList<Annotation> getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl) {
+    public ArrayList<Annotation> getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
+	throws AnnotationException  {
 
-	System.out.println("BLA, getPLusStrand for gene " + kgl.getName2());
+	System.out.println("BLA, getPLusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
 	System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
 	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 	int txstart = kgl.getTXStart();
@@ -363,8 +392,8 @@ public class Chromosome {
 	int cdsstart = kgl.getCDSStart();
 	int cdsend = kgl.getCDSEnd();
 	int exoncount = kgl.getExonCount();
-	String name2 = kgl.getName2();
-
+	String name2 = kgl.getName2(); /* the gene symbol */
+	String name = kgl.getName(); /* the ucsc knowngene id */
 	int start = position;
 	int end = start + ref.length() - 1;
 
@@ -377,7 +406,7 @@ public class Chromosome {
 	rcdsstart = kgl.getRefCDSStart();
 
 	for (int k=0; k< exoncount;++k) {
-	    System.out.println("BLA getPlusStrandCodingSequenceAnnotation");
+	    System.out.println("BLA getPlusStrandCodingSequenceAnnotation exon " + k);
 	    if (k>0)
 		cumlenintron += kgl.getLengthOfIntron(k);
 	    cumlenexon += kgl.getLengthOfExon(k);
@@ -386,7 +415,7 @@ public class Chromosome {
 		cumlenexon = kgl.getExonEnd(k) - cdsstart + 1;
 	    }
 	    /* 1) First check whether variant is a splice variant */
-	    System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
+	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
 	    if (isSpliceVariant(kgl,start,end,ref,alt,k)) {
 		System.out.println("BLA, IS splice");
 		/* Note Annovar has 	$splicing{$name2}++; at this point
@@ -423,7 +452,9 @@ public class Chromosome {
 		if (end >= kgl.getExonStart(k)) {	
 		    /* Overlap: Variation starts 5' to exon and ends within exon */ 
 		    /* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
-		    rvarstart = kgl.getRVarStart(kgl.getExonStart(k), cumlenintron);
+		    /* $rvarstart = $exonstart[$k]-$txstart-$lenintron+1; */
+		    rvarstart = kgl.getExonStart(k) - kgl.getTXStart() -  cumlenintron + 1;
+		    System.out.println("1 HERE rvarstart os " + rvarstart);
 		    /* 2) Get the end position of the variant w.r.t. the transcript (rvarend) */
 		    rvarend   = kgl.getRVarEnd(end, k, cumlenintron);
 		    if (end < cdsstart) {	
@@ -442,7 +473,7 @@ public class Chromosome {
 			   #query             ----
 			   #gene     <--*---*->
 			*/
-			Annotation ann = Annotation.createUTR3Annotation(name2);
+			Annotation ann = Annotation.createUTR3Annotation(name2,name);
 			annotation_list.add(ann);
 			/* positive strand for UTR3 */
 		    } else {	
@@ -451,7 +482,7 @@ public class Chromosome {
 			specific annotation. TODO: Figure out later best way of doing this.
 			Annovar: $exonic{$name2}++; */								
 		
-			annotation_list.add(new Annotation("exonic",name2));
+			//annotation_list.add(new Annotation("exonic",name2));
 			if ( kgl.isCodingGene() && alt != null && alt.length()>0) {
 			    /* Annovar puts all exonic variants into an array and annotates them later
 			     * we will instead get the annotation right here and add it to the
@@ -465,6 +496,9 @@ public class Chromosome {
 			      annotation_list.add(a);
 				// TODO do we need to increment foundcoding??
 			  }
+			} else {
+			    System.out.println("WARNING TO DO, exonic in noncodingn gene");
+			    System.exit(1);
 			}
 		    }
 		    break;
@@ -479,10 +513,56 @@ public class Chromosome {
 	    } /* if (start < kgl.getExonStart(k)) */ else if (start <= kgl.getExonEnd(k)) {
 		/* i.e., start of variant is not located 5' to exon start but is located 5' to exon end */
 		/* annovar: elsif ($start <= $exonend[$k]) {	#exonic */
+		/* $rvarstart = $start-$txstart-$lenintron+1; */
 		  /* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
-		rvarstart = kgl.getRVarStart(kgl.getExonStart(k), cumlenintron);
+		rvarstart = start - kgl.getTXStart() - cumlenintron + 1;
+		System.out.println("2 HERE rvarstart os " + rvarstart + ": " + kgl.getName2() + "/" + kgl.getName());
 		    /* 2) Get the end position of the variant w.r.t. the transcript (rvarend) */
 		rvarend = kgl.getRVarEnd(end, k,cumlenintron);
+		/*
+	for my $m ($k .. @exonstart-1) {
+			$m > $k and $lenintron += ($exonstart[$m]-$exonend[$m-1]-1);
+			if ($end < $exonstart[$m]) {
+			#query              ------
+			#gene     <--**---******---****---->
+				  $rvarend = $exonend[$m-1]-$txstart-$lenintron+1 + ($exonstart[$m]-$exonend[$m-1]-1);
+				  last;
+			} elsif ($end <= $exonend[$m]) {
+			#query           -----------
+			#gene     <--**---******---****---->
+			$rvarend = $end-$txstart-$lenintron+1;
+			last;
+			}
+		}## for
+		
+		*/
+		for (int m=k;m<kgl.getExonCount();++m) {
+		    if (m>k) {
+			cumlenintron += kgl.getLengthOfIntron(m);
+		    }
+		    if (end < kgl.getExonStart(m)) {
+			//#query              ------
+			//#gene     <--**---******---****---->
+			rvarend = kgl.getExonEnd(m-1) - kgl.getTXStart() - cumlenintron + 1 + kgl.getLengthOfIntron(m-1);
+			//$rvarend = $exonend[$m-1]-$txstart-$lenintron+1 + ($exonstart[$m]-$exonend[$m-1]-1);
+			break;
+		    } else if (end < kgl.getExonEnd(m)) {
+			//#query           -----------
+			//#gene     <--**---******---****---->
+			//$rvarend = $end-$txstart-$lenintron+1;
+			rvarend = end -  kgl.getTXStart() - cumlenintron + 1;
+			break; // last;
+		    }
+		}
+		/*
+		  if (not defined $rvarend) {
+			$rvarend = $txend-$txstart-$lenintron+1;		
+			#if this value is longer than transcript length, it suggest whole gene deletion
+		}
+		*/
+		if (rvarend < 0) { // i.e., uninitialized 
+		    rvarend = end - kgl.getTXStart() - cumlenintron + 1;
+		}
 					
 		//#here is the trick begins to differentiate UTR versus coding exonic
 		if (end < cdsstart) {					
@@ -498,10 +578,10 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr3{$name2}++; #positive strand for UTR3
 		     */
-		    Annotation ann = Annotation.createUTR3Annotation(name2);
+		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
 		    annotation_list.add(ann);
 		} else {
-		    annotation_list.add(new Annotation("exonic",name2));
+		    //annotation_list.add(new Annotation("exonic",name2));
 		    /* Annovar: $exonic{$name2}++; */
 
 		    if ( kgl.isCodingGene() && alt != null && alt.length()>0) {
@@ -518,10 +598,14 @@ public class Chromosome {
 				annotation_list.add(a);
 				// TODO do we need to increment foundcoding??
 			    }
-		    }
+		    } else {
+			    System.out.println("WARNING TO DO, exonic in noncodingn gene");
+			    System.exit(1);
+			}
 		}
 		/* annovar: $foundgenic++; */
-		break;
+		//break;
+		continue; // go to next knownGene
 	    }
 	} /* iterator over exons */
 	return annotation_list;
@@ -559,11 +643,15 @@ public class Chromosome {
 	 * @param kgl Gene in which variant was localized to one of the exons 
 	 */
    private ArrayList<Annotation> annotateExonicVariants(int refvarstart, int refvarend, 
-		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) {
+		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) throws AnnotationException {
        ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 
-       System.out.println("bla annotateExonicVariants start = " + refvarstart);
-
+       System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+       System.out.println("******************************");
+       System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
+       System.out.println(String.format("\tstart: %d\tend: %d",start,end));
+       System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
+       System.out.println("******************************");
        /*  Annovar declarations:
 	* my ($wtnt3, $wtnt3_after, @wtnt3, $varnt3, $wtaa, $wtaa_after, $varaa, $varpos);		
 	* #wtaa_after is the aa after the wtaa
@@ -611,77 +699,30 @@ public class Chromosome {
 	   String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
 	   annotation_list.add(ann);
-	  
-	   
        }
        /*annovar line 1079 */
        if (kgl.isMinusStrand()) {
 	   var = revcom(var);
 	   ref = revcom(ref);
        }
-       if (start == end) {
-	   if (ref.equals("-") ) {	
+       System.out.println("wtnt3=" + wtnt3);
+       if (start == end) { /* SNV or insertion variant */
+	   if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
 	       Annotation  insrt = annotateInsertionVariant(kgl,frame_s, wtnt3,wtnt3_after,ref,
 						       var,refvarstart,exonNumber);
 	       annotation_list.add(insrt);
 	   } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
-	       //$do_trim = 3;   # Trim first 3 nt of post_pad for variant, as wtnt3_after is being added here.
-	       char deletedNT=' ';
-	       String varnt3=null;
-	       if (frame_s == 1) {
-		   deletedNT = wtnt3.charAt(1);
-		   varnt3 = String.format("%c%c%s",wtnt3.charAt(0), wtnt3.charAt(2),wtnt3_after);
-		   /* $deletent = $wtnt3[1];
-		      $varnt3 = $wtnt3[0].$wtnt3[2].$wtnt3_after; */
-	       } else if (frame_s == 2) {
-		   deletedNT = wtnt3.charAt(2);
-		   varnt3 = String.format("%c%c%s",wtnt3.charAt(0), wtnt3.charAt(1),wtnt3_after);
-		   /* $deletent = $wtnt3[2];
-		      $varnt3 = $wtnt3[0].$wtnt3[1].$wtnt3_after; */
-	       } else {
-		   deletedNT = wtnt3.charAt(0);
-		   varnt3 = String.format("%c%c%s",wtnt3.charAt(1), wtnt3.charAt(2),wtnt3_after);
-		   /*$deletent = $wtnt3[0];
-		     $varnt3 = $wtnt3[1].$wtnt3[2].$wtnt3_after; */
-	       }
-	       String wtaa = translator.translateDNA(wtnt3);
-	       String varaa = translator.translateDNA(varnt3);
-	       int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
-	       /*$varpos) =   int(($refvarstart-$refcdsstart)/3)+1; */
-	       String canno = String.format("c.%ddel%c",(refvarstart-kgl.getRefCDSStart()+1),deletedNT);
-	       /* $canno = "c." . ($refvarstart-$refcdsstart+1) . "del$deletent"; */
-	       if (wtaa.equals("*")) { /* #mutation on stop codon */ 
-		   if (varaa.startsWith("*")) { /* #stop codon is still stop codon 	if ($varaa =~ m/\* /)   */
-		   String nfsdel_ann = String.format("%s:%s:exon%d:%s:p.X%dX,",kgl.getName2(),kgl.getName(),
-						     exonNumber,canno,aavarpos);
-		   Annotation ann = Annotation.createNonFrameshiftDeletionAnnotation(nfsdel_ann);
-		   annotation_list.add(ann);
-		   /* Annovar: "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "X,";	
-		      #changed fsdel to nfsdel on 2011feb19 */
-		   } else {	 /* stop codon is lost */
-		       String stoploss_ann = String.format("%s:%s:exon%d:%s:p.X%d%s,",kgl.getName2(),kgl.getName(),
-						     exonNumber,canno,aavarpos,varaa);
-		       /* $function->{$index}{stoploss} .= 
-		      "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "$varaa,"; */
-		       Annotation ann = Annotation.createStopLossAnnotation(stoploss_ann);
-		       annotation_list.add(ann);
-		   }
-	       } else {
-		   if (varaa.contains("*")) { /* new stop codon created */
-		       String annotation = String.format("%s:%s:exon%d:%s:p.%s%dX,",kgl.getName2(),kgl.getName(),
-							 exonNumber,canno,wtaa, aavarpos);
-		       /* $function->{$index}{stopgain} .= 
-			  "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "X,"; */
-		       annotation_list.add(new Annotation("stopgain",annotation));
-		   } else {
-		        String annotation = String.format("%s:%s:exon%d:%s:p.%s%dfs,",kgl.getName2(),kgl.getName(),
-							 exonNumber,canno,wtaa,aavarpos);
-			/*  $function->{$index}{fsdel} .= 
-			    "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,"; */
-			annotation_list.add(new Annotation("fsdel",annotation));
-		   }
-	       }
+	       Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
+									   ref, var,refvarstart,exonNumber);
 	       //$is_fs++;
+	   } else if (var.length()>1) {
+	       System.out.println("Warning: Not implemented yet");
+	       System.exit(1);
+	   } else {
+	       Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
+								    ref, var,refvarstart,exonNumber);
+	       annotation_list.add(mssns);
+
 	   }
        } /* if (start==end) */	
        
