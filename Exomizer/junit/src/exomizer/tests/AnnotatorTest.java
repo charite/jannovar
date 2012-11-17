@@ -22,7 +22,7 @@ import exomizer.reference.KnownGene;
 import exomizer.reference.Chromosome;
 import exomizer.reference.Annotation;
 import exomizer.exome.Variant;
-
+import exomizer.exception.AnnotationException;
 
 
 import org.junit.Test;
@@ -89,7 +89,7 @@ public class AnnotatorTest implements Constants {
      *<P>
      * annovar's annotation is intergenic	LOC100288069(dist=39337),LINC00115(dist=8181)	
      */
-    @Test public void testIntergenicVar1() {
+    @Test public void testIntergenicVar1() throws AnnotationException  {
 	byte chr = 1;
 	int pos = 753405;
 	String ref = "C";
@@ -118,7 +118,7 @@ public class AnnotatorTest implements Constants {
      * <P>
      * annovar's annotation is intergenic	AGTRAP(dist=17491),C1orf167(dist=3820)	
      */
-     @Test public void testIntergenicVar2() {
+     @Test public void testIntergenicVar2() throws AnnotationException {
 	byte chr = 1;
 	int pos = 11828319;
 	String ref = "G";
@@ -146,7 +146,7 @@ public class AnnotatorTest implements Constants {
      * <P>
      * annovar's annotation is intergenic;HGVS=CACNA1C(dist=44144),LOC283440(dist=19107)	
      */
-     @Test public void testIntergenicVar3() {
+     @Test public void testIntergenicVar3() throws AnnotationException   {
 	 byte chr = 12;
 	int pos = 2851259;
 	String ref = "A";
@@ -175,7 +175,7 @@ public class AnnotatorTest implements Constants {
      * <P>
      * annovar's annotation is intergenic	NONE(dist=NONE),DQ586768(dist=276134)	
      */
-     @Test public void testIntergenicVar4() {
+     @Test public void testIntergenicVar4()throws AnnotationException   {
 	 byte chr = 13;
 	int pos = 19043558;
 	String ref = "A";
@@ -204,7 +204,7 @@ public class AnnotatorTest implements Constants {
      * <P>
      * annovar's annotation is intergenic;HGVS=GOLGA8IP(dist=2184),HERC2P2(dist=17338)	
      */
-     @Test public void testIntergenicVar5() {
+     @Test public void testIntergenicVar5() throws AnnotationException  {
 	 byte chr = 15;
 	int pos = 23577570;
 	String ref = "C";
@@ -233,7 +233,7 @@ public class AnnotatorTest implements Constants {
      * <P>
      * annovar's annotation is ncRNA_exonic	SNORD116-5	
      */
-     @Test public void testNcRNAVar1() {
+     @Test public void testNcRNAVar1() throws AnnotationException  {
 	  byte chr = 15;
 	int pos = 25307562;
 	String ref = "A";
@@ -266,7 +266,7 @@ public class AnnotatorTest implements Constants {
      * <P>
      * annovar's annotation is EFFECT=UTR5;HGVS=DTNA	
      */
-     @Test public void testUTR5Var1() {
+     @Test public void testUTR5Var1() throws AnnotationException  {
 	  byte chr = 18;
 	int pos = 32398340;
 	String ref = "T";
@@ -290,7 +290,7 @@ public class AnnotatorTest implements Constants {
     /**
        1	43300921	43300921	C	G	EFFECT=intronic;HGVS=ERMAP;D
     */
-     @Test public void testIntronicVar1() {
+     @Test public void testIntronicVar1() throws AnnotationException  {
 	 byte chr = 1;
 	 int pos = 43300921;
 	 String ref = "C";

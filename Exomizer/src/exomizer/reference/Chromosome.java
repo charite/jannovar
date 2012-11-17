@@ -217,11 +217,7 @@ public class Chromosome {
      * (often just one annotation, but potentially multiple ones).
      */
     public ArrayList<Annotation> getAnnotation(int position,String ref, String alt) throws AnnotationException {
-	System.out.println(String.format("getAnnotation for %d ref: \"%s\" alt \"%s\"",position,ref,alt));
-	//int distL=Integer.MAX_VALUE; // distance to closest gene on left (5') side of variant (annovar: $distl)
-	//int distR=Integer.MAX_VALUE; // distance to closest gene on right (3') side of variant (annovar: $distr)
-	//int genePositionL; // position of closest gene on left (5') side of variant (annovar: $genel)
-	//int genePositionR; // position of closest gene on right (3') side of variant (annovar: $gener)
+	
 	KnownGene leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	KnownGene rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
 	/* Note, the following two variables are use to know when we can stop the search: we have already found
@@ -255,7 +251,7 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    System.out.println("Bla LOOKING AT KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
+	    //System.out.println("Bla LOOKING AT KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
 	    /* ***************************************************************************************** *
 	     * The following code block is executed if the variant has not hit a genic region yet and    *
 	     * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
@@ -287,11 +283,12 @@ public class Chromosome {
 	    }
 	    /* When we get here, leftNeighbor and rightNeighbor are the closest 5' and 3' genes to
 	       the variant to date. They may be null if we have already found a "genic" variant. */
-	    System.out.println(String.format("\tbla %s, txStart:%d, about to check for 5'/3'/genic location:", kgl.getName2(), kgl.getTXStart()));
+	    //System.out.println(String.format("\tbla %s, txStart:%d, about to check for 5'/3'/genic location:", 
+	    // kgl.getName2(), kgl.getTXStart()));
 	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
-		System.out.println(String.format("\tbla Variant at %d is 5' to gene: %s",start,kgl.getName2()));
+		//System.out.println(String.format("\tbla Variant at %d is 5' to gene: %s",start,kgl.getName2()));
 		foundThreePrimeNeighbor=true; /* gene is 3' neighbor */
 		if (foundgenic) break;
 		/* We have already found a gene such that this variant is genic. */
@@ -299,20 +296,22 @@ public class Chromosome {
 		else continue; /* go to next round, continue search */
 	    } else if (kgl.isThreePrimeToGene(start) ) {
 		/* i.e., "start" is 3' to "txend" of gene */
-		System.out.println(String.format("\tbla Variant at %d is 3' to gene: %s",start,kgl.getName2()));
-	
-
+		//System.out.println(String.format("\tbla Variant at %d is 3' to gene: %s",start,kgl.getName2()));
 		foundFivePrimeNeighbor=true; /* gene is 5' neighbor to var */
-		if (foundgenic) { System.out.println("found genic is true"); break; }
-		else if (foundThreePrimeNeighbor) { System.out.println("foudn 3' neighbior true");
+		if (foundgenic) {
+		    //System.out.println("found genic is true"); 
+		    break; 
+		} else if (foundThreePrimeNeighbor) { 
+		    //System.out.println("foudn 3' neighbior true");
 		    continue;  /* we have found genes outside of the variant on 5' and 3' sides */
 		}
 		else {
-		    	System.out.println("\tbla about to continue to next round");continue;  /* go to next round, continue search */
+		    //System.out.println("\tbla about to continue to next round");
+		    continue;  /* go to next round, continue search */
 		}
 	    } else {
 		/* We now must be in a genic region */
-		System.out.println("bla in genic region");
+		//System.out.println("bla in genic region");
 		if (! kgl.isCodingGene() ) {
 		    /* this is either noncoding RNA or maybe bad annotation in UCSC */
 		    if (start >= txstart &&  start <= txend ||   /* start is within transcript */
@@ -385,8 +384,8 @@ public class Chromosome {
     public ArrayList<Annotation> getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 
-	System.out.println("BLA, getPLusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
-	System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
+	//System.out.println("BLA, getPLusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
+	//System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
 	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -407,7 +406,7 @@ public class Chromosome {
 	rcdsstart = kgl.getRefCDSStart();
 
 	for (int k=0; k< exoncount;++k) {
-	    System.out.println("BLA getPlusStrandCodingSequenceAnnotation exon " + k);
+	    //System.out.println("BLA getPlusStrandCodingSequenceAnnotation exon " + k);
 	    if (k>0)
 		cumlenintron += kgl.getLengthOfIntron(k);
 	    cumlenexon += kgl.getLengthOfExon(k);
@@ -418,7 +417,7 @@ public class Chromosome {
 	    /* 1) First check whether variant is a splice variant */
 	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
 	    if (isSpliceVariant(kgl,start,end,ref,alt,k)) {
-		System.out.println("BLA, IS splice");
+		//System.out.println("BLA, IS splice");
 		/* Note Annovar has 	$splicing{$name2}++; at this point
 		 * We will not do this, but will add to annotation_list depending
 		 * on what type of splicing mutation we have. */
@@ -448,8 +447,8 @@ public class Chromosome {
 		}
 	    }
 	    if (start < kgl.getExonStart(k)) {
-		System.out.println(String.format("BLA, start=%d, exon[%d] start=%d for gene %s ",start,k,kgl.getExonStart(k), kgl.getName2()));
-		System.out.println(String.format("BLA, end=%d",end));
+		//System.out.println(String.format("BLA, start=%d, exon[%d] start=%d for gene %s ",start,k,kgl.getExonStart(k), kgl.getName2()));
+		//System.out.println(String.format("BLA, end=%d",end));
 		if (end >= kgl.getExonStart(k)) {	
 		    /* Overlap: Variation starts 5' to exon and ends within exon */ 
 		    /* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
@@ -517,7 +516,7 @@ public class Chromosome {
 		/* $rvarstart = $start-$txstart-$lenintron+1; */
 		  /* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
 		rvarstart = start - kgl.getTXStart() - cumlenintron + 1;
-		System.out.println("2 HERE rvarstart os " + rvarstart + ": " + kgl.getName2() + "/" + kgl.getName());
+		
 		    /* 2) Get the end position of the variant w.r.t. the transcript (rvarend) */
 		rvarend = kgl.getRVarEnd(end, k,cumlenintron);
 		/*
@@ -600,7 +599,7 @@ public class Chromosome {
 				// TODO do we need to increment foundcoding??
 			    }
 		    } else {
-			    System.out.println("WARNING TO DO, exonic in noncodingn gene");
+			    System.out.println("WARNING TO DO, exonic in noncoding gene");
 			    System.exit(1);
 			}
 		}
@@ -647,28 +646,12 @@ public class Chromosome {
 		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) throws AnnotationException {
        ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 
-       System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+       /* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
        System.out.println("******************************");
        System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
        System.out.println(String.format("\tstart: %d\tend: %d",start,end));
        System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
-       System.out.println("******************************");
-       /*  Annovar declarations:
-	* my ($wtnt3, $wtnt3_after, @wtnt3, $varnt3, $wtaa, $wtaa_after, $varaa, $varpos);		
-	* #wtaa_after is the aa after the wtaa
-	my ($chr, $start, $end, $ref, $obs);
-	my $canno;
-	
-	my ($pre_pad, $post_pad, $wt_aa_pad, $var_aa_pad);  # Hold padded seq
-	my $refcdsend = $cdslen->{$seqid} + $refcdsstart - 1;  # the end of the CDS
-	
-	my @nextline = split (/\s+/, $nextline);
-	* ($chr, $start, $end, $ref, $obs) = @nextline[@avcolumn];
-	($ref, $obs) = (uc $ref, uc $obs);
-	$zerostart and $start++;
-	$chr =~ s/^chr//;
-	* 
-	* */
+       System.out.println("******************************"); */
        /* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
        int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
        int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
@@ -698,7 +681,7 @@ public class Chromosome {
 	* so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
        if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
 	   String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
-	    Annotation ann = Annotation.createErrorAnnotation(s);
+	   Annotation ann = Annotation.createErrorAnnotation(s);
 	   annotation_list.add(ann);
        }
        /*annovar line 1079 */
@@ -706,7 +689,7 @@ public class Chromosome {
 	   var = revcom(var);
 	   ref = revcom(ref);
        }
-       System.out.println("wtnt3=" + wtnt3);
+       //System.out.println("wtnt3=" + wtnt3);
        if (start == end) { /* SNV or insertion variant */
 	   if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
 	       Annotation  insrt = annotateInsertionVariant(kgl,frame_s, wtnt3,wtnt3_after,ref,

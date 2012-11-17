@@ -24,8 +24,8 @@ import java.util.ArrayList;
  * <P>
  * The default preference for annotations is thus
  * <OL>
- * <LI><B>exonic</B>: variant overlaps a coding exon 
- * <LI><B>splicing</B>: variant is within 2-bp of a splicing junction
+ * <LI><B>exonic</B>: variant overlaps a coding exon (does not include 5' or 3' UTR).
+ * <LI><B>splicing</B>: variant is within 2-bp of a splicing junction (same precedence as exonic).
  * <LI><B>ncRNA</B>: variant overlaps a transcript without coding annotation in the gene definition 
  * <LI><B>UTR5</B>: variant overlaps a 5' untranslated region 
  * <LI><B>UTR3</B>: variant overlaps a 3' untranslated region 
@@ -48,7 +48,7 @@ import java.util.ArrayList;
 public class AnnotatedVar {
     /** These private constants are used to help keep the variants sorted in a HashMap. */
     private final static int EXONIC_PRECEDENCE = 0;
-    private final static int SPLICING_PRECEDENCE = 1;
+    private final static int SPLICING_PRECEDENCE = 0;
     private final static int ncRNA_PRECEDENCE = 2;
     private final static int UTR5_PRECEDENCE = 3;
     private final static int UTR3_PRECEDENCE = 4;
@@ -66,5 +66,16 @@ public class AnnotatedVar {
     public AnnotatedVar() {
 	this.annotation_list = new ArrayList<Annotation>();
     }
+
+    /**
+     * to do
+     */
+
+    public static Annotation chooseBestAnnotation(ArrayList<Annotation> ann_list) {
+
+	return null;
+
+    }
+
 
 }
