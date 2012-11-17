@@ -18,6 +18,7 @@ import exomizer.exception.AnnotationException;
 */
 import exomizer.annotation.DeletionAnnotation;
 import exomizer.annotation.SingleNucleotideSubstitution;
+import exomizer.annotation.BlockSubstitution;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
@@ -716,15 +717,23 @@ public class Chromosome {
 									   ref, var,refvarstart,exonNumber);
 	       //$is_fs++;
 	   } else if (var.length()>1) {
-	       System.out.println("Warning: Not implemented yet");
-	       System.exit(1);
+	       Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
+									   ref,var,refvarstart, refvarend, 
+									   exonNumber);
+	       annotation_list.add(blck);
 	   } else {
 	       Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 								    ref, var,refvarstart,exonNumber);
 	       annotation_list.add(mssns);
 
 	   }
-       } /* if (start==end) */	
+       } /* if (start==end) */
+       else if (var.equals("-")) {
+	   Annotation dltmnt = 
+	       DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
+							       ref, var, refvarstart, refvarend, exonNumber);
+	   annotation_list.add(dltmnt);
+       }
        
        return annotation_list;
    }
@@ -809,19 +818,20 @@ public class Chromosome {
 	 * @return reverse complement version of the input string sq.
 	*/
 	private String revcom(String sq) {
-		StringBuffer sb = new StringBuffer();
-		for (int i = sq.length()-1;i>=0;i--) {
-			char c = sq.charAt(i);
-			char match=0;
-			switch(c) {
-				case 'A': match='T'; break;
-				case 'C': match='G'; break;
-				case 'G': match='C'; break;
-				case 'T': match='A'; break;
-			}
-			if (match>0) sb.append(match);
+	    if (sq.equals("-")) return sq; /* deletion, insertion do not need rc */
+	    StringBuffer sb = new StringBuffer();
+	    for (int i = sq.length()-1;i>=0;i--) {
+		char c = sq.charAt(i);
+		char match=0;
+		switch(c) {
+		case 'A': match='T'; break;
+		case 'C': match='G'; break;
+		case 'G': match='C'; break;
+		case 'T': match='A'; break;
 		}
-		return sb.toString();
+		if (match>0) sb.append(match);
+	    }
+	    return sb.toString();
 	}
 	
 	/**

@@ -163,6 +163,16 @@ public class Annotation implements Constants {
      }
 
     /**
+     * Use this factory method for annotations of frameshift deletion mutations.
+     */
+     public static Annotation creatFrameshiftDeletionAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = FS_DELETION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+    /**
      * Use this factory method for annotations of non-frameshift deletion mutations.
      */
      public static Annotation createStopLossAnnotation(String msg) {
@@ -206,6 +216,21 @@ public class Annotation implements Constants {
 	ann.variantAnnotation = msg;
 	return ann;
      }
+
+
+    public static Annotation createNonFrameShiftSubstitionAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = NON_FS_SUBSTITUTION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+     public static Annotation createFrameShiftSubstitionAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = FS_SUBSTITUTION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
     
     /**
      * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
@@ -227,6 +252,10 @@ public class Annotation implements Constants {
 	case STOPLOSS: s="STOPLOSS"; break;
 	case STOPGAIN: s="STOPGAIN"; break;
 	case SYNONYMOUS: s="SYNONYMOUS"; break;
+	case MISSENSE: s="MISSENSE"; break;
+	case NON_FS_SUBSTITUTION: s="NFSSUB"; break;
+	case FS_SUBSTITUTION: s="FSSUB"; break;
+	case FS_DELETION: s="FSDEL"; break;
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
