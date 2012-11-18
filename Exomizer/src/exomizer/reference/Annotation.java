@@ -165,7 +165,7 @@ public class Annotation implements Constants {
     /**
      * Use this factory method for annotations of frameshift deletion mutations.
      */
-     public static Annotation creatFrameshiftDeletionAnnotation(String msg) {
+     public static Annotation createFrameshiftDeletionAnnotation(String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = FS_DELETION;
 	ann.variantAnnotation = msg;

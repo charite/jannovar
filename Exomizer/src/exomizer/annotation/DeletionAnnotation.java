@@ -87,7 +87,7 @@ public class DeletionAnnotation {
 		/*  $function->{$index}{fsdel} .= 
 		    "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,"; */
 	
-		Annotation ann = Annotation.createFrameshiftDelAnnotation(fsdel_ann);
+		Annotation ann = Annotation.createFrameshiftDeletionAnnotation(fsdel_ann);
 		return ann;
 	    }
 	}
