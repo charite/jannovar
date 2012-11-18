@@ -30,9 +30,7 @@ public class DeletionAnnotation {
     public static Annotation getAnnotationSingleNucleotidePlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
 		String ref, String var,int refvarstart,int exonNumber){
 	String annotation = null;
-	//String annovarClass = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
-	 //$do_trim = 3;   # Trim first 3 nt of post_pad for variant, as wtnt3_after is being added here.
 	char deletedNT=' ';
 	String varnt3=null;
 	if (frame_s == 1) {

@@ -175,6 +175,26 @@ public class Annotation implements Constants {
     /**
      * Use this factory method for annotations of non-frameshift deletion mutations.
      */
+     public static Annotation createNonFrameshiftInsertionAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = NON_FS_INSERTION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+    /**
+     * Use this factory method for annotations of frameshift deletion mutations.
+     */
+     public static Annotation creatFrameshiftInsertionAnnotation(String msg) {
+	Annotation ann = new Annotation();
+	ann.varType = FS_INSERTION;
+	ann.variantAnnotation = msg;
+	return ann;
+     }
+
+    /**
+     * Use this factory method for annotations of non-frameshift deletion mutations.
+     */
      public static Annotation createStopLossAnnotation(String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = STOPLOSS;
@@ -192,15 +212,7 @@ public class Annotation implements Constants {
 	return ann;
      }
 
-     /**
-     * Use this factory method for annotations of frameshift deletion mutations.
-     */
-     public static Annotation createFrameshiftDelAnnotation(String msg) {
-	Annotation ann = new Annotation();
-	ann.varType = FS_DELETION;
-	ann.variantAnnotation = msg;
-	return ann;
-     }
+     
 
 
     public static Annotation createSynonymousSNVAnnotation(String msg) {
