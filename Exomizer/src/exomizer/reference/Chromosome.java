@@ -74,6 +74,7 @@ public class Chromosome {
 	this.chromosome = c;
 	this.geneTreeMap = new TreeMap<Integer,ArrayList<KnownGene>>();
 	this.translator = Translator.getTranslator();
+	this.n_genes=0;
     }
 
     /**
@@ -93,6 +94,7 @@ public class Chromosome {
 	    lst.add(kg);
 	    this.geneTreeMap.put(pos,lst);
 	}
+	n_genes++;
     }
 
     /**
@@ -195,12 +197,9 @@ public class Chromosome {
     }
 
     /**
-     * TODO Now this function only returns the number of distinct transcription start sites
-     * rather than then total number of KnownGenes. We do not need this functionality right
-     * now, but reimplement this in the future and take care it also works with deserialization.
      * @return Number of genes contained in this chromosome.
      */
-    public int getNumberOfGenes() { return this.geneTreeMap.size(); }
+    public int getNumberOfGenes() { return this.n_genes; }
 
     /**
      * Main entry point to getting Annovar-type annotations for a
@@ -377,11 +376,11 @@ public class Chromosome {
     }
 
 
-/**
+    /**
      * Main entry point to getting Annovar-type annotations for a
      * variant identified by chromosomal coordinates for a KnownGene that
      * is transcribed from the plus strand. This could theoretically be
-     * combined with the Minusn strand functionalities, but separating them
+     * combined with the Minus strand functionalities, but separating them
      * makes things easier to comprehend and debug.
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
