@@ -20,6 +20,8 @@ import exomizer.annotation.DeletionAnnotation;
 import exomizer.annotation.InsertionAnnotation;
 import exomizer.annotation.SingleNucleotideSubstitution;
 import exomizer.annotation.BlockSubstitution;
+import exomizer.annotation.SpliceAnnotation;
+
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
@@ -64,8 +66,7 @@ public class Chromosome {
     private static final int SPAN = 5;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
     private static final int NEARGENE = 1000;
-    /** Number of nucleotides away from exon/intron boundary to be considered as potential splicing mutation. */
-    public final static int SPLICING_THRESHOLD=2;
+  
     /** Class object encapsulating rules to translate DNA. */
     private Translator translator = null;
     
@@ -339,7 +340,12 @@ public class Chromosome {
 			annotation_list.add(a);
 		    }
 		} else if (kgl.isMinusStrand()) {
-		    System.out.println("Warning: " + kgl.getName2() + " is minus strand genic (not yet implemented)");
+		    ArrayList<Annotation> cdsAnnots = getMinusStrandCodingSequenceAnnotation(position,ref, alt, kgl);	
+		    for (Annotation a : cdsAnnots) {
+			if (a.isGenic())
+			    foundgenic=true;
+			annotation_list.add(a);
+		    }
 		}
 	    }
 
@@ -421,35 +427,10 @@ public class Chromosome {
 	    }
 	    /* 1) First check whether variant is a splice variant */
 	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
-	    if (isSpliceVariant(kgl,start,end,ref,alt,k)) {
-		//System.out.println("BLA, IS splice");
-		/* Note Annovar has 	$splicing{$name2}++; at this point
-		 * We will not do this, but will add to annotation_list depending
-		 * on what type of splicing mutation we have. */
-		/* I am unsure what this comment in annovar is supposed to mean:
-		   if name2 is already a splicing variant, but its detailed annotation 
-		   (like c150-2A>G) is not available, 
-		   and if this splicing leads to amino acid change (rather than UTR change) */
-		if (start == end && start >= cdsstart) { /* single-nucleotide variant */
-		    int exonend = kgl.getExonEnd(k);
-		    int exonstart = kgl.getExonStart(k);
-		    if (start >= exonstart -SPLICING_THRESHOLD  && start < exonstart) {
-			/*  #------*-<---->------- mutation located right in front of exon */
-			cumlenexon -= (exonend - exonstart);
-			/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
-			String anno = String.format("HGVS=%s(%s:exon:%d:c.%d-%d%s>%s)",kgl.getName2(),kgl.getName(),
-						    k+1,cumlenexon,exonstart-start,ref,alt);
-			Annotation ann = Annotation.createSplicingAnnotation(anno);
-			annotation_list.add(ann);
-			/* Annovar:$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon-" . ($exonstart[$k]-$start) . "$ref>$obs,"; */
-		    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
-			/* #-------<---->-*--------<-->-- mutation right after exon end */
-			String anno = String.format("exon%d:c.%d+%d$s>$s",k+1,cumlenexon,start-exonend,ref,alt);
-			//$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
-			Annotation ann = Annotation.createSplicingAnnotation(anno);
-			annotation_list.add(ann);
-		    }
-		}
+	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+	    if (SpliceAnnotation.isSpliceVariantPlusStrand(kgl,start,end,ref,alt,k)) {
+		Annotation ann  = SpliceAnnotation.getSpliceAnnotationPlusStrand(kgl,start,end,ref,alt,k,cumlenexon);
+		annotation_list.add(ann);
 	    }
 	    if (start < kgl.getExonStart(k)) {
 		//System.out.println(String.format("BLA, start=%d, exon[%d] start=%d for gene %s ",start,k,kgl.getExonStart(k), kgl.getName2()));
@@ -459,7 +440,7 @@ public class Chromosome {
 		    /* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
 		    /* $rvarstart = $exonstart[$k]-$txstart-$lenintron+1; */
 		    rvarstart = kgl.getExonStart(k) - kgl.getTXStart() -  cumlenintron + 1;
-		    System.out.println("1 HERE rvarstart os " + rvarstart);
+		    // System.out.println("1 HERE rvarstart os " + rvarstart);
 		    /* 2) Get the end position of the variant w.r.t. the transcript (rvarend) */
 		    rvarend   = kgl.getRVarEnd(end, k, cumlenintron);
 		    if (end < cdsstart) {	
@@ -506,14 +487,14 @@ public class Chromosome {
 			    System.exit(1);
 			}
 		    }
-		    break;
+		    break; /* break out of for loop of exons (k) */
 		    
 		} else if (k>0 && start > kgl.getExonEnd(k-1)) {  /* i.e., variant is intronic */
 		    /* Annovar: $intronic{$name2}++; $foundgenic++; last; */
 		    Annotation ann = Annotation.createIntronicAnnotation(name2);
 		    System.out.println("INTRON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		    annotation_list.add(ann);
-		    break;
+		    break; /* break out of for loop of exons (k) */
 		}
 	    } /* if (start < kgl.getExonStart(k)) */ else if (start <= kgl.getExonEnd(k)) {
 		/* i.e., start of variant is not located 5' to exon start but is located 5' to exon end */
@@ -614,6 +595,68 @@ public class Chromosome {
 	    }
 	} /* iterator over exons */
 	return annotation_list;
+    }
+
+
+     /**
+     * Main entry point to getting Annovar-type annotations for a
+     * variant identified by chromosomal coordinates for a KnownGene that
+     * is transcribed from the minus strand. This could theoretically be
+     * combined with the Minus strand functionalities, but separating them
+     * makes things easier to comprehend and debug.
+     * @param position The start position of the variant on this chromosome
+     * @param ref String representation of the reference sequence affected by the variant
+     * @param alt String representation of the variant (alt) sequence
+     */
+    public ArrayList<Annotation> getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
+	throws AnnotationException  {
+	//System.out.println("BLA, getMinusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
+	//System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
+	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+	int txstart = kgl.getTXStart();
+	int txend   = kgl.getTXEnd();
+	int cdsstart = kgl.getCDSStart();
+	int cdsend = kgl.getCDSEnd();
+	int exoncount = kgl.getExonCount();
+	String name2 = kgl.getName2(); /* the gene symbol */
+	String name = kgl.getName(); /* the ucsc knowngene id */
+	int start = position;
+	int end = start + ref.length() - 1;
+
+	int cumlenintron = 0; // cumulative length of introns at a given exon
+	int cumlenexon=0; // cumulative length of exons at a given exon
+	int rcdsstart=0; // start of CDS within reference RNA sequence.
+	int rvarstart=-1; // start of variant within reference RNA sequence
+	int rvarend=-1; //end of variant within reference RNA sequence
+	boolean foundexonic=false; // have we found the variant to lie in an exon yet?
+	rcdsstart = kgl.getRefCDSStart();
+
+	/*************************************************************************************** *
+	 * Iterate over all exons of the gene. Start with the 3'-most exon, which is the first   *
+	 * exon for genes transcribed from the minus strand.                                     *
+	 * ************************************************************************************* */
+	for (int k = exoncount-1; k>=0; k--) {
+	    if (k < exoncount-1) {
+		cumlenintron += kgl.getExonStart(k+1)-kgl.getExonEnd(k)-1;
+	    }
+	    cumlenexon +=  kgl.getExonEnd(k)-kgl.getExonStart(k)+1;
+	    if (cdsend <= kgl.getExonEnd(k) ) {	 // calculate CDS start accurately by considering intron length
+		rcdsstart = txend-cdsend-cumlenintron+1;
+		if (cdsend >= kgl.getExonStart(k)) {  //CDS start within this exon
+		    cumlenexon = cdsend-kgl.getExonStart(k)+1;
+		} 
+	    }
+
+	    // TODO -- Still all the logic.
+	    System.out.println("Warning: " + kgl.getName2() + " is minus strand genic (not yet implemented)");
+	    System.exit(1);
+
+	} /* end for loop over exons (k) */
+
+
+
+
+	return null;
     }
 
     
@@ -726,77 +769,7 @@ public class Chromosome {
        return annotation_list;
    }
     
-    /**
-     * Determine if the variant under consideration represents a splice variant, defined as 
-     * being in the SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so,
-     * return true, otherwise, return false.
-     * @param k Exon number in gene represented by kgl
-     * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
-     */
-    private boolean isSpliceVariant(KnownGene kgl, int start, int end, String ref, String alt, int k) {
-	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns */
-	int exonend = kgl.getExonEnd(k);
-	int exonstart = kgl.getExonStart(k);
-	if (k==0 && start >= exonend-SPLICING_THRESHOLD+1 && start <= exonend+SPLICING_THRESHOLD) {
-	    /* variation is located right after (3' to) first exon. For instance, if 
-	       SPLICING_THRESHOLD is 2, we get the last two nucleotides of the first (zeroth)
-	       exon and the first 2 nucleotides of the following intron*/
-	    return true;
-	} else if (k == kgl.getExonCount()-1 && start >= exonstart - SPLICING_THRESHOLD 
-		   && start <= exonstart + SPLICING_THRESHOLD -1) {
-	    /* variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD
-	       nucleotides of the exon/intron boundary */
-	    return true;
-	} else if (k>0 && k < kgl.getExonCount()-1) {
-	    /* interior exon */
-	    if (start >= exonstart -SPLICING_THRESHOLD && start <= exonstart + SPLICING_THRESHOLD - 1)
-		/* variation is located at 5' end of exon in splicing region */
-		return true;
-	    else if (start >= exonend - SPLICING_THRESHOLD + 1 &&  start <= exonend + SPLICING_THRESHOLD)
-		/* variation is located at 3' end of exon in splicing region */
-		return true;
-	}
-	/* Now repeat the above calculations for "end", the end position of the variation.
-	* TODO: in many cases, start==end, this calculation is then superfluous. Refactor.*/
-	if (k==0 && end >= exonend-SPLICING_THRESHOLD+1 && end <= exonend+SPLICING_THRESHOLD) {
-	    /* variation is located right after (3' to) first exon. For instance, if 
-	       SPLICING_THRESHOLD is 2, we get the last two nucleotides of the first (zeroth)
-	       exon and the first 2 nucleotides of the following intron*/
-	    return true;
-	} else if (k == kgl.getExonCount()-1 && end >= exonstart - SPLICING_THRESHOLD 
-		   && end <= exonstart + SPLICING_THRESHOLD -1) {
-	    /* variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD
-	       nucleotides of the exon/intron boundary */
-	    return true;
-	} else if (k>0 && k < kgl.getExonCount()-1) {
-	    /* interior exon */
-	    if (end >= exonstart -SPLICING_THRESHOLD && end <= exonstart + SPLICING_THRESHOLD - 1)
-		/* variation is located at 5' end of exon in splicing region */
-		return true;
-	    else if (end >= exonend - SPLICING_THRESHOLD + 1 &&  end <= exonend + SPLICING_THRESHOLD)
-		/* variation is located at 3' end of exon in splicing region */
-		return true;
-	}
-	/* Check whether start/end are different and overlap with splice region. */
-	if (k==0 && start <= exonend && end >= exonend) {
-	    /* first exon, start is 5' to exon/intron boundry and end is 3' to boundary */
-	    return true;
-	} else if (k == kgl.getExonCount()-1 && start <= exonstart && end >= exonstart) {
-	    /* last exon, start is 5' to exon/intron boundry and end is 3' to boundary */
-	    return true;
-	} else if (k>0 && k < kgl.getExonCount() -1) {
-	     /* interior exon */
-	    if (start <= exonstart && end >= exonstart) {
-		/* variant overlaps 5' exon/intron boundary */
-		return true;
-	    } else if (start <= exonend && end >= exonend) {
-		/* variant overlaps 3' exon/intron boundary */
-		return true;
-	    }
-	}
-	return false; /* This variant does not lead to a splicing mutation */
-    }
-
+   
 	/**
 	 * Return the reverse complement version of a DNA string in upper case.
 	 * Note that no checking is done in this code since the parse code checks
