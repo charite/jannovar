@@ -4,7 +4,7 @@ import exomizer.common.Constants;
 import exomizer.reference.KnownGene;
 
 import java.util.ArrayList;
-
+import java.util.HashSet;
 
 /**
  * This class collects all the information about a variant and its annotations and 
@@ -40,8 +40,8 @@ import java.util.ArrayList;
  * only decide what the correct annotation is once we have seen enough candidates. Therefore, once we have gone
  * through the candidates, this class decides what the best annotation is and returns the corresponding 
  * {@link exomizer.reference.Annotation Annotation} object (in some cases, this class may modify the 
- {@link exomizer.reference.Annotation Annotation} object before returning it).
- * @version 0.01 November 15, 2012
+ * {@link exomizer.reference.Annotation Annotation} object before returning it).
+ * @version 0.02 November 25, 2012
  * @author Peter N Robinson
  */
 
@@ -49,21 +49,25 @@ public class AnnotatedVar {
    
 
     
-    /** List of all {@link exomizer.reference.Annotation Annotation}'s found to date for the current variation. */
-    private ArrayList<Annotation> annotation_list = null;
-    /** Best (lowest) precedence value found to data for any annotation. */
-    private int bestPrecedence = Integer.MAX_VALUE;
-
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for exonic variation. */
     private ArrayList<Annotation> annotation_Exonic =null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for ncRNA variation. */
     private ArrayList<Annotation> annotation_ncRNA = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR5 variation. */
     private ArrayList<Annotation> annotation_UTR5 = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR3 variation. */
     private ArrayList<Annotation> annotation_UTR3 = null;
+     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation. */
     private ArrayList<Annotation> annotation_Intronic = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for upstream variation. */
     private ArrayList<Annotation> annotation_Upstream = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for downstream variation. */
     private ArrayList<Annotation> annotation_Downstream = null; 
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intergenic variation. */
     private ArrayList<Annotation> annotation_Intergenic = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for probably erroneous data. */
     private ArrayList<Annotation> annotation_Error = null;
-
+    /** Flag to state that we have at least one exonic variant. */
     private boolean hasExonic;
     private boolean hasNcRna;
     private boolean hasUTR5;
@@ -161,6 +165,7 @@ public class AnnotatedVar {
 	} else if (hasUpstream) {
 	    return annotation_Upstream;
 	} else if (hasDownstream) {
+	    summarizeDownstream(); //only want one annotation here.
 	    return annotation_Downstream;
 	} else if (hasIntergenic) {
 	    return annotation_Intergenic;
@@ -174,13 +179,55 @@ public class AnnotatedVar {
 	return null;
     }
 
+    
+    private String concatenateWithSemicolon(ArrayList<String> lst) {
+	StringBuilder sb = new StringBuilder();
+	sb.append(lst.get(0));
+	for (int i=1;i<lst.size();++i) {
+	    sb.append(";" + lst.get(i));
+	}
+	return sb.toString();
+    }
 
+     private String concatenateWithComma(ArrayList<String> lst) {
+	StringBuilder sb = new StringBuilder();
+	sb.append(lst.get(0));
+	for (int i=1;i<lst.size();++i) {
+	    sb.append("," + lst.get(i));
+	}
+	return sb.toString();
+    }
+
+
+    private void summarizeDownstream() {
+	if (this.annotation_Downstream.size()==1) return;
+	HashSet<String> names = new HashSet<String>();
+	ArrayList<String> uniq = new ArrayList<String>();
+	StringBuilder sb = new StringBuilder();
+	for (Annotation ann: this.annotation_Downstream) {
+	    String s = ann.getVariantAnnotation();
+	    if (! names.contains(s))
+		uniq.add(s);
+	    names.add(s);
+	}
+	String s =null;
+	if (uniq.size()==1)
+	    s = uniq.get(0);
+	else
+	    s = concatenateWithComma(uniq);
+
+	Annotation ann = Annotation.getSummaryDownstreamAnnotation(s);
+	this.annotation_Downstream.clear();
+	this.annotation_Downstream.add(ann);
+	
+    }
 
 
     public void addNonCodingExonicRnaAnnotation(Annotation ann){
 	this.annotation_ncRNA.add(ann);
 	this.hasNcRna=true;
 	this.hasGenicMutation=true;
+	this.annotationCount++;
     }
 
 
@@ -188,17 +235,20 @@ public class AnnotatedVar {
 	this.annotation_UTR5.add(ann);
 	this.hasUTR5=true;
 	this.hasGenicMutation=true;
+	this.annotationCount++;
     }
 
     public void addUTR3Annotation(Annotation ann){
 	this.annotation_UTR3.add(ann);
 	this.hasUTR3=true;
 	this.hasGenicMutation=true;
+	this.annotationCount++;
     }
 
      public void addIntergenicAnnotation(Annotation ann){
 	this.annotation_Intergenic.add(ann);
 	this.hasIntergenic=true;
+	this.annotationCount++;
     }
 
 
@@ -206,17 +256,20 @@ public class AnnotatedVar {
 	this.annotation_Exonic.add(ann);
 	this.hasExonic=true;
 	this.hasGenicMutation=true;
+	this.annotationCount++;
     }
 
     public void addIntronicAnnotation(Annotation ann){
 	this.annotation_Intronic.add(ann);
 	this.hasIntronic=true;
 	this.hasGenicMutation=true;
+	this.annotationCount++;
     }
 
     public void addErrorAnnotation(Annotation ann){
 	this.annotation_Error.add(ann);
 	this.hasError=true;
+	this.annotationCount++;
      }
 
     public void addUpDownstreamAnnotation(Annotation ann){
@@ -233,6 +286,7 @@ public class AnnotatedVar {
 	    /* TODO -- Add Exception! */
 	    System.exit(1);
 	}
+	this.annotationCount++;
     }
 
 }

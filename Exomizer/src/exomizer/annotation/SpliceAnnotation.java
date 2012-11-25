@@ -91,6 +91,22 @@ public class SpliceAnnotation {
 
 
 
+     /**
+     * Determine if the variant under consideration  (which the calling
+     * code has determined to be on the plus strand) represents a splice variant, defined as 
+     * being in the SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so,
+     * return true, otherwise, return false.
+     * @param k Exon number in gene represented by kgl
+     * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
+     */
+    public static boolean isSpliceVariantMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+	System.out.println("Warning: Not yet implemented: isSpliceVariantMinusStrand");
+	return false;
+
+    }
+
+
+
   
        /**
      * Return an annotation for a splice mutation for a gene on the plus strand.
@@ -152,6 +168,13 @@ public class SpliceAnnotation {
 	Annotation ann = Annotation.createSplicingAnnotation(annot);
 	return ann;
 	
+    }
+
+
+    public static Annotation getSpliceAnnotationMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
+	System.out.println("Warning: Not yet implemented: getSpliceAnnotationMinusStrand");
+	return null;
+
     }
 
 

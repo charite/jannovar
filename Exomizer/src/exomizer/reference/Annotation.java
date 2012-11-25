@@ -84,11 +84,25 @@ public class Annotation implements Constants {
 	return ann;
     }
 
-
+    /**
+     * This method is used by {@link exomizer.reference.AnnotatedVar AnnotatedVar} to
+     * create a single Downstream annotation if there are multiple different
+     * annotations made
+     */
+    public static Annotation getSummaryDownstreamAnnotation(String name) {
+	Annotation ann = new Annotation();
+	ann.varType=DOWNSTREAM;
+	ann.variantAnnotation = name;
+	return ann;
+    }
 
     public static Annotation createUpDownstreamAnnotation(KnownGene kg, int pos) {
 	Annotation ann = new Annotation();
-	ann.variantAnnotation = String.format("HGVS=%s", kg.getName2());
+	if (kg == null) {
+	    System.out.println("createUpDownstreamAnnotation, knownGene argument is null, pos=" + pos);
+	    System.exit(1);
+	}
+	ann.variantAnnotation = String.format("%s", kg.getName2());
 	if (kg.isFivePrimeToGene(pos)) {
 	    if (kg.isPlusStrand()) {
 		ann.varType=UPSTREAM;
@@ -127,10 +141,10 @@ public class Annotation implements Constants {
     }
 
 
-    public static Annotation createUTR5Annotation(String name2) {
+    public static Annotation createUTR5Annotation(String name2,String accession) {
 	Annotation ann = new Annotation();
 	ann.varType = UTR5;
-	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	ann.variantAnnotation = String.format("HGVS=%s;%s", name2);
 	return ann;
 
     }

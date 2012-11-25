@@ -380,9 +380,9 @@ public class Chromosome {
 		annovar.addUpDownstreamAnnotation(ann);
 	    } 
 	    
-	    if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(start,NEARGENE)) {
+	    if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(end,NEARGENE)) {
 		/** The following function creates an upstream or downstream annotation as appropriate. */
-		    Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
+		    Annotation ann = Annotation.createUpDownstreamAnnotation(rightNeighbor,end);
 		    annovar.addUpDownstreamAnnotation(ann);
 	    }
 	    /* If we get here, and annotation_list is still empty, then the variant is not
@@ -466,7 +466,7 @@ public class Chromosome {
 			 #query  ----
 			 #gene     <--*---*->
 			*/
-			Annotation ann = Annotation.createUTR5Annotation(name2);
+			Annotation ann = Annotation.createUTR5Annotation(name2,name);
 			annovar.addUTR5Annotation(ann);
 			
 			  /* Annovar: $utr5{$name2}++;
@@ -570,7 +570,7 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr5{$name2}++; #positive strand for UTR5
 		     */
-		    Annotation ann = Annotation.createUTR5Annotation(name2);
+		    Annotation ann = Annotation.createUTR5Annotation(name2,name);
 		    annovar.addUTR5Annotation(ann);
 		    
 		} else if (start > cdsend) {
@@ -659,15 +659,210 @@ public class Chromosome {
 
 	    // TODO -- Still all the logic.
 	    System.out.println("Warning: " + kgl.getName2() + " is minus strand genic (not yet implemented)");
-	    System.exit(1);
-
-	} /* end for loop over exons (k) */
-
-
-
-
-	return;
+	    // System.exit(1);
+	     /* 1) First check whether variant is a splice variant */
+	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
+	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+	    if (SpliceAnnotation.isSpliceVariantMinusStrand(kgl,start,end,ref,alt,k)) {
+		Annotation ann  = SpliceAnnotation.getSpliceAnnotationMinusStrand(kgl,start,end,ref,alt,k,cumlenexon);
+		annovar.addExonicAnnotation(ann);
+	    }
+	    if (end > kgl.getExonEnd(k)) {
+		if (start <= kgl.getExonEnd(k)) {
+		    rvarstart =  kgl.getTXEnd() - kgl.getExonEnd(k)  -  cumlenintron + 1;
+		    //  $rvarstart = $txend-$exonend[$k]-$lenintron+1;
+		    for ( int m=k;m>=0;m--) {
+			if (m<k)
+			    cumlenintron += kgl.getExonStart(m+1) - kgl.getExonEnd(m) - 1;
+			// $m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
+			if (start > kgl.getExonEnd(m)) {
+			    //query           --------
+			    //gene     <--**---******---****---->
+			    // $rvarend = $txend-$exonstart[$m+1]+1-$lenintron + ($exonstart[$m+1]-$exonend[$m]-1);	#fixed this 2011feb18
+			    rvarend = kgl.getTXEnd() - kgl.getExonStart(m+1) + 1 - cumlenintron + 
+				(kgl.getExonStart(m+1) - kgl.getExonEnd(m) - 1);
+			    break;
+			} else if (start >= kgl.getExonStart(m)) {
+			    //query               ----
+			    //gene     <--**---******---****---->
+			    //$rvarend = $txend-$start-$lenintron+1;
+			    rvarend = kgl.getTXEnd() - start - cumlenintron + 1;
+			    break;
+			    //last;
+			}
+		    }
+		    if (rvarend < 0) {
+			//if rvarend is not found, then the whole tail of gene is covered
+			rvarend = kgl.getTXEnd() - kgl.getTXStart() - cumlenintron + 1;
+		    }
+		    if (end < cdsstart) {
+			//query  ----
+			//gene     <--*---*->
+			// Note this is UTR3 on negative strand
+			Annotation ann = Annotation.createUTR3Annotation(name2,name);
+			annovar.addUTR3Annotation(ann);
+		    } else if (start > cdsend) {
+			//query             ----
+			//gene     <--*---*->
+			// Note this is UTR5 on negative strand
+			Annotation ann = Annotation.createUTR5Annotation(name2,name);
+			annovar.addUTR5Annotation(ann);
+		    } 	else {
+			/*  5) If we get here, the variant is located within an exon.
+			 For now, add this as "exonic/name2 to the list, and also add the
+			specific annotation. TODO: Figure out later best way of doing this.
+			Annovar: $exonic{$name2}++; */								
+			if ( kgl.isCodingGene() && alt != null && alt.length()>0) {
+			    /* Annovar puts all exonic variants into an array and annotates them later
+			     * we will instead get the annotation right here and add it to the
+			     * exonic HashMap.
+			     * Annovar:	not $current_ncRNA and $obs and 
+			     *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
+			     */
+			    /* Note k in the following is the number (zero-based) of affected exon */
+			  annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
+			} else {
+			    System.out.println("WARNING TO DO, exonic in noncoding gene");
+			    System.exit(1);
+			}
+		    }
+		    continue; // go to next knownGene
+		}
+	    } /* iterator over exons */
+	   
+	}
     }
+
+
+
+	    /*
+
+	} 
+	    $intronic{$name2}++;
+	    $foundgenic++;
+	    last;
+	}
+    } elsif ($end >= $exonstart[$k]) {
+	$rvarstart = $txend-$end-$lenintron+1;		#all the rvarstart, rvarend are with respect to the cDNA sequence (so rvarstart corresponds to end of variants)
+	
+	for (my $m = $k; $m >= 0; $m--) {
+	    $m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
+	    if ($start > $exonend[$m]) {
+		#query           ----
+		#gene     <--**---******---****---->
+		#$rvarend = $txend-$exonstart[$m]-$lenintron+1 - ($exonstart[$m+1]-$exonend[$m]-1);		#commented out 2011feb18 due to bug (10 42244567 42244600 CACCTTTGCTTGATATGATAATATAGTGCCAAGG - hetero)
+		$rvarend = $txend-$exonstart[$m+1]+1 - $lenintron + ($exonstart[$m+1]-$exonend[$m]-1);		#fixed this 2011feb18
+		last;			#finish the circle of counting exons!!!!!
+	    } elsif ($start >= $exonstart[$m]) {			#the start is right located within exon
+		#query        -------
+		#gene     <--**---******---****---->
+		$rvarend = $txend-$start-$lenintron+1;
+		last;						#finish the cycle
+	    }
+	}
+	if (not defined $rvarend) {					#if rvarend is not found, then the whole tail of gene is covered
+	    $rvarend = $txend-$txstart-$lenintron+1;
+	}
+	
+	#here the trick begins to differentiate UTR versus coding exonic
+	if ($end < $cdsstart) {			#usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
+	    #query  ----
+	    #gene     <--*---*->
+	    $utr3{$name2}++;		#negative strand for UTR5
+	} elsif ($start > $cdsend) {
+	    #query             ----
+	    #gene     <--*---*->
+	    $utr5{$name2}++;		#negative strand for UTR3
+	} else {
+	    $exonic{$name2}++;
+	    not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+	}
+	$foundgenic++;
+	last;
+    }
+    *(if ($end > $exonend[$k]) {
+	if ($start <= $exonend[$k]) {
+	    $rvarstart = $txend-$exonend[$k]-$lenintron+1;
+	    
+	    for (my $m = $k; $m >= 0; $m--) {
+		$m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
+		if ($start > $exonend[$m]) {
+		    #query           --------
+		    #gene     <--**---******---****---->
+		    #$rvarend = $txend-$exonstart[$m]-$lenintron+1 - ($exonstart[$m+1]-$exonend[$m]-1);	#commented out 2011feb18
+		    $rvarend = $txend-$exonstart[$m+1]+1-$lenintron + ($exonstart[$m+1]-$exonend[$m]-1);	#fixed this 2011feb18
+		    last;		#finsih the cycle!!!!!!!!!!!!!!!!!!!
+		} elsif ($start >= $exonstart[$m]) {		#start within exons
+		    #query               ----
+		    #gene     <--**---******---****---->
+		    $rvarend = $txend-$start-$lenintron+1;
+		    last;
+		}
+	    }
+	    if (not defined $rvarend) {				#if rvarend is not found, then the whole tail of gene is covered
+		$rvarend = $txend-$txstart-$lenintron+1;
+	    }
+	    
+	    #here is the trick begins to differentiate UTR versus coding exonic
+	    if ($end < $cdsstart) {					#usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
+		#query  ----
+		#gene     <--*---*->
+		$utr3{$name2}++;		#negative strand for UTR5
+	    } elsif ($start > $cdsend) {
+		#query             ----
+		#gene     <--*---*->
+		$utr5{$name2}++;		#negative strand for UTR3
+	    } else {
+		$exonic{$name2}++;
+		not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+	    }
+	    $foundgenic++;
+	    last;
+	} elsif ($k < @exonstart-1 and $end < $exonstart[$k+1]) {
+	    $intronic{$name2}++;
+	    $foundgenic++;
+	    last;
+	}
+    } elsif ($end >= $exonstart[$k]) {
+	$rvarstart = $txend-$end-$lenintron+1;		#all the rvarstart, rvarend are with respect to the cDNA sequence (so rvarstart corresponds to end of variants)
+	
+	for (my $m = $k; $m >= 0; $m--) {
+	    $m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
+	    if ($start > $exonend[$m]) {
+		#query           ----
+		#gene     <--**---******---****---->
+		#$rvarend = $txend-$exonstart[$m]-$lenintron+1 - ($exonstart[$m+1]-$exonend[$m]-1);		#commented out 2011feb18 due to bug (10 42244567 42244600 CACCTTTGCTTGATATGATAATATAGTGCCAAGG - hetero)
+		$rvarend = $txend-$exonstart[$m+1]+1 - $lenintron + ($exonstart[$m+1]-$exonend[$m]-1);		#fixed this 2011feb18
+		last;			#finish the circle of counting exons!!!!!
+	    } elsif ($start >= $exonstart[$m]) {			#the start is right located within exon
+		#query        -------
+		#gene     <--**---******---****---->
+		$rvarend = $txend-$start-$lenintron+1;
+		last;						#finish the cycle
+	    }
+	}
+	if (not defined $rvarend) {					#if rvarend is not found, then the whole tail of gene is covered
+	    $rvarend = $txend-$txstart-$lenintron+1;
+	}
+	
+	#here the trick begins to differentiate UTR versus coding exonic
+	if ($end < $cdsstart) {			#usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
+	    #query  ----
+	    #gene     <--*---*->
+	    $utr3{$name2}++;		#negative strand for UTR5
+	} elsif ($start > $cdsend) {
+	    #query             ----
+	    #gene     <--*---*->
+	    $utr5{$name2}++;		#negative strand for UTR3
+	} else {
+	    $exonic{$name2}++;
+	    not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+	}
+	$foundgenic++;
+	last;
+    }
+	    */
+
 
     
 
