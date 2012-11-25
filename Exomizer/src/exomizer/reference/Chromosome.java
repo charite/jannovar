@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 
 import exomizer.reference.KnownGene;
+import exomizer.reference.AnnotatedVar;
 import exomizer.reference.Translator;
 import exomizer.exception.AnnotationException;
 
@@ -47,7 +48,7 @@ import exomizer.annotation.SpliceAnnotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.03 (Nov. 15, 2012)
+ * @version 0.04 (Nov. 25, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -69,17 +70,32 @@ public class Chromosome {
   
     /** Class object encapsulating rules to translate DNA. */
     private Translator translator = null;
+    /**
+     * This object will be used to prioritize the annotations and to choose the one(s) to
+     * report. For instance, if we have both an intronic and a nonsense mutation, just
+     * report the nonsense mutation. Note that the object will be initialized once in the constructor
+     * of the Chromosome class and will be reset for each new annotation, rather than creating
+     * a new object for each variation. Also note that the constructor takes an integer value
+     * with which the lists of potential annotations get initialized. We will take 2*SPAN because
+     * this is the maximum number of annotations any variant can get with this program.
+     */
+    private AnnotatedVar annovar = null;
     
-
+    /**
+     * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
+     * 24=Y_CHROMOSOME (see {@link exomizer.common.Constants Constants}).
+     */
     public Chromosome(byte c) {
 	this.chromosome = c;
 	this.geneTreeMap = new TreeMap<Integer,ArrayList<KnownGene>>();
 	this.translator = Translator.getTranslator();
 	this.n_genes=0;
+	this.annovar = new AnnotatedVar(2*SPAN );
     }
 
     /**
      * Add a gene model to this chromosome. 
+     @param kg A knownGene (note that there is one knownGene entry for each isoform of a gene).
      */
     public void addGene(KnownGene kg) {
 	int pos = kg.getTXStart();
@@ -234,9 +250,11 @@ public class Chromosome {
 	boolean foundFivePrimeNeighbor=false;
 	boolean foundThreePrimeNeighbor=false;
 
-	AnnotatedVar annovar = new AnnotatedVar();
+
 	
-	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+	//ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+	/* The following command "resets" the annovar object */
+	this.annovar.clearAnnotationLists();
 
 	// Define start and end positions of variant
 	int start = position;
@@ -324,7 +342,8 @@ public class Chromosome {
 			end >= txstart &&  end <= txend      ||  /* end is within transcript */
 			start <= txstart && end >= txend) {      /* variant completely contains transcript */
 			Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(name2);
-			annotation_list.add(ann); 
+			annovar.addNonCodingExonicRnaAnnotation(ann);
+			//annotation_list.add(ann); 
 			foundgenic=true;
 		    }
 		    currentGeneIsNonCoding = true;
@@ -333,18 +352,14 @@ public class Chromosome {
 		}
 	
 		if (kgl.isPlusStrand()) {	
-		    ArrayList<Annotation> cdsAnnots = getPlusStrandCodingSequenceAnnotation(position,ref, alt, kgl);	
-		    for (Annotation a : cdsAnnots) {
-			if (a.isGenic())
-			    foundgenic=true;
-			annotation_list.add(a);
+		    getPlusStrandCodingSequenceAnnotation(position,ref, alt, kgl);
+		    if (annovar.hasGenic()) {
+			foundgenic=true;
 		    }
 		} else if (kgl.isMinusStrand()) {
-		    ArrayList<Annotation> cdsAnnots = getMinusStrandCodingSequenceAnnotation(position,ref, alt, kgl);	
-		    for (Annotation a : cdsAnnots) {
-			if (a.isGenic())
-			    foundgenic=true;
-			annotation_list.add(a);
+		    getMinusStrandCodingSequenceAnnotation(position,ref, alt, kgl);	
+		    if (annovar.hasGenic()) {
+			foundgenic=true;
 		    }
 		}
 	    }
@@ -358,27 +373,27 @@ public class Chromosome {
 	    we should at least have a rightNeighbor and a leftNeighbor. 
 	    We first check if one of these is upstream or downstream.
 	    If not, then we have an intergenic variant. */
-	if (annotation_list.isEmpty()) {
+	if (annovar.isEmpty()) {
 	    if (leftNeighbor != null && leftNeighbor.isNearThreePrimeEnd(start,NEARGENE) ) {
 		/** The following function creates an upstream or downstream annotation as appropriate. */
 		Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
-		annotation_list.add(ann);
+		annovar.addUpDownstreamAnnotation(ann);
 	    } 
 	    
 	    if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(start,NEARGENE)) {
 		/** The following function creates an upstream or downstream annotation as appropriate. */
 		    Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
-		    annotation_list.add(ann);
+		    annovar.addUpDownstreamAnnotation(ann);
 	    }
 	    /* If we get here, and annotation_list is still empty, then the variant is not
 	       nearby to any gene (i.e., it is not upstream/downstream). Therefore, the variant
 	       is intergenic */
-	    if (annotation_list.isEmpty()) {
-		Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start);
-		annotation_list.add(ann);
+	    if (annovar.isEmpty()) {
+		Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start,end);
+		annovar.addIntergenicAnnotation(ann);
 	    }
 	}
-	return annotation_list;
+	return annovar.getAnnotationList();
     }
 
 
@@ -392,12 +407,12 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public ArrayList<Annotation> getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
+    public void getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 
 	//System.out.println("BLA, getPLusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
 	//System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
-	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+	//ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
@@ -430,7 +445,8 @@ public class Chromosome {
 	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
 	    if (SpliceAnnotation.isSpliceVariantPlusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationPlusStrand(kgl,start,end,ref,alt,k,cumlenexon);
-		annotation_list.add(ann);
+		annovar.addExonicAnnotation(ann);
+		//annotation_list.add(ann);
 	    }
 	    if (start < kgl.getExonStart(k)) {
 		//System.out.println(String.format("BLA, start=%d, exon[%d] start=%d for gene %s ",start,k,kgl.getExonStart(k), kgl.getName2()));
@@ -451,7 +467,8 @@ public class Chromosome {
 			 #gene     <--*---*->
 			*/
 			Annotation ann = Annotation.createUTR5Annotation(name2);
-			annotation_list.add(ann);
+			annovar.addUTR5Annotation(ann);
+			
 			  /* Annovar: $utr5{$name2}++;
 			     positive strand for UTR5 */
 		    } else if (start > cdsend) {
@@ -460,7 +477,8 @@ public class Chromosome {
 			   #gene     <--*---*->
 			*/
 			Annotation ann = Annotation.createUTR3Annotation(name2,name);
-			annotation_list.add(ann);
+			annovar.addUTR3Annotation(ann);
+			
 			/* positive strand for UTR3 */
 		    } else {	
 			/*  5) If we get here, the variant is located within an exon.
@@ -477,13 +495,9 @@ public class Chromosome {
 			     *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
 			     */
 			    /* Note k in the following is the number (zero-based) of affected exon */
-			  ArrayList<Annotation> exonicAnns = annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
-			  for (Annotation a : exonicAnns) {
-			      annotation_list.add(a);
-				// TODO do we need to increment foundcoding??
-			  }
+			  annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 			} else {
-			    System.out.println("WARNING TO DO, exonic in noncodingn gene");
+			    System.out.println("WARNING TO DO, exonic in noncoding gene");
 			    System.exit(1);
 			}
 		    }
@@ -492,8 +506,7 @@ public class Chromosome {
 		} else if (k>0 && start > kgl.getExonEnd(k-1)) {  /* i.e., variant is intronic */
 		    /* Annovar: $intronic{$name2}++; $foundgenic++; last; */
 		    Annotation ann = Annotation.createIntronicAnnotation(name2);
-		    System.out.println("INTRON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		    annotation_list.add(ann);
+		    annovar.addIntronicAnnotation(ann);
 		    break; /* break out of for loop of exons (k) */
 		}
 	    } /* if (start < kgl.getExonStart(k)) */ else if (start <= kgl.getExonEnd(k)) {
@@ -558,14 +571,15 @@ public class Chromosome {
 		     * Annovar: $utr5{$name2}++; #positive strand for UTR5
 		     */
 		    Annotation ann = Annotation.createUTR5Annotation(name2);
-		    annotation_list.add(ann);
+		    annovar.addUTR5Annotation(ann);
+		    
 		} else if (start > cdsend) {
 		    /* #query             ----
 		     * #gene     <--*---*->
 		     * Annovar: $utr3{$name2}++; #positive strand for UTR3
 		     */
 		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
-		    annotation_list.add(ann);
+		    annovar.addUTR3Annotation(ann);
 		} else {
 		    //annotation_list.add(new Annotation("exonic",name2));
 		    /* Annovar: $exonic{$name2}++; */
@@ -579,11 +593,7 @@ public class Chromosome {
 			     * #queryindex, refseq CDS start, refseq variant start
 			     */
 			    /* Note k in the following is the number (zero-based) of affected exon */
-			    ArrayList<Annotation> exonicAnns = annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
-			    for (Annotation a : exonicAnns) {
-				annotation_list.add(a);
-				// TODO do we need to increment foundcoding??
-			    }
+			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 		    } else {
 			    System.out.println("WARNING TO DO, exonic in noncoding gene");
 			    System.exit(1);
@@ -594,7 +604,7 @@ public class Chromosome {
 		continue; // go to next knownGene
 	    }
 	} /* iterator over exons */
-	return annotation_list;
+	//return annotation_list;
     }
 
 
@@ -608,11 +618,11 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public ArrayList<Annotation> getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
+    public void getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 	//System.out.println("BLA, getMinusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
 	//System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
-	ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+	//ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
@@ -656,7 +666,7 @@ public class Chromosome {
 
 
 
-	return null;
+	return;
     }
 
     
@@ -690,9 +700,9 @@ public class Chromosome {
 	 * @param exonNumber Number (one-based) of affected exon.
 	 * @param kgl Gene in which variant was localized to one of the exons 
 	 */
-   private ArrayList<Annotation> annotateExonicVariants(int refvarstart, int refvarend, 
+   private void annotateExonicVariants(int refvarstart, int refvarend, 
 		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) throws AnnotationException {
-       ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+      
 
        /* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
        System.out.println("******************************");
@@ -710,7 +720,7 @@ public class Chromosome {
 	   String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
 				    kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
 	   Annotation ann = Annotation.createErrorAnnotation(s);
-	   annotation_list.add(ann);
+	   this.annovar.addErrorAnnotation(ann);
        }
        /*
 	 
@@ -730,7 +740,7 @@ public class Chromosome {
        if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
 	   String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
 	   Annotation ann = Annotation.createErrorAnnotation(s);
-	   annotation_list.add(ann);
+	   this.annovar.addErrorAnnotation(ann);
        }
        /*annovar line 1079 */
        if (kgl.isMinusStrand()) {
@@ -742,20 +752,23 @@ public class Chromosome {
 	   if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
 	       Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
 									       var,refvarstart,exonNumber);
-	       annotation_list.add(insrt);
+	       //annotation_list.add(insrt);
+	       this.annovar.addExonicAnnotation(insrt);
 	   } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
 	       Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 									   ref, var,refvarstart,exonNumber);
-	       //$is_fs++;
+	       this.annovar.addExonicAnnotation(dlt);
 	   } else if (var.length()>1) {
 	       Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
 									   ref,var,refvarstart, refvarend, 
 									   exonNumber);
-	       annotation_list.add(blck);
+	       this.annovar.addExonicAnnotation(blck);
+	      
 	   } else {
 	       Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 								    ref, var,refvarstart,exonNumber);
-	       annotation_list.add(mssns);
+	       
+	       this.annovar.addExonicAnnotation(mssns);
 
 	   }
        } /* if (start==end) */
@@ -763,10 +776,10 @@ public class Chromosome {
 	   Annotation dltmnt = 
 	       DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
 							       ref, var, refvarstart, refvarend, exonNumber);
-	   annotation_list.add(dltmnt);
-       }
-       
-       return annotation_list;
+	   
+	   this.annovar.addExonicAnnotation(dltmnt);
+       }   
+       return;
    }
     
    

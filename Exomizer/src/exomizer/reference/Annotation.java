@@ -29,8 +29,15 @@ public class Annotation implements Constants {
 
     public String getType() { return this.variantType; }
 
+    /**
+     * Return a byte constant the corresponds to the type of the variation. This will be one of the
+     * constants in {@link exomizer.common.Constants Constants},
+     * e.g., MISSENSE, 5UTR, etc. 
+     */
+    public byte getVariantType() { return this.varType; }
 
-    public Annotation(String type, String anno) {
+
+    private Annotation(String type, String anno) {
 	this.variantType=type;
 	this.variantAnnotation=anno;
 	System.out.println("TYPE = " + type + " anno=" + anno);
@@ -49,27 +56,29 @@ public class Annotation implements Constants {
      * <PRE>HGVS=LOC100288069(dist=39337),LINC00115(dist=8181)</PRE>
      * @param leftGene Gene that is 5' to the variant
      * @param rightGene Gene that is 3' to the variant
-     * @param pos position of the variant (should be the start position)
+     * @param startpos 5' position of the variant (should be the start position)
+     * @param endpos 3' position of the variant (should be the end position)
      * @return Annotation object for internenic variant
      */
-    public static Annotation createIntergenicAnnotation(KnownGene leftGene, KnownGene rightGene, int pos) {
+    public static Annotation createIntergenicAnnotation(KnownGene leftGene, KnownGene rightGene, int startpos, int endpos) {
 	Annotation ann = new Annotation();
+	System.out.println(String.format("Left:%s, right:%s, start %d end %d",leftGene.getName2(),rightGene.getName2(),startpos,endpos));
 	ann.varType=INTERGENIC;
 	/* Note that either the leftGene or the rightGene can be null, if the variant is located
 	   5' (3') to all variants on a chromosome. */
 	if (leftGene == null) {
-	    int distR =  rightGene.getTXStart() - pos;
-	    ann.variantAnnotation = String.format("HGVS=NONE(dist=NONE),%s(dist=%d)",
+	    int distR =  rightGene.getTXStart() - endpos;
+	    ann.variantAnnotation = String.format("NONE(dist=NONE),%s(dist=%d)",
 						  rightGene.getName2(),distR);
 	} else if (rightGene == null) {
-	    int distL =  pos - leftGene.getTXEnd();
-	    ann.variantAnnotation = String.format("HGVS=%s(dist=%d),NONE(dist=NONE)",
+	    int distL =  startpos - leftGene.getTXEnd();
+	    ann.variantAnnotation = String.format("%s(dist=%d),NONE(dist=NONE)",
 						  leftGene.getName2(),distL);
 
 	} else {
-	    int distR =  rightGene.getTXStart() - pos;
-	    int distL =  pos - leftGene.getTXEnd();
-	    ann.variantAnnotation = String.format("HGVS=%s(dist=%d),%s(dist=%d)",
+	    int distR =  rightGene.getTXStart() - endpos;
+	    int distL =  startpos - leftGene.getTXEnd();
+	    ann.variantAnnotation = String.format("%s(dist=%d),%s(dist=%d)",
 						  leftGene.getName2(),distL,rightGene.getName2(),distR);
 	}
 	return ann;

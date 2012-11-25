@@ -296,8 +296,8 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public boolean isNearThreePrimeEnd(int pos,int threshold) {
 	int distance = pos - this.txEnd;
 	if (distance <= 0) return false; /* variant is not 3' to gene, but 5' to it or within it! */
-	System.out.println("Threshold: " + threshold + ", pos=" + pos + " txEnd=" + txEnd);
-	System.out.println(String.format("pos - this.txEnd  =%d; threshold=%d",pos - this.txEnd , threshold));
+	//System.out.println("Threshold: " + threshold + ", pos=" + pos + " txEnd=" + txEnd);
+	//System.out.println(String.format("pos - this.txEnd  =%d; threshold=%d",pos - this.txEnd , threshold));
 	if (distance <  threshold)
 	    return true;
 	else 
