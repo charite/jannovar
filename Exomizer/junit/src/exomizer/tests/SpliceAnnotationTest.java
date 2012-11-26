@@ -82,15 +82,15 @@ public class SpliceAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: HGVS=CALML6(NM_138705:exon3:c.253+2T>C)
- * chr1:1848056T>C
+ * annovar: TCTEX1D1(uc001dcv.3:exon4:c.336+1G>A)
+ * chr1:67242087G>A
  *</P>
  */
-@Test public void testUpstreamVar1() throws AnnotationException  {
+@Test public void testSpliceVar9() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 1848056;
-	String ref = "T";
-	String alt = "C";
+	int pos = 67242087;
+	String ref = "G";
+	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
@@ -102,9 +102,10 @@ public class SpliceAnnotationTest implements Constants {
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=CALML6(NM_138705:exon3:c.253+2T>C)",annot);
+	    Assert.assertEquals("TCTEX1D1(uc001dcv.3:exon4:c.336+1G>A)",annot);
 	}
 }
+
 
 
 }
