@@ -43,18 +43,7 @@
     </junit>
   </target>
 
-<!-- use this target to run just one test class, named below -->
-  <target name="sql"
-	  depends="compile">
-    <junit printsummary="yes" 
-	   fork="yes" 
-	   haltonfailure="no">
-       <classpath refid="classpath" />
-      <classpath path="${build.classes}" />
-      <formatter type="plain" usefile="off"/>
-      <test name="exomizer.tests.NSFP2SQLDumpParserTest"/>
-    </junit>
-  </target>
+
 
 <!-- use this target to run just one test class, named below -->
   <target name="anno"
@@ -68,7 +57,8 @@
       <classpath path="${build.classes}" />
       <formatter type="plain" usefile="off"/>
       <!-- test name="exomizer.tests.AnnotatorTest"/ -->
-	<test name="exomizer.tests.UpstreamAnnotationTest"/>
+	<test name="exomizer.tests.IntronicAnnotationTest"/>
+	
     </junit>
   </target>
 
@@ -88,6 +78,7 @@
 	<test name="exomizer.tests.IntergenicAnnotationTest"/>
 	<test name="exomizer.tests.DownstreamAnnotationTest"/>
 	<test name="exomizer.tests.UpstreamAnnotationTest"/>
+	<test name="exomizer.tests.IntronicAnnotationTest"/>
     </junit>
   </target>
 

@@ -160,7 +160,7 @@ public class Annotation implements Constants {
      public static Annotation createIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
 	ann.varType = INTRONIC;
-	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	ann.variantAnnotation = String.format("%s", name2);
 	return ann;
      }
 

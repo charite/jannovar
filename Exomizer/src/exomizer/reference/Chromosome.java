@@ -725,9 +725,16 @@ public class Chromosome {
 			    System.out.println("WARNING TO DO, exonic in noncoding gene");
 			    System.exit(1);
 			}
-		    }
+		    } 
 		    continue; // go to next knownGene
-		}
+		}else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
+			//$intronic{$name2}++;
+			Annotation ann = Annotation.createIntronicAnnotation(name2);
+			annovar.addIntronicAnnotation(ann);
+			/* break out of for loop of exons (k) */
+			//$foundgenic++;
+			break;
+		    }
 	    } /* iterator over exons */
 	   
 	}
