@@ -58,7 +58,7 @@
       <formatter type="plain" usefile="off"/>
       <!-- test name="exomizer.tests.AnnotatorTest"/ -->
 	<test name="exomizer.tests.IntronicAnnotationTest"/>
-	
+	<test name="exomizer.tests.SpliceAnnotationTest"/>
     </junit>
   </target>
 
@@ -79,6 +79,7 @@
 	<test name="exomizer.tests.DownstreamAnnotationTest"/>
 	<test name="exomizer.tests.UpstreamAnnotationTest"/>
 	<test name="exomizer.tests.IntronicAnnotationTest"/>
+	<test name="exomizer.tests.SpliceAnnotationTest"/>
     </junit>
   </target>
 
