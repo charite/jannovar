@@ -259,7 +259,15 @@ public class AnnotatedVar {
 	this.annotationCount++;
     }
 
+    /**
+     * Adds an annotation for an intronic variant. Note that if the
+     * same intronic annotation already exists, nothing is done, i.e.,
+     * this method avoids duplicate aqnnotations. 
+     */
     public void addIntronicAnnotation(Annotation ann){
+	for (Annotation a: this.annotation_Intronic) {
+	    if (a.equals(ann)) return; /* already have identical annotation */
+	}
 	this.annotation_Intronic.add(ann);
 	this.hasIntronic=true;
 	this.hasGenicMutation=true;

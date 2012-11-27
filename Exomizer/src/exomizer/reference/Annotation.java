@@ -37,6 +37,18 @@ public class Annotation implements Constants {
     public byte getVariantType() { return this.varType; }
 
 
+    /**
+     * Checks whether the annotation is equivalent
+     */
+    public boolean equals(Annotation other) {
+	if (varType == other.varType && variantAnnotation != null
+	    && variantAnnotation.equals(other.variantAnnotation))
+	    return true;
+	else
+	    return false;
+    }
+
+
     private Annotation(String type, String anno) {
 	this.variantType=type;
 	this.variantAnnotation=anno;

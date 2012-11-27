@@ -657,10 +657,7 @@ public class Chromosome {
 		} 
 	    }
 
-	    // TODO -- Still all the logic.
-	    System.out.println("Warning: " + kgl.getName2() + " is minus strand genic (not yet implemented)");
-	    // System.exit(1);
-	     /* 1) First check whether variant is a splice variant */
+	    /* 1) First check whether variant is a splice variant */
 	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
 	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
 	    if (SpliceAnnotation.isSpliceVariantMinusStrand(kgl,start,end,ref,alt,k)) {
