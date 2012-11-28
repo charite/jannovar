@@ -1585,7 +1585,7 @@ public class IntronicAnnotationTest implements Constants {
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C5orf56,IRF1",annot);
+	    Assert.assertEquals("IRF1,C5orf56",annot);
 	}
 }
 
@@ -2061,6 +2061,7 @@ public class IntronicAnnotationTest implements Constants {
  *<P>
  * annovar: LPAL2
  * chr6:160903622G>A
+ -- Annovar is in error here, it should be ncRNA INTRONIC
  *</P>
  */
 @Test public void testIntronicVar6899() throws AnnotationException  {
@@ -2077,7 +2078,7 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.assertEquals(1,N);
 	    Annotation ann = anno_list.get(0);
 	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    Assert.assertEquals(ncRNA_INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LPAL2",annot);
 	}

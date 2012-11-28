@@ -57,8 +57,11 @@ public class AnnotatedVar implements Constants {
     private ArrayList<Annotation> annotation_UTR5 = null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR3 variation. */
     private ArrayList<Annotation> annotation_UTR3 = null;
-     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation. */
+     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation in
+	 protein coding RNAs.. */
     private ArrayList<Annotation> annotation_Intronic = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation in ncRNAs. */
+    private ArrayList<Annotation> annotation_ncrnaIntronic = null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for upstream variation. */
     private ArrayList<Annotation> annotation_Upstream = null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for downstream variation. */
@@ -73,6 +76,7 @@ public class AnnotatedVar implements Constants {
     private boolean hasUTR5;
     private boolean hasUTR3;
     private boolean hasIntronic;
+    private boolean hasNcrnaIntronic;
     private boolean hasUpstream;
     private boolean hasDownstream;
     private boolean hasIntergenic;
@@ -92,6 +96,7 @@ public class AnnotatedVar implements Constants {
 
 	this.annotation_Exonic = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncRNA =  new ArrayList<Annotation>(initialCapacity);
+	this.annotation_ncrnaIntronic = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_UTR5 =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_UTR3 = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Intronic =  new ArrayList<Annotation>(initialCapacity);
@@ -121,6 +126,7 @@ public class AnnotatedVar implements Constants {
 	this.hasUTR5=false;
 	this.hasUTR3=false;
 	this.hasIntronic=false;
+	this.hasNcrnaIntronic=false;
 	this.hasUpstream=false;
 	this.hasDownstream=false;
 	this.hasIntergenic=false;
@@ -161,7 +167,9 @@ public class AnnotatedVar implements Constants {
 	} else if (hasUTR3) {
 	    return annotation_UTR3;
 	} else if (hasIntronic) {
-	    return annotation_Intronic;
+	    return summarizeIntronic();
+	} else if (hasNcrnaIntronic) {
+	    return annotation_ncrnaIntronic;
 	} else if (hasUpstream) {
 	    return annotation_Upstream;
 	} else if (hasDownstream) {
@@ -222,6 +230,25 @@ public class AnnotatedVar implements Constants {
 	
     }
 
+    /**
+     * This function will combine multiple intronic
+     * annotations, e.g., "TRIM22,TRIM5" for a variant
+     * that is located in the intron of these two different
+     * genes. */
+    private ArrayList<Annotation> summarizeIntronic() {
+	if (annotation_Intronic.size()==1)
+	    return annotation_Intronic;
+	StringBuilder sb = new StringBuilder();
+	sb.append(annotation_Intronic.get(0).getVariantAnnotation());
+	for (int i=1;i<annotation_Intronic.size();++i) {
+	    sb.append("," + annotation_Intronic.get(i).getVariantAnnotation());
+	}
+	Annotation a = Annotation.createIntronicAnnotation(sb.toString());
+	annotation_Intronic.clear();
+	annotation_Intronic.add(a);
+	return annotation_Intronic;
+    }
+
 
     public void addNonCodingExonicRnaAnnotation(Annotation ann){
 	this.annotation_ncRNA.add(ann);
@@ -263,23 +290,33 @@ public class AnnotatedVar implements Constants {
      * Adds an annotation for an intronic variant. Note that if the
      * same intronic annotation already exists, nothing is done, i.e.,
      * this method avoids duplicate annotations. 
+     * <P>
+     * Note that if multiple annotations are added for the same gene, and
+     * one annotation is INTRONIC and the other is ncRNA_INTRONIC,
+     * then we only store the INTRONIC annotation.
      */
     public void addIntronicAnnotation(Annotation ann){
-	for (Annotation a: this.annotation_Intronic) {
-	    if (a.equals(ann)) return; /* already have identical annotation */
-	    if (a.getVarType() == ncRNA_INTRONIC && a.getVariantAnnotation().equals(ann.getVariantAnnotation())) {
-		/* in this case, we have an annotation for a noncoding isoform of some gene, and we
-		   are adding an intronic annotation for a coding isoform, which has precedence. In
-		   this case, we will just keep the coding intronic annotation, i.e., INTRONIC */
-		a.setVarType(INTRONIC);
-		return;
+	if (ann.getVarType() == INTRONIC) {
+	    for (Annotation a: this.annotation_Intronic) {
+		if (a.equals(ann)) return; /* already have identical annotation */
 	    }
-	}
-	this.annotation_Intronic.add(ann);
-	this.hasIntronic=true;
-	this.hasGenicMutation=true;
+	    this.annotation_Intronic.add(ann);
+	    this.hasIntronic=true;
+	} else if (ann.getVarType() == ncRNA_INTRONIC) {
+	     for (Annotation a: this.annotation_ncrnaIntronic) {
+		 if (a.equals(ann)) return; /* already have identical annotation */
+	     }
+	     this.annotation_ncrnaIntronic.add(ann);
+	     this.hasNcrnaIntronic=true;
+	} 
+        this.hasGenicMutation=true;
 	this.annotationCount++;
     }
+
+
+    
+
+
 
     public void addErrorAnnotation(Annotation ann){
 	this.annotation_Error.add(ann);

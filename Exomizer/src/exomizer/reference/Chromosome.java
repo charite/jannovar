@@ -266,9 +266,8 @@ public class Chromosome {
 	ArrayList<KnownGene> candidateGenes = getBinRange(position);
 	
 	for (KnownGene kgl : candidateGenes) {
-	    System.out.println("Loop for kgl=" + kgl.getName2());
+	    //System.out.println("Loop for kgl=" + kgl.getName2());
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
-	    // 	($name, $dbstrand, $txstart, $txend, $cdsstart, $cdsend, $exonstart, $exonend, $name2)
 	    String name = kgl.getKnownGeneID();
 	    int txstart = kgl.getTXStart();
 	    int txend   = kgl.getTXEnd();
@@ -315,7 +314,7 @@ public class Chromosome {
 		//gene		<-*----*->
 		//System.out.println(String.format("\tbla Variant at %d is 5' to gene: %s",start,kgl.getName2()));
 		foundThreePrimeNeighbor=true; /* gene is 3' neighbor */
-		if (foundgenic) {System.out.println("5 found genic is true - break");  continue; }
+		if (foundgenic) { continue; }
 		/* We have already found a gene such that this variant is genic. */
 		else if (foundFivePrimeNeighbor) continue; /* we have found genes outside of the variant on 5' and 3' sides */
 		else continue; /* go to next round, continue search */
@@ -324,7 +323,6 @@ public class Chromosome {
 		//System.out.println(String.format("\tbla Variant at %d is 3' to gene: %s",start,kgl.getName2()));
 		foundFivePrimeNeighbor=true; /* gene is 5' neighbor to var */
 		if (foundgenic) {
-		    System.out.println("3 found genic is true - break"); 
 		    continue; 
 		} else if (foundThreePrimeNeighbor) { 
 		    //System.out.println("foudn 3' neighbior true");
@@ -336,10 +334,10 @@ public class Chromosome {
 		}
 	    } else {
 		/* We now must be in a genic region */
-		System.out.println("bla in genic region kgl=" + kgl.getName2()+ ":" + kgl.getName());
+		//System.out.println("bla in genic region kgl=" + kgl.getName2()+ ":" + kgl.getName());
 		if (! kgl.isCodingGene() ) {
 		    /* this is either noncoding RNA or maybe bad annotation in UCSC */
-		    System.out.println("bla NC in genic region kgl=" + kgl.getName2());
+		    //System.out.println("bla NC in genic region kgl=" + kgl.getName2());
 		    if (start >= txstart &&  start <= txend ||   /* start is within transcript */
 			end >= txstart &&  end <= txend      ||  /* end is within transcript */
 			start <= txstart && end >= txend) {      /* variant completely contains transcript */
@@ -506,7 +504,7 @@ public class Chromosome {
 		    
 		} else if (k>0 && start > kgl.getExonEnd(k-1)) {  /* i.e., variant is intronic */
 		    /* Annovar: $intronic{$name2}++; $foundgenic++; last; */
-		    System.out.println("+ gene intron kgl=" + kgl.getName2() + ":" + kgl.getName());
+		    //System.out.println("+ gene intron kgl=" + kgl.getName2() + ":" + kgl.getName());
 		    Annotation ann = null;
 		    if (kgl.isCodingGene() )
 			 ann = Annotation.createIntronicAnnotation(name2);
@@ -732,7 +730,7 @@ public class Chromosome {
 		    continue; // go to next knownGene
 		}else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
 			//$intronic{$name2}++;
-		     System.out.println("- gene intron kgl=" + kgl.getName2() + ":" + kgl.getName());
+		    //System.out.println("- gene intron kgl=" + kgl.getName2() + ":" + kgl.getName());
 		     Annotation ann = null;
 		     if (kgl.isCodingGene() )
 			 ann = Annotation.createIntronicAnnotation(name2);
