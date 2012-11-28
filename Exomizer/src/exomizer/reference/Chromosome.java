@@ -266,7 +266,7 @@ public class Chromosome {
 	ArrayList<KnownGene> candidateGenes = getBinRange(position);
 	
 	for (KnownGene kgl : candidateGenes) {
-	    //System.out.println("Loop for kgl=" + kgl.getName2());
+	    System.out.println("Loop for kgl=" + kgl.getName2());
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
 	    String name = kgl.getKnownGeneID();
 	    int txstart = kgl.getTXStart();

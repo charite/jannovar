@@ -2074,6 +2074,9 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    for (Annotation a : anno_list) {
+		System.out.println("SHIT " + a.getVariantAnnotation());
+	    }
 	    int N = anno_list.size();
 	    Assert.assertEquals(1,N);
 	    Annotation ann = anno_list.get(0);
@@ -2650,7 +2653,7 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.assertEquals(1,N);
 	    Annotation ann = anno_list.get(0);
 	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    Assert.assertEquals(ncRNA_INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK126491,LOC100132987",annot);
 	}
@@ -3362,6 +3365,9 @@ public class IntronicAnnotationTest implements Constants {
  *<P>
  * annovar: abParts
  * chr14:106376354A>G
+ --- There is a massive annotation for abParts  ( antibody parts) that the 
+ --- exomizer is not picking up. Instead, it is getting an intron of an ncRNA gene.
+ --- This is not wrong, but it is unclear why we are not picking up the abParts intron.
  *</P>
  */
 @Test public void testIntronicVar13184() throws AnnotationException  {
@@ -3519,6 +3525,8 @@ public class IntronicAnnotationTest implements Constants {
  * annovar: NPIPL1,TUFM
  * chr16:28855727A>G
  *</P>
+ -- This is also a mistake in Exomizer because NPIPL1 is really big and there are many interveniing genes in 
+ -- one of the NPIPL1 introns...
  */
 @Test public void testIntronicVar14118() throws AnnotationException  {
 	byte chr = 16;

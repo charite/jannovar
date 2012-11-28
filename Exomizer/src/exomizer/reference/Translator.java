@@ -11,10 +11,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exomizer.exception.AnnotationException;
+
 /**
  * This class helps to translate DNA sequences.
  * @author Peter N Robinson
- * @version 0.02 (Oct. 4, 2012)
+ * @version 0.03 (Nov. 28, 2012)
  */
 public class Translator {
     /** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
@@ -36,39 +38,36 @@ public class Translator {
     
     /** Factory method to get reference to Translator. */
     static public Translator getTranslator() {
-		if (Translator.translator == null) {
-			Translator.translator = new Translator();
-		}
-		return Translator.translator;
+	if (Translator.translator == null) {
+	    Translator.translator = new Translator();
 	}
+	return Translator.translator;
+    }
 
-	/**
-	 * Translates a DNA sequence. Assume the sequence is upper case with no ambiguous bases.
-	 * @param dnaseq A DNA sequence that is to be translated
-	 * @return corresonding aminoacid sequence
-	 */
-	public String translateDNA(String dnaseq) {
-		StringBuilder aminoAcidSeq = new StringBuilder();
-		int len = dnaseq.length();
-		if (! (len%3 == 0) ) {
-			System.err.println("Translator.java, error: dnaseq len not a multiple of 3");
-			System.err.println("Sequence: " + dnaseq);
-			System.err.println("Todo throw exception here");
-			System.exit(1);
-		}
-		for (int i=0; i<len; i += 3) {
-			String nt3 = dnaseq.substring(i,i+3);
-			String aa = this.codon1.get(nt3);
-			if (aa == null) {
-				System.err.println("Translator.java, error: could not find nt3: " + nt3);
-				System.err.println("Sequence: " + dnaseq);
-				System.err.println("Todo throw exception here");
-				System.exit(1);
-			}
-			aminoAcidSeq.append(aa);
-		}
-		return aminoAcidSeq.toString();
+    /**
+     * Translates a DNA sequence. Assume the sequence is upper case with no ambiguous bases.
+     * @param dnaseq A DNA sequence that is to be translated
+     * @return corresonding aminoacid sequence
+     */
+    public String translateDNA(String dnaseq) throws AnnotationException {
+	StringBuilder aminoAcidSeq = new StringBuilder();
+	int len = dnaseq.length();
+	if (! (len%3 == 0) ) {
+	    String err = String.format("Attempt to translate sequence [%s] with length %d (should be 3n)",dnaseq,len);
+	    throw new AnnotationException(err);
 	}
+	for (int i=0; i<len; i += 3) {
+	    String nt3 = dnaseq.substring(i,i+3);
+	    String aa = this.codon1.get(nt3);
+	    if (aa == null) {
+		String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"", 
+					   nt3, dnaseq);
+		throw new AnnotationException(err);
+	    }
+	    aminoAcidSeq.append(aa);
+	}
+	return aminoAcidSeq.toString();
+    }
    
 
 

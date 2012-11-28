@@ -3,7 +3,7 @@ package exomizer.annotation;
 import exomizer.reference.KnownGene;
 import exomizer.reference.Annotation;
 import exomizer.reference.Translator;
-
+import exomizer.exception.AnnotationException;
 
 /**
  * This class is intended to provide a static method to generate annotations for deletion
@@ -28,7 +28,7 @@ public class DeletionAnnotation {
      * @return An annotation corresponding to the deletion.
      */
     public static Annotation getAnnotationSingleNucleotidePlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
-		String ref, String var,int refvarstart,int exonNumber){
+		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	char deletedNT=' ';
@@ -113,7 +113,8 @@ public class DeletionAnnotation {
      * @return An annotation corresponding to the deletion.
      */
     public static Annotation getAnnotationBlockPlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
-							  String ref, String var,int refvarstart,int refvarend, int exonNumber){
+							  String ref, String var,int refvarstart,int refvarend, int exonNumber)
+	throws AnnotationException  {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	char deletedNT=' ';

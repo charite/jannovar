@@ -169,7 +169,7 @@ public class AnnotatedVar implements Constants {
 	} else if (hasIntronic) {
 	    return summarizeIntronic();
 	} else if (hasNcrnaIntronic) {
-	    return annotation_ncrnaIntronic;
+	    return summarizeNcRnaIntronic();
 	} else if (hasUpstream) {
 	    return annotation_Upstream;
 	} else if (hasDownstream) {
@@ -247,6 +247,28 @@ public class AnnotatedVar implements Constants {
 	annotation_Intronic.clear();
 	annotation_Intronic.add(a);
 	return annotation_Intronic;
+    }
+
+
+    
+    /**
+     * This function will combine multiple ncRNA intronic
+     * annotations, e.g., "AK126491,LOC100132987" for a variant
+     * that is located in the intron of these two different
+     * ncRNA genes. */
+    private ArrayList<Annotation>  summarizeNcRnaIntronic() {
+	if (annotation_ncrnaIntronic.size()==1)
+	    return annotation_ncrnaIntronic;
+	StringBuilder sb = new StringBuilder();
+	sb.append(annotation_ncrnaIntronic.get(0).getVariantAnnotation());
+	for (int i=1;i<annotation_ncrnaIntronic.size();++i) {
+	    sb.append("," + annotation_ncrnaIntronic.get(i).getVariantAnnotation());
+	}
+	Annotation a = Annotation.createNoncodingIntronicAnnotation(sb.toString());
+	annotation_ncrnaIntronic.clear();
+	annotation_ncrnaIntronic.add(a);
+	return annotation_ncrnaIntronic;
+
     }
 
 

@@ -80,6 +80,59 @@ public class SpliceAnnotationTest implements Constants {
 
 
 
+
+/**
+ *<P>
+ * annovar: PADI6(uc001bak.1:exon9:c.1026+2G>-)
+ * chr1:17718674G>-
+ *</P>
+--- chokes on single base intron
+@Test public void testSpliceVar4() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 17718674;
+	String ref = "G";
+	String alt = "-";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    int N = anno_list.size();
+	    Assert.assertEquals(1,N);
+	    Annotation ann = anno_list.get(0);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(SPLICING,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("PADI6(uc001bak.1:exon9:c.1026+2G>-)",annot);
+	}
+} */
+
+/**
+ *<P>
+ * annovar: KDM4A(uc001cjx.3:exon4:c.315-2A>-,uc010oki.2:exon4:c.315-2A>-)
+ * chr1:44125967A>-
+ *</P>
+ */
+@Test public void testSpliceVar7() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 44125967;
+	String ref = "A";
+	String alt = "-";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    int N = anno_list.size();
+	    Assert.assertEquals(1,N);
+	    Annotation ann = anno_list.get(0);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(SPLICING,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("KDM4A(uc001cjx.3:exon4:c.315-2A>-,uc010oki.2:exon4:c.315-2A>-)",annot);
+	}
+}
+
 /**
  *<P>
  * annovar: TCTEX1D1(uc001dcv.3:exon4:c.336+1G>A)
@@ -105,7 +158,5 @@ public class SpliceAnnotationTest implements Constants {
 	    Assert.assertEquals("TCTEX1D1(uc001dcv.3:exon4:c.336+1G>A)",annot);
 	}
 }
-
-
 
 }
