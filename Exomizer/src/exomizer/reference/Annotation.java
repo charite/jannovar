@@ -24,18 +24,30 @@ public class Annotation implements Constants {
 	e.g., MISSENSE, 5UTR, etc. */
     private byte varType;
 
-    private String variantType=null;
+    /** The string representing the actual annotation, e.g., 
+	"KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q" */
     private String variantAnnotation=null;
 
-    public String getType() { return this.variantType; }
-
+  
     /**
      * Return a byte constant the corresponds to the type of the variation. This will be one of the
      * constants in {@link exomizer.common.Constants Constants},
      * e.g., MISSENSE, 5UTR, etc. 
      */
     public byte getVariantType() { return this.varType; }
+    /**
+     * This function resets the variant type, and should only be used by the AnnotatedVar class for
+     * certain cases of resolving precedence, e.g., if there is already a noncoding RNA intronic
+     * annotation, and we get a new annotation for a coding isoform of the same gene. */
+    public void setVarType(byte typ) { this.varType = typ; }
 
+     /**
+     * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
+     */
+    public byte getVarType() {
+	return this.varType;
+    }
+    public String getVariantAnnotation() { return this.variantAnnotation; }
 
     /**
      * Checks whether the annotation is equivalent
@@ -49,14 +61,7 @@ public class Annotation implements Constants {
     }
 
 
-    private Annotation(String type, String anno) {
-	this.variantType=type;
-	this.variantAnnotation=anno;
-	System.out.println("TYPE = " + type + " anno=" + anno);
-	System.exit(1);
-    }
-
-    /** This constructor is intended to be used only by static factory methods. */
+    /** The constructor is intended to be used only by static factory methods. */
     private Annotation() {
     }
 
@@ -169,6 +174,16 @@ public class Annotation implements Constants {
 
     }
 
+
+  
+
+    public static Annotation createNoncodingIntronicAnnotation(String name2) {
+	Annotation ann = new Annotation();
+	ann.varType = ncRNA_INTRONIC;
+	ann.variantAnnotation = String.format("%s", name2);
+	return ann;
+     }
+
      public static Annotation createIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
 	ann.varType = INTRONIC;
@@ -279,13 +294,7 @@ public class Annotation implements Constants {
 	return ann;
      }
     
-    /**
-     * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
-     */
-    public byte getVarType() {
-	return this.varType;
-    }
-
+   
 
     public String getVariantTypeAsString() { 
 	String s="";
@@ -295,6 +304,7 @@ public class Annotation implements Constants {
 	case INTRONIC: s="INTRONIC";break;
 	case UPSTREAM: s="UPSTREAM"; break;
 	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
+	case ncRNA_INTRONIC: s="ncRNA_intronic"; break;
 	case SPLICING: s="SPLICING"; break;
 	case STOPLOSS: s="STOPLOSS"; break;
 	case STOPGAIN: s="STOPGAIN"; break;
@@ -310,7 +320,7 @@ public class Annotation implements Constants {
 	}
 	return s;
     }
-    public String getVariantAnnotation() { return this.variantAnnotation; }
+  
 
 
     /** Return true if this is a genic mutation

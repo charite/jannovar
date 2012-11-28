@@ -45,7 +45,7 @@ import java.util.HashSet;
  * @author Peter N Robinson
  */
 
-public class AnnotatedVar {
+public class AnnotatedVar implements Constants {
    
 
     
@@ -262,11 +262,18 @@ public class AnnotatedVar {
     /**
      * Adds an annotation for an intronic variant. Note that if the
      * same intronic annotation already exists, nothing is done, i.e.,
-     * this method avoids duplicate aqnnotations. 
+     * this method avoids duplicate annotations. 
      */
     public void addIntronicAnnotation(Annotation ann){
 	for (Annotation a: this.annotation_Intronic) {
 	    if (a.equals(ann)) return; /* already have identical annotation */
+	    if (a.getVarType() == ncRNA_INTRONIC && a.getVariantAnnotation().equals(ann.getVariantAnnotation())) {
+		/* in this case, we have an annotation for a noncoding isoform of some gene, and we
+		   are adding an intronic annotation for a coding isoform, which has precedence. In
+		   this case, we will just keep the coding intronic annotation, i.e., INTRONIC */
+		a.setVarType(INTRONIC);
+		return;
+	    }
 	}
 	this.annotation_Intronic.add(ann);
 	this.hasIntronic=true;
