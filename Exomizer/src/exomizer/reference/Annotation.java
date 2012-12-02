@@ -4,30 +4,43 @@ import exomizer.common.Constants;
 import exomizer.reference.KnownGene;
 
 /**
- * This class encapsulates a single annotation and includes basically two pieces of information:
+ * This class encapsulates a single annotation and includes basically three pieces of information:
  * <OL>
  * <LI>The variant type: frameshift, synonymous substitution, etc
- * <LI>A string representing the actualy variant
+ * <LI>The gene symbol
+ * <LI>A string representing the actual variant
  * </OL>
- * This class is meant to be used in place of the hash {@code %function} in Annovar. Typically,
- * variants are entered into that has with lines such as
  * <P>
- * {@code  $function->\{$index\}\{ssnv\} .= "$geneidmap->\{$seqid\}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";}
+ * This class also includes functionality for combining the multiple
+ * annotations assigned to one variant (e.g., annotations corresponding to the
+ * various isoforms of one gene) by means of methods that are meant to be called
+ * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
- * This has then stores the potentially multiple variants for any one chromosomal variant, and these are then
- * printed to the variant and exonic variant files.
  * @author Peter N Robinson
- * @version 0.01 (6 October 2012)
+ * @version 0.02 (2 December 2012)
  */
 public class Annotation implements Constants {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
 	e.g., MISSENSE, 5UTR, etc. */
     private byte varType;
 
-    /** The string representing the actual annotation, e.g., 
-	"KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q" */
+    /** The string representing the actual annotation, but
+     * not including the gene symbol. For instance, for the
+     * complete annotation "KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q",
+     * this field would include "uc001aim.1:exon18:c.T2287C:p.X763Q"*/
     private String variantAnnotation=null;
 
+    /** The gene symbol for this annotation. Thus, for the complete
+     *  annotation "KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q", this
+     *	field would contain simply "KIAA1751".
+     * <P>
+     * Note that for intergenic annotations, where two gene symbols are used to
+     * identify the upstream and downstream genes, the symbols are stored
+     * directly in the variable {@link #variantAnnotation}. Here, the field
+     * is used only for annotations that can be unambiguously linked to
+     * a single gene.
+     */
+    private String geneSymbol=null;
   
     /**
      * Return a byte constant the corresponds to the type of the variation. This will be one of the
@@ -47,13 +60,31 @@ public class Annotation implements Constants {
     public byte getVarType() {
 	return this.varType;
     }
+    /**
+     * Get annotation String. Note, does not include the gene symbol.
+     * @return String with the annotation, for instance, "uc001aim.1:exon18:c.T2287C:p.X763Q"
+     */
     public String getVariantAnnotation() { return this.variantAnnotation; }
+    /**
+     * Resets the annotation. This method is intended to be used by the 
+     * {@link exomizer.reference.AnnotatedVar AnnotatedVar}
+     * class during the process of summarizing Annotations.
+     * @param s A String representing the new annotation.
+     */
+    public void setVariantAnnotation(String s) { this.variantAnnotation = s; }
 
     /**
-     * Checks whether the annotation is equivalent
+     * Checks whether this annotation is equivalent to the
+     * annotation being passed as an argument. This may be the
+     * case say for two intronic annotations from different
+     * isoforms of a gene where we do not care what the exact position is.
+     * @param other An annotation to be checked for equivalence.
      */
     public boolean equals(Annotation other) {
-	if (varType == other.varType && variantAnnotation != null
+	if (varType == other.varType 
+	    && ( ( geneSymbol != null  && geneSymbol.equals(other.geneSymbol) )
+		 || ( geneSymbol == null && other.geneSymbol == null) )
+	    && variantAnnotation != null
 	    && variantAnnotation.equals(other.variantAnnotation))
 	    return true;
 	else
@@ -61,7 +92,8 @@ public class Annotation implements Constants {
     }
 
 
-    /** The constructor is intended to be used only by static factory methods. */
+    /** The (private) constructor is intended to be used 
+	only by static factory methods. */
     private Annotation() {
     }
 
@@ -120,6 +152,7 @@ public class Annotation implements Constants {
 	    System.exit(1);
 	}
 	ann.variantAnnotation = String.format("%s", kg.getName2());
+	ann.geneSymbol = kg.getName2();
 	if (kg.isFivePrimeToGene(pos)) {
 	    if (kg.isPlusStrand()) {
 		ann.varType=UPSTREAM;
@@ -295,7 +328,9 @@ public class Annotation implements Constants {
      }
     
    
-
+    /**
+     * @return A string representing the variant type (e.g., MISSENSE, STOPGAIN,...)
+     */
     public String getVariantTypeAsString() { 
 	String s="";
 	switch(this.varType) {
@@ -320,6 +355,10 @@ public class Annotation implements Constants {
 	}
 	return s;
     }
+
+
+    
+
   
 
 

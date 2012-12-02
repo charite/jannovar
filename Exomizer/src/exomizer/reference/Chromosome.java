@@ -219,6 +219,15 @@ public class Chromosome {
     public int getNumberOfGenes() { return this.n_genes; }
 
     /**
+     * ToDo
+     * Create a function that will return one annotation for each isoform.
+     */
+     public ArrayList<Annotation> getAnnotationList(int position,String ref, String alt) throws AnnotationException {
+	 return null;
+     }
+
+
+    /**
      * Main entry point to getting Annovar-type annotations for a
      * variant identified by chromosomal coordinates. When we get to
      * this point, the client code has identified the right chromosome,
@@ -238,7 +247,7 @@ public class Chromosome {
      * @return a list of {@link exomizer.reference.Annotation Annotation} objects corresponding to the mutation described by the object 
      * (often just one annotation, but potentially multiple ones).
      */
-    public ArrayList<Annotation> getAnnotation(int position,String ref, String alt) throws AnnotationException {
+    public Annotation getAnnotation(int position,String ref, String alt) throws AnnotationException {
 	
 	KnownGene leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	KnownGene rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
@@ -392,7 +401,7 @@ public class Chromosome {
 		annovar.addIntergenicAnnotation(ann);
 	    }
 	}
-	return annovar.getAnnotationList();
+	return annovar.getAnnotation();
     }
 
 

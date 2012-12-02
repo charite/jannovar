@@ -2,6 +2,7 @@ package exomizer.reference;
 
 import exomizer.common.Constants;
 import exomizer.reference.KnownGene;
+import exomizer.exception.AnnotationException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,7 +42,10 @@ import java.util.HashSet;
  * through the candidates, this class decides what the best annotation is and returns the corresponding 
  * {@link exomizer.reference.Annotation Annotation} object (in some cases, this class may modify the 
  * {@link exomizer.reference.Annotation Annotation} object before returning it).
- * @version 0.02 November 25, 2012
+ * <P>
+ * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
+ * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
+ * @version 0.03 December 2, 2012
  * @author Peter N Robinson
  */
 
@@ -113,7 +117,8 @@ public class AnnotatedVar implements Constants {
      */
     public void clearAnnotationLists() {
 	this.annotation_Exonic.clear();
-	this.annotation_ncRNA .clear();
+	this.annotation_ncRNA.clear();
+	this.annotation_ncrnaIntronic.clear();
 	this.annotation_UTR5.clear();
 	this.annotation_UTR3.clear();
 	this.annotation_Intronic.clear();
@@ -155,6 +160,8 @@ public class AnnotatedVar implements Constants {
      * Look for the best single annotation according to the precendence
      * rules. If there are multiple annotations in the same class, combine
      * them.
+     * <P>
+     * ToDo Return list with annotations for each isoform.
      */
     public ArrayList<Annotation> getAnnotationList() {
 	
@@ -167,18 +174,53 @@ public class AnnotatedVar implements Constants {
 	} else if (hasUTR3) {
 	    return annotation_UTR3;
 	} else if (hasIntronic) {
-	    return summarizeIntronic();
+	    return annotation_Intronic;
 	} else if (hasNcrnaIntronic) {
-	    return summarizeNcRnaIntronic();
+	    return annotation_ncrnaIntronic;
 	} else if (hasUpstream) {
 	    return annotation_Upstream;
 	} else if (hasDownstream) {
-	    summarizeDownstream(); //only want one annotation here.
 	    return annotation_Downstream;
 	} else if (hasIntergenic) {
 	    return annotation_Intergenic;
 	} else if (hasError) {
 	    return annotation_Error;
+	}
+	/** Should never get here */
+	System.err.println("Error AnnotatedVar: Did not find any annotation");
+	// TODO-- add Exception!
+
+	return null;
+    }
+
+    /**
+     * Look for the best single annotation according to the precendence
+     * rules. If there are multiple annotations in the same class, combine
+     * them.
+     * TODO: REVISE ME
+     */
+    public Annotation getAnnotation() throws AnnotationException {
+	
+	if (hasExonic) {
+	    return annotation_Exonic.get(0);
+	} else if (hasNcRna) {
+	    return annotation_ncRNA.get(0);
+	} else if (hasUTR5) {
+	    return annotation_UTR5.get(0);
+	} else if (hasUTR3) {
+	    return annotation_UTR3.get(0);
+	} else if (hasIntronic) {
+	    return summarizeIntronic();
+	} else if (hasNcrnaIntronic) {
+	    return summarizeNcRnaIntronic();
+	} else if (hasUpstream) {
+	    return annotation_Upstream.get(0);
+	} else if (hasDownstream) {
+	    return summarizeDownstream(); 
+	} else if (hasIntergenic) {
+	    return summarizeIntergenic();
+	} else if (hasError) {
+	    return summarizeError();
 	}
 	/** Should never get here */
 	System.err.println("Error AnnotatedVar: Did not find any annotation");
@@ -206,28 +248,24 @@ public class AnnotatedVar implements Constants {
 	return sb.toString();
     }
 
-
-    private void summarizeDownstream() {
-	if (this.annotation_Downstream.size()==1) return;
-	HashSet<String> names = new HashSet<String>();
-	ArrayList<String> uniq = new ArrayList<String>();
-	StringBuilder sb = new StringBuilder();
-	for (Annotation ann: this.annotation_Downstream) {
-	    String s = ann.getVariantAnnotation();
-	    if (! names.contains(s))
-		uniq.add(s);
-	    names.add(s);
-	}
-	String s =null;
-	if (uniq.size()==1)
-	    s = uniq.get(0);
-	else
-	    s = concatenateWithComma(uniq);
-
-	Annotation ann = Annotation.getSummaryDownstreamAnnotation(s);
-	this.annotation_Downstream.clear();
-	this.annotation_Downstream.add(ann);
-	
+    /**
+     * Return a single Annotation object representing all downstream
+     * annotations.
+     */
+    private Annotation summarizeDownstream() throws AnnotationException {
+	if (this.annotation_Downstream.size() == 0) {
+	    throw new AnnotationException("No data for downstream annotation");
+	} else if (this.annotation_Downstream.size() == 1) {
+	    return this.annotation_Downstream.get(0);
+	} else {
+	    Annotation ann = this.annotation_Downstream.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(ann.getVariantAnnotation());
+	    for (int j=1; j<this.annotation_Downstream.size(); ++j) {
+		sb.append(";" + this.annotation_Downstream.get(j).getVariantAnnotation());
+	    }
+	    return ann;
+	}	
     }
 
     /**
@@ -235,18 +273,20 @@ public class AnnotatedVar implements Constants {
      * annotations, e.g., "TRIM22,TRIM5" for a variant
      * that is located in the intron of these two different
      * genes. */
-    private ArrayList<Annotation> summarizeIntronic() {
-	if (annotation_Intronic.size()==1)
-	    return annotation_Intronic;
-	StringBuilder sb = new StringBuilder();
-	sb.append(annotation_Intronic.get(0).getVariantAnnotation());
-	for (int i=1;i<annotation_Intronic.size();++i) {
-	    sb.append("," + annotation_Intronic.get(i).getVariantAnnotation());
+    private Annotation summarizeIntronic() throws AnnotationException {
+	if (this.annotation_Intronic.size() == 0) {
+	    throw new AnnotationException("No data for intronic annotation");
+	} else if (annotation_Intronic.size()==1) {
+	    return annotation_Intronic.get(0);
+	} else {
+	    Annotation ann = annotation_Intronic.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(ann.getVariantAnnotation());
+	    for (int i=1;i<annotation_Intronic.size();++i) {
+		sb.append(";" + annotation_Intronic.get(i).getVariantAnnotation());
+	    }
+	    return ann;
 	}
-	Annotation a = Annotation.createIntronicAnnotation(sb.toString());
-	annotation_Intronic.clear();
-	annotation_Intronic.add(a);
-	return annotation_Intronic;
     }
 
 
@@ -256,19 +296,20 @@ public class AnnotatedVar implements Constants {
      * annotations, e.g., "AK126491,LOC100132987" for a variant
      * that is located in the intron of these two different
      * ncRNA genes. */
-    private ArrayList<Annotation>  summarizeNcRnaIntronic() {
-	if (annotation_ncrnaIntronic.size()==1)
-	    return annotation_ncrnaIntronic;
-	StringBuilder sb = new StringBuilder();
-	sb.append(annotation_ncrnaIntronic.get(0).getVariantAnnotation());
-	for (int i=1;i<annotation_ncrnaIntronic.size();++i) {
-	    sb.append("," + annotation_ncrnaIntronic.get(i).getVariantAnnotation());
+    private Annotation summarizeNcRnaIntronic() throws AnnotationException {
+	if (this.annotation_ncrnaIntronic.size() == 0) {
+	    throw new AnnotationException("No data for ncRNA intronic annotation");
+	} else if (annotation_ncrnaIntronic.size()==1)
+	    return annotation_ncrnaIntronic.get(0);
+	else {
+	    Annotation ann = annotation_ncrnaIntronic.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(ann.getVariantAnnotation());
+	    for (int i=1;i<annotation_ncrnaIntronic.size();++i) {
+		sb.append(";" + annotation_ncrnaIntronic.get(i).getVariantAnnotation());
+	    }
+	    return ann;
 	}
-	Annotation a = Annotation.createNoncodingIntronicAnnotation(sb.toString());
-	annotation_ncrnaIntronic.clear();
-	annotation_ncrnaIntronic.add(a);
-	return annotation_ncrnaIntronic;
-
     }
 
 
@@ -294,10 +335,29 @@ public class AnnotatedVar implements Constants {
 	this.annotationCount++;
     }
 
+    /**
+     * This function is used to register an Annotation for
+     * a variant that is located between two genes. From the program
+     * logic, only one such Annotation should be added per variant.
+     * <P>
+     * @param ann An Annotation with type INTERGENIC
+     */
      public void addIntergenicAnnotation(Annotation ann){
 	this.annotation_Intergenic.add(ann);
 	this.hasIntergenic=true;
 	this.annotationCount++;
+    }
+
+    /**
+     * This method returns an Intergenic annotation. There should only
+     * be one such annotation per variant.
+     * @return An Annotation object of type INTERGENIC
+     */
+    public Annotation summarizeIntergenic() throws AnnotationException {
+	if (this.annotation_Intergenic.size() == 0) {
+	    throw new AnnotationException("No data for intergenic annotation");
+	}
+	return this.annotation_Intergenic.get(0);
     }
 
 
@@ -339,19 +399,58 @@ public class AnnotatedVar implements Constants {
     
 
 
-
+    /**
+     * An error annotation is created in a few cases where there
+     * data seem to be inconsistent.
+     * @param ann An Annotation object that contains a String representing the error.
+     */
     public void addErrorAnnotation(Annotation ann){
 	this.annotation_Error.add(ann);
 	this.hasError=true;
 	this.annotationCount++;
      }
 
+    /**
+     * @return A single Annotation object representing one or more errors.
+     */
+    public Annotation summarizeError() throws AnnotationException {
+	if (this.annotation_Error.size()==0)
+	    throw new AnnotationException("No data for error annotation");
+	else if (this.annotation_Error.size()==1)
+	    return this.annotation_Error.get(0);
+	else {
+	    StringBuilder sb = new StringBuilder();
+	    Annotation ann = this.annotation_Error.get(0);
+	    sb.append(ann.getVariantAnnotation());
+	    for (int j=1;j<this.annotation_Error.size();++j) {
+		sb.append(";" + this.annotation_Error.get(j).getVariantAnnotation());
+	    }
+	    ann.setVariantAnnotation(sb.toString());
+	    return ann;
+	}
+    }
+
+    
+
+    /**
+     * Adds an annotation for an upstream or downstream variant. Note
+     * that currently, we add only one such annotation for each gene, that is,
+     * we do not add a separate annotation for each isoform of a gene. This
+     * method avaoid such duplicate annotations. 
+     * @param ann The annotation that is to be added to the list of annotations for the current sequence variant.
+     */
     public void addUpDownstreamAnnotation(Annotation ann){
 	byte type = ann.getVariantType();
 	if (type == exomizer.common.Constants.DOWNSTREAM) {
+	    for (Annotation a: annotation_Downstream) {
+		if (a.equals(ann)) return;
+	    }
 	    this.annotation_Downstream.add(ann);
 	    this.hasDownstream=true;
 	} else if (type == exomizer.common.Constants.UPSTREAM) {
+	    for (Annotation a: annotation_Downstream) {
+		if (a.equals(ann)) return;
+	    }
 	    this.annotation_Upstream.add(ann);
 	    this.hasUpstream=true;
 	} else {
