@@ -9,7 +9,7 @@ import exomizer.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for single
  * nucleotide substitution  mutations. This method is put in its own class only for 
  * convenience and to at least have a name that is easy to find.
- * @version 0.01 (November 15, 2012)
+ * @version 0.02 (2 December, 2012)
  * @author Peter N Robinson
  */
 
@@ -37,6 +37,7 @@ public class SingleNucleotideSubstitution {
 	String panno=null;
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
+	System.out.println("refcdsstart=" + refcdsstart);
 	if (ref.length() != 1) {
 	    throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s",
 							ref,kgl.getName2()));
@@ -75,9 +76,13 @@ public class SingleNucleotideSubstitution {
 	    varnt3 = String.format("%c%c%c",varc, wtnt3.charAt(1),wtnt3.charAt(2));
 	    // $canno = "c." . ($refvarstart-$refcdsstart+1) . $wtnt3[0] . ">" . $obs;
 	    canno =  String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(0),varc);
+	    //System.out.println("wtnt3=" + wtnt3 + " varnt3=" + varnt3 + " canno=" + canno);
+	    //System.out.println(kgl.getName2() + ":" + kgl.getName());
+	    //System.out.println("refvarstart=" + refvarstart + " refcdsstart = " + refcdsstart);
+	    //kgl.debugPrint();
 	    if (refc  != wtnt3.charAt(0)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=%c user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
+		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=\"%c\" user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
 					    strand,ref,wtnt3.charAt(0));
 		canno = String.format("%s/%s",canno,wrng);
 		throw new AnnotationException(canno);

@@ -10,7 +10,7 @@ package exomizer.exception;
  * to print an HTML error message for users if say there are major problems with
  * the input format.
  * @author Peter Robinson
- * @version 0.01 (August 22,2012)
+ * @version 0.02 (December 2,2012)
  */
 public class ExomizerException extends Exception {
 
@@ -30,5 +30,12 @@ public class ExomizerException extends Exception {
     public String getError()
     {
 	return mistake;
+    }
+
+    /**
+     * Print a summary of the error
+     */
+    public String toString() {
+	return getError();
     }
 }

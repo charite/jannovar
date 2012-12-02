@@ -48,7 +48,7 @@ import exomizer.annotation.SpliceAnnotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.04 (Nov. 25, 2012)
+ * @version 0.05 (2 December, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -896,14 +896,15 @@ public class Chromosome {
 	 * <P>
 	 * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
 	 * annovar holds cDNA sequences of the mRNAs. In this implementation,
-	 * the KnownGene objects already have this information.
+	 * the KnownGene objects already have this information. Note that
+	 * Annovar uses its own version of knownGeneMrna.txt because of some
+	 * inconsistencies in the way UCSC makes these sequences. Probably, this will
+	 * also be necessary for the Exomizer (TODO).
 	 * <P>
 	 * Finally, the $refseqvar in Annovar has the following pieces of information
-	 * my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};
+	 *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
 	 * Note that refcdsstart and refstrand are contained in the KnownGene objects
-	 * $index is used in Annovar as the overall index of the variant ($i in the outer for loop
-	 * of newprocessNextQueryBatchByGene). Not needed in our implementation.
-	 * $exonpos is the number (one-based) of the exon in which the variant was found.
+	 * $exonpos is the number (zero-based) of the exon in which the variant was found.
 	 * $nextline is the entire Annovar-formated line with information about the variant.
 	 * In contrast to annovar, this function does one annotation at a time
 	 * Note that the information in $geneidmap, cdslen, and $mrnalen
@@ -914,7 +915,7 @@ public class Chromosome {
 	 * @param end chromosomal end position of variant
 	 * @param ref sequence of reference
 	 * @param var sequence of variant (in annovar: $obs)
-	 * @param exonNumber Number (one-based) of affected exon.
+	 * @param exonNumber Number (zero-based) of affected exon.
 	 * @param kgl Gene in which variant was localized to one of the exons 
 	 */
    private void annotateExonicVariants(int refvarstart, int refvarend, 
@@ -940,7 +941,6 @@ public class Chromosome {
 	   this.annovar.addErrorAnnotation(ann);
        }
        /*
-	 
 	 @wtnt3 = split (//, $wtnt3);
 	 if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) { 
 	 #some times there are database annotation errors (example: chr17:3,141,674-3,141,683), 
@@ -949,8 +949,10 @@ public class Chromosome {
 	 next;
 	 }
        */
+       // wtnt3 represents the three nucleotides of the wildtype codon.
        String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
-       /* wtnt3_after = Sequence of codon right after the variant */
+       /* wtnt3_after = Sequence of codon right after the variant. 
+	  We may not need this, it was used for padding in annovar */
        String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
        /* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
 	* so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
@@ -969,7 +971,6 @@ public class Chromosome {
 	   if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
 	       Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
 									       var,refvarstart,exonNumber);
-	       //annotation_list.add(insrt);
 	       this.annovar.addExonicAnnotation(insrt);
 	   } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
 	       Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
@@ -980,13 +981,11 @@ public class Chromosome {
 									   ref,var,refvarstart, refvarend, 
 									   exonNumber);
 	       this.annovar.addExonicAnnotation(blck);
-	      
 	   } else {
+	       System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
 	       Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 								    ref, var,refvarstart,exonNumber);
-	       
 	       this.annovar.addExonicAnnotation(mssns);
-
 	   }
        } /* if (start==end) */
        else if (var.equals("-")) {

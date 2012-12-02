@@ -64,6 +64,22 @@
 
 
 <!-- use this target to run just one test class, named below -->
+  <target name="kg"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes"
+	   showoutput="yes"
+	   maxmemory="1024M"
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+	<test name="exomizer.tests.KnownGeneTest"/>
+    </junit>
+  </target>
+
+
+<!-- use this target to run just one test class, named below -->
   <target name="annodel"
 	  depends="compile">
     <junit printsummary="yes" 

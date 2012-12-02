@@ -7,8 +7,8 @@ import exomizer.filter.ITriage;
 
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
- * @author peter.robinson@charite.de
- * @date 22.08.2012
+ * @author Peter Robinson
+ * @version 0.02 2 December 2012
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -214,8 +214,12 @@ public class Variant implements Comparable<Variant>, Constants {
 	return i;
     }
     
-
-
+    /**
+     * @return A String representing the variant in the chromosomal sequence, e.g., chr17:c.73221527G>A
+     */
+    public String getChromosomalVariant() {
+	return String.format("%s:c.%d%s>%s",get_chrom_string(), position, ref, var);
+    }
 
 
 
@@ -223,7 +227,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	StringBuilder sb = new StringBuilder();
 	String chr = get_chrom_string();
 	sb.append("SNV: " + genename +"\n");
-	sb.append("\t"+ chr + ":" + ref + position + var);
+	sb.append("\t"+ chr + ":c." + position + ref +">" + var);
 	if (nucleotideMutation != null)
 	    sb.append("\tmutation: "+ get_mutation() + "\n");
 	else

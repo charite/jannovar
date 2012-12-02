@@ -21,7 +21,7 @@ import  exomizer.exception.KGParseException;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.01
+ * @version 0.02, 2 December, 2012
  */
 public class KnownGene implements java.io.Serializable, exomizer.common.Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -64,25 +64,24 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 
 
     /**
-     * The constructur parses a single line of the knownGene.txt file. </BR>
-     * 	"uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,		uc021olp.1
-	* <P>
-	* The fields of the file are tab separated and have the following structure:
-	* <UL>
-	* <LI> 0: name (UCSC known gene id, e.g., "uc021olp.1"	
-	* <LI> 1: chromosome, e.g., "chr1"
-	* <LI> 2: strand, e.g., "-"
-	* <LI> 3: transcription start, e.g., "38674705"
-	* <LI> 4: transcription end, e.g., "38680439"
-	* <LI> 5: CDS start, e.g., "38677458"
-	* <LI> 6: CDS end, e.g., "38678111"
-	* <LI> 7: exon count, e.g., "4"
-	* <LI> 8: exonstarts, e.g., "38674705,38677405,38677769,38680388,"
-	* <LI> 9: exonends, e.g., "38676494,38677494,38678123,38680439,"
-	* <LI> 10: name, again (?), e.g., "uc021olp.1"
-	* </UL>
-	* @param line A single line of the UCSC knownGene.txt file
-	*/
+     * The constructor parses a single line of the knownGene.txt file. 
+     * <P>
+     * The fields of the file are tab separated and have the following structure:
+     * <UL>
+     * <LI> 0: name (UCSC known gene id, e.g., "uc021olp.1"	
+     * <LI> 1: chromosome, e.g., "chr1"
+     * <LI> 2: strand, e.g., "-"
+     * <LI> 3: transcription start, e.g., "38674705"
+     * <LI> 4: transcription end, e.g., "38680439"
+     * <LI> 5: CDS start, e.g., "38677458"
+     * <LI> 6: CDS end, e.g., "38678111"
+     * <LI> 7: exon count, e.g., "4"
+     * <LI> 8: exonstarts, e.g., "38674705,38677405,38677769,38680388,"
+     * <LI> 9: exonends, e.g., "38676494,38677494,38678123,38680439,"
+     * <LI> 10: name, again (?), e.g., "uc021olp.1"
+     * </UL>
+     * @param line A single line of the UCSC knownGene.txt file
+     */
     public KnownGene(String line) throws KGParseException {
 	String A[] = line.split("\t");
 	if (A.length != NFIELDS) {
@@ -145,39 +144,50 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * thus the calculation is end-start+1 for each exon.
      */
     private void calculateMRNALength() {
-		this.mRNAlength = 0;
-		for (int i=0;i<this.exonCount;++i) {
-			mRNAlength += this.exonEnds[i] - this.exonStarts[i] + 1;
-		}
+	this.mRNAlength = 0;
+	for (int i=0;i<this.exonCount;++i) {
+	    mRNAlength += this.exonEnds[i] - this.exonStarts[i] + 1;
+	}
     }
     
-	/**
-	 * Calculate the position of the CDS start (i.e., the start codon) within the entire transcript,
-	 * essentially equal to the length of the 5' UTR plus one. If the 5' UTR contains
-	 * one or more introns, then we compensate for this by the cumlenintron calculation
-	 * (see the code).
-	 */
+    /**
+     * Calculate the position of the CDS start (i.e., the start codon) within the entire transcript,
+     * essentially equal to the length of the 5' UTR plus one. If the 5' UTR contains
+     * one or more introns, then we compensate for this by the cumlenintron calculation
+     * (see the code). 
+     * <P>
+     * Note that we calculate the rcdslength when we find the exon which it is contained in.
+     * We know this because {@code cdsStart >= this.getExonStart(k) && this.cdsStart <= this.getExonEnd(k))}
+     */
     private void calculateRefCDSStart() {
 	int cumlenintron = 0; // cumulative length of introns at a given exon
 	this.rcdsStart=0; // start of CDS within reference RNA sequence.
+	//System.out.println("calculateRefCDSStart:" + getName());
+	//System.out.println("cdsStart=" + cdsStart);
 	if (this.isPlusStrand()) {
 	    for (int k=0; k< this.exonCount;++k) {
+		//System.out.println("k=" + k);
 		if (k>0)
 		    cumlenintron += this.getLengthOfIntron(k);
-		if (this.cdsStart >= this.getExonStart(k)) {
+		if (this.cdsStart >= this.getExonStart(k) && this.cdsStart <= this.getExonEnd(k)) {
 		    /* Calculate CDS start within mRNA sequence accurately
-		       by taking intron length into account. */
+		       by taking intron length into account. Note that this block may
+		    be executed multiple times if the start codon is not located in exon
+		    1, but the loop will be terminated*/
+		    //System.out.println("start k = " + getExonStart(k) + " end k = " + getExonEnd(k));
+		    //System.out.println("IF cumlenintron=" + cumlenintron);
 		    this.rcdsStart = this.cdsStart - this.txStart - cumlenintron + 1;
+		    //System.out.println("rcdsstart=" + rcdsStart);
 		    break;
 		}
+		//System.out.println("cumlenintron=" + cumlenintron);
 	    }
 	} else { /* i.e., minus strand */
 	    for (int k = this.exonCount-1; k>=0; k--) {
 		if (k < this.exonCount-1) {
-		    cumlenintron += this.getLengthOfIntron(k);//($exonstart[$k+1]-$exonend[$k]-1);
+		    cumlenintron += this.getLengthOfIntron(k);
 		}
-		
-		if (this.cdsEnd <= this.getExonEnd(k)) {		
+		if (this.cdsEnd <= this.getExonEnd(k) && this.cdsEnd >= this.getExonStart(k)) {		
 		    //calculate CDS start accurately by considering intron length
 		    this.rcdsStart = this.txEnd-this.cdsEnd-cumlenintron+1;
 		    break;			
@@ -394,14 +404,14 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     /** Return the ucsc kg id, this corresponds to $name in annovar
      * @return name of this transcript, a UCSC knownGene id. */
      public String getName() { return this.kgID; }
-     /** Return the gene symbol, corresponds to $name2 in annovar
-      * @return genesymbol of this known gene transcript (if available, otherwise the kgID). */
-      public String getName2() { 
-			if (this.geneSymbol != null) 
-				return this.geneSymbol;
-			else
-				return this.kgID;
-       }
+    /** Return the gene symbol, corresponds to $name2 in annovar
+     * @return genesymbol of this known gene transcript (if available, otherwise the kgID). */
+    public String getName2() { 
+	if (this.geneSymbol != null) 
+	    return this.geneSymbol;
+	else
+	    return this.kgID;
+    }
     
     
     /** This function is valid for exonic variants. It extracts the 
@@ -420,7 +430,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	return this.sequence.substring(start, start+3); /* for + strand */
     }
 	
-	/** This function is valid for exonic variants. It extracts the 
+    /** This function is valid for exonic variants. It extracts the 
      * three nucleotides from the reference sequence that are directly
      * 3' to the codon that contains the
      * first nucleotide of the position of the variant. If that was the 
@@ -430,23 +440,22 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * √if (length ($refseqhash->{$seqid}) >= $refvarstart-$fs+3) {	#going into UTR
 				$wtnt3_after = substr ($refseqhash->{$seqid}, $refvarstart-$fs+2, 3);
 			} else {
-				$wtnt3_after = '';					#last amino acid in the sequence without UTR (extremely rare situation) (example: 17        53588444        53588444        -       T       414     hetero)
+				$wtnt3_after = ''; #last amino acid in the sequence without UTR (extremely rare situation) (example: 17        53588444        53588444        -       T       414     hetero)
 			}
      * @param refvarstart Position of first nucleotide of variant in cDNA sequence
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
      */
     public String getWTCodonNucleotidesAfterVariant(int refvarstart, int frame_s){
-		if (getActualSequenceLength() >= refvarstart - frame_s + 3) {
-			/* i.e., there is at least one codon 3' to codon in which variant begins */
-			int start = refvarstart - frame_s + 2;
-			/* Note add only 2 to convert back to zero-based numbering! */
-			return this.sequence.substring(start,start+3);
-		} else {
-			return "";
-		}
-		/* NOTE ABOVE IS FOR + STRAND TODO */
-		
+	if (getActualSequenceLength() >= refvarstart - frame_s + 3) {
+	    /* i.e., there is at least one codon 3' to codon in which variant begins */
+	    int start = refvarstart - frame_s + 2;
+	    /* Note add only 2 to convert back to zero-based numbering! */
+	    return this.sequence.substring(start,start+3);
+	} else {
+	    return "";
 	}
+	/* NOTE ABOVE IS FOR + STRAND TODO */
+    }
     
     /**
      * Calculates the length of the k'th intron, where k is a zero-based number.
@@ -495,10 +504,12 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     }
 
     /**
+     * This method is used by {@link exomizer.io.UCSCKGParser UCSCKGParser}
+     * to add sequence data (from knownGeneMrna.txt) to the KnownGene object.
      * @param seq cDNA sequence of this knownGene transcript. 
      */
     public void setSequence(String seq) {
-		this.sequence = seq;
+	this.sequence = seq;
     }
     
     /**
@@ -550,11 +561,40 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 		System.exit(1); 
 	    }
 	}
-	
+    }
 
+
+    /**
+     * This method can be used during development to print all the data contained in this knownGene
+     */
+    public void debugPrint() {
+	String chr=getChromosomeAsString();
+	System.err.println(String.format("%s:%s [%s (%c)]",kgID,geneSymbol,chr,strand));
+	System.err.println(String.format("txStart: %d; txEnd: %d; cdsStart: %d, cdsEnd: %d",txStart,txEnd,cdsStart,cdsEnd));
+	System.err.println(String.format("rcdsStart: %d\tExon count: %d", rcdsStart,exonCount));
+	System.err.println(String.format("mRNAlength: %d, cdslength: %d",mRNAlength,CDSlength));
+	for (int i=0;i<exonStarts.length;++i) {
+	    System.err.println(String.format("\tExon %d: %d - %d (%d nt)",i+1,exonStarts[i],exonEnds[i],exonEnds[i]-exonStarts[i]+1));
+	}
+	for (int i=0; i<sequence.length();++i) {
+	    if (i>0 && i%50==0) System.err.println("  " + i);
+	    else if (i>0 && i%10==0) System.err.print(" ");
+	    System.err.print(sequence.charAt(i));
+	}
+	System.err.println();
+    }
+
+
+    public String getChromosomeAsString() {
+	if (this.chromosome == X_CHROMOSOME) return "chrX";
+	else if (this.chromosome == Y_CHROMOSOME) return "chrY";
+	else if (this.chromosome == M_CHROMOSOME) return "chrM";
+	else {
+	    return String.format("chr%d",this.chromosome);
+	}
     }
 
 
 
-
 }
+
