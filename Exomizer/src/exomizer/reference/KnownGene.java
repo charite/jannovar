@@ -467,9 +467,9 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @return length of the k<superscript>th</superscript> intron (returns zero if k is 0)
      */
     public int getLengthOfIntron(int k){
-		if (k==0) return 0;
-		if (k>=this.exonCount) return 0;
-		return exonStarts[k] - exonEnds[k-1] - 1;
+	if (k==0) return 0;
+	if (k>=this.exonCount) return 0;
+	return exonStarts[k] - exonEnds[k-1] - 1;
     }
 
 

@@ -38,7 +38,7 @@ public class SingleNucleotideSubstitution {
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
 
-	exonNumber++; /* Correct to one-based numbering, here used only for annotation! */
+	//exonNumber++; /* Correct to one-based numbering, here used only for annotation! */
 
 	//System.out.println("refcdsstart=" + refcdsstart);
 	if (ref.length() != 1) {

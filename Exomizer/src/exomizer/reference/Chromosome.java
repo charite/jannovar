@@ -66,8 +66,11 @@ public class Chromosome {
     private TreeMap<Integer,ArrayList<KnownGene>> geneTreeMap=null;
     /** Total number of KnownGenes on the chromosome including multiple transcripts of the same gene. */
     private int n_genes;
-    /** The number of keys (gene 5' positions) to search in either direction. */
-    private static final int SPAN = 5;
+    /** The number of keys (gene 5' positions) to search in either direction. Note that if we just use a SPAN of
+     *5 genes, then we tend to miss some annotations in areas of lots of transcripts. TODO figure out the
+     * best value for SPAN to compromise between getting all annotations and speed. Most of the missed annotations
+     * seem to be intronic or downstream types, and may not be interesting for the Exomizer anyway.*/
+    private static final int SPAN = 20;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
     private static final int NEARGENE = 1000;
   
@@ -525,7 +528,8 @@ public class Chromosome {
 		    annovar.addIntronicAnnotation(ann);
 		    break; /* break out of for loop of exons (k) */
 		}
-	    } /* if (start < kgl.getExonStart(k)) */ else if (start <= kgl.getExonEnd(k)) {
+	    } /* end; if (start < kgl.getExonStart(k)) */ 
+	    else if (start <= kgl.getExonEnd(k)) {
 		/* i.e., start of variant is not located 5' to exon start but is located 5' to exon end */
 		/* annovar: elsif ($start <= $exonend[$k]) {	#exonic */
 		/* $rvarstart = $start-$txstart-$lenintron+1; */
@@ -535,21 +539,16 @@ public class Chromosome {
 		    /* 2) Get the end position of the variant w.r.t. the transcript (rvarend) */
 		rvarend = kgl.getRVarEnd(end, k,cumlenintron);
 		/*
-	for my $m ($k .. @exonstart-1) {
-			$m > $k and $lenintron += ($exonstart[$m]-$exonend[$m-1]-1);
-			if ($end < $exonstart[$m]) {
-			#query              ------
-			#gene     <--**---******---****---->
-				  $rvarend = $exonend[$m-1]-$txstart-$lenintron+1 + ($exonstart[$m]-$exonend[$m-1]-1);
-				  last;
-			} elsif ($end <= $exonend[$m]) {
-			#query           -----------
-			#gene     <--**---******---****---->
-			$rvarend = $end-$txstart-$lenintron+1;
+		  for my $m ($k .. @exonstart-1) {
+		     $m > $k and $lenintron += ($exonstart[$m]-$exonend[$m-1]-1);
+		     if ($end < $exonstart[$m]) {
+		        $rvarend = $exonend[$m-1]-$txstart-$lenintron+1 + ($exonstart[$m]-$exonend[$m-1]-1);
 			last;
-			}
+		     } elsif ($end <= $exonend[$m]) {
+		       $rvarend = $end-$txstart-$lenintron+1;
+		       last;
+		    }
 		}## for
-		
 		*/
 		for (int m=k;m<kgl.getExonCount();++m) {
 		    if (m>k) {
@@ -601,15 +600,17 @@ public class Chromosome {
 		    /* Annovar: $exonic{$name2}++; */
 
 		    if ( kgl.isCodingGene() && alt != null && alt.length()>0) {
-			    /* Annovar puts all exonic variants into an array and annotates them later
-			     * we will instead get the annotation right here and add it to the
-			     * exonic HashMap.
-			     * Annovar:	not $current_ncRNA and $obs and 
-			     *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
-			     * #queryindex, refseq CDS start, refseq variant start
-			     */
-			    /* Note k in the following is the number (zero-based) of affected exon */
-			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
+			/* Annovar puts all exonic variants into an array and annotates them later
+			 * we will instead get the annotation right here and add it to the
+			 * exonic HashMap.
+			 * Annovar:	not $current_ncRNA and $obs and 
+			 *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
+			 * #queryindex, refseq CDS start, refseq variant start
+			 */
+			/* Note k in the following is the number (zero-based) of affected exon,
+			 thus, we increment it by one to get the one-based exon number for 
+			annotation.*/
+			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k+1,kgl);
 		    } else {
 			    System.out.println("WARNING TO DO, exonic in noncoding gene");
 			    System.exit(1);
@@ -753,286 +754,210 @@ public class Chromosome {
 		     /* break out of for loop of exons (k) */
 		     //$foundgenic++;
 		     break;
+		} 
+	    } /* end; if (end > kgl.getExonEnd(k)) */ 
+	    else if (end >= kgl.getExonStart(k)) {
+		//rvarstart is with respect to cDNA sequence (so rvarstart corresponds to end of variants)
+		rvarstart = txend-end-cumlenintron+1;	
+		for (int m = k; m >= 0; m--) {
+		    if (m < k)
+			cumlenintron += kgl.getExonStart(m+1)-kgl.getExonEnd(m)-1;// length of intron
+		    if (start > kgl.getExonEnd(m)) {
+			//query           ----
+			//gene     <--**---******---****---->
+		
+			rvarend = txend- kgl.getExonStart(m+1)+1 - cumlenintron + (kgl.getExonStart(m+1)- kgl.getExonEnd(m)-1);	
+			break; //finish the cycle of counting exons!!!!!
+		    } else if (start >= kgl.getExonStart(m)) { //the start is right located within exon
+			//query        -------
+			//gene     <--**---******---****---->
+			rvarend = txend-start-cumlenintron+1;
+			break; //finish the cycle
+		    }
+		}
+		if (rvarend<0) { // i.e., rvarend not initialized, then the whole tail of gene is covered
+		    rvarend = txend-txstart-cumlenintron+1;
+		}
+		//#here the trick begins to differentiate UTR versus coding exonic
+		if (end < cdsstart) { //usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
+		    //query  ----
+		    //gene     <--*---*->
+		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
+		    annovar.addUTR3Annotation(ann);
+		    //$utr3{$name2}++;		#negative strand for UTR5
+		} else if (start > cdsend) {
+		    //query             ----
+		    //gene     <--*---*->
+		    Annotation ann = Annotation.createUTR5Annotation(name2,name);
+		    annovar.addUTR5Annotation(ann);
+		    //$utr5{$name2}++;		#negative strand for UTR3
 		} else {
-		    System.out.println("NEED TO ADD CODE FOR EXONIC MUTATION ON - STRAND");
-		    System.exit(1);
+		   
+		    /* Annovar: $exonic{$name2}++; */
+		    /* Annovar puts all exonic variants into an array and annotates them later
+		     * we will instead get the annotation right here and add it to the
+		     * the AnnotatedVar object..
+		     * Annovar:	not $current_ncRNA and $obs and 
+		     *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+		     * #queryindex, refseq CDS start, refseq variant start
+		     */
+		    /* Note k in the following is the number (zero-based) of affected exon */
+		   
+		    if ( kgl.isCodingGene() && alt != null && alt.length()>0) {
+			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,exoncount-k,kgl);
+		    } else {
+			System.out.println("WARNING TO DO, exonic in noncoding gene");
+			System.exit(1);
+		    }
 		}
-	    } /* iterator over exons */
-	   
-	}
+		//$foundgenic++;
+		//last;
+		continue;
+	    }
+	} /* iterator over exons */
     }
 
 
 
-	    /*
 
-	} 
-	    $intronic{$name2}++;
-	    $foundgenic++;
-	    last;
-	}
-    } elsif ($end >= $exonstart[$k]) {
-	$rvarstart = $txend-$end-$lenintron+1;		#all the rvarstart, rvarend are with respect to the cDNA sequence (so rvarstart corresponds to end of variants)
+		  
+    /**
+     * This method corresponds to Annovar function 
+     * {@code sub annotateExonicVariants} {
+     * 	my ($refseqvar, $geneidmap, $cdslen, $mrnalen) = @_;
+     *   (...)
+     * <P>
+     * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
+     * annovar holds cDNA sequences of the mRNAs. In this implementation,
+     * the KnownGene objects already have this information. Note that
+     * Annovar uses its own version of knownGeneMrna.txt because of some
+     * inconsistencies in the way UCSC makes these sequences. Probably, this will
+     * also be necessary for the Exomizer (TODO).
+     * <P>
+     * Finally, the $refseqvar in Annovar has the following pieces of information
+     *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
+     * Note that refcdsstart and refstrand are contained in the KnownGene objects
+     * $exonpos is the number (zero-based) of the exon in which the variant was found.
+     * $nextline is the entire Annovar-formated line with information about the variant.
+     * In contrast to annovar, this function does one annotation at a time
+     * Note that the information in $geneidmap, cdslen, and $mrnalen
+     * is contained within the KnownGene objects already
+     * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
+     * @param refvarend The end position of the variant with respect to the CDS of the mRNA
+     * @param start chromosomal start position of variant
+     * @param end chromosomal end position of variant
+     * @param ref sequence of reference
+     * @param var sequence of variant (in annovar: $obs)
+     * @param exonNumber Number (zero-based) of affected exon.
+     * @param kgl Gene in which variant was localized to one of the exons 
+     */
+    private void annotateExonicVariants(int refvarstart, int refvarend, 
+					int start, int end, String ref, 
+					String var, int exonNumber, KnownGene kgl) throws AnnotationException {
 	
-	for (my $m = $k; $m >= 0; $m--) {
-	    $m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
-	    if ($start > $exonend[$m]) {
-		#query           ----
-		#gene     <--**---******---****---->
-		#$rvarend = $txend-$exonstart[$m]-$lenintron+1 - ($exonstart[$m+1]-$exonend[$m]-1);		#commented out 2011feb18 due to bug (10 42244567 42244600 CACCTTTGCTTGATATGATAATATAGTGCCAAGG - hetero)
-		$rvarend = $txend-$exonstart[$m+1]+1 - $lenintron + ($exonstart[$m+1]-$exonend[$m]-1);		#fixed this 2011feb18
-		last;			#finish the circle of counting exons!!!!!
-	    } elsif ($start >= $exonstart[$m]) {			#the start is right located within exon
-		#query        -------
-		#gene     <--**---******---****---->
-		$rvarend = $txend-$start-$lenintron+1;
-		last;						#finish the cycle
-	    }
-	}
-	if (not defined $rvarend) {					#if rvarend is not found, then the whole tail of gene is covered
-	    $rvarend = $txend-$txstart-$lenintron+1;
-	}
 	
-	#here the trick begins to differentiate UTR versus coding exonic
-	if ($end < $cdsstart) {			#usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
-	    #query  ----
-	    #gene     <--*---*->
-	    $utr3{$name2}++;		#negative strand for UTR5
-	} elsif ($start > $cdsend) {
-	    #query             ----
-	    #gene     <--*---*->
-	    $utr5{$name2}++;		#negative strand for UTR3
-	} else {
-	    $exonic{$name2}++;
-	    not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+	   System.out.println("******************************");
+	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
+	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
+	   System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
+	   System.out.println("******************************"); */
+	/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
+	int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
+	int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
+	// Needed to complete codon following end of multibase ref seq.
+	/* The following checks for database errors where the position of the variant in
+	 * the reference sequence is given as longer the actual length of the transcript.*/
+	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
+	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
+				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
+	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    this.annovar.addErrorAnnotation(ann);
 	}
-	$foundgenic++;
-	last;
-    }
-    *(if ($end > $exonend[$k]) {
-	if ($start <= $exonend[$k]) {
-	    $rvarstart = $txend-$exonend[$k]-$lenintron+1;
-	    
-	    for (my $m = $k; $m >= 0; $m--) {
-		$m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
-		if ($start > $exonend[$m]) {
-		    #query           --------
-		    #gene     <--**---******---****---->
-		    #$rvarend = $txend-$exonstart[$m]-$lenintron+1 - ($exonstart[$m+1]-$exonend[$m]-1);	#commented out 2011feb18
-		    $rvarend = $txend-$exonstart[$m+1]+1-$lenintron + ($exonstart[$m+1]-$exonend[$m]-1);	#fixed this 2011feb18
-		    last;		#finsih the cycle!!!!!!!!!!!!!!!!!!!
-		} elsif ($start >= $exonstart[$m]) {		#start within exons
-		    #query               ----
-		    #gene     <--**---******---****---->
-		    $rvarend = $txend-$start-$lenintron+1;
-		    last;
-		}
-	    }
-	    if (not defined $rvarend) {				#if rvarend is not found, then the whole tail of gene is covered
-		$rvarend = $txend-$txstart-$lenintron+1;
-	    }
-	    
-	    #here is the trick begins to differentiate UTR versus coding exonic
-	    if ($end < $cdsstart) {					#usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
-		#query  ----
-		#gene     <--*---*->
-		$utr3{$name2}++;		#negative strand for UTR5
-	    } elsif ($start > $cdsend) {
-		#query             ----
-		#gene     <--*---*->
-		$utr5{$name2}++;		#negative strand for UTR3
-	    } else {
-		$exonic{$name2}++;
-		not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
-	    }
-	    $foundgenic++;
-	    last;
-	} elsif ($k < @exonstart-1 and $end < $exonstart[$k+1]) {
-	    $intronic{$name2}++;
-	    $foundgenic++;
-	    last;
-	}
-    } elsif ($end >= $exonstart[$k]) {
-	$rvarstart = $txend-$end-$lenintron+1;		#all the rvarstart, rvarend are with respect to the cDNA sequence (so rvarstart corresponds to end of variants)
-	
-	for (my $m = $k; $m >= 0; $m--) {
-	    $m < $k and $lenintron += ($exonstart[$m+1]-$exonend[$m]-1);
-	    if ($start > $exonend[$m]) {
-		#query           ----
-		#gene     <--**---******---****---->
-		#$rvarend = $txend-$exonstart[$m]-$lenintron+1 - ($exonstart[$m+1]-$exonend[$m]-1);		#commented out 2011feb18 due to bug (10 42244567 42244600 CACCTTTGCTTGATATGATAATATAGTGCCAAGG - hetero)
-		$rvarend = $txend-$exonstart[$m+1]+1 - $lenintron + ($exonstart[$m+1]-$exonend[$m]-1);		#fixed this 2011feb18
-		last;			#finish the circle of counting exons!!!!!
-	    } elsif ($start >= $exonstart[$m]) {			#the start is right located within exon
-		#query        -------
-		#gene     <--**---******---****---->
-		$rvarend = $txend-$start-$lenintron+1;
-		last;						#finish the cycle
-	    }
-	}
-	if (not defined $rvarend) {					#if rvarend is not found, then the whole tail of gene is covered
-	    $rvarend = $txend-$txstart-$lenintron+1;
-	}
-	
-	#here the trick begins to differentiate UTR versus coding exonic
-	if ($end < $cdsstart) {			#usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
-	    #query  ----
-	    #gene     <--*---*->
-	    $utr3{$name2}++;		#negative strand for UTR5
-	} elsif ($start > $cdsend) {
-	    #query             ----
-	    #gene     <--*---*->
-	    $utr5{$name2}++;		#negative strand for UTR3
-	} else {
-	    $exonic{$name2}++;
-	    not $current_ncRNA and $obs and push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
-	}
-	$foundgenic++;
-	last;
-    }
-	    */
-
-
-    
-
-	/**
-	 * This method corresponds to Annovar function 
-	 * {@code sub annotateExonicVariants} {
-	 * 	my ($refseqvar, $geneidmap, $cdslen, $mrnalen) = @_;
-	 *   (...)
-	 * <P>
-	 * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
-	 * annovar holds cDNA sequences of the mRNAs. In this implementation,
-	 * the KnownGene objects already have this information. Note that
-	 * Annovar uses its own version of knownGeneMrna.txt because of some
-	 * inconsistencies in the way UCSC makes these sequences. Probably, this will
-	 * also be necessary for the Exomizer (TODO).
-	 * <P>
-	 * Finally, the $refseqvar in Annovar has the following pieces of information
-	 *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
-	 * Note that refcdsstart and refstrand are contained in the KnownGene objects
-	 * $exonpos is the number (zero-based) of the exon in which the variant was found.
-	 * $nextline is the entire Annovar-formated line with information about the variant.
-	 * In contrast to annovar, this function does one annotation at a time
-	 * Note that the information in $geneidmap, cdslen, and $mrnalen
-	 * is contained within the KnownGene objects already
-	 * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
-	 * @param refvarend The end position of the variant with respect to the CDS of the mRNA
-	 * @param start chromosomal start position of variant
-	 * @param end chromosomal end position of variant
-	 * @param ref sequence of reference
-	 * @param var sequence of variant (in annovar: $obs)
-	 * @param exonNumber Number (zero-based) of affected exon.
-	 * @param kgl Gene in which variant was localized to one of the exons 
-	 */
-   private void annotateExonicVariants(int refvarstart, int refvarend, 
-		int start, int end, String ref, String var, int exonNumber, KnownGene kgl) throws AnnotationException {
-      
-
-       /* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
-       System.out.println("******************************");
-       System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
-       System.out.println(String.format("\tstart: %d\tend: %d",start,end));
-       System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
-       System.out.println("******************************"); */
-       /* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
-       int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
-       int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
-       // Needed to complete codon following end of multibase ref seq.
-       /* The following checks for database errors where the position of the variant in
-	* the reference sequence is given as longer the actual length of the transcript.*/
-       if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
-	   String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
-				    kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
-	   Annotation ann = Annotation.createErrorAnnotation(s);
-	   this.annovar.addErrorAnnotation(ann);
-       }
-       /*
-	 @wtnt3 = split (//, $wtnt3);
-	 if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) { 
-	 #some times there are database annotation errors (example: chr17:3,141,674-3,141,683), 
-	 #so the last coding frame is not complete and as a result, the cDNA sequence is not complete
-	 $function->{$index}{unknown} = "UNKNOWN";
-	 next;
-	 }
-       */
-       // wtnt3 represents the three nucleotides of the wildtype codon.
-       String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
-       /* wtnt3_after = Sequence of codon right after the variant. 
-	  We may not need this, it was used for padding in annovar */
-       String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
-       /* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
-	* so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
-       if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
-	   String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
-	   Annotation ann = Annotation.createErrorAnnotation(s);
-	   this.annovar.addErrorAnnotation(ann);
-       }
-       /*annovar line 1079 */
-       if (kgl.isMinusStrand()) {
-	   var = revcom(var);
-	   ref = revcom(ref);
-       }
-       //System.out.println("wtnt3=" + wtnt3);
-       if (start == end) { /* SNV or insertion variant */
-	   if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
-	       Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
-									       var,refvarstart,exonNumber);
-	       this.annovar.addExonicAnnotation(insrt);
-	   } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
-	       Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
-									   ref, var,refvarstart,exonNumber);
-	       this.annovar.addExonicAnnotation(dlt);
-	   } else if (var.length()>1) {
-	       Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
-									   ref,var,refvarstart, refvarend, 
-									   exonNumber);
-	       this.annovar.addExonicAnnotation(blck);
-	   } else {
-	       //System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
-	       Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
-								    ref, var,refvarstart,exonNumber);
-	       this.annovar.addExonicAnnotation(mssns);
-	   }
-       } /* if (start==end) */
-       else if (var.equals("-")) {
-	   Annotation dltmnt = 
-	       DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
-							       ref, var, refvarstart, refvarend, exonNumber);
-	   
-	   this.annovar.addExonicAnnotation(dltmnt);
-       }   
-       return;
-   }
-    
-   
-	/**
-	 * Return the reverse complement version of a DNA string in upper case.
-	 * Note that no checking is done in this code since the parse code checks
-	 * for valid DNA and upper-cases the input. This code will break if these
-	 * assumptions are not valid.
-	 * @param sq original, upper-case cDNA string
-	 * @return reverse complement version of the input string sq.
+	/*
+	  @wtnt3 = split (//, $wtnt3);
+	  if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) { 
+	  #some times there are database annotation errors (example: chr17:3,141,674-3,141,683), 
+	  #so the last coding frame is not complete and as a result, the cDNA sequence is not complete
+	  $function->{$index}{unknown} = "UNKNOWN";
+	  next;
+	  }
 	*/
-	private String revcom(String sq) {
-	    if (sq.equals("-")) return sq; /* deletion, insertion do not need rc */
-	    StringBuffer sb = new StringBuffer();
-	    for (int i = sq.length()-1;i>=0;i--) {
-		char c = sq.charAt(i);
-		char match=0;
-		switch(c) {
-		case 'A': match='T'; break;
-		case 'C': match='G'; break;
-		case 'G': match='C'; break;
-		case 'T': match='A'; break;
-		}
-		if (match>0) sb.append(match);
-	    }
-	    return sb.toString();
+	// wtnt3 represents the three nucleotides of the wildtype codon.
+	String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
+	/* wtnt3_after = Sequence of codon right after the variant. 
+	   We may not need this, it was used for padding in annovar */
+	String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
+	/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
+	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
+	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
+	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
+	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    this.annovar.addErrorAnnotation(ann);
 	}
-	
-	
-
-
+	/*annovar line 1079 */
+	if (kgl.isMinusStrand()) {
+	    var = revcom(var);
+	    ref = revcom(ref);
+	}
+	//System.out.println("wtnt3=" + wtnt3);
+	if (start == end) { /* SNV or insertion variant */
+	    if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
+		Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
+										var,refvarstart,exonNumber);
+		this.annovar.addExonicAnnotation(insrt);
+	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
+		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
+											    ref, var,refvarstart,exonNumber);
+		this.annovar.addExonicAnnotation(dlt);
+	    } else if (var.length()>1) {
+		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
+									    ref,var,refvarstart, refvarend, 
+									    exonNumber);
+		this.annovar.addExonicAnnotation(blck);
+	    } else {
+		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
+		Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
+											ref, var,refvarstart,exonNumber);
+		this.annovar.addExonicAnnotation(mssns);
+	    }
+	} /* if (start==end) */
+	else if (var.equals("-")) {
+	    Annotation dltmnt = 
+		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
+								ref, var, refvarstart, refvarend, exonNumber);
+	    
+	    this.annovar.addExonicAnnotation(dltmnt);
+	}   
+	return;
+    }
+    
+    
+    /**
+     * Return the reverse complement version of a DNA string in upper case.
+     * Note that no checking is done in this code since the parse code checks
+     * for valid DNA and upper-cases the input. This code will break if these
+     * assumptions are not valid.
+     * @param sq original, upper-case cDNA string
+     * @return reverse complement version of the input string sq.
+     */
+    private String revcom(String sq) {
+	if (sq.equals("-")) return sq; /* deletion, insertion do not need rc */
+	StringBuffer sb = new StringBuffer();
+	for (int i = sq.length()-1;i>=0;i--) {
+	    char c = sq.charAt(i);
+	    char match=0;
+	    switch(c) {
+	    case 'A': match='T'; break;
+	    case 'C': match='G'; break;
+	    case 'G': match='C'; break;
+	    case 'T': match='A'; break;
+	    }
+	    if (match>0) sb.append(match);
+	}
+	return sb.toString();
+    }
+    
+    
 }
 /* EoF*/

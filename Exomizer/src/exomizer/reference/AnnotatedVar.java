@@ -286,12 +286,19 @@ public class AnnotatedVar implements Constants {
 	} else if (annotation_Intronic.size()==1) {
 	    return annotation_Intronic.get(0);
 	} else {
-	    Annotation ann = annotation_Intronic.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append(ann.getVariantAnnotation());
-	    for (int i=1;i<annotation_Intronic.size();++i) {
-		sb.append(";" + annotation_Intronic.get(i).getVariantAnnotation());
+	    ArrayList<String> symbol_list = new ArrayList<String>();
+	    for (Annotation a : annotation_Intronic) {
+		String s = a.getVariantAnnotation();
+		symbol_list.add(s);
 	    }
+	    java.util.Collections.sort(symbol_list);
+	    String s = symbol_list.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(s);
+	    for (int i=1;i<symbol_list.size();++i) {
+		sb.append("," + symbol_list.get(i));
+	    }
+	    Annotation ann = Annotation.createIntronicAnnotation(sb.toString());
 	    return ann;
 	}
     }
@@ -388,7 +395,9 @@ public class AnnotatedVar implements Constants {
 	if (this.annotation_Exonic.size()==0)  {
 	    throw new AnnotationException("No data for exonic annotation");
 	} else if (this.annotation_Exonic.size()==1) {
-	    return this.annotation_Exonic.get(0);
+	    Annotation ann = this.annotation_Exonic.get(0);
+	    ann.setVariantAnnotation( ann.getSymbolAndAnnotation() );
+	    return ann;
 	} else {
 	    java.util.Collections.sort(this.annotation_Exonic);
 	    Annotation ann = this.annotation_Exonic.get(0);

@@ -218,7 +218,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createUTR5Annotation(String name2,String accession) {
 	Annotation ann = new Annotation();
 	ann.varType = UTR5;
-	ann.variantAnnotation = String.format("HGVS=%s;%s", name2);
+	ann.variantAnnotation = String.format("HGVS=%s;%s", name2,accession);
 	return ann;
 
     }

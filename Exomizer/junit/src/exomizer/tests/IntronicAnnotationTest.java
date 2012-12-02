@@ -81,53 +81,760 @@ public class IntronicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: IFFO2
- * chr1:19243589A>G
+ * annovar: PLEKHN1
+ * chr1:909768A>G
  *</P>
  */
-@Test public void testIntronicVar241() throws AnnotationException  {
+@Test public void testIntronicVar4() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 19243589;
+	int pos = 909768;
 	String ref = "A";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("IFFO2",annot);
+	    Assert.assertEquals("PLEKHN1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: MECR
- * chr1:29542435C>G
+ * annovar: CDK11A,CDK11B,SLC35E2B
+ * chr1:1653004T>C
  *</P>
  */
-@Test public void testIntronicVar371() throws AnnotationException  {
+@Test public void testIntronicVar29() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 29542435;
+	int pos = 1653004;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CDK11A,CDK11B,SLC35E2B",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NADK
+ * chr1:1687625T>C
+ *</P>
+ */
+@Test public void testIntronicVar32() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 1687625;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NADK",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: MORN1
+ * chr1:2286947A>G
+ *</P>
+ */
+@Test public void testIntronicVar42() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 2286947;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MORN1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CHD5
+ * chr1:6204222C>G
+ *</P>
+ */
+@Test public void testIntronicVar70() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 6204222;
 	String ref = "C";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MECR",annot);
+	    Assert.assertEquals("CHD5",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: TAS1R1
+ * chr1:6631319G>A
+ *</P>
+ */
+@Test public void testIntronicVar77() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 6631319;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("TAS1R1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: RERE
+ * chr1:8422676T>C
+ *</P>
+ */
+@Test public void testIntronicVar97() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 8422676;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("RERE",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CTNNBIP1
+ * chr1:9910846G>T
+ *</P>
+ */
+@Test public void testIntronicVar111() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 9910846;
+	String ref = "G";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CTNNBIP1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: PTCHD2
+ * chr1:11575398G>A
+ *</P>
+ */
+@Test public void testIntronicVar130() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 11575398;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("PTCHD2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: MTHFR
+ * chr1:11852300C>T
+ *</P>
+ */
+@Test public void testIntronicVar138() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 11852300;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MTHFR",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: TNFRSF1B
+ * chr1:12248965A>G
+ *</P>
+ */
+@Test public void testIntronicVar150() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 12248965;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("TNFRSF1B",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: VPS13D
+ * chr1:12418700T>C
+ *</P>
+ */
+@Test public void testIntronicVar153() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 12418700;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("VPS13D",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: PDPN
+ * chr1:13937089G>T
+ *</P>
+ */
+@Test public void testIntronicVar162() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 13937089;
+	String ref = "G";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("PDPN",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CELA2B
+ * chr1:15808702C>T
+ *</P>
+ */
+@Test public void testIntronicVar175() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 15808702;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CELA2B",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CELA2B
+ * chr1:15813969A>C
+ *</P>
+ */
+@Test public void testIntronicVar178() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 15813969;
+	String ref = "A";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CELA2B",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CLCNKB
+ * chr1:16376230->T
+ *</P>
+ */
+@Test public void testIntronicVar190() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 16376230;
+	String ref = "-";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CLCNKB",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NBPF1
+ * chr1:16891485C>T
+ *</P>
+ */
+@Test public void testIntronicVar200() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 16891485;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NBPF1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: PADI6
+ * chr1:17715475T>C
+ *</P>
+ */
+@Test public void testIntronicVar232() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 17715475;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("PADI6",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: ALDH4A1
+ * chr1:19202770T>C
+ *</P>
+ */
+@Test public void testIntronicVar239() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 19202770;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ALDH4A1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: UBR4
+ * chr1:19491857T>C
+ *</P>
+ */
+@Test public void testIntronicVar246() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 19491857;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("UBR4",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: DDOST
+ * chr1:20979310->T
+ *</P>
+ */
+@Test public void testIntronicVar262() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 20979310;
+	String ref = "-";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("DDOST",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NBPF3
+ * chr1:21806725->CACC
+ *</P>
+ */
+@Test public void testIntronicVar279() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 21806725;
+	String ref = "-";
+	String alt = "CACC";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NBPF3",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: RAP1GAP
+ * chr1:21946415G>A
+ *</P>
+ */
+@Test public void testIntronicVar289() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 21946415;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("RAP1GAP",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: USP48
+ * chr1:22063149G>A
+ *</P>
+ */
+@Test public void testIntronicVar294() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 22063149;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("USP48",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: HSPG2
+ * chr1:22208030C>T
+ *</P>
+ */
+@Test public void testIntronicVar302() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 22208030;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("HSPG2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CLIC4
+ * chr1:25098341C>T
+ *</P>
+ */
+@Test public void testIntronicVar330() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 25098341;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CLIC4",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: FAM54B
+ * chr1:26158337C>T
+ *</P>
+ */
+@Test public void testIntronicVar338() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 26158337;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("FAM54B",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CATSPER4
+ * chr1:26526348G>C
+ *</P>
+ */
+@Test public void testIntronicVar343() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 26526348;
+	String ref = "G";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CATSPER4",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: MAP3K6
+ * chr1:27682481G>A
+ *</P>
+ */
+@Test public void testIntronicVar360() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 27682481;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MAP3K6",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SNRNP40
+ * chr1:31764718->GAA
+ *</P>
+ */
+@Test public void testIntronicVar377() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 31764718;
+	String ref = "-";
+	String alt = "GAA";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("SNRNP40",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: COL16A1
+ * chr1:32156722G>A
+ *</P>
+ */
+@Test public void testIntronicVar393() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 32156722;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("COL16A1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CSMD2
+ * chr1:34189961G>-
+ *</P>
+ */
+@Test public void testIntronicVar415() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 34189961;
+	String ref = "G";
+	String alt = "-";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CSMD2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CLSPN
+ * chr1:36205166A>G
+ *</P>
+ */
+@Test public void testIntronicVar419() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 36205166;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CLSPN",annot);
 	}
 }
 
@@ -146,10 +853,7 @@ public class IntronicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -157,52 +861,345 @@ public class IntronicAnnotationTest implements Constants {
 	}
 }
 
+
 /**
  *<P>
- * annovar: OSCP1
- * chr1:36883946T>C
+ * annovar: CAP1
+ * chr1:40536074->T
  *</P>
  */
-@Test public void testIntronicVar429() throws AnnotationException  {
+@Test public void testIntronicVar457() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 36883946;
+	int pos = 40536074;
+	String ref = "-";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CAP1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CTPS
+ * chr1:41454425G>A
+ *</P>
+ */
+@Test public void testIntronicVar461() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 41454425;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CTPS",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SCMH1
+ * chr1:41540853A>T
+ *</P>
+ */
+@Test public void testIntronicVar466() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 41540853;
+	String ref = "A";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("SCMH1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SLC2A1
+ * chr1:43418026C>T
+ *</P>
+ */
+@Test public void testIntronicVar481() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 43418026;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("SLC2A1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SZT2
+ * chr1:43909265T>C
+ *</P>
+ */
+@Test public void testIntronicVar493() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 43909265;
 	String ref = "T";
 	String alt = "C";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OSCP1",annot);
+	    Assert.assertEquals("SZT2",annot);
 	}
 }
 
+/**
+ *<P>
+ * annovar: ST3GAL3
+ * chr1:44395786C>T
+ *</P>
+ */
+@Test public void testIntronicVar503() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 44395786;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ST3GAL3",annot);
+	}
+}
 
 /**
  *<P>
- * annovar: SGIP1
- * chr1:67126114A>G
+ * annovar: MAST2
+ * chr1:46290315AT>-
  *</P>
  */
-@Test public void testIntronicVar649() throws AnnotationException  {
+@Test public void testIntronicVar526() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 67126114;
+	int pos = 46290315;
+	String ref = "AT";
+	String alt = "-";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MAST2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: AGBL4
+ * chr1:49332969A>G
+ *</P>
+ */
+@Test public void testIntronicVar557() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 49332969;
 	String ref = "A";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("AGBL4",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: AGBL4
+ * chr1:50310802T>C
+ *</P>
+ */
+@Test public void testIntronicVar558() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 50310802;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("AGBL4",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: DIO1
+ * chr1:54370306G>A
+ *</P>
+ */
+@Test public void testIntronicVar576() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 54370306;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("DIO1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: USP24
+ * chr1:55546895T>C
+ *</P>
+ */
+@Test public void testIntronicVar597() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 55546895;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("USP24",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: USP24
+ * chr1:55557864C>T
+ *</P>
+ */
+@Test public void testIntronicVar598() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 55557864;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("USP24",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: INADL
+ * chr1:62340855G>C
+ *</P>
+ */
+@Test public void testIntronicVar618() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 62340855;
+	String ref = "G";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("INADL",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: DOCK7
+ * chr1:63027411A>-
+ *</P>
+ */
+@Test public void testIntronicVar624() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 63027411;
+	String ref = "A";
+	String alt = "-";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("DOCK7",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SGIP1
+ * chr1:67145322C>A
+ *</P>
+ */
+@Test public void testIntronicVar652() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 67145322;
+	String ref = "C";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -212,101 +1209,596 @@ public class IntronicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: MIER1
- * chr1:67425311T>G
+ * annovar: C1orf141
+ * chr1:67560897A>G
  *</P>
  */
-@Test public void testIntronicVar658() throws AnnotationException  {
+@Test public void testIntronicVar663() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 67425311;
+	int pos = 67560897;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("C1orf141",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: RPE65
+ * chr1:68904513A>G
+ *</P>
+ */
+@Test public void testIntronicVar670() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 68904513;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("RPE65",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: DNASE2B
+ * chr1:84876711->A
+ *</P>
+ */
+@Test public void testIntronicVar720() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 84876711;
+	String ref = "-";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("DNASE2B",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: DNASE2B
+ * chr1:84876731T>G
+ *</P>
+ */
+@Test public void testIntronicVar721() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 84876731;
 	String ref = "T";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MIER1",annot);
+	    Assert.assertEquals("DNASE2B",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: BRDT
- * chr1:92446398T>A
+ * annovar: CLCA2
+ * chr1:86890931T>A
  *</P>
  */
-@Test public void testIntronicVar778() throws AnnotationException  {
+@Test public void testIntronicVar750() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 92446398;
+	int pos = 86890931;
 	String ref = "T";
 	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BRDT",annot);
+	    Assert.assertEquals("CLCA2",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: TRIM33
- * chr1:114951390T>A
+ * annovar: CCDC18
+ * chr1:93704810G>A
  *</P>
  */
-@Test public void testIntronicVar922() throws AnnotationException  {
+@Test public void testIntronicVar793() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 114951390;
-	String ref = "T";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRIM33",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: POGZ
- * chr1:151384733G>A
- *</P>
- */
-@Test public void testIntronicVar1032() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 151384733;
+	int pos = 93704810;
 	String ref = "G";
 	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CCDC18",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: ABCD3
+ * chr1:94980671C>G
+ *</P>
+ */
+@Test public void testIntronicVar803() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 94980671;
+	String ref = "C";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ABCD3",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: COL11A1
+ * chr1:103449598G>C
+ *</P>
+ */
+@Test public void testIntronicVar830() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 103449598;
+	String ref = "G";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("COL11A1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: KIAA1324
+ * chr1:109716533T>G
+ *</P>
+ */
+@Test public void testIntronicVar853() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 109716533;
+	String ref = "T";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("KIAA1324",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SARS
+ * chr1:109779556T>A
+ *</P>
+ */
+@Test public void testIntronicVar860() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 109779556;
+	String ref = "T";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("SARS",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: GSTM1
+ * chr1:110231592T>C
+ *</P>
+ */
+@Test public void testIntronicVar880() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 110231592;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("GSTM1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: GSTM1
+ * chr1:110233247T>C
+ *</P>
+ */
+@Test public void testIntronicVar882() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 110233247;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("GSTM1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: C1orf88
+ * chr1:111891039A>G
+ *</P>
+ */
+@Test public void testIntronicVar903() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 111891039;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("C1orf88",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: OVGP1
+ * chr1:111958885C>A
+ *</P>
+ */
+@Test public void testIntronicVar904() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 111958885;
+	String ref = "C";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("OVGP1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: ADORA3
+ * chr1:112029193A>G
+ *</P>
+ */
+@Test public void testIntronicVar906() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 112029193;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ADORA3",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: DDX20
+ * chr1:112303260A>G
+ *</P>
+ */
+@Test public void testIntronicVar909() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 112303260;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("DDX20",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: MAGI3
+ * chr1:114092306A>G
+ *</P>
+ */
+@Test public void testIntronicVar917() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 114092306;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MAGI3",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: VANGL1
+ * chr1:116225180A>C
+ *</P>
+ */
+@Test public void testIntronicVar933() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 116225180;
+	String ref = "A";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("VANGL1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: TTF2
+ * chr1:117631391T>C
+ *</P>
+ */
+@Test public void testIntronicVar944() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 117631391;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("TTF2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: MAN1A2
+ * chr1:117957288A>G
+ *</P>
+ */
+@Test public void testIntronicVar946() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 117957288;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MAN1A2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NBPF14,NBPF9,PDE4DIP
+ * chr1:144915412T>C
+ *</P>
+-- Wierd part of genome with lots of transcripts. All intronic variants.
+@Test public void testIntronicVar967() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 144915412;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NBPF14,NBPF9,PDE4DIP",annot);
+	}
+}
+ */
+
+/**
+ *<P>
+ * annovar: NBPF14,NBPF9,SEC22B
+ * chr1:145109468A>G
+ *</P>
+-- Wierd part of genome, lots of transcripts some of which are not useful.
+@Test public void testIntronicVar973() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 145109468;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NBPF14,NBPF9,SEC22B",annot);
+	}
+}
+ */
+/**
+ *<P>
+ * annovar: PDZK1
+ * chr1:145762361A>G
+ *</P>
+ */
+@Test public void testIntronicVar990() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 145762361;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("PDZK1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CHD1L
+ * chr1:146759306T>C
+ *</P>
+ */
+@Test public void testIntronicVar997() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 146759306;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CHD1L",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SEMA6C
+ * chr1:151114883->T
+ *</P>
+ */
+@Test public void testIntronicVar1027() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 151114883;
+	String ref = "-";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("SEMA6C",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: POGZ
+ * chr1:151396037A>C
+ *</P>
+ */
+@Test public void testIntronicVar1033() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 151396037;
+	String ref = "A";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -316,75 +1808,390 @@ public class IntronicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: RIT1
- * chr1:155880760->A
+ * annovar: CGN
+ * chr1:151504778C>T
  *</P>
  */
-@Test public void testIntronicVar1103() throws AnnotationException  {
+@Test public void testIntronicVar1037() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 155880760;
-	String ref = "-";
-	String alt = "A";
+	int pos = 151504778;
+	String ref = "C";
+	String alt = "T";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RIT1",annot);
+	    Assert.assertEquals("CGN",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: IQGAP3
- * chr1:156536353A>G
+ * annovar: TUFT1
+ * chr1:151546931A>G
  *</P>
  */
-@Test public void testIntronicVar1136() throws AnnotationException  {
+@Test public void testIntronicVar1038() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 156536353;
+	int pos = 151546931;
 	String ref = "A";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("IQGAP3",annot);
+	    Assert.assertEquals("TUFT1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: PGLYRP4
+ * chr1:153315471->AGA
+ *</P>
+ */
+@Test public void testIntronicVar1052() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 153315471;
+	String ref = "-";
+	String alt = "AGA";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("PGLYRP4",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: S100A8
+ * chr1:153362788T>C
+ *</P>
+ */
+@Test public void testIntronicVar1056() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 153362788;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("S100A8",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CRTC2
+ * chr1:153927270T>C
+ *</P>
+ */
+@Test public void testIntronicVar1071() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 153927270;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CRTC2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: IL6R
+ * chr1:154401972T>C
+ *</P>
+ */
+@Test public void testIntronicVar1082() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 154401972;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("IL6R",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: LOC100505666
+ * -- actually in intron of ADAM15 (many transcripts) and also of LOC100505666, which is
+ * -- a noncoding RNA intron
+ * chr1:155028522G>A
+ *</P>
+ */
+@Test public void testIntronicVar1095() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 155028522;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ADAM15",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SMG5
+ * chr1:156248148T>G
+ *</P>
+ */
+@Test public void testIntronicVar1113() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 156248148;
+	String ref = "T";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("SMG5",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CCT3
+ * chr1:156280671A>T
+ *</P>
+ */
+@Test public void testIntronicVar1117() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 156280671;
+	String ref = "A";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CCT3",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: APOA1BP
+ * chr1:156563375G>A
+ *</P>
+ */
+@Test public void testIntronicVar1138() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 156563375;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("APOA1BP",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: CRABP2
+ * chr1:156670545C>T
+ *</P>
+ */
+@Test public void testIntronicVar1139() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 156670545;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CRABP2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NTRK1
+ * chr1:156844649G>C
+ *</P>
+ */
+@Test public void testIntronicVar1144() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 156844649;
+	String ref = "G";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NTRK1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NTRK1
+ * chr1:156848808T>C
+ *</P>
+ */
+@Test public void testIntronicVar1145() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 156848808;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NTRK1",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: FCRL5
+ * chr1:157517127C>T
+ *</P>
+ */
+@Test public void testIntronicVar1154() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 157517127;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("FCRL5",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: FCRL2
+ * chr1:157718283A>T
+ *</P>
+ */
+@Test public void testIntronicVar1158() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 157718283;
+	String ref = "A";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("FCRL2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: KIRREL
+ * chr1:158058109C>A
+ *</P>
+ */
+@Test public void testIntronicVar1165() throws AnnotationException  {
+	byte chr = 1;
+	int pos = 158058109;
+	String ref = "C";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("KIRREL",annot);
 	}
 }
 
 /**
  *<P>
  * annovar: IFI16
- * chr1:159002557A>G
+ * chr1:159002301T>C
  *</P>
  */
-@Test public void testIntronicVar1184() throws AnnotationException  {
+@Test public void testIntronicVar1183() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 159002557;
-	String ref = "A";
-	String alt = "G";
+	int pos = 159002301;
+	String ref = "T";
+	String alt = "C";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -394,3703 +2201,256 @@ public class IntronicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: C1orf204
- * chr1:159810867C>T
+ * annovar: ATP1A2
+ * chr1:160097315C>A
  *</P>
  */
-@Test public void testIntronicVar1192() throws AnnotationException  {
+@Test public void testIntronicVar1202() throws AnnotationException  {
 	byte chr = 1;
-	int pos = 159810867;
+	int pos = 160097315;
+	String ref = "C";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ATP1A2",annot);
+	}
+}
+
+
+/**
+ *<P>
+ * annovar: PPFIBP1
+ * chr12:27813903C>T
+ *</P>
+ */
+@Test public void testIntronicVar11475() throws AnnotationException  {
+	byte chr = 12;
+	int pos = 27813903;
 	String ref = "C";
 	String alt = "T";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C1orf204",annot);
+	    Assert.assertEquals("PPFIBP1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: PBX1
- * chr1:164789444A>G
+ * annovar: PPFIBP1
+ * chr12:27832582G>A
  *</P>
  */
-@Test public void testIntronicVar1261() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 164789444;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PBX1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CREG1
- * chr1:167515272T>C
- *</P>
- */
-@Test public void testIntronicVar1280() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 167515272;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CREG1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ASTN1
- * chr1:176857347A>G
- *</P>
- */
-@Test public void testIntronicVar1334() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 176857347;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ASTN1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HEATR1
- * chr1:236746275G>C
- *</P>
- */
-@Test public void testIntronicVar1783() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 236746275;
+@Test public void testIntronicVar11478() throws AnnotationException  {
+	byte chr = 12;
+	int pos = 27832582;
 	String ref = "G";
-	String alt = "C";
+	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HEATR1",annot);
+	    Assert.assertEquals("PPFIBP1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: NOL10
- * chr2:10729897C>T
+ * annovar: TMTC1
+ * chr12:29920791->CATA
  *</P>
  */
-@Test public void testIntronicVar1913() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 10729897;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NOL10",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SPDYA
- * chr2:29052256T>C
- *</P>
- */
-@Test public void testIntronicVar2083() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 29052256;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SPDYA",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: XDH
- * chr2:31571241G>C
- *</P>
- */
-@Test public void testIntronicVar2119() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 31571241;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("XDH",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: XDH
- * chr2:31572486->G
- *</P>
- */
-@Test public void testIntronicVar2120() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 31572486;
+@Test public void testIntronicVar11489() throws AnnotationException  {
+	byte chr = 12;
+	int pos = 29920791;
 	String ref = "-";
-	String alt = "G";
+	String alt = "CATA";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("XDH",annot);
+	    Assert.assertEquals("TMTC1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: TTC7A
- * chr2:47251354G>A
+ * annovar: BICD1
+ * chr12:32459070T>G
  *</P>
  */
-@Test public void testIntronicVar2222() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 47251354;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TTC7A",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SFTPB
- * chr2:85893929A>T
- *</P>
- */
-@Test public void testIntronicVar2364() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 85893929;
-	String ref = "A";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SFTPB",annot);
-	}
-}
-
-
-/**
- *<P>
- * annovar: VWA3B
- * chr2:98833448->CC
- *</P>
- */
-@Test public void testIntronicVar2443() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 98833448;
-	String ref = "-";
-	String alt = "CC";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("VWA3B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DPP10
- * chr2:116497479A>G
- *</P>
- */
-@Test public void testIntronicVar2543() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 116497479;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DPP10",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: STEAP3
- * chr2:120003642C>T
- *</P>
- */
-@Test public void testIntronicVar2557() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 120003642;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("STEAP3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MYO7B
- * chr2:128339456G>T
- *</P>
- */
-@Test public void testIntronicVar2587() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 128339456;
-	String ref = "G";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MYO7B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: THSD7B
- * chr2:138000226T>C
- *</P>
- */
-@Test public void testIntronicVar2630() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 138000226;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("THSD7B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: UBR3
- * chr2:170762487C>T
- *</P>
- */
-@Test public void testIntronicVar2785() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 170762487;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("UBR3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: METAP1D
- * chr2:172926211T>G
- *</P>
- */
-@Test public void testIntronicVar2807() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 172926211;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("METAP1D",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TRPM8
- * chr2:234847823A>C
- *</P>
- */
-@Test public void testIntronicVar3255() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 234847823;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRPM8",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ULK4
- * chr3:41957466T>G
- *</P>
- */
-@Test public void testIntronicVar3526() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 41957466;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ULK4",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SACM1L
- * chr3:45761115G>C
- *</P>
- */
-@Test public void testIntronicVar3564() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 45761115;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SACM1L",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CDC25A
- * chr3:48209486C>T
- *</P>
- */
-@Test public void testIntronicVar3596() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 48209486;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CDC25A",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FAM208A
- * chr3:56658481G>C
- *</P>
- */
-@Test public void testIntronicVar3712() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 56658481;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM208A",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ROBO2
- * chr3:77645984A>G
- *</P>
- */
-@Test public void testIntronicVar3820() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 77645984;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ROBO2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: RABL3
- * chr3:120412972T>G
- *</P>
- */
-@Test public void testIntronicVar3948() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 120412972;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RABL3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TMEM44
- * chr3:194344526G>C
- *</P>
- */
-@Test public void testIntronicVar4330() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 194344526;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMEM44",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SH3BP2
- * chr4:2822307T>C
- *</P>
- */
-@Test public void testIntronicVar4406() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 2822307;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SH3BP2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CRMP1
- * chr4:5837871A>G
- *</P>
- */
-@Test public void testIntronicVar4440() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 5837871;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CRMP1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CRMP1
- * chr4:5857850G>A
- *</P>
- */
-@Test public void testIntronicVar4444() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 5857850;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CRMP1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ADAMTS3
- * chr4:73434388T>-
- *</P>
- */
-@Test public void testIntronicVar4720() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 73434388;
-	String ref = "T";
-	String alt = "-";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ADAMTS3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PPEF2
- * chr4:76809319A>G
- *</P>
- */
-@Test public void testIntronicVar4754() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 76809319;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PPEF2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: C4orf21
- * chr4:113483717A>G
- *</P>
- */
-@Test public void testIntronicVar4923() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 113483717;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C4orf21",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SEC24D
- * chr4:119736598C>T
- *</P>
- */
-@Test public void testIntronicVar4939() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 119736598;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SEC24D",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PET112
- * chr4:152592480->CTTA
- *</P>
- */
-@Test public void testIntronicVar5031() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 152592480;
-	String ref = "-";
-	String alt = "CTTA";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PET112",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KIAA0922
- * chr4:154514918T>C
- *</P>
- */
-@Test public void testIntronicVar5041() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 154514918;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIAA0922",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PALLD
- * chr4:169846255T>C
- *</P>
- */
-@Test public void testIntronicVar5097() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 169846255;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PALLD",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: GALNT7
- * chr4:174099149T>C
- *</P>
- */
-@Test public void testIntronicVar5117() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 174099149;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GALNT7",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CYP4V2
- * chr4:187129995A>G
- *</P>
- */
-@Test public void testIntronicVar5169() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 187129995;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CYP4V2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FRG1
- * chr4:190878463T>G
- *</P>
- */
-@Test public void testIntronicVar5188() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 190878463;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FRG1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ADCY2
- * chr5:7826680T>C
- *</P>
- */
-@Test public void testIntronicVar5256() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 7826680;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ADCY2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: RANBP3L
- * chr5:36301374T>C
- *</P>
- */
-@Test public void testIntronicVar5347() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 36301374;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RANBP3L",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MAST4
- * chr5:66226652G>A
- *</P>
- */
-@Test public void testIntronicVar5455() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 66226652;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MAST4",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TNPO1
- * chr5:72182857A>G
- *</P>
- */
-@Test public void testIntronicVar5481() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 72182857;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TNPO1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: POC5
- * chr5:74988336C>T
- *</P>
- */
-@Test public void testIntronicVar5497() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 74988336;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("POC5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FER
- * chr5:108373106C>A
- *</P>
- */
-@Test public void testIntronicVar5617() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 108373106;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FER",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: C5orf56,IRF1
- * chr5:131820275C>A
- *</P>
- */
-@Test public void testIntronicVar5684() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 131820275;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("IRF1,C5orf56",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: WNT8A
- * chr5:137420376T>C
- *</P>
- */
-@Test public void testIntronicVar5717() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 137420376;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("WNT8A",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SPINK5
- * chr5:147505227G>A
- *</P>
- */
-@Test public void testIntronicVar5781() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 147505227;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SPINK5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CSF1R
- * chr5:149435759G>A
- *</P>
- */
-@Test public void testIntronicVar5802() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 149435759;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CSF1R",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KCNIP1
- * chr5:170145720T>G
- *</P>
- */
-@Test public void testIntronicVar5894() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 170145720;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KCNIP1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HNRNPH1
- * chr5:179043984->AA
- *</P>
- */
-@Test public void testIntronicVar5949() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 179043984;
-	String ref = "-";
-	String alt = "AA";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HNRNPH1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FARS2
- * chr6:5431960A>G
- *</P>
- */
-@Test public void testIntronicVar6007() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 5431960;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FARS2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KIF13A
- * chr6:17834346A>G
- *</P>
- */
-@Test public void testIntronicVar6061() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 17834346;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIF13A",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LOC554223
- * chr6:29761211G>C
- *</P>
- */
-@Test public void testIntronicVar6125() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 29761211;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC554223",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HLA-G
- * chr6:29794860C>T
- *</P>
- */
-@Test public void testIntronicVar6127() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 29794860;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HLA-G",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HLA-C
- * chr6:31237323A>G
- *</P>
- */
-@Test public void testIntronicVar6192() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 31237323;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HLA-C",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: C6orf10
- * chr6:32292392->AACT
- *</P>
- */
-@Test public void testIntronicVar6236() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 32292392;
-	String ref = "-";
-	String alt = "AACT";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C6orf10",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TMEM63B
- * chr6:44121947C>T
- *</P>
- */
-@Test public void testIntronicVar6422() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 44121947;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMEM63B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FAM184A
- * chr6:119323987A>T
- *</P>
- */
-@Test public void testIntronicVar6699() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 119323987;
-	String ref = "A";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM184A",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: C6orf170
- * chr6:121434153C>A
- *</P>
- */
-@Test public void testIntronicVar6701() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 121434153;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C6orf170",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: VNN3
- * chr6:133048213G>A
- *</P>
- */
-@Test public void testIntronicVar6746() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 133048213;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("VNN3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PHACTR2
- * chr6:144086394G>A
- *</P>
- */
-@Test public void testIntronicVar6780() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 144086394;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PHACTR2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZDHHC14
- * chr6:158074504A>G
- *</P>
- */
-@Test public void testIntronicVar6843() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 158074504;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZDHHC14",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SLC22A1
- * chr6:160553238C>T
- *</P>
- */
-@Test public void testIntronicVar6896() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 160553238;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC22A1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LPAL2
- * chr6:160903622G>A
- -- Annovar is in error here, it should be ncRNA INTRONIC
- *</P>
- */
-@Test public void testIntronicVar6899() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 160903622;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    for (Annotation a : anno_list) {
-		System.out.println("SHIT " + a.getVariantAnnotation());
-	    }
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LPAL2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PHF14
- * chr7:11208989C>A
- *</P>
- */
-@Test public void testIntronicVar7048() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 11208989;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PHF14",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CASD1
- * chr7:94146975T>G
- *</P>
- */
-@Test public void testIntronicVar7443() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 94146975;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CASD1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DYNC1I1
- * chr7:95709602C>T
- *</P>
- */
-@Test public void testIntronicVar7452() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 95709602;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DYNC1I1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DEFB136
- * chr8:11831661C>T
- *</P>
- */
-@Test public void testIntronicVar7962() throws AnnotationException  {
-	byte chr = 8;
-	int pos = 11831661;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DEFB136",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: EPB49
- * chr8:21937667T>C
- *</P>
- */
-@Test public void testIntronicVar8027() throws AnnotationException  {
-	byte chr = 8;
-	int pos = 21937667;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("EPB49",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ADAM18
- * chr8:39525750C>A
- *</P>
- */
-@Test public void testIntronicVar8163() throws AnnotationException  {
-	byte chr = 8;
-	int pos = 39525750;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ADAM18",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SGK196
- * chr8:42959007C>A
- *</P>
- */
-@Test public void testIntronicVar8172() throws AnnotationException  {
-	byte chr = 8;
-	int pos = 42959007;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SGK196",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: GLI4
- * chr8:144357213G>C
- *</P>
- */
-@Test public void testIntronicVar8524() throws AnnotationException  {
-	byte chr = 8;
-	int pos = 144357213;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GLI4",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MPDZ
- * chr9:13186232T>A
- *</P>
- */
-@Test public void testIntronicVar8614() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 13186232;
-	String ref = "T";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MPDZ",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KIAA1797
- * chr9:20944558G>A
- *</P>
- */
-@Test public void testIntronicVar8663() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 20944558;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIAA1797",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ASTN2
- * chr9:119582872T>G
- *</P>
- */
-@Test public void testIntronicVar9022() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 119582872;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ASTN2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: C5
- * chr9:123778688A>C
- *</P>
- */
-@Test public void testIntronicVar9040() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 123778688;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: GSN
- * chr9:124073176T>C
- *</P>
- */
-@Test public void testIntronicVar9051() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 124073176;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GSN",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TBC1D13
- * chr9:131553768A>G
- *</P>
- */
-@Test public void testIntronicVar9145() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 131553768;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TBC1D13",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MAN1B1
- * chr9:139997719A>G
- *</P>
- */
-@Test public void testIntronicVar9348() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 139997719;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MAN1B1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PFKP
- * chr10:3145885T>C
- *</P>
- */
-@Test public void testIntronicVar9393() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 3145885;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PFKP",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NRP1
- * chr10:33495306A>G
- *</P>
- */
-@Test public void testIntronicVar9623() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 33495306;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NRP1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PARD3
- * chr10:34420607G>A
- *</P>
- */
-@Test public void testIntronicVar9624() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 34420607;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PARD3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PRKG1
- * chr10:53921754C>A
- *</P>
- */
-@Test public void testIntronicVar9697() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 53921754;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PRKG1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MBL2
- * chr10:54528353C>G
- *</P>
- */
-@Test public void testIntronicVar9701() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 54528353;
-	String ref = "C";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MBL2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HK1
- * chr10:71060634G>A
- *</P>
- */
-@Test public void testIntronicVar9757() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 71060634;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HK1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AK126491,LOC100132987
- * chr10:80037743A>G
- *</P>
- */
-@Test public void testIntronicVar9832() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 80037743;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AK126491,LOC100132987",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: GBF1
- * chr10:104128954T>A
- *</P>
- */
-@Test public void testIntronicVar9967() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 104128954;
-	String ref = "T";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GBF1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: BTBD16
- * chr10:124066652G>A
- *</P>
- */
-@Test public void testIntronicVar10109() throws AnnotationException  {
-	byte chr = 10;
-	int pos = 124066652;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BTBD16",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TRIM22,TRIM5
- * chr11:5777023C>T
- *</P>
- */
-@Test public void testIntronicVar10291() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 5777023;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRIM22,TRIM5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NLRP14
- * chr11:7070866G>A
- *</P>
- */
-@Test public void testIntronicVar10313() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 7070866;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NLRP14",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TRIM66
- * chr11:8670172T>C
- *</P>
- */
-@Test public void testIntronicVar10331() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 8670172;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRIM66",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ABCC8
- * chr11:17436936A>G
- *</P>
- */
-@Test public void testIntronicVar10394() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 17436936;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ABCC8",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TPH1
- * chr11:18044304C>T
- *</P>
- */
-@Test public void testIntronicVar10407() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 18044304;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TPH1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SLC6A5
- * chr11:20628479T>C
- *</P>
- */
-@Test public void testIntronicVar10440() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 20628479;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC6A5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: BRMS1
- * chr11:66108660C>T
- *</P>
- */
-@Test public void testIntronicVar10725() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 66108660;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BRMS1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NADSYN1
- * chr11:71174452A>G
- *</P>
- */
-@Test public void testIntronicVar10775() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 71174452;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NADSYN1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AMICA1
- * chr11:118067426A>G
- *</P>
- */
-@Test public void testIntronicVar11049() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 118067426;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AMICA1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ANO2
- * chr12:5961048G>A
- *</P>
- */
-@Test public void testIntronicVar11228() throws AnnotationException  {
+@Test public void testIntronicVar11500() throws AnnotationException  {
 	byte chr = 12;
-	int pos = 5961048;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ANO2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TAPBPL
- * chr12:6567787T>C
- *</P>
- */
-@Test public void testIntronicVar11243() throws AnnotationException  {
-	byte chr = 12;
-	int pos = 6567787;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TAPBPL",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CD163
- * chr12:7639054T>G
- *</P>
- */
-@Test public void testIntronicVar11277() throws AnnotationException  {
-	byte chr = 12;
-	int pos = 7639054;
+	int pos = 32459070;
 	String ref = "T";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CD163",annot);
+	    Assert.assertEquals("BICD1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: SOX5
- * chr12:23757245C>T
+ * annovar: ADAMTS20
+ * chr12:43763234G>T
  *</P>
  */
-@Test public void testIntronicVar11443() throws AnnotationException  {
+@Test public void testIntronicVar11538() throws AnnotationException  {
 	byte chr = 12;
-	int pos = 23757245;
+	int pos = 43763234;
+	String ref = "G";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("ADAMTS20",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NELL2
+ * chr12:44926334T>A
+ *</P>
+ */
+@Test public void testIntronicVar11543() throws AnnotationException  {
+	byte chr = 12;
+	int pos = 44926334;
+	String ref = "T";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTRONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NELL2",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: SLC38A1
+ * chr12:46601056C>T
+ *</P>
+ */
+@Test public void testIntronicVar11550() throws AnnotationException  {
+	byte chr = 12;
+	int pos = 46601056;
 	String ref = "C";
 	String alt = "T";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SOX5",annot);
+	    Assert.assertEquals("SLC38A1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: SOX5
- * chr12:23998888T>C
+ * annovar: C12orf54
+ * chr12:48883012T>C
  *</P>
  */
-@Test public void testIntronicVar11444() throws AnnotationException  {
+@Test public void testIntronicVar11571() throws AnnotationException  {
 	byte chr = 12;
-	int pos = 23998888;
+	int pos = 48883012;
 	String ref = "T";
 	String alt = "C";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SOX5",annot);
+	    Assert.assertEquals("C12orf54",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: KRT76
- * chr12:53167313T>C
+ * annovar: PRKAG1
+ * chr12:49398862G>A
  *</P>
  */
-@Test public void testIntronicVar11662() throws AnnotationException  {
+@Test public void testIntronicVar11581() throws AnnotationException  {
 	byte chr = 12;
-	int pos = 53167313;
-	String ref = "T";
-	String alt = "C";
+	int pos = 49398862;
+	String ref = "G";
+	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KRT76",annot);
+	    Assert.assertEquals("PRKAG1",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: MRPL42
- * chr12:93863162C>G
+ * annovar: TMBIM6
+ * chr12:50151977G>A
  *</P>
  */
-@Test public void testIntronicVar11881() throws AnnotationException  {
+@Test public void testIntronicVar11598() throws AnnotationException  {
 	byte chr = 12;
-	int pos = 93863162;
-	String ref = "C";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MRPL42",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ISCU
- * chr12:108960906G>T
- *</P>
- */
-@Test public void testIntronicVar11979() throws AnnotationException  {
-	byte chr = 12;
-	int pos = 108960906;
-	String ref = "G";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ISCU",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KDM2B
- * chr12:121871006A>C
- *</P>
- */
-@Test public void testIntronicVar12073() throws AnnotationException  {
-	byte chr = 12;
-	int pos = 121871006;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KDM2B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MYCBP2
- * chr13:77725106C>A
- *</P>
- */
-@Test public void testIntronicVar12461() throws AnnotationException  {
-	byte chr = 13;
-	int pos = 77725106;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MYCBP2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TMTC4
- * chr13:101315175G>A
- *</P>
- */
-@Test public void testIntronicVar12530() throws AnnotationException  {
-	byte chr = 13;
-	int pos = 101315175;
+	int pos = 50151977;
 	String ref = "G";
 	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMTC4",annot);
+	    Assert.assertEquals("TMBIM6",annot);
 	}
 }
 
-/**
- *<P>
- * annovar: MCF2L
- * chr13:113681243C>A
- *</P>
- */
-@Test public void testIntronicVar12601() throws AnnotationException  {
-	byte chr = 13;
-	int pos = 113681243;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MCF2L",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DAAM1
- * chr14:59790813C>T
- *</P>
- */
-@Test public void testIntronicVar12871() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 59790813;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DAAM1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: RAD51B
- * chr14:68935759G>C
- *</P>
- */
-@Test public void testIntronicVar12943() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 68935759;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RAD51B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CCDC88C
- * chr14:91763637C>T
- *</P>
- */
-@Test public void testIntronicVar13076() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 91763637;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CCDC88C",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HSP90AA1
- * chr14:102551800->ATA
- *</P>
- */
-@Test public void testIntronicVar13137() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 102551800;
-	String ref = "-";
-	String alt = "ATA";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HSP90AA1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: abParts
- * chr14:106376354A>G
- --- There is a massive annotation for abParts  ( antibody parts) that the 
- --- exomizer is not picking up. Instead, it is getting an intron of an ncRNA gene.
- --- This is not wrong, but it is unclear why we are not picking up the abParts intron.
- *</P>
- */
-@Test public void testIntronicVar13184() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 106376354;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("abParts",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CALML4
- * chr15:68492028G>A
- *</P>
- */
-@Test public void testIntronicVar13594() throws AnnotationException  {
-	byte chr = 15;
-	int pos = 68492028;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CALML4",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KIF7
- * chr15:90172834T>G
- *</P>
- */
-@Test public void testIntronicVar13748() throws AnnotationException  {
-	byte chr = 15;
-	int pos = 90172834;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIF7",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PCSK6
- * chr15:101872306G>A
- *</P>
- */
-@Test public void testIntronicVar13813() throws AnnotationException  {
-	byte chr = 15;
-	int pos = 101872306;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PCSK6",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZG16B
- * chr16:2881675G>A
- *</P>
- */
-@Test public void testIntronicVar13898() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 2881675;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZG16B",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: JMJD5
- * chr16:27230261T>C
- *</P>
- */
-@Test public void testIntronicVar14092() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 27230261;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("JMJD5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NPIPL1,TUFM
- * chr16:28855727A>G
- *</P>
- -- This is also a mistake in Exomizer because NPIPL1 is really big and there are many interveniing genes in 
- -- one of the NPIPL1 introns...
- */
-@Test public void testIntronicVar14118() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 28855727;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NPIPL1,TUFM",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ITGAL
- * chr16:30522152G>A
- *</P>
- */
-@Test public void testIntronicVar14132() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 30522152;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ITGAL",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ITGAX
- * chr16:31384756C>T
- *</P>
- */
-@Test public void testIntronicVar14149() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 31384756;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ITGAX",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NUP93
- * chr16:56871480ACTTTATTGATT>-
- *</P>
- */
-@Test public void testIntronicVar14223() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 56871480;
-	String ref = "ACTTTATTGATT";
-	String alt = "-";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NUP93",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NLRC5
- * chr16:57073683G>C
- *</P>
- */
-@Test public void testIntronicVar14235() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 57073683;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NLRC5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: CNTNAP4
- * chr16:76523792A>G
- *</P>
- */
-@Test public void testIntronicVar14383() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 76523792;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CNTNAP4",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PLCG2
- * chr16:81891998G>C
- *</P>
- */
-@Test public void testIntronicVar14430() throws AnnotationException  {
-	byte chr = 16;
-	int pos = 81891998;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PLCG2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MINK1
- * chr17:4799897C>T
- *</P>
- */
-@Test public void testIntronicVar14669() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 4799897;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MINK1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MYH3
- * chr17:10548992C>T
- *</P>
- */
-@Test public void testIntronicVar14788() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 10548992;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MYH3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SLC13A2
- * chr17:26816369->C
- *</P>
- */
-@Test public void testIntronicVar14924() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 26816369;
-	String ref = "-";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC13A2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FOXN1
- * chr17:26851501G>A
- *</P>
- */
-@Test public void testIntronicVar14927() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 26851501;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FOXN1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HAP1,JUP
- * chr17:39883789A>G
- *</P>
- */
-@Test public void testIntronicVar15064() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 39883789;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HAP1,JUP",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: EFCAB3
- * chr17:60464688C>T
- *</P>
- */
-@Test public void testIntronicVar15254() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 60464688;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("EFCAB3",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ABCA6
- * chr17:67075294C>T
- *</P>
- */
-@Test public void testIntronicVar15309() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 67075294;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ABCA6",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PTPRM
- * chr18:8387065C>T
- *</P>
- */
-@Test public void testIntronicVar15624() throws AnnotationException  {
-	byte chr = 18;
-	int pos = 8387065;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PTPRM",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: GREB1L
- * chr18:18983766C>T
- *</P>
- */
-@Test public void testIntronicVar15661() throws AnnotationException  {
-	byte chr = 18;
-	int pos = 18983766;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GREB1L",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SLC25A23
- * chr19:6443675G>A
- *</P>
- */
-@Test public void testIntronicVar16006() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 6443675;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC25A23",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: INSR
- * chr19:7170517A>G
- *</P>
- */
-@Test public void testIntronicVar16038() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 7170517;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("INSR",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZNF799
- * chr19:12504051C>T
- *</P>
- */
-@Test public void testIntronicVar16144() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 12504051;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF799",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AP1M1
- * chr19:16320075C>G
- *</P>
- */
-@Test public void testIntronicVar16229() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 16320075;
-	String ref = "C";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AP1M1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PGPEP1
- * chr19:18466840C>T
- *</P>
- */
-@Test public void testIntronicVar16288() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 18466840;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PGPEP1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LSM14A
- * chr19:34712654C>T
- *</P>
- */
-@Test public void testIntronicVar16354() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 34712654;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LSM14A",annot);
-	}
-}   
-}
+ }

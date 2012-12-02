@@ -125,7 +125,7 @@ public class MissenseAnnotationTest implements Constants {
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(MISSENSE,varType);
 	    String geneSymbol = ann.getGeneSymbol();
-	    Assert.assertEquals("NUP85",geneSymbol);
+	    Assert.assertEquals("HOXB7",geneSymbol);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HOXB7:uc002inv.3:exon1:c.25A>G:p.T9A",annot);
 	}
