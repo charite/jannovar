@@ -74,6 +74,12 @@ public class AnnotatedVar implements Constants {
     private ArrayList<Annotation> annotation_Intergenic = null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for probably erroneous data. */
     private ArrayList<Annotation> annotation_Error = null;
+    /** Set of all gene symbols used for the current annotation (usually one, but if the size of this set
+	is greater than one, then there qare annotations to multiple genes and we will need to use
+	special treatment).*/
+    private HashSet<String> geneSymbolSet=null;
+
+
     /** Flag to state that we have at least one exonic variant. */
     private boolean hasExonic;
     private boolean hasNcRna;
@@ -108,7 +114,7 @@ public class AnnotatedVar implements Constants {
 	this.annotation_Downstream =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Intergenic =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Error =  new ArrayList<Annotation>(initialCapacity);
-
+	this.geneSymbolSet = new HashSet<String>();
     }
 
     /**
@@ -126,6 +132,7 @@ public class AnnotatedVar implements Constants {
 	this.annotation_Downstream.clear();
 	this.annotation_Intergenic.clear();
 	this.annotation_Error.clear();
+	this.geneSymbolSet.clear();
 	this.hasExonic=false;
 	this.hasNcRna=false;
 	this.hasUTR5=false;
@@ -202,7 +209,7 @@ public class AnnotatedVar implements Constants {
     public Annotation getAnnotation() throws AnnotationException {
 	
 	if (hasExonic) {
-	    return annotation_Exonic.get(0);
+	    return summarizeExonic(); 
 	} else if (hasNcRna) {
 	    return annotation_ncRNA.get(0);
 	} else if (hasUTR5) {
@@ -362,11 +369,40 @@ public class AnnotatedVar implements Constants {
 
 
     public void addExonicAnnotation(Annotation ann){
+	for (Annotation a: this.annotation_Exonic) {
+	    if (a.equals(ann)) return;
+	}
 	this.annotation_Exonic.add(ann);
+	this.geneSymbolSet.add(ann.getGeneSymbol());
 	this.hasExonic=true;
 	this.hasGenicMutation=true;
 	this.annotationCount++;
     }
+
+    /**
+     * If there are multiple exonic annotations, this function
+     * combines them (using a semicolon as a separator), and
+     * returns a single annotation object.
+     */
+    public Annotation summarizeExonic() throws AnnotationException {
+	if (this.annotation_Exonic.size()==0)  {
+	    throw new AnnotationException("No data for exonic annotation");
+	} else if (this.annotation_Exonic.size()==1) {
+	    return this.annotation_Exonic.get(0);
+	} else {
+	    java.util.Collections.sort(this.annotation_Exonic);
+	    Annotation ann = this.annotation_Exonic.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append( ann.getSymbolAndAnnotation());
+	    for (int j=1;j<this.annotation_Exonic.size();++j) {
+		ann  = this.annotation_Exonic.get(j);
+		sb.append("," + ann.getSymbolAndAnnotation());
+	    }
+	    ann.setVariantAnnotation(sb.toString());
+	    return ann;
+	}
+    }
+
 
     /**
      * Adds an annotation for an intronic variant. Note that if the
@@ -405,7 +441,7 @@ public class AnnotatedVar implements Constants {
      * @param ann An Annotation object that contains a String representing the error.
      */
     public void addErrorAnnotation(Annotation ann){
-	this.annotation_Error.add(ann);
+       	this.annotation_Error.add(ann);
 	this.hasError=true;
 	this.annotationCount++;
      }

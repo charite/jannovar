@@ -36,7 +36,8 @@ import exomizer.annotation.SpliceAnnotation;
  * chromosome with one gene located in the intron of the next or with overlapping
  * genes. 
  * <P>
- * Note that the key of the tree map corresponds to the 5' most position of the KnownGene. The value is a list
+ * Note that the key of the tree map corresponds to the 5' most position of 
+ * the KnownGene. The value is a list
  * (ArrayList) of {@link exomizer.reference.KnownGene KnownGene} objects. 
  * This is because multiple KnownGenes may share the same transcription
  * start (e.g., multiple splice forms of the same gene).
@@ -56,10 +57,12 @@ public class Chromosome {
     private byte chromosome;
     /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
-    /** TreeMap with all of the genes ({@link exomizer.reference.KnownGene KnownGene} objects) of this chromosome. The key is an
-     Integer value representing the transcription start site (txstart) of the transcript. Note that we need to
-     use an Array of KnownGenes because there can be multiple KnownGenes that share the same transcription start site.
-     (e.g., multiple isoforms of the same gene).*/
+    /** TreeMap with all of the genes ({@link exomizer.reference.KnownGene KnownGene}
+     * objects) of this chromosome. The key is an
+     * Integer value representing the transcription start site (txstart) of the transcript. 
+     * Note that we need to use an Array of KnownGenes because there can be multiple 
+     * KnownGenes that share the same transcription start site.
+     * (e.g., multiple isoforms of the same gene).*/
     private TreeMap<Integer,ArrayList<KnownGene>> geneTreeMap=null;
     /** Total number of KnownGenes on the chromosome including multiple transcripts of the same gene. */
     private int n_genes;
@@ -275,7 +278,7 @@ public class Chromosome {
 	ArrayList<KnownGene> candidateGenes = getBinRange(position);
 	
 	for (KnownGene kgl : candidateGenes) {
-	    System.out.println("Loop for kgl=" + kgl.getName2());
+	    //System.out.println("Loop for kgl=" + kgl.getName2());
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
 	    String name = kgl.getKnownGeneID();
 	    int txstart = kgl.getTXStart();
@@ -633,8 +636,8 @@ public class Chromosome {
      */
     public void getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
-	//System.out.println("BLA, getMinusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
-	//System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
+	System.out.println("BLA, getMinusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
+	System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
 	
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -671,14 +674,14 @@ public class Chromosome {
 	    }
 
 	    /* 1) First check whether variant is a splice variant */
-	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
-	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+	    System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
 	    if (SpliceAnnotation.isSpliceVariantMinusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationMinusStrand(kgl,start,end,ref,alt,k,cumlenexon);
 		annovar.addExonicAnnotation(ann);
 	    }
 	    if (end > kgl.getExonEnd(k)) {
 		if (start <= kgl.getExonEnd(k)) {
+		     /* Overlap: Variation starts 5' to exon and ends within exon */ 
 		    rvarstart =  kgl.getTXEnd() - kgl.getExonEnd(k)  -  cumlenintron + 1;
 		    //  $rvarstart = $txend-$exonend[$k]-$lenintron+1;
 		    for ( int m=k;m>=0;m--) {
@@ -730,6 +733,7 @@ public class Chromosome {
 			     *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
 			     */
 			    /* Note k in the following is the number (zero-based) of affected exon */
+			    System.out.println("MINUS STRAND ABOUT TO GO EXONIC");
 			  annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 			} else {
 			    System.out.println("WARNING TO DO, exonic in noncoding gene");
@@ -749,6 +753,9 @@ public class Chromosome {
 		     /* break out of for loop of exons (k) */
 		     //$foundgenic++;
 		     break;
+		} else {
+		    System.out.println("NEED TO ADD CODE FOR EXONIC MUTATION ON - STRAND");
+		    System.exit(1);
 		}
 	    } /* iterator over exons */
 	   
@@ -982,7 +989,7 @@ public class Chromosome {
 									   exonNumber);
 	       this.annovar.addExonicAnnotation(blck);
 	   } else {
-	       System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
+	       //System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
 	       Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 								    ref, var,refvarstart,exonNumber);
 	       this.annovar.addExonicAnnotation(mssns);

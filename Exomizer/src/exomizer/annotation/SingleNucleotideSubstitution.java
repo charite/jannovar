@@ -25,7 +25,7 @@ public class SingleNucleotideSubstitution {
      * @param ref sequence of wildtype sequence
      * @param var alternate sequence (should be '-')
      * @param refvarstart Position of the variant in the CDS of the known gene
-     * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
+     * @param exonNumber Number of the affected exon (zero-based).
      * @return An annotation corresponding to the deletion.
      */
     public static Annotation getAnnotationPlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
@@ -37,7 +37,10 @@ public class SingleNucleotideSubstitution {
 	String panno=null;
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
-	System.out.println("refcdsstart=" + refcdsstart);
+
+	exonNumber++; /* Correct to one-based numbering, here used only for annotation! */
+
+	//System.out.println("refcdsstart=" + refcdsstart);
 	if (ref.length() != 1) {
 	    throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s",
 							ref,kgl.getName2()));
@@ -111,8 +114,8 @@ public class SingleNucleotideSubstitution {
 	    return ann;
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%s%d%s",kgl.getName2(),kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createMissenseSNVAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
+	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,refvarstart,panno);
 	    return ann;
 	}
 	

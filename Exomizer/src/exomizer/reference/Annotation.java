@@ -17,12 +17,15 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.02 (2 December 2012)
+ * @version 0.03 (2 December 2012)
  */
-public class Annotation implements Constants {
+public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
 	e.g., MISSENSE, 5UTR, etc. */
     private byte varType;
+    /** The position of the variant in the ORF or mRNA, if applicable. This field is used to
+	sort exonic variants.*/
+    private int rvarstart;
 
     /** The string representing the actual annotation, but
      * not including the gene symbol. For instance, for the
@@ -60,11 +63,31 @@ public class Annotation implements Constants {
     public byte getVarType() {
 	return this.varType;
     }
+
+    /**
+     * @return The gene symbol (e.g., FBN1) for the gene affected by this Annotation.
+     */
+    public String getGeneSymbol() { return this.geneSymbol; }
+
+
+
     /**
      * Get annotation String. Note, does not include the gene symbol.
      * @return String with the annotation, for instance, "uc001aim.1:exon18:c.T2287C:p.X763Q"
      */
     public String getVariantAnnotation() { return this.variantAnnotation; }
+
+    /**
+     * Get full annotation with gene symbol
+     */
+    public String getSymbolAndAnnotation() {
+	if (geneSymbol==null && variantAnnotation != null)
+	    return variantAnnotation;
+	return String.format("%s:%s",geneSymbol,variantAnnotation);
+    }
+
+
+
     /**
      * Resets the annotation. This method is intended to be used by the 
      * {@link exomizer.reference.AnnotatedVar AnnotatedVar}
@@ -95,6 +118,7 @@ public class Annotation implements Constants {
     /** The (private) constructor is intended to be used 
 	only by static factory methods. */
     private Annotation() {
+	this.rvarstart=0;
     }
 
 
@@ -305,9 +329,11 @@ public class Annotation implements Constants {
 	return ann;
      }
 
-     public static Annotation createMissenseSNVAnnotation(String msg) {
+    public static Annotation createMissenseSNVAnnotation(KnownGene kg,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = MISSENSE;
+	ann.geneSymbol=kg.getName2();
+	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
 	return ann;
      }
@@ -376,4 +402,19 @@ public class Annotation implements Constants {
 	default: return false;
 	}
     }
+
+    /**
+     * Allows exonic mutations to be sorted according to their position
+     * in the CDS. For other mutations, rvarstart is 0 and the sorting
+     * has no effect.
+     */
+    public int compareTo(Annotation other) {
+        if (rvarstart < other.rvarstart )
+            return -1;
+        else if (rvarstart  > other.rvarstart)
+            return 1;
+	else
+	    return 0;
+    }
+
 }
