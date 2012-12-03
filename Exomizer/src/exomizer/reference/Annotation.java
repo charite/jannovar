@@ -135,7 +135,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createIntergenicAnnotation(KnownGene leftGene, KnownGene rightGene, int startpos, int endpos) {
 	Annotation ann = new Annotation();
-	System.out.println(String.format("Left:%s, right:%s, start %d end %d",leftGene.getName2(),rightGene.getName2(),startpos,endpos));
+	//System.out.println(String.format("Left:%s, right:%s, start %d end %d",leftGene.getName2(),rightGene.getName2(),startpos,endpos));
 	ann.varType=INTERGENIC;
 	/* Note that either the leftGene or the rightGene can be null, if the variant is located
 	   5' (3') to all variants on a chromosome. */

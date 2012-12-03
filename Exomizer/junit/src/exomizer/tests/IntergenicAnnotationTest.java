@@ -96,11 +96,7 @@ public class IntergenicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -108,253 +104,7 @@ public class IntergenicAnnotationTest implements Constants {
 	    
 	}
     }
-
-   /**
- *<P>
- * annovar: LOC100288069(dist=7255),LINC00115(dist=40263)
- * chr1:721323A>G
- *</P>
- */
-@Test public void testIntergenicVar1() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 721323;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC100288069(dist=7255),LINC00115(dist=40263)",annot);
-	}
-}
-
 /**
- *<P>
- * annovar: AGTRAP(dist=16527),C1orf167(dist=4784)
- * chr1:11827355A>G
- *</P>
- -- Annovar appears to have a mistake here, I sent a mail to Kai Wang.
- -- For now comment out.
-@Test public void testIntergenicVar2() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 11827355;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AGTRAP(dist=16527),C1orf167(dist=4784)",annot);
-	}
-}
-*/
-
-/**
- *<P>
- * annovar: PRAMEF5(dist=23520),LOC440563(dist=41689)
- * chr1:13141271->GCAG
- *</P>
- */
-@Test public void testIntergenicVar3() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 13141271;
-	String ref = "-";
-	String alt = "GCAG";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PRAMEF5(dist=23520),LOC440563(dist=41689)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LOC440563(dist=34831),PRAMEF22(dist=109039)
- * chr1:13219157->ACT
- *</P>
- */
-@Test public void testIntergenicVar4() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 13219157;
-	String ref = "-";
-	String alt = "ACT";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC440563(dist=34831),PRAMEF22(dist=109039)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PRDM2(dist=68612),KAZN(dist=705027)
- * chr1:14220186A>G
- *</P>
- */
-@Test public void testIntergenicVar5() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 14220186;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PRDM2(dist=68612),KAZN(dist=705027)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ARHGEF19(dist=4071),RSG1(dist=15007)
- * chr1:16543175A>C
- *</P>
- */
-@Test public void testIntergenicVar6() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 16543175;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ARHGEF19(dist=4071),RSG1(dist=15007)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MIR3675(dist=6016),ESPNP(dist=3874)
- * chr1:17013839G>C
- *</P>
- */
-@Test public void testIntergenicVar7() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 17013839;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MIR3675(dist=6016),ESPNP(dist=3874)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: Y_RNA(dist=36365),PADI1(dist=10477)
- * chr1:17521144C>A
- *</P>
- */
-@Test public void testIntergenicVar8() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 17521144;
-	String ref = "C";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("Y_RNA(dist=36365),PADI1(dist=10477)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HSPG2(dist=36020),CELA3B(dist=3648)
- * chr1:22299770T>C
- *</P>
- */
-@Test public void testIntergenicVar9() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 22299770;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HSPG2(dist=36020),CELA3B(dist=3648)",annot);
-	}
-}
-
-    /**
  *<P>
  * annovar: AK025975(dist=42221),LOC729059(dist=47759)
  * chr1:23289568T>C
@@ -369,637 +119,11 @@ public class IntergenicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK025975(dist=42221),LOC729059(dist=47759)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DQ588542(dist=13967),MYOM3(dist=47607)
- * chr1:24334924T>C
- *</P>
- */
-@Test public void testIntergenicVar11() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 24334924;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DQ588542(dist=13967),MYOM3(dist=47607)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZNF683(dist=1529),LIN28A(dist=36474)
- * chr1:26700795T>C
- *</P>
- */
-@Test public void testIntergenicVar12() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 26700795;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF683(dist=1529),LIN28A(dist=36474)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PHC2(dist=10916),ZSCAN20(dist=30701)
- * chr1:33907531T>G
- *</P>
- */
-@Test public void testIntergenicVar13() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 33907531;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PHC2(dist=10916),ZSCAN20(dist=30701)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FOXD2(dist=61954),LOC388630(dist=257883)
- * chr1:47968317G>A
- *</P>
- */
-@Test public void testIntergenicVar14() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 47968317;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FOXD2(dist=61954),LOC388630(dist=257883)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: MRPL37(dist=2408),SSBP3(dist=5731)
- * chr1:54686464C>T
- *</P>
- */
-@Test public void testIntergenicVar15() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 54686464;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MRPL37(dist=2408),SSBP3(dist=5731)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: UBE2U(dist=16387),CACHD1(dist=210062)
- * chr1:64726414A>C
- *</P>
- */
-@Test public void testIntergenicVar16() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 64726414;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("UBE2U(dist=16387),CACHD1(dist=210062)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ST6GALNAC3(dist=69775),ST6GALNAC5(dist=166742)
- * chr1:77166444T>C
- *</P>
- */
-@Test public void testIntergenicVar17() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 77166444;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ST6GALNAC3(dist=69775),ST6GALNAC5(dist=166742)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SSX2IP(dist=102366),LPAR3(dist=20280)
- * chr1:85258806T>C
- *</P>
- */
-@Test public void testIntergenicVar18() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 85258806;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SSX2IP(dist=102366),LPAR3(dist=20280)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: BC043293(dist=273243),PRMT6(dist=1164467)
- * chr1:106434800->A
- *</P>
- */
-@Test public void testIntergenicVar19() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 106434800;
-	String ref = "-";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BC043293(dist=273243),PRMT6(dist=1164467)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: PRPF38B(dist=10123),FNDC7(dist=1011)
- * chr1:109254545T>C
- *</P>
- */
-@Test public void testIntergenicVar20() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 109254545;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PRPF38B(dist=10123),FNDC7(dist=1011)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NBPF7(dist=2229),ADAM30(dist=46148)
- * chr1:120390008A>C
- *</P>
- */
-@Test public void testIntergenicVar21() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 120390008;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NBPF7(dist=2229),ADAM30(dist=46148)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DQ590126(dist=104971),DQ587539(dist=8221)
- * chr1:143394063A>T
- *</P>
- */
-@Test public void testIntergenicVar22() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 143394063;
-	String ref = "A";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DQ590126(dist=104971),DQ587539(dist=8221)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LOC728989(dist=1742),TRNA_His(dist=28432)
- * chr1:146516341T>G
- *</P>
- */
-@Test public void testIntergenicVar23() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 146516341;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC728989(dist=1742),TRNA_His(dist=28432)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NBPF9(dist=1931),DQ577785(dist=206671)
- * chr1:148349437->G
- *</P>
- */
-@Test public void testIntergenicVar24() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 148349437;
-	String ref = "-";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NBPF9(dist=1931),DQ577785(dist=206671)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AK310441(dist=1190),LOC645166(dist=24973)
- * chr1:148903313T>C
- *</P>
- */
-@Test public void testIntergenicVar25() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 148903313;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AK310441(dist=1190),LOC645166(dist=24973)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AC2(dist=37446),TCHHL1(dist=3924)
- * chr1:152052696G>A
- *</P>
- */
-@Test public void testIntergenicVar26() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 152052696;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AC2(dist=37446),TCHHL1(dist=3924)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HAX1(dist=36697),AQP10(dist=8540)
- * chr1:154285052G>A
- *</P>
- */
-@Test public void testIntergenicVar27() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 154285052;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HAX1(dist=36697),AQP10(dist=8540)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: FCRL4(dist=38424),FCRL3(dist=39977)
- * chr1:157606294T>A
- *</P>
- */
-@Test public void testIntergenicVar28() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 157606294;
-	String ref = "T";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FCRL4(dist=38424),FCRL3(dist=39977)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LOC646268(dist=36102),CD1D(dist=3205)
- * chr1:158146532C>T
- *</P>
- */
-@Test public void testIntergenicVar29() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 158146532;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC646268(dist=36102),CD1D(dist=3205)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: OR10K2(dist=33897),OR10K1(dist=10793)
- * chr1:158424553TGCTGAC>-
- *</P>
- */
-@Test public void testIntergenicVar30() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 158424553;
-	String ref = "TGCTGAC";
-	String alt = "-";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR10K2(dist=33897),OR10K1(dist=10793)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AK057554(dist=42548),OR6Y1(dist=9694)
- * chr1:158507224A>G
- *</P>
- */
-@Test public void testIntergenicVar31() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 158507224;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AK057554(dist=42548),OR6Y1(dist=9694)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: OR6K3(dist=6658),OR6K6(dist=30043)
- * chr1:158694563G>A
- *</P>
- */
-@Test public void testIntergenicVar32() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 158694563;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR6K3(dist=6658),OR6K6(dist=30043)",annot);
-	}
-}
-
-
-/**
- *<P>
- * annovar: FAM78B(dist=110461),FMO9P(dist=326734)
- * chr1:166246419A>G
- *</P>
- */
-@Test public void testIntergenicVar34() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 166246419;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM78B(dist=110461),FMO9P(dist=326734)",annot);
 	}
 }
 
@@ -1018,42 +142,11 @@ public class IntergenicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RASAL2(dist=14943),C1orf49(dist=18621)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: TDRD5(dist=18835),FAM163A(dist=17673)
- * chr1:179679242T>C
- *</P>
- */
-@Test public void testIntergenicVar36() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 179679242;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TDRD5(dist=18835),FAM163A(dist=17673)",annot);
 	}
 }
 
@@ -1072,205 +165,11 @@ public class IntergenicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FLJ23867(dist=10810),TRNA_Val(dist=3607)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: BC039493(dist=54380),AF387615(dist=176857)
- * chr1:181205722C>T
- *</P>
- */
-@Test public void testIntergenicVar38() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 181205722;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BC039493(dist=54380),AF387615(dist=176857)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: NCF2(dist=32514),ARPC5(dist=2762)
- * chr1:183592570C>T
- *</P>
- */
-@Test public void testIntergenicVar39() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 183592570;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NCF2(dist=32514),ARPC5(dist=2762)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: KIF14(dist=4143),DDX59(dist=16114)
- * chr1:200594005C>T
- *</P>
- */
-@Test public void testIntergenicVar40() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 200594005;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIF14(dist=4143),DDX59(dist=16114)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: AK123177(dist=7884),CD34(dist=9582)
- * chr1:208050301A>G
- *</P>
- */
-@Test public void testIntergenicVar41() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 208050301;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AK123177(dist=7884),CD34(dist=9582)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: LYPLAL1(dist=450501),NONE(dist=NONE)
- * Note: Annovar is wrong here, it should be YPLAL1(dist=450501),SLC30A10(dist=22061)
- * chr1:219836708A>G
- *</P>
- */
-@Test public void testIntergenicVar42() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 219836708;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LYPLAL1(dist=450501),SLC30A10(dist=22061)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HM358976(dist=80899),DQ599872(dist=6517)
- * chr1:224133205->CCA
- *</P>
- */
-@Test public void testIntergenicVar43() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 224133205;
-	String ref = "-";
-	String alt = "CCA";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HM358976(dist=80899),DQ599872(dist=6517)",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: BC039356(dist=62735),ZNF678(dist=69762)
- * chr1:227681458A>G
- *</P>
- */
-@Test public void testIntergenicVar44() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 227681458;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BC039356(dist=62735),ZNF678(dist=69762)",annot);
 	}
 }
 
@@ -1289,11 +188,7 @@ public class IntergenicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1303,141 +198,164 @@ public class IntergenicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: RNF187(dist=15588),DUSP5P(dist=80917)
- * chr1:228699477T>C
- * NOTE RHOU and DUSCP5P has identical 5' location, both are correct,
- * annovar finds DUSP5P, Exomizer finds RHOU!
+ * annovar: TRIM43B(dist=35235),AK055967(dist=6685)
+ * chr2:96185714C>T
  *</P>
  */
-@Test public void testIntergenicVar46() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 228699477;
+@Test public void testIntergenicVar69() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 96185714;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTERGENIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("TRIM43B(dist=35235),AK055967(dist=6685)",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: NMS(dist=26382),PDCL3(dist=53294)
+ * chr2:101126124T>A
+ *</P>
+ */
+@Test public void testIntergenicVar74() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 101126124;
 	String ref = "T";
-	String alt = "C";
+	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RNF187(dist=15588),RHOU(dist=80917)",annot);
+	    Assert.assertEquals("NMS(dist=26382),PDCL3(dist=53294)",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: AX748369(dist=332453),RAB4A(dist=21472)
- * chr1:229385407G>C
+ * annovar: SLC20A1(dist=6667),NT5DC4(dist=50996)
+ * chr2:113428067A>T
  *</P>
  */
-@Test public void testIntergenicVar47() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 229385407;
-	String ref = "G";
-	String alt = "C";
+@Test public void testIntergenicVar76() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 113428067;
+	String ref = "A";
+	String alt = "T";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AX748369(dist=332453),RAB4A(dist=21472)",annot);
+	    Assert.assertEquals("SLC20A1(dist=6667),NT5DC4(dist=50996)",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: URB2(dist=389043),GALNT2(dist=8547)
- * chr1:230184989G>A
+ * annovar: GLI2(dist=42566),TFCP2L1(dist=181369)
+ * chr2:121792795G>A
  *</P>
  */
-@Test public void testIntergenicVar48() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 230184989;
+@Test public void testIntergenicVar79() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 121792795;
 	String ref = "G";
 	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("URB2(dist=389043),GALNT2(dist=8547)",annot);
+	    Assert.assertEquals("GLI2(dist=42566),TFCP2L1(dist=181369)",annot);
 	}
 }
 
 /**
  *<P>
- * annovar: OR6F1(dist=25760),OR1C1(dist=18947)
- * chr1:247901817A>G
+ * annovar: CCL20(dist=52556),WDR69(dist=1491)
+ * chr2:228734836T>A
  *</P>
  */
-@Test public void testIntergenicVar49() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 247901817;
-	String ref = "A";
+@Test public void testIntergenicVar99() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 228734836;
+	String ref = "T";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(INTERGENIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CCL20(dist=52556),WDR69(dist=1491)",annot);
+	}
+}
+
+/**
+ *<P>
+ * annovar: ARMC9(dist=15624),MIR4777(dist=1881)
+ * chr2:232225538->G
+ *</P>
+ --- according to uscs browser actually 3UTR
+@Test public void testIntergenicVar101() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 232225538;
+	String ref = "-";
 	String alt = "G";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR6F1(dist=25760),OR1C1(dist=18947)",annot);
+	    Assert.assertEquals("ARMC9(dist=15624),MIR4777(dist=1881)",annot);
 	}
 }
-
+*/
 /**
  *<P>
- * annovar: OR2T1(dist=34360),OR2T2(dist=11334)
- * chr1:248604765T>A
+ * annovar: TRNA_Glu(dist=17996),MIR548I1(dist=78003)
+ * chr3:125431244G>A
  *</P>
  */
-@Test public void testIntergenicVar50() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 248604765;
-	String ref = "T";
+@Test public void testIntergenicVar123() throws AnnotationException  {
+	byte chr = 3;
+	int pos = 125431244;
+	String ref = "G";
 	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR2T1(dist=34360),OR2T2(dist=11334)",annot);
+	    Assert.assertEquals("TRNA_Glu(dist=17996),MIR548I1(dist=78003)",annot);
 	}
 }
-
 
 
 }
