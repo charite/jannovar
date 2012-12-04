@@ -9,7 +9,9 @@ import exomizer.reference.Translator;
  * This class is intended to provide a static method to generate annotations for splice
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.01 (November 15, 2012)
+ * <P> ToDo: Consider whether to call the last two nucleotides in an exon splice mutations
+ * (as annovar currently does).  Probably this should be removed.
+ * @version 0.02 (December 4, 2012)
  * @author Peter N Robinson
  */
 
@@ -204,23 +206,25 @@ public class SpliceAnnotation {
 		/*  #------*-<---->------- mutation located right in front of exon */
 		cumlenexon -= (exonend - exonstart);
 		/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
-		String anno = String.format("HGVS=%s(%s:exon:%d:c.%d-%d%s>%s)",kgl.getName2(),kgl.getName(),
+		String anno = String.format("%s:exon:%d:c.%d-%d%s>%s",kgl.getName(),
 					    k+1,cumlenexon,exonstart-start,ref,alt);
-		Annotation ann = Annotation.createSplicingAnnotation(anno);
+		int refvarstart = exonstart-start;
+		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 		/* Annovar:$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon-" . ($exonstart[$k]-$start) . "$ref>$obs,"; */
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
 		/* #-------<---->-*--------<-->-- mutation right after exon end */
-		String anno = String.format("HGVS=%s(%s:exon%d:c.%d+%d%s>%s)",kgl.getName2(),kgl.getName(),
+		String anno = String.format("%s:exon%d:c.%d+%d%s>%s)",kgl.getName(),
 					    k+1,cumlenexon,start-exonend,ref,alt);
 		//$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
-		Annotation ann = Annotation.createSplicingAnnotation(anno);
+		int refvarstart = start-exonend;
+		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    } 
 	} 
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String annot = String.format("%s:%s:exon%d:complicated splice mutation",kgl.getName2(),kgl.getName(),k+1);
-	Annotation ann = Annotation.createSplicingAnnotation(annot);
+	String annot = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
+	Annotation ann = Annotation.createSplicingAnnotation(kgl, 0,annot);
 	return ann;
 	
     }
@@ -239,26 +243,28 @@ public class SpliceAnnotation {
 	if (start == end && start <= cdsend) { /* single nucleotide splice variant */
 	    if (start >= exonstart-SPLICING_THRESHOLD && start < exonstart) {
 		//------*-<---->---------<-->-------<------>----
-		String anno = String.format("HGVS=%s(%s:exon:%d:c.%d+%d%s>%s",kgl.getName2(),kgl.getName(),
+		String anno = String.format("%s:exon:%d:c.%d+%d%s>%s",kgl.getName(),
 					    (exoncount-k+1),cumlenexon,exonstart-start,revcom(ref),revcom(alt));
 		//$splicing_anno{$name2} .= "$name:exon${\(@exonstart-$k+1)}:c.$lenexon+" . 
 		// ($exonstart[$k]-$start) . revcom($ref) . '>' . revcom ($obs) . ',';
-		Annotation ann = Annotation.createSplicingAnnotation(anno);
+		int refvarstart = exonstart-start;
+		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 		// -------<---->-*--------<-->-------<------>----
 		cumlenexon -= (exonend-exonstart); //  $lenexon -= ($exonend[$k]-$exonstart[$k]);
-		String anno = String.format("%s(%s:exon:%d:c.%d-%d%s>%s",kgl.getName2(),kgl.getName(),
+		String anno = String.format("%s:exon:%d:c.%d-%d%s>%s",kgl.getName(),
 					    (exoncount-k+1),cumlenexon,start-exonend,revcom(ref),revcom(alt));
 		//$splicing_anno{$name2} .= "$name:exon${\(@exonstart-$k+1)}:c.$lenexon-" . 
 		//($start-$exonend[$k]) . revcom($ref) . '>' . revcom($obs) . ',';
-		Annotation ann = Annotation.createSplicingAnnotation(anno);
+		int refvarstart = start-exonend;
+		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    }
 	}
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String annot = String.format("%s:%s:exon%d:complicated splice mutation",kgl.getName2(),kgl.getName(),k+1);
-	Annotation ann = Annotation.createSplicingAnnotation(annot);
+	String annot = String.format("%s:exon%d:complicated splice mutation",kgl.getName2(),kgl.getName(),k+1);
+	Annotation ann = Annotation.createSplicingAnnotation(kgl,0,annot);
 	return ann;
     }
 

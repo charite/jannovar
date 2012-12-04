@@ -61,6 +61,38 @@
     </junit>
   </target>
 
+<!-- use this target to run just one test class, named below -->
+  <target name="up"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes"
+	   showoutput="yes"
+	   maxmemory="1024M"
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+      <!-- test name="exomizer.tests.AnnotatorTest"/ -->
+      <test name="exomizer.tests.UpstreamAnnotationTest"/>
+    </junit>
+  </target>
+
+<!-- use this target to run just one test class, named below -->
+  <target name="down"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes"
+	   showoutput="yes"
+	   maxmemory="1024M"
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+      <!-- test name="exomizer.tests.AnnotatorTest"/ -->
+      <test name="exomizer.tests.DownstreamAnnotationTest"/>
+    </junit>
+  </target>
+
 
 <!-- use this target to run just one test class, named below -->
   <target name="kg"
@@ -109,6 +141,24 @@
 
 <!-- use this target to run just one test class, named below -->
   <target name="annodel"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes"
+	   showoutput="yes"
+	   maxmemory="1024M"
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+      <!-- test name="exomizer.tests.AnnotatorTest"/ -->
+
+	<test name="exomizer.tests.SpliceAnnotationTest"/>
+    </junit>
+  </target>
+
+
+<!-- use this target to run just one test class, named below -->
+  <target name="splice"
 	  depends="compile">
     <junit printsummary="yes" 
 	   fork="yes"

@@ -96,11 +96,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -124,11 +124,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -153,11 +153,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	  
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -181,11 +181,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -208,11 +208,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -235,11 +235,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -262,11 +262,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -289,11 +289,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -316,11 +316,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -343,11 +343,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -370,11 +370,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -397,11 +397,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -424,11 +424,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -451,11 +451,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -478,11 +478,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -505,11 +505,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -532,11 +532,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -559,11 +559,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -586,11 +586,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -613,11 +613,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -640,11 +640,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -667,11 +667,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -694,11 +694,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -721,11 +721,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -748,11 +748,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -775,11 +775,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -802,11 +802,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -829,11 +829,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -856,11 +856,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -883,11 +883,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -910,11 +910,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -937,11 +937,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -964,11 +964,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
 	   
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -991,11 +991,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1018,11 +1018,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1045,11 +1045,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1072,11 +1072,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1100,10 +1100,10 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1126,11 +1126,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1153,11 +1153,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1181,11 +1181,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1208,11 +1208,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1237,9 +1237,9 @@ public class DownstreamAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt)
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1263,11 +1263,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1290,11 +1290,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1318,11 +1318,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1345,11 +1345,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1372,11 +1372,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1399,11 +1399,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1426,11 +1426,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1453,11 +1453,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1480,11 +1480,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1509,11 +1509,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1536,11 +1536,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1563,11 +1563,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1590,11 +1590,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1617,11 +1617,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1644,11 +1644,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1671,11 +1671,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1698,11 +1698,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1725,11 +1725,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1754,11 +1754,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1781,11 +1781,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1808,11 +1808,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1835,11 +1835,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1862,11 +1862,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1889,11 +1889,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1917,11 +1917,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
 	   
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1945,11 +1945,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1973,11 +1973,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2000,11 +2000,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2027,11 +2027,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2054,11 +2054,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2081,11 +2081,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2108,11 +2108,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2135,11 +2135,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2162,11 +2162,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2189,11 +2189,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2216,11 +2216,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2243,11 +2243,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2270,11 +2270,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2297,11 +2297,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2324,11 +2324,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2351,11 +2351,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2378,11 +2378,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2405,11 +2405,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
 	   
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2432,11 +2432,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2459,11 +2459,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	  
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2487,11 +2487,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2514,11 +2514,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	   
 	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	   
+	   
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();

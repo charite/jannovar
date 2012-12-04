@@ -45,7 +45,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.03 December 2, 2012
+ * @version 0.04 December 4, 2012
  * @author Peter N Robinson
  */
 
@@ -221,7 +221,7 @@ public class AnnotatedVar implements Constants {
 	} else if (hasNcrnaIntronic) {
 	    return summarizeNcRnaIntronic();
 	} else if (hasUpstream) {
-	    return annotation_Upstream.get(0);
+	    return summarizeUpstream();
 	} else if (hasDownstream) {
 	    return summarizeDownstream(); 
 	} else if (hasIntergenic) {
@@ -255,25 +255,7 @@ public class AnnotatedVar implements Constants {
 	return sb.toString();
     }
 
-    /**
-     * Return a single Annotation object representing all downstream
-     * annotations.
-     */
-    private Annotation summarizeDownstream() throws AnnotationException {
-	if (this.annotation_Downstream.size() == 0) {
-	    throw new AnnotationException("No data for downstream annotation");
-	} else if (this.annotation_Downstream.size() == 1) {
-	    return this.annotation_Downstream.get(0);
-	} else {
-	    Annotation ann = this.annotation_Downstream.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append(ann.getVariantAnnotation());
-	    for (int j=1; j<this.annotation_Downstream.size(); ++j) {
-		sb.append(";" + this.annotation_Downstream.get(j).getVariantAnnotation());
-	    }
-	    return ann;
-	}	
-    }
+   
 
     /**
      * This function will combine multiple intronic
@@ -507,4 +489,57 @@ public class AnnotatedVar implements Constants {
 	this.annotationCount++;
     }
 
+    /**
+     * This method returns a single annotation object for upstream variants.
+     * According to the logic of the rest of the code, there should be one
+     * and exactly one upstream annotation if this method gets called, but
+     * a check for empty annotations is put in, and multiple upstream annotations
+     * get combined into one Annotation object before returning them.
+     */
+    public Annotation summarizeUpstream() throws AnnotationException {
+	if (this.annotation_Upstream.size()==0)  {
+	    throw new AnnotationException("No data for upstream annotation");
+	} else if (this.annotation_Upstream.size()==1) {
+	    return this.annotation_Upstream.get(0);
+	} else {
+	    java.util.Collections.sort(this.annotation_Upstream);
+	    Annotation ann = this.annotation_Upstream.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append( ann.getVariantAnnotation());
+	    for (int j=1;j<this.annotation_Upstream.size();++j) {
+		ann  = this.annotation_Upstream.get(j);
+		sb.append("," + ann.getVariantAnnotation());
+	    }
+	    ann.setVariantAnnotation(sb.toString());
+	    return ann;
+	}
+    }
+
+    /**
+     * This method returns a single annotation object for downstream variants.
+     * According to the logic of the rest of the code, there should be one
+     * and exactly one upstream annotation if this method gets called, but
+     * a check for empty annotations is put in, and multiple downstream annotations
+     * get combined into one Annotation object before returning them.
+     */
+    public Annotation summarizeDownstream() throws AnnotationException {
+	if (this.annotation_Downstream.size()==0)  {
+	    throw new AnnotationException("No data for downstream annotation");
+	} else if (this.annotation_Downstream.size()==1) {
+	    return this.annotation_Downstream.get(0);
+	} else {
+	    java.util.Collections.sort(this.annotation_Downstream);
+	    Annotation ann = this.annotation_Downstream.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append( ann.getVariantAnnotation());
+	    for (int j=1;j<this.annotation_Downstream.size();++j) {
+		ann  = this.annotation_Downstream.get(j);
+		sb.append("," + ann.getVariantAnnotation());
+	    }
+	    ann.setVariantAnnotation(sb.toString());
+	    return ann;
+	}
+    }
+
+    
 }

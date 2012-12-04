@@ -206,11 +206,16 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * string passed as an argument and to set the varType to SPLICING.
      * For now, it seems more convenient to calculate the annotation
      * string in client code.
+     * @param kgl A knownGene in which this splicing mutation has been found
+     * @param refvarstart Position of variant within transcript (used to sort)
+     * @param anno A string representing the splice mutation, e.g., uc003gqp.4:exon6:c.1366-1A>T
      */
-    public static Annotation createSplicingAnnotation(String anno) {
+    public static Annotation createSplicingAnnotation(KnownGene kgl, int refvarstart, String anno) {
 	Annotation ann = new Annotation();
 	ann.varType = SPLICING;
 	ann.variantAnnotation = anno;
+	ann.rvarstart = refvarstart;
+	ann.geneSymbol = kgl.getName2();
 	return ann;
     }
 
