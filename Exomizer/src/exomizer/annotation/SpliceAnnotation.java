@@ -11,7 +11,7 @@ import exomizer.reference.Translator;
  * have a name that is easy to find.
  * <P> ToDo: Consider whether to call the last two nucleotides in an exon splice mutations
  * (as annovar currently does).  Probably this should be removed.
- * @version 0.02 (December 4, 2012)
+ * @version 0.03 (December 6, 2012)
  * @author Peter N Robinson
  */
 
@@ -188,7 +188,7 @@ public class SpliceAnnotation {
      * if name2 is already a splicing variant, but its detailed annotation 
      * (like c150-2A>G) is not available, 
      * and if this splicing leads to amino acid change (rather than UTR change)
-     * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
+     * @param kgl Gene with splice mutation for current chromosomal variant.
      * @param start start position of the variant
      * @param  end position of the variant
      * @param ref reference sequence
@@ -208,16 +208,16 @@ public class SpliceAnnotation {
 		/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
 		String anno = String.format("%s:exon:%d:c.%d-%d%s>%s",kgl.getName(),
 					    k+1,cumlenexon,exonstart-start,ref,alt);
-		int refvarstart = exonstart-start;
+		int refvarstart = cumlenexon; /* position of mutation in CDS */
 		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 		/* Annovar:$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon-" . ($exonstart[$k]-$start) . "$ref>$obs,"; */
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
 		/* #-------<---->-*--------<-->-- mutation right after exon end */
-		String anno = String.format("%s:exon%d:c.%d+%d%s>%s)",kgl.getName(),
+		String anno = String.format("%s:exon%d:c.%d+%d%s>%s",kgl.getName(),
 					    k+1,cumlenexon,start-exonend,ref,alt);
 		//$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
-		int refvarstart = start-exonend;
+		int refvarstart = cumlenexon;
 		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    } 
@@ -230,11 +230,19 @@ public class SpliceAnnotation {
     }
 
     /**
-     * Todo:#if name2 is already a splicing variant, but its detailed annotation (like c150-2A>G) is not available, 
-     * and if this splicing leads to amino acid change (rather than UTR change)
+     * Write a splice annotation for a gene on the minus strand. When we get here, the calling code
+     * has already checked that the mutation is in the 2 nucleotides before or after the 
+     * exon/intron boundary.
+     * @param kgl Gene with splice mutation for current chromosomal variant.
+     * @param start start position of the variant
+     * @param  end position of the variant
+     * @param ref reference sequence
+     * @param alt variant sequence
+     * @param k number (zero-based) of the affected exon.
+     * @param cumlenexon cumulative length up the end of exon k
+     * @return An {@link exomizer.reference.Annotation Annotation} object corresponding to the splice mutation.
      */
     public static Annotation getSpliceAnnotationMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
-	System.out.println("Warning: Not yet implemented: getSpliceAnnotationMinusStrand");
 	int cdsend = kgl.getCDSEnd();
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);

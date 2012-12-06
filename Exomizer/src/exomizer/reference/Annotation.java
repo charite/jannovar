@@ -116,7 +116,12 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
 
     /** The (private) constructor is intended to be used 
-	only by static factory methods. */
+     * only by static factory methods. Note that the variable
+     * {@code rvarstart} is set to zero by the constructor. Variants that
+     * have a defined position in an ORF assign their position to this
+     * variable, which allows them to be sorted. Other variants (e.g., downstream),
+     * which are not assigned a position, do not need or use this variable.
+    */
     private Annotation() {
 	this.rvarstart=0;
     }
@@ -214,6 +219,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	Annotation ann = new Annotation();
 	ann.varType = SPLICING;
 	ann.variantAnnotation = anno;
+	System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
 	ann.rvarstart = refvarstart;
 	ann.geneSymbol = kgl.getName2();
 	return ann;

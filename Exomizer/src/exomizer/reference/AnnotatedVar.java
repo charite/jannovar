@@ -45,7 +45,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.04 December 4, 2012
+ * @version 0.05 December 6, 2012
  * @author Peter N Robinson
  */
 
@@ -384,11 +384,22 @@ public class AnnotatedVar implements Constants {
 	    java.util.Collections.sort(this.annotation_Exonic);
 	    Annotation ann = this.annotation_Exonic.get(0);
 	    StringBuilder sb = new StringBuilder();
-	    sb.append( ann.getSymbolAndAnnotation());
+	    String symbol = ann.getGeneSymbol();
+	    if (geneSymbolSet.size()!=1) {
+		StringBuilder sb2 = new StringBuilder();
+		for (String s: geneSymbolSet) {
+		    sb2.append(s+"/");
+		}
+		throw new AnnotationException("Error: Multiple gene symbols in exonic annotation: " +
+					      symbol + " and " + sb2.toString());
+	    }
+	    sb.append(symbol + "(");
+	    sb.append( ann.getVariantAnnotation());
 	    for (int j=1;j<this.annotation_Exonic.size();++j) {
 		ann  = this.annotation_Exonic.get(j);
-		sb.append("," + ann.getSymbolAndAnnotation());
+		sb.append("," + ann.getVariantAnnotation());
 	    }
+	    sb.append(")");
 	    ann.setVariantAnnotation(sb.toString());
 	    return ann;
 	}
