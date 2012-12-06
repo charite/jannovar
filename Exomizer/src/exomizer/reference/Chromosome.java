@@ -459,8 +459,11 @@ public class Chromosome {
 	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
 	    if (SpliceAnnotation.isSpliceVariantPlusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationPlusStrand(kgl,start,end,ref,alt,k,cumlenexon);
-		annovar.addExonicAnnotation(ann);
-		//annotation_list.add(ann);
+		if (kgl.isCodingGene()) {
+		    annovar.addExonicAnnotation(ann);
+		} else {
+		    annovar.addNcRNASplicing(ann);
+		}
 	    }
 	    if (start < kgl.getExonStart(k)) {
 		//System.out.println(String.format("BLA, start=%d, exon[%d] start=%d for gene %s ",start,k,kgl.getExonStart(k), kgl.getName2()));
@@ -675,10 +678,14 @@ public class Chromosome {
 	    }
 
 	    /* 1) First check whether variant is a splice variant */
-	    System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
+	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
 	    if (SpliceAnnotation.isSpliceVariantMinusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationMinusStrand(kgl,start,end,ref,alt,k,cumlenexon);
-		annovar.addExonicAnnotation(ann);
+		if (kgl.isCodingGene()) {
+		    annovar.addExonicAnnotation(ann);
+		} else {
+		    annovar.addNcRNASplicing(ann);
+		}
 	    }
 	    if (end > kgl.getExonEnd(k)) {
 		if (start <= kgl.getExonEnd(k)) {

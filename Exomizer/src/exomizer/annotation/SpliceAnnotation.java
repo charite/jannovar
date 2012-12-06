@@ -206,7 +206,7 @@ public class SpliceAnnotation {
 		/*  #------*-<---->------- mutation located right in front of exon */
 		cumlenexon -= (exonend - exonstart);
 		/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
-		String anno = String.format("%s:exon:%d:c.%d-%d%s>%s",kgl.getName(),
+		String anno = String.format("%s:exon%d:c.%d-%d%s>%s",kgl.getName(),
 					    k+1,cumlenexon,exonstart-start,ref,alt);
 		int refvarstart = cumlenexon; /* position of mutation in CDS */
 		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
@@ -251,27 +251,27 @@ public class SpliceAnnotation {
 	if (start == end && start <= cdsend) { /* single nucleotide splice variant */
 	    if (start >= exonstart-SPLICING_THRESHOLD && start < exonstart) {
 		//------*-<---->---------<-->-------<------>----
-		String anno = String.format("%s:exon:%d:c.%d+%d%s>%s",kgl.getName(),
+		String anno = String.format("%s:exon%d:c.%d+%d%s>%s",kgl.getName(),
 					    (exoncount-k+1),cumlenexon,exonstart-start,revcom(ref),revcom(alt));
 		//$splicing_anno{$name2} .= "$name:exon${\(@exonstart-$k+1)}:c.$lenexon+" . 
 		// ($exonstart[$k]-$start) . revcom($ref) . '>' . revcom ($obs) . ',';
-		int refvarstart = exonstart-start;
+		int refvarstart = cumlenexon; // position of variant in CDS, important for sorting
 		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 		// -------<---->-*--------<-->-------<------>----
 		cumlenexon -= (exonend-exonstart); //  $lenexon -= ($exonend[$k]-$exonstart[$k]);
-		String anno = String.format("%s:exon:%d:c.%d-%d%s>%s",kgl.getName(),
+		String anno = String.format("%s:exon%d:c.%d-%d%s>%s",kgl.getName(),
 					    (exoncount-k+1),cumlenexon,start-exonend,revcom(ref),revcom(alt));
 		//$splicing_anno{$name2} .= "$name:exon${\(@exonstart-$k+1)}:c.$lenexon-" . 
 		//($start-$exonend[$k]) . revcom($ref) . '>' . revcom($obs) . ',';
-		int refvarstart = start-exonend;
+		int refvarstart = cumlenexon; // position of variant in CDS, important for sorting
 		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    }
 	}
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String annot = String.format("%s:exon%d:complicated splice mutation",kgl.getName2(),kgl.getName(),k+1);
+	String annot = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
 	Annotation ann = Annotation.createSplicingAnnotation(kgl,0,annot);
 	return ann;
     }

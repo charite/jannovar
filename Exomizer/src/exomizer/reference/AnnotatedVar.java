@@ -369,6 +369,19 @@ public class AnnotatedVar implements Constants {
     }
 
     /**
+     * Add an annotation for a noncoding RNA transcript that is affected by
+     * a splice mutation.
+     */
+    public void addNcRNASplicing(Annotation ann) {
+	String s = String.format("%s[nc_transcript_variant]",ann.getVariantAnnotation());
+	ann.setVariantAnnotation(s);
+	this.annotation_ncRNA.add(ann);
+
+
+    }
+
+
+    /**
      * If there are multiple exonic annotations, this function
      * combines them (using a semicolon as a separator), and
      * returns a single annotation object.
@@ -378,7 +391,8 @@ public class AnnotatedVar implements Constants {
 	    throw new AnnotationException("No data for exonic annotation");
 	} else if (this.annotation_Exonic.size()==1) {
 	    Annotation ann = this.annotation_Exonic.get(0);
-	    ann.setVariantAnnotation( ann.getSymbolAndAnnotation() );
+	    String s = String.format("%s(%s)",ann.getGeneSymbol(),ann.getVariantAnnotation());
+	    ann.setVariantAnnotation(s);
 	    return ann;
 	} else {
 	    java.util.Collections.sort(this.annotation_Exonic);
