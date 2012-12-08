@@ -45,14 +45,12 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.07 December 8, 2012
+ * @version 0.08 December 8, 2012
  * @author Peter N Robinson
  */
 
 public class AnnotatedVar implements Constants {
    
-
-    
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for exonic variation. */
     private ArrayList<Annotation> annotation_Exonic =null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for ncRNA variation. */

@@ -228,7 +228,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	Annotation ann = new Annotation();
 	ann.varType = SPLICING;
 	ann.variantAnnotation = anno;
-	System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
+	//System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
 	ann.rvarstart = refvarstart;
 	ann.geneSymbol = kgl.getName2();
 	return ann;
@@ -384,6 +384,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol=kg.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
+	//System.out.println(String.format("varstart:%d [%s]",refvarstart,msg));
 	return ann;
      }
 

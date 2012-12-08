@@ -39,7 +39,7 @@ public class SingleNucleotideSubstitution {
 	if (kgl.isPlusStrand()) 
 	    return getAnnotationPlusStrand(kgl,frame_s, wtnt3, ref, var,refvarstart,exonNumber);
 	else
-	    return getAnnotationMinusStrand(kgl,frame_s, wtnt3,ref, var,refvarstart,exonNumber);
+	    return getAnnotationPlusStrand(kgl,frame_s, wtnt3,ref, var,refvarstart,exonNumber);
 
 
     }
@@ -66,8 +66,9 @@ public class SingleNucleotideSubstitution {
 	String panno=null;
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
+	int cdspos = refvarstart - refcdsstart + 1; /* position of mutation in CDS, numbered from start codon */
 
-	System.out.println("refcdsstart=" + refcdsstart);
+	//System.out.println("refcdsstart=" + refcdsstart);
 	if (ref.length() != 1) {
 	    throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s",
 							ref,kgl.getName2()));
@@ -142,7 +143,7 @@ public class SingleNucleotideSubstitution {
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,refvarstart,panno);
+	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,cdspos,panno);
 	    return ann;
 	}
 	
@@ -173,7 +174,7 @@ public class SingleNucleotideSubstitution {
 	String varnt3=null;
 
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
-
+	int cdspos = refvarstart - refcdsstart + 1; /* position of mutation in CDS, numbered from start codon */
 	/*System.out.println(String.format("GetAnnMinus refcdsstart=%d,refvarstart=%d,diff=%d",
 	  refcdsstart,refvarstart,refvarstart-refcdsstart));*/
 	if (ref.length() != 1) {
@@ -250,7 +251,7 @@ public class SingleNucleotideSubstitution {
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,refvarstart,panno);
+	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,cdspos,panno);
 	    return ann;
 	}
 	
