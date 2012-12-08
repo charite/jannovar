@@ -288,7 +288,7 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    System.out.println("Bla KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
+	    //System.out.println("Bla KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
 	    /* ***************************************************************************************** *
 	     * The following code block is executed if the variant has not hit a genic region yet and    *
 	     * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
@@ -405,6 +405,7 @@ public class Chromosome {
 		annovar.addIntergenicAnnotation(ann);
 	    }
 	}
+	//annovar.debugPrint();
 	return annovar.getAnnotation();
     }
 
@@ -422,8 +423,8 @@ public class Chromosome {
     public void getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 
-	System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
-					  kgl.getName2(),kgl.getName(),position,ref,alt));
+	/*System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
+	  kgl.getName2(),kgl.getName(),position,ref,alt));*/
 
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -488,7 +489,7 @@ public class Chromosome {
 			 #query  ----
 			 #gene     <--*---*->
 			*/
-			Annotation ann = Annotation.createUTR5Annotation(name2,name);
+			Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovar.addUTR5Annotation(ann);
 			
 			  /* Annovar: $utr5{$name2}++;
@@ -587,7 +588,7 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr5{$name2}++; #positive strand for UTR5
 		     */
-		    Annotation ann = Annotation.createUTR5Annotation(name2,name);
+		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovar.addUTR5Annotation(ann);
 		    
 		} else if (start > cdsend) {
@@ -618,9 +619,9 @@ public class Chromosome {
      */
     public void getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
-
-	System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
-					 kgl.getName2(),kgl.getName() ,position,ref,alt));
+	
+	/* System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
+	   kgl.getName2(),kgl.getName() ,position,ref,alt)); */
 	
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -714,16 +715,16 @@ public class Chromosome {
 			//query  ----
 			//gene     <--*---*->
 			// Note this is UTR3 on negative strand
-			System.out.println("end < cdsstart, 3UTR on - strand");
 			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
 			annovar.addUTR3Annotation(ann);
+			return; /* done with this annotation. */
 		    } else if (start > cdsend) {
 			//query             ----
 			//gene     <--*---*->
 			// Note this is UTR5 on negative strand
-			System.out.println("start > cdsend, 5UTR on - strand");
-			Annotation ann = Annotation.createUTR5Annotation(name2,name);
+			Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovar.addUTR5Annotation(ann);
+			return; /* done with this annotation. */
 		    } 	else {
 			/* ------------------------------------------------------------- *
 			 * If we get here, the variant is located within a CDS exon.     *
@@ -733,10 +734,9 @@ public class Chromosome {
 			 * (zero-based) of affected exon                                 *
 			 * ------------------------------------------------------------- */
 			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
+			return; /* done with this annotation. */
 		    }
-		    continue; // go to next knownGene
-		}else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
-			//$intronic{$name2}++;
+		} else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
 		    //System.out.println("- gene intron kgl=" + kgl.getName2() + ":" + kgl.getName());
 		     Annotation ann = null;
 		     if (kgl.isCodingGene() )
@@ -744,9 +744,7 @@ public class Chromosome {
 		     else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
 		     annovar.addIntronicAnnotation(ann);
-		     /* break out of for loop of exons (k) */
-		     //$foundgenic++;
-		     break;
+		     return; /* done with this annotation. */
 		} 
 	    } /* end; if (end > kgl.getExonEnd(k)) */ 
 	    else if (end >= kgl.getExonStart(k)) {
@@ -780,19 +778,20 @@ public class Chromosome {
 		if (kgl.isNonCodingGene()) {
 		    Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl, rvarstart,ref,alt);
 		    annovar.addNonCodingRNAExonicAnnotation(ann);
-		} else if (end < cdsstart) { //usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
+		    return; /* done with this annotation. */
+		} else if (end < cdsstart) { 
+		    /* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 		    //query  ----
 		    //gene     <--*---*->
-		    System.out.println("end < cdsstart (2), 3UTR on - strand");
 		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
 		    annovar.addUTR3Annotation(ann);
-		    //$utr3{$name2}++;		#negative strand for UTR5
+		    return; /* done with this annotation. */
 		} else if (start > cdsend) {
+		    /* Negative strand, mutation located 3' to CDS end, i.e., 5UTR */
 		    //query             ----
 		    //gene     <--*---*->
-		    System.out.println("start > cdsend (2), 5UTR on - strand");
-		    System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getName2()));
-		    Annotation ann = Annotation.createUTR5Annotation(name2,name);
+		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getName2()));
+		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovar.addUTR5Annotation(ann);
 		    //$utr5{$name2}++;		#negative strand for UTR3
 		} else {

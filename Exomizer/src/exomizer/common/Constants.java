@@ -48,7 +48,9 @@ public interface Constants {
     public static final byte UPSTREAM = 23;
     public static final byte UTR3 = 24;
     public static final byte UTR5 = 25;
-    public static final byte POSSIBLY_ERRONEOUS = 26;
+    /** Combination of both UTR5 and UTR3 annotation (overlap) */
+    public static final byte UTR53 = 26;
+    public static final byte POSSIBLY_ERRONEOUS = 27;
 
     /* 4) Index of fields of the DP4 (depth) from the VCF file:
        ref-forward bases, ref-reverse, alt-forward and alt-reverse bases

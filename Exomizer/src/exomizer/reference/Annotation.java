@@ -235,10 +235,16 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
 
-    public static Annotation createUTR5Annotation(String name2,String accession) {
+    /**
+     * Create a UTR5 annotation. For now, we will follow annovar in just showing "UTR5",
+     * but later we will give the HGVS type annotation. 
+     */
+    public static Annotation createUTR5Annotation(KnownGene kgl, int refvarstart, String ref, String alt) {
 	Annotation ann = new Annotation();
 	ann.varType = UTR5;
-	ann.variantAnnotation = String.format("HGVS=%s;%s", name2,accession);
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = kgl.getName2();
+	
 	return ann;
 
     }
@@ -450,6 +456,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
+	case UTR53: s="UTR5,UTR3"; break;
 	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d) annot:%s",varType,variantAnnotation);
 	}
 	return s;

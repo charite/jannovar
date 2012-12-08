@@ -45,7 +45,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.06 December 8, 2012
+ * @version 0.07 December 8, 2012
  * @author Peter N Robinson
  */
 
@@ -57,10 +57,8 @@ public class AnnotatedVar implements Constants {
     private ArrayList<Annotation> annotation_Exonic =null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for ncRNA variation. */
     private ArrayList<Annotation> annotation_ncRNA = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR5 variation. */
-    private ArrayList<Annotation> annotation_UTR5 = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR3 variation. */
-    private ArrayList<Annotation> annotation_UTR3 = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR5 or UTR3 variation. */
+    private ArrayList<Annotation> annotation_UTR = null;
      /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation in
 	 protein coding RNAs.. */
     private ArrayList<Annotation> annotation_Intronic = null;
@@ -107,8 +105,7 @@ public class AnnotatedVar implements Constants {
 	this.annotation_Exonic = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncRNA =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncrnaIntronic = new ArrayList<Annotation>(initialCapacity);
-	this.annotation_UTR5 =  new ArrayList<Annotation>(initialCapacity);
-	this.annotation_UTR3 = new ArrayList<Annotation>(initialCapacity);
+	this.annotation_UTR =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Intronic =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Upstream =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Downstream =  new ArrayList<Annotation>(initialCapacity);
@@ -125,8 +122,7 @@ public class AnnotatedVar implements Constants {
 	this.annotation_Exonic.clear();
 	this.annotation_ncRNA.clear();
 	this.annotation_ncrnaIntronic.clear();
-	this.annotation_UTR5.clear();
-	this.annotation_UTR3.clear();
+	this.annotation_UTR.clear();
 	this.annotation_Intronic.clear();
 	this.annotation_Upstream.clear();
 	this.annotation_Downstream.clear();
@@ -177,9 +173,9 @@ public class AnnotatedVar implements Constants {
 	} else if (hasNcRna) {
 	    return annotation_ncRNA;
 	} else if (hasUTR5) {
-	    return annotation_UTR5;
+	    return annotation_UTR;
 	} else if (hasUTR3) {
-	    return annotation_UTR3;
+	    return annotation_UTR;
 	} else if (hasIntronic) {
 	    return annotation_Intronic;
 	} else if (hasNcrnaIntronic) {
@@ -214,10 +210,8 @@ public class AnnotatedVar implements Constants {
 	    return summarizeExonic(); 
 	} else if (hasNcRna) {
 	    return summarizeNoncodingRNA();
-	} else if (hasUTR5) {
-	    return annotation_UTR5.get(0);
-	} else if (hasUTR3) {
-	    return summarizeUTR3();
+	} else if (hasUTR5 || hasUTR3) {
+	    return summarizeUTR();
 	} else if (hasIntronic) {
 	    return summarizeIntronic();
 	} else if (hasNcrnaIntronic) {
@@ -287,43 +281,54 @@ public class AnnotatedVar implements Constants {
 	}
     }
 
-     /**
+
+      /**
      * This function will combine multiple UTR3
      * annotations*/
-    private Annotation summarizeUTR3() throws AnnotationException {
-	if (this.annotation_UTR3.size() == 0) {
-	    throw new AnnotationException("No data for UTR3 annotation");
-	} else if (annotation_UTR3.size()==1) {
-	    return annotation_UTR3.get(0);
-	} else {
-	    ArrayList<String> symbol_list = new ArrayList<String>();
-	    HashSet<String> seen = new HashSet<String>();
-	    for (Annotation a : annotation_UTR3) {
-		String s = a.getVariantAnnotation();
-		if (seen.contains(s)) continue;
-		seen.add(s);
-		symbol_list.add(s);
-	    }
-	    java.util.Collections.sort(symbol_list);
-	    String s = symbol_list.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append(s);
-	    for (int i=1;i<symbol_list.size();++i) {
-		sb.append("," + symbol_list.get(i));
-	    }
-	    Annotation ann = Annotation.createSummaryUTR3Annotation(sb.toString());
-	    return ann;
+    private Annotation summarizeUTR() throws AnnotationException {
+	byte type;
+	if (hasUTR5 && ! hasUTR3)
+	    type = UTR5;
+	else if (hasUTR3 && ! hasUTR5)
+	    type =  UTR3;
+	else 
+	    type = UTR53; /* combination */
+		
+	ArrayList<String> symbol_list = new ArrayList<String>();
+	HashSet<String> seen = new HashSet<String>();
+	for (Annotation a : annotation_UTR) {
+	    String s = a.getVariantAnnotation();
+	    if (seen.contains(s)) continue;
+	    seen.add(s);
+	    symbol_list.add(s);
 	}
+	java.util.Collections.sort(symbol_list);
+	String s = symbol_list.get(0);
+	StringBuilder sb = new StringBuilder();
+	sb.append(s);
+	for (int i=1;i<symbol_list.size();++i) {
+	    sb.append("," + symbol_list.get(i));
+	}
+	Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),type);
+	return ann;
+
+
+
     }
 
+
+
+
+
+
     /**
-     * Checks if there is a 3' UTR annotation for the
+     * Checks if there is a 5' or 3' UTR annotation for the
      * same gene
      * @param sym The Gene Symbol of the gene we are searching for
      * @return true if there is a 3' annotation for the gene denoted by {@code sym}.
      */
-    private boolean exists_3UTRAnnotation(String sym) {
-	for (Annotation ann : this.annotation_UTR3) {
+    private boolean exists_UTRAnnotation(String sym) {
+	for (Annotation ann : this.annotation_UTR) {
 	    if (sym.equals(ann.getGeneSymbol()))
 		return true;
 	}
@@ -331,48 +336,7 @@ public class AnnotatedVar implements Constants {
     }
 
 
-    /**
-     * This function will combine multiple UTR3
-     * annotations*/
-    private Annotation summarizeUTR5() throws AnnotationException {
-	if (this.annotation_UTR5.size() == 0) {
-	    throw new AnnotationException("No data for UTR3 annotation");
-	} else if (annotation_UTR5.size()==1) {
-	    return annotation_UTR5.get(0);
-	} else {
-	    ArrayList<String> symbol_list = new ArrayList<String>();
-	    HashSet<String> seen = new HashSet<String>();
-	    for (Annotation a : annotation_UTR5) {
-		String s = a.getVariantAnnotation();
-		if (seen.contains(s)) continue;
-		seen.add(s);
-		symbol_list.add(s);
-	    }
-	    java.util.Collections.sort(symbol_list);
-	    String s = symbol_list.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append(s);
-	    for (int i=1;i<symbol_list.size();++i) {
-		sb.append("," + symbol_list.get(i));
-	    }
-	    Annotation ann = Annotation.createSummaryUTR5Annotation(sb.toString());
-	    return ann;
-	}
-    }
-
-    /**
-     * Checks if there is a 5' UTR annotation for the
-     * same gene
-     * @param sym The Gene Symbol of the gene we are searching for
-     * @return true if there is a 5' annotation for the gene denoted by {@code sym}.
-     */
-    private boolean exists_5UTRAnnotation(String sym) {
-	for (Annotation ann : this.annotation_UTR5) {
-	    if (sym.equals(ann.getGeneSymbol()))
-		return true;
-	}
-	return false;
-    }
+  
 
 
     /**
@@ -385,10 +349,8 @@ public class AnnotatedVar implements Constants {
 	HashSet<String> symbols = new HashSet<String>();
 	for (Annotation a : this.annotation_ncRNA) {
 	    String symbol = a.getGeneSymbol();
-	    if (exists_3UTRAnnotation(symbol))
-		return summarizeUTR3();
-	    if (exists_5UTRAnnotation(symbol))
-		return summarizeUTR5();
+	    if (exists_UTRAnnotation(symbol))
+		return summarizeUTR();
 	}
 	/* If we get here, there were no UTR mutations for the same gene */	
 
@@ -451,14 +413,14 @@ public class AnnotatedVar implements Constants {
 
 
     public void addUTR5Annotation(Annotation ann){
-	this.annotation_UTR5.add(ann);
+	this.annotation_UTR.add(ann);
 	this.hasUTR5=true;
 	this.hasGenicMutation=true;
 	this.annotationCount++;
     }
 
     public void addUTR3Annotation(Annotation ann){
-	this.annotation_UTR3.add(ann);
+	this.annotation_UTR.add(ann);
 	this.hasUTR3=true;
 	this.hasGenicMutation=true;
 	this.annotationCount++;
@@ -712,6 +674,44 @@ public class AnnotatedVar implements Constants {
 	    return ann;
 	}
     }
+
+    /**
+     * Print out all annotations we have for debugging purposes (before summarization)
+     */
+    public void debugPrint() {
+	System.out.println("AnnotatedVar.java:debugPrint");
+	System.out.println("Total annotiation: " + annotationCount);
+	for (Annotation a : annotation_Exonic) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_Exonic) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_ncRNA) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_UTR) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_Intronic) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_Upstream) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_Downstream) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_Intergenic) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+	for (Annotation a : annotation_Error) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	}
+
+    }
+
+
 
     
 }
