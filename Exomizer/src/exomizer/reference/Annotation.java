@@ -202,11 +202,11 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * Add an annotation for a noncoding RNA (ncRNA) for a variant that is located within
      * an exon of the ncRNA gene.
      * @param kgl {@link exomizer.reference.KnownGene KnownGene} object corresponding to the ncRNA
-     * @param start chromosomal position of the variant in the coding sequence
+     * @param rvarstart position of the variant in the coding sequence
      * @param ref reference sequence
      * @param alt variant sequence
      */
-    public static Annotation createNonCodingExonicRnaAnnotation(KnownGene kgl, int start,String ref, String alt) {
+    public static Annotation createNonCodingExonicRnaAnnotation(KnownGene kgl, int rvarstart,String ref, String alt) {
 	Annotation ann = new Annotation();
 	ann.varType = ncRNA_EXONIC;
 	ann.geneSymbol = kgl.getName2();
