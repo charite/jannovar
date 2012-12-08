@@ -21,7 +21,7 @@ import  exomizer.exception.KGParseException;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.03, 6 December, 2012
+ * @version 0.04, 7 December, 2012
  */
 public class KnownGene implements java.io.Serializable, exomizer.common.Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -185,8 +185,10 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	} else { /* i.e., minus strand */
 	    for (int k = this.exonCount-1; k>=0; k--) {
 		if (k < this.exonCount-1) {
-		    cumlenintron += this.getLengthOfIntron(k);
+		    //$lenintron += ($exonstart[$k+1]-$exonend[$k]-1);
+		    cumlenintron += (exonStarts[k+1]-exonEnds[k]-1); // gets intron k for minus strand.
 		}
+		//System.out.println("exon k=" + k + " cumlenintron=" + cumlenintron);
 		if (this.cdsEnd <= this.getExonEnd(k) && this.cdsEnd >= this.getExonStart(k)) {		
 		    //calculate CDS start accurately by considering intron length
 		    this.rcdsStart = this.txEnd-this.cdsEnd-cumlenintron+1;
@@ -215,7 +217,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @param varstart The start position of the variant on the chromosome (can be the actual start position or
      the start of the exon for variants that are )
      * @param cumlenintron The cumulative length of then intron sequences (This has
-     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandCodingSequenceAnnotation getPlusStrandCodingSequenceAnnotation}
+     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
      * or the corresponding function for the negative strand).
      */
     public int getRVarStart(int varstart, int cumlenintron) {
@@ -228,7 +230,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * @param end The position of the end of the mutation on the chromosome
      * @param k The exon number in which we have found the variant
      * @param cumlenintron The cumulative length of then intron sequences (This has
-     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandCodingSequenceAnnotation getPlusStrandCodingSequenceAnnotation}
+     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
      * or the corresponding function for the negative strand).
      * TODO FOr minus strand!
      */
@@ -406,8 +408,11 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public int getActualSequenceLength() { return this.sequence.length(); }
     public int getExonCount() { return this.exonCount; }
     public byte getChromosome() { return this.chromosome; }
-	/** Return position of CDS (start codon) in entire mRNA transcript. */
-    public int getRefCDSStart() { return this.rcdsStart;}
+    /** Return position of CDS (start codon) in entire mRNA transcript. 
+     * for transcripts on the minus strand, the corresponding position
+     * is calculated by {@link #calculateRefCDSStart} . */
+    public int getRefCDSStart() {  return this.rcdsStart;}
+    
     /** @return The UCSC Gene ID, e.g., uc021olp.1. */
     public String getKnownGeneID() { return this.kgID; }
     /** @return '+' for Watson strand and '-' for Crick strand. */
@@ -476,6 +481,11 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * Calculates the length of the k'th intron, where k is a zero-based number.
      * Note that intron 1 begins after exon 1, so there are n-1 introns in a gene
      * with n exons.
+     * <P>
+     * Note that I am worried about whether this is being used sometimes with
+     * k bein gone-based and sometimes with k being zero based. There was a problem
+     * with getRefCDSStart that I solved by looking into this function. TODO
+     * Check me all over and consider refactor.
      * <P>
      * Note that because exonEnds and exonStarts are both one-based, we return start[k]-end[k-1] -1 as the total length.
      * @param k number of intron (zero-based) whose length is to be sought

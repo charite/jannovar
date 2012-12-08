@@ -279,7 +279,7 @@ public class Chromosome {
 	ArrayList<KnownGene> candidateGenes = getBinRange(position);
 	
 	for (KnownGene kgl : candidateGenes) {
-	    //System.out.println("Loop for kgl=" + kgl.getName2());
+	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getName2(),kgl.getName(), kgl.getStrand()));
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
 	    String name = kgl.getKnownGeneID();
 	    int txstart = kgl.getTXStart();
@@ -288,7 +288,7 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    //System.out.println("Bla KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
+	   
 	    /* ***************************************************************************************** *
 	     * The following code block is executed if the variant has not hit a genic region yet and    *
 	     * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
@@ -347,9 +347,9 @@ public class Chromosome {
 		}
 	    } else {
 		/* We now must be in a genic region. Note that we will use a slightly
-		* different strategy from Annovar here. Do not distinguish between 
-		* coding and noncoding RNAs here, but do it in the following functions.
-		* Note: I changed the following commented out code. on 7 December 2012.*/
+		 * different strategy from Annovar here. Do not distinguish between 
+		 * coding and noncoding RNAs here, but do it in the following functions.
+		 * Note: I changed the following commented out code. on 7 December 2012.*/
 		/*
 	
 		if (! kgl.isCodingGene() ) {
@@ -369,12 +369,12 @@ public class Chromosome {
 		*/
 	
 		if (kgl.isPlusStrand()) {	
-		    getPlusStrandCodingSequenceAnnotation(position,ref, alt, kgl);
+		    getPlusStrandAnnotation(position,ref, alt, kgl);
 		    if (annovar.hasGenic()) {
 			foundgenic=true;
 		    }
 		} else if (kgl.isMinusStrand()) {
-		    getMinusStrandCodingSequenceAnnotation(position,ref, alt, kgl);	
+		    getMinusStrandAnnotation(position,ref, alt, kgl);	
 		    if (annovar.hasGenic()) {
 			foundgenic=true;
 		    }
@@ -405,7 +405,7 @@ public class Chromosome {
 		annovar.addIntergenicAnnotation(ann);
 	    }
 	}
-	annovar.debugPrint();
+	//annovar.debugPrint();
 	return annovar.getAnnotation();
     }
 
@@ -420,11 +420,11 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public void getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
+    public void getPlusStrandAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 
 	/*System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
-	  kgl.getName2(),kgl.getName(),position,ref,alt));*/
+	  kgl.getName2(),kgl.getName(),position,ref,alt)); */
 
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -617,11 +617,11 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public void getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
+    public void getMinusStrandAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 	
-	/* System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
-	   kgl.getName2(),kgl.getName() ,position,ref,alt)); */
+	/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
+	  kgl.getName2(),kgl.getName() ,position,ref,alt));  */
 	
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -733,6 +733,15 @@ public class Chromosome {
 			 * following function.  Note k in the following is the number    *
 			 * (zero-based) of affected exon                                 *
 			 * ------------------------------------------------------------- */
+			/*** 
+			 * Annovar for minus strand:
+			 * $exonic{$name2}++;
+			 * not $current_ncRNA and $obs and 
+			 push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+			 compare to 
+			 push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];	
+			
+			*/
 			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 			return; /* done with this annotation. */
 		    }
@@ -783,7 +792,7 @@ public class Chromosome {
 		    /* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 		    //query  ----
 		    //gene     <--*---*->
-		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
+		    Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
 		    annovar.addUTR3Annotation(ann);
 		    return; /* done with this annotation. */
 		} else if (start > cdsend) {
@@ -795,6 +804,13 @@ public class Chromosome {
 		    annovar.addUTR5Annotation(ann);
 		    //$utr5{$name2}++;		#negative strand for UTR3
 		} else {
+		    /**
+		     * annovar:
+		     * $exonic{$name2}++;
+		     * not $current_ncRNA and $obs and 
+		     * push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
+		     */
+							
 		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,exoncount-k,kgl);
 		}
 	    }
@@ -901,8 +917,120 @@ public class Chromosome {
 		this.annovar.addExonicAnnotation(blck);
 	    } else {
 		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
-		Annotation mssns = SingleNucleotideSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
-											ref, var,refvarstart,exonNumber);
+		Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl,frame_s, frame_end_s,wtnt3,
+									      ref, var,refvarstart,exonNumber);
+		this.annovar.addExonicAnnotation(mssns);
+	    }
+	} /* if (start==end) */
+	else if (var.equals("-")) {
+	    Annotation dltmnt = 
+		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
+								ref, var, refvarstart, refvarend, exonNumber);
+	    
+	    this.annovar.addExonicAnnotation(dltmnt);
+	}   
+	return;
+    }
+    
+
+ /**
+     * This method corresponds to Annovar function 
+     * {@code sub annotateExonicVariants} {
+     * 	my ($refseqvar, $geneidmap, $cdslen, $mrnalen) = @_;
+     *  It is called for exonic variants on the minus strand.
+     * <P>
+     * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
+     * annovar holds cDNA sequences of the mRNAs. In this implementation,
+     * the KnownGene objects already have this information. Note that
+     * Annovar uses its own version of knownGeneMrna.txt because of some
+     * inconsistencies in the way UCSC makes these sequences. Probably, this will
+     * also be necessary for the Exomizer (TODO).
+     * <P>
+     * Finally, the $refseqvar in Annovar has the following pieces of information
+     *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
+     * Note that refcdsstart and refstrand are contained in the KnownGene objects
+     * $exonpos is the number (zero-based) of the exon in which the variant was found.
+     * $nextline is the entire Annovar-formated line with information about the variant.
+     * In contrast to annovar, this function does one annotation at a time
+     * Note that the information in $geneidmap, cdslen, and $mrnalen
+     * is contained within the KnownGene objects already
+     * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
+     * @param refvarend The end position of the variant with respect to the CDS of the mRNA
+     * @param start chromosomal start position of variant
+     * @param end chromosomal end position of variant
+     * @param ref sequence of reference
+     * @param var sequence of variant (in annovar: $obs)
+     * @param exonNumber Number (zero-based) of affected exon.
+     * @param kgl Gene in which variant was localized to one of the exons 
+     */
+    private void annotateExonicVariantsMinusStrand(int refvarstart, int refvarend, 
+					int start, int end, String ref, 
+					String var, int exonNumber, KnownGene kgl) throws AnnotationException {
+	
+	
+	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+	   System.out.println("******************************");
+	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
+	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
+	   System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
+	   System.out.println("******************************"); */
+	/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
+	int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
+	int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
+	// Needed to complete codon following end of multibase ref seq.
+	/* The following checks for database errors where the position of the variant in
+	 * the reference sequence is given as longer the actual length of the transcript.*/
+	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
+	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
+				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
+	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    this.annovar.addErrorAnnotation(ann);
+	}
+	/*
+	  @wtnt3 = split (//, $wtnt3);
+	  if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) { 
+	  #some times there are database annotation errors (example: chr17:3,141,674-3,141,683), 
+	  #so the last coding frame is not complete and as a result, the cDNA sequence is not complete
+	  $function->{$index}{unknown} = "UNKNOWN";
+	  next;
+	  }
+	*/
+	// wtnt3 represents the three nucleotides of the wildtype codon.
+	String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
+	/* wtnt3_after = Sequence of codon right after the variant. 
+	   We may not need this, it was used for padding in annovar */
+	String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
+	/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
+	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
+	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
+	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
+	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    this.annovar.addErrorAnnotation(ann);
+	}
+	/*annovar line 1079 */
+	if (kgl.isMinusStrand()) {
+	    var = revcom(var);
+	    ref = revcom(ref);
+	}
+	//System.out.println("wtnt3=" + wtnt3);
+	if (start == end) { /* SNV or insertion variant */
+	    if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
+		Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
+										var,refvarstart,exonNumber);
+		this.annovar.addExonicAnnotation(insrt);
+	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
+		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
+											    ref, var,refvarstart,exonNumber);
+		this.annovar.addExonicAnnotation(dlt);
+	    } else if (var.length()>1) {
+		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
+									    ref,var,refvarstart, refvarend, 
+									    exonNumber);
+		this.annovar.addExonicAnnotation(blck);
+	    } else {
+		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
+		Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl,frame_s, frame_end_s,wtnt3,
+									      ref, var,refvarstart,exonNumber);
 		this.annovar.addExonicAnnotation(mssns);
 	    }
 	} /* if (start==end) */
