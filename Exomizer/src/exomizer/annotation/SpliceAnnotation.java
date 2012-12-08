@@ -9,9 +9,11 @@ import exomizer.reference.Translator;
  * This class is intended to provide a static method to generate annotations for splice
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * <P> ToDo: Consider whether to call the last two nucleotides in an exon splice mutations
- * (as annovar currently does).  Probably this should be removed.
- * @version 0.03 (December 6, 2012)
+ * <P> Annovar reports the two nucleotides on the boundary of the exon as being splice
+ * mutations, which is not entirely accurate, although mutations in this part of exons
+ * can indeed disrupt proper splicing. Instead, jannovar takes the SPLICING_THRESHOLD
+ * nucleotides on the intronic side.
+ * @version 0.05 (December 7, 2012)
  * @author Peter N Robinson
  */
 
@@ -31,43 +33,44 @@ public class SpliceAnnotation {
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns */
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);
-	if (k==0 && start >= exonend-SPLICING_THRESHOLD+1 && start <= exonend+SPLICING_THRESHOLD) {
+	if (k==0 && start > exonend  && start <= exonend+SPLICING_THRESHOLD) {
+	    /* In annovar: start >= exonend-SPLICING_THRESHOLD+1  instead of start > exonend */
 	    /* variation is located right after (3' to) first exon. For instance, if 
-	       SPLICING_THRESHOLD is 2, we get the last two nucleotides of the first (zeroth)
-	       exon and the first 2 nucleotides of the following intron*/
+	       SPLICING_THRESHOLD is 2, we get the first 2 nucleotides of the following intron*/
 	    return true;
 	} else if (k == kgl.getExonCount()-1 && start >= exonstart - SPLICING_THRESHOLD 
-		   && start <= exonstart + SPLICING_THRESHOLD -1) {
+		   && start < exonstart) {
+	    /* In annovar, we had start <= exonstart + SPLICING_THRESHOLD -1 instead of start < exonstart */
 	    /* variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD
 	       nucleotides of the exon/intron boundary */
 	    return true;
 	} else if (k>0 && k < kgl.getExonCount()-1) {
 	    /* interior exon */
-	    if (start >= exonstart -SPLICING_THRESHOLD && start <= exonstart + SPLICING_THRESHOLD - 1)
+	    if (start >= exonstart -SPLICING_THRESHOLD && start < exonstart )
 		/* variation is located at 5' end of exon in splicing region */
 		return true;
-	    else if (start >= exonend - SPLICING_THRESHOLD + 1 &&  start <= exonend + SPLICING_THRESHOLD)
+	    else if (start > exonend  &&  start <= exonend + SPLICING_THRESHOLD)
 		/* variation is located at 3' end of exon in splicing region */
 		return true;
 	}
 	/* Now repeat the above calculations for "end", the end position of the variation.
 	* TODO: in many cases, start==end, this calculation is then superfluous. Refactor.*/
-	if (k==0 && end >= exonend-SPLICING_THRESHOLD+1 && end <= exonend+SPLICING_THRESHOLD) {
+	if (k==0 && end > exonend && end <= exonend+SPLICING_THRESHOLD) {
 	    /* variation is located right after (3' to) first exon. For instance, if 
-	       SPLICING_THRESHOLD is 2, we get the last two nucleotides of the first (zeroth)
-	       exon and the first 2 nucleotides of the following intron*/
+	       SPLICING_THRESHOLD is 2, we get the first 2 nucleotides of the following intron*/
 	    return true;
-	} else if (k == kgl.getExonCount()-1 && end >= exonstart - SPLICING_THRESHOLD 
-		   && end <= exonstart + SPLICING_THRESHOLD -1) {
+	} else if (k == kgl.getExonCount()-1 
+		   && end >= exonstart - SPLICING_THRESHOLD 
+		   && end < exonstart) {
 	    /* variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD
 	       nucleotides of the exon/intron boundary */
 	    return true;
 	} else if (k>0 && k < kgl.getExonCount()-1) {
 	    /* interior exon */
-	    if (end >= exonstart -SPLICING_THRESHOLD && end <= exonstart + SPLICING_THRESHOLD - 1)
+	    if (end >= exonstart -SPLICING_THRESHOLD && end < exonstart)
 		/* variation is located at 5' end of exon in splicing region */
 		return true;
-	    else if (end >= exonend - SPLICING_THRESHOLD + 1 &&  end <= exonend + SPLICING_THRESHOLD)
+	    else if (end > exonend  &&  end <= exonend + SPLICING_THRESHOLD)
 		/* variation is located at 3' end of exon in splicing region */
 		return true;
 	}
@@ -102,7 +105,6 @@ public class SpliceAnnotation {
      * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
      */
     public static boolean isSpliceVariantMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
-	//System.out.println("Warning: Not yet implemented: isSpliceVariantMinusStrand");
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns: if (@exonstart != 1) */
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);
@@ -115,35 +117,35 @@ public class SpliceAnnotation {
 	if (k==0 /* This is the last exon of a gene on the minus strand */
 	    /* the following two lines give us the last two bp of the last intron and the
 	     first two bp of the last exon*/
-	    && start >= exonend - SPLICING_THRESHOLD +1 
+	    && start >exonend   /* was start >= exonend - SPLICING_THRESHOLD +1 in annovar */
 	    && start <= exonend + SPLICING_THRESHOLD) {
 	     return true;
 	} else if (k==(exoncount-1)  /* first exon of gene on minus strand */
 		   && start >= exonstart - SPLICING_THRESHOLD
-		   && start <= exonstart + SPLICING_THRESHOLD-1) {
+		   && start < exonstart) { /* was start <= exonstart + SPLICING_THRESHOLD-1 in annovar */
 	    return true;
 	} else if (k>0 && k<(exoncount -1)) {  /* internal exon */
 	    if (start >= exonstart - SPLICING_THRESHOLD
-		&& start <= exonstart + SPLICING_THRESHOLD - 1)
+		&& start < exonstart ) /* splice donor, minus strand */
 		return true;
-	    if (start >= exonend - SPLICING_THRESHOLD + 1
-		&& start <= exonend + SPLICING_THRESHOLD)
+	    if (start > exonend 
+		&& start <= exonend + SPLICING_THRESHOLD) /* splice acceptor, minus strand */
 		return true;
 	}
 	
 	if (k==0 /* last exon of gene on minus strand */
-	    && end >= exonend-SPLICING_THRESHOLD+1
+	    && end > exonend
 	    && end <= exonend + SPLICING_THRESHOLD) {
 	    return true;
 	} else if (k==(exoncount-1)
 		   && end >= exonstart-SPLICING_THRESHOLD
-		   && end <= exonstart+SPLICING_THRESHOLD - 1) {
+		   && end < exonstart) {
 	    return true;
 	} else if (k>0 && k<(exoncount - 1)) { /* internal exon */
 	    if (end >= exonstart - SPLICING_THRESHOLD
-		&& end <= exonstart + SPLICING_THRESHOLD-1)
+		&& end < exonstart)
 		return true;
-	    if (end >= exonend - SPLICING_THRESHOLD + 1
+	    if (end > exonend 
 		&& end <= exonend + SPLICING_THRESHOLD)
 		return true;
 	}
