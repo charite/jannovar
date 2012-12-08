@@ -198,10 +198,19 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return ann;
     }
 
-    public static Annotation createNonCodingExonicRnaAnnotation(String name2) {
+    /**
+     * Add an annotation for a noncoding RNA (ncRNA) for a variant that is located within
+     * an exon of the ncRNA gene.
+     * @param kgl {@link exomizer.reference.KnownGene KnownGene} object corresponding to the ncRNA
+     * @param start chromosomal position of the variant in the coding sequence
+     * @param ref reference sequence
+     * @param alt variant sequence
+     */
+    public static Annotation createNonCodingExonicRnaAnnotation(KnownGene kgl, int start,String ref, String alt) {
 	Annotation ann = new Annotation();
 	ann.varType = ncRNA_EXONIC;
-	ann.variantAnnotation = String.format("HGVS=%s", name2);
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = kgl.getName2();// String.format("HGVS=%s", name2);
 	return ann;
     }
 
@@ -234,14 +243,67 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
     }
 
-    public static Annotation createUTR3Annotation(String genesymbol, String accession) {
+    /**
+     * For the moment, this function is just adding the gene symbol as the annotation.
+     * this is the same as annovar does. In the future, we want to create better
+     * 3UTR annotations.
+     */
+    public static Annotation createUTR3Annotation(String genesymbol, String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = UTR3;
-	ann.variantAnnotation = String.format("HGVS=%s;%s", genesymbol,accession);
+	ann.geneSymbol = genesymbol;
+	ann.variantAnnotation = genesymbol;
+	return ann;
+    }
+
+   
+    /**
+     * This function is intended to be used to create an annovar-style
+     * combined annotation for those rare cases in which a variant is a
+     * 3UTR variant in multiple genes. In this case, we just make a list
+     * of the individual gene symbols for the annotations.
+     * @param a A list of gene symbols for genes in which the variant is 3UTR
+     */
+     public static Annotation createSummaryUTR3Annotation(String a) {
+	Annotation ann = new Annotation();
+	ann.varType = UTR3;
+	ann.variantAnnotation = a;
 	return ann;
 
     }
 
+
+       /**
+     * This function is intended to be used to create an annovar-style
+     * combined annotation for those rare cases in which a variant is a
+     * 5UTR variant in multiple genes. In this case, we just make a list
+     * of the individual gene symbols for the annotations.
+     * @param a A list of gene symbols for genes in which the variant is 3UTR
+     */
+     public static Annotation createSummaryUTR5Annotation(String a) {
+	Annotation ann = new Annotation();
+	ann.varType = UTR5;
+	ann.variantAnnotation = a;
+	return ann;
+    }
+
+      /**
+     * This function is intended to be used to create an annovar-style
+     * combined annotation for cases where we need to combine genesymbols,
+     * which essentially means down/upstream, ncRNA, UTR3, UTR5 for now.
+     * @param a String with the combined gene symbols
+     * @param typ The variant type, one of the constants in {@link exomizer.common.Constants Constants}
+     */
+     public static Annotation createSummaryAnnotation(String a, byte typ) {
+	 Annotation ann = new Annotation();
+	 ann.varType = typ ;
+	 ann.variantAnnotation = a;
+	 return ann;
+     }
+
+
+
+     
 
   
 

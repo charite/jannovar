@@ -45,7 +45,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.05 December 6, 2012
+ * @version 0.06 December 8, 2012
  * @author Peter N Robinson
  */
 
@@ -201,21 +201,23 @@ public class AnnotatedVar implements Constants {
     }
 
     /**
-     * Look for the best single annotation according to the precendence
-     * rules. If there are multiple annotations in the same class, combine
-     * them.
-     * TODO: REVISE ME
+     * This function will return a single {@link exomizer.reference.Annotation Annotation} 
+     * object that represents the most highly prioritized annotations. If there are multiple
+     * annotations with the same priority, they will be combined into a single 
+     * {@link exomizer.reference.Annotation Annotation} object that is designed to be
+     * displayed.
+     * @return An {@link exomizer.reference.Annotation Annotation} object with the most highly prioiritized annotations.
      */
     public Annotation getAnnotation() throws AnnotationException {
 	
 	if (hasExonic) {
 	    return summarizeExonic(); 
 	} else if (hasNcRna) {
-	    return annotation_ncRNA.get(0);
+	    return summarizeNoncodingRNA();
 	} else if (hasUTR5) {
 	    return annotation_UTR5.get(0);
 	} else if (hasUTR3) {
-	    return annotation_UTR3.get(0);
+	    return summarizeUTR3();
 	} else if (hasIntronic) {
 	    return summarizeIntronic();
 	} else if (hasNcrnaIntronic) {
@@ -285,6 +287,137 @@ public class AnnotatedVar implements Constants {
 	}
     }
 
+     /**
+     * This function will combine multiple UTR3
+     * annotations*/
+    private Annotation summarizeUTR3() throws AnnotationException {
+	if (this.annotation_UTR3.size() == 0) {
+	    throw new AnnotationException("No data for UTR3 annotation");
+	} else if (annotation_UTR3.size()==1) {
+	    return annotation_UTR3.get(0);
+	} else {
+	    ArrayList<String> symbol_list = new ArrayList<String>();
+	    HashSet<String> seen = new HashSet<String>();
+	    for (Annotation a : annotation_UTR3) {
+		String s = a.getVariantAnnotation();
+		if (seen.contains(s)) continue;
+		seen.add(s);
+		symbol_list.add(s);
+	    }
+	    java.util.Collections.sort(symbol_list);
+	    String s = symbol_list.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(s);
+	    for (int i=1;i<symbol_list.size();++i) {
+		sb.append("," + symbol_list.get(i));
+	    }
+	    Annotation ann = Annotation.createSummaryUTR3Annotation(sb.toString());
+	    return ann;
+	}
+    }
+
+    /**
+     * Checks if there is a 3' UTR annotation for the
+     * same gene
+     * @param sym The Gene Symbol of the gene we are searching for
+     * @return true if there is a 3' annotation for the gene denoted by {@code sym}.
+     */
+    private boolean exists_3UTRAnnotation(String sym) {
+	for (Annotation ann : this.annotation_UTR3) {
+	    if (sym.equals(ann.getGeneSymbol()))
+		return true;
+	}
+	return false;
+    }
+
+
+    /**
+     * This function will combine multiple UTR3
+     * annotations*/
+    private Annotation summarizeUTR5() throws AnnotationException {
+	if (this.annotation_UTR5.size() == 0) {
+	    throw new AnnotationException("No data for UTR3 annotation");
+	} else if (annotation_UTR5.size()==1) {
+	    return annotation_UTR5.get(0);
+	} else {
+	    ArrayList<String> symbol_list = new ArrayList<String>();
+	    HashSet<String> seen = new HashSet<String>();
+	    for (Annotation a : annotation_UTR5) {
+		String s = a.getVariantAnnotation();
+		if (seen.contains(s)) continue;
+		seen.add(s);
+		symbol_list.add(s);
+	    }
+	    java.util.Collections.sort(symbol_list);
+	    String s = symbol_list.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(s);
+	    for (int i=1;i<symbol_list.size();++i) {
+		sb.append("," + symbol_list.get(i));
+	    }
+	    Annotation ann = Annotation.createSummaryUTR5Annotation(sb.toString());
+	    return ann;
+	}
+    }
+
+    /**
+     * Checks if there is a 5' UTR annotation for the
+     * same gene
+     * @param sym The Gene Symbol of the gene we are searching for
+     * @return true if there is a 5' annotation for the gene denoted by {@code sym}.
+     */
+    private boolean exists_5UTRAnnotation(String sym) {
+	for (Annotation ann : this.annotation_UTR5) {
+	    if (sym.equals(ann.getGeneSymbol()))
+		return true;
+	}
+	return false;
+    }
+
+
+    /**
+     * This function checks whether there exist UTR mutations from
+     * coding genes from different transcripts of genes with
+     * ncRNA annotations. If so, it returns the ITR annotations, this
+     * is the default behaviour of annovar.
+     */
+    private Annotation  summarizeNoncodingRNA() throws AnnotationException {
+	HashSet<String> symbols = new HashSet<String>();
+	for (Annotation a : this.annotation_ncRNA) {
+	    String symbol = a.getGeneSymbol();
+	    if (exists_3UTRAnnotation(symbol))
+		return summarizeUTR3();
+	    if (exists_5UTRAnnotation(symbol))
+		return summarizeUTR5();
+	}
+	/* If we get here, there were no UTR mutations for the same gene */	
+
+	if (this.annotation_ncRNA.size() == 0) {
+	    throw new AnnotationException("No data for ncRNA annotation");
+	} else if (annotation_ncRNA.size()==1) {
+	    return annotation_ncRNA.get(0);
+	} else {
+	    ArrayList<String> symbol_list = new ArrayList<String>();
+	    HashSet<String> seen = new HashSet<String>();
+	    for (Annotation a : annotation_ncRNA) {
+		String s = a.getVariantAnnotation();
+		if (seen.contains(s)) continue;
+		seen.add(s);
+		symbol_list.add(s);
+	    }
+	    java.util.Collections.sort(symbol_list);
+	    String s = symbol_list.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(s);
+	    for (int i=1;i<symbol_list.size();++i) {
+		sb.append("," + symbol_list.get(i));
+	    }
+	    Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),ncRNA_EXONIC);
+	    return ann;
+	}
+    }
+
+
 
     
     /**
@@ -343,6 +476,20 @@ public class AnnotatedVar implements Constants {
 	this.hasIntergenic=true;
 	this.annotationCount++;
     }
+
+
+     /**
+     * This function is used to register an Annotation for
+     * a variant that is located between two genes. From the program
+     * logic, only one such Annotation should be added per variant.
+     * <P>
+     * @param ann An Annotation with type INTERGENIC
+     */
+     public void addNonCodingRNAExonicAnnotation(Annotation ann){
+	this.annotation_ncRNA.add(ann);
+	this.hasNcRna=true;
+	this.annotationCount++;
+     }
 
     /**
      * This method returns an Intergenic annotation. There should only

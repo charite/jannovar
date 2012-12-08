@@ -21,7 +21,7 @@ import  exomizer.exception.KGParseException;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.02, 2 December, 2012
+ * @version 0.03, 6 December, 2012
  */
 public class KnownGene implements java.io.Serializable, exomizer.common.Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -372,12 +372,27 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     }
 
     /**
-     * If this gene is not coding, then cdsEnd is one more than cdsStart.
+     * If this gene is not coding, then cdsStart is one more than cdsEnd.
+     * (Note that in UCSC files, for noncodiing genes cdsstart==cdsend. In our implementation,
+     * to change to one-based fully close numeration, we increment cdsstart by one. Therefore,
+     * for noncoding genes cdsstart == cdsend + 1. This is not the case for coding genes).
      * @return true if this is a coding gene.
      */
     public boolean isCodingGene() {
 	return (this.cdsStart != cdsEnd +1);
     }
+
+    /**
+     * If this gene is not coding, then cdsEnd is one more than cdsStart.
+      * (Note that in UCSC files, for noncodiing genes cdsstart==cdsend. In our implementation,
+     * to change to one-based fully close numeration, we increment cdsstart by one. Therefore,
+     * for noncoding genes cdsstart == cdsend + 1. This is not the case for coding genes).
+     * @return true if this is a noncoding gene.
+     */
+    public boolean isNonCodingGene() {
+	return (this.cdsStart == cdsEnd +1);
+    }
+
 
     /** @return the transcription start of this gene (for genes on + strand) or the transcription end (for genes on - strand). */
     public int getTXStart() { return  this.txStart; }

@@ -22,6 +22,7 @@ import exomizer.annotation.InsertionAnnotation;
 import exomizer.annotation.SingleNucleotideSubstitution;
 import exomizer.annotation.BlockSubstitution;
 import exomizer.annotation.SpliceAnnotation;
+import exomizer.annotation.UTR3Annotation;
 
 
 /**
@@ -49,7 +50,7 @@ import exomizer.annotation.SpliceAnnotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.05 (2 December, 2012)
+ * @version 0.06 (7 December, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -265,9 +266,6 @@ public class Chromosome {
 	boolean foundFivePrimeNeighbor=false;
 	boolean foundThreePrimeNeighbor=false;
 
-
-	
-	//ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
 	/* The following command "resets" the annovar object */
 	this.annovar.clearAnnotationLists();
 
@@ -290,7 +288,7 @@ public class Chromosome {
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
 	    String name2 = kgl.getName2();
-	    //System.out.println("Bla LOOKING AT KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
+	    System.out.println("Bla KGL \"" + kgl.getName2() + "\" (" + kgl.getName() + ")[" + kgl.getStrand() + "]");
 	    /* ***************************************************************************************** *
 	     * The following code block is executed if the variant has not hit a genic region yet and    *
 	     * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
@@ -356,8 +354,9 @@ public class Chromosome {
 		    if (start >= txstart &&  start <= txend ||   /* start is within transcript */
 			end >= txstart &&  end <= txend      ||  /* end is within transcript */
 			start <= txstart && end >= txend) {      /* variant completely contains transcript */
-			Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(name2);
-			//annovar.addNonCodingExonicRnaAnnotation(ann);
+			Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl,start,ref,alt); 
+			annovar.addNonCodingExonicRnaAnnotation(ann);
+			continue;  /* go to next round, continue search */
 			//foundgenic=true;
 		    }
 		    currentGeneIsNonCoding = true;
@@ -377,12 +376,7 @@ public class Chromosome {
 		    }
 		}
 	    }
-
-		/* Finished with splicing calculation */
-		
-	    //	} /* if not found genic */
-	
-	}/* for (KnownGene kgl : candidateGenes) */
+      	}/* for (KnownGene kgl : candidateGenes) */
 	/** If we arrive here and there are no annotations in the list, then
 	    we should at least have a rightNeighbor and a leftNeighbor. 
 	    We first check if one of these is upstream or downstream.
@@ -424,9 +418,9 @@ public class Chromosome {
     public void getPlusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 
-	//System.out.println("BLA, getPLusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
-	//System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
-	//ArrayList<Annotation> annotation_list = new ArrayList<Annotation>();
+	System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
+					  kgl.getName2(),kgl.getName(),position,ref,alt));
+
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
@@ -464,10 +458,12 @@ public class Chromosome {
 		} else {
 		    annovar.addNcRNASplicing(ann);
 		}
+		return; // we are done with this variant/KnownGene combination.
 	    }
 	    if (start < kgl.getExonStart(k)) {
-		//System.out.println(String.format("BLA, start=%d, exon[%d] start=%d for gene %s ",start,k,kgl.getExonStart(k), kgl.getName2()));
-		//System.out.println(String.format("BLA, end=%d",end));
+		//System.out.println(String.format("BLA, start=%d, end=%d,exon[%d] start=%d for gene %s ",
+		//start,end,k,kgl.getExonStart(k), kgl.getName2()));
+		
 		if (end >= kgl.getExonStart(k)) {	
 		    /* Overlap: Variation starts 5' to exon and ends within exon */ 
 		    /* 1) Get the start position of the variant w.r.t. transcript (rvarstart) */
@@ -493,7 +489,7 @@ public class Chromosome {
 			   #query             ----
 			   #gene     <--*---*->
 			*/
-			Annotation ann = Annotation.createUTR3Annotation(name2,name);
+			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
 			annovar.addUTR3Annotation(ann);
 			
 			/* positive strand for UTR3 */
@@ -529,7 +525,7 @@ public class Chromosome {
 		     else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
 		    annovar.addIntronicAnnotation(ann);
-		    break; /* break out of for loop of exons (k) */
+		    return; /* Done with this annotation */
 		}
 	    } /* end; if (start < kgl.getExonStart(k)) */ 
 	    else if (start <= kgl.getExonEnd(k)) {
@@ -580,9 +576,17 @@ public class Chromosome {
 		if (rvarend < 0) { // i.e., uninitialized 
 		    rvarend = end - kgl.getTXStart() - cumlenintron + 1;
 		}
-					
-		//#here is the trick begins to differentiate UTR versus coding exonic
-		if (end < cdsstart) {					
+		
+
+		/* ------------------------------------------------------------------------- *
+		 * If we get here, the variant is located somewhere in a exon. There are     *
+		 * several possibilities: 1) Noncoding RNA, 2) UTR5, 3) UTR3, 4) Exonic in   *
+		 * a coding gene within the actual coding sequence (not UTR).                *
+		 * ------------------------------------------------------------------------- */
+		if (kgl.isNonCodingGene()) {
+		    Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl, start,ref,alt);
+		    annovar.addNonCodingRNAExonicAnnotation(ann);
+		} else	if (end < cdsstart) {					
 		    /* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns 
 		     * #query  ----
 		     * #gene     <--*---*->
@@ -596,32 +600,12 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr3{$name2}++; #positive strand for UTR3
 		     */
-		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
+		    Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
 		    annovar.addUTR3Annotation(ann);
 		} else {
-		    //annotation_list.add(new Annotation("exonic",name2));
-		    /* Annovar: $exonic{$name2}++; */
-
-		    if ( kgl.isCodingGene() && alt != null && alt.length()>0) {
-			/* Annovar puts all exonic variants into an array and annotates them later
-			 * we will instead get the annotation right here and add it to the
-			 * exonic HashMap.
-			 * Annovar:	not $current_ncRNA and $obs and 
-			 *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
-			 * #queryindex, refseq CDS start, refseq variant start
-			 */
-			/* Note k in the following is the number (zero-based) of affected exon,
-			 thus, we increment it by one to get the one-based exon number for 
-			annotation.*/
-			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k+1,kgl);
-		    } else {
-			    System.out.println("WARNING TO DO, exonic in noncoding gene");
-			    System.exit(1);
-			}
+		    /* Note that the following functionn adds annotations to annovar */
+		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k+1,kgl);
 		}
-		/* annovar: $foundgenic++; */
-		//break;
-		continue; // go to next knownGene
 	    }
 	} /* iterator over exons */
 	//return annotation_list;
@@ -640,8 +624,9 @@ public class Chromosome {
      */
     public void getMinusStrandCodingSequenceAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
-	System.out.println("BLA, getMinusStrand for gene " + kgl.getName2() + "/" + kgl.getName());
-	System.out.println(String.format("BLA, position=%d, ref=%s, alt=%s",position,ref,alt));
+
+	System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
+					 kgl.getName2(),kgl.getName() ,position,ref,alt));
 	
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
@@ -716,16 +701,23 @@ public class Chromosome {
 			//if rvarend is not found, then the whole tail of gene is covered
 			rvarend = kgl.getTXEnd() - kgl.getTXStart() - cumlenintron + 1;
 		    }
+		    if (kgl.isNonCodingGene()) {
+			Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl,rvarstart,ref, alt);
+			annovar.addNonCodingRNAExonicAnnotation(ann);
+			return; /* Done with this annotation. */
+		    }
 		    if (end < cdsstart) {
 			//query  ----
 			//gene     <--*---*->
 			// Note this is UTR3 on negative strand
-			Annotation ann = Annotation.createUTR3Annotation(name2,name);
+			System.out.println("end < cdsstart, 3UTR on - strand");
+			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
 			annovar.addUTR3Annotation(ann);
 		    } else if (start > cdsend) {
 			//query             ----
 			//gene     <--*---*->
 			// Note this is UTR5 on negative strand
+			System.out.println("start > cdsend, 5UTR on - strand");
 			Annotation ann = Annotation.createUTR5Annotation(name2,name);
 			annovar.addUTR5Annotation(ann);
 		    } 	else {
@@ -741,7 +733,7 @@ public class Chromosome {
 			     *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
 			     */
 			    /* Note k in the following is the number (zero-based) of affected exon */
-			    System.out.println("MINUS STRAND ABOUT TO GO EXONIC");
+			    //System.out.println("MINUS STRAND ABOUT TO GO EXONIC");
 			  annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 			} else {
 			    System.out.println("WARNING TO DO, exonic in noncoding gene");
@@ -789,12 +781,15 @@ public class Chromosome {
 		if (end < cdsstart) { //usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
 		    //query  ----
 		    //gene     <--*---*->
+		    System.out.println("end < cdsstart (2), 3UTR on - strand");
 		    Annotation ann = Annotation.createUTR3Annotation(name2,name);
 		    annovar.addUTR3Annotation(ann);
 		    //$utr3{$name2}++;		#negative strand for UTR5
 		} else if (start > cdsend) {
 		    //query             ----
 		    //gene     <--*---*->
+		    System.out.println("start > cdsend (2), 5UTR on - strand");
+		    System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getName2()));
 		    Annotation ann = Annotation.createUTR5Annotation(name2,name);
 		    annovar.addUTR5Annotation(ann);
 		    //$utr5{$name2}++;		#negative strand for UTR3
@@ -817,9 +812,6 @@ public class Chromosome {
 			System.exit(1);
 		    }
 		}
-		//$foundgenic++;
-		//last;
-		continue;
 	    }
 	} /* iterator over exons */
     }
