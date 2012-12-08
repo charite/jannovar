@@ -283,8 +283,9 @@ public class AnnotatedVar implements Constants {
 
 
       /**
-     * This function will combine multiple UTR3
-     * annotations*/
+     * This function will combine multiple UTR3/UTR5 annotations.
+     * For now, we will just show the genesymbols (like annovar).
+     */
     private Annotation summarizeUTR() throws AnnotationException {
 	byte type;
 	if (hasUTR5 && ! hasUTR3)
@@ -297,7 +298,7 @@ public class AnnotatedVar implements Constants {
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
 	for (Annotation a : annotation_UTR) {
-	    String s = a.getVariantAnnotation();
+	    String s = a.getGeneSymbol();
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
 	    symbol_list.add(s);

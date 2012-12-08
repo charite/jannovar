@@ -33,7 +33,7 @@ public class UTR3Annotation {
      */
     public static Annotation getUTR3Annotation(KnownGene kgl, int start, int end, String ref, String alt) {
 	String genesymbol = kgl.getName2();
-	Annotation ann = Annotation.createUTR3Annotation(genesymbol, genesymbol);
+	Annotation ann = Annotation.createUTR3Annotation(kgl, genesymbol);
 	return ann;
     }
 

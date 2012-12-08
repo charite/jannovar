@@ -405,7 +405,7 @@ public class Chromosome {
 		annovar.addIntergenicAnnotation(ann);
 	    }
 	}
-	//annovar.debugPrint();
+	annovar.debugPrint();
 	return annovar.getAnnotation();
     }
 

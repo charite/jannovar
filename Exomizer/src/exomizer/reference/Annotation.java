@@ -243,7 +243,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	Annotation ann = new Annotation();
 	ann.varType = UTR5;
 	ann.geneSymbol = kgl.getName2();
-	ann.variantAnnotation = kgl.getName2();
+	ann.variantAnnotation = kgl.getName();
 	
 	return ann;
 
@@ -254,44 +254,16 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * this is the same as annovar does. In the future, we want to create better
      * 3UTR annotations.
      */
-    public static Annotation createUTR3Annotation(String genesymbol, String annot) {
+    public static Annotation createUTR3Annotation(KnownGene kgl, String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = UTR3;
-	ann.geneSymbol = genesymbol;
-	ann.variantAnnotation = genesymbol;
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = annot;
 	return ann;
     }
 
    
-    /**
-     * This function is intended to be used to create an annovar-style
-     * combined annotation for those rare cases in which a variant is a
-     * 3UTR variant in multiple genes. In this case, we just make a list
-     * of the individual gene symbols for the annotations.
-     * @param a A list of gene symbols for genes in which the variant is 3UTR
-     */
-     public static Annotation createSummaryUTR3Annotation(String a) {
-	Annotation ann = new Annotation();
-	ann.varType = UTR3;
-	ann.variantAnnotation = a;
-	return ann;
-
-    }
-
-
-       /**
-     * This function is intended to be used to create an annovar-style
-     * combined annotation for those rare cases in which a variant is a
-     * 5UTR variant in multiple genes. In this case, we just make a list
-     * of the individual gene symbols for the annotations.
-     * @param a A list of gene symbols for genes in which the variant is 3UTR
-     */
-     public static Annotation createSummaryUTR5Annotation(String a) {
-	Annotation ann = new Annotation();
-	ann.varType = UTR5;
-	ann.variantAnnotation = a;
-	return ann;
-    }
+   
 
       /**
      * This function is intended to be used to create an annovar-style
@@ -309,9 +281,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
 
 
-     
-
-  
+   
 
     public static Annotation createNoncodingIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
