@@ -50,7 +50,7 @@ import exomizer.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.06 (7 December, 2012)
+ * @version 0.07 (8 December, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 

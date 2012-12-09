@@ -17,7 +17,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.03 (2 December 2012)
+ * @version 0.05 (8 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -311,20 +311,24 @@ public class Annotation implements Constants, Comparable<Annotation> {
      /**
      * Use this factory method for annotations of non-frameshift deletion mutations.
      */
-     public static Annotation createNonFrameshiftDeletionAnnotation(String msg) {
+     public static Annotation createNonFrameshiftDeletionAnnotation(KnownGene kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = NON_FS_DELETION;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = annot;
+	ann.rvarstart = varstart;
 	return ann;
      }
 
     /**
      * Use this factory method for annotations of frameshift deletion mutations.
      */
-     public static Annotation createFrameshiftDeletionAnnotation(String msg) {
+     public static Annotation createFrameshiftDeletionAnnotation(KnownGene kgl, int varstart, String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = FS_DELETION;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = annot;
+	ann.rvarstart = varstart;
 	return ann;
      }
 
@@ -424,6 +428,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case NON_FS_SUBSTITUTION: s="NFSSUB"; break;
 	case FS_SUBSTITUTION: s="FSSUB"; break;
 	case FS_DELETION: s="FSDEL"; break;
+	case NON_FS_DELETION: s="nonframeshift deletion"; break;
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
