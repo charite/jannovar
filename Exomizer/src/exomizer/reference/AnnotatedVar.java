@@ -164,7 +164,7 @@ public class AnnotatedVar implements Constants {
      * <P>
      * ToDo Return list with annotations for each isoform.
      */
-    public ArrayList<Annotation> getAnnotationList() {
+    public ArrayList<Annotation> getAnnotationList() throws AnnotationException {
 	
 	if (hasExonic) {
 	    return annotation_Exonic;
@@ -188,10 +188,9 @@ public class AnnotatedVar implements Constants {
 	    return annotation_Error;
 	}
 	/** Should never get here */
-	System.err.println("Error AnnotatedVar: Did not find any annotation");
-	// TODO-- add Exception!
 
-	return null;
+	throw new AnnotationException("Error [AnnotatedVar.java] No annotation found!");
+
     }
 
     /**
