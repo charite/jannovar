@@ -17,7 +17,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.05 (8 December 2012)
+ * @version 0.07 (10 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -353,32 +353,61 @@ public class Annotation implements Constants, Comparable<Annotation> {
      }
 
     /**
-     * Use this factory method for annotations of non-frameshift deletion mutations.
+     * Use this factory method for annotations of STOPLOSS mutations.
+     * <P>
+     * For example, {@code c002ltv.3:exon29:c.3792A>G:p.X1264W}
+     * @param kgl The affected gene
+     * @param refvarstart Start position of mutation in ORF
+     * @param annot The actual annotation.
      */
-     public static Annotation createStopLossAnnotation(String msg) {
+     public static Annotation createStopLossAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = STOPLOSS;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol=kgl.getName2();
+	ann.rvarstart = refvarstart;
+	ann.variantAnnotation = annot;
 	return ann;
      }
 
      /**
-     * Use this factory method for annotations of non-frameshift deletion mutations.
+     * Use this factory method for annotations of nonsense, i.e., STOPGAIN mutations.
+     * <P>
+     * For example, {@code uc001hjk.3:exon1:c.1663A>T:p.K555X}
+     * <P>
+     * Note that the Exomizer follows HGVS recommendations and denotes nonsense mutations
+     * as p.K555* rather than p.K555X (the previous style which was replaced because
+     * IUPAC uses X to denote an unknown amino acid rather than a stop codon)
+     * @param kgl The affected gene
+     * @param refvarstart Start position of mutation in ORF
+     * @param annot The actual annotation.
      */
-     public static Annotation createStopGainAnnotation(String msg) {
+     public static Annotation createStopGainAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = STOPGAIN;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol=kgl.getName2();
+	ann.rvarstart = refvarstart;
+	ann.variantAnnotation = annot;
+
 	return ann;
      }
 
      
 
-
-    public static Annotation createSynonymousSNVAnnotation(String msg) {
+ /**
+     * Use this factory method for annotations of SYNONYMOUS variants.
+     * <P>
+     * For example, {@code SRA1:uc003lga.3:exon2:c.159C>A:p.V53V}
+     * <P>
+     * @param kgl The affected gene
+     * @param refvarstart Start position of mutation in ORF
+     * @param annot The actual annotation.
+     */
+    public static Annotation createSynonymousSNVAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = SYNONYMOUS;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol=kgl.getName2();
+	ann.rvarstart = refvarstart;
+	ann.variantAnnotation = annot;
 	return ann;
      }
 

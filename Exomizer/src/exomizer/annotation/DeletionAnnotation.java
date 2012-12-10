@@ -9,7 +9,7 @@ import exomizer.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for deletion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.02 (December 8, 2012)
+ * @version 0.03 (December 10, 2012)
  * @author Peter N Robinson
  */
 
@@ -69,20 +69,20 @@ public class DeletionAnnotation {
 		/* Annovar: "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "X,";	
 		   #changed fsdel to nfsdel on 2011feb19 */
 	    } else {	 /* stop codon is lost */
-		String stoploss_ann = String.format("%s:%s:exon%d:%s:p.X%d%s",kgl.getName2(),kgl.getName(),
+		String stoploss_ann = String.format("%s:exon%d:%s:p.X%d%s",kgl.getName(),
 						    exonNumber,canno,aavarpos,varaa);
 		/* $function->{$index}{stoploss} .= 
 		   "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "$varaa,"; */
-		Annotation ann = Annotation.createStopLossAnnotation(stoploss_ann);
+		Annotation ann = Annotation.createStopLossAnnotation(kgl,posVariantInCDS,stoploss_ann);
 		return ann;
 	    }
 	} else {
 	    if (varaa.contains("*")) { /* new stop codon created */
-		String stopgain_ann = String.format("%s:%s:exon%d:%s:p.%s%dX",kgl.getName2(),kgl.getName(),
+		String stopgain_ann = String.format("%s:exon%d:%s:p.%s%dX",kgl.getName(),
 						  exonNumber,canno,wtaa, aavarpos);
 		/* $function->{$index}{stopgain} .= 
 		   "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "X,"; */
-		Annotation ann = Annotation.createStopGainAnnotation(stopgain_ann);
+		Annotation ann = Annotation.createStopGainAnnotation(kgl,posVariantInCDS,stopgain_ann);
 		return ann;
 	    } else {
 		String fsdel_ann = String.format("%s:exon%d:%s:p.%s%dfs",kgl.getName(),

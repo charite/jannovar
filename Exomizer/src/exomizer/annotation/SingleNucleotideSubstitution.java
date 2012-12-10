@@ -9,7 +9,7 @@ import exomizer.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for single
  * nucleotide substitution  mutations. This method is put in its own class only for 
  * convenience and to at least have a name that is easy to find.
- * @version 0.03 (3 December, 2012)
+ * @version 0.04 (10 December, 2012)
  * @author Peter N Robinson
  */
 
@@ -127,18 +127,18 @@ public class SingleNucleotideSubstitution {
 	if (wtaa.equals(varaa)) {
 	    //$wtaa eq '*' and ($wtaa, $varaa) = qw/X X/;		#change * to X in the output NO! Not HGVS conform
 	    //$function->{$index}{ssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%s%d%s",kgl.getName2(),kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createSynonymousSNVAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
+	    Annotation ann = Annotation.createSynonymousSNVAnnotation(kgl,cdspos,panno);
 	    return ann;
 	} else if (varaa.equals("*")) {
 	    //$function->{$index}{stopgain} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa${varpos}X,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%s%d*",kgl.getName2(),kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-	    Annotation ann = Annotation.createStopGainAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.%s%d*",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
+	    Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
 	    return ann;
 	} else if (wtaa.equals("*")) {
 	    //$function->{$index}{stoploss} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos$varaa,";
-	    panno = String.format("%s:%s:exon%d:%s:p.*%d%s",kgl.getName2(),kgl.getName(),exonNumber,canno,aavarpos,varaa);
-	    Annotation ann = Annotation.createStopLossAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.*%d%s",kgl.getName(),exonNumber,canno,aavarpos,varaa);
+	    Annotation ann = Annotation.createStopLossAnnotation(kgl,cdspos,panno);
 	    return ann;
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
@@ -235,18 +235,18 @@ public class SingleNucleotideSubstitution {
 	if (wtaa.equals(varaa)) {
 	    //$wtaa eq '*' and ($wtaa, $varaa) = qw/X X/;		#change * to X in the output NO! Not HGVS conform
 	    //$function->{$index}{ssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%s%d%s",kgl.getName2(),kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createSynonymousSNVAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
+	    Annotation ann = Annotation.createSynonymousSNVAnnotation(kgl,cdspos,panno);
 	    return ann;
 	} else if (varaa.equals("*")) {
 	    //$function->{$index}{stopgain} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa${varpos}X,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%s%d*",kgl.getName2(),kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-	    Annotation ann = Annotation.createStopGainAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.%s%d*",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
+	    Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
 	    return ann;
 	} else if (wtaa.equals("*")) {
 	    //$function->{$index}{stoploss} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos$varaa,";
-	    panno = String.format("%s:%s:exon%d:%s:p.*%d%s",kgl.getName2(),kgl.getName(),exonNumber,canno,aavarpos,varaa);
-	    Annotation ann = Annotation.createStopLossAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.*%d%s",kgl.getName(),exonNumber,canno,aavarpos,varaa);
+	    Annotation ann = Annotation.createStopLossAnnotation(kgl,cdspos,panno);
 	    return ann;
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";

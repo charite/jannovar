@@ -9,7 +9,7 @@ import exomizer.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for insertion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.01 (November 18, 2012)
+ * @version 0.02 (December 10, 2012)
  * @author Peter N Robinson
  */
 
@@ -75,21 +75,23 @@ public class InsertionAnnotation {
 	    int refcdsstart = kgl.getRefCDSStart() ;
 	    /* annovar $varpos, here aavarpos */
 	    int aavarpos = (int) Math.floor((refvarstart-refcdsstart)/3)+1;  
+	    int startPosMutationInCDS = refvarstart-refcdsstart+1;
 	    
 	    /* Annovar: 
 	     * 	$canno = "c." . ($refvarstart-$refcdsstart+1) .  "_" . 
 	     * 				($refvarstart-$refcdsstart+2) . "ins$obs";		
 	     * 		#cDNA level annotation
 	     */
-	    String canno = String.format("c.%d_%dins%s",refvarstart-refcdsstart+1,refvarstart-refcdsstart+2,var);
+	    String canno = String.format("c.%d_%dins%s",startPosMutationInCDS,refvarstart-refcdsstart+2,var);
 	    /* If length of insertion is a multiple of 3 */
 	    if (var.length() % 3 == 0) {
 		if (wtaa.equals("*")) { /* Mutation affects the wildtype stop codon */
 		    int idx = varaa.indexOf("*");
 		    if (idx>=0) {
 			/* delete all aa after stop codon, but keep the aa before 
+			 * Note we use an asterisk (*) to denote the stop codon according to HGVS nomenclature
 			 * annovar: $varaa =~ s/\*.* /X/; */
-			varaa = String.format("%sX",varaa.substring(0,idx+1));
+			varaa = String.format("%s*",varaa.substring(0,idx+1));
 			String annot = String.format("%s:exon:%d:%s:p.X%ddelins%s",kgl.getName2(),kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
 		
@@ -101,21 +103,21 @@ public class InsertionAnnotation {
 			/* Mutation => stop codon is lost */
 			/** $function->{$index}{stoploss} .= 
 			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,";   */
-			String annot = String.format("%s:%s:exon%d:%s:p.X%ddelins%s",kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
-			Annotation ann = Annotation.createStopLossAnnotation(annot);
+			Annotation ann = Annotation.createStopLossAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    }
 		} else { /* i.w., wtaa is not equal to '*'  */
 		    int idx = varaa.indexOf("*");
 		    if (idx>=0) { /* corresponds to annovar: if ($varaa =~ m/\* /) {  */
-			varaa = String.format("%sX",varaa.substring(0,idx+1));
+			varaa = String.format("%s*",varaa.substring(0,idx+1));
 			/* $varaa =~ s/\*.* /X/;	#delete all aa after stop codon, but keep the aa before */
 			/*$function->{$index}{stopgain} .= 
 			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "delins$varaa,"; */
-			String annot = String.format("%s:%s:exon%d:%s:p.%s%ddelins%s,",kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s,",kgl.getName(),
 						   exonNumber,canno,wtaa,aavarpos,varaa);
-			Annotation ann = Annotation.createStopGainAnnotation(annot);
+			Annotation ann = Annotation.createStopGainAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    } else {
 			/*$function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
@@ -143,20 +145,21 @@ public class InsertionAnnotation {
 		    } else { /* var aa is not stop (*) */
 			/* $function->{$index}{stoploss} .= 
 			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,"; */
-			String annot = String.format("%s:%s:exon%d:%s:p.X%ddelins%s,",kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s,",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
-			Annotation ann = Annotation.createStopLossAnnotation(annot);
+			Annotation ann = Annotation.createStopLossAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    }
 		} else { /* i.e., wtaa not a stop codon */
 		    int idx = varaa.indexOf("*");
 		    if (idx>=0) {
-			varaa = String.format("%sX",varaa.substring(0,idx+1));
+			/** Note use of asterisk (*) to denote stop codon as per HGVS recommendation. */
+			varaa = String.format("%s*",varaa.substring(0,idx+1));
 			/*"$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
 			 * 	"_$wtaa_after" . ($varpos+1) . "delins$varaa,"; */
-			String annot = String.format("%s:%s:exon%d:%s:p.%s%d_%s%ddelins%s", kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", kgl.getName(),
 						   exonNumber,canno,wtaa,aavarpos,wtaa_after,(aavarpos+1),varaa);
-			Annotation ann = Annotation.createStopGainAnnotation(annot);
+			Annotation ann = Annotation.createStopGainAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    } else {
 			/* $function->{$index}{fsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,";*/
