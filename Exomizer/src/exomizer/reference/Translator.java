@@ -16,7 +16,7 @@ import exomizer.exception.AnnotationException;
 /**
  * This class helps to translate DNA sequences.
  * @author Peter N Robinson
- * @version 0.03 (Nov. 28, 2012)
+ * @version 0.04 (Dec. 12, 2012)
  */
 public class Translator {
     /** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
@@ -45,7 +45,13 @@ public class Translator {
     }
 
     /**
-     * Translates a DNA sequence. Assume the sequence is upper case with no ambiguous bases.
+     * Translates a DNA sequence. Assume the sequence is upper 
+     * case with no ambiguous bases.
+     * <P>
+     * Currently, there is no need to translate more than a single codon. However,
+     * some portions of the code are trying to translate DNA that is not a multiple
+     * of 3 nt long (from indel code). Therefore, we will translate as much as possible here.
+     * This may need refactoring in the future. (TODO).
      * @param dnaseq A DNA sequence that is to be translated
      * @return corresonding aminoacid sequence
      */
@@ -53,16 +59,21 @@ public class Translator {
 	StringBuilder aminoAcidSeq = new StringBuilder();
 	int len = dnaseq.length();
 	if (! (len%3 == 0) ) {
-	    String err = String.format("Attempt to translate sequence [%s] with length %d (should be 3n)",dnaseq,len);
-	    throw new AnnotationException(err);
+	    len = len - (len%3);
+	    /* this forces len to be a multiple of 3. */
+	    //String err = String.format("Attempt to translate sequence [%s] with length %d (should be 3n)",dnaseq,len);
+	    //throw new AnnotationException(err);
 	}
 	for (int i=0; i<len; i += 3) {
 	    String nt3 = dnaseq.substring(i,i+3);
 	    String aa = this.codon1.get(nt3);
 	    if (aa == null) {
-		String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"", 
+		/*
+		  String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"", 
 					   nt3, dnaseq);
-		throw new AnnotationException(err);
+					   throw new AnnotationException(err);
+		*/
+		break; /* stop translation */
 	    }
 	    aminoAcidSeq.append(aa);
 	}

@@ -92,17 +92,17 @@ public class InsertionAnnotation {
 			 * Note we use an asterisk (*) to denote the stop codon according to HGVS nomenclature
 			 * annovar: $varaa =~ s/\*.* /X/; */
 			varaa = String.format("%s*",varaa.substring(0,idx+1));
-			String annot = String.format("%s:exon:%d:%s:p.X%ddelins%s",kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon:%d:%s:p.X%ddelins%s",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
 		
 			/* $function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . 
 			   "delins$varaa,";		#stop codon is stil present */
-			Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(annot);
+			Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    } else {
 			/* Mutation => stop codon is lost */
 			/** $function->{$index}{stoploss} .= 
-			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,";   */
+			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa";   */
 			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
 			Annotation ann = Annotation.createStopLossAnnotation(kgl,startPosMutationInCDS,annot);
@@ -115,16 +115,16 @@ public class InsertionAnnotation {
 			/* $varaa =~ s/\*.* /X/;	#delete all aa after stop codon, but keep the aa before */
 			/*$function->{$index}{stopgain} .= 
 			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "delins$varaa,"; */
-			String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s,",kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s",kgl.getName(),
 						   exonNumber,canno,wtaa,aavarpos,varaa);
 			Annotation ann = Annotation.createStopGainAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    } else {
 			/*$function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
 			 * "delins$varaa,"; */
-			String annot = String.format("%s:%s:exon%d:%s:p.%s%ddelins%s,",kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s",kgl.getName(),
 						   exonNumber,canno,wtaa,aavarpos,varaa);
-			Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(annot);
+			Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    }
 		}
@@ -138,14 +138,14 @@ public class InsertionAnnotation {
 			varaa = String.format("%sX",varaa.substring(0,idx+1));
 			/* $function->{$index}{fsins} .= 
 			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,"; */
-			String annot = String.format("%s:%s:exon%d:%s:p.X%ddelins%s,",kgl.getName2(),kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
-			Annotation ann = Annotation.creatFrameshiftInsertionAnnotation(annot);
+			Annotation ann = Annotation.createFrameshiftInsertionAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    } else { /* var aa is not stop (*) */
 			/* $function->{$index}{stoploss} .= 
 			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,"; */
-			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s,",kgl.getName(),
+			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
 			Annotation ann = Annotation.createStopLossAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
@@ -163,9 +163,8 @@ public class InsertionAnnotation {
 			return ann;
 		    } else {
 			/* $function->{$index}{fsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,";*/
-			String annot = String.format("%s:%s:exon%d:%s:p.%s%dfs,",
-						   kgl.getName2(),kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-			Annotation ann = Annotation.creatFrameshiftInsertionAnnotation(annot);
+			String annot = String.format("%s:exon%d:%s:p.%s%dfs",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
+			Annotation ann = Annotation.createFrameshiftInsertionAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 			
 		    }

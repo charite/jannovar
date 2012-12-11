@@ -17,7 +17,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.07 (10 December 2012)
+ * @version 0.08 (11 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -333,22 +333,33 @@ public class Annotation implements Constants, Comparable<Annotation> {
      }
 
     /**
-     * Use this factory method for annotations of non-frameshift deletion mutations.
+     * Use this factory method for annotations of non-frameshift insertion mutations.
+      * For example, {@code uc001iel.1:exon1:c.771_772insTTC:p.F257delinsFF}
+     * @param kgl The affected gene
+     * @param varstart Start position of mutation in ORF
+     * @param annot The actual annotation.
      */
-     public static Annotation createNonFrameshiftInsertionAnnotation(String msg) {
+     public static Annotation createNonFrameshiftInsertionAnnotation(KnownGene kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = NON_FS_INSERTION;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = annot;
+	ann.rvarstart = varstart;
 	return ann;
      }
 
     /**
-     * Use this factory method for annotations of frameshift deletion mutations.
+     * Use this factory method for annotations of frameshift insertion mutations.
+     * @param kgl The affected gene
+     * @param varstart Start position of mutation in ORF
+     * @param annot The actual annotation.
      */
-     public static Annotation creatFrameshiftInsertionAnnotation(String msg) {
+     public static Annotation createFrameshiftInsertionAnnotation(KnownGene kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = FS_INSERTION;
-	ann.variantAnnotation = msg;
+	ann.geneSymbol = kgl.getName2();
+	ann.variantAnnotation = annot;
+	ann.rvarstart = varstart;
 	return ann;
      }
 
