@@ -8,7 +8,7 @@ import exomizer.filter.ITriage;
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.02 2 December 2012
+ * @version 0.03 12 December 2012
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -69,12 +69,12 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param r Reference nucleotide
      * @param var variant (alt) nucleotide
      * @param vcf_line A copy of the original VCF line.
-    */
+   
     public Variant(String c, int p, String r, String var,String vcf_line) {
 	this(c,p,r,var);
 	this.vcfLine = vcf_line;
     }
-   
+    */
 
     // ###########   SETTERS ######################### //
 
@@ -91,6 +91,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public void set_variant_quality(int q) { this.variant_quality = q; }
 
     public void addFilterTriage(ITriage t){ this.triage_list.add(t); }
+    public void setVCFline(String line) { this.vcfLine = line; }
    
     // ###########   GETTERS ######################### //
     private boolean is_non_SNV_patho = false;
@@ -105,6 +106,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_unknown_genotype() { return this.genotype ==GENOTYPE_UNKNOWN; }
     public boolean genotype_not_initialized() { return this.genotype == GENOTYPE_NOT_INITIALIZED; }
     public boolean is_missense_variant() { return this.variantType == MISSENSE; }
+    public String getVCFline() { return this.vcfLine; }
    
     public char ref_as_char() { return ref.charAt(0); }
     public char var_as_char() { return var.charAt(0); }
