@@ -9,7 +9,7 @@ import exomizer.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for insertion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.02 (December 10, 2012)
+ * @version 0.03 (December 12, 2012)
  * @author Peter N Robinson
  */
 
@@ -69,18 +69,18 @@ public class InsertionAnnotation {
 	    /* wtaa_after could be undefined, if the current aa is the stop codon (X) 
 	     * example:17        53588444        53588444        -       T
 	     */
-	    if (wtaa_after != null && wtaa_after.equals("*"))
+	    /* Don't do this (as in annovar), it is not HGVS conform 
+	      if (wtaa_after != null && wtaa_after.equals("*"))
 		wtaa_after = "X";
+	    */
 	    String varaa = translator.translateDNA(varnt3);
 	    int refcdsstart = kgl.getRefCDSStart() ;
 	    /* annovar $varpos, here aavarpos */
 	    int aavarpos = (int) Math.floor((refvarstart-refcdsstart)/3)+1;  
 	    int startPosMutationInCDS = refvarstart-refcdsstart+1;
 	    
-	    /* Annovar: 
-	     * 	$canno = "c." . ($refvarstart-$refcdsstart+1) .  "_" . 
+	    /* Annovar: $canno = "c." . ($refvarstart-$refcdsstart+1) .  "_" . 
 	     * 				($refvarstart-$refcdsstart+2) . "ins$obs";		
-	     * 		#cDNA level annotation
 	     */
 	    String canno = String.format("c.%d_%dins%s",startPosMutationInCDS,refvarstart-refcdsstart+2,var);
 	    /* If length of insertion is a multiple of 3 */
@@ -100,9 +100,8 @@ public class InsertionAnnotation {
 			Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(kgl,startPosMutationInCDS,annot);
 			return ann;
 		    } else {
-			/* Mutation => stop codon is lost */
-			/** $function->{$index}{stoploss} .= 
-			 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa";   */
+			/* Mutation => stop codon is lost, i.e., STOPLOSS 
+			*  Annovar: $seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa";   */
 			String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",kgl.getName(),
 						   exonNumber,canno,aavarpos,varaa);
 			Annotation ann = Annotation.createStopLossAnnotation(kgl,startPosMutationInCDS,annot);

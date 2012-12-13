@@ -13,7 +13,7 @@ import exomizer.reference.Translator;
  * mutations, which is not entirely accurate, although mutations in this part of exons
  * can indeed disrupt proper splicing. Instead, jannovar takes the SPLICING_THRESHOLD
  * nucleotides on the intronic side.
- * @version 0.05 (December 7, 2012)
+ * @version 0.06 (December 13, 2012)
  * @author Peter N Robinson
  */
 
@@ -75,18 +75,18 @@ public class SpliceAnnotation {
 		return true;
 	}
 	/* Check whether start/end are different and overlap with splice region. */
-	if (k==0 && start <= exonend && end >= exonend) {
+	if (k==0 && start <= exonend && end > exonend) {
 	    /* first exon, start is 5' to exon/intron boundry and end is 3' to boundary */
 	    return true;
-	} else if (k == kgl.getExonCount()-1 && start <= exonstart && end >= exonstart) {
+	} else if (k == kgl.getExonCount()-1 && start < exonstart && end >= exonstart) {
 	    /* last exon, start is 5' to exon/intron boundry and end is 3' to boundary */
 	    return true;
 	} else if (k>0 && k < kgl.getExonCount() -1) {
 	     /* interior exon */
-	    if (start <= exonstart && end >= exonstart) {
+	    if (start < exonstart && end >= exonstart) {
 		/* variant overlaps 5' exon/intron boundary */
 		return true;
-	    } else if (start <= exonend && end >= exonend) {
+	    } else if (start <= exonend && end > exonend) {
 		/* variant overlaps 3' exon/intron boundary */
 		return true;
 	    }
@@ -153,15 +153,18 @@ public class SpliceAnnotation {
 	}
 
 	/* overlap with splice sequence at exon/intron boundary */
-	if (k==0 && start <= exonend && end >= exonend) {
+	if (k==0 && start <= exonend && end > exonend) {
+	    /* last exon on minus strand. start is within exon and end is in intron */
 	    return true;
-	} else if (k == (exoncount-1) && start <= exonstart && end >= exonstart) {
+	} else if (k == (exoncount-1) && start < exonstart && end >= exonstart) {
+	    /* first exon for minuis-strand gene, start is within intron and end is in exon */
 	    return true;
 	} else if (k>0 && k < (exoncount -1)) {
-	    if  (start <= exonstart && end >= exonstart) {
+	    /* "inner exon" */
+	    if  (start < exonstart && end >= exonstart) {
 		return true;
 	    }
-	    if (start <= exonend && end >= exonend) {
+	    if (start <= exonend && end > exonend) {
 		  System.out.println("LOGICAL ERROR HERE; FIX ME HERE D: " + start + " exonstart=" + exonstart);
 		return true;
 	    }

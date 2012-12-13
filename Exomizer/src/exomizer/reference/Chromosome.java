@@ -50,7 +50,7 @@ import exomizer.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.07 (8 December, 2012)
+ * @version 0.08 (13 December, 2012)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -620,8 +620,8 @@ public class Chromosome {
     public void getMinusStrandAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 	
-	/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
-	  kgl.getName2(),kgl.getName() ,position,ref,alt));  */
+	System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
+	  kgl.getName2(),kgl.getName() ,position,ref,alt));  
 	
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();

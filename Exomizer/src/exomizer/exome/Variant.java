@@ -63,18 +63,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.var = var;
 	this.triage_list = new ArrayList<ITriage> ();
     }
-    /**
-     * @param c The chromosome (note: X=23, Y=24)
-     * @param p Position of the variant
-     * @param r Reference nucleotide
-     * @param var variant (alt) nucleotide
-     * @param vcf_line A copy of the original VCF line.
    
-    public Variant(String c, int p, String r, String var,String vcf_line) {
-	this(c,p,r,var);
-	this.vcfLine = vcf_line;
-    }
-    */
 
     // ###########   SETTERS ######################### //
 

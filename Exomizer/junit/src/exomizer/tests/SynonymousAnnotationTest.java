@@ -104,6 +104,29 @@ public class SynonymousAnnotationTest implements Constants {
 	}
 }
 
+/**
+ *<P>
+ * annovar: RNF207:uc001amg.3:exon17:c.1718A>G:p.N573S,
+ * chr1:6278414A>G
+ *</P>
+ */
+@Test public void testSynVar2hand() throws AnnotationException  {
+	byte chr = X_CHROMOSOME;
+	int pos = 154009588;
+	String ref = "T";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(MISSENSE,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.A1060T:p.T354S,uc010nvg.2:exon11:c.A1090T:p.T364S,uc011mzw.2:exon11:c.A1099T:p.T367S,uc004fmp.2:exon11:c.A1150T:p.T384S)",annot);
+	}
+}
+
  	
 
 /**

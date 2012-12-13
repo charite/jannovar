@@ -77,6 +77,23 @@
     </junit>
   </target>
 
+
+<!-- use this target to run just one test class, named below -->
+  <target name="block"
+	  depends="compile">
+    <junit printsummary="yes" 
+	   fork="yes"
+	   showoutput="yes"
+	   maxmemory="1024M"
+	   haltonfailure="no">
+       <classpath refid="classpath" />
+      <classpath path="${build.classes}" />
+      <formatter type="plain" usefile="off"/>
+      <!-- test name="exomizer.tests.AnnotatorTest"/ -->
+      <test name="exomizer.tests.BlockSubAnnotationTest"/>
+    </junit>
+  </target>
+
 <!-- use this target to run just one test class, named below -->
   <target name="ins"
 	  depends="compile">

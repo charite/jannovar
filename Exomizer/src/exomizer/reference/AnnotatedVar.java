@@ -538,13 +538,13 @@ public class AnnotatedVar implements Constants {
      * then we only store the INTRONIC annotation.
      */
     public void addIntronicAnnotation(Annotation ann){
-	if (ann.getVarType() == INTRONIC) {
+	if (ann.getVariantType() == INTRONIC) {
 	    for (Annotation a: this.annotation_Intronic) {
 		if (a.equals(ann)) return; /* already have identical annotation */
 	    }
 	    this.annotation_Intronic.add(ann);
 	    this.hasIntronic=true;
-	} else if (ann.getVarType() == ncRNA_INTRONIC) {
+	} else if (ann.getVariantType() == ncRNA_INTRONIC) {
 	     for (Annotation a: this.annotation_ncrnaIntronic) {
 		 if (a.equals(ann)) return; /* already have identical annotation */
 	     }

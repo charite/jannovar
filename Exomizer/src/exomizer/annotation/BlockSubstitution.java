@@ -42,7 +42,8 @@ public class BlockSubstitution {
 	String panno=null;
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
-	
+	int startPosMutationInCDS = refvarstart-refcdsstart+1;
+
 	if (frame_s == 1) {
 	    //$varnt3 = $wtnt3[0] . $obs . $wtnt3[2];
 	    varnt3 = String.format("%c%s%c",wtnt3.charAt(0),var,wtnt3.charAt(2));
@@ -59,7 +60,7 @@ public class BlockSubstitution {
 	    /*  $function->{$index}{nfssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
 		($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs,"; */
 	    panno =   String.format("%s:%s:exon:%d:%s",kgl.getName2(),kgl.getName(),exonNumber,canno);
-	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(panno);
+	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
 	    return ann;
 
 	} else {  /* i.e., frameshift */
@@ -96,12 +97,14 @@ public class BlockSubstitution {
 	String panno=null;
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
+	int startPosMutationInCDS = refvarstart-refcdsstart+1;
+
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0) {
 	    //$function->{$index}{nfssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
 	    // ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs,";
 	    canno = String.format("%s:%s:exon%d:c.%d_%d%s",kgl.getName2(),kgl.getName(),exonNumber,
-				  refvarstart-refcdsstart+1,refvarend-refcdsstart+1,var);
-	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(canno);
+				  startPosMutationInCDS,refvarend-refcdsstart+1,var);
+	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,canno);
 	    return ann;
 	} else {
 	    /* $function->{$index}{fssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 

@@ -17,7 +17,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.08 (11 December 2012)
+ * @version 0.09 (13 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -57,12 +57,14 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * annotation, and we get a new annotation for a coding isoform of the same gene. */
     public void setVarType(byte typ) { this.varType = typ; }
 
-     /**
+    /**
+     * Note this function is identical to {@link #getVariantType}, it was a mistake to have two functions
+     * with the same name. TODO: Refactor code to use only getVariantType
      * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
      */
     public byte getVarType() {
 	return this.varType;
-    }
+    } 
 
     /**
      * @return The gene symbol (e.g., FBN1) for the gene affected by this Annotation.
@@ -432,14 +434,23 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return ann;
      }
 
-
-    public static Annotation createNonFrameShiftSubstitionAnnotation(String msg) {
+    /**
+     * Create an Annotation object for a non-frameshift substitution. This is a variant such as the following
+     * <P>
+     * {@code LOC100132247:uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG}
+     * <P>
+     * Note I am not sure that the annovar nontation is correct according to HGVS
+     * @param kgl The affected gene
+     * @param refvarstart Start position of mutation in ORF
+     * @param annot The actual annotation.
+     */
+      public static Annotation createNonFrameShiftSubstitionAnnotation(KnownGene kg,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = NON_FS_SUBSTITUTION;
 	ann.variantAnnotation = msg;
 	return ann;
      }
-
+    
      public static Annotation createFrameShiftSubstitionAnnotation(String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = FS_SUBSTITUTION;
