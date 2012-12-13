@@ -17,7 +17,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.09 (13 December 2012)
+ * @version 0.10 (13 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -447,13 +447,18 @@ public class Annotation implements Constants, Comparable<Annotation> {
       public static Annotation createNonFrameShiftSubstitionAnnotation(KnownGene kg,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = NON_FS_SUBSTITUTION;
+	ann.geneSymbol=kg.getName2();
+	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
+
 	return ann;
      }
     
-     public static Annotation createFrameShiftSubstitionAnnotation(String msg) {
+     public static Annotation createFrameShiftSubstitionAnnotation(KnownGene kg,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = FS_SUBSTITUTION;
+	ann.geneSymbol=kg.getName2();
+	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
 	return ann;
      }

@@ -620,9 +620,9 @@ public class Chromosome {
     public void getMinusStrandAnnotation(int position,String ref, String alt, KnownGene kgl)
 	throws AnnotationException  {
 	
-	System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
-	  kgl.getName2(),kgl.getName() ,position,ref,alt));  
-	
+	/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
+	  kgl.getName2(),kgl.getName() ,position,ref,alt));   */
+
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
@@ -765,7 +765,6 @@ public class Chromosome {
 		    if (start > kgl.getExonEnd(m)) {
 			//query           ----
 			//gene     <--**---******---****---->
-		
 			rvarend = txend- kgl.getExonStart(m+1)+1 - cumlenintron + (kgl.getExonStart(m+1)- kgl.getExonEnd(m)-1);	
 			break; //finish the cycle of counting exons!!!!!
 		    } else if (start >= kgl.getExonStart(m)) { //the start is right located within exon
@@ -804,13 +803,6 @@ public class Chromosome {
 		    annovar.addUTR5Annotation(ann);
 		    //$utr5{$name2}++;		#negative strand for UTR3
 		} else {
-		    /**
-		     * annovar:
-		     * $exonic{$name2}++;
-		     * not $current_ncRNA and $obs and 
-		     * push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
-		     */
-							
 		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,exoncount-k,kgl);
 		}
 	    }
@@ -856,7 +848,7 @@ public class Chromosome {
 					String var, int exonNumber, KnownGene kgl) throws AnnotationException {
 	
 	
-	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+	/*System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
 	   System.out.println("******************************");
 	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
 	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
@@ -865,6 +857,8 @@ public class Chromosome {
 	/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
 	int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
 	int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
+	int refcdsstart = kgl.getRefCDSStart();
+
 	// Needed to complete codon following end of multibase ref seq.
 	/* The following checks for database errors where the position of the variant in
 	 * the reference sequence is given as longer the actual length of the transcript.*/
@@ -914,6 +908,7 @@ public class Chromosome {
 		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
 									    ref,var,refvarstart, refvarend, 
 									    exonNumber);
+		System.out.println("BLA block bout to add " + kgl.getName2());
 		this.annovar.addExonicAnnotation(blck);
 	    } else {
 		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
@@ -923,12 +918,32 @@ public class Chromosome {
 	    }
 	} /* if (start==end) */
 	else if (var.equals("-")) {
+	    /* If we get here, then the start position of the variant is not the same as the end position,
+	     * i.e., start==end is false, and the variant is "-"; thus there is as
+	     * 	deletion variant involving several nucleotides.
+	     */
 	    Annotation dltmnt = 
 		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
 								ref, var, refvarstart, refvarend, exonNumber);
 	    
 	    this.annovar.addExonicAnnotation(dltmnt);
-	}   
+	} else {
+	    /* If we get here, then start==end is false and the variant sequence is not "-",
+	     * i.e., it is not a deletion. Thus, we have a block substitution event.
+	     */
+	    String canno = String.format("%s:exon%d:c.%d_%d%s",kgl.getName(),exonNumber,refvarstart-refcdsstart+1,
+					 refvarend-refcdsstart+1,var);
+	    // 	$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
+	    if ((refvarend - refvarstart+ 1 - var.length())%3==0) {
+		/* Non-frameshift substitution */
+		Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
+		this.annovar.addExonicAnnotation(ann);
+	    } else {
+		/* frameshift substitution */
+		Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
+		this.annovar.addExonicAnnotation(ann);
+	    }
+	}
 	return;
     }
     
@@ -963,7 +978,7 @@ public class Chromosome {
      * @param exonNumber Number (zero-based) of affected exon.
      * @param kgl Gene in which variant was localized to one of the exons 
      */
-    private void annotateExonicVariantsMinusStrand(int refvarstart, int refvarend, 
+    private void OLDPROBABLY_DELETE_annotateExonicVariantsMinusStrand(int refvarstart, int refvarend, 
 					int start, int end, String ref, 
 					String var, int exonNumber, KnownGene kgl) throws AnnotationException {
 	

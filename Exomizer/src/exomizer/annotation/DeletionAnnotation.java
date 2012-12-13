@@ -9,7 +9,7 @@ import exomizer.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for deletion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.03 (December 10, 2012)
+ * @version 0.04 (December 13, 2012)
  * @author Peter N Robinson
  */
 
@@ -131,7 +131,7 @@ public class DeletionAnnotation {
 
 	int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
 	int varposend = -1; // 	the position of the last amino acid in the deletion
-
+	int posVariantInCDS = refvarstart-kgl.getRefCDSStart();
 
 	System.out.println("in getAnnotationBlockPlusStrand");
 
@@ -149,9 +149,8 @@ public class DeletionAnnotation {
 		//($refvarend-$refvarstart+1) % 3 == 0 or $is_fs++;
 	    }
 	    //$function->{$index}{fsdel} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.${varpos}_${varposend}del,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%d_%ddel",kgl.getName2(),kgl.getName(),
-				  exonNumber,canno,aavarpos,varposend);
-	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(panno);
+	    panno = String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(), exonNumber,canno,aavarpos,varposend);
+	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,posVariantInCDS,panno);
 	    return ann;
 	} else if (refvarend >= cdslen + refcdsstart) { 
 	    /* -------------------------------------------------------------------- *
@@ -161,9 +160,9 @@ public class DeletionAnnotation {
 	    //$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($cdslen->{$seqid}+$refcdsstart-1) . "del";
 	    canno = String.format("c.%d_%ddel",refvarstart - refcdsstart +1, cdslen + refcdsstart -1);
 	    //$function->{$index}{fsdel} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.${varpos}_${varposend}del,";
-	    panno = String.format("%s:%s:exon%d:%s:p.%d_%ddel",kgl.getName2(),kgl.getName(),
+	    panno = String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(),
 				  exonNumber,canno,aavarpos,varposend);
-	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(panno);
+	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,posVariantInCDS,panno);
 	    return ann;
 	    //$is_fs++;
 	} else if ((refvarend-refvarstart+1) % 3 == 0) { 
