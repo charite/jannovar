@@ -110,7 +110,6 @@ public class SpliceAnnotation {
 	int exonstart = kgl.getExonStart(k);
 	int exoncount = kgl.getExonCount();
 
-
 	//The following checks if start is within 2 nucleotides
 	// of appropriate exon boundaries to be a splice mutation.
 
@@ -119,15 +118,16 @@ public class SpliceAnnotation {
 	     first two bp of the last exon*/
 	    && start >exonend   /* was start >= exonend - SPLICING_THRESHOLD +1 in annovar */
 	    && start <= exonend + SPLICING_THRESHOLD) {
-	     return true;
+	    return true;
 	} else if (k==(exoncount-1)  /* first exon of gene on minus strand */
 		   && start >= exonstart - SPLICING_THRESHOLD
 		   && start < exonstart) { /* was start <= exonstart + SPLICING_THRESHOLD-1 in annovar */
 	    return true;
 	} else if (k>0 && k<(exoncount -1)) {  /* internal exon */
 	    if (start >= exonstart - SPLICING_THRESHOLD
-		&& start < exonstart ) /* splice donor, minus strand */
+		&& start < exonstart ) { /* splice donor, minus strand */
 		return true;
+	    }	
 	    if (start > exonend 
 		&& start <= exonend + SPLICING_THRESHOLD) /* splice acceptor, minus strand */
 		return true;
@@ -143,24 +143,29 @@ public class SpliceAnnotation {
 	    return true;
 	} else if (k>0 && k<(exoncount - 1)) { /* internal exon */
 	    if (end >= exonstart - SPLICING_THRESHOLD
-		&& end < exonstart)
+		&& end < exonstart) {
 		return true;
+	    }
 	    if (end > exonend 
-		&& end <= exonend + SPLICING_THRESHOLD)
+		&& end <= exonend + SPLICING_THRESHOLD) {
 		return true;
+	    }
 	}
+
 	/* overlap with splice sequence at exon/intron boundary */
 	if (k==0 && start <= exonend && end >= exonend) {
 	    return true;
 	} else if (k == (exoncount-1) && start <= exonstart && end >= exonstart) {
 	    return true;
 	} else if (k>0 && k < (exoncount -1)) {
-	    if  (start <= exonstart && end >= exonstart)
+	    if  (start <= exonstart && end >= exonstart) {
 		return true;
-	    if (start <= exonend && end >= exonend)
+	    }
+	    if (start <= exonend && end >= exonend) {
+		  System.out.println("LOGICAL ERROR HERE; FIX ME HERE D: " + start + " exonstart=" + exonstart);
 		return true;
+	    }
 	}
-		    
 	return false; /* This variant does not lead to a splicing mutation */
     }
 
