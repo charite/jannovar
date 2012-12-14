@@ -96,7 +96,7 @@ public class BlockSubAnnotationTest implements Constants {
 	byte varType = ann.getVarType();
 	Assert.assertEquals(NON_FS_SUBSTITUTION,varType);
 	String annot = ann.getVariantAnnotation();
-	Assert.assertEquals("LOC100132247(uc010vbn.1:exon8:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG,LOC100132247:uc002djq.3:exon7:c.993_1029TCCACCCTCAGCTCTACCCTCAGCG,uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG)",annot);
+	Assert.assertEquals("LOC100132247(uc002djq.3:exon7:c.993_1029TCCACCCTCAGCTCTACCCTCAGCG,uc010vbn.1:exon8:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG,uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG)",annot);
 	}
 }
 

@@ -133,7 +133,7 @@ public class StopAnnotationTest implements Constants {
  * annovar: PTCRA:uc011duz.1:exon3:c.348G>A:p.W116X,PTCRA:uc010jxx.1:exon2:c.198G>A:p.W66X,
  * chr6:42891022G>A
  *</P>
- */
+ --Seems correct in jannovar, potential bug in annovar, which doesnt get the missese. I asked Kai.
 @Test public void testStopVar5() throws AnnotationException  {
 	byte chr = 6;
 	int pos = 42891022;
@@ -150,7 +150,7 @@ public class StopAnnotationTest implements Constants {
 	    Assert.assertEquals("PTCRA(uc010jxx.1:exon2:c.198G>A:p.W66*,uc011duz.1:exon3:c.348G>A:p.W116*)",annot);
 	}
 }
-
+*/
 
 
 
@@ -177,5 +177,58 @@ public class StopAnnotationTest implements Constants {
 	    Assert.assertEquals("OR4X1(uc010rht.2:exon1:c.819T>A:p.Y273*)",annot);
 	}
 }
+
+
+/**
+ *<P>
+ * annovar: METTL8:uc010zdp.2:exon9:c.1000T>C:p.X334R,METTL8:uc002ugu.4:exon11:c.1135T>C:p.X379R,
+ * chr2:172180771A>G
+ -- Note this is also a splice mutation, annovar has an additional splice annotation in the variant.function file
+ *</P>
+ */
+@Test public void testStopLossVar1() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 172180771;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(STOPLOSS,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("METTL8(uc010zdp.2:exon9:c.1000T>C:p.*334R,uc010zdo.2:exon11:c.1134+1T>C,uc002ugu.4:exon11:c.1135T>C:p.*379R)",annot);
+	}
+}
+
+
+
+/**
+ *<P>
+ * annovar: NPSR1:uc003teh.1:exon10:c.1171T>C:p.X391R,
+ * chr7:34889222T>C
+-- This is now picking up synonymous exonic variants as well as the stoploss. This is a bug in jannovar,
+-- should be fixed soon
+ *</P>
+ */
+@Test public void testStopLossVar2() throws AnnotationException  {
+	byte chr = 7;
+	int pos = 34889222;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    byte varType = ann.getVarType();
+	    Assert.assertEquals(STOPLOSS,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)",annot);
+	}
+}
+
 
 }

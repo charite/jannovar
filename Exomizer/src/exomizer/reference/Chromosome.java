@@ -908,7 +908,6 @@ public class Chromosome {
 		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
 									    ref,var,refvarstart, refvarend, 
 									    exonNumber);
-		System.out.println("BLA block bout to add " + kgl.getName2());
 		this.annovar.addExonicAnnotation(blck);
 	    } else {
 		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
