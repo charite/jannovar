@@ -879,6 +879,18 @@ public class Chromosome {
 	*/
 	// wtnt3 represents the three nucleotides of the wildtype codon.
 	String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
+	if (wtnt3==null) {
+	    /* This can happen is the KnownGene.txt gene definition indicates that the mRNA sequence is
+	       longer than the actual sequence contained in KnownGeneMrna.txt. This probably reflects
+	       and error in genome annotations. */
+	    String s = String.format("Discrepancy between mRNA length and genome annotation ",
+				     "(variant at pos. %d of transcript with mRNA length %d):%s[%s]", 
+				     refvarstart,kgl.getMRNALength(), kgl.getKnownGeneID(), kgl.getName());
+	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    this.annovar.addErrorAnnotation(ann);
+	    return; /* Probably reflects some database error. */
+
+	}
 	/* wtnt3_after = Sequence of codon right after the variant. 
 	   We may not need this, it was used for padding in annovar */
 	String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
@@ -888,6 +900,7 @@ public class Chromosome {
 	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
 	    this.annovar.addErrorAnnotation(ann);
+	    return; /* Probably reflects some database error. */
 	}
 	/*annovar line 1079 */
 	if (kgl.isMinusStrand()) {

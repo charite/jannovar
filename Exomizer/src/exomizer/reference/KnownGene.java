@@ -21,7 +21,7 @@ import  exomizer.exception.KGParseException;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.04, 7 December, 2012
+ * @version 0.05, 15 December, 2012
  */
 public class KnownGene implements java.io.Serializable, exomizer.common.Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -447,6 +447,10 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	/* Substract one to get back to zero-based numbering.
 	 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
 	 */
+	if (start+3>this.sequence.length()-1) {
+	    /* This indicates a database error. */
+	    return null;
+	}
 	return this.sequence.substring(start, start+3); /* for + strand */
     }
 	
@@ -457,16 +461,23 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      * last codon, the return ""; the empty string.
      * <P>
      * In annovar: $wtnt3 = substr ($refseqhash->{$seqid}, $refvarstart-$fs-1, 3);
-     * √if (length ($refseqhash->{$seqid}) >= $refvarstart-$fs+3) {	#going into UTR
-				$wtnt3_after = substr ($refseqhash->{$seqid}, $refvarstart-$fs+2, 3);
-			} else {
-				$wtnt3_after = ''; #last amino acid in the sequence without UTR (extremely rare situation) (example: 17        53588444        53588444        -       T       414     hetero)
-			}
+     * if (length ($refseqhash->{$seqid}) >= $refvarstart-$fs+3) {	#going into UTR
+     * $wtnt3_after = substr ($refseqhash->{$seqid}, $refvarstart-$fs+2, 3);
+     *   } else {
+     * $wtnt3_after = ''; #last amino acid in the sequence without UTR (extremely rare situation) 
+     *  # (example: 17        53588444        53588444        -       T       414     hetero)
+     * }
+     * <P>
+     * TODO: This function is only used for the sequence padding option in annovar, which
+     * we do not have for this (Java) version. In the future, there are better ways
+     * of doing this, and we will attempt to provide accurate HGVS conformant annotations
+     * for indel mutations based on the actual amino acid sequence. This will require new
+     * code.
      * @param refvarstart Position of first nucleotide of variant in cDNA sequence
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
      */
     public String getWTCodonNucleotidesAfterVariant(int refvarstart, int frame_s){
-	if (getActualSequenceLength() >= refvarstart - frame_s + 3) {
+	if (getActualSequenceLength() >= refvarstart - frame_s + 5) {
 	    /* i.e., there is at least one codon 3' to codon in which variant begins */
 	    int start = refvarstart - frame_s + 2;
 	    /* Note add only 2 to convert back to zero-based numbering! */
@@ -474,7 +485,6 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	} else {
 	    return "";
 	}
-	/* NOTE ABOVE IS FOR + STRAND TODO */
     }
     
     /**

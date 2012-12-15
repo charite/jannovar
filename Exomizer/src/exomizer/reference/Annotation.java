@@ -444,12 +444,12 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * @param refvarstart Start position of mutation in ORF
      * @param annot The actual annotation.
      */
-      public static Annotation createNonFrameShiftSubstitionAnnotation(KnownGene kg,int refvarstart,String msg) {
+      public static Annotation createNonFrameShiftSubstitionAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = NON_FS_SUBSTITUTION;
-	ann.geneSymbol=kg.getName2();
+	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = msg;
+	ann.variantAnnotation = annot;
 
 	return ann;
      }

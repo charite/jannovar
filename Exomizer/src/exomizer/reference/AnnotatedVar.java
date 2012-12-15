@@ -25,16 +25,20 @@ import java.util.HashSet;
  * <P>
  * The default preference for annotations is thus
  * <OL>
- * <LI><B>exonic</B>: variant overlaps a coding exon (does not include 5' or 3' UTR).
+ * <LI><B>exonic</B>: variant overlaps a coding exon (does not include 5' or 3' UTR, and also does not include synonymous).
  * <LI><B>splicing</B>: variant is within 2-bp of a splicing junction (same precedence as exonic).
  * <LI><B>ncRNA</B>: variant overlaps a transcript without coding annotation in the gene definition 
  * <LI><B>UTR5</B>: variant overlaps a 5' untranslated region 
  * <LI><B>UTR3</B>: variant overlaps a 3' untranslated region 
+ * <LI><B>synonymous</B> synonymous substitution
  * <LI><B>intronic</B>:	variant overlaps an intron 
  * <LI><B>upstream</B>: variant overlaps 1-kb region upstream of transcription start site
  * <LI><B>downstream</B>: variant overlaps 1-kb region downtream of transcription end site (use -neargene to change this)
  * <LI><B>intergenic</B>: variant is in intergenic region 
  * </OL>
+ * Note that the class of <B>exonic</B> and <B>splicing</B> mutations as defined here comprises the class of "obvious candidates"
+ * for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
+ * <P>
  * One object of this class is created for each variant we want to annotate. The {@link exomizer.reference.Chromosome Chromosome}
  * class goes through a list of genes in the vicinity of the variant and adds one {@link exomizer.reference.Annotation Annotation}
  * object for each gene. These are essentially candidates for the actual correct annotation of the variant, but we can
@@ -45,7 +49,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.09 December 10, 2012
+ * @version 0.11 December 15, 2012
  * @author Peter N Robinson
  */
 
@@ -57,6 +61,8 @@ public class AnnotatedVar implements Constants {
     private ArrayList<Annotation> annotation_ncRNA = null;
     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR5 or UTR3 variation. */
     private ArrayList<Annotation> annotation_UTR = null;
+    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for synonymous variation. */
+    private ArrayList<Annotation> annotation_Synonymous = null;
      /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation in
 	 protein coding RNAs.. */
     private ArrayList<Annotation> annotation_Intronic = null;
@@ -78,14 +84,27 @@ public class AnnotatedVar implements Constants {
 
     /** Flag to state that we have at least one exonic variant. */
     private boolean hasExonic;
+    /** Flag to state we have at least one splicing variant  */
+    private boolean hasSplicing;
+    /** Flag to state that we have at least one noncoding RNA variant. */
     private boolean hasNcRna;
+    /** Flag to state that we have at least one UTR5 variant. */
     private boolean hasUTR5;
+    /** Flag to state that we have at least one UTR3 variant. */
     private boolean hasUTR3;
+    /** Flag to state that we have at least one nonsynonymous exonic variant. */
+    private boolean hasSynonymous;
+    /** Flag to state that we have at least one intronic variant. */
     private boolean hasIntronic;
+    /** Flag to state that we have at least one noncoding RNA intronic variant. */
     private boolean hasNcrnaIntronic;
+    /** Flag to state that we have at least one upstream variant. */
     private boolean hasUpstream;
+    /** Flag to state that we have at least one downstream variant. */
     private boolean hasDownstream;
+    /** Flag to state that we have at least one intergenic variant. */
     private boolean hasIntergenic;
+    /** Flag to state that we have at least one error annotation. */
     private boolean hasError;
     /**
      * True if we have at least one annotation for the classes ncRNA_EXONIC
@@ -101,6 +120,7 @@ public class AnnotatedVar implements Constants {
     public AnnotatedVar(int initialCapacity) {
 
 	this.annotation_Exonic = new ArrayList<Annotation>(initialCapacity);
+	this.annotation_Synonymous = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncRNA =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncrnaIntronic = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_UTR =  new ArrayList<Annotation>(initialCapacity);
@@ -118,6 +138,7 @@ public class AnnotatedVar implements Constants {
      */
     public void clearAnnotationLists() {
 	this.annotation_Exonic.clear();
+	this.annotation_Synonymous.clear();
 	this.annotation_ncRNA.clear();
 	this.annotation_ncrnaIntronic.clear();
 	this.annotation_UTR.clear();
@@ -132,6 +153,7 @@ public class AnnotatedVar implements Constants {
 	this.hasUTR5=false;
 	this.hasUTR3=false;
 	this.hasIntronic=false;
+	this.hasSynonymous=false;
 	this.hasNcrnaIntronic=false;
 	this.hasUpstream=false;
 	this.hasDownstream=false;
@@ -150,7 +172,11 @@ public class AnnotatedVar implements Constants {
      */
     public boolean isEmpty() { return this.annotationCount == 0; }
 
-   
+    /**
+     * @return true if there is a nonsynonymous, splice site, or insertion/deletion variant
+     */
+    public boolean isNS_SS_I() { return hasExonic || hasSplicing; }
+
     /**
      * True if we have at least one annotation for the classes ncRNA_EXONIC
      * SPLICING, UTR5, UTR3, EXONIC, INTRONIC
@@ -209,6 +235,8 @@ public class AnnotatedVar implements Constants {
 	    return summarizeNoncodingRNA();
 	} else if (hasUTR5 || hasUTR3) {
 	    return summarizeUTR();
+	} else if (hasSynonymous) {
+	    return summarizeSynonymous();
 	} else if (hasIntronic) {
 	    return summarizeIntronic();
 	} else if (hasNcrnaIntronic) {
@@ -223,10 +251,8 @@ public class AnnotatedVar implements Constants {
 	    return summarizeError();
 	}
 	/** Should never get here */
-	System.err.println("Error AnnotatedVar: Did not find any annotation");
-	// TODO-- add Exception!
-
-	return null;
+	String err = "Error AnnotatedVar: Did not find any annotation";
+	throw new AnnotationException(err);
     }
 
     
@@ -468,9 +494,14 @@ public class AnnotatedVar implements Constants {
 	for (Annotation a: this.annotation_Exonic) {
 	    if (a.equals(ann)) return;
 	}
-	this.annotation_Exonic.add(ann);
+	if (ann.getVariantType() == SYNONYMOUS) {
+	    this.annotation_Synonymous.add(ann);
+	    this.hasSynonymous = true;
+	} else {
+	    this.annotation_Exonic.add(ann);
+	    this.hasExonic=true;
+	}
 	this.geneSymbolSet.add(ann.getGeneSymbol());
-	this.hasExonic=true;
 	this.hasGenicMutation=true;
 	this.annotationCount++;
     }
@@ -490,8 +521,8 @@ public class AnnotatedVar implements Constants {
 
     /**
      * If there are multiple exonic annotations, this function
-     * combines them (using a semicolon as a separator), and
-     * returns a single annotation object.
+     * combines them (using comma as a separator), and
+     * @return  a single annotation object with all exonic annotations for the current variant.
      */
     public Annotation summarizeExonic() throws AnnotationException {
 	if (this.annotation_Exonic.size()==0)  {
@@ -507,18 +538,84 @@ public class AnnotatedVar implements Constants {
 	    StringBuilder sb = new StringBuilder();
 	    String symbol = ann.getGeneSymbol();
 	    if (geneSymbolSet.size()!=1) {
-		debugPrint();
-		StringBuilder sb2 = new StringBuilder();
+		//debugPrint();
 		for (String s: geneSymbolSet) {
-		    sb2.append(s+"/");
+		    ArrayList<String> tmp = new ArrayList<String>();
+		    for (int j=0;j<this.annotation_Exonic.size();++j) {
+			ann  = this.annotation_Exonic.get(j);
+			String sym = ann.getGeneSymbol();
+			if (sym.equals(s))
+			    tmp.add(ann.getVariantAnnotation());
+		    }
+		    if (tmp.size()==0) {
+			continue; /* This can happen if there are multiple genes with missense, ncRNA, synonymous etc 
+				     annotations. */
+		    }
+		    sb.append(s + "(" + tmp.get(0));
+		    for (int i = 1; i<tmp.size();++i) {
+			sb.append("," + tmp.get(i));
+		    }
+		    sb.append(") ");
 		}
-		throw new AnnotationException("Error: Multiple gene symbols in exonic annotation: " +
-					      symbol + " and " + sb2.toString());
+		ann.setVariantAnnotation(sb.toString());
+		return ann;
+	    } else {
+		sb.append(symbol + "(");
+		sb.append( ann.getVariantAnnotation());
+		for (int j=1;j<this.annotation_Exonic.size();++j) {
+		    ann  = this.annotation_Exonic.get(j);
+		    sb.append("," + ann.getVariantAnnotation());
+		}
+		sb.append(")");
+		ann.setVariantAnnotation(sb.toString());
+		return ann;
+	    }
+	}
+    }
+
+
+  /**
+     * If there are multiple synonymous annotations, this function
+     * combines them (using comma as a separator), and
+     * @return  a single annotation object with all synonymous annotations for the current variant.
+     */
+    public Annotation summarizeSynonymous() throws AnnotationException {
+	if (this.annotation_Synonymous.size()==0)  {
+	    throw new AnnotationException("No data for synonymous annotation");
+	} else if (this.annotation_Synonymous.size()==1) {
+	    Annotation ann = this.annotation_Synonymous.get(0);
+	    String s = String.format("%s(%s)",ann.getGeneSymbol(),ann.getVariantAnnotation());
+	    ann.setVariantAnnotation(s);
+	    return ann;
+	} else {
+	    java.util.Collections.sort(this.annotation_Synonymous);
+	    Annotation ann = this.annotation_Synonymous.get(0);
+	    StringBuilder sb = new StringBuilder();
+	    String symbol = ann.getGeneSymbol();
+	    if (geneSymbolSet.size()!=1) {
+		for (String s: geneSymbolSet) {
+		    ArrayList<String> tmp = new ArrayList<String>();
+		    for (int j=0;j<this.annotation_Exonic.size();++j) {
+			ann  = this.annotation_Exonic.get(j);
+			String sym = ann.getGeneSymbol();
+			if (sym.equals(s))
+			    tmp.add(ann.getVariantAnnotation());
+		    }
+		    if (tmp.size()==0)
+			continue; /* Can happen if there are multiple annotation types with lower priority */
+		    sb.append(s + "(" + tmp.get(0));
+		    for (int i = 1; i<tmp.size();++i) {
+			sb.append("," + tmp.get(i));
+		    }
+		    sb.append(") ");
+		}
+		ann.setVariantAnnotation(sb.toString());
+		return ann;
 	    }
 	    sb.append(symbol + "(");
 	    sb.append( ann.getVariantAnnotation());
-	    for (int j=1;j<this.annotation_Exonic.size();++j) {
-		ann  = this.annotation_Exonic.get(j);
+	    for (int j=1;j<this.annotation_Synonymous.size();++j) {
+		ann  = this.annotation_Synonymous.get(j);
 		sb.append("," + ann.getVariantAnnotation());
 	    }
 	    sb.append(")");
@@ -681,13 +778,13 @@ public class AnnotatedVar implements Constants {
 	System.out.println("AnnotatedVar.java:debugPrint");
 	System.out.println("Total annotiation: " + annotationCount);
 	for (Annotation a : annotation_Exonic) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
 	}
-	for (Annotation a : annotation_Exonic) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	for (Annotation a : annotation_Synonymous) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
 	}
 	for (Annotation a : annotation_ncRNA) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
 	}
 	for (Annotation a : annotation_UTR) {
 	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());

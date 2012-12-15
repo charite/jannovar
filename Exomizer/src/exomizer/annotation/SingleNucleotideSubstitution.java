@@ -6,10 +6,20 @@ import exomizer.reference.Translator;
 import exomizer.exception.AnnotationException;
 
 /**
- * This class is intended to provide a static method to generate annotations for single
- * nucleotide substitution  mutations. This method is put in its own class only for 
- * convenience and to at least have a name that is easy to find.
- * @version 0.04 (10 December, 2012)
+ * This class provides static methods to generate annotations for single
+ * nucleotide substitution  mutations.
+ * <P>
+ * Note that there are numerous variants in positions that show a discrepancy between the 
+ * genomic sequence of hg19 and the UCSC knownGene mRNA sequences. This is a difficult issue
+ * because it is uncertain which sequence is correct. Annovar uses its own version of
+ * the KnownGenesMrna.txt file that is made to conform exactly with the genome sequence. However,
+ * by inspection, of the mRNA sequence actually appears to be the correct one. Therefore, our
+ * strategy is to base annotations upon the mRNA sequence of the original USCS KnownGenesMrna.txt
+ * file but additionally to report that there is a discrepancy between the genomic sequence (which is
+ * the sequence that is typically used for variant calling and thus informs the variant calls in the
+ * VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this case, as in versions
+ * of this class up to the 15th of December, 2012 (v. 0.04).
+ * @version 0.05 (15 December, 2012)
  * @author Peter N Robinson
  */
 
@@ -85,10 +95,10 @@ public class SingleNucleotideSubstitution {
 	    canno = String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(1),varc);
 	    if (refc != wtnt3.charAt(1)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=%c user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
-					    strand,ref,wtnt3.charAt(1));
-		canno = String.format("%s/%s",canno,wrng);
-		throw new AnnotationException(canno);
+		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
+					    ref,wtnt3.charAt(1),strand);
+		canno = String.format("%s[%s]",canno,wrng);
+		//throw new AnnotationException(canno);
 	    }
 	} else if (frame_s == 2) {
 	    //$varnt3 = $wtnt3[0] . $wtnt3[1]. $obs;
@@ -97,10 +107,11 @@ public class SingleNucleotideSubstitution {
 	    canno = String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(2),varc);
 	    if (refc != wtnt3.charAt(2)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=%c user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
-					    strand,ref,wtnt3.charAt(2));
-		canno = String.format("%s/%s",canno,wrng);
-		throw new AnnotationException(canno);
+		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
+					    ref,wtnt3.charAt(1),strand);
+		
+		canno = String.format("%s[%s]",canno,wrng);
+		//throw new AnnotationException(canno);
 	    }
 	} else { /* i.e., frame_s == 0 */
 	    //$varnt3 = $obs . $wtnt3[1] . $wtnt3[2];
@@ -113,10 +124,9 @@ public class SingleNucleotideSubstitution {
 	    //kgl.debugPrint();
 	    if (refc  != wtnt3.charAt(0)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=\"%c\" user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
-					    strand,ref,wtnt3.charAt(0));
-		canno = String.format("%s/%s",canno,wrng);
-		throw new AnnotationException(canno);
+		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
+					    ref,wtnt3.charAt(1),strand);
+		canno = String.format("%s[%s]",canno,wrng);
 	    }
 	}
 	String wtaa = translator.translateDNA(wtnt3);
@@ -193,10 +203,10 @@ public class SingleNucleotideSubstitution {
 	    canno = String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(1),varc);
 	    if (refc != wtnt3.charAt(1)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=%c user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
-					    strand,ref,wtnt3.charAt(1));
-		canno = String.format("%s/%s",canno,wrng);
-		throw new AnnotationException(canno);
+		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
+					    ref,wtnt3.charAt(1),strand);
+		canno = String.format("%s[%s]",canno,wrng);
+		//throw new AnnotationException(canno);
 	    }
 	} else if (frame_s == 2) {
 	    //$varnt3 = $wtnt3[0] . $wtnt3[1]. $obs;
@@ -205,10 +215,9 @@ public class SingleNucleotideSubstitution {
 	    canno = String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(2),varc);
 	    if (refc != wtnt3.charAt(2)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=%c user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
-					    strand,ref,wtnt3.charAt(2));
-		canno = String.format("%s/%s",canno,wrng);
-		throw new AnnotationException(canno);
+		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
+					    ref,wtnt3.charAt(1),strand);
+		canno = String.format("%s[%s]",canno,wrng);
 	    }
 	} else { /* i.e., frame_s == 0 */
 	    //$varnt3 = $obs . $wtnt3[1] . $wtnt3[2];
@@ -221,10 +230,9 @@ public class SingleNucleotideSubstitution {
 	    //kgl.debugPrint();
 	    if (refc  != wtnt3.charAt(0)) {
 		char strand = kgl.getStrand();
-		String wrng = String.format("WARNING: ALLELE MISMATCH: strand=\"%c\" user-specified-allele=\"%s\" exomizer-inferred-allele=\"%s\"",
-					    strand,ref,wtnt3.charAt(0));
-		canno = String.format("%s/%s",canno,wrng);
-		throw new AnnotationException(canno);
+		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
+					    ref,wtnt3.charAt(1),strand);
+		canno = String.format("%s[%s]",canno,wrng);
 	    }
 	}
 	String wtaa = translator.translateDNA(wtnt3);
