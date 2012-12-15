@@ -476,26 +476,31 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case UPSTREAM: s="UPSTREAM"; break;
 	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
 	case ncRNA_INTRONIC: s="ncRNA_intronic"; break;
+	case ncRNA_SPLICING: s = "ncRNA_splicing"; break;
 	case SPLICING: s="SPLICING"; break;
 	case STOPLOSS: s="STOPLOSS"; break;
 	case STOPGAIN: s="STOPGAIN"; break;
+	case NONSENSE: s = "nonsense"; break;
 	case SYNONYMOUS: s="SYNONYMOUS"; break;
 	case MISSENSE: s="MISSENSE"; break;
 	case NON_FS_SUBSTITUTION: s="NFSSUB"; break;
+	case NON_FS_INSERTION: s = "nonframeshift-insertion"; break;
 	case FS_SUBSTITUTION: s="FSSUB"; break;
 	case FS_DELETION: s="FSDEL"; break;
+	case FS_INSERTION: s = "frameshift-insertion"; break;
 	case NON_FS_DELETION: s="nonframeshift deletion"; break;
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
 	case UTR53: s="UTR5,UTR3"; break;
+	case ncRNA_UTR3: s = "ncRNA_UTR5"; break;
+	case VARIANT_TYPE_UNKNOWN: s = "unknown"; break;
+	case EXONIC: s = "exonic"; break;
 	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d) annot:%s",varType,variantAnnotation);
 	}
 	return s;
     }
 
-
-    
 
   
 

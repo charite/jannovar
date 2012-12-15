@@ -28,20 +28,8 @@ public class Variant implements Comparable<Variant>, Constants {
     private float variant_quality;
     /** DP4: Number=4,Type=Integer,Description="# high-quality ref-forward bases, ref-reverse, alt-forward and alt-reverse bases"*/
     private int[] DP4;
-    /** Variant type (assigned by annovar)
-     *
-     *	@see  exomizer.common.Constants */
-    private byte variantType=VARIANT_TYPE_UNKNOWN;
     /** Number of reads associated with variant call (since we are using a short, this value has a maximum of 32,767). */
     private short nReads=0;
-    /** HGVS gene symbol */
-    private String genename=null;
-    /** Refseq id, if available */
-    private String refseq_mrna=null;
-    /** A representative String for the nucleotide mutation */
-    private String nucleotideMutation=null;
-    /** A representative String for the amino acid mutation if applicable */
-    private String aaMutation=null;
     /** A list of results of filtering applied to this variant. */
     private ArrayList<ITriage> triage_list=null;
     /** Original VCF line from which this mutation comes. */
@@ -66,19 +54,50 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.var = var;
 	this.triage_list = new ArrayList<ITriage> ();
     }
+
+    /**
+     * This constructor is intended to be used by the factory method
+     * {@link exomizer.io.VCFLine#extractVariant extractVariant} in the
+     * class {@link exomizer.io.VCFLine VCFLine}. The constructor merely
+     * initializes the ArrayList of ITriage objects and expects that everything
+     * else will be initialized by {@link exomizer.io.VCFLine#extractVariant extractVariant}.
+     */
+    public Variant() {
+	this.triage_list = new ArrayList<ITriage> ();
+    }
    
 
     // ###########   SETTERS ######################### //
-
-   
+    /** Initialize the {@link #chromosome} field
+     * @param chr A string representation of the chromosome such as chr3 or chrX
+     */
+    public void setChromosome(String chr) {
+	this.chromosome = convertChromosomeStringToByteValue(chr);
+    }
+     /** Initialize the {@link #position} field
+     * @param p Position of the variant on the chromosome
+     */
+    public void setPosition(int p) {
+	this.position = p;
+    }
+    /**
+     * Initialize the {@link #ref} field
+     * @param s sequence of reference
+     */
+    public void setRef(String s) {
+	this.ref = s;
+    }
+     /**
+     * Initialize the {@link #var} field
+     * @param s sequence of variant
+     */
+    public void setVar(String s) {
+	this.var = s;
+    }
     public void set_homozygous_alt() { this.genotype = GENOTYPE_HOMOZYGOUS_ALT; }
     public void set_heterozygous() { this.genotype = GENOTYPE_HETEROZYGOUS; }
     public void set_homozygous_ref() { this.genotype = GENOTYPE_HOMOZYGOUS_REF; }
-    public void set_predicted_non_missense_path() { this.is_non_SNV_patho = true; }
-    /** Set the type of the variant to one of the 25 types defined by the annovar annotations. */
-    public void set_variant_type(byte t) { this.variantType=t; }
     public void set_variant_quality(int q) { this.variant_quality = q; }
-
     public void addFilterTriage(ITriage t){ this.triage_list.add(t); }
     public void setVCFline(String line) { this.vcfLine = line; }
 
@@ -100,13 +119,29 @@ public class Variant implements Comparable<Variant>, Constants {
     public int get_position() { return position; }
     public String get_ref_nucleotide() { return ref; }
     public String get_alt_nucleotide() { return var; }
-    public String get_genename() { return genename; }
+    /**
+     * Get the genesymbol of the gene associated with this variant, if possible 
+     */
+    public String get_genename() { 
+	if (this.annot != null)  {
+	    return annot.getGeneSymbol();
+	} else {
+	    return ".";
+	}    
+    }
     public boolean is_homozygous_alt() { return this.genotype == GENOTYPE_HOMOZYGOUS_ALT; }
     public boolean is_homozygous_ref() { return this.genotype == GENOTYPE_HOMOZYGOUS_REF; }
     public boolean is_heterozygous() { return this.genotype == GENOTYPE_HETEROZYGOUS; }
     public boolean is_unknown_genotype() { return this.genotype ==GENOTYPE_UNKNOWN; }
     public boolean genotype_not_initialized() { return this.genotype == GENOTYPE_NOT_INITIALIZED; }
-    public boolean is_missense_variant() { return this.variantType == MISSENSE; }
+    /** 
+     * @return true if this variant is a nonsynonymous substitution (missense).
+     */
+    public boolean is_missense_variant() { 
+	if (annot == null)
+	    return false;
+	else return (annot.getVariantType() == MISSENSE);
+    }
     public String getVCFline() { return this.vcfLine; }
    
     public char ref_as_char() { return ref.charAt(0); }
@@ -177,17 +212,18 @@ public class Variant implements Comparable<Variant>, Constants {
 
 
     /**
-     * Get representation of current mutation as a string. For mutations with
-     * an amino acid code, return this in parentheses. 
+     * Get representation of current variant as a string. This method
+     * retrieves the annotation of the variant stored in the
+     * {@link exomizer.reference.Annotation Annotation} object. If this
+     * is not initialized (which should never happen), it returns ".".
      *<p>
-     * For instance, return c.1234-2A>T for a splice mutation but
-     * c.1236C>G (p.C412Y) for a missence mutation.
+     * @return The annotation of the current variant.
      */
-    public String get_mutation()
+    public String getAnnotation()
     {
-	if (aaMutation == null || aaMutation.equals("-"))
-	    return nucleotideMutation;
-	else return nucleotideMutation + " (" + aaMutation + ")";
+	if (this.annot != null)
+	    return this.annot.getVariantAnnotation();
+	else return ".";
     }
 
 
@@ -229,10 +265,9 @@ public class Variant implements Comparable<Variant>, Constants {
     public String toString() {
 	StringBuilder sb = new StringBuilder();
 	String chr = get_chrom_string();
-	sb.append("SNV: " + genename +"\n");
 	sb.append("\t"+ chr + ":c." + position + ref +">" + var);
-	if (nucleotideMutation != null)
-	    sb.append("\tmutation: "+ get_mutation() + "\n");
+	if (annot != null)
+	    sb.append("\t: "+ getAnnotation() + "\n");
 	else
 	    sb.append("\tcds mutation not initialized\n");
 	if (genotype == GENOTYPE_HOMOZYGOUS_REF)
@@ -255,35 +290,10 @@ public class Variant implements Comparable<Variant>, Constants {
      */
      public String get_variant_type_as_string()
     {
-	String s = "-";
-	switch(this.variantType) {
-	case INTERGENIC: s = "intergenic"; break;
-	case ncRNA_INTRONIC: s = "ncRNA_intronic"; break;
-	case INTRONIC: s = "intronic"; break;
-	case MISSENSE: s = "missense"; break;
-	case NONSENSE: s = "nonsense"; break;
-	case SYNONYMOUS: s = "synonymous"; break;
-	case DOWNSTREAM: s =  "downstream"; break;
-	case ncRNA_EXONIC: s = "ncRNA_exonic"; break;
-	case VARIANT_TYPE_UNKNOWN: s = "unknown"; break;
-	case UTR5: s = "UTR5"; break;
-	case UTR3: s= "UTR3"; break;
-	case STOPLOSS: s = "stoploss"; break;
-	case NON_FS_INSERTION: s = "nonframeshift-insertion"; break;
-	case ncRNA_UTR3: s = "ncRNA_UTR5"; break;
-	case STOPGAIN: s = "stopgain"; break;
-	case FS_INSERTION: s = "frameshift-insertion"; break;
-	case FS_DELETION: s = "frameshift-deletion"; break;
-	case FS_SUBSTITUTION: s = "frameshift-substitution"; break;
-	case NON_FS_DELETION: s = "nonframeshift-deletion"; break;
-	case UPSTREAM: s = "upstream"; break;
-	case SPLICING: s = "splicing"; break;
-	case NON_FS_SUBSTITUTION: s = "nonframeshift-substitution"; break;
-	case ncRNA_SPLICING: s = "ncRNA_splicing"; break;
-	case EXONIC: s = "exonic"; break;
-	default: s = "unparsed";
-	}
-	return s;
+	if (this.annot == null)
+	    return "uninitialized";
+	else
+	    return this.annot.getVariantTypeAsString();
     }
 
 
