@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exomizer.common.Constants;
 import exomizer.filter.ITriage;
+import exomizer.reference.Annotation;
 
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
@@ -45,6 +46,8 @@ public class Variant implements Comparable<Variant>, Constants {
     private ArrayList<ITriage> triage_list=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
+    /** Annotation object resulting from Jannovar-type annotation of this variant. */
+    private Annotation annot=null;
 
    
 
@@ -67,10 +70,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
     // ###########   SETTERS ######################### //
 
-    public void set_genename(String n) { this.genename=n; }
-    public void set_refseq_mrna(String m) { this.refseq_mrna=m; }
-    public void set_cds_mutation(String m) { this.nucleotideMutation=m; }
-    public void set_aa_mutation(String m) { this.aaMutation=m; }
+   
     public void set_homozygous_alt() { this.genotype = GENOTYPE_HOMOZYGOUS_ALT; }
     public void set_heterozygous() { this.genotype = GENOTYPE_HETEROZYGOUS; }
     public void set_homozygous_ref() { this.genotype = GENOTYPE_HOMOZYGOUS_REF; }
@@ -81,6 +81,18 @@ public class Variant implements Comparable<Variant>, Constants {
 
     public void addFilterTriage(ITriage t){ this.triage_list.add(t); }
     public void setVCFline(String line) { this.vcfLine = line; }
+
+    /**
+     * Set the annotation object for this variant. This method is intended to be
+     * used by our annovar-style annotation code in order to provide transcript-
+     * level annotation for the variants, for example, to annotate the chromosomal
+     * variant {@code chr7:34889222:T>C} to {@code NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)" (Type:STOPLOSS)}.
+     */
+    public void setAnnotation(Annotation a) {
+	this.annot = a;
+    }
+
+
    
     // ###########   GETTERS ######################### //
     private boolean is_non_SNV_patho = false;
