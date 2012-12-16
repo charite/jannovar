@@ -27,8 +27,11 @@ public class DeletionAnnotation {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationSingleNucleotidePlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
-		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
+    public static Annotation getAnnotationSingleNucleotidePlusStrand(KnownGene kgl,int frame_s,
+								     String wtnt3,String wtnt3_after,
+								     String ref, String var,int refvarstart,
+								     int exonNumber) 
+	throws AnnotationException {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	char deletedNT=' ';
@@ -49,7 +52,7 @@ public class DeletionAnnotation {
 	    /*$deletent = $wtnt3[0];
 	      $varnt3 = $wtnt3[1].$wtnt3[2].$wtnt3_after; */
 	}
-	System.out.println(String.format("wt:%s mut:%s",wtnt3,varnt3));
+	//System.out.println(String.format("wt:%s mut:%s",wtnt3,varnt3));
 	String wtaa = translator.translateDNA(wtnt3);
 	String varaa = translator.translateDNA(varnt3);
 	int posVariantInCDS = refvarstart-kgl.getRefCDSStart();
@@ -132,8 +135,6 @@ public class DeletionAnnotation {
 	int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
 	int varposend = -1; // 	the position of the last amino acid in the deletion
 	int posVariantInCDS = refvarstart-kgl.getRefCDSStart();
-
-	System.out.println("in getAnnotationBlockPlusStrand");
 
 	if (refvarstart <=refcdsstart) { /* first amino acid deleted */
 	    if (refvarend >= cdslen  + refcdsstart) { // i.e., 3' portion of the gene is deleted

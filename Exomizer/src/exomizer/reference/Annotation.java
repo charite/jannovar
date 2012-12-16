@@ -17,7 +17,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.11 (14 December 2012)
+ * @version 0.12 (16 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -468,8 +468,12 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * @return A string representing the variant type (e.g., MISSENSE, STOPGAIN,...)
      */
     public String getVariantTypeAsString() { 
+	return Annotation.getVariantTypeAsString(this.varType);
+    }
+
+    public static String getVariantTypeAsString(byte typ) {
 	String s="";
-	switch(this.varType) {
+	switch(typ) {
 	case INTERGENIC: s="INTERGENIC";break;
 	case DOWNSTREAM: s="DOWNSTREAM";break;
 	case INTRONIC: s="INTRONIC";break;
@@ -496,7 +500,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case ncRNA_UTR3: s = "ncRNA_UTR5"; break;
 	case VARIANT_TYPE_UNKNOWN: s = "unknown"; break;
 	case EXONIC: s = "exonic"; break;
-	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d) annot:%s",varType,variantAnnotation);
+	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",typ);
 	}
 	return s;
     }

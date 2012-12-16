@@ -128,7 +128,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /**
      * Get the genesymbol of the gene associated with this variant, if possible 
      */
-    public String get_genename() { 
+    public String getGeneSymbol() { 
 	if (this.annot != null)  {
 	    return annot.getGeneSymbol();
 	} else {
@@ -230,6 +230,24 @@ public class Variant implements Comparable<Variant>, Constants {
 	if (this.annot != null)
 	    return this.annot.getVariantAnnotation();
 	else return ".";
+    }
+
+
+    public String getVariantType() {
+	if (this.annot != null)
+	    return this.annot.getVariantTypeAsString();
+	else return "?";
+    }
+
+    /**
+     * @see exomizer.common.Constants
+     * @return a byte constant representing the variant class (NONSENSE, INTRONIC etc)
+     */
+    public byte getVariantTypeAsByte() {
+	if (this.annot != null)
+	    return this.annot.getVariantType();
+	else
+	    return VARIANT_TYPE_UNKNOWN;
     }
 
 
