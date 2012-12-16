@@ -193,7 +193,7 @@ public class VCFLineTest implements Constants {
     @Test public void testIndelLineChrom3() throws VCFParseException {
 	VCFLine line = new VCFLine(indelLine1);
 	Variant var = line.extractVariant();
-	String r = var.get_ref_nucleotide();
+	String r = var.get_ref();
 	Assert.assertEquals("-" ,r);
     }
 
@@ -217,9 +217,90 @@ public class VCFLineTest implements Constants {
     @Test public void testIndelLineChrom3A() throws VCFParseException {
 	VCFLine line = new VCFLine(indelLine2);
 	Variant var = line.extractVariant();
-	String r = var.get_ref_nucleotide();
+	String r = var.get_ref();
 	Assert.assertEquals("TG" ,r);
     }
+    /** annovar: chr1	1684375	1684375	-	CTC	unknown	3.41	4	25*/
+    private String indelLine3="chr1	1684351	.	cctcctcctcctcctcctcctcctc	cCTCctcctcctcctcctcctcctcctc	3.41	.	INDEL;DP=4;AF1=0.6663;AC1=8;DP4=0,1,2,0;MQ=25;FQ=-11.9;PV4=0.33,1,0,1	GT:PL:GQ	0/0:0,3,29:5	0/0:0,0,0:3	0/1:23,3,0:5";
+       @Test public void testIndelLineChrom1B() throws VCFParseException {
+	VCFLine line = new VCFLine(indelLine3);
+	Assert.assertEquals("chr1",line.get_chromosome_as_string());
+    }
 
+      @Test public void testIndelLineChrom2B() throws VCFParseException {
+	VCFLine line = new VCFLine(indelLine3);
+	Variant var = line.extractVariant();
+	Assert.assertEquals(1684375,var.get_position());
+    }
+      
+    @Test public void testIndelLineChrom3B() throws VCFParseException {
+	VCFLine line = new VCFLine(indelLine3);
+	Variant var = line.extractVariant();
+	String r = var.get_ref();
+	Assert.assertEquals("-" ,r);
+    }
+
+    @Test public void testIndelLineChrom4B() throws VCFParseException {
+	VCFLine line = new VCFLine(indelLine3);
+	Variant var = line.extractVariant();
+	String alt = var.get_alt();
+	Assert.assertEquals("CTC" ,alt);
+    }
 	
+
+
+    /** Line with multiple variants. Expected behavior (for now) is to just extract the first var, i.e., G */
+    private String LL="chr1	12854530	.	C	G,A	999	.	EFFECT=missense;HGVS=PRAMEF1:NM_023013:exon3:c.754C>G:p.Q252E,;DP=232;VDB=0.0032;AF1=1;AC1=12;DP4=0,0,73,157;MQ=23;FQ=-140	GT:PL:GQ	1/1:174,111,0,174,111,174:99	1/1:159,105,0,159,105,159:99	1/1:181,111,0,181,111,181:99";
+
+ @Test public void testIndelLineChrom1BL() throws VCFParseException {
+	VCFLine line = new VCFLine(LL);
+	Assert.assertEquals("chr1",line.get_chromosome_as_string());
+    }
+
+      @Test public void testIndelLineChrom2BL() throws VCFParseException {
+	VCFLine line = new VCFLine(LL);
+	Variant var = line.extractVariant();
+	Assert.assertEquals(12854530,var.get_position());
+    }
+
+       @Test public void testIndelLineChrom3BL() throws VCFParseException {
+	VCFLine line = new VCFLine(LL);
+	Variant var = line.extractVariant();
+	String r = var.get_ref();
+	Assert.assertEquals("C" ,r);
+       }
+
+  @Test public void testIndelLineChrom4BL() throws VCFParseException {
+	VCFLine line = new VCFLine(LL);
+	Variant var = line.extractVariant();
+	String r = var.get_alt();
+	Assert.assertEquals("G" ,r);
+       }
+
+    /* annovar: chr1	150199039	150199068	CTCCTCTTCCTCTTCCTCCTCCTCTTCCTC	CTCCTCTTCCTCCTCCTCTTCCTC	*/
+    private String ll="chr1	150199039	.	ctcctcttcctcttcctcctcctcttcctc	ctcctcttcctcctcctcttcctc	121	.	EFFECT=nonframeshift-substitution;HGVS=ANP32E:NM_030920:exon5:c.553_582GAGGAAGAGGAGGAGGAAGAGGAG,ANP32E:NM_001136479:exon5:c.409_438GAGGAAGAGGAGGAGGAAGAGGAG,ANP32E:NM_001136478:exon4:c.430_459GAGGAAGAGGAGGAGGAAGAGGAG,;INDEL;DP=58;VDB=0.0700;AF1=0.5092;G3=1.513e-08,1,4.01e-06;HWE=0.0143;AC1=6;DP4=13,0,12,0;MQ=43;FQ=124;PV4=1,0.082,1.6e-06,0.36	GT:PL:GQ	0/1:95,0,125:98	0/1:19,3,0:3	0/1:6,0,94:9";
+
+    @Test public void testIndelA1() throws VCFParseException {
+	VCFLine line = new VCFLine(ll);
+	Assert.assertEquals("chr1",line.get_chromosome_as_string());
+    }
+
+    @Test public void testIndelA2() throws VCFParseException {
+	VCFLine line = new VCFLine(ll);
+	Variant var = line.extractVariant();
+	Assert.assertEquals(150199039,var.get_position());
+    }
+    @Test public void testIndelA3() throws VCFParseException {
+	VCFLine line = new VCFLine(ll);
+	Variant var = line.extractVariant();
+	String r = var.get_ref();
+	Assert.assertEquals("CTCCTCTTCCTCTTCCTCCTCCTCTTCCTC" ,r);
+    }
+     @Test public void testIndelA4() throws VCFParseException {
+	VCFLine line = new VCFLine(ll);
+	Variant var = line.extractVariant();
+		String r = var.get_alt();
+	Assert.assertEquals("CTCCTCTTCCTCCTCCTCTTCCTC" ,r);
+     }
+    
 }

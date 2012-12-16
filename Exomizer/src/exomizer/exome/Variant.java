@@ -117,8 +117,14 @@ public class Variant implements Comparable<Variant>, Constants {
     private boolean is_non_SNV_patho = false;
     public boolean is_non_SNV_pathogenic() { return is_non_SNV_patho; }
     public int get_position() { return position; }
-    public String get_ref_nucleotide() { return ref; }
-    public String get_alt_nucleotide() { return var; }
+    /**
+     * @return The reference base or bases of this variant
+     */
+    public String get_ref() { return ref; }
+    /**
+     * The alternate base or bases of this variant.
+     */
+    public String get_alt() { return var; }
     /**
      * Get the genesymbol of the gene associated with this variant, if possible 
      */
