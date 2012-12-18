@@ -21,7 +21,7 @@ import  exomizer.exception.KGParseException;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.05, 15 December, 2012
+ * @version 0.06, 18 December, 2012
  */
 public class KnownGene implements java.io.Serializable, exomizer.common.Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -59,6 +59,9 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     private int CDSlength;
     /** cDNA sequence of the spliced RNA of this known gene transcript. */
     private String sequence=null;
+    /** The NCBI EntrezGene id that corresponds to the UCSC knownGene transcript. Note that this information
+	is taken from knownToLocusLink.txt. */
+    private int entrezGeneID=UNINITIALIZED_INT;
     /** Class version (for serialization).*/
     public static final long serialVersionUID = 1L;
 
@@ -546,6 +549,20 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     public void setSequence(String seq) {
 	this.sequence = seq;
     }
+    /**
+     * This method is used by {@link exomizer.io.UCSCKGParser UCSCKGParser}
+     * to add the EntrezGene id (from knowntoLocusLink.txt) to the KnownGene object.
+     * @param id an EntrezGene id 
+     */
+    public void setEntrezGeneID(int id) {
+	this.entrezGeneID=id;
+    }
+
+    /**
+     * @return The NCBI Entrez Gene ID
+     */
+    public int  getEntrezGeneID() { return this.entrezGeneID; }
+
     
     /**
      * Sets the gene symbol. This method is intended to be used while parsing

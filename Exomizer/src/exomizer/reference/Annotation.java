@@ -4,11 +4,12 @@ import exomizer.common.Constants;
 import exomizer.reference.KnownGene;
 
 /**
- * This class encapsulates a single annotation and includes basically three pieces of information:
+ * This class encapsulates a single annotation and includes four pieces of information:
  * <OL>
  * <LI>The variant type: frameshift, synonymous substitution, etc
  * <LI>The gene symbol
  * <LI>A string representing the actual variant
+ * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
  * </OL>
  * <P>
  * This class also includes functionality for combining the multiple
@@ -17,7 +18,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.12 (16 December 2012)
+ * @version 0.13 (18 December 2012)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -44,6 +45,13 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * a single gene.
      */
     private String geneSymbol=null;
+    /**
+     * The NCBI Entrez Gene id corresponding to the UCSC knownGene id of the transcript
+     * being annotated. Note that for a few cases, there is no entrezGene id, and then,
+     * the parser in {@link exomizer.io.UCSCKGParser UCSCKGParser} will enter the value
+     * {@link exomizer.common.Constants#UNINITIALIZED_INT}.
+     */
+    private int entrezGeneID=UNINITIALIZED_INT;
   
     /**
      * Return a byte constant the corresponds to the type of the variation. This will be one of the
@@ -71,7 +79,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public String getGeneSymbol() { return this.geneSymbol; }
 
-
+    public int getEntrezGeneID() { return this.entrezGeneID; }
 
     /**
      * Get annotation String. Note, does not include the gene symbol.
@@ -184,6 +192,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	}
 	ann.variantAnnotation = String.format("%s", kg.getName2());
 	ann.geneSymbol = kg.getName2();
+	ann.entrezGeneID = kg.getEntrezGeneID();
 	if (kg.isFivePrimeToGene(pos)) {
 	    if (kg.isPlusStrand()) {
 		ann.varType=UPSTREAM;
@@ -212,6 +221,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	Annotation ann = new Annotation();
 	ann.varType = ncRNA_EXONIC;
 	ann.geneSymbol = kgl.getName2();
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	ann.variantAnnotation = kgl.getName2();// String.format("HGVS=%s", name2);
 	return ann;
     }
@@ -230,6 +240,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	Annotation ann = new Annotation();
 	ann.varType = SPLICING;
 	ann.variantAnnotation = anno;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	//System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
 	ann.rvarstart = refvarstart;
 	ann.geneSymbol = kgl.getName2();
@@ -246,7 +257,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.varType = UTR5;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = kgl.getName();
-	
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
 
     }
@@ -261,6 +272,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.varType = UTR3;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
     }
 
@@ -331,6 +343,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
@@ -347,6 +360,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
@@ -362,6 +376,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
@@ -379,6 +394,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
@@ -400,13 +416,13 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
-
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
      
 
- /**
+     /**
      * Use this factory method for annotations of SYNONYMOUS variants.
      * <P>
      * For example, {@code SRA1:uc003lga.3:exon2:c.159C>A:p.V53V}
@@ -421,16 +437,26 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
-    public static Annotation createMissenseSNVAnnotation(KnownGene kg,int refvarstart,String msg) {
+    /**
+     * Use this factory method for annotations of NONSYNONYMOUS variants.
+     * <P>
+     * For example, {@code SRA1:uc003lga.3:exon2:c.159C>A:p.V53K}
+     * <P>
+     * @param kgl The affected gene
+     * @param refvarstart Start position of mutation in ORF
+     * @param annot The actual annotation.
+     */
+    public static Annotation createMissenseSNVAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = MISSENSE;
-	ann.geneSymbol=kg.getName2();
+	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = msg;
-	//System.out.println(String.format("varstart:%d [%s]",refvarstart,msg));
+	ann.variantAnnotation = annot;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
 
@@ -450,16 +476,17 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
-
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
     
-     public static Annotation createFrameShiftSubstitionAnnotation(KnownGene kg,int refvarstart,String msg) {
+     public static Annotation createFrameShiftSubstitionAnnotation(KnownGene kgl,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = FS_SUBSTITUTION;
-	ann.geneSymbol=kg.getName2();
+	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
 	return ann;
      }
     

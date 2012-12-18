@@ -114,8 +114,9 @@ public class Variant implements Comparable<Variant>, Constants {
 
    
     // ###########   GETTERS ######################### //
-    private boolean is_non_SNV_patho = false;
-    public boolean is_non_SNV_pathogenic() { return is_non_SNV_patho; }
+    /**
+     * @return the 5' position of this variant on its chromosome.
+     */
     public int get_position() { return position; }
     /**
      * @return The reference base or bases of this variant
@@ -135,6 +136,16 @@ public class Variant implements Comparable<Variant>, Constants {
 	    return ".";
 	}    
     }
+
+    /**
+     * @return the NCBI Entrez Gene ID 
+     */
+    public int getEntrezGeneID() {
+	return annot.getEntrezGeneID();
+    }
+
+
+
     public boolean is_homozygous_alt() { return this.genotype == GENOTYPE_HOMOZYGOUS_ALT; }
     public boolean is_homozygous_ref() { return this.genotype == GENOTYPE_HOMOZYGOUS_REF; }
     public boolean is_heterozygous() { return this.genotype == GENOTYPE_HETEROZYGOUS; }
