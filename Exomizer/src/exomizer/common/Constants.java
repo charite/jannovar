@@ -90,6 +90,8 @@ public interface Constants {
     public static final int NOPARSE = -5; 
     /** Flag for a float field that could not be parsed correctly */
     public static final float NOPARSE_FLOAT = -5f;
+    /** Flag for no rsID for variant */
+    public static final int NO_RSID = -1;
 
 
 }

@@ -62,7 +62,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
     /** The NCBI EntrezGene id that corresponds to the UCSC knownGene transcript. Note that this information
 	is taken from knownToLocusLink.txt. */
     private int entrezGeneID=UNINITIALIZED_INT;
-    /** Class version (for serialization).*/
+    /** Class version (for serialization). Note that the version is now at 2 because of the recent addition of entrez gene ids.*/
     public static final long serialVersionUID = 2L;
 
 
@@ -539,6 +539,20 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
      */
     public int getExonEnd(int k) {
 	return this.exonEnds[k];
+    }
+    
+    /**
+     * @return an integer array with all end positions of the exons of this knowngene
+     */
+    public int[] getExonEnds() {
+	return this.exonEnds;
+    }
+
+    /**
+     * @return an integer array with all start positions of the exons of this knowngene
+     */
+    public int[] getExonStarts() {
+	return this.exonStarts;
     }
 
     /**
