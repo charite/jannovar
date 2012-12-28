@@ -63,7 +63,7 @@ public class KnownGene implements java.io.Serializable, exomizer.common.Constant
 	is taken from knownToLocusLink.txt. */
     private int entrezGeneID=UNINITIALIZED_INT;
     /** Class version (for serialization).*/
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 2L;
 
 
     /**
