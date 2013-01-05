@@ -8,8 +8,8 @@ import exomizer.common.Constants;
 /**
  * This class is meant to be used for parsing dbSNP data and ESP data to 
  * get information about the population frequency of variants. Objects of this
- * class will be created by the parsers {@link exomizer.io.dbSNP2SQLDumpParser dbSNP2SQLDumpParser}
- * as well as {@link exomizer.io.ESP2SQLDumpParser ESP2SQLDumpParser} during parsing, and
+ * class will be created by the parsers {@link exomizer.io.dbSNP2FrequencyParser dbSNP2FrequencyParser}
+ * as well as {@link exomizer.io.ESP2FrequencyParser ESP2FrequencyParser} during parsing, and
  * matching variants will be combined. Finally, objects of this class know how to 
  * write themselves as a line of the postgres Dump File.
  * <P>
