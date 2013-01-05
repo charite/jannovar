@@ -79,11 +79,17 @@ public class Frequency implements Comparable<Frequency>, Constants {
 
 
     /**
-     *   chromosome + "|" + position + "|" + ref + "|" + alt + "|" + 
-	    rsid + "|" + dbSNPmaf + "|" + ESPmafEA + "|" + ESPmafAA+ "|" +  ESPmafAll;
-    */
+     *   This method is used to create a single line of the file we will 
+     * import into the postgreSQL database (table: frequency). The structure of the
+     * line is 
+     * <P>
+     * chromosome | position | ref | alt | rsid | dbSNPmaf | ESPmafEA | ESPmafAA | ESPmafAll;
+     * <P>
+     * Note that the rsID is printed as an integer and that client code will need to add the "rs"
+     * and transform it into a String.
+     */
     public String getDumpLine() {
-	String s = String.format("%d|%d|%s|%s|rs%d|%f|%f|%f|%f",this.chromosome,this.pos,this.ref,this.alt,this.rsID,this.dbSNPmaf,this.espEA,
+	String s = String.format("%d|%d|%s|%s|%d|%f|%f|%f|%f",this.chromosome,this.pos,this.ref,this.alt,this.rsID,this.dbSNPmaf,this.espEA,
 				 this.espAA, this.espAll);
 	return s;
     }
