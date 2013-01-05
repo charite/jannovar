@@ -8,6 +8,8 @@ package exomizer.common;
  * various entities. 
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
+ * @author Peter N Robinson
+ * @version 0.08 (8 January, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
