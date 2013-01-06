@@ -18,7 +18,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.13 (18 December 2012)
+ * @version 0.14 (7 January, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
@@ -501,25 +501,25 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static String getVariantTypeAsString(byte typ) {
 	String s="";
 	switch(typ) {
-	case INTERGENIC: s="INTERGENIC";break;
-	case DOWNSTREAM: s="DOWNSTREAM";break;
-	case INTRONIC: s="INTRONIC";break;
-	case UPSTREAM: s="UPSTREAM"; break;
+	case INTERGENIC: s="Intergenic";break;
+	case DOWNSTREAM: s="Downstream";break;
+	case INTRONIC: s="Intronic";break;
+	case UPSTREAM: s="Upstream"; break;
 	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
 	case ncRNA_INTRONIC: s="ncRNA_intronic"; break;
 	case ncRNA_SPLICING: s = "ncRNA_splicing"; break;
-	case SPLICING: s="SPLICING"; break;
-	case STOPLOSS: s="STOPLOSS"; break;
-	case STOPGAIN: s="STOPGAIN"; break;
-	case NONSENSE: s = "nonsense"; break;
-	case SYNONYMOUS: s="SYNONYMOUS"; break;
-	case MISSENSE: s="MISSENSE"; break;
-	case NON_FS_SUBSTITUTION: s="NFSSUB"; break;
-	case NON_FS_INSERTION: s = "nonframeshift-insertion"; break;
-	case FS_SUBSTITUTION: s="FSSUB"; break;
-	case FS_DELETION: s="FSDEL"; break;
-	case FS_INSERTION: s = "frameshift-insertion"; break;
-	case NON_FS_DELETION: s="nonframeshift deletion"; break;
+	case SPLICING: s="Splicing"; break;
+	case STOPLOSS: s="Stoploss"; break;
+	case STOPGAIN: s="Stopgain"; break;
+	case NONSENSE: s = "Nonsense"; break;
+	case SYNONYMOUS: s="Synonymous"; break;
+	case MISSENSE: s="Missense"; break;
+	case NON_FS_SUBSTITUTION: s="Nonframeshit subsitution"; break;
+	case NON_FS_INSERTION: s = "Nonframeshift-insertion"; break;
+	case FS_SUBSTITUTION: s="Frameshift substitution"; break;
+	case FS_DELETION: s="Frameshift deletion"; break;
+	case FS_INSERTION: s = "Frameshift insertion"; break;
+	case NON_FS_DELETION: s="Nonframeshift deletion"; break;
 	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;

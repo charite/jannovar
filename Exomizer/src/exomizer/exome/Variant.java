@@ -1,6 +1,7 @@
 package exomizer.exome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import exomizer.common.Constants;
 import exomizer.filter.ITriage;
@@ -9,7 +10,7 @@ import exomizer.reference.Annotation;
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.03 12 December 2012
+ * @version 0.04 7 January, 2013
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -31,7 +32,10 @@ public class Variant implements Comparable<Variant>, Constants {
     /** Number of reads associated with variant call (since we are using a short, this value has a maximum of 32,767). */
     private short nReads=0;
     /** A list of results of filtering applied to this variant. */
-    private ArrayList<ITriage> triage_list=null;
+    //private ArrayList<ITriage> triage_list=null;
+    /** A map of the results of filtering and prioritization. The key to the map is an 
+	integer constant as defined in {@link exomizer.common.Constants Constants}. */
+    private HashMap<Integer,ITriage> triageMap=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
     /** Annotation object resulting from Jannovar-type annotation of this variant. */
@@ -52,7 +56,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.position=p;
 	this.ref = r;
 	this.var = var;
-	this.triage_list = new ArrayList<ITriage> ();
+	this.triageMap = new HashMap<Integer,ITriage> ();
     }
 
     /**
@@ -63,7 +67,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * else will be initialized by {@link exomizer.io.VCFLine#extractVariant extractVariant}.
      */
     public Variant() {
-	this.triage_list = new ArrayList<ITriage> ();
+	this.triageMap = new HashMap<Integer,ITriage> ();
     }
    
 
@@ -98,7 +102,16 @@ public class Variant implements Comparable<Variant>, Constants {
     public void set_heterozygous() { this.genotype = GENOTYPE_HETEROZYGOUS; }
     public void set_homozygous_ref() { this.genotype = GENOTYPE_HOMOZYGOUS_REF; }
     public void set_variant_quality(int q) { this.variant_quality = q; }
-    public void addFilterTriage(ITriage t){ this.triage_list.add(t); }
+    /**
+     * This method is used to add an {@link exomizer.filter.ITriage ITriage} object to
+     * this variant. Such objects represent the results of evaluation of this variant
+     * and may be used for filtering or prioritization. The Integer is a constant from 
+     * {@link exomizer.common.Constants Constants} that identifies the type of 
+     * {@link exomizer.filter.ITriage ITriage} object being added (e.g., pathogenicity,
+     * frequency, etc). */
+    public void addFilterTriage(ITriage t, int type){ 
+	this.triageMap.put(type,t); 
+    }
     public void setVCFline(String line) { this.vcfLine = line; }
 
     /**
@@ -165,8 +178,10 @@ public class Variant implements Comparable<Variant>, Constants {
     public char var_as_char() { return var.charAt(0); }
 
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
-    /** Return the list of "ITriage objects that represent the result of filtering */
-    public ArrayList<ITriage> get_triage_list() { return this.triage_list; }
+    /** 
+     * @return the map of "ITriage objects that represent the result of filtering 
+     */
+    public HashMap<Integer,ITriage> getTriageMap() { return this.triageMap; }
      /**
      * @return an integer representation of the chromosome  (note: X=23, Y=24).
      */

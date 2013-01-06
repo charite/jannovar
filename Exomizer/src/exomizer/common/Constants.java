@@ -74,6 +74,8 @@ public interface Constants {
     public static final int GENOTYPE_QUALITY = 204;
     /**  Flag for output field representing the QUAL column of the VCF file. */
     public static final int VARIANT_QUALITY = 205;
+    /** Flag for output of field representing the Quality filter for the VCF entry */
+    public static final int QUALITY_FILTER = 300;
     /** Flag to output results of filtering against polyphen, SIFT, and mutation taster. */
     public static final int PATHOGENICITY_FILTER = 206;
     /** Flag to output results of filtering against frequency with Thousand Genomes and ESP data. */
