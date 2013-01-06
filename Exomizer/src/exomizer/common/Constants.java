@@ -9,7 +9,7 @@ package exomizer.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.08 (8 January, 2013)
+ * @version 0.09 (8 January, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -84,6 +84,8 @@ public interface Constants {
     public static final int INHERITANCE_PATTERN_FILTER = 208;
     /** Flag to represent results of filtering against phenotype data */
     public static final int PHENODIGM_FILTER = 209;
+    /** Flag to represent results of annotating against OMIM data */
+    public static final int OMIM_FILTER = 309;
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
 
     /** Flag for an integer value that has not been initialized. */
