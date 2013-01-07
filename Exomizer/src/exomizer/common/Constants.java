@@ -82,8 +82,10 @@ public interface Constants {
     public static final int FREQUENCY_FILTER = 207;
     /** Flag to represent results of filtering against an inheritance pattern. */
     public static final int INHERITANCE_PATTERN_FILTER = 208;
-    /** Flag to represent results of filtering against phenotype data */
+    /** Flag to represent results of filtering against phenotype data (Phenodigm)*/
     public static final int PHENODIGM_FILTER = 209;
+    /** Flag to represent results of filtering against phenotype data (Uberpheno) */
+    public static final int UBERPHENO_FILTER = 210;
     /** Flag to represent results of annotating against OMIM data */
     public static final int OMIM_FILTER = 309;
     public static final int THOUSAND_GENOMES_AF_AC = 1000;
