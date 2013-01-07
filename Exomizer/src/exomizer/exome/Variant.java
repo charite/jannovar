@@ -10,7 +10,7 @@ import exomizer.reference.Annotation;
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.04 7 January, 2013
+ * @version 0.05 (7 January, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -31,8 +31,7 @@ public class Variant implements Comparable<Variant>, Constants {
     private int[] DP4;
     /** Number of reads associated with variant call (since we are using a short, this value has a maximum of 32,767). */
     private short nReads=0;
-    /** A list of results of filtering applied to this variant. */
-    //private ArrayList<ITriage> triage_list=null;
+    
     /** A map of the results of filtering and prioritization. The key to the map is an 
 	integer constant as defined in {@link exomizer.common.Constants Constants}. */
     private HashMap<Integer,ITriage> triageMap=null;
@@ -276,7 +275,23 @@ public class Variant implements Comparable<Variant>, Constants {
 	    return VARIANT_TYPE_UNKNOWN;
     }
 
-
+    /**
+     * This method calculates a priority
+     * score (prediction of the pathogenicity
+     * and relevance of the Variant) by using data from
+     * the {@link exomizer.filter.ITriage ITriage} objects
+     * associated with this Variant.
+     * @return a priority score between 0 and 1
+     */
+    public float getPriorityScore() {
+	float priority = 1f;
+	for (Integer i : this.triageMap.keySet()) {
+	    ITriage itria = this.triageMap.get(i);
+	    float x = itria.filterResult();
+	    priority *= x;
+	}
+	return priority;
+    }
 
     // ##########   UTILITY FUNCTIONS ##################### //
 

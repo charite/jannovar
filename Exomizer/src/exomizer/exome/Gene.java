@@ -6,11 +6,31 @@ import java.util.ArrayList;
 import exomizer.exome.Variant;
 
 /**
- * This class is meant to allow filtering for autosomal recessive or dominant patterns in the data.
+ * (Jan 8, 2013): This class will now be extended to be the object that gets 
+ * prioritized in the Exomizer. It will receive methods that take the
+ * scores from the {@link exomizer.exome.Variant Variant} objects it
+ * contains and calculates a numerical value that can be used for sorting.
+ * <P>
+ * There are additionally some prioritization procedures that only can be
+ * performed on genes (and not on the individual variants). For instance, there
+ * are certain genes such as the Mucins or the Olfactory receptor genes that are
+ * often found to have variants in WES data but are known not to be the
+ * relevant disease genes. Additionally, filtering for autosomal recessive or 
+ * dominant patterns in the data is done with this class.
+ * @author Peter Robinson
+ * @version 0.02 (7 January, 2013)
  */
 public class Gene {
     /** A list of all of the variants that affect this gene. */
     private ArrayList<Variant> variant_list=null;
+
+    /** A priority score between 0 (irrelevant) and 1 (highest prediction 
+     * for a disease gene) reflecting the predicted relevance
+     * of this gene for the disease under study by exome sequencing.
+     */
+    private float priorityScore;
+       
+    
 
     /**
      * Construct the gene by adding the first variant that affects the gene. If the current gene
@@ -30,6 +50,25 @@ public class Gene {
     public void addVariant(Variant var) {
 	this.variant_list.add(var);
     }
+
+
+    /**
+     * Calculate the total priority score for this
+     * gene based on data stored in its associated
+     * {@link exomizer.exome.Variant Variant} objects.
+     */
+    public void calculatePriorityScore() {
+	if (variant_list.size()==0)
+	    this.priorityScore = 0f;
+	else {
+	    this.priorityScore = 1f;
+	    for (Variant v : this.variant_list) {
+		float x = v.getPriorityScore();
+		this.priorityScore *= x;
+	    }
+	}
+    }
+
 
     /**
      * @return A list of all variants in the VCF file that affect this gene.
