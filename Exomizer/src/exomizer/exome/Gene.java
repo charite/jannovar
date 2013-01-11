@@ -168,6 +168,15 @@ public class Gene implements Comparable<Gene>, Constants  {
 	return priorityScore * filterScore;
     }
 
+    /**
+     * Calculate the gene (priority) and the variant 
+     * (filtering) scores in preparation for sorting.
+     */
+    public void calculateGeneAndVariantScores() {
+	 calculatePriorityScore();
+	 calculateFilteringScore();
+    }
+
 
     /**
      * Sort this gene based on priority and filter score.
