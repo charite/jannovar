@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import exomizer.exome.Variant;
 import exomizer.common.Constants;
-import exomizer.filter.IRelevanceScore;
+import exomizer.priority.IRelevanceScore;
 
 /**
  * (Jan 8, 2013): This class will now be extended to be the object that gets 
@@ -22,7 +22,7 @@ import exomizer.filter.IRelevanceScore;
  * prioritization is done by classes that implement 
  * {@link exomizer.filter.IPriority IPriority}.
  * @author Peter Robinson
- * @version 0.03 (10 January, 2013)
+ * @version 0.05 (11 January, 2013)
  */
 public class Gene implements Comparable<Gene>, Constants  {
     /** A list of all of the variants that affect this gene. */
@@ -44,6 +44,23 @@ public class Gene implements Comparable<Gene>, Constants  {
      /** A map of the results of prioritization. The key to the map is an 
 	integer constant as defined in {@link exomizer.common.Constants Constants}. */
     private HashMap<Integer,IRelevanceScore> relevanceMap=null;
+
+    /**
+     * @return the number of {@link exomizer.exome.Variant Variant} objects for this gene.
+     */
+    public int getNumberOfVariants() {
+	return this.variant_list.size();
+    }
+    
+    /**
+     * @return the nth {@link exomizer.exome.Variant Variant} object for this gene.
+     */
+    public Variant getNthVariant(int n) {
+	if (n>= this.variant_list.size())
+	    return null;
+	else
+	    return this.variant_list.get(n);
+    }
        
     
 
@@ -78,7 +95,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Note that currently, the EntrezGene IDs are associated with the Variants. Probably it would
      * be more natural to associate that with a field of this Gene object. For now, leave it as be,
-     * and return an UNINITIALIZED_INT flag if this gene has not variants.
+     * and return an UNINITIALIZED_INT flag if this gene has no {@link exomizer.exomer.Variant Variant} objects.
      * @return the NCBI Entrez Gene ID associated with this gene (extracted from one of the Variant objects)
      */
     public int getEntrezGeneID() {
@@ -87,6 +104,21 @@ public class Gene implements Comparable<Gene>, Constants  {
 	else {
 	    Variant v = this.variant_list.get(0);
 	    return v.getEntrezGeneID();
+	}
+    }
+
+    /**
+     * Note that currently, the gene symbols are associated with the Variants. Probably it would
+     * be more natural to associate that with a field of this Gene object. For now, leave it as be,
+     * and return "-" if this gene has no  {@link exomizer.exomer.Variant Variant} objects.
+     * @return the symbol associated with this gene (extracted from one of the Variant objects)
+     */
+    public String getGeneSymbol() {
+	if (this.variant_list.isEmpty())
+	    return "-";
+	else {
+	    Variant v = this.variant_list.get(0);
+	    return v.getGeneSymbol();
 	}
     }
 
