@@ -20,9 +20,9 @@ import exomizer.priority.IRelevanceScore;
  * relevant disease genes. Additionally, filtering for autosomal recessive or 
  * dominant patterns in the data is done with this class. This kind of
  * prioritization is done by classes that implement 
- * {@link exomizer.filter.IPriority IPriority}.
+ * {@link exomizer.priority.IPriority IPriority}.
  * @author Peter Robinson
- * @version 0.05 (11 January, 2013)
+ * @version 0.06 (15 January, 2013)
  */
 public class Gene implements Comparable<Gene>, Constants  {
     /** A list of all of the variants that affect this gene. */
@@ -95,7 +95,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Note that currently, the EntrezGene IDs are associated with the Variants. Probably it would
      * be more natural to associate that with a field of this Gene object. For now, leave it as be,
-     * and return an UNINITIALIZED_INT flag if this gene has no {@link exomizer.exomer.Variant Variant} objects.
+     * and return an UNINITIALIZED_INT flag if this gene has no {@link exomizer.exome.Variant Variant} objects.
      * @return the NCBI Entrez Gene ID associated with this gene (extracted from one of the Variant objects)
      */
     public int getEntrezGeneID() {
@@ -110,7 +110,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Note that currently, the gene symbols are associated with the Variants. Probably it would
      * be more natural to associate that with a field of this Gene object. For now, leave it as be,
-     * and return "-" if this gene has no  {@link exomizer.exomer.Variant Variant} objects.
+     * and return "-" if this gene has no  {@link exomizer.exome.Variant Variant} objects.
      * @return the symbol associated with this gene (extracted from one of the Variant objects)
      */
     public String getGeneSymbol() {
