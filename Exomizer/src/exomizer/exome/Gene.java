@@ -107,6 +107,11 @@ public class Gene implements Comparable<Gene>, Constants  {
 	}
     }
 
+    /** 
+     * @return the map of "ITriage objects that represent the result of filtering 
+     */
+    public HashMap<Integer,IRelevanceScore> getRelevanceMap() { return this.relevanceMap; }
+    
     /**
      * Note that currently, the gene symbols are associated with the Variants. Probably it would
      * be more natural to associate that with a field of this Gene object. For now, leave it as be,
@@ -192,12 +197,13 @@ public class Gene implements Comparable<Gene>, Constants  {
      * (filterScore).
      * @return a combined score that will be used to rank the gene.
      */
-    private float getCombinedScore() {
+    public float getCombinedScore() {
 	if (priorityScore == UNINITIALIZED_FLOAT)
 	    calculatePriorityScore();
 	if ( filterScore == UNINITIALIZED_FLOAT)
 	    calculateFilteringScore();
-	return priorityScore * filterScore;
+	//return priorityScore * filterScore;
+	return priorityScore;
     }
 
     /**
@@ -205,7 +211,7 @@ public class Gene implements Comparable<Gene>, Constants  {
      * (filtering) scores in preparation for sorting.
      */
     public void calculateGeneAndVariantScores() {
-	 calculatePriorityScore();
+     calculatePriorityScore();
 	 calculateFilteringScore();
     }
 
@@ -217,9 +223,9 @@ public class Gene implements Comparable<Gene>, Constants  {
 	float me = getCombinedScore();
 	float you = other.getCombinedScore();
         if( me < you )
-            return -1;
-        if( me > you )
             return 1;
+        if( me > you )
+            return -1;
         return 0;
     }
 
