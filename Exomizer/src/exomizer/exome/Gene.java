@@ -8,10 +8,19 @@ import exomizer.common.Constants;
 import exomizer.priority.IRelevanceScore;
 
 /**
- * (Jan 8, 2013): This class will now be extended to be the object that gets 
- * prioritized in the Exomizer. It will receive methods that take the
- * scores from the {@link exomizer.exome.Variant Variant} objects it
- * contains and calculates a numerical value that can be used for sorting.
+ * This class represents a Gene in which {@link exomizer.exome.Variant Variant} objects
+ * have been identified by exome sequencing. Note that this class stores
+ * information about observed variants and quality scores etc. In contrast,
+ * the class {@link exomizer.reference.KnownGene KnownGene} stores information
+ * from UCSC about all genes, irrespective of whether we see a variant in the gene
+ * by exome sequencing. Therefore, the program uses information from 
+ * {@link exomizer.reference.KnownGene KnownGene} object to annotate variants found
+ * by exome sequencing, and stores the results of that annotation in
+ * {@link exomizer.exome.Variant Variant} objects. Objects of this class have a
+ * list of Variant objects, one for each variant observed in the exome. Additionally,
+ * the Gene objects get prioritized for their biomedical relevance to the disease
+ * in question, and each such prioritization results in an 
+ * {@link exomizer.priority.IRelevanceScore IRelevanceScore} object.
  * <P>
  * There are additionally some prioritization procedures that only can be
  * performed on genes (and not on the individual variants). For instance, there
@@ -22,7 +31,7 @@ import exomizer.priority.IRelevanceScore;
  * prioritization is done by classes that implement 
  * {@link exomizer.priority.IPriority IPriority}.
  * @author Peter Robinson
- * @version 0.06 (15 January, 2013)
+ * @version 0.08 (17 January, 2013)
  */
 public class Gene implements Comparable<Gene>, Constants  {
     /** A list of all of the variants that affect this gene. */
@@ -108,7 +117,8 @@ public class Gene implements Comparable<Gene>, Constants  {
     }
 
     /** 
-     * @return the map of "ITriage objects that represent the result of filtering 
+     * @return the map of {@link exomizer.priority.IRelevanceScore  IRelevanceScore} 
+     * objects that represent the result of filtering 
      */
     public HashMap<Integer,IRelevanceScore> getRelevanceMap() { return this.relevanceMap; }
     
@@ -139,7 +149,7 @@ public class Gene implements Comparable<Gene>, Constants  {
 	else {
 	    this.filterScore = 1f;
 	    for (Variant v : this.variant_list) {
-		float x = v.getPriorityScore();
+		float x = v.getFilterScore();
 		this.filterScore *= x;
 	    }
 	}
@@ -211,8 +221,8 @@ public class Gene implements Comparable<Gene>, Constants  {
      * (filtering) scores in preparation for sorting.
      */
     public void calculateGeneAndVariantScores() {
-     calculatePriorityScore();
-	 calculateFilteringScore();
+	calculatePriorityScore();
+	calculateFilteringScore();
     }
 
 

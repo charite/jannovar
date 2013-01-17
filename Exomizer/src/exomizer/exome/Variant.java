@@ -276,21 +276,26 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
     /**
-     * This method calculates a priority
+     * This method calculates a filter
      * score (prediction of the pathogenicity
      * and relevance of the Variant) by using data from
      * the {@link exomizer.filter.ITriage ITriage} objects
      * associated with this Variant.
+     * <P>
+     * Note that we use results of filtering to remove Variants
+     * that are predicted to be simply non-pathogenic. However, amongst
+     * variants predicted to be potentially pathogenic, there are different
+     * strengths of prediction, which is what this score tries to reflect.
      * @return a priority score between 0 and 1
      */
-    public float getPriorityScore() {
-	float priority = 1f;
+    public float getFilterScore() {
+	float score = 1f;
 	for (Integer i : this.triageMap.keySet()) {
 	    ITriage itria = this.triageMap.get(i);
 	    float x = itria.filterResult();
-	    priority *= x;
+	    score *= x;
 	}
-	return priority;
+	return score;
     }
 
     // ##########   UTILITY FUNCTIONS ##################### //
