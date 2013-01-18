@@ -48,7 +48,7 @@ public class Gene implements Comparable<Gene>, Constants  {
      * {@link exomizer.exome.Variant Variant} objects associated with this gene.
      */
     private float filterScore = UNINITIALIZED_FLOAT;
-
+    private float pathogenicityFilterScore = UNINITIALIZED_FLOAT;
    
      /** A map of the results of prioritization. The key to the map is an 
 	integer constant as defined in {@link exomizer.common.Constants Constants}. */
@@ -156,6 +156,24 @@ public class Gene implements Comparable<Gene>, Constants  {
     }
 
     /**
+     * Calculate the total priority score for this
+     * gene based on data stored in its associated
+     * {@link exomizer.exome.Variant Variant} objects.
+     */
+    public void calculatePathogenicityFilteringScore() {
+    	if (variant_list.size()==0)
+    		this.pathogenicityFilterScore = 0f;
+    	else {
+    		this.pathogenicityFilterScore = 1f;
+    		for (Variant v : this.variant_list) {
+    			float x = v.getPathogenicityPriorityScore();
+    			this.pathogenicityFilterScore *= x;
+    		}
+    	}
+    }
+
+    
+    /**
      * Calculate the combined priority score for this gene (the result
      * is stored in the class variable 
      * {@link exomizer.exome.Gene#priorityScore}, which is used to help sort
@@ -209,13 +227,50 @@ public class Gene implements Comparable<Gene>, Constants  {
      */
     public float getCombinedScore() {
 	if (priorityScore == UNINITIALIZED_FLOAT)
-	    calculatePriorityScore();
+	    calculatePriorityScore();// equivalent to the phenodigm score at moment - omim always equals 1?
 	if ( filterScore == UNINITIALIZED_FLOAT)
 	    calculateFilteringScore();
-	//return priorityScore * filterScore;
-	return priorityScore;
+	if ( pathogenicityFilterScore == UNINITIALIZED_FLOAT)
+	    calculatePathogenicityFilteringScore();
+	
+	return priorityScore * filterScore;
+	//return priorityScore;
+	//return priorityScore * pathogenicityFilterScore;
     }
 
+    /**
+     * Calculate the priority score of this gene based on the relevance of the
+     * gene (priorityScore) 
+     * @return a priority score that will be used to rank the gene.
+     */
+    public float getPriorityScore() {
+	if (priorityScore == UNINITIALIZED_FLOAT)
+	    calculatePriorityScore();// equivalent to the phenodigm score at moment - omim always equals 1?
+    return priorityScore;
+    }
+    
+    /**
+     * Calculate the filter score of this gene based on the relevance of the
+     * gene (filterScore) 
+     * @return a filter score that will be used to rank the gene.
+     */
+    public float getFilterScore() {
+	if (filterScore == UNINITIALIZED_FLOAT)
+	    calculateFilteringScore();
+	return filterScore;
+    }
+    
+    /**
+     * Calculate the filter score of this gene based on the relevance of the
+     * gene (filterScore) 
+     * @return a filter score that will be used to rank the gene.
+     */
+    public float getPathogenicityFilterScore() {
+	if (pathogenicityFilterScore == UNINITIALIZED_FLOAT)
+		calculatePathogenicityFilteringScore();
+    return pathogenicityFilterScore;
+    }
+    
     /**
      * Calculate the gene (priority) and the variant 
      * (filtering) scores in preparation for sorting.
