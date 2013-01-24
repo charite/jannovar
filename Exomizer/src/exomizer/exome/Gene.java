@@ -147,10 +147,12 @@ public class Gene implements Comparable<Gene>, Constants  {
 	if (variant_list.size()==0)
 	    this.filterScore = 0f;
 	else {
-	    this.filterScore = 1f;
+	    //this.filterScore = 1f;
 	    for (Variant v : this.variant_list) {
 		float x = v.getFilterScore();
-		this.filterScore *= x;
+		//this.filterScore *= x;
+		//for genes with multiple variants pick best, otherwise tend to end up with a score near 0
+		this.filterScore = Math.max(this.filterScore,x);
 	    }
 	}
     }
@@ -164,10 +166,11 @@ public class Gene implements Comparable<Gene>, Constants  {
     	if (variant_list.size()==0)
     		this.pathogenicityFilterScore = 0f;
     	else {
-    		this.pathogenicityFilterScore = 1f;
+    		//this.pathogenicityFilterScore = 1f;
     		for (Variant v : this.variant_list) {
     			float x = v.getPathogenicityPriorityScore();
-    			this.pathogenicityFilterScore *= x;
+    			//this.pathogenicityFilterScore *= x;
+    			this.pathogenicityFilterScore = Math.max(this.pathogenicityFilterScore,x);
     		}
     	}
     }
@@ -233,7 +236,8 @@ public class Gene implements Comparable<Gene>, Constants  {
 	if ( pathogenicityFilterScore == UNINITIALIZED_FLOAT)
 	    calculatePathogenicityFilteringScore();
 	
-	return priorityScore * filterScore;
+	//return priorityScore * filterScore;
+	return priorityScore + filterScore;
 	//return priorityScore;
 	//return priorityScore * pathogenicityFilterScore;
     }
