@@ -10,7 +10,7 @@ import exomizer.reference.Annotation;
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.05 (7 January, 2013)
+ * @version 0.06 (9 February, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     

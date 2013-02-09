@@ -13,11 +13,17 @@ import exomizer.common.Constants;
  * matching variants will be combined. Finally, objects of this class know how to 
  * write themselves as a line of the postgres Dump File.
  * <P>
+ * The frequencies (from dbSNP and ESP) are both stored as percentages. Note that the files
+ * downloaded from ESP expressed the MAF (minor allele frequency) as a percentage, whereas
+ * the files from dbSNP use a proportion. The code in 
+ * {@link exomizer.io.dbSNP2FrequencyParser dbSNP2FrequencyParser} therefore converts the
+ * data in dbSNP to percentages for uniformity's sake.
+ * <P>
  * Note that this class implements {@code Comparable} because it is intended
  * to be used as an element of a {@code TreeSet} in the class {@link exomizer.dbSNP2SQL dbSNP2SQL}
  * in order to sort and search these objects while creating a dump file for postgreSQL.
  * @author Peter Robinson
- * @version 0.02 (8 January, 2013)
+ * @version 0.04 (8 February, 2013)
  */
 public class Frequency implements Comparable<Frequency>, Constants {
     /** Byte representation of the chromosome */
@@ -30,13 +36,17 @@ public class Frequency implements Comparable<Frequency>, Constants {
     private String alt;
     /** Integer representation of the rsID */
     private int rsID;
-    /** Float representation of dbSNP minor allele frequency (often form 1000G) */
+    /** Float representation of dbSNP minor allele frequency (from 1000G phase I via dbSNP), 
+     * expressed as a percentage */
     private float dbSNPmaf;
-    /** Float representation of the ESP minor allele frequency for European Americans */
+    /** Float representation of the ESP minor allele frequency for European Americans,
+      * expressed as a percentage **/
     private float espEA;
-    /** Float representation of the ESP minor allele frequency for African Americans */
+    /** Float representation of the ESP minor allele frequency for African Americans,
+     * expressed as a percentage **/
     private float espAA;
-    /** Float representation of the ESP minor allele frequency for all comers */
+    /** Float representation of the ESP minor allele frequency for all comers,
+      * expressed as a percentage **/
     private float espAll;
 
     public Frequency(byte c, int p, String r, String a, int rs) {
@@ -52,12 +62,22 @@ public class Frequency implements Comparable<Frequency>, Constants {
     }
 
 
-
+    /** 
+     * Sets the frequency (expressed as percent) in dbSNP data
+     * of the current variant.
+     * Note that client code is expected to transform propoprtions, i.e.
+     * value \in [0,1] into percentages, i.e., value \in [0,100] before
+     * calling this method.
+     * @param maf The minor allele frequency, expressed as a percentage.
+     */
     public void set_dbSNP_GMAF(float maf) {
 	this.dbSNPmaf = maf;
     }
 
     /**
+     * Sets the frequency (expressed as percent) in the ESP data of the current variant.
+     * Note that the ESP MAF is expressed in percentage in the original files, and thus,
+     * the parameter is a value \in [0,100]
      * @param f The minor allele frequency of this variant as found in the ESP data.
      */
     public void setESPFrequencyEA(float f) {
