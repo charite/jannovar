@@ -9,7 +9,7 @@ package exomizer.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.09 (8 January, 2013)
+ * @version 0.11 (10 February, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -76,6 +76,8 @@ public interface Constants {
     public static final int VARIANT_QUALITY = 205;
     /** Flag for output of field representing the Quality filter for the VCF entry */
     public static final int QUALITY_FILTER = 300;
+    /** Flag for filter type "interval" */
+    public static final int INTERVAL_FILTER = 305;
     /** Flag to output results of filtering against polyphen, SIFT, and mutation taster. */
     public static final int PATHOGENICITY_FILTER = 206;
     /** Flag to output results of filtering against frequency with Thousand Genomes and ESP data. */
