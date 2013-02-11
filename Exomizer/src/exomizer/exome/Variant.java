@@ -6,11 +6,12 @@ import java.util.HashMap;
 import exomizer.common.Constants;
 import exomizer.filter.ITriage;
 import exomizer.reference.Annotation;
+import exomizer.exome.GenotypeI;
 
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.06 (9 February, 2013)
+ * @version 0.08 (11 February, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -23,10 +24,15 @@ public class Variant implements Comparable<Variant>, Constants {
     private String ref;
     /** Variant sequence (called "ALT", alternate, in VCF files). */
     private String var;
-    /**  genotype (See exomizer.common.Constants for the integer constants used to represent the genotypes). */
-    private byte genotype=GENOTYPE_NOT_INITIALIZED;
-    /** Quality of variant call, taken from QUAL column of VCF file, with QUAL=-10log<SUB>10</SUB> prob(call in ALT is wrong). */
-    private float variant_quality;
+    /**  The genotype of this variant (note that {@link exomizer.exome.GenotypeI GenotypeI}
+     * must be instantiated by either {@link exomizer.exome.SingleGenotype SingleGenotype}
+     * for VCF files with a single sample or 
+     * {@link exomizer.exome.MultipleGenotype MultipleGenotype}
+     * for VCF files with multiple samples.
+     */
+    private GenotypeI genotype=null;
+    /** The PHRED score for the variant call. */
+    private int variant_quality;
    
     
     /** A map of the results of filtering and prioritization. The key to the map is an 
@@ -87,6 +93,11 @@ public class Variant implements Comparable<Variant>, Constants {
     public void setRef(String s) {
 	this.ref = s;
     }
+
+    public void setGenotype(GenotypeI gtype) {
+	this.genotype = gtype;
+    }
+
      /**
      * Initialize the {@link #var} field
      * @param s sequence of variant
@@ -94,9 +105,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public void setVar(String s) {
 	this.var = s;
     }
-    public void set_homozygous_alt() { this.genotype = GENOTYPE_HOMOZYGOUS_ALT; }
-    public void set_heterozygous() { this.genotype = GENOTYPE_HETEROZYGOUS; }
-    public void set_homozygous_ref() { this.genotype = GENOTYPE_HOMOZYGOUS_REF; }
+    
     public void set_variant_quality(int q) { this.variant_quality = q; }
     /**
      * This method is used to add an {@link exomizer.filter.ITriage ITriage} object to
@@ -155,11 +164,11 @@ public class Variant implements Comparable<Variant>, Constants {
 
 
 
-    public boolean is_homozygous_alt() { return this.genotype == GENOTYPE_HOMOZYGOUS_ALT; }
-    public boolean is_homozygous_ref() { return this.genotype == GENOTYPE_HOMOZYGOUS_REF; }
-    public boolean is_heterozygous() { return this.genotype == GENOTYPE_HETEROZYGOUS; }
-    public boolean is_unknown_genotype() { return this.genotype ==GENOTYPE_UNKNOWN; }
-    public boolean genotype_not_initialized() { return this.genotype == GENOTYPE_NOT_INITIALIZED; }
+    public boolean is_homozygous_alt() { return this.genotype.is_homozygous_alt(); }
+    public boolean is_homozygous_ref() { return this.genotype.is_homozygous_ref(); }
+    public boolean is_heterozygous() { return this.genotype.is_heterozygous(); }
+    public boolean is_unknown_genotype() { return this.genotype.is_unknown_genotype(); }
+    public boolean genotype_not_initialized() { return this.genotype.genotype_not_initialized(); }
     /** 
      * @return true if this variant is a nonsynonymous substitution (missense).
      */
@@ -194,14 +203,8 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean passes_variant_quality_threshold(int threshold) { return this.variant_quality >= threshold; }
     public float get_variant_quality() { return this.variant_quality; }
     public String get_genotype_as_string() {
-	switch(this.genotype) {
-	case GENOTYPE_NOT_INITIALIZED: return "not initialized";
-	case GENOTYPE_HOMOZYGOUS_REF: return "hom. ref";
-	case GENOTYPE_HOMOZYGOUS_ALT: return "hom. alt";
-	case GENOTYPE_HETEROZYGOUS: return "het.";
-	case GENOTYPE_UNKNOWN: return  "unknown";
-	}
-	return "?";
+	
+	return "TODO Add this to GenotypeI";
     }
 
     
@@ -343,14 +346,9 @@ public class Variant implements Comparable<Variant>, Constants {
 	    sb.append("\t: "+ getAnnotation() + "\n");
 	else
 	    sb.append("\tcds mutation not initialized\n");
-	if (genotype == GENOTYPE_HOMOZYGOUS_REF)
-	    sb.append("\tGenotype: homzygous ref\n");
-	else if (genotype == GENOTYPE_HOMOZYGOUS_ALT)
-	    sb.append("\tGenotype: homzygous var\n");
-	else if (genotype == GENOTYPE_HETEROZYGOUS)
-	    sb.append("\tGenotype: heterozygous\n");
-	else 
-	    sb.append("\tGenotype not known or not initialized");
+
+	sb.append("\tGenotype: " + this.genotype.toString());
+
 	sb.append("\tType: " + get_variant_type_as_string() + "\n");
 	
 	return sb.toString();

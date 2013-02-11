@@ -9,7 +9,7 @@ package exomizer.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.11 (10 February, 2013)
+ * @version 0.12 (11 February, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -23,6 +23,13 @@ public interface Constants {
     public static final byte GENOTYPE_HETEROZYGOUS    = 3;
     public static final byte GENOTYPE_UNKNOWN         = 4;
     public static final byte GENOTYPE_NOT_INITIALIZED = 5;
+    /** 
+     * These codes will be used to denote the genotype of a {@link exomizer.exome.Variant Variant}
+     * in an individual sample. Note that this enumeration denotes the call (e.g., 0/1) of a
+     * genotype, whereas the classes derived from {@link exomizer.exome.GenotypeI GenotypeI}
+     * have data with respect to quality and about single or multiple samples.
+     */
+    public static enum GenotypeCall {HOMOZYGOUS_REF, HOMOZYGOUS_ALT, HETEROZYGOUS, UNKNOWN, UNINITIALIZED };
 
     /* 3) Mutation types (from annovar) */
     public static final byte DOWNSTREAM = 1;
@@ -102,6 +109,12 @@ public interface Constants {
     public static final float NOPARSE_FLOAT = -5f;
     /** Flag for no rsID for variant */
     public static final int NO_RSID = -1;
+
+    /**
+     * An enumeration of the four main Mendelian modes of inheritance for
+     * prioritizing exome data.
+     */
+    public static enum ModeOfInheritance {AUTOSOMAL_DOMINANT, AUTOSOMAL_RECESSIVE, X_RECESSIVE, X_DOMINANT , UNINITIALIZED};
 
 
 }

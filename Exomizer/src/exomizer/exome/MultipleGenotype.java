@@ -25,4 +25,12 @@ public class MultipleGenotype extends GenotypeI implements Constants {
 	this.genotype = gt;
 	this.genotype_quality=quality;
     }
+
+
+    public boolean is_homozygous_alt() { return false; }
+    public boolean is_homozygous_ref() {return false; }
+    public boolean is_heterozygous() { return false; }
+    public boolean is_unknown_genotype() { return false; }
+    public boolean genotype_not_initialized() { return false; }
+
 }
