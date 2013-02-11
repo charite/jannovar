@@ -203,8 +203,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean passes_variant_quality_threshold(int threshold) { return this.variant_quality >= threshold; }
     public float get_variant_quality() { return this.variant_quality; }
     public String get_genotype_as_string() {
-	
-	return "TODO Add this to GenotypeI";
+	return this.genotype.get_genotype_as_string();
     }
 
     

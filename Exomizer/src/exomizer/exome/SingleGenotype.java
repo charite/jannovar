@@ -12,7 +12,7 @@ import exomizer.common.Constants;
  * TODO: Note that in some files, we may have DP or DP4 in the INFO field,
  * but actually this should be in the FORMAT/Genotype fields.
  * @author Peter Robinson
- * @version 0.03 (11 February, 2013)
+ * @version 0.04 (11 February, 2013)
  */
 public class SingleGenotype extends GenotypeI implements Constants {
 
@@ -38,7 +38,16 @@ public class SingleGenotype extends GenotypeI implements Constants {
     public boolean genotype_not_initialized() { return this.genotype == GenotypeCall.UNINITIALIZED; }
 
 
-
+    public String get_genotype_as_string() {
+	switch(this.genotype) {
+	case HOMOZYGOUS_ALT: return "Hom.Alt.";
+	case HOMOZYGOUS_REF: return "Hom.Ref.";
+	case HETEROZYGOUS: return "Het";
+	case UNKNOWN: return "unknown";
+	case UNINITIALIZED: return "uninitialized";
+	}
+	return "could not identify genotype";
+    }
 
       /**
      * Get the following fields from the VCF INFO fields

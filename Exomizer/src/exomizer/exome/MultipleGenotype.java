@@ -33,4 +33,8 @@ public class MultipleGenotype extends GenotypeI implements Constants {
     public boolean is_unknown_genotype() { return false; }
     public boolean genotype_not_initialized() { return false; }
 
+    public String get_genotype_as_string() {
+	return "todo";
+    }
+
 }
