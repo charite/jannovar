@@ -9,7 +9,7 @@ import exomizer.common.Constants;
  * {@link exomizer.exome.SingleGenotype SingleGenotype} for
  * VCF files with single samples.
  * @author Peter Robinson
- * @version 0.01 (10 February, 2013)
+ * @version 0.02 (10 February, 2013)
  */
 public class MultipleGenotype extends GenotypeI implements Constants {
 
@@ -17,12 +17,12 @@ public class MultipleGenotype extends GenotypeI implements Constants {
     /**  genotype (See {@link exomizer.common.Constants Constants}
      * for the integer constants used to represent the genotypes).
      */
-    private byte genotype=GENOTYPE_NOT_INITIALIZED;
+    private GenotypeCall call =GenotypeCall.UNINITIALIZED;
 
     private int genotype_quality;
     
     public MultipleGenotype(byte gt,int quality) {
-	this.genotype = gt;
+	System.out.println("Warning: MultipleGenotype not implemented");
 	this.genotype_quality=quality;
     }
 

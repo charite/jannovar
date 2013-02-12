@@ -9,7 +9,7 @@ package exomizer.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.12 (11 February, 2013)
+ * @version 0.13 (12 February, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -17,12 +17,7 @@ public interface Constants {
     public static final byte Y_CHROMOSOME = 24;
     public static final byte M_CHROMOSOME = 25;
 
-    /* 2) Genotypes */
-    public static final byte GENOTYPE_HOMOZYGOUS_REF  = 1;
-    public static final byte GENOTYPE_HOMOZYGOUS_ALT  = 2;
-    public static final byte GENOTYPE_HETEROZYGOUS    = 3;
-    public static final byte GENOTYPE_UNKNOWN         = 4;
-    public static final byte GENOTYPE_NOT_INITIALIZED = 5;
+   
     /** 
      * These codes will be used to denote the genotype of a {@link exomizer.exome.Variant Variant}
      * in an individual sample. Note that this enumeration denotes the call (e.g., 0/1) of a
@@ -64,6 +59,7 @@ public interface Constants {
     /* 4) Index of fields of the DP4 (depth) from the VCF file:
        ref-forward bases, ref-reverse, alt-forward and alt-reverse bases
     */
+    
     public static final int N_REF_FORWARD_BASES=0;
     public static final int N_REF_REVERSE_BASES=1;
     public static final int N_ALT_FORWARD_BASES=2;
@@ -74,11 +70,6 @@ public interface Constants {
      /* The following constants are flags that
 	cause a specially formated field to be displayed in the HTML table. */
     public static final int GENOMIC_VAR = 101;
-    public static final int POLYPHEN_WITH_PRED = 200;
-    public static final int SIFT_WITH_PRED = 201;
-    public static final int MUT_TASTER_WITH_PRED = 202;
-    public static final int VARTYPE_IDX = 203;
-    public static final int GENOTYPE_QUALITY = 204;
     /**  Flag for output field representing the QUAL column of the VCF file. */
     public static final int VARIANT_QUALITY = 205;
     /** Flag for output of field representing the Quality filter for the VCF entry */
@@ -97,7 +88,7 @@ public interface Constants {
     public static final int UBERPHENO_FILTER = 210;
     /** Flag to represent results of annotating against OMIM data */
     public static final int OMIM_FILTER = 309;
-    public static final int THOUSAND_GENOMES_AF_AC = 1000;
+   
 
     /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;
