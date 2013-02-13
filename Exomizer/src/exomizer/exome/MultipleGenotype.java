@@ -1,5 +1,7 @@
 package exomizer.exome;
 
+import java.util.ArrayList;
+
 import exomizer.common.Constants;
 
 /**
@@ -9,21 +11,32 @@ import exomizer.common.Constants;
  * {@link exomizer.exome.SingleGenotype SingleGenotype} for
  * VCF files with single samples.
  * @author Peter Robinson
- * @version 0.02 (10 February, 2013)
+ * @version 0.03 (13 February, 2013)
  */
 public class MultipleGenotype extends GenotypeI implements Constants {
 
   
-    /**  genotype (See {@link exomizer.common.Constants Constants}
-     * for the integer constants used to represent the genotypes).
+    /**  List of genotype calls (See {@link exomizer.common.Constants Constants})
+     * for one variant.
      */
-    private GenotypeCall call =GenotypeCall.UNINITIALIZED;
-
-    private int genotype_quality;
+    private ArrayList<GenotypeCall> callList = null;
+    /**
+     * List of Phred-scaled qualities for the genotype calls in {@link #callList}.
+     */
+    private ArrayList<Integer> qualityList = null;
     
-    public MultipleGenotype(byte gt,int quality) {
-	System.out.println("Warning: MultipleGenotype not implemented");
-	this.genotype_quality=quality;
+    /**
+     * The constructor takes lists of calls and qualities that have been parsed from 
+     * a single VCF line by the {@link exomizer.io.MultipleGenotypeFactory MultipleGenotypeFactory}.
+     * @param calls A list of the genotype calls, one for each sample
+     * @param qualities A list of the genotype Phred qualities, one for each sample.
+     */
+    public MultipleGenotype(ArrayList<GenotypeCall> calls,ArrayList<Integer> qualities) {
+	this.callList = calls;
+	this.qualityList = qualities;
+
+	System.out.println("Warning: MultipleGenotype not fully implemented");
+
     }
 
 
