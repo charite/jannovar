@@ -507,8 +507,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case ncRNA_SPLICING: s = "ncRNA_splicing"; break;
 	case SPLICING: s="Splicing"; break;
 	case STOPLOSS: s="Stoploss"; break;
-	case STOPGAIN: s="Stopgain"; break;
-	case NONSENSE: s = "Nonsense"; break;
+	case STOPGAIN: s="Stopgain"; break; /* stopgain=nonsense */
 	case SYNONYMOUS: s="Synonymous"; break;
 	case MISSENSE: s="Missense"; break;
 	case NON_FS_SUBSTITUTION: s="Nonframeshit subsitution"; break;
