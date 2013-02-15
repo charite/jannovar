@@ -9,7 +9,7 @@ package exomizer.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.13 (12 February, 2013)
+ * @version 0.15 (15 February, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -26,36 +26,17 @@ public interface Constants {
      */
     public static enum GenotypeCall {HOMOZYGOUS_REF, HOMOZYGOUS_ALT, HETEROZYGOUS, UNKNOWN, UNINITIALIZED };
 
-    /* 3) Mutation types (from annovar) */
-    public static final byte DOWNSTREAM = 1;
-    public static final byte EXONIC = 2;
-    public static final byte FS_DELETION = 3;
-    public static final byte FS_INSERTION = 4;
-    public static final byte NON_FS_SUBSTITUTION = 5;
-    public static final byte FS_SUBSTITUTION = 6;
-    public static final byte INTERGENIC = 7;
-    public static final byte INTRONIC = 8;
-    public static final byte MISSENSE = 9;
-    public static final byte ncRNA_EXONIC = 10;
-    public static final byte ncRNA_INTRONIC = 11;
-    public static final byte ncRNA_SPLICING = 12;
-    public static final byte ncRNA_UTR3 = 13;
-    public static final byte ncRNA_UTR5 = 14;
-    public static final byte NON_FS_DELETION = 15;
-    public static final byte NON_FS_INSERTION = 16;
-    public static final byte NONSENSE = 17;
-    public static final byte SPLICING= 18;
-    public static final byte STOPGAIN = 19;
-    public static final byte STOPLOSS = 20;
-    public static final byte SYNONYMOUS = 21;
-    public static final byte VARIANT_TYPE_UNKNOWN = 22;
-    public static final byte UPSTREAM = 23;
-    public static final byte UTR3 = 24;
-    public static final byte UTR5 = 25;
-    /** Combination of both UTR5 and UTR3 annotation (overlap) */
-    public static final byte UTR53 = 26;
-    public static final byte POSSIBLY_ERRONEOUS = 27;
+    /**
+     * These codes reflect the possible types of variants that we call for an exome. Note that the
+     * codes have the obvious meanings, but UTR53 means a variant that is in the 3' UTR of one transcript
+     * and the 5' UTR of another transcript.
+     */
+    public static enum VariantType { DOWNSTREAM, EXONIC, FS_DELETION, FS_INSERTION, NON_FS_SUBSTITUTION,
+	    FS_SUBSTITUTION , INTERGENIC, INTRONIC, MISSENSE, ncRNA_EXONIC, ncRNA_INTRONIC, ncRNA_SPLICING,
+	    ncRNA_UTR3, ncRNA_UTR5, NON_FS_DELETION , NON_FS_INSERTION, NONSENSE, SPLICING, STOPGAIN,
+	    STOPLOSS, SYNONYMOUS, VARIANT_TYPE_UNKNOWN, UPSTREAM, UTR3, UTR5, UTR53,POSSIBLY_ERRONEOUS};
 
+  
     /* 4) Index of fields of the DP4 (depth) from the VCF file:
        ref-forward bases, ref-reverse, alt-forward and alt-reverse bases
     */
@@ -90,7 +71,8 @@ public interface Constants {
     public static final int ZFIN_PHENODIGM_FILTER = 211;
     /** Flag to represent results of annotating against OMIM data */
     public static final int OMIM_FILTER = 309;
-   
+    /** Flag to represent exome-target filter */
+    public static final int EXOME_TARGET_FILTER = 311;
 
     /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;

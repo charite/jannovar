@@ -11,7 +11,7 @@ import exomizer.exome.GenotypeI;
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.11 (12 February, 2013)
+ * @version 0.12 (15 February, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -175,7 +175,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_missense_variant() { 
 	if (annot == null)
 	    return false;
-	else return (annot.getVariantType() == MISSENSE);
+	else return (annot.getVariantType() == VariantType.MISSENSE);
     }
     public String getVCFline() { return this.vcfLine; }
    
@@ -257,13 +257,13 @@ public class Variant implements Comparable<Variant>, Constants {
 
     /**
      * @see exomizer.common.Constants
-     * @return a byte constant representing the variant class (NONSENSE, INTRONIC etc)
+     * @return a enum constant representing the variant class (NONSENSE, INTRONIC etc)
      */
-    public byte getVariantTypeAsByte() {
+    public VariantType getVariantTypeConstant() {
 	if (this.annot != null)
 	    return this.annot.getVariantType();
 	else
-	    return VARIANT_TYPE_UNKNOWN;
+	    return VariantType.VARIANT_TYPE_UNKNOWN;
     }
 
     /**

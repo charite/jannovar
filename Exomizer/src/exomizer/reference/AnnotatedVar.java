@@ -49,7 +49,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.11 December 15, 2012
+ * @version 0.12 (February 15, 2013)
  * @author Peter N Robinson
  */
 
@@ -310,13 +310,13 @@ public class AnnotatedVar implements Constants {
      * For now, we will just show the genesymbols (like annovar).
      */
     private Annotation summarizeUTR() throws AnnotationException {
-	byte type;
+	VariantType type;
 	if (hasUTR5 && ! hasUTR3)
-	    type = UTR5;
+	    type = VariantType.UTR5;
 	else if (hasUTR3 && ! hasUTR5)
-	    type =  UTR3;
+	    type =  VariantType.UTR3;
 	else 
-	    type = UTR53; /* combination */
+	    type = VariantType.UTR53; /* combination */
 		
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
@@ -335,14 +335,7 @@ public class AnnotatedVar implements Constants {
 	}
 	Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),type);
 	return ann;
-
-
-
     }
-
-
-
-
 
 
     /**
@@ -398,7 +391,7 @@ public class AnnotatedVar implements Constants {
 	    for (int i=1;i<symbol_list.size();++i) {
 		sb.append("," + symbol_list.get(i));
 	    }
-	    Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),ncRNA_EXONIC);
+	    Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),VariantType.ncRNA_EXONIC);
 	    return ann;
 	}
     }
@@ -494,7 +487,7 @@ public class AnnotatedVar implements Constants {
 	for (Annotation a: this.annotation_Exonic) {
 	    if (a.equals(ann)) return;
 	}
-	if (ann.getVariantType() == SYNONYMOUS) {
+	if (ann.getVariantType() == VariantType.SYNONYMOUS) {
 	    this.annotation_Synonymous.add(ann);
 	    this.hasSynonymous = true;
 	} else {
@@ -635,13 +628,13 @@ public class AnnotatedVar implements Constants {
      * then we only store the INTRONIC annotation.
      */
     public void addIntronicAnnotation(Annotation ann){
-	if (ann.getVariantType() == INTRONIC) {
+	if (ann.getVariantType() == VariantType.INTRONIC) {
 	    for (Annotation a: this.annotation_Intronic) {
 		if (a.equals(ann)) return; /* already have identical annotation */
 	    }
 	    this.annotation_Intronic.add(ann);
 	    this.hasIntronic=true;
-	} else if (ann.getVariantType() == ncRNA_INTRONIC) {
+	} else if (ann.getVariantType() == VariantType.ncRNA_INTRONIC) {
 	     for (Annotation a: this.annotation_ncrnaIntronic) {
 		 if (a.equals(ann)) return; /* already have identical annotation */
 	     }
@@ -697,14 +690,14 @@ public class AnnotatedVar implements Constants {
      * @param ann The annotation that is to be added to the list of annotations for the current sequence variant.
      */
     public void addUpDownstreamAnnotation(Annotation ann){
-	byte type = ann.getVariantType();
-	if (type == exomizer.common.Constants.DOWNSTREAM) {
+	VariantType type = ann.getVariantType();
+	if (type == VariantType.DOWNSTREAM) {
 	    for (Annotation a: annotation_Downstream) {
 		if (a.equals(ann)) return;
 	    }
 	    this.annotation_Downstream.add(ann);
 	    this.hasDownstream=true;
-	} else if (type == exomizer.common.Constants.UPSTREAM) {
+	} else if (type == VariantType.UPSTREAM) {
 	    for (Annotation a: annotation_Downstream) {
 		if (a.equals(ann)) return;
 	    }

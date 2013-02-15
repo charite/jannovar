@@ -18,12 +18,12 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.14 (7 January, 2013)
+ * @version 0.15 (15 February, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
 	e.g., MISSENSE, 5UTR, etc. */
-    private byte varType;
+    private VariantType varType;
     /** The position of the variant in the ORF or mRNA, if applicable. This field is used to
 	sort exonic variants.*/
     private int rvarstart;
@@ -58,21 +58,14 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * constants in {@link exomizer.common.Constants Constants},
      * e.g., MISSENSE, 5UTR, etc. 
      */
-    public byte getVariantType() { return this.varType; }
+    public VariantType getVariantType() { return this.varType; }
     /**
      * This function resets the variant type, and should only be used by the AnnotatedVar class for
      * certain cases of resolving precedence, e.g., if there is already a noncoding RNA intronic
      * annotation, and we get a new annotation for a coding isoform of the same gene. */
-    public void setVarType(byte typ) { this.varType = typ; }
+    public void setVarType(VariantType typ) { this.varType = typ; }
 
-    /**
-     * Note this function is identical to {@link #getVariantType}, it was a mistake to have two functions
-     * with the same name. TODO: Refactor code to use only getVariantType
-     * @return type of this Annotation (one of the constants such as INTERGENIC from {@link exomizer.common.Constants Constants}).
-     */
-    public byte getVarType() {
-	return this.varType;
-    } 
+   
 
     /**
      * @return The gene symbol (e.g., FBN1) for the gene affected by this Annotation.
@@ -151,7 +144,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createIntergenicAnnotation(KnownGene leftGene, KnownGene rightGene, int startpos, int endpos) {
 	Annotation ann = new Annotation();
 	//System.out.println(String.format("Left:%s, right:%s, start %d end %d",leftGene.getName2(),rightGene.getName2(),startpos,endpos));
-	ann.varType=INTERGENIC;
+	ann.varType=VariantType.INTERGENIC;
 	/* Note that either the leftGene or the rightGene can be null, if the variant is located
 	   5' (3') to all variants on a chromosome. */
 	if (leftGene == null) {
@@ -179,7 +172,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation getSummaryDownstreamAnnotation(String name) {
 	Annotation ann = new Annotation();
-	ann.varType=DOWNSTREAM;
+	ann.varType=VariantType.DOWNSTREAM;
 	ann.variantAnnotation = name;
 	return ann;
     }
@@ -195,15 +188,15 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.entrezGeneID = kg.getEntrezGeneID();
 	if (kg.isFivePrimeToGene(pos)) {
 	    if (kg.isPlusStrand()) {
-		ann.varType=UPSTREAM;
+		ann.varType=VariantType.UPSTREAM;
 	    } else {
-		ann.varType=DOWNSTREAM;
+		ann.varType=VariantType.DOWNSTREAM;
 	    }
 	} else if (kg.isThreePrimeToGene(pos)) {
 	    if (kg.isMinusStrand()) {
-		ann.varType=UPSTREAM;
+		ann.varType=VariantType.UPSTREAM;
 	    } else {
-		ann.varType=DOWNSTREAM;
+		ann.varType=VariantType.DOWNSTREAM;
 	    }
 	}
 	return ann;
@@ -219,7 +212,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createNonCodingExonicRnaAnnotation(KnownGene kgl, int rvarstart,String ref, String alt) {
 	Annotation ann = new Annotation();
-	ann.varType = ncRNA_EXONIC;
+	ann.varType = VariantType.ncRNA_EXONIC;
 	ann.geneSymbol = kgl.getName2();
 	ann.entrezGeneID = kgl.getEntrezGeneID();
 	ann.variantAnnotation = kgl.getName2();// String.format("HGVS=%s", name2);
@@ -238,7 +231,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createSplicingAnnotation(KnownGene kgl, int refvarstart, String anno) {
 	Annotation ann = new Annotation();
-	ann.varType = SPLICING;
+	ann.varType = VariantType.SPLICING;
 	ann.variantAnnotation = anno;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
 	//System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
@@ -254,7 +247,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createUTR5Annotation(KnownGene kgl, int refvarstart, String ref, String alt) {
 	Annotation ann = new Annotation();
-	ann.varType = UTR5;
+	ann.varType = VariantType.UTR5;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = kgl.getName();
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -269,7 +262,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createUTR3Annotation(KnownGene kgl, String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = UTR3;
+	ann.varType = VariantType.UTR3;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -284,9 +277,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * combined annotation for cases where we need to combine genesymbols,
      * which essentially means down/upstream, ncRNA, UTR3, UTR5 for now.
      * @param a String with the combined gene symbols
-     * @param typ The variant type, one of the constants in {@link exomizer.common.Constants Constants}
+     * @param typ The variant type, one of the constants in {@link exomizer.common.Constants.VariantType VariantType}
      */
-     public static Annotation createSummaryAnnotation(String a, byte typ) {
+     public static Annotation createSummaryAnnotation(String a, VariantType typ) {
 	 Annotation ann = new Annotation();
 	 ann.varType = typ ;
 	 ann.variantAnnotation = a;
@@ -299,14 +292,14 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
     public static Annotation createNoncodingIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
-	ann.varType = ncRNA_INTRONIC;
+	ann.varType = VariantType.ncRNA_INTRONIC;
 	ann.variantAnnotation = String.format("%s", name2);
 	return ann;
      }
 
      public static Annotation createIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
-	ann.varType = INTRONIC;
+	ann.varType = VariantType.INTRONIC;
 	ann.variantAnnotation = String.format("%s", name2);
 	return ann;
      }
@@ -317,7 +310,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createErrorAnnotation(String msg) {
 	Annotation ann = new Annotation();
-	ann.varType =  POSSIBLY_ERRONEOUS;
+	ann.varType =  VariantType.POSSIBLY_ERRONEOUS;
 	ann.variantAnnotation = msg;
 	return ann;
      }
@@ -327,7 +320,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createNonFrameshiftDeletionAnnotation(KnownGene kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = NON_FS_DELETION;
+	ann.varType = VariantType.NON_FS_DELETION;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
@@ -339,7 +332,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createFrameshiftDeletionAnnotation(KnownGene kgl, int varstart, String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = FS_DELETION;
+	ann.varType = VariantType.FS_DELETION;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
@@ -356,7 +349,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createNonFrameshiftInsertionAnnotation(KnownGene kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = NON_FS_INSERTION;
+	ann.varType = VariantType.NON_FS_INSERTION;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
@@ -372,7 +365,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createFrameshiftInsertionAnnotation(KnownGene kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = FS_INSERTION;
+	ann.varType = VariantType.FS_INSERTION;
 	ann.geneSymbol = kgl.getName2();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
@@ -390,7 +383,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createStopLossAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = STOPLOSS;
+	ann.varType = VariantType.STOPLOSS;
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
@@ -412,7 +405,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createStopGainAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = STOPGAIN;
+	ann.varType = VariantType.STOPGAIN;
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
@@ -433,7 +426,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createSynonymousSNVAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = SYNONYMOUS;
+	ann.varType = VariantType.SYNONYMOUS;
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
@@ -452,7 +445,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createMissenseSNVAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = MISSENSE;
+	ann.varType = VariantType.MISSENSE;
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
@@ -472,7 +465,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
       public static Annotation createNonFrameShiftSubstitionAnnotation(KnownGene kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
-	ann.varType = NON_FS_SUBSTITUTION;
+	ann.varType = VariantType.NON_FS_SUBSTITUTION;
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
@@ -482,7 +475,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     
      public static Annotation createFrameShiftSubstitionAnnotation(KnownGene kgl,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
-	ann.varType = FS_SUBSTITUTION;
+	ann.varType = VariantType.FS_SUBSTITUTION;
 	ann.geneSymbol=kgl.getName2();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
@@ -498,7 +491,11 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return Annotation.getVariantTypeAsString(this.varType);
     }
 
-    public static String getVariantTypeAsString(byte typ) {
+
+    /**
+     * @param typ A constant from the Constants.VariantType enumeration represent the type of variant.
+     */
+    public static String getVariantTypeAsString(VariantType typ) {
 	String s="";
 	switch(typ) {
 	case INTERGENIC: s="Intergenic";break;
