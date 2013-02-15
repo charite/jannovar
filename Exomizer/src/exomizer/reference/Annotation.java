@@ -522,7 +522,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case UTR3: s="UTR3"; break;
 	case UTR53: s="UTR5,UTR3"; break;
 	case ncRNA_UTR3: s = "ncRNA_UTR5"; break;
-	case VARIANT_TYPE_UNKNOWN: s = "unknown"; break;
+	case UNKNOWN: s = "unknown"; break;
 	case EXONIC: s = "exonic"; break;
 	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",typ);
 	}

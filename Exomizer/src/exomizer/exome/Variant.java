@@ -263,7 +263,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	if (this.annot != null)
 	    return this.annot.getVariantType();
 	else
-	    return VariantType.VARIANT_TYPE_UNKNOWN;
+	    return VariantType.UNKNOWN;
     }
 
     /**
