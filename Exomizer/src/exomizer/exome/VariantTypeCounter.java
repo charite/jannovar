@@ -1,7 +1,8 @@
 package exomizer.exome;
 
 import java.util.HashMap;
-
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 import exomizer.common.Constants;
 
@@ -37,6 +38,34 @@ public class VariantTypeCounter implements Constants {
 	Integer i = this.variantCountMap.get(vt);
 	this.variantCountMap.put(vt,i+1);
     }
+
+
+    public void writeSummary(BufferedWriter out) throws IOException {
+	out.write("<a name=\"#VariantClassSummary\">\n"+
+		  "<h2>Distirubtion of Variant Types</h2>\n"+
+		  "</a>\n");
+	out.write("<table class=\"priority\">\n");
+	out.write("<tr>\n");
+	out.write("<th>Missense</th>");
+	out.write("<th>Nonsense</th>");
+	out.write("<th>Frameshift</th>");
+	out.write("</tr>\n");
+	int missense = this.variantCountMap.get(VariantType.MISSENSE);
+	int nonsense = this.variantCountMap.get(VariantType.NONSENSE);
+	int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION);
+
+
+	out.write(String.format("<tr><td>%d</td><td>%d</td><td>%d</td></tr>\n",missense,nonsense,frameshift));
+
+	out.write("</table>\n");
+
+
+    }
+
+
+   
+
+
 
 
 }
