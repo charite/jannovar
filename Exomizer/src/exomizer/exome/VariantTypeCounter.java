@@ -11,7 +11,7 @@ import exomizer.common.Constants;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.01 (15 February, 2013)
+ * @version 0.02 (18 February, 2013)
  */
 
 public class VariantTypeCounter implements Constants {
@@ -66,7 +66,7 @@ public class VariantTypeCounter implements Constants {
 	outputNonpathogenicTableCell(out);
 	out.write("</tr>\n");
 
-	out.write("</table><p>&nbps;</p>\n");
+	out.write("</table><p>&nbsp;</p>\n");
 
 
     }

@@ -7,6 +7,7 @@ import exomizer.common.Constants;
 import exomizer.filter.ITriage;
 import exomizer.reference.Annotation;
 import exomizer.exome.GenotypeI;
+import exomizer.exception.VCFParseException;
 
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
@@ -53,7 +54,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param r Reference nucleotide
      * @param var variant (alt) nucleotide
     */
-    public Variant(String c, int p, String r, String var) {
+    public Variant(String c, int p, String r, String var) throws VCFParseException {
 	this.chromosome = convertChromosomeStringToByteValue(c);
 	this.position=p;
 	this.ref = r;
@@ -77,7 +78,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /** Initialize the {@link #chromosome} field
      * @param chr A string representation of the chromosome such as chr3 or chrX
      */
-    public void setChromosome(String chr) {
+    public void setChromosome(String chr) throws VCFParseException {
 	this.chromosome = convertChromosomeStringToByteValue(chr);
     }
      /** Initialize the {@link #position} field
@@ -309,7 +310,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param c a String representation of a chromosome (e.g., chr3, chrX).
      * @return corresponding integer (e.g., 3, 23).
      */
-    public byte convertChromosomeStringToByteValue(String c) {
+    public byte convertChromosomeStringToByteValue(String c) throws VCFParseException {
 	if (c.startsWith("chr")) c = c.substring(3);
 	if (c.equals("X") ) return 23;
 	if (c.equals("23")) return 23;
@@ -322,8 +323,9 @@ public class Variant implements Comparable<Variant>, Constants {
 	try {
 	    i = Byte.parseByte(c);
 	} catch (NumberFormatException e) {
-	    System.err.println("[SNV.java] Could not parse Chromosome string \"" + c + "\"");
-	    throw e;
+	    VCFParseException ve = new VCFParseException("[Variant.java] Could not parse Chromosome string \"" + c + "\"");
+	    ve.setBadChromosome(c);
+	    throw ve;
 	}
 	return i;
     }
