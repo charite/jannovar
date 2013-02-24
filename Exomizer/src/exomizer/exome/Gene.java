@@ -158,6 +158,9 @@ public class Gene implements Comparable<Gene>, Constants  {
 	    for (Variant v : this.variant_list) {
 		float x = v.getFilterScore();
 		vals.add(x);
+		/** Add the score twice if this is a homozygous variant. */
+		if (v.is_homozygous_alt())
+		    vals.add(x);
 	    }
 	    Collections.sort(vals,Collections.reverseOrder()); /* Sort in descending order */
 	    if (mode == ModeOfInheritance.AUTOSOMAL_RECESSIVE) {
