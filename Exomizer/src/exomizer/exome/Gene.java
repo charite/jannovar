@@ -1,6 +1,7 @@
 package exomizer.exome;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import exomizer.exome.Variant;
@@ -31,7 +32,7 @@ import exomizer.priority.IRelevanceScore;
  * prioritization is done by classes that implement 
  * {@link exomizer.priority.IPriority IPriority}.
  * @author Peter Robinson
- * @version 0.08 (17 January, 2013)
+ * @version 0.11 (23 January, 2013)
  */
 public class Gene implements Comparable<Gene>, Constants  {
     /** A list of all of the variants that affect this gene. */
@@ -48,7 +49,7 @@ public class Gene implements Comparable<Gene>, Constants  {
      * {@link exomizer.exome.Variant Variant} objects associated with this gene.
      */
     private float filterScore = UNINITIALIZED_FLOAT;
-    private float pathogenicityFilterScore = UNINITIALIZED_FLOAT;
+    //private float pathogenicityFilterScore = UNINITIALIZED_FLOAT;
    
      /** A map of the results of prioritization. The key to the map is an 
 	integer constant as defined in {@link exomizer.common.Constants Constants}. */
@@ -95,6 +96,7 @@ public class Gene implements Comparable<Gene>, Constants  {
 
     /**
      * @param rel Result of a prioritization algorithm
+     * @param type an integer constant from {@link exomizer.common.Constants Constants} representing the filter type
      */
     public void addRelevanceScore(IRelevanceScore rel, int type) {
 	this.relevanceMap.put(type,rel);
@@ -139,41 +141,37 @@ public class Gene implements Comparable<Gene>, Constants  {
 
 
     /**
-     * Calculate the total priority score for this
+     * Calculates the total priority score for this
      * gene based on data stored in its associated
      * {@link exomizer.exome.Variant Variant} objects.
+     * Note that for assumed autosomal recessive variants, the mean of the
+     * worst two variants is taken, and for other modes of inheritance,the
+     * since worst value is taken.
      */
-    public void calculateFilteringScore() {
+    public void calculateFilteringScore(ModeOfInheritance mode) {
+	this.filterScore = 0f;
 	if (variant_list.size()==0)
-	    this.filterScore = 0f;
+	    return;
 	else {
 	    //this.filterScore = 1f;
+	    ArrayList<Float> vals = new ArrayList<Float>();
 	    for (Variant v : this.variant_list) {
 		float x = v.getFilterScore();
-		//this.filterScore *= x;
-		//for genes with multiple variants pick best, otherwise tend to end up with a score near 0
-		this.filterScore = Math.max(this.filterScore,x);
+		vals.add(x);
 	    }
+	    Collections.sort(vals,Collections.reverseOrder()); /* Sort in descending order */
+	    if (mode == ModeOfInheritance.AUTOSOMAL_RECESSIVE) {
+		if (vals.size() < 2) return; /* Less than two variants, cannot be AR */
+		float x = vals.get(0);
+		float y = vals.get(1);
+		this.filterScore =  (x+y)/(2f);
+	    } else {
+		this.filterScore = vals.get(0);
+	    }	    
 	}
     }
 
-    /**
-     * Calculate the total priority score for this
-     * gene based on data stored in its associated
-     * {@link exomizer.exome.Variant Variant} objects.
-     */
-    public void calculatePathogenicityFilteringScore() {
-    	if (variant_list.size()==0)
-    		this.pathogenicityFilterScore = 0f;
-    	else {
-    		//this.pathogenicityFilterScore = 1f;
-    		for (Variant v : this.variant_list) {
-    			float x = v.getPathogenicityPriorityScore();
-    			//this.pathogenicityFilterScore *= x;
-    			this.pathogenicityFilterScore = Math.max(this.pathogenicityFilterScore,x);
-    		}
-    	}
-    }
+   
 
     
     /**
@@ -226,16 +224,12 @@ public class Gene implements Comparable<Gene>, Constants  {
      * Calculate the combined score of this gene based on the relevance of the
      * gene (priorityScore) and the predicted effects of the variants
      * (filterScore).
+     * <P>
+     * Note that this method assumes we have calculate the scores, which is depending on the 
+     * function {@link #calculateGeneAndVariantScores} having been called.
      * @return a combined score that will be used to rank the gene.
      */
     public float getCombinedScore() {
-	if (priorityScore == UNINITIALIZED_FLOAT)
-	    calculatePriorityScore();// equivalent to the phenodigm score at moment - omim always equals 1?
-	if ( filterScore == UNINITIALIZED_FLOAT)
-	    calculateFilteringScore();
-	if ( pathogenicityFilterScore == UNINITIALIZED_FLOAT)
-	    calculatePathogenicityFilteringScore();
-	
 	//return priorityScore * filterScore;
 	return priorityScore + filterScore;
 	//return priorityScore;
@@ -243,45 +237,50 @@ public class Gene implements Comparable<Gene>, Constants  {
     }
 
     /**
+     * @return a row for tab-separated value file.
+     */
+    public String getTSVRow() {
+	String s = String.format("%s\t%.4f\t%.4f\t%%.4f",
+				 getGeneSymbol(),
+				 getPriorityScore(),
+				 getFilterScore(),
+				 getCombinedScore());
+	return s;
+    }
+
+
+    /**
      * Calculate the priority score of this gene based on the relevance of the
      * gene (priorityScore) 
+     * <P>
+     * Note that this method assumes we have calculate the scores, which is depending on the 
+     * function {@link #calculateGeneAndVariantScores} having been called.
      * @return a priority score that will be used to rank the gene.
      */
     public float getPriorityScore() {
-	if (priorityScore == UNINITIALIZED_FLOAT)
-	    calculatePriorityScore();// equivalent to the phenodigm score at moment - omim always equals 1?
-    return priorityScore;
+	return priorityScore;
     }
     
     /**
      * Calculate the filter score of this gene based on the relevance of the
      * gene (filterScore) 
+     * <P>
+     * Note that this method assumes we have calculate the scores, which is depending on the 
+     * function {@link #calculateGeneAndVariantScores} having been called.
      * @return a filter score that will be used to rank the gene.
      */
     public float getFilterScore() {
-	if (filterScore == UNINITIALIZED_FLOAT)
-	    calculateFilteringScore();
 	return filterScore;
     }
     
-    /**
-     * Calculate the filter score of this gene based on the relevance of the
-     * gene (filterScore) 
-     * @return a filter score that will be used to rank the gene.
-     */
-    public float getPathogenicityFilterScore() {
-	if (pathogenicityFilterScore == UNINITIALIZED_FLOAT)
-		calculatePathogenicityFilteringScore();
-    return pathogenicityFilterScore;
-    }
     
     /**
      * Calculate the gene (priority) and the variant 
      * (filtering) scores in preparation for sorting.
      */
-    public void calculateGeneAndVariantScores() {
+    public void calculateGeneAndVariantScores(ModeOfInheritance mode) {
 	calculatePriorityScore();
-	calculateFilteringScore();
+	calculateFilteringScore(mode);
     }
 
 

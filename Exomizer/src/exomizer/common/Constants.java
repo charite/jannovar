@@ -73,6 +73,8 @@ public interface Constants {
     public static final int OMIM_FILTER = 309;
     /** Flag to represent exome-target filter */
     public static final int EXOME_TARGET_FILTER = 311;
+    /** Flag for dynamiic phenodigm filter. */
+    public static final int DYNAMIC_PHENODIGM_FILTER = 313;
 
     /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;
