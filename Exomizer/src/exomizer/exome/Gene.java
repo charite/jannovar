@@ -243,7 +243,7 @@ public class Gene implements Comparable<Gene>, Constants  {
      * @return a row for tab-separated value file.
      */
     public String getTSVRow() {
-	String s = String.format("%s\t%.4f\t%.4f\t%%.4f",
+	String s = String.format("%s\t%.4f\t%.4f\t%.4f",
 				 getGeneSymbol(),
 				 getPriorityScore(),
 				 getFilterScore(),
