@@ -23,8 +23,16 @@ public interface Constants {
      * in an individual sample. Note that this enumeration denotes the call (e.g., 0/1) of a
      * genotype, whereas the classes derived from {@link exomizer.exome.GenotypeI GenotypeI}
      * have data with respect to quality and about single or multiple samples.
+     * <P>
+     * Note that the constant {@code NOT_OBSERVED} refers to <B>./.</B> in a VCF file with multiple
+     * samples means a call cannot be made for the sample at this given locus (e.g., because there were
+     * nor reads). The constant {@code UNKNOWN} is used here to refer to some error condition and
+     * actually should never be used at all if the Java code performs correctly. The constant
+     * {@code UNINITIALIZED} is used to indicate that a software object has been constructed but not been
+     * initialized by parsing. Again, this should actually never happen since various Exceptions will be
+     * thrown if there is a parse error. But the constants are kept for now for debugging's sake.
      */
-    public static enum GenotypeCall {HOMOZYGOUS_REF, HOMOZYGOUS_ALT, HETEROZYGOUS, UNKNOWN, UNINITIALIZED };
+    public static enum GenotypeCall {HOMOZYGOUS_REF, HOMOZYGOUS_ALT, HETEROZYGOUS, NOT_OBSERVED, UNKNOWN, UNINITIALIZED };
 
     /**
      * These codes reflect the possible types of variants that we call for an exome. Note that the
