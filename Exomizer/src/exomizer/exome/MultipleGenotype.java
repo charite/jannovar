@@ -1,6 +1,7 @@
 package exomizer.exome;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import exomizer.common.Constants;
 
@@ -35,7 +36,7 @@ public class MultipleGenotype extends GenotypeI implements Constants {
 	this.callList = calls;
 	this.qualityList = qualities;
 
-	System.out.println("Warning: MultipleGenotype not fully implemented");
+	//System.out.println("Warning: MultipleGenotype not fully implemented");
 
     }
 
@@ -47,7 +48,23 @@ public class MultipleGenotype extends GenotypeI implements Constants {
     public boolean genotype_not_initialized() { return false; }
 
     public String get_genotype_as_string() {
-	return "todo";
+	StringBuffer sb = new StringBuffer();
+	Iterator<GenotypeCall> it = callList.iterator();
+	int c=0;
+	while (it.hasNext()) {
+	    GenotypeCall call = it.next();
+	    if (c++>0) sb.append(":");
+	    switch (call) {
+	    case HOMOZYGOUS_REF: sb.append("0/0"); break;
+	    case HOMOZYGOUS_ALT: sb.append("1/1"); break;
+	    case HETEROZYGOUS: sb.append("0/1"); break;
+	    case NOT_OBSERVED: sb.append("./."); break;  
+	    case UNKNOWN: sb.append("?"); break;  
+	    case UNINITIALIZED: sb.append("-");
+	    }
+	    
+	}
+	return sb.toString();
     }
 
 }
