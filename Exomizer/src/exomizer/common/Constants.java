@@ -77,6 +77,8 @@ public interface Constants {
     public static final int UBERPHENO_FILTER = 210;
     /** Flag to represent results of filtering against ZFIN phenotype data (Phenodigm)*/
     public static final int ZFIN_PHENODIGM_FILTER = 211;
+    /** Flag to represent results of filtering against PPI-RandomWalk-proximity */
+    public static final int GENEWANDERER_FILTER = 212;
     /** Flag to represent results of annotating against OMIM data */
     public static final int OMIM_FILTER = 309;
     /** Flag to represent exome-target filter */
