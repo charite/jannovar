@@ -1,7 +1,7 @@
 package exomizer.exome;
 
 import java.util.HashMap;
-import java.io.BufferedWriter;
+import java.io.Writer;
 import java.io.IOException;
 
 import exomizer.common.Constants;
@@ -11,7 +11,7 @@ import exomizer.common.Constants;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.02 (18 February, 2013)
+ * @version 0.03 (30 March, 2013)
  */
 
 public class VariantTypeCounter implements Constants {
@@ -39,8 +39,11 @@ public class VariantTypeCounter implements Constants {
 	this.variantCountMap.put(vt,i+1);
     }
 
-
-    public void writeSummary(String sampleName,BufferedWriter out) throws IOException {
+    /**
+     * @param sampleName The name of the exome sample as given in the VCF file.
+     * @param out a java.io.Writer handle (can be either BufferedWriter or StringWriter)
+     */
+    public void writeSummary(String sampleName, Writer out) throws IOException {
 	out.write("<a name=\"#Distribution\">\n"+
 		  "<h2>Distribution of Variant Types</h2>\n"+
 		  "</a>\n");
@@ -75,7 +78,7 @@ public class VariantTypeCounter implements Constants {
     /**
      * Write an unordered list with the variants deeemed to be nonpathogenic.
      */
-    private void outputNonpathogenicTableCell(BufferedWriter out) throws IOException {
+    private void outputNonpathogenicTableCell(Writer out) throws IOException {
 	
 	int ncrna = this.variantCountMap.get(VariantType.ncRNA_EXONIC) +
 	    this.variantCountMap.get(VariantType.ncRNA_SPLICING) + 
