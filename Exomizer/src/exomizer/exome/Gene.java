@@ -102,6 +102,29 @@ public class Gene implements Comparable<Gene>, Constants  {
 	this.relevanceMap.put(type,rel);
     }
 
+    /**
+     * @param type an integer constant from {@link exomizer.common.Constants Constants} representing the filter type
+     * @return The IRelevance object corresponding to the filter type.
+     */
+    public float getRelevanceScore(int type) {
+	IRelevanceScore ir = this.relevanceMap.get(type);
+	if (ir == null) {
+	    System.err.println("[Gene.java:getRelevanceScore] Got a null value for " + type);
+	    System.exit(1);
+	}
+	return ir.getRelevanceScore();
+    }
+
+    public void resetRelevanceScore(int type, float newval) {
+	IRelevanceScore rel = this.relevanceMap.get(type);
+	if (rel == null) {
+	    System.err.println("[Gene.java:resetRelevanceScore]Got a null value for " + type);
+	    System.exit(1);
+	}
+	rel.resetRelevanceScore(newval);
+    }
+
+
 
     /**
      * Note that currently, the EntrezGene IDs are associated with the Variants. Probably it would
