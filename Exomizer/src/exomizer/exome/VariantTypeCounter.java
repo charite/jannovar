@@ -47,8 +47,8 @@ public class VariantTypeCounter implements Constants {
 	out.write("<a name=\"#Distribution\">\n"+
 		  "<h2>Distribution of Variant Types</h2>\n"+
 		  "</a>\n");
-	out.write("<table class=\"priority\">\n");
-	out.write("<tr>\n");
+	out.write("<table class=\"#ztable\">\n");
+	out.write("<thead><tr>\n");
 	out.write("<th>Sample</th>");
 	out.write("<th>Nonsynonymous</th>");
 	out.write("<th>Nonsense</th>");
@@ -56,7 +56,8 @@ public class VariantTypeCounter implements Constants {
 	out.write("<th>Splice site</th>");
 	out.write("<th>Nonfs indel</th>");
 	out.write("<th>Deemed nonpathogenic</th>");
-	out.write("</tr>\n");
+	out.write("</tr></thead>\n");
+	out.write("<tbody>\n");
 	int missense = this.variantCountMap.get(VariantType.MISSENSE);
 	int nonsense = this.variantCountMap.get(VariantType.STOPGAIN);
 	int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION) + this.variantCountMap.get(VariantType.FS_DELETION);
@@ -67,7 +68,7 @@ public class VariantTypeCounter implements Constants {
 	out.write(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td>\n",
 				sampleName,missense,nonsense,frameshift,splice,nonfs));
 	outputNonpathogenicTableCell(out);
-	out.write("</tr>\n");
+	out.write("</tr></tbody>\n");
 
 	out.write("</table><p>&nbsp;</p>\n");
 
