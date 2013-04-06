@@ -12,7 +12,7 @@ import exomizer.exception.VCFParseException;
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.12 (15 February, 2013)
+ * @version 0.13 (6 April, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -240,6 +240,9 @@ public class Variant implements Comparable<Variant>, Constants {
      * {@link exomizer.reference.Annotation Annotation} object. If this
      * is not initialized (which should never happen), it returns ".".
      *<p>
+     * Note: This function should not be used anymore, we will refactor the
+     * code to handle variants with multiple transcripts better in the 
+     * future.
      * @return The annotation of the current variant.
      */
     public String getAnnotation()
@@ -247,6 +250,37 @@ public class Variant implements Comparable<Variant>, Constants {
 	if (this.annot != null)
 	    return this.annot.getVariantAnnotation();
 	else return ".";
+    }
+
+    /**
+     * This is intended to decouple the rest of the 
+     * program from the way that annnotations are currently
+     * stored (annotations for multiple-transcript mutations
+     * are stored as a single string, e.g., 
+     * LTF(uc003cpr.3:exon5:c.30_31insAAG:p.R10delinsRR,
+     * uc003cpq.3:exon2:c.69_70insAAG:p.R23delinsRR,
+     * uc010hjh.3:exon2:c.69_70insAAG:p.R23delinsRR)
+     * <P>
+     * We will be creating a separate object for each annotation, and future
+     * implementations will just return that, or a list of strings from 
+     * each of them. For now, since everything else is working, just split
+     * the String and send back a list.
+     */
+    public String[] getAnnotationList() {
+	ArrayList<String> annotList = new ArrayList<String>();
+	if (this.annot == null) {
+	    String A[] = new String[1];
+	    A[0] = ".";
+	    return A;
+	}
+	String a = this.annot.getVariantAnnotation();
+	int x,y;
+	x = a.indexOf('(');
+	y = a.indexOf(')');
+	String b = a.substring(x+1,y); /* Get the stuff inside the "(", ")" */
+	String A[] = b.split(","); /* transcript mutations are separated by "'".*/
+
+	return A;
     }
 
 

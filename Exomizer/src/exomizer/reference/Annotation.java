@@ -6,7 +6,7 @@ import exomizer.reference.KnownGene;
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  * <OL>
- * <LI>The variant type: frameshift, synonymous substitution, etc
+ * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link exomizer.common.Constants.VariantType VariantType}).
  * <LI>The gene symbol
  * <LI>A string representing the actual variant
  * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
@@ -18,7 +18,7 @@ import exomizer.reference.KnownGene;
  * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.15 (15 February, 2013)
+ * @version 0.16 (6 April, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
