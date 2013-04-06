@@ -47,14 +47,10 @@ public class VariantTypeCounter implements Constants {
 	out.write("<a name=\"#Distribution\">\n"+
 		  "<h2>Distribution of Variant Types</h2>\n"+
 		  "</a>\n");
-	out.write("<table class=\"#ztable\">\n");
+	out.write("<table id=\"ztable\">\n");
 	out.write("<thead><tr>\n");
 	out.write("<th>Sample</th>");
-	out.write("<th>Nonsynonymous</th>");
-	out.write("<th>Nonsense</th>");
-	out.write("<th>Frameshift</th>");
-	out.write("<th>Splice site</th>");
-	out.write("<th>Nonfs indel</th>");
+	out.write("<th>NS/SS/I</th>");
 	out.write("<th>Deemed nonpathogenic</th>");
 	out.write("</tr></thead>\n");
 	out.write("<tbody>\n");
@@ -65,8 +61,11 @@ public class VariantTypeCounter implements Constants {
 	int nonfs = this.variantCountMap.get(VariantType.NON_FS_SUBSTITUTION) +
 	    this.variantCountMap.get(VariantType.NON_FS_DELETION) +
 	    this.variantCountMap.get(VariantType.NON_FS_INSERTION);
-	out.write(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td>\n",
-				sampleName,missense,nonsense,frameshift,splice,nonfs));
+	String nsssiCell = String.format("<tr><th>%s</th><td><ul><li>Nonsynonymous: %d</li><li>nonsense: %d</li>"+
+					 "<li>frameshift: %d</li><li>splice: %s</li>"+
+					 "<li>non-fs indel: %d</li></ul></td>", sampleName, missense,nonsense,frameshift,splice,nonfs);
+
+	out.write(nsssiCell);
 	outputNonpathogenicTableCell(out);
 	out.write("</tr></tbody>\n");
 
