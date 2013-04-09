@@ -93,8 +93,8 @@ public class BlockSubAnnotationTest implements Constants {
 	Assert.fail("Could not identify chromosome \"" + chr + "\"");
     } else {
 	Annotation ann =c.getAnnotation(pos,ref,alt); 
-	byte varType = ann.getVarType();
-	Assert.assertEquals(NON_FS_SUBSTITUTION,varType);
+	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION,varType);
 	String annot = ann.getVariantAnnotation();
 	Assert.assertEquals("LOC100132247(uc002djq.3:exon7:c.993_1029TCCACCCTCAGCTCTACCCTCAGCG,uc010vbn.1:exon8:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG,uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG)",annot);
 	}
