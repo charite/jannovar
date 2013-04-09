@@ -1,34 +1,20 @@
 package exomizer.tests;
 
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-/* serialization */
-import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.HashMap;
 
-
-import exomizer.io.UCSCKGParser;
-import exomizer.common.Constants;
-import exomizer.io.AnnovarParser;
-import exomizer.reference.KnownGene;
-import exomizer.reference.Chromosome;
-import exomizer.reference.Annotation;
-import exomizer.exome.Variant;
-import exomizer.exception.AnnotationException;
-
-
-import org.junit.Test;
-import org.junit.BeforeClass;
 import junit.framework.Assert;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import exomizer.common.Constants;
+import exomizer.exception.AnnotationException;
+import exomizer.reference.Annotation;
+import exomizer.reference.Chromosome;
+import exomizer.reference.KnownGene;
 
 
 public class AnnotatorTest implements Constants {
@@ -98,15 +84,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=LOC100288069(dist=39337),LINC00115(dist=8181)",annot);
+	    Assert.assertEquals("LOC100288069(dist=39337),LINC00115(dist=8181)",annot);
 	    
 	}
     }
@@ -127,14 +109,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=C1orf167(dist=1746),C1orf167(dist=3820)",annot);
+	    Assert.assertEquals("C1orf167(dist=1746),C1orf167(dist=3820)",annot);
 	    
 	}
     }
@@ -155,14 +134,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=CACNA1C(dist=44144),LOC283440(dist=19107)",annot);
+	    Assert.assertEquals("CACNA1C(dist=44144),LOC283440(dist=19107)",annot);
 	    
 	}
 
@@ -184,14 +160,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=NONE(dist=NONE),DQ586768(dist=276134)",annot);
+	    Assert.assertEquals("NONE(dist=NONE),DQ586768(dist=276134)",annot);
 	    
 	}
 
@@ -213,14 +186,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    //Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(DOWNSTREAM,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=DQ595648",annot);
+	    Assert.assertEquals("DQ595648",annot);
 	    
 	}
 
@@ -242,14 +212,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=SNORD116-5",annot);
+	    Assert.assertEquals("SNORD116-5",annot);
 	    
 	}
      }
@@ -275,14 +242,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR5,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=DTNA",annot);
+	    Assert.assertEquals("DTNA",annot);
 	    
 	}
      }
@@ -300,14 +264,11 @@ public class AnnotatorTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGVS=ERMAP",annot);
+	    Assert.assertEquals("ERMAP",annot);
 	}
 	    
 
