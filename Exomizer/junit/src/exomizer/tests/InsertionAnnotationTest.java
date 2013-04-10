@@ -94,8 +94,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OR2T3(uc001iel.1:exon1:c.771_772insTTC:p.F257delinsFF)",annot);
 	}
@@ -118,8 +118,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM178B(uc002sxk.4:exon7:c.628_629insCGAT:p.L210fs,uc002sxl.4:exon13:c.1579_1580insCGAT:p.L527fs)",annot);
 	}
@@ -142,8 +142,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.D755fs)",annot);
 	}
@@ -167,8 +167,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RANBP2(uc002tem.4:exon20:c.6318_6319insAGCG:p.M2106fs)",annot);
 	}
@@ -192,8 +192,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RANBP2(uc002tem.4:exon20:c.6882_6883insCAT:p.D2294delinsDH)",annot);
 	}
@@ -216,8 +216,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TTN(uc002umz.1:exon112:c.21594_21595insACTT:p.K7198fs)",annot);
 	}
@@ -239,8 +239,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CPS1(uc010fur.3:exon2:c.15_16insTTC:p.I5delinsIF)",annot);
 	}
@@ -263,8 +263,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.456_457insGGA:p.L152delinsLE)",annot);
 	}
@@ -287,8 +287,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC4(uc021xjp.1:exon2:c.8108_8109insTG:p.T2703fs)",annot);
 	}
@@ -311,8 +311,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC4(uc021xjp.1:exon2:c.6858_6859insCAG:p.T2286delinsTS)",annot);
 	}
@@ -335,8 +335,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FRG1(uc003izs.3:exon6:c.439_440insA:p.M147fs)",annot);
 	}
@@ -358,8 +358,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FRG1(uc003izs.3:exon7:c.608_609insGACT:p.K203fs)",annot);
 	}
@@ -384,8 +384,8 @@ public class InsertionAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PRDM9(uc003jgo.3:exon11:c.1147_1148insTGA:p.P383delinsLT)",annot);
 	}
@@ -411,8 +411,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SCAMP1(uc003kfl.3:exon8:c.730_731insT:p.N244fs)",annot);
 	}
@@ -434,8 +434,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PCDHB10(uc003lix.3:exon1:c.1806_1807insATGC:p.L602fs)",annot);
 	}
@@ -457,8 +457,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK098012(uc003nrp.1:exon2:c.254_255insCAAA:p.P85fs)",annot);
 	}
@@ -480,8 +480,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PRICKLE4(uc011duf.1:exon8:c.863_864insTCT:p.L288delinsLL)",annot);
 	}
@@ -503,8 +503,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AEBP1(uc003tkb.3:exon1:c.118_119insAAAA:p.G40fs)",annot);
 	}
@@ -525,8 +525,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(NON_FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC12(uc003uxo.3:exon2:c.3442_3443insGTA:p.T1148delinsST)",annot);
 	}
@@ -547,8 +547,8 @@ jannovar says, annovar finds a "C")
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(FS_INSERTION,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OLFM1(uc010naq.2:exon2:c.328_329insAA:p.G110fs)",annot);
 	}

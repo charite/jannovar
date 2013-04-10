@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 
 import exomizer.io.UCSCKGParser;
 import exomizer.common.Constants;
@@ -24,9 +22,9 @@ import exomizer.reference.Annotation;
 import exomizer.exome.Variant;
 import exomizer.exception.AnnotationException;
 
-
 import org.junit.Test;
 import org.junit.BeforeClass;
+
 import junit.framework.Assert;
 
 
@@ -95,13 +93,9 @@ public class ExonicAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
-	    /* There should be just one annotation */
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(MISSENSE,varType);
+	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ISG15:uc001acj.4:exon1:c.248G>A:p.S83N (Type:MISSENSE)",annot);
 	    

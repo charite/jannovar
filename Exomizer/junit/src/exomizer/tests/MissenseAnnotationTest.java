@@ -89,8 +89,8 @@ public class MissenseAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(MISSENSE,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.A1060T:p.T354S,uc010nvg.2:exon11:c.A1090T:p.T364S,uc011mzw.2:exon11:c.A1099T:p.T367S,uc004fmp.2:exon11:c.A1150T:p.T384S)",annot);
 	}
@@ -116,8 +116,8 @@ public class MissenseAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(MISSENSE,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String geneSymbol = ann.getGeneSymbol();
 	    Assert.assertEquals("NUP85",geneSymbol);
 	    String annot = ann.getVariantAnnotation();
@@ -145,8 +145,8 @@ public class MissenseAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(MISSENSE,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String geneSymbol = ann.getGeneSymbol();
 	    Assert.assertEquals("HOXB7",geneSymbol);
 	    String annot = ann.getVariantAnnotation();

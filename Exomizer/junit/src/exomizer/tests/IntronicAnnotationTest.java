@@ -95,8 +95,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PLEKHN1",annot);
 	}
@@ -118,8 +118,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CDK11A,CDK11B,SLC35E2B",annot);
 	}
@@ -141,8 +141,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NADK",annot);
 	}
@@ -164,8 +164,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MORN1",annot);
 	}
@@ -187,8 +187,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CHD5",annot);
 	}
@@ -210,8 +210,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TAS1R1",annot);
 	}
@@ -233,8 +233,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RERE",annot);
 	}
@@ -256,8 +256,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CTNNBIP1",annot);
 	}
@@ -279,8 +279,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PTCHD2",annot);
 	}
@@ -302,8 +302,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MTHFR",annot);
 	}
@@ -325,8 +325,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TNFRSF1B",annot);
 	}
@@ -348,8 +348,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("VPS13D",annot);
 	}
@@ -371,8 +371,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PDPN",annot);
 	}
@@ -394,8 +394,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CELA2B",annot);
 	}
@@ -417,8 +417,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CELA2B",annot);
 	}
@@ -440,8 +440,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLCNKB",annot);
 	}
@@ -463,8 +463,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NBPF1",annot);
 	}
@@ -486,8 +486,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PADI6",annot);
 	}
@@ -509,8 +509,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ALDH4A1",annot);
 	}
@@ -532,8 +532,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("UBR4",annot);
 	}
@@ -555,8 +555,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DDOST",annot);
 	}
@@ -578,8 +578,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NBPF3",annot);
 	}
@@ -601,8 +601,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RAP1GAP",annot);
 	}
@@ -624,8 +624,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("USP48",annot);
 	}
@@ -647,8 +647,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HSPG2",annot);
 	}
@@ -670,8 +670,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLIC4",annot);
 	}
@@ -693,8 +693,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM54B",annot);
 	}
@@ -716,8 +716,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CATSPER4",annot);
 	}
@@ -739,8 +739,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MAP3K6",annot);
 	}
@@ -762,8 +762,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SNRNP40",annot);
 	}
@@ -785,8 +785,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("COL16A1",annot);
 	}
@@ -808,8 +808,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CSMD2",annot);
 	}
@@ -831,8 +831,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLSPN",annot);
 	}
@@ -854,8 +854,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRAPPC3",annot);
 	}
@@ -878,8 +878,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CAP1",annot);
 	}
@@ -901,8 +901,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CTPS",annot);
 	}
@@ -924,8 +924,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SCMH1",annot);
 	}
@@ -947,8 +947,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC2A1",annot);
 	}
@@ -970,8 +970,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SZT2",annot);
 	}
@@ -993,8 +993,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ST3GAL3",annot);
 	}
@@ -1016,8 +1016,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MAST2",annot);
 	}
@@ -1039,8 +1039,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AGBL4",annot);
 	}
@@ -1062,8 +1062,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AGBL4",annot);
 	}
@@ -1085,8 +1085,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DIO1",annot);
 	}
@@ -1108,8 +1108,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("USP24",annot);
 	}
@@ -1131,8 +1131,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("USP24",annot);
 	}
@@ -1154,8 +1154,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("INADL",annot);
 	}
@@ -1177,8 +1177,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DOCK7",annot);
 	}
@@ -1200,8 +1200,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SGIP1",annot);
 	}
@@ -1223,8 +1223,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C1orf141",annot);
 	}
@@ -1246,8 +1246,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RPE65",annot);
 	}
@@ -1269,8 +1269,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DNASE2B",annot);
 	}
@@ -1292,8 +1292,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DNASE2B",annot);
 	}
@@ -1315,8 +1315,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLCA2",annot);
 	}
@@ -1338,8 +1338,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CCDC18",annot);
 	}
@@ -1361,8 +1361,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ABCD3",annot);
 	}
@@ -1384,8 +1384,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("COL11A1",annot);
 	}
@@ -1407,8 +1407,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KIAA1324",annot);
 	}
@@ -1430,8 +1430,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SARS",annot);
 	}
@@ -1453,8 +1453,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GSTM1",annot);
 	}
@@ -1476,8 +1476,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GSTM1",annot);
 	}
@@ -1499,8 +1499,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C1orf88",annot);
 	}
@@ -1522,8 +1522,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OVGP1",annot);
 	}
@@ -1545,8 +1545,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADORA3",annot);
 	}
@@ -1568,8 +1568,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DDX20",annot);
 	}
@@ -1591,8 +1591,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MAGI3",annot);
 	}
@@ -1614,8 +1614,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("VANGL1",annot);
 	}
@@ -1637,8 +1637,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TTF2",annot);
 	}
@@ -1660,8 +1660,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MAN1A2",annot);
 	}
@@ -1683,8 +1683,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NBPF14,NBPF9,PDE4DIP",annot);
 	}
@@ -1707,8 +1707,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NBPF14,NBPF9,SEC22B",annot);
 	}
@@ -1730,8 +1730,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PDZK1",annot);
 	}
@@ -1753,8 +1753,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CHD1L",annot);
 	}
@@ -1776,8 +1776,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SEMA6C",annot);
 	}
@@ -1799,8 +1799,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("POGZ",annot);
 	}
@@ -1822,8 +1822,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CGN",annot);
 	}
@@ -1845,8 +1845,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TUFT1",annot);
 	}
@@ -1868,8 +1868,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PGLYRP4",annot);
 	}
@@ -1891,8 +1891,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("S100A8",annot);
 	}
@@ -1914,8 +1914,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CRTC2",annot);
 	}
@@ -1937,8 +1937,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("IL6R",annot);
 	}
@@ -1962,8 +1962,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADAM15",annot);
 	}
@@ -1985,8 +1985,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SMG5",annot);
 	}
@@ -2008,8 +2008,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CCT3",annot);
 	}
@@ -2031,8 +2031,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("APOA1BP",annot);
 	}
@@ -2054,8 +2054,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CRABP2",annot);
 	}
@@ -2077,8 +2077,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NTRK1",annot);
 	}
@@ -2100,8 +2100,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NTRK1",annot);
 	}
@@ -2123,8 +2123,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FCRL5",annot);
 	}
@@ -2146,8 +2146,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FCRL2",annot);
 	}
@@ -2169,8 +2169,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KIRREL",annot);
 	}
@@ -2192,8 +2192,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("IFI16",annot);
 	}
@@ -2215,8 +2215,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ATP1A2",annot);
 	}
@@ -2239,8 +2239,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PPFIBP1",annot);
 	}
@@ -2262,8 +2262,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PPFIBP1",annot);
 	}
@@ -2285,8 +2285,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TMTC1",annot);
 	}
@@ -2308,8 +2308,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BICD1",annot);
 	}
@@ -2331,8 +2331,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADAMTS20",annot);
 	}
@@ -2354,8 +2354,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NELL2",annot);
 	}
@@ -2377,8 +2377,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC38A1",annot);
 	}
@@ -2400,8 +2400,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C12orf54",annot);
 	}
@@ -2423,8 +2423,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PRKAG1",annot);
 	}
@@ -2446,8 +2446,8 @@ public class IntronicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTRONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TMBIM6",annot);
 	}

@@ -97,8 +97,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KLHL17(uc001aca.2:exon5:c.715C>T:p.L239L)",annot);
 	}
@@ -120,8 +120,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(MISSENSE,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.A1060T:p.T354S,uc010nvg.2:exon11:c.A1090T:p.T364S,uc011mzw.2:exon11:c.A1099T:p.T367S,uc004fmp.2:exon11:c.A1150T:p.T384S)",annot);
 	}
@@ -145,8 +145,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EPHA2(uc010oca.2:exon3:c.573G>A:p.L191L,uc001aya.2:exon3:c.573G>A:p.L191L)",annot);
 	}
@@ -168,8 +168,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("UBR4(uc001bbk.1:exon21:c.2922G>C:p.L974L,uc001bbi.3:exon68:c.9981G>C:p.L3327L)",annot);
 	}
@@ -192,8 +192,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HMGB4(uc021oky.1:exon1:c.105T>C:p.Y35Y,uc001bxp.3:exon2:c.105T>C:p.Y35Y)",annot);
 	}
@@ -216,8 +216,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MRPS15(uc001cas.2:exon3:c.207C>T:p.P69P)",annot);
 	}
@@ -240,8 +240,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FRRS1(uc001dsh.1:exon7:c.708C>T:p.S236S)",annot);
 	}
@@ -263,8 +263,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CELSR2(uc001dxa.4:exon1:c.1551T>C:p.S517S)",annot);
 	}
@@ -287,8 +287,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DDX20(uc001ebt.3:exon3:c.750G>A:p.V250V,uc010owf.2:exon10:c.1212G>A:p.V404V,uc001ebs.3:exon11:c.1926G>A:p.V642V)",annot);
 	}
@@ -311,8 +311,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HRNR(uc001ezt.1:exon3:c.814C>A:p.R272R)",annot);
 	}
@@ -334,8 +334,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LRRC52(uc001gde.2:exon2:c.886C>A:p.R296R)",annot);
 	}
@@ -357,8 +357,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GORAB(uc001ggz.4:exon1:c.96A>C:p.G32G,uc001gha.2:exon1:c.96A>C:p.G32G,uc009wvw.2:exon1:c.96A>C:p.G32G)",annot);
 	}
@@ -381,8 +381,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DNM3(uc001gih.1:exon2:c.291A>G:p.T97T,uc001gif.3:exon18:c.2211A>G:p.T737T,uc001gie.3:exon19:c.2223A>G:p.T741T)",annot);
 	}
@@ -405,8 +405,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LAMC1(uc001gpy.4:exon25:c.4128T>C:p.R1376R)",annot);
 	}
@@ -428,8 +428,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RNPEP(uc001gxe.3:exon5:c.246G>A:p.Q82Q,uc001gxd.3:exon6:c.1143G>A:p.Q381Q)",annot);
 	}
@@ -451,8 +451,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HHIPL2(uc001hnh.1:exon1:c.99G>A:p.L33L)",annot);
 	}
@@ -474,8 +474,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OBSCN(uc009xez.1:exon4:c.1431A>G:p.L477L,uc001hsn.3:exon4:c.1431A>G:p.L477L)",annot);
 	}
@@ -497,8 +497,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AGR2(uc003str.3:exon7:c.441T>C:p.N147N)",annot);
 	}
@@ -521,8 +521,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HDAC9(uc003suh.3:exon23:c.3030C>T:p.F1010F)",annot);
 	}
@@ -545,8 +545,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF680(uc003tta.2:exon4:c.1569T>C:p.C523C)",annot);
 	}
@@ -569,8 +569,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KPNA7(uc010lft.2:exon7:c.936G>A:p.T312T)",annot);
 	}
@@ -593,8 +593,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC17(uc003uxp.1:exon3:c.9135T>C:p.S3045S)",annot);
 	}
@@ -616,8 +616,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DGKI(uc003vtu.3:exon28:c.1785A>G:p.E595E,uc003vtt.3:exon29:c.2778A>G:p.E926E)",annot);
 	}
@@ -639,8 +639,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CCDC94(uc002lzv.4:exon3:c.171T>C:p.N57N)",annot);
 	}
@@ -662,8 +662,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC16(uc002mkp.3:exon1:c.1284A>G:p.E428E)",annot);
 	}
@@ -684,8 +684,8 @@ public class SynonymousAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(SYNONYMOUS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MYH9(uc003apg.3:exon26:c.3429T>G:p.A1143A)",annot);
 	}

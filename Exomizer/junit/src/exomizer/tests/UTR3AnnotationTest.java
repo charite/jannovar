@@ -88,8 +88,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLIT2",annot);
 	}
@@ -111,8 +111,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CD24",annot);
 	}
@@ -134,8 +134,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TP73",annot);
 	}
@@ -157,8 +157,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TP73",annot);
 	}
@@ -180,8 +180,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("THAP3",annot);
 	}
@@ -203,8 +203,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLCN6",annot);
 	}
@@ -226,8 +226,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLCNKB",annot);
 	}
@@ -249,8 +249,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("COL8A2",annot);
 	}
@@ -272,8 +272,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MEAF6",annot);
 	}
@@ -295,8 +295,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ANGPTL3",annot);
 	}
@@ -318,8 +318,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GBP7",annot);
 	}
@@ -341,8 +341,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PSMB4",annot);
 	}
@@ -364,8 +364,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("IL6R",annot);
 	}
@@ -387,8 +387,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ISG20L2",annot);
 	}
@@ -410,8 +410,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FCGR2B",annot);
 	}
@@ -433,8 +433,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LRRC52",annot);
 	}
@@ -456,8 +456,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("XCL1",annot);
 	}
@@ -479,8 +479,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RGS21",annot);
 	}
@@ -502,8 +502,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RGS21",annot);
 	}
@@ -525,8 +525,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LMOD1",annot);
 	}
@@ -548,8 +548,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HS1BP3",annot);
 	}
@@ -571,8 +571,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HS1BP3",annot);
 	}
@@ -594,8 +594,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CIB4",annot);
 	}
@@ -617,8 +617,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PREB",annot);
 	}
@@ -640,8 +640,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EIF2B4",annot);
 	}
@@ -663,8 +663,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EIF2B4",annot);
 	}
@@ -686,8 +686,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PLB1",annot);
 	}
@@ -709,8 +709,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CDC42EP3",annot);
 	}
@@ -732,8 +732,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PLEK",annot);
 	}
@@ -755,8 +755,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PLEK",annot);
 	}
@@ -778,8 +778,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ACTG2",annot);
 	}
@@ -801,8 +801,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("REG3G",annot);
 	}
@@ -824,8 +824,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("REG1A",annot);
 	}
@@ -847,8 +847,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GNLY",annot);
 	}
@@ -870,8 +870,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EDAR",annot);
 	}
@@ -893,8 +893,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KLHL23,PHOSPHO2-KLHL23",annot);
 	}
@@ -916,8 +916,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OSBPL6",annot);
 	}
@@ -939,8 +939,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AX746670",annot);
 	}
@@ -962,8 +962,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ACADL",annot);
 	}
@@ -985,8 +985,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SPAG16",annot);
 	}
@@ -1008,8 +1008,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GPBAR1",annot);
 	}
@@ -1031,8 +1031,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NMUR1",annot);
 	}
@@ -1054,8 +1054,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NGEF",annot);
 	}
@@ -1077,8 +1077,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NDUFA10",annot);
 	}
@@ -1100,8 +1100,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GLT8D1",annot);
 	}
@@ -1123,8 +1123,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FRG2C",annot);
 	}
@@ -1146,8 +1146,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BTLA",annot);
 	}
@@ -1169,8 +1169,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RUVBL1",annot);
 	}
@@ -1192,8 +1192,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AX746590",annot);
 	}
@@ -1215,8 +1215,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TPRG1",annot);
 	}
@@ -1238,8 +1238,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ACOX3",annot);
 	}
@@ -1261,8 +1261,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KDR",annot);
 	}
@@ -1284,8 +1284,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SMR3A",annot);
 	}
@@ -1307,8 +1307,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC7",annot);
 	}
@@ -1330,8 +1330,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RRH",annot);
 	}
@@ -1353,8 +1353,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK308309",annot);
 	}
@@ -1376,8 +1376,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FRG1",annot);
 	}
@@ -1399,8 +1399,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC6A3",annot);
 	}
@@ -1422,8 +1422,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NPR3",annot);
 	}
@@ -1445,8 +1445,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DNAJC21",annot);
 	}
@@ -1468,8 +1468,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("IL31RA",annot);
 	}
@@ -1491,8 +1491,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ATP10B",annot);
 	}
@@ -1514,8 +1514,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PXDC1",annot);
 	}
@@ -1537,8 +1537,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KIF13A",annot);
 	}
@@ -1560,8 +1560,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DCDC2",annot);
 	}
@@ -1583,8 +1583,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GPLD1",annot);
 	}
@@ -1606,8 +1606,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BTN2A2",annot);
 	}
@@ -1629,8 +1629,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HLA-A",annot);
 	}
@@ -1652,8 +1652,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HLA-C",annot);
 	}
@@ -1675,8 +1675,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MICB",annot);
 	}
@@ -1698,8 +1698,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HLA-DMB",annot);
 	}
@@ -1721,8 +1721,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LEMD2",annot);
 	}
@@ -1744,8 +1744,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PRPH2",annot);
 	}
@@ -1767,8 +1767,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PKHD1",annot);
 	}
@@ -1790,8 +1790,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ARMC2",annot);
 	}
@@ -1813,8 +1813,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ULBP3",annot);
 	}
@@ -1836,8 +1836,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SYNJ2",annot);
 	}
@@ -1859,8 +1859,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC22A2",annot);
 	}
@@ -1882,8 +1882,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC22A2",annot);
 	}
@@ -1905,8 +1905,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CDCA7L",annot);
 	}
@@ -1928,8 +1928,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("WBSCR22",annot);
 	}
@@ -1951,8 +1951,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HGF",annot);
 	}
@@ -1974,8 +1974,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EMID2",annot);
 	}
@@ -1997,8 +1997,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TSPAN12",annot);
 	}
@@ -2020,8 +2020,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC13A4",annot);
 	}
@@ -2043,8 +2043,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AKR1D1",annot);
 	}
@@ -2066,8 +2066,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LZTS1",annot);
 	}
@@ -2089,8 +2089,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PBK",annot);
 	}
@@ -2112,8 +2112,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C8orf86",annot);
 	}
@@ -2135,8 +2135,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HTRA4",annot);
 	}
@@ -2158,8 +2158,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C8orf45",annot);
 	}
@@ -2181,8 +2181,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TMEM70",annot);
 	}
@@ -2204,8 +2204,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KANK1",annot);
 	}
@@ -2227,8 +2227,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C9orf11",annot);
 	}
@@ -2250,8 +2250,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM75D3",annot);
 	}
@@ -2273,8 +2273,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC286238",annot);
 	}
@@ -2296,8 +2296,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ROR2",annot);
 	}
@@ -2319,8 +2319,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ROR2",annot);
 	}
@@ -2342,8 +2342,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DDX31",annot);
 	}
@@ -2365,8 +2365,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ATP5C1",annot);
 	}
@@ -2388,8 +2388,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRDMT1",annot);
 	}
@@ -2411,8 +2411,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CACNB2",annot);
 	}
@@ -2434,8 +2434,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ARHGAP22",annot);
 	}
@@ -2457,8 +2457,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("WDFY4",annot);
 	}
@@ -2480,8 +2480,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PBLD",annot);
 	}
@@ -2503,8 +2503,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LRRC20",annot);
 	}
@@ -2526,8 +2526,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CDHR1",annot);
 	}
@@ -2549,8 +2549,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AGAP11",annot);
 	}
@@ -2572,8 +2572,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADAM8",annot);
 	}
@@ -2595,8 +2595,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("POLR2L",annot);
 	}
@@ -2618,8 +2618,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRIM22",annot);
 	}
@@ -2641,8 +2641,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DCDC1",annot);
 	}
@@ -2664,8 +2664,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("WT1",annot);
 	}
@@ -2687,8 +2687,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK097878",annot);
 	}
@@ -2710,8 +2710,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC440040",annot);
 	}
@@ -2733,8 +2733,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FADS3",annot);
 	}
@@ -2756,8 +2756,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC22A20",annot);
 	}
@@ -2779,8 +2779,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC22A20",annot);
 	}
@@ -2802,8 +2802,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM86C2P",annot);
 	}
@@ -2825,8 +2825,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC35F2",annot);
 	}
@@ -2848,8 +2848,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KDELC2",annot);
 	}
@@ -2871,8 +2871,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("APOC3",annot);
 	}
@@ -2894,8 +2894,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GALNT8",annot);
 	}
@@ -2917,8 +2917,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DPPA3",annot);
 	}
@@ -2940,8 +2940,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KLRC2",annot);
 	}
@@ -2963,8 +2963,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("STRAP",annot);
 	}
@@ -2986,8 +2986,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CELA1",annot);
 	}
@@ -3009,8 +3009,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("WIBG",annot);
 	}
@@ -3032,8 +3032,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC5A8",annot);
 	}
@@ -3055,8 +3055,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PRDM4",annot);
 	}
@@ -3078,8 +3078,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OAS1",annot);
 	}
@@ -3101,8 +3101,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC46A3",annot);
 	}
@@ -3124,8 +3124,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CLDN10",annot);
 	}
@@ -3147,8 +3147,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("POTEM",annot);
 	}
@@ -3170,8 +3170,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RNASE12",annot);
 	}
@@ -3193,8 +3193,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ECRP",annot);
 	}
@@ -3216,8 +3216,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ABHD12B",annot);
 	}
@@ -3239,8 +3239,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GCH1",annot);
 	}
@@ -3262,8 +3262,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ESR2",annot);
 	}
@@ -3285,8 +3285,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MAX",annot);
 	}
@@ -3308,8 +3308,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AHNAK2",annot);
 	}
@@ -3331,8 +3331,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC653061",annot);
 	}
@@ -3354,8 +3354,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HERC2",annot);
 	}
@@ -3377,8 +3377,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FMN1",annot);
 	}
@@ -3400,8 +3400,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GATM",annot);
 	}
@@ -3423,8 +3423,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC30A4",annot);
 	}
@@ -3446,8 +3446,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BCL2L10",annot);
 	}
@@ -3469,8 +3469,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("IGDCC3",annot);
 	}
@@ -3492,8 +3492,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SCAPER",annot);
 	}
@@ -3515,8 +3515,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MEF2A",annot);
 	}
@@ -3539,8 +3539,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("POLR3K",annot);
 	}
@@ -3562,8 +3562,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RAB40C",annot);
 	}
@@ -3585,8 +3585,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZG16B",annot);
 	}
@@ -3608,8 +3608,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("METTL22",annot);
 	}
@@ -3631,8 +3631,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EMP2",annot);
 	}
@@ -3654,8 +3654,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("USP31",annot);
 	}
@@ -3677,8 +3677,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FBXL19-AS1",annot);
 	}
@@ -3700,8 +3700,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CMTM3",annot);
 	}
@@ -3723,8 +3723,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ACD",annot);
 	}
@@ -3746,8 +3746,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C16orf46",annot);
 	}
@@ -3769,8 +3769,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK126852",annot);
 	}
@@ -3792,8 +3792,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SERPINF2",annot);
 	}
@@ -3816,8 +3816,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR53,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR53,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C17orf49,RNASEK,RNASEK-C17ORF49",annot);
 	}
@@ -3839,8 +3839,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C17orf108",annot);
 	}
@@ -3862,8 +3862,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FLOT2",annot);
 	}
@@ -3885,8 +3885,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DUSP3",annot);
 	}
@@ -3908,8 +3908,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MPP2",annot);
 	}
@@ -3931,8 +3931,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SNX11",annot);
 	}
@@ -3954,8 +3954,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ATP5G1",annot);
 	}
@@ -3977,8 +3977,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MRPL27",annot);
 	}
@@ -4000,8 +4000,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TBX2",annot);
 	}
@@ -4023,8 +4023,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ITGB4",annot);
 	}
@@ -4046,8 +4046,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EXOC7",annot);
 	}
@@ -4069,8 +4069,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ENOSF1,TYMS",annot);
 	}
@@ -4092,8 +4092,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC14A2",annot);
 	}
@@ -4115,8 +4115,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SKA1",annot);
 	}
@@ -4138,8 +4138,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FZR1",annot);
 	}
@@ -4161,8 +4161,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF626",annot);
 	}
@@ -4184,8 +4184,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C19orf40",annot);
 	}
@@ -4207,8 +4207,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LGI4",annot);
 	}
@@ -4230,8 +4230,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C19orf55",annot);
 	}
@@ -4253,8 +4253,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FBXO27",annot);
 	}
@@ -4276,8 +4276,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FCGBP",annot);
 	}
@@ -4299,8 +4299,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MIA",annot);
 	}
@@ -4322,8 +4322,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PLA2G4C",annot);
 	}
@@ -4345,8 +4345,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF610",annot);
 	}
@@ -4368,8 +4368,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF528",annot);
 	}
@@ -4391,8 +4391,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF528",annot);
 	}
@@ -4414,8 +4414,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF160",annot);
 	}
@@ -4437,8 +4437,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LILRB5",annot);
 	}
@@ -4460,8 +4460,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KIR2DS4",annot);
 	}
@@ -4483,8 +4483,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SEL1L2",annot);
 	}
@@ -4506,8 +4506,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C20orf26",annot);
 	}
@@ -4529,8 +4529,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZBP1",annot);
 	}
@@ -4553,8 +4553,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BAGE2",annot);
 	}
@@ -4576,8 +4576,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("JAM2",annot);
 	}
@@ -4599,8 +4599,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADAMTS5",annot);
 	}
@@ -4622,8 +4622,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRAPPC10",annot);
 	}
@@ -4645,8 +4645,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C21orf33",annot);
 	}
@@ -4668,8 +4668,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LSS",annot);
 	}
@@ -4691,8 +4691,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C22orf13",annot);
 	}
@@ -4714,8 +4714,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PVALB",annot);
 	}
@@ -4737,8 +4737,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRIOBP",annot);
 	}
@@ -4760,8 +4760,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NFAM1",annot);
 	}
@@ -4783,8 +4783,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MCAT",annot);
 	}
@@ -4806,8 +4806,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NUP50",annot);
 	}
@@ -4829,8 +4829,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NCAPH2",annot);
 	}
@@ -4852,8 +4852,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM47B",annot);
 	}
@@ -4875,8 +4875,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CHIC1",annot);
 	}
@@ -4898,8 +4898,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SAGE1",annot);
 	}
@@ -4921,8 +4921,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SAGE1",annot);
 	}
@@ -4944,8 +4944,8 @@ public class UTR3AnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CD24",annot);
 	}

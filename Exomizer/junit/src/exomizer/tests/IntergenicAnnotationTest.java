@@ -97,8 +97,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC100288069(dist=39337),LINC00115(dist=8181)",annot);
 	    
@@ -120,8 +120,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK025975(dist=42221),LOC729059(dist=47759)",annot);
 	}
@@ -143,8 +143,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RASAL2(dist=14943),C1orf49(dist=18621)",annot);
 	}
@@ -166,8 +166,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FLJ23867(dist=10810),TRNA_Val(dist=3607)",annot);
 	}
@@ -189,8 +189,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GJC2(dist=4633),IBA57(dist=1269)",annot);
 	}
@@ -212,8 +212,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRIM43B(dist=35235),AK055967(dist=6685)",annot);
 	}
@@ -235,8 +235,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NMS(dist=26382),PDCL3(dist=53294)",annot);
 	}
@@ -258,8 +258,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLC20A1(dist=6667),NT5DC4(dist=50996)",annot);
 	}
@@ -281,8 +281,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GLI2(dist=42566),TFCP2L1(dist=181369)",annot);
 	}
@@ -304,8 +304,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CCL20(dist=52556),WDR69(dist=1491)",annot);
 	}
@@ -327,8 +327,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ARMC9(dist=15624),MIR4777(dist=1881)",annot);
 	}
@@ -350,8 +350,8 @@ public class IntergenicAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(INTERGENIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TRNA_Glu(dist=17996),MIR548I1(dist=78003)",annot);
 	}

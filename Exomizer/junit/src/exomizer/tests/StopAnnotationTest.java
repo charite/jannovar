@@ -95,8 +95,8 @@ public class StopAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(STOPGAIN,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM71A(uc001hjk.3:exon1:c.1663A>T:p.K555*)",annot);
 	}
@@ -120,8 +120,8 @@ public class StopAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(STOPGAIN,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HLA-L(uc003npv.2:exon5:c.431G>A:p.W144*)",annot);
 	}
@@ -144,8 +144,8 @@ public class StopAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(STOPGAIN,varType);
+	    VariantType varType = ann.getVarType();
+	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PTCRA(uc010jxx.1:exon2:c.198G>A:p.W66*,uc011duz.1:exon3:c.348G>A:p.W116*)",annot);
 	}
@@ -171,8 +171,8 @@ public class StopAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(STOPGAIN,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("OR4X1(uc010rht.2:exon1:c.819T>A:p.Y273*)",annot);
 	}
@@ -196,8 +196,8 @@ public class StopAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(STOPLOSS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.STOPLOSS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("METTL8(uc010zdp.2:exon9:c.1000T>C:p.*334R,uc010zdo.2:exon11:c.1134+1T>C,uc002ugu.4:exon11:c.1135T>C:p.*379R)",annot);
 	}
@@ -223,8 +223,8 @@ public class StopAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(STOPLOSS,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.STOPLOSS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)",annot);
 	}

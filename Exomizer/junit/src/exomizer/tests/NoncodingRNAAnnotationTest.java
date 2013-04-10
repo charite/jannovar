@@ -88,8 +88,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(UTR3,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SLIT2",annot);
 	}
@@ -111,8 +111,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC136808",annot);
 	}
@@ -134,8 +134,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SCARNA3",annot);
 	}
@@ -157,8 +157,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LINC00303",annot);
 	}
@@ -180,8 +180,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC051708",annot);
 	}
@@ -203,8 +203,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MIR217",annot);
 	}
@@ -226,8 +226,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("abParts",annot);
 	}
@@ -249,8 +249,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("abParts",annot);
 	}
@@ -272,8 +272,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("abParts",annot);
 	}
@@ -295,8 +295,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC654433",annot);
 	}
@@ -318,8 +318,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("POTEKP",annot);
 	}
@@ -341,8 +341,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("POTEKP",annot);
 	}
@@ -364,8 +364,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C4orf42",annot);
 	}
@@ -387,8 +387,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FLJ35424",annot);
 	}
@@ -410,8 +410,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM13A-AS1",annot);
 	}
@@ -433,8 +433,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADH1C",annot);
 	}
@@ -456,8 +456,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HSP90AA6P",annot);
 	}
@@ -479,8 +479,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC013821",annot);
 	}
@@ -502,8 +502,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CRSP8P",annot);
 	}
@@ -525,8 +525,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FBXL21",annot);
 	}
@@ -548,8 +548,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DQ658414,MIR146A",annot);
 	}
@@ -571,8 +571,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SNORD48",annot);
 	}
@@ -594,8 +594,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SNORA29",annot);
 	}
@@ -617,8 +617,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SNORA29",annot);
 	}
@@ -640,8 +640,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC3B",annot);
 	}
@@ -663,8 +663,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC3B",annot);
 	}
@@ -686,8 +686,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC3B",annot);
 	}
@@ -709,8 +709,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SND1-IT1",annot);
 	}
@@ -732,8 +732,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC642236",annot);
 	}
@@ -755,8 +755,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC042913,BC080653",annot);
 	}
@@ -778,8 +778,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C9orf29",annot);
 	}
@@ -801,8 +801,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK125237",annot);
 	}
@@ -824,8 +824,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC441666",annot);
 	}
@@ -847,8 +847,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC441666",annot);
 	}
@@ -870,8 +870,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC039000",annot);
 	}
@@ -893,8 +893,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC728643",annot);
 	}
@@ -916,8 +916,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ANTXRL",annot);
 	}
@@ -939,8 +939,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AX748062",annot);
 	}
@@ -962,8 +962,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MIR1307",annot);
 	}
@@ -985,8 +985,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FLJ46300",annot);
 	}
@@ -1008,8 +1008,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MUC5AC",annot);
 	}
@@ -1031,8 +1031,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AB231741",annot);
 	}
@@ -1054,8 +1054,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ANKRD20A9P",annot);
 	}
@@ -1077,8 +1077,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ATP5EP2",annot);
 	}
@@ -1100,8 +1100,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SPG20OS",annot);
 	}
@@ -1123,8 +1123,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TPTE2P3",annot);
 	}
@@ -1146,8 +1146,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AX747676",annot);
 	}
@@ -1169,8 +1169,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK024141",annot);
 	}
@@ -1192,8 +1192,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("abParts",annot);
 	}
@@ -1215,8 +1215,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC042994,abParts",annot);
 	}
@@ -1238,8 +1238,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("abParts",annot);
 	}
@@ -1261,8 +1261,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("abParts",annot);
 	}
@@ -1284,8 +1284,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DQ588973",annot);
 	}
@@ -1307,8 +1307,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HERC2P9",annot);
 	}
@@ -1330,8 +1330,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DNM1P46",annot);
 	}
@@ -1353,8 +1353,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DNM1P46",annot);
 	}
@@ -1376,8 +1376,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC073817",annot);
 	}
@@ -1399,8 +1399,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("DQ571896",annot);
 	}
@@ -1422,8 +1422,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK126539",annot);
 	}
@@ -1445,8 +1445,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("UNQ5810",annot);
 	}
@@ -1468,8 +1468,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("HTA",annot);
 	}
@@ -1491,8 +1491,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CCDC144C",annot);
 	}
@@ -1514,8 +1514,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC440434",annot);
 	}
@@ -1537,8 +1537,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FLJ43826",annot);
 	}
@@ -1560,8 +1560,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("mir-133b",annot);
 	}
@@ -1583,8 +1583,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC042382",annot);
 	}
@@ -1606,8 +1606,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC400657",annot);
 	}
@@ -1629,8 +1629,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AL137752",annot);
 	}
@@ -1652,8 +1652,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("BC039524",annot);
 	}
@@ -1675,8 +1675,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CYP2G1P",annot);
 	}
@@ -1698,8 +1698,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNF137P",annot);
 	}
@@ -1721,8 +1721,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC147804",annot);
 	}
@@ -1744,8 +1744,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM182B",annot);
 	}
@@ -1767,8 +1767,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AX746653",annot);
 	}
@@ -1790,8 +1790,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK097866",annot);
 	}
@@ -1813,8 +1813,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ANKRD20A11P",annot);
 	}
@@ -1836,8 +1836,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C21orf88",annot);
 	}
@@ -1859,8 +1859,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AK131325",annot);
 	}
@@ -1882,8 +1882,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CES5AP1",annot);
 	}
@@ -1905,8 +1905,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("INGX",annot);
 	}
@@ -1928,8 +1928,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TTTY11",annot);
 	}
@@ -1951,8 +1951,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    byte varType = ann.getVarType();
-	    Assert.assertEquals(ncRNA_EXONIC,varType);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TTTY13",annot);
 	}
