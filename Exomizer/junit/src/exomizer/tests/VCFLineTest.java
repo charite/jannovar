@@ -16,6 +16,7 @@ import exomizer.io.VCFReader;
 import exomizer.common.Constants;
 import exomizer.exception.VCFParseException;
 import exomizer.exome.Variant;
+import exomizer.exome.GenotypeI;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -28,6 +29,8 @@ import org.junit.Test;
 /**
  * Note that this class inputs the file exomizer/data/TestExome.vcf, which is a small
  * excerpt of the Manuel Corpas VCF file for the f1000 research article.
+ * <p>
+ * Refactored on 13 April, 2013 to take changes in the API of VCFLine into account.
  * <P>
  * The test cases were made by examining some of the lines from that file.
  */
@@ -61,14 +64,21 @@ public class VCFLineTest implements Constants {
 	}
     }
 
- 
-    @Test public void testGetVariantQuality() throws VCFParseException 
+    /**
+     * Line 0 has
+     * <pre>
+     * 1       866511  rs60722469      C       CCCCT 
+     * </pre>
+     */
+    @Test public void testGetReferenceSequence() throws VCFParseException 
     {
 	VCFLine line = VCFLineList.get(0);
-	float q = line.get_variant_quality();
-	Assert.assertEquals(259,q,EPSILON);
+	String ref = line.get_reference_sequence();
+	Assert.assertEquals("C", ref);
+	String var = line.get_variant_sequence();
+	Assert.assertEquals("CCCCT",var);
     }
-
+    
      @Test public void testGetPosition() throws VCFParseException 
     {
 	VCFLine line = VCFLineList.get(1);
@@ -77,13 +87,24 @@ public class VCFLineTest implements Constants {
 	String chr = line.get_chromosome_as_string();
 	Assert.assertEquals("1",chr);
     }
-    @Test public void testIsHeterozygous() 
+    
+
+    /**
+     * Line 2 is ...0/1:28,20:48:99:515,0,794
+     * Thus, we expect "Het"
+     */
+    @Test public void testIsGenotype() 
     {
 	VCFLine line = VCFLineList.get(2);
-	boolean isHet = line.is_heterozygous();
-	Assert.assertEquals(true,isHet);
+	GenotypeI GI = line.getGenotype();
+	String gt = GI.get_genotype_as_string();
+	Assert.assertEquals("Het",gt);
+	Assert.assertEquals(true,GI.is_heterozygous() );
+	Assert.assertEquals(false,GI.is_homozygous_alt() );
+	Assert.assertEquals(false,GI.is_homozygous_ref() );
+	Assert.assertEquals(false,GI.is_unknown_genotype());
     }
-
+    
 
 
    
