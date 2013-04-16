@@ -1,4 +1,4 @@
-package exomizer;
+package jannovar;
 
 /** Command line functions from apache */
 import org.apache.commons.cli.CommandLine;

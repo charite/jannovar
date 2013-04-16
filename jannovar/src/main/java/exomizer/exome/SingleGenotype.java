@@ -1,4 +1,4 @@
-package exomizer.exome;
+package jannovar.exome;
 
 import exomizer.common.Constants;
 

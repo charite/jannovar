@@ -1,4 +1,4 @@
-package exomizer.io;
+package annaovar.io;
 
 import exomizer.exome.GenotypeI;
 import exomizer.exception.VCFParseException;

@@ -39,7 +39,7 @@ public class VCFLineTest implements Constants {
     private float EPSILON = 0.000001f;
 
     private static VCFReader reader = null;
-    private static String vcfPath="src/test/resources/TestExome.vcf";//../data/TestExome.vcf";
+    private static String vcfPath="src/test/resources/TestExome.vcf";
     private static ArrayList<VCFLine> VCFLineList=null;
 
     @BeforeClass public static void setUp() throws IOException,VCFParseException
@@ -79,7 +79,7 @@ public class VCFLineTest implements Constants {
 	Assert.assertEquals("CCCCT",var);
     }
     
-     @Test public void testGetPosition() throws VCFParseException 
+    @Test public void testGetPosition() throws VCFParseException 
     {
 	VCFLine line = VCFLineList.get(1);
 	int pos = line.get_position();

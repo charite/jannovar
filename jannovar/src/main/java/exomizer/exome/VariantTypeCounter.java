@@ -1,4 +1,4 @@
-package exomizer.exome;
+package jannovar.exome;
 
 import java.util.HashMap;
 import java.io.Writer;

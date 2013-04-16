@@ -1,4 +1,4 @@
-package exomizer.io;
+package annaovar.io;
 
 import java.util.ArrayList;
 

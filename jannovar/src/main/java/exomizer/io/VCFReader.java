@@ -1,4 +1,4 @@
-package exomizer.io;
+package annaovar.io;
 
 /** Logging */
 import org.apache.log4j.Logger;

@@ -1,4 +1,4 @@
-package exomizer.exome;
+package jannovar.exome;
 
 
 
