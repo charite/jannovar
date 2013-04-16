@@ -1,4 +1,4 @@
-package exomizer.io;
+package jannovar.io;
 
 
 
@@ -11,12 +11,12 @@ import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.util.ArrayList;
 
-import exomizer.io.VCFLine;
-import exomizer.io.VCFReader;
-import exomizer.common.Constants;
-import exomizer.exception.VCFParseException;
-import exomizer.exome.Variant;
-import exomizer.exome.GenotypeI;
+import jannovar.io.VCFLine;
+import jannovar.io.VCFReader;
+import jannovar.common.Constants;
+import jannovar.exception.VCFParseException;
+import jannovar.exome.Variant;
+import jannovar.exome.GenotypeI;
 
 import org.junit.Test;
 import org.junit.Before;
