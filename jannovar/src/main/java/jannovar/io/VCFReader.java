@@ -41,11 +41,13 @@ import jannovar.io.MultipleGenotypeFactory;
  * The classes relies on the abstract factory pattern to create appropriate {@link exomizer.exome.GenotypeI GenotypeI}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
- * @version 0.06 (18 February, 2013)
+ * @version 0.07 (16 April, 2013)
  */
 public class VCFReader {
     static Logger log = Logger.getLogger(VCFReader.class.getName());
+    /** Complete path of the VCF file being parsed */
     private String file_path=null;
+    /** (Plain) basename of the VCF file being parsed. */
     private String base_filename = null;
     /** All of the lines in the original VCF header */
     private ArrayList<String> vcf_header=null;
@@ -70,12 +72,18 @@ public class VCFReader {
     private GenotypeFactoryA genofactory=null;
 
     /** List of codes for FORMAT field in VCF */
-    public static final int FORMAT_GENOTYPE = 1; /* Genotype  */
-    public static final int FORMAT_GENOTYPE_QUALITY = 2; /* Genotype Quality */
-    public static final int FORMAT_LIKELIHOODS = 3; /* Likelihoods for RR,RA,AA genotypes (R=ref,A=alt) */
-    public static final int FORMAT_HIGH_QUALITY_BASES = 4; /*# high-quality bases */
-    public static final int FORMAT_PHRED_STRAND_BIAS = 5; /* Phred-scaled strand bias P-value */
-    public static final int FORMAT_PHRED_GENOTYPE_LIKELIHOODS = 6; /*List of Phred-scaled genotype likelihoods */
+    /** Genotype field  */
+    public static final int FORMAT_GENOTYPE = 1;
+    /* Genotype Quality field for FORMAT*/
+    public static final int FORMAT_GENOTYPE_QUALITY = 2;
+    /* Likelihoods for RR,RA,AA genotypes (R=ref,A=alt)  for FORMAT*/
+    public static final int FORMAT_LIKELIHOODS = 3;
+    /** # high-quality bases for FORMAT */
+    public static final int FORMAT_HIGH_QUALITY_BASES = 4;
+    /** Phred-scaled strand bias P-value  (FORMAT)*/
+    public static final int FORMAT_PHRED_STRAND_BIAS = 5;
+    /** List of Phred-scaled genotype likelihoods (FORMAT)*/
+    public static final int FORMAT_PHRED_GENOTYPE_LIKELIHOODS = 6; 
 
     
     /** List of samples on this VCF file. Key: index, Value: name */
