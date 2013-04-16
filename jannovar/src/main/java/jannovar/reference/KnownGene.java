@@ -1,8 +1,8 @@
-package exomizer.reference;
+package jannovar.reference;
 
 
-import  exomizer.exception.KGParseException;
-
+import  jannovar.exception.KGParseException;
+import jannovar.common.Constants;
 
 
 /**
@@ -21,9 +21,9 @@ import  exomizer.exception.KGParseException;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.06, 18 December, 2012
+ * @version 0.08, 18 April, 2013
  */
-public class KnownGene implements java.io.Serializable, exomizer.common.Constants {
+public class KnownGene implements java.io.Serializable, Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
     public static final int NFIELDS=12;
     /** Name of gene using UCSC knownGene id (for instance, uc011nca.2). For now, keep the

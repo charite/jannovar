@@ -1,4 +1,4 @@
-package annaovar.io;
+package jannovar.io;
 
 /** Logging */
 import org.apache.log4j.Logger;
@@ -16,12 +16,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import exomizer.exome.Variant;
-import exomizer.exception.VCFParseException;
+import jannovar.exome.Variant;
+import jannovar.exception.VCFParseException;
 
-import exomizer.io.GenotypeFactoryA;
-import exomizer.io.SingleGenotypeFactory;
-import exomizer.io.MultipleGenotypeFactory;
+import jannovar.io.GenotypeFactoryA;
+import jannovar.io.SingleGenotypeFactory;
+import jannovar.io.MultipleGenotypeFactory;
 
 /**
  * Parses a VCF file and extracts Variants for analysis

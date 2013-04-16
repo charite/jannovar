@@ -1,11 +1,11 @@
-package annaovar.io;
+package jannovar.io;
 
 import java.util.ArrayList;
 
-import exomizer.exome.GenotypeI;
-import exomizer.exome.MultipleGenotype;
-import exomizer.common.Constants;
-import exomizer.exception.VCFParseException;
+import jannovar.exome.GenotypeI;
+import jannovar.exome.MultipleGenotype;
+import jannovar.common.Constants;
+import jannovar.exception.VCFParseException;
 
 /**
  * This class is inteded to create a Genotype object for
@@ -40,7 +40,7 @@ import exomizer.exception.VCFParseException;
  * @see exomizer.io.SingleGenotypeFactory
  * @see exomizer.exome.MultipleGenotype
  * @author Peter N Robinson
- * @version 0.06 (6 March, 2013)
+ * @version 0.07 (16 April, 2013)
  */
 public class MultipleGenotypeFactory extends GenotypeFactoryA implements Constants {
     /**

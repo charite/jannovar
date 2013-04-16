@@ -1,4 +1,4 @@
-package exomizer.common;
+package jannovar.common;
 
 
 

@@ -3,11 +3,11 @@ package jannovar.exome;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import exomizer.common.Constants;
-import exomizer.filter.ITriage;
-import exomizer.reference.Annotation;
-import exomizer.exome.GenotypeI;
-import exomizer.exception.VCFParseException;
+import jannovar.common.Constants;
+import jannovar.filter.ITriage;
+import jannovar.reference.Annotation;
+import jannovar.exome.GenotypeI;
+import jannovar.exception.VCFParseException;
 
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.

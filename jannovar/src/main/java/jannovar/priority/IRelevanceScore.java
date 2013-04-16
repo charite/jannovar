@@ -1,4 +1,4 @@
-package exomizer.priority;
+package jannovar.priority;
 
 
 

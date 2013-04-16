@@ -1,4 +1,4 @@
-package exomizer.exception;
+package jannovar.exception;
 
 
 /**

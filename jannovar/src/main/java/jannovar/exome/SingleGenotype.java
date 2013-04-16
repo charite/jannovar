@@ -1,6 +1,6 @@
 package jannovar.exome;
 
-import exomizer.common.Constants;
+import jannovar.common.Constants;
 
 /**
  * This class is intended to encapsulate a genotype for a single

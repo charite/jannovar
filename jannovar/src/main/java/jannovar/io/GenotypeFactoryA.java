@@ -1,7 +1,7 @@
-package annaovar.io;
+package jannovar.io;
 
-import exomizer.exome.GenotypeI;
-import exomizer.exception.VCFParseException;
+import jannovar.exome.GenotypeI;
+import jannovar.exception.VCFParseException;
 
 /**
  * This interface is intended to provide the flexibility

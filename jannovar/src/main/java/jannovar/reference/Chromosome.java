@@ -1,4 +1,4 @@
-package exomizer.reference;
+package jannovar.reference;
 
 
 import java.util.TreeMap;
@@ -8,21 +8,21 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 
-import exomizer.reference.KnownGene;
-import exomizer.reference.AnnotatedVar;
-import exomizer.reference.Translator;
-import exomizer.exception.AnnotationException;
+import jannovar.reference.KnownGene;
+import jannovar.reference.AnnotatedVar;
+import jannovar.reference.Translator;
+import jannovar.exception.AnnotationException;
 
 /** The following classes contain static functions used to calculate the 
     annotations for certain classes of mutation. These functions are put into
     separate classes just to keep things tidy and comprehensible in this class.
 */
-import exomizer.annotation.DeletionAnnotation;
-import exomizer.annotation.InsertionAnnotation;
-import exomizer.annotation.SingleNucleotideSubstitution;
-import exomizer.annotation.BlockSubstitution;
-import exomizer.annotation.SpliceAnnotation;
-import exomizer.annotation.UTR3Annotation;
+import jannovar.annotation.DeletionAnnotation;
+import jannovar.annotation.InsertionAnnotation;
+import jannovar.annotation.SingleNucleotideSubstitution;
+import jannovar.annotation.BlockSubstitution;
+import jannovar.annotation.SpliceAnnotation;
+import jannovar.annotation.UTR3Annotation;
 
 
 /**
@@ -50,7 +50,7 @@ import exomizer.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.09 (6 January, 2013)
+ * @version 0.11(16 April, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 

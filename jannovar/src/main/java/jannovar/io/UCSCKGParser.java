@@ -1,4 +1,4 @@
-package annaovar.io;
+package jannovar.io;
 
 /** Logging */
 import org.apache.log4j.Logger;
@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
-import exomizer.exception.KGParseException;
-import exomizer.reference.KnownGene;
+import jannovar.exception.KGParseException;
+import jannovar.reference.KnownGene;
 
 /**
  * Parses the knownGene.txt file from the UCSC database. 

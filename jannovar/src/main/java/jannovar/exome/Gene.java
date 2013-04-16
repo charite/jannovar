@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import exomizer.exome.Variant;
-import exomizer.common.Constants;
-import exomizer.priority.IRelevanceScore;
+import jannovar.exome.Variant;
+import jannovar.common.Constants;
+import jannovar.priority.IRelevanceScore;
 
 /**
  * This class represents a Gene in which {@link exomizer.exome.Variant Variant} objects

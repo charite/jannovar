@@ -1,4 +1,4 @@
-package exomizer.filter;
+package jannovar.filter;
 
 
 
@@ -9,7 +9,7 @@ package exomizer.filter;
  * find out the results of the filter and the variant can be deleted it it did not
  * pass the filter.
  * @author Peter N Robinson
- * @version 0.01 (August 22,2012)
+ * @version 0.02 (16 April, 2012)
  */
 public interface ITriage {
     /** @return true if the variant being analyzed passes the filter (e.g., is rare, pathogenic, or has high quality reads) */

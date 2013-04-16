@@ -1,4 +1,4 @@
-package exomizer.io;
+package jannovar.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +13,8 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 
-import exomizer.exome.Variant;
-import exomizer.exception.VCFParseException;
+import jannovar.exome.Variant;
+import jannovar.exception.VCFParseException;
 
 /**
  * This class reads input files in Annovar format, which we are using to debug and 
@@ -43,7 +43,7 @@ import exomizer.exception.VCFParseException;
  * Note that now that the Exomizer is running well, this class should probably no longer be
  * needed, but it is maintained should the need for debugging arise.
  * @author Peter N Robinson
- * @version 0.03 (Feb. 18, 2013)
+ * @version 0.04 (April 16, 2013)
  */
 
 public class AnnovarParser {

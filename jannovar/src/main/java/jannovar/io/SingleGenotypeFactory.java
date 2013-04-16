@@ -1,9 +1,9 @@
-package annaovar.io;
+package jannovar.io;
 
-import exomizer.exome.GenotypeI;
-import exomizer.exome.SingleGenotype;
-import exomizer.common.Constants;
-import exomizer.exception.VCFParseException;
+import jannovar.exome.GenotypeI;
+import jannovar.exome.SingleGenotype;
+import jannovar.common.Constants;
+import jannovar.exception.VCFParseException;
 
 /**
  * This class is inteded to create a Genotype object for

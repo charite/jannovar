@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.io.Writer;
 import java.io.IOException;
 
-import exomizer.common.Constants;
+import jannovar.common.Constants;
 
 /**
  * This class is intended to provide a simple way of counting up all of the

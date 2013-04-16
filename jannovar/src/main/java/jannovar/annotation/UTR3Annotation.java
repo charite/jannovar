@@ -1,8 +1,8 @@
-package exomizer.annotation;
+package jannovar.annotation;
 
-import exomizer.reference.KnownGene;
-import exomizer.reference.Annotation;
-import exomizer.reference.Translator;
+import jannovar.reference.KnownGene;
+import jannovar.reference.Annotation;
+import jannovar.reference.Translator;
 
 
 /**

@@ -3,7 +3,7 @@ package jannovar.exome;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import exomizer.common.Constants;
+import jannovar.common.Constants;
 
 /**
  * This class is intended to encapsulate a genotype for a single

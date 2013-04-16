@@ -1,8 +1,8 @@
-package exomizer.reference;
+package jannovar.reference;
 
-import exomizer.common.Constants;
-import exomizer.reference.KnownGene;
-import exomizer.exception.AnnotationException;
+import jannovar.common.Constants;
+import jannovar.reference.KnownGene;
+import jannovar.exception.AnnotationException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,7 +49,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.12 (February 15, 2013)
+ * @version 0.13 (April 15, 2013)
  * @author Peter N Robinson
  */
 

@@ -1,4 +1,4 @@
-package exomizer.reference;
+package jannovar.reference;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import exomizer.exception.AnnotationException;
+import jannovar.exception.AnnotationException;
 
 /**
  * This class helps to translate DNA sequences.

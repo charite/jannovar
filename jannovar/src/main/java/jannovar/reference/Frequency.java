@@ -1,7 +1,7 @@
-package exomizer.reference;
+package jannovar.reference;
 
 
-import exomizer.common.Constants;
+import jannovar.common.Constants;
 
 
 
@@ -23,7 +23,7 @@ import exomizer.common.Constants;
  * to be used as an element of a {@code TreeSet} in the class {@link exomizer.dbSNP2SQL dbSNP2SQL}
  * in order to sort and search these objects while creating a dump file for postgreSQL.
  * @author Peter Robinson
- * @version 0.04 (8 February, 2013)
+ * @version 0.05 (16 April, 2013)
  */
 public class Frequency implements Comparable<Frequency>, Constants {
     /** Byte representation of the chromosome */
@@ -55,10 +55,10 @@ public class Frequency implements Comparable<Frequency>, Constants {
 	this.ref = r;
 	this.alt = a;
 	this.rsID = rs;
-	this.dbSNPmaf = exomizer.common.Constants.UNINITIALIZED_FLOAT;
-	this.espEA = exomizer.common.Constants.UNINITIALIZED_FLOAT;
-	this.espAA = exomizer.common.Constants.UNINITIALIZED_FLOAT;
-	this.espAll = exomizer.common.Constants.UNINITIALIZED_FLOAT;
+	this.dbSNPmaf = Constants.UNINITIALIZED_FLOAT;
+	this.espEA = Constants.UNINITIALIZED_FLOAT;
+	this.espAA = Constants.UNINITIALIZED_FLOAT;
+	this.espAll = Constants.UNINITIALIZED_FLOAT;
     }
 
 

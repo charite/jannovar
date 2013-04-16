@@ -1,9 +1,9 @@
-package exomizer.annotation;
+package jannovar.annotation;
 
-import exomizer.reference.KnownGene;
-import exomizer.reference.Annotation;
-import exomizer.reference.Translator;
-import exomizer.exception.AnnotationException;
+import jannovar.reference.KnownGene;
+import jannovar.reference.Annotation;
+import jannovar.reference.Translator;
+import jannovar.exception.AnnotationException;
 
 /**
  * This class is intended to provide a static method to generate annotations for deletion

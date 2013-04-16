@@ -24,15 +24,15 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import exomizer.io.UCSCKGParser;
-import exomizer.io.AnnovarParser;
-import exomizer.reference.KnownGene;
-import exomizer.reference.Chromosome;
-import exomizer.reference.Annotation;
-import exomizer.exome.Variant;
-import exomizer.exception.AnnotationException;
-import exomizer.exception.KGParseException;
-import exomizer.io.VCFReader;
+import jannovar.io.UCSCKGParser;
+import jannovar.io.AnnovarParser;
+import jannovar.reference.KnownGene;
+import jannovar.reference.Chromosome;
+import jannovar.reference.Annotation;
+import jannovar.exome.Variant;
+import jannovar.exception.AnnotationException;
+import jannovar.exception.KGParseException;
+import jannovar.io.VCFReader;
 
 /**
  * This is the driver class for a program called Annotator. It has two purposes

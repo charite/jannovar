@@ -1,12 +1,12 @@
-package annaovar.io;
+package jannovar.io;
 
 import org.apache.log4j.Logger;
 
-import exomizer.common.Constants;
-import exomizer.exception.VCFParseException;
-import exomizer.exome.Variant;
-import exomizer.io.GenotypeFactoryA;
-import exomizer.exome.GenotypeI;
+import jannovar.common.Constants;
+import jannovar.exception.VCFParseException;
+import jannovar.exome.Variant;
+import jannovar.io.GenotypeFactoryA;
+import jannovar.exome.GenotypeI;
 
 import java.util.MissingFormatArgumentException;
 /**

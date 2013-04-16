@@ -1,7 +1,7 @@
-package exomizer.reference;
+package jannovar.reference;
 
-import exomizer.common.Constants;
-import exomizer.reference.KnownGene;
+import jannovar.common.Constants;
+import jannovar.reference.KnownGene;
 
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
