@@ -1,5 +1,4 @@
-package exomizer.tests;
-
+package jannovar.io;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,10 +7,11 @@ import java.io.PrintStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
-import exomizer.reference.KnownGene;
-import exomizer.io.UCSCKGParser;
-import exomizer.common.Constants;
+import jannovar.reference.KnownGene;
+import jannovar.io.UCSCKGParser;
+import jannovar.common.Constants;
 
 
 
@@ -19,7 +19,10 @@ import org.junit.Test;
 import org.junit.BeforeClass;
 import junit.framework.Assert;
 
-
+/**
+ * Tests the UCSC Parser by creating a temporary file and making sure we get the correct
+ * information from the known genes represented in this file.
+ */
 public class UCSCKGParserTest implements Constants {
 
     private static UCSCKGParser parser = null;
@@ -40,15 +43,15 @@ public class UCSCKGParserTest implements Constants {
 	ps.append("uc009viv.2	chr1	-	14406	29370	14406	14406	7	14406,16857,17232,17605,17914,24737,29320,	16765,17055,17368,17742,18061,24891,29370,		uc009viv.2\n");
 	ps.append("uc003xub.3	chr8	-	61177380	61193954	61178438	61193706	3	61177380,61192247,61193606,	61178608,61192439,61193954,	NP_004047	uc003xub.3\n");
 	ps.close();
-	String mypath="/home/peter/data/ucsc/knownGene.txt";
+	//String mypath="/home/peter/data/ucsc/knownGene.txt";
 	knownGeneMap = new HashMap<String,KnownGene>();
 
 
 	parser = new UCSCKGParser(tmp.getAbsolutePath());
 	parser.parseFile();
-	ArrayList<KnownGene> knownGeneList = (ArrayList<KnownGene>) parser.getKnownGeneMap().values();
-
-	for (KnownGene k : knownGeneList) {
+	Iterator<KnownGene> iter =  parser.getKnownGeneMap().values().iterator();
+	while (iter.hasNext()) {
+	    KnownGene k = iter.next();
 	    String name = k.getName();
 	    knownGeneMap.put(name,k);
 	}
