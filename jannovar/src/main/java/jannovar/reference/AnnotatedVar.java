@@ -38,6 +38,9 @@ import java.util.HashSet;
  * </OL>
  * Note that the class of <B>exonic</B> and <B>splicing</B> mutations as defined here comprises the class of "obvious candidates"
  * for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
+ * <p>
+ * TODO: We should store a list of Annotation objects (one per transcript affected by the variant), and allow a flag
+ * to show either ALL variants or prioritize them such as annovar (i.e., just show exonic variants if there are any.)
  * <P>
  * One object of this class is created for each variant we want to annotate. The {@link exomizer.reference.Chromosome Chromosome}
  * class goes through a list of genes in the vicinity of the variant and adds one {@link exomizer.reference.Annotation Annotation}
