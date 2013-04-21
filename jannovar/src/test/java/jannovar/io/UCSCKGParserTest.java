@@ -17,7 +17,7 @@ import jannovar.common.Constants;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * Tests the UCSC Parser by creating a temporary file and making sure we get the correct

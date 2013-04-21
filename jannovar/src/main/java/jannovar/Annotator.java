@@ -38,13 +38,13 @@ import jannovar.io.VCFReader;
  * This is the driver class for a program called Annotator. It has two purposes
  * <OL>
  * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt,
- * and to create corresponding {@link exomizer.reference.KnownGene KnownGene} objects and to 
+ * and to create corresponding {@link jannovar.reference.KnownGene KnownGene} objects and to 
  * serialize them. The resulting serialized file can be used both by this program itself (see next item)
  * or by the main Exomizer program to annotated VCF file.
- * <LI>Using the serialized file of {@link exomizer.reference.KnownGene KnownGene} objects  (see above item)
+ * <LI>Using the serialized file of {@link jannovar.reference.KnownGene KnownGene} objects  (see above item)
  * annotate a VCF file using annovar-type program logic. Note that this functionality is also
  * used by the main Exomizer program and thus this program can be used as a stand-alone annotator ("Jannovar")
- * or as a way of testing the code for the Exomizer.
+ * or as a way of testing the code for the Jannovar.
  * </OL>
  * <P>
  * To run the "Jannovar" exectuable:
@@ -143,9 +143,9 @@ public class Annotator {
 
 
     /**
-     * Gets a list of {@link exomizer.exome.Variant} objects from 
+     * Gets a list of {@link jannovar.exome.Variant} objects from 
      * a file in Annovar format. 
-     * @see exomizer.io.AnnovarParser AnnovarParser
+     * @see jannovar.io.AnnovarParser AnnovarParser
      */
     public void inputAnnovarFile() {
 	AnnovarParser parser = new AnnovarParser(this.annovarFilePath);
@@ -182,7 +182,7 @@ public class Annotator {
      * Main method for performing annovar-type analysis.
      * This method decides what chromosome the variant is 
      * located on and passes the remaining data to the
-     * corresponding {@link exomizer.reference.Chromosome Chromosome}
+     * corresponding {@link jannovar.reference.Chromosome Chromosome}
      * object for further analysis.
      */
     public void annotateVariants() {

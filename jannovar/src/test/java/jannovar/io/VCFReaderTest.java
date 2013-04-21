@@ -17,7 +17,7 @@ import jannovar.exome.Variant;
 
 import org.junit.Test;
 import org.junit.Before;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 
 public class VCFReaderTest implements Constants {

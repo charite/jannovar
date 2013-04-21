@@ -21,7 +21,7 @@ import jannovar.exome.GenotypeI;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 
 import org.junit.Test;

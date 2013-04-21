@@ -28,7 +28,7 @@ import jannovar.exception.AnnotationException;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 
 /**
@@ -46,7 +46,7 @@ public class UpstreamAnnotationTest implements Constants {
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,KnownGene> kgMap=null;
+	HashMap<String,jannovar.reference.KnownGene> kgMap=null;
 	// The following file must be created prior to running this test
 	String serializedFile = "./ucsc.ser"; //getClass().getResourceAsStream("/data.txt")
 	try {
@@ -54,7 +54,7 @@ public class UpstreamAnnotationTest implements Constants {
 		//new FileInputStream(UpstreamAnnotationTest.class.getResource("ucsc.ser").getPath());
 	    //InputStream ins = new InputStream (UpstreamAnnotationTest.class.getResourceAsStream("ucsc.ser") );
 	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,KnownGene>) in.readObject();
+	     kgMap = (HashMap<String,jannovar.reference.KnownGene>) in.readObject();
 	     in.close();
             fileIn.close();
 	    //ins.close();
