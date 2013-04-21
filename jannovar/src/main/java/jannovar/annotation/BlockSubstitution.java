@@ -1,7 +1,6 @@
 package jannovar.annotation;
 
 import jannovar.reference.KnownGene;
-import jannovar.reference.Annotation;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 
@@ -12,7 +11,7 @@ import jannovar.exception.AnnotationException;
  * <P>
  * Block substitutions are recognized in the calling class {@link jannovar.reference.Chromosome Chromosome}
  * by the fact that the length of the variant sequence is greater than 1.
- * @version 0.02 (December 14, 2012)
+ * @version 0.03 (April 22, 2013)
  * @author Peter N Robinson
  */
 

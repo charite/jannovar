@@ -21,7 +21,7 @@ import jannovar.common.Constants;
 import jannovar.io.AnnovarParser;
 import jannovar.reference.KnownGene;
 import jannovar.reference.Chromosome;
-import jannovar.reference.Annotation;
+import jannovar.annotation.Annotation;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
 
@@ -50,14 +50,13 @@ public class UpstreamAnnotationTest implements Constants {
 	// The following file must be created prior to running this test
 	String serializedFile = "./ucsc.ser"; //getClass().getResourceAsStream("/data.txt")
 	try {
-	    FileInputStream fileIn =new FileInputStream("/home/peter/SVN/apps/NGSanalysis/jannovar/src/test/resources/ucsc.ser");
-		//new FileInputStream(UpstreamAnnotationTest.class.getResource("ucsc.ser").getPath());
-	    //InputStream ins = new InputStream (UpstreamAnnotationTest.class.getResourceAsStream("ucsc.ser") );
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,jannovar.reference.KnownGene>) in.readObject();
-	     in.close();
+	    java.net.URL url = UpstreamAnnotationTest.class.getResource("/ucsc.ser");
+	    String path = url.getPath();
+	    FileInputStream fileIn = new FileInputStream(path);
+	    ObjectInputStream in = new ObjectInputStream(fileIn);
+	    kgMap = (HashMap<String,jannovar.reference.KnownGene>) in.readObject();
+	    in.close();
             fileIn.close();
-	    //ins.close();
 	} catch(IOException i) {
             i.printStackTrace();
 	    System.err.println("Could not deserialize knownGeneMap");
@@ -206,20 +205,20 @@ public class UpstreamAnnotationTest implements Constants {
  *</P>
  */
 @Test public void testUpstreamVar6() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 79152696;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("Mir_548",annot);
-	}
+    byte chr = 1;
+    int pos = 79152696;
+    String ref = "A";
+    String alt = "G";
+    Chromosome c = chromosomeMap.get(chr); 
+    if (c==null) {
+	Assert.fail("Could not identify chromosome \"" + chr + "\"");
+    } else {
+	Annotation ann = c.getAnnotation(pos,ref,alt);
+	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(VariantType.UPSTREAM,varType);
+	String annot = ann.getVariantAnnotation();
+	Assert.assertEquals("Mir_548",annot);
+    }
 }
 
 /**

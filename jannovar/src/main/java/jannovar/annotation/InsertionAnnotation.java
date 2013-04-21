@@ -1,7 +1,6 @@
 package jannovar.annotation;
 
 import jannovar.reference.KnownGene;
-import jannovar.reference.Annotation;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 
@@ -9,7 +8,7 @@ import jannovar.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for insertion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.03 (December 12, 2012)
+ * @version 0.04 (April 22, 2013)
  * @author Peter N Robinson
  */
 

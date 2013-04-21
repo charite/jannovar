@@ -7,9 +7,11 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+import jannovar.annotation.AnnotatedVar;
+import jannovar.annotation.Annotation;
 
 import jannovar.reference.KnownGene;
-import jannovar.reference.AnnotatedVar;
+
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 

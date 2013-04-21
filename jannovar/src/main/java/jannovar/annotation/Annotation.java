@@ -1,4 +1,4 @@
-package jannovar.reference;
+package jannovar.annotation;
 
 import jannovar.common.Constants;
 import jannovar.reference.KnownGene;

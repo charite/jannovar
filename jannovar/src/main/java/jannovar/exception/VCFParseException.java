@@ -7,7 +7,7 @@ package jannovar.exception;
  * @author Peter Robinson 
  * @version 0.02 (February 18,2013)
  */
-public class VCFParseException extends ExomizerException {
+public class VCFParseException extends JannovarException {
 
     public static final long serialVersionUID = 1L;
 

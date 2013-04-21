@@ -1,7 +1,6 @@
 package jannovar.annotation;
 
 import jannovar.reference.KnownGene;
-import jannovar.reference.Annotation;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 

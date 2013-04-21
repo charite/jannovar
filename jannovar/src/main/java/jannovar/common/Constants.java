@@ -59,32 +59,7 @@ public interface Constants {
      /* The following constants are flags that
 	cause a specially formated field to be displayed in the HTML table. */
     public static final int GENOMIC_VAR = 101;
-    /**  Flag for output field representing the QUAL column of the VCF file. */
-    public static final int VARIANT_QUALITY = 205;
-    /** Flag for output of field representing the Quality filter for the VCF entry */
-    public static final int QUALITY_FILTER = 300;
-    /** Flag for filter type "interval" */
-    public static final int INTERVAL_FILTER = 305;
-    /** Flag to output results of filtering against polyphen, SIFT, and mutation taster. */
-    public static final int PATHOGENICITY_FILTER = 206;
-    /** Flag to output results of filtering against frequency with Thousand Genomes and ESP data. */
-    public static final int FREQUENCY_FILTER = 207;
-    /** Flag to represent results of filtering against an inheritance pattern. */
-    public static final int INHERITANCE_PATTERN_FILTER = 208;
-    /** Flag to represent results of filtering against MGI phenotype data (Phenodigm)*/
-    public static final int PHENODIGM_FILTER = 209;
-    /** Flag to represent results of filtering against phenotype data (Uberpheno) */
-    public static final int UBERPHENO_FILTER = 210;
-    /** Flag to represent results of filtering against ZFIN phenotype data (Phenodigm)*/
-    public static final int ZFIN_PHENODIGM_FILTER = 211;
-    /** Flag to represent results of filtering against PPI-RandomWalk-proximity */
-    public static final int GENEWANDERER_FILTER = 212;
-    /** Flag to represent results of annotating against OMIM data */
-    public static final int OMIM_FILTER = 309;
-    /** Flag to represent exome-target filter */
-    public static final int EXOME_TARGET_FILTER = 311;
-    /** Flag for dynamiic phenodigm filter. */
-    public static final int DYNAMIC_PHENODIGM_FILTER = 313;
+   
 
     /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;

@@ -1,7 +1,6 @@
 package jannovar.annotation;
 
 import jannovar.reference.KnownGene;
-import jannovar.reference.Annotation;
 import jannovar.reference.Translator;
 
 
@@ -12,7 +11,7 @@ import jannovar.reference.Translator;
  * <P> The current version of this class basically does the same thing that Annovar does,
  * that is, the annotation is simply the gene symbol. TODO: Create HGVS conformant 3UTR 
  * annotations.
- * @version 0.01 (December 6, 2012)
+ * @version 0.02 (April 22, 2013)
  * @author Peter N Robinson
  */
 

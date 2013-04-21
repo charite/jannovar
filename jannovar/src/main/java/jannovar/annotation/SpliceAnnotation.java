@@ -1,7 +1,6 @@
 package jannovar.annotation;
 
 import jannovar.reference.KnownGene;
-import jannovar.reference.Annotation;
 import jannovar.reference.Translator;
 
 
@@ -13,7 +12,7 @@ import jannovar.reference.Translator;
  * mutations, which is not entirely accurate, although mutations in this part of exons
  * can indeed disrupt proper splicing. Instead, jannovar takes the SPLICING_THRESHOLD
  * nucleotides on the intronic side.
- * @version 0.06 (December 13, 2012)
+ * @version 0.07 (April 22, 2013)
  * @author Peter N Robinson
  */
 

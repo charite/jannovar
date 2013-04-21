@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import jannovar.common.Constants;
 import jannovar.filter.ITriage;
-import jannovar.reference.Annotation;
+import jannovar.annotation.Annotation;
 import jannovar.exome.GenotypeI;
 import jannovar.exception.VCFParseException;
 
@@ -333,9 +333,11 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return a priority score between 0 and 1
      */
     public float getPathogenicityPriorityScore() {
-    	ITriage path = triageMap.get(PATHOGENICITY_FILTER);
-    	float x = path.filterResult();
-    	return x;
+    	//ITriage path = triageMap.get(PATHOGENICITY_FILTER);
+    	//float x = path.filterResult();
+    	//return x;
+	System.out.println("[Variant.java] getPathogenicityPriorityScore(), fix me");
+	return -10f;
     }
 
     // ##########   UTILITY FUNCTIONS ##################### //

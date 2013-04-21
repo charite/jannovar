@@ -5,9 +5,9 @@ package jannovar.exception;
 /**
  * Exception that occurs during parsing of UCSC KnownGene.txt files.
  * @author Peter Robinson 
- * @version 0.01 (September 15,2012)
+ * @version 0.02 (April 22,2013)
  */
-public class KGParseException extends ExomizerException {
+public class KGParseException extends JannovarException {
 
     public static final long serialVersionUID = 1L;
 
