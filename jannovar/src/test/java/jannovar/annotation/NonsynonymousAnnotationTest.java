@@ -1,4 +1,4 @@
-package exomizer.tests;
+package jannovar.annotation;
 
 
 import java.io.File;
@@ -15,19 +15,19 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
-import exomizer.io.UCSCKGParser;
-import exomizer.common.Constants;
-import exomizer.io.AnnovarParser;
-import exomizer.reference.KnownGene;
-import exomizer.reference.Chromosome;
-import exomizer.reference.Annotation;
-import exomizer.exome.Variant;
-import exomizer.exception.AnnotationException;
+import jannovar.io.UCSCKGParser;
+import jannovar.common.Constants;
+import jannovar.io.AnnovarParser;
+import jannovar.reference.KnownGene;
+import jannovar.reference.Chromosome;
+import jannovar.annotation.Annotation;
+import jannovar.exome.Variant;
+import jannovar.exception.AnnotationException;
 
 
 import org.junit.Test;
 import org.junit.BeforeClass;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 
 /**
@@ -46,11 +46,11 @@ public class NonsynonymousAnnotationTest implements Constants {
     @BeforeClass 
     public static void setUp() throws IOException {
 	HashMap<String,KnownGene> kgMap=null;
-	// The following file must be created prior to running this test
-	String serializedFile = "../ucsc.ser";
+
 	try {
-	     FileInputStream fileIn =
-		 new FileInputStream(serializedFile);
+	     java.net.URL url = NonsynonymousAnnotationTest.class.getResource("/ucsc.ser");
+	     String path = url.getPath();
+	     FileInputStream fileIn = new FileInputStream(path);
 	     ObjectInputStream in = new ObjectInputStream(fileIn);
 	     kgMap = (HashMap<String,KnownGene>) in.readObject();
             in.close();
