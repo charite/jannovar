@@ -37,8 +37,8 @@ import jannovar.exception.VCFParseException;
  * Note that while other fields such as {@code AD} provide important information for individual analysis purposes,
  * we cannot expect a VCF file that somebody uploads via the Webserver to have this information,
  * because it is optional. 
- * @see exomizer.io.SingleGenotypeFactory
- * @see exomizer.exome.MultipleGenotype
+ * @see jannovar.io.SingleGenotypeFactory
+ * @see jannovar.exome.MultipleGenotype
  * @author Peter N Robinson
  * @version 0.07 (16 April, 2013)
  */
@@ -54,8 +54,8 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA implements Constan
 
     /** 
      * This is the core method of the factory, and creates
-     * a Genotype object. Currently, the Exomizer has
-     * two concrete implementations of the {@link exomizer.exome.GenotypeI GenotypeI}
+     * a Genotype object. Currently, the Jannovar has
+     * two concrete implementations of the {@link jannovar.exome.GenotypeI GenotypeI}
      * interface, for single and multiple-sample VCF files. The interface
      * could be extended to allow for cool stuff such as DP4 analysis in
      * the future.
@@ -92,7 +92,7 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA implements Constan
      * {@link #qualityList} to store the corresponding values for 
      * each of the multiple samples in the VCF file. When we are finished
      * parsing a line, the values are used to construct a 
-     * {@link exomizer.exome.MultipleGenotype MultipleGenotype} object. The
+     * {@link jannovar.exome.MultipleGenotype MultipleGenotype} object. The
      * lists need to be reset for each line, which is what this method does.
      */
     private void resetArrays() {

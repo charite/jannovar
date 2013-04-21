@@ -48,7 +48,7 @@ import jannovar.reference.KnownGene;
 
  * <P>
  * Note that this file is a MySQL dump file used at the UCSC database. We will use this program to create a 
- * serialized java object that can quickly be input to the Exomizer program. This is probably more efficient
+ * serialized java object that can quickly be input to the Jannovar program. This is probably more efficient
  * than storing everything in the postgreSQL database because we will almost always need to get information
  * for half or more of the known genes, and thus it is quicker to initialize the object from a serialization.
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
@@ -72,7 +72,7 @@ public class UCSCKGParser {
     
     /** Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the
      * value is the corresponding KnownGene object
-     * @see exomizer.reference.KnownGene
+     * @see jannovar.reference.KnownGene
     */
     private HashMap<String,KnownGene> knownGeneMap=null;
 
@@ -194,7 +194,7 @@ public class UCSCKGParser {
     /**
      * Parses the ucsc KnownToLocusLink.txt file, which contains cross references from
      * ucsc KnownGene ids to Entrez Gene ids. The function than adds an Entrez gene
-     * id to the corresponing {@link exomizer.reference.KnownGene KnownGene}
+     * id to the corresponing {@link jannovar.reference.KnownGene KnownGene}
      * objects.
      * @param path The full path to the KnownToLocusLink.txt file
      */
@@ -251,7 +251,7 @@ public class UCSCKGParser {
      * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt}
      * Note that the UCSC sequences are all in lower case, but we convert them
      * here to all upper case letters to simplify processing in other places of this program.
-     * The sequences are then added to the corresponding {@link exomizer.reference.KnownGene KnownGene}
+     * The sequences are then added to the corresponding {@link jannovar.reference.KnownGene KnownGene}
      * objects.
      * @param fastapath full path to knownGeneMrna.txt file.
      */
@@ -304,7 +304,7 @@ public class UCSCKGParser {
      /**
       * Input xref information for the known genes. We are especially interested in information
       * corresponding to $name2 in Annovar (this is almost always a geneSymbol)
-      * The sequences are then added to the corresponding {@link exomizer.reference.KnownGene KnownGene}
+      * The sequences are then added to the corresponding {@link jannovar.reference.KnownGene KnownGene}
       * objects.
       * <P>
       * According to the Annovar documentation, some genes were given names that are prefixed with "Em:",

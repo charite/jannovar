@@ -20,7 +20,7 @@ import java.util.HashSet;
  * variant is intronic to this one. Therefore, we basically need to look at a number
  * of different annotations, and then decide what the most relevant annotations are.
  * If there is a clear exonic annotation, then usually this is OK and we can stop
- * looking further (this is done in the {@link exomizer.reference.Chromosome Chromosome}
+ * looking further (this is done in the {@link jannovar.reference.Chromosome Chromosome}
  * class).
  * <P>
  * The default preference for annotations is thus
@@ -42,15 +42,15 @@ import java.util.HashSet;
  * TODO: We should store a list of Annotation objects (one per transcript affected by the variant), and allow a flag
  * to show either ALL variants or prioritize them such as annovar (i.e., just show exonic variants if there are any.)
  * <P>
- * One object of this class is created for each variant we want to annotate. The {@link exomizer.reference.Chromosome Chromosome}
- * class goes through a list of genes in the vicinity of the variant and adds one {@link exomizer.reference.Annotation Annotation}
+ * One object of this class is created for each variant we want to annotate. The {@link jannovar.reference.Chromosome Chromosome}
+ * class goes through a list of genes in the vicinity of the variant and adds one {@link jannovar.reference.Annotation Annotation}
  * object for each gene. These are essentially candidates for the actual correct annotation of the variant, but we can
  * only decide what the correct annotation is once we have seen enough candidates. Therefore, once we have gone
  * through the candidates, this class decides what the best annotation is and returns the corresponding 
- * {@link exomizer.reference.Annotation Annotation} object (in some cases, this class may modify the 
- * {@link exomizer.reference.Annotation Annotation} object before returning it).
+ * {@link jannovar.reference.Annotation Annotation} object (in some cases, this class may modify the 
+ * {@link jannovar.reference.Annotation Annotation} object before returning it).
  * <P>
- * For each class of Variant, there is a function that returns a single {@link exomizer.reference.Annotation Annotation} object.
+ * For each class of Variant, there is a function that returns a single {@link jannovar.reference.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
  * @version 0.13 (April 15, 2013)
  * @author Peter N Robinson
@@ -58,26 +58,26 @@ import java.util.HashSet;
 
 public class AnnotatedVar implements Constants {
    
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for exonic variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for exonic variation. */
     private ArrayList<Annotation> annotation_Exonic =null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for ncRNA variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for ncRNA variation. */
     private ArrayList<Annotation> annotation_ncRNA = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for UTR5 or UTR3 variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for UTR5 or UTR3 variation. */
     private ArrayList<Annotation> annotation_UTR = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for synonymous variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for synonymous variation. */
     private ArrayList<Annotation> annotation_Synonymous = null;
-     /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation in
+     /** List of all {@link jannovar.reference.Annotation Annotation} objects found for intronic variation in
 	 protein coding RNAs.. */
     private ArrayList<Annotation> annotation_Intronic = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intronic variation in ncRNAs. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for intronic variation in ncRNAs. */
     private ArrayList<Annotation> annotation_ncrnaIntronic = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for upstream variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for upstream variation. */
     private ArrayList<Annotation> annotation_Upstream = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for downstream variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for downstream variation. */
     private ArrayList<Annotation> annotation_Downstream = null; 
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for intergenic variation. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for intergenic variation. */
     private ArrayList<Annotation> annotation_Intergenic = null;
-    /** List of all {@link exomizer.reference.Annotation Annotation} objects found for probably erroneous data. */
+    /** List of all {@link jannovar.reference.Annotation Annotation} objects found for probably erroneous data. */
     private ArrayList<Annotation> annotation_Error = null;
     /** Set of all gene symbols used for the current annotation (usually one, but if the size of this set
 	is greater than one, then there qare annotations to multiple genes and we will need to use
@@ -223,12 +223,12 @@ public class AnnotatedVar implements Constants {
     }
 
     /**
-     * This function will return a single {@link exomizer.reference.Annotation Annotation} 
+     * This function will return a single {@link jannovar.reference.Annotation Annotation} 
      * object that represents the most highly prioritized annotations. If there are multiple
      * annotations with the same priority, they will be combined into a single 
-     * {@link exomizer.reference.Annotation Annotation} object that is designed to be
+     * {@link jannovar.reference.Annotation Annotation} object that is designed to be
      * displayed.
-     * @return An {@link exomizer.reference.Annotation Annotation} object with the most highly prioiritized annotations.
+     * @return An {@link jannovar.reference.Annotation Annotation} object with the most highly prioiritized annotations.
      */
     public Annotation getAnnotation() throws AnnotationException {
 	

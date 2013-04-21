@@ -30,7 +30,7 @@ public class SingleNucleotideSubstitution {
      /**
      * Creates annotation for a single-nucleotide substitution.
      * <P>
-     * This function decides what strand the affected {@link exomizer.reference.KnownGene KnownGene}
+     * This function decides what strand the affected {@link jannovar.reference.KnownGene KnownGene}
      * is located on and calls either  {@link #getAnnotationPlusStrand} or
      * {@link #getAnnotationMinusStrand} to do the calculations.
      * @param kgl The known gene that corresponds to the deletion caused by the variant.

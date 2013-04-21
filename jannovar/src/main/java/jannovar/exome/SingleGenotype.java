@@ -6,7 +6,7 @@ import jannovar.common.Constants;
  * This class is intended to encapsulate a genotype for a single
  * variant (i.e., line in a VCF file) for a VCF file with only
  * one sample - thus, SingleGenotype as opposed to 
- * {@link exomizer.exome.MultipleGenotype MultipleGenotype} for
+ * {@link jannovar.exome.MultipleGenotype MultipleGenotype} for
  * VCF files with multiple samples.
  * <P>
  * TODO: Note that in some files, we may have DP or DP4 in the INFO field,
@@ -17,7 +17,7 @@ import jannovar.common.Constants;
 public class SingleGenotype extends GenotypeI implements Constants {
 
   
-    /**  genotype (See {@link exomizer.common.Constants.GenotypeCall GenotypeCall}
+    /**  genotype (See {@link jannovar.common.Constants.GenotypeCall GenotypeCall}
      * for the enumeration used to represent the genotypes).
      */
     private GenotypeCall genotype= GenotypeCall.UNINITIALIZED;

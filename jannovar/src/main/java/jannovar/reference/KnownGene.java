@@ -6,10 +6,10 @@ import jannovar.common.Constants;
 
 
 /**
- * Encapsulates one line of the UCSC KnownGene.txt file. See {@link exomizer.io.UCSCKGParser} for an 
+ * Encapsulates one line of the UCSC KnownGene.txt file. See {@link jannovar.io.UCSCKGParser} for an 
  * explanation of the structure of individual lines. Note that for now, we are not including
- * scaffolds such as chr4_ctg9_hap1 in the parsed lines (they throw an {@link exomizer.exception.KGParseException} and
- * are discarded by {@link exomizer.io.UCSCKGParser}). Consider implementing a more flexible parse in the future (TODO).
+ * scaffolds such as chr4_ctg9_hap1 in the parsed lines (they throw an {@link jannovar.exception.KGParseException} and
+ * are discarded by {@link jannovar.io.UCSCKGParser}). Consider implementing a more flexible parse in the future (TODO).
  * <P>
  * Some details about the implementation
  * <UL>
@@ -220,7 +220,7 @@ public class KnownGene implements java.io.Serializable, Constants {
      * @param varstart The start position of the variant on the chromosome (can be the actual start position or
      the start of the exon for variants that are )
      * @param cumlenintron The cumulative length of then intron sequences (This has
-     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
+     * been calculated in {@link jannovar.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
      * or the corresponding function for the negative strand).
      */
     public int getRVarStart(int varstart, int cumlenintron) {
@@ -233,7 +233,7 @@ public class KnownGene implements java.io.Serializable, Constants {
      * @param end The position of the end of the mutation on the chromosome
      * @param k The exon number in which we have found the variant
      * @param cumlenintron The cumulative length of then intron sequences (This has
-     * been calculated in {@link exomizer.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
+     * been calculated in {@link jannovar.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
      * or the corresponding function for the negative strand).
      * TODO FOr minus strand!
      */
@@ -518,7 +518,7 @@ public class KnownGene implements java.io.Serializable, Constants {
      * exon is end-start+1.
      * @param k number of exon whose length is to be calculated.
      * @return length of exon in nucleotides.
-     * @see exomizer.reference.Chromosome Chromosome (this class makes use of this method)
+     * @see jannovar.reference.Chromosome Chromosome (this class makes use of this method)
      */
 
     public int getLengthOfExon(int k) {
@@ -556,7 +556,7 @@ public class KnownGene implements java.io.Serializable, Constants {
     }
 
     /**
-     * This method is used by {@link exomizer.io.UCSCKGParser UCSCKGParser}
+     * This method is used by {@link jannovar.io.UCSCKGParser UCSCKGParser}
      * to add sequence data (from knownGeneMrna.txt) to the KnownGene object.
      * @param seq cDNA sequence of this knownGene transcript. 
      */
@@ -564,7 +564,7 @@ public class KnownGene implements java.io.Serializable, Constants {
 	this.sequence = seq;
     }
     /**
-     * This method is used by {@link exomizer.io.UCSCKGParser UCSCKGParser}
+     * This method is used by {@link jannovar.io.UCSCKGParser UCSCKGParser}
      * to add the EntrezGene id (from knowntoLocusLink.txt) to the KnownGene object.
      * @param id an EntrezGene id 
      */

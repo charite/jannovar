@@ -29,7 +29,7 @@ import java.util.MissingFormatArgumentException;
 public class VCFLine implements Constants {
     static Logger log = Logger.getLogger(VCFLine.class.getName());
     /** This field stores the original VCF file, which can be used for debugging purposes to compare the
-	annotations inferred by the exomizer code with the original VCF file. */
+	annotations inferred by the jannovar code with the original VCF file. */
     private String vcf_line = null;
     private String chromosome = null;
     private int position;
@@ -40,7 +40,7 @@ public class VCFLine implements Constants {
     /** The quality of the variant call, the QUAL column in the VCF file. */
     private float variant_quality=0f;
    
-    /** Factory object to create {@link exomizer.exome.GenotypeI GenotypeI} objects. Note that
+    /** Factory object to create {@link jannovar.exome.GenotypeI GenotypeI} objects. Note that
      * this is an abstract class that will be instantiated depending on the information in the
      * #CHROM line of the VCF file (especially, whether there is a single sample or multiple
      * samples).
@@ -49,8 +49,8 @@ public class VCFLine implements Constants {
     /**
      * An object that represents the genotype either of a single file or
      * of each of the samples in a multiple-sample VCF file. This must be
-     * instantiated with a {@link exomizer.exome.SingleGenotype SingleGenotype}
-     * or a {@link exomizer.exome.MultipleGenotype MultipleGenotype}
+     * instantiated with a {@link jannovar.exome.SingleGenotype SingleGenotype}
+     * or a {@link jannovar.exome.MultipleGenotype MultipleGenotype}
      * object.
      */
     private GenotypeI gtype=null;
@@ -73,7 +73,7 @@ public class VCFLine implements Constants {
    
 
     /**
-     * Set the factory object to create {@link exomizer.exome.GenotypeI GenotypeI} objects.
+     * Set the factory object to create {@link jannovar.exome.GenotypeI GenotypeI} objects.
      * Note that we assume that all lines in the VCF file require the same factory
      * (single or multiple sample files), and thus make this a static class member.
      */
@@ -92,9 +92,9 @@ public class VCFLine implements Constants {
 
 
     /**
-     * This is a factory method that creates a {@link exomizer.exome.Variant Variant}
+     * This is a factory method that creates a {@link jannovar.exome.Variant Variant}
      * object corresponding to the current VCF file line.
-     * @return A {@link exomizer.exome.Variant Variant} containing data about the variant in this VCF line.
+     * @return A {@link jannovar.exome.Variant Variant} containing data about the variant in this VCF line.
      */
     public Variant extractVariant() throws VCFParseException {
 	Variant var = null;

@@ -25,10 +25,10 @@ public class Variant implements Comparable<Variant>, Constants {
     private String ref;
     /** Variant sequence (called "ALT", alternate, in VCF files). */
     private String var;
-    /**  The genotype of this variant (note that {@link exomizer.exome.GenotypeI GenotypeI}
-     * must be instantiated by either {@link exomizer.exome.SingleGenotype SingleGenotype}
+    /**  The genotype of this variant (note that {@link jannovar.exome.GenotypeI GenotypeI}
+     * must be instantiated by either {@link jannovar.exome.SingleGenotype SingleGenotype}
      * for VCF files with a single sample or 
-     * {@link exomizer.exome.MultipleGenotype MultipleGenotype}
+     * {@link jannovar.exome.MultipleGenotype MultipleGenotype}
      * for VCF files with multiple samples.
      */
     private GenotypeI genotype=null;
@@ -37,7 +37,7 @@ public class Variant implements Comparable<Variant>, Constants {
    
     
     /** A map of the results of filtering and prioritization. The key to the map is an 
-	integer constant as defined in {@link exomizer.common.Constants Constants}. */
+	integer constant as defined in {@link jannovar.common.Constants Constants}. */
     private HashMap<Integer,ITriage> triageMap=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
@@ -64,10 +64,10 @@ public class Variant implements Comparable<Variant>, Constants {
 
     /**
      * This constructor is intended to be used by the factory method
-     * {@link exomizer.io.VCFLine#extractVariant extractVariant} in the
-     * class {@link exomizer.io.VCFLine VCFLine}. The constructor merely
+     * {@link jannovar.io.VCFLine#extractVariant extractVariant} in the
+     * class {@link jannovar.io.VCFLine VCFLine}. The constructor merely
      * initializes the ArrayList of ITriage objects and expects that everything
-     * else will be initialized by {@link exomizer.io.VCFLine#extractVariant extractVariant}.
+     * else will be initialized by {@link jannovar.io.VCFLine#extractVariant extractVariant}.
      */
     public Variant() {
 	this.triageMap = new HashMap<Integer,ITriage> ();
@@ -109,11 +109,11 @@ public class Variant implements Comparable<Variant>, Constants {
     
     public void set_variant_quality(int q) { this.variant_quality = q; }
     /**
-     * This method is used to add an {@link exomizer.filter.ITriage ITriage} object to
+     * This method is used to add an {@link jannovar.filter.ITriage ITriage} object to
      * this variant. Such objects represent the results of evaluation of this variant
      * and may be used for filtering or prioritization. The Integer is a constant from 
-     * {@link exomizer.common.Constants Constants} that identifies the type of 
-     * {@link exomizer.filter.ITriage ITriage} object being added (e.g., pathogenicity,
+     * {@link jannovar.common.Constants Constants} that identifies the type of 
+     * {@link jannovar.filter.ITriage ITriage} object being added (e.g., pathogenicity,
      * frequency, etc). */
     public void addFilterTriage(ITriage t, int type){ 
 	this.triageMap.put(type,t); 
@@ -237,7 +237,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /**
      * Get representation of current variant as a string. This method
      * retrieves the annotation of the variant stored in the
-     * {@link exomizer.reference.Annotation Annotation} object. If this
+     * {@link jannovar.reference.Annotation Annotation} object. If this
      * is not initialized (which should never happen), it returns ".".
      *<p>
      * Note: This function should not be used anymore, we will refactor the
@@ -291,7 +291,7 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
     /**
-     * @see exomizer.common.Constants
+     * @see jannovar.common.Constants
      * @return a enum constant representing the variant class (NONSENSE, INTRONIC etc)
      */
     public VariantType getVariantTypeConstant() {
@@ -305,7 +305,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * This method calculates a filter
      * score (prediction of the pathogenicity
      * and relevance of the Variant) by using data from
-     * the {@link exomizer.filter.ITriage ITriage} objects
+     * the {@link jannovar.filter.ITriage ITriage} objects
      * associated with this Variant.
      * <P>
      * Note that we use results of filtering to remove Variants
@@ -328,7 +328,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * This method calculates a priority
      * score (prediction of the pathogenicity
      * and relevance of the Variant) by using data from
-     * the {@link exomizer.filter.ITriage ITriage} objects
+     * the {@link jannovar.filter.ITriage ITriage} objects
      * associated with this Variant.
      * @return a priority score between 0 and 1
      */

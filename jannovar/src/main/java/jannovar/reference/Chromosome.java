@@ -39,7 +39,7 @@ import jannovar.annotation.UTR3Annotation;
  * <P>
  * Note that the key of the tree map corresponds to the 5' most position of 
  * the KnownGene. The value is a list
- * (ArrayList) of {@link exomizer.reference.KnownGene KnownGene} objects. 
+ * (ArrayList) of {@link jannovar.reference.KnownGene KnownGene} objects. 
  * This is because multiple KnownGenes may share the same transcription
  * start (e.g., multiple splice forms of the same gene).
  * <P>
@@ -58,7 +58,7 @@ public class Chromosome {
     private byte chromosome;
     /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
-    /** TreeMap with all of the genes ({@link exomizer.reference.KnownGene KnownGene}
+    /** TreeMap with all of the genes ({@link jannovar.reference.KnownGene KnownGene}
      * objects) of this chromosome. The key is an
      * Integer value representing the transcription start site (txstart) of the transcript. 
      * Note that we need to use an Array of KnownGenes because there can be multiple 
@@ -70,7 +70,7 @@ public class Chromosome {
     /** The number of keys (gene 5' positions) to search in either direction. Note that if we just use a SPAN of
      *5 genes, then we tend to miss some annotations in areas of lots of transcripts. TODO figure out the
      * best value for SPAN to compromise between getting all annotations and speed. Most of the missed annotations
-     * seem to be intronic or downstream types, and may not be interesting for the Exomizer anyway.*/
+     * seem to be intronic or downstream types, and may not be interesting for the Jannovar anyway.*/
     private static final int SPAN = 20;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
     private static final int NEARGENE = 1000;
@@ -90,7 +90,7 @@ public class Chromosome {
     
     /**
      * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
-     * 24=Y_CHROMOSOME (see {@link exomizer.common.Constants Constants}).
+     * 24=Y_CHROMOSOME (see {@link jannovar.common.Constants Constants}).
      */
     public Chromosome(byte c) {
 	this.chromosome = c;
@@ -251,7 +251,7 @@ public class Chromosome {
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
-     * @return a list of {@link exomizer.reference.Annotation Annotation} objects corresponding to the mutation described by the object 
+     * @return a list of {@link jannovar.reference.Annotation Annotation} objects corresponding to the mutation described by the object 
      * (often just one annotation, but potentially multiple ones).
      */
     public Annotation getAnnotation(int position,String ref, String alt) throws AnnotationException {
@@ -821,10 +821,7 @@ public class Chromosome {
      * <P>
      * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
      * annovar holds cDNA sequences of the mRNAs. In this implementation,
-     * the KnownGene objects already have this information. Note that
-     * Annovar uses its own version of knownGeneMrna.txt because of some
-     * inconsistencies in the way UCSC makes these sequences. Probably, this will
-     * also be necessary for the Exomizer (TODO).
+     * the KnownGene objects already have this information.
      * <P>
      * Finally, the $refseqvar in Annovar has the following pieces of information
      *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
@@ -968,10 +965,7 @@ public class Chromosome {
      * <P>
      * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
      * annovar holds cDNA sequences of the mRNAs. In this implementation,
-     * the KnownGene objects already have this information. Note that
-     * Annovar uses its own version of knownGeneMrna.txt because of some
-     * inconsistencies in the way UCSC makes these sequences. Probably, this will
-     * also be necessary for the Exomizer (TODO).
+     * the KnownGene objects already have this information. 
      * <P>
      * Finally, the $refseqvar in Annovar has the following pieces of information
      *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}

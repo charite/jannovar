@@ -9,7 +9,7 @@ import jannovar.common.Constants;
  * This class is intended to encapsulate a genotype for a single
  * variant (i.e., line in a VCF file) for a VCF file with multiple
  * samples - thus, MultipleGenotype as opposed to 
- * {@link exomizer.exome.SingleGenotype SingleGenotype} for
+ * {@link jannovar.exome.SingleGenotype SingleGenotype} for
  * VCF files with single samples.
  * @author Peter Robinson
  * @version 0.03 (13 February, 2013)
@@ -17,7 +17,7 @@ import jannovar.common.Constants;
 public class MultipleGenotype extends GenotypeI implements Constants {
 
   
-    /**  List of genotype calls (See {@link exomizer.common.Constants Constants})
+    /**  List of genotype calls (See {@link jannovar.common.Constants Constants})
      * for one variant.
      */
     private ArrayList<GenotypeCall> callList = null;
@@ -28,7 +28,7 @@ public class MultipleGenotype extends GenotypeI implements Constants {
     
     /**
      * The constructor takes lists of calls and qualities that have been parsed from 
-     * a single VCF line by the {@link exomizer.io.MultipleGenotypeFactory MultipleGenotypeFactory}.
+     * a single VCF line by the {@link jannovar.io.MultipleGenotypeFactory MultipleGenotypeFactory}.
      * @param calls A list of the genotype calls, one for each sample
      * @param qualities A list of the genotype Phred qualities, one for each sample.
      */

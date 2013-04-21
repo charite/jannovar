@@ -6,7 +6,7 @@ import jannovar.reference.KnownGene;
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  * <OL>
- * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link exomizer.common.Constants.VariantType VariantType}).
+ * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.common.Constants.VariantType VariantType}).
  * <LI>The gene symbol
  * <LI>A string representing the actual variant
  * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
@@ -15,13 +15,13 @@ import jannovar.reference.KnownGene;
  * This class also includes functionality for combining the multiple
  * annotations assigned to one variant (e.g., annotations corresponding to the
  * various isoforms of one gene) by means of methods that are meant to be called
- * by the {@link exomizer.reference.AnnotatedVar AnnotatedVar} class.
+ * by the {@link jannovar.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
  * @version 0.16 (6 April, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
-    /** The type of the variant being annotated, using the constants in {@link exomizer.common.Constants Constants},
+    /** The type of the variant being annotated, using the constants in {@link jannovar.common.Constants Constants},
 	e.g., MISSENSE, 5UTR, etc. */
     private VariantType varType;
     /** The position of the variant in the ORF or mRNA, if applicable. This field is used to
@@ -48,14 +48,14 @@ public class Annotation implements Constants, Comparable<Annotation> {
     /**
      * The NCBI Entrez Gene id corresponding to the UCSC knownGene id of the transcript
      * being annotated. Note that for a few cases, there is no entrezGene id, and then,
-     * the parser in {@link exomizer.io.UCSCKGParser UCSCKGParser} will enter the value
-     * {@link exomizer.common.Constants#UNINITIALIZED_INT}.
+     * the parser in {@link jannovar.io.UCSCKGParser UCSCKGParser} will enter the value
+     * {@link jannovar.common.Constants#UNINITIALIZED_INT}.
      */
     private int entrezGeneID=UNINITIALIZED_INT;
   
     /**
      * Return a byte constant the corresponds to the type of the variation. This will be one of the
-     * constants in {@link exomizer.common.Constants Constants},
+     * constants in {@link jannovar.common.Constants Constants},
      * e.g., MISSENSE, 5UTR, etc. 
      */
     public VariantType getVariantType() { return this.varType; }
@@ -93,7 +93,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
     /**
      * Resets the annotation. This method is intended to be used by the 
-     * {@link exomizer.reference.AnnotatedVar AnnotatedVar}
+     * {@link jannovar.reference.AnnotatedVar AnnotatedVar}
      * class during the process of summarizing Annotations.
      * @param s A String representing the new annotation.
      */
@@ -166,7 +166,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
     /**
-     * This method is used by {@link exomizer.reference.AnnotatedVar AnnotatedVar} to
+     * This method is used by {@link jannovar.reference.AnnotatedVar AnnotatedVar} to
      * create a single Downstream annotation if there are multiple different
      * annotations made
      */
@@ -205,7 +205,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     /**
      * Add an annotation for a noncoding RNA (ncRNA) for a variant that is located within
      * an exon of the ncRNA gene.
-     * @param kgl {@link exomizer.reference.KnownGene KnownGene} object corresponding to the ncRNA
+     * @param kgl {@link jannovar.reference.KnownGene KnownGene} object corresponding to the ncRNA
      * @param rvarstart position of the variant in the coding sequence
      * @param ref reference sequence
      * @param alt variant sequence
@@ -277,7 +277,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * combined annotation for cases where we need to combine genesymbols,
      * which essentially means down/upstream, ncRNA, UTR3, UTR5 for now.
      * @param a String with the combined gene symbols
-     * @param typ The variant type, one of the constants in {@link exomizer.common.Constants.VariantType VariantType}
+     * @param typ The variant type, one of the constants in {@link jannovar.common.Constants.VariantType VariantType}
      */
      public static Annotation createSummaryAnnotation(String a, VariantType typ) {
 	 Annotation ann = new Annotation();
@@ -396,7 +396,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * <P>
      * For example, {@code uc001hjk.3:exon1:c.1663A>T:p.K555X}
      * <P>
-     * Note that the Exomizer follows HGVS recommendations and denotes nonsense mutations
+     * Note that Jannovar follows HGVS recommendations and denotes nonsense mutations
      * as p.K555* rather than p.K555X (the previous style which was replaced because
      * IUPAC uses X to denote an unknown amino acid rather than a stop codon)
      * @param kgl The affected gene

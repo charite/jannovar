@@ -9,19 +9,19 @@ import jannovar.common.Constants;
 import jannovar.priority.IRelevanceScore;
 
 /**
- * This class represents a Gene in which {@link exomizer.exome.Variant Variant} objects
+ * This class represents a Gene in which {@link jannovar.exome.Variant Variant} objects
  * have been identified by exome sequencing. Note that this class stores
  * information about observed variants and quality scores etc. In contrast,
- * the class {@link exomizer.reference.KnownGene KnownGene} stores information
+ * the class {@link jannovar.reference.KnownGene KnownGene} stores information
  * from UCSC about all genes, irrespective of whether we see a variant in the gene
  * by exome sequencing. Therefore, the program uses information from 
- * {@link exomizer.reference.KnownGene KnownGene} object to annotate variants found
+ * {@link jannovar.reference.KnownGene KnownGene} object to annotate variants found
  * by exome sequencing, and stores the results of that annotation in
- * {@link exomizer.exome.Variant Variant} objects. Objects of this class have a
+ * {@link jannovar.exome.Variant Variant} objects. Objects of this class have a
  * list of Variant objects, one for each variant observed in the exome. Additionally,
  * the Gene objects get prioritized for their biomedical relevance to the disease
  * in question, and each such prioritization results in an 
- * {@link exomizer.priority.IRelevanceScore IRelevanceScore} object.
+ * {@link jannovar.priority.IRelevanceScore IRelevanceScore} object.
  * <P>
  * There are additionally some prioritization procedures that only can be
  * performed on genes (and not on the individual variants). For instance, there
@@ -30,7 +30,7 @@ import jannovar.priority.IRelevanceScore;
  * relevant disease genes. Additionally, filtering for autosomal recessive or 
  * dominant patterns in the data is done with this class. This kind of
  * prioritization is done by classes that implement 
- * {@link exomizer.priority.IPriority IPriority}.
+ * {@link jannovar.priority.IPriority IPriority}.
  * @author Peter Robinson
  * @version 0.11 (23 January, 2013)
  */
@@ -46,24 +46,24 @@ public class Gene implements Comparable<Gene>, Constants  {
 
     /**
      * A score representing the combined pathogenicity predictions for the
-     * {@link exomizer.exome.Variant Variant} objects associated with this gene.
+     * {@link jannovar.exome.Variant Variant} objects associated with this gene.
      */
     private float filterScore = UNINITIALIZED_FLOAT;
     //private float pathogenicityFilterScore = UNINITIALIZED_FLOAT;
    
      /** A map of the results of prioritization. The key to the map is an 
-	integer constant as defined in {@link exomizer.common.Constants Constants}. */
+	integer constant as defined in {@link jannovar.common.Constants Constants}. */
     private HashMap<Integer,IRelevanceScore> relevanceMap=null;
 
     /**
-     * @return the number of {@link exomizer.exome.Variant Variant} objects for this gene.
+     * @return the number of {@link jannovar.exome.Variant Variant} objects for this gene.
      */
     public int getNumberOfVariants() {
 	return this.variant_list.size();
     }
     
     /**
-     * @return the nth {@link exomizer.exome.Variant Variant} object for this gene.
+     * @return the nth {@link jannovar.exome.Variant Variant} object for this gene.
      */
     public Variant getNthVariant(int n) {
 	if (n>= this.variant_list.size())
@@ -96,14 +96,14 @@ public class Gene implements Comparable<Gene>, Constants  {
 
     /**
      * @param rel Result of a prioritization algorithm
-     * @param type an integer constant from {@link exomizer.common.Constants Constants} representing the filter type
+     * @param type an integer constant from {@link jannovar.common.Constants Constants} representing the filter type
      */
     public void addRelevanceScore(IRelevanceScore rel, int type) {
 	this.relevanceMap.put(type,rel);
     }
 
     /**
-     * @param type an integer constant from {@link exomizer.common.Constants Constants} representing the filter type
+     * @param type an integer constant from {@link jannovar.common.Constants Constants} representing the filter type
      * @return The IRelevance object corresponding to the filter type.
      */
     public float getRelevanceScore(int type) {
@@ -129,7 +129,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Note that currently, the EntrezGene IDs are associated with the Variants. Probably it would
      * be more natural to associate that with a field of this Gene object. For now, leave it as be,
-     * and return an UNINITIALIZED_INT flag if this gene has no {@link exomizer.exome.Variant Variant} objects.
+     * and return an UNINITIALIZED_INT flag if this gene has no {@link jannovar.exome.Variant Variant} objects.
      * @return the NCBI Entrez Gene ID associated with this gene (extracted from one of the Variant objects)
      */
     public int getEntrezGeneID() {
@@ -142,7 +142,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     }
 
     /** 
-     * @return the map of {@link exomizer.priority.IRelevanceScore  IRelevanceScore} 
+     * @return the map of {@link jannovar.priority.IRelevanceScore  IRelevanceScore} 
      * objects that represent the result of filtering 
      */
     public HashMap<Integer,IRelevanceScore> getRelevanceMap() { return this.relevanceMap; }
@@ -150,7 +150,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Note that currently, the gene symbols are associated with the Variants. Probably it would
      * be more natural to associate that with a field of this Gene object. For now, leave it as be,
-     * and return "-" if this gene has no  {@link exomizer.exome.Variant Variant} objects.
+     * and return "-" if this gene has no  {@link jannovar.exome.Variant Variant} objects.
      * @return the symbol associated with this gene (extracted from one of the Variant objects)
      */
     public String getGeneSymbol() {
@@ -166,7 +166,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Calculates the total priority score for this
      * gene based on data stored in its associated
-     * {@link exomizer.exome.Variant Variant} objects.
+     * {@link jannovar.exome.Variant Variant} objects.
      * Note that for assumed autosomal recessive variants, the mean of the
      * worst two variants is taken, and for other modes of inheritance,the
      * since worst value is taken.
@@ -203,7 +203,7 @@ public class Gene implements Comparable<Gene>, Constants  {
     /**
      * Calculate the combined priority score for this gene (the result
      * is stored in the class variable 
-     * {@link exomizer.exome.Gene#priorityScore}, which is used to help sort
+     * {@link jannovar.exome.Gene#priorityScore}, which is used to help sort
      * the gene.
      */
      public void calculatePriorityScore() {

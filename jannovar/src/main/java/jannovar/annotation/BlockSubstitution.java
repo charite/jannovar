@@ -10,7 +10,7 @@ import jannovar.exception.AnnotationException;
  * block substitution  mutations. This method is put in its own class only for 
  * convenience and to at least have a name that is easy to find.
  * <P>
- * Block substitutions are recognized in the calling class {@link exomizer.reference.Chromosome Chromosome}
+ * Block substitutions are recognized in the calling class {@link jannovar.reference.Chromosome Chromosome}
  * by the fact that the length of the variant sequence is greater than 1.
  * @version 0.02 (December 14, 2012)
  * @author Peter N Robinson

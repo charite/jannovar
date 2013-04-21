@@ -4,13 +4,13 @@ package jannovar.priority;
 
 /**
  * Prioritization of Genes results in a relevance score for each tested
- * {@link exomizer.exome.Gene Gene} object. The methods may also annotate
+ * {@link jannovar.exome.Gene Gene} object. The methods may also annotate
  * the genes with data (e.g., a link to OMIM or a link to Phenodigm or
  * uberpheno data. Each prioritization is expected to result on an object
  * of a class that implements IRelevanceScore
  * @author Peter N Robinson
  * @version 0.02 (January 11,2012)
- * @see exomizer.filter.ITriage
+ * @see jannovar.filter.ITriage
  */
 public interface IRelevanceScore {
 

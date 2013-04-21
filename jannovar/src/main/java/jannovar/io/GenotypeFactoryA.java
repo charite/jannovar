@@ -24,8 +24,8 @@ public abstract class GenotypeFactoryA {
 
     /** 
      * This is the core method of the factory, and creates
-     * a Genotype object. Currently, the Exomizer has
-     * two concrete implementations of the {@link exomizer.exome.GenotypeI GenotypeI}
+     * a Genotype object. Currently, Jannovar has
+     * two concrete implementations of the {@link jannovar.exome.GenotypeI GenotypeI}
      * interface, for single and multiple-sample VCF files. The interface
      * could be extended to allow for cool stuff such as DP4 analysis in
      * the future.

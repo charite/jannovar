@@ -29,7 +29,7 @@ public class UTR3Annotation {
      * @param  end position of the variant
      * @param ref reference sequence
      * @param alt variant sequence
-     * @return An {@link exomizer.reference.Annotation Annotation} object corresponding to the UTR3 mutation.
+     * @return An {@link jannovar.reference.Annotation Annotation} object corresponding to the UTR3 mutation.
      */
     public static Annotation getUTR3Annotation(KnownGene kgl, int start, int end, String ref, String alt) {
 	String genesymbol = kgl.getName2();

@@ -36,12 +36,9 @@ import jannovar.exception.VCFParseException;
  * <LI>Optional comment
  * </UL>
  * <P>
- * We will create {@link exomizer.exome.Variant Variant} objects from these lines, 
+ * We will create {@link jannovar.exome.Variant Variant} objects from these lines, 
  * although most of the fields of the variant (which is intended to
  * represent a Variant as well as metadata from a VCF file) will be empty.
- * <P>
- * Note that now that the Exomizer is running well, this class should probably no longer be
- * needed, but it is maintained should the need for debugging arise.
  * @author Peter N Robinson
  * @version 0.04 (April 16, 2013)
  */

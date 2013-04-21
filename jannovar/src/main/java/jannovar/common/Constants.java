@@ -19,9 +19,9 @@ public interface Constants {
 
    
     /** 
-     * These codes will be used to denote the genotype of a {@link exomizer.exome.Variant Variant}
+     * These codes will be used to denote the genotype of a {@link jannovar.exome.Variant Variant}
      * in an individual sample. Note that this enumeration denotes the call (e.g., 0/1) of a
-     * genotype, whereas the classes derived from {@link exomizer.exome.GenotypeI GenotypeI}
+     * genotype, whereas the classes derived from {@link jannovar.exome.GenotypeI GenotypeI}
      * have data with respect to quality and about single or multiple samples.
      * <P>
      * Note that the constant {@code NOT_OBSERVED} refers to <B>./.</B> in a VCF file with multiple

@@ -25,7 +25,7 @@ import jannovar.io.MultipleGenotypeFactory;
 
 /**
  * Parses a VCF file and extracts Variants for analysis
- * by the Exomizer. We read and count all of the lines that are
+ * by the Jannovar. We read and count all of the lines that are
  * represented in the VCF file. 
  * <P>
  * We note that this parser demands that there be a FORMAT field and at least one sample id. 
@@ -38,7 +38,7 @@ import jannovar.io.MultipleGenotypeFactory;
  * field per sample, with the colon-separated data in this field corresponding to the types 
  * specified in the format. The first sub-field must always be the genotype (GT).
  * <P>
- * The classes relies on the abstract factory pattern to create appropriate {@link exomizer.exome.GenotypeI GenotypeI}
+ * The classes relies on the abstract factory pattern to create appropriate {@link jannovar.exome.GenotypeI GenotypeI}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
  * @version 0.07 (16 April, 2013)
@@ -64,7 +64,7 @@ public class VCFReader {
      as well as those that are probably not (intergenic, synonymous).*/
     private int total_number_of_variants;
     
-    /** Factory object to create {@link exomizer.exome.GenotypeI GenotypeI} objects. Note that
+    /** Factory object to create {@link jannovar.exome.GenotypeI GenotypeI} objects. Note that
      * this is an abstract class that will be instantiated depending on the information in the
      * #CHROM line of the VCF file (especially, whether there is a single sample or multiple
      * samples).
@@ -286,7 +286,7 @@ public class VCFReader {
      * #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	name1  name2 ...
      * </PRE>
      * We will use the number of sample names to determine which subclass of the abstract
-     * factory {@link exomizer.io.GenotypeFactoryA GenotypeFactoryA} to instantiate.
+     * factory {@link jannovar.io.GenotypeFactoryA GenotypeFactoryA} to instantiate.
      */
     public void parse_chrom_line(String line) throws VCFParseException
     {
