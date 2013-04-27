@@ -26,6 +26,7 @@ import jannovar.exception.AnnotationException;
 
 
 import org.junit.Test;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -77,7 +78,10 @@ public class InsertionAnnotationTest implements Constants {
 	}
     }
 
-
+     @AfterClass public static void releaseResources() { 
+	chromosomeMap = null;
+	System.gc();
+    }
 /**
  *<P>
  * annovar: OR2T3:uc001iel.1:exon1:c.771_772insTTC:p.F257delinsFF,

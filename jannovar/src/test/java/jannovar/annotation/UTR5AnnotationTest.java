@@ -26,6 +26,7 @@ import jannovar.exception.AnnotationException;
 
 
 import org.junit.Test;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -77,8 +78,12 @@ public class UTR5AnnotationTest implements Constants {
 	}
     }
 
+    @AfterClass public static void releaseResources() { 
+	chromosomeMap = null;
+	System.gc();
+    }
   
-@Test public void testUTR3VarByHand1() throws AnnotationException  {
+    @Test public void testUTR3VarByHand1() throws AnnotationException  {
 	byte chr = 4;
 	int pos = 20620683;
 	String ref = "G";

@@ -16,6 +16,7 @@ import jannovar.exception.KGParseException;
 
 
 import org.junit.Test;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -32,6 +33,12 @@ public class KnownGeneTest implements Constants {
 	  uc010wrv = new KnownGene("uc010wrv.1	chr17	+	73201596	73231854	73205928	73231774	18	73201596,73205917,73208086,73209170,73211848,73214279,73221197,73221436,73221792,73222145,73227434,73227667,73227922,73228945,73229152,73230731,73231194,73231672,	73201889,73206080,73208157,73209214,73211918,73214401,73221332,73221559,73221924,73222252,73227518,73227733,73228074,73229063,73229253,73230883,73231296,73231854,	Q9BW27	uc010wrv.1");
 
       }
+
+    @AfterClass public static void releaseResources() { 
+	uc0210lp = null;
+	uc010wrv = null;
+	System.gc();
+    }
 
 
     @Test public void testExonCount_uc0210lp() {

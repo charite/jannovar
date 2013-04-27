@@ -16,17 +16,18 @@ import jannovar.exome.Variant;
 
 
 import org.junit.Test;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Assert;
 
 
 public class VCFReaderTest implements Constants {
 
-    private VCFReader reader = null;
+    private static VCFReader reader = null;
 
 
-    @Before
-	public void setUp() throws IOException
+    @BeforeClass
+	public static void setUp() throws IOException
     {
 	File tmp = File.createTempFile("vcfreader-test","vcfreader-test");
 	PrintStream ps = new PrintStream(new FileOutputStream(tmp));
@@ -87,9 +88,12 @@ public class VCFReaderTest implements Constants {
       ps.close();
 
 
-      this.reader = new VCFReader(tmp.getAbsolutePath());
+      reader = new VCFReader(tmp.getAbsolutePath());
+    }
 
-
+     @AfterClass public static void releaseResources() { 
+	reader = null;
+	System.gc();
     }
 
 
@@ -97,10 +101,21 @@ public class VCFReaderTest implements Constants {
      @Test
 	public void testSizeOfVariantList() 
 	{
-	    int nvar = this.reader.get_total_number_of_variants();
+	    int nvar = reader.get_total_number_of_variants();
 	    Assert.assertEquals(3,nvar);	  
 	}
 
+    /**
+     * Mentalist02 Mentalist02_dup	Mentalist02_dup2
+     Mentalist02_dup3 Mentalist02_dup4 Mentalist02_dup5
+    */
+    @Test public void testSampleNameList() {
+	ArrayList<String> sampleList = reader.getSampleNames();
+	int N = sampleList.size();
+	Assert.assertEquals(6,N);
+	String sampl2 = sampleList.get(1);
+	Assert.assertEquals("Mentalist02_dup",sampl2);
+    }
      
 
 }

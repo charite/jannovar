@@ -27,6 +27,7 @@ import jannovar.exception.AnnotationException;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Assert;
 
 
@@ -76,6 +77,11 @@ public class BlockSubAnnotationTest implements Constants {
 	    Chromosome c = chromosomeMap.get(chrom);
 	    c.addGene(kgl);	
 	}
+    }
+
+    @AfterClass public static void releaseResources() { 
+	chromosomeMap = null;
+	System.gc();
     }
 
 /**

@@ -26,6 +26,7 @@ import jannovar.exception.AnnotationException;
 
 
 import org.junit.Test;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -78,7 +79,10 @@ public class IntronicAnnotationTest implements Constants {
 	}
     }
 
-
+    @AfterClass public static void releaseResources() { 
+	chromosomeMap = null;
+	System.gc();
+    }
 /**
  *<P>
  * annovar: PLEKHN1

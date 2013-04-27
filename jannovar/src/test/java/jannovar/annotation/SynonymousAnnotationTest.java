@@ -27,6 +27,7 @@ import jannovar.exception.AnnotationException;
 
 
 import org.junit.Test;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -81,7 +82,10 @@ public class SynonymousAnnotationTest implements Constants {
     }
 
 
-
+    @AfterClass public static void releaseResources() { 
+	chromosomeMap = null;
+	System.gc();
+    }
 
 
 /**
@@ -111,6 +115,9 @@ public class SynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: RNF207:uc001amg.3:exon17:c.1718A>G:p.N573S,
  * chr1:6278414A>G
+  expected:<...uc011mzv.2:exon12:c.[A1060T:p.T354S,uc010nvg.2:exon11:c.A1090T:p.T364S,uc011mzw.2:exon11:c.A1099T:p.T367S,uc004fmp.2:exon11:c.A1150]T:p.T384S)> but was:<...uc011mzv.2:exon12:c.[1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>]T:p.T384S)>
+
+
  *</P>
  */
 @Test public void testSynVar2hand() throws AnnotationException  {
@@ -126,7 +133,7 @@ public class SynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.A1060T:p.T354S,uc010nvg.2:exon11:c.A1090T:p.T364S,uc011mzw.2:exon11:c.A1099T:p.T367S,uc004fmp.2:exon11:c.A1150T:p.T384S)",annot);
+	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)",annot);
 	}
 }
 

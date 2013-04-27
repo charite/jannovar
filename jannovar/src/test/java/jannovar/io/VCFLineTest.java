@@ -19,7 +19,7 @@ import jannovar.exome.Variant;
 import jannovar.exome.GenotypeI;
 
 import org.junit.Test;
-import org.junit.Before;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -62,6 +62,14 @@ public class VCFLineTest implements Constants {
 	    VCFLine ln  = new VCFLine(line);
 	    VCFLineList.add(ln);
 	}
+	br.close();
+	in.close();
+	fstream.close();
+    }
+
+     @AfterClass public static void releaseResources() { 
+	VCFLineList = null;
+	System.gc();
     }
 
     /**

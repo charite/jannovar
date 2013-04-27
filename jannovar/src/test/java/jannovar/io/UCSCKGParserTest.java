@@ -16,6 +16,7 @@ import jannovar.common.Constants;
 
 
 import org.junit.Test;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
@@ -56,6 +57,12 @@ public class UCSCKGParserTest implements Constants {
 	    knownGeneMap.put(name,k);
 	}
 	
+    }
+
+    @AfterClass public static void releaseResources() { 
+	knownGeneMap = null;
+	parser = null;
+	System.gc();
     }
 
     @Test public void testSizeOfKnownGeneMap() {
