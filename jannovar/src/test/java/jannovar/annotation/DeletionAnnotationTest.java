@@ -22,6 +22,7 @@ import jannovar.io.AnnovarParser;
 import jannovar.reference.KnownGene;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationList;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
 
@@ -38,18 +39,14 @@ import org.junit.Assert;
  */
 public class DeletionAnnotationTest implements Constants {
 
-    
-   
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
   
-
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
 	HashMap<String,KnownGene> kgMap=null;
 	// The following file must be created prior to running this test
-
 	try {
 	    java.net.URL url = DeletionAnnotationTest.class.getResource("/ucsc.ser");
 	    String path = url.getPath();
@@ -62,8 +59,7 @@ public class DeletionAnnotationTest implements Constants {
             i.printStackTrace();
 	    System.err.println("Could not deserialize knownGeneMap");
 	    System.exit(1);
-           
-        } catch(ClassNotFoundException c) {
+	} catch(ClassNotFoundException c) {
             System.out.println("Could not find HashMap<String,KnownGene> class.");
             c.printStackTrace();
             System.exit(1);
@@ -100,7 +96,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -123,7 +119,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -148,7 +144,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    byte varType = ann.getVarType();
 	    Assert.assertEquals(FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -172,7 +168,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -196,7 +192,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -221,7 +217,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -246,7 +242,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -271,7 +267,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -296,7 +292,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -321,7 +317,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -345,7 +341,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -368,7 +364,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -391,7 +387,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -414,7 +410,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -438,7 +434,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -461,7 +457,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -484,7 +480,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -508,7 +504,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -532,7 +528,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -555,7 +551,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -579,7 +575,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -603,7 +599,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -626,7 +622,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -649,7 +645,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -673,7 +669,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -697,7 +693,7 @@ public class DeletionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();

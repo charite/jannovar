@@ -12,7 +12,7 @@ import jannovar.common.VariantType;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.04 (28 April, 2013)
+ * @version 0.05 (28 April, 2013)
  */
 
 public class VariantTypeCounter implements Constants {
@@ -96,7 +96,7 @@ public class VariantTypeCounter implements Constants {
 	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
 	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
 	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);
-	int posErr = this.variantCountMap.get(VariantType.POSSIBLY_ERRONEOUS);
+	int posErr = this.variantCountMap.get(VariantType.ERROR);
 
 	out.write("<td><ul>\n");
 

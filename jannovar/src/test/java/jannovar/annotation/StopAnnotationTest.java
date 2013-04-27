@@ -100,7 +100,7 @@ public class StopAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -125,7 +125,7 @@ public class StopAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -149,7 +149,7 @@ public class StopAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -176,7 +176,7 @@ public class StopAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.STOPGAIN,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -201,7 +201,7 @@ public class StopAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.STOPLOSS,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -228,7 +228,7 @@ public class StopAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.STOPLOSS,varType);
 	    String annot = ann.getVariantAnnotation();

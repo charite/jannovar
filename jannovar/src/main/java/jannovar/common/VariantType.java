@@ -5,6 +5,10 @@ package jannovar.common;
  * These codes reflect the possible types of variants that we call for an exome. Note that the
  * codes have the obvious meanings, but UTR53 means a variant that is in the 3' UTR of one transcript
  * and the 5' UTR of another transcript.
+ * <p>
+ * Note that the an intergenic variant is considered UPSTREAM or DOWNSTREAM if it is within 1000 nucleotides of 
+ * a gene, otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in 
+ * {@link jannovar.reference.Chromosome Chromosome} (maybe make this adjustable in future versions),
  * @author Peter Robinson
  * @version 0.03 (28 April, 2013)
  */
@@ -58,6 +62,6 @@ public enum  VariantType {
 	/** Variant is located in the 3' untranslated region of one gene and the 5' UTR of an overlapping gene*/
 	UTR53,
 	/** Variant assesed as probabily erroneous (this indicates some error in the VCF file)*/
-	POSSIBLY_ERRONEOUS;
+	ERROR;
 
 }

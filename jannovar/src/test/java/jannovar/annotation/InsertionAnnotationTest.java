@@ -15,15 +15,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
-import jannovar.io.UCSCKGParser;
+
+import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationList;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
-import jannovar.io.AnnovarParser;
-import jannovar.reference.KnownGene;
-import jannovar.reference.Chromosome;
-import jannovar.annotation.Annotation;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
+import jannovar.io.AnnovarParser;
+import jannovar.io.UCSCKGParser;
+import jannovar.reference.Chromosome;
+import jannovar.reference.KnownGene;
 
 
 import org.junit.Test;
@@ -98,7 +100,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -122,7 +124,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -146,7 +148,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -171,7 +173,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -196,7 +198,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -220,7 +222,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -243,7 +245,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -267,7 +269,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -291,7 +293,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -315,7 +317,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -339,7 +341,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -362,7 +364,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -388,7 +390,7 @@ public class InsertionAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -415,7 +417,7 @@ jannovar says, annovar finds a "C")
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -438,7 +440,7 @@ jannovar says, annovar finds a "C")
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -461,7 +463,7 @@ jannovar says, annovar finds a "C")
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -484,7 +486,7 @@ jannovar says, annovar finds a "C")
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -507,7 +509,7 @@ jannovar says, annovar finds a "C")
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -529,7 +531,7 @@ jannovar says, annovar finds a "C")
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -543,20 +545,20 @@ jannovar says, annovar finds a "C")
  *</P>
  */
 @Test public void testInsertionVar48() throws AnnotationException  {
-	byte chr = 9;
-	int pos = 137968919;
-	String ref = "-";
-	String alt = "AA";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    Annotation ann =c.getAnnotation(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OLFM1(uc010naq.2:exon2:c.328_329insAA:p.G110fs)",annot);
-	}
+    byte chr = 9;
+    int pos = 137968919;
+    String ref = "-";
+    String alt = "AA";
+    Chromosome c = chromosomeMap.get(chr); 
+    if (c==null) {
+	Assert.fail("Could not identify chromosome \"" + chr + "\"");
+    } else {
+	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
+	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	String annot = ann.getVariantAnnotation();
+	Assert.assertEquals("OLFM1(uc010naq.2:exon2:c.328_329insAA:p.G110fs)",annot);
+    }
 }
-
+    
 }

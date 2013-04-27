@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import jannovar.annotation.AnnotatedVar;
+import jannovar.annotation.AnnotatedVariantFactory;
+import jannovar.annotation.AnnotationList;
 import jannovar.annotation.Annotation;
 
 import jannovar.reference.KnownGene;
@@ -52,7 +53,7 @@ import jannovar.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.11(16 April, 2013)
+ * @version 0.12 (28 April, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -88,7 +89,7 @@ public class Chromosome {
      * with which the lists of potential annotations get initialized. We will take 2*SPAN because
      * this is the maximum number of annotations any variant can get with this program.
      */
-    private AnnotatedVar annovar = null;
+    private AnnotatedVariantFactory annovarFactory = null;
     
     /**
      * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
@@ -99,7 +100,7 @@ public class Chromosome {
 	this.geneTreeMap = new TreeMap<Integer,ArrayList<KnownGene>>();
 	this.translator = Translator.getTranslator();
 	this.n_genes=0;
-	this.annovar = new AnnotatedVar(2*SPAN );
+	this.annovarFactory = new AnnotatedVariantFactory(2*SPAN); /* the argument is the initial capacity of the arrayLists of vars */
     }
 
     /**
@@ -227,14 +228,15 @@ public class Chromosome {
      */
     public int getNumberOfGenes() { return this.n_genes; }
 
-    /**
-     * ToDo
-     * Create a function that will return one annotation for each isoform.
-     */
-     public ArrayList<Annotation> getAnnotationList(int position,String ref, String alt) throws AnnotationException {
-	 return null;
-     }
+   
 
+
+    /**
+     * Just for refactor
+     */
+    public Annotation getAnnotation(int position,String ref, String alt) throws AnnotationException  { 
+	return null; 
+    }
 
     /**
      * Main entry point to getting Annovar-type annotations for a
@@ -256,7 +258,7 @@ public class Chromosome {
      * @return a list of {@link jannovar.reference.Annotation Annotation} objects corresponding to the mutation described by the object 
      * (often just one annotation, but potentially multiple ones).
      */
-    public Annotation getAnnotation(int position,String ref, String alt) throws AnnotationException {
+    public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {
 	
 	KnownGene leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	KnownGene rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
@@ -269,7 +271,7 @@ public class Chromosome {
 	boolean foundThreePrimeNeighbor=false;
 
 	/* The following command "resets" the annovar object */
-	this.annovar.clearAnnotationLists();
+	this.annovarFactory.clearAnnotationLists();
 
 	// Define start and end positions of variant
 	int start = position;
@@ -372,12 +374,12 @@ public class Chromosome {
 	
 		if (kgl.isPlusStrand()) {	
 		    getPlusStrandAnnotation(position,ref, alt, kgl);
-		    if (annovar.hasGenic()) {
+		    if (annovarFactory.hasGenic()) {
 			foundgenic=true;
 		    }
 		} else if (kgl.isMinusStrand()) {
 		    getMinusStrandAnnotation(position,ref, alt, kgl);	
-		    if (annovar.hasGenic()) {
+		    if (annovarFactory.hasGenic()) {
 			foundgenic=true;
 		    }
 		}
@@ -387,28 +389,28 @@ public class Chromosome {
 	    we should at least have a rightNeighbor and a leftNeighbor. 
 	    We first check if one of these is upstream or downstream.
 	    If not, then we have an intergenic variant. */
-	if (annovar.isEmpty()) {
+	if (annovarFactory.isEmpty()) {
 	    if (leftNeighbor != null && leftNeighbor.isNearThreePrimeEnd(start,NEARGENE) ) {
 		/** The following function creates an upstream or downstream annotation as appropriate. */
 		Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
-		annovar.addUpDownstreamAnnotation(ann);
+		annovarFactory.addUpDownstreamAnnotation(ann);
 	    } 
 	    
 	    if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(end,NEARGENE)) {
 		/** The following function creates an upstream or downstream annotation as appropriate. */
 		    Annotation ann = Annotation.createUpDownstreamAnnotation(rightNeighbor,end);
-		    annovar.addUpDownstreamAnnotation(ann);
+		    annovarFactory.addUpDownstreamAnnotation(ann);
 	    }
 	    /* If we get here, and annotation_list is still empty, then the variant is not
 	       nearby to any gene (i.e., it is not upstream/downstream). Therefore, the variant
 	       is intergenic */
-	    if (annovar.isEmpty()) {
+	    if (annovarFactory.isEmpty()) {
 		Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start,end);
-		annovar.addIntergenicAnnotation(ann);
+		annovarFactory.addIntergenicAnnotation(ann);
 	    }
 	}
 	//annovar.debugPrint();
-	return annovar.getAnnotation();
+	return annovarFactory.getAnnotationList();
     }
 
 
@@ -461,9 +463,9 @@ public class Chromosome {
 	    if (SpliceAnnotation.isSpliceVariantPlusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationPlusStrand(kgl,start,end,ref,alt,k,cumlenexon);
 		if (kgl.isCodingGene()) {
-		    annovar.addExonicAnnotation(ann);
+		    annovarFactory.addExonicAnnotation(ann);
 		} else {
-		    annovar.addNcRNASplicing(ann);
+		    annovarFactory.addNcRNASplicing(ann);
 		}
 		return; // we are done with this variant/KnownGene combination.
 	    }
@@ -492,7 +494,7 @@ public class Chromosome {
 			 #gene     <--*---*->
 			*/
 			Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
-			annovar.addUTR5Annotation(ann);
+			annovarFactory.addUTR5Annotation(ann);
 			
 			  /* Annovar: $utr5{$name2}++;
 			     positive strand for UTR5 */
@@ -502,7 +504,7 @@ public class Chromosome {
 			   #gene     <--*---*->
 			*/
 			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
-			annovar.addUTR3Annotation(ann);
+			annovarFactory.addUTR3Annotation(ann);
 			
 			/* positive strand for UTR3 */
 		    } else {	
@@ -526,7 +528,7 @@ public class Chromosome {
 			 ann = Annotation.createIntronicAnnotation(name2);
 		     else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
-		    annovar.addIntronicAnnotation(ann);
+		    annovarFactory.addIntronicAnnotation(ann);
 		    return; /* Done with this annotation */
 		}
 	    } /* end; if (start < kgl.getExonStart(k)) */ 
@@ -583,7 +585,7 @@ public class Chromosome {
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
 		    Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl, rvarstart,ref,alt);
-		    annovar.addNonCodingRNAExonicAnnotation(ann);
+		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		} else	if (end < cdsstart ) {					
 		    /* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns 
 		     * #query  ----
@@ -591,7 +593,7 @@ public class Chromosome {
 		     * Annovar: $utr5{$name2}++; #positive strand for UTR5
 		     */
 		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
-		    annovar.addUTR5Annotation(ann);
+		    annovarFactory.addUTR5Annotation(ann);
 		    
 		} else if (start > cdsend) {
 		    /* #query             ----
@@ -599,7 +601,7 @@ public class Chromosome {
 		     * Annovar: $utr3{$name2}++; #positive strand for UTR3
 		     */
 		    Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
-		    annovar.addUTR3Annotation(ann);
+		    annovarFactory.addUTR3Annotation(ann);
 		} else {
 		    /* Note that the following function adds annotations to annovar */
 		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k+1,kgl);
@@ -664,9 +666,9 @@ public class Chromosome {
 	    if (SpliceAnnotation.isSpliceVariantMinusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationMinusStrand(kgl,start,end,ref,alt,k,cumlenexon);
 		if (kgl.isCodingGene()) {
-		    annovar.addExonicAnnotation(ann);
+		    annovarFactory.addExonicAnnotation(ann);
 		} else {
-		    annovar.addNcRNASplicing(ann);
+		    annovarFactory.addNcRNASplicing(ann);
 		}
 		return; /* We are done with this annotation. */
 	    }
@@ -711,21 +713,21 @@ public class Chromosome {
 		     * ------------------------------------------------------------- */
 		    if (kgl.isNonCodingGene()) {
 			Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl,rvarstart,ref, alt);
-			annovar.addNonCodingRNAExonicAnnotation(ann);
+			annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 			return;
 		    } else if (end < cdsstart ) {
 			//query  ----
 			//gene     <--*---*->
 			// Note this is UTR3 on negative strand
 			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
-			annovar.addUTR3Annotation(ann);
+			annovarFactory.addUTR3Annotation(ann);
 			return; /* done with this annotation. */
 		    } else if (start > cdsend) {
 			//query             ----
 			//gene     <--*---*->
 			// Note this is UTR5 on negative strand
 			Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
-			annovar.addUTR5Annotation(ann);
+			annovarFactory.addUTR5Annotation(ann);
 			return; /* done with this annotation. */
 		    } 	else {
 			/* ------------------------------------------------------------- *
@@ -754,7 +756,7 @@ public class Chromosome {
 			 ann = Annotation.createIntronicAnnotation(name2);
 		     else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
-		     annovar.addIntronicAnnotation(ann);
+		     annovarFactory.addIntronicAnnotation(ann);
 		     return; /* done with this annotation. */
 		} 
 	    } /* end; if (end > kgl.getExonEnd(k)) */ 
@@ -787,14 +789,14 @@ public class Chromosome {
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
 		    Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl, rvarstart,ref,alt);
-		    annovar.addNonCodingRNAExonicAnnotation(ann);
+		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		    return; /* done with this annotation. */
 		} else if (end < cdsstart) { 
 		    /* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 		    //query  ----
 		    //gene     <--*---*->
 		    Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
-		    annovar.addUTR3Annotation(ann);
+		    annovarFactory.addUTR3Annotation(ann);
 		    return; /* done with this annotation. */
 		} else if (start > cdsend) {
 		    /* Negative strand, mutation located 3' to CDS end, i.e., 5UTR */
@@ -802,7 +804,7 @@ public class Chromosome {
 		    //gene     <--*---*->
 		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getName2()));
 		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
-		    annovar.addUTR5Annotation(ann);
+		    annovarFactory.addUTR5Annotation(ann);
 		    //$utr5{$name2}++;		#negative strand for UTR3
 		} else {
 		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,exoncount-k,kgl);
@@ -865,7 +867,7 @@ public class Chromosome {
 	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
 				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovar.addErrorAnnotation(ann);
+	    this.annovarFactory.addErrorAnnotation(ann);
 	}
 	/*
 	  @wtnt3 = split (//, $wtnt3);
@@ -886,7 +888,7 @@ public class Chromosome {
 				     "(variant at pos. %d of transcript with mRNA length %d):%s[%s]", 
 				     refvarstart,kgl.getMRNALength(), kgl.getKnownGeneID(), kgl.getName());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovar.addErrorAnnotation(ann);
+	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
 
 	}
@@ -898,7 +900,7 @@ public class Chromosome {
 	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
 	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovar.addErrorAnnotation(ann);
+	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
 	}
 	/*annovar line 1079 */
@@ -911,21 +913,21 @@ public class Chromosome {
 	    if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
 		Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
 										var,refvarstart,exonNumber);
-		this.annovar.addExonicAnnotation(insrt);
+		this.annovarFactory.addExonicAnnotation(insrt);
 	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
 		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 											    ref, var,refvarstart,exonNumber);
-		this.annovar.addExonicAnnotation(dlt);
+		this.annovarFactory.addExonicAnnotation(dlt);
 	    } else if (var.length()>1) {
 		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
 									    ref,var,refvarstart, refvarend, 
 									    exonNumber);
-		this.annovar.addExonicAnnotation(blck);
+		this.annovarFactory.addExonicAnnotation(blck);
 	    } else {
 		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
 		Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl,frame_s, frame_end_s,wtnt3,
 									      ref, var,refvarstart,exonNumber);
-		this.annovar.addExonicAnnotation(mssns);
+		this.annovarFactory.addExonicAnnotation(mssns);
 	    }
 	} /* if (start==end) */
 	else if (var.equals("-")) {
@@ -937,7 +939,7 @@ public class Chromosome {
 		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
 								ref, var, refvarstart, refvarend, exonNumber);
 	    
-	    this.annovar.addExonicAnnotation(dltmnt);
+	    this.annovarFactory.addExonicAnnotation(dltmnt);
 	} else {
 	    /* If we get here, then start==end is false and the variant sequence is not "-",
 	     * i.e., it is not a deletion. Thus, we have a block substitution event.
@@ -948,11 +950,11 @@ public class Chromosome {
 	    if ((refvarend - refvarstart+ 1 - var.length())%3==0) {
 		/* Non-frameshift substitution */
 		Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
-		this.annovar.addExonicAnnotation(ann);
+		this.annovarFactory.addExonicAnnotation(ann);
 	    } else {
 		/* frameshift substitution */
 		Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
-		this.annovar.addExonicAnnotation(ann);
+		this.annovarFactory.addExonicAnnotation(ann);
 	    }
 	}
 	return;
@@ -1007,7 +1009,7 @@ public class Chromosome {
 	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
 				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovar.addErrorAnnotation(ann);
+	    this.annovarFactory.addErrorAnnotation(ann);
 	}
 	/*
 	  @wtnt3 = split (//, $wtnt3);
@@ -1028,7 +1030,7 @@ public class Chromosome {
 	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
 	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
 	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovar.addErrorAnnotation(ann);
+	    this.annovarFactory.addErrorAnnotation(ann);
 	}
 	/*annovar line 1079 */
 	if (kgl.isMinusStrand()) {
@@ -1040,21 +1042,21 @@ public class Chromosome {
 	    if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
 		Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
 										var,refvarstart,exonNumber);
-		this.annovar.addExonicAnnotation(insrt);
+		this.annovarFactory.addExonicAnnotation(insrt);
 	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
 		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
 											    ref, var,refvarstart,exonNumber);
-		this.annovar.addExonicAnnotation(dlt);
+		this.annovarFactory.addExonicAnnotation(dlt);
 	    } else if (var.length()>1) {
 		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
 									    ref,var,refvarstart, refvarend, 
 									    exonNumber);
-		this.annovar.addExonicAnnotation(blck);
+		this.annovarFactory.addExonicAnnotation(blck);
 	    } else {
 		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
 		Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl,frame_s, frame_end_s,wtnt3,
 									      ref, var,refvarstart,exonNumber);
-		this.annovar.addExonicAnnotation(mssns);
+		this.annovarFactory.addExonicAnnotation(mssns);
 	    }
 	} /* if (start==end) */
 	else if (var.equals("-")) {
@@ -1062,7 +1064,7 @@ public class Chromosome {
 		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
 								ref, var, refvarstart, refvarend, exonNumber);
 	    
-	    this.annovar.addExonicAnnotation(dltmnt);
+	    this.annovarFactory.addExonicAnnotation(dltmnt);
 	}   
 	return;
     }

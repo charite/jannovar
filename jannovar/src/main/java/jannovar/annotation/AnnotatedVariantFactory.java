@@ -10,19 +10,16 @@ import java.util.HashSet;
 
 /**
  * This class collects all the information about a variant and its annotations and 
- * calculates the final annotations for a given variant. It uses the annotations
- * that were calculated for each of the genes in the vicinity of the variant and
- * decides upon the best final variant using heuristics that were adapted from the
- * annovar package. The main problems seem to arise for deciding how long to search
- * for neighboring genes and intergenic variants. For instance, a problem arose for
- * a variant that is located 5' to gene B, and then gene A has different transcripts.
- * One of the transcripts of gene A is short and thus, the variant is located 3' to
- * this transcript. On the other hand, another transcript of gene A is longer, and the
- * variant is intronic to this one. Therefore, we basically need to look at a number
- * of different annotations, and then decide what the most relevant annotations are.
- * If there is a clear exonic annotation, then usually this is OK and we can stop
- * looking further (this is done in the {@link jannovar.reference.Chromosome Chromosome}
- * class).
+ * calculates the final annotations for a given variant. The 
+ * {@link jannovar.reference.Chromosome Chromosome} objects each use an instance of
+ * this class to assemble a list of {@link jannovar.annotation.Annotation Annotation} objects
+ * for each {@link jannovar.exome.Variant Variant}. Each  {@link jannovar.exome.Variant Variant} should
+ * receive at least one {@link jannovar.annotation.Annotation Annotation}, but variants that affect
+ * multiple transcripts will have multiple annotations. 
+ * <P>
+ * This class creates one {@link jannovar.annotation.AnnotationList AnnotationList} object for each
+ * variant, that can return both an ArrayList of annotations, a string containing all the variants
+ * as well as an HTML unordered list that can be used for displaying the variants.
  * <P>
  * The default preference for annotations is thus
  * <OL>
@@ -57,7 +54,7 @@ import java.util.HashSet;
  * @author Peter N Robinson
  */
 
-public class AnnotatedVar implements Constants {
+public class AnnotatedVariantFactory implements Constants {
    
     /** List of all {@link jannovar.reference.Annotation Annotation} objects found for exonic variation. */
     private ArrayList<Annotation> annotation_Exonic =null;
@@ -121,7 +118,7 @@ public class AnnotatedVar implements Constants {
 
     
 
-    public AnnotatedVar(int initialCapacity) {
+    public AnnotatedVariantFactory(int initialCapacity) {
 
 	this.annotation_Exonic = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Synonymous = new ArrayList<Annotation>(initialCapacity);
@@ -188,39 +185,56 @@ public class AnnotatedVar implements Constants {
     public boolean hasGenic() { return this.hasGenicMutation; }
 
     /**
-     * Look for the best single annotation according to the precendence
-     * rules. If there are multiple annotations in the same class, combine
-     * them.
+     * After the {@link jannovar.reference.Chromosome Chromosome} object
+     * has added annotations for all of the transcripts that intersect with 
+     * the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation
+     * if the variant does not intersect with any transcript), it calls
+     * this function to return the list of annotations in form of an
+     * {@link jannovar.annotation.AnnotationList AnnotationList} object.
      * <P>
-     * ToDo Return list with annotations for each isoform.
+     * The strategy is to return all variants that affect coding exons (and only these)
+     * if such variants exist, as they are the best candidates. Otherwise, return 
+     * all variants that affect other exonic sequences (UTRs, ncRNA). Otherwise,
+     * return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return
+     * an intergenic Annotation.
      */
-    public ArrayList<Annotation> getAnnotationList() throws AnnotationException {
-	
+    public AnnotationList getAnnotationList() throws AnnotationException {
+	AnnotationList annL = null;
 	if (hasExonic) {
-	    return annotation_Exonic;
-	} else if (hasNcRna) {
-	    return annotation_ncRNA;
-	} else if (hasUTR5) {
-	    return annotation_UTR;
-	} else if (hasUTR3) {
-	    return annotation_UTR;
-	} else if (hasIntronic) {
-	    return annotation_Intronic;
-	} else if (hasNcrnaIntronic) {
-	    return annotation_ncrnaIntronic;
-	} else if (hasUpstream) {
-	    return annotation_Upstream;
-	} else if (hasDownstream) {
-	    return annotation_Downstream;
+	    annL = new AnnotationList(annotation_Exonic);
+	} else if (hasNcRna || hasUTR5 || hasUTR3 || hasIntronic || hasNcrnaIntronic || hasSynonymous ) {
+	    annL = new AnnotationList();
+	    if (annotation_ncRNA.size()>0)
+		annL.addAnnotations(annotation_ncRNA);
+	    if ( annotation_UTR.size()>0)
+		annL.addAnnotations(annotation_UTR);
+	    if (annotation_Intronic.size()>0)
+		annL.addAnnotations(annotation_Intronic);
+	    if (annotation_ncrnaIntronic.size()>0)
+		annL.addAnnotations(annotation_ncrnaIntronic);
+	    if (annotation_Synonymous.size()>0)
+		annL.addAnnotations(annotation_Synonymous);
+	} else if (hasUpstream || hasDownstream ) {
+	    annL = new AnnotationList();
+	    if (annotation_Upstream.size()>0)
+		annL.addAnnotations(annotation_Upstream);
+	    if (annotation_Downstream.size()>0)
+		annL.addAnnotations(annotation_Downstream);
 	} else if (hasIntergenic) {
-	    return annotation_Intergenic;
+	    annL = new AnnotationList(annotation_Intergenic);
 	} else if (hasError) {
-	    return annotation_Error;
+	    annL = new AnnotationList( annotation_Error );
+	} else {
+	    /** Should never get here */
+	    throw new AnnotationException("Error [AnnotatedVar.java] No annotation found!");
 	}
-	/** Should never get here */
-
-	throw new AnnotationException("Error [AnnotatedVar.java] No annotation found!");
-
+	if (this.geneSymbolSet.size() > 1) {
+	    annL.setHasMultipleGeneSymbols();
+	}
+	annL.sortAnnotations();
+	VariantType vt = getMostPathogenicVariantType();
+	annL.setMostPathogenicVariantType(vt);
+	return annL;
     }
 
     /**
@@ -230,7 +244,7 @@ public class AnnotatedVar implements Constants {
      * {@link jannovar.reference.Annotation Annotation} object that is designed to be
      * displayed.
      * @return An {@link jannovar.reference.Annotation Annotation} object with the most highly prioiritized annotations.
-     */
+   
     public Annotation getAnnotation() throws AnnotationException {
 	
 	if (hasExonic) {
@@ -254,10 +268,10 @@ public class AnnotatedVar implements Constants {
 	} else if (hasError) {
 	    return summarizeError();
 	}
-	/** Should never get here */
+Should never get here 
 	String err = "Error AnnotatedVar: Did not find any annotation";
 	throw new AnnotationException(err);
-    }
+    }  */
 
     
     private String concatenateWithSemicolon(ArrayList<String> lst) {
@@ -279,67 +293,63 @@ public class AnnotatedVar implements Constants {
     }
 
    
-
     /**
-     * This function will combine multiple intronic
-     * annotations, e.g., "TRIM22,TRIM5" for a variant
-     * that is located in the intron of these two different
-     * genes. */
-    private Annotation summarizeIntronic() throws AnnotationException {
-	if (this.annotation_Intronic.size() == 0) {
-	    throw new AnnotationException("No data for intronic annotation");
-	} else if (annotation_Intronic.size()==1) {
-	    return annotation_Intronic.get(0);
-	} else {
-	    ArrayList<String> symbol_list = new ArrayList<String>();
-	    for (Annotation a : annotation_Intronic) {
-		String s = a.getVariantAnnotation();
-		symbol_list.add(s);
-	    }
-	    java.util.Collections.sort(symbol_list);
-	    String s = symbol_list.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append(s);
-	    for (int i=1;i<symbol_list.size();++i) {
-		sb.append("," + symbol_list.get(i));
-	    }
-	    Annotation ann = Annotation.createIntronicAnnotation(sb.toString());
-	    return ann;
-	}
-    }
-
-
-      /**
-     * This function will combine multiple UTR3/UTR5 annotations.
-     * For now, we will just show the genesymbols (like annovar).
+     * This function goes through all of the Annotations that have been 
+     * entered for the current variant and enters the type of 
+     * variant that is deemed to be the most pathogenic. The function
+     * follows the priority as set out by annovar.
+     * <P>
+     * The strategy of the function is to start out with the least
+     * pathogenic type (INTERGENIC), and to workthrough all types
+     * towards the most pathogenic. After this is finished, the variant
+     * type with the most pathogenic annotation is returned.
+     * <P>
+     * There should always be at least one annotation type. If not
+     * return ERROR (should never happen).
+     * @return most pathogenic variant type for current variant.
      */
-    private Annotation summarizeUTR() throws AnnotationException {
-	VariantType type;
+    private VariantType getMostPathogenicVariantType() {
+	VariantType vt = null;
+	if (hasIntergenic)
+	    vt = VariantType.INTERGENIC;
+	if (hasNcrnaIntronic)
+	    vt = VariantType.ncRNA_INTRONIC;
+	if (hasNcRna)
+	    vt = VariantType.ncRNA_EXONIC;
+	if (hasIntronic)
+	    vt = VariantType.INTRONIC;
+	if (hasUpstream)
+	    vt = VariantType.UPSTREAM;
+	if (hasDownstream)
+	    vt = VariantType.DOWNSTREAM;
+	if (hasSynonymous)
+	    vt = VariantType.SYNONYMOUS;
+
 	if (hasUTR5 && ! hasUTR3)
-	    type = VariantType.UTR5;
-	else if (hasUTR3 && ! hasUTR5)
-	    type =  VariantType.UTR3;
-	else 
-	    type = VariantType.UTR53; /* combination */
-		
-	ArrayList<String> symbol_list = new ArrayList<String>();
-	HashSet<String> seen = new HashSet<String>();
-	for (Annotation a : annotation_UTR) {
-	    String s = a.getGeneSymbol();
-	    if (seen.contains(s)) continue;
-	    seen.add(s);
-	    symbol_list.add(s);
+	    vt = VariantType.UTR5;
+	if (hasUTR3 && ! hasUTR5)
+	    vt =  VariantType.UTR3;
+	if (hasUTR3 && hasUTR5)
+	    vt = VariantType.UTR53; /* combination */
+	if (hasExonic) {
+	    /* For now, assume all exonic mutation types are the same. This
+	       will affect the combined annotation, but not affecte the detailed
+	       list of annotation used in exomizer. */
+	    Annotation ann = 	this.annotation_Exonic.get(0);
+	    vt = ann.getVariantType();
 	}
-	java.util.Collections.sort(symbol_list);
-	String s = symbol_list.get(0);
-	StringBuilder sb = new StringBuilder();
-	sb.append(s);
-	for (int i=1;i<symbol_list.size();++i) {
-	    sb.append("," + symbol_list.get(i));
-	}
-	Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),type);
-	return ann;
+	/* Finally, if we do not yet have an annotation, or if there was
+	   an error someplace, set the type to ERROR. */
+	if ( hasError  || vt == null )
+	    vt = VariantType.ERROR;
+	
+	return vt;
     }
+
+    
+
+
+   
 
 
     /**
@@ -363,9 +373,9 @@ public class AnnotatedVar implements Constants {
     /**
      * This function checks whether there exist UTR mutations from
      * coding genes from different transcripts of genes with
-     * ncRNA annotations. If so, it returns the ITR annotations, this
+     * ncRNA annotations. If so, it returns the UTR annotations, this
      * is the default behaviour of annovar.
-     */
+   
     private Annotation  summarizeNoncodingRNA() throws AnnotationException {
 	HashSet<String> symbols = new HashSet<String>();
 	for (Annotation a : this.annotation_ncRNA) {
@@ -373,7 +383,7 @@ public class AnnotatedVar implements Constants {
 	    if (exists_UTRAnnotation(symbol))
 		return summarizeUTR();
 	}
-	/* If we get here, there were no UTR mutations for the same gene */	
+	 If we get here, there were no UTR mutations for the same gene 	
 
 	if (this.annotation_ncRNA.size() == 0) {
 	    throw new AnnotationException("No data for ncRNA annotation");
@@ -398,7 +408,7 @@ public class AnnotatedVar implements Constants {
 	    Annotation ann = Annotation.createSummaryAnnotation(sb.toString(),VariantType.ncRNA_EXONIC);
 	    return ann;
 	}
-    }
+    }  */
 
 
 
@@ -474,17 +484,7 @@ public class AnnotatedVar implements Constants {
 	this.annotationCount++;
      }
 
-    /**
-     * This method returns an Intergenic annotation. There should only
-     * be one such annotation per variant.
-     * @return An Annotation object of type INTERGENIC
-     */
-    public Annotation summarizeIntergenic() throws AnnotationException {
-	if (this.annotation_Intergenic.size() == 0) {
-	    throw new AnnotationException("No data for intergenic annotation");
-	}
-	return this.annotation_Intergenic.get(0);
-    }
+  
 
 
     public void addExonicAnnotation(Annotation ann){
@@ -722,7 +722,7 @@ public class AnnotatedVar implements Constants {
      * and exactly one upstream annotation if this method gets called, but
      * a check for empty annotations is put in, and multiple upstream annotations
      * get combined into one Annotation object before returning them.
-     */
+   
     public Annotation summarizeUpstream() throws AnnotationException {
 	if (this.annotation_Upstream.size()==0)  {
 	    throw new AnnotationException("No data for upstream annotation");
@@ -740,33 +740,9 @@ public class AnnotatedVar implements Constants {
 	    ann.setVariantAnnotation(sb.toString());
 	    return ann;
 	}
-    }
+    }  */
 
-    /**
-     * This method returns a single annotation object for downstream variants.
-     * According to the logic of the rest of the code, there should be one
-     * and exactly one upstream annotation if this method gets called, but
-     * a check for empty annotations is put in, and multiple downstream annotations
-     * get combined into one Annotation object before returning them.
-     */
-    public Annotation summarizeDownstream() throws AnnotationException {
-	if (this.annotation_Downstream.size()==0)  {
-	    throw new AnnotationException("No data for downstream annotation");
-	} else if (this.annotation_Downstream.size()==1) {
-	    return this.annotation_Downstream.get(0);
-	} else {
-	    java.util.Collections.sort(this.annotation_Downstream);
-	    Annotation ann = this.annotation_Downstream.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append( ann.getVariantAnnotation());
-	    for (int j=1;j<this.annotation_Downstream.size();++j) {
-		ann  = this.annotation_Downstream.get(j);
-		sb.append("," + ann.getVariantAnnotation());
-	    }
-	    ann.setVariantAnnotation(sb.toString());
-	    return ann;
-	}
-    }
+  
 
     /**
      * Print out all annotations we have for debugging purposes (before summarization)

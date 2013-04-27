@@ -101,10 +101,10 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt);
+	    ArrayList<Annotation> anno_list = c.getAnnotationList(pos,ref,alt);
 	    int N = anno_list.size();
 	    Assert.assertEquals(1,N);
-	    Annotation ann = anno_list.get(0);
+	    AnnotationList ann = anno_list.get(0);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -127,7 +127,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann =  c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann =  c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -150,7 +150,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -173,7 +173,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -191,7 +191,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -210,7 +210,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -228,7 +228,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -246,7 +246,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -264,7 +264,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -281,7 +281,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -298,7 +298,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -316,7 +316,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -333,7 +333,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -351,7 +351,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -368,7 +368,7 @@ public class SpliceAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();

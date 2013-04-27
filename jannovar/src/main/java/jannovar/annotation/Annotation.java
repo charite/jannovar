@@ -311,7 +311,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
      public static Annotation createErrorAnnotation(String msg) {
 	Annotation ann = new Annotation();
-	ann.varType =  VariantType.POSSIBLY_ERRONEOUS;
+	ann.varType =  VariantType.ERROR;
 	ann.variantAnnotation = msg;
 	return ann;
      }
@@ -517,7 +517,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case FS_DELETION: s="Frameshift deletion"; break;
 	case FS_INSERTION: s = "Frameshift insertion"; break;
 	case NON_FS_DELETION: s="Nonframeshift deletion"; break;
-	case POSSIBLY_ERRONEOUS: s="Potential database error"; break;
+	case ERROR: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
 	case UTR53: s="UTR5,UTR3"; break;

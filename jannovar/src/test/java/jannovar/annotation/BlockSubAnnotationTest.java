@@ -21,7 +21,7 @@ import jannovar.common.VariantType;
 import jannovar.io.AnnovarParser;
 import jannovar.reference.KnownGene;
 import jannovar.reference.Chromosome;
-import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationList;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
 
@@ -43,26 +43,27 @@ public class BlockSubAnnotationTest implements Constants {
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
   
-
+    /**
+     * Set up test by importing Chromosome objects from serialized file.
+     */
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
 	HashMap<String,KnownGene> kgMap=null;
 	// The following file must be created prior to running this test
-	
 	try {
-	     java.net.URL url = BlockSubAnnotationTest.class.getResource("/ucsc.ser");
+	    java.net.URL url = BlockSubAnnotationTest.class.getResource("/ucsc.ser");
 	    String path = url.getPath();
 	    FileInputStream fileIn = new FileInputStream(path);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,KnownGene>) in.readObject();
+	    ObjectInputStream in = new ObjectInputStream(fileIn);
+	    kgMap = (HashMap<String,KnownGene>) in.readObject();
             in.close();
             fileIn.close();
 	} catch(IOException i) {
             i.printStackTrace();
 	    System.err.println("Could not deserialize knownGeneMap");
 	    System.exit(1);
-           
+	    
         } catch(ClassNotFoundException c) {
             System.out.println("Could not find HashMap<String,KnownGene> class.");
             c.printStackTrace();
@@ -100,7 +101,7 @@ public class BlockSubAnnotationTest implements Constants {
     if (c==null) {
 	Assert.fail("Could not identify chromosome \"" + chr + "\"");
     } else {
-	Annotation ann =c.getAnnotation(pos,ref,alt); 
+	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	VariantType varType = ann.getVariantType();
 	Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION,varType);
 	String annot = ann.getVariantAnnotation();

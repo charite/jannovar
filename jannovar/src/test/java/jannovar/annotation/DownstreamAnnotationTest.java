@@ -22,6 +22,7 @@ import jannovar.io.AnnovarParser;
 import jannovar.reference.KnownGene;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationList;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
 
@@ -49,7 +50,6 @@ public class DownstreamAnnotationTest implements Constants {
     public static void setUp() throws IOException {
 	HashMap<String,KnownGene> kgMap=null;
 	// The following file must be created prior to running this test
-	
 	try {
 	     java.net.URL url = DownstreamAnnotationTest.class.getResource("/ucsc.ser");
 	    String path = url.getPath();
@@ -106,7 +106,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -134,7 +134,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -163,7 +163,7 @@ public class DownstreamAnnotationTest implements Constants {
 	  
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -191,7 +191,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -218,7 +218,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -245,7 +245,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -272,7 +272,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -299,7 +299,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -326,7 +326,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -353,7 +353,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -380,7 +380,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -407,7 +407,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -434,7 +434,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -461,7 +461,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -488,7 +488,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -515,7 +515,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -542,7 +542,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -569,7 +569,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -596,7 +596,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -623,7 +623,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -650,7 +650,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -677,7 +677,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -704,7 +704,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -731,7 +731,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -758,7 +758,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -785,7 +785,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -812,7 +812,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -839,7 +839,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -866,7 +866,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -893,7 +893,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -920,7 +920,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -947,7 +947,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -974,7 +974,7 @@ public class DownstreamAnnotationTest implements Constants {
 	   
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1001,7 +1001,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1028,7 +1028,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1055,7 +1055,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1082,7 +1082,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1109,7 +1109,7 @@ public class DownstreamAnnotationTest implements Constants {
 	   
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1136,7 +1136,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1163,7 +1163,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1191,7 +1191,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1218,7 +1218,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1242,10 +1242,10 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    ArrayList<Annotation> anno_list = c.getAnnotation(pos,ref,alt)
+	    ArrayList<Annotation> anno_list = c.getAnnotationList(pos,ref,alt)
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1273,7 +1273,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1300,7 +1300,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1328,7 +1328,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1355,7 +1355,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1382,7 +1382,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1409,7 +1409,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1436,7 +1436,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1463,7 +1463,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1490,7 +1490,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1519,7 +1519,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1546,7 +1546,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1573,7 +1573,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1600,7 +1600,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1627,7 +1627,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1654,7 +1654,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1681,7 +1681,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1708,7 +1708,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1735,7 +1735,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1764,7 +1764,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1791,7 +1791,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1818,7 +1818,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1845,7 +1845,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1872,7 +1872,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1899,7 +1899,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1927,7 +1927,7 @@ public class DownstreamAnnotationTest implements Constants {
 	   
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1955,7 +1955,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -1983,7 +1983,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2010,7 +2010,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2037,7 +2037,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2064,7 +2064,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2091,7 +2091,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2118,7 +2118,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2145,7 +2145,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2172,7 +2172,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2199,7 +2199,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2226,7 +2226,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2253,7 +2253,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2280,7 +2280,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2307,7 +2307,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2334,7 +2334,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2361,7 +2361,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2388,7 +2388,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2415,7 +2415,7 @@ public class DownstreamAnnotationTest implements Constants {
 	   
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2442,7 +2442,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2469,7 +2469,7 @@ public class DownstreamAnnotationTest implements Constants {
 	  
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVarType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2497,7 +2497,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
@@ -2524,7 +2524,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    /* There should be just one annotation */
 	   
 	   
-	    Annotation ann = c.getAnnotation(pos,ref,alt);
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
