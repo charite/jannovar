@@ -1,6 +1,7 @@
 package jannovar.annotation;
 
 import jannovar.common.Constants;
+import jannovar.common.VariantType;
 import jannovar.reference.KnownGene;
 import jannovar.exception.AnnotationException;
 

@@ -1,7 +1,7 @@
 package jannovar.exome;
 
-import jannovar.common.Constants;
 
+import jannovar.common.GenotypeCall;
 /**
  * This class is intended to encapsulate a genotype for a single
  * variant (i.e., line in a VCF file) for a VCF file with only
@@ -12,9 +12,9 @@ import jannovar.common.Constants;
  * TODO: Note that in some files, we may have DP or DP4 in the INFO field,
  * but actually this should be in the FORMAT/Genotype fields.
  * @author Peter Robinson
- * @version 0.05 (12 February, 2013)
+ * @version 0.06 (28 April, 2013)
  */
-public class SingleGenotype extends GenotypeI implements Constants {
+public class SingleGenotype extends GenotypeI {
 
   
     /**  genotype (See {@link jannovar.common.Constants.GenotypeCall GenotypeCall}

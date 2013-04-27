@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import jannovar.exome.GenotypeI;
 import jannovar.exome.MultipleGenotype;
 import jannovar.common.Constants;
+import jannovar.common.GenotypeCall;
 import jannovar.exception.VCFParseException;
 
 /**
@@ -40,7 +41,7 @@ import jannovar.exception.VCFParseException;
  * @see jannovar.io.SingleGenotypeFactory
  * @see jannovar.exome.MultipleGenotype
  * @author Peter N Robinson
- * @version 0.07 (16 April, 2013)
+ * @version 0.08 (28 April, 2013)
  */
 public class MultipleGenotypeFactory extends GenotypeFactoryA implements Constants {
     /**

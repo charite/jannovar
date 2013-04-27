@@ -3,7 +3,8 @@ package jannovar.exome;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import jannovar.common.Constants;
+
+import jannovar.common.GenotypeCall;
 
 /**
  * This class is intended to encapsulate a genotype for a single
@@ -12,9 +13,9 @@ import jannovar.common.Constants;
  * {@link jannovar.exome.SingleGenotype SingleGenotype} for
  * VCF files with single samples.
  * @author Peter Robinson
- * @version 0.03 (13 February, 2013)
+ * @version 0.04 (28 April, 2013)
  */
-public class MultipleGenotype extends GenotypeI implements Constants {
+public class MultipleGenotype extends GenotypeI {
 
   
     /**  List of genotype calls (See {@link jannovar.common.Constants Constants})

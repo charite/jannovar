@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
+import jannovar.common.VariantType;
 import jannovar.io.AnnovarParser;
 import jannovar.reference.KnownGene;
 import jannovar.reference.Chromosome;

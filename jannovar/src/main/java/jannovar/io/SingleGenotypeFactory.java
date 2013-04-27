@@ -3,6 +3,7 @@ package jannovar.io;
 import jannovar.exome.GenotypeI;
 import jannovar.exome.SingleGenotype;
 import jannovar.common.Constants;
+import jannovar.common.GenotypeCall;
 import jannovar.exception.VCFParseException;
 
 /**
@@ -14,7 +15,7 @@ import jannovar.exception.VCFParseException;
  * should be fixed in a future version of this class, but it occurs relatively
  * rarely in VCF files that are of interest to us.
  * @author Peter N Robinson
- * @version 0.03 (13 February, 2013)
+ * @version 0.04 (28 April, 2013)
  */
 public class SingleGenotypeFactory extends GenotypeFactoryA implements Constants {
 

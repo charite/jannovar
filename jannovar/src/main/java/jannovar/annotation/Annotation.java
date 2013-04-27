@@ -1,6 +1,7 @@
 package jannovar.annotation;
 
 import jannovar.common.Constants;
+import jannovar.common.VariantType;
 import jannovar.reference.KnownGene;
 
 /**
@@ -18,7 +19,7 @@ import jannovar.reference.KnownGene;
  * by the {@link jannovar.reference.AnnotatedVar AnnotatedVar} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.16 (6 April, 2013)
+ * @version 0.17 (28 April, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in {@link jannovar.common.Constants Constants},
@@ -522,7 +523,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case UTR53: s="UTR5,UTR3"; break;
 	case ncRNA_UTR3: s = "ncRNA_UTR5"; break;
 	case UNKNOWN: s = "unknown"; break;
-	case EXONIC: s = "exonic"; break;
+	    //case EXONIC: s = "exonic"; break;
 	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",typ);
 	}
 	return s;
@@ -534,18 +535,18 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
     /** Return true if this is a genic mutation
      * TODO: COmplete me!!!
-     */
+  
     public boolean isGenic() {
 	switch(this.varType) {
 	case ncRNA_EXONIC: return true;
 	case SPLICING:return true;
 	case UTR5:return true;
 	case UTR3:return true;
-	case EXONIC: return true;
+	    //case EXONIC: return true;
 	case INTRONIC: return true;
 	default: return false;
 	}
-    }
+    }   */
 
     /**
      * Allows exonic mutations to be sorted according to their position

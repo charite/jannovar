@@ -5,13 +5,14 @@ import java.io.Writer;
 import java.io.IOException;
 
 import jannovar.common.Constants;
+import jannovar.common.VariantType;
 
 /**
  * This class is intended to provide a simple way of counting up all of the
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.03 (30 March, 2013)
+ * @version 0.04 (28 April, 2013)
  */
 
 public class VariantTypeCounter implements Constants {
