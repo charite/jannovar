@@ -1,6 +1,6 @@
 package jannovar.annotation;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 
 
@@ -12,7 +12,7 @@ import jannovar.reference.Translator;
  * mutations, which is not entirely accurate, although mutations in this part of exons
  * can indeed disrupt proper splicing. Instead, jannovar takes the SPLICING_THRESHOLD
  * nucleotides on the intronic side.
- * @version 0.07 (April 22, 2013)
+ * @version 0.08 (April 28, 2013)
  * @author Peter N Robinson
  */
 
@@ -28,7 +28,7 @@ public class SpliceAnnotation {
      * @param k Exon number in gene represented by kgl
      * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
      */
-    public static boolean isSpliceVariantPlusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+    public static boolean isSpliceVariantPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns */
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);
@@ -103,7 +103,7 @@ public class SpliceAnnotation {
      * @param k Exon number in gene represented by kgl
      * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
      */
-    public static boolean isSpliceVariantMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+    public static boolean isSpliceVariantMinusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns: if (@exonstart != 1) */
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);
@@ -206,7 +206,7 @@ public class SpliceAnnotation {
      * @param cumlenexon cumulative length up the end of exon k
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the splice mutation.
      */
-    public static Annotation getSpliceAnnotationPlusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
+    public static Annotation getSpliceAnnotationPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
 	int cdsstart = kgl.getCDSStart();
 	if (start == end && start >= cdsstart) { /* single-nucleotide variant */
 	    int exonend = kgl.getExonEnd(k);
@@ -251,7 +251,8 @@ public class SpliceAnnotation {
      * @param cumlenexon cumulative length up the end of exon k
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the splice mutation.
      */
-    public static Annotation getSpliceAnnotationMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
+    public static Annotation getSpliceAnnotationMinusStrand(TranscriptModel kgl, int start, int end, 
+							    String ref, String alt, int k, int cumlenexon) {
 	int cdsend = kgl.getCDSEnd();
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);

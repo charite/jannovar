@@ -1,6 +1,6 @@
 package jannovar.annotation;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 
@@ -18,7 +18,7 @@ import jannovar.exception.AnnotationException;
  * the sequence that is typically used for variant calling and thus informs the variant calls in the
  * VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this case, as in versions
  * of this class up to the 15th of December, 2012 (v. 0.04).
- * @version 0.06 (6 January, 2013)
+ * @version 0.07 (6 January, 2013)
  * @author Peter N Robinson
  */
 
@@ -29,7 +29,7 @@ public class SingleNucleotideSubstitution {
      /**
      * Creates annotation for a single-nucleotide substitution.
      * <P>
-     * This function decides what strand the affected {@link jannovar.reference.KnownGene KnownGene}
+     * This function decides what strand the affected {@link jannovar.reference.TranscriptModel TranscriptModel}
      * is located on and calls either  {@link #getAnnotationPlusStrand} or
      * {@link #getAnnotationMinusStrand} to do the calculations.
      * @param kgl The known gene that corresponds to the deletion caused by the variant.
@@ -43,7 +43,7 @@ public class SingleNucleotideSubstitution {
      * @param exonNumber Number of the affected exon (zero-based).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotation(KnownGene kgl,int frame_s, int frame_end_s, String wtnt3,
+    public static Annotation getAnnotation(TranscriptModel kgl,int frame_s, int frame_end_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
 	if (kgl.isPlusStrand()) 
 	    return getAnnotationPlusStrand(kgl,frame_s, wtnt3, ref, var,refvarstart,exonNumber);
@@ -66,7 +66,7 @@ public class SingleNucleotideSubstitution {
      * @param exonNumber Number of the affected exon (zero-based).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationPlusStrand(KnownGene kgl,int frame_s, String wtnt3,
+    public static Annotation getAnnotationPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
@@ -173,7 +173,7 @@ public class SingleNucleotideSubstitution {
      * @param exonNumber Number of the affected exon (zero-based, already corrected for being on minus strand).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationMinusStrand(KnownGene kgl,int frame_s, String wtnt3,
+    public static Annotation getAnnotationMinusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */

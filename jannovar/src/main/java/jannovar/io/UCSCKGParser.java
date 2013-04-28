@@ -25,7 +25,7 @@ import java.util.Iterator;
 
 
 import jannovar.exception.KGParseException;
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 
 /**
  * Parses the knownGene.txt file from the UCSC database. 
@@ -71,10 +71,10 @@ public class UCSCKGParser {
     private String kgPath=null;
     
     /** Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the
-     * value is the corresponding KnownGene object
-     * @see jannovar.reference.KnownGene
+     * value is the corresponding TranscriptModel object
+     * @see jannovar.reference.TranscriptModel
     */
-    private HashMap<String,KnownGene> knownGeneMap=null;
+    private HashMap<String,TranscriptModel> knownGeneMap=null;
 
 
     /**
@@ -84,7 +84,7 @@ public class UCSCKGParser {
     public UCSCKGParser(String ucscPath) {
 	this.kgPath = ucscPath;
 	log.info("Set kg path to " + kgPath);
-	this.knownGeneMap = new HashMap<String,KnownGene>();
+	this.knownGeneMap = new HashMap<String,TranscriptModel>();
     }
 
 
@@ -92,7 +92,7 @@ public class UCSCKGParser {
     /**
      * @return a reference to the {@link #knownGeneMap knownGeneMap}, which contains info and sequences on all genes.
      */
-    public HashMap<String,KnownGene> getKnownGeneMap() {
+    public HashMap<String,TranscriptModel> getKnownGeneMap() {
 	return this.knownGeneMap;
     }
     
@@ -132,7 +132,7 @@ public class UCSCKGParser {
                           new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(fileIn);
 	   
-            this.knownGeneMap  = (HashMap<String,KnownGene>) in.readObject();
+            this.knownGeneMap  = (HashMap<String,TranscriptModel>) in.readObject();
             in.close();
             fileIn.close();
         }catch(IOException i) {
@@ -141,7 +141,7 @@ public class UCSCKGParser {
 	    System.exit(1);
            
         }catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,KnownGene> class.");
+            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
             c.printStackTrace();
             System.exit(1);
         }
@@ -165,7 +165,7 @@ public class UCSCKGParser {
 		linecount++;
 		//System.out.println(line);
 		try {
-		    KnownGene kg = new KnownGene(line);
+		    TranscriptModel kg = new TranscriptModel(line);
 		    String id = kg.getKnownGeneID();
 		    this.knownGeneMap.put(id,kg);	   
 		} catch (KGParseException e) {
@@ -218,7 +218,7 @@ public class UCSCKGParser {
 		}
 		String id = A[0];
 		Integer entrez = Integer.parseInt(A[1]);
-		KnownGene kg = this.knownGeneMap.get(id);
+		TranscriptModel kg = this.knownGeneMap.get(id);
 		if (kg == null) {
 		    /** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 		    //System.err.println("Error, could not find FASTA sequence for known gene \"" + id + "\"");
@@ -276,7 +276,7 @@ public class UCSCKGParser {
 		
 		String id = A[0];
 		String seq = A[1].toUpperCase();
-		KnownGene kg = this.knownGeneMap.get(id);
+		TranscriptModel kg = this.knownGeneMap.get(id);
 		if (kg == null) {
 		    /** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 		    //System.err.println("Error, could not find FASTA sequence for known gene \"" + id + "\"");
@@ -353,7 +353,7 @@ public class UCSCKGParser {
 		}
 		String id = A[0];
 		String geneSymbol = A[4];
-		KnownGene kg = this.knownGeneMap.get(id);
+		TranscriptModel kg = this.knownGeneMap.get(id);
 		if (kg == null) {
 		    /** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 		    //System.err.println("Error, could not find xref sequence for known gene \"" + id + "\"");

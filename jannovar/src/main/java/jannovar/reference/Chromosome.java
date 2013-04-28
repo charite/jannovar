@@ -11,7 +11,7 @@ import jannovar.annotation.AnnotatedVariantFactory;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.Annotation;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
@@ -30,7 +30,7 @@ import jannovar.annotation.UTR3Annotation;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
- * It is intended to be used together with the KnownGene class to make 
+ * It is intended to be used together with the TranscriptModel class to make 
  * a list of gene models that will be used to annotate chromosomal variants.
  * The genes are stored in a TreeMap (A Java implementation of the red-black
  * tree), allowing them to be found quickly on the basis of the position of 
@@ -41,9 +41,9 @@ import jannovar.annotation.UTR3Annotation;
  * genes. 
  * <P>
  * Note that the key of the tree map corresponds to the 5' most position of 
- * the KnownGene. The value is a list
- * (ArrayList) of {@link jannovar.reference.KnownGene KnownGene} objects. 
- * This is because multiple KnownGenes may share the same transcription
+ * the TranscriptModel. The value is a list
+ * (ArrayList) of {@link jannovar.reference.TranscriptModel TranscriptModel} objects. 
+ * This is because multiple TranscriptModels may share the same transcription
  * start (e.g., multiple splice forms of the same gene).
  * <P>
  * Note that this class contains some of the annotation functions of Annovar. It was not
@@ -61,14 +61,14 @@ public class Chromosome {
     private byte chromosome;
     /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
-    /** TreeMap with all of the genes ({@link jannovar.reference.KnownGene KnownGene}
+    /** TreeMap with all of the genes ({@link jannovar.reference.TranscriptModel TranscriptModel}
      * objects) of this chromosome. The key is an
      * Integer value representing the transcription start site (txstart) of the transcript. 
-     * Note that we need to use an Array of KnownGenes because there can be multiple 
-     * KnownGenes that share the same transcription start site.
+     * Note that we need to use an Array of TranscriptModels because there can be multiple 
+     * TranscriptModels that share the same transcription start site.
      * (e.g., multiple isoforms of the same gene).*/
-    private TreeMap<Integer,ArrayList<KnownGene>> geneTreeMap=null;
-    /** Total number of KnownGenes on the chromosome including multiple transcripts of the same gene. */
+    private TreeMap<Integer,ArrayList<TranscriptModel>> geneTreeMap=null;
+    /** Total number of TranscriptModels on the chromosome including multiple transcripts of the same gene. */
     private int n_genes;
     /** The number of keys (gene 5' positions) to search in either direction. Note that if we just use a SPAN of
      *5 genes, then we tend to miss some annotations in areas of lots of transcripts. TODO figure out the
@@ -97,7 +97,7 @@ public class Chromosome {
      */
     public Chromosome(byte c) {
 	this.chromosome = c;
-	this.geneTreeMap = new TreeMap<Integer,ArrayList<KnownGene>>();
+	this.geneTreeMap = new TreeMap<Integer,ArrayList<TranscriptModel>>();
 	this.translator = Translator.getTranslator();
 	this.n_genes=0;
 	this.annovarFactory = new AnnotatedVariantFactory(2*SPAN); /* the argument is the initial capacity of the arrayLists of vars */
@@ -107,17 +107,17 @@ public class Chromosome {
      * Add a gene model to this chromosome. 
      @param kg A knownGene (note that there is one knownGene entry for each isoform of a gene).
      */
-    public void addGene(KnownGene kg) {
+    public void addGene(TranscriptModel kg) {
 	int pos = kg.getTXStart();
-	ArrayList<KnownGene> lst = null;
-	/* 1. There is already a KnownGene with this txStart */
+	ArrayList<TranscriptModel> lst = null;
+	/* 1. There is already a TranscriptModel with this txStart */
 	if (this.geneTreeMap.containsKey(pos)) {
 	    lst = geneTreeMap.get(pos);
 	    lst.add(kg);
 	}
 	/* 2. This is the first knownGene with this txStart */
 	else {
-	    lst =  new 	ArrayList<KnownGene>();
+	    lst =  new 	ArrayList<TranscriptModel>();
 	    lst.add(kg);
 	    this.geneTreeMap.put(pos,lst);
 	}
@@ -150,20 +150,20 @@ public class Chromosome {
      * keys in the tree map that span a range of SPAN entries. We then search amongst these entries much the same as
      * Annovar does in its bins.
      * <P>
-     * The strategy is to put the KnownGene nearest to position at index 0 of the ArrayList that is to be returned. 
+     * The strategy is to put the TranscriptModel nearest to position at index 0 of the ArrayList that is to be returned. 
      * Then, we add up to SPAN genes on each side, going out centrifugally. This
      * will increase the probability that only one gene has to be tested, and if not reduce the total number.
      * @param position the Position of the mutation on the current chromosome.
-     * @return list of KnownGenes that are candidates for being affected by variant at this position
+     * @return list of TranscriptModels that are candidates for being affected by variant at this position
      */
-    private ArrayList<KnownGene> getBinRange(int position) {
-	ArrayList<KnownGene> kgList = new ArrayList<KnownGene>(); /* list of KnownGenes in range. */
-	KnownGene currentKG=null;
-	ArrayList<KnownGene> currentKGlist=null;
+    private ArrayList<TranscriptModel> getBinRange(int position) {
+	ArrayList<TranscriptModel> kgList = new ArrayList<TranscriptModel>(); /* list of TranscriptModels in range. */
+	TranscriptModel currentKG=null;
+	ArrayList<TranscriptModel> currentKGlist=null;
 	
 	Integer midpos=null, leftpos=null, rightpos=null;
-	Map.Entry<Integer,ArrayList<KnownGene>> entrL = this.geneTreeMap.ceilingEntry(position);
-	Map.Entry<Integer,ArrayList<KnownGene>> entrR = null;
+	Map.Entry<Integer,ArrayList<TranscriptModel>> entrL = this.geneTreeMap.ceilingEntry(position);
+	Map.Entry<Integer,ArrayList<TranscriptModel>> entrR = null;
 	if (entrL == null) {
 	    entrL = this.geneTreeMap.floorEntry(position);
 	}
@@ -174,7 +174,7 @@ public class Chromosome {
 	}
 	midpos = entrL.getKey();
 	currentKGlist = entrL.getValue();
-	for (KnownGene KG : currentKGlist)
+	for (TranscriptModel KG : currentKGlist)
 	    kgList.add(KG);
 	
 	leftpos = midpos;
@@ -189,7 +189,7 @@ public class Chromosome {
 		iL = entrL.getKey();
 	    if (iL != null) {
 		currentKGlist = entrL.getValue();
-		for (KnownGene KG : currentKGlist)
+		for (TranscriptModel KG : currentKGlist)
 		    kgList.add(KG);
 		leftpos = iL;
 	    } /* Note that if iL==null then there are no more positions on 5'
@@ -201,7 +201,7 @@ public class Chromosome {
 		iR = entrR.getKey();
 	    if (iR != null) {
 		currentKGlist = entrR.getValue();
-		for ( KnownGene KG : currentKGlist)
+		for ( TranscriptModel KG : currentKGlist)
 		    kgList.add(KG);
 		rightpos = iR;
 	    } /* Note that if iR==null, then there are no more positions on
@@ -249,7 +249,7 @@ public class Chromosome {
      * variant is genic or intergenic and identify the involved genes (which are stored in the {@link #geneTreeMap} object of this class).
      * Then, other functions are called to characterize the precise variant.
      * <OL>
-     * <LI>Use the method {@link #getBinRange} to get a list of KnownGenes to be tested (Corresponds roughly to 
+     * <LI>Use the method {@link #getBinRange} to get a list of TranscriptModels to be tested (Corresponds roughly to 
      {@code for my $nextbin ($bin1 .. $bin2)} in Annovar) </LI>
      * </OL>
      * @param position The start position of the variant on this chromosome
@@ -260,8 +260,8 @@ public class Chromosome {
      */
     public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {
 	
-	KnownGene leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
-	KnownGene rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
+	TranscriptModel leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
+	TranscriptModel rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
 	/* Note, the following two variables are use to know when we can stop the search: we have already found
 	   a 5' and a 3' neighboring gene surrounding the variant. Annovar goes 5' to 3', but we are going
 	   centrifugally away from the position of the variant when deciding which gene to test next. Therefore,
@@ -279,10 +279,10 @@ public class Chromosome {
 	
 	boolean foundgenic=false; //variant already found in genic region (between start and end position of a gene)
 	
-	/** Get KnownGenes that are located in vicinity of position. */
-	ArrayList<KnownGene> candidateGenes = getBinRange(position);
+	/** Get TranscriptModels that are located in vicinity of position. */
+	ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
 	
-	for (KnownGene kgl : candidateGenes) {
+	for (TranscriptModel kgl : candidateGenes) {
 	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getName2(),kgl.getName(), kgl.getStrand()));
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
 	    String name = kgl.getKnownGeneID();
@@ -384,7 +384,7 @@ public class Chromosome {
 		    }
 		}
 	    }
-      	}/* for (KnownGene kgl : candidateGenes) */
+      	}/* for (TranscriptModel kgl : candidateGenes) */
 	/** If we arrive here and there are no annotations in the list, then
 	    we should at least have a rightNeighbor and a leftNeighbor. 
 	    We first check if one of these is upstream or downstream.
@@ -416,7 +416,7 @@ public class Chromosome {
 
     /**
      * Main entry point to getting Annovar-type annotations for a
-     * variant identified by chromosomal coordinates for a KnownGene that
+     * variant identified by chromosomal coordinates for a TranscriptModel that
      * is transcribed from the plus strand. This could theoretically be
      * combined with the Minus strand functionalities, but separating them
      * makes things easier to comprehend and debug.
@@ -424,7 +424,7 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public void getPlusStrandAnnotation(int position,String ref, String alt, KnownGene kgl)
+    public void getPlusStrandAnnotation(int position,String ref, String alt, TranscriptModel kgl)
 	throws AnnotationException  {
 
 	/*System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
@@ -459,7 +459,7 @@ public class Chromosome {
 	    }
 	    /* 1) First check whether variant is a splice variant */
 	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
-	    //isSpliceVariantPositiveStrand(KnownGene kgl, int start, int end, String ref, String alt, int k) {
+	    //isSpliceVariantPositiveStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
 	    if (SpliceAnnotation.isSpliceVariantPlusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationPlusStrand(kgl,start,end,ref,alt,k,cumlenexon);
 		if (kgl.isCodingGene()) {
@@ -467,7 +467,7 @@ public class Chromosome {
 		} else {
 		    annovarFactory.addNcRNASplicing(ann);
 		}
-		return; // we are done with this variant/KnownGene combination.
+		return; // we are done with this variant/TranscriptModel combination.
 	    }
 	    if (start < kgl.getExonStart(k)) {
 		//System.out.println(String.format("BLA, start=%d, end=%d,exon[%d] start=%d for gene %s ",
@@ -613,7 +613,7 @@ public class Chromosome {
 
      /**
      * Main entry point to getting Annovar-type annotations for a
-     * variant identified by chromosomal coordinates for a KnownGene that
+     * variant identified by chromosomal coordinates for a TranscriptModel that
      * is transcribed from the minus strand. This could theoretically be
      * combined with the Minus strand functionalities, but separating them
      * makes things easier to comprehend and debug.
@@ -621,7 +621,7 @@ public class Chromosome {
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      */
-    public void getMinusStrandAnnotation(int position,String ref, String alt, KnownGene kgl)
+    public void getMinusStrandAnnotation(int position,String ref, String alt, TranscriptModel kgl)
 	throws AnnotationException  {
 	
 	/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
@@ -825,16 +825,16 @@ public class Chromosome {
      * <P>
      * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
      * annovar holds cDNA sequences of the mRNAs. In this implementation,
-     * the KnownGene objects already have this information.
+     * the TranscriptModel objects already have this information.
      * <P>
      * Finally, the $refseqvar in Annovar has the following pieces of information
      *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
-     * Note that refcdsstart and refstrand are contained in the KnownGene objects
+     * Note that refcdsstart and refstrand are contained in the TranscriptModel objects
      * $exonpos is the number (zero-based) of the exon in which the variant was found.
      * $nextline is the entire Annovar-formated line with information about the variant.
      * In contrast to annovar, this function does one annotation at a time
      * Note that the information in $geneidmap, cdslen, and $mrnalen
-     * is contained within the KnownGene objects already
+     * is contained within the TranscriptModel objects already
      * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
      * @param refvarend The end position of the variant with respect to the CDS of the mRNA
      * @param start chromosomal start position of variant
@@ -846,7 +846,7 @@ public class Chromosome {
      */
     private void annotateExonicVariants(int refvarstart, int refvarend, 
 					int start, int end, String ref, 
-					String var, int exonNumber, KnownGene kgl) throws AnnotationException {
+					String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
 	
 	
 	/*System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
@@ -990,7 +990,7 @@ public class Chromosome {
      */
     private void OLDPROBABLY_DELETE_annotateExonicVariantsMinusStrand(int refvarstart, int refvarend, 
 					int start, int end, String ref, 
-					String var, int exonNumber, KnownGene kgl) throws AnnotationException {
+					String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
 	
 	
 	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());

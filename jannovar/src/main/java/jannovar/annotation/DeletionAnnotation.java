@@ -1,6 +1,6 @@
 package jannovar.annotation;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 
@@ -26,7 +26,7 @@ public class DeletionAnnotation {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationSingleNucleotidePlusStrand(KnownGene kgl,int frame_s,
+    public static Annotation getAnnotationSingleNucleotidePlusStrand(TranscriptModel kgl,int frame_s,
 								     String wtnt3,String wtnt3_after,
 								     String ref, String var,int refvarstart,
 								     int exonNumber) 
@@ -118,7 +118,7 @@ public class DeletionAnnotation {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationBlockPlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation getAnnotationBlockPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
 							  String ref, String var,int refvarstart,int refvarend, int exonNumber)
 	throws AnnotationException  {
 	String annotation = null;

@@ -1,6 +1,6 @@
 package jannovar.annotation;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 
 
@@ -11,7 +11,7 @@ import jannovar.reference.Translator;
  * <P> The current version of this class basically does the same thing that Annovar does,
  * that is, the annotation is simply the gene symbol. TODO: Create HGVS conformant 3UTR 
  * annotations.
- * @version 0.02 (April 22, 2013)
+ * @version 0.03 (April 28, 2013)
  * @author Peter N Robinson
  */
 
@@ -30,9 +30,9 @@ public class UTR3Annotation {
      * @param alt variant sequence
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the UTR3 mutation.
      */
-    public static Annotation getUTR3Annotation(KnownGene kgl, int start, int end, String ref, String alt) {
-	String genesymbol = kgl.getName2();
-	Annotation ann = Annotation.createUTR3Annotation(kgl, genesymbol);
+    public static Annotation getUTR3Annotation(TranscriptModel trmdl, int start, int end, String ref, String alt) {
+	String genesymbol = trmdl.getName2();
+	Annotation ann = Annotation.createUTR3Annotation(trmdl, genesymbol);
 	return ann;
     }
 

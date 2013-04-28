@@ -2,7 +2,6 @@ package jannovar.annotation;
 
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
-import jannovar.reference.KnownGene;
 import jannovar.exception.AnnotationException;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.14 (April 28, 2013)
+ * @version 0.15 (April 28, 2013)
  * @author Peter N Robinson
  */
 
@@ -384,113 +383,7 @@ public class AnnotatedVariantFactory implements Constants {
 	this.annotation_ncRNA.add(ann);
     }
 
-
-    /**
-     * If there are multiple exonic annotations, this function
-     * combines them (using comma as a separator), and
-     * @return  a single annotation object with all exonic annotations for the current variant.
-    
-    public Annotation summarizeExonic() throws AnnotationException {
-	if (this.annotation_Exonic.size()==0)  {
-	    throw new AnnotationException("No data for exonic annotation");
-	} else if (this.annotation_Exonic.size()==1) {
-	    Annotation ann = this.annotation_Exonic.get(0);
-	    String s = String.format("%s(%s)",ann.getGeneSymbol(),ann.getVariantAnnotation());
-	    ann.setVariantAnnotation(s);
-	    return ann;
-	} else {
-	    java.util.Collections.sort(this.annotation_Exonic);
-	    Annotation ann = this.annotation_Exonic.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    String symbol = ann.getGeneSymbol();
-	    if (geneSymbolSet.size()!=1) {
-		//debugPrint();
-		for (String s: geneSymbolSet) {
-		    ArrayList<String> tmp = new ArrayList<String>();
-		    for (int j=0;j<this.annotation_Exonic.size();++j) {
-			ann  = this.annotation_Exonic.get(j);
-			String sym = ann.getGeneSymbol();
-			if (sym.equals(s))
-			    tmp.add(ann.getVariantAnnotation());
-		    }
-		    if (tmp.size()==0) {
-			continue; 
-		    }
-		    sb.append(s + "(" + tmp.get(0));
-		    for (int i = 1; i<tmp.size();++i) {
-			sb.append("," + tmp.get(i));
-		    }
-		    sb.append(") ");
-		}
-		ann.setVariantAnnotation(sb.toString());
-		return ann;
-	    } else {
-		sb.append(symbol + "(");
-		sb.append( ann.getVariantAnnotation());
-		for (int j=1;j<this.annotation_Exonic.size();++j) {
-		    ann  = this.annotation_Exonic.get(j);
-		    sb.append("," + ann.getVariantAnnotation());
-		}
-		sb.append(")");
-		ann.setVariantAnnotation(sb.toString());
-		return ann;
-	    }
-	}
-    } */
-
-
-  /**
-     * If there are multiple synonymous annotations, this function
-     * combines them (using comma as a separator), and
-     * @return  a single annotation object with all synonymous annotations for the current variant.
-    
-    public Annotation summarizeSynonymous() throws AnnotationException {
-	if (this.annotation_Synonymous.size()==0)  {
-	    throw new AnnotationException("No data for synonymous annotation");
-	} else if (this.annotation_Synonymous.size()==1) {
-	    Annotation ann = this.annotation_Synonymous.get(0);
-	    String s = String.format("%s(%s)",ann.getGeneSymbol(),ann.getVariantAnnotation());
-	    ann.setVariantAnnotation(s);
-	    return ann;
-	} else {
-	    java.util.Collections.sort(this.annotation_Synonymous);
-	    Annotation ann = this.annotation_Synonymous.get(0);
-	    StringBuilder sb = new StringBuilder();
-	    String symbol = ann.getGeneSymbol();
-	    if (geneSymbolSet.size()!=1) {
-		for (String s: geneSymbolSet) {
-		    ArrayList<String> tmp = new ArrayList<String>();
-		    for (int j=0;j<this.annotation_Exonic.size();++j) {
-			ann  = this.annotation_Exonic.get(j);
-			String sym = ann.getGeneSymbol();
-			if (sym.equals(s))
-			    tmp.add(ann.getVariantAnnotation());
-		    }
-		    if (tmp.size()==0)
-			continue;  Can happen if there are multiple annotation types with lower priority 
-		    sb.append(s + "(" + tmp.get(0));
-		    for (int i = 1; i<tmp.size();++i) {
-			sb.append("," + tmp.get(i));
-		    }
-		    sb.append(") ");
-		}
-		ann.setVariantAnnotation(sb.toString());
-		return ann;
-	    }
-	    sb.append(symbol + "(");
-	    sb.append( ann.getVariantAnnotation());
-	    for (int j=1;j<this.annotation_Synonymous.size();++j) {
-		ann  = this.annotation_Synonymous.get(j);
-		sb.append("," + ann.getVariantAnnotation());
-	    }
-	    sb.append(")");
-	    ann.setVariantAnnotation(sb.toString());
-	    return ann;
-	}
-    }
- */
-
-
+   
     /**  The {@link jannovar.reference.Chromosome Chromosome} class calls this
      * function to add an annotation for an intronic variant. Note that if the
      * same intronic annotation already exists, nothing is done, i.e.,

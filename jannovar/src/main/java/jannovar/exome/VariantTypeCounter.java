@@ -12,7 +12,7 @@ import jannovar.common.VariantType;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.05 (28 April, 2013)
+ * @version 0.06 (28 April, 2013)
  */
 
 public class VariantTypeCounter implements Constants {
@@ -55,7 +55,7 @@ public class VariantTypeCounter implements Constants {
 	out.write("<th>Deemed nonpathogenic</th>");
 	out.write("</tr></thead>\n");
 	out.write("<tbody>\n");
-	int missense = this.variantCountMap.get(VariantType.MISSENSE);
+	int nonsyn = this.variantCountMap.get(VariantType.NONSYNONYMOUS);
 	int nonsense = this.variantCountMap.get(VariantType.STOPGAIN);
 	int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION) + this.variantCountMap.get(VariantType.FS_DELETION);
 	int splice = this.variantCountMap.get(VariantType.SPLICING);
@@ -64,7 +64,7 @@ public class VariantTypeCounter implements Constants {
 	    this.variantCountMap.get(VariantType.NON_FS_INSERTION);
 	String nsssiCell = String.format("<tr><th>%s</th><td><ul><li>Nonsynonymous: %d</li><li>nonsense: %d</li>"+
 					 "<li>frameshift: %d</li><li>splice: %s</li>"+
-					 "<li>non-fs indel: %d</li></ul></td>", sampleName, missense,nonsense,frameshift,splice,nonfs);
+					 "<li>non-fs indel: %d</li></ul></td>", sampleName, nonsyn,nonsense,frameshift,splice,nonfs);
 
 	out.write(nsssiCell);
 	outputNonpathogenicTableCell(out);
@@ -82,9 +82,7 @@ public class VariantTypeCounter implements Constants {
     private void outputNonpathogenicTableCell(Writer out) throws IOException {
 	
 	int ncrna = this.variantCountMap.get(VariantType.ncRNA_EXONIC) +
-	    this.variantCountMap.get(VariantType.ncRNA_SPLICING) + 
-	    this.variantCountMap.get(VariantType.ncRNA_UTR3) +
-	    this.variantCountMap.get(VariantType.ncRNA_UTR5);
+	    this.variantCountMap.get(VariantType.ncRNA_SPLICING);
 	int intron = this.variantCountMap.get(VariantType.INTRONIC) +
 	    this.variantCountMap.get(VariantType.ncRNA_INTRONIC);
 	int upstream = this.variantCountMap.get(VariantType.UPSTREAM);

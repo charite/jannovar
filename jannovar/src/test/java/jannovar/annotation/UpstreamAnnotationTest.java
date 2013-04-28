@@ -20,7 +20,7 @@ import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.io.AnnovarParser;
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
 import jannovar.exome.Variant;
@@ -48,7 +48,7 @@ public class UpstreamAnnotationTest implements Constants {
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,jannovar.reference.KnownGene> kgMap=null;
+	HashMap<String,jannovar.reference.TranscriptModel> kgMap=null;
 	// The following file must be created prior to running this test
 	String serializedFile = "./ucsc.ser"; //getClass().getResourceAsStream("/data.txt")
 	try {
@@ -56,7 +56,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    String path = url.getPath();
 	    FileInputStream fileIn = new FileInputStream(path);
 	    ObjectInputStream in = new ObjectInputStream(fileIn);
-	    kgMap = (HashMap<String,jannovar.reference.KnownGene>) in.readObject();
+	    kgMap = (HashMap<String,jannovar.reference.TranscriptModel>) in.readObject();
 	    in.close();
             fileIn.close();
 	} catch(IOException i) {
@@ -65,13 +65,13 @@ public class UpstreamAnnotationTest implements Constants {
 	    System.exit(1);
            
         } catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,KnownGene> class.");
+            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
             c.printStackTrace();
             System.exit(1);
         }
 	//System.out.println("Done deserialization, size of map is " + kgMap.size());
 	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (KnownGene kgl : kgMap.values()) {
+	for (TranscriptModel kgl : kgMap.values()) {
 	    byte chrom = kgl.getChromosome();
 	    if (! chromosomeMap.containsKey(chrom)) {
 		Chromosome chr = new Chromosome(chrom);

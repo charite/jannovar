@@ -1,6 +1,6 @@
 package jannovar.annotation;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 
@@ -11,7 +11,7 @@ import jannovar.exception.AnnotationException;
  * <P>
  * Block substitutions are recognized in the calling class {@link jannovar.reference.Chromosome Chromosome}
  * by the fact that the length of the variant sequence is greater than 1.
- * @version 0.03 (April 22, 2013)
+ * @version 0.04 (April 28, 2013)
  * @author Peter N Robinson
  */
 
@@ -21,7 +21,7 @@ public class BlockSubstitution {
 
      /**
      * Creates annotation for a block substitution on the plus strand.
-     * @param kgl The known gene that corresponds to the deletion caused by the variant.
+     * @param kgl The transcript model that corresponds to the deletion caused by the variant.
      * @param frame_s 0 if deletion begins at first base of codon, 1 if it begins at second base, 2 if at third base
      * @param wtnt3 Nucleotide sequence of wildtype codon
      * @param wtnt3_after Nucleotide sequence of codon following that affected by variant
@@ -32,7 +32,7 @@ public class BlockSubstitution {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationPlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation getAnnotationPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
 						     String ref, String var,int refvarstart,int refvarend, 
 						     int exonNumber) throws AnnotationException {
 	String annotation = null;
@@ -75,7 +75,7 @@ public class BlockSubstitution {
 
      /**
      * Creates annotation for a block substitution on the plus strand. Both ref and var are blocks.
-     * @param kgl The known gene that corresponds to the deletion caused by the variant.
+     * @param kgl The TranscriptModel that corresponds to the deletion caused by the variant.
      * @param frame_s 0 if deletion begins at first base of codon, 1 if it begins at second base, 2 if at third base
      * @param wtnt3 Nucleotide sequence of wildtype codon
      * @param wtnt3_after Nucleotide sequence of codon following that affected by variant
@@ -86,7 +86,7 @@ public class BlockSubstitution {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationBlockPlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation getAnnotationBlockPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
 						     String ref, String var,int refvarstart,int refvarend, 
 						     int exonNumber) throws AnnotationException {
 

@@ -19,7 +19,7 @@ import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.io.AnnovarParser;
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
@@ -45,14 +45,14 @@ public class DeletionAnnotationTest implements Constants {
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,KnownGene> kgMap=null;
+	HashMap<String,TranscriptModel> kgMap=null;
 	// The following file must be created prior to running this test
 	try {
 	    java.net.URL url = DeletionAnnotationTest.class.getResource("/ucsc.ser");
 	    String path = url.getPath();
 	    FileInputStream fileIn = new FileInputStream(path);
 	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,KnownGene>) in.readObject();
+	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
             in.close();
             fileIn.close();
 	} catch(IOException i) {
@@ -60,12 +60,12 @@ public class DeletionAnnotationTest implements Constants {
 	    System.err.println("Could not deserialize knownGeneMap");
 	    System.exit(1);
 	} catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,KnownGene> class.");
+            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
             c.printStackTrace();
             System.exit(1);
         }
 	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (KnownGene kgl : kgMap.values()) {
+	for (TranscriptModel kgl : kgMap.values()) {
 	    byte chrom = kgl.getChromosome();
 	    if (! chromosomeMap.containsKey(chrom)) {
 		Chromosome chr = new Chromosome(chrom);

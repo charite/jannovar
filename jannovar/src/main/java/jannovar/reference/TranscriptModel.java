@@ -9,7 +9,12 @@ import jannovar.common.Constants;
  * Encapsulates one line of the UCSC KnownGene.txt file. See {@link jannovar.io.UCSCKGParser} for an 
  * explanation of the structure of individual lines. Note that for now, we are not including
  * scaffolds such as chr4_ctg9_hap1 in the parsed lines (they throw an {@link jannovar.exception.KGParseException} and
- * are discarded by {@link jannovar.io.UCSCKGParser}). Consider implementing a more flexible parse in the future (TODO).
+ * are discarded by {@link jannovar.io.UCSCKGParser}). 
+ * <P>
+ * Note that the name of this class was changed from {@code KnownGene} to {@code TranscriptModel} on
+ * April 28, 2013, because we want to be able to use not only UCSC KnownGenes, but also RefSeq and ENSEMBL gene models.
+ * Some of the method names were changed (e.g., getName2, which returns a gene symbol for UCSC KnownGenes, but is
+ * pretty lousy as a method name). In the future, we will add I/O code to be able to input these gene models as well.
  * <P>
  * Some details about the implementation
  * <UL>
@@ -21,9 +26,9 @@ import jannovar.common.Constants;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.08, 18 April, 2013
+ * @version 0.12, 28 April, 2013
  */
-public class KnownGene implements java.io.Serializable, Constants {
+public class TranscriptModel implements java.io.Serializable, Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
     public static final int NFIELDS=12;
     /** Name of gene using UCSC knownGene id (for instance, uc011nca.2). For now, keep the
@@ -62,8 +67,8 @@ public class KnownGene implements java.io.Serializable, Constants {
     /** The NCBI EntrezGene id that corresponds to the UCSC knownGene transcript. Note that this information
 	is taken from knownToLocusLink.txt. */
     private int entrezGeneID=UNINITIALIZED_INT;
-    /** Class version (for serialization). Note that the version is now at 2 because of the recent addition of entrez gene ids.*/
-    public static final long serialVersionUID = 2L;
+    /** Class version (for serialization). Note that the version is now at 3 because of the recent (April 2013) changes.*/
+    public static final long serialVersionUID = 3L;
 
 
     /**
@@ -85,7 +90,7 @@ public class KnownGene implements java.io.Serializable, Constants {
      * </UL>
      * @param line A single line of the UCSC knownGene.txt file
      */
-    public KnownGene(String line) throws KGParseException {
+    public TranscriptModel(String line) throws KGParseException {
 	String A[] = line.split("\t");
 	if (A.length != NFIELDS) {
 	    System.err.println("Malformed line in UCSC knownGene.txt file:\n" + line +

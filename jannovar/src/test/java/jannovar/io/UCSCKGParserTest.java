@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 
@@ -28,7 +28,7 @@ public class UCSCKGParserTest implements Constants {
 
     private static UCSCKGParser parser = null;
    
-    private static HashMap<String,KnownGene> knownGeneMap=null;
+    private static HashMap<String,TranscriptModel> knownGeneMap=null;
 
     /** The following are the indices in the array list of the genes to be tested. */
     public static final int UC009VIS=2;
@@ -45,14 +45,14 @@ public class UCSCKGParserTest implements Constants {
 	ps.append("uc003xub.3	chr8	-	61177380	61193954	61178438	61193706	3	61177380,61192247,61193606,	61178608,61192439,61193954,	NP_004047	uc003xub.3\n");
 	ps.close();
 	//String mypath="/home/peter/data/ucsc/knownGene.txt";
-	knownGeneMap = new HashMap<String,KnownGene>();
+	knownGeneMap = new HashMap<String,TranscriptModel>();
 
 
 	parser = new UCSCKGParser(tmp.getAbsolutePath());
 	parser.parseFile();
-	Iterator<KnownGene> iter =  parser.getKnownGeneMap().values().iterator();
+	Iterator<TranscriptModel> iter =  parser.getKnownGeneMap().values().iterator();
 	while (iter.hasNext()) {
-	    KnownGene k = iter.next();
+	    TranscriptModel k = iter.next();
 	    String name = k.getName();
 	    knownGeneMap.put(name,k);
 	}
@@ -73,7 +73,7 @@ public class UCSCKGParserTest implements Constants {
     /**
      *uc009vis.3 is the gene WASH7P and has four exons */
     @Test public void test_uc009vis_ExonCount() {
-	KnownGene kgl = knownGeneMap.get("uc009vis.3");
+	TranscriptModel kgl = knownGeneMap.get("uc009vis.3");
 	if (kgl==null) {
 	    Assert.fail("Could not find uc009vis.3");
 	}
@@ -85,7 +85,7 @@ public class UCSCKGParserTest implements Constants {
     /** uc009vis.3 is the pseudogene WASH7P; the CDS Start is the same as teh CDS end, which is a signal that this
 	gene is not a protein coding gene. */
     @Test public void test_uc009visCDSSize() {
-	KnownGene kgl = knownGeneMap.get("uc009vis.3");
+	TranscriptModel kgl = knownGeneMap.get("uc009vis.3");
 	int ORFsize = kgl.getCDSLength();
 	Assert.assertEquals(0,ORFsize);
     }
@@ -93,40 +93,40 @@ public class UCSCKGParserTest implements Constants {
     /** uc009vis.3 is the pseudogene WASH7P; according to the knownGene file, its RNA size must be 843.
 	There is a discrepancy on the website. */
     @Test public void test_uc009vis_mRNASize() {
-	KnownGene kgl = knownGeneMap.get("uc009vis.3");
+	TranscriptModel kgl = knownGeneMap.get("uc009vis.3");
 	int N = kgl.getMRNALength();
 	Assert.assertEquals(843,N);
     }
 
     @Test public void test_uc001zwx_ExonCount() {
-	KnownGene kgl = knownGeneMap.get("uc001zwx.2");
+	TranscriptModel kgl = knownGeneMap.get("uc001zwx.2");
 	int N = kgl.getExonCount();
 	Assert.assertEquals(66,N);
     }
 
     @Test public void test_uc001zwxCDSSize() {
-	KnownGene kgl = knownGeneMap.get("uc001zwx.2");
+	TranscriptModel kgl = knownGeneMap.get("uc001zwx.2");
 	int ORFsize = kgl.getCDSLength();
 	Assert.assertEquals(8616,ORFsize);
 
     }
 
      @Test public void test_uc001zwxMRNASize() {
-	KnownGene kgl = knownGeneMap.get("uc001zwx.2");
+	TranscriptModel kgl = knownGeneMap.get("uc001zwx.2");
 	int size = kgl.getMRNALength();
 	Assert.assertEquals(11695,size);
     }
 
     /** uc003xub.3 is CA8 */
     @Test public void test_CA8_MRNASize() {
-	KnownGene kgl = knownGeneMap.get("uc003xub.3");
+	TranscriptModel kgl = knownGeneMap.get("uc003xub.3");
 	int size = kgl.getMRNALength();
 	Assert.assertEquals(1768,size);
     }
 
     /** uc003xub.3 is CA8 */
     @Test public void test_CA8_CDSSize() {
-	KnownGene kgl = knownGeneMap.get("uc003xub.3");
+	TranscriptModel kgl = knownGeneMap.get("uc003xub.3");
 	int size = kgl.getCDSLength();
 	Assert.assertEquals(462,size);
     }

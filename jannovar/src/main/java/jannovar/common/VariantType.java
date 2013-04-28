@@ -28,17 +28,13 @@ public enum  VariantType {
 	/** Variant located in an intron. */
 	INTRONIC, 
 	/** Probaby remove (Preferred terminology is NONSYNONYMOUS TODO */
-	MISSENSE, 
+	NONSYNONYMOUS, 
 	/** Variant located in an exon of a noncoding RNA gene */
 	ncRNA_EXONIC, 
        /** Variant located in an intron of a noncoding RNA gene */
 	ncRNA_INTRONIC, 
 	/** Variant located in a splice site of a noncoding RNA gene */
 	ncRNA_SPLICING,
-	/** Category from annovar: TODO-does not make sense */
-	ncRNA_UTR3, 
-	/** Category from annovar: TODO-does not make sense */
-	ncRNA_UTR5, 
 	/** Deletion that does not result in a frameshift. */
 	NON_FS_DELETION , 
 	/** Insertion that does not result in a frameshift. */

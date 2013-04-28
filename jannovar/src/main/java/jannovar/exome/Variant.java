@@ -177,7 +177,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_missense_variant() { 
 	if (annot == null)
 	    return false;
-	else return (annot.getVariantType() == VariantType.MISSENSE);
+	else return (annot.getVariantType() == VariantType.NONSYNONYMOUS);
     }
     public String getVCFline() { return this.vcfLine; }
    

@@ -20,7 +20,7 @@ import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.io.AnnovarParser;
-import jannovar.reference.KnownGene;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
 import jannovar.exome.Variant;
@@ -51,13 +51,13 @@ public class SynonymousAnnotationTest implements Constants {
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,KnownGene> kgMap=null;
+	HashMap<String,TranscriptModel> kgMap=null;
 	try {
 	     URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	     String path = url.getPath();
 	     FileInputStream fileIn = new FileInputStream(path);
 	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,KnownGene>) in.readObject();
+	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
             in.close();
             fileIn.close();
 	} catch(IOException i) {
@@ -66,12 +66,12 @@ public class SynonymousAnnotationTest implements Constants {
 	    System.exit(1);
            
         } catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,KnownGene> class.");
+            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
             c.printStackTrace();
             System.exit(1);
         }
 	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (KnownGene kgl : kgMap.values()) {
+	for (TranscriptModel kgl : kgMap.values()) {
 	    byte chrom = kgl.getChromosome();
 	    if (! chromosomeMap.containsKey(chrom)) {
 		Chromosome chr = new Chromosome(chrom);
@@ -132,7 +132,7 @@ public class SynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.MISSENSE,varType);
+	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)",annot);
 	}
@@ -357,7 +357,7 @@ public class SynonymousAnnotationTest implements Constants {
  * annovar: GORAB:uc001ggz.4:exon1:c.96A>C:p.G32G,GORAB:uc001gha.2:exon1:c.96A>C:p.G32G,GORAB:uc009wvw.2:exon1:c.96A>C:p.G32G,
  * chr1:170501385A>C
  *</P>
---- Annotation error in KnownGenesMrna.
+--- Annotation error in sMrna.
 @Test public void testSynonymousVar16() throws AnnotationException  {
 	byte chr = 1;
 	int pos = 170501385;
