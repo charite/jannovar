@@ -38,7 +38,7 @@ public class Variant implements Comparable<Variant>, Constants {
    
     
     /** A map of the results of filtering and prioritization. The key to the map is an 
-	integer constant as defined in {@link jannovar.common.Constants Constants}. */
+	integer constant as defined in {@link jannovar.common.FilterType FilterType}. */
     private HashMap<Integer,ITriage> triageMap=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
@@ -113,7 +113,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * This method is used to add an {@link jannovar.filter.ITriage ITriage} object to
      * this variant. Such objects represent the results of evaluation of this variant
      * and may be used for filtering or prioritization. The Integer is a constant from 
-     * {@link jannovar.common.Constants Constants} that identifies the type of 
+     * {@link jannovar.common.FilterType FilterType} that identifies the type of 
      * {@link jannovar.filter.ITriage ITriage} object being added (e.g., pathogenicity,
      * frequency, etc). */
     public void addFilterTriage(ITriage t, int type){ 
@@ -238,7 +238,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /**
      * Get representation of current variant as a string. This method
      * retrieves the annotation of the variant stored in the
-     * {@link jannovar.reference.Annotation Annotation} object. If this
+     * {@link jannovar.annotation.Annotation Annotation} object. If this
      * is not initialized (which should never happen), it returns ".".
      *<p>
      * Note: This function should not be used anymore, we will refactor the

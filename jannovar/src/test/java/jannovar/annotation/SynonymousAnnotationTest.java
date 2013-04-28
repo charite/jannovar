@@ -91,8 +91,8 @@ public class SynonymousAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: RNF207:uc001amg.3:exon17:c.1718A>G:p.N573S,
- * chr1:6278414A>G
+ * KLHL17, several transcripts affected, some are synonymous and some are 3UTR.
+ * The synonymous should get priority.
  *</P>
  */
 @Test public void testSynVar1hand() throws AnnotationException  {

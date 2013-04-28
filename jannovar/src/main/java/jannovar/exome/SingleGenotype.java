@@ -17,7 +17,7 @@ import jannovar.common.GenotypeCall;
 public class SingleGenotype extends GenotypeI {
 
   
-    /**  genotype (See {@link jannovar.common.Constants.GenotypeCall GenotypeCall}
+    /**  genotype (See {@link jannovar.common.GenotypeCall GenotypeCall}
      * for the enumeration used to represent the genotypes).
      */
     private GenotypeCall genotype= GenotypeCall.UNINITIALIZED;

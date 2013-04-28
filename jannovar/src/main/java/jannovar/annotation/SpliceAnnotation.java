@@ -204,7 +204,7 @@ public class SpliceAnnotation {
      * @param alt variant sequence
      * @param k number (zero-based) of the affected exon.
      * @param cumlenexon cumulative length up the end of exon k
-     * @return An {@link jannovar.reference.Annotation Annotation} object corresponding to the splice mutation.
+     * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the splice mutation.
      */
     public static Annotation getSpliceAnnotationPlusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
 	int cdsstart = kgl.getCDSStart();
@@ -249,7 +249,7 @@ public class SpliceAnnotation {
      * @param alt variant sequence
      * @param k number (zero-based) of the affected exon.
      * @param cumlenexon cumulative length up the end of exon k
-     * @return An {@link jannovar.reference.Annotation Annotation} object corresponding to the splice mutation.
+     * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the splice mutation.
      */
     public static Annotation getSpliceAnnotationMinusStrand(KnownGene kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
 	int cdsend = kgl.getCDSEnd();

@@ -13,7 +13,7 @@ import java.util.HashSet;
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
  * summarize, sort, or display the objects.
  * @author Peter N Robinson
- * @version 0.03 (28 April, 2013)
+ * @version 0.04 (28 April, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -30,7 +30,7 @@ public class AnnotationList {
     /**
      * This flag is set to true for those rare variants that have 
      * annotations for multiple genes. The flag then alters the
-     * behavior of the function {@link #getCombinedAnnotationString},
+     * behavior of the function {@link #getVariantAnnotation},
      * which produces a list of all annotations in separate parentheses
      * for each gene.
      */
@@ -81,7 +81,7 @@ public class AnnotationList {
 	    return getUpDownstreamAnnotation();
 	} else if (this.type == VariantType.INTERGENIC) {
 	    return getIntergenicAnnotation();
-	}  else if (this.type == VariantType.INTRONIC) {
+	}  else if (this.type == VariantType.INTRONIC || this.type == VariantType.ncRNA_INTRONIC) {
 	    return getIntronicAnnotation();
 	} else if (this.type == VariantType.UTR3 || this.type == VariantType.UTR5 || this.type == VariantType.UTR53) {
 	    return getUTRAnnotation();
@@ -89,19 +89,27 @@ public class AnnotationList {
 	    return getNoncodingRnaAnnotation();
 	} else if (this.hasMultipleGeneSymbols) {
 	    return getCombinedAnnotationForVariantAffectingMultipleGenes();
-	}		
-	StringBuilder sb = new StringBuilder();
-	/* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
-	   If there are multiple transcript annotations they are separated by comma.
-	   After the last annotation, there is a closing parenthesis. */
-	Annotation ann = this.annotationList.get(0);
-	sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
-	for (int j=1;j<this.annotationList.size();++j) {
-	    ann  = this.annotationList.get(j);
-	    sb.append("," + ann.getVariantAnnotation());
+	} else { /* The default gets called for everything else--EXONIC*/		
+	    StringBuilder sb = new StringBuilder();
+	    /* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
+	       If there are multiple transcript annotations they are separated by comma.
+	       After the last annotation, there is a closing parenthesis. */
+	    boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
+	    for (int j=0;j<this.annotationList.size();++j) {
+		Annotation ann  = this.annotationList.get(j);
+		if (! ann.isCodingExonic())
+		    continue; /* this skips over intronic annotations of alternative transcripts
+				 for variants that have at least one exonic annotation */
+		if (needGeneSymbol) {
+		      sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
+		      needGeneSymbol = false;
+		} else {
+		    sb.append("," + ann.getVariantAnnotation());
+		}
+	    }
+	    sb.append(")");
+	    return sb.toString();
 	}
-	sb.append(")");
-	return sb.toString();
     }
 
     public VariantType getVariantType() {
@@ -111,6 +119,11 @@ public class AnnotationList {
     public void setMostPathogenicVariantType(VariantType vt) {
 	this.type = vt;
     }
+
+     /**
+     * @return true if there are currently no annotations. 
+     */
+    public boolean isEmpty() { return this.annotationList.size() == 0; }
 
 
     /**
@@ -186,7 +199,7 @@ public class AnnotationList {
      * This function will combine multiple intronic
      * annotations, e.g., "TRIM22,TRIM5" for a variant
      * that is located in the intron of these two different
-     * genes. 
+     * genes. It works for coding and ncRNA intronic annotations.
      */
     private String getIntronicAnnotation() {
 	if (! hasMultipleGeneSymbols) { /* just a single gene affected */
@@ -210,6 +223,9 @@ public class AnnotationList {
     }
 
 
+
+
+
     /**
      * This function returns a String representing ncRNA annotations.  
      * Note that this function assumes that there are no UTR annotations
@@ -220,6 +236,8 @@ public class AnnotationList {
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
 	for (Annotation a : annotationList) {
+	    if (! a.isNonCodingRNA())
+		continue;
 	    String s = a.getVariantAnnotation();
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
@@ -241,14 +259,19 @@ public class AnnotationList {
      * For now, we will just show the genesymbols (like annovar).
      */
     private String getUTRAnnotation() {
-	
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
 	for (Annotation a : annotationList) {
+	    if (a.getVariantType() != VariantType.UTR5 && 
+		a.getVariantType() != VariantType.UTR3 && 
+		a.getVariantType() != VariantType.UTR53) {
+		continue; /* Often, there are both UTR and Intronic annotations for the same variant */
+	    }
 	    String s = a.getGeneSymbol();
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
 	    symbol_list.add(s);
+	    if (s==null) debugPrint();
 	}
 	java.util.Collections.sort(symbol_list);
 	String s = symbol_list.get(0);
@@ -258,6 +281,19 @@ public class AnnotationList {
 	    sb.append("," + symbol_list.get(i));
 	}
 	return sb.toString();
+    }
+
+
+      /**
+     * Print out all annotations we have for debugging purposes (before summarization)
+     */
+    public void debugPrint() {
+	System.out.println("AnnotatedList.java:debugPrint");
+	System.out.println("Total annotations: " + annotationList.size());
+	for (Annotation a : annotationList) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+	}
+	System.out.println("*******");
     }
 
 

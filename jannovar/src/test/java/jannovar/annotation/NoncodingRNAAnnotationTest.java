@@ -421,6 +421,7 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
+	    System.out.println("XYZ annot = " + annot);
 	    Assert.assertEquals("FAM13A-AS1",annot);
 	}
 }

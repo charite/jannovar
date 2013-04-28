@@ -7,7 +7,7 @@ import jannovar.reference.KnownGene;
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  * <OL>
- * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.common.Constants.VariantType VariantType}).
+ * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.common.VariantType VariantType}).
  * <LI>The gene symbol
  * <LI>A string representing the actual variant
  * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
@@ -16,13 +16,13 @@ import jannovar.reference.KnownGene;
  * This class also includes functionality for combining the multiple
  * annotations assigned to one variant (e.g., annotations corresponding to the
  * various isoforms of one gene) by means of methods that are meant to be called
- * by the {@link jannovar.reference.AnnotatedVar AnnotatedVar} class.
+ * by the {@link jannovar.annotation.AnnotationList AnnotationList} class.
  * <P>
  * @author Peter N Robinson
  * @version 0.17 (28 April, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
-    /** The type of the variant being annotated, using the constants in {@link jannovar.common.Constants Constants},
+    /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
 	e.g., MISSENSE, 5UTR, etc. */
     private VariantType varType;
     /** The position of the variant in the ORF or mRNA, if applicable. This field is used to
@@ -61,7 +61,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public VariantType getVariantType() { return this.varType; }
     /**
-     * This function resets the variant type, and should only be used by the AnnotatedVar class for
+     * This function resets the variant type, and should only be used by the AnnotationList class for
      * certain cases of resolving precedence, e.g., if there is already a noncoding RNA intronic
      * annotation, and we get a new annotation for a coding isoform of the same gene. */
     public void setVarType(VariantType typ) { this.varType = typ; }
@@ -94,7 +94,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
     /**
      * Resets the annotation. This method is intended to be used by the 
-     * {@link jannovar.reference.AnnotatedVar AnnotatedVar}
+     * {@link jannovar.annotation.AnnotationList AnnotationList}
      * class during the process of summarizing Annotations.
      * @param s A String representing the new annotation.
      */
@@ -167,7 +167,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
     /**
-     * This method is used by {@link jannovar.reference.AnnotatedVar AnnotatedVar} to
+     * This method is used by {@link jannovar.annotation.AnnotationList AnnotationList} to
      * create a single Downstream annotation if there are multiple different
      * annotations made
      */
@@ -278,7 +278,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * combined annotation for cases where we need to combine genesymbols,
      * which essentially means down/upstream, ncRNA, UTR3, UTR5 for now.
      * @param a String with the combined gene symbols
-     * @param typ The variant type, one of the constants in {@link jannovar.common.Constants.VariantType VariantType}
+     * @param typ The variant type, one of the constants in {@link jannovar.common.VariantType VariantType}
      */
      public static Annotation createSummaryAnnotation(String a, VariantType typ) {
 	 Annotation ann = new Annotation();
@@ -527,6 +527,37 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",typ);
 	}
 	return s;
+    }
+
+    /**
+     * This function checks if we have a variant that affects the sequence of a coding exon
+     * @return true if we have a missense, PTC, splicing, indel variant, or a synonymous change.
+     */
+    public boolean isCodingExonic() {
+	switch(this.varType) {
+	case SPLICING: 
+	case STOPLOSS: 
+	case STOPGAIN: 
+	case SYNONYMOUS: 
+	case MISSENSE:
+	case NON_FS_SUBSTITUTION: 
+	case NON_FS_INSERTION:
+	case FS_SUBSTITUTION:
+	case FS_DELETION: 
+	case FS_INSERTION: 
+	case NON_FS_DELETION: 
+	    return true;
+	default:
+	    return false;
+	}
+    }
+
+    /**
+     * @return true if the variant affects an exon of an ncRNA
+     */
+    public boolean isNonCodingRNA() {
+	if (this.varType == VariantType.ncRNA_EXONIC) return true;
+	else return false;
     }
 
 

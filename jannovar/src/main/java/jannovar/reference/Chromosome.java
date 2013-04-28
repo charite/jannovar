@@ -255,7 +255,7 @@ public class Chromosome {
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
-     * @return a list of {@link jannovar.reference.Annotation Annotation} objects corresponding to the mutation described by the object 
+     * @return a list of {@link jannovar.annotation.Annotation Annotation} objects corresponding to the mutation described by the object 
      * (often just one annotation, but potentially multiple ones).
      */
     public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {

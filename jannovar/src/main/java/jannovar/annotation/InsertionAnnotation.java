@@ -33,7 +33,7 @@ public class InsertionAnnotation {
 	* @param wtnt3_after the three nucleotides of the codon following codon affected by mutation
 	* @param refvarstart The start position of the variant with respect to the CDS of the mRNA
 	* @param exonNumber Number (one-based) of affected exon.
-	* @return an {@link jannovar.reference.Annotation Annotation} object representing the current variant
+	* @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
 	*/
 	
 	public static Annotation  getAnnotationPlusStrand(KnownGene kgl,int frame_s, String wtnt3,String wtnt3_after,
