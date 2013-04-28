@@ -5,15 +5,16 @@ import java.util.HashMap;
 
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
-import jannovar.filter.ITriage;
 import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationList;
 import jannovar.exome.GenotypeI;
+import jannovar.exception.AnnotationException;
 import jannovar.exception.VCFParseException;
 
 /* A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.14 (28 April, 2013)
+ * @version 0.15 (28 April, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -35,15 +36,11 @@ public class Variant implements Comparable<Variant>, Constants {
     private GenotypeI genotype=null;
     /** The PHRED score for the variant call. */
     private int variant_quality;
-   
-    
-    /** A map of the results of filtering and prioritization. The key to the map is an 
-	integer constant as defined in {@link jannovar.common.FilterType FilterType}. */
-    private HashMap<Integer,ITriage> triageMap=null;
     /** Original VCF line from which this mutation comes. */
     public String vcfLine=null;
-    /** Annotation object resulting from Jannovar-type annotation of this variant. */
-    private Annotation annot=null;
+    /** {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from 
+	Jannovar-type annotation of this variant. */
+    private AnnotationList annot=null;
 
    
 
@@ -60,18 +57,16 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.position=p;
 	this.ref = r;
 	this.var = var;
-	this.triageMap = new HashMap<Integer,ITriage> ();
     }
 
     /**
      * This constructor is intended to be used by the factory method
      * {@link jannovar.io.VCFLine#extractVariant extractVariant} in the
-     * class {@link jannovar.io.VCFLine VCFLine}. The constructor merely
-     * initializes the ArrayList of ITriage objects and expects that everything
-     * else will be initialized by {@link jannovar.io.VCFLine#extractVariant extractVariant}.
+     * class {@link jannovar.io.VCFLine VCFLine}. The constructor
+     * expects that everything else will be initialized by 
+     * {@link jannovar.io.VCFLine#extractVariant extractVariant}.
      */
     public Variant() {
-	this.triageMap = new HashMap<Integer,ITriage> ();
     }
    
 
@@ -110,15 +105,11 @@ public class Variant implements Comparable<Variant>, Constants {
     
     public void set_variant_quality(int q) { this.variant_quality = q; }
     /**
-     * This method is used to add an {@link jannovar.filter.ITriage ITriage} object to
-     * this variant. Such objects represent the results of evaluation of this variant
-     * and may be used for filtering or prioritization. The Integer is a constant from 
-     * {@link jannovar.common.FilterType FilterType} that identifies the type of 
-     * {@link jannovar.filter.ITriage ITriage} object being added (e.g., pathogenicity,
-     * frequency, etc). */
-    public void addFilterTriage(ITriage t, int type){ 
-	this.triageMap.put(type,t); 
-    }
+     * @param line a VCF line from the original file corresponding to current variant,
+     * it may be useful for debuigging purposes to keep the line around but it 
+     * will just waste space in the final working version. See the VCFReader file for
+     * options to include this or not.
+     */
     public void setVCFline(String line) { this.vcfLine = line; }
 
     /**
@@ -126,8 +117,9 @@ public class Variant implements Comparable<Variant>, Constants {
      * used by our annovar-style annotation code in order to provide transcript-
      * level annotation for the variants, for example, to annotate the chromosomal
      * variant {@code chr7:34889222:T>C} to {@code NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)" (Type:STOPLOSS)}.
+     * @param a An annotationList object representing annotations of all affected transcripts.
      */
-    public void setAnnotation(Annotation a) {
+    public void setAnnotation(AnnotationList a) {
 	this.annot = a;
     }
 
@@ -185,10 +177,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public char var_as_char() { return var.charAt(0); }
 
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
-    /** 
-     * @return the map of "ITriage objects that represent the result of filtering 
-     */
-    public HashMap<Integer,ITriage> getTriageMap() { return this.triageMap; }
+    
      /**
      * @return an integer representation of the chromosome  (note: X=23, Y=24).
      */
@@ -248,9 +237,14 @@ public class Variant implements Comparable<Variant>, Constants {
      */
     public String getAnnotation()
     {
-	if (this.annot != null)
-	    return this.annot.getVariantAnnotation();
-	else return ".";
+	try { 
+	    if (this.annot != null)
+		return this.annot.getVariantAnnotation();
+	     else return ".";
+	} catch (AnnotationException e) {
+	    return ".";
+	}
+	   
     }
 
     /**
@@ -268,26 +262,27 @@ public class Variant implements Comparable<Variant>, Constants {
      * the String and send back a list.
      */
     public String[] getAnnotationList() {
-	ArrayList<String> annotList = new ArrayList<String>();
+	
+	
 	if (this.annot == null) {
 	    String A[] = new String[1];
 	    A[0] = ".";
 	    return A;
 	}
-	String a = this.annot.getVariantAnnotation();
-	int x,y;
-	x = a.indexOf('(');
-	y = a.indexOf(')');
-	String b = a.substring(x+1,y); /* Get the stuff inside the "(", ")" */
-	String A[] = b.split(","); /* transcript mutations are separated by "'".*/
-
-	return A;
+	ArrayList<Annotation> alist = this.annot.getAnnotationList();
+	ArrayList<String> A = new ArrayList<String>();
+	for (Annotation ann : alist) {
+	    String s = ann.getVariantAnnotation();
+	    A.add(s);
+	}
+	String B[] = (String[]) A.toArray();
+	return B;
     }
 
 
     public String getVariantType() {
 	if (this.annot != null)
-	    return this.annot.getVariantTypeAsString();
+	    return this.annot.getVariantType().toString();
 	else return "?";
     }
 
@@ -302,45 +297,8 @@ public class Variant implements Comparable<Variant>, Constants {
 	    return VariantType.UNKNOWN;
     }
 
-    /**
-     * This method calculates a filter
-     * score (prediction of the pathogenicity
-     * and relevance of the Variant) by using data from
-     * the {@link jannovar.filter.ITriage ITriage} objects
-     * associated with this Variant.
-     * <P>
-     * Note that we use results of filtering to remove Variants
-     * that are predicted to be simply non-pathogenic. However, amongst
-     * variants predicted to be potentially pathogenic, there are different
-     * strengths of prediction, which is what this score tries to reflect.
-     * @return a priority score between 0 and 1
-     */
-    public float getFilterScore() {
-	float score = 1f;
-	for (Integer i : this.triageMap.keySet()) {
-	    ITriage itria = this.triageMap.get(i);
-	    float x = itria.filterResult();
-	    score *= x;
-	}
-	return score;
-    }
-    
-    /**
-     * This method calculates a priority
-     * score (prediction of the pathogenicity
-     * and relevance of the Variant) by using data from
-     * the {@link jannovar.filter.ITriage ITriage} objects
-     * associated with this Variant.
-     * @return a priority score between 0 and 1
-     */
-    public float getPathogenicityPriorityScore() {
-    	//ITriage path = triageMap.get(PATHOGENICITY_FILTER);
-    	//float x = path.filterResult();
-    	//return x;
-	System.out.println("[Variant.java] getPathogenicityPriorityScore(), fix me");
-	return -10f;
-    }
-
+   
+   
     // ##########   UTILITY FUNCTIONS ##################### //
 
     /**
@@ -402,7 +360,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	if (this.annot == null)
 	    return "uninitialized";
 	else
-	    return this.annot.getVariantTypeAsString();
+	    return this.annot.getVariantType().toString();
     }
 
 

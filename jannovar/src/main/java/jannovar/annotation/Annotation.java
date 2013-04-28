@@ -294,14 +294,22 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createNoncodingIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.ncRNA_INTRONIC;
+	ann.geneSymbol = name2;
 	ann.variantAnnotation = String.format("%s", name2);
 	return ann;
      }
 
-     public static Annotation createIntronicAnnotation(String name2) {
+    /**
+     * This method is called when an intronic mutation was found. The method should
+     * probably try to do better to create a correct HGVS nomeclature for intronic mutations, by
+     * giving the position, for instance.
+     * @param gsymbol The gene symbol of the current TranscriptModel
+     */
+     public static Annotation createIntronicAnnotation(String gsymbol) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.INTRONIC;
-	ann.variantAnnotation = String.format("%s", name2);
+	ann.geneSymbol = gsymbol;
+	ann.variantAnnotation = String.format("%s", gsymbol);
 	return ann;
      }
 

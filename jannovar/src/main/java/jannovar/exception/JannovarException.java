@@ -10,13 +10,13 @@ package jannovar.exception;
  * to print an HTML error message for users if say there are major problems with
  * the input format.
  * @author Peter Robinson
- * @version 0.03 (April 20, 2013)
+ * @version 0.03 (April 28, 2013)
  */
 public class JannovarException extends Exception {
 
     private String mistake=null;
     
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 2L;
 
     public JannovarException() {
 	super();

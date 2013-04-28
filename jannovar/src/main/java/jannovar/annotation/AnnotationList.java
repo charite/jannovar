@@ -13,7 +13,7 @@ import java.util.HashSet;
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
  * summarize, sort, or display the objects.
  * @author Peter N Robinson
- * @version 0.04 (28 April, 2013)
+ * @version 0.05 (28 April, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -52,6 +52,15 @@ public class AnnotationList {
     public void addAnnotations(ArrayList<Annotation> lst) {
 	this.annotationList.addAll(lst);
     }
+
+    /**
+     * Get a list of all individual
+     * {@link jannovar.annotation.Annotation Annotation}
+     * objects.
+     */
+    public ArrayList<Annotation> getAnnotationList() {
+	return this.annotationList;
+    }
     
     /**
      * This method is called if a variant affects multiple genes (the default is
@@ -76,7 +85,7 @@ public class AnnotationList {
      * @return an annotation consiting of the gene symbol and a list of all affected transcripts 
      * with the HGVS mutation nomenclature.
      */
-    public String getVariantAnnotation() {
+    public String getVariantAnnotation() throws AnnotationException {
 	if (this.type == VariantType.DOWNSTREAM || this.type == VariantType.UPSTREAM) {
 	    return getUpDownstreamAnnotation();
 	} else if (this.type == VariantType.INTERGENIC) {
@@ -112,6 +121,26 @@ public class AnnotationList {
 	}
     }
 
+    /**
+     * Returns the gene symbol of the annotations. If multiple genes are affected,
+     * it returns the string "MultipleGenes". Probably this needs to be refactored.
+     */
+    public String getGeneSymbol() {
+	if (hasMultipleGeneSymbols) {
+	    return "MultipleGenes";
+	} else {
+	    return this.annotationList.get(0).getGeneSymbol();
+	}
+    }
+
+    /**
+     * TODO: Some variants have multiple genes affected. Need to refactor this interface.
+     * @return EntrezGene id of gene affected by variant
+     */
+    public int getEntrezGeneID() {
+	return this.annotationList.get(0).getEntrezGeneID();
+    }
+
     public VariantType getVariantType() {
 	return this.type;
     }
@@ -134,7 +163,7 @@ public class AnnotationList {
      * then sorts the output accordingly.
      * @return String with the combined annotation.
      */
-    public String  getCombinedAnnotationForVariantAffectingMultipleGenes(){
+    public String  getCombinedAnnotationForVariantAffectingMultipleGenes() throws AnnotationException {
 	StringBuilder sb = new StringBuilder();
 	/** First we need to get a list of the genesymbols. */
 	HashSet<String> geneSymbolSet = new HashSet<String>();
@@ -145,11 +174,17 @@ public class AnnotationList {
 	* Note that they already should be sorted according to position.*/
 
 	for (String s: geneSymbolSet) {
+	    System.out.println("MultAnno: symbolSet s=" + s);
 	    ArrayList<String> tmp = new ArrayList<String>();
 	    Annotation ann = this.annotationList.get(0);
 	    for (int j=0;j<this.annotationList.size();++j) {
 		ann  = this.annotationList.get(j);
+		if (ann == null)
+		    throw new AnnotationException("Ann is null at j="+j);
+		System.out.println("Type = " + ann.getVariantType());
 		String sym = ann.getGeneSymbol();
+		System.out.println("\t for : sym=" + sym);
+	   
 		if (sym.equals(s))
 		    tmp.add(ann.getVariantAnnotation());
 	    }

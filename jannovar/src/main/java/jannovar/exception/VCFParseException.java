@@ -5,11 +5,11 @@ package jannovar.exception;
 /**
  * Exception that occurs during parsing of VCF files.
  * @author Peter Robinson 
- * @version 0.02 (February 18,2013)
+ * @version 0.03 (April 28,2013)
  */
 public class VCFParseException extends JannovarException {
 
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 2L;
 
     public String badChromosome=null;
 

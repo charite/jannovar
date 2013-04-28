@@ -53,7 +53,7 @@ import jannovar.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.13 (28 April, 2013)
+ * @version 0.14 (28 April, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -228,15 +228,7 @@ public class Chromosome {
      */
     public int getNumberOfGenes() { return this.n_genes; }
 
-   
-
-
-    /**
-     * Just for refactor
-     */
-    public Annotation getAnnotation(int position,String ref, String alt) throws AnnotationException  { 
-	return null; 
-    }
+  
 
     /**
      * Main entry point to getting Annovar-type annotations for a
