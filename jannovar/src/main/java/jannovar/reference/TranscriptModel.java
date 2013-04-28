@@ -26,7 +26,7 @@ import jannovar.common.Constants;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.12, 28 April, 2013
+ * @version 0.13, 28 April, 2013
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -432,9 +432,11 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     /** Return the ucsc kg id, this corresponds to $name in annovar
      * @return name of this transcript, a UCSC knownGene id. */
      public String getName() { return this.kgID; }
-    /** Return the gene symbol, corresponds to $name2 in annovar
+    /** Return the gene symbol, corresponds to {@code $name2} in annovar. Note that earlier versions
+     * of the code called this function {@code getName2()}, but this was changed because it is
+     * 	a potentially confusing name.
      * @return genesymbol of this known gene transcript (if available, otherwise the kgID). */
-    public String getName2() { 
+    public String getGeneSymbol() { 
 	if (this.geneSymbol != null) 
 	    return this.geneSymbol;
 	else

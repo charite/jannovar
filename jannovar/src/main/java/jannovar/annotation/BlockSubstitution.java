@@ -11,7 +11,7 @@ import jannovar.exception.AnnotationException;
  * <P>
  * Block substitutions are recognized in the calling class {@link jannovar.reference.Chromosome Chromosome}
  * by the fact that the length of the variant sequence is greater than 1.
- * @version 0.04 (April 28, 2013)
+ * @version 0.05 (April 28, 2013)
  * @author Peter N Robinson
  */
 
@@ -58,7 +58,7 @@ public class BlockSubstitution {
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0)  {
 	    /*  $function->{$index}{nfssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
 		($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs,"; */
-	    panno =   String.format("%s:%s:exon:%d:%s",kgl.getName2(),kgl.getName(),exonNumber,canno);
+	    panno =   String.format("%s:%s:exon:%d:%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,canno);
 	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
 	    return ann;
 
@@ -101,7 +101,7 @@ public class BlockSubstitution {
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0) {
 	    //$function->{$index}{nfssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
 	    // ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs,";
-	    canno = String.format("%s:%s:exon%d:c.%d_%d%s",kgl.getName2(),kgl.getName(),exonNumber,
+	    canno = String.format("%s:%s:exon%d:c.%d_%d%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,
 				  startPosMutationInCDS,refvarend-refcdsstart+1,var);
 	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,canno);
 	    return ann;

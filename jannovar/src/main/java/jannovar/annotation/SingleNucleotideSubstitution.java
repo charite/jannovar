@@ -80,10 +80,10 @@ public class SingleNucleotideSubstitution {
 	//System.out.println("refcdsstart=" + refcdsstart);
 	if (ref.length() != 1) {
 	    throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s",
-							ref,kgl.getName2()));
+							ref,kgl.getGeneSymbol()));
 	} else if (var.length() != 1) {
 	     throw new AnnotationException(String.format("Error: Malformed variant sequence (%s) for SNV annotation of %s",
-							var,kgl.getName2()));
+							var,kgl.getGeneSymbol()));
 	}
 	char refc = ref.charAt(0);
 	char varc = var.charAt(0);
@@ -118,7 +118,7 @@ public class SingleNucleotideSubstitution {
 	    // $canno = "c." . ($refvarstart-$refcdsstart+1) . $wtnt3[0] . ">" . $obs;
 	    canno =  String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(0),varc);
 	    //System.out.println("wtnt3=" + wtnt3 + " varnt3=" + varnt3 + " canno=" + canno);
-	    //System.out.println(kgl.getName2() + ":" + kgl.getName());
+	    //System.out.println(kgl.getGeneSymbol() + ":" + kgl.getName());
 	    //System.out.println("refvarstart=" + refvarstart + " refcdsstart = " + refcdsstart);
 	    //kgl.debugPrint();
 	    if (refc  != wtnt3.charAt(0)) {
@@ -188,10 +188,10 @@ public class SingleNucleotideSubstitution {
 	  refcdsstart,refvarstart,refvarstart-refcdsstart));*/
 	if (ref.length() != 1) {
 	    throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s",
-							ref,kgl.getName2()));
+							ref,kgl.getGeneSymbol()));
 	} else if (var.length() != 1) {
 	     throw new AnnotationException(String.format("Error: Malformed variant sequence (%s) for SNV annotation of %s",
-							var,kgl.getName2()));
+							var,kgl.getGeneSymbol()));
 	}
 	char refc = ref.charAt(0);
 	char varc = var.charAt(0);
@@ -224,7 +224,7 @@ public class SingleNucleotideSubstitution {
 	    // $canno = "c." . ($refvarstart-$refcdsstart+1) . $wtnt3[0] . ">" . $obs;
 	    canno =  String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(0),varc);
 	    //System.out.println("wtnt3=" + wtnt3 + " varnt3=" + varnt3 + " canno=" + canno);
-	    //System.out.println(kgl.getName2() + ":" + kgl.getName());
+	    //System.out.println(kgl.getGeneSymbol() + ":" + kgl.getName());
 	    //System.out.println("refvarstart=" + refvarstart + " refcdsstart = " + refcdsstart);
 	    //kgl.debugPrint();
 	    if (refc  != wtnt3.charAt(0)) {

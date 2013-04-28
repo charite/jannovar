@@ -9,7 +9,7 @@ package jannovar.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.15 (15 February, 2013)
+ * @version 0.18 (28 April, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -17,10 +17,6 @@ public interface Constants {
     public static final byte Y_CHROMOSOME = 24;
     public static final byte M_CHROMOSOME = 25;
 
-   
-    
-  
-  
     /* 4) Index of fields of the DP4 (depth) from the VCF file:
        ref-forward bases, ref-reverse, alt-forward and alt-reverse bases
     */
@@ -44,11 +40,7 @@ public interface Constants {
     /** Flag for no rsID for variant */
     public static final int NO_RSID = -1;
 
-    /**
-     * An enumeration of the four main Mendelian modes of inheritance for
-     * prioritizing exome data.
-     */
-    public static enum ModeOfInheritance {AUTOSOMAL_DOMINANT, AUTOSOMAL_RECESSIVE, X_RECESSIVE, X_DOMINANT , UNINITIALIZED};
+   
 
 
 }

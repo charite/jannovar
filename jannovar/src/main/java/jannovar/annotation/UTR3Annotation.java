@@ -11,7 +11,7 @@ import jannovar.reference.Translator;
  * <P> The current version of this class basically does the same thing that Annovar does,
  * that is, the annotation is simply the gene symbol. TODO: Create HGVS conformant 3UTR 
  * annotations.
- * @version 0.03 (April 28, 2013)
+ * @version 0.05 (April 28, 2013)
  * @author Peter N Robinson
  */
 
@@ -23,7 +23,7 @@ public class UTR3Annotation {
     /**
      * Return an annotation for a UTR3  mutation for a gene. TODO figure out +/- strand strategy
      * <P> See the description of this class for comments on the TODO. For now, KISS
-     * @param kgl Gene with splice mutation for current chromosomal variant.
+     * @param trmdl Gene with splice mutation for current chromosomal variant.
      * @param start start position of the variant
      * @param  end position of the variant
      * @param ref reference sequence
@@ -31,7 +31,7 @@ public class UTR3Annotation {
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the UTR3 mutation.
      */
     public static Annotation getUTR3Annotation(TranscriptModel trmdl, int start, int end, String ref, String alt) {
-	String genesymbol = trmdl.getName2();
+	String genesymbol = trmdl.getGeneSymbol();
 	Annotation ann = Annotation.createUTR3Annotation(trmdl, genesymbol);
 	return ann;
     }

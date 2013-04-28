@@ -62,7 +62,7 @@ import jannovar.reference.TranscriptModel;
  * ...
  * </PRE>
  * @author Peter N Robinson
- * @version 0.03 (18 December, 2012)
+ * @version 0.05 (28 April, 2013)
  */
 public class UCSCKGParser {
     /** A logger from Apache's log4j that records key statistics from program execution. */
@@ -194,7 +194,7 @@ public class UCSCKGParser {
     /**
      * Parses the ucsc KnownToLocusLink.txt file, which contains cross references from
      * ucsc KnownGene ids to Entrez Gene ids. The function than adds an Entrez gene
-     * id to the corresponing {@link jannovar.reference.KnownGene KnownGene}
+     * id to the corresponing {@link jannovar.reference.TranscriptModel TranscriptModel}
      * objects.
      * @param path The full path to the KnownToLocusLink.txt file
      */
@@ -251,7 +251,7 @@ public class UCSCKGParser {
      * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt}
      * Note that the UCSC sequences are all in lower case, but we convert them
      * here to all upper case letters to simplify processing in other places of this program.
-     * The sequences are then added to the corresponding {@link jannovar.reference.KnownGene KnownGene}
+     * The sequences are then added to the corresponding {@link jannovar.reference.TranscriptModel TranscriptModel}
      * objects.
      * @param fastapath full path to knownGeneMrna.txt file.
      */
@@ -304,7 +304,7 @@ public class UCSCKGParser {
      /**
       * Input xref information for the known genes. We are especially interested in information
       * corresponding to $name2 in Annovar (this is almost always a geneSymbol)
-      * The sequences are then added to the corresponding {@link jannovar.reference.KnownGene KnownGene}
+      * The sequences are then added to the corresponding {@link jannovar.reference.TranscriptModel TranscriptModel}
       * objects.
       * <P>
       * According to the Annovar documentation, some genes were given names that are prefixed with "Em:",

@@ -19,7 +19,7 @@ import jannovar.reference.TranscriptModel;
  * by the {@link jannovar.annotation.AnnotationList AnnotationList} class.
  * <P>
  * @author Peter N Robinson
- * @version 0.18 (28 April, 2013)
+ * @version 0.19 (28 April, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -151,17 +151,17 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	if (leftGene == null) {
 	    int distR =  rightGene.getTXStart() - endpos;
 	    ann.variantAnnotation = String.format("NONE(dist=NONE),%s(dist=%d)",
-						  rightGene.getName2(),distR);
+						  rightGene.getGeneSymbol(),distR);
 	} else if (rightGene == null) {
 	    int distL =  startpos - leftGene.getTXEnd();
 	    ann.variantAnnotation = String.format("%s(dist=%d),NONE(dist=NONE)",
-						  leftGene.getName2(),distL);
+						  leftGene.getGeneSymbol(),distL);
 
 	} else {
 	    int distR =  rightGene.getTXStart() - endpos;
 	    int distL =  startpos - leftGene.getTXEnd();
 	    ann.variantAnnotation = String.format("%s(dist=%d),%s(dist=%d)",
-						  leftGene.getName2(),distL,rightGene.getName2(),distR);
+						  leftGene.getGeneSymbol(),distL,rightGene.getGeneSymbol(),distR);
 	}
 	return ann;
     }
@@ -184,8 +184,8 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	    System.out.println("createUpDownstreamAnnotation, TranscriptModel argument is null, pos=" + pos);
 	    System.exit(1);
 	}
-	ann.variantAnnotation = String.format("%s", trmdl.getName2());
-	ann.geneSymbol = trmdl.getName2();
+	ann.variantAnnotation = String.format("%s", trmdl.getGeneSymbol());
+	ann.geneSymbol = trmdl.getGeneSymbol();
 	ann.entrezGeneID = trmdl.getEntrezGeneID();
 	if (trmdl.isFivePrimeToGene(pos)) {
 	    if (trmdl.isPlusStrand()) {
@@ -206,7 +206,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     /**
      * Add an annotation for a noncoding RNA (ncRNA) for a variant that is located within
      * an exon of the ncRNA gene.
-     * @param kgl {@link jannovar.reference.TranscriptModel TranscriptModel} object corresponding to the ncRNA
+     * @param trmdl {@link jannovar.reference.TranscriptModel TranscriptModel} object corresponding to the ncRNA
      * @param rvarstart position of the variant in the coding sequence
      * @param ref reference sequence
      * @param alt variant sequence
@@ -214,9 +214,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createNonCodingExonicRnaAnnotation(TranscriptModel trmdl, int rvarstart,String ref, String alt) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.ncRNA_EXONIC;
-	ann.geneSymbol = trmdl.getName2();
+	ann.geneSymbol = trmdl.getGeneSymbol();
 	ann.entrezGeneID = trmdl.getEntrezGeneID();
-	ann.variantAnnotation = trmdl.getName2();// String.format("HGVS=%s", name2);
+	ann.variantAnnotation = trmdl.getGeneSymbol();// String.format("HGVS=%s", name2);
 	return ann;
     }
 
@@ -237,7 +237,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	ann.entrezGeneID = trmdl.getEntrezGeneID();
 	//System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
 	ann.rvarstart = refvarstart;
-	ann.geneSymbol = trmdl.getName2();
+	ann.geneSymbol = trmdl.getGeneSymbol();
 	return ann;
     }
 
@@ -249,7 +249,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createUTR5Annotation(TranscriptModel trmdl, int refvarstart, String ref, String alt) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.UTR5;
-	ann.geneSymbol = trmdl.getName2();
+	ann.geneSymbol = trmdl.getGeneSymbol();
 	ann.variantAnnotation = trmdl.getName();
 	ann.entrezGeneID = trmdl.getEntrezGeneID();
 	return ann;
@@ -264,7 +264,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createUTR3Annotation(TranscriptModel trmdl, String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.UTR3;
-	ann.geneSymbol = trmdl.getName2();
+	ann.geneSymbol = trmdl.getGeneSymbol();
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = trmdl.getEntrezGeneID();
 	return ann;
@@ -322,7 +322,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createNonFrameshiftDeletionAnnotation(TranscriptModel kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.NON_FS_DELETION;
-	ann.geneSymbol = kgl.getName2();
+	ann.geneSymbol = kgl.getGeneSymbol();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
 	return ann;
@@ -334,7 +334,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createFrameshiftDeletionAnnotation(TranscriptModel kgl, int varstart, String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.FS_DELETION;
-	ann.geneSymbol = kgl.getName2();
+	ann.geneSymbol = kgl.getGeneSymbol();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -351,7 +351,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createNonFrameshiftInsertionAnnotation(TranscriptModel kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.NON_FS_INSERTION;
-	ann.geneSymbol = kgl.getName2();
+	ann.geneSymbol = kgl.getGeneSymbol();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -367,7 +367,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createFrameshiftInsertionAnnotation(TranscriptModel kgl, int varstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.FS_INSERTION;
-	ann.geneSymbol = kgl.getName2();
+	ann.geneSymbol = kgl.getGeneSymbol();
 	ann.variantAnnotation = annot;
 	ann.rvarstart = varstart;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -385,7 +385,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createStopLossAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.STOPLOSS;
-	ann.geneSymbol=kgl.getName2();
+	ann.geneSymbol=kgl.getGeneSymbol();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -407,7 +407,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createStopGainAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.STOPGAIN;
-	ann.geneSymbol=kgl.getName2();
+	ann.geneSymbol=kgl.getGeneSymbol();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -428,7 +428,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createSynonymousSNVAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.SYNONYMOUS;
-	ann.geneSymbol=kgl.getName2();
+	ann.geneSymbol=kgl.getGeneSymbol();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -447,7 +447,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public static Annotation createMissenseSNVAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.NONSYNONYMOUS;
-	ann.geneSymbol=kgl.getName2();
+	ann.geneSymbol=kgl.getGeneSymbol();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -467,7 +467,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
       public static Annotation createNonFrameShiftSubstitionAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.NON_FS_SUBSTITUTION;
-	ann.geneSymbol=kgl.getName2();
+	ann.geneSymbol=kgl.getGeneSymbol();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = annot;
 	ann.entrezGeneID = kgl.getEntrezGeneID();
@@ -477,7 +477,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      public static Annotation createFrameShiftSubstitionAnnotation(TranscriptModel kgl,int refvarstart,String msg) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.FS_SUBSTITUTION;
-	ann.geneSymbol=kgl.getName2();
+	ann.geneSymbol=kgl.getGeneSymbol();
 	ann.rvarstart = refvarstart;
 	ann.variantAnnotation = msg;
 	ann.entrezGeneID = kgl.getEntrezGeneID();

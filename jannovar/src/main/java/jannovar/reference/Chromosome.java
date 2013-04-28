@@ -53,7 +53,7 @@ import jannovar.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.12 (28 April, 2013)
+ * @version 0.13 (28 April, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -283,7 +283,7 @@ public class Chromosome {
 	ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
 	
 	for (TranscriptModel kgl : candidateGenes) {
-	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getName2(),kgl.getName(), kgl.getStrand()));
+	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(), kgl.getStrand()));
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
 	    String name = kgl.getKnownGeneID();
 	    int txstart = kgl.getTXStart();
@@ -291,7 +291,7 @@ public class Chromosome {
 	    int cdsstart = kgl.getCDSStart();
 	    int cdsend = kgl.getCDSEnd();
 	    int exoncount = kgl.getExonCount();
-	    String name2 = kgl.getName2();
+	    String name2 = kgl.getGeneSymbol();
 	   
 	    /* ***************************************************************************************** *
 	     * The following code block is executed if the variant has not hit a genic region yet and    *
@@ -325,11 +325,11 @@ public class Chromosome {
 	    /* When we get here, leftNeighbor and rightNeighbor are the closest 5' and 3' genes to
 	       the variant to date. They may be null if we have already found a "genic" variant. */
 	    //System.out.println(String.format("\tbla %s, txStart:%d, about to check for 5'/3'/genic location:", 
-	    // kgl.getName2(), kgl.getTXStart()));
+	    // kgl.getGeneSymbol(), kgl.getTXStart()));
 	    if (kgl.isFivePrimeToGene(end)) {  // "end" of variant is 5' to "txstart" of gene
 		//variant ---
 		//gene		<-*----*->
-		//System.out.println(String.format("\tbla Variant at %d is 5' to gene: %s",start,kgl.getName2()));
+		//System.out.println(String.format("\tbla Variant at %d is 5' to gene: %s",start,kgl.getGeneSymbol()));
 		foundThreePrimeNeighbor=true; /* gene is 3' neighbor */
 		if (foundgenic) { continue; }
 		/* We have already found a gene such that this variant is genic. */
@@ -337,7 +337,7 @@ public class Chromosome {
 		else continue; /* go to next round, continue search */
 	    } else if (kgl.isThreePrimeToGene(start) ) {
 		/* i.e., "start" is 3' to "txend" of gene */
-		//System.out.println(String.format("\tbla Variant at %d is 3' to gene: %s",start,kgl.getName2()));
+		//System.out.println(String.format("\tbla Variant at %d is 3' to gene: %s",start,kgl.getGeneSymbol()));
 		foundFivePrimeNeighbor=true; /* gene is 5' neighbor to var */
 		if (foundgenic) {
 		    continue; 
@@ -428,14 +428,14 @@ public class Chromosome {
 	throws AnnotationException  {
 
 	/*System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
-	  kgl.getName2(),kgl.getName(),position,ref,alt)); */
+	  kgl.getGeneSymbol(),kgl.getName(),position,ref,alt)); */
 
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
 	int cdsend = kgl.getCDSEnd();
 	int exoncount = kgl.getExonCount();
-	String name2 = kgl.getName2(); /* the gene symbol */
+	String name2 = kgl.getGeneSymbol(); /* the gene symbol */
 	String name = kgl.getName(); /* the ucsc knowngene id */
 	int start = position;
 	int end = start + ref.length() - 1;
@@ -458,7 +458,7 @@ public class Chromosome {
 		cumlenexon = kgl.getExonEnd(k) - cdsstart + 1;
 	    }
 	    /* 1) First check whether variant is a splice variant */
-	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
+	    //System.out.println("BLA, About to check for splice for gene " + kgl.getGeneSymbol());
 	    //isSpliceVariantPositiveStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
 	    if (SpliceAnnotation.isSpliceVariantPlusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationPlusStrand(kgl,start,end,ref,alt,k,cumlenexon);
@@ -471,7 +471,7 @@ public class Chromosome {
 	    }
 	    if (start < kgl.getExonStart(k)) {
 		//System.out.println(String.format("BLA, start=%d, end=%d,exon[%d] start=%d for gene %s ",
-		//start,end,k,kgl.getExonStart(k), kgl.getName2()));
+		//start,end,k,kgl.getExonStart(k), kgl.getGeneSymbol()));
 		/* --------------------------------------------------------------------------- *
 		 * The variant is not a splice mutation (because of the above code), and it    *
 		 * begins before the start position of exon k. Therefore, there are several    *
@@ -625,14 +625,14 @@ public class Chromosome {
 	throws AnnotationException  {
 	
 	/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
-	  kgl.getName2(),kgl.getName() ,position,ref,alt));   */
+	  kgl.getGeneSymbol(),kgl.getName() ,position,ref,alt));   */
 
 	int txstart = kgl.getTXStart();
 	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
 	int cdsend = kgl.getCDSEnd();
 	int exoncount = kgl.getExonCount();
-	String name2 = kgl.getName2(); /* the gene symbol */
+	String name2 = kgl.getGeneSymbol(); /* the gene symbol */
 	String name = kgl.getName(); /* the ucsc knowngene id */
 	int start = position;
 	int end = start + ref.length() - 1;
@@ -662,7 +662,7 @@ public class Chromosome {
 	    }
 
 	    /* 1) First check whether variant is a splice variant */
-	    //System.out.println("BLA, About to check for splice for gene " + kgl.getName2());
+	    //System.out.println("BLA, About to check for splice for gene " + kgl.getGeneSymbol());
 	    if (SpliceAnnotation.isSpliceVariantMinusStrand(kgl,start,end,ref,alt,k)) {
 		Annotation ann  = SpliceAnnotation.getSpliceAnnotationMinusStrand(kgl,start,end,ref,alt,k,cumlenexon);
 		if (kgl.isCodingGene()) {
@@ -750,7 +750,7 @@ public class Chromosome {
 			return; /* done with this annotation. */
 		    }
 		} else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
-		    //System.out.println("- gene intron kgl=" + kgl.getName2() + ":" + kgl.getName());
+		    //System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 		     Annotation ann = null;
 		     if (kgl.isCodingGene() )
 			 ann = Annotation.createIntronicAnnotation(name2);
@@ -802,7 +802,7 @@ public class Chromosome {
 		    /* Negative strand, mutation located 3' to CDS end, i.e., 5UTR */
 		    //query             ----
 		    //gene     <--*---*->
-		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getName2()));
+		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getGeneSymbol()));
 		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovarFactory.addUTR5Annotation(ann);
 		    //$utr5{$name2}++;		#negative strand for UTR3
@@ -849,7 +849,7 @@ public class Chromosome {
 					String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
 	
 	
-	/*System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+	/*System.out.println("bla annotateExonicVariants for KG=" + kgl.getGeneSymbol() + "/" + kgl.getName());
 	   System.out.println("******************************");
 	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
 	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
@@ -993,7 +993,7 @@ public class Chromosome {
 					String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
 	
 	
-	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getName2() + "/" + kgl.getName());
+	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getGeneSymbol() + "/" + kgl.getName());
 	   System.out.println("******************************");
 	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
 	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
