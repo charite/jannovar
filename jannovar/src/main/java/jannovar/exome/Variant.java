@@ -113,10 +113,11 @@ public class Variant implements Comparable<Variant>, Constants {
     public void setVCFline(String line) { this.vcfLine = line; }
 
     /**
-     * Set the annotation object for this variant. This method is intended to be
+     * Set the {@link jannovar.annotation.AnnotationList AnnotationList} object for this variant. 
+     * This method is intended to be
      * used by our annovar-style annotation code in order to provide transcript-
      * level annotation for the variants, for example, to annotate the chromosomal
-     * variant {@code chr7:34889222:T>C} to {@code NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)" (Type:STOPLOSS)}.
+     * variant {@code chr7:34889222:T>C} to {@code NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R) (Type:STOPLOSS)}.
      * @param a An annotationList object representing annotations of all affected transcripts.
      */
     public void setAnnotation(AnnotationList a) {
@@ -146,7 +147,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	    return annot.getGeneSymbol();
 	} else {
 	    return ".";
-	}    
+	} 
     }
 
     /**
@@ -201,8 +202,10 @@ public class Variant implements Comparable<Variant>, Constants {
 
     public String get_position_as_string() { return Integer.toString(this.position); }
    
-
-    public String get_chromosomal_mutation() {
+    /**
+     * @return variant expressed in chromosomal coordinates 
+     */
+    public String get_chromosomal_variant() {
 	StringBuilder sb = new StringBuilder();
 	sb.append( get_chrom_string() );
 	sb.append(":g.");
@@ -230,9 +233,14 @@ public class Variant implements Comparable<Variant>, Constants {
      * {@link jannovar.annotation.Annotation Annotation} object. If this
      * is not initialized (which should never happen), it returns ".".
      *<p>
-     * Note: This function should not be used anymore, we will refactor the
-     * code to handle variants with multiple transcripts better in the 
-     * future.
+     * Note: This function returns a String that summarizes all of the annotations
+     * of the current variant, e.g., 
+     * <p>
+     * LTF(uc003cpr.3:exon5:c.30_31insAAG:p.R10delinsRR,uc003cpq.3:exon2:c.69_70insAAG:p.R23delinsRR,
+     * uc010hjh.3:exon2:c.69_70insAAG:p.R23delinsRR)
+     * </P>
+     * If client code wants to get a list of each individual annotation, it should instead call 
+     * the function {@link #getAnnotationList}.
      * @return The annotation of the current variant.
      */
     public String getAnnotation()
@@ -248,25 +256,25 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
     /**
-     * This is intended to decouple the rest of the 
-     * program from the way that annnotations are currently
-     * stored (annotations for multiple-transcript mutations
-     * are stored as a single string, e.g., 
-     * LTF(uc003cpr.3:exon5:c.30_31insAAG:p.R10delinsRR,
-     * uc003cpq.3:exon2:c.69_70insAAG:p.R23delinsRR,
-     * uc010hjh.3:exon2:c.69_70insAAG:p.R23delinsRR)
+     * This function returns a list of all of the 
+     * {@link jannovar.annotation.Annotation Annotation} objects
+     * that have been associated with the current variant. This function
+     * can be called if client code wants to display one line for each
+     * affected transcript, e.g., 
+     * <ul>
+     * <li>LTF(uc003cpr.3:exon5:c.30_31insAAG:p.R10delinsRR)
+     * <li>LTF(uc003cpq.3:exon2:c.69_70insAAG:p.R23delinsRR)
+     * <li>LTF(uc010hjh.3:exon2:c.69_70insAAG:p.R23delinsRR)
+     * </ul>
      * <P>
-     * We will be creating a separate object for each annotation, and future
-     * implementations will just return that, or a list of strings from 
-     * each of them. For now, since everything else is working, just split
-     * the String and send back a list.
+     * If client code wants instead to display just
+     * a single string that summarizes all of the annotations, it should
+     * call the function {@link #getAnnotation}.
      */
-    public String[] getAnnotationList() {
-	
-	
+    public ArrayList<String> getAnnotationList() {
 	if (this.annot == null) {
-	    String A[] = new String[1];
-	    A[0] = ".";
+	    ArrayList<String> A = new ArrayList<String>();
+	    A.add(".");
 	    return A;
 	}
 	ArrayList<Annotation> alist = this.annot.getAnnotationList();
@@ -275,8 +283,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	    String s = ann.getVariantAnnotation();
 	    A.add(s);
 	}
-	String B[] = (String[]) A.toArray();
-	return B;
+	return A;
     }
 
 

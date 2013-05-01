@@ -152,7 +152,7 @@ public class SingleNucleotideSubstitution {
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,cdspos,panno);
+	    Annotation ann = Annotation.createNonSynonymousSNVAnnotation(kgl,cdspos,panno);
 	    return ann;
 	}
 	
@@ -258,7 +258,7 @@ public class SingleNucleotideSubstitution {
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createMissenseSNVAnnotation(kgl,cdspos,panno);
+	    Annotation ann = Annotation.createNonSynonymousSNVAnnotation(kgl,cdspos,panno);
 	    return ann;
 	}
 	

@@ -163,7 +163,7 @@ public class AnnotatedVariantFactory implements Constants {
 
     /**
      * @return The number of {@link jannovar.annotation.Annotation Annotation} 
-     * objects for current variant.
+     * objects for the current variant.
      */
     public int getAnnotationCount() { return this.annotationCount; }
 

@@ -13,10 +13,9 @@ import jannovar.reference.TranscriptModel;
  * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
  * </OL>
  * <P>
- * This class also includes functionality for combining the multiple
- * annotations assigned to one variant (e.g., annotations corresponding to the
- * various isoforms of one gene) by means of methods that are meant to be called
- * by the {@link jannovar.annotation.AnnotationList AnnotationList} class.
+ * Each annotation for one transcript corresponds to a single Annotation object. All of the transcripts 
+ * affected by a variant are collected by an {@link jannovar.annotation.AnnotationList AnnotationList}
+ * object.
  * <P>
  * @author Peter N Robinson
  * @version 0.19 (28 April, 2013)
@@ -72,7 +71,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * @return The gene symbol (e.g., FBN1) for the gene affected by this Annotation.
      */
     public String getGeneSymbol() { return this.geneSymbol; }
-
+    /**
+     * @return the NCBI Entrez ID for the gene.
+     */
     public int getEntrezGeneID() { return this.entrezGeneID; }
 
     /**
@@ -82,7 +83,8 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public String getVariantAnnotation() { return this.variantAnnotation; }
 
     /**
-     * Get full annotation with gene symbol
+     * Get full annotation with gene symbol. If this Annotation does not have a
+     * symbol (e.g., for an intergnic annotation), then just return the annotation string.
      */
     public String getSymbolAndAnnotation() {
 	if (geneSymbol==null && variantAnnotation != null)
@@ -93,9 +95,6 @@ public class Annotation implements Constants, Comparable<Annotation> {
 
 
     /**
-     * Resets the annotation. This method is intended to be used by the 
-     * {@link jannovar.annotation.AnnotationList AnnotationList}
-     * class during the process of summarizing Annotations.
      * @param s A String representing the new annotation.
      */
     public void setVariantAnnotation(String s) { this.variantAnnotation = s; }
@@ -166,18 +165,13 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return ann;
     }
 
+  
     /**
-     * This method is used by {@link jannovar.annotation.AnnotationList AnnotationList} to
-     * create a single Downstream annotation if there are multiple different
-     * annotations made
+     * Create an Annotation obejct for a variant that is upstream or downstream
+     * to a gene (default: within 1000 nt).
+     * @trmdl The transcript that the variant is up/downstream to
+     * @pos The chromosomal position of the variant 
      */
-    public static Annotation getSummaryDownstreamAnnotation(String name) {
-	Annotation ann = new Annotation();
-	ann.varType=VariantType.DOWNSTREAM;
-	ann.variantAnnotation = name;
-	return ann;
-    }
-
     public static Annotation createUpDownstreamAnnotation(TranscriptModel trmdl, int pos) {
 	Annotation ann = new Annotation();
 	if (trmdl == null) {
@@ -270,27 +264,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return ann;
     }
 
-   
-   
-
-      /**
-     * This function is intended to be used to create an annovar-style
-     * combined annotation for cases where we need to combine genesymbols,
-     * which essentially means down/upstream, ncRNA, UTR3, UTR5 for now.
-     * @param a String with the combined gene symbols
-     * @param typ The variant type, one of the constants in {@link jannovar.common.VariantType VariantType}
+    /**
+     * Create an Annotation object for a variant that is in an intronic of a noncoding gene.
      */
-     public static Annotation createSummaryAnnotation(String a, VariantType typ) {
-	 Annotation ann = new Annotation();
-	 ann.varType = typ ;
-	 ann.variantAnnotation = a;
-	 return ann;
-     }
-
-
-
-   
-
     public static Annotation createNoncodingIntronicAnnotation(String name2) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.ncRNA_INTRONIC;
@@ -303,13 +279,13 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * This method is called when an intronic mutation was found. The method should
      * probably try to do better to create a correct HGVS nomeclature for intronic mutations, by
      * giving the position, for instance.
-     * @param gsymbol The gene symbol of the current TranscriptModel
+     * @param trmdl The current TranscriptModel
      */
-     public static Annotation createIntronicAnnotation(String gsymbol) {
+    public static Annotation createIntronicAnnotation(TranscriptModel trmdl) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.INTRONIC;
-	ann.geneSymbol = gsymbol;
-	ann.variantAnnotation = String.format("%s", gsymbol);
+	ann.geneSymbol = trmdl.getGeneSymbol();
+	ann.variantAnnotation = String.format("%s", ann.geneSymbol);
 	return ann;
      }
 
@@ -321,6 +297,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	Annotation ann = new Annotation();
 	ann.varType =  VariantType.ERROR;
 	ann.variantAnnotation = msg;
+	ann.geneSymbol = "Error";
 	return ann;
      }
 
@@ -452,7 +429,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * @param refvarstart Start position of mutation in ORF
      * @param annot The actual annotation.
      */
-    public static Annotation createMissenseSNVAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
+    public static Annotation createNonSynonymousSNVAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
 	Annotation ann = new Annotation();
 	ann.varType = VariantType.NONSYNONYMOUS;
 	ann.geneSymbol=kgl.getGeneSymbol();
@@ -530,7 +507,6 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case UTR3: s="UTR3"; break;
 	case UTR53: s="UTR5,UTR3"; break;
 	case UNKNOWN: s = "unknown"; break;
-	    //case EXONIC: s = "exonic"; break;
 	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",typ);
 	}
 	return s;

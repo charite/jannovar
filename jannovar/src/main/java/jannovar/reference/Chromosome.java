@@ -402,6 +402,11 @@ public class Chromosome {
 	    }
 	}
 	//annovar.debugPrint();
+	AnnotationList al = annovarFactory.getAnnotationList();
+	if (al.getAnnotationList().size()==0) {
+	    System.out.println("XXX zero size for " + position + ":" +ref+ ">"+ alt+ " on chromosome " + chromosomeString);
+	    System.exit(1);
+	}
 	return annovarFactory.getAnnotationList();
     }
 
@@ -517,7 +522,7 @@ public class Chromosome {
 		     * ----------------------------------------------------------------------- */
 		    Annotation ann = null;
 		    if (kgl.isCodingGene() )
-			 ann = Annotation.createIntronicAnnotation(name2);
+			ann = Annotation.createIntronicAnnotation(kgl);
 		     else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
 		    annovarFactory.addIntronicAnnotation(ann);
@@ -745,7 +750,7 @@ public class Chromosome {
 		    //System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 		     Annotation ann = null;
 		     if (kgl.isCodingGene() )
-			 ann = Annotation.createIntronicAnnotation(name2);
+			 ann = Annotation.createIntronicAnnotation(kgl);
 		     else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
 		     annovarFactory.addIntronicAnnotation(ann);
@@ -895,7 +900,7 @@ public class Chromosome {
 	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
 	}
-	/*annovar line 1079 */
+	/* If the gene is on the minus strand, we take the reverse complement of the ref and the var sequence.*/
 	if (kgl.isMinusStrand()) {
 	    var = revcom(var);
 	    ref = revcom(ref);

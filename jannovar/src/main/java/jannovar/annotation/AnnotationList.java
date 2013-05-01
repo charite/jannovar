@@ -13,7 +13,7 @@ import java.util.HashSet;
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
  * summarize, sort, or display the objects.
  * @author Peter N Robinson
- * @version 0.05 (28 April, 2013)
+ * @version 0.06 (1 May, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -41,7 +41,8 @@ public class AnnotationList {
     }
 
     public AnnotationList(ArrayList<Annotation> lst) {
-	this.annotationList = lst;
+	this.annotationList = new ArrayList<Annotation>();
+	this.annotationList.addAll(lst);
     }
 
     /**
@@ -128,13 +129,27 @@ public class AnnotationList {
     public String getGeneSymbol() {
 	if (hasMultipleGeneSymbols) {
 	    return "MultipleGenes";
+	} else if (this.annotationList == null) {
+	    System.err.println("error-annotationListNull");
+	    System.out.println("VarType = " + type);
+	} else if (this.annotationList.size()==0) {
+	    System.err.println("error-annotationList-zero size");
+	    System.out.println("VarType = " + type);
 	} else {
-	    return this.annotationList.get(0).getGeneSymbol();
+	    Annotation ann = this.annotationList.get(0);
+	    if (ann == null) {
+		System.err.println("error-annotationObjectNull");
+		System.out.println("VarType = " + type);
+	    } else return ann.getGeneSymbol();
 	}
+	return "?";
     }
 
     /**
-     * TODO: Some variants have multiple genes affected. Need to refactor this interface.
+     * TODO: Some variants have multiple genes affected. For the most part,
+     * this affects noncoding transcripts and not the transcripts typically interesting
+     * in exome sequencing. However, we may want to refactor the interface to return
+     * a list of ids in thus future.
      * @return EntrezGene id of gene affected by variant
      */
     public int getEntrezGeneID() {
@@ -174,17 +189,13 @@ public class AnnotationList {
 	* Note that they already should be sorted according to position.*/
 
 	for (String s: geneSymbolSet) {
-	    System.out.println("MultAnno: symbolSet s=" + s);
 	    ArrayList<String> tmp = new ArrayList<String>();
 	    Annotation ann = this.annotationList.get(0);
 	    for (int j=0;j<this.annotationList.size();++j) {
 		ann  = this.annotationList.get(j);
 		if (ann == null)
-		    throw new AnnotationException("Ann is null at j="+j);
-		System.out.println("Type = " + ann.getVariantType());
+		    throw new AnnotationException("[AnnotationList.java]Annotation is null");
 		String sym = ann.getGeneSymbol();
-		System.out.println("\t for : sym=" + sym);
-	   
 		if (sym.equals(s))
 		    tmp.add(ann.getVariantAnnotation());
 	    }
