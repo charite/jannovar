@@ -44,7 +44,8 @@ public class VCFLineTest implements Constants {
 
     @BeforeClass public static void setUp() throws IOException,VCFParseException
     {
-	reader = new VCFReader(vcfPath);
+	reader = new VCFReader();
+	reader.parseFile(vcfPath);
 	VCFLineList = new ArrayList<VCFLine>();
 	FileInputStream fstream = new FileInputStream(vcfPath);
 	DataInputStream in = new DataInputStream(fstream);

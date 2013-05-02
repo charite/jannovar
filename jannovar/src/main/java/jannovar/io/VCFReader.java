@@ -1,9 +1,5 @@
 package jannovar.io;
 
-/** Logging */
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.DataInputStream;
@@ -41,10 +37,9 @@ import jannovar.io.MultipleGenotypeFactory;
  * The classes relies on the abstract factory pattern to create appropriate {@link jannovar.exome.GenotypeI GenotypeI}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
- * @version 0.07 (16 April, 2013)
+ * @version 0.09 (2 May, 2013)
  */
 public class VCFReader {
-    static Logger log = Logger.getLogger(VCFReader.class.getName());
     /** Complete path of the VCF file being parsed */
     private String file_path=null;
     /** (Plain) basename of the VCF file being parsed. */
@@ -96,13 +91,10 @@ public class VCFReader {
     
 
     /**
-     * @param path Path to a VCF file. 
+     * The constructor initializes various ArrayLists etc. After calling the constructors,
+     * users can call parse_file(String path) to 
      */
-    public VCFReader(String path) {
-	log.trace("Parsing VCF file: " + path);
-	file_path = path;
-	File file = new File(path);
-	this.base_filename = file.getName();
+    public VCFReader() {
 	this.variant_list = new ArrayList<Variant>();
 	this.vcf_header= new ArrayList<String>();
 	this.unparsable_line_list = new ArrayList<String>();
@@ -110,7 +102,6 @@ public class VCFReader {
 	this.total_number_of_variants = 0;
 	this.badChrom = new HashSet<String>();
 	this.errorList = new ArrayList<String>();
-	parse_file();
     }
 
     /**
@@ -153,107 +144,129 @@ public class VCFReader {
     }
 
     /**
+     * Parse a VCF file that has been put into a BufferedReader by
+     * client code (one possible use: a tomcat server)
+     */
+    public void parseStringStream(BufferedReader VCFfileContents) {
+	try{
+	    inputVCFStream(VCFfileContents);
+	} catch (IOException e) {
+	    System.err.println("IO Exception while trying to input BufferedReader VCFFileContents");
+	     System.err.println(e);
+	     System.exit(1);
+	 }
+    }
+
+
+    /**
      * This method parses the entire VCF file.
      * It places all header lines into the arraylist "header" and the remaining lines are parsed into
      * Variant objects.
      */
-    private void parse_file() {
-	try{
-	    FileInputStream fstream = new FileInputStream(this.file_path);
-	    DataInputStream in = new DataInputStream(fstream);
-	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
-	    String line;
-	    int linecount=0;
-	    int snvcount=0;
-	    // The first line of a VCF file should include the VCF version number
-	    // e.g., ##fileformat=VCFv4.0
-	    line = br.readLine();
-	    if (line == null) {
-		System.err.println("Error: First line of VCF file was not read (null pointer)");
-		System.err.println("File: " + this.file_path);
-		System.exit(1);
-	    }
-	    if (!line.startsWith("##fileformat=VCF")) {
-		System.err.println("Error: First line of VCF file did not start with format:" + line);
-		System.exit(1);
-	    } else {
-		vcf_header.add(line);
-	    }
-	    String version = line.substring(16).trim();
-	    log.trace("VCF Format: " + version);
-	    
-	    while ((line = br.readLine()) != null)   {
-		if (line.isEmpty()) continue;
-		if (line.startsWith("##")) {
-		    vcf_header.add(line); 
-		    continue; 
-		} else if (line.startsWith("#CHROM")) {
-		    try {
-			parse_chrom_line(line); // Line with FORMAT and Sample names. 
-			vcf_header.add(line); 
-		    } catch (VCFParseException e) {
-			String s = String.format("Error parsing #CHROM line: %s",e.toString());
-			this.errorList.add(s);
-		    }
-		    /* Note that a side effect of the function parse_chrom_line
-		       is to add sample names to sample_name_map. We can now instantiate the
-		       genotype factory depending on whether there is more than one sample.
-		    */
-		    int n = this.sample_name_list.size();
-		    if (n == 1) {
-			this.genofactory = new SingleGenotypeFactory();
-		    } else {
-			this.genofactory = new MultipleGenotypeFactory();
-		    } 
-		    break; /* The #CHROM line is the last line of the header */ 
-		}
-	    }
-	    VCFLine.setGenotypeFactory(genofactory);
-	    while ((line = br.readLine()) != null)   {
-		if (line.isEmpty()) continue;
-		VCFLine ln = null;
-		try {
-		    ln = new VCFLine(line);
-		} catch (VCFParseException e) {
-		    this.unparsable_line_list.add(e + ": " + line);      
-		    System.err.println("Warning: Skipping unparsable line: \n\t" + line);
-		    System.err.println("Exception: "+e.toString());
-		    continue;
-		}
-		this.total_number_of_variants++;
-		
-		try {
-		    Variant var = ln.extractVariant();
-		   
-		    if (var.genotype_not_initialized()) {
-			System.err.println("Error: Did not initialize genotype of SNV object");
-			ln.dump_VCF_line_for_debug();
-			System.out.println("Variant has genotype:" + var.get_genotype_as_string());
-			System.exit(1);
-		    }
-		    var.setVCFline(line);
-		    if (var.is_homozygous_ref())
-			continue; /* SKIP Non-Variants, this does not make sense in WES setting
-				     TODO: Move this into a separate filter */
-		    variant_list.add(var);
-		} catch (NumberFormatException e) {
-		    //Exceptions may occur for variants such as 11_gl000202_random
-		    // For now, just skip this. Refactor later
-		    continue;
-		} catch (VCFParseException ve) {
-		    /** Record all chromosomes that could not be parsed,
-			usually scaffolds such as 11_gl000202_random
-		    */
-		    String bad = ve.getBadChromosome();
-		    this.badChrom.add(bad);
-		    continue;
-		}
-	    } // while
-	    in.close();
-	} catch (IOException e) {
-	    System.err.println(e);
+     public void parseFile(String VCFfilePath) {
+	 this.file_path = VCFfilePath;
+	 File file = new File(this.file_path);
+	 this.base_filename = file.getName();
+	 try{
+	     FileInputStream fstream = new FileInputStream(this.file_path);
+	     DataInputStream in = new DataInputStream(fstream);
+	     BufferedReader br = new BufferedReader(new InputStreamReader(in));
+	     inputVCFStream(br);
+	 } catch (IOException e) {
+	     System.err.println(e);
+	     System.exit(1);
+	 }
+     }
+
+
+    private void inputVCFStream(BufferedReader br) throws IOException
+    {	
+	String line;
+	int linecount=0;
+	int snvcount=0;
+	// The first line of a VCF file should include the VCF version number
+	// e.g., ##fileformat=VCFv4.0
+	line = br.readLine();
+	if (line == null) {
+	    System.err.println("Error: First line of VCF file was not read (null pointer)");
+	    System.err.println("File: " + this.file_path);
 	    System.exit(1);
 	}
+	if (!line.startsWith("##fileformat=VCF")) {
+	    System.err.println("Error: First line of VCF file did not start with format:" + line);
+	    System.exit(1);
+	} else {
+	    vcf_header.add(line);
+	}
+	String version = line.substring(16).trim();
+		
+	while ((line = br.readLine()) != null)   {
+	    if (line.isEmpty()) continue;
+	    if (line.startsWith("##")) {
+		vcf_header.add(line); 
+		continue; 
+	    } else if (line.startsWith("#CHROM")) {
+		try {
+		    parse_chrom_line(line); // Line with FORMAT and Sample names. 
+		    vcf_header.add(line); 
+		} catch (VCFParseException e) {
+		    String s = String.format("Error parsing #CHROM line: %s",e.toString());
+		    this.errorList.add(s);
+		}
+		/* Note that a side effect of the function parse_chrom_line
+		   is to add sample names to sample_name_map. We can now instantiate the
+		   genotype factory depending on whether there is more than one sample.
+		*/
+		int n = this.sample_name_list.size();
+		if (n == 1) {
+		    this.genofactory = new SingleGenotypeFactory();
+		} else {
+		    this.genofactory = new MultipleGenotypeFactory();
+		} 
+		break; /* The #CHROM line is the last line of the header */ 
+	    }
+	}
+	VCFLine.setGenotypeFactory(genofactory);
+	while ((line = br.readLine()) != null)   {
+	    if (line.isEmpty()) continue;
+	    VCFLine ln = null;
+	    try {
+		ln = new VCFLine(line);
+	    } catch (VCFParseException e) {
+		this.unparsable_line_list.add(e + ": " + line);      
+		System.err.println("Warning: Skipping unparsable line: \n\t" + line);
+		System.err.println("Exception: "+e.toString());
+		continue;
+	    }
+	    this.total_number_of_variants++;
+	    
+	    try {
+		Variant var = ln.extractVariant();
+		
+		if (var.genotype_not_initialized()) {
+		    System.err.println("Error: Did not initialize genotype of SNV object");
+		    ln.dump_VCF_line_for_debug();
+		    System.out.println("Variant has genotype:" + var.get_genotype_as_string());
+		    System.exit(1);
+		}
+		var.setVCFline(line);
+		if (var.is_homozygous_ref())
+		    continue; /* SKIP Non-Variants, this does not make sense in WES setting
+				 TODO: Move this into a separate filter */
+		variant_list.add(var);
+	    } catch (NumberFormatException e) {
+		//Exceptions may occur for variants such as 11_gl000202_random
+		// For now, just skip this. Refactor later
+		continue;
+	    } catch (VCFParseException ve) {
+		/** Record all chromosomes that could not be parsed,
+		    usually scaffolds such as 11_gl000202_random
+		*/
+		String bad = ve.getBadChromosome();
+		this.badChrom.add(bad);
+		continue;
+	    }
+	} // while
 	if (this.badChrom.size()>0) {
 	    recordBadChromosomeParses();
 	}

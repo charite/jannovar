@@ -88,7 +88,8 @@ public class VCFReaderTest implements Constants {
       ps.close();
 
 
-      reader = new VCFReader(tmp.getAbsolutePath());
+      reader = new VCFReader();
+      reader.parseFile(tmp.getAbsolutePath());
     }
 
      @AfterClass public static void releaseResources() { 
