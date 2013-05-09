@@ -1,10 +1,9 @@
-package jannovar.io;
+package jpedfilter.genotype;
 
-import jannovar.exome.GenotypeI;
-import jannovar.exome.SingleGenotype;
-import jannovar.common.Constants;
-import jannovar.common.GenotypeCall;
-import jannovar.exception.VCFParseException;
+import jpedfilter.genotype.GenotypeI;
+import jpedfilter.genotype.SingleGenotype;
+import jpedfilter.common.Genotype;
+import jpedfilter.exception.VCFParseException;
 
 /**
  * This class is inteded to create a Genotype object for
@@ -15,10 +14,11 @@ import jannovar.exception.VCFParseException;
  * should be fixed in a future version of this class, but it occurs relatively
  * rarely in VCF files that are of interest to us.
  * @author Peter N Robinson
- * @version 0.04 (28 April, 2013)
+ * @version 0.05 (5 May, 2013)
  */
-public class SingleGenotypeFactory extends GenotypeFactoryA implements Constants {
+public class SingleGenotypeFactory extends GenotypeFactoryA  {
 
+    private int UNINITIALIZED_INT = -10;
 
     /** 
      * This is the core method of the factory, and creates
@@ -43,7 +43,7 @@ public class SingleGenotypeFactory extends GenotypeFactoryA implements Constants
     private SingleGenotype  parse_genotype(String format, String sample) throws VCFParseException {
 	
 	/* one of HOMOZYGOUS_REF,HOMOZYGOUS_VAR, HETEROZYGOUS or UNKNOWN */
-	GenotypeCall call= GenotypeCall.UNKNOWN;
+	Genotype call= Genotype.UNINITIALIZED;
 	/* The overall genotype quality as parsed from the QUAL field. If this field was given as
 	   a float, then it is rounded to the nearest integer. */
 	int genotype_quality=UNINITIALIZED_INT;
@@ -63,13 +63,13 @@ public class SingleGenotypeFactory extends GenotypeFactoryA implements Constants
 	//Added code to deal with male chr X genotypes
 	
 	if (genot.equals("0/1") || genot.equals("0|1") || genot.equals("1|0") || genot.equals("0/2"))
-	    call = GenotypeCall.HETEROZYGOUS; 
+	    call = Genotype.HETEROZYGOUS; 
 	else if (genot.equals("1/1") || genot.equals("1|1") || genot.equals("2/2"))
-	    call = GenotypeCall.HOMOZYGOUS_ALT;
+	    call = Genotype.HOMOZYGOUS_ALT;
 	else if (genot.equals("0/0") || genot.equals("0|0"))
-	    call = GenotypeCall.HOMOZYGOUS_REF;
+	    call = Genotype.HOMOZYGOUS_REF;
 	else if (genot.equals("1"))
-	    call = GenotypeCall.HOMOZYGOUS_ALT;
+	    call = Genotype.HOMOZYGOUS_ALT;
 
 	if (qual_idx >= 0) {
 	    try {

@@ -1,7 +1,7 @@
-package jannovar.io;
+package jpedfilter.genotype;
 
-import jannovar.exome.GenotypeI;
-import jannovar.exception.VCFParseException;
+import jpedfilter.genotype.GenotypeI;
+import jpedfilter.exception.VCFParseException;
 
 /**
  * This interface is intended to provide the flexibility
@@ -25,7 +25,7 @@ public abstract class GenotypeFactoryA {
     /** 
      * This is the core method of the factory, and creates
      * a Genotype object. Currently, Jannovar has
-     * two concrete implementations of the {@link jannovar.exome.GenotypeI GenotypeI}
+     * two concrete implementations of the {@link jpedfilter.genotype.GenotypeI GenotypeI}
      * interface, for single and multiple-sample VCF files. The interface
      * could be extended to allow for cool stuff such as DP4 analysis in
      * the future.

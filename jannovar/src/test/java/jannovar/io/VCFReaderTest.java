@@ -1,4 +1,4 @@
-package jannovar.tests;
+package jpedfilter.tests;
 
 
 import java.io.File;
@@ -8,11 +8,9 @@ import java.io.PrintStream;
 
 import java.util.ArrayList;
 
-
-import jannovar.io.VCFLine;
-import jannovar.io.VCFReader;
-import jannovar.common.Constants;
-import jannovar.exome.Variant;
+import jpedfilter.exception.VCFParseException;
+import jpedfilter.io.VCFLine;
+import jpedfilter.io.VCFReader;
 
 
 import org.junit.Test;
@@ -21,13 +19,13 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 
 
-public class VCFReaderTest implements Constants {
+public class VCFReaderTest  {
 
     private static VCFReader reader = null;
 
 
     @BeforeClass
-	public static void setUp() throws IOException
+	public static void setUp() throws IOException,VCFParseException
     {
 	File tmp = File.createTempFile("vcfreader-test","vcfreader-test");
 	PrintStream ps = new PrintStream(new FileOutputStream(tmp));

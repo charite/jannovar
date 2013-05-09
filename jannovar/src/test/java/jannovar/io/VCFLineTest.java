@@ -1,4 +1,4 @@
-package jannovar.io;
+package jpedfilter.io;
 
 
 
@@ -11,20 +11,16 @@ import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.util.ArrayList;
 
-import jannovar.io.VCFLine;
-import jannovar.io.VCFReader;
-import jannovar.common.Constants;
-import jannovar.exception.VCFParseException;
-import jannovar.exome.Variant;
-import jannovar.exome.GenotypeI;
+import jpedfilter.io.VCFLine;
+import jpedfilter.io.VCFReader;
+import jpedfilter.exception.VCFParseException;
+import jpedfilter.genotype.GenotypeI;
 
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Assert;
 
-
-import org.junit.Test;
 
 /**
  * Note that this class inputs the file exomizer/data/TestExome.vcf, which is a small
@@ -34,7 +30,7 @@ import org.junit.Test;
  * <P>
  * The test cases were made by examining some of the lines from that file.
  */
-public class VCFLineTest implements Constants {
+public class VCFLineTest {
     /** This is the tolerance for checking equality of floating point numbers for junit.*/
     private float EPSILON = 0.000001f;
 
@@ -76,17 +72,24 @@ public class VCFLineTest implements Constants {
     /**
      * Line 0 has
      * <pre>
-     * 1       866511  rs60722469      C       CCCCT 
+     * 1       866511  rs60722469      C       CCCCT
      * </pre>
+     * Since the C at 866511 is wildtype, the insertion is from "-" to CCCT
      */
     @Test public void testGetReferenceSequence() throws VCFParseException 
     {
 	VCFLine line = VCFLineList.get(0);
 	String ref = line.get_reference_sequence();
-	Assert.assertEquals("C", ref);
-	String var = line.get_variant_sequence();
-	Assert.assertEquals("CCCCT",var);
+	Assert.assertEquals("-", ref);
+	String alt = line.get_alternate_sequence();
+	Assert.assertEquals("CCCT",alt);
+	int pos = line.get_position();
+	Assert.assertEquals(866511,pos);
     }
+    
+    /**
+     *    1       879317  rs7523549       C       T       150.77
+     *    */
     
     @Test public void testGetPosition() throws VCFParseException 
     {
@@ -95,6 +98,8 @@ public class VCFLineTest implements Constants {
 	Assert.assertEquals(879317,pos);
 	String chr = line.get_chromosome_as_string();
 	Assert.assertEquals("1",chr);
+	String alt = line.get_alternate_sequence();
+	Assert.assertEquals("T",alt);
     }
     
 
@@ -111,7 +116,7 @@ public class VCFLineTest implements Constants {
 	Assert.assertEquals(true,GI.is_heterozygous() );
 	Assert.assertEquals(false,GI.is_homozygous_alt() );
 	Assert.assertEquals(false,GI.is_homozygous_ref() );
-	Assert.assertEquals(false,GI.is_unknown_genotype());
+	Assert.assertEquals(false,GI.is_error());
     }
     
 
@@ -153,7 +158,11 @@ public class VCFLineTest implements Constants {
     }
 
 
-    // The following tests are for indel notation in VCF
+    /** The following tests are for indel notation in VCF
+     * The reference, GACACA, begins at position 1276973. The alternate sequence
+     * GACACACACA, shows that three additional CA dinucleotides have been
+     * inserted after the wildtype sequence GACACA.
+     */ 
     private String indelLine1 = "chr1	1276973	.	GACACA	GACACACACA	999	.	INDEL;DP=20;VDB=0.0141;AF1=1;AC1=12;DP4=0,0,19,0;MQ=34;FQ=-45.4	GT:PL:GQ	1/1:103,12,0:27	1/1:66,9,0:24	1/1:116,15,0:30";
 
     @Test public void testIndelLineChrom1() throws VCFParseException {
@@ -163,14 +172,14 @@ public class VCFLineTest implements Constants {
 
       @Test public void testIndelLineChrom2() throws VCFParseException {
 	VCFLine line = new VCFLine(indelLine1);
-	Assert.assertEquals(1276973 ,line.get_position());
+	Assert.assertEquals(1276978 ,line.get_position());
     }
       
     @Test public void testIndelLineChrom3() throws VCFParseException {
 	VCFLine line = new VCFLine(indelLine1);
-	Variant var = line.extractVariant();
-	String r = var.get_ref();
+	String r = line.get_reference_sequence();
 	Assert.assertEquals("-" ,r);
+	//Assert.assertEquals("TODO-- Figure out where to convert the VCF numbering",r);
     }
 
 
