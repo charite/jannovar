@@ -1,23 +1,23 @@
-package jpedfilter.genotype;
+package jannovar.genotype;
 
 
-import jpedfilter.common.Genotype;
+import jannovar.common.Genotype;
 /**
  * This class is intended to encapsulate a genotype for a single
  * variant (i.e., line in a VCF file) for a VCF file with only
  * one sample - thus, SingleGenotype as opposed to 
- * {@link jpedfilter.genotype.MultipleGenotype MultipleGenotype} for
+ * {@link jannovar.genotype.MultipleGenotype MultipleGenotype} for
  * VCF files with multiple samples.
  * <P>
  * TODO: Note that in some files, we may have DP or DP4 in the INFO field,
  * but actually this should be in the FORMAT/Genotype fields.
  * @author Peter Robinson
- * @version 0.06 (28 April, 2013)
+ * @version 0.07 (10 May, 2013)
  */
 public class SingleGenotype extends GenotypeI {
 
   
-    /**  genotype (See {@link jpedfilter.common.Genotype Genotype}
+    /**  genotype (See {@link jannovar.common.Genotype Genotype}
      * for the enumeration used to represent the genotypes).
      */
     private Genotype genotype= Genotype.UNINITIALIZED;

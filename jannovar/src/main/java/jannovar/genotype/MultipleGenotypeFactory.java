@@ -1,11 +1,11 @@
-package jpedfilter.genotype;
+package jannovar.genotype;
 
 import java.util.ArrayList;
 
-import jpedfilter.genotype.GenotypeI;
-import jpedfilter.genotype.MultipleGenotype;
-import jpedfilter.common.Genotype;
-import jpedfilter.exception.VCFParseException;
+import jannovar.genotype.GenotypeI;
+import jannovar.genotype.MultipleGenotype;
+import jannovar.common.Genotype;
+import jannovar.exception.VCFParseException;
 
 /**
  * This class is inteded to create a Genotype object for
@@ -37,10 +37,10 @@ import jpedfilter.exception.VCFParseException;
  * Note that while other fields such as {@code AD} provide important information for individual analysis purposes,
  * we cannot expect a VCF file that somebody uploads via the Webserver to have this information,
  * because it is optional. 
- * @see jpedfilter.genotype.SingleGenotypeFactory
- * @see jpedfilter.genotype.MultipleGenotype
+ * @see jannovar.genotype.SingleGenotypeFactory
+ * @see jannovar.genotype.MultipleGenotype
  * @author Peter N Robinson
- * @version 0.10 (5 May, 2013)
+ * @version 0.11 (10 May, 2013)
  */
 public class MultipleGenotypeFactory extends GenotypeFactoryA {
     /**
@@ -69,7 +69,7 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
     /** 
      * This is the core method of the factory, and creates
      * a Genotype object. Currently, the Jannovar has
-     * two concrete implementations of the {@link jpedfilter.genotype.GenotypeI GenotypeI}
+     * two concrete implementations of the {@link jannovar.genotype.GenotypeI GenotypeI}
      * interface, for single and multiple-sample VCF files. The interface
      * could be extended to allow for cool stuff such as DP4 analysis in
      * the future.

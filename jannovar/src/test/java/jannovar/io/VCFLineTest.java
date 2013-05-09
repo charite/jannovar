@@ -1,4 +1,4 @@
-package jpedfilter.io;
+package jannovar.io;
 
 
 
@@ -11,10 +11,10 @@ import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.util.ArrayList;
 
-import jpedfilter.io.VCFLine;
-import jpedfilter.io.VCFReader;
-import jpedfilter.exception.VCFParseException;
-import jpedfilter.genotype.GenotypeI;
+import jannovar.io.VCFLine;
+import jannovar.io.VCFReader;
+import jannovar.exception.VCFParseException;
+import jannovar.genotype.GenotypeI;
 
 import org.junit.Test;
 import org.junit.AfterClass;

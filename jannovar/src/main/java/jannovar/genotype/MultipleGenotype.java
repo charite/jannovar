@@ -1,17 +1,17 @@
-package jpedfilter.genotype;
+package jannovar.genotype;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
-import jpedfilter.common.Genotype;
+import jannovar.common.Genotype;
 
 
 /**
  * This class is intended to encapsulate a genotype for a single
  * variant (i.e., line in a VCF file) for a VCF file with multiple
  * samples - thus, MultipleGenotype as opposed to 
- * {@link jpedfilter.genotype.SingleGenotype SingleGenotype} for
+ * {@link jannovar.genotype.SingleGenotype SingleGenotype} for
  * VCF files with single samples.
  * @author Peter Robinson
  * @version 0.05 (5 May, 2013)
@@ -19,7 +19,7 @@ import jpedfilter.common.Genotype;
 public class MultipleGenotype extends GenotypeI {
 
   
-    /**  List of genotype calls (See {@link jpedfilter.common.Genotype Genotype})
+    /**  List of genotype calls (See {@link jannovar.common.Genotype Genotype})
      * for one variant.
      */
     private ArrayList<Genotype> callList = null;
@@ -30,7 +30,7 @@ public class MultipleGenotype extends GenotypeI {
     
     /**
      * The constructor takes lists of calls and qualities that have been parsed from 
-     * a single VCF line by the {@link jpedfilter.genotype.MultipleGenotypeFactory MultipleGenotypeFactory}.
+     * a single VCF line by the {@link jannovar.genotype.MultipleGenotypeFactory MultipleGenotypeFactory}.
      * @param calls A list of the genotype calls, one for each sample
      * @param qualities A list of the genotype Phred qualities, one for each sample.
      */

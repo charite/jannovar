@@ -1,4 +1,4 @@
-package jpedfilter.io;
+package jannovar.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import jpedfilter.exception.PedParseException;
-import jpedfilter.pedigree.Person;
-import jpedfilter.pedigree.Pedigree;
+import jannovar.exception.PedParseException;
+import jannovar.pedigree.Person;
+import jannovar.pedigree.Pedigree;
 
 /**
  * A class to parse standard Pedfiles (pedigree files) as known from linkage.
@@ -31,7 +31,7 @@ import jpedfilter.pedigree.Pedigree;
  * <li> 0 means unknown
  * </ul>
  * @author Peter Robinson
- * @version 0.02 (10 May, 2013)
+ * @version 0.03 (10 May, 2013)
  */
 public class PedFileParser {
     /**

@@ -1,4 +1,4 @@
-package jpedfilter.pedigree;
+package jannovar.pedigree;
 
 
 
@@ -10,12 +10,12 @@ import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.util.ArrayList;
 
-import jpedfilter.common.Disease;
-import jpedfilter.common.Genotype;
-import jpedfilter.exception.PedParseException;
-import jpedfilter.genotype.MultipleGenotype;
-import jpedfilter.io.PedFileParser;
-import jpedfilter.pedigree.Pedigree;
+import jannovar.common.Disease;
+import jannovar.common.Genotype;
+import jannovar.exception.PedParseException;
+import jannovar.genotype.MultipleGenotype;
+import jannovar.io.PedFileParser;
+import jannovar.pedigree.Pedigree;
 
 import org.junit.Test;
 import org.junit.AfterClass;

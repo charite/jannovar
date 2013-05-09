@@ -1,9 +1,9 @@
-package jpedfilter.io;
+package jannovar.io;
 
-import jpedfilter.common.Genotype;
-import jpedfilter.exception.VCFParseException;
-import jpedfilter.genotype.GenotypeFactoryA;
-import jpedfilter.genotype.GenotypeI;
+import jannovar.common.Genotype;
+import jannovar.exception.VCFParseException;
+import jannovar.genotype.GenotypeFactoryA;
+import jannovar.genotype.GenotypeI;
 
 import java.util.MissingFormatArgumentException;
 /**
@@ -38,7 +38,7 @@ public class VCFLine {
     /** The quality of the variant call, the QUAL column in the VCF file. */
     private float variant_quality=0f;
    
-    /** Factory object to create {@link jpedfilter.genotype.GenotypeI GenotypeI}
+    /** Factory object to create {@link jannovar.genotype.GenotypeI GenotypeI}
      * objects. Note that this is an abstract class that will be instantiated
      * depending on the information in the #CHROM line of the VCF file
      * (especially, whether there is a single sample or multiple
@@ -48,14 +48,14 @@ public class VCFLine {
     /**
      * An object that represents the genotype either of a single file or
      * of each of the samples in a multiple-sample VCF file. This must be
-     * instantiated with a {@link jpedfilter.genotype.SingleGenotype SingleGenotype}
-     * or a {@link jpedfilter.genotype.MultipleGenotype MultipleGenotype}
+     * instantiated with a {@link jannovar.genotype.SingleGenotype SingleGenotype}
+     * or a {@link jannovar.genotype.MultipleGenotype MultipleGenotype}
      * object.
      */
     private GenotypeI gtype=null;
     /**
      * A flag that if true causes the original VCF lines to be stored by the
-     * individual {@link jpedfilter.io.VCFLine VCFLine} objects.
+     * individual {@link jannovar.io.VCFLine VCFLine} objects.
      */
     private static boolean storeVCFlines=false;
       
@@ -77,7 +77,7 @@ public class VCFLine {
     /**
      * Calling this method causes the static variable {@link #storeVCFlines}
      * to be set to true, which causes the original VCF lines to be stored by the
-     * individual {@link jpedfilter.io.VCFLine VCFLine} objects.
+     * individual {@link jannovar.io.VCFLine VCFLine} objects.
      */
     public static void setStoreVCFLines() {
 	VCFLine.storeVCFlines = true;
@@ -92,7 +92,7 @@ public class VCFLine {
    
 
     /**
-     * Set the factory object to create {@link jpedfilter.genotype.GenotypeI GenotypeI} objects.
+     * Set the factory object to create {@link jannovar.genotype.GenotypeI GenotypeI} objects.
      * Note that we assume that all lines in the VCF file require the same factory
      * (single or multiple sample files), and thus make this a static class member.
      * <p>

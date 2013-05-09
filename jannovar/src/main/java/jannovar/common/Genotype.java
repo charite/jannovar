@@ -1,4 +1,4 @@
-package jpedfilter.common;
+package jannovar.common;
 
 
 /**

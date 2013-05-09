@@ -1,9 +1,9 @@
-package jpedfilter.genotype;
+package jannovar.genotype;
 
-import jpedfilter.genotype.GenotypeI;
-import jpedfilter.genotype.SingleGenotype;
-import jpedfilter.common.Genotype;
-import jpedfilter.exception.VCFParseException;
+import jannovar.genotype.GenotypeI;
+import jannovar.genotype.SingleGenotype;
+import jannovar.common.Genotype;
+import jannovar.exception.VCFParseException;
 
 /**
  * This class is inteded to create a Genotype object for

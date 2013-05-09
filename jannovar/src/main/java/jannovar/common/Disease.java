@@ -1,10 +1,10 @@
-package jpedfilter.common;
+package jannovar.common;
 
 
 /**
  * These codes will be used to denote the affected status of a
- * {@link jpedfilter.pedigree.Person Person} in a
- * {@link jpedfilter.pedigree.Pedigree Pedigree} }
+ * {@link jannovar.pedigree.Person Person} in a
+ * {@link jannovar.pedigree.Pedigree Pedigree} }
  * <P>
  * @author Peter Robinson
  * @version 0.03 (5 May, 2013)

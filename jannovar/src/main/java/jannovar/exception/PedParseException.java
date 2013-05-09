@@ -1,4 +1,4 @@
-package jpedfilter.exception;
+package jannovar.exception;
 
 
 
@@ -7,7 +7,7 @@ package jpedfilter.exception;
  * @author Peter Robinson 
  * @version 0.03 (April 28,2013)
  */
-public class PedParseException extends Exception {
+public class PedParseException extends JannovarException {
 
     public static final long serialVersionUID = 2L;
 

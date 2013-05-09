@@ -1,12 +1,12 @@
-package jpedfilter.pedigree;
+package jannovar.pedigree;
 
-import jpedfilter.exception.PedParseException;
-import jpedfilter.common.Disease;
+import jannovar.exception.PedParseException;
+import jannovar.common.Disease;
 /**
  * A class representing one individual within a
- * {@link jpedfilter.pedigree.Pedigree Pedigree}.
+ * {@link jannovar.pedigree.Pedigree Pedigree}.
  * @author Peter Robinson
- * @version 0.0.2 (7 May, 2013)
+ * @version 0.03 (10 May, 2013)
  */
 public class Person {
     /**
@@ -56,7 +56,7 @@ public class Person {
     private boolean isFounder = false;
     /**
      * This variable is used to enable flexible searching within the
-     * {@link jpedfilter.pedigree.Pedigree Pedigree} object. It corresponds
+     * {@link jannovar.pedigree.Pedigree Pedigree} object. It corresponds
      * to the index of the Person in the list of persons of the pedigree.
      */
     private int index;

@@ -1,6 +1,6 @@
-package jpedfilter.genotype;
+package jannovar.genotype;
 
-import jpedfilter.common.Genotype;
+import jannovar.common.Genotype;
 
 /**
  * THis is the superclass of both SingleGenotype and MultipleGenotype. It
@@ -15,7 +15,7 @@ import jpedfilter.common.Genotype;
  * <p>
  * Need to implement new features.
  * @author Peter Robinson
- * @version 0.02 (7 May, 2013)
+ * @version 0.03 (10 May, 2013)
  */
 public abstract class GenotypeI {
 

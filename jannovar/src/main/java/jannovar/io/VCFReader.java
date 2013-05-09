@@ -1,4 +1,4 @@
-package jpedfilter.io;
+package jannovar.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import jpedfilter.exception.VCFParseException;
-import jpedfilter.genotype.GenotypeFactoryA;
-import jpedfilter.genotype.SingleGenotypeFactory;
-import jpedfilter.genotype.MultipleGenotypeFactory;
+import jannovar.exception.VCFParseException;
+import jannovar.genotype.GenotypeFactoryA;
+import jannovar.genotype.SingleGenotypeFactory;
+import jannovar.genotype.MultipleGenotypeFactory;
 
 /**
  * Parses a VCF file and extracts Variants from each of the variant lines of
@@ -33,7 +33,7 @@ import jpedfilter.genotype.MultipleGenotypeFactory;
  * specified in the format. The first sub-field must always be the genotype (GT).
  * <P>
  * The classes relies on the abstract factory pattern to create appropriate
- * {@link jpedfilter.genotype.GenotypeI GenotypeI}
+ * {@link jannovar.genotype.GenotypeI GenotypeI}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
  * @version 0.14 (5 May, 2013)
@@ -58,7 +58,7 @@ public class VCFReader {
     /** The total number of lines with variants.*/
     private int total_number_of_variants;
     
-    /** Factory object to create {@link jpedfilter.genotype.GenotypeI GenotypeI} objects. Note that
+    /** Factory object to create {@link jannovar.genotype.GenotypeI GenotypeI} objects. Note that
      * this is an abstract class that will be instantiated depending on the information in the
      * #CHROM line of the VCF file (especially, whether there is a single sample or multiple
      * samples).
@@ -286,7 +286,7 @@ public class VCFReader {
      * #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	name1  name2 ...
      * </PRE>
      * We will use the number of sample names to determine which subclass of the abstract
-     * factory {@link jpedfilter.genotype.GenotypeFactoryA GenotypeFactoryA} to instantiate.
+     * factory {@link jannovar.genotype.GenotypeFactoryA GenotypeFactoryA} to instantiate.
      */
     public void parse_chrom_line(String line) throws VCFParseException
     {

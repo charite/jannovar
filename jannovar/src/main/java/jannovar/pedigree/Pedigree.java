@@ -1,13 +1,13 @@
-package jpedfilter.pedigree;
+package jannovar.pedigree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-import jpedfilter.exception.PedParseException;
-import jpedfilter.genotype.MultipleGenotype;
-import jpedfilter.common.Disease;
-import jpedfilter.common.Genotype;
+import jannovar.exception.PedParseException;
+import jannovar.genotype.MultipleGenotype;
+import jannovar.common.Disease;
+import jannovar.common.Genotype;
 
 /**
  * Model a single-family pedigree in an whole-exome sequencing project.
@@ -133,7 +133,7 @@ public class Pedigree {
     /**
      * Initialize the three lists, {@link #affectedList},
      * {@link #parentList} and {@link #unaffectedList}.
-     * This will put each {@link jpedfilter.pedigree.Person Person}
+     * This will put each {@link jannovar.pedigree.Person Person}
      * object with a known Disease status into one of these three
      * categories. Persons with an unknown Disease status are not
      * included.
@@ -220,13 +220,13 @@ public class Pedigree {
     /**
      * This function checks whether the Genotypes passed are compatible with
      * autosomal dominant inheritance. The
-     * {@link jpedfilter.genotype.MultipleGenotype MultipleGenotype}
+     * {@link jannovar.genotype.MultipleGenotype MultipleGenotype}
      * object passed to this function is expected to represent all of the variants found in
      * a certain gene (possibly after filtering for rarity or predicted pathogenicity).
      * For autosomal dominant inheritance, there must be at least one Variant that
      * is shared by all affected persons but no unaffected persons in the pedigree.
      * The samples represented by the
-     * {@link jpedfilter.genotype.MultipleGenotype MultipleGenotype} must be in
+     * {@link jannovar.genotype.MultipleGenotype MultipleGenotype} must be in
      * the same order as the list of Persons contained in this pedigree.
      */
     public boolean isCompatibleWithAutosomalDominant(ArrayList<MultipleGenotype> gtypeList) {
