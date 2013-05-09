@@ -115,6 +115,27 @@ public class VCFReaderTest  {
 	String sampl2 = sampleList.get(1);
 	Assert.assertEquals("Mentalist02_dup",sampl2);
     }
+
+    @Test(expected =  VCFParseException.class)  
+	public void testBadChromosomeLine1() throws VCFParseException {
+	String chrlin = "#CHROM	POSS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	Mentalist02	"+
+		  "Mentalist02_dup	Mentalist02_dup2	Mentalist02_dup3	Mentalist02_dup4	Mentalist02_dup5\n";
+	reader.parse_chrom_line(chrlin);
+    }
+
+    @Test(expected =  VCFParseException.class)  
+	public void testBadChromosomeLine2() throws VCFParseException {
+	String chrlin = "#CHROM	POS	ID	RE	ALT	QUAL	FILTER	INFO	FORMAT	Mentalist02	"+
+		  "Mentalist02_dup	Mentalist02_dup2	Mentalist02_dup3	Mentalist02_dup4	Mentalist02_dup5\n";
+	reader.parse_chrom_line(chrlin);
+    }
+
+    /** This CHROM line does not contain a sample name and is thus invalid. */
+    @Test(expected =  VCFParseException.class)  
+	public void testBadChromosomeLine3() throws VCFParseException {
+	String chrlin = "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT\n";
+	reader.parse_chrom_line(chrlin);
+    }
      
 
 }

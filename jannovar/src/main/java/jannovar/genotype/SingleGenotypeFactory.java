@@ -1,7 +1,7 @@
 package jannovar.genotype;
 
-import jannovar.genotype.GenotypeI;
-import jannovar.genotype.SingleGenotype;
+
+import jannovar.genotype.GenotypeCall;
 import jannovar.common.Genotype;
 import jannovar.exception.VCFParseException;
 
@@ -28,8 +28,8 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
      * the array A has ten fields
      * @param A an array with the fields of the VCF line.
      */
-    public SingleGenotype createGenotype(String A[]) throws VCFParseException {
-	SingleGenotype gt = parse_genotype(A[8],A[9]);
+    public GenotypeCall createGenotype(String A[]) throws VCFParseException {
+	GenotypeCall gt = parse_genotype(A[8],A[9]);
 	return gt;
     }
 
@@ -40,7 +40,7 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
      * @param format VCF FORMAT field, e.g., GT:PL:GQ	
      * @param sample VCF sample field, e.g., 1/1:21,9,0:17
      */
-    private SingleGenotype  parse_genotype(String format, String sample) throws VCFParseException {
+    private GenotypeCall  parse_genotype(String format, String sample) throws VCFParseException {
 	
 	/* one of HOMOZYGOUS_REF,HOMOZYGOUS_VAR, HETEROZYGOUS or UNKNOWN */
 	Genotype call= Genotype.UNINITIALIZED;
@@ -83,7 +83,7 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
 		throw new VCFParseException(err); 
 	    }
 	}
-	SingleGenotype gt = new SingleGenotype(call,genotype_quality);
+	GenotypeCall gt = new GenotypeCall(call,genotype_quality);
 	return gt;
     }
 

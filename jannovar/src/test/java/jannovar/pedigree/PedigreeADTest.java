@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import jannovar.common.Disease;
 import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
-import jannovar.genotype.MultipleGenotype;
+import jannovar.genotype.GenotypeCall;
 import jannovar.io.PedFileParser;
 import jannovar.pedigree.Pedigree;
 
@@ -65,16 +65,16 @@ public class PedigreeADTest {
     }
         
         
-    private MultipleGenotype constructMultipleGenotype(Genotype... calls) {
+    private GenotypeCall constructGenotypeCall(Genotype... calls) {
         ArrayList<Genotype> lst = new ArrayList<Genotype>();
         for (Genotype g: calls) lst.add(g);
-        return new MultipleGenotype(lst,null);
+        return new GenotypeCall(lst,null);
     }
     
     @Test public void testADinheritance1() {
-        MultipleGenotype mg = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+        GenotypeCall mg = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg);
         boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
         Assert.assertEquals(false,b);
@@ -83,9 +83,9 @@ public class PedigreeADTest {
     
     /** Correct inheritance pattern! */
     @Test public void testADinheritance2() {
-        MultipleGenotype mg = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+        GenotypeCall mg = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg);
         boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
         Assert.assertEquals(true,b);  
@@ -93,9 +93,9 @@ public class PedigreeADTest {
     
     /** An affected is homozygous alt => cannot be right variant! */
     @Test public void testADinheritance3() {
-        MultipleGenotype mg = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+        GenotypeCall mg = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HOMOZYGOUS_ALT,Genotype.HOMOZYGOUS_REF);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg);
         boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
         Assert.assertEquals(false,b);  
@@ -103,9 +103,9 @@ public class PedigreeADTest {
     
     /** An affected is homozygous ref => cannot be right variant! */
     @Test public void testADinheritance4() {
-        MultipleGenotype mg = constructMultipleGenotype(Genotype.HOMOZYGOUS_REF,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+        GenotypeCall mg = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg);
         boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
         Assert.assertEquals(false,b);  
@@ -114,9 +114,9 @@ public class PedigreeADTest {
     
      /** An unaffected person is heterozyous -> FALSE */
     @Test public void testADinheritance5() {
-        MultipleGenotype mg = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+        GenotypeCall mg = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg);
         boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
         Assert.assertEquals(false,b);  

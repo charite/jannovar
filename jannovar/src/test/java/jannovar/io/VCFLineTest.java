@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import jannovar.io.VCFLine;
 import jannovar.io.VCFReader;
 import jannovar.exception.VCFParseException;
-import jannovar.genotype.GenotypeI;
+import jannovar.genotype.GenotypeCall;
 
 import org.junit.Test;
 import org.junit.AfterClass;
@@ -105,18 +105,15 @@ public class VCFLineTest {
 
     /**
      * Line 2 is ...0/1:28,20:48:99:515,0,794
-     * Thus, we expect "Het"
+     * Thus, we expect "0/1"
      */
     @Test public void testIsGenotype() 
     {
 	VCFLine line = VCFLineList.get(2);
-	GenotypeI GI = line.getGenotype();
+	GenotypeCall GI = line.getGenotype();
 	String gt = GI.get_genotype_as_string();
-	Assert.assertEquals("Het",gt);
-	Assert.assertEquals(true,GI.is_heterozygous() );
-	Assert.assertEquals(false,GI.is_homozygous_alt() );
-	Assert.assertEquals(false,GI.is_homozygous_ref() );
-	Assert.assertEquals(false,GI.is_error());
+	Assert.assertEquals("0/1",gt);
+	
     }
     
 

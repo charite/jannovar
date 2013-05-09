@@ -12,7 +12,7 @@ import jannovar.exception.VCFParseException;
 import jannovar.io.VCFLine;
 import jannovar.io.VCFReader;
 import jannovar.common.Genotype;
-import jannovar.genotype.GenotypeI;
+import jannovar.genotype.GenotypeCall;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
@@ -62,7 +62,7 @@ public class MultiSampleVCFReaderTest  {
     @Test public void testVariant1genotype() {
         VCFLine line = this.vcfList.get(0);
         //line.dump_VCF_line_for_debug();
-        GenotypeI gt = line.getGenotype();
+        GenotypeCall gt = line.getGenotype();
         //System.out.println(line.get_genotype_as_string());
         Assert.assertEquals(Genotype.NOT_OBSERVED, gt.getGenotypeInIndividualN(0));
         Assert.assertEquals(Genotype.HOMOZYGOUS_ALT, gt.getGenotypeInIndividualN(1));
@@ -76,7 +76,7 @@ public class MultiSampleVCFReaderTest  {
     @Test(expected =  IllegalArgumentException.class)   public void testVariant1genotypeBadIndex() {
         VCFLine line = this.vcfList.get(0);
         //line.dump_VCF_line_for_debug();
-        GenotypeI gt = line.getGenotype();
+        GenotypeCall gt = line.getGenotype();
         Genotype g = gt.getGenotypeInIndividualN(17);
         Assert.assertEquals(Genotype.NOT_OBSERVED, g);
     }
@@ -84,7 +84,7 @@ public class MultiSampleVCFReaderTest  {
     @Test(expected =  IllegalArgumentException.class)   public void testVariant1genotypeBadIndex2() {
         VCFLine line = this.vcfList.get(0);
         //line.dump_VCF_line_for_debug();
-        GenotypeI gt = line.getGenotype();
+        GenotypeCall gt = line.getGenotype();
         Genotype g = gt.getGenotypeInIndividualN(-1);
         Assert.assertEquals(Genotype.NOT_OBSERVED, g);
     }
@@ -111,7 +111,7 @@ public class MultiSampleVCFReaderTest  {
     @Test public void testVariant2genotype() {
         VCFLine line = this.vcfList.get(1);
         //line.dump_VCF_line_for_debug();
-        GenotypeI gt = line.getGenotype();
+        GenotypeCall gt = line.getGenotype();
         //System.out.println(line.get_genotype_as_string());
         Assert.assertEquals(Genotype.HETEROZYGOUS, gt.getGenotypeInIndividualN(0));
         Assert.assertEquals(Genotype.HOMOZYGOUS_ALT, gt.getGenotypeInIndividualN(1));

@@ -3,18 +3,19 @@ package jannovar.exome;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import jannovar.common.Constants;
-import jannovar.common.VariantType;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-import jannovar.exome.GenotypeI;
+import jannovar.common.Constants;
+import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.VCFParseException;
+import jannovar.genotype.GenotypeCall;
 
-/* A class that is used to hold information about the individual variants 
+
+/** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.15 (28 April, 2013)
+ * @version 0.16 (9 May, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -33,7 +34,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * {@link jannovar.exome.MultipleGenotype MultipleGenotype}
      * for VCF files with multiple samples.
      */
-    private GenotypeI genotype=null;
+    private GenotypeCall genotype=null;
     /** The PHRED score for the variant call. */
     private int variant_quality;
     /** Original VCF line from which this mutation comes. */
@@ -91,7 +92,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.ref = s;
     }
 
-    public void setGenotype(GenotypeI gtype) {
+    public void setGenotype(GenotypeCall gtype) {
 	this.genotype = gtype;
     }
 
@@ -159,11 +160,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 
 
-    public boolean is_homozygous_alt() { return this.genotype.is_homozygous_alt(); }
-    public boolean is_homozygous_ref() { return this.genotype.is_homozygous_ref(); }
-    public boolean is_heterozygous() { return this.genotype.is_heterozygous(); }
-    public boolean is_unknown_genotype() { return this.genotype.is_unknown_genotype(); }
-    public boolean genotype_not_initialized() { return this.genotype.genotype_not_initialized(); }
+   
     /** 
      * @return true if this variant is a nonsynonymous substitution (missense).
      */
@@ -174,12 +171,10 @@ public class Variant implements Comparable<Variant>, Constants {
     }
     public String getVCFline() { return this.vcfLine; }
    
-    public char ref_as_char() { return ref.charAt(0); }
-    public char var_as_char() { return var.charAt(0); }
-
+  
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
     
-     /**
+    /**
      * @return an integer representation of the chromosome  (note: X=23, Y=24).
      */
     public int get_chromosome() { return chromosome; }
@@ -192,7 +187,9 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
     
    
-    public boolean passes_variant_quality_threshold(int threshold) { return this.variant_quality >= threshold; }
+    /**
+     * @return The PHRED quality of this variant call.
+     */
     public float get_variant_quality() { return this.variant_quality; }
     public String get_genotype_as_string() {
 	return this.genotype.get_genotype_as_string();

@@ -9,14 +9,19 @@ import jannovar.common.Genotype;
 
 /**
  * This class is intended to encapsulate a genotype for a single
- * variant (i.e., line in a VCF file) for a VCF file with multiple
- * samples - thus, MultipleGenotype as opposed to 
- * {@link jannovar.genotype.SingleGenotype SingleGenotype} for
- * VCF files with single samples.
+ * variant (i.e., line in a VCF file) for a VCF file with a single or will multiple
+ * samples. The individual calls for each sample are stored in 
+ * {@link #callList}, and the corresponding qualities are stored in {@link #qualityList}.
+ * <P>
+ * TODO: Probably it will be good to make a separate class to store the quality of the
+ * calls in a more sophisticated way.
+ * <P>
+ * Note that this class was renamed from MultipleGenotypwe on 9 May, 2013, and the
+ * class SingleGenotype was merged into it.
  * @author Peter Robinson
- * @version 0.05 (5 May, 2013)
+ * @version 0.07 (9 May, 2013)
  */
-public class MultipleGenotype extends GenotypeI {
+public class GenotypeCall  {
 
   
     /**  List of genotype calls (See {@link jannovar.common.Genotype Genotype})
@@ -31,15 +36,26 @@ public class MultipleGenotype extends GenotypeI {
     /**
      * The constructor takes lists of calls and qualities that have been parsed from 
      * a single VCF line by the {@link jannovar.genotype.MultipleGenotypeFactory MultipleGenotypeFactory}.
+     * By assumption, there are multiple samples, which are described elsewhere by a PED file.
      * @param calls A list of the genotype calls, one for each sample
      * @param qualities A list of the genotype Phred qualities, one for each sample.
      */
-    public MultipleGenotype(ArrayList<Genotype> calls,ArrayList<Integer> qualities) {
+    public GenotypeCall(ArrayList<Genotype> calls,ArrayList<Integer> qualities) {
 	this.callList = calls;
 	this.qualityList = qualities;
+	//System.out.println("Warning: GenotypeCall  not fully implemented");
+    }
 
-	//System.out.println("Warning: MultipleGenotype not fully implemented");
 
+    /**
+     * This constructor is inteded to be used for VCF files with a single
+     * sample, which by assumption contains data from a patient.
+     */
+    public GenotypeCall(Genotype gt, Integer qual) {
+	this.callList = new ArrayList<Genotype>();
+	this.callList.add(gt);
+	this.qualityList = new ArrayList<Integer>();
+	this.qualityList.add(qual);
     }
 
 
@@ -81,6 +97,11 @@ public class MultipleGenotype extends GenotypeI {
 	return this.callList.get(n);
     }
 
-      @Override public int getNumberOfIndividuals() {return this.callList.size(); }
+    /**
+     * This method gets the number of individuals included in the
+     * genotype call. This must be equal to the number of samples
+     * in the VCF file.
+     */
+    public int getNumberOfIndividuals() {return this.callList.size(); }
 
 }

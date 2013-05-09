@@ -1,6 +1,6 @@
 package jannovar.genotype;
 
-import jannovar.genotype.GenotypeI;
+
 import jannovar.exception.VCFParseException;
 
 /**
@@ -31,7 +31,7 @@ public abstract class GenotypeFactoryA {
      * the future.
      * @param A an array of Strings with the tab-separated fields of a VCF line.
      */
-    public abstract GenotypeI createGenotype(String A[])  throws VCFParseException;
+    public abstract GenotypeCall createGenotype(String A[])  throws VCFParseException;
 
 
     /**

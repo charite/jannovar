@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 
 import jannovar.exception.PedParseException;
-import jannovar.genotype.MultipleGenotype;
+import jannovar.genotype.GenotypeCall;
 import jannovar.common.Disease;
 import jannovar.common.Genotype;
 
@@ -40,7 +40,7 @@ import jannovar.common.Genotype;
  * currently.
  * 
  * @author Peter Robinson
- * @version 0.05 (10 May, 2013)
+ * @version 0.06 (9 May, 2013)
  */
 public class Pedigree {
     /**
@@ -220,17 +220,17 @@ public class Pedigree {
     /**
      * This function checks whether the Genotypes passed are compatible with
      * autosomal dominant inheritance. The
-     * {@link jannovar.genotype.MultipleGenotype MultipleGenotype}
+     * {@link jannovar.genotype.GenotypeCall GenotypeCall}
      * object passed to this function is expected to represent all of the variants found in
      * a certain gene (possibly after filtering for rarity or predicted pathogenicity).
      * For autosomal dominant inheritance, there must be at least one Variant that
      * is shared by all affected persons but no unaffected persons in the pedigree.
      * The samples represented by the
-     * {@link jannovar.genotype.MultipleGenotype MultipleGenotype} must be in
+     * {@link jannovar.genotype.GenotypeCall GenotypeCall} must be in
      * the same order as the list of Persons contained in this pedigree.
      */
-    public boolean isCompatibleWithAutosomalDominant(ArrayList<MultipleGenotype> gtypeList) {
-        for (MultipleGenotype multiGT : gtypeList){
+    public boolean isCompatibleWithAutosomalDominant(ArrayList<GenotypeCall> gtypeList) {
+        for (GenotypeCall multiGT : gtypeList){
           int N = multiGT.getNumberOfIndividuals();
           boolean variantCompatible=true; /* Is the current variant compatible with AD? */
           int n_affected_with_het = 0;
@@ -275,7 +275,7 @@ public class Pedigree {
      * @param multiGT Genotypes of all persons in the pedigree for the current variant.
      * @return true if all affecteds have a HOMOZYGOUS_ALT genotype.
      */
-    private boolean affectedsAreHomozygousALT(MultipleGenotype multiGT) {
+    private boolean affectedsAreHomozygousALT(GenotypeCall multiGT) {
 	for (Person p : this.affectedList) {
 	    int idx = p.getIndex();
 	    Genotype gt = multiGT.getGenotypeInIndividualN(idx);
@@ -290,7 +290,7 @@ public class Pedigree {
      * @param multiGT Genotypes of all persons in the pedigree for the current variant.
      * @return true if all of the parents are heterozygous for this variant.
      */
-    private boolean parentsAreHeterozygous(MultipleGenotype multiGT) {
+    private boolean parentsAreHeterozygous(GenotypeCall multiGT) {
 	for (Person p : this.parentList) {
 	    int idx = p.getIndex();
 	    Genotype gt = multiGT.getGenotypeInIndividualN(idx);
@@ -308,7 +308,7 @@ public class Pedigree {
      * @param multiGT Genotypes of all persons in the pedigree for the current variant.
      * @return true if none of the unaffecteds has a HOMOZYGOUS_ALT genotype.
      */
-     private boolean unaffectedsAreNotHomozygousALT(MultipleGenotype multiGT) {
+     private boolean unaffectedsAreNotHomozygousALT(GenotypeCall multiGT) {
 	 for (Person p : this.unaffectedList) {
 	     int idx = p.getIndex();
 	     Genotype gt = multiGT.getGenotypeInIndividualN(idx);
@@ -325,7 +325,7 @@ public class Pedigree {
      * @param multiGT Genotypes of all persons in the pedigree for the current variant.
      * @return true if all affecteds have a HETEROZYGOUS genotype.
      */
-    private boolean affectedsAreHeterozygous(MultipleGenotype multiGT) {
+    private boolean affectedsAreHeterozygous(GenotypeCall multiGT) {
 	for (Person p : this.affectedList) {
 	    int idx = p.getIndex();
 	    Genotype gt = multiGT.getGenotypeInIndividualN(idx);
@@ -341,7 +341,7 @@ public class Pedigree {
      * @param multiGT Genotypes of all persons in the pedigree for the current variant.
      * @return true if only one of the parent has a HETEROZYGOUS genotype.
      */
-    private boolean onlyOneParentIsHeterozygous(MultipleGenotype multiGT) {
+    private boolean onlyOneParentIsHeterozygous(GenotypeCall multiGT) {
 	int n=0;
 	for (Person p : this.parentList) {
 	    int idx = p.getIndex();
@@ -357,7 +357,7 @@ public class Pedigree {
 
     
 
-    private boolean fatherIsHeterozygous(MultipleGenotype multiGT) {
+    private boolean fatherIsHeterozygous(GenotypeCall multiGT) {
 	for (Person p : this.parentList) {
 	    int idx = p.getIndex();
 	    Genotype gt = multiGT.getGenotypeInIndividualN(idx);
@@ -367,7 +367,7 @@ public class Pedigree {
 	return false;
     }
 
-     private boolean motherIsHeterozygous(MultipleGenotype multiGT) {
+     private boolean motherIsHeterozygous(GenotypeCall multiGT) {
 	for (Person p : this.parentList) {
 	    int idx = p.getIndex();
 	    Genotype gt = multiGT.getGenotypeInIndividualN(idx);
@@ -387,8 +387,8 @@ public class Pedigree {
      * @param gtypeList a List of Genotypes representing all variants seen in some gene
      * @return true if the distribution of variants is compatible with a homozygous mutation.
      */
-    public boolean containsCompatibleHomozygousVariant(ArrayList<MultipleGenotype> gtypeList) {
-	for (MultipleGenotype multiGT : gtypeList){
+    public boolean containsCompatibleHomozygousVariant(ArrayList<GenotypeCall> gtypeList) {
+	for (GenotypeCall multiGT : gtypeList){
 	    if (affectedsAreHomozygousALT(multiGT) &&
 		parentsAreHeterozygous(multiGT) &&
 		unaffectedsAreNotHomozygousALT(multiGT))
@@ -409,7 +409,7 @@ public class Pedigree {
      * @param patGT A het mutation candidate that is heterozygous in father only
      * @return true if none of the unaffecteds are compound het for this pair of variants.
      */
-    private boolean validCompoundHet(MultipleGenotype matGT, MultipleGenotype patGT) {
+    private boolean validCompoundHet(GenotypeCall matGT, GenotypeCall patGT) {
 	for (Person p : this.unaffectedList) {
 	    int i = p.getIndex();
 	    Genotype g1 = matGT.getGenotypeInIndividualN(i);
@@ -433,21 +433,21 @@ public class Pedigree {
      * whether the maternal-het mutations are compatible with the paternal het mutations, and
      * it returns all variants for which there are compatible pairs.
      */
-    public boolean isCompatibleWithAutosomalRecessive(ArrayList<MultipleGenotype> gtypeList) {
+    public boolean isCompatibleWithAutosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
 	if (containsCompatibleHomozygousVariant(gtypeList))
 	    return true;
 	/* If we get here, there is no compatible homozygous mutation. 
 	   Check for compound heterozygous mutations. */
 	boolean hasMaternallyInheritedCompatibleVariant = false;
 	boolean hasPaternallyInheritedCompatibleVariant = false;
-	ArrayList<MultipleGenotype> paternal = new ArrayList<MultipleGenotype> ();
-	ArrayList<MultipleGenotype> maternal = new ArrayList<MultipleGenotype> ();
+	ArrayList<GenotypeCall> paternal = new ArrayList<GenotypeCall> ();
+	ArrayList<GenotypeCall> maternal = new ArrayList<GenotypeCall> ();
 
 	if (this.parentList.size()>2) {
 	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parentsis not supported!");
 	}
 
-	for (MultipleGenotype multiGT : gtypeList) {
+	for (GenotypeCall multiGT : gtypeList) {
 	    if (affectedsAreHeterozygous(multiGT) &&
 		onlyOneParentIsHeterozygous(multiGT) &&
 		unaffectedsAreNotHomozygousALT(multiGT) ) {
@@ -462,13 +462,13 @@ public class Pedigree {
 		}
 	    }
 	}  
-	/* When we get here, we have (potentially empty) lists of MultipleGenotypes that are
+	/* When we get here, we have (potentially empty) lists of GenotypeCalls that are
 	   heterozygous in the father or mother. If there is a combination of maternal and paternal
 	   genotypes that could be a valid compound heterozygous mutation, then return true!
 	   The strategy is to iterate over paternal variants and check all maternal variants for
 	   compatibility. */
-	for (MultipleGenotype patGT : paternal) {
-	    for (MultipleGenotype matGT : maternal) {
+	for (GenotypeCall patGT : paternal) {
+	    for (GenotypeCall matGT : maternal) {
 		System.out.println("BLA: patGT:" + patGT + "  matGT=" + matGT);
 		if (validCompoundHet(matGT,patGT))
 		    return true;

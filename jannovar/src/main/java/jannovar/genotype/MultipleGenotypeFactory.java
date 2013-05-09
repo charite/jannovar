@@ -2,8 +2,8 @@ package jannovar.genotype;
 
 import java.util.ArrayList;
 
-import jannovar.genotype.GenotypeI;
-import jannovar.genotype.MultipleGenotype;
+
+import jannovar.genotype.GenotypeCall;
 import jannovar.common.Genotype;
 import jannovar.exception.VCFParseException;
 
@@ -40,7 +40,7 @@ import jannovar.exception.VCFParseException;
  * @see jannovar.genotype.SingleGenotypeFactory
  * @see jannovar.genotype.MultipleGenotype
  * @author Peter N Robinson
- * @version 0.11 (10 May, 2013)
+ * @version 0.12 (10 May, 2013)
  */
 public class MultipleGenotypeFactory extends GenotypeFactoryA {
     /**
@@ -68,18 +68,15 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 
     /** 
      * This is the core method of the factory, and creates
-     * a Genotype object. Currently, the Jannovar has
-     * two concrete implementations of the {@link jannovar.genotype.GenotypeI GenotypeI}
-     * interface, for single and multiple-sample VCF files. The interface
-     * could be extended to allow for cool stuff such as DP4 analysis in
-     * the future.
+     * a GenotypeCall object that represents a multiple-sample 
+     * VCF file. 
      * <P>
      * Note that we do not check here how many fields there are for the 
      * genotypes (there should be the same number in every line). However,
      * client code probably should check that the number of individual
      * genotypes is the same for each line.
      */
-    public MultipleGenotype createGenotype(String []A) throws VCFParseException {
+    public GenotypeCall createGenotype(String []A) throws VCFParseException {
 	/* The following two lines have the effect of reseting the ArrayLists
 	  * for each new line. */
 	this.callList = new ArrayList<Genotype>();
@@ -93,7 +90,7 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 	    //System.out.println("i="+i+": " + A[i]);
 	    parseGenotypeField(A[i]);
 	}
-	MultipleGenotype mgt = new MultipleGenotype(callList,qualityList);
+	GenotypeCall  mgt = new GenotypeCall(callList,qualityList);
 	return mgt;
     }
 

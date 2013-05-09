@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import jannovar.common.Disease;
 import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
-import jannovar.genotype.MultipleGenotype;
+import jannovar.genotype.GenotypeCall;
 import jannovar.io.PedFileParser;
 import jannovar.pedigree.Pedigree;
 
@@ -56,10 +56,10 @@ public class PedigreeARTest {
             Assert.assertEquals(6,n);
         }
 	
-    private MultipleGenotype constructMultipleGenotype(Genotype... calls) {
+    private GenotypeCall constructGenotypeCall(Genotype... calls) {
         ArrayList<Genotype> lst = new ArrayList<Genotype>();
         for (Genotype g: calls) lst.add(g);
-        return new MultipleGenotype(lst,null);
+        return new GenotypeCall(lst,null);
     }
     
 
@@ -67,14 +67,14 @@ public class PedigreeARTest {
      * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
      */
     @Test public void testARinheritance1() {
-        MultipleGenotype mg1 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	MultipleGenotype mg2 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	GenotypeCall mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
 	/* mg3 is compatible with linkage. */
-	MultipleGenotype mg3 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
+	GenotypeCall mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
 							 Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,Genotype.HOMOZYGOUS_REF);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
 	lst.add(mg3);
@@ -87,14 +87,14 @@ public class PedigreeARTest {
      * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
      */
     @Test public void testARinheritance3() {
-        MultipleGenotype mg1 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	MultipleGenotype mg2 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	GenotypeCall mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
 	/* mg3 is compatible with linkage */
-	MultipleGenotype mg3 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
+	GenotypeCall mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
 							 Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,Genotype.HOMOZYGOUS_REF);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
 	lst.add(mg3);
@@ -107,14 +107,14 @@ public class PedigreeARTest {
      * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
      */
     @Test public void testARinheritance4() {
-        MultipleGenotype mg1 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	MultipleGenotype mg2 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	GenotypeCall mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
 	/* mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET */
-	MultipleGenotype mg3 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
+	GenotypeCall mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
 							 Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
 	lst.add(mg3);
@@ -136,13 +136,13 @@ public class PedigreeARTest {
      Here, mg1 is paternal het, mg2 is maternal het
      */
     @Test public void testARinheritanceCompoundHet1() {
-        MultipleGenotype mg1 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	MultipleGenotype mg2 = constructMultipleGenotype(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	GenotypeCall mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
 	/* mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET */
 
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
 	
@@ -163,13 +163,13 @@ public class PedigreeARTest {
      Here, mg1 is paternal het, mg2 is maternal het, but one of theunaffecteds is compound het (dau2
      */
     @Test public void testARinheritanceCompoundHet2() {
-        MultipleGenotype mg1 = constructMultipleGenotype(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	MultipleGenotype mg2 = constructMultipleGenotype(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	GenotypeCall mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
 	/* mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET */
 
-        ArrayList<MultipleGenotype> lst = new ArrayList<MultipleGenotype>();
+        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
 	

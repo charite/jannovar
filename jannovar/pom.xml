@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.charite.compbio</groupId>
   <artifactId>jannovar</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -60,6 +60,20 @@
       <configuration>
 	<show>private</show>
       </configuration>
+    </plugin>
+    <plugin>
+      <!-- This plugin generates a test coverage analysis -->
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>cobertura-maven-plugin</artifactId>
+      <version>2.5.1</version>
+      <executions>
+	<execution>
+	  <phase>process-classes</phase>
+	  <goals>
+	    <goal>cobertura</goal>
+	  </goals>
+	</execution>
+      </executions>
     </plugin>
    </plugins>
   </build>

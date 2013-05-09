@@ -3,7 +3,7 @@ package jannovar.io;
 import jannovar.common.Genotype;
 import jannovar.exception.VCFParseException;
 import jannovar.genotype.GenotypeFactoryA;
-import jannovar.genotype.GenotypeI;
+import jannovar.genotype.GenotypeCall;
 
 import java.util.MissingFormatArgumentException;
 /**
@@ -47,12 +47,9 @@ public class VCFLine {
     private static GenotypeFactoryA genofactory=null;
     /**
      * An object that represents the genotype either of a single file or
-     * of each of the samples in a multiple-sample VCF file. This must be
-     * instantiated with a {@link jannovar.genotype.SingleGenotype SingleGenotype}
-     * or a {@link jannovar.genotype.MultipleGenotype MultipleGenotype}
-     * object.
+     * of each of the samples in a multiple-sample VCF file. 
      */
-    private GenotypeI gtype=null;
+    private GenotypeCall gtype=null;
     /**
      * A flag that if true causes the original VCF lines to be stored by the
      * individual {@link jannovar.io.VCFLine VCFLine} objects.
@@ -69,7 +66,7 @@ public class VCFLine {
      * @return A Genotype object representing the genotype of a single sample 
      * or multiple samples for this variant
      */
-    public GenotypeI getGenotype() { return this.gtype; }
+    public GenotypeCall getGenotype() { return this.gtype; }
     public String get_genotype_as_string() {
 	return this.gtype.get_genotype_as_string();
     }
