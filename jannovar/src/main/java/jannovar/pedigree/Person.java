@@ -111,6 +111,8 @@ public class Person {
     
     public Disease getDiseaseStatus() { return this.disease; }
 
+    public boolean isAffected() { return this.disease == Disease.AFFECTED; }
+
     public boolean isMale() { return this.sex == Sex.MALE; }
 
     public boolean isFemale() { return this.sex == Sex.FEMALE; }

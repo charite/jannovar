@@ -8,6 +8,7 @@ import jannovar.exception.PedParseException;
 import jannovar.genotype.GenotypeCall;
 import jannovar.common.Disease;
 import jannovar.common.Genotype;
+import jannovar.exome.Variant;
 
 /**
  * Model a single-family pedigree in an whole-exome sequencing project.
@@ -40,7 +41,7 @@ import jannovar.common.Genotype;
  * currently.
  * 
  * @author Peter Robinson
- * @version 0.06 (9 May, 2013)
+ * @version 0.08 (12 May, 2013)
  */
 public class Pedigree {
     /**
@@ -72,9 +73,15 @@ public class Pedigree {
      * Note that this list is a subset of the persons in {@link #personList}.
      */
     private ArrayList<Person> unaffectedList = null;
+    /** True if this pedigree represents a single sample VCF file only. */
+    private boolean isSingleSample;
     
 
-
+    public static Pedigree constructSingleSamplePedigree() {
+	Pedigree ped = new Pedigree();
+	ped.isSingleSample = true;
+	return ped;
+    }
 
     /**
      * Disallow default constructor (The only valid way to construct a Pedigree
@@ -98,6 +105,10 @@ public class Pedigree {
        }
        setPersonIndices();
        initializeAffectedsParentsSibs();
+       if (personList.size() == 1)
+	   isSingleSample = true;
+       else
+	   isSingleSample = false;
     }
     
     /**
@@ -216,6 +227,9 @@ public class Pedigree {
         }
         return null;
     }
+
+
+
     
     /**
      * This function checks whether the Genotypes passed are compatible with
@@ -230,6 +244,11 @@ public class Pedigree {
      * the same order as the list of Persons contained in this pedigree.
      */
     public boolean isCompatibleWithAutosomalDominant(ArrayList<GenotypeCall> gtypeList) {
+	if (this.isSingleSample) {
+	    return singleSampleHasHeterozygousVariant(gtypeList);
+	}
+
+
         for (GenotypeCall multiGT : gtypeList){
           int N = multiGT.getNumberOfIndividuals();
           boolean variantCompatible=true; /* Is the current variant compatible with AD? */
@@ -387,16 +406,19 @@ public class Pedigree {
      * @param gtypeList a List of Genotypes representing all variants seen in some gene
      * @return true if the distribution of variants is compatible with a homozygous mutation.
      */
-    public boolean containsCompatibleHomozygousVariant(ArrayList<GenotypeCall> gtypeList) {
-	for (GenotypeCall multiGT : gtypeList){
-	    if (affectedsAreHomozygousALT(multiGT) &&
-		parentsAreHeterozygous(multiGT) &&
-		unaffectedsAreNotHomozygousALT(multiGT))
-		return true;
+    public boolean containsCompatibleHomozygousVariant(GenotypeCall GT) {
+	if (this.isSingleSample) {
+	    return (Genotype.HOMOZYGOUS_ALT == GT.getGenotypeInIndividualN(0));
+	} else if (affectedsAreHomozygousALT(GT) &&
+		   parentsAreHeterozygous(GT) &&
+		   unaffectedsAreNotHomozygousALT(GT)) {
+	    /* i.e., multiple sample VCF compatible with homozygous var and AR inheritance. */
+	    return true;
+	} else {
+	    /* If we get here, none of the variants represents a compatible
+	       homozygous mutation. */
+	    return false;
 	}
-	/* If we get here, none of the variants represents a compatible
-	   homozygous mutation. */
-	return false;
     }
 
     /**
@@ -421,7 +443,6 @@ public class Pedigree {
     }
 
 
-	    
     /**
      * This function checks whether the gene, whose variants are represented in the list
      * of genotypes passed to the function, has at least two variants compatible with
@@ -434,8 +455,10 @@ public class Pedigree {
      * it returns all variants for which there are compatible pairs.
      */
     public boolean isCompatibleWithAutosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
-	if (containsCompatibleHomozygousVariant(gtypeList))
-	    return true;
+	if (this.isSingleSample) {
+	    return singleSampleCompatibleWithAutosomalRecessive(gtypeList);
+	}
+
 	/* If we get here, there is no compatible homozygous mutation. 
 	   Check for compound heterozygous mutations. */
 	boolean hasMaternallyInheritedCompatibleVariant = false;
@@ -444,10 +467,14 @@ public class Pedigree {
 	ArrayList<GenotypeCall> maternal = new ArrayList<GenotypeCall> ();
 
 	if (this.parentList.size()>2) {
-	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parentsis not supported!");
+	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
 	}
 
 	for (GenotypeCall multiGT : gtypeList) {
+	    if (containsCompatibleHomozygousVariant(multiGT)) {
+		/* If this is the case, we are good. */
+		return true;
+	    }
 	    if (affectedsAreHeterozygous(multiGT) &&
 		onlyOneParentIsHeterozygous(multiGT) &&
 		unaffectedsAreNotHomozygousALT(multiGT) ) {
@@ -477,6 +504,81 @@ public class Pedigree {
 	return false;
     }
     
+
+/**
+     * This function checks whether the gene, whose variants are represented in the list
+     * of genotypes passed to the function, has a variant compatible with
+     * X chromosomal recessive inheritance. 
+     * <P>
+     * If there is only one sample, this is the case if the variant is called
+     * homozygous (we are assuming this is a male sample with a hemizygous variant
+     * that has been called homozygous alt)
+     * <P>
+     * If there are multiple samples, then 
+     */
+    public boolean isCompatibleWithXChromosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
+	if (this.isSingleSample) {
+	    for (GenotypeCall gc: gtypeList) {
+		Genotype g = gc.getGenotypeInIndividualN(0);
+		if (g == Genotype.HOMOZYGOUS_ALT) return true;
+	    }
+	    return false; /* Single sample, no appropriate variant in this gene. */
+	}
+	/* If we get here, there is a multiple sample. */
+	 for (GenotypeCall gc: gtypeList) {
+	     boolean compatible = true;
+	     for (Person p : affectedList) {
+		 int i = p.getIndex();
+		 Genotype g = gc.getGenotypeInIndividualN(i);
+		 if (g != Genotype.HOMOZYGOUS_ALT) {
+		     compatible = false;
+		     break; 
+		 /* Cannot be disease-causing mutation, 
+		    an affected male does not have it. */
+		 }
+		 if (! compatible) break;
+	     }
+	     for (Person p : parentList) {
+		 int i = p.getIndex();
+		 Genotype g = gc.getGenotypeInIndividualN(i);
+		 if (p.isMale() && 
+		     ! p.isAffected() &&
+		     g == Genotype.HOMOZYGOUS_ALT) {
+		     compatible = false;
+		     break; 
+		     /* Cannot be disease-causing mutation, 
+			an unaffected father has it. */
+		 }
+		 if (p.isFemale() && 
+		     g != Genotype.HETEROZYGOUS) {
+		     compatible = false;
+		     break;
+		     /* Cannot be disease-causing mutation, 
+			mother of patient is not heterozygous. */
+		 }
+		 if (! compatible) break;
+	     }
+	     for (Person p : unaffectedList ) {
+		 int i = p.getIndex();
+		 Genotype g = gc.getGenotypeInIndividualN(i);
+		 if (p.isMale() &&
+		     g == Genotype.HOMOZYGOUS_ALT) {
+		     compatible = false;
+		     break; 
+		      /* Cannot be disease-causing mutation, 
+			 an unaffected brother has it. */
+		 }
+		 if (p.isFemale() &&
+		     g == Genotype.HOMOZYGOUS_ALT) {
+		     break;
+		      /* Cannot be disease-causing mutation, 
+			 an unaffected sister is homozygos. */
+		 }
+	     }
+	     if (compatible) return true;
+	 }
+	return false;
+    }
     
     
     public void debugPrint() {
@@ -500,4 +602,43 @@ public class Pedigree {
         }
 	
     }
+
+
+     /**
+     * This function checks whether the gene, whose variants are represented in the list
+     * of genotypes passed to the function, has at least two variants compatible with
+     * autosomal recessive inheritance. Since this is a single sample, we just check
+     * in the proband.
+     */
+    public boolean singleSampleCompatibleWithAutosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
+	int n_het = 0;
+	for (GenotypeCall gc: gtypeList) {
+	    Genotype g = gc.getGenotypeInIndividualN(0);
+	    if (g == Genotype.HOMOZYGOUS_ALT)
+		return true;
+	    else if (g == Genotype.HETEROZYGOUS)
+		n_het++;
+	}
+	if (n_het > 1)
+	    return true;
+	else
+	    return false;
+    }
+    
+    /**
+     * This function checks whether the gene, whose variants are represented in the list
+     * of genotypes passed to the function, has at least one heterozygous variant compatible with
+     * autosomal dominant inheritance or with X-chromosomeal recessive inheritance. 
+     * Since this is a single sample, we just check
+     * in the proband.
+     */
+    public boolean singleSampleHasHeterozygousVariant(ArrayList<GenotypeCall> gtypeList) {
+	for (GenotypeCall gc: gtypeList) {
+	    Genotype g = gc.getGenotypeInIndividualN(0);
+	    if (g == Genotype.HETEROZYGOUS)
+		return true;
+	}
+	return false;
+    }
+
 }

@@ -34,7 +34,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * specified in the format. The first sub-field must always be the genotype (GT).
  * <P>
  * The classes relies on the abstract factory pattern to create appropriate
- * {@link jannovar.genotype.GenotypeI GenotypeI}
+ * {@link jannovar.genotype.GenotypeCall GenotypeCall}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
  * @version 0.15 (12 May, 2013)
@@ -59,7 +59,7 @@ public class VCFReader {
     /** The total number of lines with variants.*/
     private int total_number_of_variants;
     
-    /** Factory object to create {@link jannovar.genotype.GenotypeI GenotypeI} objects. Note that
+    /** Factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall} objects. Note that
      * this is an abstract class that will be instantiated depending on the information in the
      * #CHROM line of the VCF file (especially, whether there is a single sample or multiple
      * samples).
@@ -218,7 +218,7 @@ public class VCFReader {
 
     /**
      * Parse the entire VCF file. It places all header lines into the arraylist 
-     * {@link #header} and the remaining lines are parsed into
+     * {@link #vcf_header} and the remaining lines are parsed into
      * Variant objects.  This class could be improved by storing various
      * data elements/explanations explicitly.
      * @param br An open handle to a VCF file.

@@ -10,7 +10,6 @@ import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.genotype.GenotypeCall;
 
-
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
@@ -27,11 +26,9 @@ public class Variant implements Comparable<Variant>, Constants {
     private String ref;
     /** Variant sequence (called "ALT", alternate, in VCF files). */
     private String alt;
-    /**  The genotype of this variant (note that {@link jannovar.exome.GenotypeI GenotypeI}
-     * must be instantiated by either {@link jannovar.exome.SingleGenotype SingleGenotype}
-     * for VCF files with a single sample or 
-     * {@link jannovar.exome.MultipleGenotype MultipleGenotype}
-     * for VCF files with multiple samples.
+    /**  The genotype of this variant (note that {@link jannovar.genotype.GenotypeCall GenotypeCall}
+     * objects can hold a single genotype for single-sample VCF files or multiple
+     * genotypes for for VCF files with multiple samples.
      */
     private GenotypeCall genotype=null;
     /** The PHRED score for the variant call. */
@@ -45,7 +42,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param c The chromosome (note: X=23, Y=24)
      * @param p Position of the variant
      * @param r Reference nucleotide
-     * @param var variant (alt) nucleotide
+     * @param alternate variant (alt) nucleotide
     */
     public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, int qual) {
 	this.chromosome = c;
@@ -85,7 +82,7 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
      /**
-     * Initialize the {@link #var} field
+     * Initialize the {@link #alt} field
      * @param s sequence of variant
      */
     public void setVar(String s) {

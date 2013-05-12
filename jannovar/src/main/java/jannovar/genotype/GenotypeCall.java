@@ -59,11 +59,7 @@ public class GenotypeCall  {
     }
 
 
-    public boolean is_homozygous_alt() { return false; }
-    public boolean is_homozygous_ref() {return false; }
-    public boolean is_heterozygous() { return false; }
-    public boolean is_error() { return false; }
-    public boolean genotype_not_initialized() { return false; }
+   
 
     public String get_genotype_as_string() {
 	StringBuffer sb = new StringBuffer();
@@ -86,7 +82,7 @@ public class GenotypeCall  {
     }
     
     /**
-     * Note that this function expects the parameter n to be one-based.
+     * Note that this function expects the parameter n to be zero-based.
      * If the n is invalid, return null.
      * This method is intended mainly for debugging. May need to add exceptions.
      * @return the Genotype of the Nth individual represented in the VCF file. (0-based)
@@ -96,6 +92,8 @@ public class GenotypeCall  {
 	    throw new IllegalArgumentException();
 	return this.callList.get(n);
     }
+
+   
 
     /**
      * This method gets the number of individuals included in the

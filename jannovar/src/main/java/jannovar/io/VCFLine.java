@@ -37,7 +37,7 @@ public class VCFLine {
     /** The quality of the variant call, the QUAL column in the VCF file. */
     private float variant_quality=0f;
    
-    /** Factory object to create {@link jannovar.genotype.GenotypeI GenotypeI}
+    /** Factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall}
      * objects. Note that this is an abstract class that will be instantiated
      * depending on the information in the #CHROM line of the VCF file
      * (especially, whether there is a single sample or multiple
@@ -93,7 +93,7 @@ public class VCFLine {
    
 
     /**
-     * Set the factory object to create {@link jannovar.genotype.GenotypeI GenotypeI} objects.
+     * Set the factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall} objects.
      * Note that we assume that all lines in the VCF file require the same factory
      * (single or multiple sample files), and thus make this a static class member.
      * <p>
