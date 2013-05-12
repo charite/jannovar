@@ -26,9 +26,8 @@ import java.util.MissingFormatArgumentException;
 public class VCFLine {
     /** This field stores the original VCF file for debugging purposes (or leave null). */
     private String vcf_line = null;
-    /** A String representation of the chromosome, e.g., chr2.
-     * TODO: change to integer constant. */
-    private String chromosome = null;
+    /** A byte representation of the chromosome, e.g., 2 is chr 2, 23 is X, 24 is Y, 25 is Mt.*/
+    private byte chromosome;
     /** Start position of the variant on the chromosome. */
     private int position;
     /** Reference nucleotide or sequence */
@@ -58,18 +57,23 @@ public class VCFLine {
       
   
     /** getters */
-    public String get_chromosome_as_string() { return this.chromosome; }
+    /** @return a byte representationof the chromosome, 1-22, 23=X, 24=Y, 25=MT */
+    public byte get_chromosome() { return this.chromosome; }
+    /** @return position of the variant on the chromosome. */
     public int get_position() { return this.position; }
+    /** @return reference sequence that is changed by the variant. */
     public String get_reference_sequence() { return this.ref; }
+    /** @return The alternate (variant) sequence. */
     public String get_alternate_sequence() { return this.alt; }
     /**
      * @return A Genotype object representing the genotype of a single sample 
      * or multiple samples for this variant
      */
     public GenotypeCall getGenotype() { return this.gtype; }
-    public String get_genotype_as_string() {
-	return this.gtype.get_genotype_as_string();
-    }
+    /**
+     * @return the Phred quality score for the variant call (cast to an integer)
+     */
+    public int getVariantQuality() { return (int) this.variant_quality; }
     
     /**
      * Calling this method causes the static variable {@link #storeVCFlines}
@@ -153,7 +157,7 @@ public class VCFLine {
 	
 	this.variant_quality = parseVariantQuality(A[5]);
 	
-	this.chromosome = A[0];
+	this.chromosome = convertChromosomeStringToByteValue(A[0]);
 	try {
 	    Integer pos = Integer.parseInt(A[1]);
 	    this.position = pos.intValue();
@@ -278,7 +282,31 @@ public class VCFLine {
     }
 
 
+     // ##########   UTILITY FUNCTIONS ##################### //
 
+    /**
+     * @param c a String representation of a chromosome (e.g., chr3, chrX).
+     * @return corresponding integer (e.g., 3, 23).
+     */
+    public byte convertChromosomeStringToByteValue(String c) throws VCFParseException {
+	if (c.startsWith("chr")) c = c.substring(3);
+	if (c.equals("X") ) return 23;
+	if (c.equals("23")) return 23;
+	if (c.equals("Y") ) return 24;
+	if (c.equals("24")) return 24;
+	if (c.equals("M") ) return 25;
+	if (c.equals("MT") ) return 25;
+	if (c.equals("25") ) return 25;
+	Byte i = null;
+	try {
+	    i = Byte.parseByte(c);
+	} catch (NumberFormatException e) {
+	    VCFParseException ve = new VCFParseException("[Variant.java] Could not parse Chromosome string \"" + c + "\"");
+	    ve.setBadChromosome(c);
+	    throw ve;
+	}
+	return i;
+    }
     
 	  
 
@@ -286,15 +314,13 @@ public class VCFLine {
      * This method can be used to show the state of the current VCFLine
      * object for debugging.
      */
-    public void dump_VCF_line_for_debug()
+    private void dump_VCF_line_for_debug()
     {
 	System.err.println(vcf_line);
-	System.err.println("chromosome: " + get_chromosome_as_string());
+	System.err.println("chromosome: " + get_chromosome());
 	System.err.println("position: " + get_position() );
 	System.err.println("reference sequence:" +  get_reference_sequence() );
 	System.err.println("alt sequence:" +  get_alternate_sequence() );
-	System.err.println("genotype: " +  get_genotype_as_string());
-
     }
 
 

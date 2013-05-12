@@ -22,7 +22,6 @@ import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
-import jannovar.io.AnnovarParser;
 import jannovar.io.UCSCKGParser;
 import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptModel;

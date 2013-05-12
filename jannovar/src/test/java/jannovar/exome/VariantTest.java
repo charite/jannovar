@@ -27,30 +27,32 @@ import org.junit.Assert;
 public class VariantTest {
 
     @Test public void testPosition() {
-	Variant v = new Variant();
-	v.setPosition(13);
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"A","C",null,0);
 	int p = v.get_position();
 	Assert.assertEquals(13,p);
     }
 
     @Test public void testChromosome1() throws VCFParseException {
-	Variant v = new Variant();
-	v.setChromosome("chr5");
+	byte chr5 = 5;
+	Variant v = new Variant(chr5,13,"A","A",null,0);
         String c= v.get_chrom_string();
 	Assert.assertEquals("chr5",c);
     }
 
     @Test public void testChromosomeX() throws VCFParseException {
-	Variant v = new Variant();
-	v.setChromosome("chrX");
+	byte chrX = 23;
+	Variant v = new Variant(chrX,13,"A","C",null,0);
+
         String c= v.get_chrom_string();
 	Assert.assertEquals("chrX",c);
 	Assert.assertEquals(true,v.is_X_chromosomal());
     }
 
     @Test public void testChromosomeY() throws VCFParseException {
-	Variant v = new Variant();
-	v.setChromosome("chrY");
+	byte chrY = 24;
+	Variant v = new Variant(chrY,13,"A","C",null,0);
+
         String c= v.get_chrom_string();
 	Assert.assertEquals("chrY",c);
 	Assert.assertEquals(false,v.is_X_chromosomal());

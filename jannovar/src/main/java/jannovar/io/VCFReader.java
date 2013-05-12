@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import jannovar.exome.Variant;
 import jannovar.exception.VCFParseException;
 import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.SingleGenotypeFactory;
@@ -36,7 +37,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * {@link jannovar.genotype.GenotypeI GenotypeI}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
- * @version 0.14 (5 May, 2013)
+ * @version 0.15 (12 May, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -89,6 +90,11 @@ public class VCFReader {
 
      /** @return The total number of variants of any kind parsed from the VCF file*/
     public int get_total_number_of_variants() { return this.total_number_of_variants;}
+
+    /**
+     * @return the total number of samples represented in this VCF file 
+     */
+    public int getNumberOfSamples() { return this.sample_name_list.size(); }
     
 
     /**
@@ -106,9 +112,39 @@ public class VCFReader {
     }
 
     /**
-     * @return a list of variants extracted from the VCF file. 
+     * This function is intended to be used for debugging purposes.
+     * The VCFReader first parses the VCF file variant lines into
+     * {@link jannovar.io.VCFLine VCFLine} objects. These objects
+     * store the String from the original VCF line, and thus it is
+     * possible to output both the original VCF line as well as the
+     * data that was parsed from it. Assuming that everything works
+     * correctly, however, client code should be using the 
+     * {@link jannovar.exome.Variant Variant} class for the individual
+     * variants. This class has a number of functions for examining and
+     * sorting the variants. It does not sotre the actual String from the
+     * original VCF line.
+     * @return A list of {@link jannovar.io.VCFLine VCFLine} objects representing 
+     * all lines of the VCF file.
      */
-    public ArrayList<VCFLine> getVariantList() { return this.variant_list;} 
+    public ArrayList<VCFLine> getVCFLineList() { return this.variant_list;} 
+
+
+    /**
+     * @return a list of {@link jannovar.exome.Variant Variant} objects extracted from the VCF file. 
+     */
+    public ArrayList<Variant> getVariantList() { 
+	ArrayList<Variant> vars = new ArrayList<Variant>();
+	for (VCFLine line : this.variant_list) {
+	    Variant v = new Variant(line.get_chromosome(),
+				    line.get_position(),
+				    line.get_reference_sequence(),
+				    line.get_alternate_sequence(),
+				    line.getGenotype(),
+				    line.getVariantQuality());
+	    vars.add(v);
+	}
+	return vars;
+    } 
 
     /**
      * @return List of sample names
@@ -161,9 +197,9 @@ public class VCFReader {
 
 
     /**
-     * This method parses the entire VCF file.
-     * It places all header lines into the arraylist "header" and the remaining lines are parsed into
-     * Variant objects.
+     * This method parses the entire VCF file by creating a Stream from the
+     * file path passed to it and calling the method {@link #inputVCFStream}.
+     * @param VCFfilePath complete path to a VCF file.
      */
      public void parseFile(String VCFfilePath) throws VCFParseException {
 	 this.file_path = VCFfilePath;
@@ -181,8 +217,9 @@ public class VCFReader {
      }
 
     /**
-     * Parse the entire VCF file. Note that for now, we merely store the header lines
-     * of the file in an ArrayList. This class could be improved by storing various
+     * Parse the entire VCF file. It places all header lines into the arraylist 
+     * {@link #header} and the remaining lines are parsed into
+     * Variant objects.  This class could be improved by storing various
      * data elements/explanations explicitly.
      * @param br An open handle to a VCF file.
      */

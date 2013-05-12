@@ -8,14 +8,13 @@ import jannovar.annotation.AnnotationList;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
-import jannovar.exception.VCFParseException;
 import jannovar.genotype.GenotypeCall;
 
 
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.16 (9 May, 2013)
+ * @version 0.17 (12 May, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -27,7 +26,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /** Reference sequence (a single nucleotide for a SNV, more for some other types of variant) */
     private String ref;
     /** Variant sequence (called "ALT", alternate, in VCF files). */
-    private String var;
+    private String alt;
     /**  The genotype of this variant (note that {@link jannovar.exome.GenotypeI GenotypeI}
      * must be instantiated by either {@link jannovar.exome.SingleGenotype SingleGenotype}
      * for VCF files with a single sample or 
@@ -37,15 +36,10 @@ public class Variant implements Comparable<Variant>, Constants {
     private GenotypeCall genotype=null;
     /** The PHRED score for the variant call. */
     private int variant_quality;
-    /** Original VCF line from which this mutation comes. */
-    public String vcfLine=null;
     /** {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from 
 	Jannovar-type annotation of this variant. */
     private AnnotationList annot=null;
 
-   
-
- 
    
      /**
      * @param c The chromosome (note: X=23, Y=24)
@@ -53,33 +47,27 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param r Reference nucleotide
      * @param var variant (alt) nucleotide
     */
-    public Variant(String c, int p, String r, String var) throws VCFParseException {
-	this.chromosome = convertChromosomeStringToByteValue(c);
+    public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, int qual) {
+	this.chromosome = c;
 	this.position=p;
 	this.ref = r;
-	this.var = var;
+	this.alt = alternate;
+	this.genotype = gtype;
+	this.variant_quality = qual;
     }
 
-    /**
-     * This constructor is intended to be used by the factory method
-     * {@link jannovar.io.VCFLine#extractVariant extractVariant} in the
-     * class {@link jannovar.io.VCFLine VCFLine}. The constructor
-     * expects that everything else will be initialized by 
-     * {@link jannovar.io.VCFLine#extractVariant extractVariant}.
-     */
-    public Variant() {
-    }
+    
    
 
     // ###########   SETTERS ######################### //
     /** Initialize the {@link #chromosome} field
      * @param chr A string representation of the chromosome such as chr3 or chrX
      */
-    public void setChromosome(String chr) throws VCFParseException {
-	this.chromosome = convertChromosomeStringToByteValue(chr);
+    public void setChromosome(byte chr)  {
+	this.chromosome = chr;
     }
      /** Initialize the {@link #position} field
-     * @param p Position of the variant on the chromosome
+     * @param p Position of the alternate sequence on the chromosome
      */
     public void setPosition(int p) {
 	this.position = p;
@@ -101,17 +89,11 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param s sequence of variant
      */
     public void setVar(String s) {
-	this.var = s;
+	this.alt = s;
     }
     
     public void set_variant_quality(int q) { this.variant_quality = q; }
-    /**
-     * @param line a VCF line from the original file corresponding to current variant,
-     * it may be useful for debuigging purposes to keep the line around but it 
-     * will just waste space in the final working version. See the VCFReader file for
-     * options to include this or not.
-     */
-    public void setVCFline(String line) { this.vcfLine = line; }
+    
 
     /**
      * Set the {@link jannovar.annotation.AnnotationList AnnotationList} object for this variant. 
@@ -139,7 +121,7 @@ public class Variant implements Comparable<Variant>, Constants {
     /**
      * The alternate base or bases of this variant.
      */
-    public String get_alt() { return var; }
+    public String get_alt() { return alt; }
     /**
      * Get the genesymbol of the gene associated with this variant, if possible 
      */
@@ -164,15 +146,14 @@ public class Variant implements Comparable<Variant>, Constants {
     /** 
      * @return true if this variant is a nonsynonymous substitution (missense).
      */
-    public boolean is_missense_variant() { 
+    public boolean is_nonsynonymous_variant() { 
 	if (annot == null)
 	    return false;
 	else return (annot.getVariantType() == VariantType.NONSYNONYMOUS);
     }
-    public String getVCFline() { return this.vcfLine; }
-   
   
-    public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.var.length()==1); }
+  
+    public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.alt.length()==1); }
     
     /**
      * @return an integer representation of the chromosome  (note: X=23, Y=24).
@@ -182,6 +163,18 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return an byte representation of the chromosome, e.g., 1,2,...,22 (note: X=23, Y=24, MT=25).
      */
     public byte getChromosomeAsByte() { return chromosome; }
+
+    public String get_chromosome_as_string() {
+	if (this.chromosome == (byte)23)
+	    return "chrX";
+	else if (this.chromosome == (byte)24)
+	    return "chrY";
+	else if (this.chromosome == (byte)25)
+	    return "chrM";
+	else
+	    return String.format("chr%d",this.chromosome);
+
+    }
    
 
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
@@ -191,6 +184,13 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return The PHRED quality of this variant call.
      */
     public float get_variant_quality() { return this.variant_quality; }
+
+    /**
+     * @return the {@link jannovar.genotype.GenotypeCall GenotypeCall} object corresponding to this variant.
+     */
+    public GenotypeCall getGenotype() { return this.genotype; }
+
+
     public String get_genotype_as_string() {
 	return this.genotype.get_genotype_as_string();
     }
@@ -206,7 +206,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	StringBuilder sb = new StringBuilder();
 	sb.append( get_chrom_string() );
 	sb.append(":g.");
-	sb.append(this.position + ref + ">" + var);
+	sb.append(this.position + ref + ">" + alt);
 	return sb.toString();
     }
 
@@ -303,45 +303,21 @@ public class Variant implements Comparable<Variant>, Constants {
 
    
    
-    // ##########   UTILITY FUNCTIONS ##################### //
-
-    /**
-     * @param c a String representation of a chromosome (e.g., chr3, chrX).
-     * @return corresponding integer (e.g., 3, 23).
-     */
-    public byte convertChromosomeStringToByteValue(String c) throws VCFParseException {
-	if (c.startsWith("chr")) c = c.substring(3);
-	if (c.equals("X") ) return 23;
-	if (c.equals("23")) return 23;
-	if (c.equals("Y") ) return 24;
-	if (c.equals("24")) return 24;
-	if (c.equals("M") ) return 25;
-	if (c.equals("MT") ) return 25;
-	if (c.equals("25") ) return 25;
-	Byte i = null;
-	try {
-	    i = Byte.parseByte(c);
-	} catch (NumberFormatException e) {
-	    VCFParseException ve = new VCFParseException("[Variant.java] Could not parse Chromosome string \"" + c + "\"");
-	    ve.setBadChromosome(c);
-	    throw ve;
-	}
-	return i;
-    }
+   
     
     /**
      * @return A String representing the variant in the chromosomal sequence, e.g., chr17:c.73221527G>A
      */
     public String getChromosomalVariant() {
-	return String.format("%s:c.%d%s>%s",get_chrom_string(), position, ref, var);
+	return String.format("%s:c.%d%s>%s",get_chrom_string(), position, ref, alt);
     }
 
 
 
     public String toString() {
 	StringBuilder sb = new StringBuilder();
-	String chr = get_chrom_string();
-	sb.append("\t"+ chr + ":c." + position + ref +">" + var);
+	String chr = getChromosomalVariant();
+	sb.append("\t"+ chr);
 	if (annot != null)
 	    sb.append("\t: "+ getAnnotation() + "\n");
 	else

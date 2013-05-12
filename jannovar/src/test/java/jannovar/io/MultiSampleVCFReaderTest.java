@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 
 import jannovar.exception.VCFParseException;
-import jannovar.io.VCFLine;
+import jannovar.exome.Variant;
 import jannovar.io.VCFReader;
 import jannovar.common.Genotype;
 import jannovar.genotype.GenotypeCall;
@@ -24,7 +24,7 @@ public class MultiSampleVCFReaderTest  {
 
     private static VCFReader reader = null;
     
-    private static  ArrayList<VCFLine> vcfList = null;
+    private static  ArrayList<Variant> vcfList = null;
 
 
     @BeforeClass
@@ -51,16 +51,16 @@ public class MultiSampleVCFReaderTest  {
      **/
     @Test public void testVariant1() 
 	{
-	   VCFLine line = this.vcfList.get(0); 
+	   Variant line = this.vcfList.get(0); 
 	    Assert.assertEquals("chr1",line.get_chromosome_as_string());
             Assert.assertEquals(14907,line.get_position());
-            Assert.assertEquals("A",line.get_reference_sequence());
-            Assert.assertEquals("G",line.get_alternate_sequence());
+            Assert.assertEquals("A",line.get_ref());
+            Assert.assertEquals("G",line.get_alt());
 	}
         
         
     @Test public void testVariant1genotype() {
-        VCFLine line = this.vcfList.get(0);
+        Variant line = this.vcfList.get(0);
         //line.dump_VCF_line_for_debug();
         GenotypeCall gt = line.getGenotype();
         //System.out.println(line.get_genotype_as_string());
@@ -74,7 +74,7 @@ public class MultiSampleVCFReaderTest  {
 
 
     @Test(expected =  IllegalArgumentException.class)   public void testVariant1genotypeBadIndex() {
-        VCFLine line = this.vcfList.get(0);
+        Variant line = this.vcfList.get(0);
         //line.dump_VCF_line_for_debug();
         GenotypeCall gt = line.getGenotype();
         Genotype g = gt.getGenotypeInIndividualN(17);
@@ -82,7 +82,7 @@ public class MultiSampleVCFReaderTest  {
     }
     
     @Test(expected =  IllegalArgumentException.class)   public void testVariant1genotypeBadIndex2() {
-        VCFLine line = this.vcfList.get(0);
+        Variant line = this.vcfList.get(0);
         //line.dump_VCF_line_for_debug();
         GenotypeCall gt = line.getGenotype();
         Genotype g = gt.getGenotypeInIndividualN(-1);
@@ -100,16 +100,16 @@ public class MultiSampleVCFReaderTest  {
     
     @Test public void testVariant2() 
 	{
-	   VCFLine line = this.vcfList.get(1); 
-	    Assert.assertEquals("chr1",line.get_chromosome_as_string());
+	   Variant line = this.vcfList.get(1); 
+	   Assert.assertEquals((byte)1,line.get_chromosome());
             Assert.assertEquals(14930,line.get_position());
-            Assert.assertEquals("A",line.get_reference_sequence());
-            Assert.assertEquals("G",line.get_alternate_sequence());
+            Assert.assertEquals("A",line.get_ref());
+            Assert.assertEquals("G",line.get_alt());
 	}
         
              
     @Test public void testVariant2genotype() {
-        VCFLine line = this.vcfList.get(1);
+        Variant line = this.vcfList.get(1);
         //line.dump_VCF_line_for_debug();
         GenotypeCall gt = line.getGenotype();
         //System.out.println(line.get_genotype_as_string());

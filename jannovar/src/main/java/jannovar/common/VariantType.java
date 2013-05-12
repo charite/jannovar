@@ -10,7 +10,7 @@ package jannovar.common;
  * a gene, otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in 
  * {@link jannovar.reference.Chromosome Chromosome} (maybe make this adjustable in future versions),
  * @author Peter Robinson
- * @version 0.03 (28 April, 2013)
+ * @version 0.04 (12 May, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -27,7 +27,7 @@ public enum  VariantType {
 	INTERGENIC, 
 	/** Variant located in an intron. */
 	INTRONIC, 
-	/** Probaby remove (Preferred terminology is NONSYNONYMOUS TODO */
+	/** Variant that leads to the subsitution of one amino acid. */
 	NONSYNONYMOUS, 
 	/** Variant located in an exon of a noncoding RNA gene */
 	ncRNA_EXONIC, 
@@ -57,7 +57,7 @@ public enum  VariantType {
 	UTR5, 
 	/** Variant is located in the 3' untranslated region of one gene and the 5' UTR of an overlapping gene*/
 	UTR53,
-	/** Variant assesed as probabily erroneous (this indicates some error in the VCF file)*/
+	/** Variant assesed as probably erroneous (may indicate an error in the VCF file)*/
 	ERROR;
 
 }

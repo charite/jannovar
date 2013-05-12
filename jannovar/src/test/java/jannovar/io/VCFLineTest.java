@@ -96,8 +96,8 @@ public class VCFLineTest {
 	VCFLine line = VCFLineList.get(1);
 	int pos = line.get_position();
 	Assert.assertEquals(879317,pos);
-	String chr = line.get_chromosome_as_string();
-	Assert.assertEquals("1",chr);
+	byte chr = line.get_chromosome();
+	Assert.assertEquals((byte)1,chr);
 	String alt = line.get_alternate_sequence();
 	Assert.assertEquals("T",alt);
     }
@@ -164,7 +164,7 @@ public class VCFLineTest {
 
     @Test public void testIndelLineChrom1() throws VCFParseException {
 	VCFLine line = new VCFLine(indelLine1);
-	Assert.assertEquals("chr1",line.get_chromosome_as_string());
+	Assert.assertEquals((byte)1,line.get_chromosome());
     }
 
       @Test public void testIndelLineChrom2() throws VCFParseException {
