@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class IntervalTree<Type> {
 	public Node<Type> root;
-	public List<Interval<Integer, String>> intervals;
+	public List<Interval<Type>> intervals;
 
 	/**
 	 * Default constructor.
@@ -17,7 +17,7 @@ public class IntervalTree<Type> {
 		/* sets the root of the tree */
 		this.root = new Node<Type>();
 		/* sets the intervals list which is of the type ArrayList */
-		this.intervals = new ArrayList<Interval<Integer, String>>();
+		this.intervals = new ArrayList<Interval<Type>>();
 
 	}
 
@@ -26,7 +26,7 @@ public class IntervalTree<Type> {
 	 * 
 	 * @param intervals A list that contains the intervals
 	 */
-	public IntervalTree(List<Interval<Integer, String>> intervals) {
+	public IntervalTree(List<Interval<Type>> intervals) {
 		/* sets the root and calls the node constructor with list */
 		this.root = new Node<Type>(intervals);
 		this.intervals = intervals;
@@ -39,8 +39,8 @@ public class IntervalTree<Type> {
 	 * @param high The higher element of the interval
 	 * @return result, which is an ArrayList containg the found intervals
 	 */
-	public ArrayList<Interval<Integer, String>> search(int low, int high) {
-		ArrayList<Interval<Integer, String>> result = new ArrayList<Interval<Integer, String>>();
+	public ArrayList<Interval<Type>> search(int low, int high) {
+		ArrayList<Interval<Type>> result = new ArrayList<Interval<Type>>();
 		searchInterval(root, result, low, high);
 		return result;
 	}
@@ -53,7 +53,7 @@ public class IntervalTree<Type> {
 	 * @param ilow The lower element of the interval
 	 * @param ihigh The higher element of the interval
 	 */
-	public void searchInterval(Node<Type> n, ArrayList<Interval<Integer, String>> result, int ilow, int ihigh) {
+	public void searchInterval(Node<Type> n, ArrayList<Interval<Type>> result, int ilow, int ihigh) {
 		/* ends if the node n is empty */
 		if (n == null) {
 			return;
@@ -118,7 +118,7 @@ public class IntervalTree<Type> {
 	 * 
 	 * @param newinterval A new interval that is inserted into intervals
 	 */
-	public void addInterval(Interval<Integer, String> newinterval) {
+	public void addInterval(Interval<Type> newinterval) {
 		intervals.add(newinterval);
 		update();
 	}

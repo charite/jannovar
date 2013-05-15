@@ -40,6 +40,8 @@ import jannovar.annotation.UTR3Annotation;
  * chromosome with one gene located in the intron of the next or with overlapping
  * genes. 
  * <P>
+ * NOTE: Make array list to which to add genes and then a function called construct Interval Tree etc.
+ * <P>
  * Note that the key of the tree map corresponds to the 5' most position of 
  * the TranscriptModel. The value is a list
  * (ArrayList) of {@link jannovar.reference.TranscriptModel TranscriptModel} objects. 
