@@ -34,6 +34,7 @@
 
   <build>
    <plugins>
+     <!--
     <plugin>
      <groupId>org.apache.maven.plugins</groupId>
      <artifactId>maven-compiler-plugin</artifactId>
@@ -42,7 +43,25 @@
           <compilerArgument>-Xlint</compilerArgument>
         </configuration>
     </plugin>
-    <plugin>
+    -->
+     <plugin>
+       <!-- Build an executable JAR -->
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-jar-plugin</artifactId>
+       <configuration>
+	 <archive>
+	   <manifest>
+	     <addClasspath>true</addClasspath>
+	     <classpathPrefix>lib/</classpathPrefix>
+	     <mainClass>jannovar.Jannovar</mainClass>
+	   </manifest>
+	 </archive>
+	 <descriptorRefs>
+	   <descriptorRef>jar-with-dependencies</descriptorRef>
+	 </descriptorRefs>
+       </configuration>
+     </plugin>
+     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
       <version>2.14.1</version>
