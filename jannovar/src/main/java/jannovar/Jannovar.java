@@ -26,6 +26,8 @@ import java.io.IOException;
 
 import jannovar.exception.VCFParseException;
 import jannovar.io.UCSCKGParser;
+import jannovar.interval.Interval;
+import jannovar.interval.IntervalTree;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
@@ -324,6 +326,45 @@ public class Jannovar {
 	    c.addGene(kgl);	
 	}
 	
+    }
+
+
+    /**
+     * Diese Funktion soll ausgebaut werden, um den Intervallbaum zu verwenden!
+     *
+     */
+    public void readUCSCKnownGenesFile2() {
+	UCSCKGParser parser = new UCSCKGParser(this.ucscPath);
+	try {
+	    parser.parseFile();
+	    parser.readFASTAsequences(this.ucscKGMrnaPath);
+	    parser.readKGxRefFile(this.ucscXrefPath);
+	} catch (KGParseException e) {
+	    System.out.println(e);
+	    System.exit(1);
+	}
+	HashMap<String,TranscriptModel> kgMap = parser.getKnownGeneMap();
+	/** Use the following map to collect all of the TranscriptModels for each chromosome. */
+	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
+	for (TranscriptModel kgl : kgMap.values()) {
+	    byte chrom = kgl.getChromosome();
+	    //System.out.println("Chromosome is " + chrom);
+	    if (! chrMap.containsKey(chrom)) {
+		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
+	    }
+	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
+	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
+	    lst.add(in);
+	}
+	/* When we get here, chrMap has an arraylist of all Interval<TranscriptModel> for each
+	   Chromosome. We can now create an Interval tree with this list and 
+	   use the new Chromosome constructor, that takes an  Interval tree. */
+	// make IntervalTree for each chromosome
+	// use Chromosome(/IntervalTree ) CTOR
+
+
+
+
     }
     
     public void debugShowChromosomeMap() {

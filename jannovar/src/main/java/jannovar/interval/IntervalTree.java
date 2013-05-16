@@ -5,19 +5,29 @@ import java.util.List;
 
 /**
  * Implements an Interval Tree.
+ * <P>
+ * The construction of the interval tree proceeds in several phases.
+ * <ol>
+ * <li>Phase 1
+ * <li>Phase 2
+ * <li>...
+ * </ol>
+ * To search in the interval tree, the following procedure is used (...)
+ * @author names
+ * @version 0.02 (15 May, 2013)
  */
-public class IntervalTree<Type> {
-	public Node<Type> root;
-	public List<Interval<Type>> intervals;
+public class IntervalTree<T> {
+	public Node<T> root;
+	public List<Interval<T>> intervals;
 
 	/**
 	 * Default constructor.
 	 */
 	public IntervalTree() {
 		/* sets the root of the tree */
-		this.root = new Node<Type>();
+		this.root = new Node<T>();
 		/* sets the intervals list which is of the type ArrayList */
-		this.intervals = new ArrayList<Interval<Type>>();
+		this.intervals = new ArrayList<Interval<T>>();
 
 	}
 
@@ -26,9 +36,9 @@ public class IntervalTree<Type> {
 	 * 
 	 * @param intervals A list that contains the intervals
 	 */
-	public IntervalTree(List<Interval<Type>> intervals) {
+	public IntervalTree(List<Interval<T>> intervals) {
 		/* sets the root and calls the node constructor with list */
-		this.root = new Node<Type>(intervals);
+		this.root = new Node<T>(intervals);
 		this.intervals = intervals;
 	}
 
@@ -39,8 +49,8 @@ public class IntervalTree<Type> {
 	 * @param high The higher element of the interval
 	 * @return result, which is an ArrayList containg the found intervals
 	 */
-	public ArrayList<Interval<Type>> search(int low, int high) {
-		ArrayList<Interval<Type>> result = new ArrayList<Interval<Type>>();
+	public ArrayList<Interval<T>> search(int low, int high) {
+		ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
 		searchInterval(root, result, low, high);
 		return result;
 	}
@@ -53,7 +63,7 @@ public class IntervalTree<Type> {
 	 * @param ilow The lower element of the interval
 	 * @param ihigh The higher element of the interval
 	 */
-	public void searchInterval(Node<Type> n, ArrayList<Interval<Type>> result, int ilow, int ihigh) {
+	public void searchInterval(Node<T> n, ArrayList<Interval<T>> result, int ilow, int ihigh) {
 		/* ends if the node n is empty */
 		if (n == null) {
 			return;
@@ -118,7 +128,7 @@ public class IntervalTree<Type> {
 	 * 
 	 * @param newinterval A new interval that is inserted into intervals
 	 */
-	public void addInterval(Interval<Type> newinterval) {
+	public void addInterval(Interval<T> newinterval) {
 		intervals.add(newinterval);
 		update();
 	}
@@ -128,7 +138,7 @@ public class IntervalTree<Type> {
 	 * interval.
 	 */
 	public void update() {
-		this.root = new Node<Type>(intervals);
+		this.root = new Node<T>(intervals);
 	}
 
 }

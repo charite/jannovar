@@ -27,6 +27,7 @@ import jannovar.annotation.BlockSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTR3Annotation;
 
+import jannovar.interval.*;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
@@ -40,7 +41,8 @@ import jannovar.annotation.UTR3Annotation;
  * chromosome with one gene located in the intron of the next or with overlapping
  * genes. 
  * <P>
- * NOTE: Make array list to which to add genes and then a function called construct Interval Tree etc.
+ * NOTE: 15 May 2013. We are in the process of replacing the Java TreeMap with our
+ * IntervalTree to improve performance.
  * <P>
  * Note that the key of the tree map corresponds to the 5' most position of 
  * the TranscriptModel. The value is a list
@@ -55,7 +57,7 @@ import jannovar.annotation.UTR3Annotation;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.14 (28 April, 2013)
+ * @version 0.15 (15 May, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -92,6 +94,12 @@ public class Chromosome {
      * this is the maximum number of annotations any variant can get with this program.
      */
     private AnnotatedVariantFactory annovarFactory = null;
+
+
+    /** An {@link jannovar.interval.IntervalTree IntervalTree} that contains all of the 
+     * {@link jannovar.reference.TranscriptModel TranscriptModel} objects 
+     * for transcripts located on this chromosome. */
+    private IntervalTree<TranscriptModel> itree = null;
     
     /**
      * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
@@ -104,6 +112,20 @@ public class Chromosome {
 	this.n_genes=0;
 	this.annovarFactory = new AnnotatedVariantFactory(2*SPAN); /* the argument is the initial capacity of the arrayLists of vars */
     }
+
+
+    /**
+     * This constructor is for testing the INTERVAL TREE
+     */
+    public Chromosome(byte c, IntervalTree<TranscriptModel> intrvtree) {
+	this.chromosome = c;
+	this.itree = intrvtree;
+	this.translator = Translator.getTranslator();
+	this.n_genes=0;
+	this.annovarFactory = new AnnotatedVariantFactory(2*SPAN); /* the argument is the initial capacity of the arrayLists of vars */
+    }
+
+
 
     /**
      * Add a gene model to this chromosome. 
@@ -133,6 +155,31 @@ public class Chromosome {
 	if (chromosomeString != null) return chromosomeString;
 	else return String.format("chr%d",chromosome);
     }
+
+
+    /**
+     * Diese Funktion sollte ausgebaut werden!
+     * <P>
+     * @param startpos The start position of the {@link jannovar.exome.Variant Variant}
+     * @param endpos The end position of the {@link jannovar.exome.Variant Variant}
+     * @return List of TranscriptModels that intersect with startpos/endpos, or if there
+     * are no such transcripts, then a Transcript to the 5' and another transcript to the 3'
+     * for intergenic {@link jannovar.exome.Variant Variant}s.
+     */
+    private ArrayList<TranscriptModel> getBinRange2(int startpos, int endpos) {
+	/* 1. Search the interval tree for all intersecting Intervals. Extract the
+	   TranscriptModels from these intervals (getValue) and return them all as a list
+	   2. If there are no intersecting intervals, we need to get the 5' TranscriptModel
+	   and the 3' TranscriptModel, and return these as an ArrayList.
+	   3. If the Variant is 5' to all TranscriptModels (or 3' to all TranscriptModels),
+	   then we return just a single TranscriptModel.
+	   4. Consider setting some class-scope variable so that other functions processing the
+	   current variant know whether case 1, 2, or 3 pertains.
+	*/
+	return null;
+    }
+
+
     
     
     /**

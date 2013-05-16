@@ -6,14 +6,17 @@ import java.util.Comparator;
  * Implements an interval with two end points and each interval contains
  * additional information.
  * 
- * @param value element that contains additional information
- * @param lowpoint The smaller end point of the interval
- * @param highpoint The bigger end point of the interval
+ * @author names..
+ * @version 0.02 (15 May, 2013)
  */
 public class Interval<T>  { // implements Comparable<Interval<T>> 
-	public T value;
-	public int lowpoint;
-	public int highpoint;
+    /** The object that we are putting into the interval tree (such as a 
+     * {@jannovar.reference.TranscriptModel TranscriptModel} object).*/
+    private T value;
+    /** The smaller end point of the interval */
+    private int lowpoint;
+    /** The larger end point of the interval */
+    private int highpoint;
 
 	/**
 	 * Getters and setters for the parameters of the Interval class.
