@@ -17,11 +17,11 @@ public class IntervalTreeException extends JannovarException {
     
     public static final long serialVersionUID = 2L;
 
-    public AnnotationException() {
+    public IntervalTreeException() {
 	super();
     }
 
-    public AnnotationException(String msg) {
+    public IntervalTreeException(String msg) {
 	super(msg);
 	this.mistake = msg;
     }

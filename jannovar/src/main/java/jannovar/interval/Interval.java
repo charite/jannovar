@@ -2,6 +2,8 @@ package jannovar.interval;
 
 import java.util.Comparator;
 
+import jannovar.exception.IntervalTreeException;
+
 /**
  * This class implements an interval on a numberline with a lowpoint
  * and a highpoint (where lowpoint <= highpoint). The Interval is intended
@@ -66,76 +68,29 @@ public class Interval<T>  { // implements Comparable<Interval<T>>
 
     /**
      * Interval constructor.
+     * @param low lower endpoint of the interval (cannot be higher than the upper endpoint or exception is thrown)
+     * @param high upper endpoint of the interval
+     * @oparam value The object represented by the interval.
      */
-    public Interval(int low, int high, T value) {
-        if (low < high) {
-		this.lowpoint = low;
-		this.highpoint = high;
-		this.value = value;
-	    }
+    public Interval(int low, int high, T value)  throws IntervalTreeException {
+        if (low <= high) {
+	    this.lowpoint = low;
+	    this.highpoint = high;
+	    this.value = value;
+	} else {
+	    String s = String.format("Error, low endpoint higher than upper endpoint for internval: %s",
+				    toString());
+	    throw new IntervalTreeException(s);
+	}
     }
 
-    /**
-     * The new comparator for the leftorder interval list which contains the
-     * left end points sorted in increasing order.
-     */
-    public class LeftComparator implements Comparator<Interval<T>> {
-    	public int compare(Interval<T> interval_1, Interval<T> interval_2) {
-	    /* returns -1 if the lowpoint of i is smaller than the lowpoint of j */
-	    if (interval_1.getLow() < interval_2.getLow())
-        	return -1;
-	    /* returns 1 if the lowpoint of i is bigger than the lowpoint of j */
-	    else if (interval_1.getLow() > interval_2.getLow())
-		return 1;
-	    /*
-	    * returns -1 if the highpoint of i is smaller than the highpoint of
-	     * j
-	     */
-	    else if (interval_1.getHigh() < interval_2.getHigh())
-		return -1;
-	    /* returns 1 if the highpoint of i is bigger than the highpoint of j */
-	    else if (interval_1.getHigh() > interval_2.getHigh())
-		return 1;
-	    /* returns 0 if they are equal */
-	    else
-		return 0;
-	    }
-	}
+    
 
-	/**
-	 * The new comparator for the rightorder interval list which contains the
-	 * right end points sorted in decreasing order.
-	 * 
-	 */
-	public class RightComparator implements Comparator<Interval<T>> {
-	    public int compare(Interval<T> interval_1, Interval<T> interval_2) {
-		/*
-		 * returns -1 if the highpoint of i is bigger than the highpoint of
-		 * j
-		 */
-		if (interval_1.getHigh() > interval_2.getHigh())
-		    return -1;
-		/*
-		 * returns 1 if the highpoint of i is smaller than the highpoint of
-		 * j
-		 */
-		else if (interval_1.getHigh() < interval_2.getHigh() )
-		    return 1;
-		/* returns -1 if the lowpoint of i is bigger than the lowpoint of j */
-		else if (interval_1.getLow() > interval_2.getLow())
-		    return -1;
-		    /* returns 1 if the lowpoint of i is smaller than the lowpoint of j */
-		else if (interval_1.getLow() < interval_2.getLow() )
-		    return 1;
-		 /* returns 0 if they are equal */
-		else
-		    return 0;
-	    }
-	}
+	
 
-	/* returns a string that represents the interval */
-	public String toString() {
-	    return "[" + lowpoint + "," + highpoint + "," + value + "]";
-	}
+    /* returns a string that represents the interval */
+    public String toString() {
+	return "[" + lowpoint + "," + highpoint + "," + value + "]";
+    }
 
 }

@@ -19,7 +19,11 @@ import jannovar.interval.LeftComparator;
  * @version 0.02 (15 May, 2013)
  */
 public class IntervalTree<T> {
+	/** The root node of the entire interval tree. */
 	public Node<T> root;
+	/** All intervals of the entire tree (pointers to these intervals are
+	 * also used in the nodes).
+	 */
 	public List<Interval<T>> intervals;
 	
 	/** A Comparator that is used to sort intervals by their left endpoint
@@ -84,8 +88,8 @@ public class IntervalTree<T> {
 	 * 
 	 * @param n A node of the interval tree
 	 * @param result An ArrayList containg the found intervals
-	 * @param ilow The lower element of the interval
-	 * @param ihigh The higher element of the interval
+	 * @param ilow The lower element of the search interval
+	 * @param ihigh The higher element of the search interval
 	 */
 	public void searchInterval(Node<T> n, ArrayList<Interval<T>> result, int ilow, int ihigh) {
 		/* ends if the node n is empty */
