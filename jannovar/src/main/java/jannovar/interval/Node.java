@@ -19,8 +19,8 @@ import jannovar.interval.LeftComparator;
  * stores the same intervals sorted by their right end points (highpoint).
  *
  * @see jannovar.interval.IntervalTree
- * @author n1, n2, ... (eure Namen!)
- * @version 0.02 (18 May, 2013)
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
+ * @version 0.1 (14 May, 2013)
  */
 public class Node<T> {
 	/** Median of all intervals in this node */

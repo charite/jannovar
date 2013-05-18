@@ -7,15 +7,45 @@ import jannovar.interval.LeftComparator;
 
 /**
  * Implements an Interval Tree.
- * <P>
+* <P>
  * The construction of the interval tree proceeds in several phases.
  * <ol>
- * <li>Phase 1
- * <li>Phase 2
- * <li>...
+ * <li>The 2n endpoints are sorted for the n intervals and the median point of
+ * the endpoints is calculated.
+ * <li>The intervals are divided into three categories.
+ * <ol>
+ * <li>Intervals that cross the median are stored in the intervals list.
+ * <li>Intervals completely to the left of the median are stored in the leftNode
+ * list.
+ * <li>Intervals completely to the right are stored in the rightNode list.
  * </ol>
- * To search in the interval tree, the following procedure is used (...)
- * @author names
+ * <li>Each interval in the intervals list is sorted in two lists: leftorder
+ * (sorted by increasing left endpoints) and rightorder (sorted by decreasing
+ * right endpoints).
+ * </ol>
+ * <P>
+ * To search in the interval tree, the following procedure is used.
+ * <ol>
+ * <li>If the highpoint of the interval is smaller than the median, the right
+ * subtree is eliminated. Otherwise, the search method is called recursively.
+ * <li>If the lowpoint of the interval is larger than the median, the left
+ * subtree is eliminated. Otherwise, the search method is called recursively.
+ * <li>Always searches the intervals stored at current node using the two sorted
+ * lists leftorder and rightorder.
+ * <ol>
+ * <li>If the highpoint is smaller than the median, search the leftorder list
+ * and output all intervals until there is one with a left endpoint larger than
+ * the lowpoint.
+ * <li>If the lowpoint is larger than the median, search the rightorder list and
+ * output all intervals until there is one with a right endpoint smaller than
+ * the highpoint.
+ * </ol>
+ * </ol>
+ * <P>
+ * The construction of an Interval Tree enables a fast search of overlapping
+ * intervals.
+ * 
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.02 (15 May, 2013)
  */
 public class IntervalTree<T> {

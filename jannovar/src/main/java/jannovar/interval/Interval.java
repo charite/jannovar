@@ -12,7 +12,7 @@ import jannovar.exception.IntervalTreeException;
  * intervals are intended to be used with the
  * {@link jannovar.interval.IntervalTree IntervallTree}.
  * @see jannovar.interval.IntervalTree
- * @author names..
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.02 (15 May, 2013)
  */
 public class Interval<T>  { // implements Comparable<Interval<T>> 
