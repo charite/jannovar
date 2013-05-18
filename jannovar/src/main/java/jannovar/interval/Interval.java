@@ -3,9 +3,13 @@ package jannovar.interval;
 import java.util.Comparator;
 
 /**
- * Implements an interval with two end points and each interval contains
- * additional information.
- * 
+ * This class implements an interval on a numberline with a lowpoint
+ * and a highpoint (where lowpoint <= highpoint). The Interval is intended
+ * to contain some other kind of data (clients of this templated class will
+ * need to initialize the template variable T to the corresponding datatype). The
+ * intervals are intended to be used with the
+ * {@link jannovar.interval.IntervalTree IntervallTree}.
+ * @see jannovar.interval.IntervalTree
  * @author names..
  * @version 0.02 (15 May, 2013)
  */
@@ -18,69 +22,84 @@ public class Interval<T>  { // implements Comparable<Interval<T>>
     /** The larger end point of the interval */
     private int highpoint;
 
-	/**
-	 * Getters and setters for the parameters of the Interval class.
-	 */
-	public void setLow(int lowpoint) {
-		this.lowpoint = lowpoint;
-	}
+    /**
+     * @param lpoint The lower end of the Interval
+     */
+    public void setLow(int lpoint) {
+    	this.lowpoint = lpoint;
+    }
 
-	public int getLow() {
-	    return lowpoint;
-	}
+    /**
+     * @return the lower end of the interval.
+     */
+    public int getLow() {
+        return lowpoint;
+    }
 
-	public void setHigh(int highpoint) {
-	    this.highpoint = highpoint;
-	}
+    /**
+     * @param hpoint The upper end of the Interval
+     */
+    public void setHigh(int hpoint) {
+        this.highpoint = hpoint;
+    }
 
-	public int getHigh() {
-		return highpoint;
-	}
+    /**
+     * @return the upper end of the interval.
+     */
+    public int getHigh() {
+    	return highpoint;
+    }
 
-	public void setValue(T value) {
-	    this.value = value;
-	}
+    /**
+     * @param val The object that is to be represented by the interval
+     */
+    public void setValue(T val) {
+        this.value = val;
+    }
 
-	public T getValue() {
-	    return value;
-	}
+    /**
+     *	@return The object that is represented by this interval
+     */
+    public T getValue() {
+        return value;
+    }
 
-	/**
-	 * Interval constructor.
-	 */
-	public Interval(int low, int high, T value) {
-	    if (low < high) {
+    /**
+     * Interval constructor.
+     */
+    public Interval(int low, int high, T value) {
+        if (low < high) {
 		this.lowpoint = low;
 		this.highpoint = high;
 		this.value = value;
 	    }
-	}
+    }
 
-	/**
-	 * The new comparator for the leftorder interval list which contains the
-	 * left end points sorted in increasing order.
-	 */
-	public class LeftComparator implements Comparator<Interval<T>> {
-		public int compare(Interval<T> interval_1, Interval<T> interval_2) {
-			/* returns -1 if the lowpoint of i is smaller than the lowpoint of j */
-			if (interval_1.getLow() < interval_2.getLow())
-				return -1;
-			/* returns 1 if the lowpoint of i is bigger than the lowpoint of j */
-			else if (interval_1.getLow() > interval_2.getLow())
-				return 1;
-			/*
-			 * returns -1 if the highpoint of i is smaller than the highpoint of
-			 * j
-			 */
-			else if (interval_1.getHigh() < interval_2.getHigh())
-				return -1;
-			/* returns 1 if the highpoint of i is bigger than the highpoint of j */
-			else if (interval_1.getHigh() > interval_2.getHigh())
-				return 1;
-			/* returns 0 if they are equal */
-			else
-				return 0;
-		}
+    /**
+     * The new comparator for the leftorder interval list which contains the
+     * left end points sorted in increasing order.
+     */
+    public class LeftComparator implements Comparator<Interval<T>> {
+    	public int compare(Interval<T> interval_1, Interval<T> interval_2) {
+	    /* returns -1 if the lowpoint of i is smaller than the lowpoint of j */
+	    if (interval_1.getLow() < interval_2.getLow())
+        	return -1;
+	    /* returns 1 if the lowpoint of i is bigger than the lowpoint of j */
+	    else if (interval_1.getLow() > interval_2.getLow())
+		return 1;
+	    /*
+	    * returns -1 if the highpoint of i is smaller than the highpoint of
+	     * j
+	     */
+	    else if (interval_1.getHigh() < interval_2.getHigh())
+		return -1;
+	    /* returns 1 if the highpoint of i is bigger than the highpoint of j */
+	    else if (interval_1.getHigh() > interval_2.getHigh())
+		return 1;
+	    /* returns 0 if they are equal */
+	    else
+		return 0;
+	    }
 	}
 
 	/**
@@ -89,35 +108,34 @@ public class Interval<T>  { // implements Comparable<Interval<T>>
 	 * 
 	 */
 	public class RightComparator implements Comparator<Interval<T>> {
-		public int compare(Interval<T> interval_1, Interval<T> interval_2) {
-			/*
-			 * returns -1 if the highpoint of i is bigger than the highpoint of
-			 * j
-			 */
-			if (interval_1.getHigh() > interval_2.getHigh())
-				return -1;
-			/*
-			 * returns 1 if the highpoint of i is smaller than the highpoint of
-			 * j
-			 */
-			else if (interval_1.getHigh() < interval_2.getHigh() )
-				return 1;
-			/* returns -1 if the lowpoint of i is bigger than the lowpoint of j */
-			else if (interval_1.getLow() > interval_2.getLow())
-				return -1;
-			/* returns 1 if the lowpoint of i is smaller than the lowpoint of j */
-			else if (interval_1.getLow() < interval_2.getLow() )
-				return 1;
-			/* returns 0 if they are equal */
-			else
-				return 0;
-
-		}
+	    public int compare(Interval<T> interval_1, Interval<T> interval_2) {
+		/*
+		 * returns -1 if the highpoint of i is bigger than the highpoint of
+		 * j
+		 */
+		if (interval_1.getHigh() > interval_2.getHigh())
+		    return -1;
+		/*
+		 * returns 1 if the highpoint of i is smaller than the highpoint of
+		 * j
+		 */
+		else if (interval_1.getHigh() < interval_2.getHigh() )
+		    return 1;
+		/* returns -1 if the lowpoint of i is bigger than the lowpoint of j */
+		else if (interval_1.getLow() > interval_2.getLow())
+		    return -1;
+		    /* returns 1 if the lowpoint of i is smaller than the lowpoint of j */
+		else if (interval_1.getLow() < interval_2.getLow() )
+		    return 1;
+		 /* returns 0 if they are equal */
+		else
+		    return 0;
+	    }
 	}
 
 	/* returns a string that represents the interval */
 	public String toString() {
-		return "[" + lowpoint + "," + highpoint + "," + value + "]";
+	    return "[" + lowpoint + "," + highpoint + "," + value + "]";
 	}
 
 }

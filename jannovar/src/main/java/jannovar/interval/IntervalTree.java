@@ -3,6 +3,8 @@ package jannovar.interval;
 import java.util.ArrayList;
 import java.util.List;
 
+import jannovar.interval.LeftComparator;
+
 /**
  * Implements an Interval Tree.
  * <P>
@@ -19,6 +21,13 @@ import java.util.List;
 public class IntervalTree<T> {
 	public Node<T> root;
 	public List<Interval<T>> intervals;
+	
+	/** A Comparator that is used to sort intervals by their left endpoint
+	 * in ascending order. */
+	public static LeftComparator leftcomp = null;
+	/** A Comparator that is used to sort intervals by their right endpoint
+	 * in descending order. */
+	public static RightComparator rightcomp = null;
 
 	/**
 	 * Default constructor.
@@ -28,7 +37,7 @@ public class IntervalTree<T> {
 		this.root = new Node<T>();
 		/* sets the intervals list which is of the type ArrayList */
 		this.intervals = new ArrayList<Interval<T>>();
-
+		initializeComparators();
 	}
 
 	/**
@@ -40,6 +49,21 @@ public class IntervalTree<T> {
 		/* sets the root and calls the node constructor with list */
 		this.root = new Node<T>(intervals);
 		this.intervals = intervals;
+		initializeComparators();
+	}
+	
+	/**
+	 * A helper method intended to be used by the Constructors of this
+	 * class to initialize the static Comparator objects that will be
+	 * used to sort intervals.
+	 */
+	private void initializeComparators() {
+		if (IntervalTree.leftcomp == null){
+			IntervalTree.leftcomp = new LeftComparator();
+		}
+		if (IntervalTree.rightcomp == null) {
+			IntervalTree.rightcomp = new RightComparator();
+		}
 	}
 
 	/**

@@ -5,11 +5,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import jannovar.interval.LeftComparator;
+
 /**
- * Implements the Node structure of the interval tree.
- * 
+ * Implements the Node structure of the interval tree. The class is inteded to
+ * store {@link jannovar.interval.Interval Interval} objects. Each node stores
+ * all Intervals that intersect with the {@link #median}. The {@link #leftNode}
+ * stores all Intervals that are completely to the left of {@link #median}, and
+ * the {@link #rightNode} stores all intervals that are completely to the right.
+ * Additionally there are two lists that store orders lists of the Intevals that
+ * are stored within the present node. {@link #leftorder} stores the intervals
+ * sorted by increased left end points (lowpoint), and {@link #rightorder}
+ * stores the same intervals sorted by their right end points (highpoint).
+ *
+ * @see jannovar.interval.IntervalTree
  * @author n1, n2, ... (eure Namen!)
- * @version 0.1 (14 May, 2013)
+ * @version 0.02 (18 May, 2013)
  */
 public class Node<T> {
 	/** Median of all intervals in this node */
@@ -24,6 +35,12 @@ public class Node<T> {
 	public List<Interval<T>> leftorder;
 	/** list sorted by decreasing right end points */
 	public List<Interval<T>> rightorder;
+	/** A Comparator that is used to sort intervals by their left endpoint
+	 * in ascending order. */
+	public static LeftComparator leftcomp = null;
+	/** A Comparator that is used to sort intervals by their right endpoint
+	 * in descending order. */
+	public static RightComparator rightcomp = null;
 
 	/**
 	 * Default constructor to create an empty node.
@@ -66,13 +83,19 @@ public class Node<T> {
 			 */
 			if (interval.getHigh() < median) {
 				lefts.add(interval);
-				/*
-				 * if the lowpoint is bigger than the median, insert interval
-				 * into rights
-				 */
+			/*
+			 * if the lowpoint is bigger than the median, insert interval
+			 * into rights
+			 */
 			} else if (interval.getLow() > median) {
 				rights.add(interval);
 			}
+			/** ?????????????????????
+			 * Warum nicht hier  else {
+				medianIntervals.add(interval);
+			 }
+			 Das wäre auf jeden Fall effizienter als addAll...remove...remove
+			 */
 		}
 		/* medianIntervals stores all intervals containing the median point */
 		List<Interval<T>> medianIntervals = new ArrayList<Interval<T>>();
@@ -87,18 +110,17 @@ public class Node<T> {
 		rightorder = new ArrayList<Interval<T>>();
 
 		/*
-		 * comp is a comparator used to sort the low points in increasing order
+		 * Node.leftcomp is a comparator used to sort the low points in increasing order
 		 */
-		Comparator<Interval<T>> comp = new LeftComparator();
-		Collections.sort(medianIntervals, comp);
+		
+		Collections.sort(medianIntervals, Node.leftcomp);
 		/* leftorder stores sorted medianIntervals */
 		leftorder.addAll(medianIntervals);
 		/*
-		 * compare is a comparator used to sort the high points in decreasing
+		 * Node.rightcomp is a comparator used to sort the high points in decreasing
 		 * order
 		 */
-		Comparator<Interval<T>> compare = new RightComparator();
-		Collections.sort(medianIntervals, compare);
+		Collections.sort(medianIntervals, Node.rightcomp);
 		/* rightorder stores sorted medianIntervals */
 		rightorder.addAll(medianIntervals);
 		/* if lefts is not empty it is stored in leftNode */
@@ -111,6 +133,26 @@ public class Node<T> {
 			rightNode = new Node<T>(rights);
 		}
 	}
+
+	/**
+	 * A static method intended to be used by the IntervalTree
+	 * constructor to set the left-comparator once for all
+	 * node objects.
+	 */
+	public static void setLeftComparator(LeftComparator lcmp) { // 
+		Node.leftcomp = lcmp;
+	}
+
+	/**
+	 * A static method intended to be used by the IntervalTree
+	 * constructor to set the right-comparator once for all
+	 * node objects.
+	 */
+	public static void setRightComparator(RightComparator rcmp) { // 
+		Node.rightcomp = rcmp;
+	}
+
+
 
 	/**
 	 * Calculates the median value of the sorted list. For this purpose, the
@@ -134,65 +176,8 @@ public class Node<T> {
 
 
 
-		/**
-	 * The new comparator for the leftorder interval list which contains the
-	 * left end points sorted in increasing order.
-	 */
-	public class LeftComparator implements Comparator<Interval<T>> {
-		public int compare(Interval<T> interval_1, Interval<T> interval_2) {
-			/* returns -1 if the lowpoint of i is smaller than the lowpoint of j */
-			if (interval_1.getLow() < interval_2.getLow())
-				return -1;
-			/* returns 1 if the lowpoint of i is bigger than the lowpoint of j */
-			else if (interval_1.getLow() > interval_2.getLow())
-				return 1;
-			/*
-			 * returns -1 if the highpoint of i is smaller than the highpoint of
-			 * j
-			 */
-			else if (interval_1.getHigh() < interval_2.getHigh())
-				return -1;
-			/* returns 1 if the highpoint of i is bigger than the highpoint of j */
-			else if (interval_1.getHigh() > interval_2.getHigh())
-				return 1;
-			/* returns 0 if they are equal */
-			else
-				return 0;
-		}
-	}
 
-	/**
-	 * The new comparator for the rightorder interval list which contains the
-	 * right end points sorted in decreasing order.
-	 * 
-	 */
-	public class RightComparator implements Comparator<Interval<T>> {
-		public int compare(Interval<T> interval_1, Interval<T> interval_2) {
-			/*
-			 * returns -1 if the highpoint of i is bigger than the highpoint of
-			 * j
-			 */
-			if (interval_1.getHigh() > interval_2.getHigh())
-				return -1;
-			/*
-			 * returns 1 if the highpoint of i is smaller than the highpoint of
-			 * j
-			 */
-			else if (interval_1.getHigh() < interval_2.getHigh() )
-				return 1;
-			/* returns -1 if the lowpoint of i is bigger than the lowpoint of j */
-			else if (interval_1.getLow() > interval_2.getLow())
-				return -1;
-			/* returns 1 if the lowpoint of i is smaller than the lowpoint of j */
-			else if (interval_1.getLow() < interval_2.getLow() )
-				return 1;
-			/* returns 0 if they are equal */
-			else
-				return 0;
-
-		}
-	}
-
+	
 
 
 
