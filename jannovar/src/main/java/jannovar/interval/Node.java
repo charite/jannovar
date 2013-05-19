@@ -69,12 +69,14 @@ public class Node<T> {
 			Collections.sort(endpointslist);
 		}
 		/* calculates the median of the current node */
-		median = findMedian(endpointslist);
+		median = calculateMedian(endpointslist);
 
 		/* lefts stores intervals to the left of the median */
 		List<Interval<T>> lefts = new ArrayList<Interval<T>>();
 		/* rights stores intervals to the right of the median */
 		List<Interval<T>> rights = new ArrayList<Interval<T>>();
+		/* medianIntervals stores all intervals containing the median point */
+		List<Interval<T>> medianIntervals = new ArrayList<Interval<T>>();
 
 		for (Interval<T> interval : intervals) {
 			/*
@@ -89,22 +91,17 @@ public class Node<T> {
 			 */
 			} else if (interval.getLow() > median) {
 				rights.add(interval);
-			}
-			/** ?????????????????????
-			 * Warum nicht hier  else {
+			} else {
 				medianIntervals.add(interval);
 			 }
-			 Das wäre auf jeden Fall effizienter als addAll...remove...remove
-			 */
 		}
-		/* medianIntervals stores all intervals containing the median point */
-		List<Interval<T>> medianIntervals = new ArrayList<Interval<T>>();
-		/* inserts intervals into medianIntervals */
+		
+		/* inserts intervals into medianIntervals 
 		medianIntervals.addAll(intervals);
-		/* removes lefts from medianIntervals */
+		 removes lefts from medianIntervals 
 		medianIntervals.removeAll(lefts);
-		/* removes rights from medianIntervals */
-		medianIntervals.removeAll(rights);
+		 removes rights from medianIntervals 
+		medianIntervals.removeAll(rights);*/
 
 		leftorder = new ArrayList<Interval<T>>();
 		rightorder = new ArrayList<Interval<T>>();
@@ -163,7 +160,7 @@ public class Node<T> {
 	 * @param list A list of integers
 	 * @return The median of the list
 	 */
-	public Integer findMedian(List<Integer> list) {
+	private Integer calculateMedian(List<Integer> list) {
 		/* mid is defined as the center of the list */
 		int mid = list.size() / 2;
 		/* median is set to mid */
@@ -173,6 +170,8 @@ public class Node<T> {
 		}
 		return median;
 	}
+	
+	public int getMedian() { return this.median; }
 
 
 
