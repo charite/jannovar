@@ -35,6 +35,7 @@ import jannovar.annotation.AnnotationList;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.KGParseException;
+import jannovar.exception.IntervalTreeException;
 import jannovar.io.VCFReader;
 
 /**
@@ -116,15 +117,20 @@ public class Jannovar {
 	Jannovar anno = new Jannovar(argv);
 
 	if (anno.serialize()) {
-	    anno.readUCSCKnownGenesFile();	
+	    try{
+		anno.readUCSCKnownGenesFile2();	
+	    } catch (IntervalTreeException e) {
+		System.out.println("Could not construct interval tree: " + e.toString());
+		System.exit(1);
+	    }
 	    anno.serializeUCSCdata();
 	    return;
 	} else if (anno.deserialize()) {
-	    anno.deserializeUCSCdata();
+	    //anno.deserializeUCSCdata();
 	} else {
 	    System.err.println("Error: Need to first run program to serialize UCSC data");
 	    System.err.println("Then, run analysis using serialized data");
-	    System.exit(1);
+	    //System.exit(1);
 	}
 	/* When we get here, the program has deserialized data and put it into the
 	   Chromosome objects. We can now start to annotate variants. */
@@ -333,7 +339,7 @@ public class Jannovar {
      * Diese Funktion soll ausgebaut werden, um den Intervallbaum zu verwenden!
      *
      */
-    public void readUCSCKnownGenesFile2() {
+    public void readUCSCKnownGenesFile2() throws IntervalTreeException {
 	UCSCKGParser parser = new UCSCKGParser(this.ucscPath);
 	try {
 	    parser.parseFile();
@@ -361,8 +367,15 @@ public class Jannovar {
 	   use the new Chromosome constructor, that takes an  Interval tree. */
 	// make IntervalTree for each chromosome
 	// use Chromosome(/IntervalTree ) CTOR
-
-
+	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
+	for (Byte chrom : chrMap.keySet()) {
+	    System.out.println("B=" + chrom);
+	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
+	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
+	    Chromosome chr = new Chromosome(chrom,itree);
+	    this.chromosomeMap.put(chrom,chr);
+	}
+	
 
 
     }

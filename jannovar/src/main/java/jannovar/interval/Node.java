@@ -43,15 +43,9 @@ public class Node<T> {
 	public static RightComparator rightcomp = null;
 
 	/**
-	 * Default constructor to create an empty node.
+	 * Default constructor forbidden.
 	 */
-	public Node() {
-		median = 0;
-		leftNode = null;
-		rightNode = null;
-		intervals = new ArrayList<Interval<T>>();
-		leftorder = new ArrayList<Interval<T>>();
-		rightorder = new ArrayList<Interval<T>>();
+	private Node() {
 	}
 
 	/**
@@ -83,26 +77,20 @@ public class Node<T> {
 			 * if the highpoint is smaller than the median, insert interval into
 			 * lefts
 			 */
-			if (interval.getHigh() < median) {
-				lefts.add(interval);
+		    if (interval.getHigh() < median) {
+			lefts.add(interval);
 			/*
 			 * if the lowpoint is bigger than the median, insert interval
 			 * into rights
 			 */
-			} else if (interval.getLow() > median) {
-				rights.add(interval);
-			} else {
-				medianIntervals.add(interval);
-			 }
+		    } else if (interval.getLow() > median) {
+			rights.add(interval);
+		    } else {
+			medianIntervals.add(interval);
+		    }
 		}
 		
-		/* inserts intervals into medianIntervals 
-		medianIntervals.addAll(intervals);
-		 removes lefts from medianIntervals 
-		medianIntervals.removeAll(lefts);
-		 removes rights from medianIntervals 
-		medianIntervals.removeAll(rights);*/
-
+		
 		leftorder = new ArrayList<Interval<T>>();
 		rightorder = new ArrayList<Interval<T>>();
 

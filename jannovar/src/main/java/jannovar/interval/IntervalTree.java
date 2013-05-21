@@ -48,7 +48,7 @@ import jannovar.interval.LeftComparator;
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.02 (15 May, 2013)
  */
-public class IntervalTree<T> {
+public class IntervalTree<T> implements java.io.Serializable {
 	/** The root node of the entire interval tree. */
 	public Node<T> root;
 	/** All intervals of the entire tree (pointers to these intervals are
@@ -65,14 +65,14 @@ public class IntervalTree<T> {
 
 	/**
 	 * Default constructor.
-	 */
+
 	public IntervalTree() {
-		/* sets the root of the tree */
-		this.root = new Node<T>();
-		/* sets the intervals list which is of the type ArrayList */
+	    /* sets the root of the tree 
+	    this.root = new Node<T>();
+		/* sets the intervals list which is of the type ArrayList 
 		this.intervals = new ArrayList<Interval<T>>();
 		initializeComparators();
-	}
+	}	 */
 
 	/**
 	 * Tree constructor.
@@ -107,10 +107,14 @@ public class IntervalTree<T> {
 	 * @param high The higher element of the interval
 	 * @return result, which is an ArrayList containg the found intervals
 	 */
-	public ArrayList<Interval<T>> search(int low, int high) {
-		ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
-		searchInterval(root, result, low, high);
-		return result;
+	public ArrayList<T> search(int low, int high) {
+	    ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
+	    searchInterval(root, result, low, high);
+	    ArrayList<T> obtlst = new ArrayList<T>();
+	    for (Interval<T> it : result) {
+		obtlst.add(it.getValue());
+	    }
+	    return obtlst;
 	}
 
 	/**

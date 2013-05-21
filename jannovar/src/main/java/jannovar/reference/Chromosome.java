@@ -321,8 +321,11 @@ public class Chromosome {
 	boolean foundgenic=false; //variant already found in genic region (between start and end position of a gene)
 	
 	/** Get TranscriptModels that are located in vicinity of position. */
-	ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
+	//ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
 	
+	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
+
+
 	for (TranscriptModel kgl : candidateGenes) {
 	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(), kgl.getStrand()));
 	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
