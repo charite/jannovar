@@ -12,7 +12,7 @@ import java.util.Comparator;
  * @version 0.03 (22 May, 2013)
  */
 public class LeftComparator<T> implements Comparator<Interval<T>> {
-    public int compare(Interval interval_1, Interval interval_2) {
+    public int compare(Interval<T> interval_1, Interval<T> interval_2) {
 	/* returns -1 if the lowpoint of i is smaller than the lowpoint of j */
 	if (interval_1.getLow() < interval_2.getLow())
 	    return -1;

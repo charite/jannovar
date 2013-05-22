@@ -15,11 +15,12 @@ import java.util.Comparator;
  */
 public class RightComparator<T> implements Comparator<Interval<T>>  {
     
-    public int compare(Interval interval_1, Interval interval_2) {
+    public int compare(Interval<T> interval_1, Interval<T> interval_2) {
 	/*
 	 * returns -1 if the highpoint of i is bigger than the highpoint of
 	 * j
 	 */
+
 	if (interval_1.getHigh() > interval_2.getHigh())
 	    return -1;
 	/*

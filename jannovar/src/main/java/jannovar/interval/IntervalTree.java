@@ -58,10 +58,10 @@ public class IntervalTree<T > implements java.io.Serializable {
 	
 	/** A Comparator that is used to sort intervals by their left endpoint
 	 * in ascending order. */
-	public static LeftComparator leftcomp = null;
+	public LeftComparator<Interval<T>> leftcomp = null;
 	/** A Comparator that is used to sort intervals by their right endpoint
 	 * in descending order. */
-	public static RightComparator rightcomp = null;
+	public RightComparator<Interval<T>> rightcomp = null;
 
 
 	/** The default constructor should not be used and is declared private. */
@@ -86,11 +86,11 @@ public class IntervalTree<T > implements java.io.Serializable {
 	 * used to sort intervals.
 	 */
 	private void initializeComparators() {
-	    if (IntervalTree.leftcomp == null){
-		IntervalTree.leftcomp = new LeftComparator();
+	    if (this.leftcomp == null){
+		this.leftcomp = new LeftComparator<Interval<T>>();
 	    }
-	    if (IntervalTree.rightcomp == null) {
-		IntervalTree.rightcomp = new RightComparator();
+	    if (this.rightcomp == null) {
+		this.rightcomp = new RightComparator<Interval<T>>();
 	    }
 	}
 	
