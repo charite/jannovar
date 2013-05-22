@@ -72,7 +72,7 @@ import jannovar.io.VCFReader;
  * </PRE>
  * This will create two files with all variants and a special file with exonic variants.
  * @author Peter N Robinson
- * @version 0.13 (13 May, 2013)
+ * @version 0.15 (22 May, 2013)
  */
 public class Jannovar {
     /** A logger from Apache's log4j that records key statistics from program execution. */
@@ -126,17 +126,22 @@ public class Jannovar {
 	    anno.serializeUCSCdata();
 	    return;
 	} else if (anno.deserialize()) {
-	    //anno.deserializeUCSCdata();
+	    anno.deserializeUCSCdata();
+	} else if (anno.ucscFilesAvailable()) {
+	     try{
+		anno.readUCSCKnownGenesFile2();	
+	    } catch (IntervalTreeException e) {
+		System.out.println("Could not construct interval tree: " + e.toString());
+		System.exit(1);
+	    }
 	} else {
-	    System.err.println("Error: Need to first run program to serialize UCSC data");
-	    System.err.println("Then, run analysis using serialized data");
-	    //System.exit(1);
+	    usage();
+	    System.exit(1);
 	}
 	/* When we get here, the program has deserialized data and put it into the
 	   Chromosome objects. We can now start to annotate variants. */
 	if (anno.hasVCFfile()) {
-	    anno.annotateVCF();
-	   
+	    anno.annotateVCF(); 
 	} else {
 	    System.out.println("No VCF file found");
 	}
@@ -170,6 +175,22 @@ public class Jannovar {
 	return this.VCFfilePath != null;
     }
 
+    /**
+     * This function can be used to know whether we have all the UCSC files
+     * we need to either serialize the 
+     * {@link jannovar.reference.TranscriptModel TranscriptModel} objects
+     * or to proceed directly to the analysis without serialization.
+     * @return true if the user has given paths for the UCSC files.
+     */
+    public boolean ucscFilesAvailable() {
+	if ( this.ucscPath !=null &&
+	     this.ucscXrefPath != null &&
+	     this.ucscKGMrnaPath != null &&
+	     this.ucscKnown2LocusPath != null)
+	    return true;
+	else
+	    return false;
+    }
    
 
     /**
@@ -336,7 +357,10 @@ public class Jannovar {
 
 
     /**
-     * Diese Funktion soll ausgebaut werden, um den Intervallbaum zu verwenden!
+     * This menction uses {@link jannovar.io.UCSCKGParser UCSCKGParser}
+     * to parse the four UCSC KnownGenes files that are needed to create
+     *  {@link jannovar.reference.TranscriptModel TranscriptModel} objects
+     * for all genes in the transcriptome.
      *
      */
     public void readUCSCKnownGenesFile2() throws IntervalTreeException {
@@ -416,6 +440,7 @@ public class Jannovar {
 	    {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("Annotator", options);
+		usage();
 		System.exit(0);
 	    }
 	   
@@ -462,6 +487,18 @@ public class Jannovar {
 	return val;
     }
 
+
+    private static void usage() {
+	System.out.println("***   Jannovar: Usage     ****");
+	System.out.println("Jannovar can be used to serialize UCSC KnownGenes data:");
+	System.out.println("** $ java -jar Jannovar -S f -U p1 -X p2 -M p3 -L p4");
+	System.out.println("** Here,f is the desired file name of the serialized file, and p1-p4 are paths to the UCSC files");
+	System.out.println("Jannovar can be used to annotate VCF files with the serialized UCSC file (or the original UCSC files):");
+	System.out.println("** $ java -jar Jannovar -D ucsc.ser -V vcfPath");
+	System.out.println("** Here, ucsc.ser is the name of the serialized UCSC data, and vcfPath is the path to the VCF exome file");
+
+
+    }
 
 
 }

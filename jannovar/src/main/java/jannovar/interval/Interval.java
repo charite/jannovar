@@ -15,7 +15,7 @@ import jannovar.exception.IntervalTreeException;
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.02 (15 May, 2013)
  */
-public class Interval<T>  { // implements Comparable<Interval<T>> 
+public class Interval<T extends Comparable<? super T>>  { // implements Comparable<Interval<T>> 
     /** The object that we are putting into the interval tree (such as a 
      * {@jannovar.reference.TranscriptModel TranscriptModel} object).*/
     private T value;

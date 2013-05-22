@@ -46,7 +46,7 @@ import jannovar.interval.LeftComparator;
  * intervals.
  * 
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.02 (15 May, 2013)
+ * @version 0.03 (22 May, 2013)
  */
 public class IntervalTree<T> implements java.io.Serializable {
 	/** The root node of the entire interval tree. */
@@ -63,16 +63,10 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 * in descending order. */
 	public static RightComparator rightcomp = null;
 
-	/**
-	 * Default constructor.
 
-	public IntervalTree() {
-	    /* sets the root of the tree 
-	    this.root = new Node<T>();
-		/* sets the intervals list which is of the type ArrayList 
-		this.intervals = new ArrayList<Interval<T>>();
-		initializeComparators();
-	}	 */
+	/** The default constructor should not be used and is declared private. */
+	private IntervalTree() {
+	}
 
 	/**
 	 * Tree constructor.
@@ -80,10 +74,10 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 * @param intervals A list that contains the intervals
 	 */
 	public IntervalTree(List<Interval<T>> intervals) {
-		/* sets the root and calls the node constructor with list */
-		this.root = new Node<T>(intervals);
-		this.intervals = intervals;
-		initializeComparators();
+	    /* sets the root and calls the node constructor with list */
+	    this.root = new Node<T>(intervals);
+	    this.intervals = intervals;
+	    initializeComparators();
 	}
 	
 	/**
@@ -92,14 +86,14 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 * used to sort intervals.
 	 */
 	private void initializeComparators() {
-		if (IntervalTree.leftcomp == null){
-			IntervalTree.leftcomp = new LeftComparator();
-		}
-		if (IntervalTree.rightcomp == null) {
-			IntervalTree.rightcomp = new RightComparator();
-		}
+	    if (IntervalTree.leftcomp == null){
+		IntervalTree.leftcomp = new LeftComparator();
+	    }
+	    if (IntervalTree.rightcomp == null) {
+		IntervalTree.rightcomp = new RightComparator();
+	    }
 	}
-
+	
 	/**
 	 * Search function which calls the method searchInterval to find intervals.
 	 * 
@@ -126,81 +120,81 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 * @param ihigh The higher element of the search interval
 	 */
 	public void searchInterval(Node<T> n, ArrayList<Interval<T>> result, int ilow, int ihigh) {
-		/* ends if the node n is empty */
-		if (n == null) {
-			return;
-		}
-		/*
-		 * if ilow is smaller than the median of n the left side of the tree is
-		 * searched
-		 */
-		if (ilow < n.median) {
-			/* as long as the iterator i is smaller than the size of leftorder */
-			int size = n.leftorder.size();
-
-			for (int i = 0; i < size; i++) {
-				/*
-				 * breaks if the lowpoint at position i is bigger than the
-				 * wanted high point
-				 */
-				if (n.leftorder.get(i).getLow() > ihigh) {
-					break;
-				}
-				/* adds the interval at position i of leftorder to result */
-				result.add(n.leftorder.get(i));
-			}
-			/*
-			 * if ihigh is bigger than the median of n the right side of the
-			 * tree is searched
-			 */
-		} else if (ihigh > n.median) {
-			/* as long as the iterator i is smaller than the size of rightorder */
-			int size = n.rightorder.size();
-			for (int i = 0; i < size; i++) {
-				/*
-				 * breaks if the highpoint at position i is smaller than the
-				 * wanted low point
-				 */
-				if (n.rightorder.get(i).getHigh() < ilow) {
-					break;
-				}
-				/* adds the interval at position i of rightorder to result */
-				result.add(n.rightorder.get(i));
-			}
-		}
-		/*
-		 * if leftNode is not empty the searchInterval method is called
-		 * recursively
-		 */
-		if (n.leftNode != null) {
-			searchInterval(n.leftNode, result, ilow, ihigh);
-		}
-		/*
-		 * if rightNode is not empty the searchInterval method is called
-		 * recursively
-		 */
-		if (n.rightNode != null) {
-			searchInterval(n.rightNode, result, ilow, ihigh);
-		}
+	    /* ends if the node n is empty */
+	    if (n == null) {
 		return;
+	    }
+	    /*
+	     * if ilow is smaller than the median of n the left side of the tree is
+	     * searched
+	     */
+	    if (ilow < n.getMedian()) {
+		/* as long as the iterator i is smaller than the size of leftorder */
+		int size = n.leftorder.size();
+		
+		for (int i = 0; i < size; i++) {
+		    /*
+		     * breaks if the lowpoint at position i is bigger than the
+		     * wanted high point
+		     */
+		    if (n.leftorder.get(i).getLow() > ihigh) {
+			break;
+		    }
+		    /* adds the interval at position i of leftorder to result */
+		    result.add(n.leftorder.get(i));
+		}
+		/*
+		 * if ihigh is bigger than the median of n the right side of the
+		 * tree is searched
+		 */
+	    } else if (ihigh > n.getMedian()) {
+		/* as long as the iterator i is smaller than the size of rightorder */
+		int size = n.rightorder.size();
+		for (int i = 0; i < size; i++) {
+		    /*
+		     * breaks if the highpoint at position i is smaller than the
+		     * wanted low point
+		     */
+		    if (n.rightorder.get(i).getHigh() < ilow) {
+			break;
+		    }
+		    /* adds the interval at position i of rightorder to result */
+		    result.add(n.rightorder.get(i));
+		}
+	    }
+	    /*
+	     * if leftNode is not empty the searchInterval method is called
+	     * recursively
+	     */
+	    if (n.getLeft() != null) {
+		searchInterval(n.getLeft(), result, ilow, ihigh);
+	    }
+	    /*
+	     * if rightNode is not empty the searchInterval method is called
+	     * recursively
+	     */
+	    if (n.getRight() != null) {
+		searchInterval(n.getRight(), result, ilow, ihigh);
+	    }
+	    return;
 	}
-
+	
 	/**
 	 * Adds a new interval to the intervals list, which contains all intervals.
 	 * 
 	 * @param newinterval A new interval that is inserted into intervals
 	 */
 	public void addInterval(Interval<T> newinterval) {
-		intervals.add(newinterval);
-		update();
+	    intervals.add(newinterval);
+	    update();
 	}
-
+	
 	/**
 	 * Updates the list containing all intervals, for example after adding a new
 	 * interval.
 	 */
 	public void update() {
-		this.root = new Node<T>(intervals);
+	    this.root = new Node<T>(intervals);
 	}
-
+	
 }
