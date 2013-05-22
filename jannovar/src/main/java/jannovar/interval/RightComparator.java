@@ -13,7 +13,7 @@ import java.util.Comparator;
  * @author names
  * @version 0.02 (15 May, 2013)
  */
-public class RightComparator {
+public class RightComparator<T> implements Comparator<Interval<T>>  {
     
     public int compare(Interval interval_1, Interval interval_2) {
 	/*

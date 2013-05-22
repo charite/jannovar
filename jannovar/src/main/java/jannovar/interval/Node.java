@@ -22,6 +22,8 @@ import jannovar.interval.LeftComparator;
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (14 May, 2013)
  */
+
+// public class Node<T extends Comparable<T>>  {
 public class Node<T>  {
     /** Median of all intervals in this node */
     private Integer median;

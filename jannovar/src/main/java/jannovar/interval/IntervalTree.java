@@ -48,7 +48,7 @@ import jannovar.interval.LeftComparator;
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
  */
-public class IntervalTree<T> implements java.io.Serializable {
+public class IntervalTree<T > implements java.io.Serializable {
 	/** The root node of the entire interval tree. */
 	public Node<T> root;
 	/** All intervals of the entire tree (pointers to these intervals are
