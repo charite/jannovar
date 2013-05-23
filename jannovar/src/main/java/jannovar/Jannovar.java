@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import jannovar.exception.VCFParseException;
+import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
@@ -72,7 +73,7 @@ import jannovar.io.VCFReader;
  * </PRE>
  * This will create two files with all variants and a special file with exonic variants.
  * @author Peter N Robinson
- * @version 0.15 (22 May, 2013)
+ * @version 0.16 (22 May, 2013)
  */
 public class Jannovar {
     /** A logger from Apache's log4j that records key statistics from program execution. */
@@ -118,7 +119,7 @@ public class Jannovar {
 
 	if (anno.serialize()) {
 	    try{
-		anno.readUCSCKnownGenesFile2();	
+		anno.readUCSCKnownGenesFile();	
 	    } catch (IntervalTreeException e) {
 		System.out.println("Could not construct interval tree: " + e.toString());
 		System.exit(1);
@@ -129,7 +130,7 @@ public class Jannovar {
 	    anno.deserializeUCSCdata();
 	} else if (anno.ucscFilesAvailable()) {
 	     try{
-		anno.readUCSCKnownGenesFile2();	
+		anno.readUCSCKnownGenesFile();	
 	    } catch (IntervalTreeException e) {
 		System.out.println("Could not construct interval tree: " + e.toString());
 		System.exit(1);
@@ -261,87 +262,92 @@ public class Jannovar {
 
 
      /**
-     * Inputs the list of known genes from the UCSC file called knownGene.txt, and uses it
-     * to write a serialized version of the data.
+     * Inputs the KnownGenes data from UCSC files, convert the
+     * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
+     * objects to {@link jannovar.interval.Interval Interval} objects, and
+     * store these in a serialized file.
      */
     public void serializeUCSCdata() {
-	UCSCKGParser parser = new UCSCKGParser(this.ucscPath);
-	try{
-	    parser.parseFile();
-	    parser.readFASTAsequences(this.ucscKGMrnaPath);
-	    parser.readKGxRefFile(this.ucscXrefPath);
-	    parser.readKnown2Locus(this.ucscKnown2LocusPath);
-	    parser.serializeKnownGeneMap(this.UCSCserializationFileName);
-	} catch (KGParseException e) {
-	    System.out.println("Failed to serialize UCSC Data");
-	    System.out.println(e);
-	    System.exit(1);
-	}
-	
+	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
+	SerializationManager manager = new SerializationManager();
+	manager.serializeKnownGeneList(this.UCSCserializationFileName, kgList);
     }
 
-     /**
-     * Inputs the list of known genes from the serialized data file. The serialized file 
-     * was originally  created by parsing the three UCSC known gene files.
+
+     public void deserializeUCSCdata() {
+	ArrayList<TranscriptModel> kgList=null;
+	SerializationManager manager = new SerializationManager();
+	kgList = manager.deserializeKnownGeneList(this.serializedFile);
+	constructChromosomeMapWithIntervalTree(kgList);
+     }  
+
+
+
+
+
+    /**
+     * Input the four UCSC files for the KnownGene data
+     * @return a list of all TranscriptModel objects from the KnownGene data.
      */
-    @SuppressWarnings (value="unchecked")
-    public void deserializeUCSCdata() {
-	HashMap<String,TranscriptModel> kgMap=null;
-	try {
-	     FileInputStream fileIn =
-		 new FileInputStream(this.serializedFile);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-	}catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
+    private ArrayList<TranscriptModel> inputUCSCDataFromFile() {
+	UCSCKGParser parser = new UCSCKGParser(this.ucscPath,this.ucscXrefPath,
+					       this.ucscKGMrnaPath,this.ucscKnown2LocusPath);
+	try{
+	    parser.parseUCSCFiles();
+	} catch (Exception e) {
+	    System.out.println("Unable to input data from the UCSC files");
+	    e.printStackTrace();
 	    System.exit(1);
-           
-        }catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-	//System.out.println("Done deserialization, size of map is " + kgMap.size());
+	}
+	return parser.getKnownGeneList();
+    }
+
+
+    private void constructChromosomeMapWithIntervalTree(ArrayList<TranscriptModel> kgList) {
 	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
-	// System.out.println("Number of KGs is " + kgMap.size());
-	for (TranscriptModel kgl : kgMap.values()) {
+	/* 1. First sort the TranscriptModel objects by Chromosome. */
+	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
+	for (TranscriptModel kgl : kgList) {
 	    byte chrom = kgl.getChromosome();
-	    //System.out.println("Chromosome is " + chrom);
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		//System.out.println("Adding chromosome for " + chrom);
-		chromosomeMap.put(chrom,chr);
+	    if (! chrMap.containsKey(chrom)) {
+		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
 	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
+	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
+	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
+	    lst.add(in);
+	}
+	/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
+	for (Byte chrom : chrMap.keySet()) {
+	    System.out.println("B=" + chrom);
+	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
+	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
+	    Chromosome chr = new Chromosome(chrom,itree);
+	    this.chromosomeMap.put(chrom,chr);
 	}
     }
+
+
+
+   
+
+
+   
 
 
     /**
      * Input the list of known genes from the UCSC file called knownGene.txt, and uses it
      * to construct Chromosome objects. These objects represent the Chromosomes and the
      * genes they contain.
+     * NOTE this is the old version prior to refactoringto the IntervalTree.
      */
-    public void readUCSCKnownGenesFile()
+    public void readUCSCKnownGenesFileOLD()
     {
-	UCSCKGParser parser = new UCSCKGParser(this.ucscPath);
-	try {
-	    parser.parseFile();
-	    parser.readFASTAsequences(this.ucscKGMrnaPath);
-	    parser.readKGxRefFile(this.ucscXrefPath);
-	} catch (KGParseException e) {
-	    System.out.println(e);
-	    System.exit(1);
-	}
-	HashMap<String,TranscriptModel> kgMap = parser.getKnownGeneMap();
+	
+	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
 	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
 	System.out.println("Adding KGs to Chromosomes");
-	System.out.println("Number of KGs is " + kgMap.size());
-	for (TranscriptModel kgl : kgMap.values()) {
+	System.out.println("Number of KGs is " + kgList.size());
+	for (TranscriptModel kgl : kgList ) {
 	    byte chrom = kgl.getChromosome();
 	    //System.out.println("Chromosome is " + chrom);
 	    if (! chromosomeMap.containsKey(chrom)) {
@@ -352,8 +358,7 @@ public class Jannovar {
 	    Chromosome c = chromosomeMap.get(chrom);
 	    c.addGene(kgl);	
 	}
-	
-    }
+    } 
 
 
     /**
@@ -363,47 +368,14 @@ public class Jannovar {
      * for all genes in the transcriptome.
      *
      */
-    public void readUCSCKnownGenesFile2() throws IntervalTreeException {
-	UCSCKGParser parser = new UCSCKGParser(this.ucscPath);
-	try {
-	    parser.parseFile();
-	    parser.readFASTAsequences(this.ucscKGMrnaPath);
-	    parser.readKGxRefFile(this.ucscXrefPath);
-	} catch (KGParseException e) {
-	    System.out.println(e);
-	    System.exit(1);
-	}
-	HashMap<String,TranscriptModel> kgMap = parser.getKnownGeneMap();
-	/** Use the following map to collect all of the TranscriptModels for each chromosome. */
-	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
-	for (TranscriptModel kgl : kgMap.values()) {
-	    byte chrom = kgl.getChromosome();
-	    //System.out.println("Chromosome is " + chrom);
-	    if (! chrMap.containsKey(chrom)) {
-		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
-	    }
-	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
-	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
-	    lst.add(in);
-	}
-	/* When we get here, chrMap has an arraylist of all Interval<TranscriptModel> for each
-	   Chromosome. We can now create an Interval tree with this list and 
-	   use the new Chromosome constructor, that takes an  Interval tree. */
-	// make IntervalTree for each chromosome
-	// use Chromosome(/IntervalTree ) CTOR
-	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (Byte chrom : chrMap.keySet()) {
-	    System.out.println("B=" + chrom);
-	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
-	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
-	    Chromosome chr = new Chromosome(chrom,itree);
-	    this.chromosomeMap.put(chrom,chr);
-	}
-	
-
-
+    public void readUCSCKnownGenesFile() throws IntervalTreeException {
+	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
+	constructChromosomeMapWithIntervalTree(kgList);
     }
     
+    /**
+     * A simple printout of the chromosome map for debugging purposes.
+     */
     public void debugShowChromosomeMap() {
 	for (Byte c: chromosomeMap.keySet()) {
 	    Chromosome chromo = chromosomeMap.get(c);

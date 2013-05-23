@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import jannovar.reference.TranscriptModel;
 import jannovar.io.UCSCKGParser;
+import jannovar.exception.KGParseException;
 import jannovar.common.Constants;
 
 
@@ -34,7 +35,7 @@ public class UCSCKGParserTest implements Constants {
     public static final int UC009VIS=2;
     public static final int UC001ZWX=1;
 
-    @BeforeClass public static void setUp() throws IOException {
+    @BeforeClass public static void setUp() throws IOException,KGParseException {
 	File tmp = File.createTempFile("ucsckg-test","ucsckg-test");
 	PrintStream ps = new PrintStream(new FileOutputStream(tmp));
 	ps.append("uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,		uc021olp.1\n");
@@ -48,8 +49,8 @@ public class UCSCKGParserTest implements Constants {
 	knownGeneMap = new HashMap<String,TranscriptModel>();
 
 
-	parser = new UCSCKGParser(tmp.getAbsolutePath());
-	parser.parseFile();
+	parser = new UCSCKGParser(tmp.getAbsolutePath(),null,null,null);
+	parser.parseKnownGeneFile();
 	Iterator<TranscriptModel> iter =  parser.getKnownGeneMap().values().iterator();
 	while (iter.hasNext()) {
 	    TranscriptModel k = iter.next();

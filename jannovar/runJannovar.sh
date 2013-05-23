@@ -8,7 +8,7 @@
 ## and knownToLocusLink.txt). Put them all in some directory (probably you then need 
 ## to change the following path):
 DIR="/home/peter/data/ucsc"
-DIR="/Users/hecht/Desktop/data/ucsc"
+#DIR="/Users/hecht/Desktop/data/ucsc"
 
 
 ## The following four variables now give the complete path of these four files

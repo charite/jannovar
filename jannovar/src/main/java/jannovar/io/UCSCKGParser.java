@@ -15,9 +15,7 @@ import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.io.FileNotFoundException;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,13 +60,20 @@ import jannovar.reference.TranscriptModel;
  * ...
  * </PRE>
  * @author Peter N Robinson
- * @version 0.06 (21 May, 2013)
+ * @version 0.11 (23 May, 2013)
  */
 public class UCSCKGParser {
-    /** A logger from Apache's log4j that records key statistics from program execution. */
-    static Logger log = Logger.getLogger(UCSCKGParser.class.getName());
     /** Path to the knownGene.txt file from UCSC */
     private String kgPath=null;
+
+     /** Path to the UCSC file kgXref.txt */
+    private String ucscXrefPath=null;
+    /** Path to the UCSC file knownGeneMrna.txt */
+    private String ucscKGMrnaPath=null;
+    /** Path to UCSC file knownToLocusLink.txt file. This file has cross refs between the 
+	ucsc knownGene ids and Entrez gene ids (the previous name of Entrez gene was 
+	locus link). */
+    private String ucscKnown2LocusPath=null;
     
     /** Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the
      * value is the corresponding TranscriptModel object
@@ -80,13 +85,34 @@ public class UCSCKGParser {
     /**
      * Set up and check the existence of the file knownGene.txt
      * @param ucscPath path to the UCSC file knownGene.txt.
+     * @param XrefPath path to the UCSC file kgXref.txt
+     * @param mRNApath path to the UCSC file knownGeneMrna.txt
+     * @param locusPath path to the UCSC file knownToLocusLink.txt
      */
-    public UCSCKGParser(String ucscPath) {
+    public UCSCKGParser(String ucscPath, String XrefPath,String mRNApath,String locusPath) {
 	this.kgPath = ucscPath;
-	log.info("Set kg path to " + kgPath);
+	this.ucscXrefPath = XrefPath;
+	this.ucscKGMrnaPath = mRNApath;
+	this.ucscKnown2LocusPath = locusPath;
 	this.knownGeneMap = new HashMap<String,TranscriptModel>();
     }
 
+    /**
+     * This function causes all four UCSC files to be parsed. This results in the 
+     * construction of {@link #knownGeneMap}.
+     */
+    public void parseUCSCFiles() {
+	try {
+	    parseKnownGeneFile();
+	    readFASTAsequences();
+	    readKGxRefFile();
+	    readKnown2Locus();
+	} catch (KGParseException kge) {
+	    System.out.println("UCSCKGParser.java: Error with file input");
+	    System.out.println(kge.toString());
+	    System.exit(1);
+	}
+    }
 
 	
     /**
@@ -95,64 +121,26 @@ public class UCSCKGParser {
     public HashMap<String,TranscriptModel> getKnownGeneMap() {
 	return this.knownGeneMap;
     }
+
+    /**
+     * @return a List of all {@link jannovar.reference.TranscriptModel TranscriptModel} objects.
+     */
+    public ArrayList<TranscriptModel> getKnownGeneList() {
+	ArrayList<TranscriptModel> lst =
+	    new ArrayList<TranscriptModel>(this.knownGeneMap.values());
+	return lst;
+    }
     
 
-    /**
-     * Serializes the contents of the HashMap {@link #knownGeneMap knownGeneMap} 
-     * @param filename Name and path of the file to serialize to
-     */
-    public void serializeKnownGeneMap(String filename) {
-	if (this.knownGeneMap==null || this.knownGeneMap.size()==0) {
-	    System.err.println("Error: attempt to serialize empty knownGeneMap");
-	    return;
-	}
-	try {
-	    FileOutputStream fos = new FileOutputStream(filename);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(this.knownGeneMap);
-            oos.close();
-	} catch (IOException i) {
-          i.printStackTrace();
-	  System.err.println("Could not serialize knownGeneMap");
-	  System.exit(1);
-	}
-    }
 
 
-    /**
-     * Deserializes the HashMap {@link #knownGeneMap knownGeneMap} that was 
-     * originally created by parsing the four UCSC known gene files.
-     * @param filename name of serialized file
-     */
-    @SuppressWarnings (value="unchecked")
-    public void deserializeKnownGeneMap(String filename) {
-	try
-         {
-            FileInputStream fileIn =
-                          new FileInputStream(filename);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-	   
-            this.knownGeneMap  = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-        }catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
-           
-        }catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-    }
-
+   
 
 
     /** 
      * Parses the UCSC knownGene.txt file.
      */
-    public void parseFile() {
+    public void parseKnownGeneFile() throws KGParseException {
 	int linecount=0;
 	int exceptionCount=0;
 	try{
@@ -176,17 +164,14 @@ public class UCSCKGParser {
 	    System.out.println(String.format("lines: %d, exceptions: %d",linecount,exceptionCount));
 	    System.out.println("Size of knownGeneMap: " + knownGeneMap.size());
 	} catch (FileNotFoundException fnfe) {
-	    System.out.println("Could not find file: " + this.kgPath);
-	    System.out.println(fnfe);
-	    System.exit(1);
+	    String s = String.format("Could not find KnownGene.txt file: %s\n%s", 
+				     this.kgPath, fnfe.toString());
+	    throw new KGParseException(s);
 	} catch (IOException e) {
-	    System.out.println("Exception while parsing UCSC KnownGene file at \"" + this.kgPath + "\"");
-	    System.err.println(e);
-	    System.exit(1);
+	    String s = String.format("Exception while parsing UCSC KnownGene file at \"%s\"\n%s",
+				     this.kgPath,e.toString());
+	    throw new KGParseException(s);
 	}
-	log.info("Read a total of " + linecount + " lines from " + this.kgPath);
-	log.info("Parsed total of " + this.knownGeneMap.size() + " knownGene transcripts.");
-	log.info("There were " + exceptionCount + " exceptions thrown for unparsable lines.");
     }
 
 
@@ -198,9 +183,9 @@ public class UCSCKGParser {
      * objects.
      * @param path The full path to the KnownToLocusLink.txt file
      */
-    public void  readKnown2Locus(String path) {
+    private void  readKnown2Locus() throws KGParseException {
 	try{
-	    FileInputStream fstream = new FileInputStream(path);
+	    FileInputStream fstream = new FileInputStream(this.ucscKnown2LocusPath);
 	    DataInputStream in = new DataInputStream(fstream);
 	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 	    String line;
@@ -232,15 +217,14 @@ public class UCSCKGParser {
 	    String msg = String.format("Done parsing knownToLocusLink. Got ids for %d knownGenes. Missed in %d",
 				       foundID,notFoundID);
 	    System.out.println(msg);
-	    log.info(msg);
 	} catch (FileNotFoundException fnfe) {
-	    System.out.println("Could not find knownToLocusLink file: " + path);
-	    System.out.println(fnfe);
-	    System.exit(1);
+	    String s = String.format("Exception while parsing UCSC  knownToLocusLink file at \"%s\"\n%s",
+				     this.ucscKnown2LocusPath,fnfe.toString());
+	    throw new KGParseException(s);
 	} catch (IOException e) {
-	    System.out.println("Exception while parsing UCSC KnownToLocusfile at \"" + path + "\"");
-	    System.err.println(e);
-	    System.exit(1);
+	    String s = String.format("Exception while parsing UCSC KnownToLocusfile at \"%s\"\n%s",
+				     this.ucscKnown2LocusPath,e.toString() );
+	    throw new KGParseException(s);
 	}
 	   
     }
@@ -253,12 +237,11 @@ public class UCSCKGParser {
      * here to all upper case letters to simplify processing in other places of this program.
      * The sequences are then added to the corresponding {@link jannovar.reference.TranscriptModel TranscriptModel}
      * objects.
-     * @param fastapath full path to knownGeneMrna.txt file.
      */
-    public void readFASTAsequences(String fastapath) {
+    private void readFASTAsequences() throws KGParseException {
 	
 	try{
-	    FileInputStream fstream = new FileInputStream(fastapath);
+	    FileInputStream fstream = new FileInputStream(this.ucscKGMrnaPath);
 	    DataInputStream in = new DataInputStream(fstream);
 	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 	    String line;
@@ -290,13 +273,12 @@ public class UCSCKGParser {
 	    in.close();
 	    System.out.println(String.format("Found sequences for %d KGs, did not find sequence for %d",foundSequence,kgWithNoSequence));
 	} catch (FileNotFoundException fnfe) {
-	    System.out.println("Could not find file: " + fastapath);
-	    System.out.println(fnfe);
-	    System.exit(1);
-	} catch (IOException e) {
-	    System.out.println("Exception while parsing UCSC KnownGene FASTA file at \"" + fastapath + "\"");
-	    System.err.println(e);
-	    System.exit(1);
+	    String s = String.format("Could not find file: %s\n%s",this.ucscKGMrnaPath, fnfe.toString());
+	    throw new KGParseException(s);
+	} catch (IOException ioe) {
+	    String s = String.format("Exception while parsing UCSC KnownGene FASTA file at \"%s\"\n%s",
+				     this.ucscKGMrnaPath,ioe.toString());
+	   throw new KGParseException(s);
 	}
     }
     
@@ -333,9 +315,9 @@ public class UCSCKGParser {
       * </UL>
       * @param xrefpath full path to kgXref.txt file.
      */
-    public void readKGxRefFile(String xrefpath) throws KGParseException {
+    public void readKGxRefFile() throws KGParseException {
 	try{
-	    FileInputStream fstream = new FileInputStream(xrefpath);
+	    FileInputStream fstream = new FileInputStream(this.ucscXrefPath);
 	    DataInputStream in = new DataInputStream(fstream);
 	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 	    String line;
@@ -368,11 +350,11 @@ public class UCSCKGParser {
 	    in.close();
 	    System.out.println(String.format("Found kg for %d genes, missed it for %d",kgWithXref,kgWithNoXref));
 	} catch (FileNotFoundException fnfe) {
-	    String err = String.format("Could not find file: %s\n%s",xrefpath,fnfe.toString());
+	    String err = String.format("Could not find file: %s\n%s",this.ucscXrefPath,fnfe.toString());
 	    throw new KGParseException(err);
 	} catch (IOException e) {
 	    String err = String.format("Exception while parsing UCSC KnownGene xref file at \"%s\"\n%s",
-				       xrefpath,e.toString());
+				       this.ucscXrefPath,e.toString());
 	    throw new KGParseException(err);
 	}
     }

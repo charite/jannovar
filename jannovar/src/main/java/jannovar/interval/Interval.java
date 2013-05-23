@@ -13,9 +13,9 @@ import jannovar.exception.IntervalTreeException;
  * {@link jannovar.interval.IntervalTree IntervallTree}.
  * @see jannovar.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.02 (15 May, 2013)
+ * @version 0.03 (22 May, 2013)
  */
-public class Interval<T >  { // implements Comparable<Interval<T>> 
+public class Interval<T > implements java.io.Serializable { 
     /** The object that we are putting into the interval tree (such as a 
      * {@jannovar.reference.TranscriptModel TranscriptModel} object).*/
     private T value;
@@ -23,6 +23,8 @@ public class Interval<T >  { // implements Comparable<Interval<T>>
     private int lowpoint;
     /** The larger end point of the interval */
     private int highpoint;
+     /** Class version (for serialization).*/
+    public static final long serialVersionUID = 1L;
 
     /**
      * @param lpoint The lower end of the Interval
@@ -72,15 +74,15 @@ public class Interval<T >  { // implements Comparable<Interval<T>>
      * @param high upper endpoint of the interval
      * @oparam value The object represented by the interval.
      */
-    public Interval(int low, int high, T value)  throws IntervalTreeException {
+    public Interval(int low, int high, T value)   {
         if (low <= high) {
 	    this.lowpoint = low;
 	    this.highpoint = high;
 	    this.value = value;
 	} else {
-	    String s = String.format("Error, low endpoint higher than upper endpoint for internval: %s",
-				    toString());
-	    throw new IntervalTreeException(s);
+	    System.out.println("Error, low endpoint higher than upper endpoint for interval");
+	    System.out.println("Recheck the format of the input data, low end of interval must be less than high end");
+	    System.exit(1);
 	}
     }
 
