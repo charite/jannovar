@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Comparator;
 
 
+import jannovar.reference.TranscriptModel;
 
 /**
  * This class is intended to be used to sort

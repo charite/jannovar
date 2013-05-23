@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 
+import jannovar.reference.TranscriptModel;
+
 /**
  * This class is intended to be used to sort
  * lists of {@link jannovar.interval.Interval Interval} objects by ascending

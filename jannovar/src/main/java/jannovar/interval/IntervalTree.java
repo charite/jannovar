@@ -2,8 +2,8 @@ package jannovar.interval;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
-import jannovar.interval.LeftComparator;
 
 /**
  * Implements an Interval Tree.
@@ -46,7 +46,7 @@ import jannovar.interval.LeftComparator;
  * intervals.
  * 
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.03 (22 May, 2013)
+ * @version 0.04 (23 May, 2013)
  */
 public class IntervalTree<T > implements java.io.Serializable {
 	/** The root node of the entire interval tree. */
@@ -58,10 +58,10 @@ public class IntervalTree<T > implements java.io.Serializable {
 	
 	/** A Comparator that is used to sort intervals by their left endpoint
 	 * in ascending order. */
-	public LeftComparator<Interval<T>> leftcomp = null;
+	public Comparator<Interval<T>> leftcomp = null;
 	/** A Comparator that is used to sort intervals by their right endpoint
 	 * in descending order. */
-	public RightComparator<Interval<T>> rightcomp = null;
+	public Comparator<Interval<T>> rightcomp = null;
 
 
 	/** The default constructor should not be used and is declared private. */
@@ -75,9 +75,9 @@ public class IntervalTree<T > implements java.io.Serializable {
 	 */
 	public IntervalTree(List<Interval<T>> intervals) {
 	    /* sets the root and calls the node constructor with list */
+	    initializeComparators();
 	    this.root = new Node<T>(intervals);
 	    this.intervals = intervals;
-	    initializeComparators();
 	}
 	
 	/**
@@ -87,11 +87,13 @@ public class IntervalTree<T > implements java.io.Serializable {
 	 */
 	private void initializeComparators() {
 	    if (this.leftcomp == null){
-		this.leftcomp = new LeftComparator<Interval<T>>();
+		this.leftcomp = new LeftComparator();
 	    }
 	    if (this.rightcomp == null) {
-		this.rightcomp = new RightComparator<Interval<T>>();
+		this.rightcomp = new RightComparator();
 	    }
+	    Node.setLeftComparator(leftcomp);
+	    Node.setRightComparator(rightcomp);
 	}
 	
 	/**

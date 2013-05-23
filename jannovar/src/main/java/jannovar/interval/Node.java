@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import jannovar.interval.LeftComparator;
+
 
 /**
  * Implements the Node structure of the interval tree. The class is inteded to
@@ -39,10 +39,10 @@ public class Node<T>  {
     public List<Interval<T>> rightorder;
     /** A Comparator that is used to sort intervals by their left endpoint
      * in ascending order. */
-    private static LeftComparator leftcomp = null;
+    private static Comparator leftcomp = null;
     /** A Comparator that is used to sort intervals by their right endpoint
      * in descending order. */
-    private static RightComparator rightcomp = null;
+    private static Comparator rightcomp = null;
   
 
     /**
@@ -96,8 +96,6 @@ public class Node<T>  {
 	leftorder = new ArrayList<Interval<T>>();
 	rightorder = new ArrayList<Interval<T>>();
 
-	
-	
 	Collections.sort(medianIntervals, Node.leftcomp);
 	leftorder.addAll(medianIntervals);
 	
@@ -117,7 +115,7 @@ public class Node<T>  {
      * constructor to set the left-comparator once for all
      * node objects.
      */
-    public static void setLeftComparator(LeftComparator lcmp) { // 
+    public static void setLeftComparator(Comparator lcmp) { //
 	Node.leftcomp = lcmp;
     }
     
@@ -126,7 +124,7 @@ public class Node<T>  {
      * constructor to set the right-comparator once for all
      * node objects.
      */
-    public static void setRightComparator(RightComparator rcmp) { // 
+    public static void setRightComparator(Comparator rcmp) { // 
 	Node.rightcomp = rcmp;
     }
     

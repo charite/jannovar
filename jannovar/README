@@ -19,7 +19,10 @@ target/site/cobertura directory.
 $ mvn javadoc:javadoc
 -> This causes javadoc to be written to the directory
 target/site/apidocs
-$ mvn shaded:shaded
-->This causes an executable Jar file to be created in the directory target
+$ mvn package
+->This causes an executable Jar file to be created in the directory target. It makes
+use of the shade:shade maven goal to package a Jar file that also includes the Apache
+CLI library, i.e., it stands on its own. It does however require that all of the
+test phase be performed as part of the build.
 ->One can then run Jannovar as
 $ java -jar target/Jannovar.jar -H (change arguments for a particular kind of run)
