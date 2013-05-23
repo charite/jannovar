@@ -62,7 +62,7 @@ import jannovar.reference.TranscriptModel;
  * ...
  * </PRE>
  * @author Peter N Robinson
- * @version 0.05 (28 April, 2013)
+ * @version 0.06 (21 May, 2013)
  */
 public class UCSCKGParser {
     /** A logger from Apache's log4j that records key statistics from program execution. */

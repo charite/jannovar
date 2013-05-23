@@ -39,7 +39,7 @@ import jannovar.exception.IntervalTreeException;
 import jannovar.io.VCFReader;
 
 /**
- * This is the driver class for a program called Annotator. It has two purposes
+ * This is the driver class for a program called Jannovar. It has two purposes
  * <OL>
  * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt,
  * and to create corresponding {@link jannovar.reference.TranscriptModel TranscriptModel} objects and to 

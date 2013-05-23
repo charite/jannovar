@@ -322,8 +322,9 @@ public class Chromosome {
 	
 	/** Get TranscriptModels that are located in vicinity of position. */
 	//ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
-	
+	System.out.println("getAnnList position=" + position + " ref=" + ref + " alt=" + alt);
 	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
+	System.out.println("Size of candidate genes = " + candidateGenes.size());
 
 
 	for (TranscriptModel kgl : candidateGenes) {
