@@ -113,6 +113,28 @@ public class IntervalTree<T > implements java.io.Serializable {
 	    return obtlst;
 	}
 
+
+
+	/**
+	 * This function is intended to be called after a call to 
+	 * {@link #search} reveals an emptylist, i.e., if none of the
+	 * items overlaps with the search coordinates. In the example of
+	 * gene annotations, this would be the case for intergenic variants or
+	 * for variants that are upstream or downstream to a gene (within 1000 nt).
+	 * <P>
+	 * The search strategy basically implies that we will go to a
+	 * {@link jannovar.interval.Node Node} that is a leaf in the tree. When we
+	 * get to this Node, again there is no interval that overlaps with the 
+	 * search coordinates. This is a bit tricky and will require a little
+	 * thought...
+	 * @param low Leftwards end of search interval
+	 * @param high rightwards end of search interval
+	 */
+	public ArrayList<T> getNeighboringItems(int low, int high) {
+
+	    return null;
+	}
+
 	/**
 	 * Searches for intervals in the interval tree.
 	 * 

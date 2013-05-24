@@ -57,7 +57,7 @@ import jannovar.interval.*;
  * <LI> The -seq_padding functionality of annovar was ignored
  * </UL>
  * @author Peter N Robinson
- * @version 0.15 (15 May, 2013)
+ * @version 0.17 (24 May, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -323,7 +323,17 @@ public class Chromosome {
 	/** Get TranscriptModels that are located in vicinity of position. */
 	//ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
 	System.out.println("getAnnList position=" + position + " ref=" + ref + " alt=" + alt);
+
+
 	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
+
+	if (candidateGenes == null) {
+	    candidateGenes = itree.getNeighboringItems(start,end);
+	    // etc, code here would deal with intergenic and upstream/downstream annotations.
+	}
+
+	
+
 	System.out.println("Size of candidate genes = " + candidateGenes.size());
 
 
