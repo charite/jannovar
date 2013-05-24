@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
+import jannovar.interval.*;
+import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
@@ -42,41 +44,43 @@ public class SpliceAnnotationTest implements Constants {
    
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
-  
+    private static void constructChromosomeMapWithIntervalTree(ArrayList<TranscriptModel> kgList) {
+	chromosomeMap = new HashMap<Byte,Chromosome> ();
+	/* 1. First sort the TranscriptModel objects by Chromosome. */
+	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
+	for (TranscriptModel kgl : kgList) {
+	    byte chrom = kgl.getChromosome();
+	    if (! chrMap.containsKey(chrom)) {
+		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
+	    }
+	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
+	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
+	    lst.add(in);
+	}
+	/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
+	for (Byte chrom : chrMap.keySet()) {
+	    System.out.println("B=" + chrom);
+	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
+	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
+	    Chromosome chr = new Chromosome(chrom,itree);
+	    chromosomeMap.put(chrom,chr);
+	}
+    }
+
+
 
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,TranscriptModel> kgMap=null;
-	try {
-	     java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
-	     String path = url.getPath();
-	     FileInputStream fileIn = new FileInputStream(path);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-	} catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
-           
-        } catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-	//System.out.println("Done deserialization, size of map is " + kgMap.size());
-	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (TranscriptModel kgl : kgMap.values()) {
-	    byte chrom = kgl.getChromosome();
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		chromosomeMap.put(chrom,chr);
-	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
-	}
+	ArrayList<TranscriptModel> kgList=null;
+
+	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
+	String path = url.getPath();
+	SerializationManager manager = new SerializationManager();
+	kgList = manager.deserializeKnownGeneList(path);
+	constructChromosomeMapWithIntervalTree(kgList);
+	
+
     }
 
   @AfterClass public static void releaseResources() { 
