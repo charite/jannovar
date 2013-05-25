@@ -26,7 +26,7 @@ import jannovar.common.Constants;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.13, 28 April, 2013
+ * @version 0.15, 23 May, 2013
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
@@ -88,6 +88,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * <LI> 9: exonends, e.g., "38676494,38677494,38678123,38680439,"
      * <LI> 10: name, again (?), e.g., "uc021olp.1"
      * </UL>
+     * ToDo: This belongs in the UCSCKGParser class!
      * @param line A single line of the UCSC knownGene.txt file
      */
     public TranscriptModel(String line) throws KGParseException {
@@ -667,7 +668,15 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	}
     }
 
-
+    public String toString() {
+	return String.format("%s[%s]:%s:%d-%d [%d exons]",
+			     getGeneSymbol(),
+			     getKnownGeneID(),
+			     getChromosomeAsString(),
+			     getTXStart(),
+			     getTXEnd(),
+			     getExonCount());
+    }
 
 }
 

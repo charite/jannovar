@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @see jannovar.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.04 (14 May, 2013)
+ * @version 0.05 (25 May, 2013)
  */
 
 // public class Node<T extends Comparable<T>>  {
@@ -187,7 +187,7 @@ public class Node<T>  {
      * intervals, or it is the right of all of the intervals, or
      * it is to the left of all of the intervals.
      * <P> 
-     * If the query is to the right of all of the intervals, then 
+     * If the query is to the left of all of the intervals, then 
      * its left neighbor is the interval whose highpoint is
      * the most to the right. This is the interval that is returned by
      * this function (it is the last element of {@link #rightorder}).
@@ -195,8 +195,7 @@ public class Node<T>  {
      */
     public Interval<T> getRightmostInterval() {
 	if (rightorder.size() == 0) return null;
-	int i = rightorder.size()-1;
-	return rightorder.get(i);
+	return rightorder.get(0);
     }
 
 
@@ -245,8 +244,8 @@ public class Node<T>  {
 		System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(),median));
 	    else
 		System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,this.leftorder.size(),median));
-	    System.out.print(indent);
-	    for (Interval<T> i: leftorder) { System.out.println(i); }
+	    for (Interval<T> i: leftorder) { System.out.println(indent + "##(leftorder):" + i); }
+	     for (Interval<T> i: rightorder) { System.out.println(indent + "##(rightorder):" + i); }
 	    System.out.println();
 	    Node l = getLeft();
 	    if (l==null) { 

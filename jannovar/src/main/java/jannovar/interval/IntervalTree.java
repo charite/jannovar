@@ -49,7 +49,7 @@ import java.util.Comparator;
  * intervals.
  * 
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
- * @version 0.07 (25 May, 2013)
+ * @version 0.08 (25 May, 2013)
  */
 public class IntervalTree<T> implements java.io.Serializable {
     /** The root node of the entire interval tree. */
@@ -222,21 +222,37 @@ public class IntervalTree<T> implements java.io.Serializable {
 	    }
 	}
 	/** The following two lines set the left and right neighbor. This
-	    will only be useful if we do not interact with an interval. 
-	if (ihigh < n.getMedian()) {
-	    this.rightNeighbor = n.getLeftmostInterval();
+	    will only be useful if we do not interact with an interval. */
+	if (ihigh < n.getMedian()  ) {
+	    Interval<T> neighbor = n.getLeftmostInterval();
+	    if (rightNeighbor == null) {
+		rightNeighbor = neighbor;
+	    } else if (neighbor != null && neighbor.getLow() < this.rightNeighbor.getLow()) {
+		this.rightNeighbor =  neighbor; //n.getLeftmostInterval();
+	    }
 	}
-	if (ilow > n.getMedian()) {
+	/* OLD
+	if (ilow > n.getMedian() ) {
 	    this.leftNeighbor =  n.getRightmostInterval();
-	}*/
+	    }*/
+
+	if (ilow > n.getMedian() ) {
+	     Interval<T> neighbor = n.getRightmostInterval();
+	     if (leftNeighbor == null) {
+		 leftNeighbor = neighbor;
+	     } else if (neighbor != null && neighbor.getHigh()>this.leftNeighbor.getHigh()) {
+		 this.leftNeighbor =  neighbor;
+	     }
+	}
 	
 	/*
 	 * if the query is to the left of the median and the
 	 * leftNode is not empty the searchInterval method is called
 	 * recursively
 	 */
-	if (ilow < n.getMedian() && n.getLeft() != null) {
+	if ( ilow < n.getMedian() && n.getLeft() != null ) {
 	    searchInterval(n.getLeft(), result, ilow, ihigh);
+	    
 	}
 	/*
 	 * if thequery is to the right of the median and the

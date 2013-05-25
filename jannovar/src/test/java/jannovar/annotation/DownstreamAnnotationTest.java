@@ -47,7 +47,6 @@ public class DownstreamAnnotationTest implements Constants {
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	System.out.println("testDownstreamVar1 annot=SETUP");
 	ArrayList<TranscriptModel> kgList=null;
 	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	String path = url.getPath();
@@ -77,20 +76,11 @@ public class DownstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	   
-	    /* There should be just one annotation */
-	    System.out.println("testDownstreamVar1 c=" + c);
-	   
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    System.out.println("annotation list = " + ann);
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-
-	    System.out.println("testDownstreamVar1 annot=" + annot);
-
 	    Assert.assertEquals("ISG15",annot);
-	    System.exit(8);
 	}
 }
 

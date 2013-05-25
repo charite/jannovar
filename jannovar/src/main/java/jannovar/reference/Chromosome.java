@@ -51,7 +51,7 @@ import jannovar.interval.IntervalTree;
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.19 (25 May, 2013)
+ * @version 0.21 (25 May, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -274,7 +274,7 @@ public class Chromosome {
      * (often just one annotation, but potentially multiple ones).
      */
     public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {
-	
+	//System.out.println("getAnnotationList position = " + position);
 	TranscriptModel leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	TranscriptModel rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
 
@@ -287,19 +287,18 @@ public class Chromosome {
 
 	/** Get TranscriptModels that overlap with (start,end). */
 	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
-
+	//System.out.println("Size of candidate genes = " + candidateGenes.size());
 	if (candidateGenes.size() == 0) {
 	    /* The query does not overlap with any transcript!
 	       This means it can be intergenic, upstream or downstream. */
 	    leftNeighbor = itree.getLeftNeighbor();
 	    rightNeighbor = itree.getRightNeighbor();
 	    createIntergenicAnnotations(start, end, leftNeighbor, rightNeighbor);
-	    System.out.println("Down createIntergenicAnnotations, annovarFacotry is " + annovarFactory);
 	    return annovarFactory.getAnnotationList();
 	}
 	/** If we get here, then there is at least one transcript that overlaps
 	    with the query. */
-	//System.out.println("Size of candidate genes = " + candidateGenes.size());
+
 
 	for (TranscriptModel kgl : candidateGenes) {
 	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(), kgl.getStrand()));
@@ -338,17 +337,26 @@ public class Chromosome {
 	 * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
 	 * This information is useful for "intergenic" variants.                                     *
 	 * ***************************************************************************************** */
-	System.out.println("createIntergenicAnnotations: " + start + "-" + end);
+	/*System.out.println("createIntergenicAnnotations: " + start + "-" + end);
+	if (leftNeighbor == null) {
+	    System.out.println("leftNeighbor == null");
+	} else {
+	    System.out.println("L: " + leftNeighbor);
+	}
+	if (rightNeighbor == null) {
+	    System.out.println("rightNeighbor == null");
+	} else {
+	    System.out.println("R: " + rightNeighbor);
+	    }*/
+
 	if (leftNeighbor != null && leftNeighbor.isNearThreePrimeEnd(start,NEARGENE) ) {
 	    /** The following function creates an upstream or downstream annotation as appropriate. */
-	    System.out.println("leftNeighbor: " + leftNeighbor.getName());
 	    Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
 	    annovarFactory.addUpDownstreamAnnotation(ann);
 	} 
 	
 	if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(end,NEARGENE)) {
 	    /** The following function creates an upstream or downstream annotation as appropriate. */
-	    System.out.println("rightNeighbor: " + rightNeighbor.getName());
 	    Annotation ann = Annotation.createUpDownstreamAnnotation(rightNeighbor,end);
 	    annovarFactory.addUpDownstreamAnnotation(ann);
 	}
@@ -357,7 +365,7 @@ public class Chromosome {
 	   is intergenic */
 	if (annovarFactory.isEmpty()) {
 	    if (leftNeighbor == null && rightNeighbor == null) {
-		System.out.println("Both neighbors arenull");
+		System.out.println("Both neighbors are null");
 	    }
 	    Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start,end);
 	    annovarFactory.addIntergenicAnnotation(ann);
