@@ -108,8 +108,12 @@ public class Chromosome {
     }
 
 
+   
     /**
-     * This constructor is for testing the INTERVAL TREE
+     * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
+     * 24=Y_CHROMOSOME (see {@link jannovar.common.Constants Constants}).
+     * @param c the chromosome
+     * @param intrvtree An interval tree with all transcripts on this chromosome.
      */
     public Chromosome(byte c, IntervalTree<TranscriptModel> intrvtree) {
 	this.chromosome = c;
@@ -294,6 +298,142 @@ public class Chromosome {
      * (often just one annotation, but potentially multiple ones).
      */
     public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {
+	
+	TranscriptModel leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
+	TranscriptModel rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
+	/* Note, the following two variables are use to know when we can stop the search: we have already found
+	   a 5' and a 3' neighboring gene surrounding the variant. Annovar goes 5' to 3', but we are going
+	   centrifugally away from the position of the variant when deciding which gene to test next. Therefore,
+	   we need a slightly different strategy to decide whedn to quit the search (In annovar, the search is
+	   stopped when we have already found an intragenidc mutation and we hit a gene that is 3' to the variant).*/
+	boolean foundFivePrimeNeighbor=false;
+	boolean foundThreePrimeNeighbor=false;
+
+	/* The following command "resets" the annovar object */
+	this.annovarFactory.clearAnnotationLists();
+
+	// Define start and end positions of variant
+	int start = position;
+	int end = start + ref.length() - 1;
+	
+	boolean foundgenic=false; //variant already found in genic region (between start and end position of a gene)
+	
+	/** Get TranscriptModels that are located in vicinity of position. */
+	//ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
+	//System.out.println("getAnnList position=" + position + " ref=" + ref + " alt=" + alt);
+
+
+	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
+
+	if (candidateGenes.size() == 0) {
+	    /* The query does not overlap with any transcript!
+	       This means it can be intergenic, upstream or downstream. */
+	    leftNeighbor = itree.getLeftNeighbor();
+	    rightNeighbor = itree.getRightNeighbor();
+	    createIntergenicAnnotations(start, end, leftNeighbor, rightNeighbor);
+	    return annovarFactory.getAnnotationList();
+	}
+	/** If we get here, then there is at least one transcript that overlaps
+	    with the query. */
+	
+
+	//System.out.println("Size of candidate genes = " + candidateGenes.size());
+
+
+	for (TranscriptModel kgl : candidateGenes) {
+	    //System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(), kgl.getStrand()));
+	    boolean currentGeneIsNonCoding=false; // in annovar: $current_ncRNA
+	    String name = kgl.getKnownGeneID();
+	    int txstart = kgl.getTXStart();
+	    int txend   = kgl.getTXEnd();
+	    int cdsstart = kgl.getCDSStart();
+	    int cdsend = kgl.getCDSEnd();
+	    int exoncount = kgl.getExonCount();
+	    String name2 = kgl.getGeneSymbol();
+	   
+	   
+	   
+	    
+	    if (kgl.isPlusStrand()) {	
+		getPlusStrandAnnotation(position,ref, alt, kgl);
+		if (annovarFactory.hasGenic()) {
+		    foundgenic=true;
+		}
+	    } else if (kgl.isMinusStrand()) {
+		getMinusStrandAnnotation(position,ref, alt, kgl);	
+		if (annovarFactory.hasGenic()) {
+		    foundgenic=true;
+		}
+	    }
+      	}/* for (TranscriptModel kgl : candidateGenes) */
+
+	AnnotationList al = annovarFactory.getAnnotationList();
+	if (al.getAnnotationList().size()==0) {
+	    System.out.println("XXX zero size for " + position + ":" +ref+ ">"+ alt+ " on chromosome " + chromosomeString);
+	    System.exit(1);
+	}
+	return annovarFactory.getAnnotationList();
+    }
+
+    /**
+     * This function is called when the query position(s) represented by start and end
+     * do not overlap with any isoforms. In this case, it must be integenic. UPSTREAM and
+     * DOWNSTREAM annotations are special cases of INTERGENIC when the variant is within
+     * 1000 nucleotides of a transcript.
+     * 
+     * @param start The start position of the variant on this chromosome
+     * @param end The end position of the variant on this chromosome
+     * @param leftNeighbor The transcript that is closest to the variant on the left
+     * @param rightNeighbor  The transcript that is closest to the variant on the right
+     */
+    public void createIntergenicAnnotations(int start, int end, 
+					    TranscriptModel leftNeighbor, 
+					    TranscriptModel rightNeighbor){
+
+	/* ***************************************************************************************** *
+	 * The following code block is executed if the variant has not hit a genic region yet and    *
+	 * it basically updates information about the nearest 5' (left) and 3' (right) neighbor.     *
+	 * This information is useful for "intergenic" variants.                                     *
+	 * ***************************************************************************************** */
+
+	if (leftNeighbor != null && leftNeighbor.isNearThreePrimeEnd(start,NEARGENE) ) {
+		/** The following function creates an upstream or downstream annotation as appropriate. */
+		Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
+		annovarFactory.addUpDownstreamAnnotation(ann);
+	    } 
+	    
+	if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(end,NEARGENE)) {
+	    /** The following function creates an upstream or downstream annotation as appropriate. */
+	    Annotation ann = Annotation.createUpDownstreamAnnotation(rightNeighbor,end);
+	    annovarFactory.addUpDownstreamAnnotation(ann);
+	}
+	/* If we get here, and annotation_list is still empty, then the variant is not
+	   nearby to any gene (i.e., it is not upstream/downstream). Therefore, the variant
+	   is intergenic */
+	if (annovarFactory.isEmpty()) {
+	    Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start,end);
+	    annovarFactory.addIntergenicAnnotation(ann);
+	}
+    }
+
+    /**
+     * 25 May: CHanging this function to work with interval tree!
+     * <P>
+     * The strategy for finding annotations is based on the perl code in Annovar.
+     * Roughly speaking, we take the following steps in this method in order to find out whether the
+     * variant is genic or intergenic and identify the involved genes (which are stored in the {@link #geneTreeMap} object of this class).
+     * Then, other functions are called to characterize the precise variant.
+     * <OL>
+     * <LI>Use the method {@link #getBinRange} to get a list of TranscriptModels to be tested (Corresponds roughly to 
+     {@code for my $nextbin ($bin1 .. $bin2)} in Annovar) </LI>
+     * </OL>
+     * @param position The start position of the variant on this chromosome
+     * @param ref String representation of the reference sequence affected by the variant
+     * @param alt String representation of the variant (alt) sequence
+     * @return a list of {@link jannovar.annotation.Annotation Annotation} objects corresponding to the mutation described by the object 
+     * (often just one annotation, but potentially multiple ones).
+     */
+    public AnnotationList getAnnotationListOLD(int position,String ref, String alt) throws AnnotationException {
 	
 	TranscriptModel leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	TranscriptModel rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
