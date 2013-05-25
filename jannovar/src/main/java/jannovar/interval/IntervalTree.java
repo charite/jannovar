@@ -45,180 +45,214 @@ import java.util.Comparator;
  * The construction of an Interval Tree enables a fast search of overlapping
  * intervals.
  * 
- * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.04 (23 May, 2013)
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
+ * @version 0.07 (25 May, 2013)
  */
-public class IntervalTree<T > implements java.io.Serializable {
-	/** The root node of the entire interval tree. */
-	public Node<T> root;
-	/** All intervals of the entire tree (pointers to these intervals are
-	 * also used in the nodes).
-	 */
-	public List<Interval<T>> intervals;
-	
-	/** A Comparator that is used to sort intervals by their left endpoint
-	 * in ascending order. */
-	public Comparator<Interval<T>> leftcomp = null;
-	/** A Comparator that is used to sort intervals by their right endpoint
-	 * in descending order. */
-	public Comparator<Interval<T>> rightcomp = null;
+public class IntervalTree<T> implements java.io.Serializable {
+    /** The root node of the entire interval tree. */
+    private Node<T> root;
+    /** All intervals of the entire tree (pointers to these intervals are
+     * also used in the nodes).
+     */
+    private List<Interval<T>> intervals;
+    
+    /** A Comparator that is used to sort intervals by their left endpoint
+     * in ascending order. */
+    private Comparator<Interval<T>> leftcomp = null;
+    /** A Comparator that is used to sort intervals by their right endpoint
+     * in descending order. */
+    private Comparator<Interval<T>> rightcomp = null;
+    /** The left neighbor of the current query position (non-overlapping interval to
+	the left of the query that is the closest of all intervals). */
+    private Interval<T> leftNeighbor = null;
+    /** The right neighbor of the current query position (non-overlapping interval to
+	the right of the query that is the closest of all intervals). */
+    private Interval<T> rightNeighbor = null;
+    
+    
+    
+    /** The default constructor should not be used and is declared private. */
+    private IntervalTree() {
+    }
 
-
-	/** The default constructor should not be used and is declared private. */
-	private IntervalTree() {
+    /**
+     * Tree constructor.
+     * 
+     * @param intervals A list that contains the intervals
+     */
+    public IntervalTree(List<Interval<T>> intervals) {
+	/* sets the root and calls the node constructor with list */
+	initializeComparators();
+	this.root = new Node<T>(intervals);
+	this.intervals = intervals;
+    }
+    
+    /**
+     * A helper method intended to be used by the Constructors of this
+     * class to initialize the static Comparator objects that will be
+     * used to sort intervals.
+     */
+    private void initializeComparators() {
+	if (this.leftcomp == null){
+	    this.leftcomp = new LeftComparator();
 	}
-
-	/**
-	 * Tree constructor.
-	 * 
-	 * @param intervals A list that contains the intervals
-	 */
-	public IntervalTree(List<Interval<T>> intervals) {
-	    /* sets the root and calls the node constructor with list */
-	    initializeComparators();
-	    this.root = new Node<T>(intervals);
-	    this.intervals = intervals;
+	if (this.rightcomp == null) {
+	    this.rightcomp = new RightComparator();
 	}
-	
-	/**
-	 * A helper method intended to be used by the Constructors of this
-	 * class to initialize the static Comparator objects that will be
-	 * used to sort intervals.
-	 */
-	private void initializeComparators() {
-	    if (this.leftcomp == null){
-		this.leftcomp = new LeftComparator();
-	    }
-	    if (this.rightcomp == null) {
-		this.rightcomp = new RightComparator();
-	    }
-	    Node.setLeftComparator(leftcomp);
-	    Node.setRightComparator(rightcomp);
+	Node.setLeftComparator(leftcomp);
+	Node.setRightComparator(rightcomp);
+    }
+    
+    /**
+     * Search function which calls the method searchInterval to find intervals.
+     * <P>
+     * As a side-effect of the search, the variables {@link #rightNeighbor} and
+     * {@link #leftNeighbor} are set. If this method returns an empty list, then
+     * these variables contain the intervals that are the closest neighbors to 
+     * the left and the right to the query position.  
+     * @param low The lower element of the interval
+     * @param high The higher element of the interval
+     * @return result, which is an ArrayList containg the found intervals
+     */
+    public ArrayList<T> search(int low, int high) {
+	ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
+	/* reset */
+	this.leftNeighbor = null;
+	this.rightNeighbor = null;
+	searchInterval(root, result, low, high);
+	ArrayList<T> obtlst = new ArrayList<T>();
+	for (Interval<T> it : result) {
+	    obtlst.add(it.getValue());
 	}
-	
-	/**
-	 * Search function which calls the method searchInterval to find intervals.
-	 * 
-	 * @param low The lower element of the interval
-	 * @param high The higher element of the interval
-	 * @return result, which is an ArrayList containg the found intervals
-	 */
-	public ArrayList<T> search(int low, int high) {
-	    ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
-	    searchInterval(root, result, low, high);
-	    ArrayList<T> obtlst = new ArrayList<T>();
-	    for (Interval<T> it : result) {
-		obtlst.add(it.getValue());
-	    }
-	    return obtlst;
-	}
+	return obtlst;
+    }
+    
+    
+    
+    /**
+     * This function is intended to be called after a call to 
+     * {@link #search} reveals an emptylist, i.e., if none of the
+     * items overlaps with the search coordinates. In the example of
+     * gene annotations, this would be the case for intergenic variants or
+     * for variants that are upstream or downstream to a gene (within 1000 nt).
+     * <P>
+     * The search strategy basically implies that we will go to a
+     * {@link jannovar.interval.Node Node} that is a leaf in the tree. When we
+     * get to this Node, again there is no interval that overlaps with the 
+     * search coordinates. This is a bit tricky and will require a little
+     * thought...
+     * @param low Leftwards end of search interval
+     * @param high rightwards end of search interval
+     */
+    public ArrayList<T> getNeighboringItems(int low, int high) {
+	return null;
+    }
 
 
+    public T getRightNeighbor() {
+	return this.rightNeighbor.getValue();
+    }
 
-	/**
-	 * This function is intended to be called after a call to 
-	 * {@link #search} reveals an emptylist, i.e., if none of the
-	 * items overlaps with the search coordinates. In the example of
-	 * gene annotations, this would be the case for intergenic variants or
-	 * for variants that are upstream or downstream to a gene (within 1000 nt).
-	 * <P>
-	 * The search strategy basically implies that we will go to a
-	 * {@link jannovar.interval.Node Node} that is a leaf in the tree. When we
-	 * get to this Node, again there is no interval that overlaps with the 
-	 * search coordinates. This is a bit tricky and will require a little
-	 * thought...
-	 * @param low Leftwards end of search interval
-	 * @param high rightwards end of search interval
-	 */
-	public ArrayList<T> getNeighboringItems(int low, int high) {
 
-	    return null;
-	}
+    public T getLeftNeighbor() {
+	return this.leftNeighbor.getValue();
+    }
 
-	/**
-	 * Searches for intervals in the interval tree.
-	 * 
-	 * @param n A node of the interval tree
-	 * @param result An ArrayList containg the found intervals
-	 * @param ilow The lower element of the search interval
-	 * @param ihigh The higher element of the search interval
-	 */
-	public void searchInterval(Node<T> n, ArrayList<Interval<T>> result, int ilow, int ihigh) {
-	    /* ends if the node n is empty */
-	    if (n == null) {
-		return;
-	    }
-	    /*
-	     * if ilow is smaller than the median of n the left side of the tree is
-	     * searched
-	     */
-	    if (ilow < n.getMedian()) {
-		/* as long as the iterator i is smaller than the size of leftorder */
-		int size = n.leftorder.size();
-		
-		for (int i = 0; i < size; i++) {
-		    /*
-		     * breaks if the lowpoint at position i is bigger than the
-		     * wanted high point
-		     */
-		    if (n.leftorder.get(i).getLow() > ihigh) {
-			break;
-		    }
-		    /* adds the interval at position i of leftorder to result */
-		    result.add(n.leftorder.get(i));
-		}
-		/*
-		 * if ihigh is bigger than the median of n the right side of the
-		 * tree is searched
-		 */
-	    } else if (ihigh > n.getMedian()) {
-		/* as long as the iterator i is smaller than the size of rightorder */
-		int size = n.rightorder.size();
-		for (int i = 0; i < size; i++) {
-		    /*
-		     * breaks if the highpoint at position i is smaller than the
-		     * wanted low point
-		     */
-		    if (n.rightorder.get(i).getHigh() < ilow) {
-			break;
-		    }
-		    /* adds the interval at position i of rightorder to result */
-		    result.add(n.rightorder.get(i));
-		}
-	    }
-	    /*
-	     * if leftNode is not empty the searchInterval method is called
-	     * recursively
-	     */
-	    if (n.getLeft() != null) {
-		searchInterval(n.getLeft(), result, ilow, ihigh);
-	    }
-	    /*
-	     * if rightNode is not empty the searchInterval method is called
-	     * recursively
-	     */
-	    if (n.getRight() != null) {
-		searchInterval(n.getRight(), result, ilow, ihigh);
-	    }
+    /**
+     * Searches for intervals in the interval tree.
+     * 
+     * @param n A node of the interval tree
+     * @param result An ArrayList containg the found intervals
+     * @param ilow The lower element of the search interval
+     * @param ihigh The higher element of the search interval
+     */
+    private void searchInterval(Node<T> n, ArrayList<Interval<T>> result, int ilow, int ihigh) {
+	/* ends if the node n is empty */
+	if (n == null) {
 	    return;
 	}
-	
-	/**
-	 * Adds a new interval to the intervals list, which contains all intervals.
-	 * 
-	 * @param newinterval A new interval that is inserted into intervals
+	/*
+	 * if ilow is smaller than the median of n the left side of the tree is
+	 * searched
 	 */
-	public void addInterval(Interval<T> newinterval) {
-	    intervals.add(newinterval);
-	    update();
+	if (ilow < n.getMedian()) {
+	    /* as long as the iterator i is smaller than the size of leftorder */
+	    int size = n.leftorder.size();
+	    
+	    for (int i = 0; i < size; i++) {
+		/*
+		 * breaks if the lowpoint at position i is bigger than the
+		 * wanted high point
+		 */
+		if (n.leftorder.get(i).getLow() > ihigh) {
+		    break;
+		}
+		/* adds the interval at position i of leftorder to result */
+		result.add(n.leftorder.get(i));
+	    }
+	    /*
+	     * if ihigh is bigger than the median of n the right side of the
+	     * tree is searched
+	     */
+	} else if (ihigh > n.getMedian()) {
+	    /* as long as the iterator i is smaller than the size of rightorder */
+	    int size = n.rightorder.size();
+	    for (int i = 0; i < size; i++) {
+		/*
+		 * breaks if the highpoint at position i is smaller than the
+		 * wanted low point
+		 */
+		if (n.rightorder.get(i).getHigh() < ilow) {
+		    break;
+		}
+		/* adds the interval at position i of rightorder to result */
+		result.add(n.rightorder.get(i));
+	    }
 	}
+	/** The following two lines set the left and right neighbor. This
+	    will only be useful if we do not interact with an interval. 
+	if (ihigh < n.getMedian()) {
+	    this.rightNeighbor = n.getLeftmostInterval();
+	}
+	if (ilow > n.getMedian()) {
+	    this.leftNeighbor =  n.getRightmostInterval();
+	}*/
 	
-	/**
-	 * Updates the list containing all intervals, for example after adding a new
-	 * interval.
+	/*
+	 * if the query is to the left of the median and the
+	 * leftNode is not empty the searchInterval method is called
+	 * recursively
 	 */
-	public void update() {
-	    this.root = new Node<T>(intervals);
+	if (ilow < n.getMedian() && n.getLeft() != null) {
+	    searchInterval(n.getLeft(), result, ilow, ihigh);
 	}
-	
+	/*
+	 * if thequery is to the right of the median and the
+	 * rightNode is not empty the searchInterval method is called
+	 * recursively
+	 */
+	if (ihigh > n.getMedian() && n.getRight() != null) {
+	    searchInterval(n.getRight(), result, ilow, ihigh);
+	}
+	return;
+    }
+    
+    /**
+     * Adds a new interval to the intervals list, which contains all intervals.
+     * 
+     * @param newinterval A new interval that is inserted into intervals
+     
+     public void addInterval(Interval<T> newinterval) {
+     intervals.add(newinterval);
+     update();
+     } */
+    
+    /**
+     * Updates the list containing all intervals, for example after adding a new
+     * interval.
+     
+     public void update() {
+     this.root = new Node<T>(intervals);
+     } */
+    
 }

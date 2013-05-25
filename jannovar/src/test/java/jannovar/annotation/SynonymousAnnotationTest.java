@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-
+import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
@@ -45,40 +45,14 @@ public class SynonymousAnnotationTest implements Constants {
    
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
-  
-
-    @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,TranscriptModel> kgMap=null;
-	try {
-	     URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
-	     String path = url.getPath();
-	     FileInputStream fileIn = new FileInputStream(path);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-	} catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
-           
-        } catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (TranscriptModel kgl : kgMap.values()) {
-	    byte chrom = kgl.getChromosome();
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		chromosomeMap.put(chrom,chr);
-	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
-	}
+	ArrayList<TranscriptModel> kgList=null;
+	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
+	String path = url.getPath();
+	SerializationManager manager = new SerializationManager();
+	kgList = manager.deserializeKnownGeneList(path);
+	chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);  
     }
 
 
@@ -143,6 +117,9 @@ public class SynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: EPHA2:uc010oca.2:exon3:c.573G>A:p.L191L,EPHA2:uc001aya.2:exon3:c.573G>A:p.L191L,
  * chr1:16475123C>T
+ expected:<EPHA2(uc0[10oca.2:exon3:c.573G>A:p.L191L,uc001ay]a.2:exon3:c.573G>A:p...> 
+but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p...>
+
  *</P>
  */
 @Test public void testSynonymousVar2() throws AnnotationException  {
@@ -158,7 +135,7 @@ public class SynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("EPHA2(uc010oca.2:exon3:c.573G>A:p.L191L,uc001aya.2:exon3:c.573G>A:p.L191L)",annot);
+	    Assert.assertEquals("EPHA2(uc001aya.2:exon3:c.573G>A:p.L191L,uc010oca.2:exon3:c.573G>A:p.L191L)",annot);
 	}
 }
 
@@ -190,6 +167,9 @@ public class SynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: HMGB4:uc021oky.1:exon1:c.105T>C:p.Y35Y,HMGB4:uc001bxp.3:exon2:c.105T>C:p.Y35Y,
  * chr1:34329897T>C
+ expected:<HMGB4(uc0[21oky.1:exon1:c.105T>C:p.Y35Y,uc001bxp.3:exon2]:c.105T>C:p.Y35Y)> 
+but was:<HMGB4(uc0[01bxp.3:exon2:c.105T>C:p.Y35Y,uc021oky.1:exon1]:c.105T>C:p.Y35Y)>
+
  *</P>
  */
 @Test public void testSynonymousVar6() throws AnnotationException  {
@@ -205,7 +185,7 @@ public class SynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HMGB4(uc021oky.1:exon1:c.105T>C:p.Y35Y,uc001bxp.3:exon2:c.105T>C:p.Y35Y)",annot);
+	    Assert.assertEquals("HMGB4(uc001bxp.3:exon2:c.105T>C:p.Y35Y,uc021oky.1:exon1:c.105T>C:p.Y35Y)",annot);
 	}
 }
 
@@ -472,6 +452,9 @@ public class SynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: OBSCN:uc001hsn.3:exon4:c.1431A>G:p.L477L,OBSCN:uc009xez.1:exon4:c.1431A>G:p.L477L,
  * chr1:228402047A>G
+  expected:<OBSCN(uc00[9xez.1:exon4:c.1431A>G:p.L477L,uc001hsn.3]:exon4:c.1431A>G:p.L...> 
+but was:<OBSCN(uc00[1hsn.3:exon4:c.1431A>G:p.L477L,uc009xez.1]:exon4:c.1431A>G:p.L...>
+
  *</P>
  */
 @Test public void testSynonymousVar23() throws AnnotationException  {
@@ -487,7 +470,7 @@ public class SynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OBSCN(uc009xez.1:exon4:c.1431A>G:p.L477L,uc001hsn.3:exon4:c.1431A>G:p.L477L)",annot);
+	    Assert.assertEquals("OBSCN(uc001hsn.3:exon4:c.1431A>G:p.L477L,uc009xez.1:exon4:c.1431A>G:p.L477L)",annot);
 	}
 }
 

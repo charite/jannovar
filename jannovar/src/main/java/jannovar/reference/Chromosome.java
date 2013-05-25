@@ -31,33 +31,27 @@ import jannovar.interval.*;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
- * It is intended to be used together with the TranscriptModel class to make 
+ * It is intended to be used together with the 
+ * {@link jannovar.reference.TranscriptModel TranscriptModel} class to make 
  * a list of gene models that will be used to annotate chromosomal variants.
- * The genes are stored in a TreeMap (A Java implementation of the red-black
- * tree), allowing them to be found quickly on the basis of the position of 
- * the chromosomal variant. Also, we can find the neighbors (5' and 3') of 
+ * We use an {@link jannovar.interval.IntervalTree IntervalTree} to store 
+ * all of the {@link jannovar.reference.TranscriptModel TranscriptModel}
+ * objects that belong to this Chromosome and to search for all transcripts
+ * that overlap with any given variant. Note that the IntervalTree class has
+ * functionality also to find the neighbors (5' and 3') of 
  * the closest gene in order to find the right and left genes of intergenic
  * variants and to find the correct gene in the cases of complex regions of the
  * chromosome with one gene located in the intron of the next or with overlapping
  * genes. 
  * <P>
- * NOTE: 15 May 2013. We are in the process of replacing the Java TreeMap with our
- * IntervalTree to improve performance.
- * <P>
- * Note that the key of the tree map corresponds to the 5' most position of 
- * the TranscriptModel. The value is a list
- * (ArrayList) of {@link jannovar.reference.TranscriptModel TranscriptModel} objects. 
- * This is because multiple TranscriptModels may share the same transcription
- * start (e.g., multiple splice forms of the same gene).
+ * Note that the {@link jannovar.interval.Interval Interval} objects in the
+ * interval tree are defined by the transcription start and stop sites of the isoform.
  * <P>
  * Note that this class contains some of the annotation functions of Annovar. It was not
  * attempted to reimplement all of the copious functionality of that nice program,
- * just enough to annotate variants found in VCF files. Some notes in particular
- * <UL>
- * <LI> The -seq_padding functionality of annovar was ignored
- * </UL>
+ * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.17 (24 May, 2013)
+ * @version 0.18 (24 May, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -322,7 +316,7 @@ public class Chromosome {
 	
 	/** Get TranscriptModels that are located in vicinity of position. */
 	//ArrayList<TranscriptModel> candidateGenes = getBinRange(position);
-	System.out.println("getAnnList position=" + position + " ref=" + ref + " alt=" + alt);
+	//System.out.println("getAnnList position=" + position + " ref=" + ref + " alt=" + alt);
 
 
 	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
@@ -334,7 +328,7 @@ public class Chromosome {
 
 	
 
-	System.out.println("Size of candidate genes = " + candidateGenes.size());
+	//System.out.println("Size of candidate genes = " + candidateGenes.size());
 
 
 	for (TranscriptModel kgl : candidateGenes) {
@@ -1153,6 +1147,37 @@ public class Chromosome {
 	    if (match>0) sb.append(match);
 	}
 	return sb.toString();
+    }
+
+
+    /**
+     * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the
+     * {@link jannovar.reference.TranscriptModel TranscriptModel} objects are entered into an
+     * {@link jannovar.interval.IntervalTree IntervalTree} for the appropriate Chromosome.
+     * @param kgList A list of all TranscriptModels for the entire genome
+     * @return a Map of Chromosome objects with all 22+2+M chromosomes.
+     */
+     public static HashMap<Byte,Chromosome> constructChromosomeMapWithIntervalTree(ArrayList<TranscriptModel> kgList) {
+	 HashMap<Byte,Chromosome> chromosomeMap = new HashMap<Byte,Chromosome> ();
+	/* 1. First sort the TranscriptModel objects by Chromosome. */
+	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
+	for (TranscriptModel kgl : kgList) {
+	    byte chrom = kgl.getChromosome();
+	    if (! chrMap.containsKey(chrom)) {
+		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
+	    }
+	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
+	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
+	    lst.add(in);
+	}
+	/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
+	for (Byte chrom : chrMap.keySet()) {
+	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
+	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
+	    Chromosome chr = new Chromosome(chrom,itree);
+	    chromosomeMap.put(chrom,chr);
+	}
+	return chromosomeMap;
     }
     
     

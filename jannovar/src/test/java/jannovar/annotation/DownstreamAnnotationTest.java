@@ -14,7 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-
+import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
@@ -47,37 +47,12 @@ public class DownstreamAnnotationTest implements Constants {
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,TranscriptModel> kgMap=null;
-	// The following file must be created prior to running this test
-	try {
-	     java.net.URL url = DownstreamAnnotationTest.class.getResource("/ucsc.ser");
-	    String path = url.getPath();
-	    FileInputStream fileIn = new FileInputStream(path);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-	} catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
-           
-        } catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-	//System.out.println("Done deserialization, size of map is " + kgMap.size());
-	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (TranscriptModel kgl : kgMap.values()) {
-	    byte chrom = kgl.getChromosome();
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		chromosomeMap.put(chrom,chr);
-	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
-	}
+	ArrayList<TranscriptModel> kgList=null;
+	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
+	String path = url.getPath();
+	SerializationManager manager = new SerializationManager();
+	kgList = manager.deserializeKnownGeneList(path);
+	chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
     }
 
     @AfterClass public static void releaseResources() { 

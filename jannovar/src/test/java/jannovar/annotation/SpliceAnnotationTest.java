@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
-import jannovar.interval.*;
+
 import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
@@ -44,42 +44,14 @@ public class SpliceAnnotationTest implements Constants {
    
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
-    private static void constructChromosomeMapWithIntervalTree(ArrayList<TranscriptModel> kgList) {
-	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	/* 1. First sort the TranscriptModel objects by Chromosome. */
-	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
-	for (TranscriptModel kgl : kgList) {
-	    byte chrom = kgl.getChromosome();
-	    if (! chrMap.containsKey(chrom)) {
-		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
-	    }
-	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
-	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
-	    lst.add(in);
-	}
-	/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
-	for (Byte chrom : chrMap.keySet()) {
-	    System.out.println("B=" + chrom);
-	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
-	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
-	    Chromosome chr = new Chromosome(chrom,itree);
-	    chromosomeMap.put(chrom,chr);
-	}
-    }
-
-
-
-    @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
 	ArrayList<TranscriptModel> kgList=null;
-
 	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(path);
-	constructChromosomeMapWithIntervalTree(kgList);
-	
+	chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
 
     }
 
@@ -309,7 +281,11 @@ public class SpliceAnnotationTest implements Constants {
 	}
 }
 
-
+    /**
+     * Note: The order is not defined for the following, but all variants of the program get the 3 isoforms.
+ expected:<MTA3(uc002rs[p.1:exon6:c.214-2A>G,uc002rso.1:exon7]:c.214-2A>G,uc002rsq...> 
+but was:<MTA3(uc002rs[o.1:exon7:c.214-2A>G,uc002rsp.1:exon6]:c.214-2A>G,uc002rsq...>
+    */
 @Test public void testSpliceVar6h() throws AnnotationException  {
 	byte chr = 2;
 	int pos = 42871265;
@@ -323,7 +299,7 @@ public class SpliceAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MTA3(uc002rsp.1:exon6:c.214-2A>G,uc002rso.1:exon7:c.214-2A>G,uc002rsq.3:exon6:c.382-2A>G)",annot);
+	    Assert.assertEquals("MTA3(uc002rso.1:exon7:c.214-2A>G,uc002rsp.1:exon6:c.214-2A>G,uc002rsq.3:exon6:c.382-2A>G)",annot);
 	}
 }
 
@@ -362,6 +338,11 @@ public class SpliceAnnotationTest implements Constants {
 	}
 }
 
+
+    /**
+       expected:<...exon5:c.337-1G>A,uc0[10fjv.1:exon7:c.523-1G>A,uc002tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc010ywx.2]:exon7:c.523-1G>A)> 
+but was:<...exon5:c.337-1G>A,uc0[02tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc010ywx.2:exon7:c.523-1G>A,uc010fjv.1]:exon7:c.523-1G>A)>
+    */
 @Test public void testSpliceVar9h() throws AnnotationException  {
 	byte chr = 2;
 	int pos = 110926131;
@@ -375,7 +356,7 @@ public class SpliceAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NPHP1(uc002tfo.4:exon5:c.337-1G>A,uc010fjv.1:exon7:c.523-1G>A,uc002tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc010ywx.2:exon7:c.523-1G>A)",annot);
+	    Assert.assertEquals("NPHP1(uc002tfo.4:exon5:c.337-1G>A,uc002tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc010ywx.2:exon7:c.523-1G>A,uc010fjv.1:exon7:c.523-1G>A)",annot);
 	}
 }
 

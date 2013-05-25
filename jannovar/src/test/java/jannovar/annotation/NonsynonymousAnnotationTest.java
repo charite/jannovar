@@ -14,7 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-
+import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
@@ -43,40 +43,14 @@ public class NonsynonymousAnnotationTest implements Constants {
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
   
-
-    @SuppressWarnings (value="unchecked")
     @BeforeClass 
     public static void setUp() throws IOException {
-	HashMap<String,TranscriptModel> kgMap=null;
-
-	try {
-	     java.net.URL url = NonsynonymousAnnotationTest.class.getResource("/ucsc.ser");
-	     String path = url.getPath();
-	     FileInputStream fileIn = new FileInputStream(path);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-	} catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
-           
-        } catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-	chromosomeMap = new HashMap<Byte,Chromosome> ();
-	for (TranscriptModel kgl : kgMap.values()) {
-	    byte chrom = kgl.getChromosome();
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		chromosomeMap.put(chrom,chr);
-	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
-	}
+	ArrayList<TranscriptModel> kgList=null;
+	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
+	String path = url.getPath();
+	SerializationManager manager = new SerializationManager();
+	kgList = manager.deserializeKnownGeneList(path);
+	chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);   
     }
 
     @AfterClass public static void releaseResources() { 
@@ -184,6 +158,10 @@ public class NonsynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: FHAD1:uc001awb.2:exon21:c.2756A>G:p.E919G,FHAD1:uc001awf.3:exon2:c.197A>G:p.E66G,FHAD1:uc010obl.1:exon5:c.515A>G:p.E172G,FHAD1:uc001awd.1:exon6:c.515A>G:p.E172G,FHAD1:uc001awe.1:exon4:c.320A>G:p.E107G,
  * chr1:15687059A>G
+
+ expected:<...c.320A>G:p.E107G,uc0[10obl.1:exon5:c.515A>G:p.E172G,uc001awd.1:exon6]:c.515A>G:p.E172G,uc...> 
+but was:<...c.320A>G:p.E107G,uc0[01awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5]:c.515A>G:p.E172G,uc...>
+
  *</P>
  */
 @Test public void testNonsynVar4() throws AnnotationException  {
@@ -199,7 +177,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FHAD1(uc001awf.3:exon2:c.197A>G:p.E66G,uc001awe.1:exon4:c.320A>G:p.E107G,uc010obl.1:exon5:c.515A>G:p.E172G,uc001awd.1:exon6:c.515A>G:p.E172G,uc001awb.2:exon21:c.2756A>G:p.E919G)",annot);
+	    Assert.assertEquals("FHAD1(uc001awf.3:exon2:c.197A>G:p.E66G,uc001awe.1:exon4:c.320A>G:p.E107G,uc001awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5:c.515A>G:p.E172G,uc001awb.2:exon21:c.2756A>G:p.E919G)",annot);
 	}
 }
 
@@ -208,6 +186,9 @@ public class NonsynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: CASP9:uc001awm.2:exon5:c.662A>G:p.Q221R,CASP9:uc009voi.3:exon5:c.194A>G:p.Q65R,CASP9:uc010obm.2:exon5:c.413A>G:p.Q138R,CASP9:uc001awp.3:exon5:c.194A>G:p.Q65R,CASP9:uc001awn.3:exon5:c.662A>G:p.Q221R,
  * chr1:15832543T>C
+ * expected:<...3A>G:p.Q138R,uc001aw[n.3:exon5:c.662A>G:p.Q221R,uc001awm.2]:exon5:c.662A>G:p.Q2...> 
+but was:<...3A>G:p.Q138R,uc001aw[m.2:exon5:c.662A>G:p.Q221R,uc001awn.3]:exon5:c.662A>G:p.Q2...>
+
  *</P>
  */
 @Test public void testNonsynVar5() throws AnnotationException  {
@@ -223,7 +204,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CASP9(uc001awp.3:exon5:c.194A>G:p.Q65R,uc009voi.3:exon5:c.194A>G:p.Q65R,uc010obm.2:exon5:c.413A>G:p.Q138R,uc001awn.3:exon5:c.662A>G:p.Q221R,uc001awm.2:exon5:c.662A>G:p.Q221R)",annot);
+	    Assert.assertEquals("CASP9(uc001awp.3:exon5:c.194A>G:p.Q65R,uc009voi.3:exon5:c.194A>G:p.Q65R,uc010obm.2:exon5:c.413A>G:p.Q138R,uc001awm.2:exon5:c.662A>G:p.Q221R,uc001awn.3:exon5:c.662A>G:p.Q221R)",annot);
 	}
 }
 
@@ -286,6 +267,10 @@ public class NonsynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: ECE1:uc001bem.2:exon9:c.974C>T:p.T325I,ECE1:uc001bek.2:exon9:c.1022C>T:p.T341I,ECE1:uc001bej.2:exon7:c.986C>T:p.T329I,ECE1:uc009vqa.1:exon9:c.1022C>T:p.T341I,ECE1:uc010odl.1:exon9:c.1022C>T:p.T341I,ECE1:uc001bei.2:exon8:c.1013C>T:p.T338I,
  * chr1:21573855G>A
+ *
+expected:<....1013C>T:p.T338I,uc0[09vqa.1:exon9:c.1022C>T:p.T341I,uc010odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2]:exon9:c.1022C>T:p.T...> 
+but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon9:c.1022C>T:p.T341I,uc009vqa.1]:exon9:c.1022C>T:p.T...>
+
  *</P>
  */
 @Test public void testNonsynVar8() throws AnnotationException  {
@@ -301,7 +286,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ECE1(uc001bem.2:exon9:c.974C>T:p.T325I,uc001bej.2:exon7:c.986C>T:p.T329I,uc001bei.2:exon8:c.1013C>T:p.T338I,uc009vqa.1:exon9:c.1022C>T:p.T341I,uc010odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon9:c.1022C>T:p.T341I)",annot);
+	    Assert.assertEquals("ECE1(uc001bem.2:exon9:c.974C>T:p.T325I,uc001bej.2:exon7:c.986C>T:p.T329I,uc001bei.2:exon8:c.1013C>T:p.T338I,uc010odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon9:c.1022C>T:p.T341I,uc009vqa.1:exon9:c.1022C>T:p.T341I)",annot);
 	}
 }
 
@@ -479,6 +464,11 @@ public class NonsynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: EMILIN1:uc002rii.4:exon3:c.446A>G:p.Q149R,EMILIN1:uc010eyq.2:exon3:c.446A>G:p.Q149R,
  * chr2:27303755A>G
+expected:<EMILIN1(uc0[02rii.4:exon3:c.446A>G:p.Q149R,uc0]10eyq.2:exon3:c.446A...> 
+but was:<EMILIN1(uc0[]10eyq.2:exon3:c.446A...>
+expected:<...on3:c.446A>G:p.Q149R[,uc002rii.4:exon3:c.446A>G:p.Q149R])> but was:<...on3:c.446A>G:p.Q149R[])>
+
+
  *</P>
  */
 @Test public void testNonsynVar61() throws AnnotationException  {
@@ -494,7 +484,8 @@ public class NonsynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("EMILIN1(uc002rii.4:exon3:c.446A>G:p.Q149R,uc010eyq.2:exon3:c.446A>G:p.Q149R)",annot);
+	    System.out.println("Annota = " + annot);
+	    Assert.assertEquals("EMILIN1(uc010eyq.2:exon3:c.446A>G:p.Q149R,uc002rii.4:exon3:c.446A>G:p.Q149R)",annot);
 	}
 }
 

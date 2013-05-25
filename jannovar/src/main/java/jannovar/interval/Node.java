@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @see jannovar.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.03 (14 May, 2013)
+ * @version 0.04 (14 May, 2013)
  */
 
 // public class Node<T extends Comparable<T>>  {
@@ -153,9 +153,46 @@ public class Node<T>  {
     public int getMedian() { return this.median; }
     
 
+    /**
+     * This function is intended to be used to find Intervals
+     * that surround queries that do not actually intersect with
+     * any of the intervals in the tree. For any search query at a
+     * given node, either the search query overlaps with one of the 
+     * intervals, or it is the right of all of the intervals, or
+     * it is to the left of all of the intervals.
+     * <P> 
+     * If the query is to the left of all of the intervals, then 
+     * its right neighbor is the interval whose low point is
+     * the most to the left. This is the interval that is returned by
+     * this function (it is the first element of {@link #leftorder}).
+     * @return the left most Interval
+     */
+    public Interval<T> getLeftmostInterval() {
+	if (leftorder.size() == 0) return null;
+	else return leftorder.get(0);
+    }
 
 
-	
+
+    /**
+     * This function is intended to be used to find Intervals
+     * that surround queries that do not actually intersect with
+     * any of the intervals in the tree. For any search query at a
+     * given node, either the search query overlaps with one of the 
+     * intervals, or it is the right of all of the intervals, or
+     * it is to the left of all of the intervals.
+     * <P> 
+     * If the query is to the right of all of the intervals, then 
+     * its left neighbor is the interval whose highpoint is
+     * the most to the right. This is the interval that is returned by
+     * this function (it is the last element of {@link #rightorder}).
+     * @return the left most Interval
+     */
+    public Interval<T> getRightmostInterval() {
+	if (rightorder.size() == 0) return null;
+	int i = rightorder.size()-1;
+	return rightorder.get(i);
+    }
 
 
 
@@ -178,14 +215,14 @@ public class Node<T>  {
 	 * @return A left node of the interval tree
 	 */
 	public Node<T> getLeft() {
-		return leftNode;
+	    return leftNode;
 	}
-
+	
 	/**
 	 * @return A right node of the interval tree
 	 */
 	public Node<T> getRight() {
-		return rightNode;
+	    return rightNode;
 	}
 
 }
