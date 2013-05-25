@@ -26,13 +26,13 @@ import java.util.List;
 // public class Node<T extends Comparable<T>>  {
 public class Node<T>  {
     /** Median of all intervals in this node */
-    private Integer median;
+    private int median;
     /** node containing the intervals completely to the left of the median. */ 
     private Node<T> leftNode;
     /** node containing the intervals completely to the right of the median. */
     private Node<T> rightNode;
     /** list of all intervals that cross median of this node. */
-    private List<Interval<T>> intervals;
+    //private List<Interval<T>> intervals;
     /**  list of intervals sorted by increasing left end points */
     public List<Interval<T>> leftorder;
     /** list sorted by decreasing right end points */
@@ -133,23 +133,28 @@ public class Node<T>  {
     /**
      * Calculates the median value of the sorted list. For this purpose, the
      * method finds the center of the list by dividing the size of the list by
-     * two and stores it in mid. If the size of the list is devisible by two,
+     * two and stores it in mid. If the size of the list is divisible by two,
      * the previous element of mid is added to the median and divided by two.
-     * 
+     * <P>
+     * Note that because list of Integers represent each of the endpoints of the
+     * intervals that cross the midline, they need to be sorted before we can
+     * calculate the median.
      * @param list A list of integers
      * @return The median of the list
      */
     private Integer calculateMedian(List<Integer> list) {
-	/* mid is defined as the center of the list */
+	Collections.sort(list);
 	int mid = list.size() / 2;
-	/* median is set to mid */
-	median = list.get(mid);
+	int median = list.get(mid);
 	if (list.size() % 2 == 0) {
 	    median = (median + list.get(mid - 1)) / 2;
 	}
 	return median;
     }
     
+    /**
+     * @return the median value of all endpoints of all intervals that represent this
+     * node and all of its children nodes. */
     public int getMedian() { return this.median; }
     
 
@@ -223,6 +228,41 @@ public class Node<T>  {
 	 */
 	public Node<T> getRight() {
 	    return rightNode;
+	}
+
+
+	/**
+	 * This is intended to be used to print out the interval tree
+	 * for debugging purposes.
+	 */
+	public void debugPrint(String type, int level) {
+	    
+	    StringBuffer sb = new StringBuffer();
+	    for (int i=0;i<level;++i) sb.append("-");
+	    String indent = new String(sb);
+	    System.out.print(indent);
+	    if (type==null)
+		System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(),median));
+	    else
+		System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,this.leftorder.size(),median));
+	    System.out.print(indent);
+	    for (Interval<T> i: leftorder) { System.out.println(i); }
+	    System.out.println();
+	    Node l = getLeft();
+	    if (l==null) { 
+		System.out.print(indent);
+		System.out.println("-:Left=null");
+	    } else {
+		l.debugPrint("L",level+1);
+	    }
+	    Node r = getRight();
+	     if (r==null) { 
+		 System.out.print(indent);
+		 System.out.println("-:Right=null");
+	    } else {
+		 r.debugPrint("R",level+1);
+	    }
+		
 	}
 
 }

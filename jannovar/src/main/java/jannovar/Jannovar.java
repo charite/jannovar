@@ -73,7 +73,7 @@ import jannovar.io.VCFReader;
  * </PRE>
  * This will create two files with all variants and a special file with exonic variants.
  * @author Peter N Robinson
- * @version 0.16 (22 May, 2013)
+ * @version 0.17 (25 May, 2013)
  */
 public class Jannovar {
     /** A logger from Apache's log4j that records key statistics from program execution. */
@@ -325,41 +325,6 @@ public class Jannovar {
 	    this.chromosomeMap.put(chrom,chr);
 	}
     }
-
-
-
-   
-
-
-   
-
-
-    /**
-     * Input the list of known genes from the UCSC file called knownGene.txt, and uses it
-     * to construct Chromosome objects. These objects represent the Chromosomes and the
-     * genes they contain.
-     * NOTE this is the old version prior to refactoringto the IntervalTree.
-     */
-    public void readUCSCKnownGenesFileOLD()
-    {
-	
-	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
-	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
-	System.out.println("Adding KGs to Chromosomes");
-	System.out.println("Number of KGs is " + kgList.size());
-	for (TranscriptModel kgl : kgList ) {
-	    byte chrom = kgl.getChromosome();
-	    //System.out.println("Chromosome is " + chrom);
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		//System.out.println("Adding chromosome for " + chrom);
-		chromosomeMap.put(chrom,chr);
-	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
-	}
-    } 
-
 
     /**
      * This menction uses {@link jannovar.io.UCSCKGParser UCSCKGParser}

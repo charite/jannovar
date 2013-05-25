@@ -64,7 +64,7 @@ public class IntervalTreeTest {
 	return ilist;
 
     }
-    
+    /*
     @Test
         public void findAllIntervals() throws IntervalTreeException {
 	// create a tree with the interval list from setUp()
@@ -72,7 +72,7 @@ public class IntervalTreeTest {
 	// all intervals in the random tree overlap with the interval (0,2000):
 	Assert.assertEquals(5000, tree.search(0, 2000).size());	
     }
-
+    */
     @Test public void testSearch1() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
 	List<String> qy = tree.search(7,8);
@@ -106,11 +106,27 @@ public class IntervalTreeTest {
 	//
     }
 
-    /** Tests not finding an interval but getting the neighbor */
-    @Test public void testSearch3() throws IntervalTreeException {
+    /** Tests not finding an interval  */
+    @Test public void testSearch3a() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
 	List<String> qy = tree.search(10,11);
 	Assert.assertEquals(0,qy.size());
+    }
+
+     /** Tests not finding an interval but getting the left neighbor */
+    @Test public void testSearch3b() throws IntervalTreeException {
+	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
+	List<String> qy = tree.search(10,11);
+	String lft = tree.getLeftNeighbor();
+	Assert.assertEquals("f",lft);
+    }
+
+      /** Tests not finding an interval but getting the right neighbor */
+    @Test public void testSearch3c() throws IntervalTreeException {
+	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
+	List<String> qy = tree.search(10,11);
+	String rt = tree.getRightNeighbor();
+	Assert.assertEquals("g",rt);
     }
 
 }

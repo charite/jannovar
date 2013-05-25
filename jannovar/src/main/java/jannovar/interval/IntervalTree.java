@@ -23,6 +23,9 @@ import java.util.Comparator;
  * (sorted by increasing left endpoints) and rightorder (sorted by decreasing
  * right endpoints).
  * </ol>
+ * Note that a Node object may have non-null right and left children while the
+ * Node itself has not associated intervals, depending on the relationship of the
+ * median value to the values of the intervals.
  * <P>
  * To search in the interval tree, the following procedure is used.
  * <ol>
@@ -119,6 +122,8 @@ public class IntervalTree<T> implements java.io.Serializable {
 	/* reset */
 	this.leftNeighbor = null;
 	this.rightNeighbor = null;
+
+	//debugPrint();
 	searchInterval(root, result, low, high);
 	ArrayList<T> obtlst = new ArrayList<T>();
 	for (Interval<T> it : result) {
@@ -150,12 +155,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 
 
     public T getRightNeighbor() {
-	return this.rightNeighbor.getValue();
+	return rightNeighbor == null ? null : this.rightNeighbor.getValue();
     }
 
 
     public T getLeftNeighbor() {
-	return this.leftNeighbor.getValue();
+	return leftNeighbor==null ? null : this.leftNeighbor.getValue();
     }
 
     /**
@@ -178,16 +183,19 @@ public class IntervalTree<T> implements java.io.Serializable {
 	if (ilow < n.getMedian()) {
 	    /* as long as the iterator i is smaller than the size of leftorder */
 	    int size = n.leftorder.size();
-	    
+	    //System.out.println(String.format("ilow=%d < median=%d, leftorder size=%d",ilow,n.getMedian(),n.leftorder.size()));
 	    for (int i = 0; i < size; i++) {
 		/*
 		 * breaks if the lowpoint at position i is bigger than the
 		 * wanted high point
 		 */
 		if (n.leftorder.get(i).getLow() > ihigh) {
+		    //System.out.println(String.format("break because low-interval [%d] > ihigh [%d] with median=%d", 
+		    //				     n.leftorder.get(i).getLow(),ihigh,n.getMedian()));
 		    break;
 		}
 		/* adds the interval at position i of leftorder to result */
+		//System.out.println(String.format("ilow < median: adding interval: " + n.leftorder.get(i)));
 		result.add(n.leftorder.get(i));
 	    }
 	    /*
@@ -197,15 +205,19 @@ public class IntervalTree<T> implements java.io.Serializable {
 	} else if (ihigh > n.getMedian()) {
 	    /* as long as the iterator i is smaller than the size of rightorder */
 	    int size = n.rightorder.size();
+	    //System.out.println(String.format("ihigh=%d > median=%d, rightorder size=%d",ihigh,n.getMedian(),n.rightorder.size()));
 	    for (int i = 0; i < size; i++) {
 		/*
 		 * breaks if the highpoint at position i is smaller than the
 		 * wanted low point
 		 */
 		if (n.rightorder.get(i).getHigh() < ilow) {
+		    //System.out.println(String.format("break because high-interval [%d] < ilow [%d] ", n.leftorder.get(i).getHigh(),ilow));
 		    break;
 		}
 		/* adds the interval at position i of rightorder to result */
+		//System.out.println(String.format("ihigh [%d] > median [%d]: adding interval: %s",
+		//				 ihigh,n.getMedian(),n.rightorder.get(i)));
 		result.add(n.rightorder.get(i));
 	    }
 	}
@@ -254,5 +266,17 @@ public class IntervalTree<T> implements java.io.Serializable {
      public void update() {
      this.root = new Node<T>(intervals);
      } */
+
+
+    /**
+     * This is intended to be used to print out the interval tree
+     * for debugging purposes.
+     */
+    public void debugPrint() {
+	System.out.println("IntervalTree<T>");
+	root.debugPrint(null,0);
+	System.out.println("LeftNeighbor:" + leftNeighbor);
+	System.out.println("RightNeighbor:" + rightNeighbor);
+    }
     
 }
