@@ -186,9 +186,6 @@ but was:<...c.320A>G:p.E107G,uc0[01awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5
  *<P>
  * annovar: CASP9:uc001awm.2:exon5:c.662A>G:p.Q221R,CASP9:uc009voi.3:exon5:c.194A>G:p.Q65R,CASP9:uc010obm.2:exon5:c.413A>G:p.Q138R,CASP9:uc001awp.3:exon5:c.194A>G:p.Q65R,CASP9:uc001awn.3:exon5:c.662A>G:p.Q221R,
  * chr1:15832543T>C
- * expected:<...3A>G:p.Q138R,uc001aw[n.3:exon5:c.662A>G:p.Q221R,uc001awm.2]:exon5:c.662A>G:p.Q2...> 
-but was:<...3A>G:p.Q138R,uc001aw[m.2:exon5:c.662A>G:p.Q221R,uc001awn.3]:exon5:c.662A>G:p.Q2...>
-
  *</P>
  */
 @Test public void testNonsynVar5() throws AnnotationException  {
@@ -204,7 +201,7 @@ but was:<...3A>G:p.Q138R,uc001aw[m.2:exon5:c.662A>G:p.Q221R,uc001awn.3]:exon5:c.
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CASP9(uc001awp.3:exon5:c.194A>G:p.Q65R,uc009voi.3:exon5:c.194A>G:p.Q65R,uc010obm.2:exon5:c.413A>G:p.Q138R,uc001awm.2:exon5:c.662A>G:p.Q221R,uc001awn.3:exon5:c.662A>G:p.Q221R)",annot);
+	    Assert.assertEquals("CASP9(uc001awp.3:exon5:c.194A>G:p.Q65R,uc009voi.3:exon5:c.194A>G:p.Q65R,uc010obm.2:exon5:c.413A>G:p.Q138R,uc001awn.3:exon5:c.662A>G:p.Q221R,uc001awm.2:exon5:c.662A>G:p.Q221R)",annot);
 	}
 }
 
@@ -464,10 +461,11 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
  *<P>
  * annovar: EMILIN1:uc002rii.4:exon3:c.446A>G:p.Q149R,EMILIN1:uc010eyq.2:exon3:c.446A>G:p.Q149R,
  * chr2:27303755A>G
-expected:<EMILIN1(uc0[02rii.4:exon3:c.446A>G:p.Q149R,uc0]10eyq.2:exon3:c.446A...> 
-but was:<EMILIN1(uc0[]10eyq.2:exon3:c.446A...>
-expected:<...on3:c.446A>G:p.Q149R[,uc002rii.4:exon3:c.446A>G:p.Q149R])> but was:<...on3:c.446A>G:p.Q149R[])>
-
+Jannovar reveals the following:
+Total annotiation: 2
+[Nonsynonymous] "EMILIN1" -> uc010eyq.2:exon3:c.446A>G:p.Q149R
+[Synonymous] "EMILIN1" -> uc002rii.4:exon3:c.446G>G [WARNING: mRNA/genome discrepancy: "A"/"G" strand=+]:p.R149R
+Therefore, the "nonsynonymous" variant "wins", togehther with an error message. This is the desired behaviour
 
  *</P>
  */
@@ -484,8 +482,7 @@ expected:<...on3:c.446A>G:p.Q149R[,uc002rii.4:exon3:c.446A>G:p.Q149R])> but was:
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    System.out.println("Annota = " + annot);
-	    Assert.assertEquals("EMILIN1(uc010eyq.2:exon3:c.446A>G:p.Q149R,uc002rii.4:exon3:c.446A>G:p.Q149R)",annot);
+	    Assert.assertEquals("EMILIN1(uc010eyq.2:exon3:c.446A>G:p.Q149R)",annot);
 	}
 }
 

@@ -6,6 +6,7 @@ import jannovar.exception.AnnotationException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Collections;
 
 
 /**
@@ -13,7 +14,7 @@ import java.util.HashSet;
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
  * summarize, sort, or display the objects.
  * @author Peter N Robinson
- * @version 0.07 (23 May, 2013)
+ * @version 0.08 (23 May, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -242,6 +243,26 @@ public class AnnotationList {
 
 
     /**
+     * For variants that affect multiple transcripts, we sometimes want to
+     * list all of the gene symbols alphabetically.
+     * @return alphabetical list of gene symbols affected by the current variant.
+     */
+    private ArrayList<String> getSortedListOfGeneSymbols() {
+	HashSet<String> set = new HashSet<String>();
+	ArrayList<String> list = new ArrayList<String>();
+	for (Annotation a : annotationList) {
+		String s = a.getVariantAnnotation();
+		if (! set.contains(s)) {
+		    set.add(s);
+		    list.add(s);
+		}
+	}
+	Collections.sort(list);
+	return list;
+    }
+
+
+    /**
      * This function will combine multiple intronic
      * annotations, e.g., "TRIM22,TRIM5" for a variant
      * that is located in the intron of these two different
@@ -252,12 +273,7 @@ public class AnnotationList {
 	    Annotation ann = annotationList.get(0);
 	    return ann.getVariantAnnotation();
 	} else { /* variant is in intron of multiple genes. */
-	    ArrayList<String> symbol_list = new ArrayList<String>();
-	    for (Annotation a : annotationList) {
-		String s = a.getVariantAnnotation();
-		symbol_list.add(s);
-	    }
-	    java.util.Collections.sort(symbol_list);
+	    ArrayList<String> symbol_list = getSortedListOfGeneSymbols();
 	    String s = symbol_list.get(0);
 	    StringBuilder sb = new StringBuilder();
 	    sb.append(s);
@@ -267,9 +283,6 @@ public class AnnotationList {
 	    return sb.toString();
 	}
     }
-
-
-
 
 
     /**

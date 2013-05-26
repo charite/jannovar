@@ -445,6 +445,9 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: FAM194B:uc001vam.1:exon2:c.398_415del:p.133_139del,FAM194B:uc001val.2:exon3:c.398_415del:p.133_139del,
  * chr13:46170726ACTCTTCCTCCTCCAGAT>-
+ * expected:<FAM194B(uc001va[m.1:exon2:c.398_415del:p.133_139del,uc001val.2:exon3]:c.398_415del:p.133_...> 
+ * but was:<FAM194B(uc001va[l.2:exon3:c.398_415del:p.133_139del,uc001vam.1:exon2]:c.398_415del:p.133_...>
+ * (order changed)
  *</P>
  */
 @Test public void testFSDeletionVar22() throws AnnotationException  {
@@ -460,7 +463,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM194B(uc001vam.1:exon2:c.398_415del:p.133_139del,uc001val.2:exon3:c.398_415del:p.133_139del)",annot);
+	    Assert.assertEquals("FAM194B(uc001val.2:exon3:c.398_415del:p.133_139del,uc001vam.1:exon2:c.398_415del:p.133_139del)",annot);
 	}
 }
 

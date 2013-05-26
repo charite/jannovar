@@ -46,7 +46,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.16 (25 May, 2013)
+ * @version 0.17 (25 May, 2013)
  * @author Peter N Robinson
  */
 
@@ -54,6 +54,8 @@ public class AnnotatedVariantFactory implements Constants {
    
     /** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
     private ArrayList<Annotation> annotation_Exonic =null;
+     /** List of all {@link jannovar.annotation.Annotation Annotation} objects found for splice site variation. */
+    private ArrayList<Annotation> annotation_Splicing =null;
     /** List of all {@link jannovar.annotation.Annotation Annotation} objects found for ncRNA variation. */
     private ArrayList<Annotation> annotation_ncRNA = null;
     /** List of all {@link jannovar.annotation.Annotation Annotation} objects found for UTR5 or UTR3 variation. */
@@ -117,6 +119,7 @@ public class AnnotatedVariantFactory implements Constants {
     public AnnotatedVariantFactory(int initialCapacity) {
 
 	this.annotation_Exonic = new ArrayList<Annotation>(initialCapacity);
+	this.annotation_Splicing = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_Synonymous = new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncRNA =  new ArrayList<Annotation>(initialCapacity);
 	this.annotation_ncrnaIntronic = new ArrayList<Annotation>(initialCapacity);
@@ -135,6 +138,7 @@ public class AnnotatedVariantFactory implements Constants {
      */
     public void clearAnnotationLists() {
 	this.annotation_Exonic.clear();
+	this.annotation_Splicing.clear();
 	this.annotation_Synonymous.clear();
 	this.annotation_ncRNA.clear();
 	this.annotation_ncrnaIntronic.clear();
@@ -146,6 +150,7 @@ public class AnnotatedVariantFactory implements Constants {
 	this.annotation_Error.clear();
 	this.geneSymbolSet.clear();
 	this.hasExonic=false;
+	this.hasSplicing=false;
 	this.hasNcRna=false;
 	this.hasUTR5=false;
 	this.hasUTR3=false;
@@ -204,6 +209,9 @@ public class AnnotatedVariantFactory implements Constants {
 	AnnotationList annL = null;
 	if (hasExonic) {
 	    annL = new AnnotationList(annotation_Exonic);
+	    if (hasSplicing) annL.addAnnotations(annotation_Splicing); /* Also add splice mutations */
+	} else if (hasSplicing) { /* just splicing, no other exonic */
+	    annL = new AnnotationList(annotation_Splicing);
 	} else if (hasNcRna || hasUTR5 || hasUTR3 || hasIntronic || hasNcrnaIntronic || hasSynonymous ) {
 	    annL = new AnnotationList();
 	    if (annotation_ncRNA.size()>0)
@@ -258,7 +266,7 @@ public class AnnotatedVariantFactory implements Constants {
      */
     private VariantType getMostPathogenicVariantType() {
 	VariantType vt = null;
-	//debugPrint();
+	debugPrint();
 	/* Strategy: Start with the least pathogenic and work our way up. */
 	if (hasIntergenic)
 	    vt = VariantType.INTERGENIC;
@@ -280,10 +288,11 @@ public class AnnotatedVariantFactory implements Constants {
 	    vt = VariantType.UTR53; /* combination */
 	if (hasNcRna)
 	    vt = VariantType.ncRNA_EXONIC;
-
+	if (hasSplicing)
+	    vt = VariantType.SPLICING; /* This has a priority just under that of EXONIC */
 	if (hasExonic) {
 	    /* For now, assume all exonic mutation types are the same. This
-	       will affect the combined annotation, but not affecte the detailed
+	       will affect the combined annotation, but not affect the detailed
 	       list of annotation used in exomizer. */
 	    Annotation ann = 	this.annotation_Exonic.get(0);
 	    vt = ann.getVariantType();
@@ -367,6 +376,9 @@ public class AnnotatedVariantFactory implements Constants {
 	if (ann.getVariantType() == VariantType.SYNONYMOUS) {
 	    this.annotation_Synonymous.add(ann);
 	    this.hasSynonymous = true;
+	} else if (ann.getVariantType() == VariantType.SPLICING) {
+	    this.annotation_Splicing.add(ann);
+	    this.hasSplicing = true;
 	} else {
 	    this.annotation_Exonic.add(ann);
 	    this.hasExonic=true;
@@ -394,6 +406,7 @@ public class AnnotatedVariantFactory implements Constants {
      * @param ann the Intronic annotation to be added.    
      */
     public void addIntronicAnnotation(Annotation ann){
+	this.geneSymbolSet.add(ann.getGeneSymbol());
 	if (ann.getVariantType() == VariantType.INTRONIC) {
 	    for (Annotation a: this.annotation_Intronic) {
 		if (a.equals(ann)) return; /* already have identical annotation */
@@ -470,29 +483,36 @@ public class AnnotatedVariantFactory implements Constants {
     public void debugPrint() {
 	System.out.println("AnnotatedVar.java:debugPrint");
 	System.out.println("Total annotiation: " + annotationCount);
+	System.out.println("Exonic:");
 	for (Annotation a : annotation_Exonic) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
 	}
+	System.out.println("Synonymous:");
 	for (Annotation a : annotation_Synonymous) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
 	}
+	System.out.println("ncRNA:");
 	for (Annotation a : annotation_ncRNA) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
 	}
+	System.out.println("UTR:");
 	for (Annotation a : annotation_UTR) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
 	}
+	System.out.println("Intronic:");
 	for (Annotation a : annotation_Intronic) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
 	}
+	System.out.println("Upstream/Downstream:");
 	for (Annotation a : annotation_Upstream) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
 	}
 	for (Annotation a : annotation_Downstream) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
 	}
+	System.out.println("Intergenic:");
 	for (Annotation a : annotation_Intergenic) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
+	    System.out.println("\t[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());
 	}
 	for (Annotation a : annotation_Error) {
 	    System.out.println("[" + a.getVariantTypeAsString() + "] " + a.getGeneSymbol() + " -> " + a.getVariantAnnotation());

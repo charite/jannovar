@@ -113,12 +113,12 @@ public class IntervalTreeTest {
 	Assert.assertEquals(0,qy.size());
     }
 
-     /** Tests not finding an interval but getting the left neighbor */
+     /** Tests not finding an interval but getting the left neighbor, this is d=(5,7) */
     @Test public void testSearch3b() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
 	List<String> qy = tree.search(10,11);
 	String lft = tree.getLeftNeighbor();
-	Assert.assertEquals("f",lft);
+	Assert.assertEquals("d",lft);
     }
 
       /** Tests not finding an interval but getting the right neighbor */

@@ -1942,7 +1942,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ADAM15",annot);
+	    Assert.assertEquals("ADAM15,LOC100505666",annot);
 	}
 }
 
@@ -2365,6 +2365,9 @@ public class IntronicAnnotationTest implements Constants {
  *<P>
  * annovar: C12orf54
  * chr12:48883012T>C
+ * This variant overlaps an intron of a coding isoform of C12orf54 as well as
+ * an exon of a non-coding RNA of this gene (refered to as near-coding by UCSC).
+ * Therefore, Jannovar is correct in calling this ncRNA_EXONIC.
  *</P>
  */
 @Test public void testIntronicVar11571() throws AnnotationException  {
@@ -2378,7 +2381,7 @@ public class IntronicAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.INTRONIC,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("C12orf54",annot);
 	}
