@@ -46,7 +46,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.15 (April 28, 2013)
+ * @version 0.16 (25 May, 2013)
  * @author Peter N Robinson
  */
 
@@ -258,16 +258,20 @@ public class AnnotatedVariantFactory implements Constants {
      */
     private VariantType getMostPathogenicVariantType() {
 	VariantType vt = null;
+	//debugPrint();
+	/* Strategy: Start with the least pathogenic and work our way up. */
 	if (hasIntergenic)
 	    vt = VariantType.INTERGENIC;
+	if (hasDownstream)
+	    vt = VariantType.DOWNSTREAM;
+	if (hasUpstream)
+	    vt = VariantType.UPSTREAM;
 	if (hasNcrnaIntronic)
 	    vt = VariantType.ncRNA_INTRONIC;
 	if (hasIntronic)
 	    vt = VariantType.INTRONIC;
-	if (hasUpstream)
-	    vt = VariantType.UPSTREAM;
-	if (hasDownstream)
-	    vt = VariantType.DOWNSTREAM;
+	if (hasSynonymous)
+	    vt = VariantType.SYNONYMOUS;
 	if (hasUTR5 && ! hasUTR3)
 	    vt = VariantType.UTR5;
 	if (hasUTR3 && ! hasUTR5)
@@ -276,8 +280,7 @@ public class AnnotatedVariantFactory implements Constants {
 	    vt = VariantType.UTR53; /* combination */
 	if (hasNcRna)
 	    vt = VariantType.ncRNA_EXONIC;
-	if (hasSynonymous)
-	    vt = VariantType.SYNONYMOUS;
+
 	if (hasExonic) {
 	    /* For now, assume all exonic mutation types are the same. This
 	       will affect the combined annotation, but not affecte the detailed
@@ -398,7 +401,7 @@ public class AnnotatedVariantFactory implements Constants {
 	    this.annotation_Intronic.add(ann);
 	    this.hasIntronic=true;
 	} else if (ann.getVariantType() == VariantType.ncRNA_INTRONIC) {
-	     for (Annotation a: this.annotation_ncrnaIntronic) {
+	    for (Annotation a: this.annotation_ncrnaIntronic) {
 		 if (a.equals(ann)) return; /* already have identical annotation */
 	     }
 	     this.annotation_ncrnaIntronic.add(ann);

@@ -560,6 +560,9 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: IL17RC
  * chr3:9965745C>T
+ * In this case, IL17RC is a near-coding mRNA that is classified as ncRNA.
+ * The variant hits an exonic region, and is thus correctly classified as
+ * ncRNA_EXONIC by Jannovar
  *</P>
  */
 @Test public void testUTR5Var122() throws AnnotationException  {
@@ -573,7 +576,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("IL17RC",annot);
 	}
@@ -1112,6 +1115,8 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: ZNHIT1
  * chr7:100861213T>C
+ * This is correctly called as a nearcoding-gene by Jannovar, the
+ * correct annotation is thus ncRNA_EXONIC
  *</P>
  */
 @Test public void testUTR5Var278() throws AnnotationException  {
@@ -1125,7 +1130,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZNHIT1",annot);
 	}
@@ -1434,6 +1439,7 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: FOXRED1
  * chr11:126139100T>C
+ * Correctly called ncRNA_EXONIC by Jannovar (Another isoform is UTR5)
  *</P>
  */
 @Test public void testUTR5Var386() throws AnnotationException  {
@@ -1447,7 +1453,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FOXRED1",annot);
 	}
@@ -1526,6 +1532,7 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: MED21
  * chr12:27175494T>C
+ * Correctly called ncRNA_EXONIC by Jannovar (Another isoform is 5UTR
  *</P>
  */
 @Test public void testUTR5Var394() throws AnnotationException  {
@@ -1539,7 +1546,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MED21",annot);
 	}
@@ -1825,6 +1832,7 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: MEG3
  * chr14:101301012T>C
+ Correctly called ncRNA_EXONIC by Jannovar (Another isoform is UTR5)
  *</P>
  */
 @Test public void testUTR5Var466() throws AnnotationException  {
@@ -1838,7 +1846,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MEG3",annot);
 	}
@@ -2101,6 +2109,7 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: MYO15B
  * chr17:73586358G>A
+ Correctly called ncRNA_EXONIC by Jannovar (Another isoform is 5UTR
  *</P>
  */
 @Test public void testUTR5Var540() throws AnnotationException  {
@@ -2114,7 +2123,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MYO15B",annot);
 	}
@@ -2262,6 +2271,7 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: TMEM150B
  * chr19:55832427T>G
+ * Correctly called ncRNA_EXONIC by Jannovar (there is another 5UTR isoform)
  *</P>
  */
 @Test public void testUTR5Var591() throws AnnotationException  {
@@ -2275,7 +2285,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TMEM150B",annot);
 	}
@@ -2446,6 +2456,7 @@ public class UTR5AnnotationTest implements Constants {
  *<P>
  * annovar: GRIA3
  * chrX_CHROMOSOME:122318387->C
+ * correctly called ncRNA_EXONIC by Jannovar (there is also a 5UTR-annotation for another isoform)
  *</P>
  */
 @Test public void testUTR5Var643() throws AnnotationException  {
@@ -2459,7 +2470,7 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR5,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("GRIA3",annot);
 	}

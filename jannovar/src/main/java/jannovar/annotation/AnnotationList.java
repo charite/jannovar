@@ -13,7 +13,7 @@ import java.util.HashSet;
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
  * summarize, sort, or display the objects.
  * @author Peter N Robinson
- * @version 0.06 (1 May, 2013)
+ * @version 0.07 (23 May, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -76,7 +76,7 @@ public class AnnotationList {
      */
     public void  sortAnnotations() throws AnnotationException {
 	if (this.annotationList.size()==0)  {
-	    throw new AnnotationException("No data forannotation");
+	    throw new AnnotationException("No data for annotation");
 	} else {
 	    java.util.Collections.sort(this.annotationList);
 	}

@@ -193,51 +193,7 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: abParts
- * chr2:89292182A>G
- *</P>
- */
-@Test public void testNcRnaExonicVar61() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 89292182;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("abParts",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: abParts
- * chr2:89533810C>T
- *</P>
- */
-@Test public void testNcRnaExonicVar67() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 89533810;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("abParts",annot);
-	}
-}
 
 /**
  *<P>
@@ -1160,97 +1116,8 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: abParts
- * chr14:106452817A>G
- *</P>
- */
-@Test public void testNcRnaExonicVar417() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 106452817;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("abParts",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: BC042994,abParts
- * chr14:106586290C>T
- *</P>
- */
-@Test public void testNcRnaExonicVar427() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 106586290;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BC042994,abParts",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: abParts
- * chr14:106805408C>T
- *</P>
- */
-@Test public void testNcRnaExonicVar436() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 106805408;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("abParts",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: abParts
- * chr14:107095216G>A
- *</P>
- */
-@Test public void testNcRnaExonicVar448() throws AnnotationException  {
-	byte chr = 14;
-	int pos = 107095216;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("abParts",annot);
-	}
-}
 
 /**
  *<P>
@@ -1601,6 +1468,9 @@ public class NoncodingRNAAnnotationTest implements Constants {
  *<P>
  * annovar: AL137752
  * chr19:36243813G>A
+ * In this case, annovar appears to be wrong. The variant affects the -2 position 
+ * of the mRNA lin37 LIN37(uc021usw.1:exon5:c.192-2G>A). It also affects the
+ * noncoding RNA AL137752, but Jannovar correctly reports the mRNA-affecting annotation.
  *</P>
  */
 @Test public void testNcRnaExonicVar540() throws AnnotationException  {
@@ -1614,9 +1484,9 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
+	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AL137752",annot);
+	    Assert.assertEquals("LIN37(uc021usw.1:exon5:c.192-2G>A)",annot);
 	}
 }
 
