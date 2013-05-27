@@ -208,7 +208,7 @@ public class AnnotationList {
 	    for (int i = 1; i<tmp.size();++i) {
 		sb.append("," + tmp.get(i));
 	    }
-	    sb.append(") ");
+	    sb.append(")");
 	}
 	return sb.toString();
     }

@@ -8,7 +8,7 @@ import jannovar.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for deletion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.06 (April 28, 2013)
+ * @version 0.07 (25 May, 2013)
  * @author Peter N Robinson
  */
 
@@ -183,18 +183,13 @@ public class DeletionAnnotation {
 	     * Frameshift deletion within the body of the mRNA                      *
 	     * -------------------------------------------------------------------- */
 	    varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;// int (($refvarend-$refcdsstart)/3) + 1;
-	    //$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "del";
-	    int posMutationInCDS = refvarstart-refcdsstart+1; /* start pos of mutation */
+	  
+	    int posMutationInCDS = refvarstart-refcdsstart+1; /* start pos of mutation with respect to CDS begin */
 	    canno = String.format("c.%d_%ddel",posMutationInCDS,refvarend-refcdsstart+1);
-	    //$function->{$index}{fsdel} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.${varpos}_${varposend}del,";
-	     panno =  String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(),
-				  exonNumber,canno,aavarpos,varposend);
-	     Annotation ann = Annotation.createFrameshiftDeletionAnnotation(kgl,posMutationInCDS,panno);
-	     return ann;
-	     
+	    panno =  String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(),
+				   exonNumber,canno,aavarpos,varposend);
+	    Annotation ann = Annotation.createFrameshiftDeletionAnnotation(kgl,posMutationInCDS,panno);
+	    return ann;
 	}
     }
-
-
-	
 }

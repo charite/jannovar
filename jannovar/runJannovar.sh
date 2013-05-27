@@ -25,7 +25,7 @@ SERIAL="ucsc.ser"
 JAVA="/usr/bin/java"
 MV="/bin/mv"
 
-JANNOVAR="target/jannovar-0.0.5-SNAPSHOT.jar"
+JANNOVAR="target/jannovar-0.0.6-SNAPSHOT.jar"
 
 
 echo ${JAVA}  -Xms1G -Xmx2G -jar ${JANNOVAR} -U $KG -M $MRNA -X $XR -L $LOCUS -S $SERIAL

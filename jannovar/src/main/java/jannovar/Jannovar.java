@@ -73,7 +73,7 @@ import jannovar.io.VCFReader;
  * </PRE>
  * This will create two files with all variants and a special file with exonic variants.
  * @author Peter N Robinson
- * @version 0.17 (25 May, 2013)
+ * @version 0.18 (27 May, 2013)
  */
 public class Jannovar {
     /** A logger from Apache's log4j that records key statistics from program execution. */
@@ -278,7 +278,7 @@ public class Jannovar {
 	ArrayList<TranscriptModel> kgList=null;
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(this.serializedFile);
-	constructChromosomeMapWithIntervalTree(kgList);
+	this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
      }  
 
 
@@ -301,30 +301,7 @@ public class Jannovar {
 	}
 	return parser.getKnownGeneList();
     }
-
-
-    private void constructChromosomeMapWithIntervalTree(ArrayList<TranscriptModel> kgList) {
-	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
-	/* 1. First sort the TranscriptModel objects by Chromosome. */
-	HashMap<Byte,ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte,ArrayList<Interval<TranscriptModel>>>();
-	for (TranscriptModel kgl : kgList) {
-	    byte chrom = kgl.getChromosome();
-	    if (! chrMap.containsKey(chrom)) {
-		chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
-	    }
-	    ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
-	    Interval<TranscriptModel> in = new Interval<TranscriptModel>(kgl.getTXStart(), kgl.getTXEnd(), kgl); 
-	    lst.add(in);
-	}
-	/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
-	for (Byte chrom : chrMap.keySet()) {
-	    System.out.println("B=" + chrom);
-	    ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
-	    IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
-	    Chromosome chr = new Chromosome(chrom,itree);
-	    this.chromosomeMap.put(chrom,chr);
-	}
-    }
+    
 
     /**
      * This menction uses {@link jannovar.io.UCSCKGParser UCSCKGParser}
@@ -335,7 +312,7 @@ public class Jannovar {
      */
     public void readUCSCKnownGenesFile() throws IntervalTreeException {
 	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
-	constructChromosomeMapWithIntervalTree(kgList);
+	this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
     }
     
     /**

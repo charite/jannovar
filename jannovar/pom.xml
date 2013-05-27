@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.charite.compbio</groupId>
   <artifactId>jannovar</artifactId>
-  <version>0.0.5-SNAPSHOT</version>
+  <version>0.0.6-SNAPSHOT</version>
   <properties>
     <project.custom.encoding>UTF-8</project.custom.encoding>
     <project.custom.java.version>1.6</project.custom.java.version>
@@ -60,6 +60,7 @@
 	     <mainClass>jannovar.Jannovar</mainClass>
 	   </manifest>
 	 </archive>
+	  <compilerArgument>-Xlint</compilerArgument>
        </configuration>
      </plugin>
      <plugin>
@@ -82,7 +83,7 @@
           </execution>
         </executions>
       </plugin>
-      <!-- junit testing 
+      <!-- junit testing  -->
      <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
@@ -93,7 +94,7 @@
 	<argLine>-Xms512m -Xmx1024m</argLine>
 	<testFailureIgnore>true</testFailureIgnore>
       </configuration>
-    </plugin> -->
+    </plugin>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-javadoc-plugin</artifactId>

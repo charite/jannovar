@@ -51,7 +51,7 @@ import jannovar.interval.IntervalTree;
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.22 (25 May, 2013)
+ * @version 0.23 (27 May, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -59,20 +59,11 @@ public class Chromosome {
     private byte chromosome;
     /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
     private String chromosomeString=null;
-    /** TreeMap with all of the genes ({@link jannovar.reference.TranscriptModel TranscriptModel}
-     * objects) of this chromosome. The key is an
-     * Integer value representing the transcription start site (txstart) of the transcript. 
-     * Note that we need to use an Array of TranscriptModels because there can be multiple 
-     * TranscriptModels that share the same transcription start site.
-     * (e.g., multiple isoforms of the same gene).*/
-    //private TreeMap<Integer,ArrayList<TranscriptModel>> geneTreeMap=null;
     /** Total number of TranscriptModels on the chromosome including multiple transcripts of the same gene. */
     private int n_genes;
-    /** The number of keys (gene 5' positions) to search in either direction. Note that if we just use a SPAN of
-     *5 genes, then we tend to miss some annotations in areas of lots of transcripts. TODO figure out the
-     * best value for SPAN to compromise between getting all annotations and speed. Most of the missed annotations
-     * seem to be intronic or downstream types, and may not be interesting for the Jannovar anyway.*/
-    private static final int SPAN = 20;
+    /** The initial capacity for {@link jannovar.reference.TranscriptModel TranscriptModel} objects for the
+     * @link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} object.  */
+    private static final int CAPACITY = 20;
     /** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
     private static final int NEARGENE = 1000;
   
@@ -98,20 +89,6 @@ public class Chromosome {
     /**
      * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
      * 24=Y_CHROMOSOME (see {@link jannovar.common.Constants Constants}).
-   
-    public Chromosome(byte c) {
-	this.chromosome = c;
-	this.geneTreeMap = new TreeMap<Integer,ArrayList<TranscriptModel>>();
-	this.translator = Translator.getTranslator();
-	this.n_genes=0;
-	this.annovarFactory = new AnnotatedVariantFactory(2*SPAN); // the argument is the initial capacity of the arrayLists of vars 
-    }  */
-
-
-   
-    /**
-     * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or
-     * 24=Y_CHROMOSOME (see {@link jannovar.common.Constants Constants}).
      * @param c the chromosome
      * @param intrvtree An interval tree with all transcripts on this chromosome.
      */
@@ -119,8 +96,8 @@ public class Chromosome {
 	this.chromosome = c;
 	this.itree = intrvtree;
 	this.translator = Translator.getTranslator();
-	this.n_genes=0;
-	this.annovarFactory = new AnnotatedVariantFactory(2*SPAN); /* the argument is the initial capacity of the arrayLists of vars */
+	this.n_genes=0; /* TODO: Need to get this information from the IntervalTree */
+	this.annovarFactory = new AnnotatedVariantFactory(CAPACITY); /* the argument is the initial capacity of the arrayLists of vars */
     }
 
 
@@ -829,115 +806,7 @@ public class Chromosome {
     }
     
 
- /**
-     * This method corresponds to Annovar function 
-     * {@code sub annotateExonicVariants} {
-     * 	my ($refseqvar, $geneidmap, $cdslen, $mrnalen) = @_;
-     *  It is called for exonic variants on the minus strand.
-     * <P>
-     * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
-     * annovar holds cDNA sequences of the mRNAs. In this implementation,
-     * the KnownGene objects already have this information. 
-     * <P>
-     * Finally, the $refseqvar in Annovar has the following pieces of information
-     *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
-     * Note that refcdsstart and refstrand are contained in the KnownGene objects
-     * $exonpos is the number (zero-based) of the exon in which the variant was found.
-     * $nextline is the entire Annovar-formated line with information about the variant.
-     * In contrast to annovar, this function does one annotation at a time
-     * Note that the information in $geneidmap, cdslen, and $mrnalen
-     * is contained within the KnownGene objects already
-     * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
-     * @param refvarend The end position of the variant with respect to the CDS of the mRNA
-     * @param start chromosomal start position of variant
-     * @param end chromosomal end position of variant
-     * @param ref sequence of reference
-     * @param var sequence of variant (in annovar: $obs)
-     * @param exonNumber Number (zero-based) of affected exon.
-     * @param kgl Gene in which variant was localized to one of the exons 
-     */
-    private void OLDPROBABLY_DELETE_annotateExonicVariantsMinusStrand(int refvarstart, int refvarend, 
-					int start, int end, String ref, 
-					String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
-	
-	
-	/* System.out.println("bla annotateExonicVariants for KG=" + kgl.getGeneSymbol() + "/" + kgl.getName());
-	   System.out.println("******************************");
-	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
-	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
-	   System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
-	   System.out.println("******************************"); */
-	/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
-	int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
-	int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
-	// Needed to complete codon following end of multibase ref seq.
-	/* The following checks for database errors where the position of the variant in
-	 * the reference sequence is given as longer the actual length of the transcript.*/
-	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
-	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
-				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
-	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovarFactory.addErrorAnnotation(ann);
-	}
-	/*
-	  @wtnt3 = split (//, $wtnt3);
-	  if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) { 
-	  #some times there are database annotation errors (example: chr17:3,141,674-3,141,683), 
-	  #so the last coding frame is not complete and as a result, the cDNA sequence is not complete
-	  $function->{$index}{unknown} = "UNKNOWN";
-	  next;
-	  }
-	*/
-	// wtnt3 represents the three nucleotides of the wildtype codon.
-	String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
-	/* wtnt3_after = Sequence of codon right after the variant. 
-	   We may not need this, it was used for padding in annovar */
-	String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
-	/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
-	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
-	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
-	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
-	    Annotation ann = Annotation.createErrorAnnotation(s);
-	    this.annovarFactory.addErrorAnnotation(ann);
-	}
-	/*annovar line 1079 */
-	if (kgl.isMinusStrand()) {
-	    var = revcom(var);
-	    ref = revcom(ref);
-	}
-	//System.out.println("wtnt3=" + wtnt3);
-	if (start == end) { /* SNV or insertion variant */
-	    if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
-		Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
-										var,refvarstart,exonNumber);
-		this.annovarFactory.addExonicAnnotation(insrt);
-	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
-		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
-											    ref, var,refvarstart,exonNumber);
-		this.annovarFactory.addExonicAnnotation(dlt);
-	    } else if (var.length()>1) {
-		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
-									    ref,var,refvarstart, refvarend, 
-									    exonNumber);
-		this.annovarFactory.addExonicAnnotation(blck);
-	    } else {
-		//System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
-		Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl,frame_s, frame_end_s,wtnt3,
-									      ref, var,refvarstart,exonNumber);
-		this.annovarFactory.addExonicAnnotation(mssns);
-	    }
-	} /* if (start==end) */
-	else if (var.equals("-")) {
-	    Annotation dltmnt = 
-		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
-								ref, var, refvarstart, refvarend, exonNumber);
-	    
-	    this.annovarFactory.addExonicAnnotation(dltmnt);
-	}   
-	return;
-    }
-    
-    
+ 
     /**
      * Return the reverse complement version of a DNA string in upper case.
      * Note that no checking is done in this code since the parse code checks

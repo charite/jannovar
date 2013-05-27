@@ -186,8 +186,6 @@ public class InsertionAnnotationTest implements Constants {
  *<P>
  * annovar: TTN:uc002umz.1:exon112:c.21594_21595insACTT:p.K7198fs,
  * chr2:179519685->AAGT
- * Strangely, this is correct but there is an extra "space" after the closing parenthesis.
- * Do not understand why, but put a trim() on
  *</P>
  */
 @Test public void testInsertionVar17() throws AnnotationException  {
@@ -202,7 +200,7 @@ public class InsertionAnnotationTest implements Constants {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
-	    String annot = ann.getVariantAnnotation().trim();
+	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("TTN(uc002umz.1:exon112:c.21594_21595insACTT:p.K7198fs)",annot);
 	}
 }

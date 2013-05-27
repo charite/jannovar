@@ -46,7 +46,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.17 (25 May, 2013)
+ * @version 0.18 (25 May, 2013)
  * @author Peter N Robinson
  */
 
@@ -212,18 +212,18 @@ public class AnnotatedVariantFactory implements Constants {
 	    if (hasSplicing) annL.addAnnotations(annotation_Splicing); /* Also add splice mutations */
 	} else if (hasSplicing) { /* just splicing, no other exonic */
 	    annL = new AnnotationList(annotation_Splicing);
-	} else if (hasNcRna || hasUTR5 || hasUTR3 || hasIntronic || hasNcrnaIntronic || hasSynonymous ) {
+	} else if (hasNcRna) {
+	    annL = new AnnotationList(annotation_ncRNA);
+	} else if (hasUTR5 || hasUTR3) {
+	    annL = new AnnotationList(annotation_UTR);
+	} else if (hasSynonymous) {
+	    annL = new AnnotationList(annotation_Synonymous);
+	} else if (hasIntronic || hasNcrnaIntronic ) {
 	    annL = new AnnotationList();
-	    if (annotation_ncRNA.size()>0)
-		annL.addAnnotations(annotation_ncRNA);
-	    if ( annotation_UTR.size()>0)
-		annL.addAnnotations(annotation_UTR);
 	    if (annotation_Intronic.size()>0)
 		annL.addAnnotations(annotation_Intronic);
 	    if (annotation_ncrnaIntronic.size()>0)
 		annL.addAnnotations(annotation_ncrnaIntronic);
-	    if (annotation_Synonymous.size()>0)
-		annL.addAnnotations(annotation_Synonymous);
 	} else if (hasUpstream || hasDownstream ) {
 	    annL = new AnnotationList();
 	    if (annotation_Upstream.size()>0)
@@ -266,7 +266,7 @@ public class AnnotatedVariantFactory implements Constants {
      */
     private VariantType getMostPathogenicVariantType() {
 	VariantType vt = null;
-	debugPrint();
+	//debugPrint();
 	/* Strategy: Start with the least pathogenic and work our way up. */
 	if (hasIntergenic)
 	    vt = VariantType.INTERGENIC;
