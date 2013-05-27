@@ -33,15 +33,14 @@ all: load-external ucsc-ser
 
 .PHONY: ucsc-ser
 ucsc-ser:
-	echo ${JAVA}  -Xms1G -Xmx2G -jar ${JANNOVAR} -U $KG -M $MRNA -X $XR -L $LOCUS -S $SERIAL
-	${JAVA}  -Xms1G -Xmx2G -jar ${JANNOVAR} -U $KG -M $MRNA -X $XR -L $LOCUS -S $SERIAL
+	${JAVA}  -Xms1G -Xmx2G -jar ${JANNOVAR} -U $(KG) -M $(MRNA) -X $(XR) -L $(LOCUS) -S $(SERIAL)
 
 
 .PHONY: load-external
 load-external:
 	# Employ wget to retrieve external data from NCBI/OMIM, Orphanet, HPO-annotation. 
 	# File are listed in external_ncbi.txt. We also ignore lines starting with #
-	cd $(EXTERNAL_DATA) ; cat ../external_data.txt | sed "/^#.*$$/d" | wget --retry-connrefused -N -i -
+	cd $(EXTERNAL_DATA) ; cat ../../../external_data.txt | sed "/^#.*$$/d" | wget --retry-connrefused -N -i - ; gunzip *gz
 
 
 
