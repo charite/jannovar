@@ -5,11 +5,14 @@
 ## and knownToLocusLink.txt). Put them all in some directory (probably you then need 
 ## to change the following path):
 
+
+EXTERNAL_DATA?=src/main/resources
+
 ## The following four variables now give the complete path of these four files
-KG="${DIR}/knownGene.txt"
-MRNA="${DIR}/knownGeneMrna.txt" 
-XR="${DIR}/kgXref.txt"
-LOCUS="${DIR}/knownToLocusLink.txt"
+KG="${EXTERNAL_DATA}/knownGene.txt"
+MRNA="${EXTERNAL_DATA}/knownGeneMrna.txt" 
+XR="${EXTERNAL_DATA}/kgXref.txt"
+LOCUS="${EXTERNAL_DATA}/knownToLocusLink.txt"
 
 ## This is the default name of the output file
 SERIAL="ucsc.ser"
@@ -20,8 +23,6 @@ JAVA="/usr/bin/java"
 MV="/bin/mv"
 
 JANNOVAR="target/jannovar-0.0.6-SNAPSHOT.jar"
-
-EXTERNAL_DATA?=src/main/resources
 
 
 
