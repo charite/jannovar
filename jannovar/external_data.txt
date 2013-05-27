@@ -1,0 +1,4 @@
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/KnownGene.txt
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGeneMrna.txt
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/kgXref.txt
+http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownToLocusLink.txt
