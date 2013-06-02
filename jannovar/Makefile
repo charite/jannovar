@@ -25,22 +25,37 @@ MV="/bin/mv"
 JANNOVAR="target/jannovar-0.0.6-SNAPSHOT.jar"
 
 
-
-
-.PHONY: all
-all: load-external ucsc-ser
+all: ucsc-ser
 
 
 .PHONY: ucsc-ser
-ucsc-ser:
+ucsc-ser: $(KG) $(MRNA) $(XR) $(LOCUS) $(SERIAL)
 	${JAVA}  -Xms1G -Xmx2G -jar ${JANNOVAR} -U $(KG) -M $(MRNA) -X $(XR) -L $(LOCUS) -S $(SERIAL)
 
 
-.PHONY: load-external
-load-external:
-	# Employ wget to retrieve external data from NCBI/OMIM, Orphanet, HPO-annotation. 
-	# File are listed in external_ncbi.txt. We also ignore lines starting with #
-	cd $(EXTERNAL_DATA) ; cat ../../../external_data.txt | sed "/^#.*$$/d" | wget --retry-connrefused -N -i - ; gunzip *gz
+#.PHONY: load-external
+#load-external:
+# Employ wget to retrieve external data from NCBI/OMIM, Orphanet, HPO-annotation. 
+# Files are listed in external_ncbi.txt. We also ignore lines starting with #
+
+${KG}: ${KG}
+	cd $(EXTERNAL_DATA) ; wget --retry-connrefused -N -i ${KG}.gz ; gunzip knownGene.txt.gz
+
+$(MRNA):
+	cd $(EXTERNAL_DATA) ; wget --retry-connrefused -N -i ${MRNA}.gz ; gunzip *gz
+
+$(XR):
+	cd $(EXTERNAL_DATA) ; wget --retry-connrefused -N -i ${XR}.gz ; gunzip *gz
+
+$(LOCUS):
+	cd $(EXTERNAL_DATA) ; wget --retry-connrefused -N -i ${LOCUS}.gz ; gunzip *gz
+
+
+.PHONY: clean
+
+clean:
+	@-rm ucsc.ser
+
 
 
 

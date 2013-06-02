@@ -122,7 +122,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	/* reset */
 	this.leftNeighbor = null;
 	this.rightNeighbor = null;
-
+	System.out.println("Search for (" + low + "," + high + ")");
 	//debugPrint();
 	searchInterval(root, result, low, high);
 	ArrayList<T> obtlst = new ArrayList<T>();
@@ -223,19 +223,24 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 	/** The following two lines set the left and right neighbor. This
 	    will only be useful if we do not interact with an interval. */
-	if (ihigh < n.getMedian()  ) {
-	    Interval<T> neighbor = n.getLeftmostInterval();
-	    if (rightNeighbor == null) {
-		rightNeighbor = neighbor;
-	    } else if (neighbor != null && neighbor.getLow() < this.rightNeighbor.getLow()) {
-		this.rightNeighbor =  neighbor; //n.getLeftmostInterval();
-	    }
+	if (ihigh < n.getMedian() && n.hasInterval() ) {
+	    Interval<T> ivl = n.getLeftmostInterval();
+	    if (this.rightNeighbor == null)
+		this.rightNeighbor = ivl;
+	    else if (ivl.getLow() < this.rightNeighbor.getLow())
+		this.rightNeighbor = ivl;
+	    System.out.println("rightniehgbor = " + this.rightNeighbor);
 	}
-	/* OLD
-	if (ilow > n.getMedian() ) {
-	    this.leftNeighbor =  n.getRightmostInterval();
-	    }*/
 
+	if (ilow > n.getMedian() && n.hasInterval()) {
+	    Interval<T> ivl  =  n.getRightmostInterval();
+	    if (this.leftNeighbor == null)
+		this.leftNeighbor = ivl;
+	    else if (ivl.getHigh() > this.leftNeighbor.getHigh())
+		this.leftNeighbor = ivl;
+	     System.out.println("leftniehgbor = " + this.leftNeighbor);
+	}
+	    /*
 	if (ilow > n.getMedian() ) {
 	     Interval<T> neighbor = n.getRightmostInterval();
 	     if (leftNeighbor == null) {
@@ -243,7 +248,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	     } else if (neighbor != null && neighbor.getHigh()>this.leftNeighbor.getHigh()) {
 		 this.leftNeighbor =  neighbor;
 	     }
-	}
+	     }*/
 	
 	/*
 	 * if the query is to the left of the median and the

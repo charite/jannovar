@@ -110,6 +110,41 @@ public class Pedigree {
        else
 	   isSingleSample = false;
     }
+
+    /**
+     * @return number of people represented in the pedigree
+     */
+    public int getPedigreeSize() {
+	return this.personList.size();
+    }
+
+    /**
+     * @return true if the nth person in the PED file is affected.
+     */
+    public boolean isNthPersonAffected(int n) {
+	if (n<0 || n>=personList.size())
+	    return false;
+	Person p = this.personList.get(n);
+	if (p.isAffected())
+	    return true;
+	else
+	    return false;
+    }
+
+    /**
+     * @return true if the nth person in the PED file is parent of an affected child.
+     */
+    public boolean isNthPersonParentOfAffected(int n) {
+	if (n<0 || n>=personList.size())
+	    return false;
+	Person p = this.personList.get(n);
+	if (this.parentList.contains(p))
+	    return true;
+	else
+	    return false;
+
+    }
+
     
     /**
      * Add an individual to the current pedigree.

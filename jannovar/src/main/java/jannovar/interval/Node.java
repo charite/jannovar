@@ -195,73 +195,86 @@ public class Node<T>  {
      */
     public Interval<T> getRightmostInterval() {
 	if (rightorder.size() == 0) return null;
-	return rightorder.get(0);
+	int n = rightorder.size() - 1;
+	return rightorder.get(n);
     }
 
 
 
 
-	/**
-	 * Checks if a given node is empty.
-	 * 
-	 * @param node A node of the interval tree
-	 * @return True, if the node is empty, otherwise False
-	 */
-	public boolean isEmpty(Node<T> node) {
-		if (node == null)
-			return true;
-		else {
-			return false;
-		}
+    /**
+     * Checks if this node is empty.
+     * @return True, if the node is empty, otherwise False
+     */
+    public boolean isEmpty() {
+	if (rightorder.size()==0)
+	    return true;
+	else {
+	    return false;
 	}
+    }
+    
+    /**
+     * @return true if this Node has at least one interval stored within this node.
+     */
+    public boolean hasInterval() {
+	if (rightorder.size()>0)
+	    return true;
+	else {
+	    return false;
+	}
+    }
 
-	/**
-	 * @return A left node of the interval tree
-	 */
-	public Node<T> getLeft() {
-	    return leftNode;
+   
+
+
+    /**
+     * @return A left node of the interval tree
+     */
+    public Node<T> getLeft() {
+	return leftNode;
+    }
+    
+    /**
+     * @return A right node of the interval tree
+     */
+    public Node<T> getRight() {
+	return rightNode;
+    }
+    
+    
+    /**
+     * This is intended to be used to print out the interval tree
+     * for debugging purposes.
+     */
+    public void debugPrint(String type, int level) {
+	
+	StringBuffer sb = new StringBuffer();
+	for (int i=0;i<level;++i) sb.append("-");
+	String indent = new String(sb);
+	System.out.print(indent);
+	if (type==null)
+	    System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(),median));
+	else
+	    System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,this.leftorder.size(),median));
+	for (Interval<T> i: leftorder) { System.out.println(indent + "##(leftorder):" + i); }
+	for (Interval<T> i: rightorder) { System.out.println(indent + "##(rightorder):" + i); }
+	System.out.println();
+	Node l = getLeft();
+	if (l==null) { 
+	    System.out.print(indent);
+	    System.out.println("-:Left=null");
+	} else {
+	    l.debugPrint("L",level+1);
+	}
+	Node r = getRight();
+	if (r==null) { 
+	    System.out.print(indent);
+	    System.out.println("-:Right=null");
+	} else {
+	    r.debugPrint("R",level+1);
 	}
 	
-	/**
-	 * @return A right node of the interval tree
-	 */
-	public Node<T> getRight() {
-	    return rightNode;
-	}
-
-
-	/**
-	 * This is intended to be used to print out the interval tree
-	 * for debugging purposes.
-	 */
-	public void debugPrint(String type, int level) {
-	    
-	    StringBuffer sb = new StringBuffer();
-	    for (int i=0;i<level;++i) sb.append("-");
-	    String indent = new String(sb);
-	    System.out.print(indent);
-	    if (type==null)
-		System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(),median));
-	    else
-		System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,this.leftorder.size(),median));
-	    for (Interval<T> i: leftorder) { System.out.println(indent + "##(leftorder):" + i); }
-	     for (Interval<T> i: rightorder) { System.out.println(indent + "##(rightorder):" + i); }
-	    System.out.println();
-	    Node l = getLeft();
-	    if (l==null) { 
-		System.out.print(indent);
-		System.out.println("-:Left=null");
-	    } else {
-		l.debugPrint("L",level+1);
-	    }
-	    Node r = getRight();
-	     if (r==null) { 
-		 System.out.print(indent);
-		 System.out.println("-:Right=null");
-	    } else {
-		 r.debugPrint("R",level+1);
-	    }
-		
-	}
-
+    }
+    
 }
