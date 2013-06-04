@@ -1,4 +1,4 @@
-package jannovar.io;
+package jannovar.exome;
 
 
 
