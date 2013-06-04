@@ -122,7 +122,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	/* reset */
 	this.leftNeighbor = null;
 	this.rightNeighbor = null;
-	System.out.println("Search for (" + low + "," + high + ")");
+//	System.out.println("Search for (" + low + "," + high + ")");
 	//debugPrint();
 	searchInterval(root, result, low, high);
 	ArrayList<T> obtlst = new ArrayList<T>();
@@ -229,7 +229,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		this.rightNeighbor = ivl;
 	    else if (ivl.getLow() < this.rightNeighbor.getLow())
 		this.rightNeighbor = ivl;
-	    System.out.println("rightniehgbor = " + this.rightNeighbor);
+//	    System.out.println("rightniehgbor = " + this.rightNeighbor);
 	}
 
 	if (ilow > n.getMedian() && n.hasInterval()) {
@@ -238,7 +238,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		this.leftNeighbor = ivl;
 	    else if (ivl.getHigh() > this.leftNeighbor.getHigh())
 		this.leftNeighbor = ivl;
-	     System.out.println("leftniehgbor = " + this.leftNeighbor);
+//	     System.out.println("leftniehgbor = " + this.leftNeighbor);
 	}
 	    /*
 	if (ilow > n.getMedian() ) {
