@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
+import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
 import jannovar.reference.TranscriptModel;
 
@@ -59,14 +59,17 @@ import jannovar.reference.TranscriptModel;
  * uc010evf.3      3805
  * ...
  * </PRE>
+ * This class parses the UCSC knownGenes files to create a list of 
+ * {@link jannovar.reference.TranscriptModel TranscriptModel} objects.
  * @author Peter N Robinson
- * @version 0.11 (23 May, 2013)
+ * @version 0.12 (4 June, 2013)
  */
-public class UCSCKGParser {
+public class UCSCKGParser implements  Constants{
+    /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
+    public static final int NFIELDS=12;
     /** Path to the knownGene.txt file from UCSC */
     private String kgPath=null;
-
-     /** Path to the UCSC file kgXref.txt */
+    /** Path to the UCSC file kgXref.txt */
     private String ucscXrefPath=null;
     /** Path to the UCSC file knownGeneMrna.txt */
     private String ucscKGMrnaPath=null;
@@ -132,8 +135,129 @@ public class UCSCKGParser {
     }
     
 
+    /**
+     * The constructor parses a single line of the knownGene.txt file. 
+     * <P>
+     * The fields of the file are tab separated and have the following structure:
+     * <UL>
+     * <LI> 0: name (UCSC known gene id, e.g., "uc021olp.1"	
+     * <LI> 1: chromosome, e.g., "chr1"
+     * <LI> 2: strand, e.g., "-"
+     * <LI> 3: transcription start, e.g., "38674705"
+     * <LI> 4: transcription end, e.g., "38680439"
+     * <LI> 5: CDS start, e.g., "38677458"
+     * <LI> 6: CDS end, e.g., "38678111"
+     * <LI> 7: exon count, e.g., "4"
+     * <LI> 8: exonstarts, e.g., "38674705,38677405,38677769,38680388,"
+     * <LI> 9: exonends, e.g., "38676494,38677494,38678123,38680439,"
+     * <LI> 10: name, again (?), e.g., "uc021olp.1"
+     * </UL>
+     * The function additionalls parses the start and end of the exons. 
+     * Note that in the UCSC database, positions are represented using
+     * half-open, zero-based coordinates. That is, if start is 2 and end is 7, then the first nucleotide is at
+     * position 3 (one-based) and the last nucleotide is at positon 7 (one-based). For now, we are switching
+     * the coordinates to fully-closed one based by incrementing all start positions by one. This is the way
+     * coordinates are typically represented in VCF files and is the way coordinate calculations are done
+     * in annovar. At a later date, it may be worthwhile to switch to the UCSC-way of half-open zero based coordinates.
+     * @param line A single line of the UCSC knownGene.txt file
+     */
+    public TranscriptModel parseTranscriptModelFromLine(String line) throws KGParseException  {
+	TranscriptModel model = TranscriptModel.createTranscriptModel();
+	String A[] = line.split("\t");
+	if (A.length != NFIELDS) {
+	    String error = String.format("Malformed line in UCSC knownGene.txt file:\n%s\nExpected %d fields but there were %d",
+					 line,NFIELDS,A.length);
+	    throw new KGParseException(error);
+	}
+	/* Field 0 has the accession number, e.g., uc010nxr.1. */
+	model.setAccessionNumber(A[0]);
+	byte chromosome;
+	try {
+	    if (A[1].equals("chrX"))  chromosome = X_CHROMOSOME;     // 23
+	    else if (A[1].equals("chrY")) chromosome = Y_CHROMOSOME; // 24
+	    else if (A[1].equals("chrM")) chromosome = M_CHROMOSOME;  // 25
+	    else {
+		String tmp = A[1].substring(3); // remove leading "chr"
+		chromosome = Byte.parseByte(tmp);
+	    }
+	} catch (NumberFormatException e) {  // scaffolds such as chrUn_gl000243 cause Exception to be thrown.
+	    throw new KGParseException("Could not parse chromosome field: " + A[1]);
+	}
+	model.setChromosome(chromosome);
+	char strand = A[2].charAt(0);
+	if (strand != '+' && strand != '-') {
+	    throw new KGParseException("Malformed strand: " + A[2]);
+	}
+	model.setStrand(strand);
+	int txStart,txEnd,cdsStart,cdsEnd;
+	try {
+	    txStart = Integer.parseInt(A[3]) + 1; // +1 to convert to one-based fully closed numbering
+	} catch (NumberFormatException e) {
+	    throw new KGParseException("Could not parse txStart:" + A[3]);
+	}
+	model.setTranscriptionStart(txStart);
+	try {
+	    txEnd = Integer.parseInt(A[4]);
+	} catch (NumberFormatException e) {
+	    throw new KGParseException("Could not parse txEnd:" + A[4]);
+	}
+	model.setTranscriptionEnd(txEnd);
+	try {
+	    cdsStart = Integer.parseInt(A[5]) + 1;// +1 to convert to one-based fully closed numbering
+	} catch (NumberFormatException e) {
+	    throw new KGParseException("Could not parse cdsStart:" + A[5]);
+	}
+	model.setCdsStart(cdsStart);
+	try {
+	    cdsEnd = Integer.parseInt(A[6]);
+	} catch (NumberFormatException e) {
+	    throw new KGParseException("Could not parse cdsEnd:" + A[6]);
+	}
+	model.setCdsEnd(cdsEnd);
+	byte exonCount;
+	try {
+	    exonCount = Byte.parseByte(A[7]);
+	}catch (NumberFormatException e) {
+	    throw new KGParseException("Could not parse exonCount:" + A[7]);
+	}
+	/* Now parse the exon ends and starts */
+	int[] exonStarts= new int[exonCount] ;
+	/** End positions of each of the exons of this transcript */
+	int[] exonEnds= new int[exonCount];
+	String starts = A[8];
+	String ends   = A[9];
+	String B[] = starts.split(",");
+	if (B.length != exonCount) {
+	    String error = String.format("[UCSCKGParser] Malformed exonStarts list: found %d but I expected %d exons",
+					 B.length,exonCount);
+	    error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
+	    throw new KGParseException(error); 
+	}
+	for (int i=0;i<exonCount;++i) {
+	    try {
+		exonStarts[i] = Integer.parseInt(B[i]) + 1; // Change 0-based to 1-based numbering
+	    } catch (NumberFormatException e) {
+		String error = String.format("[UCSCKGParser] Malformed exon start at position %d of line %s", i, starts);
+		error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
+		throw new KGParseException(error);
+	    }
+	}
+	// Now do the ends.
+	B = ends.split(",");
+	for (int i=0;i<exonCount;++i) {
+	    try {
+		exonEnds[i] = Integer.parseInt(B[i]);
+	    } catch (NumberFormatException e) {
+		String error = String.format("[UCSCKGParser] Malformed exon end at position %d of line %s", i, ends);
+		error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
+		throw new KGParseException(error);
+	    }
+	}
+	model.setExonStartsAndEnds(exonStarts, exonEnds);
+	model.initialize();
 
-
+	return model;
+    }
    
 
 
@@ -153,7 +277,7 @@ public class UCSCKGParser {
 		linecount++;
 		//System.out.println(line);
 		try {
-		    TranscriptModel kg = new TranscriptModel(line);
+		    TranscriptModel kg = parseTranscriptModelFromLine(line);
 		    String id = kg.getKnownGeneID();
 		    this.knownGeneMap.put(id,kg);	   
 		} catch (KGParseException e) {

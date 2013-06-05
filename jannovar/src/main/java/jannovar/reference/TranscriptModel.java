@@ -26,11 +26,10 @@ import jannovar.common.Constants;
  * 
  * </UL>
  * @author Peter N Robinson
- * @version 0.15, 23 May, 2013
+ * @version 0.16, 24 May, 2013
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
-    /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
-    public static final int NFIELDS=12;
+   
     /** Name of gene using UCSC knownGene id (for instance, uc011nca.2). For now, keep the
 	version as part of the name. */
     private String kgID=null;
@@ -67,85 +66,49 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     /** The NCBI EntrezGene id that corresponds to the UCSC knownGene transcript. Note that this information
 	is taken from knownToLocusLink.txt. */
     private int entrezGeneID=UNINITIALIZED_INT;
-    /** Class version (for serialization). Note that the version is now at 3 because of the recent (April 2013) changes.*/
-    public static final long serialVersionUID = 3L;
+    /** Class version (for serialization). */
+    public static final long serialVersionUID = 4L;
 
+
+   
+    /**
+     * The constructor is private to prevent accidental initialization of an empty
+     * TranscriptModel object. The way to make TranscriptModels is to use the static
+     * method {@link #createTranscriptModel} and then to set the variables. 
+     * @see jannovar.io.UCSCKnownGeneParser
+     */
+    private TranscriptModel() { /* no op */ }
+
+    public static TranscriptModel createTranscriptModel() { return new TranscriptModel(); }
+
+    /** @param acc an accession number such as the UCSC knownGene id. */
+    public void setAccessionNumber(String acc) { this.kgID = acc; }
+    /** @param c The chromosome on which this gene is located. It is denoted by a byte constant that
+     * is defined in {@link jannovar.common.Constants Constants}. */
+    public void setChromosome(byte c) { this.chromosome = c; }
+    /* @param s The strand  on which this gene is located ('+' or '-') */
+    public void setStrand(char s) { this.strand = s; }
+    public void setTranscriptionStart(int st) { this.txStart = st; }
+    public void setTranscriptionEnd(int st) { this.txEnd = st; }
+    public void setCdsStart(int st) { this.cdsStart = st; }
+    public void setCdsEnd(int st) { this.cdsEnd = st; }
+    public void setExonCount(byte c) { this.exonCount = c; }
+    public void setExonStartsAndEnds(int [] starts, int [] ends) {
+	this.exonStarts = starts;
+	this.exonEnds = ends;
+    }
 
     /**
-     * The constructor parses a single line of the knownGene.txt file. 
-     * <P>
-     * The fields of the file are tab separated and have the following structure:
-     * <UL>
-     * <LI> 0: name (UCSC known gene id, e.g., "uc021olp.1"	
-     * <LI> 1: chromosome, e.g., "chr1"
-     * <LI> 2: strand, e.g., "-"
-     * <LI> 3: transcription start, e.g., "38674705"
-     * <LI> 4: transcription end, e.g., "38680439"
-     * <LI> 5: CDS start, e.g., "38677458"
-     * <LI> 6: CDS end, e.g., "38678111"
-     * <LI> 7: exon count, e.g., "4"
-     * <LI> 8: exonstarts, e.g., "38674705,38677405,38677769,38680388,"
-     * <LI> 9: exonends, e.g., "38676494,38677494,38678123,38680439,"
-     * <LI> 10: name, again (?), e.g., "uc021olp.1"
-     * </UL>
-     * ToDo: This belongs in the UCSCKGParser class!
-     * @param line A single line of the UCSC knownGene.txt file
+     * This method causes the TranscriptModel object to initialize various internal variables such
+     * as mRNA length following the initial construction of the object. This function was defined
+     * during refactoring efforts, placing the parse functions in the IO hierarchy. TODO, is there
+     * are more elegant way of doing this?
      */
-    public TranscriptModel(String line) throws KGParseException {
-	String A[] = line.split("\t");
-	if (A.length != NFIELDS) {
-	    System.err.println("Malformed line in UCSC knownGene.txt file:\n" + line +
-			       "\nExpected " + NFIELDS + " fields but there were " + A.length);
-	    System.exit(1);
-	}
-	kgID = A[0]; // knownGene id
-	try {
-	    if (A[1].equals("chrX"))  this.chromosome = X_CHROMOSOME;     // 23
-	    else if (A[1].equals("chrY")) this.chromosome = Y_CHROMOSOME; // 24
-	    else if (A[1].equals("chrM")) this.chromosome = M_CHROMOSOME;  // 25
-	    else {
-		String tmp = A[1].substring(3); // remove leading "chr"
-		this.chromosome = Byte.parseByte(tmp);
-	    }
-	} catch (NumberFormatException e) {  // scaffolds such as chrUn_gl000243 cause Exception to be thrown.
-	    throw new KGParseException("Could not parse chromosome field: " + A[1]);
-	}
-	//System.out.println(A[0] + ":   " + A.length);
-	this.strand = A[2].charAt(0);
-	if (strand != '+' && strand != '-') {
-	    throw new KGParseException("Malformed strand: " + A[2]);
-	}
-	try {
-	    this.txStart = Integer.parseInt(A[3]) + 1; // +1 to convert to one-based fully closed numbering
-	} catch (NumberFormatException e) {
-	    throw new KGParseException("Could not parse txStart:" + A[3]);
-	}
-	try {
-	    this.txEnd = Integer.parseInt(A[4]);
-	} catch (NumberFormatException e) {
-	    throw new KGParseException("Could not parse txEnd:" + A[4]);
-	}
-	try {
-	    this.cdsStart = Integer.parseInt(A[5]) + 1;// +1 to convert to one-based fully closed numbering
-	} catch (NumberFormatException e) {
-	    throw new KGParseException("Could not parse cdsStart:" + A[5]);
-	}
-	try {
-	    this.cdsEnd = Integer.parseInt(A[6]);
-	} catch (NumberFormatException e) {
-	    throw new KGParseException("Could not parse cdsEnd:" + A[6]);
-	}
-	try {
-	    this.exonCount = Byte.parseByte(A[7]);
-	}catch (NumberFormatException e) {
-	    throw new KGParseException("Could not parse exonCount:" + A[7]);
-	}
-	parseExonStartsAndEnds(A[8],A[9]);
+    public void initialize() {
 	calculateMRNALength();
 	calculateCDSLength();
 	calculateRefCDSStart();
     }
-
 
     /**
      * Calculate the total length of the mRNA from the exonEnd/exonStart data.
@@ -594,48 +557,6 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      public void setGeneSymbol(String sym) { this.geneSymbol = sym; }
 
 
-
-
-    /**
-     * Parse the start and end of the exons. Note that in the UCSC database, positions are represented using
-     * half-open, zero-based coordinates. That is, if start is 2 and end is 7, then the first nucleotide is at
-     * position 3 (one-based) and the last nucleotide is at positon 7 (one-based). For now, we are switching
-     * the coordinates to fully-closed one based by incrementing all start positions by one. This is the way
-     * coordinates are typically represented in VCF files and is the way coordinate calculations are done
-     * in annovar. At a later date, it may be worthwhile to switch to the UCSC-way of half-open zero based coordinates.
-     * @param starts A string such as 14361,14969,15795,16606 representing start positions of exons on chromosome
-     * @param ends A string such as 14829,15038,15947 representing end positions of exons on chromosome
-     */
-    private void parseExonStartsAndEnds(String starts, String ends) {
-	this.exonStarts = new int[this.exonCount];
-	this.exonEnds   = new int[this.exonCount];
-	String A[] = starts.split(",");
-	if (A.length != this.exonCount) {
-	    System.err.println("Malformed exonStarts list: " + starts + " \n\tI expected " + exonCount + " exons");
-	    System.err.println("This should never happen, consider if the knownGene.txt file is corrupted");
-	    System.exit(1); 
-	}
-	for (int i=0;i<this.exonCount;++i) {
-	    try {
-		this.exonStarts[i] = Integer.parseInt(A[i]) + 1; // Change 0-based to 1-based numbering
-	    } catch (NumberFormatException e) {
-		System.err.println("Malformed exon start at position " + i + " of line " + starts);
-		System.err.println("This should never happen, consider if the knownGene.txt file is corrupted");
-		System.exit(1); 
-	    }
-	}
-	// Now do the ends.
-	A = ends.split(",");
-	for (int i=0;i<this.exonCount;++i) {
-	    try {
-		this.exonEnds[i] = Integer.parseInt(A[i]);
-	    } catch (NumberFormatException e) {
-		System.err.println("Malformed exon end at position " + i + " of line " + starts);
-		System.err.println("This should never happen, consider if the knownGene.txt file is corrupted");
-		System.exit(1); 
-	    }
-	}
-    }
 
 
     /**

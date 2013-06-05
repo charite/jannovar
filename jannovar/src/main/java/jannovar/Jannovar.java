@@ -36,6 +36,7 @@ import jannovar.annotation.AnnotationList;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.KGParseException;
+import jannovar.exception.JannovarException;
 import jannovar.exception.IntervalTreeException;
 import jannovar.io.VCFReader;
 
@@ -123,11 +124,21 @@ public class Jannovar {
 	    } catch (IntervalTreeException e) {
 		System.out.println("Could not construct interval tree: " + e.toString());
 		System.exit(1);
+	    } 
+	    try {
+		anno.serializeUCSCdata();
+	    } catch (JannovarException je) {
+		System.out.println("Could not serialize UCSC data: " + je.toString());
+		System.exit(1);
 	    }
-	    anno.serializeUCSCdata();
 	    return;
 	} else if (anno.deserialize()) {
-	    anno.deserializeUCSCdata();
+	    try {
+		anno.deserializeUCSCdata();
+	    } catch (JannovarException je) {
+		System.out.println("Could not deserialize UCSC data: " + je.toString());
+		System.exit(1);
+	    }
 	} else if (anno.ucscFilesAvailable()) {
 	     try{
 		anno.readUCSCKnownGenesFile();	
@@ -267,14 +278,14 @@ public class Jannovar {
      * objects to {@link jannovar.interval.Interval Interval} objects, and
      * store these in a serialized file.
      */
-    public void serializeUCSCdata() {
+    public void serializeUCSCdata() throws JannovarException {
 	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
 	SerializationManager manager = new SerializationManager();
 	manager.serializeKnownGeneList(this.UCSCserializationFileName, kgList);
     }
 
 
-     public void deserializeUCSCdata() {
+     public void deserializeUCSCdata() throws JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(this.serializedFile);

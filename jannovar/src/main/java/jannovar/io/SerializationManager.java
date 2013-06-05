@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import jannovar.exception.JannovarException;
 import jannovar.reference.TranscriptModel;
 
 
@@ -34,10 +35,9 @@ public class SerializationManager {
      * @param filename Name and path of the file to serialize to
      * @param kgList A list of {@link jannovar.reference.TranscriptModel TranscriptModel} objects to be serialized
      */
-    public void serializeKnownGeneList(String filename, ArrayList<TranscriptModel> kgList) {
+    public void serializeKnownGeneList(String filename, ArrayList<TranscriptModel> kgList) throws JannovarException {
 	if (kgList ==null || kgList.size()==0) {
-	    System.err.println("Error: attempt to serialize empty knownGene list");
-	    return;
+	    throw new JannovarException("Error: attempt to serialize empty knownGene list");
 	}
 	try {
 	    FileOutputStream fos = new FileOutputStream(filename);
@@ -45,9 +45,8 @@ public class SerializationManager {
             oos.writeObject(kgList);
             oos.close();
 	} catch (IOException i) {
-	    i.printStackTrace();
-	    System.err.println("Could not serialize knownGene list");
-	    System.exit(1);
+	    String error = String.format("Could not serialize knownGene list: %s",i.toString());
+	    throw new JannovarException(error);
 	}
     }
     
@@ -58,7 +57,7 @@ public class SerializationManager {
      * @param filename name of serialized file
      */
     @SuppressWarnings (value="unchecked")
-    public ArrayList<TranscriptModel> deserializeKnownGeneList(String filename) {
+    public ArrayList<TranscriptModel> deserializeKnownGeneList(String filename) throws JannovarException  {
 	ArrayList<TranscriptModel> kgList = null;
 	try{
 	    FileInputStream fileIn = new FileInputStream(filename);
@@ -67,57 +66,14 @@ public class SerializationManager {
 	    in.close();
 	    fileIn.close();
 	} catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
+	    String error = String.format("Could not deserialize knownGene list: %s",i.toString());
+	    throw new JannovarException(error);
 	} catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
+	    String error = String.format("[SerializationManager] Could not serialized class definition: %s",c.toString());
+	    throw new JannovarException(error);
+	}
 	return kgList;
     }
-
-
-      /**
-     * Inputs the list of known genes from the serialized data file. The serialized file 
-     * was originally  created by parsing the three UCSC known gene files.
-   
-    @SuppressWarnings (value="unchecked")
-    public void deserializeUCSCdata() {
-	HashMap<String,TranscriptModel> kgMap=null;
-	try {
-	     FileInputStream fileIn =
-		 new FileInputStream(this.serializedFile);
-	     ObjectInputStream in = new ObjectInputStream(fileIn);
-	     kgMap = (HashMap<String,TranscriptModel>) in.readObject();
-            in.close();
-            fileIn.close();
-	}catch(IOException i) {
-            i.printStackTrace();
-	    System.err.println("Could not deserialize knownGeneMap");
-	    System.exit(1);
-           
-        }catch(ClassNotFoundException c) {
-            System.out.println("Could not find HashMap<String,TranscriptModel> class.");
-            c.printStackTrace();
-            System.exit(1);
-        }
-	//System.out.println("Done deserialization, size of map is " + kgMap.size());
-	this.chromosomeMap = new HashMap<Byte,Chromosome> ();
-	// System.out.println("Number of KGs is " + kgMap.size());
-	for (TranscriptModel kgl : kgMap.values()) {
-	    byte chrom = kgl.getChromosome();
-	    //System.out.println("Chromosome is " + chrom);
-	    if (! chromosomeMap.containsKey(chrom)) {
-		Chromosome chr = new Chromosome(chrom);
-		//System.out.println("Adding chromosome for " + chrom);
-		chromosomeMap.put(chrom,chr);
-	    }
-	    Chromosome c = chromosomeMap.get(chrom);
-	    c.addGene(kgl);	
-	}
-    }  */
 
 
 

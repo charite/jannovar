@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 
-
+import jannovar.exception.JannovarException;
 import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
@@ -45,7 +45,7 @@ public class SpliceAnnotationTest implements Constants {
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
     @BeforeClass 
-    public static void setUp() throws IOException {
+	public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	String path = url.getPath();

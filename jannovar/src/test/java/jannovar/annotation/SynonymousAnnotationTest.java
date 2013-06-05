@@ -19,6 +19,7 @@ import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
+import jannovar.exception.JannovarException;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Chromosome;
 import jannovar.annotation.Annotation;
@@ -46,7 +47,7 @@ public class SynonymousAnnotationTest implements Constants {
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
     @BeforeClass 
-    public static void setUp() throws IOException {
+	public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	String path = url.getPath();

@@ -14,7 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-
+import jannovar.exception.JannovarException;
 import jannovar.io.SerializationManager;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
@@ -47,7 +47,7 @@ public class InsertionAnnotationTest implements Constants {
 
     
     @BeforeClass 
-    public static void setUp() throws IOException {
+	public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	String path = url.getPath();

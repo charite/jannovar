@@ -31,7 +31,7 @@ import jannovar.pedigree.Pedigree;
  * <li> 0 means unknown
  * </ul>
  * @author Peter Robinson
- * @version 0.03 (10 May, 2013)
+ * @version 0.04 (2 June, 2013)
  */
 public class PedFileParser {
     /**
@@ -77,9 +77,9 @@ public class PedFileParser {
      * as if we passed the file path to the method {@link #parseFile} but
      * is useful in cases where we have a BufferedReader but not a file on disk.
      */
-    public Pedigree parseStream(BufferedReader VCFfileContents) throws PedParseException {
+    public Pedigree parseStream(BufferedReader PEDfileContents) throws PedParseException {
 	try{
-	    inputPedFileStream(VCFfileContents);
+	    inputPedFileStream(PEDfileContents);
 	} catch (IOException e) {
 	    String err =
 	      String.format("[PedFileParser:parseStringStream]: %s",e.toString());

@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import jannovar.exception.JannovarException;
 import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
@@ -46,7 +47,7 @@ public class DownstreamAnnotationTest implements Constants {
 
     @SuppressWarnings (value="unchecked")
     @BeforeClass 
-    public static void setUp() throws IOException {
+	public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	java.net.URL url = SynonymousAnnotationTest.class.getResource("/ucsc.ser");
 	String path = url.getPath();
