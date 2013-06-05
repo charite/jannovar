@@ -67,7 +67,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	is taken from knownToLocusLink.txt. */
     private int entrezGeneID=UNINITIALIZED_INT;
     /** Class version (for serialization). */
-    public static final long serialVersionUID = 4L;
+    public static final long serialVersionUID = 3L;
 
 
    

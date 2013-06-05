@@ -66,7 +66,7 @@ public class SerializationManager {
 	    in.close();
 	    fileIn.close();
 	} catch(IOException i) {
-	    String error = String.format("Could not deserialize knownGene list: %s",i.toString());
+	    String error = String.format("[SerializationManager] i/o error: Could not deserialize knownGene list: %s",i.toString());
 	    throw new JannovarException(error);
 	} catch(ClassNotFoundException c) {
 	    String error = String.format("[SerializationManager] Could not serialized class definition: %s",c.toString());
