@@ -438,7 +438,7 @@ public class Pedigree {
      * genotypes is a homozygous ALT variant that is shared by all of the affecteds. Additionally,
      * both parents (if they are represented in the pedigree) must be heterozygous. Any unaffected
      * siblings must be either heterozygous or homozygous ref.
-     * @param gtypeList a List of Genotypes representing all variants seen in some gene
+     * @param GT a List of Genotypes representing all variants seen in some gene
      * @return true if the distribution of variants is compatible with a homozygous mutation.
      */
     public boolean containsCompatibleHomozygousVariant(GenotypeCall GT) {

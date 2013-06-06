@@ -38,7 +38,7 @@ import jannovar.exception.VCFParseException;
  * we cannot expect a VCF file that somebody uploads via the Webserver to have this information,
  * because it is optional. 
  * @see jannovar.genotype.SingleGenotypeFactory
- * @see jannovar.genotype.MultipleGenotype
+ * @see jannovar.genotype.GenotypeCall
  * @author Peter N Robinson
  * @version 0.12 (10 May, 2013)
  */

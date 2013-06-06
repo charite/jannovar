@@ -11,13 +11,13 @@ import jannovar.exception.IntervalTreeException;
  * need to initialize the template variable T to the corresponding datatype). The
  * intervals are intended to be used with the
  * {@link jannovar.interval.IntervalTree IntervallTree}.
- * @see jannovar.interval.IntervalTree
+ * @see "jannovar.interval.IntervalTree"
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
  */
 public class Interval<T > implements java.io.Serializable { 
     /** The object that we are putting into the interval tree (such as a 
-     * {@jannovar.reference.TranscriptModel TranscriptModel} object).*/
+     * {@link jannovar.reference.TranscriptModel TranscriptModel} object).*/
     private T value;
     /** The smaller end point of the interval */
     private int lowpoint;
@@ -72,7 +72,7 @@ public class Interval<T > implements java.io.Serializable {
      * Interval constructor.
      * @param low lower endpoint of the interval (cannot be higher than the upper endpoint or exception is thrown)
      * @param high upper endpoint of the interval
-     * @oparam value The object represented by the interval.
+     * @param value The object represented by the interval.
      */
     public Interval(int low, int high, T value)   {
         if (low <= high) {

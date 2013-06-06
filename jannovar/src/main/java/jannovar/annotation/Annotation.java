@@ -169,8 +169,8 @@ public class Annotation implements Constants, Comparable<Annotation> {
     /**
      * Create an Annotation obejct for a variant that is upstream or downstream
      * to a gene (default: within 1000 nt).
-     * @trmdl The transcript that the variant is up/downstream to
-     * @pos The chromosomal position of the variant 
+     * @param trmdl The transcript that the variant is up/downstream to
+     * @param pos The chromosomal position of the variant 
      */
     public static Annotation createUpDownstreamAnnotation(TranscriptModel trmdl, int pos) {
 	Annotation ann = new Annotation();

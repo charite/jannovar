@@ -172,9 +172,9 @@ public class Node<T>  {
      * this function (it is the first element of {@link #leftorder}).
      * @return the left most Interval
      */
-    public Interval<T> getLeftmostInterval() {
+    public T getLeftmostItem() {
 	if (leftorder.size() == 0) return null;
-	else return leftorder.get(0);
+	else return leftorder.get(0).getValue();
     }
 
 
@@ -193,10 +193,10 @@ public class Node<T>  {
      * this function (it is the last element of {@link #rightorder}).
      * @return the left most Interval
      */
-    public Interval<T> getRightmostInterval() {
+    public T getRightmostItem() {
 	if (rightorder.size() == 0) return null;
 	int n = rightorder.size() - 1;
-	return rightorder.get(n);
+	return rightorder.get(n).getValue();
     }
 
 

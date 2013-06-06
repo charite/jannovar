@@ -24,11 +24,7 @@ public abstract class GenotypeFactoryA {
 
     /** 
      * This is the core method of the factory, and creates
-     * a Genotype object. Currently, Jannovar has
-     * two concrete implementations of the {@link jannovar.genotype.GenotypeI GenotypeI}
-     * interface, for single and multiple-sample VCF files. The interface
-     * could be extended to allow for cool stuff such as DP4 analysis in
-     * the future.
+     * a  {@link jannovar.genotype.GenotypeCall GenotypeCall} object.
      * @param A an array of Strings with the tab-separated fields of a VCF line.
      */
     public abstract GenotypeCall createGenotype(String A[])  throws VCFParseException;

@@ -67,10 +67,10 @@ public class IntervalTree<T> implements java.io.Serializable {
     private Comparator<Interval<T>> rightcomp = null;
     /** The left neighbor of the current query position (non-overlapping interval to
 	the left of the query that is the closest of all intervals). */
-    private Interval<T> leftNeighbor = null;
+    private T leftNeighbor = null;
     /** The right neighbor of the current query position (non-overlapping interval to
 	the right of the query that is the closest of all intervals). */
-    private Interval<T> rightNeighbor = null;
+    private T rightNeighbor = null;
     
     
     
@@ -155,13 +155,63 @@ public class IntervalTree<T> implements java.io.Serializable {
 
 
     public T getRightNeighbor() {
-	return rightNeighbor == null ? null : this.rightNeighbor.getValue();
+	return rightNeighbor;
     }
 
 
     public T getLeftNeighbor() {
-	return leftNeighbor==null ? null : this.leftNeighbor.getValue();
+	return leftNeighbor;
     }
+
+    private T getLeftmost(Node n) {
+	if (n.hasInterval()) {
+	    //T bla = n.getLeftmostItem();
+	    return null;
+	} else {
+	    Node<T> current = n;
+	    while (n != null) {
+		current = n;
+		n = n.getLeft();
+	    }
+	    return current.getLeftmostItem();
+	}
+    }
+
+
+    private void searchInbetween(Node<T> n, int x) {
+	Node<T> current = null;
+	Node<T> left = null;
+	Node<T> right = null;
+	while (n != null) {
+	    current = n;
+	    if (x < n.getMedian() ) {
+		right = n;
+		n = n.getLeft();
+	    } else {
+		left = n;
+		n = n.getRight();
+	    }
+	}
+	/* if there is no Node at all in the tree, then current will be null
+	   and the neighbors will also be null. Actually should never happen. */
+	if (current==null) return;
+	/* When we get here, current will be a non-null leaf Node. If
+	   x < current.getMedian(), then current has an interval containing
+	   the right neighbor of X, and if x > current.getMedian() and we can obtain
+	   the left neighbor of x via this.leftNeighbor, then current
+	   has an interval containing the left neighbor of x.
+	*/
+	if (x < current.getMedian()) {
+	    this.rightNeighbor = current.getLeftmostItem();
+	} else {
+	    this.leftNeighbor = current.getRightmostItem();
+	    this.rightNeighbor = getLeftmost(left);
+	}
+	    
+
+    }
+
+
 
     /**
      * Searches for intervals in the interval tree.
@@ -222,7 +272,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	    }
 	}
 	/** The following two lines set the left and right neighbor. This
-	    will only be useful if we do not interact with an interval. */
+	    will only be useful if we do not interact with an interval.
 	if (ihigh < n.getMedian() && n.hasInterval() ) {
 	    Interval<T> ivl = n.getLeftmostInterval();
 	    if (this.rightNeighbor == null)
@@ -239,7 +289,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	    else if (ivl.getHigh() > this.leftNeighbor.getHigh())
 		this.leftNeighbor = ivl;
 //	     System.out.println("leftniehgbor = " + this.leftNeighbor);
-	}
+	} */
 	    /*
 	if (ilow > n.getMedian() ) {
 	     Interval<T> neighbor = n.getRightmostInterval();

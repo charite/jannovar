@@ -146,13 +146,10 @@ public class Chromosome {
      * and we are provided the coordinates on that chromosome.
      * <P>
      * The strategy for finding annotations is based on the perl code in Annovar.
-     * Roughly speaking, we take the following steps in this method in order to find out whether the
-     * variant is genic or intergenic and identify the involved genes (which are stored in the {@link #geneTreeMap} object of this class).
-     * Then, other functions are called to characterize the precise variant.
-     * <OL>
-     * <LI>Use the method {@link #getBinRange} to get a list of TranscriptModels to be tested (Corresponds roughly to 
-     {@code for my $nextbin ($bin1 .. $bin2)} in Annovar) </LI>
-     * </OL>
+     * Roughly speaking, we identify a list of genes affected by the variant using
+     * the interval tree ({@link #itree}). and then annotated the variants accordingly.
+     * If no hit is found in the tree, we identify the left and right neighbor and
+     * annotate to intergenic, upstream or downstream
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence

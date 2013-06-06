@@ -30,7 +30,7 @@ public class TranscriptModelTest implements Constants {
       @BeforeClass public static void setUp() throws KGParseException {
 	  String dummy = "";
 	  UCSCKGParser parser = new UCSCKGParser(dummy,dummy,dummy,dummy);
-	  /* Note that uc021olp. is a non-coding RNA. */
+	  /* Note that uc021olp. is TESK2. */
 	  uc0210lp = parser.parseTranscriptModelFromLine("uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,		uc021olp.1\n");
 	  uc010wrv = parser.parseTranscriptModelFromLine("uc010wrv.1	chr17	+	73201596	73231854	73205928	73231774	18	73201596,73205917,73208086,73209170,73211848,73214279,73221197,73221436,73221792,73222145,73227434,73227667,73227922,73228945,73229152,73230731,73231194,73231672,	73201889,73206080,73208157,73209214,73211918,73214401,73221332,73221559,73221924,73222252,73227518,73227733,73228074,73229063,73229253,73230883,73231296,73231854,	Q9BW27	uc010wrv.1");
 
@@ -54,12 +54,13 @@ public class TranscriptModelTest implements Constants {
 	int N = uc0210lp.getCDSLength();
 	Assert.assertEquals(378,N);	  
     }
-    /* TODO
-     @Test public void test_rcdsstart_uc0210lp() {
-	int N = uc0210lp.getRefCDSStart();
-	Assert.assertEquals(2303,N);	  
+   
+    /** This is TESTK2 */
+     @Test public void test_coding_uc0210lp() {
+	boolean b = uc0210lp.isCodingGene();
+	Assert.assertEquals(true,b);	  
     }
-    */
+    
     @Test public void testChromosome_uc0210lp() {
 	byte C = uc0210lp.getChromosome();
 	Assert.assertEquals(1,C);	  

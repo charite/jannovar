@@ -42,16 +42,13 @@ import jannovar.reference.TranscriptModel;
  * <LI>  `proteinID` e.g., NP_001091971
  * <LI>  `alignID` e.g.,  uc001irt.4 (Note: We do not need this field for our app).
  * </OL>
-
-
  * <P>
  * Note that this file is a MySQL dump file used at the UCSC database. We will use this program to create a 
  * serialized java object that can quickly be input to the Jannovar program. This is probably more efficient
  * than storing everything in the postgreSQL database because we will almost always need to get information
  * for half or more of the known genes, and thus it is quicker to initialize the object from a serialization.
- * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
- * <P>
- * This class now additionally parses the ucsc {@code KnownToLocusLink.txt} file, which contains cross
+  * <P>
+ * This class additionally parses the ucsc {@code KnownToLocusLink.txt} file, which contains cross
  * references from the ucsc IDs to the corresponding Entrez Gene ids (earlier known as Locus Link):
  * <PRE>
  * uc010eve.3      3805
@@ -61,6 +58,7 @@ import jannovar.reference.TranscriptModel;
  * </PRE>
  * This class parses the UCSC knownGenes files to create a list of 
  * {@link jannovar.reference.TranscriptModel TranscriptModel} objects.
+ * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
  * @version 0.12 (4 June, 2013)
  */
@@ -220,6 +218,7 @@ public class UCSCKGParser implements  Constants{
 	}catch (NumberFormatException e) {
 	    throw new KGParseException("Could not parse exonCount:" + A[7]);
 	}
+	model.setExonCount(exonCount);
 	/* Now parse the exon ends and starts */
 	int[] exonStarts= new int[exonCount] ;
 	/** End positions of each of the exons of this transcript */
@@ -305,7 +304,6 @@ public class UCSCKGParser implements  Constants{
      * ucsc KnownGene ids to Entrez Gene ids. The function than adds an Entrez gene
      * id to the corresponing {@link jannovar.reference.TranscriptModel TranscriptModel}
      * objects.
-     * @param path The full path to the KnownToLocusLink.txt file
      */
     private void  readKnown2Locus() throws KGParseException {
 	try{
@@ -437,8 +435,7 @@ public class UCSCKGParser implements  Constants{
       * <LI> 6: (?) Protein accession number
       * <LI> 7: Description
       * </UL>
-      * @param xrefpath full path to kgXref.txt file.
-     */
+      */
     public void readKGxRefFile() throws KGParseException {
 	try{
 	    FileInputStream fstream = new FileInputStream(this.ucscXrefPath);

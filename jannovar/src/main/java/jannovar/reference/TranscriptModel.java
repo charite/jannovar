@@ -75,7 +75,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * The constructor is private to prevent accidental initialization of an empty
      * TranscriptModel object. The way to make TranscriptModels is to use the static
      * method {@link #createTranscriptModel} and then to set the variables. 
-     * @see jannovar.io.UCSCKnownGeneParser
+     * @see jannovar.io.UCSCKGParser
      */
     private TranscriptModel() { /* no op */ }
 
