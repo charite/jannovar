@@ -60,7 +60,9 @@
 	     <mainClass>jannovar.Jannovar</mainClass>
 	   </manifest>
 	 </archive>
-	  <compilerArgument>-Xlint</compilerArgument>
+	 <compilerArgument>-Xlint:all</compilerArgument>
+	 <showWarnings>true</showWarnings>
+	 <showDeprecation>true</showDeprecation>
        </configuration>
      </plugin>
      <plugin>

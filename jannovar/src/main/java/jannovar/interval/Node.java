@@ -174,7 +174,10 @@ public class Node<T>  {
      */
     public T getLeftmostItem() {
 	if (leftorder.size() == 0) return null;
-	else return leftorder.get(0).getValue();
+	else {
+	    Interval<T> i =  leftorder.get(0);
+	    return i.getValue();
+	}
     }
 
 

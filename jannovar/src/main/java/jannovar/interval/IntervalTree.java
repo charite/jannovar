@@ -129,6 +129,9 @@ public class IntervalTree<T> implements java.io.Serializable {
 	for (Interval<T> it : result) {
 	    obtlst.add(it.getValue());
 	}
+	/* Search for neighbors if there are no hits */
+	if (obtlst.isEmpty())
+	    searchInbetween(root,low);
 	return obtlst;
     }
     
@@ -163,20 +166,42 @@ public class IntervalTree<T> implements java.io.Serializable {
 	return leftNeighbor;
     }
 
-    private T getLeftmost(Node n) {
+    /**
+     * This method get either the leftmost item contained
+     * in a Node (this is the case if the Node itself contains some
+     * itervals). Otherwise, we keep going down the to the left
+     * child node until we get to a leaf, and return the leftmost item
+     * of that node. 
+     * @param n The node for which we want to get the leftmost interval of the node or
+     * any of its descendents.
+     * @return The leftmost interval.
+     */
+    private T getLeftmost(Node<T> n) {
 	if (n.hasInterval()) {
-	    //T bla = n.getLeftmostItem();
-	    return null;
+	    return  n.getLeftmostItem();
+	    
 	} else {
 	    Node<T> current = n;
 	    while (n != null) {
 		current = n;
 		n = n.getLeft();
 	    }
-	    return current.getLeftmostItem();
+	    return  current.getLeftmostItem();
 	}
     }
 
+    private T getRightmost(Node<T> n) {
+	if (n.hasInterval()) {
+	    return  n.getRightmostItem();
+	} else {
+	    Node<T> current = n;
+	    while (n != null) {
+		current = n;
+		n = n.getRight();
+	    }
+	    return  current.getRightmostItem();
+	}
+    }
 
     private void searchInbetween(Node<T> n, int x) {
 	Node<T> current = null;
@@ -203,9 +228,10 @@ public class IntervalTree<T> implements java.io.Serializable {
 	*/
 	if (x < current.getMedian()) {
 	    this.rightNeighbor = current.getLeftmostItem();
+	    this.leftNeighbor = getRightmost(left);
 	} else {
 	    this.leftNeighbor = current.getRightmostItem();
-	    this.rightNeighbor = getLeftmost(left);
+	    this.rightNeighbor = getLeftmost(right);
 	}
 	    
 

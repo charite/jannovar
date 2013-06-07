@@ -15,7 +15,7 @@ import jannovar.exception.IntervalTreeException;
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
  */
-public class Interval<T > implements java.io.Serializable { 
+public class Interval<T> implements java.io.Serializable { 
     /** The object that we are putting into the interval tree (such as a 
      * {@link jannovar.reference.TranscriptModel TranscriptModel} object).*/
     private T value;
