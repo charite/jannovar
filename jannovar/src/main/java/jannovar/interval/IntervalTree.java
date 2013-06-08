@@ -168,7 +168,10 @@ public class IntervalTree<T> implements java.io.Serializable {
      * @return the right neighbor of the current search query, if no overlapping interval was found.
      */
     public T getRightNeighbor() {
-	return rightNeighbor.getValue();
+	if (rightNeighbor == null)
+		return null;
+	else
+		return rightNeighbor.getValue();
     }
 
      /**
@@ -183,7 +186,10 @@ public class IntervalTree<T> implements java.io.Serializable {
      * @return the left neighbor of the current search query, if no overlapping interval was found.
      */
     public T getLeftNeighbor() {
-	return leftNeighbor.getValue();
+	if (leftNeighbor == null)
+		return null;
+	else
+		return leftNeighbor.getValue();
     }
 
     /**
@@ -244,26 +250,49 @@ public class IntervalTree<T> implements java.io.Serializable {
 	    return  current.getRightmostItem();
 	}
     }
+    
+    private void switchLeftNeighborIfBetter(Interval<T> item, int x) {
+	if (item == null) return;
+	if (this.leftNeighbor == null) {
+		this.leftNeighbor = item;
+		return;
+	}
+	/* 1) Return if item is not to left of x */
+	if (item.getHigh() >= x)
+		return;
+	/* 2) if item is closer to x than current leftNeighbor, replace it */
+	if (item.getHigh() > this.leftNeighbor.getHigh()){
+		this.leftNeighbor = item;
+	}
+    }
+    
+    private void switchRightNeighborIfBetter(Interval<T> item, int x){
+	if (item == null) return;
+	if (this.rightNeighbor == null) {
+		this.rightNeighbor = item;
+		return;
+	}
+	/* 1) Return if item is not to right of x */
+	if (item.getLow() <= x)
+		return;
+	/* 2) if item is closer to x than current leftNeighbor, replace it */
+	if (item.getLow() > this.rightNeighbor.getLow()){
+		this.rightNeighbor = item;
+	}
+    }
 
     private void searchInbetween(Node<T> n, int x) {
 	Node<T> current = null;
 	Node<T> left = null;
 	Node<T> right = null;
-	int leftmostToDate = Integer.MAX_VALUE;
-	int rightmostToDate = Integer.MIN_VALUE;
-	Interval<T> lN = null;
-	Interval<T> rN = null;
+
 	while (n != null) {
 	    current = n;
 	    if (x < n.getMedian() ) {
 		/* First up date the right neighbor (most left to date that is right of query) .*/
 		if (n.hasInterval()) {
 		    Interval<T> item = n.getLeftmostItem();
-		    if (rN == null) {
-			rN = item;
-		    } else if (rN.getLow() > item.getLow()) {
-			rN = item;
-		    }
+		    switchRightNeighborIfBetter(item,x);
 		}
 		/* Now continue to navigate the interval tree */
 		right = n;
@@ -273,11 +302,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		    /* First up date the left neighbor (most right to date that is left of query) .*/
 		    if (n.hasInterval()) {
 			Interval<T> item = n.getRightmostItem();  
-			if (lN == null) {
-			    lN = item;
-			} else if (lN.getHigh() < item.getHigh()){
-			    lN = item;
-			}
+			switchLeftNeighborIfBetter(item,x);
 		    }
 		}
 		/* Now continue to navigate the interval tree */
@@ -285,41 +310,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		n = n.getRight();
 	    }
 	}
-	System.out.println("Done with first loop. Left  = " + left + " and right = " + right);
-	System.out.println(String.format("x=%d and x-left = %d",x, x - lN.getHigh()));
-	System.out.println("Done with first loop. lN  = " + lN + " and rN = " + rN);
-	/* if there is no Node at all in the tree, then current will be null
-	   and the neighbors will also be null. Actually should never happen. */
-	if (current==null) return;
-	/* When we get here, current will be a non-null leaf Node. If
-	   x < current.getMedian(), then current has an interval containing
-	   the right neighbor of X, and if x > current.getMedian() and we can obtain
-	   the left neighbor of x via this.leftNeighbor, then current
-	   has an interval containing the left neighbor of x.
-	*/
-	if (x < current.getMedian()) {
-	     System.out.println("x < current.getMedian()");
-	    this.rightNeighbor = current.getLeftmostItem();
-	    System.out.println("rightNeighbior = " + this.rightNeighbor);
-	    Interval<T> leftCandidate = getRightmost(left);
-	    System.out.println("leftCan = " + leftCandidate);
-	    if (leftCandidate.getHigh() < x && leftCandidate.getHigh() > lN.getHigh()) {
-		this.leftNeighbor = leftCandidate; System.out.println("leftCandidate wins");
-	    } else {
-		this.leftNeighbor = lN;  System.out.println("lN=" + lN + " wins");
-	    }
-	} else {
-	    System.out.println("ELSE current median=" + current.getMedian());
-	  
-	    this.leftNeighbor = current.getRightmostItem();
-	    System.out.println("leftNeighbior = " + this.leftNeighbor);
-	    Interval<T> rightCandidate = getLeftmost(right);
-	     System.out.println("rightCan = " + rightCandidate);
-	    if (rightCandidate.getLow() > x && rightCandidate.getLow() < rN.getLow())
-		this.rightNeighbor = rightCandidate;
-	    else
-		this.rightNeighbor = rN;
-	}
+	
     }
 
 
@@ -420,6 +411,10 @@ public class IntervalTree<T> implements java.io.Serializable {
 	n.debugPrint(null,0);
 	System.out.println("LeftNeighbor:" + leftNeighbor);
 	System.out.println("RightNeighbor:" + rightNeighbor);
+    }
+    
+    public void debugPrint() {
+	debugPrint(this.root);
     }
     
 }

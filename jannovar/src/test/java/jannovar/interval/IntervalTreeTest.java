@@ -122,7 +122,8 @@ public class IntervalTreeTest {
      /** Tests not finding an interval but getting the right neighbor*/
     @Test public void testSearch3d() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(62,62);
+	List<String> qy = tree.search(512,512);
+	//tree.debugPrint();
 	String rt = tree.getRightNeighbor();
 	Assert.assertEquals(null,rt);
     } 
