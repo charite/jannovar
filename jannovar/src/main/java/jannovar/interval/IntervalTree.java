@@ -49,7 +49,7 @@ import java.util.Comparator;
  * intervals.
  * 
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
- * @version 0.08 (25 May, 2013)
+ * @version 0.11 (7 June, 2013)
  */
 public class IntervalTree<T> implements java.io.Serializable {
     /** The root node of the entire interval tree. */
@@ -67,10 +67,10 @@ public class IntervalTree<T> implements java.io.Serializable {
     private Comparator<Interval<T>> rightcomp = null;
     /** The left neighbor of the current query position (non-overlapping interval to
 	the left of the query that is the closest of all intervals). */
-    private T leftNeighbor = null;
+    private Interval<T> leftNeighbor = null;
     /** The right neighbor of the current query position (non-overlapping interval to
 	the right of the query that is the closest of all intervals). */
-    private T rightNeighbor = null;
+    private Interval<T> rightNeighbor = null;
     
     
     
@@ -122,8 +122,8 @@ public class IntervalTree<T> implements java.io.Serializable {
 	/* reset */
 	this.leftNeighbor = null;
 	this.rightNeighbor = null;
-//	System.out.println("Search for (" + low + "," + high + ")");
-	//debugPrint();
+	//System.out.println("Search for (" + low + "," + high + ")");
+	//debugPrint(this.root);
 	searchInterval(root, result, low, high);
 	ArrayList<T> obtlst = new ArrayList<T>();
 	for (Interval<T> it : result) {
@@ -156,27 +156,53 @@ public class IntervalTree<T> implements java.io.Serializable {
 	return null;
     }
 
-
+    /**
+     * In cases where we do not find an intersection, i.e., when  a call to 
+     * {@link #search} reveals an emptylist because none of the
+     * items overlaps with the search coordinates, then the search function
+     * automatically calls 
+     * {@link #searchInbetween}, which sets the variables 
+     * {@link #rightNeighbor} and 
+     * {@link #lefttNeighbor}, which can then be called by this function 
+     * and {@link #getLeftNeighbor}.
+     * @return the right neighbor of the current search query, if no overlapping interval was found.
+     */
     public T getRightNeighbor() {
-	return rightNeighbor;
+	return rightNeighbor.getValue();
     }
 
-
+     /**
+     * In cases where we do not find an intersection, i.e., when  a call to 
+     * {@link #search} reveals an emptylist because none of the
+     * items overlaps with the search coordinates, then the search function
+     * automatically calls 
+     * {@link #searchInbetween}, which sets the variables 
+     * {@link #rightNeighbor} and 
+     * {@link #lefttNeighbor}, which can then be called by this function 
+     * and {@link #getRighttNeighbor}.
+     * @return the left neighbor of the current search query, if no overlapping interval was found.
+     */
     public T getLeftNeighbor() {
-	return leftNeighbor;
+	return leftNeighbor.getValue();
     }
 
     /**
      * This method get either the leftmost item contained
-     * in a Node (this is the case if the Node itself contains some
-     * itervals). Otherwise, we keep going down the to the left
+     * in a Node or any of its descendents. Remembering that if a
+     * Node contains zero intervals, then it must have descendents with intervals,
+     * we first check if the node has an interval. If not, we take the leftmost interval
+     * of any of the descendets of the node, i.e., we keep going down the to the left
      * child node until we get to a leaf, and return the leftmost item
      * of that node. 
+     * <P>
+     * As a special case, we note that the node may be null if we are at the very end of a 
+     * Chromosome. In this case, we return null.
      * @param n The node for which we want to get the leftmost interval of the node or
      * any of its descendents.
      * @return The leftmost interval.
      */
-    private T getLeftmost(Node<T> n) {
+    private Interval<T> getLeftmost(Node<T> n) {
+	if (n==null) return null;
 	if (n.hasInterval()) {
 	    return  n.getLeftmostItem();
 	    
@@ -190,7 +216,23 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
     }
 
-    private T getRightmost(Node<T> n) {
+    /**
+     * This method get either the rightmost item contained
+     * in a Node or any of its descendents. Remembering that if a
+     * Node contains zero intervals, then it must have descendents with intervals,
+     * we first check if the node has an interval. If not, we take the righttmost interval
+     * of any of the descendets of the node, i.e., we keep going down the to the right
+     * child node until we get to a leaf, and return the rightmost item
+     * of that node. 
+     * <P>
+     * As a special case, we note that the node may be null if we are at the very end of a 
+     * Chromosome. In this case, we return null.
+     * @param n The node for which we want to get the rightmost interval of the node or
+     * any of its descendents.
+     * @return The rightmost interval.
+     */
+    private Interval<T> getRightmost(Node<T> n) {
+	if (n == null) return null;
 	if (n.hasInterval()) {
 	    return  n.getRightmostItem();
 	} else {
@@ -207,16 +249,45 @@ public class IntervalTree<T> implements java.io.Serializable {
 	Node<T> current = null;
 	Node<T> left = null;
 	Node<T> right = null;
+	int leftmostToDate = Integer.MAX_VALUE;
+	int rightmostToDate = Integer.MIN_VALUE;
+	Interval<T> lN = null;
+	Interval<T> rN = null;
 	while (n != null) {
 	    current = n;
 	    if (x < n.getMedian() ) {
+		/* First up date the right neighbor (most left to date that is right of query) .*/
+		if (n.hasInterval()) {
+		    Interval<T> item = n.getLeftmostItem();
+		    if (rN == null) {
+			rN = item;
+		    } else if (rN.getLow() > item.getLow()) {
+			rN = item;
+		    }
+		}
+		/* Now continue to navigate the interval tree */
 		right = n;
 		n = n.getLeft();
 	    } else {
+		if (n.hasInterval()) {
+		    /* First up date the left neighbor (most right to date that is left of query) .*/
+		    if (n.hasInterval()) {
+			Interval<T> item = n.getRightmostItem();  
+			if (lN == null) {
+			    lN = item;
+			} else if (lN.getHigh() < item.getHigh()){
+			    lN = item;
+			}
+		    }
+		}
+		/* Now continue to navigate the interval tree */
 		left = n;
 		n = n.getRight();
 	    }
 	}
+	System.out.println("Done with first loop. Left  = " + left + " and right = " + right);
+	System.out.println(String.format("x=%d and x-left = %d",x, x - lN.getHigh()));
+	System.out.println("Done with first loop. lN  = " + lN + " and rN = " + rN);
 	/* if there is no Node at all in the tree, then current will be null
 	   and the neighbors will also be null. Actually should never happen. */
 	if (current==null) return;
@@ -227,16 +298,38 @@ public class IntervalTree<T> implements java.io.Serializable {
 	   has an interval containing the left neighbor of x.
 	*/
 	if (x < current.getMedian()) {
+	     System.out.println("x < current.getMedian()");
 	    this.rightNeighbor = current.getLeftmostItem();
-	    this.leftNeighbor = getRightmost(left);
+	    System.out.println("rightNeighbior = " + this.rightNeighbor);
+	    Interval<T> leftCandidate = getRightmost(left);
+	    System.out.println("leftCan = " + leftCandidate);
+	    if (leftCandidate.getHigh() < x && leftCandidate.getHigh() > lN.getHigh()) {
+		this.leftNeighbor = leftCandidate; System.out.println("leftCandidate wins");
+	    } else {
+		this.leftNeighbor = lN;  System.out.println("lN=" + lN + " wins");
+	    }
 	} else {
+	    System.out.println("ELSE current median=" + current.getMedian());
+	  
 	    this.leftNeighbor = current.getRightmostItem();
-	    this.rightNeighbor = getLeftmost(right);
+	    System.out.println("leftNeighbior = " + this.leftNeighbor);
+	    Interval<T> rightCandidate = getLeftmost(right);
+	     System.out.println("rightCan = " + rightCandidate);
+	    if (rightCandidate.getLow() > x && rightCandidate.getLow() < rN.getLow())
+		this.rightNeighbor = rightCandidate;
+	    else
+		this.rightNeighbor = rN;
 	}
-	    
-
     }
 
+
+    Interval<T> getBestRightNeighbor( Interval<T> a, Interval<T> b, int x) {
+	if (a.getLow() <= x && b.getLow() <= x) return null;
+	else if (a.getLow() <= x) return b;
+	else if (b.getLow() <= x) return a;
+	else if (a.getLow() < b.getLow()) return a;
+	else return b;
+    }
 
 
     /**
@@ -297,35 +390,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		result.add(n.rightorder.get(i));
 	    }
 	}
-	/** The following two lines set the left and right neighbor. This
-	    will only be useful if we do not interact with an interval.
-	if (ihigh < n.getMedian() && n.hasInterval() ) {
-	    Interval<T> ivl = n.getLeftmostInterval();
-	    if (this.rightNeighbor == null)
-		this.rightNeighbor = ivl;
-	    else if (ivl.getLow() < this.rightNeighbor.getLow())
-		this.rightNeighbor = ivl;
-//	    System.out.println("rightniehgbor = " + this.rightNeighbor);
-	}
 
-	if (ilow > n.getMedian() && n.hasInterval()) {
-	    Interval<T> ivl  =  n.getRightmostInterval();
-	    if (this.leftNeighbor == null)
-		this.leftNeighbor = ivl;
-	    else if (ivl.getHigh() > this.leftNeighbor.getHigh())
-		this.leftNeighbor = ivl;
-//	     System.out.println("leftniehgbor = " + this.leftNeighbor);
-	} */
-	    /*
-	if (ilow > n.getMedian() ) {
-	     Interval<T> neighbor = n.getRightmostInterval();
-	     if (leftNeighbor == null) {
-		 leftNeighbor = neighbor;
-	     } else if (neighbor != null && neighbor.getHigh()>this.leftNeighbor.getHigh()) {
-		 this.leftNeighbor =  neighbor;
-	     }
-	     }*/
-	
 	/*
 	 * if the query is to the left of the median and the
 	 * leftNode is not empty the searchInterval method is called
@@ -336,7 +401,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	    
 	}
 	/*
-	 * if thequery is to the right of the median and the
+	 * if the query is to the right of the median and the
 	 * rightNode is not empty the searchInterval method is called
 	 * recursively
 	 */
@@ -347,31 +412,12 @@ public class IntervalTree<T> implements java.io.Serializable {
     }
     
     /**
-     * Adds a new interval to the intervals list, which contains all intervals.
-     * 
-     * @param newinterval A new interval that is inserted into intervals
-     
-     public void addInterval(Interval<T> newinterval) {
-     intervals.add(newinterval);
-     update();
-     } */
-    
-    /**
-     * Updates the list containing all intervals, for example after adding a new
-     * interval.
-     
-     public void update() {
-     this.root = new Node<T>(intervals);
-     } */
-
-
-    /**
      * This is intended to be used to print out the interval tree
      * for debugging purposes.
      */
-    public void debugPrint() {
-	System.out.println("IntervalTree<T>");
-	root.debugPrint(null,0);
+    public void debugPrint(Node<T> n) {
+	System.out.println("IntervalTree<T> starting at  " + n.toString());
+	n.debugPrint(null,0);
 	System.out.println("LeftNeighbor:" + leftNeighbor);
 	System.out.println("RightNeighbor:" + rightNeighbor);
     }

@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @see jannovar.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.05 (25 May, 2013)
+ * @version 0.06 (8 June, 2013)
  */
 
 // public class Node<T extends Comparable<T>>  {
@@ -172,11 +172,11 @@ public class Node<T>  {
      * this function (it is the first element of {@link #leftorder}).
      * @return the left most Interval
      */
-    public T getLeftmostItem() {
-	if (leftorder.size() == 0) return null;
-	else {
-	    Interval<T> i =  leftorder.get(0);
-	    return i.getValue();
+    public Interval<T> getLeftmostItem() {
+	if (leftorder.size() == 0) {
+	    return null;
+	} else {
+	    return leftorder.get(0);
 	}
     }
 
@@ -193,13 +193,12 @@ public class Node<T>  {
      * If the query is to the left of all of the intervals, then 
      * its left neighbor is the interval whose highpoint is
      * the most to the right. This is the interval that is returned by
-     * this function (it is the last element of {@link #rightorder}).
+     * this function (it is the first element of {@link #rightorder}).
      * @return the left most Interval
      */
-    public T getRightmostItem() {
+    public Interval<T> getRightmostItem() {
 	if (rightorder.size() == 0) return null;
-	int n = rightorder.size() - 1;
-	return rightorder.get(n).getValue();
+	return rightorder.get(0);
     }
 
 
@@ -278,6 +277,11 @@ public class Node<T>  {
 	    r.debugPrint("R",level+1);
 	}
 	
+    }
+
+
+    public String toString() {
+	return String.format("[Node]: median: %d, number of items: %d",this.median, this.leftorder.size());
     }
     
 }

@@ -48,11 +48,11 @@ public class IntervalTreeTest {
     public List<Interval<String>> getIntervalList1() throws IntervalTreeException {
 	List<Interval<String>> ilist = new ArrayList<Interval<String>>();
 	Interval<String> iA = new Interval(1,3,"a");
-	Interval<String> iB = new Interval(4,6,"b");
-	Interval<String> iC = new Interval(2,4,"c");
-	Interval<String> iD = new Interval(5,7,"d");
-	Interval<String> iE = new Interval(1,2,"e");
-	Interval<String> iF = new Interval(3,6,"f");
+	Interval<String> iB = new Interval(5,8,"b");
+	Interval<String> iC = new Interval(4,7,"c");
+	Interval<String> iD = new Interval(5,6,"d");
+	Interval<String> iE = new Interval(16,19,"e");
+	Interval<String> iF = new Interval(11,15,"f");
 	Interval<String> iG = new Interval(30,66,"g");
 	ilist.add(iA);
 	ilist.add(iB);
@@ -73,60 +73,67 @@ public class IntervalTreeTest {
 	Assert.assertEquals(5000, tree.search(0, 2000).size());	
     }
     */
-    @Test public void testSearch1() throws IntervalTreeException {
+
+     @Test public void testSearch1() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(7,8);
-	Assert.assertEquals("d",qy.get(0));
+	List<String> qy = tree.search(1,2);
+	Assert.assertEquals("a",qy.get(0));
     }
 
     @Test public void testSearch2a() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(3,3);
+	List<String> qy = tree.search(6,7);
 	Collections.sort(qy);
 	Assert.assertEquals(3,qy.size());
-	Assert.assertEquals("a",qy.get(0));
-
     }
 
     @Test public void testSearch2b() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(3,3);
+	List<String> qy = tree.search(11,12);
 	Collections.sort(qy);
-
-	Assert.assertEquals(3,qy.size());
-	Assert.assertEquals("c",qy.get(1));
+	Assert.assertEquals("f",qy.get(0));
     }
 
-     @Test public void testSearch2c() throws IntervalTreeException {
-	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(3,3);
-	Collections.sort(qy);
-	Assert.assertEquals(3,qy.size());
-	Assert.assertEquals("f",qy.get(2));
-	//
-    }
+   
 
     /** Tests not finding an interval  */
     @Test public void testSearch3a() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(10,11);
+	List<String> qy = tree.search(20,20);
 	Assert.assertEquals(0,qy.size());
     }
 
      /** Tests not finding an interval but getting the left neighbor, this is d=(5,7) */
     @Test public void testSearch3b() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(10,11);
+	List<String> qy = tree.search(20,20);
 	String lft = tree.getLeftNeighbor();
-	Assert.assertEquals("d",lft);
+	Assert.assertEquals("e",lft);
     }
 
-      /** Tests not finding an interval but getting the right neighbor */
+      /** Tests not finding an interval but getting the right neighbor*/
     @Test public void testSearch3c() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
-	List<String> qy = tree.search(10,11);
+	List<String> qy = tree.search(20,20);
 	String rt = tree.getRightNeighbor();
 	Assert.assertEquals("g",rt);
-    }
+    } 
+
+     /** Tests not finding an interval but getting the right neighbor*/
+    @Test public void testSearch3d() throws IntervalTreeException {
+	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
+	List<String> qy = tree.search(62,62);
+	String rt = tree.getRightNeighbor();
+	Assert.assertEquals(null,rt);
+    } 
+
+   
+    /** Tests not finding an interval but getting the right neighbor*/
+    @Test public void testSearch3e() throws IntervalTreeException {
+	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList1() );
+	List<String> qy = tree.search(69,69);
+	String rt = tree.getLeftNeighbor();
+	Assert.assertEquals("g",rt);
+    } 
 
 }
