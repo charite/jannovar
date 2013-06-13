@@ -228,7 +228,21 @@ public class Node<T>  {
     }
 
    
+    public Node<T> getRightmostDescendentOfLeftChild() {
+	Node <T> n = this.getLeft();
+	if (n == null) return null;
+	while (n.getRight() != null)
+	    n = n.getRight();
+	return n;
+    }
 
+    public Node<T> getLeftmostDescendentOfRightChild() {
+	Node <T> n = this.getRight();
+	if (n == null) return null;
+	while (n.getLeft() != null)
+	    n = n.getLeft();
+	return n;
+    }
 
     /**
      * @return A left node of the interval tree
@@ -253,6 +267,7 @@ public class Node<T>  {
 	
 	StringBuffer sb = new StringBuffer();
 	for (int i=0;i<level;++i) sb.append("-");
+	sb.append("(" + level + ")");
 	String indent = new String(sb);
 	System.out.print(indent);
 	if (type==null)
