@@ -68,20 +68,17 @@ public class IntervalTreeTest {
      public List<Interval<String>> getIntervalList2() throws IntervalTreeException {
 	List<Interval<String>> ilist = new ArrayList<Interval<String>>();
 	
-	ilist.add(new Interval(1,3,"a"));
-	ilist.add(new Interval(2,8,"b"));
-	ilist.add(new Interval(3,5,"c"));
-	ilist.add(new Interval(4,19,"d"));
-	ilist.add(new Interval(5,10,"e"));
-	ilist.add(new Interval(7,12,"f"));
-	ilist.add(new Interval(9,12,"g"));
-	ilist.add(new Interval(16,19,"h"));
-	ilist.add(new Interval(17,20,"i"));
-	ilist.add(new Interval(18,20,"j"));
-	ilist.add(new Interval(18,20,"k"));
-	ilist.add(new Interval(26,28,"l"));
-	ilist.add(new Interval(26,30,"m"));
-	ilist.add(new Interval(27,29,"n"));
+	ilist.add(new Interval(1,8,"a"));
+	ilist.add(new Interval(2,3,"b"));
+	ilist.add(new Interval(5,7,"d"));
+	ilist.add(new Interval(4,11,"c"));
+	ilist.add(new Interval(7,12,"e"));
+	ilist.add(new Interval(9,19,"f"));
+	ilist.add(new Interval(16,19,"g"));
+	ilist.add(new Interval(17,20,"h"));
+	
+	ilist.add(new Interval(26,30,"i"));
+	ilist.add(new Interval(27,29,"j"));
 
 	return ilist;
 
@@ -96,7 +93,7 @@ public class IntervalTreeTest {
      @Test public void testSearchPub2() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList2() );
 	List<String> qy = tree.search(13,14);
-	Assert.assertEquals("d",qy.get(0));
+	Assert.assertEquals("f",qy.get(0));
 		tree.debugPrint();
     }
 
