@@ -41,13 +41,17 @@ import jannovar.exome.Variant;
  * currently.
  * 
  * @author Peter Robinson
- * @version 0.08 (12 May, 2013)
+ * @version 0.09 (16 June, 2013)
  */
 public class Pedigree {
     /**
      * The identifier of the family in the PED file.
      */
     private String familyID = null;
+    /**
+     * The name of the sample in case this pedigree object is being used to describe a single sample only.
+     */
+    private String singleSampleName = null;
     /**
      * A list of all persons in this pedigree
      */
@@ -77,8 +81,9 @@ public class Pedigree {
     private boolean isSingleSample;
     
 
-    public static Pedigree constructSingleSamplePedigree() {
+    public static Pedigree constructSingleSamplePedigree(String name) {
 	Pedigree ped = new Pedigree();
+	ped.singleSampleName = name;
 	ped.isSingleSample = true;
 	return ped;
     }
@@ -119,6 +124,16 @@ public class Pedigree {
     }
 
     /**
+     * @return the name of the single sample (only or single-sample VCF files)
+     */
+    public String getSingleSampleName() {
+	if (this.isSingleSample)
+	    return this.singleSampleName;
+	else
+	    return "[Pedigree] Error: Attempt to retrieve single sampl name for multiple sample PED file";
+    }
+
+    /**
      * @return true if the nth person in the PED file is affected.
      */
     public boolean isNthPersonAffected(int n) {
@@ -129,6 +144,13 @@ public class Pedigree {
 	    return true;
 	else
 	    return false;
+    }
+
+    public ArrayList<String> getPEDFileDatForNthPerson(int n) {
+	if (n<0 || n>=personList.size())
+	    return null;
+	Person p = this.personList.get(n);
+	return p.getPEDFileData();
     }
 
     /**

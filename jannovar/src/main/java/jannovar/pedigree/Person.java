@@ -1,12 +1,16 @@
 package jannovar.pedigree;
 
+import java.util.ArrayList;
+
 import jannovar.exception.PedParseException;
 import jannovar.common.Disease;
 /**
  * A class representing one individual within a
  * {@link jannovar.pedigree.Pedigree Pedigree}.
+ * In essence, this class stores data representing the six fields of a PED file:
+ * 
  * @author Peter Robinson
- * @version 0.03 (10 May, 2013)
+ * @version 0.04 (16 June, 2013)
  */
 public class Person {
     /**
@@ -113,10 +117,34 @@ public class Person {
 
     public boolean isAffected() { return this.disease == Disease.AFFECTED; }
 
+    public boolean isUnaffected() { return this.disease == Disease.UNAFFECTED; }
+
     public boolean isMale() { return this.sex == Sex.MALE; }
 
     public boolean isFemale() { return this.sex == Sex.FEMALE; }
 
+    /**
+     * This function returns a list with six fields representing the six entries
+     * about this Person in the PED file. This is intended to be used by
+     * client code to create HTML tables or to report the data in tabular form.
+     */
+    public ArrayList<String> getPEDFileData() {
+	ArrayList<String> lst = new ArrayList<String>();
+	lst.add( getFamilyID() );
+	lst.add( getIndividualID() );
+	lst.add( getFatherID() );
+	lst.add( getMotherID() );
+	if (isMale()) lst.add("Male");
+	else if (isFemale()) lst.add("Female");
+	else lst.add("Gender unknown");
+	if (isAffected())
+	    lst.add("Affected");
+	else if ( isUnaffected())
+	    lst.add("Unaffected");
+	else
+	    lst.add("Disease status unknown");
+	return lst;
+    }
 
     
     public String toString() {
