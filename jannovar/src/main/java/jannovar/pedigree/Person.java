@@ -10,7 +10,7 @@ import jannovar.common.Disease;
  * In essence, this class stores data representing the six fields of a PED file:
  * 
  * @author Peter Robinson
- * @version 0.04 (16 June, 2013)
+ * @version 0.05 (17 June, 2013)
  */
 public class Person {
     /**
@@ -132,8 +132,16 @@ public class Person {
 	ArrayList<String> lst = new ArrayList<String>();
 	lst.add( getFamilyID() );
 	lst.add( getIndividualID() );
-	lst.add( getFatherID() );
-	lst.add( getMotherID() );
+	String f = getFatherID();
+	if (f==null)
+	    lst.add("-");
+	else
+	    lst.add( getFatherID() );
+	String m = getMotherID();
+	if (m == null)
+	    lst.add("-");
+	else
+	    lst.add( getMotherID() );
 	if (isMale()) lst.add("Male");
 	else if (isFemale()) lst.add("Female");
 	else lst.add("Gender unknown");

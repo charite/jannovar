@@ -19,7 +19,7 @@ import jannovar.common.Genotype;
  * Note that this class was renamed from MultipleGenotypwe on 9 May, 2013, and the
  * class SingleGenotype was merged into it.
  * @author Peter Robinson
- * @version 0.07 (9 May, 2013)
+ * @version 0.08 (17 June, 2013)
  */
 public class GenotypeCall  {
 
@@ -59,8 +59,30 @@ public class GenotypeCall  {
     }
 
 
-   
+    /**
+     * @return A list of genotype calls, e.g., "0/0","0/1","1/1"
+     */
+    public ArrayList<String> getGenotypeList() {
+	ArrayList<String> lst = new ArrayList<String>();
+	Iterator<Genotype> it = callList.iterator();
+	while (it.hasNext()) {
+	    Genotype call = it.next();
+	    switch (call) {
+	    case HOMOZYGOUS_REF: lst.add("0/0"); break;
+	    case HOMOZYGOUS_ALT: lst.add("1/1"); break;
+	    case HETEROZYGOUS: lst.add("0/1"); break;
+	    case NOT_OBSERVED: lst.add("./."); break;  
+	    case ERROR: lst.add("?"); break;  
+	    case UNINITIALIZED: lst.add("-");
+	    }
+	}
+	return lst;
 
+    }
+   
+    /**
+     * @return A string with all genotype calls separated by ":", e.g., "0/0:0/1:1/1"
+     */
     public String get_genotype_as_string() {
 	StringBuffer sb = new StringBuffer();
 	Iterator<Genotype> it = callList.iterator();

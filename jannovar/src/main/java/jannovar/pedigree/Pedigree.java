@@ -273,8 +273,12 @@ public class Pedigree {
         return true;
     }
     
+    /**
+     * @return The number of individuals in the PED file (or simply "1" for a single-sample VCF file).
+     */
     public int getNumberOfIndividualsInPedigree(){
-        return this.personList.size();
+	if (isSingleSample) return 1;
+        else return this.personList.size();
     }
     
     public Person getPerson(String id) {
