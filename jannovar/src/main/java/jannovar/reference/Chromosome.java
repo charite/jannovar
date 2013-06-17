@@ -51,7 +51,7 @@ import jannovar.interval.IntervalTree;
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.23 (27 May, 2013)
+ * @version 0.24 (17 June, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -99,29 +99,6 @@ public class Chromosome {
 	this.n_genes=0; /* TODO: Need to get this information from the IntervalTree */
 	this.annovarFactory = new AnnotatedVariantFactory(CAPACITY); /* the argument is the initial capacity of the arrayLists of vars */
     }
-
-
-
-    /**
-     * Add a gene model to this chromosome. 
-     @param kg A knownGene (note that there is one knownGene entry for each isoform of a gene).
-   
-    public void addGene(TranscriptModel kg) {
-	int pos = kg.getTXStart();
-	ArrayList<TranscriptModel> lst = null;
-	// 1. There is already a TranscriptModel with this txStart 
-	if (this.geneTreeMap.containsKey(pos)) {
-	    lst = geneTreeMap.get(pos);
-	    lst.add(kg);
-	}
-    // 2. This is the first knownGene with this txStart 
-	else {
-	    lst =  new 	ArrayList<TranscriptModel>();
-	    lst.add(kg);
-	    this.geneTreeMap.put(pos,lst);
-	}
-	n_genes++;
-    }  */
 
     /**
      * @return String representation of name of chromosome, e.g., chr2

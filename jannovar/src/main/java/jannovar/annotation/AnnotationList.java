@@ -6,15 +6,17 @@ import jannovar.exception.AnnotationException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Collections;
 
 
 /**
  * Encapsulates a list of {@link jannovar.annotation.Annotation Annotation} objects associated 
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
- * summarize, sort, or display the objects.
+ * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more
+ * than one Gene symbol. In this case, we represent the affected gene as a comma-separated list of symbols.
  * @author Peter N Robinson
- * @version 0.08 (23 May, 2013)
+ * @version 0.12 (17 June, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -128,8 +130,8 @@ public class AnnotationList {
      * it returns the string "MultipleGenes". Probably this needs to be refactored.
      */
     public String getGeneSymbol() {
-	if (hasMultipleGeneSymbols) {
-	    return "MultipleGenes";
+	if (this.hasMultipleGeneSymbols) {
+	    return getMultipleGeneList();
 	} else if (this.annotationList == null) {
 	    System.err.println("error-annotationListNull");
 	    System.out.println("VarType = " + type);
@@ -141,7 +143,9 @@ public class AnnotationList {
 	    if (ann == null) {
 		System.err.println("error-annotationObjectNull");
 		System.out.println("VarType = " + type);
-	    } else return ann.getGeneSymbol();
+	    } else { 
+		return ann.getGeneSymbol();
+	    }
 	}
 	return "?";
     }
@@ -169,6 +173,34 @@ public class AnnotationList {
      * @return true if there are currently no annotations. 
      */
     public boolean isEmpty() { return this.annotationList.size() == 0; }
+
+
+    /**
+     * For annotations that affect multiple genes (i.e., multiple
+     * gene symbols), return String with a comma-separated list of the
+     * symbols. It is assumed that this function is call only for 
+     * cases with multiple annotations.
+     */
+    public String getMultipleGeneList() {
+	StringBuilder sb = new StringBuilder();
+	/** First we need to get a list of the genesymbols. */
+	HashSet<String> geneSymbolSet = new HashSet<String>();
+	for (Annotation a : annotationList) {
+	    geneSymbolSet.add(a.getGeneSymbol());
+	}
+	Iterator<String> it = geneSymbolSet.iterator();
+	int i=0;
+	while (it.hasNext()) {
+	    String s = it.next();
+	    if (i>0)
+		sb.append(", " + s);
+	    else
+		sb.append(s);
+	    i++;
+	}
+	return sb.toString();
+
+    }
 
 
     /**
