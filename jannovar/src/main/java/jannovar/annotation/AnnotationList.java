@@ -16,7 +16,7 @@ import java.util.Collections;
  * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more
  * than one Gene symbol. In this case, we represent the affected gene as a comma-separated list of symbols.
  * @author Peter N Robinson
- * @version 0.12 (17 June, 2013)
+ * @version 0.13 (22 June, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -83,6 +83,36 @@ public class AnnotationList {
 	} else {
 	    java.util.Collections.sort(this.annotationList);
 	}
+    }
+
+
+    /**
+     * Get an annotation for a single transcript (this will be used to annotated VCF files).
+     * Note that we will return an annotation that matches with the overall type of this
+     * annotation, in case there are multiple annotations for this variant (e.g., if there
+     * are nonsense and synonymous annotation, return nonsense).
+     */
+    public String getSingleTranscriptAnnotation() throws AnnotationException {
+	/* Need an exception for UTR53, which means that we have UTR3 of one
+	   annotation and UTR5 for another. */
+	if (this.type == VariantType.UTR53) {
+	    for (Annotation a : this.annotationList) {
+		if (a.getVariantType() == VariantType.UTR3)
+		    return a.getVariantAnnotation();
+	    }
+	}
+	/* Now for the rest of the variant types. */
+
+	for (Annotation a : this.annotationList) {
+	    
+	    if (a.getVariantType() == this.type) {
+		return a.getVariantAnnotation();
+	    }
+	}
+	String e = String.format("[AnnotationList] could not retrieve matching annotation for %s",
+				 this.type);
+	throw new AnnotationException(e);
+
     }
 
     /**

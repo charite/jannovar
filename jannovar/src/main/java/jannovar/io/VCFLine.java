@@ -307,6 +307,10 @@ public class VCFLine {
 	}
 	return i;
     }
+
+    public String getOriginalVCFLine() {
+	return this.vcf_line;
+    }
     
 	  
 

@@ -37,15 +37,25 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * {@link jannovar.genotype.GenotypeCall GenotypeCall}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
- * @version 0.15 (12 May, 2013)
+ * @version 0.16 (22 June, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
     private String file_path=null;
     /** (Plain) basename of the VCF file being parsed. */
     private String base_filename = null;
-    /** All of the lines in the original VCF header */
+    /** Very first line of VCF file, must be of the form {@code ##fileformat=VCFv4.1}. */
+    private String firstVCFLine=null;
+    /** All of the lines in the original VCF header (excluding those that have been
+     * stored in {@link #formatLines}, {@link #infoLines} or {@link #contigLines}*/
     private ArrayList<String> vcf_header=null;
+    /** All of the FORMAT lines fromt he VCF header */
+    private ArrayList<String> formatLines=null;
+    /** All of the INFO lines from the VCF header */
+    private ArrayList<String> infoLines=null;
+    /** All of the contig lines from the VCF header, e.g., 
+	{@code ##contig=<ID=chr22,length=51304566,assembly=hg19>}. */
+    private ArrayList<String> contigLines=null;
     /** Set of all of the chromosomes that could not be parsed correctly, usually
 	scaffolds such as chr11_random.*/
     private HashSet<String> badChrom=null;
@@ -104,6 +114,9 @@ public class VCFReader {
     public VCFReader() {
 	this.variant_list = new ArrayList<VCFLine>();
 	this.vcf_header= new ArrayList<String>();
+	this.formatLines=new ArrayList<String>();
+	this.infoLines=new ArrayList<String>();
+	this.contigLines=new ArrayList<String>();
 	this.unparsable_line_list = new ArrayList<String>();
 	this.sample_name_list = new  ArrayList<String>();
 	this.total_number_of_variants = 0;
@@ -112,7 +125,9 @@ public class VCFReader {
     }
 
     /**
-     * This function is intended to be used for debugging purposes.
+     * This function is intended to be used to retrieve the original
+     * variant lines of the VCF file.
+     * <p>
      * The VCFReader first parses the VCF file variant lines into
      * {@link jannovar.io.VCFLine VCFLine} objects. These objects
      * store the String from the original VCF line, and thus it is
@@ -147,6 +162,23 @@ public class VCFReader {
     } 
 
     /**
+     * Transform a VCF variant line into a 
+     * {@link jannovar.exome.Variant Variant} object.
+     * @param line a line of a VCF file that represents a variant
+     * @return the corresponding {@link jannovar.exome.Variant Variant} object.
+     */
+    public Variant VCFline2Variant(VCFLine line) {
+	Variant v = new Variant(line.get_chromosome(),
+				    line.get_position(),
+				    line.get_reference_sequence(),
+				    line.get_alternate_sequence(),
+				    line.getGenotype(),
+				    line.getVariantQuality());
+	return v;
+    }
+
+
+    /**
      * @return List of sample names
      */
     public ArrayList<String> getSampleNames(){ return this.sample_name_list; }
@@ -160,7 +192,52 @@ public class VCFReader {
      * The parsing process stores a list with each of the header lines of the original VCF file.
      * @return List of lines of the original VCF file.
      */
-    public ArrayList<String> get_vcf_header() { return vcf_header; }
+    public ArrayList<String> get_vcf_header() { 
+	ArrayList<String> lst = new ArrayList<String>();
+	lst.add(this.firstVCFLine);
+	lst.addAll(this.formatLines);
+	lst.addAll(this.infoLines);
+	lst.addAll(this.contigLines);
+	lst.addAll(this.vcf_header); 
+	return lst;
+    }
+
+   
+
+    /**
+     * This line is added to the output of a VCF file annotated by Jannovar and describes the new field
+     * for the INFO section entitled EFFECT, which decribes the effects of variants 
+     * (splicing,missense,stoploss, etc).
+     */
+    private static final String infoEFFECT="##INFO=<ID=EFFECT,Number=1,Type=String,Description=\""+
+	"variant effect (UTR5,UTR3,intronic,splicing,missense,stoploss,stopgain,"+
+	"frameshift-insertion,frameshift-deletion,non-frameshift-deletion,"+
+	"non-frameshift-insertion,synonymous)\">";
+
+    /**
+     * This line is added to the output of a VCF file annotated by Jannovar and describes the new field
+     * for the INFO section entitled HGVS, which provides the HGVS encoded variant corresponding to the
+     * chromosomal variant in the original VCF file.
+     */
+    private static final String infoHGVS="##INFO=<ID=HGVS,Number=1,Type=String,Description=\"HGVS Nomenclature\">";
+
+    /**
+     * The parsing process stores a list with each of the header lines of the original VCF file.
+     * This function returns those lines but adds two additional lines to provide information
+     * about the annotations added to the output VCF file.
+     * @return List of lines of the original VCF file.
+     */
+    public ArrayList<String> getAnnotatedVCFHeader() { 
+	ArrayList<String> lst = new ArrayList<String>();
+	lst.add(this.firstVCFLine);
+	lst.addAll(this.formatLines);
+	lst.addAll(this.infoLines);
+	lst.add(infoEFFECT);
+	lst.add(infoHGVS);
+	lst.addAll(this.contigLines);
+	lst.addAll(this.vcf_header); 
+	return lst;
+    }
 
     /**
      * @return list of any errors encountered during VCF parsing, or  null to indicate no error.
@@ -242,14 +319,22 @@ public class VCFReader {
 	    String err = "Error: First line of VCF file did not start with format:" + line;
 	    throw new VCFParseException(err);
 	} else {
-	    vcf_header.add(line);
+	    this.firstVCFLine = line;
 	}
 	String version = line.substring(16).trim();
 		
 	while ((line = br.readLine()) != null)   {
 	    if (line.isEmpty()) continue;
 	    if (line.startsWith("##")) {
-		vcf_header.add(line); 
+		if (line.startsWith("##FORMAT")) {
+		    this.formatLines.add(line);
+		} else if (line.startsWith("##INFO")) {
+		    this.infoLines.add(line);
+		} else if (line.startsWith("##contig") || line.startsWith("##CONTIG")) {
+		    this.contigLines.add(line);
+		} else {
+		    vcf_header.add(line); 
+		}
 		continue; 
 	    } else if (line.startsWith("#CHROM")) {
 		/* The CHROM line is the last line of the header and

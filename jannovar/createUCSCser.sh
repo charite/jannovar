@@ -37,7 +37,7 @@ SERIAL="ucsc.ser"
 JAVA="/usr/bin/java"
 MV="/bin/mv"
 
-JANNOVAR="target/jannovar-0.0.6-SNAPSHOT.jar"
+JANNOVAR="target/jannovar-0.0.7-SNAPSHOT.jar"
 
 
 if [ ! -e ucsc.ser ]; then

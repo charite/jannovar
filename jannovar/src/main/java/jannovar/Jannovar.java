@@ -9,12 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 
-/** Logging */
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.PatternLayout;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +18,15 @@ import java.util.HashMap;
 import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.Writer;
+
 
 import jannovar.exception.VCFParseException;
 import jannovar.io.SerializationManager;
+import jannovar.io.VCFLine;
 import jannovar.io.UCSCKGParser;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
@@ -73,12 +74,23 @@ import jannovar.io.VCFReader;
  * $ perl annotate_variation.pl -buildver hg19 --geneanno BLA.av --dbtype knowngene humandb/
  * </PRE>
  * This will create two files with all variants and a special file with exonic variants.
+ * <p>
+ * There are three ways of using this program.
+ * <ol>
+ * <li>To create a serialized version of the UCSC gene definition data. In this case, the command-line
+ * flag <b>- S</b> is provide as is the path to the four UCSC files. Then, {@code anno.serialize()} is true
+ * and a file <b>ucsc.ser</b> is created.
+ * <li>To deserialize the serialized data (<b>ucsc.ser</b>). In this case, the flag <b>- D</b> must be used.
+ * <li>To simply read in the UCSC data without creating a serialized file.
+ * </ol>
+ * Whichever of the three versions is chosen, the user may additionally pass the path to a VCF file using the <b>-v</b> flag.
+ * If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a file called
+ * test.vcf.jannovar (assuming the original file was named test.vcf).
+ * The
  * @author Peter N Robinson
- * @version 0.18 (27 May, 2013)
+ * @version 0.21 (22 June, 2013)
  */
 public class Jannovar {
-    /** A logger from Apache's log4j that records key statistics from program execution. */
-    static Logger log = Logger.getLogger(Jannovar.class.getName());
     /** Path to the UCSC file knownGene.txt */
     private String ucscPath = null;
     /** Path to the UCSC file kgXref.txt */
@@ -104,20 +116,9 @@ public class Jannovar {
     private String VCFfilePath=null;
 
     public static void main(String argv[]) {
-	log.setLevel(Level.TRACE);
-	FileAppender fa = new FileAppender();
-	fa.setName("FileLogger");
-	fa.setFile("annotator.log");
-	fa.setLayout(new PatternLayout("[%t] [%d{HH:mm:ss.SSS}] %-5p %c %x - %m%n"));
-	fa.setThreshold(Level.TRACE);
-	fa.setAppend(false);
-	fa.activateOptions();
-	Logger.getRootLogger().addAppender(fa);
-	log.trace("Starting executation of Annotator");
-
 	
 	Jannovar anno = new Jannovar(argv);
-
+	
 	if (anno.serialize()) {
 	    try{
 		anno.readUCSCKnownGenesFile();	
@@ -212,7 +213,7 @@ public class Jannovar {
      * corresponding {@link jannovar.reference.Chromosome Chromosome}
      * object for further analysis.
      */
-    public void annotateVariants() {
+    public void annotateVariants(Writer out) throws IOException {
 	Chromosome c = null;
 	int i=0;
 	for (Variant v : variantList) {
@@ -221,9 +222,9 @@ public class Jannovar {
 	    int pos = v.get_position();
 	    String ref = v.get_ref();
 	    String alt = v.get_alt();
-	    c = chromosomeMap.get(chr); // TODO change chromosome in Variant to byte?
+	    c = chromosomeMap.get(chr);
 	    if (c==null) {
-		System.err.println("[Annotator.java:anotateVariants()] Could not identify chromosome \"" + chr + "\"");
+		System.err.println("[Jannovar] Could not identify chromosome \"" + chr + "\"");
 		debugShowChromosomeMap();		
 	    } else {
 		System.out.println("***********   Annotation List  ******************");
@@ -256,8 +257,50 @@ public class Jannovar {
 	}
     }
 
+    /**
+     * Annotate a single line of a VCF file, and output the line together with the new
+     * INFO fields representing the annotations.
+     * @param line an object representing the original VCF line 
+     * @param v the Variant object that was parsed from the line
+     * @param out A file handle to write to.
+     */
+    private void annotateVCFLine(VCFLine line, Variant v, Writer out) throws IOException,AnnotationException
+    {
+	byte chr =  v.getChromosomeAsByte();
+	int pos = v.get_position();
+	String ref = v.get_ref();
+	String alt = v.get_alt();
+	Chromosome c = chromosomeMap.get(chr);
+	if (c==null) {
+	    String e = String.format("[Jannovar] Could not identify chromosome \"%d\"", chr );
+	    throw new AnnotationException(e);	
+	} 
+	AnnotationList anno = c.getAnnotationList(pos,ref,alt);
+	if (anno==null) {
+	    String e = String.format("[Jannovar] No annotations found for variant %s", v.toString());
+	    throw new AnnotationException(e);	
+	}
+	String annotation = anno.getSingleTranscriptAnnotation();
+	String effect = anno.getVariantType().toString();
+	String A[] = line.getOriginalVCFLine().split("\t");
+	for (int i=0;i<6;++i)
+	    out.write(A[i] + "\t");
+	/* Now add the stuff to the INFO line */
+	String INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[6]);
+	out.write(INFO);
+	for (int i=7;i<A.length;++i)
+	     out.write(A[i] + "\t");
+	out.write("\n");
+    }
+
+
+    /**
+     * This function inputs a VCF file, and prints the annotated version thereof
+     * to a file (name of the original file with the suffix .jannovar).
+     */
     public void annotateVCF() {
 	VCFReader parser = new VCFReader();
+	VCFLine.setStoreVCFLines();
 	try{
 	    parser.parseFile(this.VCFfilePath);
 	} catch (VCFParseException e) {
@@ -265,8 +308,36 @@ public class Jannovar {
 	    System.err.println(e.toString());
 	    System.exit(1);
 	}
+
+
 	this.variantList = parser.getVariantList();
-	annotateVariants();
+	ArrayList<VCFLine> lineList = parser.getVCFLineList();
+	File f = new File(this.VCFfilePath);
+	String outname = f.getName() + ".jannovar";
+	try {
+	    FileWriter fstream = new FileWriter(outname);
+	    BufferedWriter out = new BufferedWriter(fstream);
+	    /** Write the header of the new VCF file */
+	    ArrayList<String> lst = parser.getAnnotatedVCFHeader();
+	    for (String s: lst) {
+		out.write(s + "\n");
+	    }
+	    /** Now write each of the variants. */
+	    for (VCFLine  line : lineList) {
+		Variant v = parser.VCFline2Variant(line);
+		try{
+		    annotateVCFLine(line,v,out);
+		} catch (AnnotationException e) {
+		    System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
+		}
+	    }
+	    out.close();
+	}catch (IOException e){
+	    System.out.println("[Jannovar] Error writing annotated VCF file");
+	    System.out.println("[Jannovar] " + e.toString());
+	    System.exit(1);
+	}
+	
     }
 
 
