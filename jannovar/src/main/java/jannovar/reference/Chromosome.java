@@ -26,6 +26,7 @@ import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.BlockSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTR3Annotation;
+import jannovar.annotation.UTR5Annotation;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
 
@@ -51,7 +52,7 @@ import jannovar.interval.IntervalTree;
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.24 (17 June, 2013)
+ * @version 0.25 (22 June, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -171,8 +172,9 @@ public class Chromosome {
 
 	AnnotationList al = annovarFactory.getAnnotationList();
 	if (al.getAnnotationList().size()==0) {
-	    System.out.println("XXX zero size for " + position + ":" +ref+ ">"+ alt+ " on chromosome " + chromosomeString);
-	    System.exit(1);
+	    String e = String.format("[Jannovar:Chromosome] Error: No annotations produced for %s:g.%d%s>%s",
+				     chromosomeString, position,ref,alt);
+	    throw new AnnotationException(e);
 	}
 	return annovarFactory.getAnnotationList();
     }
@@ -312,7 +314,8 @@ public class Chromosome {
 			 #query  ----
 			 #gene     <--*---*->
 			*/
-			Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+			Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+			//Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovarFactory.addUTR5Annotation(ann);
 			
 			  /* Annovar: $utr5{$name2}++;
@@ -411,7 +414,7 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr5{$name2}++; #positive strand for UTR5
 		     */
-		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+		    Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovarFactory.addUTR5Annotation(ann);
 		    
 		} else if (start > cdsend) {
@@ -545,7 +548,8 @@ public class Chromosome {
 			//query             ----
 			//gene     <--*---*->
 			// Note this is UTR5 on negative strand
-			Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+			Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+			//Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovarFactory.addUTR5Annotation(ann);
 			return; /* done with this annotation. */
 		    } 	else {
@@ -622,9 +626,8 @@ public class Chromosome {
 		    //query             ----
 		    //gene     <--*---*->
 		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getGeneSymbol()));
-		    Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+		    Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovarFactory.addUTR5Annotation(ann);
-		    //$utr5{$name2}++;		#negative strand for UTR3
 		} else {
 		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,exoncount-k,kgl);
 		}

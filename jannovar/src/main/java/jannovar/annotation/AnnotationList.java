@@ -394,13 +394,26 @@ public class AnnotationList {
 	    symbol_list.add(s);
 	    if (s==null) debugPrint();
 	}
-	java.util.Collections.sort(symbol_list);
-	String s = symbol_list.get(0);
+
 	StringBuilder sb = new StringBuilder();
-	sb.append(s);
-	for (int i=1;i<symbol_list.size();++i) {
-	    sb.append("," + symbol_list.get(i));
+	/* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
+	   If there are multiple transcript annotations they are separated by comma.
+	   After the last annotation, there is a closing parenthesis. */
+	boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
+	for (int j=0;j<this.annotationList.size();++j) {
+	    Annotation ann  = this.annotationList.get(j);
+	    if (! ann.isUTRVariant())
+		continue; /* this skips over non UTR annotations of alternative transcripts
+			     for variants that have at least one UTR annotation. Note this
+			     will break for variants affecting multiple genes.*/
+	    if (needGeneSymbol) {
+		sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
+		needGeneSymbol = false;
+	    } else {
+		sb.append("," + ann.getVariantAnnotation());
+	    }
 	}
+	sb.append(")");
 	return sb.toString();
     }
 

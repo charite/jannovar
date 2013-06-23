@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.21 (25 May, 2013)
+ * @version 0.22 (22 June, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -100,6 +100,22 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public void setVariantAnnotation(String s) { this.variantAnnotation = s; }
 
     /**
+     * @param symbol The gene symbol for the gene affected by the variant.
+     */
+    public void setGeneSymbol(String symbol) { this.geneSymbol = symbol; }
+
+    /**
+     * TODO. Probably this should be refactored, this field should hold some ID number,
+     * but we then need to know if it is from EntrezGene or another source.
+     * For now, it is an int that is understood to be an Entrez Gene id, but in the future
+     * we might use this to store ENSEMBL identifiers etc.
+     * @param id The identifier of the gene affected by the variant (e.g., Entrez Gene ID)
+     */
+    public void setGeneID(int id) {
+	this.entrezGeneID = id;
+    }
+
+    /**
      * Checks whether this annotation is equivalent to the
      * annotation being passed as an argument. This may be the
      * case say for two intronic annotations from different
@@ -127,6 +143,15 @@ public class Annotation implements Constants, Comparable<Annotation> {
     */
     private Annotation() {
 	this.rvarstart=0;
+    }
+
+    /**
+     * This method constructs an empty Annotation object. We may be able to 
+     * switch to simply the constructor, TODO continue refactoring.
+     */
+    public static Annotation createEmptyAnnotation() {
+	Annotation a = new Annotation();
+	return a;
     }
 
 
@@ -236,19 +261,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
 
-    /**
-     * Create a UTR5 annotation. For now, we will follow annovar in just showing "UTR5",
-     * but later we will give the HGVS type annotation. 
-     */
-    public static Annotation createUTR5Annotation(TranscriptModel trmdl, int refvarstart, String ref, String alt) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.UTR5;
-	ann.geneSymbol = trmdl.getGeneSymbol();
-	ann.variantAnnotation = trmdl.getName();
-	ann.entrezGeneID = trmdl.getEntrezGeneID();
-	return ann;
-
-    }
+    
 
     /**
      * For the moment, this function is just adding the gene symbol as the annotation.
@@ -529,6 +542,20 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case FS_DELETION: 
 	case FS_INSERTION: 
 	case NON_FS_DELETION: 
+	    return true;
+	default:
+	    return false;
+	}
+    }
+
+    /**
+     * @return true if this annotation is for a 3' or 5' UTR 
+     */
+    public boolean isUTRVariant() {
+	switch(this.varType) {
+	case UTR3:
+	case UTR5:
+	case UTR53:
 	    return true;
 	default:
 	    return false;

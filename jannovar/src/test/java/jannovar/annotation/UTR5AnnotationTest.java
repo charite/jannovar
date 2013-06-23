@@ -391,7 +391,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR2W3",annot);
+	    Assert.assertEquals("OR2W3(uc001idp.1:c.-10A>T)",annot);
 	}
 }
 
@@ -552,7 +552,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ASB18",annot);
+	    Assert.assertEquals("ASB18(uc010fyp.1:c.-3A>C)",annot);
 	}
 }
 
