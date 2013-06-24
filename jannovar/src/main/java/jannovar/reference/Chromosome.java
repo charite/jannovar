@@ -25,8 +25,7 @@ import jannovar.annotation.InsertionAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.BlockSubstitution;
 import jannovar.annotation.SpliceAnnotation;
-import jannovar.annotation.UTR3Annotation;
-import jannovar.annotation.UTR5Annotation;
+import jannovar.annotation.UTRAnnotation;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
 
@@ -314,7 +313,7 @@ public class Chromosome {
 			 #query  ----
 			 #gene     <--*---*->
 			*/
-			Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+			Annotation ann = UTRAnnotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			//Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovarFactory.addUTR5Annotation(ann);
 			
@@ -325,7 +324,8 @@ public class Chromosome {
 			   #query             ----
 			   #gene     <--*---*->
 			*/
-			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
+			//Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
+			 Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 			annovarFactory.addUTR3Annotation(ann);
 			
 			/* positive strand for UTR3 */
@@ -414,7 +414,7 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr5{$name2}++; #positive strand for UTR5
 		     */
-		    Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+		    Annotation ann = UTRAnnotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovarFactory.addUTR5Annotation(ann);
 		    
 		} else if (start > cdsend) {
@@ -422,7 +422,8 @@ public class Chromosome {
 		     * #gene     <--*---*->
 		     * Annovar: $utr3{$name2}++; #positive strand for UTR3
 		     */
-		    Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
+		    //Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
+		    Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 		    annovarFactory.addUTR3Annotation(ann);
 		} else {
 		    /* Note that the following function adds annotations to annovar */
@@ -541,14 +542,15 @@ public class Chromosome {
 			//query  ----
 			//gene     <--*---*->
 			// Note this is UTR3 on negative strand
-			Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
+			//Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
+			Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 			annovarFactory.addUTR3Annotation(ann);
 			return; /* done with this annotation. */
 		    } else if (start > cdsend) {
 			//query             ----
 			//gene     <--*---*->
 			// Note this is UTR5 on negative strand
-			Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+			Annotation ann = UTRAnnotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			//Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovarFactory.addUTR5Annotation(ann);
 			return; /* done with this annotation. */
@@ -618,7 +620,8 @@ public class Chromosome {
 		    /* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 		    //query  ----
 		    //gene     <--*---*->
-		    Annotation ann = UTR3Annotation.getUTR3Annotation(kgl,start,end,ref,alt);
+		    //Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
+		    Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 		    annovarFactory.addUTR3Annotation(ann);
 		    return; /* done with this annotation. */
 		} else if (start > cdsend) {
@@ -626,7 +629,7 @@ public class Chromosome {
 		    //query             ----
 		    //gene     <--*---*->
 		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getGeneSymbol()));
-		    Annotation ann = UTR5Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
+		    Annotation ann = UTRAnnotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovarFactory.addUTR5Annotation(ann);
 		} else {
 		    annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,exoncount-k,kgl);

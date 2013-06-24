@@ -109,8 +109,20 @@ public class AnnotationList {
 		return a.getVariantAnnotation();
 	    }
 	}
-	String e = String.format("[AnnotationList] could not retrieve matching annotation for %s",
+	String e = null;
+	if (this.annotationList.size()==0) {
+	    e = String.format("[AnnotationList] could not retrieve matching annotation for %s",
 				 this.type);
+	} else {
+	    Annotation ann = this.annotationList.get(0);
+	    int n = this.annotationList.size();
+	    e = String.format("%s (type: %s) [from a total of %d annotations]", ann.getVariantAnnotation(), this.type,n);
+	}
+	/*
+	System.out.println("Total annotations: " + annotationList.size());
+	for (Annotation a : annotationList) {
+	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+	    }*/
 	throw new AnnotationException(e);
 
     }
@@ -379,7 +391,7 @@ public class AnnotationList {
      * This function will combine multiple UTR3/UTR5 annotations.
      * For now, we will just show the genesymbols (like annovar).
      */
-    private String getUTRAnnotation() {
+    private String getUTRAnnotation() throws AnnotationException {
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
 	for (Annotation a : annotationList) {
@@ -392,7 +404,10 @@ public class AnnotationList {
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
 	    symbol_list.add(s);
-	    if (s==null) debugPrint();
+	    if (s==null) {
+		String e = "No Gene symbol found for UTR variant";
+		throw new AnnotationException(e);
+	    }
 	}
 
 	StringBuilder sb = new StringBuilder();

@@ -140,6 +140,10 @@ public class IntervalTree<T> implements java.io.Serializable {
 	    searchInbetween(low);
 	return obtlst;
     }
+
+
+    private void searchOnEmpty(int low, int high) {
+    }
     
     
     

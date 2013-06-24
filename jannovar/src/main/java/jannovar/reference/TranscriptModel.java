@@ -45,7 +45,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     private int txStart;
     /** Transcription end position of gene. */
     private int txEnd;
-    /** CDS start position of gene. */
+    /** CDS start position of gene (chromosomal coordinate; Note that {@link #rcdsStart} is the CDS start within the transcript. */
     private int cdsStart;
     /** CDS end position of gene. */
     private int cdsEnd;
@@ -90,6 +90,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public void setStrand(char s) { this.strand = s; }
     public void setTranscriptionStart(int st) { this.txStart = st; }
     public void setTranscriptionEnd(int st) { this.txEnd = st; }
+    /** @param st The start position of the CDS on the chromosome.
+	(Note that {@linl #rcdsStart} is the CDS start within the transcript).*/
     public void setCdsStart(int st) { this.cdsStart = st; }
     public void setCdsEnd(int st) { this.cdsEnd = st; }
     public void setExonCount(byte c) { this.exonCount = c; }
@@ -168,6 +170,45 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		}
 	    }
 	}
+    }
+
+
+    public int getRefCDSEnd() {
+	int cumlenintron = 0; // cumulative length of introns at a given exon
+	int rcdsend=0; // end of CDS within reference RNA sequence.
+	if (this.isPlusStrand()) {
+	    for (int k=0; k< this.exonCount;++k) {
+		//System.out.println("k=" + k);
+		if (k>0)
+		    cumlenintron += this.getLengthOfIntron(k);
+		if (this.cdsEnd >= this.getExonStart(k) && this.cdsEnd <= this.getExonEnd(k)) {
+		    /* Calculate CDS start within mRNA sequence accurately
+		       by taking intron length into account. Note that this block may
+		    be executed multiple times if the start codon is not located in exon
+		    1, but the loop will be terminated*/
+		    //System.out.println("start k = " + getExonStart(k) + " end k = " + getExonEnd(k));
+		    //System.out.println("IF cumlenintron=" + cumlenintron);
+		    rcdsend = this.cdsEnd - this.txStart - cumlenintron + 1;
+		    //System.out.println("rcdsstart=" + rcdsStart);
+		    break;
+		}
+	    }
+	} else { /* i.e., minus strand */
+	    for (int k = this.exonCount-1; k>=0; k--) {
+		if (k < this.exonCount-1) {
+		    //$lenintron += ($exonstart[$k+1]-$exonend[$k]-1);
+		    cumlenintron += (exonStarts[k+1]-exonEnds[k]-1); // gets intron k for minus strand.
+		}
+		//System.out.println("exon k=" + k + " cumlenintron=" + cumlenintron);
+		if (this.cdsEnd <= this.getExonEnd(k) && this.cdsEnd >= this.getExonStart(k)) {		
+		    //calculate CDS start accurately by considering intron length
+		    rcdsend = this.txEnd-this.cdsEnd-cumlenintron+1;
+		    break;			
+		}
+	    }
+	    //System.out.println("cumlenintron=" + cumlenintron);
+	}
+    	return rcdsend;
     }
 
 

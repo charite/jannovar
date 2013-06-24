@@ -283,12 +283,12 @@ public class Jannovar {
 	String annotation = anno.getSingleTranscriptAnnotation();
 	String effect = anno.getVariantType().toString();
 	String A[] = line.getOriginalVCFLine().split("\t");
-	for (int i=0;i<6;++i)
+	for (int i=0;i<7;++i)
 	    out.write(A[i] + "\t");
 	/* Now add the stuff to the INFO line */
-	String INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[6]);
+	String INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[7]);
 	out.write(INFO);
-	for (int i=7;i<A.length;++i)
+	for (int i=8;i<A.length;++i)
 	     out.write(A[i] + "\t");
 	out.write("\n");
     }
@@ -432,10 +432,10 @@ public class Jannovar {
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
-	    if (cmd.hasOption("h"))
+	    if (cmd.hasOption("h") || args.length==0)
 	    {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("Annotator", options);
+		formatter.printHelp("java -jar Jannovar [-options]", options);
 		usage();
 		System.exit(0);
 	    }

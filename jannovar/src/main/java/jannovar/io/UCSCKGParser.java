@@ -1,12 +1,5 @@
 package jannovar.io;
 
-/** Logging */
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.PatternLayout;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.DataInputStream;

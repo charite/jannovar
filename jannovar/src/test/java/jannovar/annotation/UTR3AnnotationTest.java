@@ -4622,7 +4622,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRAPPC10",annot);
+	    Assert.assertEquals("TRAPPC10(uc011afa.2:c.*4C>T,uc002zea.3:c.*4C>T,uc010gpo.3:c.*4C>T)",annot);
 	}
 }
 
