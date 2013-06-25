@@ -75,6 +75,52 @@ public class VariantTypeCounter implements Constants {
 
     }
 
+    /**
+     * Sanger specific method
+     */
+    
+    public String getSummaryRow(String sampleName) throws IOException {
+        StringBuffer row = new StringBuffer();
+        int missense = this.variantCountMap.get(VariantType.MISSENSE);
+        int nonsense = this.variantCountMap.get(VariantType.STOPGAIN);
+        int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION) + this.variantCountMap.get(VariantType.FS_DELETION);
+        int splice = this.variantCountMap.get(VariantType.SPLICING);
+        int nonfs = this.variantCountMap.get(VariantType.NON_FS_SUBSTITUTION) +
+            this.variantCountMap.get(VariantType.NON_FS_DELETION) +
+            this.variantCountMap.get(VariantType.NON_FS_INSERTION);     
+        int ncrna = this.variantCountMap.get(VariantType.ncRNA_EXONIC) +
+	    this.variantCountMap.get(VariantType.ncRNA_SPLICING) + 
+	    this.variantCountMap.get(VariantType.ncRNA_UTR3) +
+	    this.variantCountMap.get(VariantType.ncRNA_UTR5);
+	int intron = this.variantCountMap.get(VariantType.INTRONIC) +
+	    this.variantCountMap.get(VariantType.ncRNA_INTRONIC);
+	int upstream = this.variantCountMap.get(VariantType.UPSTREAM);
+	int downstream = this.variantCountMap.get(VariantType.DOWNSTREAM);
+	int intergen =  this.variantCountMap.get(VariantType.INTERGENIC);
+	int utr = this.variantCountMap.get(VariantType.UTR3) + 
+	    this.variantCountMap.get(VariantType.UTR5) +
+	    this.variantCountMap.get(VariantType.UTR53);
+	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
+	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
+	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);
+	int posErr = this.variantCountMap.get(VariantType.POSSIBLY_ERRONEOUS);
+	row.append(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td>\n",
+				 sampleName,missense,nonsense,frameshift,splice,nonfs));
+	row.append("<td><ul>\n");
+	row.append(String.format("<li>ncRNA: %d</li>\n<li>intronic: %d</li>",ncrna, intron));
+	row.append(String.format("<li>upstream: %d</li>\n<li>downstream: %d</li>",upstream,downstream));
+	row.append(String.format("<li>intergenic: %d</li>\n<li>UTR3/UTR5: %d</li>",intergen,utr));
+	row.append(String.format("<li>Synonymous: %d</li>\n",synonym));
+	row.append(String.format("<li>Total: %d</li>\n",total));
+	if (unknown>0)
+	    row.append(String.format("<li>Unknown: %d</li>\n",unknown));
+	if (posErr>0)
+	    row.append(String.format("<li>Possible annotation errors: %d</li>\n",posErr));
+	row.append("</ul></td>\n");
+	return row.toString();
+    }
+
+
 
     /**
      * Write an unordered list with the variants deeemed to be nonpathogenic.
