@@ -114,6 +114,10 @@ public class Jannovar {
     private String serializedFile=null;
     /** Path to a VCF file waiting to be annotated. */
     private String VCFfilePath=null;
+    /**
+     * Flag indicating whether to output annotations in Jannovar format (default: false).
+     */
+    private boolean jannovarFormat;
 
     public static void main(String argv[]) {
 	
@@ -293,23 +297,46 @@ public class Jannovar {
 	out.write("\n");
     }
 
-
     /**
-     * This function inputs a VCF file, and prints the annotated version thereof
-     * to a file (name of the original file with the suffix .jannovar).
+     * This function outputs a single line in Jannovar format.
+     * @param n The current number (one for each variant in the VCF file)
+     * @param v The current variant with one or more annotations
+     * @param out File handle to write Jannovar file.
      */
-    public void annotateVCF() {
-	VCFReader parser = new VCFReader();
-	VCFLine.setStoreVCFLines();
-	try{
-	    parser.parseFile(this.VCFfilePath);
-	} catch (VCFParseException e) {
-	    System.err.println("Unable to parse VCF file");
-	    System.err.println(e.toString());
-	    System.exit(1);
+    private void outputJannovarLine(int n,Variant v, Writer out) throws IOException,AnnotationException
+    {
+	byte chr =  v.getChromosomeAsByte();
+	String chrStr = v.get_chromosome_as_string();
+	int pos = v.get_position();
+	String ref = v.get_ref();
+	String alt = v.get_alt();
+	String gtype = v.getGenotypeAsString();
+	float qual = v.get_variant_quality();
+	Chromosome c = chromosomeMap.get(chr);
+	if (c==null) {
+	    String e = String.format("[Jannovar] Could not identify chromosome \"%d\"", chr );
+	    throw new AnnotationException(e);	
+	} 
+	AnnotationList anno = c.getAnnotationList(pos,ref,alt);
+	if (anno==null) {
+	    String e = String.format("[Jannovar] No annotations found for variant %s", v.toString());
+	    throw new AnnotationException(e);	
 	}
+	
+	String effect = anno.getVariantType().toString();
+	ArrayList<Annotation> lst = anno.getAnnotationList();
+	for (Annotation a : lst) {
+	    String annt = a.getVariantAnnotation();
+	    String sym = a.getGeneSymbol();
+	    String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f",
+				     n,effect,sym,annt,chrStr,pos,ref,alt,gtype,qual);
+	    out.write(s + "\n");
+	}
+    }
 
 
+    private void outputAnnotatedVCF(VCFReader parser) 
+    {
 	this.variantList = parser.getVariantList();
 	ArrayList<VCFLine> lineList = parser.getVCFLineList();
 	File f = new File(this.VCFfilePath);
@@ -337,6 +364,57 @@ public class Jannovar {
 	    System.out.println("[Jannovar] " + e.toString());
 	    System.exit(1);
 	}
+    }
+
+
+    private void outputJannovarFormatFile(VCFReader parser) 
+    {
+	this.variantList = parser.getVariantList();
+	File f = new File(this.VCFfilePath);
+	String outname = f.getName() + ".jannovar";
+		try {
+	    FileWriter fstream = new FileWriter(outname);
+	    BufferedWriter out = new BufferedWriter(fstream);
+	    /**  Output each of the variants. */
+	    int n=0;
+	    for (Variant v : variantList) {
+		n++;
+		try{
+		    outputJannovarLine(n,v,out);
+		} catch (AnnotationException e) {
+		    System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
+		}
+	    }
+	    out.close();
+	}catch (IOException e){
+	    System.out.println("[Jannovar] Error writing annotated VCF file");
+	    System.out.println("[Jannovar] " + e.toString());
+	    System.exit(1);
+	}
+    }
+
+
+
+    /**
+     * This function inputs a VCF file, and prints the annotated version thereof
+     * to a file (name of the original file with the suffix .jannovar).
+     */
+    public void annotateVCF() {
+	VCFReader parser = new VCFReader();
+	VCFLine.setStoreVCFLines();
+	try{
+	    parser.parseFile(this.VCFfilePath);
+	} catch (VCFParseException e) {
+	    System.err.println("Unable to parse VCF file");
+	    System.err.println(e.toString());
+	    System.exit(1);
+	}
+	if (this.jannovarFormat) {
+	    outputJannovarFormatFile(parser);
+	} else {
+	    outputAnnotatedVCF(parser);
+	}
+
 	
     }
 
@@ -429,17 +507,23 @@ public class Jannovar {
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("L","locus",true,"Path to ucsc file KnownToLocusLink.txt"));
+	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
 	    if (cmd.hasOption("h") || args.length==0)
 	    {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("java -jar Jannovar [-options]", options);
+		formatter.printHelp("java -jar Jannovar.jar [-options]", options);
 		usage();
 		System.exit(0);
 	    }
 	   
+	    if (cmd.hasOption("J")) {
+		this.jannovarFormat = true; 
+	    } else {
+		this.jannovarFormat = false;
+	    }
 	    
 	    
 	    if (cmd.hasOption("S")) {
@@ -487,7 +571,7 @@ public class Jannovar {
     private static void usage() {
 	System.out.println("***   Jannovar: Usage     ****");
 	System.out.println("Jannovar can be used to serialize UCSC KnownGenes data:");
-	System.out.println("** $ java -jar Jannovar -S f -U p1 -X p2 -M p3 -L p4");
+	System.out.println("** $ java -jar Jannovar.jar -S f -U p1 -X p2 -M p3 -L p4");
 	System.out.println("** Here,f is the desired file name of the serialized file, and p1-p4 are paths to the UCSC files");
 	System.out.println("Jannovar can be used to annotate VCF files with the serialized UCSC file (or the original UCSC files):");
 	System.out.println("** $ java -jar Jannovar -D ucsc.ser -V vcfPath");

@@ -187,6 +187,12 @@ public class Variant implements Comparable<Variant>, Constants {
      */
     public GenotypeCall getGenotype() { return this.genotype; }
 
+    /**
+     * @return A string representing the genotype of this variant.
+     */
+    public String getGenotypeAsString() {
+	return this.genotype.get_genotype_as_string();
+    }
 
     public String get_genotype_as_string() {
 	return this.genotype.get_genotype_as_string();

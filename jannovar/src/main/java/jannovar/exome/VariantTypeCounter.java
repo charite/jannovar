@@ -12,7 +12,7 @@ import jannovar.common.VariantType;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.06 (28 April, 2013)
+ * @version 0.08 (28 June, 2013)
  */
 
 public class VariantTypeCounter implements Constants {
@@ -76,12 +76,14 @@ public class VariantTypeCounter implements Constants {
     }
 
     /**
-     * Sanger specific method
+     * TODO. This method should be extended to get an entire row of statistics for
+     * a single sample. Also, the HTML code needs to be removed from this class and
+     * put into the main HTML interface classes.
      */
     
     public String getSummaryRow(String sampleName) throws IOException {
         StringBuffer row = new StringBuffer();
-        int missense = this.variantCountMap.get(VariantType.MISSENSE);
+        int nonsynonymous = this.variantCountMap.get(VariantType.NONSYNONYMOUS);
         int nonsense = this.variantCountMap.get(VariantType.STOPGAIN);
         int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION) + this.variantCountMap.get(VariantType.FS_DELETION);
         int splice = this.variantCountMap.get(VariantType.SPLICING);
@@ -89,9 +91,7 @@ public class VariantTypeCounter implements Constants {
             this.variantCountMap.get(VariantType.NON_FS_DELETION) +
             this.variantCountMap.get(VariantType.NON_FS_INSERTION);     
         int ncrna = this.variantCountMap.get(VariantType.ncRNA_EXONIC) +
-	    this.variantCountMap.get(VariantType.ncRNA_SPLICING) + 
-	    this.variantCountMap.get(VariantType.ncRNA_UTR3) +
-	    this.variantCountMap.get(VariantType.ncRNA_UTR5);
+	    this.variantCountMap.get(VariantType.ncRNA_SPLICING);
 	int intron = this.variantCountMap.get(VariantType.INTRONIC) +
 	    this.variantCountMap.get(VariantType.ncRNA_INTRONIC);
 	int upstream = this.variantCountMap.get(VariantType.UPSTREAM);
@@ -103,9 +103,9 @@ public class VariantTypeCounter implements Constants {
 	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
 	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
 	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);
-	int posErr = this.variantCountMap.get(VariantType.POSSIBLY_ERRONEOUS);
+	int posErr = this.variantCountMap.get(VariantType.ERROR);
 	row.append(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td>\n",
-				 sampleName,missense,nonsense,frameshift,splice,nonfs));
+				 sampleName,nonsynonymous,nonsense,frameshift,splice,nonfs));
 	row.append("<td><ul>\n");
 	row.append(String.format("<li>ncRNA: %d</li>\n<li>intronic: %d</li>",ncrna, intron));
 	row.append(String.format("<li>upstream: %d</li>\n<li>downstream: %d</li>",upstream,downstream));
