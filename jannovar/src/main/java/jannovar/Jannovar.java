@@ -9,13 +9,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 
-
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-/* serialization */
-import java.io.ObjectInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.File;
@@ -24,22 +17,26 @@ import java.io.BufferedWriter;
 import java.io.Writer;
 
 
-import jannovar.exception.VCFParseException;
-import jannovar.io.SerializationManager;
-import jannovar.io.VCFLine;
-import jannovar.io.UCSCKGParser;
-import jannovar.interval.Interval;
-import jannovar.interval.IntervalTree;
-import jannovar.reference.TranscriptModel;
-import jannovar.reference.Chromosome;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
-import jannovar.exception.KGParseException;
-import jannovar.exception.JannovarException;
 import jannovar.exception.IntervalTreeException;
+import jannovar.exception.JannovarException;
+import jannovar.exception.KGParseException;
+import jannovar.exception.VCFParseException;
+import jannovar.exome.Variant;
+import jannovar.interval.Interval;
+import jannovar.interval.IntervalTree;
+import jannovar.io.SerializationManager;
+import jannovar.io.UCSCKGParser;
+import jannovar.io.VCFLine;
 import jannovar.io.VCFReader;
+import jannovar.reference.Chromosome;
+import jannovar.reference.TranscriptModel;
+
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
@@ -210,56 +207,7 @@ public class Jannovar {
     }
    
 
-    /**
-     * Main method for performing annovar-type analysis.
-     * This method decides what chromosome the variant is 
-     * located on and passes the remaining data to the
-     * corresponding {@link jannovar.reference.Chromosome Chromosome}
-     * object for further analysis.
-     */
-    public void annotateVariants(Writer out) throws IOException {
-	Chromosome c = null;
-	int i=0;
-	for (Variant v : variantList) {
-	    System.out.println(v);
-	    byte chr =  v.getChromosomeAsByte();
-	    int pos = v.get_position();
-	    String ref = v.get_ref();
-	    String alt = v.get_alt();
-	    c = chromosomeMap.get(chr);
-	    if (c==null) {
-		System.err.println("[Jannovar] Could not identify chromosome \"" + chr + "\"");
-		debugShowChromosomeMap();		
-	    } else {
-		System.out.println("***********   Annotation List  ******************");
-		try {
-		    AnnotationList anno = c.getAnnotationList(pos,ref,alt);
-		    if (anno==null) {
-			System.out.println("No annotations found for variant " + v);
-			continue;
-		    }
-		    i++;
-		    //System.out.println(i + ")\t \"" + v.getChromosomalVariant() + "\"");
-		    System.out.print("Line " + i + ": \t\"" + anno.getVariantAnnotation() + 	
-				       "\" (Type: " + anno.getVariantType() + ")");
-		    // TODO Reimplement getVCD FLINE System.out.println("\t" + v.getVCFline());
-		   
-		} catch (AnnotationException ae) {
-		    System.err.println("§§§§§§§§§§§§§§§ Annotation Exception §§§§§§§§§§§§§§§§§§§§§§§§§");
-		    System.err.println("Variant: \"" + v.getChromosomalVariant() + "\"");
-		    ae.printStackTrace();
-		    System.err.println("§§§§§§§§§§§§§§§ ------------------- §§§§§§§§§§§§§§§§§§§§§§§§§");
-		    System.exit(1);
-		} catch (Exception e) {
-		    System.err.println("Really bad exception ");
-		    System.err.println(v);
-		    e.printStackTrace();
-		    System.exit(1);
-		}
-		
-	    }
-	}
-    }
+  
 
     /**
      * Annotate a single line of a VCF file, and output the line together with the new

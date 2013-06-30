@@ -2,6 +2,7 @@ package jannovar.pedigree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 import jannovar.exception.PedParseException;
@@ -11,7 +12,7 @@ import jannovar.common.Genotype;
 import jannovar.exome.Variant;
 
 /**
- * Model a single-family pedigree in an whole-exome sequencing project.
+ * Models a single-family pedigree in an whole-exome sequencing project.
  * Note that the constructor expects to receive a String with the
  * family ID. If an individual is added to the Pedigree with a different
  * family ID, then an exception is thrown.
@@ -19,10 +20,10 @@ import jannovar.exome.Variant;
  * This class is meant to simulate relatively simple pedigrees that can
  * be conceived of as Affecteds, Parents of Affects, and Unaffected Persons. The class is not
  * meant to be used for formal Lander-Green or Elston-Stewart linkage analysis. Instead, it
- * is meant to be used for relatively simple pedigrees commonly analysed in teh setting of
+ * is meant to be used for relatively simple pedigrees commonly analysed in the setting of
  * whole-exome sequencing.
  * <P>
- * The assumptions of this class are as follows
+ * The assumptions of this class are as follows:
  * <P>
  * For autosomal dominant pedigrees, all affected persons must share the same heterozygous
  * mutation, and none of the unaffected persons can carry the mutation.
@@ -37,11 +38,17 @@ import jannovar.exome.Variant;
  * the other mutation. Unaffecteds can carry up to one of the mutations.
  * </ul>
  * For X chromosomal mutations, we are currently demanding that affected males are called homozygous
- * for the mutation (actually, they are hemizygous). We are only looking for X chromosomal recessive mutations
- * currently.
+ * for the mutation (actually, they are hemizygous). Only X chromosomal recessive mutations
+ * can be analyzed.
+ * <P>
+ * Note that a common problem is the fact that the order of the sample names in the VCF file
+ * may be different from that in the PED file. To simplify the analysis, we demand that the
+ * two orders be consolidated, meaning that the order of the PED file samples is adjusted to
+ * match the order of the VCF file samples using the function
+ * {@link #adjustSampleOrderInPedFile}.
  * 
  * @author Peter Robinson
- * @version 0.09 (16 June, 2013)
+ * @version 0.12 (30 June, 2013)
  */
 public class Pedigree {
     /**
@@ -80,7 +87,10 @@ public class Pedigree {
     /** True if this pedigree represents a single sample VCF file only. */
     private boolean isSingleSample;
     
-
+    /**
+     * Constructs a Pedigree object for a single sample. This object is 
+     * used with the same interface as the multisample pedigree 
+     */
     public static Pedigree constructSingleSamplePedigree(String name) {
 	Pedigree ped = new Pedigree();
 	ped.singleSampleName = name;
@@ -146,6 +156,10 @@ public class Pedigree {
 	    return false;
     }
 
+    /**
+     * Returns the PED file data for the nth person in the pedigree.
+     * See {@link jannovar.pedigree.Person#getPEDFileData getPEDFileData}.
+     */
     public ArrayList<String> getPEDFileDatForNthPerson(int n) {
 	if (n<0 || n>=personList.size())
 	    return null;
@@ -164,7 +178,53 @@ public class Pedigree {
 	    return true;
 	else
 	    return false;
+    }
 
+    /**
+     * This function is used to check whether a sample-id is 
+     * represented in this pedigree (it can be used to check that
+     * a VCF file and a PED file have the same samples).
+     * @param name The name of a sample (e.g., from a VCF file)
+     * @return true if the sample is also in this pedigree, otherwise false.
+     */
+    public boolean sampleIsRepresentedInPedigree(String name) {
+	for (Person p :this.personList) {
+	    if (name.equals(p.getIndividualID()))
+		return true;
+	}
+	return false;
+    }
+
+
+    /** 
+     *  It is possible that the order of the names is different
+     * in the PED file and in the VCF file. We use this function to
+     * adjust the order of the samples in the PED file to be the same as in
+     * the VCF file, which makes it easier to visualize and perform the 
+     * pedigree analysis.
+     * @param names List of names from the VCF file.
+     */
+    public void adjustSampleOrderInPedFile(ArrayList<String> names) throws PedParseException {
+	ArrayList<Person> newList = new ArrayList<Person>();
+	for (String s : names) {
+	    Iterator<Person> it = this.personList.iterator();
+	    while (it.hasNext()) {
+		Person p = it.next();
+		if (s.equals(p.getIndividualID())) {
+		    newList.add(p);
+		    break;
+		}
+	    }
+	}
+	if (newList.size() != this.personList.size()) {
+	    String e = String.format("Error adjusting sample order." +
+				     "Added %d samples to new list but " +
+				     " the original PED file has %d",
+				     newList.size(),personList.size());
+	    throw new PedParseException(e);
+	}
+	this.personList = newList;
+	setPersonIndices();
     }
 
     

@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.22 (22 June, 2013)
+ * @version 0.23 (30 June, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -89,7 +89,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     public String getSymbolAndAnnotation() {
 	if (geneSymbol==null && variantAnnotation != null)
 	    return variantAnnotation;
-	return String.format("%s:%s",geneSymbol,variantAnnotation);
+	return String.format("%s(%s)",geneSymbol,variantAnnotation);
     }
 
 

@@ -16,7 +16,7 @@ import java.util.Collections;
  * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more
  * than one Gene symbol. In this case, we represent the affected gene as a comma-separated list of symbols.
  * @author Peter N Robinson
- * @version 0.13 (22 June, 2013)
+ * @version 0.14 (30 June, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -106,7 +106,12 @@ public class AnnotationList {
 	for (Annotation a : this.annotationList) {
 	    
 	    if (a.getVariantType() == this.type) {
-		return a.getVariantAnnotation();
+		/* Note that since Intronic is just the gene symbol, we return only that.
+		   Otherwise, we show the gene symbol, and in parens, the annotation. */
+		if (this.type == VariantType.INTRONIC)
+		    return a.getVariantAnnotation();
+		else
+		    return a.getSymbolAndAnnotation();//getVariantAnnotation();
 	    }
 	}
 	String e = null;
