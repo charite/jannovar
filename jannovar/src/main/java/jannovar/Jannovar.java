@@ -98,6 +98,11 @@ public class Jannovar {
 	ucsc knownGene ids and Entrez gene ids (the previous name of Entrez gene was 
 	locus link). */
     private String ucscKnown2LocusPath=null;
+    /**
+     * Flag to indicate that Jannovar should download known gene definitions files from the
+     * UCSC server.
+     */
+    private boolean downloadUCSC;
    
     /** List of all lines from knownGene.txt file from UCSC */
     private ArrayList<TranscriptModel> knownGenesList=null;
@@ -119,6 +124,11 @@ public class Jannovar {
     public static void main(String argv[]) {
 	
 	Jannovar anno = new Jannovar(argv);
+
+	if (anno.downloadUCSC()) {
+	    anno.downloadUCSCfiles();
+	    return;
+	}
 	
 	if (anno.serialize()) {
 	    try{
@@ -167,8 +177,19 @@ public class Jannovar {
     }
 
 
+    /**
+     * @return true if user wants to download UCSC files
+     */
+    public boolean downloadUCSC() {
+	return this.downloadUCSC;
+    }
 
-   
+    public void downloadUCSCfiles() {
+
+
+
+    }
+
 
     /**
      * @return true if we should serialize the UCSC data. */
@@ -456,6 +477,7 @@ public class Jannovar {
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("L","locus",true,"Path to ucsc file KnownToLocusLink.txt"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
+	    options.addOption(new Option(void,"download-ucsc",false,"Download UCSC KnownGene data"));
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
@@ -471,6 +493,12 @@ public class Jannovar {
 		this.jannovarFormat = true; 
 	    } else {
 		this.jannovarFormat = false;
+	    }
+
+	    if (cmd.hasOption("download-ucsc")) {
+		this.downloadUCSC = true;
+	    } else {
+		this.downloadUCSC = false;
 	    }
 	    
 	    
