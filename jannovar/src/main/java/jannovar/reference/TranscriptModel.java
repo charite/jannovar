@@ -91,7 +91,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public void setTranscriptionStart(int st) { this.txStart = st; }
     public void setTranscriptionEnd(int st) { this.txEnd = st; }
     /** @param st The start position of the CDS on the chromosome.
-	(Note that {@linl #rcdsStart} is the CDS start within the transcript).*/
+	(Note that {@link #rcdsStart} is the CDS start within the transcript).*/
     public void setCdsStart(int st) { this.cdsStart = st; }
     public void setCdsEnd(int st) { this.cdsEnd = st; }
     public void setExonCount(byte c) { this.exonCount = c; }
@@ -200,9 +200,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		    cumlenintron += (exonStarts[k+1]-exonEnds[k]-1); // gets intron k for minus strand.
 		}
 		//System.out.println("exon k=" + k + " cumlenintron=" + cumlenintron);
-		if (this.cdsEnd <= this.getExonEnd(k) && this.cdsEnd >= this.getExonStart(k)) {		
+		if (this.cdsStart <= this.getExonEnd(k) && this.cdsStart >= this.getExonStart(k)) {		
 		    //calculate CDS start accurately by considering intron length
-		    rcdsend = this.txEnd-this.cdsEnd-cumlenintron+1;
+		    rcdsend = this.txEnd-this.cdsStart-cumlenintron+1;
 		    break;			
 		}
 	    }
@@ -638,6 +638,89 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 			     getTXStart(),
 			     getTXEnd(),
 			     getExonCount());
+    }
+    
+    
+    /**
+     * Returns the distance to the Start position of the CDS or '-1' if the give coordinate is
+     * located in inter- or intragenic region or the gene is noncoding.
+     * @param pos The coordinate of interest. Should be in the exonic region of the transcriptmodel.
+     * @return The distance to the CDS start position (without intronic regions).
+     */
+    public int getDistanceToCDSstart(int pos){
+    	if(!isCodingGene())
+    		return -1;
+    	if(strand == '+')
+    		return getDistance(pos, getCDSStart());
+    	else
+    		return getDistance(pos, getCDSEnd());
+    }
+
+    /**
+     * Returns the distance to the end position of the CDS or '-1' if the give coordinate is
+     * located in inter- or intragenic region or the gene is noncoding.
+     * @param pos The coordinate of interest. Should be in the exonic region of the transcriptmodel.
+     * @return The distance to the CDS end position (without intronic regions).
+     */
+    public int getDistanceToCDSend(int pos){
+    	if(!isCodingGene())
+    		return -1;
+    	if(strand == '+')
+    		return getDistance(pos, getCDSEnd());
+    	else
+    		return getDistance(pos, getCDSStart());
+    }
+    
+    /**
+     * Returns the mRNA length between the two positions given in chromosomal coordinates.
+     * First it is checked that both positions are located in exonic regions of this {@link TranscriptModel}.
+     * @param a first exonic position
+     * @param b second exonic position
+     * @return the distance of the two position in the mRNA
+     */
+    private int getDistance(int a, int b){
+    	// check positions in exons
+    	if(a < getTXStart() | b < getTXStart()){
+    		System.out.println(String.format("TXstart: %d\tTXend: %d\tPosA: %d\tPosB: %d",getTXStart(),getTXEnd(),a,b));
+    		return -2;
+    	}
+    	if(a > getTXEnd() | b > getTXEnd())
+    		return -3;
+    	for (int i=0; i<exonCount-1; i++) {
+			if(a > exonEnds[i] & a < exonStarts[i+1])
+				return -4;
+			if(b > exonEnds[i] & b < exonStarts[i+1])
+				return -5;
+		}
+    	// set a to the minor value
+    	if(a > b){
+    		int c = a;
+    		a = b;
+    		b = c;
+    	}
+    	// 
+    	int cumlen = 0; // cumulative length of exonic length between the two positions
+    	for(int i=0;i<exonCount;i++){
+			if (a >= exonStarts[i]) {
+				if (a <= exonEnds[i]) {
+					// both in the same exon
+					if (b <= exonEnds[i]) {
+						return b - a + 1;
+					} else {
+						cumlen += exonEnds[i] - a + 1;
+						continue;
+					}
+				}else{
+					if(b <= exonEnds[i])
+						return cumlen + b-exonStarts[i] + 1;
+					else{
+						cumlen += exonEnds[i] - exonStarts[i] + 1;
+						continue;
+					}
+				}
+			}
+    	}
+    	return cumlen;
     }
 
 }
