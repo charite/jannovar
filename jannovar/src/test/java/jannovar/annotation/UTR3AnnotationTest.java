@@ -94,7 +94,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CD24",annot);
+	    Assert.assertEquals("CD24(uc004ftz.1:c.*30G>A)",annot);
 	}
 }
 
@@ -394,7 +394,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FCGR2B",annot);
+	    Assert.assertEquals("FCGR2B(uc009wum.2:c.*21A>G)",annot);
 	}
 }
 
@@ -417,7 +417,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LRRC52",annot);
+	    Assert.assertEquals("LRRC52(uc001gde.2:c.*14C>T)",annot);
 	}
 }
 
@@ -440,7 +440,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("XCL1",annot);
+	    Assert.assertEquals("XCL1(uc001gfo.2:c.*77A>G)",annot);
 	}
 }
 
@@ -4040,7 +4040,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("EXOC7",annot);
+	    Assert.assertEquals("EXOC7(uc002jqr.3:c.*2232G>C,uc002jqs.3:c.*2232G>C,uc002jqq.3:c.*2232G>C,uc010wsw.2:c.*2232G>C,uc010wsx.2:c.*2232G>C,uc010wsv.2:c.*2232G>C,uc010dgv.2:c.*2232G>C,uc002jqp.2:c.*2261G>C)",annot);
 	}
 }
 
@@ -4089,7 +4089,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC14A2",annot);
+	    Assert.assertEquals("SLC14A2(uc002lbe.3:c.*48C>A,uc010dnj.3:c.*48C>A)",annot);
 	}
 }
 
@@ -4112,7 +4112,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SKA1",annot);
+	    Assert.assertEquals("SKA1(uc002let.3:c.*22A>C,uc002leu.3:c.*22A>C,uc010xdl.2:c.*22A>C)",annot);
 	}
 }
 
@@ -4135,7 +4135,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FZR1",annot);
+	    Assert.assertEquals("FZR1(uc010dtk.2:c.*8G>A,uc002lxv.2:c.*8G>A,uc002lxt.2:c.*8G>A)",annot);
 	}
 }
 
@@ -4181,7 +4181,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C19orf40",annot);
+	    Assert.assertEquals("C19orf40(uc002nud.4:c.*32T>C)",annot);
 	}
 }
 
@@ -4227,7 +4227,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C19orf55",annot);
+	    Assert.assertEquals("C19orf55(uc021usz.1:c.*47C>A)",annot);
 	}
 }
 
@@ -4296,7 +4296,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MIA",annot);
+	    Assert.assertEquals("MIA(uc002opb.4:c.*40C>G,uc021uuu.1:c.*40C>G)",annot);
 	}
 }
 
@@ -4806,7 +4806,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NUP50",annot);
+	    Assert.assertEquals("NUP50(uc003bfs.3:c.*38->TT,uc003bfr.3:c.*38->TT,uc011aqn.2:c.*38->TT,uc003bft.3:c.*38->TT,uc011aqo.1:c.*1123->TT)",annot);
 	}
 }
 
@@ -4829,7 +4829,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NCAPH2",annot);
+	    Assert.assertEquals("NCAPH2(uc003blx.4:c.*50T>C,uc003blr.4:c.*50T>C,uc003blv.3:c.*166T>C)",annot);
 	}
 }
 
@@ -4852,7 +4852,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM47B",annot);
+	    Assert.assertEquals("FAM47B(uc004ddi.2:c.*23A>C)",annot);
 	}
 }
 
@@ -4945,7 +4945,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CD24",annot);
+	    Assert.assertEquals("CD24(uc004ftz.1:c.*30G>A)",annot);
 	}
 }
 

@@ -70,7 +70,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLIT2",annot);
+	    Assert.assertEquals("SLIT2(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)",annot);
 	}
 }
 /**
@@ -368,7 +368,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIF26B",annot);
+	    Assert.assertEquals("KIF26B(uc010pyq.1:c.-39C>T,uc001ibf.1:c.-39C>T)",annot);
 	}
 }
 
@@ -460,7 +460,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ALMS1P",annot);
+	    Assert.assertEquals("ALMS1P(uc010yrl.2:c.-37T>G)",annot);
 	}
 }
 
@@ -1571,7 +1571,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR53,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CACNB3",annot);
+	    Assert.assertEquals("CACNB3(uc001rsk.2:c.-101->T,uc010slx.2:c.*255->T)",annot);
 	}
 }
 
@@ -2101,7 +2101,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ACE",annot);
+	    Assert.assertEquals("ACE(uc010ddv.2:c.-33G>C)",annot);
 	}
 }
 
@@ -2333,7 +2333,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HPS4",annot);
+	    Assert.assertEquals("HPS4(uc003ach.3:c.-725C>A)",annot);
 	}
 }
 
