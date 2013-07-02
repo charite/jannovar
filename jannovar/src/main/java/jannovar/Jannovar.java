@@ -121,6 +121,11 @@ public class Jannovar {
     private String serializedFile=null;
     /** Path to a VCF file waiting to be annotated. */
     private String VCFfilePath=null;
+    /** An FTP proxy for downloading the UCSC files from behind a firewall. */
+    private String ftpProxy=null;
+    /** An FTP proxy port for downloading the UCSC files from behind a firewall. */
+    private String ftpProxyPort=null;
+    
     /**
      * Flag indicating whether to output annotations in Jannovar format (default: false).
      */
@@ -195,7 +200,7 @@ public class Jannovar {
      * download the four required UCSC files.
      */
     public void downloadUCSCfiles() {
-	UCSCDownloader downloader = new UCSCDownloader(this.downloadDirectory);
+	UCSCDownloader downloader = new UCSCDownloader(this.downloadDirectory,"http://proxy.charite.de","888");
 	downloader.downloadUCSCfiles();
 
 
@@ -489,6 +494,8 @@ public class Jannovar {
 	    options.addOption(new Option("L","locus",true,"Path to ucsc file KnownToLocusLink.txt"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new  Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
+	    options.addOption(new  Option(null,"fpt-proxy",false,"FTP Proxy"));
+	    options.addOption(new  Option(null,"fpt-proxy-port",false,"FTP Proxy Port"));
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
@@ -511,6 +518,15 @@ public class Jannovar {
 	    } else {
 		this.downloadUCSC = false;
 	    }
+
+	     if (cmd.hasOption("fpt-proxy")) {
+		 this.ftpProxy = getRequiredOptionValue(cmd,"ftp-proxy");
+	    } 
+
+	      if (cmd.hasOption("fpt-proxy-port")) {
+		  this.ftpProxyPort = getRequiredOptionValue(cmd,"ftp-proxy");
+	    } 
+	    
 	    
 	    
 	    if (cmd.hasOption("S")) {
@@ -522,11 +538,11 @@ public class Jannovar {
 	    }
 
 	    if (cmd.hasOption('D')) {
-		this.serializedFile = cmd.getOptionValue('D');
+		this.serializedFile = cmd.getOptionValue(cmd,'D');
 	    }
 
 	    if (cmd.hasOption("V"))
-		this.VCFfilePath =  cmd.getOptionValue("V");
+		this.VCFfilePath =  cmd.getOptionValue(cmd,"V");
 	
 	   
 	} catch (ParseException pe)

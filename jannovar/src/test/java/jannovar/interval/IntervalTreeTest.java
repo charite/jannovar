@@ -94,8 +94,8 @@ public class IntervalTreeTest {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList2() );
 	List<String> qy = tree.search(13,14);
 	Assert.assertEquals("f",qy.get(0));
-		tree.debugPrint();
-    }
+	//tree.debugPrint();
+     }
 
     /*  @Test public void testSearchPub3() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList2() );
