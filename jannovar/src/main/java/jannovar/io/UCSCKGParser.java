@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.zip.GZIPInputStream;
 
 import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
@@ -68,6 +69,10 @@ public class UCSCKGParser implements  Constants{
 	ucsc knownGene ids and Entrez gene ids (the previous name of Entrez gene was 
 	locus link). */
     private String ucscKnown2LocusPath=null;
+
+    
+    /** Path of direrctory in which the UCSC files live. */
+    private String directory_path;
     
     /** Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the
      * value is the corresponding TranscriptModel object
@@ -92,12 +97,61 @@ public class UCSCKGParser implements  Constants{
     }
 
     /**
+     * Tries to parse all four UCSC files, which must be located in the 
+     * indicated directory.
+     */
+    public UCSCKGParser(String path) {
+	this.knownGeneMap = new HashMap<String,TranscriptModel>();
+	if ( path.endsWith("/")) {
+	    this.directory_path = path;
+	} else {
+	    this.directory_path = path + "/"; // add trailing slash.
+	}
+    }
+    
+    public void parseGzipUCSCFiles() {
+	String knownGene = "knownGene.txt.gz";
+	String knownGeneMrna = "knownGeneMrna.txt.gz";
+	String kgXref = "kgXref.txt.gz";
+	String known2locus = "knownToLocusLink.txt.gz";
+	/* first check that all four files actually exist */
+	File f;
+	f = new File(this.directory_path + knownGene);
+	if (! f.exists() ) {
+	    System.err.println("Error: Could not find knownGene.txt.gz");
+	    return;
+	} else {
+	    knownGene = this.directory_path + knownGene;
+	}
+	f = new File(this.directory_path +knownGeneMrna);
+	if (! f.exists() ) {
+	    System.err.println("Error: Could not find knownGeneMrna.txt.gz");
+	    return;
+	}
+	f = new File(this.directory_path +kgXref);
+	if (! f.exists() ) {
+	    System.err.println("Error: Could not find knownGeneMrnakgXref.txt.gz");
+	    return;
+	}
+	f = new File(this.directory_path + known2locus);
+	if (! f.exists() ) {
+	    System.err.println("Error: Could not find known2locus.txt.gz");
+	    return;
+	}
+	try{
+	    parseKnownGeneFile(knownGene,true);
+	} catch (KGParseException e) {
+
+	}
+    }
+
+    /**
      * This function causes all four UCSC files to be parsed. This results in the 
      * construction of {@link #knownGeneMap}.
      */
     public void parseUCSCFiles() {
 	try {
-	    parseKnownGeneFile();
+	    parseKnownGeneFile(this.kgPath, false);
 	    readFASTAsequences();
 	    readKGxRefFile();
 	    readKnown2Locus();
@@ -256,13 +310,22 @@ public class UCSCKGParser implements  Constants{
     /** 
      * Parses the UCSC knownGene.txt file.
      */
-    public void parseKnownGeneFile() throws KGParseException {
+    public void parseKnownGeneFile(String kgpath, boolean isGzip) throws KGParseException {
 	int linecount=0;
 	int exceptionCount=0;
 	try{
-	    FileInputStream fstream = new FileInputStream(this.kgPath);
-	    DataInputStream in = new DataInputStream(fstream);
-	    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+	    
+	    FileInputStream fin = new FileInputStream(kgpath);
+	    BufferedReader br = null;
+	    if (isGzip) {
+		GZIPInputStream gzis = new GZIPInputStream(fin);
+		InputStreamReader xover = new InputStreamReader(gzis);
+		br = new BufferedReader(xover);
+	    } else {
+		DataInputStream in = new DataInputStream(fin);
+		br = new BufferedReader(new InputStreamReader(in));
+	    }
+	    
 	    String line;
 	   
 	    while ((line = br.readLine()) != null)   {

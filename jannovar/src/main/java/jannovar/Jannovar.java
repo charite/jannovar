@@ -197,13 +197,24 @@ public class Jannovar {
     /**
      * This function creates a
      * {@link jannovar.io.UCSCDownloader UCSCDownloader} object in order to
-     * download the four required UCSC files.
+     * download the four required UCSC files. If the user has set the FTP proxy and
+     * proxy port via the command line, we use these to download the files.
      */
     public void downloadUCSCfiles() {
-	UCSCDownloader downloader = new UCSCDownloader(this.downloadDirectory,"http://proxy.charite.de","888");
-	downloader.downloadUCSCfiles();
-
-
+	UCSCDownloader downloader = null;
+	try {
+	    if (this.ftpProxy != null && this.ftpProxyPort != null) {
+		downloader = new UCSCDownloader(this.downloadDirectory,this.ftpProxy,this.ftpProxyPort);
+	    } else {
+		downloader = new UCSCDownloader(this.downloadDirectory);
+	    }
+	    downloader.downloadUCSCfiles();
+	    UCSCKGParser parser = new UCSCKGParser(this.downloadDirectory);
+	    parser.parseGzipUCSCFiles();
+	} catch (KGParseException  e) {
+	    System.err.println(e);
+	    System.exit(1);
+	}
     }
 
 
@@ -520,11 +531,11 @@ public class Jannovar {
 	    }
 
 	     if (cmd.hasOption("fpt-proxy")) {
-		 this.ftpProxy = getRequiredOptionValue(cmd,"ftp-proxy");
+		 this.ftpProxy = cmd.getOptionValue("ftp-proxy");
 	    } 
 
 	      if (cmd.hasOption("fpt-proxy-port")) {
-		  this.ftpProxyPort = getRequiredOptionValue(cmd,"ftp-proxy");
+		  this.ftpProxyPort = cmd.getOptionValue("ftp-proxy-port");
 	    } 
 	    
 	    
@@ -538,11 +549,11 @@ public class Jannovar {
 	    }
 
 	    if (cmd.hasOption('D')) {
-		this.serializedFile = cmd.getOptionValue(cmd,'D');
+		this.serializedFile = cmd.getOptionValue('D');
 	    }
 
 	    if (cmd.hasOption("V"))
-		this.VCFfilePath =  cmd.getOptionValue(cmd,"V");
+		this.VCFfilePath =  cmd.getOptionValue("V");
 	
 	   
 	} catch (ParseException pe)

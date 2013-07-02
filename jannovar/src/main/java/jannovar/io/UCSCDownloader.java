@@ -1,6 +1,8 @@
 package jannovar.io;
 
 
+import jannovar.exception.KGParseException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -63,7 +65,7 @@ public class UCSCDownloader {
      * files from the UCSC genome browser (if a file already exists, it emits a
      * warning message and skips it).
      */
-    public void downloadUCSCfiles() {
+    public void downloadUCSCfiles() throws KGParseException {
 	makeDirectoryIfNotExist();
 	download_file(this.hg19base, this.knownGene);
 	download_file(this.hg19base, this.knownGeneMrna);
@@ -95,7 +97,7 @@ public class UCSCDownloader {
      * This method downloads a file to the specified local file path.
      * If the file already exists, it emits a warning message and does nothing.
      */
-    public boolean download_file(String baseURL, String fname ) {
+    public boolean download_file(String baseURL, String fname ) throws KGParseException {
 
 	String urlstring = baseURL + fname;
 	String local_file_path = this.directory_path + fname;
@@ -115,7 +117,6 @@ public class UCSCDownloader {
 	int block = 250000;
 	try{
 	    URL url = new URL(urlstring);
-	    
 	    InputStream reader = url.openConnection().getInputStream();
 	    FileOutputStream writer = new FileOutputStream(local_file_path);
 	    byte[] buffer = new byte[153600];
@@ -127,7 +128,8 @@ public class UCSCDownloader {
 		totalBytesRead += bytesRead;
 		if (totalBytesRead > threshold) {
 		    System.err.print("=");
-		    threshold += block;
+		    threshold += block; 
+		    block += 250000; /* reduce number of progress bars for big files. */
 		}
 	    }
 	    System.err.println();
@@ -135,14 +137,14 @@ public class UCSCDownloader {
 	    writer.close();
 	    reader.close();
 	} catch (MalformedURLException e){
-	    System.out.println("Could not interpret url: " + urlstring);
-	    e.printStackTrace();
-	    System.exit(1);
+	    String err = String.format("Could not interpret url: \"%s\"\n%s",
+				     urlstring,e.toString());
+	    throw new KGParseException(err);
 	}
 	catch (IOException e){
-	    System.out.println("IO Exception reading from URL: " + urlstring);
-	    e.printStackTrace();
-	    System.exit(1);
+	    String err = String.format("IO Exception reading from URL: \"%s\"\n%s",
+				      urlstring,e.toString());
+	    throw new KGParseException(err);
 	}
 	
 	return true;
