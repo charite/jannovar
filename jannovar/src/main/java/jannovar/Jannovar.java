@@ -31,6 +31,7 @@ import jannovar.exome.Variant;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
 import jannovar.io.SerializationManager;
+import jannovar.io.UCSCDownloader;
 import jannovar.io.UCSCKGParser;
 import jannovar.io.VCFLine;
 import jannovar.io.VCFReader;
@@ -85,7 +86,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.21 (22 June, 2013)
+ * @version 0.22 (2 July, 2013)
  */
 public class Jannovar {
     /** Path to the UCSC file knownGene.txt */
@@ -103,6 +104,10 @@ public class Jannovar {
      * UCSC server.
      */
     private boolean downloadUCSC;
+    /**
+     * Location of directory into which Jannovar will download the UCSC files (default: "ucsc").
+     */
+    private String downloadDirectory="ucsc/";
    
     /** List of all lines from knownGene.txt file from UCSC */
     private ArrayList<TranscriptModel> knownGenesList=null;
@@ -184,8 +189,14 @@ public class Jannovar {
 	return this.downloadUCSC;
     }
 
+    /**
+     * This function creates a
+     * {@link jannovar.io.UCSCDownloader UCSCDownloader} object in order to
+     * download the four required UCSC files.
+     */
     public void downloadUCSCfiles() {
-
+	UCSCDownloader downloader = new UCSCDownloader(this.downloadDirectory);
+	downloader.downloadUCSCfiles();
 
 
     }
@@ -477,7 +488,7 @@ public class Jannovar {
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("L","locus",true,"Path to ucsc file KnownToLocusLink.txt"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
-	    options.addOption(new Option(void,"download-ucsc",false,"Download UCSC KnownGene data"));
+	    options.addOption(new  Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
@@ -508,9 +519,12 @@ public class Jannovar {
 		this.ucscKGMrnaPath = getRequiredOptionValue(cmd,'M');
 		this.UCSCserializationFileName=cmd.getOptionValue('S');
 		this.ucscKnown2LocusPath=cmd.getOptionValue('L');
-		return;
 	    }
-	    this.serializedFile = getRequiredOptionValue(cmd, 'D');
+
+	    if (cmd.hasOption('D')) {
+		this.serializedFile = cmd.getOptionValue('D');
+	    }
+
 	    if (cmd.hasOption("V"))
 		this.VCFfilePath =  cmd.getOptionValue("V");
 	

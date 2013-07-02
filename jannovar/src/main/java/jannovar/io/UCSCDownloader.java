@@ -30,6 +30,11 @@ public class UCSCDownloader {
     /** Name of the UCSC knownGenes Xref file. */
     private String known2locus = "knownToLocusLink.txt.gz";
     
+    /**
+     * This constructor sets the locationof the directory into 
+     * which the UCSC data will be downloaded.
+     * @param dirpath Location of download directory.
+     */
     public UCSCDownloader(String dirpath) {
 	if (! dirpath.endsWith("/")) {
 	    dirpath = dirpath + "/"; // add trailing slash.
@@ -43,16 +48,32 @@ public class UCSCDownloader {
      * Construct the object and also set proxy properties for http connection.
      */
     public UCSCDownloader(String dirpath, String proxyHost, String port) {
-	UCSCDownloader(dirpath);
+	this(dirpath);
 	System.setProperty("http.proxyHost", proxyHost);
-	System.setPropery("http.proxyPort", port);
+	System.setProperty("http.proxyPort", port);
+    }
+
+
+     /**
+     * This function first checks if the download directory already exists. If not,
+     * it tries to create the directory. It then tries to download the four required
+     * files from the UCSC genome browser (if a file already exists, it emits a
+     * warning message and skips it).
+     */
+    public void downloadUCSCfiles() {
+	download_file(this.hg19base, this.knownGene);
+
     }
 
 
     /**
      * This method downloads a file to the specified local file path
      */
-    public boolean download_file(String urlstring, String local_file_path) {
+    public boolean download_file(String baseURL, String fname ) {
+
+	String urlstring = baseURL + fname;
+	String local_file_path = this.directory_path + fname;
+
 	try{
 	    URL url = new URL(urlstring);
 	    url.openConnection();
@@ -82,3 +103,5 @@ public class UCSCDownloader {
 	
 	return true;
     }
+}
+/* end of file */
