@@ -89,16 +89,10 @@ import jannovar.reference.TranscriptModel;
  * @version 0.22 (2 July, 2013)
  */
 public class Jannovar {
-    /** Path to the UCSC file knownGene.txt */
-    private String ucscPath = null;
-    /** Path to the UCSC file kgXref.txt */
-    private String ucscXrefPath=null;
-    /** Path to the UCSC file knownGeneMrna.txt */
-    private String ucscKGMrnaPath=null;
-    /** Path to UCSC file knownToLocusLink.txt file. This file has cross refs between the 
-	ucsc knownGene ids and Entrez gene ids (the previous name of Entrez gene was 
-	locus link). */
-    private String ucscKnown2LocusPath=null;
+    /** Location of a directory that must contain the files
+     * knownGene.txt, kgXref.txt, knownGeneMrnfile knownGene.txt 
+     * (the files may or may not be compressed with gzip*/
+    private String ucscDirPath = null;
     /**
      * Flag to indicate that Jannovar should download known gene definitions files from the
      * UCSC server.
@@ -134,12 +128,20 @@ public class Jannovar {
     public static void main(String argv[]) {
 	
 	Jannovar anno = new Jannovar(argv);
-
+	/* Option 1. Download the UCSC files from the server, create the ucsc.ser file, and return. */
 	if (anno.downloadUCSC()) {
-	    anno.downloadUCSCfiles();
+	    try{
+		anno.downloadUCSCfiles();
+		anno.inputUCSCDataFromFile();
+		anno.serializeUCSCdata();
+	    } catch (JannovarException e) {
+		System.err.println("[Jannovar]: " + e.toString());
+		System.exit(1);
+	    }
 	    return;
 	}
-	
+	/* Option 2. The UCSC files are already on the local disk. Use them to create the
+	   ucsc.ser file and return. */
 	if (anno.serialize()) {
 	    try{
 		anno.readUCSCKnownGenesFile();	
@@ -154,28 +156,26 @@ public class Jannovar {
 		System.exit(1);
 	    }
 	    return;
-	} else if (anno.deserialize()) {
+	} 
+
+	/* Option 3. The user must provide the ucsc.set file to do analysis. We can either
+	   annotate a VCF file (3a) or create a separate annotation file (3b). */
+	if (anno.deserialize()) {
 	    try {
 		anno.deserializeUCSCdata();
 	    } catch (JannovarException je) {
 		System.out.println("Could not deserialize UCSC data: " + je.toString());
 		System.exit(1);
 	    }
-	} else if (anno.ucscFilesAvailable()) {
-	     try{
-		anno.readUCSCKnownGenesFile();	
-	    } catch (IntervalTreeException e) {
-		System.out.println("Could not construct interval tree: " + e.toString());
-		System.exit(1);
-	    }
-	} else {
+	}  else {
+	    System.err.println("[Jannovar] Error: You need to pass ucscs.ser file to perform analysis.");
 	    usage();
 	    System.exit(1);
 	}
 	/* When we get here, the program has deserialized data and put it into the
 	   Chromosome objects. We can now start to annotate variants. */
 	if (anno.hasVCFfile()) {
-	    anno.annotateVCF(); 
+	    anno.annotateVCF();  /* 3a or 3b */
 	} else {
 	    System.out.println("No VCF file found");
 	}
@@ -209,8 +209,8 @@ public class Jannovar {
 		downloader = new UCSCDownloader(this.downloadDirectory);
 	    }
 	    downloader.downloadUCSCfiles();
-	    UCSCKGParser parser = new UCSCKGParser(this.downloadDirectory);
-	    parser.parseGzipUCSCFiles();
+	    String dir = downloader.getDownloadDirectory();
+	    this.ucscDirPath = dir;
 	} catch (KGParseException  e) {
 	    System.err.println(e);
 	    System.exit(1);
@@ -236,26 +236,6 @@ public class Jannovar {
     public boolean hasVCFfile() {
 	return this.VCFfilePath != null;
     }
-
-    /**
-     * This function can be used to know whether we have all the UCSC files
-     * we need to either serialize the 
-     * {@link jannovar.reference.TranscriptModel TranscriptModel} objects
-     * or to proceed directly to the analysis without serialization.
-     * @return true if the user has given paths for the UCSC files.
-     */
-    public boolean ucscFilesAvailable() {
-	if ( this.ucscPath !=null &&
-	     this.ucscXrefPath != null &&
-	     this.ucscKGMrnaPath != null &&
-	     this.ucscKnown2LocusPath != null)
-	    return true;
-	else
-	    return false;
-    }
-   
-
-  
 
     /**
      * Annotate a single line of a VCF file, and output the line together with the new
@@ -446,8 +426,7 @@ public class Jannovar {
      * @return a list of all TranscriptModel objects from the KnownGene data.
      */
     private ArrayList<TranscriptModel> inputUCSCDataFromFile() {
-	UCSCKGParser parser = new UCSCKGParser(this.ucscPath,this.ucscXrefPath,
-					       this.ucscKGMrnaPath,this.ucscKnown2LocusPath);
+	UCSCKGParser parser = new UCSCKGParser(this.ucscDirPath);
 	try{
 	    parser.parseUCSCFiles();
 	} catch (Exception e) {
@@ -495,14 +474,10 @@ public class Jannovar {
 	{
 	    Options options = new Options();
 	    options.addOption(new Option("h","help",false,"Shows this help"));
-	    options.addOption(new Option("U","nfsp",true,"Path to UCSC knownGene file. Required"));
-	    options.addOption(new Option("X","xref",true,"Path to UCSC kgXref file. Required"));
-	    options.addOption(new Option("M","mrna",true,"Path to UCSC knownGenes mrna file. Required"));
+	    options.addOption(new Option("U","nfsp",true,"Path to directory with UCSC files."));
 	    options.addOption(new Option("S","serialize",true,"Serialize"));
-	    options.addOption(new Option("A","nfsp",true,"Path to Annovar input file. Required"));
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
-	    options.addOption(new Option("L","locus",true,"Path to ucsc file KnownToLocusLink.txt"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new  Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
 	    options.addOption(new  Option(null,"fpt-proxy",false,"FTP Proxy"));
@@ -530,22 +505,16 @@ public class Jannovar {
 		this.downloadUCSC = false;
 	    }
 
-	     if (cmd.hasOption("fpt-proxy")) {
-		 this.ftpProxy = cmd.getOptionValue("ftp-proxy");
-	    } 
-
-	      if (cmd.hasOption("fpt-proxy-port")) {
-		  this.ftpProxyPort = cmd.getOptionValue("ftp-proxy-port");
+	    if (cmd.hasOption("fpt-proxy")) {
+		this.ftpProxy = cmd.getOptionValue("ftp-proxy");
 	    } 
 	    
-	    
-	    
-	    if (cmd.hasOption("S")) {
-		this.ucscPath = getRequiredOptionValue(cmd,'U');
-		this.ucscXrefPath = getRequiredOptionValue(cmd,'X');
-		this.ucscKGMrnaPath = getRequiredOptionValue(cmd,'M');
-		this.UCSCserializationFileName=cmd.getOptionValue('S');
-		this.ucscKnown2LocusPath=cmd.getOptionValue('L');
+	    if (cmd.hasOption("fpt-proxy-port")) {
+		this.ftpProxyPort = cmd.getOptionValue("ftp-proxy-port");
+	    }
+	        
+	    if (cmd.hasOption("U")) {
+		this.ucscDirPath = getRequiredOptionValue(cmd,'U');
 	    }
 
 	    if (cmd.hasOption('D')) {

@@ -40,6 +40,15 @@ public interface Constants {
     /** Flag for no rsID for variant */
     public static final int NO_RSID = -1;
 
+
+     /** Name of the UCSC knownGenes file. */
+    public static final String knownGene = "knownGene.txt";
+    /** Name of the UCSC knownGenes mRNA file. */
+    public static final String knownGeneMrna = "knownGeneMrna.txt";
+    /** Name of the UCSC knownGenes Xref file. */
+    public static final String kgXref = "kgXref.txt";
+    /** Name of the UCSC knownGenes Xref file. */
+    public static final String known2locus = "knownToLocusLink.txt";
    
 
 

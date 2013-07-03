@@ -1,6 +1,6 @@
 package jannovar.io;
 
-
+import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
 
 import java.io.File;
@@ -16,21 +16,14 @@ import java.net.URL;
  * @version 0.01 (1 July, 2013)
  * @author Peter Robinsin
  */
-public class UCSCDownloader {
+public class UCSCDownloader implements Constants {
 	
     /** Path of direrctory to which the files will be downloaded. */
     private String directory_path;
     /** Base URI for UCSC hg19 build annotation files */
     private String hg19base = "ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
 
-    /** Name of the knownGenes file. */
-    private String knownGene = "knownGene.txt.gz";
-    /** Name of the UCSC knownGenes mRNA file. */
-    private String knownGeneMrna = "knownGeneMrna.txt.gz";
-    /** Name of the UCSC knownGenes Xref file. */
-    private String kgXref = "kgXref.txt.gz";
-    /** Name of the UCSC knownGenes Xref file. */
-    private String known2locus = "knownToLocusLink.txt.gz";
+   
     
     /**
      * This constructor sets the locationof the directory into 
@@ -44,7 +37,9 @@ public class UCSCDownloader {
 	this.directory_path = dirpath;	
     }
 
-    
+    public String getDownloadDirectory() {
+	return this.directory_path;
+    }
     
     /**
      * Construct the object and also set proxy properties for http connection.
