@@ -183,6 +183,7 @@ public class Jannovar {
 
     /** The constructor parses the command-line arguments. */
     public Jannovar(String argv[]){
+	UCSCserializationFileName = "ucsc.ser"; /* default */
 	parseCommandLineArguments(argv);
     }
 
@@ -406,6 +407,7 @@ public class Jannovar {
     public void serializeUCSCdata() throws JannovarException {
 	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
 	SerializationManager manager = new SerializationManager();
+	System.out.println("Serializing known gene data as " + this.UCSCserializationFileName);
 	manager.serializeKnownGeneList(this.UCSCserializationFileName, kgList);
     }
 

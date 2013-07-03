@@ -346,7 +346,7 @@ public class UCSCKGParser implements  Constants {
 	   
 	    while ((line = br.readLine()) != null)   {
 		linecount++;
-		System.out.println(line);
+		//System.out.println(line);
 		try {
 		    TranscriptModel kg = parseTranscriptModelFromLine(line);
 		    String id = kg.getKnownGeneID();
