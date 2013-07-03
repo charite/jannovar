@@ -62,10 +62,14 @@ public class UCSCDownloader implements Constants {
      */
     public void downloadUCSCfiles() throws KGParseException {
 	makeDirectoryIfNotExist();
-	download_file(this.hg19base, this.knownGene);
-	download_file(this.hg19base, this.knownGeneMrna);
-	download_file(this.hg19base, this.kgXref);
-	download_file(this.hg19base, this.known2locus);
+	String knownGene = String.format("%s.gz",Constants.knownGene);
+	String knownGeneMrna = String.format("%s.gz",Constants.knownGeneMrna);
+	String kgXref = String.format("%s.gz",Constants.kgXref);
+	String known2locus = String.format("%s.gz",Constants.known2locus);
+	download_file(this.hg19base, knownGene);
+	download_file(this.hg19base, knownGeneMrna);
+	download_file(this.hg19base, kgXref);
+	download_file(this.hg19base, known2locus);
 	
 
     }

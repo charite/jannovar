@@ -108,26 +108,26 @@ public class UCSCKGParser implements  Constants {
 	String knownGeneMrna = addPrefixAndGzipSuffix(this.directory_path,Constants.knownGeneMrna);
 	String kgXref = addPrefixAndGzipSuffix(this.directory_path,Constants.kgXref);
 	String known2locus = addPrefixAndGzipSuffix(this.directory_path,Constants.known2locus);
+
+	System.out.println("GZ known=" + knownGene);
 	/* first check that all four files actually exist */
 	File f;
-	f = new File(this.directory_path + knownGene);
+	f = new File(knownGene);
 	if (! f.exists() ) {
-	    System.err.println("Error: Could not find knownGene.txt.gz");
+	    System.err.println(String.format("Error: Could not find \"%s\"",f.getName()));
 	    return false;
-	} else {
-	    knownGene = this.directory_path + knownGene;
-	}
-	f = new File(this.directory_path +knownGeneMrna);
+	} 
+	f = new File(knownGeneMrna);
 	if (! f.exists() ) {
 	    System.err.println("Error: Could not find knownGeneMrna.txt.gz");
 	    return false;
 	}
-	f = new File(this.directory_path +kgXref);
+	f = new File(kgXref);
 	if (! f.exists() ) {
 	    System.err.println("Error: Could not find knownGeneMrnakgXref.txt.gz");
 	    return false;
 	}
-	f = new File(this.directory_path + known2locus);
+	f = new File(known2locus);
 	if (! f.exists() ) {
 	    System.err.println("Error: Could not find known2locus.txt.gz");
 	    return false;
@@ -151,8 +151,10 @@ public class UCSCKGParser implements  Constants {
      * construction of {@link #knownGeneMap}.
      */
     public void parseUCSCFiles() {
+	System.out.println("parseUCSCFiles");
 	boolean success = parseGzipUCSCFiles();
 	if (success) return;
+	System.out.println("parseUCSCFiles - no su");
 	String knownGene = String.format("%s%s",this.directory_path,Constants.knownGene);
 	String knownGeneMrna = String.format("%s%s",this.directory_path,Constants.knownGeneMrna);
 	String kgXref = String.format("%s%s",this.directory_path,Constants.kgXref);
@@ -357,11 +359,11 @@ public class UCSCKGParser implements  Constants {
 	    System.out.println(String.format("lines: %d, exceptions: %d",linecount,exceptionCount));
 	    System.out.println("Size of knownGeneMap: " + knownGeneMap.size());
 	} catch (FileNotFoundException fnfe) {
-	    String s = String.format("Could not find KnownGene.txt file: %s\n%s", 
+	    String s = String.format("[Jannovar/USCSKGParser] Could not find KnownGene.txt file: %s\n%s", 
 				     kgpath, fnfe.toString());
 	    throw new KGParseException(s);
 	} catch (IOException e) {
-	    String s = String.format("Exception while parsing UCSC KnownGene file at \"%s\"\n%s",
+	    String s = String.format("[Jannovar/USCSKGParser] Exception while parsing UCSC KnownGene file at \"%s\"\n%s",
 				     kgpath,e.toString());
 	    throw new KGParseException(s);
 	}
