@@ -40,7 +40,7 @@ public class UTRAnnotation {
 	ann.setVarType(VariantType.UTR3);
 	ann.setGeneSymbol( trmdl.getGeneSymbol() );
 	if (ref.length()>1) {
-	    /* We are not yet ready to annotate complex variants in the UTR5, in this
+	    /* TODO We are not yet ready to annotate complex variants in the UTR5, in this
 	    * case just use the gene name. Improve this later.*/
 	    ann.setVariantAnnotation( trmdl.getName() );
 	} else {
