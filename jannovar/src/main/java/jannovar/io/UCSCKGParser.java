@@ -108,8 +108,6 @@ public class UCSCKGParser implements  Constants {
 	String knownGeneMrna = addPrefixAndGzipSuffix(this.directory_path,Constants.knownGeneMrna);
 	String kgXref = addPrefixAndGzipSuffix(this.directory_path,Constants.kgXref);
 	String known2locus = addPrefixAndGzipSuffix(this.directory_path,Constants.known2locus);
-
-	System.out.println("GZ known=" + knownGene);
 	/* first check that all four files actually exist */
 	File f;
 	f = new File(knownGene);

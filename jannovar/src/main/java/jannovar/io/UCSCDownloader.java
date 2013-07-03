@@ -70,8 +70,6 @@ public class UCSCDownloader implements Constants {
 	download_file(this.hg19base, knownGeneMrna);
 	download_file(this.hg19base, kgXref);
 	download_file(this.hg19base, known2locus);
-	
-
     }
 
 

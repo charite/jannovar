@@ -86,32 +86,39 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.22 (2 July, 2013)
+ * @version 0.23 (2 July, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
      * knownGene.txt, kgXref.txt, knownGeneMrnfile knownGene.txt 
-     * (the files may or may not be compressed with gzip*/
-    private String ucscDirPath = null;
+     * (the files may or may not be compressed with gzip. The same variable is
+     * also used to indicate the location of the download directory. The default value
+     * is "ucsc".*/
+    private String ucscDirPath=null;
     /**
      * Flag to indicate that Jannovar should download known gene definitions files from the
      * UCSC server.
      */
     private boolean downloadUCSC;
-    /**
-     * Location of directory into which Jannovar will download the UCSC files (default: "ucsc").
-     */
-    private String downloadDirectory="ucsc/";
-   
     /** List of all lines from knownGene.txt file from UCSC */
     private ArrayList<TranscriptModel> knownGenesList=null;
     /** Map of Chromosomes */
     private HashMap<Byte,Chromosome> chromosomeMap=null;
     /** List of variants from input file to be analysed. */
     private ArrayList<Variant> variantList=null;
-    /** Flag indicating whether a serialization of the ICSC data should be written to file. */
-    private String UCSCserializationFileName=null;
-    /** Name of file with serialized UCSC data. */
+    /**  Name of the UCSC serialized data file that will be created by Jannovar. */
+    private static final String UCSCserializationFileName="ucsc.ser";
+    /** Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to
+     * true automatically if the user enters --download-ucsc (then, thefour files are downloaded
+     * and subsequently serialized). If the user enters the flag {@code -U path}, then Jannovar
+     * interprets path as the location of a directory that already contains the UCSC files (either
+     * compressed or uncompressed), and sets this flag to true to perform serialization and then
+     * to exit. The name of the serialized file that gets created is "ucsc.ser" (this cannot
+     * be changed from the command line, see {@link #UCSCserializationFileName}). 
+     */
+    private boolean performSerialization=false;
+    /** Name of file with serialized UCSC data. This should be the complete path to the file,
+     * and will be used for annotating VCF files.*/
     private String serializedFile=null;
     /** Path to a VCF file waiting to be annotated. */
     private String VCFfilePath=null;
@@ -132,7 +139,7 @@ public class Jannovar {
 	if (anno.downloadUCSC()) {
 	    try{
 		anno.downloadUCSCfiles();
-		anno.inputUCSCDataFromFile();
+		anno.inputTranscriptModelDataFromUCSCFiles();
 		anno.serializeUCSCdata();
 	    } catch (JannovarException e) {
 		System.err.println("[Jannovar]: " + e.toString());
@@ -144,13 +151,11 @@ public class Jannovar {
 	   ucsc.ser file and return. */
 	if (anno.serialize()) {
 	    try{
-		anno.readUCSCKnownGenesFile();	
+		anno.inputTranscriptModelDataFromUCSCFiles();
+		anno.serializeUCSCdata();
 	    } catch (IntervalTreeException e) {
 		System.out.println("Could not construct interval tree: " + e.toString());
 		System.exit(1);
-	    } 
-	    try {
-		anno.serializeUCSCdata();
 	    } catch (JannovarException je) {
 		System.out.println("Could not serialize UCSC data: " + je.toString());
 		System.exit(1);
@@ -183,7 +188,7 @@ public class Jannovar {
 
     /** The constructor parses the command-line arguments. */
     public Jannovar(String argv[]){
-	UCSCserializationFileName = "ucsc.ser"; /* default */
+	this.ucscDirPath="ucsc/"; /* default */
 	parseCommandLineArguments(argv);
     }
 
@@ -205,13 +210,11 @@ public class Jannovar {
 	UCSCDownloader downloader = null;
 	try {
 	    if (this.ftpProxy != null && this.ftpProxyPort != null) {
-		downloader = new UCSCDownloader(this.downloadDirectory,this.ftpProxy,this.ftpProxyPort);
+		downloader = new UCSCDownloader(this.ucscDirPath,this.ftpProxy,this.ftpProxyPort);
 	    } else {
-		downloader = new UCSCDownloader(this.downloadDirectory);
+		downloader = new UCSCDownloader(this.ucscDirPath);
 	    }
 	    downloader.downloadUCSCfiles();
-	    String dir = downloader.getDownloadDirectory();
-	    this.ucscDirPath = dir;
 	} catch (KGParseException  e) {
 	    System.err.println(e);
 	    System.exit(1);
@@ -222,7 +225,7 @@ public class Jannovar {
     /**
      * @return true if we should serialize the UCSC data. */
     public boolean serialize() {
-	return this.UCSCserializationFileName != null;
+	return this.performSerialization;
     }
     /**
      * @return true if we should deserialize a file with UCSC data to perform analysis
@@ -391,8 +394,6 @@ public class Jannovar {
 	} else {
 	    outputAnnotatedVCF(parser);
 	}
-
-	
     }
 
 
@@ -405,10 +406,9 @@ public class Jannovar {
      * store these in a serialized file.
      */
     public void serializeUCSCdata() throws JannovarException {
-	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
 	SerializationManager manager = new SerializationManager();
 	System.out.println("Serializing known gene data as " + this.UCSCserializationFileName);
-	manager.serializeKnownGeneList(this.UCSCserializationFileName, kgList);
+	manager.serializeKnownGeneList(this.UCSCserializationFileName, this.knownGenesList);
     }
 
 
@@ -427,7 +427,7 @@ public class Jannovar {
      * Input the four UCSC files for the KnownGene data
      * @return a list of all TranscriptModel objects from the KnownGene data.
      */
-    private ArrayList<TranscriptModel> inputUCSCDataFromFile() {
+    private void inputTranscriptModelDataFromUCSCFiles() {
 	UCSCKGParser parser = new UCSCKGParser(this.ucscDirPath);
 	try{
 	    parser.parseUCSCFiles();
@@ -436,21 +436,9 @@ public class Jannovar {
 	    e.printStackTrace();
 	    System.exit(1);
 	}
-	return parser.getKnownGeneList();
+	this.knownGenesList = parser.getKnownGeneList();
     }
     
-
-    /**
-     * This menction uses {@link jannovar.io.UCSCKGParser UCSCKGParser}
-     * to parse the four UCSC KnownGenes files that are needed to create
-     *  {@link jannovar.reference.TranscriptModel TranscriptModel} objects
-     * for all genes in the transcriptome.
-     *
-     */
-    public void readUCSCKnownGenesFile() throws IntervalTreeException {
-	ArrayList<TranscriptModel> kgList = inputUCSCDataFromFile();
-	this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-    }
     
     /**
      * A simple printout of the chromosome map for debugging purposes.
@@ -477,7 +465,7 @@ public class Jannovar {
 	    Options options = new Options();
 	    options.addOption(new Option("h","help",false,"Shows this help"));
 	    options.addOption(new Option("U","nfsp",true,"Path to directory with UCSC files."));
-	    options.addOption(new Option("S","serialize",true,"Serialize"));
+	    options.addOption(new Option("S","serialize",false,"Serialize"));
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
@@ -503,8 +491,13 @@ public class Jannovar {
 
 	    if (cmd.hasOption("download-ucsc")) {
 		this.downloadUCSC = true;
+		this.performSerialization = true;
 	    } else {
 		this.downloadUCSC = false;
+	    }
+
+	    if (cmd.hasOption('S')) {
+		this.performSerialization = true;
 	    }
 
 	    if (cmd.hasOption("fpt-proxy")) {
