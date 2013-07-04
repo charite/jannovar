@@ -617,7 +617,6 @@ public class Pedigree {
 	   compatibility. */
 	for (GenotypeCall patGT : paternal) {
 	    for (GenotypeCall matGT : maternal) {
-		System.out.println("BLA: patGT:" + patGT + "  matGT=" + matGT);
 		if (validCompoundHet(matGT,patGT))
 		    return true;
 	    }
