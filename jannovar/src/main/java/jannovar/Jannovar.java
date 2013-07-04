@@ -469,9 +469,9 @@ public class Jannovar {
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
-	    options.addOption(new  Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
-	    options.addOption(new  Option(null,"fpt-proxy",false,"FTP Proxy"));
-	    options.addOption(new  Option(null,"fpt-proxy-port",false,"FTP Proxy Port"));
+	    options.addOption(new Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
+	    options.addOption(new Option(null,"ftp-proxy",true,"FTP Proxy"));
+	    options.addOption(new Option(null,"ftp-proxy-port",true,"FTP Proxy Port"));
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
@@ -500,12 +500,14 @@ public class Jannovar {
 		this.performSerialization = true;
 	    }
 
-	    if (cmd.hasOption("fpt-proxy")) {
+	    if (cmd.hasOption("ftp-proxy")) {
 		this.ftpProxy = cmd.getOptionValue("ftp-proxy");
+	    	System.out.println(this.ftpProxy);
 	    } 
 	    
-	    if (cmd.hasOption("fpt-proxy-port")) {
+	    if (cmd.hasOption("ftp-proxy-port")) {
 		this.ftpProxyPort = cmd.getOptionValue("ftp-proxy-port");
+		System.out.println(this.ftpProxyPort);
 	    }
 	        
 	    if (cmd.hasOption("U")) {
