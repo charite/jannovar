@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * This class downloads the four files we need to
@@ -21,8 +22,8 @@ public class UCSCDownloader implements Constants {
     /** Path of direrctory to which the files will be downloaded. */
     private String directory_path;
     /** Base URI for UCSC hg19 build annotation files */
-    private String hg19base = "ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
-
+//    private String hg19base = "ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
+    private String hg19base = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
    
     
     /**
@@ -49,9 +50,11 @@ public class UCSCDownloader implements Constants {
 	if (proxyHost == null)
 	    return; /* Do not set proxy if proxyHost is null. */
 	System.setProperty("proxySet","true");
+	if(proxyHost.startsWith("http://"))
+		proxyHost = proxyHost.substring(7);
 	System.setProperty("http.proxyHost", proxyHost);
 	System.setProperty("http.proxyPort", port);
-    }
+	}
 
 
      /**
@@ -114,11 +117,16 @@ public class UCSCDownloader implements Constants {
 	int block = 250000;
 	try{
 	    URL url = new URL(urlstring);
-	    InputStream reader = url.openConnection().getInputStream();
+	    URLConnection urlc = url.openConnection();
+	    InputStream reader = urlc.getInputStream();
 	    FileOutputStream writer = new FileOutputStream(local_file_path);
 	    byte[] buffer = new byte[153600];
 	    int totalBytesRead = 0;
 	    int bytesRead = 0;
+	    int size = urlc.getContentLength();
+	    if(size >= 0)
+	    	block = size / 20;
+		System.err.println("0%       50%      100%");
 	    while ((bytesRead = reader.read(buffer)) > 0){ 
 		writer.write(buffer, 0, bytesRead);
 		buffer = new byte[153600];
@@ -126,11 +134,11 @@ public class UCSCDownloader implements Constants {
 		if (totalBytesRead > threshold) {
 		    System.err.print("=");
 		    threshold += block; 
-		    block += 250000; /* reduce number of progress bars for big files. */
+//		    block += 250000; /* reduce number of progress bars for big files. */
 		}
 	    }
 	    System.err.println();
-	    System.err.println("Done. " + (new Integer(totalBytesRead).toString()) + " bytes read.");
+	    System.err.println("Done. " + (new Integer(totalBytesRead).toString())+"("+size + ") bytes read.");
 	    writer.close();
 	    reader.close();
 	} catch (MalformedURLException e){
