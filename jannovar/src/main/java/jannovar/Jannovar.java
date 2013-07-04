@@ -502,13 +502,11 @@ public class Jannovar {
 
 	    if (cmd.hasOption("ftp-proxy")) {
 		this.ftpProxy = cmd.getOptionValue("ftp-proxy");
-	    	System.out.println(this.ftpProxy);
 	    } 
 	    
 	    if (cmd.hasOption("ftp-proxy-port")) {
 		this.ftpProxyPort = cmd.getOptionValue("ftp-proxy-port");
-		System.out.println(this.ftpProxyPort);
-	    }
+		}
 	        
 	    if (cmd.hasOption("U")) {
 		this.ucscDirPath = getRequiredOptionValue(cmd,'U');
