@@ -475,7 +475,7 @@ public class Jannovar {
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
-	    if (cmd.hasOption("h") || args.length==0)
+	    if (cmd.hasOption("h") || cmd.hasOption("H") || args.length==0)
 	    {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("java -jar Jannovar.jar [-options]", options);
@@ -551,14 +551,13 @@ public class Jannovar {
 
     private static void usage() {
 	System.out.println("***   Jannovar: Usage     ****");
-	System.out.println("Jannovar can be used to serialize UCSC KnownGenes data:");
-	System.out.println("** $ java -jar Jannovar.jar -S f -U p1 -X p2 -M p3 -L p4");
-	System.out.println("** Here,f is the desired file name of the serialized file, and p1-p4 are paths to the UCSC files");
-	System.out.println("Jannovar can be used to annotate VCF files with the serialized UCSC file (or the original UCSC files):");
-	System.out.println("** $ java -jar Jannovar -D ucsc.ser -V vcfPath");
-	System.out.println("** Here, ucsc.ser is the name of the serialized UCSC data, and vcfPath is the path to the VCF exome file");
-
-
+	System.out.println("Use case 1: Download UCSC data and create transcript data file (ucsc.ser)");
+	System.out.println("$ java -jar Jannovar.jar --download-ucsc");
+	System.out.println("Use case 2: Add annotations to a VCF file");
+	System.out.println("$ java -jar Jannovar.jar -D ucsc.ser -V example.vcf");
+	System.out.println("Use case 3: Write new file with Jannovar-format annotations of a VCF file");
+	System.out.println("$ java -jar Jannovar -D ucsc.ser -V vcfPath -J");
+	System.out.println("*** See the tutorial for details ***");
     }
 
 

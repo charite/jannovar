@@ -170,7 +170,12 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
  * chr1:34329897T>C
  * This is synonymous, HMGB4(uc001bxp.3:exon2:c.105T>C:p.Y35Y,uc021oky.1:exon1:c.105T>C:p.Y35Y)
  * but there is another isoform that is UTR5, which gets correctly prioritized by Jannovar
-
+ * This is:
+ * uc001bxq.3	chr1	+	34329679	34330392	34330014	34330353	2	
+ * 34329679,34329863,	34329778,34330392,	Q8WW32	uc001bxq.3
+ * That is, startCDS=34330014 (located in exon 2)
+ * The variant 34329897 is also located in exon 2. This rvarstart is
+ * position = 34330014 - 34329897 +1 = 117
  *</P>
  */
 @Test public void testSynonymousVar6() throws AnnotationException  {
@@ -186,7 +191,7 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HMGB4",annot);
+	    Assert.assertEquals("HMGB4(uc001bxq.3:c.-118T>C)",annot);
 	}
 }
 
@@ -305,7 +310,7 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HRNR(uc001ezt.1:exon3:c.814C>A:p.R272R)",annot);
+	    Assert.assertEquals("HRNR(uc001ezt.2:exon3:c.814C>A:p.R272R)",annot);
 	}
 }
 
@@ -380,7 +385,7 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DNM3(uc001gih.1:exon2:c.291A>G:p.T97T,uc001gif.3:exon18:c.2211A>G:p.T737T,uc001gie.3:exon19:c.2223A>G:p.T741T)",annot);
+	    Assert.assertEquals("DNM3(uc001gih.1:exon2:c.291A>G:p.T97T,uc001gif.4:exon18:c.2211A>G:p.T737T,uc001gie.4:exon19:c.2223A>G:p.T741T)",annot);
 	}
 }
 
@@ -472,9 +477,10 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OBSCN(uc009xez.1:exon4:c.1431A>G:p.L477L,uc001hsn.3:exon4:c.1431A>G:p.L477L)",annot);
+	    Assert.assertEquals("OBSCN(uc009xez.2:exon4:c.1431A>G:p.L477L,uc001hsq.2:exon4:c.1431A>G:p.L477L,uc001hsn.4:exon4:c.1431A>G:p.L477L)",annot);
 	}
 }
+
 
 /**
  *<P>

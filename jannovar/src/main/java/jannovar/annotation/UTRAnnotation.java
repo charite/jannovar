@@ -13,7 +13,10 @@ import jannovar.reference.Translator;
  * The Human Genome Variation Society nomenclature for <b>5' UTR variants</b> works as follows.
  * <P>
  * A G to A substitution 12 nts upstream of the ATG translation initiation codon
- * is refered to as <b>c.-12G>A</b>
+ * is refered to as <b>c.-12G>A</b>. To get this far, we first calculate rvarstart in the
+ * class {@link jannovar.reference.Chromosome Chromosome} as  
+ * {@code rvarstart = kgl.getExonStart(k) - kgl.getTXStart() -  cumlenintron + 1;}. Assuming for
+ * instance that the 5' UTR has two exons, and that the start codon as well as the 
  * <P> 
  * The Human Genome Variation Society nomenclature for <b>3' UTR variants</b> works as follows.
  * <P>
