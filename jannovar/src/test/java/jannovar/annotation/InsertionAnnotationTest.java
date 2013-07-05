@@ -488,7 +488,7 @@ jannovar says, annovar finds a "C")
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AEBP1(uc003tkb.3:exon1:c.118_119insAAAA:p.G40fs)",annot);
+	    Assert.assertEquals("AEBP1(uc003tkb.4:exon1:c.118_119insAAAA:p.G40fs)",annot);
 	}
 }
 /**

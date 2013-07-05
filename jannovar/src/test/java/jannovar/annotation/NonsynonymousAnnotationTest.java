@@ -159,10 +159,6 @@ public class NonsynonymousAnnotationTest implements Constants {
  *<P>
  * annovar: FHAD1:uc001awb.2:exon21:c.2756A>G:p.E919G,FHAD1:uc001awf.3:exon2:c.197A>G:p.E66G,FHAD1:uc010obl.1:exon5:c.515A>G:p.E172G,FHAD1:uc001awd.1:exon6:c.515A>G:p.E172G,FHAD1:uc001awe.1:exon4:c.320A>G:p.E107G,
  * chr1:15687059A>G
-
- expected:<...c.320A>G:p.E107G,uc0[10obl.1:exon5:c.515A>G:p.E172G,uc001awd.1:exon6]:c.515A>G:p.E172G,uc...> 
-but was:<...c.320A>G:p.E107G,uc0[01awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5]:c.515A>G:p.E172G,uc...>
-
  *</P>
  */
 @Test public void testNonsynVar4() throws AnnotationException  {
@@ -178,7 +174,7 @@ but was:<...c.320A>G:p.E107G,uc0[01awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FHAD1(uc001awf.3:exon2:c.197A>G:p.E66G,uc001awe.1:exon4:c.320A>G:p.E107G,uc001awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5:c.515A>G:p.E172G,uc001awb.2:exon21:c.2756A>G:p.E919G)",annot);
+	    Assert.assertEquals("FHAD1(uc001awf.3:exon2:c.197A>G:p.E66G,uc001awe.1:exon4:c.320A>G:p.E107G,uc010obl.1:exon5:c.515A>G:p.E172G,uc001awd.1:exon6:c.515A>G:p.E172G,uc001awb.2:exon21:c.2756A>G:p.E919G)",annot);
 	}
 }
 
@@ -188,6 +184,10 @@ but was:<...c.320A>G:p.E107G,uc0[01awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5
  * annovar: CASP9:uc001awm.2:exon5:c.662A>G:p.Q221R,CASP9:uc009voi.3:exon5:c.194A>G:p.Q65R,CASP9:uc010obm.2:exon5:c.413A>G:p.Q138R,CASP9:uc001awp.3:exon5:c.194A>G:p.Q65R,CASP9:uc001awn.3:exon5:c.662A>G:p.Q221R,
  * chr1:15832543T>C
  *</P>
+ * 
+expected:<CASP9(uc001awp.[3:exon5:c.194A>G:p.Q65R,uc009voi.3:exon5:c.194A>G:p.Q65R,uc010obm.2:exon5:c.413A>G:p.Q138R,uc001awn.3]:exon5:c.662A>G:p.Q2...> but was:
+<CASP9(uc001awp.[4:exon5:c.194A>G:p.Q65R,uc009voi.4:exon5:c.194A>G:p.Q65R,uc010obm.3:exon5:c.413A>G:p.Q138R,uc001awn.4]:exon5:c.662A>G:p.Q2...>
+
  */
 @Test public void testNonsynVar5() throws AnnotationException  {
 	byte chr = 1;
@@ -202,7 +202,7 @@ but was:<...c.320A>G:p.E107G,uc0[01awd.1:exon6:c.515A>G:p.E172G,uc010obl.1:exon5
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CASP9(uc001awp.3:exon5:c.194A>G:p.Q65R,uc009voi.3:exon5:c.194A>G:p.Q65R,uc010obm.2:exon5:c.413A>G:p.Q138R,uc001awn.3:exon5:c.662A>G:p.Q221R,uc001awm.2:exon5:c.662A>G:p.Q221R)",annot);
+	    Assert.assertEquals("CASP9(uc001awp.4:exon5:c.194A>G:p.Q65R,uc009voi.4:exon5:c.194A>G:p.Q65R,uc010obm.3:exon5:c.413A>G:p.Q138R,uc001awn.4:exon5:c.662A>G:p.Q221R,uc001awm.2:exon5:c.662A>G:p.Q221R)",annot);
 	}
 }
 
@@ -428,7 +428,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NBAS(uc002rcc.1:exon9:c.727A>G:p.I243V)",annot);
+	    Assert.assertEquals("NBAS(uc002rcc.2:exon9:c.727A>G:p.I243V)",annot);
 	}
 }
 
@@ -439,6 +439,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
  *<P>
  * annovar: LOC375190:uc002rew.3:exon10:c.542G>A:p.G181D,
  * chr2:24390517G>A
+ * Note that LOC375190 was changed to FAM228B (GeneID:375190)
  *</P>
  */
 @Test public void testNonsynVar60() throws AnnotationException  {
@@ -454,7 +455,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC375190(uc002rew.3:exon10:c.542G>A:p.G181D)",annot);
+	    Assert.assertEquals("FAM228B(uc002rew.3:exon10:c.542G>A:p.G181D)",annot);
 	}
 }
 

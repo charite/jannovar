@@ -659,6 +659,7 @@ public class IntronicAnnotationTest implements Constants {
  *<P>
  * annovar: FAM54B
  * chr1:26158337C>T
+ * => Name change to MTFR1L (Gene 56181)
  *</P>
  */
 @Test public void testIntronicVar338() throws AnnotationException  {
@@ -674,7 +675,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM54B",annot);
+	    Assert.assertEquals("MTFR1L",annot);
 	}
 }
 
@@ -865,7 +866,7 @@ public class IntronicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: CTPS
+ * annovar: CTPS : Name change CTPS1 (Gene 1503)
  * chr1:41454425G>A
  *</P>
  */
@@ -882,7 +883,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CTPS",annot);
+	    Assert.assertEquals("CTPS1",annot);
 	}
 }
 
@@ -1463,7 +1464,7 @@ public class IntronicAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: C1orf88
+ * annovar: C1orf88 Name change PIFO (Gene 128344)
  * chr1:111891039A>G
  *</P>
  */
@@ -1480,7 +1481,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C1orf88",annot);
+	    Assert.assertEquals("PIFO",annot);
 	}
 }
 
@@ -1711,7 +1712,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PDZK1",annot);
+	    Assert.assertEquals("LOC100288142,NBPF10,PDZK1",annot);
 	}
 }
 
