@@ -424,8 +424,7 @@ public class Jannovar {
 
 
     /**
-     * Input the four UCSC files for the KnownGene data
-     * @return a list of all TranscriptModel objects from the KnownGene data.
+     * Input the four UCSC files for the KnownGene data.
      */
     private void inputTranscriptModelDataFromUCSCFiles() {
 	UCSCKGParser parser = new UCSCKGParser(this.ucscDirPath);

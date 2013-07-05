@@ -1,0 +1,2965 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building jannovar 0.0.8-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.3:resources (default-resources) @ jannovar ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 4 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.0.2:compile (default-compile) @ jannovar ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.3:testResources (default-testResources) @ jannovar ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 5 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.0.2:testCompile (default-testCompile) @ jannovar ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.14.1:test (default-test) @ jannovar ---
+[INFO] Surefire report directory: /home/mjaeger/workspace/jannovar/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running jannovar.io.VCFReaderTest
+Running jannovar.reference.TranscriptModelTest
+Running jannovar.io.UCSCKGParserTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.066 sec
+Running jannovar.io.VCFLineTest
+lines: 5, exceptions: 0
+Size of knownGeneMap: 5
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 sec
+Running jannovar.io.MultiSampleVCFReaderTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.113 sec
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.125 sec
+Running jannovar.annotation.UTR3AnnotationTest
+Running jannovar.annotation.UTR5AnnotationTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 sec
+Running jannovar.annotation.DownstreamAnnotationTest
+Tests run: 83, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.618 sec <<< FAILURE!
+testDownstreamVar78(jannovar.annotation.DownstreamAnnotationTest)  Time elapsed: 0.005 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RPS13[,SNORD14]> but was:<RPS13[]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.DownstreamAnnotationTest.testDownstreamVar78(DownstreamAnnotationTest.java:2177)
+
+rvarstart: 653
+uc001gsh.3	TXstart: 192286122	TXend: 192336414	Variant: 653	CDSend: 633
+rvarstart: 654
+uc001gsh.3	TXstart: 192286122	TXend: 192336414	Variant: 654	CDSend: 633
+rvarstart: 3634
+uc010ppu.2	TXstart: 201865584	TXend: 201915716	Variant: 3634	CDSend: 249
+rvarstart: 3787
+uc021phl.1	TXstart: 201865584	TXend: 201915716	Variant: 3787	CDSend: 249
+rvarstart: 3788
+uc021phm.1	TXstart: 201865584	TXend: 201915716	Variant: 3788	CDSend: 249
+rvarstart: 845
+uc010slx.2	TXstart: 49208215	TXend: 49219026	Variant: 845	CDSend: 590
+Running jannovar.annotation.DeletionAnnotationTest
+rvarstart: 1513
+uc002rdw.1	TXstart: 20817564	TXend: 20850864	Variant: 1513	CDSend: 42
+rvarstart: 1300
+rvarstart: 1509
+uc010sro.1	TXstart: 57870513	TXend: 57873633	Variant: 1300	CDSend: 140
+uc002rdw.1	TXstart: 20817564	TXend: 20850864	Variant: 1509	CDSend: 42
+rvarstart: 600
+uc002rhm.3	TXstart: 26804073	TXend: 26864211	Variant: 600	CDSend: 30
+rvarstart: 1549
+uc002riy.1	TXstart: 27353625	TXend: 27357542	Variant: 1549	CDSend: 403
+rvarstart: 1616
+uc002rix.1	TXstart: 27353625	TXend: 27357542	Variant: 1616	CDSend: 254
+rvarstart: 1709
+uc002rke.3	TXstart: 27587219	TXend: 27593324	Variant: 1709	CDSend: 230
+rvarstart: 1713
+uc002rkc.3	TXstart: 27587219	TXend: 27593324	Variant: 1713	CDSend: 144
+rvarstart: 1716
+uc002rkb.3	TXstart: 27587219	TXend: 27593324	Variant: 1716	CDSend: 144
+rvarstart: 1766
+uc002rka.3	TXstart: 27587219	TXend: 27593196	Variant: 1766	CDSend: 239
+rvarstart: 1672
+uc002rjz.3	TXstart: 27587219	TXend: 27592919	Variant: 1672	CDSend: 40
+rvarstart: 2905
+uc002rkf.1	TXstart: 27589089	TXend: 27593190	Variant: 2905	CDSend: 790
+rvarstart: 1561
+uc002rmc.3	TXstart: 28771367	TXend: 28818926	Variant: 1561	CDSend: 1533
+rvarstart: 1853
+uc002rqi.1	TXstart: 37870743	TXend: 37899326	Variant: 1853	CDSend: 994
+rvarstart: 1215
+uc010fde.3	TXstart: 68592322	TXend: 68624585	Variant: 1215	CDSend: 1035
+rvarstart: 1219
+uc002sen.4	TXstart: 68592322	TXend: 68624585	Variant: 1219	CDSend: 1215
+rvarstart: 1253
+uc010fde.3	TXstart: 68592322	TXend: 68624585	Variant: 1253	CDSend: 1035
+rvarstart: 1257
+uc002sen.4	TXstart: 68592322	TXend: 68624585	Variant: 1257	CDSend: 1215
+rvarstart: 522
+uc010fex.1	TXstart: 74120093	TXend: 74130385	Variant: 522	CDSend: 482
+rvarstart: 637
+uc002snw.3	TXstart: 79252826	TXend: 79255631	Variant: 637	CDSend: 613
+rvarstart: 737
+uc002snx.3	TXstart: 79252826	TXend: 79255631	Variant: 737	CDSend: 713
+rvarstart: 599
+uc010ffu.3	TXstart: 79252826	TXend: 79255631	Variant: 599	CDSend: 575
+rvarstart: 610
+uc002snz.3	TXstart: 79347584	TXend: 79350545	Variant: 610	CDSend: 604
+rvarstart: 574
+uc010ysd.2	TXstart: 79347921	TXend: 79350545	Variant: 574	CDSend: 568
+rvarstart: 4845
+uc003gpr.1	TXstart: 20255235	TXend: 20620788	Variant: 4845	CDSend: 4794
+rvarstart: 4821
+rvarstart: 706
+uc003gps.1	TXstart: 20255235	TXend: 20620788	Variant: 4821	CDSend: 4770
+uc010ysx.2	TXstart: 85921414	TXend: 85925875	Variant: 706	CDSend: 647
+rvarstart: 625
+uc002sql.4	TXstart: 85921414	TXend: 85925875	Variant: 625	CDSend: 566
+rvarstart: 869
+uc010fgp.3	TXstart: 85921414	TXend: 85925875	Variant: 869	CDSend: 810
+rvarstart: 1820
+uc002teq.4	TXstart: 109510927	TXend: 109605828	Variant: 1820	CDSend: 432
+rvarstart: 1916
+uc010yws.2	TXstart: 109510927	TXend: 109605828	Variant: 1916	CDSend: 432
+rvarstart: 2032
+uc010fjn.3	TXstart: 109510927	TXend: 109605828	Variant: 2032	CDSend: 548
+rvarstart: 2110
+uc002ufh.2	TXstart: 170550964	TXend: 170608396	Variant: 2110	CDSend: 2052
+rvarstart: 1979
+uc002ufi.2	TXstart: 170590356	TXend: 170608396	Variant: 1979	CDSend: 1921
+rvarstart: 1032
+uc010pcf.2	TXstart: 150480487	TXend: 150484220	Variant: 1032	CDSend: 884
+rvarstart: 1053
+uc010pce.2	TXstart: 150480487	TXend: 150484220	Variant: 1053	CDSend: 905
+rvarstart: 3520
+uc002uly.3	TXstart: 179059208	TXend: 179264160	Variant: 3520	CDSend: 3424
+rvarstart: 3445
+uc002ulx.3	TXstart: 179059208	TXend: 179264160	Variant: 3445	CDSend: 3349
+rvarstart: 3337
+uc002ulz.3	TXstart: 179059208	TXend: 179264160	Variant: 3337	CDSend: 3241
+rvarstart: 3352
+uc010zfe.2	TXstart: 179059208	TXend: 179264160	Variant: 3352	CDSend: 3256
+rvarstart: 3033
+uc002uma.3	TXstart: 179184971	TXend: 179264160	Variant: 3033	CDSend: 2937
+rvarstart: 1110
+uc002umv.1	TXstart: 179443517	TXend: 179445633	Variant: 1110	CDSend: 564
+rvarstart: 689
+uc010zjg.1	TXstart: 211082199	TXend: 211090215	Variant: 689	CDSend: 229
+rvarstart: 648
+uc002veo.3	TXstart: 214149116	TXend: 214182702	Variant: 648	CDSend: 644
+rvarstart: 1927
+uc010zjx.1	TXstart: 219125738	TXend: 219128582	Variant: 1927	CDSend: 1861
+rvarstart: 1419
+uc010zjy.1	TXstart: 219125738	TXend: 219128582	Variant: 1419	CDSend: 1353
+rvarstart: 1306
+uc010zjw.1	TXstart: 219125738	TXend: 219128582	Variant: 1306	CDSend: 1240
+rvarstart: 1401
+uc002vry.4	TXstart: 232387871	TXend: 232395182	Variant: 1401	CDSend: 111
+rvarstart: 969
+uc002vtt.2	TXstart: 233759312	TXend: 233792861	Variant: 969	CDSend: 153
+rvarstart: 816
+uc002vyo.2	TXstart: 240951135	TXend: 240964819	Variant: 816	CDSend: 102
+rvarstart: 1527
+uc003dfk.3	TXstart: 52728504	TXend: 52739807	Variant: 1527	CDSend: 355
+rvarstart: 2024
+uc003dfl.3	TXstart: 52728504	TXend: 52740048	Variant: 2024	CDSend: 852
+rvarstart: 1795
+uc003dfm.3	TXstart: 52728504	TXend: 52740048	Variant: 1795	CDSend: 623
+rvarstart: 2020
+uc003dfn.3	TXstart: 52728504	TXend: 52740048	Variant: 2020	CDSend: 848
+rvarstart: 1404
+uc003dfi.4	TXstart: 52728504	TXend: 52737714	Variant: 1404	CDSend: 232
+rvarstart: 906
+uc003dpt.4	TXstart: 75713481	TXend: 75716368	Variant: 906	CDSend: 899
+rvarstart: 957
+uc003dzb.4	TXstart: 112182813	TXend: 112218408	Variant: 957	CDSend: 204
+rvarstart: 1101
+uc003dza.4	TXstart: 112182813	TXend: 112218408	Variant: 1101	CDSend: 204
+rvarstart: 1405
+uc010hss.3	TXstart: 127799800	TXend: 127842671	Variant: 1405	CDSend: 105
+rvarstart: 1497
+uc003ekh.3	TXstart: 127799800	TXend: 127842671	Variant: 1497	CDSend: 105
+rvarstart: 722
+uc003fma.1	TXstart: 183521772	TXend: 183524378	Variant: 722	CDSend: 70
+rvarstart: 1034
+uc003frw.2	TXstart: 188889763	TXend: 189041271	Variant: 1034	CDSend: 995
+rvarstart: 2094
+uc003frv.2	TXstart: 188665003	TXend: 189041271	Variant: 2094	CDSend: 2055
+rvarstart: 2279
+uc003glc.4	TXstart: 8368009	TXend: 8442452	Variant: 2279	CDSend: 93
+rvarstart: 2211
+uc003gld.4	TXstart: 8368009	TXend: 8442452	Variant: 2211	CDSend: 93
+rvarstart: 2332
+uc010idk.3	TXstart: 8368009	TXend: 8430208	Variant: 2332	CDSend: 146
+rvarstart: 4400
+uc003has.3	TXstart: 55944426	TXend: 55991762	Variant: 4400	CDSend: 303
+rvarstart: 4400
+uc003hat.1	TXstart: 55945926	TXend: 55991762	Variant: 4400	CDSend: 303
+rvarstart: 517
+uc003hfg.1	TXstart: 71226493	TXend: 71232823	Variant: 517	CDSend: 486
+rvarstart: 1521
+uc011cat.2	TXstart: 71296209	TXend: 71348714	Variant: 1521	CDSend: 1422
+rvarstart: 1460
+uc011cau.2	TXstart: 71337675	TXend: 71348714	Variant: 1460	CDSend: 1361
+rvarstart: 1423
+uc003hfj.3	TXstart: 71337834	TXend: 71348714	Variant: 1423	CDSend: 1324
+rvarstart: 1056
+uc003hzv.3	TXstart: 110749150	TXend: 110765861	Variant: 1056	CDSend: 1048
+rvarstart: 973
+uc003izs.3	TXstart: 190861974	TXend: 190884359	Variant: 973	CDSend: 968
+rvarstart: 3078
+uc003jck.3	TXstart: 1392905	TXend: 1445543	Variant: 3078	CDSend: 127
+rvarstart: 5469
+uc003jhu.3	TXstart: 32711438	TXend: 32791830	Variant: 5469	CDSend: 2068
+rvarstart: 5472
+uc003jhv.3	TXstart: 32711438	TXend: 32791830	Variant: 5472	CDSend: 2071
+rvarstart: 4402
+uc003jhw.2	TXstart: 32710743	TXend: 32791830	Variant: 4402	CDSend: 1001
+rvarstart: 3433
+uc003jjb.3	TXstart: 34929698	TXend: 34959069	Variant: 3433	CDSend: 1958
+rvarstart: 3298
+uc003jjc.3	TXstart: 34929698	TXend: 34959069	Variant: 3298	CDSend: 1823
+rvarstart: 2562
+uc003jql.3	TXstart: 55147207	TXend: 55213165	Variant: 2562	CDSend: 2487
+rvarstart: 2697
+uc003jqo.3	TXstart: 55149150	TXend: 55213165	Variant: 2697	CDSend: 2622
+rvarstart: 2553
+uc021xyq.1	TXstart: 55149150	TXend: 55213165	Variant: 2553	CDSend: 2478
+rvarstart: 1771
+uc003lyn.3	TXstart: 160039246	TXend: 160061613	Variant: 1771	CDSend: 199
+rvarstart: 1266
+uc003mvt.2	TXstart: 3722836	TXend: 3752246	Variant: 1266	CDSend: 482
+Tests run: 104, Failures: 94, Errors: 0, Skipped: 0, Time elapsed: 2.722 sec <<< FAILURE!
+testUTR5Var8(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.006 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KAZN[]> but was:<KAZN[(uc001avs.4:c.-169G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var8(UTR5AnnotationTest.java:95)
+
+testUTR5Var109(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TANC1[]> but was:<TANC1[(uc010fon.3:c.-280->C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var109(UTR5AnnotationTest.java:509)
+
+testUTR5Var110(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TANC1[]> but was:<TANC1[(uc010fon.3:c.-280->C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var110(UTR5AnnotationTest.java:532)
+
+testUTR5Var123(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HRH1[]> but was:<HRH1[(uc003bwb.4:c.-17T>C,uc010hdt.3:c.-17T>C,uc010hds.3:c.-17T>C,uc010hdr.3:c.-17T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var123(UTR5AnnotationTest.java:604)
+
+testUTR5Var131(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FBXW12[]> but was:<FBXW12[(uc003csr.3:c.-61A>T,uc003css.3:c.-61A>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var131(UTR5AnnotationTest.java:627)
+
+testUTR5Var137(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CACNA1D[]> but was:<CACNA1D[(uc003dgu.4:c.-21T>A,uc003dgv.4:c.-21T>A,uc003dgy.4:c.-21T>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var137(UTR5AnnotationTest.java:650)
+
+testUTR5Var138(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LRTM1[]> but was:<LRTM1[(uc003dhl.3:c.-11C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var138(UTR5AnnotationTest.java:673)
+
+testUTR5Var144(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C3orf38[]> but was:<C3orf38[(uc003dqw.3:c.-11->C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var144(UTR5AnnotationTest.java:696)
+
+testUTR5Var152(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC41A3[]> but was:<SLC41A3[(uc003eii.3:c.-33G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var152(UTR5AnnotationTest.java:719)
+
+testUTR5Var158(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AADAC[]> but was:<AADAC[(uc003eze.3:c.-57C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var158(UTR5AnnotationTest.java:742)
+
+testUTR5Var159(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KCNAB1[]> but was:<KCNAB1[(uc010hvt.1:c.-83A>G,uc003fat.2:c.-83A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var159(UTR5AnnotationTest.java:765)
+
+testUTR5Var164(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TMEM207[]> but was:<TMEM207[(uc003fsj.2:c.-49T>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var164(UTR5AnnotationTest.java:788)
+
+testUTR5Var169(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KCNIP4[]> but was:<KCNIP4[(uc021xmt.1:c.-5A>G,uc021xmu.1:c.-5A>G,uc003gqi.1:c.-201A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var169(UTR5AnnotationTest.java:811)
+
+testUTR5Var177(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LRBA[]> but was:<LRBA[(uc003ilr.4:c.-84G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var177(UTR5AnnotationTest.java:834)
+
+testUTR5Var182(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AHRR[]> but was:<AHRR[(uc003jaz.3:c.-183C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var182(UTR5AnnotationTest.java:857)
+
+testUTR5Var183(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MED10[]> but was:<MED10[(uc003jdo.3:c.-18G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var183(UTR5AnnotationTest.java:880)
+
+testUTR5Var188(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C5orf34[]> but was:<C5orf34[(uc003jnz.2:c.-22->C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var188(UTR5AnnotationTest.java:903)
+
+testUTR5Var192(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LOC644936[]> but was:<LOC644936[(uc010jai.3:c.-19T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var192(UTR5AnnotationTest.java:926)
+
+testUTR5Var194(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PJA2[]> but was:<PJA2[(uc003kos.4:c.-17G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var194(UTR5AnnotationTest.java:949)
+
+testUTR5Var197(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.004 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RAD50[]> but was:<RAD50[(uc003kxi.3:c.-38G>A,uc003kxh.3:c.-390G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var197(UTR5AnnotationTest.java:972)
+
+testUTR5Var223(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DDX39B[]> but was:<DDX39B[(uc003ntw.2:c.-554->G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var223(UTR5AnnotationTest.java:995)
+
+testUTR5Var245(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MYO6[]> but was:<MYO6[(uc003pij.1:c.-397T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var245(UTR5AnnotationTest.java:1041)
+
+testUTR5Var248(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SCML4[]> but was:<SCML4[(uc011eam.1:c.-49C>T,uc010kdf.3:c.-49C>T,uc003psa.3:c.-230C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var248(UTR5AnnotationTest.java:1064)
+
+testUTR5Var255(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ULBP2[]> but was:<ULBP2[(uc011eeh.1:c.-23A>C,uc003qno.3:c.-23A>C,uc010kij.3:c.-23A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var255(UTR5AnnotationTest.java:1087)
+
+testUTR5Var277(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<hCG_2023280[]> but was:<hCG_2023280[(uc003upk.1:c.-56T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var277(UTR5AnnotationTest.java:1110)
+
+testUTR5Var292(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ANGPT2[]> but was:<ANGPT2[(uc003wqk.4:c.-35C>G,uc003wqj.4:c.-35C>G,uc010lri.3:c.-35C>G,uc003wql.4:c.-35C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var292(UTR5AnnotationTest.java:1158)
+
+testUTR5Var293(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ANGPT2[]> but was:<ANGPT2[(uc003wqk.4:c.-79A>G,uc003wqj.4:c.-79A>G,uc010lri.3:c.-79A>G,uc003wql.4:c.-79A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var293(UTR5AnnotationTest.java:1181)
+
+testUTR5Var296(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DLC1[]> but was:<DLC1[(uc003wwm.2:c.-7G>A,uc011kxy.2:c.-7G>A,uc003wwn.3:c.-7G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var296(UTR5AnnotationTest.java:1204)
+
+rvarstart: 5496
+testUTR5Var307(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF34[]> but was:<ZNF34[(uc010mgb.3:c.-111A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var307(UTR5AnnotationTest.java:1227)
+
+testUTR5Var308(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KANK1[]> but was:<KANK1[(uc003zgl.1:c.-19T>C,uc003zgn.1:c.-19T>C,uc003zgm.3:c.-19T>C,uc003zgo.1:c.-19T>C,uc003zgp.1:c.-19T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var308(UTR5AnnotationTest.java:1250)
+
+testUTR5Var310(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<UBAP2[]> but was:<UBAP2[(uc003ztp.2:c.-393A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var310(UTR5AnnotationTest.java:1273)
+
+testUTR5Var316(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CENPP[]> but was:<CENPP[(uc004asj.3:c.-31G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var316(UTR5AnnotationTest.java:1296)
+
+testUTR5Var318(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C9orf84[]> but was:<C9orf84[(uc010mug.3:c.-107A>G,uc004bfq.3:c.-62A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var318(UTR5AnnotationTest.java:1319)
+
+testUTR5Var344(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PIK3AP1[]> but was:<PIK3AP1[(uc001kmo.3:c.-56A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var344(UTR5AnnotationTest.java:1342)
+
+testUTR5Var347(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C10orf90[]> but was:<C10orf90[(uc001ljq.3:c.-70G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var347(UTR5AnnotationTest.java:1365)
+
+testUTR5Var370(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CATSPER1[]> but was:<CATSPER1[(uc001ogt.3:c.-28A>-)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var370(UTR5AnnotationTest.java:1388)
+
+testUTR5Var374(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLCO2B1[]> but was:<SLCO2B1[(uc001owc.3:c.-150T>C,uc001owb.3:c.-71T>C,uc010rrr.2:c.-71T>C,uc010rrs.2:c.-150T>C,uc010rrq.2:c.-71T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var374(UTR5AnnotationTest.java:1411)
+
+testUTR5Var378(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<BCO2[]> but was:<BCO2[(uc001pne.1:c.-173T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var378(UTR5AnnotationTest.java:1434)
+
+testUTR5Var387(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<B4GALNT3[]> but was:<B4GALNT3[(uc001qik.1:c.-167C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var387(UTR5AnnotationTest.java:1481)
+
+testUTR5Var390(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CLEC4A[]> but was:<CLEC4A[(uc009zgb.1:c.-43C>T,uc009zga.1:c.-43C>T,uc001qtz.1:c.-43C>T,uc001quc.1:c.-43C>T,uc001qub.1:c.-43C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var390(UTR5AnnotationTest.java:1504)
+
+testUTR5Var392(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FAM90A1[]> but was:<FAM90A1[(uc001qui.2:c.-20T>-,uc001quh.2:c.-20T>-)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var392(UTR5AnnotationTest.java:1527)
+
+uc003nci.4	TXstart: 17763924	TXend: 17987854	Variant: 5496	CDSend: 161
+testUTR5Var397(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CACNB3[]> but was:<CACNB3[(uc001rsk.2:c.-101->T,uc010slx.2:c.*255->T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var397(UTR5AnnotationTest.java:1574)
+
+testUTR5Var398(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LMBR1L[]> but was:<LMBR1L[(uc001rtj.1:c.-80T>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var398(UTR5AnnotationTest.java:1597)
+
+testUTR5Var399(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TUBA1B[]> but was:<TUBA1B[(uc001rtl.3)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var399(UTR5AnnotationTest.java:1620)
+
+testUTR5Var403(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<POU6F1[]> but was:<POU6F1[(uc001rya.3:c.-562T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var403(UTR5AnnotationTest.java:1643)
+
+testUTR5Var408(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RPS26[]> but was:<RPS26[(uc001sjf.3:c.-22C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var408(UTR5AnnotationTest.java:1666)
+
+testUTR5Var409(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC39A5[]> but was:<SLC39A5[(uc010sqj.2:c.-14T>C,uc010sqk.2:c.-14T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var409(UTR5AnnotationTest.java:1689)
+
+testUTR5Var412(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ARHGAP9[]> but was:<ARHGAP9[(uc001soa.3:c.-241A>G,uc010sro.1:c.*1160A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var412(UTR5AnnotationTest.java:1712)
+
+testUTR5Var425(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF84[]> but was:<ZNF84[(uc009zyz.3:c.-32G>A,uc001ulm.4:c.-32G>A,uc009zyy.3:c.-32G>A,uc009zza.3:c.-32G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var425(UTR5AnnotationTest.java:1735)
+
+testUTR5Var432(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CAB39L[]> but was:<CAB39L[(uc001vcx.3:c.-187A>G,uc010adf.3:c.-334A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var432(UTR5AnnotationTest.java:1758)
+
+testUTR5Var441(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TOX4[]> but was:<TOX4[(uc001way.3:c.-891G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var441(UTR5AnnotationTest.java:1781)
+
+testUTR5Var443(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TRAV12-1[]> but was:<TRAV12-1[(uc001wbx.2:c.-36A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var443(UTR5AnnotationTest.java:1804)
+
+testUTR5Var461(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KCNK10[]> but was:<KCNK10[(uc001xwo.3:c.-17T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var461(UTR5AnnotationTest.java:1827)
+
+testUTR5Var474(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SERINC4[]> but was:<SERINC4[(uc010bds.1:c.-257A>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var474(UTR5AnnotationTest.java:1874)
+
+rvarstart: 5640
+testUTR5Var479(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FAH[]> but was:<FAH[(uc002bfn.2:c.-142G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var479(UTR5AnnotationTest.java:1897)
+
+testUTR5Var482(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PDE8A[]> but was:<PDE8A[(uc002blk.3:c.-775G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var482(UTR5AnnotationTest.java:1920)
+
+testUTR5Var486(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MCTP2[]> but was:<MCTP2[(uc002btk.4:c.-224A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var486(UTR5AnnotationTest.java:1943)
+
+testUTR5Var490(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C16orf59[]> but was:<C16orf59[(uc002cqg.2:c.-397C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var490(UTR5AnnotationTest.java:1966)
+
+testUTR5Var491(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ERCC4[]> but was:<ERCC4[(uc010uyz.1:c.-503G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var491(UTR5AnnotationTest.java:1989)
+
+testUTR5Var497(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GPR114[]> but was:<GPR114[(uc002ely.3:c.-7A>G,uc010vhr.2:c.-7A>G,uc002elx.4:c.-7A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var497(UTR5AnnotationTest.java:2012)
+
+testUTR5Var509(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ALOX15[]> but was:<ALOX15[(uc010vsd.2:c.-37->AAG)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var509(UTR5AnnotationTest.java:2035)
+
+testUTR5Var512(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ALOX15[]> but was:<ALOX15[(uc010vsd.2:c.-37->AAG)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var512(UTR5AnnotationTest.java:2058)
+
+testUTR5Var515(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PLSCR3[]> but was:<PLSCR3[(uc002ggr.2:c.-23A>G,uc010cmg.2:c.-23A>G,uc002ggn.2:c.-23A>G,uc002ggm.2:c.-23A>G,uc002ggq.2:c.-576A>G,uc002ggp.2:c.-309A>G,uc002ggo.2:c.-23A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var515(UTR5AnnotationTest.java:2081)
+
+testUTR5Var536(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ACE[]> but was:<ACE[(uc010ddv.2:c.-33G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var536(UTR5AnnotationTest.java:2104)
+
+testUTR5Var543(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LOC100653515[]> but was:<LOC100653515[(uc021uei.1:c.-299C>T,uc002jwg.2:c.-64C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var543(UTR5AnnotationTest.java:2151)
+
+uc003ncg.4	TXstart: 17763924	TXend: 17987854	Variant: 5640	CDSend: 161
+testUTR5Var550(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ANKRD62[]> but was:<ANKRD62[(uc002kqr.3:c.-11C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var550(UTR5AnnotationTest.java:2174)
+
+testUTR5Var556(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MAPK4[]> but was:<MAPK4[(uc002lev.3:c.-58T>G,uc010doz.3:c.-58T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var556(UTR5AnnotationTest.java:2197)
+
+testUTR5Var568(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF682[]> but was:<ZNF682[(uc002noq.3:c.-21G>C,uc010eck.3:c.-26G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var568(UTR5AnnotationTest.java:2220)
+
+testUTR5Var570(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF430[]> but was:<ZNF430[(uc002npk.3:c.-55C>T,uc002npj.3:c.-55C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var570(UTR5AnnotationTest.java:2243)
+
+testUTR5Var580(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PNMAL1[]> but was:<PNMAL1[(uc002per.4:c.-15C>T,uc002peq.4:c.-15C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var580(UTR5AnnotationTest.java:2266)
+
+testUTR5Var593(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CCDC106[]> but was:<CCDC106[(uc002qlr.3:c.-14T>C,uc021vcc.1:c.-14T>C,uc021vcd.1:c.-14T>C,uc002qls.3:c.-14T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var593(UTR5AnnotationTest.java:2313)
+
+testUTR5Var618(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HPS4[]> but was:<HPS4[(uc003ach.3:c.-725C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var618(UTR5AnnotationTest.java:2336)
+
+testUTR5Var621(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<APOL1[]> but was:<APOL1[(uc003ape.3:c.-43C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var621(UTR5AnnotationTest.java:2359)
+
+testUTR5Var624(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RPL3[]> but was:<RPL3[(uc003axj.3:c.-181G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var624(UTR5AnnotationTest.java:2382)
+
+testUTR5Var627(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<VCX[]> but was:<VCX[(uc004crz.3)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var627(UTR5AnnotationTest.java:2405)
+
+rvarstart: 5535
+testUTR5Var632(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PCYT1B[]> but was:<PCYT1B[(uc004dbi.3:c.-51G>A,uc004dbk.4:c.-51G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var632(UTR5AnnotationTest.java:2428)
+
+testUTR5Var635(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EFHC2[]> but was:<EFHC2[(uc004dgb.4:c.-57->C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var635(UTR5AnnotationTest.java:2451)
+
+testUTR3VarByHand1(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLIT2[]> but was:<SLIT2[(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR3VarByHand1(UTR5AnnotationTest.java:73)
+
+testUTR5Var10(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ESPNP[]> but was:<ESPNP[(uc001azn.1:c.-75C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var10(UTR5AnnotationTest.java:118)
+
+testUTR5Var20(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PPIH[]> but was:<PPIH[(uc021omf.1:c.-157C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var20(UTR5AnnotationTest.java:141)
+
+testUTR5Var22(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HECTD3[]> but was:<HECTD3[(uc001cmy.4:c.-96G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var22(UTR5AnnotationTest.java:164)
+
+testUTR5Var36(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PPIAL4G[]> but was:<PPIAL4G[(uc001ejt.3:c.-27T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var36(UTR5AnnotationTest.java:187)
+
+testUTR5Var39(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ECM1[]> but was:<ECM1[(uc009wlu.3:c.-105C>T,uc010pcf.2:c.*148C>T,uc010pce.2:c.*148C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var39(UTR5AnnotationTest.java:210)
+
+testUTR5Var44(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PGLYRP3[]> but was:<PGLYRP3[(uc001fbn.1:c.-38A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var44(UTR5AnnotationTest.java:233)
+
+uc003nch.4	TXstart: 17763924	TXend: 17987854	Variant: 5535	CDSend: 161
+testUTR5Var47(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RIT1[]> but was:<RIT1[(uc001fmh.1:c.-21C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var47(UTR5AnnotationTest.java:256)
+
+testUTR5Var50(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C1orf182[]> but was:<C1orf182[(uc001foo.3:c.-78T>C,uc009wry.3:c.-78T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var50(UTR5AnnotationTest.java:279)
+
+testUTR5Var59(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ATP1A4[]> but was:<ATP1A4[(uc001fvg.3:c.-43G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var59(UTR5AnnotationTest.java:302)
+
+testUTR5Var69(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FAM5B[]> but was:<FAM5B[(uc001glf.3:c.-15T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var69(UTR5AnnotationTest.java:325)
+
+testUTR5Var71(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KIAA1614[]> but was:<KIAA1614[(uc001gol.1:c.-121C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var71(UTR5AnnotationTest.java:348)
+
+testUTR5Var83(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KIF26B[]> but was:<KIF26B[(uc010pyq.1:c.-39C>T,uc001ibf.1:c.-39C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var83(UTR5AnnotationTest.java:371)
+
+testUTR5Var86(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RSAD2[]> but was:<RSAD2[(uc002qyp.1:c.-29A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var86(UTR5AnnotationTest.java:417)
+
+testUTR5Var92(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ABCG8[]> but was:<ABCG8[(uc010yoa.2:c.-35G>A,uc002rtq.3:c.-35G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var92(UTR5AnnotationTest.java:440)
+
+testUTR5Var94(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ALMS1P[]> but was:<ALMS1P[(uc010yrl.2:c.-37T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var94(UTR5AnnotationTest.java:463)
+
+testUTR5Var98(jannovar.annotation.UTR5AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ITPRIPL1[]> but was:<ITPRIPL1[(uc002svx.3:c.-86A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR5AnnotationTest.testUTR5Var98(UTR5AnnotationTest.java:486)
+
+rvarstart: 1736
+uc003ndx.3	TXstart: 24171983	TXend: 24358280	Variant: 1736	CDSend: 303
+rvarstart: 1643
+uc003ndy.3	TXstart: 24171983	TXend: 24383520	Variant: 1643	CDSend: 210
+rvarstart: 713
+uc003ndw.3	TXstart: 24171983	TXend: 24205531	Variant: 713	CDSend: 27
+rvarstart: 1833
+uc010jps.1	TXstart: 24447759	TXend: 24489850	Variant: 1833	CDSend: 112
+rvarstart: 1386
+uc010jpr.1	TXstart: 24447759	TXend: 24476506	Variant: 1386	CDSend: 154
+rvarstart: 894
+uc011dkg.2	TXstart: 26383329	TXend: 26395100	Variant: 894	CDSend: 882
+rvarstart: 1733
+uc011dki.1	TXstart: 26390233	TXend: 26394197	Variant: 1733	CDSend: 269
+rvarstart: 1350
+uc011dmd.2	TXstart: 29911045	TXend: 29913547	Variant: 1350	CDSend: 698
+rvarstart: 869
+uc021yuk.1	TXstart: 31236526	TXend: 31239125	Variant: 869	CDSend: 21
+rvarstart: 1181
+uc011dnj.2	TXstart: 31236526	TXend: 31239705	Variant: 1181	CDSend: 72
+rvarstart: 1259
+uc003nsy.3	TXstart: 31236526	TXend: 31239913	Variant: 1259	CDSend: 66
+rvarstart: 2400
+uc003ocj.2	TXstart: 32902410	TXend: 32908847	Variant: 2400	CDSend: 264
+rvarstart: 1173
+uc011dql.2	TXstart: 32904341	TXend: 32908847	Variant: 1173	CDSend: 264
+rvarstart: 1548
+uc011drm.2	TXstart: 33738990	TXend: 33756906	Variant: 1548	CDSend: 14
+rvarstart: 967
+uc011drl.2	TXstart: 33738990	TXend: 33754719	Variant: 967	CDSend: 339
+rvarstart: 725
+uc010jvg.3	TXstart: 33738990	TXend: 33748076	Variant: 725	CDSend: 64
+rvarstart: 1340
+uc003osk.3	TXstart: 42664333	TXend: 42690358	Variant: 1340	CDSend: 287
+rvarstart: 10480
+uc003pai.3	TXstart: 51585647	TXend: 51952423	Variant: 10480	CDSend: 277
+rvarstart: 2740
+uc011eao.2	TXstart: 109169619	TXend: 109295352	Variant: 2740	CDSend: 2705
+rvarstart: 2813
+uc003pss.4	TXstart: 109169619	TXend: 109295352	Variant: 2813	CDSend: 2778
+rvarstart: 396
+uc011eej.1	TXstart: 150383341	TXend: 150386809	Variant: 396	CDSend: 24
+rvarstart: 829
+uc003qns.3	TXstart: 150385721	TXend: 150390283	Variant: 829	CDSend: 82
+Running jannovar.annotation.InsertionAnnotationTest
+rvarstart: 4030
+uc003qqz.2	TXstart: 158480005	TXend: 158520207	Variant: 4030	CDSend: 3975
+rvarstart: 4575
+uc003qqy.2	TXstart: 158438080	TXend: 158520207	Variant: 4575	CDSend: 4520
+rvarstart: 4652
+uc003qqx.2	TXstart: 158402888	TXend: 158520207	Variant: 4652	CDSend: 4597
+rvarstart: 2985
+uc003qra.2	TXstart: 158491160	TXend: 158520207	Variant: 2985	CDSend: 2930
+rvarstart: 1933
+uc003qth.2	TXstart: 160670198	TXend: 160679963	Variant: 1933	CDSend: 175
+rvarstart: 927
+uc003qth.2	TXstart: 160670198	TXend: 160679963	Variant: 927	CDSend: 175
+rvarstart: 1240
+uc003tyw.1	TXstart: 73097898	TXend: 73119491	Variant: 1240	CDSend: 903
+rvarstart: 1125
+uc003uho.1	TXstart: 81372007	TXend: 81399452	Variant: 1125	CDSend: 166
+rvarstart: 1140
+uc003uhn.1	TXstart: 81372007	TXend: 81399452	Variant: 1140	CDSend: 166
+rvarstart: 1584
+uc003uyo.1	TXstart: 101006122	TXend: 101202304	Variant: 1584	CDSend: 1404
+rvarstart: 1564
+uc010lhy.1	TXstart: 101006122	TXend: 101202304	Variant: 1564	CDSend: 1497
+rvarstart: 1331
+uc003vjk.3	TXstart: 120427374	TXend: 120498177	Variant: 1331	CDSend: 375
+rvarstart: 753
+uc010lkj.3	TXstart: 120427374	TXend: 120454214	Variant: 753	CDSend: 178
+rvarstart: 2685
+uc003vta.3	TXstart: 135365987	TXend: 135412933	Variant: 2685	CDSend: 690
+rvarstart: 2688
+uc003vtb.3	TXstart: 135365987	TXend: 135412933	Variant: 2688	CDSend: 690
+rvarstart: 950
+uc011kqf.2	TXstart: 137761178	TXend: 137803050	Variant: 950	CDSend: 945
+rvarstart: 990
+uc011kqe.1	TXstart: 137761178	TXend: 137803050	Variant: 990	CDSend: 960
+rvarstart: 1073
+uc003vtz.3	TXstart: 137761178	TXend: 137803050	Variant: 1073	CDSend: 1068
+rvarstart: 1992
+uc003wzr.3	TXstart: 20103676	TXend: 20112803	Variant: 1992	CDSend: 112
+rvarstart: 1199
+uc003xgi.3	TXstart: 27667138	TXend: 27695349	Variant: 1199	CDSend: 202
+rvarstart: 1397
+uc011lap.2	TXstart: 27667138	TXend: 27695572	Variant: 1397	CDSend: 367
+rvarstart: 771
+uc003xlx.1	TXstart: 38368352	TXend: 38386180	Variant: 771	CDSend: 26
+rvarstart: 1567
+uc003xmj.3	TXstart: 38831668	TXend: 38846181	Variant: 1567	CDSend: 1546
+rvarstart: 1990
+uc011lev.2	TXstart: 67782984	TXend: 67814014	Variant: 1990	CDSend: 1944
+rvarstart: 961
+uc003yac.3	TXstart: 74888377	TXend: 74895018	Variant: 961	CDSend: 464
+rvarstart: 947
+uc003yab.3	TXstart: 74888377	TXend: 74895018	Variant: 947	CDSend: 923
+rvarstart: 5085
+uc003zgm.3	TXstart: 504703	TXend: 734110	Variant: 5085	CDSend: 3072
+rvarstart: 982
+uc003zql.3	TXstart: 27284654	TXend: 27297137	Variant: 982	CDSend: 85
+rvarstart: 895
+uc011lnq.2	TXstart: 27284654	TXend: 27297137	Variant: 895	CDSend: 85
+rvarstart: 3413
+uc010mpt.2	TXstart: 84558415	TXend: 84565009	Variant: 3413	CDSend: 2840
+rvarstart: 480
+uc010mql.1	TXstart: 91261836	TXend: 91267075	Variant: 480	CDSend: 134
+rvarstart: 2713
+uc004ari.1	TXstart: 94325373	TXend: 94711162	Variant: 2713	CDSend: 598
+rvarstart: 3047
+uc004arj.2	TXstart: 94484878	TXend: 94712444	Variant: 3047	CDSend: 200
+rvarstart: 2785
+uc004cbq.1	TXstart: 135469676	TXend: 135545788	Variant: 2785	CDSend: 153
+rvarstart: 2566
+uc010mzu.1	TXstart: 135469676	TXend: 135545788	Variant: 2566	CDSend: 153
+rvarstart: 1035
+uc001ijv.3	TXstart: 7830093	TXend: 7849762	Variant: 1035	CDSend: 972
+rvarstart: 1072
+uc001iju.3	TXstart: 7830093	TXend: 7849762	Variant: 1072	CDSend: 975
+rvarstart: 1221
+uc010qcd.2	TXstart: 17194934	TXend: 17244070	Variant: 1221	CDSend: 438
+rvarstart: 2162
+uc009xka.2	TXstart: 18429742	TXend: 18830688	Variant: 2162	CDSend: 2152
+rvarstart: 2276
+uc001ipu.3	TXstart: 18429742	TXend: 18830688	Variant: 2276	CDSend: 2266
+rvarstart: 2204
+uc001ipv.3	TXstart: 18429742	TXend: 18830688	Variant: 2204	CDSend: 2194
+rvarstart: 1303
+uc009xjz.1	TXstart: 18429606	TXend: 18830688	Variant: 1303	CDSend: 1293
+rvarstart: 1981
+uc001ips.2	TXstart: 18429606	TXend: 18830688	Variant: 1981	CDSend: 1971
+rvarstart: 2053
+uc001ipr.2	TXstart: 18429606	TXend: 18830688	Variant: 2053	CDSend: 2043
+rvarstart: 1939
+uc001ipt.2	TXstart: 18429606	TXend: 18830688	Variant: 1939	CDSend: 1929
+rvarstart: 2183
+uc010qco.1	TXstart: 18689513	TXend: 18830688	Variant: 2183	CDSend: 2173
+rvarstart: 2297
+uc001iqa.2	TXstart: 18689513	TXend: 18830688	Variant: 2297	CDSend: 2287
+rvarstart: 2073
+uc001ipy.2	TXstart: 18629614	TXend: 18830688	Variant: 2073	CDSend: 2063
+rvarstart: 2001
+uc001ipz.2	TXstart: 18629614	TXend: 18830688	Variant: 2001	CDSend: 1991
+rvarstart: 2443
+uc001ipx.2	TXstart: 18549584	TXend: 18830688	Variant: 2443	CDSend: 2433
+rvarstart: 2329
+uc001ipw.2	TXstart: 18549584	TXend: 18830688	Variant: 2329	CDSend: 2319
+rvarstart: 2473
+uc001jgu.3	TXstart: 49654079	TXend: 49813138	Variant: 2473	CDSend: 298
+rvarstart: 2425
+uc001jgt.3	TXstart: 49654079	TXend: 49813138	Variant: 2425	CDSend: 298
+rvarstart: 2296
+uc010qgl.2	TXstart: 49654079	TXend: 49813138	Variant: 2296	CDSend: 298
+rvarstart: 2257
+uc010qgm.2	TXstart: 49654079	TXend: 49860441	Variant: 2257	CDSend: 112
+rvarstart: 2962
+uc001jgv.3	TXstart: 49654079	TXend: 49864310	Variant: 2962	CDSend: 1741
+rvarstart: 2017
+uc001jgs.3	TXstart: 49654079	TXend: 49701692	Variant: 2017	CDSend: 160
+rvarstart: 1515
+uc001jgr.3	TXstart: 49654079	TXend: 49659558	Variant: 1515	CDSend: 237
+rvarstart: 9811
+uc001jha.4	TXstart: 49893518	TXend: 50191001	Variant: 9811	CDSend: 9632
+rvarstart: 517
+uc001jnv.1	TXstart: 70046785	TXend: 70066660	Variant: 517	CDSend: 60
+rvarstart: 559
+uc001jqy.1	TXstart: 72058729	TXend: 72142382	Variant: 559	CDSend: 142
+rvarstart: 577
+uc001jqz.1	TXstart: 72058729	TXend: 72142382	Variant: 577	CDSend: 142
+rvarstart: 808
+uc001jqx.1	TXstart: 72058729	TXend: 72141414	Variant: 808	CDSend: 223
+rvarstart: 1894
+uc009xst.3	TXstart: 85961563	TXend: 85977121	Variant: 1894	CDSend: 1890
+rvarstart: 2689
+uc001kcv.3	TXstart: 85954412	TXend: 85977121	Variant: 2689	CDSend: 2685
+rvarstart: 1016
+uc001kcx.3	TXstart: 85972633	TXend: 85977121	Variant: 1016	CDSend: 1012
+rvarstart: 2873
+uc001kee.2	TXstart: 88730498	TXend: 88769960	Variant: 2873	CDSend: 2857
+rvarstart: 2698
+uc021qbe.1	TXstart: 135075920	TXend: 135090407	Variant: 2698	CDSend: 87
+rvarstart: 2425
+uc010qva.2	TXstart: 135075920	TXend: 135090407	Variant: 2425	CDSend: 87
+rvarstart: 2531
+uc009ybi.3	TXstart: 135075920	TXend: 135090407	Variant: 2531	CDSend: 87
+rvarstart: 234
+uc001lsc.3	TXstart: 839721	TXend: 842529	Variant: 234	CDSend: 22
+rvarstart: 1679
+uc010qzm.2	TXstart: 5710817	TXend: 5732093	Variant: 1679	CDSend: 1643
+rvarstart: 1912
+uc001mbr.3	TXstart: 5710817	TXend: 5732093	Variant: 1912	CDSend: 1876
+rvarstart: 1900
+uc009yes.3	TXstart: 5710817	TXend: 5732093	Variant: 1900	CDSend: 1864
+rvarstart: 2874
+uc001msu.2	TXstart: 30964749	TXend: 31391357	Variant: 2874	CDSend: 1270
+rvarstart: 1832
+uc001mtn.2	TXstart: 32409322	TXend: 32457081	Variant: 1832	CDSend: 191
+rvarstart: 1823
+uc001mto.2	TXstart: 32409322	TXend: 32457081	Variant: 1823	CDSend: 191
+rvarstart: 1772
+uc001mtq.2	TXstart: 32409322	TXend: 32457081	Variant: 1772	CDSend: 191
+rvarstart: 1275
+uc001mtl.2	TXstart: 32409322	TXend: 32452363	Variant: 1275	CDSend: 279
+rvarstart: 1233
+uc001mtm.2	TXstart: 32409322	TXend: 32452363	Variant: 1233	CDSend: 279
+rvarstart: 856
+uc021qgl.1	TXstart: 45234022	TXend: 45236293	Variant: 856	CDSend: 304
+rvarstart: 1815
+uc010rhy.2	TXstart: 49580080	TXend: 49831969	Variant: 1815	CDSend: 1498
+rvarstart: 1723
+uc009ymb.3	TXstart: 49582475	TXend: 49831969	Variant: 1723	CDSend: 1406
+rvarstart: 1566
+uc001nsm.3	TXstart: 61640998	TXend: 61659006	Variant: 1566	CDSend: 154
+rvarstart: 1113
+uc021qlg.1	TXstart: 64981311	TXend: 64993511	Variant: 1113	CDSend: 1083
+rvarstart: 1116
+uc021qlg.1	TXstart: 64981311	TXend: 64993511	Variant: 1116	CDSend: 1083
+rvarstart: 1327
+uc001omt.4	TXstart: 67559238	TXend: 67572807	Variant: 1327	CDSend: 24
+rvarstart: 2638
+uc001pjs.3	TXstart: 107674734	TXend: 107729680	Variant: 2638	CDSend: 188
+rvarstart: 1629
+uc001pkj.2	TXstart: 108342833	TXend: 108369159	Variant: 1629	CDSend: 67
+rvarstart: 1698
+uc001pki.2	TXstart: 108342833	TXend: 108362231	Variant: 1698	CDSend: 304
+rvarstart: 417
+uc001ppt.1	TXstart: 116700624	TXend: 116703787	Variant: 417	CDSend: 346
+rvarstart: 2018
+uc001qne.1	TXstart: 4829752	TXend: 4881892	Variant: 2018	CDSend: 2006
+rvarstart: 583
+uc001qtf.3	TXstart: 7864089	TXend: 7870152	Variant: 583	CDSend: 558
+rvarstart: 723
+uc001qyk.2	TXstart: 10583206	TXend: 10588592	Variant: 723	CDSend: 8
+rvarstart: 1286
+uc001rdd.4	TXstart: 16035288	TXend: 16056410	Variant: 1286	CDSend: 1271
+rvarstart: 1422
+uc001rdc.4	TXstart: 16035288	TXend: 16056410	Variant: 1422	CDSend: 1407
+rvarstart: 1461
+uc010shw.2	TXstart: 16035288	TXend: 16056410	Variant: 1461	CDSend: 1446
+rvarstart: 868
+uc001ryi.1	TXstart: 51722227	TXend: 51740463	Variant: 868	CDSend: 42
+rvarstart: 2865
+uc001tmp.3	TXstart: 108126643	TXend: 108154914	Variant: 2865	CDSend: 438
+rvarstart: 1221
+uc009zwf.3	TXstart: 113344739	TXend: 113369990	Variant: 1221	CDSend: 1189
+rvarstart: 3152
+uc001usg.3	TXstart: 29274218	TXend: 29289110	Variant: 3152	CDSend: 1460
+rvarstart: 2888
+uc001usi.3	TXstart: 29274218	TXend: 29293105	Variant: 2888	CDSend: 971
+rvarstart: 2460
+uc001ush.3	TXstart: 29274218	TXend: 29293150	Variant: 2460	CDSend: 543
+rvarstart: 870
+uc010tii.1	TXstart: 96085853	TXend: 96232010	Variant: 870	CDSend: 859
+rvarstart: 927
+uc001vmg.2	TXstart: 96085853	TXend: 96232010	Variant: 927	CDSend: 916
+rvarstart: 759
+uc001vmh.2	TXstart: 96204947	TXend: 96232010	Variant: 759	CDSend: 748
+rvarstart: 2374
+uc001vwc.3	TXstart: 19983954	TXend: 20020272	Variant: 2374	CDSend: 53
+rvarstart: 558
+uc001vxt.3	TXstart: 21058240	TXend: 21058982	Variant: 558	CDSend: 101
+rvarstart: 572
+uc021ror.1	TXstart: 21387500	TXend: 21388335	Variant: 572	CDSend: 550
+rvarstart: 1141
+uc001wys.3	TXstart: 51338878	TXend: 51371688	Variant: 1141	CDSend: 1104
+rvarstart: 910
+uc001wyr.3	TXstart: 51338878	TXend: 51371688	Variant: 910	CDSend: 873
+rvarstart: 1013
+uc001wyq.3	TXstart: 51338878	TXend: 51371688	Variant: 1013	CDSend: 976
+rvarstart: 1157
+uc001xbi.1	TXstart: 55308724	TXend: 55369542	Variant: 1157	CDSend: 162
+rvarstart: 1949
+uc001xgy.2	TXstart: 64693751	TXend: 64749793	Variant: 1949	CDSend: 91
+rvarstart: 2012
+uc001xgu.3	TXstart: 64693751	TXend: 64761128	Variant: 2012	CDSend: 469
+rvarstart: 2287
+uc001xgv.3	TXstart: 64693751	TXend: 64805268	Variant: 2287	CDSend: 744
+rvarstart: 3272
+uc001xgx.3	TXstart: 64693751	TXend: 64805268	Variant: 3272	CDSend: 1729
+rvarstart: 543
+uc001xik.3	TXstart: 65550462	TXend: 65569227	Variant: 543	CDSend: 171
+rvarstart: 17524
+uc010axc.1	TXstart: 105403591	TXend: 105444694	Variant: 17524	CDSend: 121
+rvarstart: 3646
+uc021sen.1	TXstart: 105403590	TXend: 105408029	Variant: 3646	CDSend: 52
+rvarstart: 2642
+uc021seo.1	TXstart: 105403590	TXend: 105420241	Variant: 2642	CDSend: 245
+rvarstart: 17377
+uc001ypx.2	TXstart: 105403591	TXend: 105436820	Variant: 17377	CDSend: 274
+rvarstart: 2288
+uc021sfv.1	TXstart: 23599895	TXend: 23613471	Variant: 2288	CDSend: 2264
+rvarstart: 14661
+uc001zbj.3	TXstart: 28356188	TXend: 28567295	Variant: 14661	CDSend: 107
+rvarstart: 1680
+uc001zbi.3	TXstart: 28356188	TXend: 28362697	Variant: 1680	CDSend: 59
+rvarstart: 3624
+uc001zhf.4	TXstart: 33057747	TXend: 33360085	Variant: 3624	CDSend: 1
+rvarstart: 1603
+uc001zvc.3	TXstart: 45653322	TXend: 45670980	Variant: 1603	CDSend: 330
+rvarstart: 2930
+uc001zvb.3	TXstart: 45653322	TXend: 45670742	Variant: 2930	CDSend: 2044
+rvarstart: 1619
+uc001zvj.3	TXstart: 45774680	TXend: 45815002	Variant: 1619	CDSend: 313
+rvarstart: 776
+uc002abq.3	TXstart: 52401822	TXend: 52404972	Variant: 776	CDSend: 50
+rvarstart: 2806
+uc002aos.2	TXstart: 65619465	TXend: 65670378	Variant: 2806	CDSend: 253
+rvarstart: 554
+uc002aor.1	TXstart: 65620611	TXend: 65621935	Variant: 554	CDSend: 143
+rvarstart: 3861
+uc002bbz.1	TXstart: 76672050	TXend: 77197744	Variant: 3861	CDSend: 452
+rvarstart: 449
+uc002cfi.2	TXstart: 96979	TXend: 103632	Variant: 449	CDSend: 47
+rvarstart: 972
+uc002chr.3	TXstart: 640173	TXend: 679273	Variant: 972	CDSend: 965
+rvarstart: 870
+uc002chq.3	TXstart: 640077	TXend: 679273	Variant: 870	CDSend: 863
+rvarstart: 927
+uc021szv.1	TXstart: 640077	TXend: 679273	Variant: 927	CDSend: 920
+rvarstart: 967
+uc021szu.1	TXstart: 639669	TXend: 679273	Variant: 967	CDSend: 960
+rvarstart: 1075
+uc021szt.1	TXstart: 639357	TXend: 679273	Variant: 1075	CDSend: 1068
+rvarstart: 740
+uc002cru.3	TXstart: 2880173	TXend: 2882285	Variant: 740	CDSend: 703
+rvarstart: 1408
+uc010nzj.2	TXstart: 3607236	TXend: 3646315	Variant: 1408	CDSend: 1287
+rvarstart: 1463
+uc010nzj.2	TXstart: 3607236	TXend: 3646315	Variant: 1463	CDSend: 1287
+rvarstart: 907
+uc001aoc.3	TXstart: 6684925	TXend: 6693642	Variant: 907	CDSend: 879
+rvarstart: 814
+uc001aod.3	TXstart: 6685210	TXend: 6693642	Variant: 814	CDSend: 786
+rvarstart: 1020
+uc009vne.1	TXstart: 11866207	TXend: 11876844	Variant: 1020	CDSend: 371
+rvarstart: 1506
+uc002cyz.3	TXstart: 8715527	TXend: 8740079	Variant: 1506	CDSend: 1491
+rvarstart: 1573
+uc002czx.3	TXstart: 10622279	TXend: 10674539	Variant: 1573	CDSend: 195
+rvarstart: 4073
+uc002dll.3	TXstart: 23072728	TXend: 23160591	Variant: 4073	CDSend: 1
+rvarstart: 2401
+uc010bxm.3	TXstart: 23072728	TXend: 23096983	Variant: 2401	CDSend: 465
+rvarstart: 2868
+uc010vca.2	TXstart: 23072728	TXend: 23086172	Variant: 2868	CDSend: 887
+rvarstart: 2089
+uc002dlk.3	TXstart: 23072728	TXend: 23083869	Variant: 2089	CDSend: 201
+rvarstart: 516
+uc002dzy.2	TXstart: 30930640	TXend: 30934590	Variant: 516	CDSend: 24
+rvarstart: 1126
+uc002epu.3	TXstart: 66637935	TXend: 66647795	Variant: 1126	CDSend: 1075
+rvarstart: 906
+uc002epv.3	TXstart: 66638228	TXend: 66647795	Variant: 906	CDSend: 855
+rvarstart: 742
+uc002epx.3	TXstart: 66638567	TXend: 66647795	Variant: 742	CDSend: 691
+rvarstart: 1956
+uc002etr.4	TXstart: 67691415	TXend: 67694718	Variant: 1956	CDSend: 338
+rvarstart: 2004
+uc002etq.4	TXstart: 67691415	TXend: 67694718	Variant: 2004	CDSend: 338
+rvarstart: 1995
+uc002etp.4	TXstart: 67691415	TXend: 67694718	Variant: 1995	CDSend: 338
+rvarstart: 1116
+uc010vno.2	TXstart: 81094585	TXend: 81110872	Variant: 1116	CDSend: 742
+rvarstart: 1453
+uc002fgc.4	TXstart: 81094585	TXend: 81110872	Variant: 1453	CDSend: 260
+rvarstart: 1517
+uc002fkt.1	TXstart: 88121647	TXend: 88134565	Variant: 1517	CDSend: 245
+rvarstart: 1602
+uc021tnm.1	TXstart: 1646320	TXend: 1658559	Variant: 1602	CDSend: 1531
+rvarstart: 1624
+uc002ftk.1	TXstart: 1646130	TXend: 1658559	Variant: 1624	CDSend: 1553
+rvarstart: 1432
+uc010vqr.1	TXstart: 1646130	TXend: 1658559	Variant: 1432	CDSend: 1361
+rvarstart: 662
+uc002gea.3	TXstart: 6915736	TXend: 6918197	Variant: 662	CDSend: 564
+rvarstart: 879
+uc021tow.1	TXstart: 6915736	TXend: 6918197	Variant: 879	CDSend: 781
+rvarstart: 407
+uc002gzx.3	TXstart: 26205340	TXend: 26220409	Variant: 407	CDSend: 86
+rvarstart: 1190
+uc002gzy.1	TXstart: 26205386	TXend: 26220409	Variant: 1190	CDSend: 86
+rvarstart: 1418
+uc002hdc.3	TXstart: 27206357	TXend: 27224715	Variant: 1418	CDSend: 124
+rvarstart: 783
+uc002iee.4	TXstart: 41843489	TXend: 41856368	Variant: 783	CDSend: 77
+rvarstart: 647
+uc002ied.4	TXstart: 41843489	TXend: 41856368	Variant: 647	CDSend: 77
+rvarstart: 1917
+uc010wio.1	TXstart: 41952727	TXend: 41985113	Variant: 1917	CDSend: 275
+rvarstart: 1862
+uc010win.1	TXstart: 41952727	TXend: 41985113	Variant: 1862	CDSend: 604
+rvarstart: 1981
+uc002ieo.1	TXstart: 41952727	TXend: 41985113	Variant: 1981	CDSend: 306
+rvarstart: 1868
+uc010wip.1	TXstart: 41952727	TXend: 41987068	Variant: 1868	CDSend: 58
+rvarstart: 1798
+uc002ien.1	TXstart: 41952727	TXend: 41977991	Variant: 1798	CDSend: 72
+rvarstart: 1924
+uc010wim.1	TXstart: 41952727	TXend: 41978930	Variant: 1924	CDSend: 282
+rvarstart: 899
+uc002inh.1	TXstart: 46188063	TXend: 46200105	Variant: 899	CDSend: 893
+rvarstart: 1173
+uc002inf.1	TXstart: 46184920	TXend: 46200105	Variant: 1173	CDSend: 1167
+rvarstart: 1113
+uc002ing.1	TXstart: 46184920	TXend: 46200105	Variant: 1113	CDSend: 1107
+rvarstart: 971
+uc010wlj.1	TXstart: 46184920	TXend: 46200105	Variant: 971	CDSend: 965
+rvarstart: 1139
+uc010wlh.1	TXstart: 46184920	TXend: 46200105	Variant: 1139	CDSend: 1133
+rvarstart: 1072
+uc010wli.1	TXstart: 46184920	TXend: 46200105	Variant: 1072	CDSend: 1066
+rvarstart: 906
+uc010wlg.1	TXstart: 46184911	TXend: 46200105	Variant: 906	CDSend: 900
+rvarstart: 490
+uc002ioh.3	TXstart: 46970148	TXend: 46973232	Variant: 490	CDSend: 475
+rvarstart: 560
+uc002iog.3	TXstart: 46970148	TXend: 46973232	Variant: 560	CDSend: 545
+rvarstart: 1965
+uc002iqr.2	TXstart: 48445229	TXend: 48450562	Variant: 1965	CDSend: 32
+rvarstart: 4595
+uc002ize.3	TXstart: 59477257	TXend: 59486485	Variant: 4595	CDSend: 1628
+rvarstart: 5453
+uc002jpj.3	TXstart: 73720774	TXend: 73753899	Variant: 5453	CDSend: 5428
+rvarstart: 5349
+uc002jpi.4	TXstart: 73717589	TXend: 73753899	Variant: 5349	CDSend: 5324
+rvarstart: 5681
+uc002jpg.3	TXstart: 73717516	TXend: 73753899	Variant: 5681	CDSend: 5656
+rvarstart: 5471
+uc002jph.3	TXstart: 73717516	TXend: 73753899	Variant: 5471	CDSend: 5446
+rvarstart: 4289
+uc002jqr.3	TXstart: 74077086	TXend: 74099868	Variant: 4289	CDSend: 96
+rvarstart: 4535
+uc002jqs.3	TXstart: 74077086	TXend: 74099868	Variant: 4535	CDSend: 96
+rvarstart: 4382
+uc002jqq.3	TXstart: 74077086	TXend: 74099868	Variant: 4382	CDSend: 96
+rvarstart: 4451
+uc010wsw.2	TXstart: 74077086	TXend: 74099868	Variant: 4451	CDSend: 96
+rvarstart: 4358
+uc010wsx.2	TXstart: 74077086	TXend: 74099868	Variant: 4358	CDSend: 96
+rvarstart: 4411
+uc010wsv.2	TXstart: 74077086	TXend: 74099652	Variant: 4411	CDSend: 209
+rvarstart: 4095
+uc010dgv.2	TXstart: 74077086	TXend: 74097944	Variant: 4095	CDSend: 34
+rvarstart: 2938
+uc002jqp.2	TXstart: 74077086	TXend: 74080797	Variant: 2938	CDSend: 114
+rvarstart: 851
+uc010dkc.1	TXstart: 657604	TXend: 673499	Variant: 851	CDSend: 832
+rvarstart: 998
+uc010dkb.1	TXstart: 657604	TXend: 673499	Variant: 998	CDSend: 979
+rvarstart: 1100
+uc010dka.1	TXstart: 657604	TXend: 673499	Variant: 1100	CDSend: 1081
+rvarstart: 2698
+uc002kkw.4	TXstart: 670324	TXend: 712662	Variant: 2698	CDSend: 621
+rvarstart: 1496
+uc002kkt.4	TXstart: 670324	TXend: 712662	Variant: 1496	CDSend: 206
+rvarstart: 2696
+uc002kku.4	TXstart: 670324	TXend: 712662	Variant: 2696	CDSend: 76
+rvarstart: 2653
+uc010dkf.3	TXstart: 670324	TXend: 712517	Variant: 2653	CDSend: 12
+rvarstart: 3627
+uc002lbe.3	TXstart: 43194766	TXend: 43263060	Variant: 3627	CDSend: 3579
+rvarstart: 3145
+uc010dnj.3	TXstart: 42792947	TXend: 43263060	Variant: 3145	CDSend: 3097
+rvarstart: 974
+uc002let.3	TXstart: 47901392	TXend: 47920538	Variant: 974	CDSend: 952
+rvarstart: 1019
+uc002leu.3	TXstart: 47901392	TXend: 47920538	Variant: 1019	CDSend: 997
+rvarstart: 836
+uc010xdl.2	TXstart: 47901392	TXend: 47920538	Variant: 836	CDSend: 814
+rvarstart: 1533
+uc010dtk.2	TXstart: 3522954	TXend: 3536755	Variant: 1533	CDSend: 1525
+rvarstart: 1257
+uc002lxv.2	TXstart: 3522954	TXend: 3536755	Variant: 1257	CDSend: 1249
+rvarstart: 1702
+uc002lxt.2	TXstart: 3506295	TXend: 3536755	Variant: 1702	CDSend: 1694
+rvarstart: 1940
+uc002npb.1	TXstart: 20802745	TXend: 20844402	Variant: 1940	CDSend: 151
+rvarstart: 1717
+uc002npc.1	TXstart: 20802745	TXend: 20844402	Variant: 1717	CDSend: 156
+rvarstart: 798
+uc002nud.4	TXstart: 33463148	TXend: 33467960	Variant: 798	CDSend: 766
+rvarstart: 1684
+uc002nxy.1	TXstart: 35615417	TXend: 35633355	Variant: 1684	CDSend: 576
+rvarstart: 2219
+uc002nxx.2	TXstart: 35615417	TXend: 35626178	Variant: 2219	CDSend: 595
+rvarstart: 2145
+uc002nxz.1	TXstart: 35615578	TXend: 35624668	Variant: 2145	CDSend: 275
+rvarstart: 1563
+uc021usz.1	TXstart: 36249044	TXend: 36260077	Variant: 1563	CDSend: 1516
+rvarstart: 1046
+uc002okh.3	TXstart: 39514663	TXend: 39523198	Variant: 1046	CDSend: 83
+rvarstart: 16286
+uc002omp.4	TXstart: 40353963	TXend: 40440533	Variant: 16286	CDSend: 9
+rvarstart: 602
+uc002opb.4	TXstart: 41281282	TXend: 41283398	Variant: 602	CDSend: 562
+rvarstart: 477
+uc021uuu.1	TXstart: 41281082	TXend: 41283398	Variant: 477	CDSend: 437
+rvarstart: 2078
+uc002phx.3	TXstart: 48551100	TXend: 48614109	Variant: 2078	CDSend: 399
+rvarstart: 2121
+uc010elr.3	TXstart: 48551100	TXend: 48614109	Variant: 2121	CDSend: 399
+rvarstart: 2047
+uc010xzd.2	TXstart: 48551100	TXend: 48614109	Variant: 2047	CDSend: 338
+rvarstart: 1679
+uc002phw.3	TXstart: 48551100	TXend: 48608708	Variant: 1679	CDSend: 195
+rvarstart: 1940
+uc002pyy.4	TXstart: 52839498	TXend: 52870376	Variant: 1940	CDSend: 1908
+rvarstart: 1811
+uc002pyz.4	TXstart: 52839498	TXend: 52870376	Variant: 1811	CDSend: 1779
+rvarstart: 1827
+uc002pyx.4	TXstart: 52839498	TXend: 52870376	Variant: 1827	CDSend: 1795
+rvarstart: 1796
+uc002pza.3	TXstart: 52848682	TXend: 52870376	Variant: 1796	CDSend: 1764
+rvarstart: 2330
+uc002pzh.3	TXstart: 52901121	TXend: 52921657	Variant: 2330	CDSend: 2313
+rvarstart: 2543
+uc002pzi.3	TXstart: 52901121	TXend: 52921657	Variant: 2543	CDSend: 2526
+rvarstart: 2330
+uc002pzh.3	TXstart: 52901121	TXend: 52921657	Variant: 2330	CDSend: 2313
+rvarstart: 2543
+uc002pzi.3	TXstart: 52901121	TXend: 52921657	Variant: 2543	CDSend: 2526
+rvarstart: 885
+uc002qas.4	TXstart: 53576146	TXend: 53606687	Variant: 885	CDSend: 441
+rvarstart: 3653
+uc002qfa.1	TXstart: 54754410	TXend: 54761108	Variant: 3653	CDSend: 433
+rvarstart: 965
+uc002qhm.1	TXstart: 55344174	TXend: 55360023	Variant: 965	CDSend: 937
+rvarstart: 1839
+uc010zrl.2	TXstart: 13830050	TXend: 13971262	Variant: 1839	CDSend: 83
+rvarstart: 2299
+uc002woq.4	TXstart: 13830050	TXend: 13971262	Variant: 2299	CDSend: 621
+rvarstart: 2178
+uc010gcf.3	TXstart: 13830050	TXend: 13971262	Variant: 2178	CDSend: 83
+rvarstart: 1431
+uc010zsf.1	TXstart: 20037290	TXend: 20152977	Variant: 1431	CDSend: 1421
+rvarstart: 1611
+uc010gjm.3	TXstart: 56178902	TXend: 56195632	Variant: 1611	CDSend: 282
+rvarstart: 1614
+uc002xyo.3	TXstart: 56178902	TXend: 56195632	Variant: 1614	CDSend: 282
+rvarstart: 1389
+uc002xyp.3	TXstart: 56178902	TXend: 56195632	Variant: 1389	CDSend: 282
+rvarstart: 1502
+uc002ylp.1	TXstart: 27011589	TXend: 27087235	Variant: 1502	CDSend: 1442
+rvarstart: 1394
+uc011acf.1	TXstart: 27011589	TXend: 27087235	Variant: 1394	CDSend: 1334
+rvarstart: 3570
+uc002ymg.3	TXstart: 28290231	TXend: 28339439	Variant: 3570	CDSend: 730
+rvarstart: 1938
+uc011afa.2	TXstart: 45502669	TXend: 45526432	Variant: 1938	CDSend: 1934
+rvarstart: 3953
+uc002zea.3	TXstart: 45432206	TXend: 45526432	Variant: 3953	CDSend: 3949
+rvarstart: 4069
+uc010gpo.3	TXstart: 45432206	TXend: 45526432	Variant: 4069	CDSend: 4065
+rvarstart: 1535
+uc002zec.4	TXstart: 45553494	TXend: 45565605	Variant: 1535	CDSend: 893
+rvarstart: 1442
+uc002zed.4	TXstart: 45553494	TXend: 45565605	Variant: 1442	CDSend: 800
+rvarstart: 2472
+uc002zij.3	TXstart: 47608360	TXend: 47648738	Variant: 2472	CDSend: 80
+rvarstart: 3043
+uc003aah.2	TXstart: 24936406	TXend: 24951275	Variant: 3043	CDSend: 317
+rvarstart: 3005
+uc003aal.2	TXstart: 24936406	TXend: 24951903	Variant: 3005	CDSend: 111
+rvarstart: 426
+uc010gwz.3	TXstart: 37196745	TXend: 37213079	Variant: 426	CDSend: 31
+rvarstart: 446
+uc003apx.3	TXstart: 37196745	TXend: 37215517	Variant: 446	CDSend: 51
+rvarstart: 2014
+uc003atx.1	TXstart: 38153620	TXend: 38169113	Variant: 2014	CDSend: 1408
+rvarstart: 1687
+uc003bcn.4	TXstart: 42776414	TXend: 42828401	Variant: 1687	CDSend: 39
+rvarstart: 1024
+uc003bdm.1	TXstart: 43528212	TXend: 43539403	Variant: 1024	CDSend: 50
+rvarstart: 1242
+uc003bdl.1	TXstart: 43528212	TXend: 43539403	Variant: 1242	CDSend: 50
+rvarstart: 2063
+uc003bfs.3	TXstart: 45559726	TXend: 45583890	Variant: 2063	CDSend: 2025
+rvarstart: 1907
+uc003bfr.3	TXstart: 45559726	TXend: 45583890	Variant: 1907	CDSend: 1869
+rvarstart: 1720
+uc011aqn.2	TXstart: 45559726	TXend: 45583890	Variant: 1720	CDSend: 1682
+rvarstart: 1733
+uc003bft.3	TXstart: 45560552	TXend: 45583890	Variant: 1733	CDSend: 1695
+rvarstart: 2576
+uc011aqo.1	TXstart: 45573580	TXend: 45581505	Variant: 2576	CDSend: 1453
+rvarstart: 1993
+uc003blx.4	TXstart: 50946645	TXend: 50963209	Variant: 1993	CDSend: 1943
+rvarstart: 1990
+uc003blr.4	TXstart: 50946645	TXend: 50963209	Variant: 1990	CDSend: 1940
+rvarstart: 2058
+uc003blv.3	TXstart: 50946645	TXend: 50961901	Variant: 2058	CDSend: 1892
+rvarstart: 1997
+uc004ddi.2	TXstart: 34960913	TXend: 34963034	Variant: 1997	CDSend: 1974
+rvarstart: 842
+uc004ebl.4	TXstart: 72782984	TXend: 72906937	Variant: 842	CDSend: 752
+rvarstart: 837
+uc011mql.2	TXstart: 72782984	TXend: 72906937	Variant: 837	CDSend: 680
+rvarstart: 902
+uc004ebk.4	TXstart: 72782984	TXend: 72906937	Variant: 902	CDSend: 812
+rvarstart: 3147
+uc010nry.1	TXstart: 134975854	TXend: 134995221	Variant: 3147	CDSend: 2666
+rvarstart: 3158
+uc010nry.1	TXstart: 134975854	TXend: 134995221	Variant: 3158	CDSend: 2666
+rvarstart: 383
+uc004ftz.1	TXstart: 21152526	TXend: 21154705	Variant: 383	CDSend: 111
+rvarstart: 383
+uc004ftz.1	TXstart: 21152526	TXend: 21154705	Variant: 383	CDSend: 111
+rvarstart: 4845
+uc003gpr.1	TXstart: 20255235	TXend: 20620788	Variant: 4845	CDSend: 4794
+rvarstart: 4821
+uc003gps.1	TXstart: 20255235	TXend: 20620788	Variant: 4821	CDSend: 4770
+rvarstart: 2068
+uc001axy.4	TXstart: 16375284	TXend: 16383803	Variant: 2068	CDSend: 1737
+rvarstart: 2071
+uc021ogm.1	TXstart: 16375284	TXend: 16383803	Variant: 2071	CDSend: 1740
+rvarstart: 2531
+uc001axx.4	TXstart: 16370247	TXend: 16383803	Variant: 2531	CDSend: 2200
+rvarstart: 1986
+uc001bzw.2	TXstart: 36560844	TXend: 36565850	Variant: 1986	CDSend: 58
+rvarstart: 2131
+uc001bzv.2	TXstart: 36560844	TXend: 36565850	Variant: 2131	CDSend: 8
+rvarstart: 873
+uc001cbe.1	TXstart: 37958176	TXend: 37980364	Variant: 873	CDSend: 18
+rvarstart: 843
+uc001cbg.1	TXstart: 37958176	TXend: 37980364	Variant: 843	CDSend: 18
+rvarstart: 1464
+uc001cbd.1	TXstart: 37958176	TXend: 37979867	Variant: 1464	CDSend: 705
+rvarstart: 2133
+uc001dna.2	TXstart: 89597434	TXend: 89641723	Variant: 2133	CDSend: 140
+rvarstart: 653
+uc010pda.2	TXstart: 151372041	TXend: 151373603	Variant: 653	CDSend: 527
+rvarstart: 1790
+uc001ffa.2	TXstart: 154377669	TXend: 154441926	Variant: 1790	CDSend: 1535
+rvarstart: 1884
+uc001fez.2	TXstart: 154377669	TXend: 154441926	Variant: 1884	CDSend: 1844
+rvarstart: 1329
+uc001fps.1	TXstart: 156692413	TXend: 156697705	Variant: 1329	CDSend: 262
+rvarstart: 1251
+uc001fpt.1	TXstart: 156692413	TXend: 156698211	Variant: 1251	CDSend: 184
+rvarstart: 853
+uc009wum.2	TXstart: 161632905	TXend: 161643863	Variant: 853	CDSend: 832
+rvarstart: 1012
+uc001gde.2	TXstart: 165513478	TXend: 165533185	Variant: 1012	CDSend: 998
+rvarstart: 587
+uc001gfo.2	TXstart: 168545711	TXend: 168551315	Variant: 587	CDSend: 510
+Tests run: 210, Failures: 181, Errors: 0, Skipped: 0, Time elapsed: 2.897 sec <<< FAILURE!
+testUTR3Var112(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.007 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RGS21[]> but was:<RGS21[(uc001gsh.3:c.*20->CTAA)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var112(UTR3AnnotationTest.java:466)
+
+testUTR3Var116(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RGS21[]> but was:<RGS21[(uc001gsh.3:c.*21->TAAT)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var116(UTR3AnnotationTest.java:489)
+
+testUTR3Var119(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LMOD1[]> but was:<LMOD1[(uc010ppu.2:c.*3385A>G,uc021phl.1:c.*3538A>G,uc021phm.1:c.*3539A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var119(UTR3AnnotationTest.java:512)
+
+testUTR3Var137(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.009 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HS1BP3[]> but was:<HS1BP3[(uc002rdw.1:c.*1471T>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var137(UTR3AnnotationTest.java:535)
+
+testUTR3Var138(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HS1BP3[]> but was:<HS1BP3[(uc002rdw.1:c.*1467G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var138(UTR3AnnotationTest.java:558)
+
+testUTR3Var140(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CIB4[]> but was:<CIB4[(uc002rhm.3:c.*570G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var140(UTR3AnnotationTest.java:581)
+
+testUTR3Var142(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PREB[]> but was:<PREB[(uc002riy.1:c.*1146C>A,uc002rix.1:c.*1362C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var142(UTR3AnnotationTest.java:604)
+
+testUTR3Var143(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.003 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EIF2B4[]> but was:<EIF2B4[(uc002rke.3:c.*1479G>A,uc002rkc.3:c.*1569G>A,uc002rkb.3:c.*1572G>A,uc002rka.3:c.*1527G>A,uc002rjz.3:c.*1632G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var143(UTR3AnnotationTest.java:627)
+
+testUTR3Var144(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EIF2B4[]> but was:<EIF2B4[(uc002rkf.1:c.*2115T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var144(UTR3AnnotationTest.java:650)
+
+testUTR3Var146(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.005 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PLB1[]> but was:<PLB1[(uc002rmc.3:c.*28C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var146(UTR3AnnotationTest.java:673)
+
+testUTR3Var148(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CDC42EP3[]> but was:<CDC42EP3[(uc002rqi.1:c.*859C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var148(UTR3AnnotationTest.java:696)
+
+testUTR3Var153(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PLEK[]> but was:<PLEK[(uc010fde.3:c.*180G>C,uc002sen.4:c.*4G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var153(UTR3AnnotationTest.java:719)
+
+testUTR3Var154(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PLEK[]> but was:<PLEK[(uc010fde.3:c.*218T>C,uc002sen.4:c.*42T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var154(UTR3AnnotationTest.java:742)
+
+testUTR3Var161(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ACTG2[]> but was:<ACTG2[(uc010fex.1:c.*40G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var161(UTR3AnnotationTest.java:765)
+
+testUTR3Var163(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.003 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<REG3G[]> but was:<REG3G[(uc002snw.3:c.*24G>C,uc002snx.3:c.*24G>C,uc010ffu.3:c.*24G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var163(UTR3AnnotationTest.java:788)
+
+testUTR3Var164(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<REG1A[]> but was:<REG1A[(uc002snz.3:c.*6A>G,uc010ysd.2:c.*6A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var164(UTR3AnnotationTest.java:811)
+
+testUTR3Var166(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GNLY[]> but was:<GNLY[(uc010ysx.2:c.*59C>G,uc002sql.4:c.*59C>G,uc010fgp.3:c.*59C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var166(UTR3AnnotationTest.java:834)
+
+testUTR3Var172(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EDAR[]> but was:<EDAR[(uc002teq.4:c.*1388C>A,uc010yws.2:c.*1484C>A,uc010fjn.3:c.*1484C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var172(UTR3AnnotationTest.java:857)
+
+testUTR3Var182(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<[KLHL23,PHOSPHO2-KLHL23]> but was:<[PHOSPHO2-KLHL23(uc002ufh.2:c.*58->A,uc002ufi.2:c.*58->A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var182(UTR3AnnotationTest.java:880)
+
+testUTR3Var186(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.004 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<OSBPL6[]> but was:<OSBPL6[(uc002uly.3:c.*96A>G,uc002ulx.3:c.*96A>G,uc002ulz.3:c.*96A>G,uc010zfe.2:c.*96A>G,uc002uma.3:c.*96A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var186(UTR3AnnotationTest.java:903)
+
+testUTR3Var187(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AX746670[]> but was:<AX746670[(uc002umv.1:c.*546A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var187(UTR3AnnotationTest.java:926)
+
+testUTR3Var199(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ACADL[]> but was:<ACADL[(uc010zjg.1:c.*460T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var199(UTR3AnnotationTest.java:949)
+
+testUTR3Var200(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SPAG16[]> but was:<SPAG16[(uc002veo.3:c.*4A>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var200(UTR3AnnotationTest.java:972)
+
+testUTR3Var205(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GPBAR1[]> but was:<GPBAR1[(uc010zjx.1:c.*66C>T,uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var205(UTR3AnnotationTest.java:995)
+
+testUTR3Var213(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<NMUR1[]> but was:<NMUR1[(uc002vry.4:c.*1290A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var213(UTR3AnnotationTest.java:1018)
+
+testUTR3Var215(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<NGEF[]> but was:<NGEF[(uc002vtt.2:c.*816G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var215(UTR3AnnotationTest.java:1041)
+
+testUTR3Var223(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<NDUFA10[]> but was:<NDUFA10[(uc002vyo.2:c.*714A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var223(UTR3AnnotationTest.java:1064)
+
+testUTR3Var248(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GLT8D1[]> but was:<GLT8D1[(uc003dfk.3:c.*1172C>T,uc003dfl.3:c.*1172C>T,uc003dfm.3:c.*1172C>T,uc003dfn.3:c.*1172C>T,uc003dfi.4:c.*1172C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var248(UTR3AnnotationTest.java:1087)
+
+testUTR3Var254(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FRG2C[]> but was:<FRG2C[(uc003dpt.4:c.*7T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var254(UTR3AnnotationTest.java:1110)
+
+testUTR3Var262(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<BTLA[]> but was:<BTLA[(uc003dzb.4:c.*753A>G,uc003dza.4:c.*897A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var262(UTR3AnnotationTest.java:1133)
+
+testUTR3Var273(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RUVBL1[]> but was:<RUVBL1[(uc010hss.3:c.*1300A>G,uc003ekh.3:c.*1392A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var273(UTR3AnnotationTest.java:1156)
+
+testUTR3Var292(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AX746590[]> but was:<AX746590[(uc003fma.1:c.*652A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var292(UTR3AnnotationTest.java:1179)
+
+testUTR3Var298(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TPRG1[]> but was:<TPRG1[(uc003frw.2:c.*39T>C,uc003frv.2:c.*39T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var298(UTR3AnnotationTest.java:1202)
+
+testUTR3Var307(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ACOX3[]> but was:<ACOX3[(uc003glc.4:c.*2186C>T,uc003gld.4:c.*2118C>T,uc010idk.3:c.*2186C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var307(UTR3AnnotationTest.java:1225)
+
+testUTR3Var318(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KDR[]> but was:<KDR[(uc003has.3:c.*4097A>G,uc003hat.1:c.*4097A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var318(UTR3AnnotationTest.java:1248)
+
+testUTR3Var323(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SMR3A[]> but was:<SMR3A[(uc003hfg.1:c.*31C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var323(UTR3AnnotationTest.java:1271)
+
+testUTR3Var324(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MUC7[]> but was:<MUC7[(uc011cat.2:c.*99T>C,uc011cau.2:c.*99T>C,uc003hfj.3:c.*99T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var324(UTR3AnnotationTest.java:1294)
+
+testUTR3Var335(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RRH[]> but was:<RRH[(uc003hzv.3:c.*8T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var335(UTR3AnnotationTest.java:1317)
+
+testUTR3Var338(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AK308309[]> but was:<AK308309[(uc010imy.1)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var338(UTR3AnnotationTest.java:1340)
+
+testUTR3Var352(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FRG1[]> but was:<FRG1[(uc003izs.3:c.*5->GACA)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var352(UTR3AnnotationTest.java:1363)
+
+testUTR3Var360(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC6A3[]> but was:<SLC6A3[(uc003jck.3:c.*2951->GG)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var360(UTR3AnnotationTest.java:1386)
+
+testUTR3Var366(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<NPR3[]> but was:<NPR3[(uc003jhu.3:c.*3401T>C,uc003jhv.3:c.*3401T>C,uc003jhw.2:c.*3401T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var366(UTR3AnnotationTest.java:1409)
+
+testUTR3Var369(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DNAJC21[]> but was:<DNAJC21[(uc003jjb.3:c.*1475C>T,uc003jjc.3:c.*1475C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var369(UTR3AnnotationTest.java:1432)
+
+testUTR3Var376(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<IL31RA[]> but was:<IL31RA[(uc003jql.3:c.*75C>T,uc003jqo.3:c.*75C>T,uc021xyq.1:c.*75C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var376(UTR3AnnotationTest.java:1455)
+
+testUTR3Var390(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ATP10B[]> but was:<ATP10B[(uc003lyn.3:c.*1572T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var390(UTR3AnnotationTest.java:1478)
+
+testUTR3Var402(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PXDC1[]> but was:<PXDC1[(uc003mvt.2:c.*784G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var402(UTR3AnnotationTest.java:1501)
+
+testUTR3Var407(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KIF13A[]> but was:<KIF13A[(uc003nci.4:c.*5335A>C,uc003ncg.4:c.*5479A>C,uc003nch.4:c.*5374A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var407(UTR3AnnotationTest.java:1524)
+
+testUTR3Var408(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DCDC2[]> but was:<DCDC2[(uc003ndx.3:c.*1433G>C,uc003ndy.3:c.*1433G>C,uc003ndw.3:c.*686G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var408(UTR3AnnotationTest.java:1547)
+
+testUTR3Var409(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GPLD1[]> but was:<GPLD1[(uc010jps.1:c.*1721A>C,uc010jpr.1:c.*1232A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var409(UTR3AnnotationTest.java:1570)
+
+testUTR3Var413(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<BTN2A2[]> but was:<BTN2A2[(uc011dkg.2:c.*12G>A,uc011dki.1:c.*1464G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var413(UTR3AnnotationTest.java:1593)
+
+testUTR3Var418(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HLA-A[]> but was:<HLA-A[(uc011dmd.2:c.*652A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var418(UTR3AnnotationTest.java:1616)
+
+testUTR3Var427(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HLA-C[]> but was:<HLA-C[(uc021yuk.1:c.*848G>A,uc011dnj.2:c.*1109G>A,uc003nsy.3:c.*1193G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var427(UTR3AnnotationTest.java:1639)
+
+testUTR3Var430(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MICB[]> but was:<MICB[(uc003nto.4,uc003ntn.4,uc011dnm.2)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var430(UTR3AnnotationTest.java:1662)
+
+testUTR3Var436(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HLA-DMB[]> but was:<HLA-DMB[(uc003ocj.2:c.*2136G>A,uc011dql.2:c.*909G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var436(UTR3AnnotationTest.java:1685)
+
+testUTR3Var443(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LEMD2[]> but was:<LEMD2[(uc011drm.2:c.*1534G>A,uc011drl.2:c.*628G>A,uc010jvg.3:c.*661G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var443(UTR3AnnotationTest.java:1708)
+
+testUTR3Var448(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PRPH2[]> but was:<PRPH2[(uc003osk.3:c.*1053G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var448(UTR3AnnotationTest.java:1731)
+
+testUTR3Var453(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PKHD1[]> but was:<PKHD1[(uc003pai.3:c.*10203G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var453(UTR3AnnotationTest.java:1754)
+
+testUTR3Var467(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ARMC2[]> but was:<ARMC2[(uc011eao.2:c.*35C>T,uc003pss.4:c.*35C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var467(UTR3AnnotationTest.java:1777)
+
+testUTR3Var472(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ULBP3[]> but was:<ULBP3[(uc011eej.1:c.*372T>G,uc003qns.3:c.*747T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var472(UTR3AnnotationTest.java:1800)
+
+testUTR3Var474(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SYNJ2[]> but was:<SYNJ2[(uc003qqz.2:c.*55A>G,uc003qqy.2:c.*55A>G,uc003qqx.2:c.*55A>G,uc003qra.2:c.*55A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var474(UTR3AnnotationTest.java:1823)
+
+testUTR3Var478(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC22A2[]> but was:<SLC22A2[(uc003qth.2:c.*1758A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var478(UTR3AnnotationTest.java:1846)
+
+testUTR3Var479(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC22A2[]> but was:<SLC22A2[(uc003qth.2:c.*752T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var479(UTR3AnnotationTest.java:1869)
+
+testUTR3Var498(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CDCA7L[]> but was:<CDCA7L[(uc003sve.4,uc003svf.4,uc010kuk.3,uc010kul.3)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var498(UTR3AnnotationTest.java:1892)
+
+testUTR3Var511(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<WBSCR22[]> but was:<WBSCR22[(uc003tyw.1:c.*337T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var511(UTR3AnnotationTest.java:1915)
+
+testUTR3Var513(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HGF[]> but was:<HGF[(uc003uho.1:c.*959A>G,uc003uhn.1:c.*974A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var513(UTR3AnnotationTest.java:1938)
+
+testUTR3Var522(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EMID2[]> but was:<EMID2[(uc003uyo.1:c.*180G>A,uc010lhy.1:c.*67G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var522(UTR3AnnotationTest.java:1961)
+
+testUTR3Var527(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TSPAN12[]> but was:<TSPAN12[(uc003vjk.3:c.*956G>A,uc010lkj.3:c.*575G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var527(UTR3AnnotationTest.java:1984)
+
+testUTR3Var537(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC13A4[]> but was:<SLC13A4[(uc003vta.3:c.*1995G>A,uc003vtb.3:c.*1998G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var537(UTR3AnnotationTest.java:2007)
+
+testUTR3Var556(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LZTS1[]> but was:<LZTS1[(uc003wzr.3:c.*1880A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var556(UTR3AnnotationTest.java:2054)
+
+testUTR3Var565(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PBK[]> but was:<PBK[(uc003xgi.3:c.*997C>T,uc011lap.2:c.*1030C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var565(UTR3AnnotationTest.java:2077)
+
+testUTR3Var569(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C8orf86[]> but was:<C8orf86[(uc003xlx.1:c.*745A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var569(UTR3AnnotationTest.java:2100)
+
+testUTR3Var570(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HTRA4[]> but was:<HTRA4[(uc003xmj.3:c.*21A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var570(UTR3AnnotationTest.java:2123)
+
+testUTR3Var572(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C8orf45[]> but was:<C8orf45[(uc011lev.2:c.*46A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var572(UTR3AnnotationTest.java:2146)
+
+testUTR3Var587(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KANK1[]> but was:<KANK1[(uc003zgm.3:c.*2013T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var587(UTR3AnnotationTest.java:2193)
+
+testUTR3Var597(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C9orf11[]> but was:<C9orf11[(uc003zql.3:c.*897T>A,uc011lnq.2:c.*810T>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var597(UTR3AnnotationTest.java:2216)
+
+testUTR3Var608(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FAM75D3[]> but was:<FAM75D3[(uc010mpt.2:c.*573->CTAC)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var608(UTR3AnnotationTest.java:2239)
+
+testUTR3Var610(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LOC286238[]> but was:<LOC286238[(uc010mql.1:c.*346G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var610(UTR3AnnotationTest.java:2262)
+
+testUTR3Var611(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ROR2[]> but was:<ROR2[(uc004ari.1:c.*2115G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var611(UTR3AnnotationTest.java:2285)
+
+testUTR3Var612(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ROR2[]> but was:<ROR2[(uc004arj.2:c.*2847C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var612(UTR3AnnotationTest.java:2308)
+
+testUTR3Var643(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DDX31[]> but was:<DDX31[(uc004cbq.1:c.*2632C>G,uc010mzu.1:c.*2413C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var643(UTR3AnnotationTest.java:2331)
+
+testUTR3Var656(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ATP5C1[]> but was:<ATP5C1[(uc001ijv.3:c.*63T>C,uc001iju.3:c.*97T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var656(UTR3AnnotationTest.java:2354)
+
+testUTR3Var662(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TRDMT1[]> but was:<TRDMT1[(uc010qcd.2:c.*783G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var662(UTR3AnnotationTest.java:2377)
+
+testUTR3Var663(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.003 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CACNB2[]> but was:<CACNB2[(uc009xka.2:c.*10G>T,uc001ipu.3:c.*10G>T,uc001ipv.3:c.*10G>T,uc009xjz.1:c.*10G>T,uc001ips.2:c.*10G>T,uc001ipr.2:c.*10G>T,uc001ipt.2:c.*10G>T,uc010qco.1:c.*10G>T,uc001iqa.2:c.*10G>T,uc001ipy.2:c.*10G>T,uc001ipz.2:c.*10G>T,uc001ipx.2:c.*10G>T,uc001ipw.2:c.*10G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var663(UTR3AnnotationTest.java:2400)
+
+testUTR3Var678(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.005 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ARHGAP22[]> but was:<ARHGAP22[(uc001jgu.3:c.*2175C>T,uc001jgt.3:c.*2127C>T,uc010qgl.2:c.*1998C>T,uc010qgm.2:c.*2145C>T,uc001jgv.3:c.*1221C>T,uc001jgs.3:c.*1857C>T,uc001jgr.3:c.*1278C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var678(UTR3AnnotationTest.java:2423)
+
+testUTR3Var681(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<WDFY4[]> but was:<WDFY4[(uc001jha.4:c.*179C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var681(UTR3AnnotationTest.java:2446)
+
+testUTR3Var688(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PBLD[]> but was:<PBLD[(uc001jnv.1:c.*457G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var688(UTR3AnnotationTest.java:2469)
+
+testUTR3Var690(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LRRC20[]> but was:<LRRC20[(uc001jqy.1:c.*417C>T,uc001jqz.1:c.*435C>T,uc001jqx.1:c.*585C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var690(UTR3AnnotationTest.java:2492)
+
+testUTR3Var696(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CDHR1[]> but was:<CDHR1[(uc009xst.3:c.*4A>G,uc001kcv.3:c.*4A>G,uc001kcx.3:c.*4A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var696(UTR3AnnotationTest.java:2515)
+
+testUTR3Var697(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AGAP11[]> but was:<AGAP11[(uc001kee.2:c.*16->TGC)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var697(UTR3AnnotationTest.java:2538)
+
+testUTR3Var716(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ADAM8[]> but was:<ADAM8[(uc021qbe.1:c.*2611C>A,uc010qva.2:c.*2338C>A,uc009ybi.3:c.*2444C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var716(UTR3AnnotationTest.java:2561)
+
+testUTR3Var724(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<POLR2L[]> but was:<POLR2L[(uc001lsc.3:c.*212C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var724(UTR3AnnotationTest.java:2584)
+
+testUTR3Var735(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TRIM22[]> but was:<TRIM22[(uc010qzm.2:c.*36C>T,uc001mbr.3:c.*36C>T,uc009yes.3:c.*36C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var735(UTR3AnnotationTest.java:2607)
+
+testUTR3Var746(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DCDC1[]> but was:<DCDC1[(uc001msu.2:c.*1604A>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var746(UTR3AnnotationTest.java:2630)
+
+testUTR3Var751(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AK097878[]> but was:<AK097878[(uc021qgl.1:c.*552T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var751(UTR3AnnotationTest.java:2677)
+
+testUTR3Var755(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LOC440040[]> but was:<LOC440040[(uc010rhy.2:c.*317G>-,uc009ymb.3:c.*317G>-)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var755(UTR3AnnotationTest.java:2700)
+
+testUTR3Var761(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FADS3[]> but was:<FADS3[(uc001nsm.3:c.*1412A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var761(UTR3AnnotationTest.java:2723)
+
+testUTR3Var766(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC22A20[]> but was:<SLC22A20[(uc021qlg.1:c.*30->TAAG)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var766(UTR3AnnotationTest.java:2746)
+
+testUTR3Var767(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC22A20[]> but was:<SLC22A20[(uc021qlg.1:c.*33->GCAA)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var767(UTR3AnnotationTest.java:2769)
+
+testUTR3Var773(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FAM86C2P[]> but was:<FAM86C2P[(uc001omt.4:c.*1303C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var773(UTR3AnnotationTest.java:2792)
+
+testUTR3Var786(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC35F2[]> but was:<SLC35F2[(uc001pjs.3:c.*2450C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var786(UTR3AnnotationTest.java:2815)
+
+testUTR3Var787(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KDELC2[]> but was:<KDELC2[(uc001pkj.2:c.*1562->A,uc001pki.2:c.*1394->A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var787(UTR3AnnotationTest.java:2838)
+
+testUTR3Var795(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<APOC3[]> but was:<APOC3[(uc001ppt.1:c.*71G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var795(UTR3AnnotationTest.java:2861)
+
+testUTR3Var809(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GALNT8[]> but was:<GALNT8[(uc001qne.1:c.*12T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var809(UTR3AnnotationTest.java:2884)
+
+testUTR3Var815(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<DPPA3[]> but was:<DPPA3[(uc001qtf.3:c.*25->CCCG)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var815(UTR3AnnotationTest.java:2907)
+
+testUTR3Var821(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<KLRC2[]> but was:<KLRC2[(uc001qyk.2:c.*715C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var821(UTR3AnnotationTest.java:2930)
+
+testUTR3Var824(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<STRAP[]> but was:<STRAP[(uc001rdd.4:c.*15->T,uc001rdc.4:c.*15->T,uc010shw.2:c.*15->T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var824(UTR3AnnotationTest.java:2953)
+
+testUTR3Var839(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CELA1[]> but was:<CELA1[(uc001ryi.1:c.*826C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var839(UTR3AnnotationTest.java:2976)
+
+testUTR3Var843(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<WIBG[]> but was:<WIBG[(uc001sie.1,uc001sif.1)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var843(UTR3AnnotationTest.java:2999)
+
+testUTR3Var850(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC5A8[]> but was:<SLC5A8[(uc001thz.4)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var850(UTR3AnnotationTest.java:3022)
+
+testUTR3Var855(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<OAS1[]> but was:<OAS1[(uc009zwf.3:c.*32G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var855(UTR3AnnotationTest.java:3069)
+
+testUTR3Var864(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC46A3[]> but was:<SLC46A3[(uc001usg.3:c.*1692T>C,uc001usi.3:c.*1917T>C,uc001ush.3:c.*1917T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var864(UTR3AnnotationTest.java:3092)
+
+testUTR3Var884(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CLDN10[]> but was:<CLDN10[(uc010tii.1:c.*11T>G,uc001vmg.2:c.*11T>G,uc001vmh.2:c.*11T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var884(UTR3AnnotationTest.java:3115)
+
+testUTR3Var895(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RNASE12[]> but was:<RNASE12[(uc001vxt.3:c.*457G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var895(UTR3AnnotationTest.java:3162)
+
+testUTR3Var898(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ECRP[]> but was:<ECRP[(uc021ror.1:c.*22G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var898(UTR3AnnotationTest.java:3185)
+
+testUTR3Var923(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GCH1[]> but was:<GCH1[(uc001xbi.1:c.*995G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var923(UTR3AnnotationTest.java:3232)
+
+testUTR3Var932(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MAX[]> but was:<MAX[(uc001xik.3:c.*372T>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var932(UTR3AnnotationTest.java:3279)
+
+testUTR3Var950(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AHNAK2[]> but was:<AHNAK2[(uc010axc.1:c.*17403T>C,uc021sen.1:c.*3594T>C,uc021seo.1:c.*2397T>C,uc001ypx.2:c.*17103T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var950(UTR3AnnotationTest.java:3302)
+
+testUTR3Var952(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LOC653061[]> but was:<LOC653061[(uc021sfv.1:c.*24C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var952(UTR3AnnotationTest.java:3325)
+
+testUTR3Var953(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HERC2[]> but was:<HERC2[(uc001zbj.3:c.*14554C>T,uc001zbi.3:c.*1621C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var953(UTR3AnnotationTest.java:3348)
+
+testUTR3Var955(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FMN1[]> but was:<FMN1[(uc001zhf.4:c.*3623C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var955(UTR3AnnotationTest.java:3371)
+
+testUTR3Var963(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GATM[]> but was:<GATM[(uc001zvc.3:c.*1273G>A,uc001zvb.3:c.*886G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var963(UTR3AnnotationTest.java:3394)
+
+testUTR3Var964(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLC30A4[]> but was:<SLC30A4[(uc001zvj.3:c.*1306T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var964(UTR3AnnotationTest.java:3417)
+
+testUTR3Var966(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<BCL2L10[]> but was:<BCL2L10[(uc002abq.3:c.*726A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var966(UTR3AnnotationTest.java:3440)
+
+testUTR3Var971(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<IGDCC3[]> but was:<IGDCC3[(uc002aos.2:c.*2553G>A,uc002aor.1:c.*411G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var971(UTR3AnnotationTest.java:3463)
+
+testUTR3Var982(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SCAPER[]> but was:<SCAPER[(uc002bbz.1:c.*3409T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var982(UTR3AnnotationTest.java:3486)
+
+testUTR3Var992(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<POLR3K[]> but was:<POLR3K[(uc002cfi.2:c.*402A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var992(UTR3AnnotationTest.java:3533)
+
+testUTR3Var993(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<RAB40C[]> but was:<RAB40C[(uc002chr.3:c.*7T>C,uc002chq.3:c.*7T>C,uc021szv.1:c.*7T>C,uc021szu.1:c.*7T>C,uc021szt.1:c.*7T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var993(UTR3AnnotationTest.java:3556)
+
+testUTR3Var998(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZG16B[]> but was:<ZG16B[(uc002cru.3:c.*37G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var998(UTR3AnnotationTest.java:3579)
+
+testUTR3Var4(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TP73[]> but was:<TP73[(uc010nzj.2:c.*121C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var4(UTR3AnnotationTest.java:120)
+
+testUTR3Var5(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TP73[]> but was:<TP73[(uc010nzj.2:c.*176G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var5(UTR3AnnotationTest.java:143)
+
+testUTR3Var7(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<THAP3[]> but was:<THAP3[(uc001aoc.3:c.*28->TA,uc001aod.3:c.*28->TA)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var7(UTR3AnnotationTest.java:166)
+
+testUTR3Var9(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CLCN6[]> but was:<CLCN6[(uc009vne.1:c.*649G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var9(UTR3AnnotationTest.java:189)
+
+testUTR3Var1008(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EMP2[]> but was:<EMP2[(uc002czx.3:c.*1378C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1008(UTR3AnnotationTest.java:3626)
+
+testUTR3Var1014(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<USP31[]> but was:<USP31[(uc002dll.3:c.*4072T>C,uc010bxm.3:c.*1936T>C,uc010vca.2:c.*1981T>C,uc002dlk.3:c.*1888T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1014(UTR3AnnotationTest.java:3649)
+
+testUTR3Var1017(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FBXL19-AS1[]> but was:<FBXL19-AS1[(uc002dzy.2:c.*492G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1017(UTR3AnnotationTest.java:3672)
+
+testUTR3Var1026(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ACD[]> but was:<ACD[(uc002etr.4:c.*1618A>T,uc002etq.4:c.*1666A>T,uc002etp.4:c.*1657A>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1026(UTR3AnnotationTest.java:3719)
+
+testUTR3Var1037(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C16orf46[]> but was:<C16orf46[(uc010vno.2:c.*374A>G,uc002fgc.4:c.*1193A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1037(UTR3AnnotationTest.java:3742)
+
+testUTR3Var1044(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<AK126852[]> but was:<AK126852[(uc002fkt.1:c.*1272C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1044(UTR3AnnotationTest.java:3765)
+
+testUTR3Var1049(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SERPINF2[]> but was:<SERPINF2[(uc021tnm.1:c.*71G>T,uc002ftk.1:c.*71G>T,uc010vqr.1:c.*71G>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1049(UTR3AnnotationTest.java:3788)
+
+testUTR3Var1055(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.006 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C17orf49[,RNASEK,RNASEK-C17ORF49]> but was:<C17orf49[(uc002gec.3:c.-474C>T,uc010vti.2:c.-474C>T,uc002ged.3:c.-474C>T,uc002gea.3:c.*98C>T,uc021tow.1:c.*98C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1055(UTR3AnnotationTest.java:3812)
+
+testUTR3Var1073(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C17orf108[]> but was:<C17orf108[(uc002gzx.3:c.*321C>A,uc002gzy.1:c.*1104C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1073(UTR3AnnotationTest.java:3835)
+
+testUTR3Var1074(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FLOT2[]> but was:<FLOT2[(uc002hdc.3:c.*1294C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1074(UTR3AnnotationTest.java:3858)
+
+testUTR3Var1090(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MPP2[]> but was:<MPP2[(uc010wio.1:c.*1642A>G,uc010win.1:c.*1258A>G,uc002ieo.1:c.*1675A>G,uc010wip.1:c.*1810A>G,uc002ien.1:c.*1726A>G,uc010wim.1:c.*1642A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1090(UTR3AnnotationTest.java:3905)
+
+testUTR3Var1099(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SNX11[]> but was:<SNX11[(uc002inh.1:c.*6G>C,uc002inf.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc010wli.1:c.*6G>C,uc010wlg.1:c.*6G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1099(UTR3AnnotationTest.java:3928)
+
+testUTR3Var1100(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ATP5G1[]> but was:<ATP5G1[(uc002ioh.3:c.*15G>-,uc002iog.3:c.*15G>-)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1100(UTR3AnnotationTest.java:3951)
+
+testUTR3Var1103(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MRPL27[]> but was:<MRPL27[(uc002iqr.2:c.*1933C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1103(UTR3AnnotationTest.java:3974)
+
+testUTR3Var1107(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TBX2[]> but was:<TBX2[(uc002ize.3:c.*2967C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1107(UTR3AnnotationTest.java:3997)
+
+testUTR3Var1115(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ITGB4[]> but was:<ITGB4[(uc002jpj.3:c.*25C>T,uc002jpi.4:c.*25C>T,uc002jpg.3:c.*25C>T,uc002jph.3:c.*25C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1115(UTR3AnnotationTest.java:4020)
+
+testUTR3Var1118(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<EXOC7[]> but was:<EXOC7[(uc002jqr.3:c.*4193G>C,uc002jqs.3:c.*4439G>C,uc002jqq.3:c.*4286G>C,uc010wsw.2:c.*4355G>C,uc010wsx.2:c.*4262G>C,uc010wsv.2:c.*4202G>C,uc010dgv.2:c.*4061G>C,uc002jqp.2:c.*2824G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1118(UTR3AnnotationTest.java:4043)
+
+testUTR3Var1171(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF626[]> but was:<ZNF626[(uc002npb.1:c.*1789T>C,uc002npc.1:c.*1561T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1171(UTR3AnnotationTest.java:4161)
+
+testUTR3Var1178(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LGI4[]> but was:<LGI4[(uc002nxy.1:c.*1108C>T,uc002nxx.2:c.*1624C>T,uc002nxz.1:c.*1870C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1178(UTR3AnnotationTest.java:4207)
+
+testUTR3Var1188(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FBXO27[]> but was:<FBXO27[(uc002okh.3:c.*963T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1188(UTR3AnnotationTest.java:4253)
+
+testUTR3Var1189(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<FCGBP[]> but was:<FCGBP[(uc002omp.4:c.*16277T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1189(UTR3AnnotationTest.java:4276)
+
+testUTR3Var1199(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PLA2G4C[]> but was:<PLA2G4C[(uc002phx.3:c.*1679A>T,uc010elr.3:c.*1722A>T,uc010xzd.2:c.*1709A>T,uc002phw.3:c.*1484A>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1199(UTR3AnnotationTest.java:4322)
+
+testUTR3Var1204(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF610[]> but was:<ZNF610[(uc002pyy.4:c.*32C>G,uc002pyz.4:c.*32C>G,uc002pyx.4:c.*32C>G,uc002pza.3:c.*32C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1204(UTR3AnnotationTest.java:4345)
+
+testUTR3Var1205(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF528[]> but was:<ZNF528[(uc002pzh.3:c.*17->GT,uc002pzi.3:c.*17->GT)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1205(UTR3AnnotationTest.java:4368)
+
+testUTR3Var1206(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF528[]> but was:<ZNF528[(uc002pzh.3:c.*17->GT,uc002pzi.3:c.*17->GT)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1206(UTR3AnnotationTest.java:4391)
+
+testUTR3Var1209(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZNF160[]> but was:<ZNF160[(uc002qas.4:c.*444C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1209(UTR3AnnotationTest.java:4414)
+
+testUTR3Var1215(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LILRB5[]> but was:<LILRB5[(uc002qfa.1:c.*3220A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1215(UTR3AnnotationTest.java:4437)
+
+testUTR3Var1231(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C20orf26[]> but was:<C20orf26[(uc010zsf.1:c.*10A>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1231(UTR3AnnotationTest.java:4508)
+
+testUTR3Var1243(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ZBP1[]> but was:<ZBP1[(uc010gjm.3:c.*1329G>A,uc002xyo.3:c.*1332G>A,uc002xyp.3:c.*1107G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1243(UTR3AnnotationTest.java:4531)
+
+testUTR3Var1258(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ADAMTS5[]> but was:<ADAMTS5[(uc002ymg.3:c.*2840A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1258(UTR3AnnotationTest.java:4602)
+
+testUTR3Var1270(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C21orf33[]> but was:<C21orf33[(uc002zec.4:c.*642C>T,uc002zed.4:c.*642C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1270(UTR3AnnotationTest.java:4648)
+
+testUTR3Var1276(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<LSS[]> but was:<LSS[(uc002zij.3:c.*2392G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1276(UTR3AnnotationTest.java:4671)
+
+testUTR3Var1284(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<C22orf13[]> but was:<C22orf13[(uc003aah.2:c.*2726A>G,uc003aal.2:c.*2894A>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1284(UTR3AnnotationTest.java:4694)
+
+testUTR3Var1290(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PVALB[]> but was:<PVALB[(uc010gwz.3:c.*395G>A,uc003apx.3:c.*395G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1290(UTR3AnnotationTest.java:4717)
+
+testUTR3Var1291(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<TRIOBP[]> but was:<TRIOBP[(uc003atx.1:c.*606T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1291(UTR3AnnotationTest.java:4740)
+
+testUTR3Var1300(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<NFAM1[]> but was:<NFAM1[(uc003bcn.4:c.*1648G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1300(UTR3AnnotationTest.java:4763)
+
+testUTR3Var1304(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<MCAT[]> but was:<MCAT[(uc003bdm.1:c.*974C>T,uc003bdl.1:c.*1192C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1304(UTR3AnnotationTest.java:4786)
+
+testUTR3Var1332(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SAGE1[]> but was:<SAGE1[(uc010nry.1:c.*481T>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1332(UTR3AnnotationTest.java:4902)
+
+testUTR3Var1337(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SAGE1[]> but was:<SAGE1[(uc010nry.1:c.*492G>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1337(UTR3AnnotationTest.java:4925)
+
+testUTR3Var1346(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CD24(uc004ftz.1:c.*[30]G>A)> but was:<CD24(uc004ftz.1:c.*[272]G>A)>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1346(UTR3AnnotationTest.java:4948)
+
+testUTR3Var1346b(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CD24(uc004ftz.1:c.*[30]G>A)> but was:<CD24(uc004ftz.1:c.*[272]G>A)>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var1346b(UTR3AnnotationTest.java:97)
+
+testUTR3VarByHand1(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLIT2[]> but was:<SLIT2[(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3VarByHand1(UTR3AnnotationTest.java:74)
+
+testUTR3Var13(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.002 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<CLCNKB[]> but was:<CLCNKB[(uc001axy.4:c.*331C>G,uc021ogm.1:c.*331C>G,uc001axx.4:c.*331C>G)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var13(UTR3AnnotationTest.java:212)
+
+testUTR3Var26(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<COL8A2[]> but was:<COL8A2[(uc001bzw.2:c.*1928C>A,uc001bzv.2:c.*2123C>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var26(UTR3AnnotationTest.java:235)
+
+testUTR3Var44(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ANGPTL3[]> but was:<ANGPTL3[(uc001das.1)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var44(UTR3AnnotationTest.java:282)
+
+testUTR3Var54(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<GBP7[]> but was:<GBP7[(uc001dna.2:c.*1993T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var54(UTR3AnnotationTest.java:305)
+
+testUTR3Var72(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<PSMB4[]> but was:<PSMB4[(uc010pda.2:c.*126T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var72(UTR3AnnotationTest.java:328)
+
+testUTR3Var86(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<IL6R[]> but was:<IL6R[(uc001ffa.2:c.*255T>C,uc001fez.2:c.*40T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var86(UTR3AnnotationTest.java:351)
+
+testUTR3Var90(jannovar.annotation.UTR3AnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<ISG20L2[]> but was:<ISG20L2[(uc001fps.1:c.*1067C>T,uc001fpt.1:c.*1067C>T)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.UTR3AnnotationTest.testUTR3Var90(UTR3AnnotationTest.java:374)
+
+Running jannovar.annotation.SynonymousAnnotationTest
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.022 sec
+Running jannovar.annotation.BlockSubAnnotationTest
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.009 sec
+Running jannovar.annotation.IntronicAnnotationTest
+rvarstart: 835
+uc001acb.1	TXstart: 896829	TXend: 897858	Variant: 835	CDSend: 749
+rvarstart: 655
+uc010nya.1	TXstart: 897009	TXend: 897858	Variant: 655	CDSend: 569
+ANNOT=LRRC52(uc001gde.2:exon2:c.886C>A:p.R296R)
+Tests run: 25, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.111 sec <<< FAILURE!
+testSynonymousVar6(jannovar.annotation.SynonymousAnnotationTest)  Time elapsed: 0 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<HMGB4[]> but was:<HMGB4[(uc001bxq.3:c.-118T>C)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.SynonymousAnnotationTest.testSynonymousVar6(SynonymousAnnotationTest.java:189)
+
+Running jannovar.annotation.IntergenicAnnotationTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.936 sec
+Running jannovar.annotation.SpliceAnnotationTest
+Tests run: 101, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.017 sec
+Running jannovar.annotation.NonsynonymousAnnotationTest
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.949 sec
+Running jannovar.annotation.UpstreamAnnotationTest
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.924 sec
+Running jannovar.annotation.NoncodingRNAAnnotationTest
+Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.874 sec
+Running jannovar.annotation.StopAnnotationTest
+Annot=DQ596041,DQ591060
+Tests run: 37, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.877 sec
+Running jannovar.pedigree.PedigreeARTest
+BLA: patGT:jannovar.genotype.GenotypeCall@43f7c3e3  matGT=jannovar.genotype.GenotypeCall@3f5d8ef1
+BLA: patGT:jannovar.genotype.GenotypeCall@175390b7  matGT=jannovar.genotype.GenotypeCall@6f41ea57
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
+Running jannovar.pedigree.PedigreeADTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 sec
+Running jannovar.exome.VariantTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 sec
+Running jannovar.interval.IntervalTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+Running jannovar.interval.NodeTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+Running jannovar.interval.IntervalTreeTest
+IntervalTree<T> starting at  [Node]: median: 11, number of items: 3
+(0)Node:  3 intervals crossing median [11]:
+(0)##(leftorder):[4,11,c]
+(0)##(leftorder):[7,12,e]
+(0)##(leftorder):[9,19,f]
+(0)##(rightorder):[9,19,f]
+(0)##(rightorder):[7,12,e]
+(0)##(rightorder):[4,11,c]
+
+-(1)L,Node:  1 intervals crossing median [4]:
+-(1)##(leftorder):[1,8,a]
+-(1)##(rightorder):[1,8,a]
+
+--(2)L,Node:  1 intervals crossing median [2]:
+--(2)##(leftorder):[2,3,b]
+--(2)##(rightorder):[2,3,b]
+
+--(2)-:Left=null
+--(2)-:Right=null
+--(2)R,Node:  1 intervals crossing median [6]:
+--(2)##(leftorder):[5,7,d]
+--(2)##(rightorder):[5,7,d]
+
+--(2)-:Left=null
+--(2)-:Right=null
+-(1)R,Node:  0 intervals crossing median [23]:
+
+--(2)L,Node:  2 intervals crossing median [18]:
+--(2)##(leftorder):[16,19,g]
+--(2)##(leftorder):[17,20,h]
+--(2)##(rightorder):[17,20,h]
+--(2)##(rightorder):[16,19,g]
+
+--(2)-:Left=null
+--(2)-:Right=null
+--(2)R,Node:  2 intervals crossing median [28]:
+--(2)##(leftorder):[26,30,i]
+--(2)##(leftorder):[27,29,j]
+--(2)##(rightorder):[26,30,i]
+--(2)##(rightorder):[27,29,j]
+
+--(2)-:Left=null
+--(2)-:Right=null
+LeftNeighbor:null
+RightNeighbor:null
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 sec
+rvarstart: 2512
+uc003hsf.1	TXstart: 89647106	TXend: 89978323	Variant: 2512	CDSend: 658
+rvarstart: 3305
+uc003hse.1	TXstart: 89647106	TXend: 89978323	Variant: 3305	CDSend: 209
+rvarstart: 2282
+uc003hsd.1	TXstart: 89647106	TXend: 89744402	Variant: 2282	CDSend: 248
+rvarstart: 2324
+uc003hsc.1	TXstart: 89647106	TXend: 89744402	Variant: 2324	CDSend: 248
+rvarstart: 2366
+uc003hsb.1	TXstart: 89647106	TXend: 89744402	Variant: 2366	CDSend: 248
+rvarstart: 2282
+uc011cdq.1	TXstart: 89647106	TXend: 89744402	Variant: 2282	CDSend: 248
+rvarstart: 2003
+uc003hsa.1	TXstart: 89647106	TXend: 89680620	Variant: 2003	CDSend: 578
+rvarstart: 549
+uc011cdp.1	TXstart: 89647106	TXend: 89658720	Variant: 549	CDSend: 147
+XYZ annot = FAM13A-AS1
+rvarstart: 1678
+uc002bwn.4	TXstart: 101420009	TXend: 101456830	Variant: 1678	CDSend: 1643
+rvarstart: 1357
+uc010bpb.3	TXstart: 101420009	TXend: 101456830	Variant: 1357	CDSend: 1322
+rvarstart: 565
+uc002dga.4	TXstart: 19297101	TXend: 19315720	Variant: 565	CDSend: 484
+rvarstart: 5013
+uc002xtw.1	TXstart: 47240793	TXend: 47444420	Variant: 5013	CDSend: 24
+rvarstart: 2970
+uc002xtv.1	TXstart: 47240793	TXend: 47273118	Variant: 2970	CDSend: 90
+rvarstart: 4845
+uc003gpr.1	TXstart: 20255235	TXend: 20620788	Variant: 4845	CDSend: 4794
+rvarstart: 4821
+uc003gps.1	TXstart: 20255235	TXend: 20620788	Variant: 4821	CDSend: 4770
+Tests run: 76, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.772 sec <<< FAILURE!
+testUTR3VarByHand1(jannovar.annotation.NoncodingRNAAnnotationTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<SLIT2[]> but was:<SLIT2[(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at jannovar.annotation.NoncodingRNAAnnotationTest.testUTR3VarByHand1(NoncodingRNAAnnotationTest.java:77)
+
+rvarstart: 1236
+uc002ugs.4	TXstart: 172173913	TXend: 172290619	Variant: 1236	CDSend: 359
+rvarstart: 1391
+uc002ugt.4	TXstart: 172173913	TXend: 172290619	Variant: 1391	CDSend: 364
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.763 sec
+
+Results :
+
+Failed tests: 
+  UTR5AnnotationTest.testUTR5Var8:95 expected:<KAZN[]> but was:<KAZN[(uc001avs.4:c.-169G>A)]>
+  UTR5AnnotationTest.testUTR5Var109:509 expected:<TANC1[]> but was:<TANC1[(uc010fon.3:c.-280->C)]>
+  UTR5AnnotationTest.testUTR5Var110:532 expected:<TANC1[]> but was:<TANC1[(uc010fon.3:c.-280->C)]>
+  UTR5AnnotationTest.testUTR5Var123:604 expected:<HRH1[]> but was:<HRH1[(uc003bwb.4:c.-17T>C,uc010hdt.3:c.-17T>C,uc010hds.3:c.-17T>C,uc010hdr.3:c.-17T>C)]>
+  UTR5AnnotationTest.testUTR5Var131:627 expected:<FBXW12[]> but was:<FBXW12[(uc003csr.3:c.-61A>T,uc003css.3:c.-61A>T)]>
+  UTR5AnnotationTest.testUTR5Var137:650 expected:<CACNA1D[]> but was:<CACNA1D[(uc003dgu.4:c.-21T>A,uc003dgv.4:c.-21T>A,uc003dgy.4:c.-21T>A)]>
+  UTR5AnnotationTest.testUTR5Var138:673 expected:<LRTM1[]> but was:<LRTM1[(uc003dhl.3:c.-11C>T)]>
+  UTR5AnnotationTest.testUTR5Var144:696 expected:<C3orf38[]> but was:<C3orf38[(uc003dqw.3:c.-11->C)]>
+  UTR5AnnotationTest.testUTR5Var152:719 expected:<SLC41A3[]> but was:<SLC41A3[(uc003eii.3:c.-33G>A)]>
+  UTR5AnnotationTest.testUTR5Var158:742 expected:<AADAC[]> but was:<AADAC[(uc003eze.3:c.-57C>T)]>
+  UTR5AnnotationTest.testUTR5Var159:765 expected:<KCNAB1[]> but was:<KCNAB1[(uc010hvt.1:c.-83A>G,uc003fat.2:c.-83A>G)]>
+  UTR5AnnotationTest.testUTR5Var164:788 expected:<TMEM207[]> but was:<TMEM207[(uc003fsj.2:c.-49T>A)]>
+  DownstreamAnnotationTest.testDownstreamVar78:2177 expected:<RPS13[,SNORD14]> but was:<RPS13[]>
+  UTR5AnnotationTest.testUTR5Var169:811 expected:<KCNIP4[]> but was:<KCNIP4[(uc021xmt.1:c.-5A>G,uc021xmu.1:c.-5A>G,uc003gqi.1:c.-201A>G)]>
+  UTR5AnnotationTest.testUTR5Var177:834 expected:<LRBA[]> but was:<LRBA[(uc003ilr.4:c.-84G>T)]>
+  UTR5AnnotationTest.testUTR5Var182:857 expected:<AHRR[]> but was:<AHRR[(uc003jaz.3:c.-183C>A)]>
+  UTR5AnnotationTest.testUTR5Var183:880 expected:<MED10[]> but was:<MED10[(uc003jdo.3:c.-18G>C)]>
+  UTR5AnnotationTest.testUTR5Var188:903 expected:<C5orf34[]> but was:<C5orf34[(uc003jnz.2:c.-22->C)]>
+  UTR5AnnotationTest.testUTR5Var192:926 expected:<LOC644936[]> but was:<LOC644936[(uc010jai.3:c.-19T>C)]>
+  UTR5AnnotationTest.testUTR5Var194:949 expected:<PJA2[]> but was:<PJA2[(uc003kos.4:c.-17G>A)]>
+  UTR5AnnotationTest.testUTR5Var197:972 expected:<RAD50[]> but was:<RAD50[(uc003kxi.3:c.-38G>A,uc003kxh.3:c.-390G>A)]>
+  UTR5AnnotationTest.testUTR5Var223:995 expected:<DDX39B[]> but was:<DDX39B[(uc003ntw.2:c.-554->G)]>
+  UTR5AnnotationTest.testUTR5Var245:1041 expected:<MYO6[]> but was:<MYO6[(uc003pij.1:c.-397T>G)]>
+  UTR5AnnotationTest.testUTR5Var248:1064 expected:<SCML4[]> but was:<SCML4[(uc011eam.1:c.-49C>T,uc010kdf.3:c.-49C>T,uc003psa.3:c.-230C>T)]>
+  UTR5AnnotationTest.testUTR5Var255:1087 expected:<ULBP2[]> but was:<ULBP2[(uc011eeh.1:c.-23A>C,uc003qno.3:c.-23A>C,uc010kij.3:c.-23A>C)]>
+  UTR5AnnotationTest.testUTR5Var277:1110 expected:<hCG_2023280[]> but was:<hCG_2023280[(uc003upk.1:c.-56T>C)]>
+  UTR5AnnotationTest.testUTR5Var292:1158 expected:<ANGPT2[]> but was:<ANGPT2[(uc003wqk.4:c.-35C>G,uc003wqj.4:c.-35C>G,uc010lri.3:c.-35C>G,uc003wql.4:c.-35C>G)]>
+  UTR5AnnotationTest.testUTR5Var293:1181 expected:<ANGPT2[]> but was:<ANGPT2[(uc003wqk.4:c.-79A>G,uc003wqj.4:c.-79A>G,uc010lri.3:c.-79A>G,uc003wql.4:c.-79A>G)]>
+  UTR5AnnotationTest.testUTR5Var296:1204 expected:<DLC1[]> but was:<DLC1[(uc003wwm.2:c.-7G>A,uc011kxy.2:c.-7G>A,uc003wwn.3:c.-7G>A)]>
+  UTR5AnnotationTest.testUTR5Var307:1227 expected:<ZNF34[]> but was:<ZNF34[(uc010mgb.3:c.-111A>G)]>
+  UTR5AnnotationTest.testUTR5Var308:1250 expected:<KANK1[]> but was:<KANK1[(uc003zgl.1:c.-19T>C,uc003zgn.1:c.-19T>C,uc003zgm.3:c.-19T>C,uc003zgo.1:c.-19T>C,uc003zgp.1:c.-19T>C)]>
+  UTR5AnnotationTest.testUTR5Var310:1273 expected:<UBAP2[]> but was:<UBAP2[(uc003ztp.2:c.-393A>G)]>
+  UTR3AnnotationTest.testUTR3Var112:466 expected:<RGS21[]> but was:<RGS21[(uc001gsh.3:c.*20->CTAA)]>
+  UTR5AnnotationTest.testUTR5Var316:1296 expected:<CENPP[]> but was:<CENPP[(uc004asj.3:c.-31G>C)]>
+  UTR5AnnotationTest.testUTR5Var318:1319 expected:<C9orf84[]> but was:<C9orf84[(uc010mug.3:c.-107A>G,uc004bfq.3:c.-62A>G)]>
+  UTR3AnnotationTest.testUTR3Var116:489 expected:<RGS21[]> but was:<RGS21[(uc001gsh.3:c.*21->TAAT)]>
+  UTR5AnnotationTest.testUTR5Var344:1342 expected:<PIK3AP1[]> but was:<PIK3AP1[(uc001kmo.3:c.-56A>C)]>
+  UTR5AnnotationTest.testUTR5Var347:1365 expected:<C10orf90[]> but was:<C10orf90[(uc001ljq.3:c.-70G>T)]>
+  UTR5AnnotationTest.testUTR5Var370:1388 expected:<CATSPER1[]> but was:<CATSPER1[(uc001ogt.3:c.-28A>-)]>
+  UTR3AnnotationTest.testUTR3Var119:512 expected:<LMOD1[]> but was:<LMOD1[(uc010ppu.2:c.*3385A>G,uc021phl.1:c.*3538A>G,uc021phm.1:c.*3539A>G)]>
+  UTR5AnnotationTest.testUTR5Var374:1411 expected:<SLCO2B1[]> but was:<SLCO2B1[(uc001owc.3:c.-150T>C,uc001owb.3:c.-71T>C,uc010rrr.2:c.-71T>C,uc010rrs.2:c.-150T>C,uc010rrq.2:c.-71T>C)]>
+  UTR5AnnotationTest.testUTR5Var378:1434 expected:<BCO2[]> but was:<BCO2[(uc001pne.1:c.-173T>C)]>
+  UTR5AnnotationTest.testUTR5Var387:1481 expected:<B4GALNT3[]> but was:<B4GALNT3[(uc001qik.1:c.-167C>T)]>
+  UTR5AnnotationTest.testUTR5Var390:1504 expected:<CLEC4A[]> but was:<CLEC4A[(uc009zgb.1:c.-43C>T,uc009zga.1:c.-43C>T,uc001qtz.1:c.-43C>T,uc001quc.1:c.-43C>T,uc001qub.1:c.-43C>T)]>
+  UTR5AnnotationTest.testUTR5Var392:1527 expected:<FAM90A1[]> but was:<FAM90A1[(uc001qui.2:c.-20T>-,uc001quh.2:c.-20T>-)]>
+  UTR5AnnotationTest.testUTR5Var397:1574 expected:<CACNB3[]> but was:<CACNB3[(uc001rsk.2:c.-101->T,uc010slx.2:c.*255->T)]>
+  UTR5AnnotationTest.testUTR5Var398:1597 expected:<LMBR1L[]> but was:<LMBR1L[(uc001rtj.1:c.-80T>A)]>
+  UTR5AnnotationTest.testUTR5Var399:1620 expected:<TUBA1B[]> but was:<TUBA1B[(uc001rtl.3)]>
+  UTR5AnnotationTest.testUTR5Var403:1643 expected:<POU6F1[]> but was:<POU6F1[(uc001rya.3:c.-562T>G)]>
+  UTR5AnnotationTest.testUTR5Var408:1666 expected:<RPS26[]> but was:<RPS26[(uc001sjf.3:c.-22C>G)]>
+  UTR3AnnotationTest.testUTR3Var137:535 expected:<HS1BP3[]> but was:<HS1BP3[(uc002rdw.1:c.*1471T>A)]>
+  UTR5AnnotationTest.testUTR5Var409:1689 expected:<SLC39A5[]> but was:<SLC39A5[(uc010sqj.2:c.-14T>C,uc010sqk.2:c.-14T>C)]>
+  UTR5AnnotationTest.testUTR5Var412:1712 expected:<ARHGAP9[]> but was:<ARHGAP9[(uc001soa.3:c.-241A>G,uc010sro.1:c.*1160A>G)]>
+  UTR5AnnotationTest.testUTR5Var425:1735 expected:<ZNF84[]> but was:<ZNF84[(uc009zyz.3:c.-32G>A,uc001ulm.4:c.-32G>A,uc009zyy.3:c.-32G>A,uc009zza.3:c.-32G>A)]>
+  UTR3AnnotationTest.testUTR3Var138:558 expected:<HS1BP3[]> but was:<HS1BP3[(uc002rdw.1:c.*1467G>A)]>
+  UTR5AnnotationTest.testUTR5Var432:1758 expected:<CAB39L[]> but was:<CAB39L[(uc001vcx.3:c.-187A>G,uc010adf.3:c.-334A>G)]>
+  UTR5AnnotationTest.testUTR5Var441:1781 expected:<TOX4[]> but was:<TOX4[(uc001way.3:c.-891G>A)]>
+  UTR3AnnotationTest.testUTR3Var140:581 expected:<CIB4[]> but was:<CIB4[(uc002rhm.3:c.*570G>A)]>
+  UTR5AnnotationTest.testUTR5Var443:1804 expected:<TRAV12-1[]> but was:<TRAV12-1[(uc001wbx.2:c.-36A>C)]>
+  UTR5AnnotationTest.testUTR5Var461:1827 expected:<KCNK10[]> but was:<KCNK10[(uc001xwo.3:c.-17T>G)]>
+  UTR3AnnotationTest.testUTR3Var142:604 expected:<PREB[]> but was:<PREB[(uc002riy.1:c.*1146C>A,uc002rix.1:c.*1362C>A)]>
+  UTR5AnnotationTest.testUTR5Var474:1874 expected:<SERINC4[]> but was:<SERINC4[(uc010bds.1:c.-257A>T)]>
+  UTR5AnnotationTest.testUTR5Var479:1897 expected:<FAH[]> but was:<FAH[(uc002bfn.2:c.-142G>A)]>
+  UTR5AnnotationTest.testUTR5Var482:1920 expected:<PDE8A[]> but was:<PDE8A[(uc002blk.3:c.-775G>A)]>
+  UTR5AnnotationTest.testUTR5Var486:1943 expected:<MCTP2[]> but was:<MCTP2[(uc002btk.4:c.-224A>G)]>
+  UTR5AnnotationTest.testUTR5Var490:1966 expected:<C16orf59[]> but was:<C16orf59[(uc002cqg.2:c.-397C>T)]>
+  UTR3AnnotationTest.testUTR3Var143:627 expected:<EIF2B4[]> but was:<EIF2B4[(uc002rke.3:c.*1479G>A,uc002rkc.3:c.*1569G>A,uc002rkb.3:c.*1572G>A,uc002rka.3:c.*1527G>A,uc002rjz.3:c.*1632G>A)]>
+  UTR5AnnotationTest.testUTR5Var491:1989 expected:<ERCC4[]> but was:<ERCC4[(uc010uyz.1:c.-503G>A)]>
+  UTR5AnnotationTest.testUTR5Var497:2012 expected:<GPR114[]> but was:<GPR114[(uc002ely.3:c.-7A>G,uc010vhr.2:c.-7A>G,uc002elx.4:c.-7A>G)]>
+  UTR3AnnotationTest.testUTR3Var144:650 expected:<EIF2B4[]> but was:<EIF2B4[(uc002rkf.1:c.*2115T>C)]>
+  UTR5AnnotationTest.testUTR5Var509:2035 expected:<ALOX15[]> but was:<ALOX15[(uc010vsd.2:c.-37->AAG)]>
+  UTR5AnnotationTest.testUTR5Var512:2058 expected:<ALOX15[]> but was:<ALOX15[(uc010vsd.2:c.-37->AAG)]>
+  UTR5AnnotationTest.testUTR5Var515:2081 expected:<PLSCR3[]> but was:<PLSCR3[(uc002ggr.2:c.-23A>G,uc010cmg.2:c.-23A>G,uc002ggn.2:c.-23A>G,uc002ggm.2:c.-23A>G,uc002ggq.2:c.-576A>G,uc002ggp.2:c.-309A>G,uc002ggo.2:c.-23A>G)]>
+  UTR5AnnotationTest.testUTR5Var536:2104 expected:<ACE[]> but was:<ACE[(uc010ddv.2:c.-33G>C)]>
+  UTR5AnnotationTest.testUTR5Var543:2151 expected:<LOC100653515[]> but was:<LOC100653515[(uc021uei.1:c.-299C>T,uc002jwg.2:c.-64C>T)]>
+  UTR5AnnotationTest.testUTR5Var550:2174 expected:<ANKRD62[]> but was:<ANKRD62[(uc002kqr.3:c.-11C>T)]>
+  UTR3AnnotationTest.testUTR3Var146:673 expected:<PLB1[]> but was:<PLB1[(uc002rmc.3:c.*28C>T)]>
+  UTR3AnnotationTest.testUTR3Var148:696 expected:<CDC42EP3[]> but was:<CDC42EP3[(uc002rqi.1:c.*859C>T)]>
+  UTR5AnnotationTest.testUTR5Var556:2197 expected:<MAPK4[]> but was:<MAPK4[(uc002lev.3:c.-58T>G,uc010doz.3:c.-58T>G)]>
+  UTR5AnnotationTest.testUTR5Var568:2220 expected:<ZNF682[]> but was:<ZNF682[(uc002noq.3:c.-21G>C,uc010eck.3:c.-26G>C)]>
+  UTR5AnnotationTest.testUTR5Var570:2243 expected:<ZNF430[]> but was:<ZNF430[(uc002npk.3:c.-55C>T,uc002npj.3:c.-55C>T)]>
+  UTR5AnnotationTest.testUTR5Var580:2266 expected:<PNMAL1[]> but was:<PNMAL1[(uc002per.4:c.-15C>T,uc002peq.4:c.-15C>T)]>
+  UTR3AnnotationTest.testUTR3Var153:719 expected:<PLEK[]> but was:<PLEK[(uc010fde.3:c.*180G>C,uc002sen.4:c.*4G>C)]>
+  UTR3AnnotationTest.testUTR3Var154:742 expected:<PLEK[]> but was:<PLEK[(uc010fde.3:c.*218T>C,uc002sen.4:c.*42T>C)]>
+  UTR5AnnotationTest.testUTR5Var593:2313 expected:<CCDC106[]> but was:<CCDC106[(uc002qlr.3:c.-14T>C,uc021vcc.1:c.-14T>C,uc021vcd.1:c.-14T>C,uc002qls.3:c.-14T>C)]>
+  UTR5AnnotationTest.testUTR5Var618:2336 expected:<HPS4[]> but was:<HPS4[(uc003ach.3:c.-725C>A)]>
+  UTR3AnnotationTest.testUTR3Var161:765 expected:<ACTG2[]> but was:<ACTG2[(uc010fex.1:c.*40G>A)]>
+  UTR5AnnotationTest.testUTR5Var621:2359 expected:<APOL1[]> but was:<APOL1[(uc003ape.3:c.-43C>T)]>
+  UTR5AnnotationTest.testUTR5Var624:2382 expected:<RPL3[]> but was:<RPL3[(uc003axj.3:c.-181G>A)]>
+  UTR5AnnotationTest.testUTR5Var627:2405 expected:<VCX[]> but was:<VCX[(uc004crz.3)]>
+  UTR5AnnotationTest.testUTR5Var632:2428 expected:<PCYT1B[]> but was:<PCYT1B[(uc004dbi.3:c.-51G>A,uc004dbk.4:c.-51G>A)]>
+  UTR3AnnotationTest.testUTR3Var163:788 expected:<REG3G[]> but was:<REG3G[(uc002snw.3:c.*24G>C,uc002snx.3:c.*24G>C,uc010ffu.3:c.*24G>C)]>
+  UTR5AnnotationTest.testUTR5Var635:2451 expected:<EFHC2[]> but was:<EFHC2[(uc004dgb.4:c.-57->C)]>
+  UTR3AnnotationTest.testUTR3Var164:811 expected:<REG1A[]> but was:<REG1A[(uc002snz.3:c.*6A>G,uc010ysd.2:c.*6A>G)]>
+  UTR5AnnotationTest.testUTR3VarByHand1:73 expected:<SLIT2[]> but was:<SLIT2[(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)]>
+  UTR5AnnotationTest.testUTR5Var10:118 expected:<ESPNP[]> but was:<ESPNP[(uc001azn.1:c.-75C>T)]>
+  UTR3AnnotationTest.testUTR3Var166:834 expected:<GNLY[]> but was:<GNLY[(uc010ysx.2:c.*59C>G,uc002sql.4:c.*59C>G,uc010fgp.3:c.*59C>G)]>
+  UTR5AnnotationTest.testUTR5Var20:141 expected:<PPIH[]> but was:<PPIH[(uc021omf.1:c.-157C>T)]>
+  UTR5AnnotationTest.testUTR5Var22:164 expected:<HECTD3[]> but was:<HECTD3[(uc001cmy.4:c.-96G>A)]>
+  UTR3AnnotationTest.testUTR3Var172:857 expected:<EDAR[]> but was:<EDAR[(uc002teq.4:c.*1388C>A,uc010yws.2:c.*1484C>A,uc010fjn.3:c.*1484C>A)]>
+  UTR5AnnotationTest.testUTR5Var36:187 expected:<PPIAL4G[]> but was:<PPIAL4G[(uc001ejt.3:c.-27T>C)]>
+  UTR3AnnotationTest.testUTR3Var182:880 expected:<[KLHL23,PHOSPHO2-KLHL23]> but was:<[PHOSPHO2-KLHL23(uc002ufh.2:c.*58->A,uc002ufi.2:c.*58->A)]>
+  UTR5AnnotationTest.testUTR5Var39:210 expected:<ECM1[]> but was:<ECM1[(uc009wlu.3:c.-105C>T,uc010pcf.2:c.*148C>T,uc010pce.2:c.*148C>T)]>
+  UTR5AnnotationTest.testUTR5Var44:233 expected:<PGLYRP3[]> but was:<PGLYRP3[(uc001fbn.1:c.-38A>G)]>
+  UTR5AnnotationTest.testUTR5Var47:256 expected:<RIT1[]> but was:<RIT1[(uc001fmh.1:c.-21C>G)]>
+  UTR5AnnotationTest.testUTR5Var50:279 expected:<C1orf182[]> but was:<C1orf182[(uc001foo.3:c.-78T>C,uc009wry.3:c.-78T>C)]>
+  UTR3AnnotationTest.testUTR3Var186:903 expected:<OSBPL6[]> but was:<OSBPL6[(uc002uly.3:c.*96A>G,uc002ulx.3:c.*96A>G,uc002ulz.3:c.*96A>G,uc010zfe.2:c.*96A>G,uc002uma.3:c.*96A>G)]>
+  UTR5AnnotationTest.testUTR5Var59:302 expected:<ATP1A4[]> but was:<ATP1A4[(uc001fvg.3:c.-43G>A)]>
+  UTR5AnnotationTest.testUTR5Var69:325 expected:<FAM5B[]> but was:<FAM5B[(uc001glf.3:c.-15T>C)]>
+  UTR3AnnotationTest.testUTR3Var187:926 expected:<AX746670[]> but was:<AX746670[(uc002umv.1:c.*546A>C)]>
+  UTR5AnnotationTest.testUTR5Var71:348 expected:<KIAA1614[]> but was:<KIAA1614[(uc001gol.1:c.-121C>T)]>
+  UTR5AnnotationTest.testUTR5Var83:371 expected:<KIF26B[]> but was:<KIF26B[(uc010pyq.1:c.-39C>T,uc001ibf.1:c.-39C>T)]>
+  UTR3AnnotationTest.testUTR3Var199:949 expected:<ACADL[]> but was:<ACADL[(uc010zjg.1:c.*460T>C)]>
+  UTR5AnnotationTest.testUTR5Var86:417 expected:<RSAD2[]> but was:<RSAD2[(uc002qyp.1:c.-29A>G)]>
+  UTR3AnnotationTest.testUTR3Var200:972 expected:<SPAG16[]> but was:<SPAG16[(uc002veo.3:c.*4A>T)]>
+  UTR5AnnotationTest.testUTR5Var92:440 expected:<ABCG8[]> but was:<ABCG8[(uc010yoa.2:c.-35G>A,uc002rtq.3:c.-35G>A)]>
+  UTR5AnnotationTest.testUTR5Var94:463 expected:<ALMS1P[]> but was:<ALMS1P[(uc010yrl.2:c.-37T>G)]>
+  UTR3AnnotationTest.testUTR3Var205:995 expected:<GPBAR1[]> but was:<GPBAR1[(uc010zjx.1:c.*66C>T,uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T)]>
+  UTR5AnnotationTest.testUTR5Var98:486 expected:<ITPRIPL1[]> but was:<ITPRIPL1[(uc002svx.3:c.-86A>G)]>
+  UTR3AnnotationTest.testUTR3Var213:1018 expected:<NMUR1[]> but was:<NMUR1[(uc002vry.4:c.*1290A>G)]>
+  UTR3AnnotationTest.testUTR3Var215:1041 expected:<NGEF[]> but was:<NGEF[(uc002vtt.2:c.*816G>C)]>
+  UTR3AnnotationTest.testUTR3Var223:1064 expected:<NDUFA10[]> but was:<NDUFA10[(uc002vyo.2:c.*714A>G)]>
+  UTR3AnnotationTest.testUTR3Var248:1087 expected:<GLT8D1[]> but was:<GLT8D1[(uc003dfk.3:c.*1172C>T,uc003dfl.3:c.*1172C>T,uc003dfm.3:c.*1172C>T,uc003dfn.3:c.*1172C>T,uc003dfi.4:c.*1172C>T)]>
+  UTR3AnnotationTest.testUTR3Var254:1110 expected:<FRG2C[]> but was:<FRG2C[(uc003dpt.4:c.*7T>G)]>
+  UTR3AnnotationTest.testUTR3Var262:1133 expected:<BTLA[]> but was:<BTLA[(uc003dzb.4:c.*753A>G,uc003dza.4:c.*897A>G)]>
+  UTR3AnnotationTest.testUTR3Var273:1156 expected:<RUVBL1[]> but was:<RUVBL1[(uc010hss.3:c.*1300A>G,uc003ekh.3:c.*1392A>G)]>
+  UTR3AnnotationTest.testUTR3Var292:1179 expected:<AX746590[]> but was:<AX746590[(uc003fma.1:c.*652A>G)]>
+  UTR3AnnotationTest.testUTR3Var298:1202 expected:<TPRG1[]> but was:<TPRG1[(uc003frw.2:c.*39T>C,uc003frv.2:c.*39T>C)]>
+  UTR3AnnotationTest.testUTR3Var307:1225 expected:<ACOX3[]> but was:<ACOX3[(uc003glc.4:c.*2186C>T,uc003gld.4:c.*2118C>T,uc010idk.3:c.*2186C>T)]>
+  UTR3AnnotationTest.testUTR3Var318:1248 expected:<KDR[]> but was:<KDR[(uc003has.3:c.*4097A>G,uc003hat.1:c.*4097A>G)]>
+  UTR3AnnotationTest.testUTR3Var323:1271 expected:<SMR3A[]> but was:<SMR3A[(uc003hfg.1:c.*31C>G)]>
+  UTR3AnnotationTest.testUTR3Var324:1294 expected:<MUC7[]> but was:<MUC7[(uc011cat.2:c.*99T>C,uc011cau.2:c.*99T>C,uc003hfj.3:c.*99T>C)]>
+  UTR3AnnotationTest.testUTR3Var335:1317 expected:<RRH[]> but was:<RRH[(uc003hzv.3:c.*8T>G)]>
+  UTR3AnnotationTest.testUTR3Var338:1340 expected:<AK308309[]> but was:<AK308309[(uc010imy.1)]>
+  UTR3AnnotationTest.testUTR3Var352:1363 expected:<FRG1[]> but was:<FRG1[(uc003izs.3:c.*5->GACA)]>
+  UTR3AnnotationTest.testUTR3Var360:1386 expected:<SLC6A3[]> but was:<SLC6A3[(uc003jck.3:c.*2951->GG)]>
+  UTR3AnnotationTest.testUTR3Var366:1409 expected:<NPR3[]> but was:<NPR3[(uc003jhu.3:c.*3401T>C,uc003jhv.3:c.*3401T>C,uc003jhw.2:c.*3401T>C)]>
+  UTR3AnnotationTest.testUTR3Var369:1432 expected:<DNAJC21[]> but was:<DNAJC21[(uc003jjb.3:c.*1475C>T,uc003jjc.3:c.*1475C>T)]>
+  UTR3AnnotationTest.testUTR3Var376:1455 expected:<IL31RA[]> but was:<IL31RA[(uc003jql.3:c.*75C>T,uc003jqo.3:c.*75C>T,uc021xyq.1:c.*75C>T)]>
+  UTR3AnnotationTest.testUTR3Var390:1478 expected:<ATP10B[]> but was:<ATP10B[(uc003lyn.3:c.*1572T>C)]>
+  UTR3AnnotationTest.testUTR3Var402:1501 expected:<PXDC1[]> but was:<PXDC1[(uc003mvt.2:c.*784G>T)]>
+  UTR3AnnotationTest.testUTR3Var407:1524 expected:<KIF13A[]> but was:<KIF13A[(uc003nci.4:c.*5335A>C,uc003ncg.4:c.*5479A>C,uc003nch.4:c.*5374A>C)]>
+  UTR3AnnotationTest.testUTR3Var408:1547 expected:<DCDC2[]> but was:<DCDC2[(uc003ndx.3:c.*1433G>C,uc003ndy.3:c.*1433G>C,uc003ndw.3:c.*686G>C)]>
+  UTR3AnnotationTest.testUTR3Var409:1570 expected:<GPLD1[]> but was:<GPLD1[(uc010jps.1:c.*1721A>C,uc010jpr.1:c.*1232A>C)]>
+  UTR3AnnotationTest.testUTR3Var413:1593 expected:<BTN2A2[]> but was:<BTN2A2[(uc011dkg.2:c.*12G>A,uc011dki.1:c.*1464G>A)]>
+  UTR3AnnotationTest.testUTR3Var418:1616 expected:<HLA-A[]> but was:<HLA-A[(uc011dmd.2:c.*652A>G)]>
+  UTR3AnnotationTest.testUTR3Var427:1639 expected:<HLA-C[]> but was:<HLA-C[(uc021yuk.1:c.*848G>A,uc011dnj.2:c.*1109G>A,uc003nsy.3:c.*1193G>A)]>
+  UTR3AnnotationTest.testUTR3Var430:1662 expected:<MICB[]> but was:<MICB[(uc003nto.4,uc003ntn.4,uc011dnm.2)]>
+  UTR3AnnotationTest.testUTR3Var436:1685 expected:<HLA-DMB[]> but was:<HLA-DMB[(uc003ocj.2:c.*2136G>A,uc011dql.2:c.*909G>A)]>
+  UTR3AnnotationTest.testUTR3Var443:1708 expected:<LEMD2[]> but was:<LEMD2[(uc011drm.2:c.*1534G>A,uc011drl.2:c.*628G>A,uc010jvg.3:c.*661G>A)]>
+  UTR3AnnotationTest.testUTR3Var448:1731 expected:<PRPH2[]> but was:<PRPH2[(uc003osk.3:c.*1053G>A)]>
+  UTR3AnnotationTest.testUTR3Var453:1754 expected:<PKHD1[]> but was:<PKHD1[(uc003pai.3:c.*10203G>A)]>
+  UTR3AnnotationTest.testUTR3Var467:1777 expected:<ARMC2[]> but was:<ARMC2[(uc011eao.2:c.*35C>T,uc003pss.4:c.*35C>T)]>
+  UTR3AnnotationTest.testUTR3Var472:1800 expected:<ULBP3[]> but was:<ULBP3[(uc011eej.1:c.*372T>G,uc003qns.3:c.*747T>G)]>
+  UTR3AnnotationTest.testUTR3Var474:1823 expected:<SYNJ2[]> but was:<SYNJ2[(uc003qqz.2:c.*55A>G,uc003qqy.2:c.*55A>G,uc003qqx.2:c.*55A>G,uc003qra.2:c.*55A>G)]>
+  UTR3AnnotationTest.testUTR3Var478:1846 expected:<SLC22A2[]> but was:<SLC22A2[(uc003qth.2:c.*1758A>G)]>
+  UTR3AnnotationTest.testUTR3Var479:1869 expected:<SLC22A2[]> but was:<SLC22A2[(uc003qth.2:c.*752T>C)]>
+  UTR3AnnotationTest.testUTR3Var498:1892 expected:<CDCA7L[]> but was:<CDCA7L[(uc003sve.4,uc003svf.4,uc010kuk.3,uc010kul.3)]>
+  UTR3AnnotationTest.testUTR3Var511:1915 expected:<WBSCR22[]> but was:<WBSCR22[(uc003tyw.1:c.*337T>C)]>
+  UTR3AnnotationTest.testUTR3Var513:1938 expected:<HGF[]> but was:<HGF[(uc003uho.1:c.*959A>G,uc003uhn.1:c.*974A>G)]>
+  UTR3AnnotationTest.testUTR3Var522:1961 expected:<EMID2[]> but was:<EMID2[(uc003uyo.1:c.*180G>A,uc010lhy.1:c.*67G>A)]>
+  UTR3AnnotationTest.testUTR3Var527:1984 expected:<TSPAN12[]> but was:<TSPAN12[(uc003vjk.3:c.*956G>A,uc010lkj.3:c.*575G>A)]>
+  UTR3AnnotationTest.testUTR3Var537:2007 expected:<SLC13A4[]> but was:<SLC13A4[(uc003vta.3:c.*1995G>A,uc003vtb.3:c.*1998G>A)]>
+  UTR3AnnotationTest.testUTR3Var556:2054 expected:<LZTS1[]> but was:<LZTS1[(uc003wzr.3:c.*1880A>G)]>
+  UTR3AnnotationTest.testUTR3Var565:2077 expected:<PBK[]> but was:<PBK[(uc003xgi.3:c.*997C>T,uc011lap.2:c.*1030C>T)]>
+  UTR3AnnotationTest.testUTR3Var569:2100 expected:<C8orf86[]> but was:<C8orf86[(uc003xlx.1:c.*745A>C)]>
+  UTR3AnnotationTest.testUTR3Var570:2123 expected:<HTRA4[]> but was:<HTRA4[(uc003xmj.3:c.*21A>C)]>
+  UTR3AnnotationTest.testUTR3Var572:2146 expected:<C8orf45[]> but was:<C8orf45[(uc011lev.2:c.*46A>G)]>
+  UTR3AnnotationTest.testUTR3Var587:2193 expected:<KANK1[]> but was:<KANK1[(uc003zgm.3:c.*2013T>C)]>
+  UTR3AnnotationTest.testUTR3Var597:2216 expected:<C9orf11[]> but was:<C9orf11[(uc003zql.3:c.*897T>A,uc011lnq.2:c.*810T>A)]>
+  UTR3AnnotationTest.testUTR3Var608:2239 expected:<FAM75D3[]> but was:<FAM75D3[(uc010mpt.2:c.*573->CTAC)]>
+  UTR3AnnotationTest.testUTR3Var610:2262 expected:<LOC286238[]> but was:<LOC286238[(uc010mql.1:c.*346G>A)]>
+  UTR3AnnotationTest.testUTR3Var611:2285 expected:<ROR2[]> but was:<ROR2[(uc004ari.1:c.*2115G>C)]>
+  UTR3AnnotationTest.testUTR3Var612:2308 expected:<ROR2[]> but was:<ROR2[(uc004arj.2:c.*2847C>T)]>
+  UTR3AnnotationTest.testUTR3Var643:2331 expected:<DDX31[]> but was:<DDX31[(uc004cbq.1:c.*2632C>G,uc010mzu.1:c.*2413C>G)]>
+  UTR3AnnotationTest.testUTR3Var656:2354 expected:<ATP5C1[]> but was:<ATP5C1[(uc001ijv.3:c.*63T>C,uc001iju.3:c.*97T>C)]>
+  UTR3AnnotationTest.testUTR3Var662:2377 expected:<TRDMT1[]> but was:<TRDMT1[(uc010qcd.2:c.*783G>C)]>
+  UTR3AnnotationTest.testUTR3Var663:2400 expected:<CACNB2[]> but was:<CACNB2[(uc009xka.2:c.*10G>T,uc001ipu.3:c.*10G>T,uc001ipv.3:c.*10G>T,uc009xjz.1:c.*10G>T,uc001ips.2:c.*10G>T,uc001ipr.2:c.*10G>T,uc001ipt.2:c.*10G>T,uc010qco.1:c.*10G>T,uc001iqa.2:c.*10G>T,uc001ipy.2:c.*10G>T,uc001ipz.2:c.*10G>T,uc001ipx.2:c.*10G>T,uc001ipw.2:c.*10G>T)]>
+  UTR3AnnotationTest.testUTR3Var678:2423 expected:<ARHGAP22[]> but was:<ARHGAP22[(uc001jgu.3:c.*2175C>T,uc001jgt.3:c.*2127C>T,uc010qgl.2:c.*1998C>T,uc010qgm.2:c.*2145C>T,uc001jgv.3:c.*1221C>T,uc001jgs.3:c.*1857C>T,uc001jgr.3:c.*1278C>T)]>
+  UTR3AnnotationTest.testUTR3Var681:2446 expected:<WDFY4[]> but was:<WDFY4[(uc001jha.4:c.*179C>T)]>
+  UTR3AnnotationTest.testUTR3Var688:2469 expected:<PBLD[]> but was:<PBLD[(uc001jnv.1:c.*457G>A)]>
+  UTR3AnnotationTest.testUTR3Var690:2492 expected:<LRRC20[]> but was:<LRRC20[(uc001jqy.1:c.*417C>T,uc001jqz.1:c.*435C>T,uc001jqx.1:c.*585C>T)]>
+  UTR3AnnotationTest.testUTR3Var696:2515 expected:<CDHR1[]> but was:<CDHR1[(uc009xst.3:c.*4A>G,uc001kcv.3:c.*4A>G,uc001kcx.3:c.*4A>G)]>
+  UTR3AnnotationTest.testUTR3Var697:2538 expected:<AGAP11[]> but was:<AGAP11[(uc001kee.2:c.*16->TGC)]>
+  UTR3AnnotationTest.testUTR3Var716:2561 expected:<ADAM8[]> but was:<ADAM8[(uc021qbe.1:c.*2611C>A,uc010qva.2:c.*2338C>A,uc009ybi.3:c.*2444C>A)]>
+  UTR3AnnotationTest.testUTR3Var724:2584 expected:<POLR2L[]> but was:<POLR2L[(uc001lsc.3:c.*212C>T)]>
+  UTR3AnnotationTest.testUTR3Var735:2607 expected:<TRIM22[]> but was:<TRIM22[(uc010qzm.2:c.*36C>T,uc001mbr.3:c.*36C>T,uc009yes.3:c.*36C>T)]>
+  UTR3AnnotationTest.testUTR3Var746:2630 expected:<DCDC1[]> but was:<DCDC1[(uc001msu.2:c.*1604A>T)]>
+  UTR3AnnotationTest.testUTR3Var751:2677 expected:<AK097878[]> but was:<AK097878[(uc021qgl.1:c.*552T>C)]>
+  UTR3AnnotationTest.testUTR3Var755:2700 expected:<LOC440040[]> but was:<LOC440040[(uc010rhy.2:c.*317G>-,uc009ymb.3:c.*317G>-)]>
+  UTR3AnnotationTest.testUTR3Var761:2723 expected:<FADS3[]> but was:<FADS3[(uc001nsm.3:c.*1412A>G)]>
+  UTR3AnnotationTest.testUTR3Var766:2746 expected:<SLC22A20[]> but was:<SLC22A20[(uc021qlg.1:c.*30->TAAG)]>
+  UTR3AnnotationTest.testUTR3Var767:2769 expected:<SLC22A20[]> but was:<SLC22A20[(uc021qlg.1:c.*33->GCAA)]>
+  UTR3AnnotationTest.testUTR3Var773:2792 expected:<FAM86C2P[]> but was:<FAM86C2P[(uc001omt.4:c.*1303C>A)]>
+  UTR3AnnotationTest.testUTR3Var786:2815 expected:<SLC35F2[]> but was:<SLC35F2[(uc001pjs.3:c.*2450C>T)]>
+  UTR3AnnotationTest.testUTR3Var787:2838 expected:<KDELC2[]> but was:<KDELC2[(uc001pkj.2:c.*1562->A,uc001pki.2:c.*1394->A)]>
+  UTR3AnnotationTest.testUTR3Var795:2861 expected:<APOC3[]> but was:<APOC3[(uc001ppt.1:c.*71G>T)]>
+  UTR3AnnotationTest.testUTR3Var809:2884 expected:<GALNT8[]> but was:<GALNT8[(uc001qne.1:c.*12T>C)]>
+  UTR3AnnotationTest.testUTR3Var815:2907 expected:<DPPA3[]> but was:<DPPA3[(uc001qtf.3:c.*25->CCCG)]>
+  UTR3AnnotationTest.testUTR3Var821:2930 expected:<KLRC2[]> but was:<KLRC2[(uc001qyk.2:c.*715C>T)]>
+  UTR3AnnotationTest.testUTR3Var824:2953 expected:<STRAP[]> but was:<STRAP[(uc001rdd.4:c.*15->T,uc001rdc.4:c.*15->T,uc010shw.2:c.*15->T)]>
+  UTR3AnnotationTest.testUTR3Var839:2976 expected:<CELA1[]> but was:<CELA1[(uc001ryi.1:c.*826C>T)]>
+  UTR3AnnotationTest.testUTR3Var843:2999 expected:<WIBG[]> but was:<WIBG[(uc001sie.1,uc001sif.1)]>
+  UTR3AnnotationTest.testUTR3Var850:3022 expected:<SLC5A8[]> but was:<SLC5A8[(uc001thz.4)]>
+  UTR3AnnotationTest.testUTR3Var855:3069 expected:<OAS1[]> but was:<OAS1[(uc009zwf.3:c.*32G>C)]>
+  UTR3AnnotationTest.testUTR3Var864:3092 expected:<SLC46A3[]> but was:<SLC46A3[(uc001usg.3:c.*1692T>C,uc001usi.3:c.*1917T>C,uc001ush.3:c.*1917T>C)]>
+  UTR3AnnotationTest.testUTR3Var884:3115 expected:<CLDN10[]> but was:<CLDN10[(uc010tii.1:c.*11T>G,uc001vmg.2:c.*11T>G,uc001vmh.2:c.*11T>G)]>
+  UTR3AnnotationTest.testUTR3Var895:3162 expected:<RNASE12[]> but was:<RNASE12[(uc001vxt.3:c.*457G>T)]>
+  UTR3AnnotationTest.testUTR3Var898:3185 expected:<ECRP[]> but was:<ECRP[(uc021ror.1:c.*22G>A)]>
+  UTR3AnnotationTest.testUTR3Var923:3232 expected:<GCH1[]> but was:<GCH1[(uc001xbi.1:c.*995G>A)]>
+  UTR3AnnotationTest.testUTR3Var932:3279 expected:<MAX[]> but was:<MAX[(uc001xik.3:c.*372T>A)]>
+  UTR3AnnotationTest.testUTR3Var950:3302 expected:<AHNAK2[]> but was:<AHNAK2[(uc010axc.1:c.*17403T>C,uc021sen.1:c.*3594T>C,uc021seo.1:c.*2397T>C,uc001ypx.2:c.*17103T>C)]>
+  UTR3AnnotationTest.testUTR3Var952:3325 expected:<LOC653061[]> but was:<LOC653061[(uc021sfv.1:c.*24C>T)]>
+  UTR3AnnotationTest.testUTR3Var953:3348 expected:<HERC2[]> but was:<HERC2[(uc001zbj.3:c.*14554C>T,uc001zbi.3:c.*1621C>T)]>
+  UTR3AnnotationTest.testUTR3Var955:3371 expected:<FMN1[]> but was:<FMN1[(uc001zhf.4:c.*3623C>T)]>
+  UTR3AnnotationTest.testUTR3Var963:3394 expected:<GATM[]> but was:<GATM[(uc001zvc.3:c.*1273G>A,uc001zvb.3:c.*886G>A)]>
+  UTR3AnnotationTest.testUTR3Var964:3417 expected:<SLC30A4[]> but was:<SLC30A4[(uc001zvj.3:c.*1306T>C)]>
+  UTR3AnnotationTest.testUTR3Var966:3440 expected:<BCL2L10[]> but was:<BCL2L10[(uc002abq.3:c.*726A>G)]>
+  UTR3AnnotationTest.testUTR3Var971:3463 expected:<IGDCC3[]> but was:<IGDCC3[(uc002aos.2:c.*2553G>A,uc002aor.1:c.*411G>A)]>
+  UTR3AnnotationTest.testUTR3Var982:3486 expected:<SCAPER[]> but was:<SCAPER[(uc002bbz.1:c.*3409T>C)]>
+  UTR3AnnotationTest.testUTR3Var992:3533 expected:<POLR3K[]> but was:<POLR3K[(uc002cfi.2:c.*402A>G)]>
+  UTR3AnnotationTest.testUTR3Var993:3556 expected:<RAB40C[]> but was:<RAB40C[(uc002chr.3:c.*7T>C,uc002chq.3:c.*7T>C,uc021szv.1:c.*7T>C,uc021szu.1:c.*7T>C,uc021szt.1:c.*7T>C)]>
+  UTR3AnnotationTest.testUTR3Var998:3579 expected:<ZG16B[]> but was:<ZG16B[(uc002cru.3:c.*37G>T)]>
+  UTR3AnnotationTest.testUTR3Var4:120 expected:<TP73[]> but was:<TP73[(uc010nzj.2:c.*121C>T)]>
+  UTR3AnnotationTest.testUTR3Var5:143 expected:<TP73[]> but was:<TP73[(uc010nzj.2:c.*176G>A)]>
+  UTR3AnnotationTest.testUTR3Var7:166 expected:<THAP3[]> but was:<THAP3[(uc001aoc.3:c.*28->TA,uc001aod.3:c.*28->TA)]>
+  UTR3AnnotationTest.testUTR3Var9:189 expected:<CLCN6[]> but was:<CLCN6[(uc009vne.1:c.*649G>A)]>
+  UTR3AnnotationTest.testUTR3Var1008:3626 expected:<EMP2[]> but was:<EMP2[(uc002czx.3:c.*1378C>T)]>
+  UTR3AnnotationTest.testUTR3Var1014:3649 expected:<USP31[]> but was:<USP31[(uc002dll.3:c.*4072T>C,uc010bxm.3:c.*1936T>C,uc010vca.2:c.*1981T>C,uc002dlk.3:c.*1888T>C)]>
+  UTR3AnnotationTest.testUTR3Var1017:3672 expected:<FBXL19-AS1[]> but was:<FBXL19-AS1[(uc002dzy.2:c.*492G>A)]>
+  UTR3AnnotationTest.testUTR3Var1026:3719 expected:<ACD[]> but was:<ACD[(uc002etr.4:c.*1618A>T,uc002etq.4:c.*1666A>T,uc002etp.4:c.*1657A>T)]>
+  UTR3AnnotationTest.testUTR3Var1037:3742 expected:<C16orf46[]> but was:<C16orf46[(uc010vno.2:c.*374A>G,uc002fgc.4:c.*1193A>G)]>
+  UTR3AnnotationTest.testUTR3Var1044:3765 expected:<AK126852[]> but was:<AK126852[(uc002fkt.1:c.*1272C>G)]>
+  UTR3AnnotationTest.testUTR3Var1049:3788 expected:<SERPINF2[]> but was:<SERPINF2[(uc021tnm.1:c.*71G>T,uc002ftk.1:c.*71G>T,uc010vqr.1:c.*71G>T)]>
+  UTR3AnnotationTest.testUTR3Var1055:3812 expected:<C17orf49[,RNASEK,RNASEK-C17ORF49]> but was:<C17orf49[(uc002gec.3:c.-474C>T,uc010vti.2:c.-474C>T,uc002ged.3:c.-474C>T,uc002gea.3:c.*98C>T,uc021tow.1:c.*98C>T)]>
+  UTR3AnnotationTest.testUTR3Var1073:3835 expected:<C17orf108[]> but was:<C17orf108[(uc002gzx.3:c.*321C>A,uc002gzy.1:c.*1104C>A)]>
+  UTR3AnnotationTest.testUTR3Var1074:3858 expected:<FLOT2[]> but was:<FLOT2[(uc002hdc.3:c.*1294C>T)]>
+  UTR3AnnotationTest.testUTR3Var1090:3905 expected:<MPP2[]> but was:<MPP2[(uc010wio.1:c.*1642A>G,uc010win.1:c.*1258A>G,uc002ieo.1:c.*1675A>G,uc010wip.1:c.*1810A>G,uc002ien.1:c.*1726A>G,uc010wim.1:c.*1642A>G)]>
+  UTR3AnnotationTest.testUTR3Var1099:3928 expected:<SNX11[]> but was:<SNX11[(uc002inh.1:c.*6G>C,uc002inf.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc010wli.1:c.*6G>C,uc010wlg.1:c.*6G>C)]>
+  UTR3AnnotationTest.testUTR3Var1100:3951 expected:<ATP5G1[]> but was:<ATP5G1[(uc002ioh.3:c.*15G>-,uc002iog.3:c.*15G>-)]>
+  UTR3AnnotationTest.testUTR3Var1103:3974 expected:<MRPL27[]> but was:<MRPL27[(uc002iqr.2:c.*1933C>T)]>
+  UTR3AnnotationTest.testUTR3Var1107:3997 expected:<TBX2[]> but was:<TBX2[(uc002ize.3:c.*2967C>T)]>
+  UTR3AnnotationTest.testUTR3Var1115:4020 expected:<ITGB4[]> but was:<ITGB4[(uc002jpj.3:c.*25C>T,uc002jpi.4:c.*25C>T,uc002jpg.3:c.*25C>T,uc002jph.3:c.*25C>T)]>
+  UTR3AnnotationTest.testUTR3Var1118:4043 expected:<EXOC7[]> but was:<EXOC7[(uc002jqr.3:c.*4193G>C,uc002jqs.3:c.*4439G>C,uc002jqq.3:c.*4286G>C,uc010wsw.2:c.*4355G>C,uc010wsx.2:c.*4262G>C,uc010wsv.2:c.*4202G>C,uc010dgv.2:c.*4061G>C,uc002jqp.2:c.*2824G>C)]>
+  UTR3AnnotationTest.testUTR3Var1171:4161 expected:<ZNF626[]> but was:<ZNF626[(uc002npb.1:c.*1789T>C,uc002npc.1:c.*1561T>C)]>
+  UTR3AnnotationTest.testUTR3Var1178:4207 expected:<LGI4[]> but was:<LGI4[(uc002nxy.1:c.*1108C>T,uc002nxx.2:c.*1624C>T,uc002nxz.1:c.*1870C>T)]>
+  UTR3AnnotationTest.testUTR3Var1188:4253 expected:<FBXO27[]> but was:<FBXO27[(uc002okh.3:c.*963T>C)]>
+  UTR3AnnotationTest.testUTR3Var1189:4276 expected:<FCGBP[]> but was:<FCGBP[(uc002omp.4:c.*16277T>C)]>
+  UTR3AnnotationTest.testUTR3Var1199:4322 expected:<PLA2G4C[]> but was:<PLA2G4C[(uc002phx.3:c.*1679A>T,uc010elr.3:c.*1722A>T,uc010xzd.2:c.*1709A>T,uc002phw.3:c.*1484A>T)]>
+  UTR3AnnotationTest.testUTR3Var1204:4345 expected:<ZNF610[]> but was:<ZNF610[(uc002pyy.4:c.*32C>G,uc002pyz.4:c.*32C>G,uc002pyx.4:c.*32C>G,uc002pza.3:c.*32C>G)]>
+  UTR3AnnotationTest.testUTR3Var1205:4368 expected:<ZNF528[]> but was:<ZNF528[(uc002pzh.3:c.*17->GT,uc002pzi.3:c.*17->GT)]>
+  UTR3AnnotationTest.testUTR3Var1206:4391 expected:<ZNF528[]> but was:<ZNF528[(uc002pzh.3:c.*17->GT,uc002pzi.3:c.*17->GT)]>
+  UTR3AnnotationTest.testUTR3Var1209:4414 expected:<ZNF160[]> but was:<ZNF160[(uc002qas.4:c.*444C>G)]>
+  UTR3AnnotationTest.testUTR3Var1215:4437 expected:<LILRB5[]> but was:<LILRB5[(uc002qfa.1:c.*3220A>G)]>
+  UTR3AnnotationTest.testUTR3Var1231:4508 expected:<C20orf26[]> but was:<C20orf26[(uc010zsf.1:c.*10A>C)]>
+  UTR3AnnotationTest.testUTR3Var1243:4531 expected:<ZBP1[]> but was:<ZBP1[(uc010gjm.3:c.*1329G>A,uc002xyo.3:c.*1332G>A,uc002xyp.3:c.*1107G>A)]>
+  UTR3AnnotationTest.testUTR3Var1258:4602 expected:<ADAMTS5[]> but was:<ADAMTS5[(uc002ymg.3:c.*2840A>G)]>
+  UTR3AnnotationTest.testUTR3Var1270:4648 expected:<C21orf33[]> but was:<C21orf33[(uc002zec.4:c.*642C>T,uc002zed.4:c.*642C>T)]>
+  UTR3AnnotationTest.testUTR3Var1276:4671 expected:<LSS[]> but was:<LSS[(uc002zij.3:c.*2392G>A)]>
+  UTR3AnnotationTest.testUTR3Var1284:4694 expected:<C22orf13[]> but was:<C22orf13[(uc003aah.2:c.*2726A>G,uc003aal.2:c.*2894A>G)]>
+  UTR3AnnotationTest.testUTR3Var1290:4717 expected:<PVALB[]> but was:<PVALB[(uc010gwz.3:c.*395G>A,uc003apx.3:c.*395G>A)]>
+  UTR3AnnotationTest.testUTR3Var1291:4740 expected:<TRIOBP[]> but was:<TRIOBP[(uc003atx.1:c.*606T>C)]>
+  UTR3AnnotationTest.testUTR3Var1300:4763 expected:<NFAM1[]> but was:<NFAM1[(uc003bcn.4:c.*1648G>C)]>
+  UTR3AnnotationTest.testUTR3Var1304:4786 expected:<MCAT[]> but was:<MCAT[(uc003bdm.1:c.*974C>T,uc003bdl.1:c.*1192C>T)]>
+  UTR3AnnotationTest.testUTR3Var1332:4902 expected:<SAGE1[]> but was:<SAGE1[(uc010nry.1:c.*481T>G)]>
+  UTR3AnnotationTest.testUTR3Var1337:4925 expected:<SAGE1[]> but was:<SAGE1[(uc010nry.1:c.*492G>C)]>
+  UTR3AnnotationTest.testUTR3Var1346:4948 expected:<CD24(uc004ftz.1:c.*[30]G>A)> but was:<CD24(uc004ftz.1:c.*[272]G>A)>
+  UTR3AnnotationTest.testUTR3Var1346b:97 expected:<CD24(uc004ftz.1:c.*[30]G>A)> but was:<CD24(uc004ftz.1:c.*[272]G>A)>
+  UTR3AnnotationTest.testUTR3VarByHand1:74 expected:<SLIT2[]> but was:<SLIT2[(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)]>
+  UTR3AnnotationTest.testUTR3Var13:212 expected:<CLCNKB[]> but was:<CLCNKB[(uc001axy.4:c.*331C>G,uc021ogm.1:c.*331C>G,uc001axx.4:c.*331C>G)]>
+  UTR3AnnotationTest.testUTR3Var26:235 expected:<COL8A2[]> but was:<COL8A2[(uc001bzw.2:c.*1928C>A,uc001bzv.2:c.*2123C>A)]>
+  UTR3AnnotationTest.testUTR3Var44:282 expected:<ANGPTL3[]> but was:<ANGPTL3[(uc001das.1)]>
+  UTR3AnnotationTest.testUTR3Var54:305 expected:<GBP7[]> but was:<GBP7[(uc001dna.2:c.*1993T>C)]>
+  UTR3AnnotationTest.testUTR3Var72:328 expected:<PSMB4[]> but was:<PSMB4[(uc010pda.2:c.*126T>C)]>
+  UTR3AnnotationTest.testUTR3Var86:351 expected:<IL6R[]> but was:<IL6R[(uc001ffa.2:c.*255T>C,uc001fez.2:c.*40T>C)]>
+  UTR3AnnotationTest.testUTR3Var90:374 expected:<ISG20L2[]> but was:<ISG20L2[(uc001fps.1:c.*1067C>T,uc001fpt.1:c.*1067C>T)]>
+  SynonymousAnnotationTest.testSynonymousVar6:189 expected:<HMGB4[]> but was:<HMGB4[(uc001bxq.3:c.-118T>C)]>
+  NoncodingRNAAnnotationTest.testUTR3VarByHand1:77 expected:<SLIT2[]> but was:<SLIT2[(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)]>
+
+Tests run: 797, Failures: 278, Errors: 0, Skipped: 0
+
+[ERROR] There are test failures.
+
+Please refer to /home/mjaeger/workspace/jannovar/target/surefire-reports for the individual test results.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 11.600s
+[INFO] Finished at: Mon Jul 01 16:34:12 CEST 2013
+[INFO] Final Memory: 7M/238M
+[INFO] ------------------------------------------------------------------------

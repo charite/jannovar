@@ -30,8 +30,7 @@ public class UTRAnnotation {
      * Return an annotation for a UTR3  mutation for a gene. TODO figure out +/- strand strategy
      * <P> See the description of this class for comments on the TODO. For now, KISS
      * @param trmdl Gene with splice mutation for current chromosomal variant.
-     * @param start start position of the variant
-     * @param  end position of the variant
+     * @param rvarstart start position of the variant
      * @param ref reference sequence
      * @param alt variant sequence
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to a 3' UTR variant.

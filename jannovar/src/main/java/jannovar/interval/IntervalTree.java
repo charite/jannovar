@@ -155,7 +155,7 @@ public class IntervalTree<T> implements java.io.Serializable {
      * automatically calls 
      * {@link #searchInbetween}, which sets the variables 
      * {@link #rightNeighbor} and 
-     * {@link #lefttNeighbor}, which can then be called by this function 
+     * {@link #leftNeighbor}, which can then be called by this function 
      * and {@link #getLeftNeighbor}.
      * @return the right neighbor of the current search query, if no overlapping interval was found.
      */
@@ -173,8 +173,8 @@ public class IntervalTree<T> implements java.io.Serializable {
      * automatically calls 
      * {@link #searchInbetween}, which sets the variables 
      * {@link #rightNeighbor} and 
-     * {@link #lefttNeighbor}, which can then be called by this function 
-     * and {@link #getRighttNeighbor}.
+     * {@link #leftNeighbor}, which can then be called by this function 
+     * and {@link #getRightNeighbor}.
      * @return the left neighbor of the current search query, if no overlapping interval was found.
      */
     public T getLeftNeighbor() {
