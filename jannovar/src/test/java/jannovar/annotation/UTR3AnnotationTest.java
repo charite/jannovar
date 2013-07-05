@@ -377,7 +377,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GLT8D1(uc003dfk.3:c.*57C>T,uc003dfl.3:c.*57C>T,uc003dfm.3:c.*57C>T,uc003dfn.3:c.*57C>T,uc003dfi.4:c.*57C>T)",annot);
+	    Assert.assertEquals("GLT8D1(uc003dfl.3:c.*57C>T,uc003dfm.3:c.*57C>T,uc003dfn.3:c.*57C>T,uc003dfk.3:c.*57C>T,uc003dfi.4:c.*57C>T)",annot);
 	}
 }
 
@@ -515,7 +515,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MICB(uc003nto.4:c.*85GA>-,uc003ntn.4:c.*85GA>-,uc011dnm.2:c.*85GA>-,uc031snm.1:c.*85GA>-)",annot);
+	    Assert.assertEquals("MICB(uc031snm.1:c.*85GA>-,uc011dnm.2:c.*85GA>-,uc003nto.4:c.*85GA>-,uc003ntn.4:c.*85GA>-)",annot);
 	}
 }
 
@@ -654,7 +654,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AKR1D1...",annot);
+	    Assert.assertEquals("AKR1D1(uc010lmy.1,uc003vtz.3:c.*5A>C,uc011kqf.2:c.*5A>C,uc011kqe.1:c.*30A>C)",annot);
 	}
 }
 
@@ -863,7 +863,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC22A20(uc021qlg.1:c.*30->TAAG)]",annot);
+	    Assert.assertEquals("SLC22A20(uc021qlg.1:c.*30->TAAG)",annot);
 	}
 }
 
@@ -909,7 +909,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KDELC2[(uc001pkj.2:c.*39->A,uc001pki.2:c.*39->A)",annot);
+	    Assert.assertEquals("KDELC2(uc001pkj.2:c.*39->A,uc001pki.2:c.*39->A)",annot);
 	}
 }
 
@@ -1098,7 +1098,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AHNAK2(uc010axc.1:c.*16T>C,uc021sen.1:c.*16T>C,uc021seo.1:c.*16T>C,uc001ypx.2:c.*16T>C)",annot);
+	    Assert.assertEquals("AHNAK2(uc021seo.1:c.*16T>C,uc021sen.1:c.*16T>C,uc001ypx.2:c.*16T>C,uc010axc.1:c.*16T>C)",annot);
 	}
 }
 
@@ -1217,7 +1217,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SNX11(uc002inh.1:c.*6G>C,uc002inf.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc010wli.1:c.*6G>C,uc010wlg.1:c.*6G>C)",annot);
+	    Assert.assertEquals("SNX11(uc002inf.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc010wli.1:c.*6G>C,uc010wlg.1:c.*6G>C,uc002inh.1:c.*6G>C)",annot);
 	}
 }
 
@@ -1591,7 +1591,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRAPPC10(uc011afa.2:c.*4C>T,uc002zea.3:c.*4C>T,uc010gpo.3:c.*4C>T)",annot);
+	    Assert.assertEquals("TRAPPC10(uc002zea.3:c.*4C>T,uc010gpo.3:c.*4C>T,uc011afa.2:c.*4C>T)",annot);
 	}
 }
 
@@ -1660,7 +1660,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GUCD1(uc003aah.2:c.*2004A>G,uc003aal.2:c.*2004A>G)",annot);
+	    Assert.assertEquals("GUCD1(uc003aal.2:c.*2004A>G,uc003aah.2:c.*2004A>G)",annot);
 	}
 }
 

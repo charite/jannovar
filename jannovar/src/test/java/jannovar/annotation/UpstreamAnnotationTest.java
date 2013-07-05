@@ -435,7 +435,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC388946",annot);
+	    Assert.assertEquals("TMEM247",annot);
 	}
 }
 
@@ -525,9 +525,9 @@ public class UpstreamAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
+	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DQ580140",annot);
+	    Assert.assertEquals("POTEJ(uc021vor.2:exon15:c.1843C>T:p.R615W)",annot);
 	}
 }
 
@@ -549,7 +549,7 @@ public class UpstreamAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CYBRD1",annot);
 	}
@@ -595,7 +595,7 @@ public class UpstreamAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
+	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("KLF7",annot);
 	}
@@ -643,7 +643,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("WDR69",annot);
+	    Assert.assertEquals("DAW1",annot);
 	}
 }
 

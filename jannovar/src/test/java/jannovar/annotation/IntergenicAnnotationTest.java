@@ -127,7 +127,7 @@ public class IntergenicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RASAL2(dist=14943),C1orf49(dist=18621)",annot);
+	    Assert.assertEquals("RASAL2(dist=14943),TEX35(dist=18621)",annot);
 	}
 }
 
@@ -288,7 +288,7 @@ public class IntergenicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CCL20(dist=52556),WDR69(dist=1491)",annot);
+	    Assert.assertEquals("CCL20(dist=52556),DAW1(dist=1491)",annot);
 	}
 }
 

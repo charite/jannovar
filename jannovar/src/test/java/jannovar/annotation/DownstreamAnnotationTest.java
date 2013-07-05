@@ -490,7 +490,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -517,7 +517,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -544,7 +544,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -571,7 +571,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -598,7 +598,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -625,7 +625,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -652,7 +652,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -679,7 +679,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -706,7 +706,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -733,7 +733,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -760,7 +760,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -787,7 +787,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -814,7 +814,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DKFZp667P0924",annot);
+	    Assert.assertEquals("ANKRD36C",annot);
 	}
 }
 
@@ -1328,9 +1328,9 @@ public class DownstreamAnnotationTest implements Constants {
 	   
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MAPK13",annot);
+	    Assert.assertEquals("MAPK13(uc003olt.4)",annot);
 	}
 }
 
@@ -2282,7 +2282,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC440041",annot);
+	    Assert.assertEquals("TRIM51HP",annot);
 	}
 }
 
