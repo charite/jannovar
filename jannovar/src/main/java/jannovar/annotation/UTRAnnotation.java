@@ -26,7 +26,7 @@ import jannovar.reference.Translator;
  * The Human Genome Variation Society nomenclature for <b>3' UTR variants</b> works as follows.
  * <P>
  * ....
- * @version 0.08 (7 July, 2013)
+ * @version 0.12 (7 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -45,12 +45,27 @@ public class UTRAnnotation {
 	Annotation ann = Annotation.createEmptyAnnotation();
 	ann.setVarType(VariantType.UTR3);
 	ann.setGeneSymbol( trmdl.getGeneSymbol() );
-	if (ref.length()>1) {
-	    /* TODO We are not yet ready to annotate complex variants in the UTR5, in this
-	    * case just use the gene name. Improve this later.*/
-	    ann.setVariantAnnotation( trmdl.getName() );
+	int distance =  rvarstart - trmdl.getRefCDSEnd();
+
+	//System.out.println(trmdl.getName()+": Rvarstart=" + rvarstart + "distance=" + distance);
+
+	if (alt.equals("-")) {
+	   /* i.e., deletion in the UTR3 region */
+	    if (ref.length() == 1) {
+		String annotation = String.format("%s:c.*%ddel%s",trmdl.getName(),distance,ref);
+		ann.setVariantAnnotation( annotation );
+	    } else {
+		int d2 = distance + ref.length() - 1;
+		String annotation = String.format("%s:c.*%d_%ddel%s",trmdl.getName(),distance,d2,ref);
+		ann.setVariantAnnotation( annotation );
+	    } 
+	} else if (ref.equals("-")) {
+	    /* i.e., insertion in the UTR3 region */
+	    int d2=distance + 1; /* get end of insertion */ 
+	    String annotation = String.format("%s:c.*%d_%dins%s",trmdl.getName(),distance,d2,alt);
+	    ann.setVariantAnnotation( annotation );
 	} else {
-	    int distance =  rvarstart - trmdl.getRefCDSEnd();
+	   
 	    String annotation = String.format("%s:c.*%d%s>%s",trmdl.getName(),distance,ref,alt);
 	    ann.setVariantAnnotation(annotation);
 

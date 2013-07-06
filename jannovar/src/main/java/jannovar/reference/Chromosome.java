@@ -547,7 +547,6 @@ public class Chromosome {
 			//query  ----
 			//gene     <--*---*->
 			// Note this is UTR3 on negative strand
-			//Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
 			alt = revcom(alt);
 			ref = revcom(ref);
 			Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
@@ -621,7 +620,8 @@ public class Chromosome {
 		    /* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 		    //query  ----
 		    //gene     <--*---*->
-		    //Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
+		    ref = revcom(ref);
+		    alt = revcom(alt);
 		    Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 		    annovarFactory.addUTR3Annotation(ann);
 		    return; /* done with this annotation. */
