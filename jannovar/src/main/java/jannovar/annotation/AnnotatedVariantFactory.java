@@ -17,8 +17,8 @@ import java.util.HashSet;
  * multiple transcripts will have multiple annotations. 
  * <P>
  * This class creates one {@link jannovar.annotation.AnnotationList AnnotationList} object for each
- * variant, that can return both an ArrayList of annotations, a string containing all the variants
- * as well as an HTML unordered list that can be used for displaying the variants.
+ * variant, that can return both an ArrayList of all annotations, a list of all annotations of the highest
+ * priority level for the variant, and a single representative Annotation.
  * <P>
  * The default preference for annotations is thus
  * <OL>
@@ -46,7 +46,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.18 (25 May, 2013)
+ * @version 0.19 (5 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -189,7 +189,7 @@ public class AnnotatedVariantFactory implements Constants {
      * True if we have at least one annotation for the classes ncRNA_EXONIC
      * SPLICING, UTR5, UTR3, EXONIC, INTRONIC
      */
-    public boolean hasGenic() { return this.hasGenicMutation; }
+    //public boolean hasGenic() { return this.hasGenicMutation; }
 
     /**
      * After the {@link jannovar.reference.Chromosome Chromosome} object

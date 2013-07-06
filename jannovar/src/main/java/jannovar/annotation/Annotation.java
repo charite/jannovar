@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.25 (7 July, 2013)
+ * @version 0.26 (7 July, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -105,6 +105,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	a.varType = type;
 	a.variantAnnotation = annotation;
 	a.geneSymbol=null;
+	a.rvarstart=0;
 	return a;
     } 
 
@@ -193,6 +194,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public static Annotation createEmptyAnnotation() {
 	Annotation a = new Annotation();
+	a.rvarstart=0;
 	return a;
     }
 
@@ -286,30 +288,21 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
 
-  
-
-
-    /** Return true if this is a genic mutation
-     * TODO: COmplete me!!!
-  
-    public boolean isGenic() {
-	switch(this.varType) {
-	case ncRNA_EXONIC: return true;
-	case SPLICING:return true;
-	case UTR5:return true;
-	case UTR3:return true;
-	    //case EXONIC: return true;
-	case INTRONIC: return true;
-	default: return false;
-	}
-    }   */
-
     /**
-     * Allows exonic mutations to be sorted according to their position
+     * This function allows Annotation objects to be sorted. They are first
+     * sorted according to the priority level of the VariantType. If there are
+     * multiple Annotations with the same priority level, they are 
+     * sorted according to their position
      * in the CDS. For other mutations, rvarstart is 0 and the sorting
      * has no effect.
      */
     public int compareTo(Annotation other) {
+	int mypriority = VariantType.priorityLevel(this.varType);
+	int yourpriority = VariantType.priorityLevel(other.varType);
+	if (mypriority < yourpriority)
+	    return -1;
+	else if (mypriority > yourpriority)
+	    return 1;
         if (rvarstart < other.rvarstart )
             return -1;
         else if (rvarstart  > other.rvarstart)
