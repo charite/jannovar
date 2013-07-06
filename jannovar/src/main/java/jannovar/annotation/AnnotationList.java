@@ -15,8 +15,14 @@ import java.util.Collections;
  * with a {@link jannovar.exome.Variant Variant} and provides some access functions that
  * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more
  * than one Gene symbol. In this case, we represent the affected gene as a comma-separated list of symbols.
+ * <P>
+ * The list {@link #annotationList} contains all of the
+ * {@link jannovar.annotation.Annotation Annotation} objects but they are sorted according to
+ * priority. We can take advantage of this if we want to return only those annotations that
+ * belong to the highest priority class by noting the class of the first annotation, and
+ * not returning any annotation  of a lower priority level.
  * @author Peter N Robinson
- * @version 0.15 (5 July, 2013)
+ * @version 0.16 (6 July, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -39,8 +45,12 @@ public class AnnotationList {
      */
     private boolean hasMultipleGeneSymbols = false;
 
-    public AnnotationList() {
-	this.annotationList = new ArrayList<Annotation>();
+    /**
+     * Prevent unwanted initialization of an empty
+     * AnnotationList object by making the default constructor private.
+     */
+    private AnnotationList() {
+	/* no-op */
     }
 
     public AnnotationList(ArrayList<Annotation> lst) {
@@ -48,14 +58,7 @@ public class AnnotationList {
 	this.annotationList.addAll(lst);
     }
 
-    /**
-     * Appends all of the  {@link jannovar.annotation.Annotation Annotation} objects
-     * in {@code lst} to {@link #annotationList}.
-     * @param lst Listof Annotations to be appended.
-     */
-    public void addAnnotations(ArrayList<Annotation> lst) {
-	this.annotationList.addAll(lst);
-    }
+   
 
     /**
      * Get a list of all individual
@@ -93,43 +96,15 @@ public class AnnotationList {
      * are nonsense and synonymous annotation, return nonsense).
      */
     public String getSingleTranscriptAnnotation() throws AnnotationException {
-	/* Need an exception for UTR53, which means that we have UTR3 of one
-	   annotation and UTR5 for another. */
-	if (this.type == VariantType.UTR53) {
-	    for (Annotation a : this.annotationList) {
-		if (a.getVariantType() == VariantType.UTR3)
-		    return a.getVariantAnnotation();
-	    }
-	}
-	/* Now for the rest of the variant types. */
-
-	for (Annotation a : this.annotationList) {
-	    
-	    if (a.getVariantType() == this.type) {
-		/* Note that since Intronic is just the gene symbol, we return only that.
-		   Otherwise, we show the gene symbol, and in parens, the annotation. */
-		if (this.type == VariantType.INTRONIC)
-		    return a.getVariantAnnotation();
-		else
-		    return a.getSymbolAndAnnotation();//getVariantAnnotation();
-	    }
-	}
-	String e = null;
 	if (this.annotationList.size()==0) {
-	    e = String.format("[AnnotationList] could not retrieve matching annotation for %s",
-				 this.type);
-	} else {
-	    Annotation ann = this.annotationList.get(0);
-	    int n = this.annotationList.size();
-	    e = String.format("%s (type: %s) [from a total of %d annotations]", ann.getVariantAnnotation(), this.type,n);
+	    String e = String.format("[AnnotationList] Error: No Annotations found");
+	    throw new AnnotationException(e);
 	}
-	/*
-	System.out.println("Total annotations: " + annotationList.size());
-	for (Annotation a : annotationList) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
-	    }*/
-	throw new AnnotationException(e);
-
+	Annotation a = this.annotationList.get(0);
+	if (a.getVariantType() ==  VariantType.INTRONIC)
+	    return a.getVariantAnnotation();
+	else
+	    return a.getSymbolAndAnnotation();
     }
 
     /**
@@ -137,40 +112,71 @@ public class AnnotationList {
      * with the HGVS mutation nomenclature.
      */
     public String getVariantAnnotation() throws AnnotationException {
-	if (this.type == VariantType.DOWNSTREAM || this.type == VariantType.UPSTREAM) {
-	    return getUpDownstreamAnnotation();
+	if (this.annotationList.size()==0) {
+	    String e = String.format("[AnnotationList] Error: No Annotations found");
+	    throw new AnnotationException(e);
+	}
+	/* Make a list for the class of annotations with the highest priority */
+	ArrayList<Annotation> priorityList = new ArrayList<Annotation>();
+	VariantType tp = this.annotationList.get(0).getVariantType();
+	int topPriority = VariantType.priorityLevel(tp);
+	int lastIdx = this.annotationList.size() - 1;
+	VariantType lastType = this.annotationList.get(lastIdx).getVariantType();
+	if (tp.equals(lastType)) {
+	    priorityList = this.annotationList;
+	} else {
+	    /* i.e., there are annotations of different types in the list */
+	    for (Annotation a : this.annotationList) {
+	        int level = VariantType.priorityLevel(a.getVariantType());
+		if (level == topPriority)
+		    priorityList.add(a);
+		else
+		    break;
+	    }		
+	}
+	/* When we get here, priorityList has all of the annotations we want to return. */
+	if (topPriority == 1) {
+	    return getExonicAnnotations(priorityList);
+	}
+	if (this.type == VariantType.ncRNA_EXONIC || this.type == VariantType.ncRNA_SPLICING) {
+	    return getNoncodingRnaAnnotation(priorityList);
+	} else if (this.type == VariantType.UTR3 || this.type == VariantType.UTR5) {
+	    return getUTRAnnotation(priorityList);
+	} else if (this.type == VariantType.SYNONYMOUS) {
+	     return getExonicAnnotations(priorityList);
+	}   else if (this.type == VariantType.INTRONIC || this.type == VariantType.ncRNA_INTRONIC) {
+	    return getIntronicAnnotation(priorityList);
+	} else if (this.type == VariantType.DOWNSTREAM || this.type == VariantType.UPSTREAM) {
+	    return getUpDownstreamAnnotation(priorityList);
 	} else if (this.type == VariantType.INTERGENIC) {
-	    return getIntergenicAnnotation();
-	}  else if (this.type == VariantType.INTRONIC || this.type == VariantType.ncRNA_INTRONIC) {
-	    return getIntronicAnnotation();
-	} else if (this.type == VariantType.UTR3 || this.type == VariantType.UTR5 || this.type == VariantType.UTR53) {
-	    return getUTRAnnotation();
-	} else if (this.type == VariantType.ncRNA_EXONIC) {
-	    return getNoncodingRnaAnnotation();
-	} else if (this.hasMultipleGeneSymbols) {
+	    Annotation ann = priorityList.get(0);
+	    return ann.getVariantAnnotation();
+	}  else if (this.hasMultipleGeneSymbols) {
 	    return getCombinedAnnotationForVariantAffectingMultipleGenes();
-	} else { /* The default gets called for everything else--EXONIC*/		
-	    StringBuilder sb = new StringBuilder();
-	    /* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
-	       If there are multiple transcript annotations they are separated by comma.
-	       After the last annotation, there is a closing parenthesis. */
-	    boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
-	    for (int j=0;j<this.annotationList.size();++j) {
-		Annotation ann  = this.annotationList.get(j);
-		if (! ann.isCodingExonic())
-		    continue; /* this skips over intronic annotations of alternative transcripts
-				 for variants that have at least one exonic annotation */
-		if (needGeneSymbol) {
-		      sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
-		      needGeneSymbol = false;
-		} else {
-		    sb.append("," + ann.getVariantAnnotation());
-		}
-	    }
-	    sb.append(")");
-	    return sb.toString();
+	} else { 
+	    throw new AnnotationException("[AnnotationList] Could not find annotation class");
 	}
     }
+
+    private String getExonicAnnotations(ArrayList<Annotation> lst) {
+	StringBuilder sb = new StringBuilder();
+	/* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
+	   If there are multiple transcript annotations they are separated by comma.
+	   After the last annotation, there is a closing parenthesis. */
+	boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
+	for (int j=0;j<lst.size();++j) {
+	    Annotation ann  = lst.get(j);
+	    if (needGeneSymbol) {
+		sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
+		needGeneSymbol = false;
+	    } else {
+		sb.append("," + ann.getVariantAnnotation());
+	    }
+	}
+	sb.append(")");
+	return sb.toString();
+    }
+
 
     /**
      * Returns the gene symbol of the annotations. If multiple genes are affected,
@@ -297,8 +303,8 @@ public class AnnotationList {
      * This method returns a String for up/downstream variants.
      * 
      */
-    private String getUpDownstreamAnnotation() {
-	Annotation ann = this.annotationList.get(0);
+    private String getUpDownstreamAnnotation(ArrayList<Annotation> lst) {
+	Annotation ann = lst.get(0);
 	StringBuilder sb = new StringBuilder();
 	sb.append( ann.getVariantAnnotation());
 	for (int j=1;j<this.annotationList.size();++j) {
@@ -309,16 +315,7 @@ public class AnnotationList {
     }
     
 
-    /**
-     * This method returns an Intergenic annotation. There should only
-     * be one such annotation per variant.
-     * @return A String representing an INTERGENIC annotation
-     */
-    private String getIntergenicAnnotation()  {
-	Annotation ann = this.annotationList.get(0);
-	return ann.getVariantAnnotation();
-    }
-
+   
 
 
     /**
@@ -347,9 +344,9 @@ public class AnnotationList {
      * that is located in the intron of these two different
      * genes. It works for coding and ncRNA intronic annotations.
      */
-    private String getIntronicAnnotation() {
+    private String getIntronicAnnotation(ArrayList<Annotation> lst) {
 	if (! hasMultipleGeneSymbols) { /* just a single gene affected */
-	    Annotation ann = annotationList.get(0);
+	    Annotation ann = lst.get(0);
 	    return ann.getVariantAnnotation();
 	} else { /* variant is in intron of multiple genes. */
 	    ArrayList<String> symbol_list = getSortedListOfGeneSymbols();
@@ -370,10 +367,10 @@ public class AnnotationList {
      * (because these are priority). This should have been decided by the 
      * calling function.
      */
-    private String getNoncodingRnaAnnotation() {
+    private String getNoncodingRnaAnnotation(ArrayList<Annotation> lst) {
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
-	for (Annotation a : annotationList) {
+	for (Annotation a : lst) {
 	    if (! a.isNonCodingRNA())
 		continue;
 	    String s = a.getVariantAnnotation();
@@ -396,15 +393,10 @@ public class AnnotationList {
      * This function will combine multiple UTR3/UTR5 annotations.
      * For now, we will just show the genesymbols (like annovar).
      */
-    private String getUTRAnnotation() throws AnnotationException {
+    private String getUTRAnnotation(ArrayList<Annotation> lst) throws AnnotationException {
 	ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
-	for (Annotation a : annotationList) {
-	    if (a.getVariantType() != VariantType.UTR5 && 
-		a.getVariantType() != VariantType.UTR3 && 
-		a.getVariantType() != VariantType.UTR53) {
-		continue; /* Often, there are both UTR and Intronic annotations for the same variant */
-	    }
+	for (Annotation a : lst) {
 	    String s = a.getGeneSymbol();
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
@@ -420,8 +412,8 @@ public class AnnotationList {
 	   If there are multiple transcript annotations they are separated by comma.
 	   After the last annotation, there is a closing parenthesis. */
 	boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
-	for (int j=0;j<this.annotationList.size();++j) {
-	    Annotation ann  = this.annotationList.get(j);
+	for (int j=0;j<lst.size();++j) {
+	    Annotation ann  = lst.get(j);
 	    if (! ann.isUTRVariant())
 		continue; /* this skips over non UTR annotations of alternative transcripts
 			     for variants that have at least one UTR annotation. Note this
@@ -445,7 +437,9 @@ public class AnnotationList {
 	System.out.println("AnnotatedList.java:debugPrint");
 	System.out.println("Total annotations: " + annotationList.size());
 	for (Annotation a : annotationList) {
-	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+	    int level = VariantType.priorityLevel(a.getVariantType());
+	    System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " 
+			       + a.getVariantAnnotation() + " [" + level + "]");
 	}
 	System.out.println("*******");
     }

@@ -81,6 +81,60 @@ public class NonsynonymousAnnotationTest implements Constants {
 	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)",annot);
 	}
 }
+/**
+ *<P>
+ * annovar: LOC654433
+ * chr2:114017029A>G
+ expected:<...xon4:c.166A>G:p.T56A[])> but was:
+ <...xon4:c.166A>G:p.T56A[,LOC654433,LOC654433)PAX8(PAX8])>
+
+ *</P>
+ */
+@Test public void testNcRnaExonicVar76() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 114017029;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("LOC654433(uc010fks.4:exon3:c.166A>G:p.T56A,uc002tjq.5:exon4:c.166A>G:p.T56A)",annot);
+	}
+}
+
+
+/**
+ *<P>
+ * annovar: SND1-IT1
+ * chr7:127637816A>G
+ expected:<SND1[]-IT1(uc003vmj.2:exon...> but was:
+          <SND1[(SND1)SND1]-IT1(uc003vmj.2:exon...>
+
+ *</P>
+ */
+@Test public void testNcRnaExonicVar215() throws AnnotationException  {
+	byte chr = 7;
+	int pos = 127637816;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    String annot = ann.getVariantAnnotation();
+	    System.out.println(annot);
+	    Assert.assertEquals("SND1-IT1(uc003vmj.2:exon1:c.70A>G:p.T24A)",annot);
+	}
+}
+
 
 /**
  *<P>

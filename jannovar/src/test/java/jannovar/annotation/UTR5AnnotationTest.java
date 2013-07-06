@@ -91,9 +91,9 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR53,varType);
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ECM1(uc009wlu.3:c.-105C>T,uc010pcf.2:c.*148C>T,uc010pce.2:c.*148C>T)",annot);
+	    Assert.assertEquals("ECM1(uc010pcf.2:c.*148C>T,uc010pce.2:c.*148C>T)",annot);
 	}
 }
 
@@ -402,9 +402,9 @@ public class UTR5AnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UTR53,varType);
+	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CACNB3(uc001rsk.2:c.-101_-100insT,uc010slx.2:c.*255_256insT)",annot);
+	    Assert.assertEquals("CACNB3(uc010slx.2:c.*255_256insT)",annot);
 	}
 }
 

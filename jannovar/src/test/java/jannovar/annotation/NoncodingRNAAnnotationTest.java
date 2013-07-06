@@ -243,28 +243,6 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: LOC654433
- * chr2:114017029A>G
- *</P>
- */
-@Test public void testNcRnaExonicVar76() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 114017029;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC654433(uc010fks.4:exon3:c.166A>G:p.T56A,uc002tjq.5:exon4:c.166A>G:p.T56A)",annot);
-	}
-}
 
 /**
  *<P>
@@ -654,28 +632,6 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: SND1-IT1
- * chr7:127637816A>G
- *</P>
- */
-@Test public void testNcRnaExonicVar215() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 127637816;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SND1-IT1(uc003vmj.2:exon1:c.70A>G:p.T24A)",annot);
-	}
-}
 
 /**
  *<P>

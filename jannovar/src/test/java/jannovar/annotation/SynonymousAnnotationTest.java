@@ -335,9 +335,7 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
 	    String annot = ann.getVariantAnnotation();
-	    System.out.println("ANNOT=" + annot);
 	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
-	    
 	    Assert.assertEquals("LRRC52(uc001gde.2:exon2:c.886C>A:p.R296R)",annot);
 	}
 }

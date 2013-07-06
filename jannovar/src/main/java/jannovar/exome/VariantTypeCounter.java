@@ -98,8 +98,7 @@ public class VariantTypeCounter implements Constants {
 	int downstream = this.variantCountMap.get(VariantType.DOWNSTREAM);
 	int intergen =  this.variantCountMap.get(VariantType.INTERGENIC);
 	int utr = this.variantCountMap.get(VariantType.UTR3) + 
-	    this.variantCountMap.get(VariantType.UTR5) +
-	    this.variantCountMap.get(VariantType.UTR53);
+	    this.variantCountMap.get(VariantType.UTR5);
 	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
 	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
 	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);
@@ -135,8 +134,7 @@ public class VariantTypeCounter implements Constants {
 	int downstream = this.variantCountMap.get(VariantType.DOWNSTREAM);
 	int intergen =  this.variantCountMap.get(VariantType.INTERGENIC);
 	int utr = this.variantCountMap.get(VariantType.UTR3) + 
-	    this.variantCountMap.get(VariantType.UTR5) +
-	    this.variantCountMap.get(VariantType.UTR53);
+	    this.variantCountMap.get(VariantType.UTR5);
 	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
 	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
 	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);

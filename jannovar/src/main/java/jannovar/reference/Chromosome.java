@@ -287,6 +287,7 @@ public class Chromosome {
 		if (kgl.isCodingGene()) {
 		    annovarFactory.addExonicAnnotation(ann);
 		} else {
+		    ann.setVarType(VariantType.ncRNA_SPLICING);
 		    annovarFactory.addNcRNASplicing(ann);
 		}
 		return; // we are done with this variant/TranscriptModel combination.
@@ -501,6 +502,7 @@ public class Chromosome {
 		if (kgl.isCodingGene()) {
 		    annovarFactory.addExonicAnnotation(ann);
 		} else {
+		    ann.setVarType(VariantType.ncRNA_SPLICING);
 		    annovarFactory.addNcRNASplicing(ann);
 		}
 		return; /* We are done with this annotation. */

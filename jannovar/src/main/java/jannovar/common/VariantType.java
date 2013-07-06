@@ -58,8 +58,6 @@ public enum  VariantType {
 	UTR3, 
 	/** Variant is located in the 5' untranslated region */
 	UTR5, 
-	/** Variant is located in the 3' untranslated region of one gene and the 5' UTR of an overlapping gene*/
-	UTR53,
 	/** Variant assesed as probably erroneous (may indicate an error in the VCF file)*/
 	ERROR;
 
@@ -72,13 +70,15 @@ public enum  VariantType {
      * NONSYNONYMOUS, NON_FS_DELETION, NON_FS_INSERTION, STOPGAIN, STOPLOSS.
      * <LI><B>splicing (1)</B>: SPLICING.
      * <LI><B>ncRNA (2)</B>:ncRNA_EXONIC, ncRNA_SPLICING.
-     * <LI><B>UTR5, UTR3 (3)</B>: UTR3, UTR5, UTR53
-     * <LI><B>synonymous (4)</B>: SYNONYMOUS
-     * <LI><B>intronic (5)</B>: INTRONIC, ncRNA_INTRONIC.
-     * <LI><B>upstream (6)</B>: UPSTREAM.
-     * <LI><B>downstream (6)</B>: DOWNSTREAM.
-     * <LI><B>intergenic (7)</B>: INTERGENIC.
-     * <LI><B>error (8)</B>: UNKNOWN, ERROR.
+     * <LI><B>UTR3 (3)</B>: UTR3
+     * <LI><B>UTR5 (4)</B>: UTR5
+     * <LI><B>synonymous (5)</B>: SYNONYMOUS
+     * <LI><B>intronic (6)</B>: INTRONIC
+     * <LI><B>intronic (7)</B>: ncRNA_INTRONIC.
+     * <LI><B>upstream (8)</B>: UPSTREAM.
+     * <LI><B>downstream (8)</B>: DOWNSTREAM.
+     * <LI><B>intergenic (9)</B>: INTERGENIC.
+     * <LI><B>error (10)</B>: UNKNOWN, ERROR.
      * </OL>
      * @param vt Type of the variant
      * @return priority level for sorting lists of variants.
@@ -100,24 +100,25 @@ public enum  VariantType {
 	case ncRNA_SPLICING:
 	    return 2;
 	case UTR3:
-	case UTR5:
-	case UTR53:
 	    return 3;
-	case SYNONYMOUS:
+	case UTR5:
 	    return 4;
-	case INTRONIC:
-	case ncRNA_INTRONIC:
+	case SYNONYMOUS:
 	    return 5;
+	case INTRONIC:
+	    return 6;
+	case ncRNA_INTRONIC:
+	    return 7;
 	case UPSTREAM:
 	case DOWNSTREAM:
-	    return 6;
+	    return 8;
 	case INTERGENIC:
-	return 7;
+	return 9;
 	case UNKNOWN:
 	case ERROR:
-	    return 8;
+	    return 10;
 	default:
-	    return 8; /* should never get here */
+	    return 10; /* should never get here */
 	}
     }
 }

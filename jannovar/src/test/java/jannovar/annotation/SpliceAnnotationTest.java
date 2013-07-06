@@ -114,6 +114,9 @@ public class SpliceAnnotationTest implements Constants {
  *<P>
  * annovar: TCTEX1D1(uc001dcv.3:exon4:c.336+1G>A)
  * chr1:67242087G>A
+ <...v.3:exon4:c.336+1G>A[])> but was:
+ <...v.3:exon4:c.336+1G>A[,uc009wau.3:exon6:c.597+1G>A[nc_transcript_variant]])>
+
  *</P>
  */
 @Test public void testSpliceVar9() throws AnnotationException  {
