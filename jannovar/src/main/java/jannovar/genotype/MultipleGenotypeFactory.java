@@ -40,7 +40,7 @@ import jannovar.exception.VCFParseException;
  * @see jannovar.genotype.SingleGenotypeFactory
  * @see jannovar.genotype.GenotypeCall
  * @author Peter N Robinson
- * @version 0.12 (10 May, 2013)
+ * @version 0.13 (7 July, 2013)
  */
 public class MultipleGenotypeFactory extends GenotypeFactoryA {
     /**
@@ -165,7 +165,11 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 		String err = "Could not parse genotype quality field \"" + B[qual_idx] 
 		    +  "\" due to a Number Format Exception:" + e.toString();
 		throw new VCFParseException(err); 
-	    } 
+	    } catch (Exception e) {
+		String err = "Could not parse genotype quality field for sample \"" + sample 
+		    +  "\" due to:" + e.toString();
+		throw new VCFParseException(err); 
+	    }
 	}
 	/* when we get here, we have successfully parsed the GT field. If there was a QC field,
 	   we have successfully parsed it, otherwise, genotype_quality is still UNINITIALIZED_INT.
