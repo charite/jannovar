@@ -1,5 +1,6 @@
 package jannovar.annotation;
 
+import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
@@ -11,7 +12,7 @@ import jannovar.exception.AnnotationException;
  * <P>
  * Block substitutions are recognized in the calling class {@link jannovar.reference.Chromosome Chromosome}
  * by the fact that the length of the variant sequence is greater than 1.
- * @version 0.05 (April 28, 2013)
+ * @version 0.07 (7 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -53,20 +54,17 @@ public class BlockSubstitution {
 	    //$varnt3 = $obs . $wtnt3[1] . $wtnt3[2];
 	    varnt3 = String.format("%s%c%c",var, wtnt3.charAt(1),wtnt3.charAt(2));
 	}
-	//$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs";
 	canno = String.format("c.%d_%ddelins%s",refvarstart - refcdsstart +1, refvarend-refcdsstart+1,var);
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0)  {
-	    /*  $function->{$index}{nfssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
-		($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs,"; */
 	    panno =   String.format("%s:%s:exon:%d:%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,canno);
-	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.NON_FS_SUBSTITUTION,refvarstart);
 	    return ann;
-
 	} else {  /* i.e., frameshift */
 	    /* $function->{$index}{fssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
 	       ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs,"; */
 	    panno =   String.format("%s:exon:%d:%s",kgl.getName(),exonNumber,canno);
-	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
+	    //Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
 	    return ann;
 					
 	}
@@ -99,18 +97,14 @@ public class BlockSubstitution {
 	int startPosMutationInCDS = refvarstart-refcdsstart+1;
 
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0) {
-	    //$function->{$index}{nfssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
-	    // ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs,";
 	    canno = String.format("%s:%s:exon%d:c.%d_%d%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,
 				  startPosMutationInCDS,refvarend-refcdsstart+1,var);
-	    Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,canno);
+	    Annotation ann = new Annotation(kgl,canno,VariantType.NON_FS_SUBSTITUTION,startPosMutationInCDS);
 	    return ann;
 	} else {
-	    /* $function->{$index}{fssub} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:c." . 
-	       ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs,"; */
 	    canno = String.format("%s:exon%d:c.%d_%d%s",kgl.getName(),exonNumber,
 				  refvarstart-refcdsstart+1,refvarend-refcdsstart+1,var);
-	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,canno);
+	    Annotation ann = new Annotation(kgl,canno,VariantType.FS_SUBSTITUTION,startPosMutationInCDS);
 	    return ann;
 	}
     }

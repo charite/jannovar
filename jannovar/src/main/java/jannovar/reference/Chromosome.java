@@ -353,8 +353,11 @@ public class Chromosome {
 			String annot = kgl.getGeneSymbol();
 			ann = new Annotation(kgl,annot, VariantType.INTRONIC);
 		
-		    } else
-			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
+		    } else {
+			/* For now, the ncRNA_INTRONIC annotation is just the gene symbol */
+			String annot = kgl.getGeneSymbol();
+			ann = new Annotation(kgl,annot, VariantType.ncRNA_INTRONIC);
+		    }
 		    annovarFactory.addIntronicAnnotation(ann);
 		    return; /* Done with this annotation */
 		}
@@ -411,7 +414,9 @@ public class Chromosome {
 		 * a coding gene within the actual coding sequence (not UTR).                *
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
-		    Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl, rvarstart,ref,alt);
+		    /* For now, annotation the ncRNA vars with just the gene symbol */
+		    String annot = kgl.getGeneSymbol();
+		    Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
 		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		} else	if (end < cdsstart ) {					
 		    /* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns 
@@ -540,7 +545,9 @@ public class Chromosome {
 		     * exon of a noncoding gene, a UTR5, UTR3, or a CDS exon.        *
 		     * ------------------------------------------------------------- */
 		    if (kgl.isNonCodingGene()) {
-			Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl,rvarstart,ref, alt);
+			/* For now, annotation the ncRNA vars with just the gene symbol */
+			String annot = kgl.getGeneSymbol();
+			Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
 			annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 			return;
 		    } else if (end < cdsstart ) {
@@ -579,8 +586,11 @@ public class Chromosome {
 			 /* For now, the INTRONIC annotation is just the gene symbol */
 			 String annot = kgl.getGeneSymbol();
 		     	ann = new Annotation(kgl,annot, VariantType.INTRONIC);
-		     } else
-			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
+		     } else {
+			 /* For now, the ncRNA_INTRONIC annotation is just the gene symbol */
+			 String annot = kgl.getGeneSymbol();
+			 ann = new Annotation(kgl,annot, VariantType.ncRNA_INTRONIC);
+		     }
 		     annovarFactory.addIntronicAnnotation(ann);
 		     return; /* done with this annotation. */
 		} 
@@ -613,7 +623,9 @@ public class Chromosome {
 		 * a coding gene within the actual coding sequence (not UTR).                *
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
-		    Annotation ann = Annotation.createNonCodingExonicRnaAnnotation(kgl, rvarstart,ref,alt);
+		    /* For now, we annotate ncRNA variants with just the gene symbol */
+		    String annot = kgl.getGeneSymbol();
+		    Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
 		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		    return; /* done with this annotation. */
 		} else if (end < cdsstart) { 
@@ -694,7 +706,7 @@ public class Chromosome {
 	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
 	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
 				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
-	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	}
 	/*
@@ -715,7 +727,7 @@ public class Chromosome {
 	    String s = String.format("Discrepancy between mRNA length and genome annotation ",
 				     "(variant at pos. %d of transcript with mRNA length %d):%s[%s]", 
 				     refvarstart,kgl.getMRNALength(), kgl.getKnownGeneID(), kgl.getName());
-	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
 
@@ -727,7 +739,7 @@ public class Chromosome {
 	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
 	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
 	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
-	    Annotation ann = Annotation.createErrorAnnotation(s);
+	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
 	}
@@ -777,11 +789,20 @@ public class Chromosome {
 	    // 	$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
 	    if ((refvarend - refvarstart+ 1 - var.length())%3==0) {
 		/* Non-frameshift substitution */
-		Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
+		//Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
+		/*
+	Annotation ann = new Annotation();
+	ann.varType = VariantType.NON_FS_SUBSTITUTION;
+	ann.geneSymbol=kgl.getGeneSymbol();
+	ann.rvarstart = refvarstart;
+	ann.variantAnnotation = annot;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
+	return ann;*/
+		Annotation ann = new Annotation(kgl,canno,VariantType.NON_FS_SUBSTITUTION,refvarstart);
 		this.annovarFactory.addExonicAnnotation(ann);
 	    } else {
 		/* frameshift substitution */
-		Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
+		Annotation ann = new Annotation(kgl,canno,VariantType.FS_SUBSTITUTION,refvarstart);
 		this.annovarFactory.addExonicAnnotation(ann);
 	    }
 	}

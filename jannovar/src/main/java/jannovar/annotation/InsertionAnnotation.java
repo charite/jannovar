@@ -1,5 +1,6 @@
 package jannovar.annotation;
 
+import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
@@ -8,7 +9,7 @@ import jannovar.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for insertion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.05 (6 July, 2013)
+ * @version 0.06 (7 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -45,7 +46,6 @@ public class InsertionAnnotation {
 	if (trmdl.isPlusStrand() ) {
 	    if (frame_s == 1) { /* insertion located at 0-1-INS-2 part of codon */
 		varnt3 = String.format("%c%c%s%c",wtnt3.charAt(0), wtnt3.charAt(1), var, wtnt3.charAt(2));
-		// . $wtnt3[1] . $obs . $wtnt3[2];
 	    } else if (frame_s == 2) {
 		varnt3 = String.format("%s%s", wtnt3, var);
 	    } else { /* i.e., frame_s == 0 */
@@ -57,7 +57,7 @@ public class InsertionAnnotation {
 	    } else if (frame_s == 2) {
 		varnt3 = String.format("%c%c%s%c", wtnt3.charAt(0), wtnt3.charAt(1), var, wtnt3.charAt(2));
 	    } else { /* i.e., frame_s == 0 */
-		varnt3 = String.format("%s%s", var, wtnt3); // $obs . $wtnt3[0] . $wtnt3[1] . $wtnt3[2];
+		varnt3 = String.format("%s%s", var, wtnt3); 
 	    }
 	}
 	String wtaa = translator.translateDNA(wtnt3);
@@ -68,13 +68,9 @@ public class InsertionAnnotation {
 	/* wtaa_after could be undefined, if the current aa is the stop codon (X) 
 	 * example:17        53588444        53588444        -       T
 	 */
-	/* Don't do this (as in annovar), it is not HGVS conform 
-	   if (wtaa_after != null && wtaa_after.equals("*"))
-	   wtaa_after = "X";
-	*/
 	String varaa = translator.translateDNA(varnt3);
 	int refcdsstart = trmdl.getRefCDSStart() ;
-	/* annovar $varpos, here aavarpos */
+
 	int aavarpos = (int) Math.floor((refvarstart-refcdsstart)/3)+1;  
 	int startPosMutationInCDS = refvarstart-refcdsstart+1;
 	
@@ -96,33 +92,34 @@ public class InsertionAnnotation {
 		    
 		    /* $function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . 
 		       "delins$varaa,";		#stop codon is stil present */
-		    Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    //Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.NON_FS_INSERTION,startPosMutationInCDS);
 		    return ann;
 		} else {
 		    /* Mutation => stop codon is lost, i.e., STOPLOSS 
 		     *  Annovar: $seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa";   */
 		    String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,aavarpos,varaa);
-		    Annotation ann = Annotation.createStopLossAnnotation(trmdl,startPosMutationInCDS,annot);
+		    //Annotation ann = Annotation.createStopLossAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.STOPLOSS,startPosMutationInCDS);
 		    return ann;
 		}
 	    } else { /* i.w., wtaa is not equal to '*'  */
 		int idx = varaa.indexOf("*");
 		if (idx>=0) { /* corresponds to annovar: if ($varaa =~ m/\* /) {  */
 		    varaa = String.format("%s*",varaa.substring(0,idx+1));
-		    /* $varaa =~ s/\*.* /X/;	#delete all aa after stop codon, but keep the aa before */
-		    /*$function->{$index}{stopgain} .= 
-		     * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "delins$varaa,"; */
+		    /* i.e., delete all aa after stop codon, but keep the aa before */
 		    String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,wtaa,aavarpos,varaa);
-		    Annotation ann = Annotation.createStopGainAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.STOPGAIN,startPosMutationInCDS);
 		    return ann;
 		} else {
 		    /*$function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
 		     * "delins$varaa,"; */
 		    String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,wtaa,aavarpos,varaa);
-		    Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    //Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.NON_FS_INSERTION,startPosMutationInCDS);
 		    return ann;
 		}
 	    }
@@ -134,18 +131,18 @@ public class InsertionAnnotation {
 		    /* delete all aa after stop codon, but keep the aa before 
 		     * annovar: $varaa =~ s/\*.* /X/; */
 		    varaa = String.format("%sX",varaa.substring(0,idx+1));
-		    /* $function->{$index}{fsins} .= 
-		     * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,"; */
 		    String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,aavarpos,varaa);
-		    Annotation ann = Annotation.createFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    //Annotation ann = Annotation.createFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.FS_INSERTION,startPosMutationInCDS);
 		    return ann;
 		} else { /* var aa is not stop (*) */
 		    /* $function->{$index}{stoploss} .= 
 		     * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,"; */
 		    String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,aavarpos,varaa);
-		    Annotation ann = Annotation.createStopLossAnnotation(trmdl,startPosMutationInCDS,annot);
+		    //Annotation ann = Annotation.createStopLossAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.STOPLOSS,startPosMutationInCDS);
 		    return ann;
 		}
 	    } else { /* i.e., wtaa not a stop codon */
@@ -157,12 +154,12 @@ public class InsertionAnnotation {
 		     * 	"_$wtaa_after" . ($varpos+1) . "delins$varaa,"; */
 		    String annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", trmdl.getName(),
 						 exonNumber,canno,wtaa,aavarpos,wtaa_after,(aavarpos+1),varaa);
-		    Annotation ann = Annotation.createStopGainAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl, annot,VariantType.STOPGAIN, startPosMutationInCDS);
 		    return ann;
 		} else {
-		    /* $function->{$index}{fsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,";*/
 		    String annot = String.format("%s:exon%d:%s:p.%s%dfs",trmdl.getName(),exonNumber,canno,wtaa,aavarpos);
-		    Annotation ann = Annotation.createFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    //Annotation ann = Annotation.createFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.FS_INSERTION,startPosMutationInCDS);
 		    return ann;
 		    
 		}

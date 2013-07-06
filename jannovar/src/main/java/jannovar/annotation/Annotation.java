@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.23 (30 June, 2013)
+ * @version 0.25 (7 July, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -80,8 +80,22 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
     /**
+     * Construct a new annotation. This constructor is used by variants that
+     * are exonic and have a position in the CDS of the transcript.
+     * @param tmdl The transcript affected by the variant
+     * @param annotation A complete annotation (without the gene symbol)
+     * @param type The class of the variant (e.g., INTRONIC).
+     * @param refvarstart start position of variant in the CDS.
+     */
+    public Annotation(TranscriptModel tmdl, String annotation, VariantType type, int refvarstart) {
+	this(tmdl,annotation,type);
+	this.rvarstart = refvarstart;
+    }
+
+    /**
      * Construct a new annotation.
-     * This constructor is used for intergenic annotations where there is
+     * This factory method is used instead of a constructor
+     * for intergenic annotations where there is
      * no gene synbol.
      * @param annotation A complete annotation (without the gene symbol)
      * @param type The class of the variant (e.g., INTRONIC).
@@ -92,7 +106,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	a.variantAnnotation = annotation;
 	a.geneSymbol=null;
 	return a;
-    }
+    } 
 
 
     /**
@@ -182,258 +196,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return a;
     }
 
-
   
-  
-   
-
-    /**
-     * Add an annotation for a noncoding RNA (ncRNA) for a variant that is located within
-     * an exon of the ncRNA gene.
-     * @param trmdl {@link jannovar.reference.TranscriptModel TranscriptModel} object corresponding to the ncRNA
-     * @param rvarstart position of the variant in the coding sequence
-     * @param ref reference sequence
-     * @param alt variant sequence
-     */
-    public static Annotation createNonCodingExonicRnaAnnotation(TranscriptModel trmdl, int rvarstart,String ref, String alt) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.ncRNA_EXONIC;
-	ann.geneSymbol = trmdl.getGeneSymbol();
-	ann.entrezGeneID = trmdl.getEntrezGeneID();
-	ann.variantAnnotation = trmdl.getGeneSymbol();// String.format("HGVS=%s", name2);
-	return ann;
-    }
-
-
-    /**
-     * This factory method does little more than assign the annotation
-     * string passed as an argument and to set the varType to SPLICING.
-     * For now, it seems more convenient to calculate the annotation
-     * string in client code.
-     * @param trmdl A TranscriptModel in which this splicing mutation has been found
-     * @param refvarstart Position of variant within transcript (used to sort)
-     * @param anno A string representing the splice mutation, e.g., uc003gqp.4:exon6:c.1366-1A>T
-     */
-    public static Annotation createSplicingAnnotation(TranscriptModel trmdl, int refvarstart, String anno) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.SPLICING;
-	ann.variantAnnotation = anno;
-	ann.entrezGeneID = trmdl.getEntrezGeneID();
-	//System.out.println("createSplicingAnnotation: rvarstart: " + refvarstart + "," + anno);
-	ann.rvarstart = refvarstart;
-	ann.geneSymbol = trmdl.getGeneSymbol();
-	return ann;
-    }
-
-
-    
-
-    /**
-     * For the moment, this function is just adding the gene symbol as the annotation.
-     * this is the same as annovar does. In the future, we want to create better
-     * 3UTR annotations.
-     */
-    public static Annotation createUTR3Annotation(TranscriptModel trmdl, String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.UTR3;
-	ann.geneSymbol = trmdl.getGeneSymbol();
-	ann.variantAnnotation = annot;
-	ann.entrezGeneID = trmdl.getEntrezGeneID();
-	return ann;
-    }
-
-    /**
-     * Create an Annotation object for a variant that is in an intronic of a noncoding gene.
-     */
-    public static Annotation createNoncodingIntronicAnnotation(String name2) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.ncRNA_INTRONIC;
-	ann.geneSymbol = name2;
-	ann.variantAnnotation = String.format("%s", name2);
-	return ann;
-     }
-
-   
-    /**
-     * Use this factory method for annotations that probably represent database
-     * errors or bugs and require manual checking.
-     */
-     public static Annotation createErrorAnnotation(String msg) {
-	Annotation ann = new Annotation();
-	ann.varType =  VariantType.ERROR;
-	ann.variantAnnotation = msg;
-	ann.geneSymbol = "Error";
-	return ann;
-     }
-
-     /**
-     * Use this factory method for annotations of non-frameshift deletion mutations.
-     */
-     public static Annotation createNonFrameshiftDeletionAnnotation(TranscriptModel kgl, int varstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.NON_FS_DELETION;
-	ann.geneSymbol = kgl.getGeneSymbol();
-	ann.variantAnnotation = annot;
-	ann.rvarstart = varstart;
-	return ann;
-     }
-
-    /**
-     * Use this factory method for annotations of frameshift deletion mutations.
-     */
-     public static Annotation createFrameshiftDeletionAnnotation(TranscriptModel kgl, int varstart, String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.FS_DELETION;
-	ann.geneSymbol = kgl.getGeneSymbol();
-	ann.variantAnnotation = annot;
-	ann.rvarstart = varstart;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-    /**
-     * Use this factory method for annotations of non-frameshift insertion mutations.
-      * For example, {@code uc001iel.1:exon1:c.771_772insTTC:p.F257delinsFF}
-     * @param kgl The affected gene
-     * @param varstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-     public static Annotation createNonFrameshiftInsertionAnnotation(TranscriptModel kgl, int varstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.NON_FS_INSERTION;
-	ann.geneSymbol = kgl.getGeneSymbol();
-	ann.variantAnnotation = annot;
-	ann.rvarstart = varstart;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-    /**
-     * Use this factory method for annotations of frameshift insertion mutations.
-     * @param kgl The affected gene
-     * @param varstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-     public static Annotation createFrameshiftInsertionAnnotation(TranscriptModel kgl, int varstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.FS_INSERTION;
-	ann.geneSymbol = kgl.getGeneSymbol();
-	ann.variantAnnotation = annot;
-	ann.rvarstart = varstart;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-    /**
-     * Use this factory method for annotations of STOPLOSS mutations.
-     * <P>
-     * For example, {@code c002ltv.3:exon29:c.3792A>G:p.X1264W}
-     * @param kgl The affected gene
-     * @param refvarstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-     public static Annotation createStopLossAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.STOPLOSS;
-	ann.geneSymbol=kgl.getGeneSymbol();
-	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = annot;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-     /**
-     * Use this factory method for annotations of nonsense, i.e., STOPGAIN mutations.
-     * <P>
-     * For example, {@code uc001hjk.3:exon1:c.1663A>T:p.K555X}
-     * <P>
-     * Note that Jannovar follows HGVS recommendations and denotes nonsense mutations
-     * as p.K555* rather than p.K555X (the previous style which was replaced because
-     * IUPAC uses X to denote an unknown amino acid rather than a stop codon)
-     * @param kgl The affected gene
-     * @param refvarstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-     public static Annotation createStopGainAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.STOPGAIN;
-	ann.geneSymbol=kgl.getGeneSymbol();
-	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = annot;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-     
-
-     /**
-     * Use this factory method for annotations of SYNONYMOUS variants.
-     * <P>
-     * For example, {@code SRA1:uc003lga.3:exon2:c.159C>A:p.V53V}
-     * <P>
-     * @param kgl The affected gene
-     * @param refvarstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-    public static Annotation createSynonymousSNVAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.SYNONYMOUS;
-	ann.geneSymbol=kgl.getGeneSymbol();
-	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = annot;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-    /**
-     * Use this factory method for annotations of NONSYNONYMOUS variants.
-     * <P>
-     * For example, {@code SRA1:uc003lga.3:exon2:c.159C>A:p.V53K}
-     * <P>
-     * @param kgl The affected gene
-     * @param refvarstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-    public static Annotation createNonSynonymousSNVAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.NONSYNONYMOUS;
-	ann.geneSymbol=kgl.getGeneSymbol();
-	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = annot;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-
-    /**
-     * Create an Annotation object for a non-frameshift substitution. This is a variant such as the following
-     * <P>
-     * {@code LOC100132247:uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG}
-     * <P>
-     * Note I am not sure that the annovar nontation is correct according to HGVS
-     * @param kgl The affected gene
-     * @param refvarstart Start position of mutation in ORF
-     * @param annot The actual annotation.
-     */
-      public static Annotation createNonFrameShiftSubstitionAnnotation(TranscriptModel kgl,int refvarstart,String annot) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.NON_FS_SUBSTITUTION;
-	ann.geneSymbol=kgl.getGeneSymbol();
-	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = annot;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-    
-     public static Annotation createFrameShiftSubstitionAnnotation(TranscriptModel kgl,int refvarstart,String msg) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.FS_SUBSTITUTION;
-	ann.geneSymbol=kgl.getGeneSymbol();
-	ann.rvarstart = refvarstart;
-	ann.variantAnnotation = msg;
-	ann.entrezGeneID = kgl.getEntrezGeneID();
-	return ann;
-     }
-    
    
     /**
      * @return A string representing the variant type (e.g., MISSENSE, STOPGAIN,...)

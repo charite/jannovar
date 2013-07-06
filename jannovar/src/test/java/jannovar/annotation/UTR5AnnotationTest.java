@@ -404,7 +404,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR53,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CACNB3(uc001rsk.2:c.-101_-100insT,uc010slx.2:c.*255->T)",annot);
+	    Assert.assertEquals("CACNB3(uc001rsk.2:c.-101_-100insT,uc010slx.2:c.*255_256insT)",annot);
 	}
 }
 

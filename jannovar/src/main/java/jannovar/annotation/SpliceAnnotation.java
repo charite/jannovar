@@ -1,5 +1,6 @@
 package jannovar.annotation;
 
+import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 
@@ -12,7 +13,7 @@ import jannovar.reference.Translator;
  * mutations, which is not entirely accurate, although mutations in this part of exons
  * can indeed disrupt proper splicing. Instead, jannovar takes the SPLICING_THRESHOLD
  * nucleotides on the intronic side.
- * @version 0.08 (April 28, 2013)
+ * @version 0.11 (7 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -218,7 +219,8 @@ public class SpliceAnnotation {
 		String anno = String.format("%s:exon%d:c.%d-%d%s>%s",kgl.getName(),
 					    k+1,cumlenexon,exonstart-start,ref,alt);
 		int refvarstart = cumlenexon; /* position of mutation in CDS */
-		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		//Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,refvarstart);
 		return ann;
 		/* Annovar:$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon-" . ($exonstart[$k]-$start) . "$ref>$obs,"; */
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
@@ -227,13 +229,15 @@ public class SpliceAnnotation {
 					    k+1,cumlenexon,start-exonend,ref,alt);
 		//$splicing_anno{$name2} .= "$name:exon${\($k+1)}:c.$lenexon+" . ($start-$exonend[$k]) . "$ref>$obs,";
 		int refvarstart = cumlenexon;
-		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,refvarstart);
+		//Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
 		return ann;
 	    } 
 	} 
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String annot = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
-	Annotation ann = Annotation.createSplicingAnnotation(kgl, 0,annot);
+	String anno = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
+	//Annotation ann = Annotation.createSplicingAnnotation(kgl, 0,annot);
+	Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,0);
 	return ann;
 	
     }
@@ -266,7 +270,8 @@ public class SpliceAnnotation {
 		//$splicing_anno{$name2} .= "$name:exon${\(@exonstart-$k+1)}:c.$lenexon+" . 
 		// ($exonstart[$k]-$start) . revcom($ref) . '>' . revcom ($obs) . ',';
 		int refvarstart = cumlenexon; // position of variant in CDS, important for sorting
-		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		//Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,refvarstart);
 		return ann;
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 		// -------<---->-*--------<-->-------<------>----
@@ -276,13 +281,15 @@ public class SpliceAnnotation {
 		//$splicing_anno{$name2} .= "$name:exon${\(@exonstart-$k+1)}:c.$lenexon-" . 
 		//($start-$exonend[$k]) . revcom($ref) . '>' . revcom($obs) . ',';
 		int refvarstart = cumlenexon; // position of variant in CDS, important for sorting
-		Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		//Annotation ann = Annotation.createSplicingAnnotation(kgl,refvarstart,anno);
+		Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,refvarstart);
 		return ann;
 	    }
 	}
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String annot = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
-	Annotation ann = Annotation.createSplicingAnnotation(kgl,0,annot);
+	String anno = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
+	Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,0);
+	//Annotation ann = Annotation.createSplicingAnnotation(kgl,0,annot);
 	return ann;
     }
 

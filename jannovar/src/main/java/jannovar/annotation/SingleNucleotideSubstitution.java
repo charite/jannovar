@@ -1,5 +1,6 @@
 package jannovar.annotation;
 
+import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
@@ -18,7 +19,7 @@ import jannovar.exception.AnnotationException;
  * the sequence that is typically used for variant calling and thus informs the variant calls in the
  * VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this case, as in versions
  * of this class up to the 15th of December, 2012 (v. 0.04).
- * @version 0.07 (6 January, 2013)
+ * @version 0.08 (6 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -137,28 +138,31 @@ public class SingleNucleotideSubstitution {
 	    //$wtaa eq '*' and ($wtaa, $varaa) = qw/X X/;		#change * to X in the output NO! Not HGVS conform
 	    //$function->{$index}{ssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createSynonymousSNVAnnotation(kgl,cdspos,panno);
+	    //Annotation ann = Annotation.createSynonymousSNVAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.SYNONYMOUS,cdspos);
 	    return ann;
 	} else if (varaa.equals("*")) {
 	    //$function->{$index}{stopgain} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa${varpos}X,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d*",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-	    Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
+	    //Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPGAIN,cdspos);
 	    return ann;
 	} else if (wtaa.equals("*")) {
-	    //$function->{$index}{stoploss} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos$varaa,";
+	    /* i.e., the wildtype codon is the stop codon */
 	    panno = String.format("%s:exon%d:%s:p.*%d%s",kgl.getName(),exonNumber,canno,aavarpos,varaa);
-	    Annotation ann = Annotation.createStopLossAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPLOSS,cdspos);
 	    return ann;
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createNonSynonymousSNVAnnotation(kgl,cdspos,panno);
+	   
+	    Annotation ann = new Annotation(kgl,panno,VariantType.NONSYNONYMOUS,cdspos);
 	    return ann;
 	}
 	
 	
     } 
-
+   
 
 
 
@@ -223,10 +227,6 @@ public class SingleNucleotideSubstitution {
 	    varnt3 = String.format("%c%c%c",varc, wtnt3.charAt(1),wtnt3.charAt(2));
 	    // $canno = "c." . ($refvarstart-$refcdsstart+1) . $wtnt3[0] . ">" . $obs;
 	    canno =  String.format("c.%d%c>%c",(refvarstart - refcdsstart+1),wtnt3.charAt(0),varc);
-	    //System.out.println("wtnt3=" + wtnt3 + " varnt3=" + varnt3 + " canno=" + canno);
-	    //System.out.println(kgl.getGeneSymbol() + ":" + kgl.getName());
-	    //System.out.println("refvarstart=" + refvarstart + " refcdsstart = " + refcdsstart);
-	    //kgl.debugPrint();
 	    if (refc  != wtnt3.charAt(0)) {
 		char strand = kgl.getStrand();
 		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
@@ -240,25 +240,25 @@ public class SingleNucleotideSubstitution {
 
 	
 	if (wtaa.equals(varaa)) {
-	    //$wtaa eq '*' and ($wtaa, $varaa) = qw/X X/;		#change * to X in the output NO! Not HGVS conform
-	    //$function->{$index}{ssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createSynonymousSNVAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.SYNONYMOUS,cdspos);
 	    return ann;
 	} else if (varaa.equals("*")) {
 	    //$function->{$index}{stopgain} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa${varpos}X,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d*",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-	    Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
+	    //Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPGAIN,cdspos);
 	    return ann;
 	} else if (wtaa.equals("*")) {
-	    //$function->{$index}{stoploss} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.*%d%s",kgl.getName(),exonNumber,canno,aavarpos,varaa);
-	    Annotation ann = Annotation.createStopLossAnnotation(kgl,cdspos,panno);
+	    //Annotation ann = Annotation.createStopLossAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPLOSS,cdspos);
 	    return ann;
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    Annotation ann = Annotation.createNonSynonymousSNVAnnotation(kgl,cdspos,panno);
+	    //Annotation ann = Annotation.createNonSynonymousSNVAnnotation(kgl,cdspos,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.NONSYNONYMOUS,cdspos);
 	    return ann;
 	}
 	

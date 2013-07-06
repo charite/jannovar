@@ -1,14 +1,14 @@
 package jannovar.annotation;
 
+import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.Translator;
 import jannovar.exception.AnnotationException;
 
 /**
- * This class is intended to provide a static method to generate annotations for deletion
- * mutations. This method is put in its own class only for convenience and to at least
- * have a name that is easy to find.
- * @version 0.07 (25 May, 2013)
+ * This class provides static methods to generate annotations for deletion
+ * mutations. 
+ * @version 0.09 (7 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -38,44 +38,31 @@ public class DeletionAnnotation {
 	if (frame_s == 1) {
 	    deletedNT = wtnt3.charAt(1);
 	    varnt3 = String.format("%c%c%s",wtnt3.charAt(0), wtnt3.charAt(2),wtnt3_after.charAt(0));
-	    /* $deletent = $wtnt3[1];
-	       $varnt3 = $wtnt3[0].$wtnt3[2].$wtnt3_after; */
 	} else if (frame_s == 2) {
 	    deletedNT = wtnt3.charAt(2);
 	    varnt3 = String.format("%c%c%s",wtnt3.charAt(0), wtnt3.charAt(1),wtnt3_after.charAt(0));
-	    /* $deletent = $wtnt3[2];
-	       $varnt3 = $wtnt3[0].$wtnt3[1].$wtnt3_after; */
 	} else {
 	    deletedNT = wtnt3.charAt(0);
 	    varnt3 = String.format("%c%c%s",wtnt3.charAt(1), wtnt3.charAt(2),wtnt3_after.charAt(0));
-	    /*$deletent = $wtnt3[0];
-	      $varnt3 = $wtnt3[1].$wtnt3[2].$wtnt3_after; */
 	}
-	//System.out.println(String.format("wt:%s mut:%s",wtnt3,varnt3));
 	String wtaa = translator.translateDNA(wtnt3);
 	String varaa = translator.translateDNA(varnt3);
 	int posVariantInCDS = refvarstart-kgl.getRefCDSStart();
 	int aavarpos = (int)Math.floor(posVariantInCDS/3)+1;
 	
-	/*$varpos) =   int(($refvarstart-$refcdsstart)/3)+1; */
 	/* The following gives us the cDNA annotation */
 	String canno = String.format("c.%ddel%c",(refvarstart-kgl.getRefCDSStart()+1),deletedNT);
-	/* $canno = "c." . ($refvarstart-$refcdsstart+1) . "del$deletent"; */
 	/* Now create amino-acid annotation */
 	if (wtaa.equals("*")) { /* #mutation on stop codon */ 
 	    if (varaa.startsWith("*")) { /* #stop codon is still stop codon 	if ($varaa =~ m/\* /)   */
 		String nfsdel_ann = String.format("%s:exon%d:%s:p.X%dX",kgl.getName(),
 						     exonNumber,canno,aavarpos);
-		Annotation ann = Annotation.createNonFrameshiftDeletionAnnotation(kgl,posVariantInCDS,nfsdel_ann);
+		Annotation ann= new Annotation(kgl,nfsdel_ann,VariantType.NON_FS_DELETION,posVariantInCDS);
 		return ann;
-		/* Annovar: "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "X,";	
-		   #changed fsdel to nfsdel on 2011feb19 */
 	    } else {	 /* stop codon is lost */
 		String stoploss_ann = String.format("%s:exon%d:%s:p.X%d%s",kgl.getName(),
 						    exonNumber,canno,aavarpos,varaa);
-		/* $function->{$index}{stoploss} .= 
-		   "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "$varaa,"; */
-		Annotation ann = Annotation.createStopLossAnnotation(kgl,posVariantInCDS,stoploss_ann);
+		Annotation ann = new Annotation(kgl,stoploss_ann,VariantType.STOPLOSS,posVariantInCDS);
 		return ann;
 	    }
 	} else {
@@ -84,7 +71,8 @@ public class DeletionAnnotation {
 						  exonNumber,canno,wtaa, aavarpos);
 		/* $function->{$index}{stopgain} .= 
 		   "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "X,"; */
-		Annotation ann = Annotation.createStopGainAnnotation(kgl,posVariantInCDS,stopgain_ann);
+		//Annotation ann = Annotation.createStopGainAnnotation(kgl,posVariantInCDS,stopgain_ann);
+		Annotation ann = new Annotation(kgl,stopgain_ann,VariantType.STOPGAIN,posVariantInCDS);
 		return ann;
 	    } else {
 		String fsdel_ann = String.format("%s:exon%d:%s:p.%s%dfs",kgl.getName(),
@@ -92,7 +80,17 @@ public class DeletionAnnotation {
 		/*  $function->{$index}{fsdel} .= 
 		    "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,"; */
 	
-		Annotation ann = Annotation.createFrameshiftDeletionAnnotation(kgl,posVariantInCDS,fsdel_ann);
+		//Annotation ann = Annotation.createFrameshiftDeletionAnnotation(kgl,posVariantInCDS,fsdel_ann);
+		Annotation ann = new Annotation(kgl, fsdel_ann,VariantType.FS_DELETION,posVariantInCDS);
+		/*
+	Annotation ann = new Annotation();
+	ann.varType = VariantType.FS_DELETION;
+	ann.geneSymbol = kgl.getGeneSymbol();
+	ann.variantAnnotation = annot;
+	ann.rvarstart = varstart;
+	ann.entrezGeneID = kgl.getEntrezGeneID();
+	return ann;
+		*/
 		return ann;
 	    }
 	}
@@ -150,33 +148,31 @@ public class DeletionAnnotation {
 	    }
 	    //$function->{$index}{fsdel} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.${varpos}_${varposend}del,";
 	    panno = String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(), exonNumber,canno,aavarpos,varposend);
-	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,posVariantInCDS,panno);
+	    //Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,posVariantInCDS,panno);
+	     Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION, posVariantInCDS);
 	    return ann;
 	} else if (refvarend >= cdslen + refcdsstart) { 
 	    /* -------------------------------------------------------------------- *
 	     * if we get here, then the 3' part of the gene is deleted              *
 	     * -------------------------------------------------------------------- */
 	    varposend = (int)Math.floor(cdslen/3);	
-	    //$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($cdslen->{$seqid}+$refcdsstart-1) . "del";
 	    canno = String.format("c.%d_%ddel",refvarstart - refcdsstart +1, cdslen + refcdsstart -1);
-	    //$function->{$index}{fsdel} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.${varpos}_${varposend}del,";
 	    panno = String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(),
 				  exonNumber,canno,aavarpos,varposend);
-	    Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,posVariantInCDS,panno);
+	    //Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,posVariantInCDS,panno);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION, posVariantInCDS);
 	    return ann;
-	    //$is_fs++;
 	} else if ((refvarend-refvarstart+1) % 3 == 0) { 
 	    /* -------------------------------------------------------------------- *
 	     * Non-frameshift deletion within the body of the mRNA                  *
 	     * -------------------------------------------------------------------- */
 	    varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
-	    //$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "del";
-	    int posMutationInCDS = refvarstart-refcdsstart+1; /* start pos of mutation */
-	    canno = String.format("c.%d_%ddel",posMutationInCDS,refvarend-refcdsstart+1);
-	    //$function->{$index}{nfsdel} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.${varpos}_${varposend}del,";
+	    posVariantInCDS = refvarstart-refcdsstart+1; /* start pos of mutation */
+	    canno = String.format("c.%d_%ddel",posVariantInCDS,refvarend-refcdsstart+1);
 	    panno =  String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(), exonNumber,canno,aavarpos,varposend);
-	    Annotation ann = Annotation. createNonFrameshiftDeletionAnnotation(kgl,posMutationInCDS,panno);
-	    //createNonFrameShiftSubstitionAnnotation(panno);
+	   
+	    Annotation ann= new Annotation(kgl,panno,VariantType.NON_FS_DELETION,posVariantInCDS);
+	   
 	    return ann;
 	} else {
 	    /* -------------------------------------------------------------------- *
@@ -188,7 +184,7 @@ public class DeletionAnnotation {
 	    canno = String.format("c.%d_%ddel",posMutationInCDS,refvarend-refcdsstart+1);
 	    panno =  String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(),
 				   exonNumber,canno,aavarpos,varposend);
-	    Annotation ann = Annotation.createFrameshiftDeletionAnnotation(kgl,posMutationInCDS,panno);
+	    Annotation ann = new Annotation(kgl, panno,VariantType.FS_DELETION,posMutationInCDS);
 	    return ann;
 	}
     }

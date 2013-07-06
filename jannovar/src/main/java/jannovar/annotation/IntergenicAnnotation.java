@@ -9,7 +9,7 @@ import jannovar.exception.AnnotationException;
 /**
  * This class is intended to provide a static method to generate annotations for INTERGENIC,
  * DOWNSTREAM and UPSTREAM variants.
- * @version 0.01 (5 July, 2013)
+ * @version 0.02 (5 July, 2013)
  * @author Peter N Robinson
  */
 
