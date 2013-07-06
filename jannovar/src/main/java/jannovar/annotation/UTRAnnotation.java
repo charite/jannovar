@@ -18,17 +18,21 @@ import jannovar.reference.Translator;
  * {@code rvarstart = kgl.getExonStart(k) - kgl.getTXStart() -  cumlenintron + 1;}. Assuming for
  * instance that the 5' UTR has two exons, and that the start codon as well as the 
  * <P> 
+ * For deletions in the 5' UTR, Jannovar performs the following calculations.
+ * For instance, if we have chrX:7811234AGCTGCG>-, there is deletion of the bases AGCTGCG in the 5' UTR
+ * The nucleotides in the mRNA right before the start codon are  agacgttg[agctgcg]gaag[START-CODON]. 
+ * Thus, the bases -11 to -5 are affected, and we annotate <b>VCX(uc004crz.3:c.-11_-5delAGCTGCG)</b>.
+ * <P>
  * The Human Genome Variation Society nomenclature for <b>3' UTR variants</b> works as follows.
  * <P>
  * ....
- * @version 0.07 (27 June, 2013)
+ * @version 0.08 (7 July, 2013)
  * @author Peter N Robinson
  */
 
 public class UTRAnnotation {
     /**
-     * Return an annotation for a UTR3  mutation for a gene. TODO figure out +/- strand strategy
-     * <P> See the description of this class for comments on the TODO. For now, KISS
+     * Return an annotation for a UTR3  mutation for a gene.
      * @param trmdl Gene with splice mutation for current chromosomal variant.
      * @param rvarstart start position of the variant
      * @param ref reference sequence
@@ -57,8 +61,6 @@ public class UTRAnnotation {
 
 
     /**
-     * Return an annotation for a 5' UTR  mutation for a gene. 
-     * <P> See the description of this class for comments on the TODO. For now, KISS
      * @param trmdl Gene with splice mutation for current chromosomal variant.
      * @param rvarstart start position of the variant with respect to begin of transcript.  
      * @param ref reference sequence
@@ -70,12 +72,25 @@ public class UTRAnnotation {
 	Annotation ann = Annotation.createEmptyAnnotation();
 	ann.setVarType(VariantType.UTR5);
 	ann.setGeneSymbol( trmdl.getGeneSymbol() );
-	if (ref.length()>1) {
-	    /* We are not yet ready to annotate complex variants in the UTR5, in this
-	    * case just use the gene name. Improve this later.*/
-	    ann.setVariantAnnotation( trmdl.getName() );
+	int distance = trmdl.getRefCDSStart()  - rvarstart;
+	if (alt.equals("-")) {
+	    /* i.e., deletion in the UTR5 region */
+	    if (ref.length() == 1) {
+		String annotation = String.format("%s:c.-%ddel%s",trmdl.getName(),distance,ref);
+		ann.setVariantAnnotation( annotation );
+	    } else {
+		int d2 = distance - ref.length() + 1;
+		String annotation = String.format("%s:c.-%d_-%ddel%s",trmdl.getName(),distance,d2,ref);
+		ann.setVariantAnnotation( annotation );
+	    }
+	} else if (ref.equals("-")) {
+	    /* i.e., insertion in the UTR5 region */
+	    int len= alt.length();
+	    int d2=distance - 1; /* get end of insertion */ 
+	    String annotation = String.format("%s:c.-%d_-%dins%s",trmdl.getName(),distance,d2,alt);
+	    ann.setVariantAnnotation( annotation );
 	} else {
-	    int distance = trmdl.getRefCDSStart()  - rvarstart;
+	   
 	    String annotation = String.format("%s:c.-%d%s>%s",trmdl.getName(),distance,ref,alt);
 	    ann.setVariantAnnotation(annotation);
 	}

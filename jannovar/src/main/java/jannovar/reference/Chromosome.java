@@ -22,10 +22,12 @@ import jannovar.exception.AnnotationException;
 */
 import jannovar.annotation.DeletionAnnotation;
 import jannovar.annotation.InsertionAnnotation;
+import jannovar.annotation.IntergenicAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.BlockSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTRAnnotation;
+import jannovar.common.VariantType;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
 
@@ -51,7 +53,7 @@ import jannovar.interval.IntervalTree;
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.25 (22 June, 2013)
+ * @version 0.26 (7 July, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -212,13 +214,13 @@ public class Chromosome {
 
 	if (leftNeighbor != null && leftNeighbor.isNearThreePrimeEnd(start,NEARGENE) ) {
 	    /** The following function creates an upstream or downstream annotation as appropriate. */
-	    Annotation ann = Annotation.createUpDownstreamAnnotation(leftNeighbor,start);
+	    Annotation ann = IntergenicAnnotation.createUpDownstreamAnnotation(leftNeighbor,start);
 	    annovarFactory.addUpDownstreamAnnotation(ann);
 	} 
 	
 	if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(end,NEARGENE)) {
 	    /** The following function creates an upstream or downstream annotation as appropriate. */
-	    Annotation ann = Annotation.createUpDownstreamAnnotation(rightNeighbor,end);
+	    Annotation ann = IntergenicAnnotation.createUpDownstreamAnnotation(rightNeighbor,end);
 	    annovarFactory.addUpDownstreamAnnotation(ann);
 	}
 	/* If we get here, and annotation_list is still empty, then the variant is not
@@ -228,7 +230,7 @@ public class Chromosome {
 	    if (leftNeighbor == null && rightNeighbor == null) {
 		System.out.println("Both neighbors are null");
 	    }
-	    Annotation ann = Annotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start,end);
+	    Annotation ann = IntergenicAnnotation.createIntergenicAnnotation(leftNeighbor,rightNeighbor,start,end);
 	    annovarFactory.addIntergenicAnnotation(ann);
 	}
     }
@@ -346,9 +348,12 @@ public class Chromosome {
 		     * This means that the variant is INTRONIC of a coding or noncoding RNA    *
 		     * ----------------------------------------------------------------------- */
 		    Annotation ann = null;
-		    if (kgl.isCodingGene() )
-			ann = Annotation.createIntronicAnnotation(kgl);
-		     else
+		    if (kgl.isCodingGene() ) {
+			/* For now, the INTRONIC annotation is just the gene symbol */
+			String annot = kgl.getGeneSymbol();
+			ann = new Annotation(kgl,annot, VariantType.INTRONIC);
+		
+		    } else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
 		    annovarFactory.addIntronicAnnotation(ann);
 		    return; /* Done with this annotation */
@@ -543,6 +548,8 @@ public class Chromosome {
 			//gene     <--*---*->
 			// Note this is UTR3 on negative strand
 			//Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
+			alt = revcom(alt);
+			ref = revcom(ref);
 			Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 			annovarFactory.addUTR3Annotation(ann);
 			return; /* done with this annotation. */
@@ -550,8 +557,9 @@ public class Chromosome {
 			//query             ----
 			//gene     <--*---*->
 			// Note this is UTR5 on negative strand
+			alt = revcom(alt);
+			ref = revcom(ref);
 			Annotation ann = UTRAnnotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
-			//Annotation ann = Annotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 			annovarFactory.addUTR5Annotation(ann);
 			return; /* done with this annotation. */
 		    } 	else {
@@ -562,24 +570,17 @@ public class Chromosome {
 			 * following function.  Note k in the following is the number    *
 			 * (zero-based) of affected exon                                 *
 			 * ------------------------------------------------------------- */
-			/*** 
-			 * Annovar for minus strand:
-			 * $exonic{$name2}++;
-			 * not $current_ncRNA and $obs and 
-			 push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '-', $i, @exonstart-$k, $nextline];
-			 compare to 
-			 push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];	
-			
-			*/
 			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 			return; /* done with this annotation. */
 		    }
 		} else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
 		    //System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 		     Annotation ann = null;
-		     if (kgl.isCodingGene() )
-			 ann = Annotation.createIntronicAnnotation(kgl);
-		     else
+		     if (kgl.isCodingGene() ) {
+			 /* For now, the INTRONIC annotation is just the gene symbol */
+			 String annot = kgl.getGeneSymbol();
+		     	ann = new Annotation(kgl,annot, VariantType.INTRONIC);
+		     } else
 			 ann = Annotation.createNoncodingIntronicAnnotation(name2);
 		     annovarFactory.addIntronicAnnotation(ann);
 		     return; /* done with this annotation. */
@@ -629,6 +630,8 @@ public class Chromosome {
 		    //query             ----
 		    //gene     <--*---*->
 		    //System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getGeneSymbol()));
+		    ref = revcom(ref);
+		    alt = revcom(alt);
 		    Annotation ann = UTRAnnotation.createUTR5Annotation(kgl,rvarstart,ref,alt);
 		    annovarFactory.addUTR5Annotation(ann);
 		} else {

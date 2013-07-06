@@ -1115,33 +1115,6 @@ public class DownstreamAnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: HSP90AB3P
- * chr4:88815223C>T
- *</P>
- */
-@Test public void testDownstreamVar40() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 88815223;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	   
-	    /* There should be just one annotation */
-	   
-	   
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HSP90AB3P",annot);
-	}
-}
-
 
 /**
  *<P>
@@ -1307,32 +1280,6 @@ public class DownstreamAnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: MAPK13
- * chr6:36108118G>C
- *</P>
- */
-@Test public void testDownstreamVar47() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 36108118;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	   
-	    /* There should be just one annotation */
-	   
-	   
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MAPK13(uc003olt.4)",annot);
-	}
-}
 
 /**
  *<P>
@@ -2154,6 +2101,8 @@ public class DownstreamAnnotationTest implements Constants {
 /**
  *<P>
  * annovar: RPS13,SNORD14
+ * Note: Since SNORD14 is further downstream than RPS13, the logic of Jannovar does not
+ * display it. RPS13 is the unique immediate downstream gene.
  * chr11:17095596T>C
  *</P>
  */
@@ -2174,7 +2123,7 @@ public class DownstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RPS13,SNORD14",annot);
+	    Assert.assertEquals("RPS13",annot);
 	}
 }
 

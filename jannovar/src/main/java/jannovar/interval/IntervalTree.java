@@ -142,12 +142,6 @@ public class IntervalTree<T> implements java.io.Serializable {
     }
 
 
-    private void searchOnEmpty(int low, int high) {
-    }
-    
-    
-    
-
     /**
      * In cases where we do not find an intersection, i.e., when  a call to 
      * {@link #search} reveals an emptylist because none of the
@@ -214,11 +208,18 @@ public class IntervalTree<T> implements java.io.Serializable {
 	if (item.getHigh() > this.leftNeighbor.getHigh()){
 		this.leftNeighbor = item;
 	}
-	//System.out.println("BOTTOM=> switchLefttNeighborIfBetter item=" + item + " current leftN=" + leftNeighbor);
     }
     
     /**
-     * TODO: see switchLeftNeighborIfBetter for explanation (Improve me!).
+     * This function checks if {@code item}, which is passed to the function as an argument,
+     * is a better right neighbor for position x than the current value of 
+     * {@link #rightNeighbor}. If the current value of {@link #rightNeighbor} is null,
+     * we assign it the value of {@code item} (this is guaranteed to be a valid value).
+     * Otherwise, we check whether item is to the right of {@link #rightNeighbor} (if not, just return).
+     * Finally, we check whether item is closer to {@code x} than the current rightneighbor, and if
+     * so, we update the value of {@link #rightNeighbor} to {@code item}.#
+     * @param item The new candidate rightt neighbor
+     * @param x the search position 
      */
     private void switchRightNeighborIfBetter(Interval<T> item, int x){
 	if (item == null) return;
@@ -234,18 +235,18 @@ public class IntervalTree<T> implements java.io.Serializable {
 	if (item.getLow() < this.rightNeighbor.getLow()){
 		this.rightNeighbor = item;
 	}
-	//System.out.println("BOTTOM=> switchRightNeighborIfBetter item=" + item + " current rightN=" + rightNeighbor);
     }
 
     /**
-     * This function is called if no inverval is found to overlap with the search query.
+     * This function is called if no inverval is found to overlap with the search query. If this method
+     * is called, we know that we are "in between" two intervals (or at the extreme right or left end
+     * of the search space).
      * @param x The lower range of the oringal search query (it doesnt matter whether we take the lower or
      * the upper range, since both do not overlap).
      */
     private void searchInbetween(int x) {
 	Node<T> n = this.root;
 	while (n != null) {
-	    //System.out.println("****** SIBN: " + current);
 	    if (x < n.getMedian() ) {
 		/* First up date the right neighbor (most left to date that is right of query) .*/
 		if (n.hasInterval()) {
@@ -274,10 +275,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		/* Now continue to navigate the interval tree */
 		n = n.getRight();
 	    }
-	    //System.out.println("rightN=" + rightNeighbor);
-	    //System.out.println("leftN=" + leftNeighbor);
 	}
-	
     }
 
     
@@ -302,19 +300,15 @@ public class IntervalTree<T> implements java.io.Serializable {
 	if (ilow < n.getMedian()) {
 	    /* as long as the iterator i is smaller than the size of leftorder */
 	    int size = n.leftorder.size();
-	    //System.out.println(String.format("ilow=%d < median=%d, leftorder size=%d",ilow,n.getMedian(),n.leftorder.size()));
 	    for (int i = 0; i < size; i++) {
 		/*
 		 * breaks if the lowpoint at position i is bigger than the
 		 * wanted high point
 		 */
 		if (n.leftorder.get(i).getLow() > ihigh) {
-		    //System.out.println(String.format("break because low-interval [%d] > ihigh [%d] with median=%d", 
-		    //				     n.leftorder.get(i).getLow(),ihigh,n.getMedian()));
 		    break;
 		}
 		/* adds the interval at position i of leftorder to result */
-		//System.out.println(String.format("ilow < median: adding interval: " + n.leftorder.get(i)));
 		result.add(n.leftorder.get(i));
 	    }
 	    /*
@@ -324,19 +318,15 @@ public class IntervalTree<T> implements java.io.Serializable {
 	} else if (ihigh > n.getMedian()) {
 	    /* as long as the iterator i is smaller than the size of rightorder */
 	    int size = n.rightorder.size();
-	    //System.out.println(String.format("ihigh=%d > median=%d, rightorder size=%d",ihigh,n.getMedian(),n.rightorder.size()));
 	    for (int i = 0; i < size; i++) {
 		/*
 		 * breaks if the highpoint at position i is smaller than the
 		 * wanted low point
 		 */
 		if (n.rightorder.get(i).getHigh() < ilow) {
-		    //System.out.println(String.format("break because high-interval [%d] < ilow [%d] ", n.leftorder.get(i).getHigh(),ilow));
 		    break;
 		}
 		/* adds the interval at position i of rightorder to result */
-		//System.out.println(String.format("ihigh [%d] > median [%d]: adding interval: %s",
-		//				 ihigh,n.getMedian(),n.rightorder.get(i)));
 		result.add(n.rightorder.get(i));
 	    }
 	}

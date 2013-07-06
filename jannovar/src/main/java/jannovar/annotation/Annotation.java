@@ -65,7 +65,35 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * annotation, and we get a new annotation for a coding isoform of the same gene. */
     public void setVarType(VariantType typ) { this.varType = typ; }
 
-   
+
+    /**
+     * Construct a new annotation.
+     * @param tmdl The transcript affected by the variant
+     * @param annotation A complete annotation (without the gene symbol)
+     * @param type The class of the variant (e.g., INTRONIC).
+     */
+    public Annotation(TranscriptModel tmdl, String annotation, VariantType type) {
+	this.varType = type;
+	this.variantAnnotation = annotation;
+	this.geneSymbol = tmdl==null?null:tmdl.getGeneSymbol();
+	this.entrezGeneID = tmdl==null?null:tmdl.getEntrezGeneID();
+    }
+
+    /**
+     * Construct a new annotation.
+     * This constructor is used for intergenic annotations where there is
+     * no gene synbol.
+     * @param annotation A complete annotation (without the gene symbol)
+     * @param type The class of the variant (e.g., INTRONIC).
+     */
+    public static  Annotation createIntergenicAnnotation(String annotation, VariantType type) {
+	Annotation a = new Annotation();
+	a.varType = type;
+	a.variantAnnotation = annotation;
+	a.geneSymbol=null;
+	return a;
+    }
+
 
     /**
      * @return The gene symbol (e.g., FBN1) for the gene affected by this Annotation.
@@ -155,72 +183,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
     }
 
 
-    /**
-     * This factory method creates an annotation object for an intergenic variant that is located
-     * between two genes and is not nearby (threshold default of 1000 nt) to either of them. For
-     * example the annotation should look like
-     * <PRE>HGVS=LOC100288069(dist=39337),LINC00115(dist=8181)</PRE>
-     * @param leftGene Gene that is 5' to the variant
-     * @param rightGene Gene that is 3' to the variant
-     * @param startpos 5' position of the variant (should be the start position)
-     * @param endpos 3' position of the variant (should be the end position)
-     * @return Annotation object for internenic variant
-     */
-    public static Annotation createIntergenicAnnotation(TranscriptModel leftGene, TranscriptModel rightGene, int startpos, int endpos) {
-	Annotation ann = new Annotation();
-	//System.out.println(String.format("Left:%s, right:%s, start %d end %d",leftGene.getName2(),rightGene.getName2(),startpos,endpos));
-	ann.varType=VariantType.INTERGENIC;
-	/* Note that either the leftGene or the rightGene can be null, if the variant is located
-	   5' (3') to all variants on a chromosome. */
-	if (leftGene == null) {
-	    int distR =  rightGene.getTXStart() - endpos;
-	    ann.variantAnnotation = String.format("NONE(dist=NONE),%s(dist=%d)",
-						  rightGene.getGeneSymbol(),distR);
-	} else if (rightGene == null) {
-	    int distL =  startpos - leftGene.getTXEnd();
-	    ann.variantAnnotation = String.format("%s(dist=%d),NONE(dist=NONE)",
-						  leftGene.getGeneSymbol(),distL);
-
-	} else {
-	    int distR =  rightGene.getTXStart() - endpos;
-	    int distL =  startpos - leftGene.getTXEnd();
-	    ann.variantAnnotation = String.format("%s(dist=%d),%s(dist=%d)",
-						  leftGene.getGeneSymbol(),distL,rightGene.getGeneSymbol(),distR);
-	}
-	return ann;
-    }
-
   
-    /**
-     * Create an Annotation obejct for a variant that is upstream or downstream
-     * to a gene (default: within 1000 nt).
-     * @param trmdl The transcript that the variant is up/downstream to
-     * @param pos The chromosomal position of the variant 
-     */
-    public static Annotation createUpDownstreamAnnotation(TranscriptModel trmdl, int pos) {
-	Annotation ann = new Annotation();
-	if (trmdl == null) {
-	    System.out.println("createUpDownstreamAnnotation, TranscriptModel argument is null, pos=" + pos);
-	    System.exit(1);
-	}
-	ann.variantAnnotation = String.format("%s", trmdl.getGeneSymbol());
-	ann.geneSymbol = trmdl.getGeneSymbol();
-	ann.entrezGeneID = trmdl.getEntrezGeneID();
-	if (trmdl.isFivePrimeToGene(pos)) {
-	    if (trmdl.isPlusStrand()) {
-		ann.varType=VariantType.UPSTREAM;
-	    } else {
-		ann.varType=VariantType.DOWNSTREAM;
-	    }
-	} else if (trmdl.isThreePrimeToGene(pos)) {
-	    if (trmdl.isMinusStrand()) {
-		ann.varType=VariantType.UPSTREAM;
-	    } else {
-		ann.varType=VariantType.DOWNSTREAM;
-	    }
-	}
-	return ann;
-    }
+  
+   
 
     /**
      * Add an annotation for a noncoding RNA (ncRNA) for a variant that is located within
@@ -288,20 +253,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	return ann;
      }
 
-    /**
-     * This method is called when an intronic mutation was found. The method should
-     * probably try to do better to create a correct HGVS nomeclature for intronic mutations, by
-     * giving the position, for instance.
-     * @param trmdl The current TranscriptModel
-     */
-    public static Annotation createIntronicAnnotation(TranscriptModel trmdl) {
-	Annotation ann = new Annotation();
-	ann.varType = VariantType.INTRONIC;
-	ann.geneSymbol = trmdl.getGeneSymbol();
-	ann.variantAnnotation = String.format("%s", ann.geneSymbol);
-	return ann;
-     }
-
+   
     /**
      * Use this factory method for annotations that probably represent database
      * errors or bugs and require manual checking.

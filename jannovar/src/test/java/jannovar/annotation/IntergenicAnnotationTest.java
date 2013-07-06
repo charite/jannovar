@@ -110,6 +110,34 @@ public class IntergenicAnnotationTest implements Constants {
 
 /**
  *<P>
+ * annovar: HSP90AB3P
+ * chr4:88815223C>T
+ *</P>
+ */
+@Test public void testDownstreamVar40() throws AnnotationException  {
+	byte chr = 4;
+	int pos = 88815223;
+	String ref = "C";
+	String alt = "T";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	   
+	    /* There should be just one annotation */
+	   
+	   
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
+	    Assert.assertEquals("MEPE(dist=47255),SPP1(dist=81579)",annot);
+	}
+}
+
+
+/**
+ *<P>
  * annovar: RASAL2(dist=14943),C1orf49(dist=18621)
  * chr1:178463591C>T
  *</P>

@@ -16,7 +16,7 @@ import java.util.Collections;
  * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more
  * than one Gene symbol. In this case, we represent the affected gene as a comma-separated list of symbols.
  * @author Peter N Robinson
- * @version 0.14 (30 June, 2013)
+ * @version 0.15 (5 July, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 

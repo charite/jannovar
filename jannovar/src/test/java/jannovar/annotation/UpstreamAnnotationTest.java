@@ -901,9 +901,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
 	    VariantType varType = ann.getVariantType();
 	    String annot = ann.getVariantAnnotation();
-	    System.out.println("Annot=" + annot);
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    
 	    Assert.assertEquals("DQ596041,DQ591060",annot);
 	}
 }

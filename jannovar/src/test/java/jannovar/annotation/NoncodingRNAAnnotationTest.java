@@ -103,6 +103,31 @@ public class NoncodingRNAAnnotationTest implements Constants {
 
 /**
  *<P>
+ * annovar: MEG3
+ * chr14:101301012T>C
+ Correctly called ncRNA_EXONIC by Jannovar (Another isoform is UTR5)
+ *</P>
+ */
+@Test public void testUTR5Var466() throws AnnotationException  {
+	byte chr = 14;
+	int pos = 101301012;
+	String ref = "T";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
+	    Assert.assertEquals("MEG3",annot);
+	}
+}
+
+
+/**
+ *<P>
  * annovar: SCARNA3
  * chr1:175937540C>T
  *</P>
@@ -267,7 +292,7 @@ public class NoncodingRNAAnnotationTest implements Constants {
 /**
  *<P>
  * annovar: POTEKP
- * chr2:132384682T>C
+ * chr2:132384682T>C => Annovar is mistaken here, the variant is downstream of FKSG30
  *</P>
  */
 @Test public void testNcRnaExonicVar86() throws AnnotationException  {
@@ -281,17 +306,14 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.INTERGENIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("POTEKP",annot);
+	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
+	    Assert.assertEquals("FKSG30",annot);
 	}
 }
 
 /**
- *<P>
- * annovar: C4orf42
- * chr4:1244416A>G
- *</P>
+
  */
 @Test public void testNcRnaExonicVar123() throws AnnotationException  {
 	byte chr = 4;
@@ -304,9 +326,9 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.SYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C4orf42",annot);
+	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals("CTBP1-AS1(uc003gcz.3:exon2:c.55A>G:p.S19G)",annot);
 	}
 }
 
@@ -352,7 +374,6 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    System.out.println("XYZ annot = " + annot);
 	    Assert.assertEquals("FAM13A-AS1",annot);
 	}
 }
@@ -1650,6 +1671,34 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    Assert.assertEquals("AK097866",annot);
 	}
 }
+
+/**
+ *<P>
+ * annovar: MAPK13
+ * chr6:36108118G>C
+ *</P>
+ */
+@Test public void testDownstreamVar47() throws AnnotationException  {
+	byte chr = 6;
+	int pos = 36108118;
+	String ref = "G";
+	String alt = "C";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	   
+	    /* There should be just one annotation */
+	   
+	   
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MAPK13",annot);
+	}
+}
+
 
 /**
  *<P>

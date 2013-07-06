@@ -1712,7 +1712,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC100288142,NBPF10,PDZK1",annot);
+	    Assert.assertEquals("NBPF10,PDZK1",annot);
 	}
 }
 
