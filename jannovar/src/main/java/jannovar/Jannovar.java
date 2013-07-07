@@ -86,7 +86,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.23 (2 July, 2013)
+ * @version 0.24 (8 July, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
@@ -123,9 +123,9 @@ public class Jannovar {
     /** Path to a VCF file waiting to be annotated. */
     private String VCFfilePath=null;
     /** An FTP proxy for downloading the UCSC files from behind a firewall. */
-    private String ftpProxy=null;
+    private String proxy=null;
     /** An FTP proxy port for downloading the UCSC files from behind a firewall. */
-    private String ftpProxyPort=null;
+    private String proxyPort=null;
     
     /**
      * Flag indicating whether to output annotations in Jannovar format (default: false).
@@ -203,14 +203,14 @@ public class Jannovar {
     /**
      * This function creates a
      * {@link jannovar.io.UCSCDownloader UCSCDownloader} object in order to
-     * download the four required UCSC files. If the user has set the FTP proxy and
+     * download the four required UCSC files. If the user has set the proxy and
      * proxy port via the command line, we use these to download the files.
      */
     public void downloadUCSCfiles() {
 	UCSCDownloader downloader = null;
 	try {
-	    if (this.ftpProxy != null && this.ftpProxyPort != null) {
-		downloader = new UCSCDownloader(this.ucscDirPath,this.ftpProxy,this.ftpProxyPort);
+	    if (this.proxy != null && this.proxyPort != null) {
+		downloader = new UCSCDownloader(this.ucscDirPath,this.proxy,this.proxyPort);
 	    } else {
 		downloader = new UCSCDownloader(this.ucscDirPath);
 	    }
@@ -499,12 +499,12 @@ public class Jannovar {
 		this.performSerialization = true;
 	    }
 
-	    if (cmd.hasOption("ftp-proxy")) {
-		this.ftpProxy = cmd.getOptionValue("ftp-proxy");
+	    if (cmd.hasOption("proxy")) {
+		this.proxy = cmd.getOptionValue("proxy");
 	    } 
 	    
-	    if (cmd.hasOption("ftp-proxy-port")) {
-		this.ftpProxyPort = cmd.getOptionValue("ftp-proxy-port");
+	    if (cmd.hasOption("proxy-port")) {
+		this.proxyPort = cmd.getOptionValue("proxy-port");
 		}
 	        
 	    if (cmd.hasOption("U")) {

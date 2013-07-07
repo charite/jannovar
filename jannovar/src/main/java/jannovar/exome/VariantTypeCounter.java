@@ -12,7 +12,7 @@ import jannovar.common.VariantType;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.08 (28 June, 2013)
+ * @version 0.11 (8 July,2013)
  */
 
 public class VariantTypeCounter implements Constants {
@@ -101,7 +101,6 @@ public class VariantTypeCounter implements Constants {
 	    this.variantCountMap.get(VariantType.UTR5);
 	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
 	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
-	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);
 	int posErr = this.variantCountMap.get(VariantType.ERROR);
 	row.append(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td>\n",
 				 sampleName,nonsynonymous,nonsense,frameshift,splice,nonfs));
@@ -111,8 +110,6 @@ public class VariantTypeCounter implements Constants {
 	row.append(String.format("<li>intergenic: %d</li>\n<li>UTR3/UTR5: %d</li>",intergen,utr));
 	row.append(String.format("<li>Synonymous: %d</li>\n",synonym));
 	row.append(String.format("<li>Total: %d</li>\n",total));
-	if (unknown>0)
-	    row.append(String.format("<li>Unknown: %d</li>\n",unknown));
 	if (posErr>0)
 	    row.append(String.format("<li>Possible annotation errors: %d</li>\n",posErr));
 	row.append("</ul></td>\n");
@@ -137,7 +134,6 @@ public class VariantTypeCounter implements Constants {
 	    this.variantCountMap.get(VariantType.UTR5);
 	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
 	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
-	int unknown = this.variantCountMap.get(VariantType.UNKNOWN);
 	int posErr = this.variantCountMap.get(VariantType.ERROR);
 
 	out.write("<td><ul>\n");
@@ -147,8 +143,6 @@ public class VariantTypeCounter implements Constants {
 	out.write(String.format("<li>intergenic: %d</li>\n<li>UTR3/UTR5: %d</li>",intergen,utr));
 	out.write(String.format("<li>Synonymous: %d</li>\n",synonym));
 	out.write(String.format("<li>Total: %d</li>\n",total));
-	if (unknown>0)
-	    out.write(String.format("<li>Unknown: %d</li>\n",unknown));
 	if (posErr>0)
 	    out.write(String.format("<li>Possible annotation errors: %d</li>\n",posErr));
 	out.write("</ul></td>\n");

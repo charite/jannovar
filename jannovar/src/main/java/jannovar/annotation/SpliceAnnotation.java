@@ -165,7 +165,7 @@ public class SpliceAnnotation {
 		return true;
 	    }
 	    if (start <= exonend && end > exonend) {
-		  System.out.println("LOGICAL ERROR HERE; FIX ME HERE D: " + start + " exonstart=" + exonstart);
+		  System.out.println("[SpliceAnnotation] LOGICAL ERROR: " + start + " exonstart=" + exonstart);
 		return true;
 	    }
 	}

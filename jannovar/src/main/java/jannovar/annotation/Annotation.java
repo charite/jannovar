@@ -235,8 +235,6 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case ERROR: s="Potential database error"; break;
 	case UTR5: s="UTR5"; break;
 	case UTR3: s="UTR3"; break;
-	case UNKNOWN: s = "unknown"; break;
-	default: s=String.format("NOT IMPLEMENTED YET, CHECK Annotation.java (Number:%d)",typ);
 	}
 	return s;
     }

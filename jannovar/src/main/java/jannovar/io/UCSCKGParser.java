@@ -347,7 +347,7 @@ public class UCSCKGParser implements  Constants {
 		//System.out.println(line);
 		try {
 		    TranscriptModel kg = parseTranscriptModelFromLine(line);
-		    String id = kg.getKnownGeneID();
+		    String id = kg.getAccessionNumber();
 		    this.knownGeneMap.put(id,kg);	   
 		} catch (KGParseException e) {
 		    //System.out.println("Exception parsing KnownGene.txt: " + e.toString());

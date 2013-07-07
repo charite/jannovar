@@ -13,7 +13,7 @@ package jannovar.common;
  * the document for the class
   {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.05 (6 July, 2013)
+ * @version 0.06 (7 July, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -50,9 +50,7 @@ public enum  VariantType {
 	STOPLOSS, 
 	/** Nucleotide substution that does not alter the encoded amino acid of the affected codon. */
 	SYNONYMOUS, 
-	/** Variant with unknown effect (this indicates some error in the code)*/
-	UNKNOWN, 
-	 /** Variant is upstream of a gene */
+	/** Variant is upstream of a gene */
 	UPSTREAM, 
 	/** Variant is located in the 3' untranslated region */
 	UTR3, 
@@ -78,7 +76,7 @@ public enum  VariantType {
      * <LI><B>upstream (8)</B>: UPSTREAM.
      * <LI><B>downstream (8)</B>: DOWNSTREAM.
      * <LI><B>intergenic (9)</B>: INTERGENIC.
-     * <LI><B>error (10)</B>: UNKNOWN, ERROR.
+     * <LI><B>error (10)</B>: ERROR.
      * </OL>
      * @param vt Type of the variant
      * @return priority level for sorting lists of variants.
@@ -114,7 +112,6 @@ public enum  VariantType {
 	    return 8;
 	case INTERGENIC:
 	return 9;
-	case UNKNOWN:
 	case ERROR:
 	    return 10;
 	default:

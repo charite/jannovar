@@ -6,33 +6,27 @@ import jannovar.common.Constants;
 
 
 /**
- * Encapsulates one line of the UCSC KnownGene.txt file. See {@link jannovar.io.UCSCKGParser} for an 
+ * This class encapsulates information about a single transcript. Jannovar has functionality to 
+ * use the data from the UCSC database (Known Genes) to extract information about transcripts. In this
+ * case, each line of the UCSC KnownGene.txt file will correspond to one {@code TranscriptModel}
+ * object. See {@link jannovar.io.UCSCKGParser} for an 
  * explanation of the structure of individual lines. Note that for now, we are not including
  * scaffolds such as chr4_ctg9_hap1 in the parsed lines (they throw an {@link jannovar.exception.KGParseException} and
  * are discarded by {@link jannovar.io.UCSCKGParser}). 
  * <P>
- * Note that the name of this class was changed from {@code KnownGene} to {@code TranscriptModel} on
- * April 28, 2013, because we want to be able to use not only UCSC KnownGenes, but also RefSeq and ENSEMBL gene models.
- * Some of the method names were changed (e.g., getName2, which returns a gene symbol for UCSC KnownGenes, but is
- * pretty lousy as a method name). In the future, we will add I/O code to be able to input these gene models as well.
+ * Additionally, it is possible to create comparable {@code TranscriptModel}
+ * objects by parsing other data sources (GTF files, for instance).
  * <P>
- * Some details about the implementation
- * <UL>
- * <LI>If we cannot find a cDNA sequence, we report "UNKNOWN" for mutations in this gene since it is impossible
- * to check the exact mutation position etc.
- * <LI>In annovar, $name
- * <LI> Note that the UCSC knownGene file has some strange entries. For instance, uc021ser.1 on chr14 has 4461 exons, but there is
- * no corresponding sequence in the knownGeneMrna file.
- * 
- * </UL>
+ * This class provides methods that allow the Chromosome class to calculate what annotations are
+ * appropriate for a given variant, and thus represents one of the core classes of Jannovar.
  * @author Peter N Robinson
- * @version 0.16, 24 May, 2013
+ * @version 0.17, 8 July, 2013
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
    
-    /** Name of gene using UCSC knownGene id (for instance, uc011nca.2). For now, keep the
-	version as part of the name. */
-    private String kgID=null;
+    /** Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may
+	be included. */
+    private String accession=null;
     /** Gene symbol of the known Gene. Can be null for some genes. Note that in annovar, $name2 corresponds to the
      * geneSymbol if available, otherwise the kgID is used.*/
     private String geneSymbol=null;
@@ -67,7 +61,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	is taken from knownToLocusLink.txt. */
     private int entrezGeneID=UNINITIALIZED_INT;
     /** Class version (for serialization). */
-    public static final long serialVersionUID = 3L;
+    public static final long serialVersionUID = 4L;
 
 
    
@@ -82,7 +76,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public static TranscriptModel createTranscriptModel() { return new TranscriptModel(); }
 
     /** @param acc an accession number such as the UCSC knownGene id. */
-    public void setAccessionNumber(String acc) { this.kgID = acc; }
+    public void setAccessionNumber(String acc) { this.accession = acc; }
     /** @param c The chromosome on which this gene is located. It is denoted by a byte constant that
      * is defined in {@link jannovar.common.Constants Constants}. */
     public void setChromosome(byte c) { this.chromosome = c; }
@@ -375,7 +369,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		}
 	    } 
 	    if ( CDSlength > 0 && cdsEnd < exonStarts[i])  {
-		System.err.println("Impossible parsing scenario for " + this.kgID + " (CDSend is less than exon start)");
+		System.err.println("Impossible parsing scenario for " + this.accession + " (CDSend is less than exon start)");
 		System.exit(1);
 	    } else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
 		CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
@@ -426,8 +420,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * is calculated by {@link #calculateRefCDSStart} . */
     public int getRefCDSStart() {  return this.rcdsStart;}
     
-    /** @return The UCSC Gene ID, e.g., uc021olp.1. */
-    public String getKnownGeneID() { return this.kgID; }
+    /** @return The accession number (e.g., the UCSC Gene ID: uc021olp.1) */
+    public String getAccessionNumber() { return this.accession; }
     /** @return '+' for Watson strand and '-' for Crick strand. */
     public char getStrand() { return this.strand; }
     /** @return true if strand is '+' */
@@ -436,7 +430,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public boolean isMinusStrand() { return this.strand == '-'; }
     /** Return the ucsc kg id, this corresponds to $name in annovar
      * @return name of this transcript, a UCSC knownGene id. */
-     public String getName() { return this.kgID; }
+     public String getName() { return this.accession; }
     /** Return the gene symbol, corresponds to {@code $name2} in annovar. Note that earlier versions
      * of the code called this function {@code getName2()}, but this was changed because it is
      * 	a potentially confusing name.
@@ -445,7 +439,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	if (this.geneSymbol != null) 
 	    return this.geneSymbol;
 	else
-	    return this.kgID;
+	    return this.accession;
     }
     
     
@@ -605,7 +599,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      */
     public void debugPrint() {
 	String chr=getChromosomeAsString();
-	System.err.println(String.format("%s:%s [%s (%c)]",kgID,geneSymbol,chr,strand));
+	System.err.println(String.format("%s:%s [%s (%c)]",accession,geneSymbol,chr,strand));
 	System.err.println(String.format("txStart: %d; txEnd: %d; cdsStart: %d, cdsEnd: %d",txStart,txEnd,cdsStart,cdsEnd));
 	System.err.println(String.format("rcdsStart: %d\tExon count: %d", rcdsStart,exonCount));
 	System.err.println(String.format("mRNAlength: %d, cdslength: %d",mRNAlength,CDSlength));
@@ -633,7 +627,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public String toString() {
 	return String.format("%s[%s]:%s:%d-%d [%d exons]",
 			     getGeneSymbol(),
-			     getKnownGeneID(),
+			     getAccessionNumber(),
 			     getChromosomeAsString(),
 			     getTXStart(),
 			     getTXEnd(),

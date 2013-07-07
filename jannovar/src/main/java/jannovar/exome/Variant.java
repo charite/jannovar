@@ -13,7 +13,7 @@ import jannovar.genotype.GenotypeCall;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.18 (17 June, 2013)
+ * @version 0.18 (7 July, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -311,7 +311,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	if (this.annot != null)
 	    return this.annot.getVariantType();
 	else
-	    return VariantType.UNKNOWN;
+	    return VariantType.ERROR;
     }
 
    

@@ -351,12 +351,12 @@ public class Chromosome {
 		    Annotation ann = null;
 		    if (kgl.isCodingGene() ) {
 			/* For now, the INTRONIC annotation is just the gene symbol */
-			String annot = kgl.getGeneSymbol();
+			String annot = kgl.getAccessionNumber();
 			ann = new Annotation(kgl,annot, VariantType.INTRONIC);
 		
 		    } else {
 			/* For now, the ncRNA_INTRONIC annotation is just the gene symbol */
-			String annot = kgl.getGeneSymbol();
+			String annot = kgl.getAccessionNumber();
 			ann = new Annotation(kgl,annot, VariantType.ncRNA_INTRONIC);
 		    }
 		    annovarFactory.addIntronicAnnotation(ann);
@@ -416,7 +416,7 @@ public class Chromosome {
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
 		    /* For now, annotation the ncRNA vars with just the gene symbol */
-		    String annot = kgl.getGeneSymbol();
+		    String annot = kgl.getAccessionNumber();
 		    Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
 		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		} else	if (end < cdsstart ) {					
@@ -548,7 +548,7 @@ public class Chromosome {
 		     * ------------------------------------------------------------- */
 		    if (kgl.isNonCodingGene()) {
 			/* For now, annotation the ncRNA vars with just the gene symbol */
-			String annot = kgl.getGeneSymbol();
+			String annot = kgl.getAccessionNumber();
 			Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
 			annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 			return;
@@ -586,11 +586,11 @@ public class Chromosome {
 		     Annotation ann = null;
 		     if (kgl.isCodingGene() ) {
 			 /* For now, the INTRONIC annotation is just the gene symbol */
-			 String annot = kgl.getGeneSymbol();
+			 String annot = kgl.getAccessionNumber();
 		     	ann = new Annotation(kgl,annot, VariantType.INTRONIC);
 		     } else {
 			 /* For now, the ncRNA_INTRONIC annotation is just the gene symbol */
-			 String annot = kgl.getGeneSymbol();
+			 String annot = kgl.getAccessionNumber();
 			 ann = new Annotation(kgl,annot, VariantType.ncRNA_INTRONIC);
 		     }
 		     annovarFactory.addIntronicAnnotation(ann);
@@ -626,7 +626,7 @@ public class Chromosome {
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
 		    /* For now, we annotate ncRNA variants with just the gene symbol */
-		    String annot = kgl.getGeneSymbol();
+		    String annot = kgl.getAccessionNumber();
 		    Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
 		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		    return; /* done with this annotation. */
@@ -707,7 +707,7 @@ public class Chromosome {
 	 * the reference sequence is given as longer the actual length of the transcript.*/
 	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
 	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
-				     kgl.getKnownGeneID(), refvarstart,frame_s,kgl.getActualSequenceLength());
+				     kgl.getAccessionNumber(), refvarstart,frame_s,kgl.getActualSequenceLength());
 	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	}
@@ -728,7 +728,7 @@ public class Chromosome {
 	       and error in genome annotations. */
 	    String s = String.format("Discrepancy between mRNA length and genome annotation ",
 				     "(variant at pos. %d of transcript with mRNA length %d):%s[%s]", 
-				     refvarstart,kgl.getMRNALength(), kgl.getKnownGeneID(), kgl.getName());
+				     refvarstart,kgl.getMRNALength(), kgl.getAccessionNumber(), kgl.getName());
 	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
@@ -740,7 +740,7 @@ public class Chromosome {
 	/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
 	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
 	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
-	    String s = String.format("%s, wtnt3-length: %d", kgl.getKnownGeneID(), wtnt3.length());
+	    String s = String.format("%s, wtnt3-length: %d", kgl.getAccessionNumber(), wtnt3.length());
 	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	    return; /* Probably reflects some database error. */
