@@ -19,7 +19,7 @@ import jannovar.exception.AnnotationException;
  * the sequence that is typically used for variant calling and thus informs the variant calls in the
  * VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this case, as in versions
  * of this class up to the 15th of December, 2012 (v. 0.04).
- * @version 0.08 (6 July, 2013)
+ * @version 0.09 (6 July, 2013)
  * @author Peter N Robinson
  */
 

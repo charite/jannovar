@@ -132,6 +132,29 @@ public class InsertionAnnotationTest implements Constants {
 }
 
 
+/**
+ *<P>
+ * annovar: FBXL21
+ * chr5:135272375->A
+ *</P>
+ */
+@Test public void testNcRnaExonicVar152() throws AnnotationException  {
+	byte chr = 5;
+	int pos = 135272375;
+	String ref = "-";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92_93insA:p.N31fs)",annot);
+	}
+}
+
 
 /**
  *<P>

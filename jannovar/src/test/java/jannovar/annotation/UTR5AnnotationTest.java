@@ -74,6 +74,31 @@ public class UTR5AnnotationTest implements Constants {
 	}
 }
 
+
+/**
+ *<P>
+ * annovar: AX747676
+ * chr13:76445189A>G
+ *</P>
+ */
+@Test public void testNcRnaExonicVar392() throws AnnotationException  {
+	byte chr = 13;
+	int pos = 76445189;
+	String ref = "A";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR5,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("C13orf45(uc001vjy.2:c.-74A>G)",annot);
+	}
+}
+
+
 /**
  *<P>
  * annovar: ECM1;ECM1
@@ -217,30 +242,6 @@ public class UTR5AnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: ZNHIT1
- * chr7:100861213T>C
- * This is correctly called as a nearcoding-gene by Jannovar, the
- * correct annotation is thus ncRNA_EXONIC
- *</P>
- */
-@Test public void testUTR5Var278() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 100861213;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNHIT1",annot);
-	}
-}
 
 /**
  *<P>
@@ -316,30 +317,6 @@ public class UTR5AnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: FOXRED1
- * chr11:126139100T>C
- * Correctly called ncRNA_EXONIC by Jannovar (Another isoform is UTR5)
- *</P>
- */
-@Test public void testUTR5Var386() throws AnnotationException  {
-	byte chr = 11;
-	int pos = 126139100;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FOXRED1",annot);
-	}
-}
-
-/**
- *<P>
  * annovar: FAM90A1
  * chr12:8377448T>-
  *</P>
@@ -361,29 +338,6 @@ public class UTR5AnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: MED21
- * chr12:27175494T>C
- * Correctly called ncRNA_EXONIC by Jannovar (Another isoform is 5UTR
- *</P>
- */
-@Test public void testUTR5Var394() throws AnnotationException  {
-	byte chr = 12;
-	int pos = 27175494;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MED21",annot);
-	}
-}
   
 /**
  *<P>
@@ -477,53 +431,8 @@ public class UTR5AnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: MYO15B
- * chr17:73586358G>A
- Correctly called ncRNA_EXONIC by Jannovar (Another isoform is 5UTR
- *</P>
- */
-@Test public void testUTR5Var540() throws AnnotationException  {
-	byte chr = 17;
-	int pos = 73586358;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MYO15B",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: TMEM150B
- * chr19:55832427T>G
- * Correctly called ncRNA_EXONIC  (there is another 5UTR isoform)
- *</P>
- */
-@Test public void testUTR5Var591() throws AnnotationException  {
-	byte chr = 19;
-	int pos = 55832427;
-	String ref = "T";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMEM150B",annot);
-	}
-}
+
 
 /**
  *<P>
@@ -576,29 +485,6 @@ public class UTR5AnnotationTest implements Constants {
 	}
 }
 
-/**
- *<P>
- * annovar: GRIA3
- * chrX_CHROMOSOME:122318387->C
- * correctly called ncRNA_EXONIC by Jannovar (there is also a 5UTR-annotation for another isoform)
- *</P>
- */
-@Test public void testUTR5Var643() throws AnnotationException  {
-	byte chr = X_CHROMOSOME;
-	int pos = 122318387;
-	String ref = "-";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GRIA3",annot);
-	}
-}
 
 
 }

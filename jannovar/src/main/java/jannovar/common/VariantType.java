@@ -13,7 +13,7 @@ package jannovar.common;
  * the document for the class
   {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.06 (7 July, 2013)
+ * @version 0.07 (7 July, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -74,9 +74,9 @@ public enum  VariantType {
      * <LI><B>intronic (6)</B>: INTRONIC
      * <LI><B>intronic (7)</B>: ncRNA_INTRONIC.
      * <LI><B>upstream (8)</B>: UPSTREAM.
-     * <LI><B>downstream (8)</B>: DOWNSTREAM.
-     * <LI><B>intergenic (9)</B>: INTERGENIC.
-     * <LI><B>error (10)</B>: ERROR.
+     * <LI><B>downstream (9)</B>: DOWNSTREAM.
+     * <LI><B>intergenic (10)</B>: INTERGENIC.
+     * <LI><B>error (11)</B>: ERROR.
      * </OL>
      * @param vt Type of the variant
      * @return priority level for sorting lists of variants.

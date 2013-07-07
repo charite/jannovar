@@ -58,7 +58,7 @@ import jannovar.reference.TranscriptModel;
  * decompressed files. The class checks of the files exist and if they have the suffix "gz".
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
- * @version 0.15 (3 July, 2013)
+ * @version 0.16 (7 July, 2013)
  */
 public class UCSCKGParser implements  Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */

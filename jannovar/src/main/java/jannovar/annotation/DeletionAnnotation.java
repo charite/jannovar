@@ -8,7 +8,7 @@ import jannovar.exception.AnnotationException;
 /**
  * This class provides static methods to generate annotations for deletion
  * mutations. 
- * @version 0.09 (7 July, 2013)
+ * @version 0.11 (7 July, 2013)
  * @author Peter N Robinson
  */
 

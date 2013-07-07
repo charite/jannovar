@@ -57,29 +57,7 @@ public class UpstreamAnnotationTest implements Constants {
 	System.gc();
     }
 
-/**
- *<P>
- * annovar: C1orf167
- * chr1:11831615C>T
- *</P>
- */
-@Test public void testUpstreamVar1() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 11831615;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C1orf167",annot);
-	}
-}
+
 
 /**
  *<P>
@@ -101,7 +79,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C1orf167",annot);
+	    Assert.assertEquals("C1orf167(dist=39)",annot);
 	}
 }
 /**
@@ -124,7 +102,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KIAA2013",annot);
+	    Assert.assertEquals("KIAA2013(dist=69)",annot);
 	}
 }
 
@@ -147,7 +125,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PADI6",annot);
+	    Assert.assertEquals("PADI6(dist=16)",annot);
 	}
 }
 
@@ -170,7 +148,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C8B",annot);
+	    Assert.assertEquals("C8B(dist=440)",annot);
 	}
 }
 
@@ -193,7 +171,7 @@ public class UpstreamAnnotationTest implements Constants {
 	VariantType varType = ann.getVariantType();
 	Assert.assertEquals(VariantType.UPSTREAM,varType);
 	String annot = ann.getVariantAnnotation();
-	Assert.assertEquals("Mir_548",annot);
+	Assert.assertEquals("Mir_548(dist=49)",annot);
     }
 }
 
@@ -217,7 +195,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SAMD13",annot);
+	    Assert.assertEquals("SAMD13(dist=37)",annot);
 	}
 }
 
@@ -241,7 +219,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CLCA3P",annot);
+	    Assert.assertEquals("CLCA3P(dist=50)",annot);
 	}
 }
 
@@ -265,64 +243,11 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ADAR",annot);
+	    Assert.assertEquals("ADAR(dist=77)",annot);
 	}
 }
 
-/**
- *<P>
- * annovar: ZNF847P
- * chr1:227885726G>A
- *</P>
- --- annovar mistaken, this is an intron of a oprotein coding gene.
- 
-@Test public void testUpstreamVar10() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 227885726;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    AnnotationList ann = anno_list.get(0);
-	    VariantType varType = ann.getVarType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF847P",annot);
-	}
-}
-*/
 
-/**
- *<P>
- * annovar: C1orf150
- * chr1:247712303T>C
- *</P>
- -- annovar mistaken, this is an intron of a mRNA
-@Test public void testUpstreamVar11() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 247712303;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    
-	    int N = anno_list.size();
-	    Assert.assertEquals(1,N);
-	    AnnotationList ann = anno_list.get(0);
-	    VariantType varType = ann.getVarType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("C1orf150",annot);
-	}
-}
-*/
 
 /**
  *<P>
@@ -343,7 +268,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR1C1",annot);
+	    Assert.assertEquals("OR1C1(dist=9)",annot);
 	}
 }
 
@@ -366,7 +291,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR11L1",annot);
+	    Assert.assertEquals("OR11L1(dist=15)",annot);
 	}
 }
 
@@ -389,7 +314,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR2T4",annot);
+	    Assert.assertEquals("OR2T4(dist=65)",annot);
 	}
 }
 
@@ -412,7 +337,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("Mir_548",annot);
+	    Assert.assertEquals("Mir_548(dist=105)",annot);
 	}
 }
 
@@ -435,125 +360,11 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMEM247",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZNF2
- * chr2:95830742->A
- *</P>
- */
-@Test public void testUpstreamVar17() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 95830742;
-	String ref = "-";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZNF2
- * chr2:95830742->A
- *</P>
- */
-@Test public void testUpstreamVar18() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 95830742;
-	String ref = "-";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: ZNF2
- * chr2:95830742->A
- *</P>
- */
-@Test public void testUpstreamVar19() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 95830742;
-	String ref = "-";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DQ580140
- * chr2:131414176C>T
- *</P>
- */
-@Test public void testUpstreamVar20() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 131414176;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("POTEJ(uc021vor.2:exon15:c.1843C>T:p.R615W)",annot);
+	    Assert.assertEquals("TMEM247(dist=86)",annot);
 	}
 }
 
 
-/**
- *<P>
- * annovar: CYBRD1
- * chr2:172378818A>G
- *</P>
- */
-@Test public void testUpstreamVar21() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 172378818;
-	String ref = "A";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CYBRD1",annot);
-	}
-}
 
 /**
  *<P>
@@ -574,124 +385,11 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SF3B1",annot);
+	    Assert.assertEquals("SF3B1(dist=37)",annot);
 	}
 }
 
-/**
- *<P>
- * annovar: KLF7
- * chr2:208031796C>G
- *</P>
- */
-@Test public void testUpstreamVar23() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 208031796;
-	String ref = "C";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.INTRONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KLF7",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: XRCC5
- * chr2:216973814C>T
- *</P>
- */
-@Test public void testUpstreamVar24() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 216973814;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("XRCC5",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: WDR69
- * chr2:228735448G>A
- *</P>
- */
-@Test public void testUpstreamVar25() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 228735448;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DAW1",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: HDAC4
- * chr2:240323906->G
- *</P>
- */
-@Test public void testUpstreamVar26() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 240323906;
-	String ref = "-";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HDAC4",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: RYBP
- * chr3:72495777C>G
- *</P>
- */
-@Test public void testUpstreamVar27() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 72495777;
-	String ref = "C";
-	String alt = "G";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("RYBP",annot);
-	}
-}
 
 /**
  *<P>
@@ -712,7 +410,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ROBO2",annot);
+	    Assert.assertEquals("ROBO2(dist=23)",annot);
 	}
 }
 
@@ -735,79 +433,12 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CEP97",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: SENP2
- * chr3:185300395G>A
- *</P>
- */
-@Test public void testUpstreamVar30() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 185300395;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SENP2",annot);
+	    Assert.assertEquals("CEP97(dist=33)",annot);
 	}
 }
 
 
-/**
- *<P>
- * annovar: PYDC2
- * chr3:191178925G>A
- *</P>
- */
-@Test public void testUpstreamVar31() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 191178925;
-	String ref = "G";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PYDC2",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: ATP13A5
- * chr3:193096529C>T
- *</P>
- */
-@Test public void testUpstreamVar32() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 193096529;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ATP13A5",annot);
-	}
-}
 
 /**
  *<P>
@@ -828,53 +459,7 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FGFBP2",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DQ593719
- * chr4:49561616G>C
- *</P>
- */
-@Test public void testUpstreamVar34() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 49561616;
-	String ref = "G";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DQ593719",annot);
-	}
-}
-
-/**
- *<P>
- * annovar: DQ593719
- * chr4:49561626TC>-
- *</P>
- */
-@Test public void testUpstreamVar35() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 49561626;
-	String ref = "TC";
-	String alt = "-";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DQ593719",annot);
+	    Assert.assertEquals("FGFBP2(dist=335)",annot);
 	}
 }
 
@@ -898,11 +483,12 @@ public class UpstreamAnnotationTest implements Constants {
 	if (c==null) {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    ann.debugPrint();
 	    VariantType varType = ann.getVariantType();
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    Assert.assertEquals("DQ596041,DQ591060",annot);
+	    Assert.assertEquals("DQ596041(dist=535),DQ591060(dist=37)",annot);
 	}
 }
 
@@ -925,55 +511,11 @@ public class UpstreamAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GRXCR2",annot);
+	    Assert.assertEquals("GRXCR2(dist=43)",annot);
 	}
 }
 
-/**
- *<P>
- * annovar: FAT2
- * chr5:150948537T>C
- *</P>
- */
-@Test public void testUpstreamVar38() throws AnnotationException  {
-	byte chr = 5;
-	int pos = 150948537;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAT2",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: F13A1
- * chr6:6321128T>C
- *</P>
- */
-@Test public void testUpstreamVar39() throws AnnotationException  {
-	byte chr = 6;
-	int pos = 6321128;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt); ;
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("F13A1",annot);
-	}
-}
 
 
 }

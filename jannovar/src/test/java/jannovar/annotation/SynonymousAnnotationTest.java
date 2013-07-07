@@ -63,28 +63,7 @@ public class SynonymousAnnotationTest implements Constants {
     }
 
 
-/**
- *<P>
- * KLHL17, several transcripts affected, some are synonymous and some are 3UTR.
- * There is one nearcoding RNA, and Jannovar correctly prioritizes as ncRNA_EXONIC
- *</P>
- */
-@Test public void testSynVar1hand() throws AnnotationException  {
-	byte chr = 1;
-	int pos = 897738;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KLHL17",annot);
-	}
-}
+
 
 /**
  *<P>
@@ -576,30 +555,6 @@ but was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p..
 }
 
 
-/**
- *<P>
- * annovar: MUC17:uc003uxp.1:exon3:c.9135T>C:p.S3045S,
- * chr7:100683832T>C
- * The variant hits both synonymous MUC17(uc003uxp.1:exon3:c.9135T>C:p.S3045S)
- * as well as a near-coding isoform. Jannovar correctly prioritizes as ncRNA_EXONIC
- *</P>
- */
-@Test public void testSynonymousVar126() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 100683832;
-	String ref = "T";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MUC17",annot);
-	}
-}
 
 /**
  *<P>

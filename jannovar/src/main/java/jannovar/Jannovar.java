@@ -86,7 +86,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.24 (8 July, 2013)
+ * @version 0.25 (8 July, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files

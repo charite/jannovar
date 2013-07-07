@@ -23,6 +23,7 @@ import jannovar.exception.AnnotationException;
 import jannovar.annotation.DeletionAnnotation;
 import jannovar.annotation.InsertionAnnotation;
 import jannovar.annotation.IntergenicAnnotation;
+import jannovar.annotation.NoncodingAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.BlockSubstitution;
 import jannovar.annotation.SpliceAnnotation;
@@ -53,7 +54,7 @@ import jannovar.interval.IntervalTree;
  * attempted to reimplement all of the copious functionality of that nice program,
  * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.26 (7 July, 2013)
+ * @version 0.27 (7 July, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -415,9 +416,9 @@ public class Chromosome {
 		 * a coding gene within the actual coding sequence (not UTR).                *
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
-		    /* For now, annotation the ncRNA vars with just the gene symbol */
-		    String annot = kgl.getAccessionNumber();
-		    Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
+		    ref = revcom(ref);
+		    alt = revcom(alt);
+		    Annotation ann =  NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt,k);
 		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		} else	if (end < cdsstart ) {					
 		    /* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns 
@@ -625,9 +626,9 @@ public class Chromosome {
 		 * a coding gene within the actual coding sequence (not UTR).                *
 		 * ------------------------------------------------------------------------- */
 		if (kgl.isNonCodingGene()) {
-		    /* For now, we annotate ncRNA variants with just the gene symbol */
-		    String annot = kgl.getAccessionNumber();
-		    Annotation ann = new Annotation(kgl,annot,VariantType.ncRNA_EXONIC);
+		    ref = revcom(ref);
+		    alt = revcom(alt);
+		    Annotation ann =  NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt,k);
 		    annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 		    return; /* done with this annotation. */
 		} else if (end < cdsstart) { 

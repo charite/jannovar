@@ -47,7 +47,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.21 (7 July, 2013)
+ * @version 0.23 (8 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -289,7 +289,8 @@ public class AnnotatedVariantFactory implements Constants {
      *is affected by a splice mutation.
      */
     public void addNcRNASplicing(Annotation ann) {
-	String s = String.format("%s[nc_transcript_variant]",ann.getVariantAnnotation());
+	String s = String.format("%s",ann.getVariantAnnotation());
+	this.hasNcRna=true;
 	ann.setVariantAnnotation(s);
 	this.annotationLst.add(ann);
     }

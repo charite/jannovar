@@ -85,6 +85,32 @@ public class IntergenicAnnotationTest implements Constants {
 	    
 	}
     }
+
+
+/**
+ *<P>
+ * annovar: POTEKP
+ * chr2:132349413G>A
+ *</P>
+ */
+@Test public void testNcRnaExonicVar79() throws AnnotationException  {
+	byte chr = 2;
+	int pos = 132349413;
+	String ref = "G";
+	String alt = "A";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.INTERGENIC,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CCDC74A(dist=58174),RNU6-81P(dist=11028)",annot);
+	}
+}
+
+
 /**
  *<P>
  * annovar: AK025975(dist=42221),LOC729059(dist=47759)

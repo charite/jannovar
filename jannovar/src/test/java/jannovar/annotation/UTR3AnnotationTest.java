@@ -82,6 +82,31 @@ public class UTR3AnnotationTest implements Constants {
 	}
 }
 
+
+
+/**
+ *<P>
+ * annovar: UNQ5810
+ * chr16:19315621C>G
+ *</P>
+ */
+@Test public void testNcRnaExonicVar495() throws AnnotationException  {
+	byte chr = 16;
+	int pos = 19315621;
+	String ref = "C";
+	String alt = "G";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.UTR3,varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("CLEC19A(uc002dga.5:c.*81C>G)",annot);
+	}
+}
+
 /**
  *<P>
  * annovar: ANGPTL3
@@ -601,53 +626,9 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	}
 }
 
-/**
- *<P>
- * annovar: AKR1D1
- * chr7:137801413A>C
- * ncRNA-Transcript exonic change together with UTR3 change of another isoform. Jannovar correctly prioritizes these
- *</P>
- */
-@Test public void testUTR3Var538() throws AnnotationException  {
-	byte chr = 7;
-	int pos = 137801413;
-	String ref = "A";
-	String alt = "C";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AKR1D1",annot);
-	}
-}
 
-/**
- *<P>
- * annovar: TMEM70
- * chr8:74893880C>T
- * ncRNA-Transcript exonic change together with UTR3 change of another isoform. Jannovar correctly prioritizes these
- *</P>
- */
-@Test public void testUTR3Var575() throws AnnotationException  {
-	byte chr = 8;
-	int pos = 74893880;
-	String ref = "C";
-	String alt = "T";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMEM70",annot);
-	}
-}
+
+
 
 /**
  *<P>

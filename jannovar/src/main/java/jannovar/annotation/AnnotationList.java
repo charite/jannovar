@@ -22,7 +22,7 @@ import java.util.Collections;
  * belong to the highest priority class by noting the class of the first annotation, and
  * not returning any annotation  of a lower priority level.
  * @author Peter N Robinson
- * @version 0.16 (6 July, 2013)
+ * @version 0.17 (7 July, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -301,15 +301,26 @@ public class AnnotationList {
 
     /**
      * This method returns a String for up/downstream variants.
-     * 
+     * Note that in some cases, we have up and downstream annotations.
+     * Note that UPSTREAM has a higher priority than DOWNSTREAM
      */
     private String getUpDownstreamAnnotation(ArrayList<Annotation> lst) {
-	Annotation ann = lst.get(0);
+	boolean first = true;
+	HashSet<String> seen = new HashSet<String>();
 	StringBuilder sb = new StringBuilder();
-	sb.append( ann.getVariantAnnotation());
-	for (int j=1;j<this.annotationList.size();++j) {
-	    ann  = this.annotationList.get(j);
-	    sb.append("," + ann.getVariantAnnotation());
+	for (Annotation a : lst) {
+	    String sym = a.getGeneSymbol();
+	    if (seen.contains(sym))
+		continue;
+	    else {
+		seen.add(sym);
+		if (first) {
+		    sb.append( a.getVariantAnnotation() );
+		    first = false;
+		} else {
+		    sb.append("," +  a.getVariantAnnotation() );
+		}
+	    }
 	}
 	return sb.toString();
     }
@@ -347,14 +358,24 @@ public class AnnotationList {
     private String getIntronicAnnotation(ArrayList<Annotation> lst) {
 	if (! hasMultipleGeneSymbols) { /* just a single gene affected */
 	    Annotation ann = lst.get(0);
-	    return ann.getVariantAnnotation();
-	} else { /* variant is in intron of multiple genes. */
-	    ArrayList<String> symbol_list = getSortedListOfGeneSymbols();
-	    String s = symbol_list.get(0);
+	    return ann.getSymbolAndAnnotation();
+	} else { /* variant is in intron of multiple genes, get one annotation each */
+	    HashSet<String> seen = new HashSet<String>(); 
 	    StringBuilder sb = new StringBuilder();
-	    sb.append(s);
-	    for (int i=1;i<symbol_list.size();++i) {
-		sb.append("," + symbol_list.get(i));
+	    boolean first = true;
+	    for (Annotation a: lst) {
+		String sym = a.getGeneSymbol();
+		if (seen.contains(sym)) {
+		    continue;
+		} else {
+		    seen.add(sym);
+		    if (first) {
+			sb.append(a.getSymbolAndAnnotation());
+			first = false;
+		    } else {
+			sb.append("," + a.getSymbolAndAnnotation());
+		    }
+		}
 	    }
 	    return sb.toString();
 	}
@@ -376,7 +397,7 @@ public class AnnotationList {
 	    String s = a.getVariantAnnotation();
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
-	    symbol_list.add(s);
+	    symbol_list.add(a.getSymbolAndAnnotation());
 	}
 	java.util.Collections.sort(symbol_list);
 	String s = symbol_list.get(0);

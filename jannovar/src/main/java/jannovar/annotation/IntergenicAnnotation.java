@@ -9,7 +9,7 @@ import jannovar.exception.AnnotationException;
 /**
  * This class is intended to provide a static method to generate annotations for INTERGENIC,
  * DOWNSTREAM and UPSTREAM variants.
- * @version 0.02 (5 July, 2013)
+ * @version 0.04 (7 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -58,27 +58,31 @@ public class IntergenicAnnotation {
      * @param pos The chromosomal position of the variant 
      */
     public static Annotation createUpDownstreamAnnotation(TranscriptModel trmdl, int pos) {
-	String annot = String.format("%s", trmdl.getGeneSymbol());
+
 	VariantType type=null;
 	if (trmdl == null) {
 	    System.out.println("createUpDownstreamAnnotation, TranscriptModel argument is null, pos=" + pos);
 	    System.exit(1);
 	}
 
-	
+	int dist=0;
 	if (trmdl.isFivePrimeToGene(pos)) {
+	    dist = trmdl.getTXStart() - pos;
 	    if (trmdl.isPlusStrand()) {
 		type=VariantType.UPSTREAM;
+	
 	    } else {
 		type=VariantType.DOWNSTREAM;
 	    }
 	} else if (trmdl.isThreePrimeToGene(pos)) {
+	    dist = pos - trmdl.getTXEnd();
 	    if (trmdl.isMinusStrand()) {
 		type=VariantType.UPSTREAM;
 	    } else {
 		type=VariantType.DOWNSTREAM;
 	    }
 	}
+	String annot = String.format("%s(dist=%d)", trmdl.getGeneSymbol(),dist);
 	return new Annotation(trmdl,annot,type);
     }
 

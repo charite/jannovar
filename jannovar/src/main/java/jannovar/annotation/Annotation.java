@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.26 (7 July, 2013)
+ * @version 0.27 (7 July, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},

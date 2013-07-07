@@ -26,7 +26,7 @@ import jannovar.reference.Translator;
  * The Human Genome Variation Society nomenclature for <b>3' UTR variants</b> works as follows.
  * <P>
  * ....
- * @version 0.12 (7 July, 2013)
+ * @version 0.13 (7 July, 2013)
  * @author Peter N Robinson
  */
 
