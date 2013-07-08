@@ -26,3 +26,5 @@ CLI library, i.e., it stands on its own. It does however require that all of the
 test phase be performed as part of the build.
 ->One can then run Jannovar as
 $ java -jar target/Jannovar.jar -H (change arguments for a particular kind of run)
+
+See the tutorial at http://compbio.charite.de/contao/index.php/jannovar.html for further information.
