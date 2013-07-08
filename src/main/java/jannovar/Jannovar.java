@@ -469,8 +469,8 @@ public class Jannovar {
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
-	    options.addOption(new Option(null,"ftp-proxy",true,"FTP Proxy"));
-	    options.addOption(new Option(null,"ftp-proxy-port",true,"FTP Proxy Port"));
+	    options.addOption(new Option(null,"proxy",true,"FTP Proxy"));
+	    options.addOption(new Option(null,"proxy-port",true,"FTP Proxy Port"));
 
 	    Parser parser = new GnuParser();
 	    CommandLine cmd = parser.parse(options,args);
