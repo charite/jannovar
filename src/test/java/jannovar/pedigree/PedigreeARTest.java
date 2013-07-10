@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import jannovar.common.Disease;
 import jannovar.common.Genotype;
+import jannovar.exome.Variant;
 import jannovar.exception.PedParseException;
 import jannovar.genotype.GenotypeCall;
 import jannovar.io.PedFileParser;
@@ -56,25 +57,38 @@ public class PedigreeARTest {
             Assert.assertEquals(6,n);
         }
 	
-    private GenotypeCall constructGenotypeCall(Genotype... calls) {
+    private GenotypeCall constructGenotypeCall2(Genotype... calls) {
         ArrayList<Genotype> lst = new ArrayList<Genotype>();
         for (Genotype g: calls) lst.add(g);
         return new GenotypeCall(lst,null);
     }
+         
+    private Variant constructGenotypeCall(Genotype... calls) {
+	ArrayList<Genotype> lst = new ArrayList<Genotype>();
+	for (Genotype g: calls) {
+	    lst.add(g);
+	}
+	GenotypeCall gc = new GenotypeCall(lst,null);
+	Variant v = new Variant ((byte)1, 1, "A", "C", gc, 20); 
+
+        return v;
+    }
+
     
 
     /**
      * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
      */
     @Test public void testARinheritance1() {
-        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	ArrayList<Variant> lst = new ArrayList<Variant>();
+        Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	GenotypeCall mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
 	/* mg3 is compatible with linkage. */
-	GenotypeCall mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
+	Variant  mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
 							 Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,Genotype.HOMOZYGOUS_REF);
-        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
+       
         lst.add(mg1);
 	lst.add(mg2);
 	lst.add(mg3);
@@ -87,15 +101,15 @@ public class PedigreeARTest {
      * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
      */
     @Test public void testARinheritance3() {
-        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
-                                                        Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	GenotypeCall mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
-                                                        Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
+	ArrayList<Variant> lst = new ArrayList<Variant>();
+	Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+					   Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
+	Variant	mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+					    Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
 	/* mg3 is compatible with linkage */
-	GenotypeCall mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
-							 Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,Genotype.HOMOZYGOUS_REF);
-        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
-        lst.add(mg1);
+	Variant	mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
+					    Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,Genotype.HOMOZYGOUS_REF);
+	lst.add(mg1);
 	lst.add(mg2);
 	lst.add(mg3);
         boolean b = pedigree.isCompatibleWithAutosomalRecessive(lst);
@@ -107,22 +121,22 @@ public class PedigreeARTest {
      * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
      */
     @Test public void testARinheritance4() {
-        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	ArrayList<Variant> lst = new ArrayList<Variant>();
+	Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	GenotypeCall mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	Variant	mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT);
 	/* mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET */
-	GenotypeCall mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
-							 Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
-        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
-        lst.add(mg1);
+	Variant	mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_ALT,
+					    Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
+	lst.add(mg1);
 	lst.add(mg2);
 	lst.add(mg3);
         boolean b = pedigree.isCompatibleWithAutosomalRecessive(lst);
 	//pedigree.debugPrint();
         Assert.assertEquals(false,b);  
     }
-
+    
     
     /**
     
@@ -136,13 +150,12 @@ public class PedigreeARTest {
      Here, mg1 is paternal het, mg2 is maternal het
      */
     @Test public void testARinheritanceCompoundHet1() {
-        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+	ArrayList<Variant> lst = new ArrayList<Variant>();
+	Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	GenotypeCall mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF);
 	/* mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET */
-
-        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
 	
@@ -163,17 +176,14 @@ public class PedigreeARTest {
      Here, mg1 is paternal het, mg2 is maternal het, but one of theunaffecteds is compound het (dau2
      */
     @Test public void testARinheritanceCompoundHet2() {
-        GenotypeCall mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
+	ArrayList<Variant> lst = new ArrayList<Variant>();
+        Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,
                                                         Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	GenotypeCall mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
+	Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS,
                                                         Genotype.HOMOZYGOUS_REF,Genotype.HETEROZYGOUS,Genotype.HETEROZYGOUS);
-	/* mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET */
-
-        ArrayList<GenotypeCall> lst = new ArrayList<GenotypeCall>();
         lst.add(mg1);
 	lst.add(mg2);
-	
-        boolean b = pedigree.isCompatibleWithAutosomalRecessive(lst);
+	boolean b = pedigree.isCompatibleWithAutosomalRecessive(lst);
         Assert.assertEquals(false,b);  
     }
 

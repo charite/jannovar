@@ -48,7 +48,7 @@ import jannovar.exome.Variant;
  * {@link #adjustSampleOrderInPedFile}.
  * 
  * @author Peter Robinson
- * @version 0.12 (30 June, 2013)
+ * @version 0.13 (10 July, 2013)
  */
 public class Pedigree {
     /**
@@ -363,17 +363,21 @@ public class Pedigree {
      * The samples represented by the
      * {@link jannovar.genotype.GenotypeCall GenotypeCall} must be in
      * the same order as the list of Persons contained in this pedigree.
+     * @param varList A list of variants (usually all variants corresponding to one gene).
      */
-    public boolean isCompatibleWithAutosomalDominant(ArrayList<GenotypeCall> gtypeList) {
+    public boolean isCompatibleWithAutosomalDominant(ArrayList<Variant> varList) {
+	
+	/** If the VCF file only contains one sample, the following if-clause
+	    will be executed. */
 	if (this.isSingleSample) {
-	    return singleSampleHasHeterozygousVariant(gtypeList);
+	    return singleSampleHasHeterozygousVariant(varList);
 	}
-
-
-        for (GenotypeCall multiGT : gtypeList){
-          int N = multiGT.getNumberOfIndividuals();
-          boolean variantCompatible=true; /* Is the current variant compatible with AD? */
-          int n_affected_with_het = 0;
+        //for (GenotypeCall multiGT : gtypeList){
+	for (Variant v : varList) {
+	    GenotypeCall multiGT = v.getGenotype();
+	    int N = multiGT.getNumberOfIndividuals();
+	    boolean variantCompatible=true; /* Is the current variant compatible with AD? */
+	    int n_affected_with_het = 0;
           for (int i=0;i<N;++i) {
               Genotype gt = multiGT.getGenotypeInIndividualN(i);
               Disease diseaseStatus = personList.get(i).getDiseaseStatus();
@@ -574,10 +578,11 @@ public class Pedigree {
      * parents. All such variants are stored. If there are such variants, then it checks
      * whether the maternal-het mutations are compatible with the paternal het mutations, and
      * it returns all variants for which there are compatible pairs.
+     * @param varList A list of variants (usually all variants in some gene).
      */
-    public boolean isCompatibleWithAutosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
+    public boolean isCompatibleWithAutosomalRecessive(ArrayList<Variant> varList) {
 	if (this.isSingleSample) {
-	    return singleSampleCompatibleWithAutosomalRecessive(gtypeList);
+	    return singleSampleCompatibleWithAutosomalRecessive(varList);
 	}
 
 	/* If we get here, there is no compatible homozygous mutation. 
@@ -591,7 +596,9 @@ public class Pedigree {
 	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
 	}
 
-	for (GenotypeCall multiGT : gtypeList) {
+	//for (GenotypeCall multiGT : gtypeList) {
+	for (Variant v : varList) {
+	    GenotypeCall multiGT = v.getGenotype();
 	    if (containsCompatibleHomozygousVariant(multiGT)) {
 		/* If this is the case, we are good. */
 		return true;
@@ -636,67 +643,78 @@ public class Pedigree {
      * <P>
      * If there are multiple samples, then 
      */
-    public boolean isCompatibleWithXChromosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
+    public boolean isCompatibleWithXChromosomalRecessive(ArrayList<Variant> varList) {
+	if (varList.size()==0) {
+	    System.out.println("[Pedigree.java] Warning: attempt to test zero-length variant list");
+	    return false;
+	}
+	/* First check whether the gene is X-chromosomal, if not, it cannot be
+	   X chromosomally inherited!. */
+	if (! varList.get(0).is_X_chromosomal() ) {
+	    return false;
+	}
 	if (this.isSingleSample) {
-	    for (GenotypeCall gc: gtypeList) {
+	    for (Variant v: varList) {
+		GenotypeCall gc = v.getGenotype();
 		Genotype g = gc.getGenotypeInIndividualN(0);
 		if (g == Genotype.HOMOZYGOUS_ALT) return true;
 	    }
 	    return false; /* Single sample, no appropriate variant in this gene. */
 	}
 	/* If we get here, there is a multiple sample. */
-	 for (GenotypeCall gc: gtypeList) {
-	     boolean compatible = true;
-	     for (Person p : affectedList) {
-		 int i = p.getIndex();
-		 Genotype g = gc.getGenotypeInIndividualN(i);
-		 if (g != Genotype.HOMOZYGOUS_ALT) {
-		     compatible = false;
-		     break; 
-		 /* Cannot be disease-causing mutation, 
-		    an affected male does not have it. */
-		 }
-		 if (! compatible) break;
-	     }
-	     for (Person p : parentList) {
-		 int i = p.getIndex();
-		 Genotype g = gc.getGenotypeInIndividualN(i);
-		 if (p.isMale() && 
-		     ! p.isAffected() &&
-		     g == Genotype.HOMOZYGOUS_ALT) {
-		     compatible = false;
-		     break; 
-		     /* Cannot be disease-causing mutation, 
-			an unaffected father has it. */
-		 }
-		 if (p.isFemale() && 
-		     g != Genotype.HETEROZYGOUS) {
-		     compatible = false;
-		     break;
-		     /* Cannot be disease-causing mutation, 
-			mother of patient is not heterozygous. */
-		 }
-		 if (! compatible) break;
-	     }
-	     for (Person p : unaffectedList ) {
-		 int i = p.getIndex();
-		 Genotype g = gc.getGenotypeInIndividualN(i);
-		 if (p.isMale() &&
-		     g == Genotype.HOMOZYGOUS_ALT) {
-		     compatible = false;
-		     break; 
-		      /* Cannot be disease-causing mutation, 
-			 an unaffected brother has it. */
-		 }
-		 if (p.isFemale() &&
-		     g == Genotype.HOMOZYGOUS_ALT) {
-		     break;
-		      /* Cannot be disease-causing mutation, 
-			 an unaffected sister is homozygos. */
-		 }
-	     }
-	     if (compatible) return true;
-	 }
+	for (Variant v : varList) {
+	    GenotypeCall gc = v.getGenotype();
+	    boolean compatible = true;
+	    for (Person p : affectedList) {
+		int i = p.getIndex();
+		Genotype g = gc.getGenotypeInIndividualN(i);
+		if (g != Genotype.HOMOZYGOUS_ALT) {
+		    compatible = false;
+		    break; 
+		    /* Cannot be disease-causing mutation, 
+		       an affected male does not have it. */
+		}
+		if (! compatible) break;
+	    }
+	    for (Person p : parentList) {
+		int i = p.getIndex();
+		Genotype g = gc.getGenotypeInIndividualN(i);
+		if (p.isMale() && 
+		    ! p.isAffected() &&
+		    g == Genotype.HOMOZYGOUS_ALT) {
+		    compatible = false;
+		    break; 
+		    /* Cannot be disease-causing mutation, 
+		       an unaffected father has it. */
+		}
+		if (p.isFemale() && 
+		    g != Genotype.HETEROZYGOUS) {
+		    compatible = false;
+		    break;
+		    /* Cannot be disease-causing mutation, 
+		       mother of patient is not heterozygous. */
+		}
+		if (! compatible) break;
+	    }
+	    for (Person p : unaffectedList ) {
+		int i = p.getIndex();
+		Genotype g = gc.getGenotypeInIndividualN(i);
+		if (p.isMale() &&
+		    g == Genotype.HOMOZYGOUS_ALT) {
+		    compatible = false;
+		    break; 
+		    /* Cannot be disease-causing mutation, 
+		       an unaffected brother has it. */
+		}
+		if (p.isFemale() &&
+		    g == Genotype.HOMOZYGOUS_ALT) {
+		    break;
+		    /* Cannot be disease-causing mutation, 
+		       an unaffected sister is homozygos. */
+		}
+	    }
+	    if (compatible) return true;
+	}
 	return false;
     }
     
@@ -730,9 +748,10 @@ public class Pedigree {
      * autosomal recessive inheritance. Since this is a single sample, we just check
      * in the proband.
      */
-    public boolean singleSampleCompatibleWithAutosomalRecessive(ArrayList<GenotypeCall> gtypeList) {
+    public boolean singleSampleCompatibleWithAutosomalRecessive(ArrayList<Variant> varList) {
 	int n_het = 0;
-	for (GenotypeCall gc: gtypeList) {
+	for (Variant v : varList) {
+	    GenotypeCall gc = v.getGenotype();
 	    Genotype g = gc.getGenotypeInIndividualN(0);
 	    if (g == Genotype.HOMOZYGOUS_ALT)
 		return true;
@@ -752,8 +771,9 @@ public class Pedigree {
      * Since this is a single sample, we just check
      * in the proband.
      */
-    public boolean singleSampleHasHeterozygousVariant(ArrayList<GenotypeCall> gtypeList) {
-	for (GenotypeCall gc: gtypeList) {
+    public boolean singleSampleHasHeterozygousVariant(ArrayList<Variant> varList) {
+	for (Variant v : varList) {
+	    GenotypeCall gc = v.getGenotype();
 	    Genotype g = gc.getGenotypeInIndividualN(0);
 	    if (g == Genotype.HETEROZYGOUS)
 		return true;
