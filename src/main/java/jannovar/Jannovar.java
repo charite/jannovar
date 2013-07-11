@@ -90,7 +90,7 @@ import jannovar.reference.TranscriptModel;
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
-     * knownGene.txt, kgXref.txt, knownGeneMrnfile knownGene.txt 
+     * knownGene.txt, kgXref.txt, knownGeneMrnfile knownGene.txt
      * (the files may or may not be compressed with gzip. The same variable is
      * also used to indicate the location of the download directory. The default value
      * is "ucsc".*/
