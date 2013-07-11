@@ -1,30 +1,37 @@
 Jannovar
 
-A Java library and executable for annotating VCF files with gene/transcript-based
-annotations and adding simple pedigree/genotype filtering capabilities. This is
-a maven project that integrates the test and build phases. Here are the most
-important commands.
+Jannovar is a Java library and executable for annotating VCF files with 
+gene/transcript-based annotations and adding simple pedigree/genotype filtering 
+capabilities.
 
-
+The source code of Jannovar is organized as a maven project that integrates the 
+test and build phases. Here are the most important commands:
 
 $ mvn compile
 -> This compiles all the Java classes
+
 $ mvn jar:jar
 -> This builds a jar archive with all the classes but no Manifest for the
-main class
-$ mvn test
--> This causes all of the test classes to be executed. It also runs the
-cobertura test-coverage pluiing. This causes files to be written to the
-target/site/cobertura directory.
-$ mvn javadoc:javadoc
--> This causes javadoc to be written to the directory
-target/site/apidocs
-$ mvn package
-->This causes an executable Jar file to be created in the directory target. It makes
-use of the shade:shade maven goal to package a Jar file that also includes the Apache
-CLI library, i.e., it stands on its own. It does however require that all of the
-test phase be performed as part of the build.
-->One can then run Jannovar as
-$ java -jar target/Jannovar.jar -H (change arguments for a particular kind of run)
+   main class
 
-See the tutorial at http://compbio.charite.de/contao/index.php/jannovar.html for further information.
+$ mvn test
+-> This causes all of the test classes to be executed. It also runs 
+   the cobertura test-coverage pluiing. This causes files to be written to the 
+   target/site/cobertura directory.
+
+$ mvn javadoc:javadoc
+-> This causes javadoc to be written to the directory target/site/apidocs
+
+$ mvn package
+-> This causes an executable Jar file to be created in the directory target. It 
+   makes use of the shade:shade maven goal to package a Jar file that also 
+   includes the Apache CLI library, i.e., it stands on its own. It does however 
+   require that all of the test phase be performed as part of the 
+   build.
+
+After building the mvn package, one can then run Jannovar as
+$ java -jar target/Jannovar.jar -H
+Change arguments for a particular kind of run.
+
+See the tutorial at http://compbio.charite.de/contao/index.php/jannovar.html for 
+further information.
