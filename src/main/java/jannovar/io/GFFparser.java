@@ -200,10 +200,7 @@ public class GFFparser {
 //		if(!fields[ATTRIBUTES].endsWith(";"))
 //			this.isGFF = true;
 		feature.setAttributes(processAttributes(fields[ATTRIBUTES]));
-		
 		return feature;
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private short codePhase(String phase) {

@@ -190,13 +190,13 @@ public class TranscriptModelBuilder implements ChromosomMap{
 //		System.out.println(curGeneID);	
 		// if the gene is not known yet --> add
 		if(!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID,curGeneName,feature.getSequence_id()));
+			genes.put(curGeneID, new Gene(curGeneID,curGeneName,feature.getSequence_id(),feature.strand));
 		// get Gene
 		curGene	= genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if(!rna2gene.containsKey(curRnaID)){
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID,curRnaID,feature.getSequence_id()));
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID,curRnaID,feature.getSequence_id(),feature.strand));
 		}
 		// get RNA
 		curRna	= curGene.rnas.get(curRnaID);
@@ -248,7 +248,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 			genes.put(curGeneID, new Gene());
 //			System.out.println("Added gene with ID: "+curGeneID);
 		}
-		curGene = this.genes.get(curGeneID);	
+		curGene = this.genes.get(curGeneID);
 		curGene.strand 	= feature.getStrand();
 		curGene.start	= feature.getStart();
 		curGene.end		= feature.getEnd();
@@ -259,7 +259,6 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		// extract Xreferences
 		if(feature.getAttribute("Dbxref") != null)
 			extractXreferences(feature.getAttribute("Dbxref"));
-		
 	}
 
 
@@ -352,10 +351,11 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		ArrayList<GFFstruct> exons;
 		ArrayList<GFFstruct> cdss;
 		
-		public Transcript(String id, String name, String chr) {
+		public Transcript(String id, String name, String chr,boolean strand) {
 			this.id	= id;
 			this.name	= name;
 			this.chromosom	= chr;
+			this.strand	= strand;
 			exons	= new ArrayList<TranscriptModelBuilder.GFFstruct>();
 			cdss	= new ArrayList<TranscriptModelBuilder.GFFstruct>();
 		}
@@ -457,10 +457,11 @@ public class TranscriptModelBuilder implements ChromosomMap{
 //		ArrayList<GFFstruct> cdss;
 		HashMap<String,Transcript> rnas;
 		
-		public Gene(String id, String name, String chr) {
+		public Gene(String id, String name, String chr, boolean strand) {
 			this.id	= id;
 			this.name	= name;
 			this.chromosom	= chr;
+			this.strand	= strand;
 			exons	= new ArrayList<TranscriptModelBuilder.GFFstruct>();
 			rnas	= new HashMap<String, TranscriptModelBuilder.Transcript>();
 			

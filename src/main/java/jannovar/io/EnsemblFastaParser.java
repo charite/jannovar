@@ -17,10 +17,12 @@ public class EnsemblFastaParser {
 	private String accession;
 	private String sequence;
 	private ArrayList<TranscriptModel> transcriptmodels;
+	private ArrayList<TranscriptModel> transcriptmodelsProcessed;
 	private HashMap<String, Integer> transcript2index;
 	public EnsemblFastaParser(String filename, ArrayList<TranscriptModel> models) {
 		this.filename	= filename;
 		this.transcriptmodels	= models;
+		this.transcriptmodelsProcessed = new ArrayList<TranscriptModel>();
 		transcript2index = new HashMap<String, Integer>(transcriptmodels.size());
 		for (int i = 0; i < transcriptmodels.size(); i++) {
 			transcript2index.put(transcriptmodels.get(i).getAccessionNumber(), i);
@@ -31,7 +33,7 @@ public class EnsemblFastaParser {
 	/**
 	 * Parse the mRNA sequences and thereby add these to the {@link TranscriptModel}s.
 	 */
-	public void parse(){
+	public ArrayList<TranscriptModel> parse(){
 		BufferedReader in = null;
 		String[] fields; 
 		String str;
@@ -62,7 +64,7 @@ public class EnsemblFastaParser {
 				e.printStackTrace();
 			}
 		}
-		
+		return transcriptmodelsProcessed;
 	}
 
 	/**
@@ -70,9 +72,11 @@ public class EnsemblFastaParser {
 	 */
 	private void addSequenceToModel() {
 		Integer idx;
+		
 		if((idx = transcript2index.get(accession)) != null){
 			transcriptmodels.get(idx).setSequence(sequence);
 			transcriptmodels.get(idx).initialize();
+			transcriptmodelsProcessed.add(transcriptmodels.get(idx));
 		}
 //		System.out.println(accession+"\t"+sequence);
 	}
