@@ -29,7 +29,8 @@ public class TranscriptModelBuilder implements ChromosomMap{
 	
 	private int gff_version	= 2;
 	private int subregion_Index = 0;
-	
+
+	private String curGeneName;
 	private String curGeneID;
 	private String curRnaID;
 	private String curID;
@@ -176,6 +177,8 @@ public class TranscriptModelBuilder implements ChromosomMap{
 			curID		= "sub"+(subregion_Index++);
 			curRnaID	= feature.getAttribute("transcript_id");
 			curGeneID	= feature.getAttribute("gene_id");
+			if((curGeneName = feature.getAttribute("gene_name")) == null)
+				curGeneName = curGeneID;
 		}
 //		System.out.println("Gene: "+curGeneID+"\tRNA: "+curRnaID);
 //		System.out.println(feature.toLine());
@@ -187,7 +190,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 //		System.out.println(curGeneID);	
 		// if the gene is not known yet --> add
 		if(!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID,curGeneID,feature.getSequence_id()));
+			genes.put(curGeneID, new Gene(curGeneID,curGeneName,feature.getSequence_id()));
 		// get Gene
 		curGene	= genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene

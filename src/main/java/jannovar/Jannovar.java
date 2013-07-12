@@ -489,6 +489,8 @@ public class Jannovar {
 		// add sequences
 		EnsemblFastaParser efp = new EnsemblFastaParser(this.dirPath+Constants.ensembl_cdna, transcriptModelList);
 		efp.parse();
+		for(int i=0;i< 5;i++)
+			transcriptModelList.get(i).debugPrint();
 	}
 
 
