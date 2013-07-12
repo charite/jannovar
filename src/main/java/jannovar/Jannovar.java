@@ -489,9 +489,11 @@ public class Jannovar {
 		}
 		// add sequences
 		EnsemblFastaParser efp = new EnsemblFastaParser(this.dirPath+Constants.ensembl_cdna, transcriptModelList);
-		efp.parse();
-		for(int i=0;i< 5;i++)
-			transcriptModelList.get(i).debugPrint();
+		int before	= transcriptModelList.size();
+		transcriptModelList = efp.parse();
+		int after = transcriptModelList.size();
+		System.out.println(String.format("removed %d (%d --> %d) transcript models w/o rna sequence",before-after,before, after));
+		
 	}
 
 

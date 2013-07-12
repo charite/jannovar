@@ -426,7 +426,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 					if(cdsStart < cds.start)
 						cdsStart = cds.start;
 			if(cdsStart == Integer.MAX_VALUE)
-				cdsStart = getTxStart();
+				cdsStart = getTxStart()+1;
 			return cdsStart;
 		}
 		
