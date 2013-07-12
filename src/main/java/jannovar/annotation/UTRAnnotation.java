@@ -70,7 +70,7 @@ public class UTRAnnotation {
 	    ann.setVariantAnnotation(annotation);
 
 	}
-	ann.setGeneID( trmdl.getEntrezGeneID() );
+	ann.setGeneID( trmdl.getGeneID() );
 	return ann;
     }
 
@@ -109,7 +109,7 @@ public class UTRAnnotation {
 	    String annotation = String.format("%s:c.-%d%s>%s",trmdl.getName(),distance,ref,alt);
 	    ann.setVariantAnnotation(annotation);
 	}
-	ann.setGeneID( trmdl.getEntrezGeneID() );
+	ann.setGeneID( trmdl.getGeneID() );
 	return ann;
     }
 

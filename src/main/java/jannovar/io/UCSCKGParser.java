@@ -353,7 +353,7 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 		    System.exit(1);
 		}
 		String id = A[0];
-		Integer entrez = Integer.parseInt(A[1]);
+		Integer geneID = Integer.parseInt(A[1]);
 		TranscriptModel kg = this.knownGeneMap.get(id);
 		if (kg == null) {
 		    /** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
@@ -363,7 +363,7 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 		    //System.exit(1);
 		}
 		foundID++;
-		kg.setEntrezGeneID(entrez);
+		kg.setGeneID(geneID);
 	    }
 	    br.close();
 	    String msg = String.format("Done parsing knownToLocusLink. Got ids for %d knownGenes. Missed in %d",

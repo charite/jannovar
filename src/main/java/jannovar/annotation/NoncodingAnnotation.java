@@ -48,7 +48,7 @@ public class NoncodingAnnotation {
 	   
 	}
 	Annotation ann = new Annotation(trmdl, annotation, VariantType.ncRNA_EXONIC,rvarstart);
-	ann.setGeneID( trmdl.getEntrezGeneID() );
+	ann.setGeneID( trmdl.getGeneID() );
 	ann.setGeneSymbol( trmdl.getGeneSymbol() );
 	return ann;
     }
