@@ -80,6 +80,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 					model.setChromosome(curChrom);
 				else
 					continue;
+				model.setGeneSymbol(gene.name);
 				model.setStrand(rna.strand ? '+' : '-');
 				model.setTranscriptionStart(rna.getTxStart());
 				model.setTranscriptionEnd(rna.getTxEnd());
@@ -395,7 +396,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		int getTxStart(){
 			if(start == Integer.MAX_VALUE)
 				for (GFFstruct exon : exons) 
-					if(start < exon.start)
+					if(start > exon.start)
 						start = exon.start;
 			return start;
 		}

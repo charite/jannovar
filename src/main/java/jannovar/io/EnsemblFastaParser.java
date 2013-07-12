@@ -70,8 +70,10 @@ public class EnsemblFastaParser {
 	 */
 	private void addSequenceToModel() {
 		Integer idx;
-		if((idx = transcript2index.get(accession)) != null)
+		if((idx = transcript2index.get(accession)) != null){
 			transcriptmodels.get(idx).setSequence(sequence);
+			transcriptmodels.get(idx).initialize();
+		}
 //		System.out.println(accession+"\t"+sequence);
 	}
 }

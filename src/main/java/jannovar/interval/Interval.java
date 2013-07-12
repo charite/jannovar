@@ -82,6 +82,7 @@ public class Interval<T> implements java.io.Serializable {
 	} else {
 	    System.out.println("Error, low endpoint higher than upper endpoint for interval");
 	    System.out.println("Recheck the format of the input data, low end of interval must be less than high end");
+	    System.out.println(String.format("lo:%d-high:%d ()",this.lowpoint,this.highpoint));
 	    System.exit(1);
 	}
     }
