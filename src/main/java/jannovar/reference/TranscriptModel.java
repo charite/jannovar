@@ -57,9 +57,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     private int CDSlength;
     /** cDNA sequence of the spliced RNA of this known gene transcript. */
     private String sequence=null;
-    /** The NCBI EntrezGene id that corresponds to the UCSC knownGene transcript. Note that this information
-	is taken from knownToLocusLink.txt. */
-    private int entrezGeneID=UNINITIALIZED_INT;
+    /** The Gene id that corresponds to the transcript model. Note that this information
+	is taken from knownToLocusLink.txt or modified Ensembl Gene ids. */
+    private int geneID=UNINITIALIZED_INT;
     /** Class version (for serialization). */
     public static final long serialVersionUID = 4L;
 
@@ -571,17 +571,17 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     }
     /**
      * This method is used by {@link jannovar.io.UCSCKGParser UCSCKGParser}
-     * to add the EntrezGene id (from knowntoLocusLink.txt) to the KnownGene object.
-     * @param id an EntrezGene id 
+     * to add the Gene id (from knowntoLocusLink.txt) to the KnownGene object.
+     * @param id an Gene id 
      */
-    public void setEntrezGeneID(int id) {
-	this.entrezGeneID=id;
+    public void setGeneID(int id) {
+	this.geneID=id;
     }
 
     /**
-     * @return The NCBI Entrez Gene ID
+     * @return The Gene ID.
      */
-    public int  getEntrezGeneID() { return this.entrezGeneID; }
+    public int  getGeneID() { return this.geneID; }
 
     
     /**

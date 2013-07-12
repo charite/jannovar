@@ -76,7 +76,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	this.varType = type;
 	this.variantAnnotation = annotation;
 	this.geneSymbol = tmdl==null?null:tmdl.getGeneSymbol();
-	this.entrezGeneID = tmdl==null?null:tmdl.getEntrezGeneID();
+	this.entrezGeneID = tmdl==null?null:tmdl.getGeneID();
     }
 
     /**
