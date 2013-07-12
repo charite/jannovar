@@ -20,7 +20,6 @@ import java.util.HashMap;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-import jannovar.annotation.DownstreamAnnotationTest;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.IntervalTreeException;
