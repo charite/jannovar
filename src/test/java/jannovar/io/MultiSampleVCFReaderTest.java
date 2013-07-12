@@ -30,9 +30,9 @@ public class MultiSampleVCFReaderTest  {
     @BeforeClass
 	public static void setUp() throws IOException,VCFParseException
     {
-         java.net.URL url = MultiSampleVCFReaderTest.class.getResource("/MultiTestExome.vcf");
+	java.net.URL url = MultiSampleVCFReaderTest.class.getResource("/MultiTestExome.vcf");
         String path = url.getPath();
-        reader = new VCFReader();
+	reader = new VCFReader();
         reader.parseFile(path);
         vcfList = reader.getVariantList();
         /*for (VCFLine v : vcfList){

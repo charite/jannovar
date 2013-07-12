@@ -1,6 +1,7 @@
 package jannovar.io;
 
 import jannovar.common.Genotype;
+import jannovar.exception.ChromosomeScaffoldException;
 import jannovar.exception.VCFParseException;
 import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.GenotypeCall;
@@ -286,7 +287,7 @@ public class VCFLine {
      * @param c a String representation of a chromosome (e.g., chr3, chrX).
      * @return corresponding integer (e.g., 3, 23).
      */
-    public byte convertChromosomeStringToByteValue(String c) throws VCFParseException {
+    public byte convertChromosomeStringToByteValue(String c) throws ChromosomeScaffoldException {
 	if (c.startsWith("chr")) c = c.substring(3);
 	if (c.equals("X") ) return 23;
 	if (c.equals("23")) return 23;
@@ -299,9 +300,8 @@ public class VCFLine {
 	try {
 	    i = Byte.parseByte(c);
 	} catch (NumberFormatException e) {
-	    VCFParseException ve = new VCFParseException("[Variant.java] Could not parse Chromosome string \"" + c + "\"");
-	    ve.setBadChromosome(c);
-	    throw ve;
+	   ChromosomeScaffoldException cpe = new ChromosomeScaffoldException(c);
+	    throw cpe;
 	}
 	return i;
     }

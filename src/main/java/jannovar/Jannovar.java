@@ -9,7 +9,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,24 +19,18 @@ import java.util.HashMap;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-import jannovar.annotation.DownstreamAnnotationTest;
+
 import jannovar.common.Constants;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
-import jannovar.exception.IntervalTreeException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
-import jannovar.exception.KGParseException;
 import jannovar.exception.VCFParseException;
 import jannovar.exome.Variant;
-import jannovar.interval.Interval;
-import jannovar.interval.IntervalTree;
 import jannovar.io.EnsemblFastaParser;
 import jannovar.io.GFFparser;
 import jannovar.io.SerializationManager;
 import jannovar.io.TranscriptDataDownloader;
-import jannovar.io.UCSCDownloader;
-import jannovar.io.RefSeqParser;
 import jannovar.io.UCSCKGParser;
 import jannovar.io.VCFLine;
 import jannovar.io.VCFReader;
@@ -320,7 +313,7 @@ public class Jannovar {
 	    out.write(A[i] + "\t");
 	/* Now add the stuff to the INFO line */
 	String INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[7]);
-	out.write(INFO);
+	out.write(INFO + "\t");
 	for (int i=8;i<A.length;++i)
 	     out.write(A[i] + "\t");
 	out.write("\n");
@@ -453,8 +446,8 @@ public class Jannovar {
     */
     public void serializeEnsemblData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
-    	System.out.println("Serializing known gene data as " + this.EnsemblSerializationFileName);
-    	manager.serializeKnownGeneList(this.EnsemblSerializationFileName, this.transcriptModelList);
+    	System.out.println("Serializing known gene data as " + Jannovar.EnsemblSerializationFileName);
+    	manager.serializeKnownGeneList(Jannovar.EnsemblSerializationFileName, this.transcriptModelList);
     }
 
 
@@ -467,8 +460,8 @@ public class Jannovar {
      */
     public void serializeUCSCdata() throws JannovarException {
 	SerializationManager manager = new SerializationManager();
-	System.out.println("Serializing known gene data as " + this.UCSCserializationFileName);
-	manager.serializeKnownGeneList(this.UCSCserializationFileName, this.transcriptModelList);
+	System.out.println("Serializing known gene data as " + Jannovar.UCSCserializationFileName);
+	manager.serializeKnownGeneList(Jannovar.UCSCserializationFileName, this.transcriptModelList);
     }
 
 

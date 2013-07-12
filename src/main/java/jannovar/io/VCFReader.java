@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import jannovar.exome.Variant;
+import jannovar.exception.ChromosomeScaffoldException;
 import jannovar.exception.VCFParseException;
 import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.SingleGenotypeFactory;
@@ -37,7 +38,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * {@link jannovar.genotype.GenotypeCall GenotypeCall}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
- * @version 0.16 (22 June, 2013)
+ * @version 0.17 (10 July, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -56,15 +57,19 @@ public class VCFReader {
     /** All of the contig lines from the VCF header, e.g., 
 	{@code ##contig=<ID=chr22,length=51304566,assembly=hg19>}. */
     private ArrayList<String> contigLines=null;
-    /** Set of all of the chromosomes that could not be parsed correctly, usually
-	scaffolds such as chr11_random.*/
-    private HashSet<String> badChrom=null;
-
+   
     /** List of all variants parsed from this VCF file */
     private ArrayList<VCFLine> variant_list=null;
     /** Short messages describing any errors encountered in parsing the VCF file,
 	useful for output messages. */ 
     private ArrayList<String> errorList=null;
+    /** Set of all of the chromosomes that could not be parsed correctly, usually
+	scaffolds such as chr11_random.*/
+    private HashSet<String> unparsableChromosomes=null;
+    /** The total number of variants located in chromosome scaffolds other than the
+	canonical 1-22, X,Y,M. */
+    private int n_unparsable_chromosome_scaffold_variants;
+    
    
     /** The total number of lines with variants.*/
     private int total_number_of_variants;
@@ -120,8 +125,9 @@ public class VCFReader {
 	this.unparsable_line_list = new ArrayList<String>();
 	this.sample_name_list = new  ArrayList<String>();
 	this.total_number_of_variants = 0;
-	this.badChrom = new HashSet<String>();
+	this.unparsableChromosomes = new HashSet<String>();
 	this.errorList = new ArrayList<String>();
+	this.n_unparsable_chromosome_scaffold_variants=0;
     }
 
     /**
@@ -367,6 +373,10 @@ public class VCFReader {
 	    VCFLine ln = null;
 	    try {
 		ln = new VCFLine(line);
+	    } catch (ChromosomeScaffoldException cse) {
+		this.unparsableChromosomes.add(cse.getMessage());
+		this.n_unparsable_chromosome_scaffold_variants++;
+		continue;
 	    } catch (VCFParseException e) {
 		/* Note: Do not propagate these exceptions further, but
 		  * merely record what happened. */ 
@@ -378,7 +388,7 @@ public class VCFReader {
 	    this.total_number_of_variants++;    
 	    variant_list.add(ln);
 	} // while
-	if (this.badChrom.size()>0) {
+	if (this.unparsableChromosomes.size()>0) {
 	    recordBadChromosomeParses();
 	}
     }
@@ -392,12 +402,22 @@ public class VCFReader {
      */
     private void recordBadChromosomeParses()
     {
-	Iterator<String> it = this.badChrom.iterator();
+	if (n_unparsable_chromosome_scaffold_variants == 0) 
+	    return;
+	Iterator<String> it = this.unparsableChromosomes.iterator();
+	boolean first=true;
+	StringBuffer sb = new StringBuffer();
+	sb.append(n_unparsable_chromosome_scaffold_variants + " variants were identified from the following chromosome scaffolds: ");
 	while (it.hasNext()) {
 	    String s = it.next();
-	    String t = String.format("Could not parse variant(s) mapped to chromosome: %s",s);
-	    this.errorList.add(t);
+	    if (first) {
+		sb.append(s);
+		first=false;
+	    } else {
+		sb.append(", " + s);
+	    }
 	}
+	this.errorList.add(sb.toString());
     }
 
 
