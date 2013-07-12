@@ -21,15 +21,19 @@ import java.util.HashMap;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.DownstreamAnnotationTest;
+import jannovar.common.Constants;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.IntervalTreeException;
+import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
 import jannovar.exception.KGParseException;
 import jannovar.exception.VCFParseException;
 import jannovar.exome.Variant;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
+import jannovar.io.EnsemblFastaParser;
+import jannovar.io.GFFparser;
 import jannovar.io.SerializationManager;
 import jannovar.io.TranscriptDataDownloader;
 import jannovar.io.UCSCDownloader;
@@ -107,13 +111,15 @@ public class Jannovar {
     /** Flag to indicate Jannovar should download transcript definition files for Ensembl.*/
     private boolean downloadEnsembl;
     /** List of all lines from knownGene.txt file from UCSC */
-    private ArrayList<TranscriptModel> knownGenesList=null;
+    private ArrayList<TranscriptModel> transcriptModelList=null;
     /** Map of Chromosomes */
     private HashMap<Byte,Chromosome> chromosomeMap=null;
     /** List of variants from input file to be analysed. */
     private ArrayList<Variant> variantList=null;
     /**  Name of the UCSC serialized data file that will be created by Jannovar. */
     private static final String UCSCserializationFileName="ucsc.ser";
+    /**  Name of the Ensembl serialized data file that will be created by Jannovar. */
+    private static final String EnsemblSerializationFileName="ensembl.ser";
     /** Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to
      * true automatically if the user enters --download-ucsc (then, thefour files are downloaded
      * and subsequently serialized). If the user enters the flag {@code -U path}, then Jannovar
@@ -153,16 +159,14 @@ public class Jannovar {
 	    return;
 	} 
 	if (anno.downloadEnsembl()) {
-	    //try{
+	    try{
 		anno.downloadTranscriptFiles(jannovar.common.Constants.ENSEMBL);
-//		anno.inputTranscriptModelDataFromUCSCFiles();
-		//anno.serializeUCSCdata();
-		System.err.println("TODO: Implement parse Ensembl");
-		System.exit(1);
-		/*} catch (JannovarException e) {
+		anno.inputTranscriptModelDataFromEnsembl();
+		anno.serializeEnsemblData();
+		} catch (JannovarException e) {
 		System.err.println("[Jannovar]: " + e.toString());
 		System.exit(1);
-		}*/
+		}
 	    return;
 	} 
 	if (anno.downloadRefseq()) {
@@ -441,6 +445,17 @@ public class Jannovar {
 	}
     }
 
+    /**
+    * Inputs the GTF data from Ensembl files, convert the
+    * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
+    * objects to {@link jannovar.interval.Interval Interval} objects, and
+    * store these in a serialized file.
+    */
+    public void serializeEnsemblData() throws JannovarException {
+    	SerializationManager manager = new SerializationManager();
+    	System.out.println("Serializing known gene data as " + this.EnsemblSerializationFileName);
+    	manager.serializeKnownGeneList(this.EnsemblSerializationFileName, this.transcriptModelList);
+    }
 
 
 
@@ -453,7 +468,7 @@ public class Jannovar {
     public void serializeUCSCdata() throws JannovarException {
 	SerializationManager manager = new SerializationManager();
 	System.out.println("Serializing known gene data as " + this.UCSCserializationFileName);
-	manager.serializeKnownGeneList(this.UCSCserializationFileName, this.knownGenesList);
+	manager.serializeKnownGeneList(this.UCSCserializationFileName, this.transcriptModelList);
     }
 
 
@@ -465,6 +480,24 @@ public class Jannovar {
      }  
 
 
+     /**
+      * Input the Ensembl data. 
+      */
+	private void inputTranscriptModelDataFromEnsembl() {
+		// parse GFF/GTF
+		GFFparser gff = new GFFparser(this.dirPath + Constants.ensembl_gtf);
+		try {
+			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+		} catch (InvalidAttributException e) {
+			System.out.println("Unable to input data from the Ensembl files");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		// add sequences
+		EnsemblFastaParser efp = new EnsemblFastaParser(this.dirPath+Constants.ensembl_cdna, transcriptModelList);
+		efp.parse();
+		
+	}
 
 
 
@@ -480,7 +513,7 @@ public class Jannovar {
 	    e.printStackTrace();
 	    System.exit(1);
 	}
-	this.knownGenesList = parser.getKnownGeneList();
+	this.transcriptModelList = parser.getKnownGeneList();
     }
     
     
