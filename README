@@ -1,11 +1,12 @@
 Jannovar
 
 Jannovar is a Java library and executable for annotating VCF files with 
-gene/transcript-based annotations and adding simple pedigree/genotype filtering 
-capabilities.
-
-The source code of Jannovar is organized as a maven project that integrates the 
-test and build phases. Here are the most important commands:
+gene/transcript-based annotations and performing simple pedigree/genotype 
+filtering. If you are reading this, then preumably you have already 
+downloaded the source code from github by using the command
+$ git clone https://github.com/charite/jannovar
+The source code of Jannovar is organized as a maven project 
+that integrates the test and build phases. Here are the most important commands:
 
 $ mvn compile
 -> This compiles all the Java classes
@@ -15,8 +16,10 @@ $ mvn jar:jar
    main class
 
 $ mvn test
--> This causes all of the test classes to be executed. It also runs 
-   the cobertura test-coverage pluiing. This causes files to be written to the 
+-> This causes all of the test classes to be executed. It is also possible
+   to run the the cobertura test-coverage pluging. To do so, you need to 
+   uncomment the corresponding lines in the pom.xml file. The results of
+   test coverage analysis will then be writtten to the 
    target/site/cobertura directory.
 
 $ mvn javadoc:javadoc
@@ -29,9 +32,53 @@ $ mvn package
    require that all of the test phase be performed as part of the 
    build.
 
-After building the mvn package, one can then run Jannovar as
-$ java -jar target/Jannovar.jar -H
-Change arguments for a particular kind of run.
+Note that currently, full testing of Jannovar requires that a transcript datafile
+from the UCSC website be built. To do this, first run mvn package as above. This
+will generate an executable in the target directory (jannovar-0.1.1-SNAPSHOT.jar).
+For simplicity, copy this into the current directory with the name Jannovar:
+$ cp target/jannovar-0.1.1-SNAPSHOT.jar Jannovar.jar
+Now create the transcript datafile
+$ java -jar Jannovar.jar --download-ucsc
+This will create a file called "ucsc.ser" with the transcript definition data. To
+run all of the unit tests (which is required by maven for the package task), copy this
+file to the resources directory of the test subdirectory:
+$ cp ucsc.ser src/test/resources/.
+Now you can run either
+$ mvn test
+or
+$ mvn package
+and all of the tests should now run correctly.
+For more information, see the main tutorial or enter
+$ java -jar Jannovar.jar -H
 
 See the tutorial at http://compbio.charite.de/contao/index.php/jannovar.html for 
 further information.
+
+Jannovar is licenced under a BSD2 license.
+
+
+Copyright (c) 2013, Charite Universitätsmedizin Berlin
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.  
+
+Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

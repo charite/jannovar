@@ -106,7 +106,8 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
     /**
      * Parse the FORMAT field of the current line to extract the
      * genotype subfield index and the genotype-quality subfield
-     * index.
+     * index. Note that the quality field (GQ) is optional according
+     * to the VCF specification, but the GT field is mandatory.
      * @param format The FORMAT field, e.g., {@code GT:AD:DP:GQ:PL}.
      */
     private void parseFORMATfield(String format) throws VCFParseException {
@@ -120,9 +121,6 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 	}
 	if (gt_index < 0) {
 	    String s = String.format("Could not find genotype field in FORMAT field: \"%s\"",format);
-	    throw new VCFParseException(s);
-	} else if (qual_idx < 0) {
-	    String s = String.format("Could not find genotype quality field in FORMAT field: \"%s\"",format);
 	    throw new VCFParseException(s);
 	}
     }

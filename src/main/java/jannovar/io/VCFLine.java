@@ -308,6 +308,9 @@ public class VCFLine {
 	return i;
     }
 
+    /**
+     * @return a copy of the original line in the VCF file.
+     */
     public String getOriginalVCFLine() {
 	return this.vcf_line;
     }

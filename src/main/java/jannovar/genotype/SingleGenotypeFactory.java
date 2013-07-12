@@ -14,7 +14,7 @@ import jannovar.exception.VCFParseException;
  * should be fixed in a future version of this class, but it occurs relatively
  * rarely in VCF files that are of interest to us.
  * @author Peter N Robinson
- * @version 0.05 (5 May, 2013)
+ * @version 0.06 (10 July, 2013)
  */
 public class SingleGenotypeFactory extends GenotypeFactoryA  {
 
@@ -37,6 +37,8 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
 
     /**
      * We are expecting to get two fields from the VCF file, from which we will parse the genotype.
+     * Note that the genotype quality field GQ is not required, and if it is not present, the
+     * value will remain UNINITIALIZED_INT.
      * @param format VCF FORMAT field, e.g., GT:PL:GQ	
      * @param sample VCF sample field, e.g., 1/1:21,9,0:17
      */

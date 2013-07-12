@@ -4,7 +4,7 @@ package jannovar.genotype;
 import jannovar.exception.VCFParseException;
 
 /**
- * This interface is intended to provide the flexibility
+ * This class and its two subclasses provide the flexibility
  * needed to deal with the various kinds of VCF file formats.
  * For instance, VCF files may contain a single sample or multiple
  * samples, and they may have different attributes depending on the
@@ -17,11 +17,9 @@ import jannovar.exception.VCFParseException;
  * abstract class. These in turn have various interfaces to describe
  * the possible variations in VCF format.
  * @author Peter N Robinson
- * @version 0.03 (13 February, 2013)
+ * @version 0.04 (12 July, 2013)
  */
 public abstract class GenotypeFactoryA {
-
-
     /** 
      * This is the core method of the factory, and creates
      * a  {@link jannovar.genotype.GenotypeCall GenotypeCall} object.
