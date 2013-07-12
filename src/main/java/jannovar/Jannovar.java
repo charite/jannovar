@@ -319,7 +319,7 @@ public class Jannovar {
 	    out.write(A[i] + "\t");
 	/* Now add the stuff to the INFO line */
 	String INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[7]);
-	out.write(INFO);
+	out.write(INFO + "\t");
 	for (int i=8;i<A.length;++i)
 	     out.write(A[i] + "\t");
 	out.write("\n");
@@ -441,6 +441,10 @@ public class Jannovar {
 	    outputJannovarFormatFile(parser);
 	} else {
 	    outputAnnotatedVCF(parser);
+	}
+	ArrayList<String> e = parser.get_html_message();
+	for (String a: e) {
+	    System.out.println(e);
 	}
     }
 
