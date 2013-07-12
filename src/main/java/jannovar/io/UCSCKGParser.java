@@ -58,20 +58,14 @@ import jannovar.reference.TranscriptModel;
  * decompressed files. The class checks of the files exist and if they have the suffix "gz".
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
- * @version 0.16 (7 July, 2013)
+ * @version 0.17 (10 July, 2013)
  */
-public class UCSCKGParser implements  Constants {
+public class UCSCKGParser extends TranscriptDataParser implements  Constants {
     /** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
     public static final int NFIELDS=12;
-    /** Path of direrctory in which the four UCSC files live. */
-    private String directory_path;
+   
     
-    /** Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the
-     * value is the corresponding TranscriptModel object
-     * @see jannovar.reference.TranscriptModel
-    */
-    private HashMap<String,TranscriptModel> knownGeneMap=null;
-
+  
     /**
      * Tries to parse all four UCSC files, which must be located in the 
      * indicated directory.
@@ -80,12 +74,7 @@ public class UCSCKGParser implements  Constants {
      * The files optionally can be gzipped.
      */
     public UCSCKGParser(String path) {
-	this.knownGeneMap = new HashMap<String,TranscriptModel>();
-	if ( path.endsWith("/")) {
-	    this.directory_path = path;
-	} else {
-	    this.directory_path = path + "/"; // add trailing slash.
-	}
+	super(path);
     }
 
     /**
@@ -152,12 +141,11 @@ public class UCSCKGParser implements  Constants {
 	System.out.println("parseUCSCFiles");
 	boolean success = parseGzipUCSCFiles();
 	if (success) return;
-	System.out.println("parseUCSCFiles - no su");
+	/* If we get here, then the Gzip files were not found, we need to try unziped files. */
 	String knownGene = String.format("%s%s",this.directory_path,Constants.knownGene);
 	String knownGeneMrna = String.format("%s%s",this.directory_path,Constants.knownGeneMrna);
 	String kgXref = String.format("%s%s",this.directory_path,Constants.kgXref);
 	String known2locus = String.format("%s%s",this.directory_path,Constants.known2locus);
-	/* If we get here, then the Gzip files were not found, we need to try unziped files. */
 	try {
 	    parseKnownGeneFile(knownGene, false);
 	    parseKnownGeneMrna(knownGeneMrna,false);
@@ -171,21 +159,8 @@ public class UCSCKGParser implements  Constants {
     }
 
 	
-    /**
-     * @return a reference to the {@link #knownGeneMap knownGeneMap}, which contains info and sequences on all genes.
-     */
-    public HashMap<String,TranscriptModel> getKnownGeneMap() {
-	return this.knownGeneMap;
-    }
+  
 
-    /**
-     * @return a List of all {@link jannovar.reference.TranscriptModel TranscriptModel} objects.
-     */
-    public ArrayList<TranscriptModel> getKnownGeneList() {
-	ArrayList<TranscriptModel> lst =
-	    new ArrayList<TranscriptModel>(this.knownGeneMap.values());
-	return lst;
-    }
     
 
     /**
@@ -314,21 +289,6 @@ public class UCSCKGParser implements  Constants {
     }
    
 
-    private BufferedReader getBufferedReaderFromFilePath(String path, boolean isGzip) 
-	throws IOException
-    {
-	FileInputStream fin = new FileInputStream(path);
-	BufferedReader br = null;
-	if (isGzip) {
-	    GZIPInputStream gzis = new GZIPInputStream(fin);
-	    InputStreamReader xover = new InputStreamReader(gzis);
-	    br = new BufferedReader(xover);
-	} else {
-	    DataInputStream in = new DataInputStream(fin);
-	    br = new BufferedReader(new InputStreamReader(in));
-	}
-	return br;
-    }
 
 
     /** 
@@ -474,21 +434,14 @@ public class UCSCKGParser implements  Constants {
     
     
      /**
-      * Input xref information for the known genes. We are especially interested in information
-      * corresponding to $name2 in Annovar (this is almost always a geneSymbol)
-      * The sequences are then added to the corresponding {@link jannovar.reference.TranscriptModel TranscriptModel}
-      * objects.
-      * <P>
-      * According to the Annovar documentation, some genes were given names that are prefixed with "Em:",
-      * which should be removed due to the presence of ":" in exonic variant annotation. I do not find this
-      * in the current version of kgXref.txt,
-      * <P>
-      * annovar parses the 5th field of this file (4th in zero-based numbering). For many of the entries, this
-      * field contains the gene symbol, and this is used as $name2. 
+      * Input xref information for the known genes. This method parses the
+      * ucsc xref table to get the gene symbol that corresponds to the ucsc kgID.
+      * The information is then added to the corresponding {@link jannovar.reference.TranscriptModel TranscriptModel}
+      * object.
       * <P>
       * Note that some of the fields are empty, which can cause a problem for Java's split function, which then
       * conflates neighboring fields. Therefore, we instead just count the number of tab signs to get to the 5th
-      * field. Annovar does not use any of the other information in this file, we will do the same for now. 
+      * field. 
       * <P>
       * uc001aca.2      NM_198317       Q6TDP4  KLH17_HUMAN     KLHL17  NM_198317       NP_938073       Homo sapiens kelch-like 17 (Drosophila) (KLHL17), mRNA. 
       * <P>

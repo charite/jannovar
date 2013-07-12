@@ -14,7 +14,7 @@ import java.net.URLConnection;
 /**
  * This class downloads the four files we need to
  * generate TranscriptModel obejcts from the UCSC server.
- * @version 0.01 (1 July, 2013)
+ * @version 0.02 (10 July, 2013)
  * @author Peter Robinsin
  */
 public class UCSCDownloader implements Constants {
@@ -22,7 +22,6 @@ public class UCSCDownloader implements Constants {
     /** Path of direrctory to which the files will be downloaded. */
     private String directory_path;
     /** Base URI for UCSC hg19 build annotation files */
-//    private String hg19base = "ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
     private String hg19base = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
    
     
@@ -134,7 +133,6 @@ public class UCSCDownloader implements Constants {
 		if (totalBytesRead > threshold) {
 		    System.err.print("=");
 		    threshold += block; 
-//		    block += 250000; /* reduce number of progress bars for big files. */
 		}
 	    }
 	    System.err.println();
