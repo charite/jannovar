@@ -9,7 +9,7 @@ package jannovar.common;
  * Chromosomes 1-22 are refered to by the corresponding ints, and chromosomes
  * X, Y, and M are referred to as below.
  * @author Peter N Robinson
- * @version 0.18 (28 April, 2013)
+ * @version 0.19 (11 July, 2013)
  */
 public interface Constants {
     /* 1) Chromosomes */
@@ -26,8 +26,22 @@ public interface Constants {
     public static final int N_ALT_FORWARD_BASES=2;
     public static final int N_ALT_REVERSE_BASES=3;
       
+    /* Source of transcript files */
+    
+    public static final int UCSC	= 0;
+    public static final int ENSEMBL	= 1;
+    public static final int REFSEQ	= 2; 
+    
+    /* FTP base names and paths */
+    
+    public static final String UCSC_FTP_BASE	= "ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
+    public static final String ENSEMBL_FTP_BASE	= "ftp://ftp.ensembl.org/pub/release-72/";
+    public static final String ENSEMBL_GTF_BASE	= "gtf/homo_sapiens/";
+    public static final String ENSEMBL_FASTA_BASE	= "fasta/homo_sapiens/";
 
-  
+    public static final String ensembl_gtf		= "Homo_sapiens.GRCh37.72.gtf.gz";
+    public static final String ensembl_cdna		= "Homo_sapiens.GRCh37.72.cdna.all.fa.gz";
+    public static final String ensembl_ncrna	= "Homo_sapiens.GRCh37.72.ncrna.fa.gz";
 
     /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;
@@ -49,6 +63,8 @@ public interface Constants {
     public static final String kgXref = "kgXref.txt";
     /** Name of the UCSC knownGenes Xref file. */
     public static final String known2locus = "knownToLocusLink.txt";
+    /** Name of refFlat.txt file */
+    public static final String refFlat = "refFlat.txt";
    
 
 

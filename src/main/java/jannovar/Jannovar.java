@@ -15,14 +15,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.Writer;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.DownstreamAnnotationTest;
 import jannovar.exception.AnnotationException;
+import jannovar.exception.FileDownloadException;
 import jannovar.exception.IntervalTreeException;
 import jannovar.exception.JannovarException;
 import jannovar.exception.KGParseException;
@@ -31,6 +31,7 @@ import jannovar.exome.Variant;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
 import jannovar.io.SerializationManager;
+import jannovar.io.TranscriptDataDownloader;
 import jannovar.io.UCSCDownloader;
 import jannovar.io.RefSeqParser;
 import jannovar.io.UCSCKGParser;
@@ -91,15 +92,15 @@ import jannovar.reference.TranscriptModel;
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
-     * knownGene.txt, kgXref.txt, knownGeneMrnfile knownGene.txt
+     * knownGene.txt, kgXref.txt, knownGeneMrnafile knownGene.txt
      * (the files may or may not be compressed with gzip. The same variable is
      * also used to indicate the location of the download directory. The default value
      * is "ucsc".*/
-    private String ucscDirPath=null;
-    /** Location of a directory that must contain the files
-     .....*/
-    private String refseqDirPath="refseq";
-    /** Flag to indicate Jannovar should download known gene definitions files from UCSC.*/
+    private String dirPath=null;
+    /**
+     * Flag to indicate that Jannovar should download known gene definitions files from the
+     * UCSC server.
+     */
     private boolean downloadUCSC;
     /** Flag to indicate Jannovar should download transcript definition files for RefSeq.*/
     private boolean downloadRefseq;
@@ -138,12 +139,11 @@ public class Jannovar {
     private boolean jannovarFormat;
 
     public static void main(String argv[]) {
-	
 	Jannovar anno = new Jannovar(argv);
 	/* Option 1. Download the UCSC files from the server, create the ucsc.ser file, and return. */
 	if (anno.downloadUCSC()) {
 	    try{
-		anno.downloadUCSCfiles();
+		anno.downloadTranscriptFiles(jannovar.common.Constants.UCSC);
 		anno.inputTranscriptModelDataFromUCSCFiles();
 		anno.serializeUCSCdata();
 	    } catch (JannovarException e) {
@@ -151,43 +151,48 @@ public class Jannovar {
 		System.exit(1);
 	    }
 	    return;
-	} else if (anno.downloadRefseq()) {
-	    try{
-		anno.downloadRefseqfiles();
-		//anno.inputTranscriptModelDataFromUCSCFiles();
-		//anno.serializeUCSCdata();
-	    } catch (JannovarException e) {
-		System.err.println("[Jannovar]: " + e.toString());
-		System.exit(1);
-	    }
-	    return;
-	} else if (anno.downloadEnsembl()) {
+	} 
+	if (anno.downloadEnsembl()) {
 	    //try{
-		//anno.downloadRefseqfiles();
-		anno.inputTranscriptModelDataFromUCSCFiles();
+		anno.downloadTranscriptFiles(jannovar.common.Constants.ENSEMBL);
+//		anno.inputTranscriptModelDataFromUCSCFiles();
 		//anno.serializeUCSCdata();
-		System.err.println("TODO: Implement download Ensembl");
+		System.err.println("TODO: Implement parse Ensembl");
+		System.exit(1);
 		/*} catch (JannovarException e) {
 		System.err.println("[Jannovar]: " + e.toString());
 		System.exit(1);
 		}*/
 	    return;
 	} 
+	if (anno.downloadRefseq()) {
+		System.out.println("hallo");
+//	    try{
+		anno.downloadTranscriptFiles(jannovar.common.Constants.REFSEQ);
+		//anno.serializeUCSCdata();
+		System.err.println("TODO: Implement parse Refseq");
+		System.exit(1);
+//	    } catch (JannovarException e) {
+//		System.err.println("[Jannovar]: " + e.toString());
+//		System.exit(1);
+//	    }
+	    return;
+	}
 	/* Option 2. The UCSC files are already on the local disk. Use them to create the
 	   ucsc.ser file and return. */
-	if (anno.serialize()) {
-	    try{
-		anno.inputTranscriptModelDataFromUCSCFiles();
-		anno.serializeUCSCdata();
-	    } catch (IntervalTreeException e) {
-		System.out.println("Could not construct interval tree: " + e.toString());
-		System.exit(1);
-	    } catch (JannovarException je) {
-		System.out.println("Could not serialize UCSC data: " + je.toString());
-		System.exit(1);
-	    }
-	    return;
-	} 
+//	if (anno.serialize()) {
+//	    try{
+//		anno.inputTranscriptModelDataFromUCSCFiles();
+//		anno.serializeUCSCdata();
+//	    } catch (IntervalTreeException e) {
+//		System.out.println("Could not construct interval tree: " + e.toString());
+//		System.exit(1);
+//	    } catch (JannovarException je) {
+//		System.out.println("Could not serialize UCSC data: " + je.toString());
+//		System.exit(1);
+//	    }
+//	    return;
+//	} 
 
 	/* Option 3. The user must provide the ucsc.set file to do analysis. We can either
 	   annotate a VCF file (3a) or create a separate annotation file (3b). */
@@ -214,7 +219,7 @@ public class Jannovar {
 
     /** The constructor parses the command-line arguments. */
     public Jannovar(String argv[]){
-	this.ucscDirPath="ucsc/"; /* default */
+	this.dirPath="data/"; /* default */
 	parseCommandLineArguments(argv);
     }
 
@@ -230,7 +235,7 @@ public class Jannovar {
      * @return true if user wants to download refseq files
      */
     public boolean downloadRefseq() {
-	return this.downloadUCSC;
+	return this.downloadRefseq;
     }
 
     /**
@@ -242,31 +247,23 @@ public class Jannovar {
 
     /**
      * This function creates a
-     * {@link jannovar.io.UCSCDownloader UCSCDownloader} object in order to
-     * download the four required UCSC files. If the user has set the proxy and
+     * {@link TranscriptDataDownloader} object in order to
+     * download the required transcript data files. If the user has set the proxy and
      * proxy port via the command line, we use these to download the files.
      */
-    public void downloadUCSCfiles() {
-	UCSCDownloader downloader = null;
+    public void downloadTranscriptFiles(int source) {
+	TranscriptDataDownloader downloader = null;
 	try {
 	    if (this.proxy != null && this.proxyPort != null) {
-		downloader = new UCSCDownloader(this.ucscDirPath,this.proxy,this.proxyPort);
+		downloader = new TranscriptDataDownloader(this.dirPath,this.proxy,this.proxyPort);
 	    } else {
-		downloader = new UCSCDownloader(this.ucscDirPath);
+		downloader = new TranscriptDataDownloader(this.dirPath);
 	    }
-	    downloader.downloadUCSCfiles();
-	} catch (KGParseException  e) {
+	    downloader.downloadTranscriptFiles(source);
+	} catch (FileDownloadException  e) {
 	    System.err.println(e);
 	    System.exit(1);
 	}
-    }
-
-    /**
-     *xxx
-     */
-    public void downloadRefseqfiles() throws JannovarException {
-	RefSeqParser parser = new RefSeqParser(this.refseqDirPath);
-	parser.downloadFiles();
     }
 
 
@@ -475,7 +472,7 @@ public class Jannovar {
      * Input the four UCSC files for the KnownGene data.
      */
     private void inputTranscriptModelDataFromUCSCFiles() {
-	UCSCKGParser parser = new UCSCKGParser(this.ucscDirPath);
+	UCSCKGParser parser = new UCSCKGParser(this.dirPath);
 	try{
 	    parser.parseUCSCFiles();
 	} catch (Exception e) {
@@ -552,7 +549,7 @@ public class Jannovar {
 		this.downloadRefseq = false;
 	    }
 
-	     if (cmd.hasOption("download-ensembl")) {
+	    if (cmd.hasOption("download-ensembl")) {
 		this.downloadEnsembl = true;
 		this.performSerialization = true;
 	    } else {
@@ -572,7 +569,7 @@ public class Jannovar {
 		}
 	        
 	    if (cmd.hasOption("U")) {
-		this.ucscDirPath = getRequiredOptionValue(cmd,'U');
+		this.dirPath = getRequiredOptionValue(cmd,'U');
 	    }
 
 	    if (cmd.hasOption('D')) {
