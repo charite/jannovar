@@ -345,9 +345,10 @@ public class Jannovar {
 	    throw new AnnotationException(e);	
 	}
 	
-	String effect = anno.getVariantType().toString();
+
 	ArrayList<Annotation> lst = anno.getAnnotationList();
 	for (Annotation a : lst) {
+	    String effect = a.getVariantTypeAsString();
 	    String annt = a.getVariantAnnotation();
 	    String sym = a.getGeneSymbol();
 	    String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f",
