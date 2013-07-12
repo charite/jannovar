@@ -8,14 +8,13 @@ import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.io.FileNotFoundException;
 
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import jannovar.common.Constants;
+import jannovar.exception.JannovarException;
 import jannovar.exception.KGParseException;
 import jannovar.reference.TranscriptModel;
 
@@ -27,11 +26,15 @@ import jannovar.reference.TranscriptModel;
  * decompressed files. The class checks of the files exist and if they have the suffix "gz".
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
- * @version 0.01 (10 July, 2013)
+ * @version 0.02 (10 July, 2013)
  */
 public class RefSeqParser extends TranscriptDataParser implements Constants  {
      /** Number of tab-separated fields in then UCSC refFlat.txt file (build hg19). */
     public static final int NFIELDS=11;
+    /** Base URI for UCSC hg19 build annotation files */
+    private static final String hg19base = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
+    /** Name of refFlat.txt file */
+    private static final String refFlat = "refFlat.txt";
 
 
     public RefSeqParser(String path) {
@@ -59,6 +62,19 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
      * This is the basis for the TranscriptModel
     */
     public void parseRefFlatFile() {
+
+
+    }
+
+
+    public void downloadFiles() throws JannovarException {
+	makeDirectoryIfNotExist();
+	String refFlatCompressed = String.format("%s.gz",this.refFlat);
+	//String knownGeneMrna = String.format("%s.gz",Constants.knownGeneMrna);
+	//String kgXref = String.format("%s.gz",Constants.kgXref);
+	//String known2locus = String.format("%s.gz",Constants.known2locus);
+	download_file(this.hg19base, refFlatCompressed);
+	
 
 
     }

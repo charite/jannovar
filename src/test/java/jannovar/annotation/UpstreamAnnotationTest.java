@@ -484,7 +484,6 @@ public class UpstreamAnnotationTest implements Constants {
 	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
-	    ann.debugPrint();
 	    VariantType varType = ann.getVariantType();
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals(VariantType.UPSTREAM,varType);

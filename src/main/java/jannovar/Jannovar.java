@@ -32,6 +32,7 @@ import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
 import jannovar.io.SerializationManager;
 import jannovar.io.UCSCDownloader;
+import jannovar.io.RefSeqParser;
 import jannovar.io.UCSCKGParser;
 import jannovar.io.VCFLine;
 import jannovar.io.VCFReader;
@@ -95,11 +96,15 @@ public class Jannovar {
      * also used to indicate the location of the download directory. The default value
      * is "ucsc".*/
     private String ucscDirPath=null;
-    /**
-     * Flag to indicate that Jannovar should download known gene definitions files from the
-     * UCSC server.
-     */
+    /** Location of a directory that must contain the files
+     .....*/
+    private String refseqDirPath="refseq";
+    /** Flag to indicate Jannovar should download known gene definitions files from UCSC.*/
     private boolean downloadUCSC;
+    /** Flag to indicate Jannovar should download transcript definition files for RefSeq.*/
+    private boolean downloadRefseq;
+    /** Flag to indicate Jannovar should download transcript definition files for Ensembl.*/
+    private boolean downloadEnsembl;
     /** List of all lines from knownGene.txt file from UCSC */
     private ArrayList<TranscriptModel> knownGenesList=null;
     /** Map of Chromosomes */
@@ -146,7 +151,28 @@ public class Jannovar {
 		System.exit(1);
 	    }
 	    return;
-	}
+	} else if (anno.downloadRefseq()) {
+	    try{
+		anno.downloadRefseqfiles();
+		//anno.inputTranscriptModelDataFromUCSCFiles();
+		//anno.serializeUCSCdata();
+	    } catch (JannovarException e) {
+		System.err.println("[Jannovar]: " + e.toString());
+		System.exit(1);
+	    }
+	    return;
+	} else if (anno.downloadEnsembl()) {
+	    //try{
+		//anno.downloadRefseqfiles();
+		anno.inputTranscriptModelDataFromUCSCFiles();
+		//anno.serializeUCSCdata();
+		System.err.println("TODO: Implement download Ensembl");
+		/*} catch (JannovarException e) {
+		System.err.println("[Jannovar]: " + e.toString());
+		System.exit(1);
+		}*/
+	    return;
+	} 
 	/* Option 2. The UCSC files are already on the local disk. Use them to create the
 	   ucsc.ser file and return. */
 	if (anno.serialize()) {
@@ -201,6 +227,20 @@ public class Jannovar {
     }
 
     /**
+     * @return true if user wants to download refseq files
+     */
+    public boolean downloadRefseq() {
+	return this.downloadUCSC;
+    }
+
+    /**
+     * @return true if user wants to download ENSEMBL files
+     */
+    public boolean downloadEnsembl() {
+	return this.downloadEnsembl;
+    }
+
+    /**
      * This function creates a
      * {@link jannovar.io.UCSCDownloader UCSCDownloader} object in order to
      * download the four required UCSC files. If the user has set the proxy and
@@ -219,6 +259,14 @@ public class Jannovar {
 	    System.err.println(e);
 	    System.exit(1);
 	}
+    }
+
+    /**
+     *xxx
+     */
+    public void downloadRefseqfiles() throws JannovarException {
+	RefSeqParser parser = new RefSeqParser(this.refseqDirPath);
+	parser.downloadFiles();
     }
 
 
@@ -469,6 +517,8 @@ public class Jannovar {
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
+	    options.addOption(new Option(null,"download-refseq",false,"Download UCSC Refseq data"));
+	    options.addOption(new Option(null,"download-ensembl",false,"Download Ensembl data"));
 	    options.addOption(new Option(null,"proxy",true,"FTP Proxy"));
 	    options.addOption(new Option(null,"proxy-port",true,"FTP Proxy Port"));
 
@@ -493,6 +543,20 @@ public class Jannovar {
 		this.performSerialization = true;
 	    } else {
 		this.downloadUCSC = false;
+	    }
+
+	    if (cmd.hasOption("download-refseq")) {
+		this.downloadRefseq = true;
+		this.performSerialization = true;
+	    } else {
+		this.downloadRefseq = false;
+	    }
+
+	     if (cmd.hasOption("download-ensembl")) {
+		this.downloadEnsembl = true;
+		this.performSerialization = true;
+	    } else {
+		this.downloadEnsembl = false;
 	    }
 
 	    if (cmd.hasOption('S')) {
