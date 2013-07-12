@@ -282,8 +282,6 @@ public class VCFLine {
     }
 
 
-     // ##########   UTILITY FUNCTIONS ##################### //
-
     /**
      * @param c a String representation of a chromosome (e.g., chr3, chrX).
      * @return corresponding integer (e.g., 3, 23).
