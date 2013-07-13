@@ -48,7 +48,7 @@ import jannovar.exome.Variant;
  * {@link #adjustSampleOrderInPedFile}.
  * 
  * @author Peter Robinson
- * @version 0.13 (10 July, 2013)
+ * @version 0.14 (13 July, 2013)
  */
 public class Pedigree {
     /**
@@ -202,11 +202,69 @@ public class Pedigree {
      * adjust the order of the samples in the PED file to be the same as in
      * the VCF file, which makes it easier to visualize and perform the 
      * pedigree analysis.
-     * @param names List of names from the VCF file.
+     * @param sampleNames List of names from the VCF file.
      */
-    public void adjustSampleOrderInPedFile(ArrayList<String> names) throws PedParseException {
+    public void adjustSampleOrderInPedFile(ArrayList<String> sampleNames) throws PedParseException {
+	if (sampleNames == null) {
+	    String e = "[Pedigree:adjustSampleOrderInPedFile] Error: VCF sample name list empty";
+	    throw new PedParseException(e);
+	}
+	/* Now check that the names of the samples are identical to the
+	   names in the PED file. */
+	if (sampleNames.size() != getPedigreeSize() ) {
+	    String e = String.format("[Pedigree:adjustSampleOrderInPedFile] Error:" +
+				     "%n individuals in pedigree but %d " +
+				     "individuals in the VCF file",
+				     sampleNames.size(),
+				     getPedigreeSize());
+	    throw new PedParseException(e);
+	}
+
+	ArrayList<String> badName = new ArrayList<String>();
+	/* Check if all the VCF file sample names are in the PED file. */
+	for (String s : sampleNames) {
+	    if (! sampleIsRepresentedInPedigree(s) ) {
+		badName.add(s);
+	    }
+	}
+	if (badName.size()>0) {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("[Pedigree:adjustSampleOrderInPedFile] Error: Did not find VCF sample names in PED file: ");
+	    boolean first = true;
+	    for (String s : badName) {
+		if (first) {
+		    sb.append(s);
+		    first = false;
+		} else {
+		    sb.append(", " + s);
+		}
+	    }
+	    throw new PedParseException(sb.toString());
+	}
+	/* Check if all the PED file sample names are in the VCF file. */
+	for (Person p : personList) {
+	    String id = p.getIndividualID();
+	    if (! sampleNames.contains(id) ) {
+		badName.add(id);
+	    }
+	}
+	if (badName.size()>0) {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("[Pedigree:adjustSampleOrderInPedFile] Error: Did not find PED file names in VCF file: ");
+	    boolean first = true;
+	    for (String s : badName) {
+		if (first) {
+		    sb.append(s);
+		    first = false;
+		} else {
+		    sb.append(", " + s);
+		}
+	    }
+	    throw new PedParseException(sb.toString());
+	}
+	/* If we get here, the names are the same in both files, but their order may be different. */
 	ArrayList<Person> newList = new ArrayList<Person>();
-	for (String s : names) {
+	for (String s : sampleNames) {
 	    Iterator<Person> it = this.personList.iterator();
 	    while (it.hasNext()) {
 		Person p = it.next();
@@ -282,9 +340,9 @@ public class Pedigree {
 	for (Person p : affectedList) {
 	    Person father = p.getFather();
 	    Person mother = p.getMother();
-	    if (! this.parentList.contains(father))
+	    if (father != null && ! this.parentList.contains(father))
 		this.parentList.add(father);
-	    if (! this.parentList.contains(mother))
+	    if (mother != null && ! this.parentList.contains(mother))
 		this.parentList.add(mother);
 	}
 	
@@ -314,20 +372,18 @@ public class Pedigree {
             if (fatherID != null) {
                 Person father = personMap.get(fatherID);
                 if (father == null) {
-		    System.out.println("FatherID=" + fatherID + " but father null");
-                    debugPrint();
-                    return false;
+		    String s = String.format("[Pedigree] Could not find father id: %s",fatherID);
+		    throw new PedParseException(s);
                 }
-                p.setFather(father);
+		p.setFather(father);
             }
             if (motherID != null) {
                 Person mother = personMap.get(motherID);
                 if (mother == null) {
-		    System.out.println("MotherID=" + fatherID + " but mother null");
-                    debugPrint();
-                    return false;
+		    String s = String.format("[Pedigree] Could not find mother id: %s",motherID);
+		    throw new PedParseException(s);
                 }
-                p.setMother(mother);
+		p.setMother(mother);
             }
         }
         return true;
@@ -339,6 +395,25 @@ public class Pedigree {
     public int getNumberOfIndividualsInPedigree(){
 	if (isSingleSample) return 1;
         else return this.personList.size();
+    }
+
+    /**
+     * Returns the number of parents in the pedigree. If there is only a single sample,
+     * returns zero because the assumption is that a single sample is from an affected.
+     */
+    public int getNumberOfParentsInPedigree() {
+	if (isSingleSample) return 0;
+	else return this.parentList.size();
+    }
+
+    public int getNumberOfAffectedsInPedigree() {
+	if (isSingleSample) return 1;
+        else return this.affectedList.size();
+    }
+
+    public int getNumberOfUnaffectedsInPedigree() {
+	if (isSingleSample) return 0;
+        else return this.unaffectedList.size();
     }
     
     public Person getPerson(String id) {
@@ -720,8 +795,11 @@ public class Pedigree {
     
     
     public void debugPrint() {
-        System.out.println("Pedigree: " + familyID);
-        
+        System.out.println("Pedigree: " + familyID + " [n=" + getNumberOfIndividualsInPedigree() + "]");
+	System.out.println(String.format("Parents: n=%d, Affecteds: n=%d, Unaffecteds: n=%d",
+					 getNumberOfParentsInPedigree(),
+					 getNumberOfAffectedsInPedigree(),
+					 getNumberOfUnaffectedsInPedigree()));
         for (Person p : personList) {
 	    System.out.println(p.getIndex() + ": " + p);
         }
