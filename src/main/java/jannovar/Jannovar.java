@@ -85,7 +85,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.25 (8 July, 2013)
+ * @version 0.26 (14 July, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
@@ -357,13 +357,26 @@ public class Jannovar {
 	}
     }
 
-
+    /**
+     * This function outputs a VCF file that corresponds to the original
+     * VCF file but additionally has annotations for each variant. A new file
+     * is created with the suffix "jv.vcf";
+     */
     private void outputAnnotatedVCF(VCFReader parser) 
     {
 	this.variantList = parser.getVariantList();
 	ArrayList<VCFLine> lineList = parser.getVCFLineList();
 	File f = new File(this.VCFfilePath);
-	String outname = f.getName() + ".jannovar";
+	String outname = f.getName(); 
+	int i = outname.lastIndexOf("vcf");
+	if (i<0) {
+	    i = outname.lastIndexOf("VCF");
+	}
+	if (i<0) {
+	    outname = outname + ".jv.vcf";
+	} else {
+	    outname = outname.substring(0,i) + "jv.vcf";
+	}
 	try {
 	    FileWriter fstream = new FileWriter(outname);
 	    BufferedWriter out = new BufferedWriter(fstream);
