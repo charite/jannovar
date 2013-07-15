@@ -487,10 +487,10 @@ public class Jannovar {
       * Input the RefSeq data. 
       */
 	private void inputTranscriptModelDataFromRefseq() {
-		// parse GFF/GTF
+    	// parse GFF/GTF
 		GFFparser gff = new GFFparser(this.dirPath + Constants.refseq_gff);
 		try {
-			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+	        this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
 		} catch (InvalidAttributException e) {
 			System.out.println("Unable to input data from the Refseq files");
 			e.printStackTrace();

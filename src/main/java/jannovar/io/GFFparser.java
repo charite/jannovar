@@ -54,6 +54,12 @@ public class GFFparser {
 	private TranscriptModelBuilder transcriptBuilder;
 	private int gff_version	= 2;
 	
+	// Feature processing
+	private int start;
+	private int index;
+	private int subIndex;
+	private String rawfeature;
+	private String valueSeparator = " ";
 	
 	
 	public GFFparser(String filename) {
@@ -121,11 +127,13 @@ public class GFFparser {
 	 * tag, we assume it is GFF version 2/2.5 aka. GTF.
 	 */
 	public void parse(){
-//		transcriptFactory =  new TranscriptModelFactory();
 		transcriptBuilder =  new TranscriptModelBuilder();
 		try {
+			logger.info("Get GFF version");
 			getGFFversion();
+			valueSeparator = gff_version == 3 ? "=" : " ";
 			transcriptBuilder.setGffversion(gff_version);
+			logger.info("Read features");
 			if(this.file.getName().endsWith(".gz"))
 				in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(this.file))));
 			else
@@ -226,26 +234,31 @@ public class GFFparser {
 	 * @throws FeatureFormatException 
 	 */
 	private HashMap<String, String> processAttributes(String attributeString) throws FeatureFormatException {
-		// split attributes
-		fields_attribute = attributeString.split(";\\s?");
-		if(fields_attribute.length < 2)
-			throw new FeatureFormatException("attribute String with to few arguments: "+attributeString);
-		HashMap<String, String> attributes = new HashMap<String, String>();
-		
-		// split attribute key and value
-		for (int i=0;i< fields_attribute.length;i++) {
-			fields_attribute[i] = fields_attribute[i].trim();
-			if(fields_attribute.length < 1)
-				continue;
-			fields_attribute_Pair = fields_attribute[i].split("=|\\s");
+		HashMap<String, String> attributes = new HashMap<String, String>();	
 
-			if(fields_attribute_Pair.length < 2)
-				throw new FeatureFormatException("attribute pair with to few arguments: "+fields_attribute);
-			if(fields_attribute_Pair[1].startsWith("\""))
-				attributes.put(fields_attribute_Pair[0], fields_attribute_Pair[1].substring(1, fields_attribute_Pair[1].length()-1));
+		start = 0;
+		if(attributeString.startsWith(" "))
+			attributeString	= attributeString.substring(1);
+		while((index = attributeString.indexOf(";", start)) > 0){
+			rawfeature = attributeString.substring(start, index);
+//			System.out.println(rawfeature);
+			if((subIndex = rawfeature.indexOf(valueSeparator)) > 0){
+				if(gff_version == 3){
+					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1));
+//					System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1)));
+				}
+				else
+					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1));
+			}
 			else
-				attributes.put(fields_attribute_Pair[0], fields_attribute_Pair[1]);
+				throw new FeatureFormatException("attribute String without valid value separator: "+rawfeature+" - "+attributeString);
+			
+			if(gff_version == 3)
+				start	= index+1;
+			else
+				start	= index+2;
 		}
+		
 		return attributes;
 	}
 
