@@ -98,11 +98,11 @@ public class Jannovar {
      * Flag to indicate that Jannovar should download known gene definitions files from the
      * UCSC server.
      */
-    private boolean downloadUCSC;
+    private boolean createUCSC;
     /** Flag to indicate Jannovar should download transcript definition files for RefSeq.*/
-    private boolean downloadRefseq;
+    private boolean createRefseq;
     /** Flag to indicate Jannovar should download transcript definition files for Ensembl.*/
-    private boolean downloadEnsembl;
+    private boolean createEnsembl;
     /** List of all lines from knownGene.txt file from UCSC */
     private ArrayList<TranscriptModel> transcriptModelList=null;
     /** Map of Chromosomes */
@@ -140,7 +140,7 @@ public class Jannovar {
     public static void main(String argv[]) {
 	Jannovar anno = new Jannovar(argv);
 	/* Option 1. Download the UCSC files from the server, create the ucsc.ser file, and return. */
-	if (anno.downloadUCSC()) {
+	if (anno.createUCSC()) {
 	    try{
 		anno.downloadTranscriptFiles(jannovar.common.Constants.UCSC);
 		anno.inputTranscriptModelDataFromUCSCFiles();
@@ -151,7 +151,7 @@ public class Jannovar {
 	    }
 	    return;
 	} 
-	if (anno.downloadEnsembl()) {
+	if (anno.createEnsembl()) {
 	    try{
 		anno.downloadTranscriptFiles(jannovar.common.Constants.ENSEMBL);
 		anno.inputTranscriptModelDataFromEnsembl();
@@ -162,7 +162,7 @@ public class Jannovar {
 		}
 	    return;
 	} 
-	if (anno.downloadRefseq()) {
+	if (anno.createRefseq()) {
 		System.out.println("hallo");
 //	    try{
 		anno.downloadTranscriptFiles(jannovar.common.Constants.REFSEQ);
@@ -175,21 +175,6 @@ public class Jannovar {
 //	    }
 	    return;
 	}
-	/* Option 2. The UCSC files are already on the local disk. Use them to create the
-	   ucsc.ser file and return. */
-//	if (anno.serialize()) {
-//	    try{
-//		anno.inputTranscriptModelDataFromUCSCFiles();
-//		anno.serializeUCSCdata();
-//	    } catch (IntervalTreeException e) {
-//		System.out.println("Could not construct interval tree: " + e.toString());
-//		System.exit(1);
-//	    } catch (JannovarException je) {
-//		System.out.println("Could not serialize UCSC data: " + je.toString());
-//		System.exit(1);
-//	    }
-//	    return;
-//	} 
 
 	/* Option 3. The user must provide the ucsc.set file to do analysis. We can either
 	   annotate a VCF file (3a) or create a separate annotation file (3b). */
@@ -224,22 +209,22 @@ public class Jannovar {
     /**
      * @return true if user wants to download UCSC files
      */
-    public boolean downloadUCSC() {
-	return this.downloadUCSC;
+    public boolean createUCSC() {
+	return this.createUCSC;
     }
 
     /**
      * @return true if user wants to download refseq files
      */
-    public boolean downloadRefseq() {
-	return this.downloadRefseq;
+    public boolean createRefseq() {
+	return this.createRefseq;
     }
 
     /**
      * @return true if user wants to download ENSEMBL files
      */
-    public boolean downloadEnsembl() {
-	return this.downloadEnsembl;
+    public boolean createEnsembl() {
+	return this.createEnsembl;
     }
 
     /**
@@ -556,9 +541,9 @@ public class Jannovar {
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
-	    options.addOption(new Option(null,"download-ucsc",false,"Download UCSC KnownGene data"));
-	    options.addOption(new Option(null,"download-refseq",false,"Download UCSC Refseq data"));
-	    options.addOption(new Option(null,"download-ensembl",false,"Download Ensembl data"));
+	    options.addOption(new Option(null,"create-ucsc",false,"Create UCSC definition file"));
+	    options.addOption(new Option(null,"create-refseq",false,"Create RefSeq definition file"));
+	    options.addOption(new Option(null,"create-ensembl",false,"Create Ensembl definition file"));
 	    options.addOption(new Option(null,"proxy",true,"FTP Proxy"));
 	    options.addOption(new Option(null,"proxy-port",true,"FTP Proxy Port"));
 
@@ -578,25 +563,25 @@ public class Jannovar {
 		this.jannovarFormat = false;
 	    }
 
-	    if (cmd.hasOption("download-ucsc")) {
-		this.downloadUCSC = true;
+	    if (cmd.hasOption("create-ucsc")) {
+		this.createUCSC = true;
 		this.performSerialization = true;
 	    } else {
-		this.downloadUCSC = false;
+		this.createUCSC = false;
 	    }
 
-	    if (cmd.hasOption("download-refseq")) {
-		this.downloadRefseq = true;
+	    if (cmd.hasOption("create-refseq")) {
+		this.createRefseq = true;
 		this.performSerialization = true;
 	    } else {
-		this.downloadRefseq = false;
+		this.createRefseq = false;
 	    }
 
-	    if (cmd.hasOption("download-ensembl")) {
-		this.downloadEnsembl = true;
+	    if (cmd.hasOption("create-ensembl")) {
+		this.createEnsembl = true;
 		this.performSerialization = true;
 	    } else {
-		this.downloadEnsembl = false;
+		this.createEnsembl = false;
 	    }
 
 	    if (cmd.hasOption('S')) {

@@ -34,7 +34,7 @@ public interface Constants {
     
     /* FTP base names and paths */
     
-    public static final String UCSC_FTP_BASE	= "ftp://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
+    public static final String UCSC_FTP_BASE	= "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
     public static final String ENSEMBL_FTP_BASE	= "ftp://ftp.ensembl.org/pub/release-72/";
     public static final String ENSEMBL_GTF_BASE	= "gtf/homo_sapiens/";
     public static final String ENSEMBL_FASTA_BASE	= "fasta/homo_sapiens/";

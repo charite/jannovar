@@ -38,7 +38,7 @@ will generate an executable in the target directory (jannovar-0.1.1-SNAPSHOT.jar
 For simplicity, copy this into the current directory with the name Jannovar:
 $ cp target/jannovar-0.1.1-SNAPSHOT.jar Jannovar.jar
 Now create the transcript datafile
-$ java -jar Jannovar.jar --download-ucsc
+$ java -jar Jannovar.jar --create-ucsc
 This will create a file called "ucsc.ser" with the transcript definition data. To
 run all of the unit tests (which is required by maven for the package task), copy this
 file to the resources directory of the test subdirectory:
