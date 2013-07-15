@@ -73,7 +73,8 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		int curid;
 		Byte curChrom;
 		for (Gene gene : genes.values()) {
-//			System.out.println("gene: "+gene.id);
+			if(gene.id == null)
+				continue;
 			for (Transcript rna : gene.rnas.values()) {
 				model	= TranscriptModel.createTranscriptModel();
 				model.setAccessionNumber(rna.name);
@@ -89,6 +90,9 @@ public class TranscriptModelBuilder implements ChromosomMap{
 				model.setCdsEnd(rna.getCdsEnd());
 				model.setExonCount((byte)rna.exons.size());
 				model.setExonStartsAndEnds(rna.getExonStarts(),rna.getExonEnds());
+				if(gff_version == 3)
+					model.setGeneID(Integer.parseInt(gene.id.substring(4)));
+				else
 				if((curid = RNA2GeneIDMapper.getGeneID(gene.id)) > 0)
 					model.setGeneID(curid);
 				else
@@ -257,8 +261,9 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		if(feature.getAttribute("Name") != null)
 			curGene.name = feature.getAttribute("Name");
 		// extract Xreferences
-		if(feature.getAttribute("Dbxref") != null)
-			extractXreferences(feature.getAttribute("Dbxref"));
+//		if(feature.getAttribute("Dbxref") != null)
+//			extractXreferences(feature.getAttribute("Dbxref"));
+		curGene.id	= curGeneID;
 	}
 
 
@@ -447,9 +452,9 @@ public class TranscriptModelBuilder implements ChromosomMap{
 
 	private class Gene extends GFFstruct {
 
-		String ensemblID;
-		String refseqID;
-		String entrezGeneID;
+//		String ensemblID;
+//		String refseqID;
+//		String entrezGeneID;
 		boolean strand;
 //		HashMap<String,GFFstruct> exons;
 //		HashMap<String,GFFstruct> cdss;
@@ -470,6 +475,10 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		public Gene() {
 			exons	= new ArrayList<TranscriptModelBuilder.GFFstruct>();
 			rnas	= new HashMap<String, TranscriptModelBuilder.Transcript>();
+		}
+		
+		public String toString(){
+			return String.format("id: %s\tname: %s\tchr: %s\tstrand: %b\tnexons: %d\tnrna: %d", id, name, chromosom,strand,exons.size(),rnas.size());
 		}
 		
 	}

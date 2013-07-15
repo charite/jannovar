@@ -16,6 +16,11 @@ public class RNA2GeneIDMapper {
 	
 	private static String ensemblRegex = "ENSG0+([0-9]+)";
 	private static Pattern ensemblPattern = Pattern.compile(ensemblRegex);
+	
+	private static String refseqRegex	= "gene([0-9]+)";
+	private static Pattern refseqPattern	= Pattern.compile(refseqRegex);
+	
+//	private static Matcher matcher;
 
 	/**
 	 * Returns a integer representation of the gene identifier or '-1' if no valid 
@@ -26,9 +31,14 @@ public class RNA2GeneIDMapper {
 	 */
 	public static int getGeneID(String geneName){
 		// check for Ensembl genename
-		Matcher ensemblMatcher = ensemblPattern.matcher(geneName);
-		if(ensemblMatcher.matches()){
-			return Integer.parseInt(ensemblMatcher.group(1));
+		Matcher matcher;
+		matcher = ensemblPattern.matcher(geneName);
+		if(matcher.matches()){
+			return Integer.parseInt(matcher.group(1));
+		}
+		matcher = refseqPattern.matcher(geneName);
+		if(matcher.matches()){
+			return Integer.parseInt(matcher.group(1));
 		}
 		return -1;
 	}

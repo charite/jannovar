@@ -19,7 +19,6 @@ import java.util.HashMap;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-
 import jannovar.common.Constants;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
@@ -28,7 +27,9 @@ import jannovar.exception.JannovarException;
 import jannovar.exception.VCFParseException;
 import jannovar.exome.Variant;
 import jannovar.io.EnsemblFastaParser;
+import jannovar.io.FastaParser;
 import jannovar.io.GFFparser;
+import jannovar.io.RefSeqFastaParser;
 import jannovar.io.SerializationManager;
 import jannovar.io.TranscriptDataDownloader;
 import jannovar.io.UCSCKGParser;
@@ -113,6 +114,8 @@ public class Jannovar {
     private static final String UCSCserializationFileName="ucsc.ser";
     /**  Name of the Ensembl serialized data file that will be created by Jannovar. */
     private static final String EnsemblSerializationFileName="ensembl.ser";
+    /**  Name of the refSeq serialized data file that will be created by Jannovar. */
+    private static final String RefseqSerializationFileName="refseq.ser";
     /** Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to
      * true automatically if the user enters --download-ucsc (then, thefour files are downloaded
      * and subsequently serialized). If the user enters the flag {@code -U path}, then Jannovar
@@ -163,16 +166,14 @@ public class Jannovar {
 	    return;
 	} 
 	if (anno.createRefseq()) {
-		System.out.println("hallo");
-//	    try{
+	    try{
 		anno.downloadTranscriptFiles(jannovar.common.Constants.REFSEQ);
-		//anno.serializeUCSCdata();
-		System.err.println("TODO: Implement parse Refseq");
+		anno.inputTranscriptModelDataFromRefseq();
+		anno.serializeRefseqData();
+	    } catch (JannovarException e) {
+		System.err.println("[Jannovar]: " + e.toString());
 		System.exit(1);
-//	    } catch (JannovarException e) {
-//		System.err.println("[Jannovar]: " + e.toString());
-//		System.exit(1);
-//	    }
+	    }
 	    return;
 	}
 
@@ -438,18 +439,28 @@ public class Jannovar {
     }
 
     /**
-    * Inputs the GTF data from Ensembl files, convert the
+    * Inputs the GFF data from RefSeq files, convert the
+    * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
+    * objects to {@link jannovar.interval.Interval Interval} objects, and
+    * store these in a serialized file.
+    */
+    public void serializeRefseqData() throws JannovarException {
+    	SerializationManager manager = new SerializationManager();
+    	System.out.println("Serializing RefSeq data as " + Jannovar.RefseqSerializationFileName);
+    	manager.serializeKnownGeneList(Jannovar.RefseqSerializationFileName, this.transcriptModelList);
+    }
+
+    /**
+    * Inputs the GFF data from Ensembl files, convert the
     * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
     * objects to {@link jannovar.interval.Interval Interval} objects, and
     * store these in a serialized file.
     */
     public void serializeEnsemblData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
-    	System.out.println("Serializing known gene data as " + Jannovar.EnsemblSerializationFileName);
+    	System.out.println("Serializing Ensembl data as " + Jannovar.EnsemblSerializationFileName);
     	manager.serializeKnownGeneList(Jannovar.EnsemblSerializationFileName, this.transcriptModelList);
     }
-
-
 
      /**
      * Inputs the KnownGenes data from UCSC files, convert the
@@ -472,6 +483,27 @@ public class Jannovar {
      }  
 
 
+     /**
+      * Input the RefSeq data. 
+      */
+	private void inputTranscriptModelDataFromRefseq() {
+		// parse GFF/GTF
+		GFFparser gff = new GFFparser(this.dirPath + Constants.refseq_gff);
+		try {
+			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+		} catch (InvalidAttributException e) {
+			System.out.println("Unable to input data from the Refseq files");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		// add sequences
+		FastaParser efp = new RefSeqFastaParser(this.dirPath+Constants.refseq_rna, transcriptModelList);
+		int before	= transcriptModelList.size();
+		transcriptModelList = efp.parse();
+		int after = transcriptModelList.size();
+		System.out.println(String.format("removed %d (%d --> %d) transcript models w/o rna sequence",before-after,before, after));
+		
+	}
      /**
       * Input the Ensembl data. 
       */

@@ -38,10 +38,18 @@ public interface Constants {
     public static final String ENSEMBL_FTP_BASE	= "ftp://ftp.ensembl.org/pub/release-72/";
     public static final String ENSEMBL_GTF_BASE	= "gtf/homo_sapiens/";
     public static final String ENSEMBL_FASTA_BASE	= "fasta/homo_sapiens/";
+    public static final String REFSEQ_FTP_BASE		= "ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/";
+    public static final String REFSEQ_GFF_BASE		= "GFF_interim/";
+    public static final String REFSEQ_FASTA_BASE	= "RNA/";
 
     public static final String ensembl_gtf		= "Homo_sapiens.GRCh37.72.gtf.gz";
     public static final String ensembl_cdna		= "Homo_sapiens.GRCh37.72.cdna.all.fa.gz";
     public static final String ensembl_ncrna	= "Homo_sapiens.GRCh37.72.ncrna.fa.gz";
+    
+    public static final String refseq_gff		= "interim_GRCh37.p13_top_level_2013-07-05.gff3.gz";
+    public static final String refseq_rna		= "rna.fa.gz";
+    
+    
 
     /** Flag for an integer value that has not been initialized. */
     public static final int UNINITIALIZED_INT = -10;

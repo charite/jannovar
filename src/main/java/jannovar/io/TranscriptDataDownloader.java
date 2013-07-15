@@ -91,9 +91,13 @@ public class TranscriptDataDownloader implements Constants {
 	 * it emits a warning message and skips it).
 	 */
 	public void downloadRefseqFiles() throws FileDownloadException{
-		String refFlatCompressed = String.format("%s.gz",Constants.refFlat);
-		download_file(UCSC_FTP_BASE, refFlatCompressed);
-		downloadUCSCfiles();
+		String gff	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_GFF_BASE);
+		String rna	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_FASTA_BASE);
+		download_file(rna, refseq_rna);
+		download_file(gff, refseq_gff);
+//		String refFlatCompressed = String.format("%s.gz",Constants.refFlat);
+//		download_file(UCSC_FTP_BASE, refFlatCompressed);
+//		downloadUCSCfiles();
 	}
 
 	/**
