@@ -54,7 +54,9 @@ public class GFFparser {
 	private TranscriptModelBuilder transcriptBuilder;
 	private int gff_version	= 2;
 	
-	// Feature processing
+	// Feature Processing
+	
+	// Attributes processing
 	private int start;
 	private int index;
 	private int subIndex;
@@ -190,25 +192,55 @@ public class GFFparser {
 	 */
 	private Feature processFeature(String featureLine) throws FeatureFormatException {
 		
-		fields = featureLine.split("\t");
-		if(fields.length < 9){
-			logger.warning("skipping malformed feature line: "+featureLine);
+		ArrayList<String> myfields	= new ArrayList<String>();
+		start = 0;
+		while((index = featureLine.indexOf('\t', start)) >= 0){
+			myfields.add(featureLine.substring(start, index));
+//			System.out.println(featureLine.substring(start, index));
+			start = index+1;
+		}
+		if(start != featureLine.length()){
+			myfields.add(featureLine.substring(start));
+//			System.out.println();
+		}
+				
+
+		if(myfields.size() < 9){
+			logger.warning("skipping malformed feature line (missing columns ("+myfields.size()+")): "+featureLine);
 			return null;
 		}
-		Feature feature = new Feature();
 		
-		feature.setSequence_id(fields[SEQID]);
-//		feature.setSource(fields[SOURCE]);
-		feature.setType(codeType(fields[TYPE]));
-		feature.setStart(Integer.parseInt(fields[START]));
-		feature.setEnd(Integer.parseInt(fields[END]));
-//		feature.setScore(Double.parseDouble(fields[SCORE]));
-		feature.setStrand(codeStrand(fields[STRAND]));
-		feature.setPhase(codePhase(fields[PHASE]));
-//		if(!fields[ATTRIBUTES].endsWith(";"))
-//			this.isGFF = true;
-		feature.setAttributes(processAttributes(fields[ATTRIBUTES]));
+		Feature feature = new Feature();
+		feature.setSequence_id(myfields.get(SEQID));
+		feature.setType(codeType(myfields.get(TYPE)));
+		feature.setStart(Integer.parseInt(myfields.get(START)));
+		feature.setEnd(Integer.parseInt(myfields.get(END)));
+		feature.setStrand(codeStrand(myfields.get(STRAND)));
+		feature.setPhase(codePhase(myfields.get(PHASE)));
+		feature.setAttributes(processAttributes(myfields.get(ATTRIBUTES)));
 		return feature;
+		
+		
+		
+//		fields = featureLine.split("\t");
+//		if(fields.length < 9){
+//			logger.warning("skipping malformed feature line (missing columns ("+myfields.size()+")): "+featureLine);
+//			return null;
+//		}
+//		Feature feature = new Feature();
+//		
+//		feature.setSequence_id(fields[SEQID]);
+////		feature.setSource(fields[SOURCE]);
+//		feature.setType(codeType(fields[TYPE]));
+//		feature.setStart(Integer.parseInt(fields[START]));
+//		feature.setEnd(Integer.parseInt(fields[END]));
+////		feature.setScore(Double.parseDouble(fields[SCORE]));
+//		feature.setStrand(codeStrand(fields[STRAND]));
+//		feature.setPhase(codePhase(fields[PHASE]));
+////		if(!fields[ATTRIBUTES].endsWith(";"))
+////			this.isGFF = true;
+//		feature.setAttributes(processAttributes(fields[ATTRIBUTES]));
+//		return feature;
 	}
 	
 	private short codePhase(String phase) {

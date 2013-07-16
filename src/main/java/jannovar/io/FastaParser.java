@@ -22,7 +22,7 @@ public abstract class FastaParser {
 
 	protected String filename;
 	protected String accession;
-	protected String sequence;
+	protected StringBuilder sequence;
 	protected ArrayList<TranscriptModel> transcriptmodels;
 	protected ArrayList<TranscriptModel> transcriptmodelsProcessed;
 	protected HashMap<String, Integer> transcript2index;
@@ -56,9 +56,9 @@ public abstract class FastaParser {
 					if(sequence != null)
 						addSequenceToModel();
 					accession = processHeader(str);
-					sequence = "";
+					sequence = new StringBuilder();
 				}else
-					sequence += str;
+					sequence.append(str);
 			}
 			
 		} catch (IOException e) {
@@ -81,7 +81,7 @@ public abstract class FastaParser {
 		Integer idx;
 		
 		if((idx = transcript2index.get(accession)) != null){
-			transcriptmodels.get(idx).setSequence(sequence);
+			transcriptmodels.get(idx).setSequence(sequence.toString());
 			transcriptmodels.get(idx).initialize();
 			transcriptmodelsProcessed.add(transcriptmodels.get(idx));
 		}
