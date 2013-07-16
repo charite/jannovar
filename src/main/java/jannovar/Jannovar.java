@@ -177,13 +177,14 @@ public class Jannovar {
 	    return;
 	}
 
-	/* Option 3. The user must provide the ucsc.set file to do analysis. We can either
+	/* Option 2. The user must provide the ucsc.ser file to do analysis. (or the
+	   ensembl.ser or refseq.ser files). We can either
 	   annotate a VCF file (3a) or create a separate annotation file (3b). */
 	if (anno.deserialize()) {
 	    try {
-		anno.deserializeUCSCdata();
+		anno.deserializeTranscriptDefinitionFile();
 	    } catch (JannovarException je) {
-		System.out.println("Could not deserialize UCSC data: " + je.toString());
+		System.out.println("[Jannovar] Could not deserialize UCSC data: " + je.toString());
 		System.exit(1);
 	    }
 	}  else {
@@ -196,7 +197,7 @@ public class Jannovar {
 	if (anno.hasVCFfile()) {
 	    anno.annotateVCF();  /* 3a or 3b */
 	} else {
-	    System.out.println("No VCF file found");
+	    System.out.println("[Jannovar] No VCF file found");
 	}
     }
 
@@ -386,15 +387,22 @@ public class Jannovar {
 	    System.out.println("[Jannovar] " + e.toString());
 	    System.exit(1);
 	}
+	System.out.println("[Jannovar] Wrote annotated VCF file to \"" + outname + "\"");
     }
 
 
+    /**
+     * This function writes detailed annotations to file. One annotation
+     * is written for each of the transcripts affected by a variant, and the
+     * file is a tab-separated file in "Jannovar" format.
+     * @param parser The VCFParser that has extracted a list of variants from the VCF file.
+     */
     private void outputJannovarFormatFile(VCFReader parser) 
     {
 	this.variantList = parser.getVariantList();
 	File f = new File(this.VCFfilePath);
 	String outname = f.getName() + ".jannovar";
-		try {
+	try {
 	    FileWriter fstream = new FileWriter(outname);
 	    BufferedWriter out = new BufferedWriter(fstream);
 	    /**  Output each of the variants. */
@@ -413,6 +421,7 @@ public class Jannovar {
 	    System.out.println("[Jannovar] " + e.toString());
 	    System.exit(1);
 	}
+	System.out.println("[Jannovar] Wrote annotations to \"" + outname + "\"");
     }
 
 
@@ -427,7 +436,7 @@ public class Jannovar {
 	try{
 	    parser.parseFile(this.VCFfilePath);
 	} catch (VCFParseException e) {
-	    System.err.println("Unable to parse VCF file");
+	    System.err.println("[Jannovar] Unable to parse VCF file");
 	    System.err.println(e.toString());
 	    System.exit(1);
 	}
@@ -446,7 +455,7 @@ public class Jannovar {
     */
     public void serializeRefseqData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
-    	System.out.println("Serializing RefSeq data as " + Jannovar.RefseqSerializationFileName);
+    	System.out.println("[Jannovar] Serializing RefSeq data as " + Jannovar.RefseqSerializationFileName);
     	manager.serializeKnownGeneList(Jannovar.RefseqSerializationFileName, this.transcriptModelList);
     }
 
@@ -458,7 +467,7 @@ public class Jannovar {
     */
     public void serializeEnsemblData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
-    	System.out.println("Serializing Ensembl data as " + Jannovar.EnsemblSerializationFileName);
+    	System.out.println("[Jannovar] Serializing Ensembl data as " + Jannovar.EnsemblSerializationFileName);
     	manager.serializeKnownGeneList(Jannovar.EnsemblSerializationFileName, this.transcriptModelList);
     }
 
@@ -470,61 +479,70 @@ public class Jannovar {
      */
     public void serializeUCSCdata() throws JannovarException {
 	SerializationManager manager = new SerializationManager();
-	System.out.println("Serializing known gene data as " + Jannovar.UCSCserializationFileName);
+	System.out.println("[Jannovar] Serializing known gene data as " + Jannovar.UCSCserializationFileName);
 	manager.serializeKnownGeneList(Jannovar.UCSCserializationFileName, this.transcriptModelList);
     }
 
 
-     public void deserializeUCSCdata() throws JannovarException {
+    /**
+     * To run Jannovar, the user must pass a transcript definition file with the
+     * -D flag. This can be one of the files ucsc.ser, ensembl.ser, or 
+     * refseq.ser (or a comparable file) containing a serialized version of the
+     * TranscriptModel objects created to contain info about the 
+     * transcript definitions (exon positions etc.) extracted from 
+     * UCSC, Ensembl, or Refseq and necessary for annotation. */
+    public void deserializeTranscriptDefinitionFile() throws JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(this.serializedFile);
 	this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
      }  
 
-
-     /**
-      * Input the RefSeq data. 
-      */
-	private void inputTranscriptModelDataFromRefseq() {
+    
+    /**
+     * Input the RefSeq data. 
+     */
+    private void inputTranscriptModelDataFromRefseq() {
     	// parse GFF/GTF
-		GFFparser gff = new GFFparser(this.dirPath + Constants.refseq_gff);
-		try {
-	        this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
-		} catch (InvalidAttributException e) {
-			System.out.println("Unable to input data from the Refseq files");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		// add sequences
-		FastaParser efp = new RefSeqFastaParser(this.dirPath+Constants.refseq_rna, transcriptModelList);
-		int before	= transcriptModelList.size();
-		transcriptModelList = efp.parse();
-		int after = transcriptModelList.size();
-		System.out.println(String.format("removed %d (%d --> %d) transcript models w/o rna sequence",before-after,before, after));
-		
+	GFFparser gff = new GFFparser(this.dirPath + Constants.refseq_gff);
+	try {
+	    this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+	} catch (InvalidAttributException e) {
+	    System.out.println("[Jannovar] Unable to input data from the Refseq files");
+	    e.printStackTrace();
+	    System.exit(1);
 	}
-     /**
-      * Input the Ensembl data. 
-      */
-	private void inputTranscriptModelDataFromEnsembl() {
-		// parse GFF/GTF
-		GFFparser gff = new GFFparser(this.dirPath + Constants.ensembl_gtf);
-		try {
-			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
-		} catch (InvalidAttributException e) {
-			System.out.println("Unable to input data from the Ensembl files");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		// add sequences
-		EnsemblFastaParser efp = new EnsemblFastaParser(this.dirPath+Constants.ensembl_cdna, transcriptModelList);
-		int before	= transcriptModelList.size();
-		transcriptModelList = efp.parse();
-		int after = transcriptModelList.size();
-		System.out.println(String.format("removed %d (%d --> %d) transcript models w/o rna sequence",before-after,before, after));
-		
+	// add sequences
+	FastaParser efp = new RefSeqFastaParser(this.dirPath+Constants.refseq_rna, transcriptModelList);
+	int before	= transcriptModelList.size();
+	transcriptModelList = efp.parse();
+	int after = transcriptModelList.size();
+	System.out.println(String.format("[Jannovar] removed %d (%d --> %d) transcript models w/o rna sequence",
+					 before-after,before, after));
+	
+    }
+    /**
+     * Input the Ensembl data. 
+     */
+    private void inputTranscriptModelDataFromEnsembl() {
+	// parse GFF/GTF
+	GFFparser gff = new GFFparser(this.dirPath + Constants.ensembl_gtf);
+	try {
+	    this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+	} catch (InvalidAttributException e) {
+	    System.out.println("[Jannovar] Unable to input data from the Ensembl files");
+	    e.printStackTrace();
+	    System.exit(1);
 	}
+	// add sequences
+	EnsemblFastaParser efp = new EnsemblFastaParser(this.dirPath+Constants.ensembl_cdna, transcriptModelList);
+	int before	= transcriptModelList.size();
+	transcriptModelList = efp.parse();
+	int after = transcriptModelList.size();
+	System.out.println(String.format("[Jannovar] removed %d (%d --> %d) transcript models w/o rna sequence",
+					 before-after,before, after));
+	
+    }
 
 
 
@@ -536,7 +554,7 @@ public class Jannovar {
 	try{
 	    parser.parseUCSCFiles();
 	} catch (Exception e) {
-	    System.out.println("Unable to input data from the UCSC files");
+	    System.out.println("[Jannovar] Unable to input data from the UCSC files");
 	    e.printStackTrace();
 	    System.exit(1);
 	}
@@ -672,7 +690,7 @@ public class Jannovar {
     private static void usage() {
 	System.out.println("***   Jannovar: Usage     ****");
 	System.out.println("Use case 1: Download UCSC data and create transcript data file (ucsc.ser)");
-	System.out.println("$ java -jar Jannovar.jar --download-ucsc");
+	System.out.println("$ java -jar Jannovar.jar --create-ucsc");
 	System.out.println("Use case 2: Add annotations to a VCF file");
 	System.out.println("$ java -jar Jannovar.jar -D ucsc.ser -V example.vcf");
 	System.out.println("Use case 3: Write new file with Jannovar-format annotations of a VCF file");
