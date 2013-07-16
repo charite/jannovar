@@ -242,9 +242,9 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 	    throw new KGParseException("Could not parse cdsEnd:" + A[6]);
 	}
 	model.setCdsEnd(cdsEnd);
-	byte exonCount;
+	short exonCount;
 	try {
-	    exonCount = Byte.parseByte(A[7]);
+	    exonCount = Short.parseShort(A[7]);
 	}catch (NumberFormatException e) {
 	    throw new KGParseException("Could not parse exonCount:" + A[7]);
 	}

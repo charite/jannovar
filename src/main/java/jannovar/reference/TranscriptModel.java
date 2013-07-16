@@ -1,7 +1,6 @@
 package jannovar.reference;
 
 
-import  jannovar.exception.KGParseException;
 import jannovar.common.Constants;
 
 
@@ -46,7 +45,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     /** Position of start of CDS within the mRNA transcript. */
     private int rcdsStart;
     /** Number of exons of the gene */
-    private byte exonCount;
+    private short exonCount;
     /** Start positions of each of the exons of this transcript */
     private int[] exonStarts=null;
     /** End positions of each of the exons of this transcript */
@@ -88,7 +87,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	(Note that {@link #rcdsStart} is the CDS start within the transcript).*/
     public void setCdsStart(int st) { this.cdsStart = st; }
     public void setCdsEnd(int st) { this.cdsEnd = st; }
-    public void setExonCount(byte c) { this.exonCount = c; }
+    public void setExonCount(short c) { this.exonCount = c; }
     public void setExonStartsAndEnds(int [] starts, int [] ends) {
 	this.exonStarts = starts;
 	this.exonEnds = ends;
