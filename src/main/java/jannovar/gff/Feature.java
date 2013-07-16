@@ -27,14 +27,23 @@ import jannovar.common.FeatureType;
  */
 public class Feature {
 
+	/** ID of the landmark used to establish the coordinate system for the current feature. (e.g. chromosom id) **/
 	String sequence_id;
+	/** A free text qualifier intended to describe the algorithm or operating procedure that generated this feature. (e.g. "GenScan", "NCBI-Annotator") **/
 	String source;
+	/** The type of the feature. Constrained a term from the "lite" version of the Sequence Ontology **/
 	FeatureType type;
+	/** Start coordinate of the feature. Given in positive 1-based integer coordinates, relative to the landmark given in {@link #sequence_id}. **/
 	int start;
+	/** End coordinate of the feature. Given in positive 1-based integer coordinates, relative to the landmark given in {@link #sequence_id}. **/
 	int end;
+	/** The score of the feature. **/
 	double score;
+	/** The strand of the feature. <code>true</code> for positive strand (relative to the {@link #sequence_id landmark}), <code>false</code> for minus strand. **/
 	boolean strand;
-	short phase;
+	/** For features of {@link #type} 'CDS' this indicates the offset of the reading frame. **/
+	byte phase;
+	/** A List of feature attributes. Were the key is the tag. **/
 	HashMap<String, String> attributes;
 	
 	
@@ -147,7 +156,7 @@ public class Feature {
 	/**
 	 * @param phase the phase to set
 	 */
-	public void setPhase(short phase) {
+	public void setPhase(byte phase) {
 		this.phase = phase;
 	}
 	/**

@@ -186,7 +186,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		}
 //		System.out.println("Gene: "+curGeneID+"\tRNA: "+curRnaID);
 //		System.out.println(feature.toLine());
-		// check if there are more than one parent
+		// check if there is more than one parent
 		if(curRnaID.contains(",")){
 			logger.severe("More than one Parent. Will only link to the first.");
 			curRnaID	= curRnaID.substring(0,curRnaID.indexOf(","));
@@ -371,7 +371,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		}
 		
 		/**
-		 * Returns the accending ordert start positions of the exons. 
+		 * Returns the accending ordered start positions of the exons. 
 		 * @return exons start indices  (1-based, including)
 		 */
 		public int[] getExonStarts() {
@@ -428,7 +428,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		int getCdsStart(){
 			if(cdsStart == Integer.MAX_VALUE)
 				for (GFFstruct cds : cdss) 
-					if(cdsStart < cds.start)
+					if(cdsStart > cds.start)
 						cdsStart = cds.start;
 			if(cdsStart == Integer.MAX_VALUE)
 				cdsStart = getTxStart()+1;

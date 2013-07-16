@@ -86,6 +86,14 @@ public class GFFparser {
 	}
 	
 	/**
+	 * Returns the GFF version of the parsed file.
+	 * @return the GFF version
+	 */
+	public int getGFFversion(){
+		return gff_version;
+	}
+	
+	/**
 	 * This will check the GFF format version. There are several version known.<br>
 	 * <UL>
 	 * 	<LI>Version 2 - attributes separated by '; ' and gene_id, transcript_id tags<br>
@@ -97,7 +105,7 @@ public class GFFparser {
 	 * </UL>
 	 * @throws IOException if the file could not be read
 	 */
-	private void getGFFversion() throws IOException{
+	private void determineGFFversion() throws IOException{
 
 		if(file.getName().endsWith(".gz"))
 			in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
@@ -132,7 +140,7 @@ public class GFFparser {
 		transcriptBuilder =  new TranscriptModelBuilder();
 		try {
 			logger.info("Get GFF version");
-			getGFFversion();
+			determineGFFversion();
 			valueSeparator = gff_version == 3 ? "=" : " ";
 			transcriptBuilder.setGffversion(gff_version);
 			logger.info("Read features");
@@ -190,7 +198,7 @@ public class GFFparser {
 	 * @return {@link Feature}
 	 * @throws FeatureFormatException 
 	 */
-	private Feature processFeature(String featureLine) throws FeatureFormatException {
+	public Feature processFeature(String featureLine) throws FeatureFormatException {
 		
 		ArrayList<String> myfields	= new ArrayList<String>();
 		start = 0;
@@ -243,7 +251,12 @@ public class GFFparser {
 //		return feature;
 	}
 	
-	private short codePhase(String phase) {
+	/**
+	 * Codes the phase of the CDS reading frame in the exon. A simple cast from String to byte.  
+	 * @param phase
+	 * @return
+	 */
+	private byte codePhase(String phase) {
 
 		if(phase.equals("0"))
 			return 0;
@@ -283,14 +296,27 @@ public class GFFparser {
 					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1));
 			}
 			else
-				throw new FeatureFormatException("attribute String without valid value separator: "+rawfeature+" - "+attributeString);
+				throw new FeatureFormatException("attribute String without valid value separator ("+valueSeparator+"): "+rawfeature+" - "+attributeString);
 			
 			if(gff_version == 3)
 				start	= index+1;
 			else
 				start	= index+2;
 		}
-		
+//		if(start != attributeString.length()){
+//			rawfeature = attributeString.substring(start);
+//			if((subIndex = rawfeature.indexOf(valueSeparator)) > 0){
+//				if(gff_version == 3){
+//					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1));
+////					System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1)));
+//				}
+//				else
+//					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1));
+//			}
+//			else
+//				throw new FeatureFormatException("attribute String without valid value separator ("+valueSeparator+"): "+rawfeature+" - "+attributeString);
+//			
+//		}
 		return attributes;
 	}
 
