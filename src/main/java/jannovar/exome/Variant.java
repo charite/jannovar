@@ -13,7 +13,7 @@ import jannovar.genotype.GenotypeCall;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.19 (7 July, 2013)
+ * @version 0.21 (17 July, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -326,7 +326,9 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
 
-
+    /**
+     * Represent the Variant and its genotype as a string
+     */
     public String toString() {
 	StringBuilder sb = new StringBuilder();
 	String chr = getChromosomalVariant();
@@ -336,9 +338,9 @@ public class Variant implements Comparable<Variant>, Constants {
 	else
 	    sb.append("\tcds mutation not initialized\n");
 
-	sb.append("\tGenotype: " + this.genotype.toString());
+	sb.append("\tGenotype: " + this.genotype.get_genotype_as_string() + "\n");
 
-	sb.append("\tType: " + get_variant_type_as_string() + "\n");
+	sb.append("\tType: " + get_variant_type_as_string() );
 	
 	return sb.toString();
 
