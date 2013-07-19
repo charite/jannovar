@@ -224,7 +224,7 @@ public class InsertionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TTN(uc002umz.1:exon112:c.21594_21595insACTT:p.K7198fs)",annot);
+	    Assert.assertEquals("TTN(uc002umz.1:exon112:c.21594_21595insACTT:p.K7198fs,uc031rqc.1:exon190:c.38076_38077insACTT:p.K12692fs)",annot);
 	}
 }
 

@@ -238,7 +238,7 @@ public class UTR5AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR5,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SCML4(uc011eam.1:c.-49G>A,uc010kdf.3:c.-49G>A,uc003psa.3:c.-230G>A)",annot);
+	    Assert.assertEquals("SCML4(uc010kdf.3:c.-49G>A,uc011eam.1:c.-49G>A,uc003psa.3:c.-230G>A)",annot);
 	}
 }
 

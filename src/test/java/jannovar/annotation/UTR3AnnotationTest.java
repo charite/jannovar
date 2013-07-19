@@ -927,6 +927,9 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
  * chr14:105404384T>C
  * minus strand
  *</P>
+ <AHNAK2(uc0[21seo.1:c.*16A>G,uc021sen.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc010axc].1:c.*16A>G)> but was:
+<AHNAK2(uc0[10axc.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc021seo.1:c.*16A>G,uc021sen].1:c.*16A>G)>
+
  */
 @Test public void testUTR3Var950() throws AnnotationException  {
 	byte chr = 14;
@@ -941,7 +944,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AHNAK2(uc021seo.1:c.*16A>G,uc021sen.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc010axc.1:c.*16A>G)",annot);
+	    Assert.assertEquals("AHNAK2(uc010axc.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc021seo.1:c.*16A>G,uc021sen.1:c.*16A>G)",annot);
 	}
 }
 
