@@ -130,7 +130,6 @@ public class NonsynonymousAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
 	    String annot = ann.getVariantAnnotation();
-	    System.out.println(annot);
 	    Assert.assertEquals("SND1-IT1(uc003vmj.2:exon1:c.70A>G:p.T24A)",annot);
 	}
 }

@@ -48,7 +48,7 @@ import jannovar.exome.Variant;
  * {@link #adjustSampleOrderInPedFile}.
  * 
  * @author Peter Robinson
- * @version 0.14 (13 July, 2013)
+ * @version 0.16 (17 July, 2013)
  */
 public class Pedigree {
     /**
@@ -659,9 +659,6 @@ public class Pedigree {
 	if (this.isSingleSample) {
 	    return singleSampleCompatibleWithAutosomalRecessive(varList);
 	}
-
-	/* If we get here, there is no compatible homozygous mutation. 
-	   Check for compound heterozygous mutations. */
 	boolean hasMaternallyInheritedCompatibleVariant = false;
 	boolean hasPaternallyInheritedCompatibleVariant = false;
 	ArrayList<GenotypeCall> paternal = new ArrayList<GenotypeCall> ();
@@ -671,13 +668,28 @@ public class Pedigree {
 	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
 	}
 
-	//for (GenotypeCall multiGT : gtypeList) {
 	for (Variant v : varList) {
 	    GenotypeCall multiGT = v.getGenotype();
 	    if (containsCompatibleHomozygousVariant(multiGT)) {
 		/* If this is the case, we are good. */
 		return true;
 	    }
+	    /* System.out.println("# 1 not hom");
+	    if (affectedsAreHeterozygous(multiGT)) 
+		System.out.println("# 2 affecteds are het");
+	    else
+		System.out.println("# 2 affecteds are not het");
+
+	    if (onlyOneParentIsHeterozygous(multiGT)) 
+		System.out.println("# 3 only one paret is het");
+	    else
+		System.out.println("# 3 not only one parent is het het");
+
+	    if (unaffectedsAreNotHomozygousALT(multiGT) ) 
+		System.out.println("# 4 unaffects Not Hom");
+	    else
+		System.out.println("# 4 NOT unaffects Not Hom");
+	    */
 	    if (affectedsAreHeterozygous(multiGT) &&
 		onlyOneParentIsHeterozygous(multiGT) &&
 		unaffectedsAreNotHomozygousALT(multiGT) ) {
@@ -783,6 +795,7 @@ public class Pedigree {
 		}
 		if (p.isFemale() &&
 		    g == Genotype.HOMOZYGOUS_ALT) {
+		    compatible = false;
 		    break;
 		    /* Cannot be disease-causing mutation, 
 		       an unaffected sister is homozygos. */

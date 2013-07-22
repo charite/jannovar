@@ -13,7 +13,7 @@ import jannovar.reference.Translator;
  * mutations, which is not entirely accurate, although mutations in this part of exons
  * can indeed disrupt proper splicing. Instead, jannovar takes the SPLICING_THRESHOLD
  * nucleotides on the intronic side.
- * @version 0.12 (7 July, 2013)
+ * @version 0.13 (17 July, 2013)
  * @author Peter N Robinson
  */
 
@@ -114,14 +114,14 @@ public class SpliceAnnotation {
 	// of appropriate exon boundaries to be a splice mutation.
 
 	if (k==0 /* This is the last exon of a gene on the minus strand */
-	    /* the following two lines give us the last two bp of the last intron and the
-	     first two bp of the last exon*/
-	    && start >exonend   /* was start >= exonend - SPLICING_THRESHOLD +1 in annovar */
+	    /* the following two lines give us the last two bp of the last intron 
+	     * (Splice acceptor sequence). */
+	    && start >exonend   
 	    && start <= exonend + SPLICING_THRESHOLD) {
 	    return true;
 	} else if (k==(exoncount-1)  /* first exon of gene on minus strand */
 		   && start >= exonstart - SPLICING_THRESHOLD
-		   && start < exonstart) { /* was start <= exonstart + SPLICING_THRESHOLD-1 in annovar */
+		   && start < exonstart) { /* first two nt of splice donor */
 	    return true;
 	} else if (k>0 && k<(exoncount -1)) {  /* internal exon */
 	    if (start >= exonstart - SPLICING_THRESHOLD
@@ -132,12 +132,11 @@ public class SpliceAnnotation {
 		&& start <= exonend + SPLICING_THRESHOLD) /* splice acceptor, minus strand */
 		return true;
 	}
-	
 	if (k==0 /* last exon of gene on minus strand */
 	    && end > exonend
 	    && end <= exonend + SPLICING_THRESHOLD) {
 	    return true;
-	} else if (k==(exoncount-1)
+	} else if (k==(exoncount-1) /* first exon of gene on minus strand */
 		   && end >= exonstart-SPLICING_THRESHOLD
 		   && end < exonstart) {
 	    return true;
@@ -157,7 +156,7 @@ public class SpliceAnnotation {
 	    /* last exon on minus strand. start is within exon and end is in intron */
 	    return true;
 	} else if (k == (exoncount-1) && start < exonstart && end >= exonstart) {
-	    /* first exon for minuis-strand gene, start is within intron and end is in exon */
+	    /* first exon for minus-strand gene, start is within intron and end is in exon */
 	    return true;
 	} else if (k>0 && k < (exoncount -1)) {
 	    /* "inner exon" */
@@ -165,7 +164,6 @@ public class SpliceAnnotation {
 		return true;
 	    }
 	    if (start <= exonend && end > exonend) {
-		  System.out.println("[SpliceAnnotation] LOGICAL ERROR: " + start + " exonstart=" + exonstart);
 		return true;
 	    }
 	}

@@ -302,7 +302,7 @@ but was:<MTA3(uc002rs[o.1:exon7:c.214-2A>G,uc002rsp.1:exon6]:c.214-2A>G,uc002rsq
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MTA3(uc002rso.1:exon7:c.214-2A>G,uc002rsp.1:exon6:c.214-2A>G,uc002rsq.3:exon6:c.382-2A>G)",annot);
+	    Assert.assertEquals("MTA3(uc002rsp.1:exon6:c.214-2A>G,uc002rso.1:exon7:c.214-2A>G,uc002rsq.3:exon6:c.382-2A>G)",annot);
 	}
 }
 
