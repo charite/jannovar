@@ -6,7 +6,6 @@ package jannovar.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -64,21 +63,12 @@ public class GFFparser {
 	private String valueSeparator = " ";
 	
 	
-	public GFFparser(String filename) {
-		this(new File(filename));
-	}
-	
-	public GFFparser(File file){
-		this.file	= file;
-//		if(!checkFile()){
-//			throw new IOException("File not found: "+file.getAbsolutePath());
-//		}
-		if(this.checkFile())
-			this.parse();
+	public GFFparser(){
+		
 	}
 	
 	/**
-	 * Checks if the specified file can be  
+	 * Checks if the specified file can be accessed.
 	 * @return
 	 */
 	public boolean checkFile(){
@@ -131,12 +121,17 @@ public class GFFparser {
 		logger.info("gff version: "+gff_version);
 	}
 	
+	public void parse(String filename){
+		parse(new File(filename));
+	}
+	
 	/**
 	 * Parse the file and feeds the {@link TranscriptModelFactory}.
 	 * First the GFF format version is verified. If there is no header containing the <code>##gff-version</code> 
 	 * tag, we assume it is GFF version 2/2.5 aka. GTF.
 	 */
-	public void parse(){
+	public void parse(File file){
+		this.file = file;
 		transcriptBuilder =  new TranscriptModelBuilder();
 		try {
 			logger.info("Get GFF version");
@@ -144,10 +139,10 @@ public class GFFparser {
 			valueSeparator = gff_version == 3 ? "=" : " ";
 			transcriptBuilder.setGffversion(gff_version);
 			logger.info("Read features");
-			if(this.file.getName().endsWith(".gz"))
-				in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(this.file))));
+			if(file.getName().endsWith(".gz"))
+				in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
 			else
-				in = new BufferedReader(new FileReader(this.file));
+				in = new BufferedReader(new FileReader(file));
 			String str;
 			while ((str = in.readLine()) != null) {
 				// skip info lines

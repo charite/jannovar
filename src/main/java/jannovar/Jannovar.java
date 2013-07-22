@@ -117,7 +117,7 @@ public class Jannovar {
     /**  Name of the refSeq serialized data file that will be created by Jannovar. */
     private static final String RefseqSerializationFileName="refseq.ser";
     /** Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to
-     * true automatically if the user enters --download-ucsc (then, thefour files are downloaded
+     * true automatically if the user enters --create-ucsc (then, the four files are downloaded
      * and subsequently serialized). If the user enters the flag {@code -U path}, then Jannovar
      * interprets path as the location of a directory that already contains the UCSC files (either
      * compressed or uncompressed), and sets this flag to true to perform serialization and then
@@ -504,7 +504,8 @@ public class Jannovar {
      */
     private void inputTranscriptModelDataFromRefseq() {
     	// parse GFF/GTF
-	GFFparser gff = new GFFparser(this.dirPath + Constants.refseq_gff);
+	GFFparser gff = new GFFparser();
+	gff.parse(this.dirPath + Constants.refseq_gff);
 	try {
 	    this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
 	} catch (InvalidAttributException e) {
@@ -526,9 +527,12 @@ public class Jannovar {
      */
     private void inputTranscriptModelDataFromEnsembl() {
 	// parse GFF/GTF
-	GFFparser gff = new GFFparser(this.dirPath + Constants.ensembl_gtf);
+
+    	GFFparser gff = new GFFparser();
+    	gff.parse(this.dirPath + Constants.ensembl_gtf);
 	try {
 	    this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+	    System.out.println("TranscriptmodelList size: "+this.transcriptModelList.size());
 	} catch (InvalidAttributException e) {
 	    System.out.println("[Jannovar] Unable to input data from the Ensembl files");
 	    e.printStackTrace();

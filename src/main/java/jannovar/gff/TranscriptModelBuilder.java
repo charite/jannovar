@@ -78,10 +78,12 @@ public class TranscriptModelBuilder implements ChromosomMap{
 			for (Transcript rna : gene.rnas.values()) {
 				model	= TranscriptModel.createTranscriptModel();
 				model.setAccessionNumber(rna.name);
-				if((curChrom = ChromosomMap.identifier2chromosom.get(rna.chromosom)) != null)
-					model.setChromosome(curChrom);
-				else
-					continue;
+//				System.out.println(rna.chromosom+" --> "+identifier2chromosom.get(rna.chromosom));
+//				if((curChrom = ChromosomMap.identifier2chromosom.get(rna.chromosom)) != null)
+//					model.setChromosome(curChrom);
+//				else
+//					continue;
+				model.setChromosome(rna.chromosom);
 				model.setGeneSymbol(gene.name);
 				model.setStrand(rna.strand ? '+' : '-');
 				model.setTranscriptionStart(rna.getTxStart());
@@ -111,6 +113,8 @@ public class TranscriptModelBuilder implements ChromosomMap{
 	 */
 	public void addFeature(Feature feature) throws InvalidAttributException, FeatureFormatException{
 //		System.out.println(feature.toLine());
+		if(identifier2chromosom.get(feature.sequence_id) == null)
+			return;
 		switch (feature.getType()) {
 		case GENE:
 			processGene(feature);
@@ -156,8 +160,8 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		curRna.end 			= feature.getEnd();
 		curRna.id			= curRnaID;
 		curRna.name			= feature.getAttribute("Name");
-		curRna.chromosom	= feature.getSequence_id();
-		if(!curGene.chromosom.equals(curRna.chromosom))
+		curRna.chromosom	= identifier2chromosom.get(feature.getSequence_id());
+		if(curGene.chromosom != curRna.chromosom)
 			throw new InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match.");
 		curRna.strand		= feature.getStrand();
 		// check strand of transcript and gene
@@ -194,20 +198,20 @@ public class TranscriptModelBuilder implements ChromosomMap{
 //		System.out.println(curGeneID);	
 		// if the gene is not known yet --> add
 		if(!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID,curGeneName,feature.getSequence_id(),feature.strand));
+			genes.put(curGeneID, new Gene(curGeneID,curGeneName,identifier2chromosom.get(feature.sequence_id),feature.strand));
 		// get Gene
 		curGene	= genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if(!rna2gene.containsKey(curRnaID)){
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID,curRnaID,feature.getSequence_id(),feature.strand));
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID,curRnaID,identifier2chromosom.get(feature.sequence_id),feature.strand));
 		}
 		// get RNA
 		curRna	= curGene.rnas.get(curRnaID);
 		
 		// now finally process the Subregion
 		curGFF	= new GFFstruct();
-		curGFF.chromosom	= feature.getSequence_id();
+		curGFF.chromosom	= identifier2chromosom.get(feature.sequence_id);
 		curGFF.start	= feature.getStart();
 		curGFF.end		= feature.getEnd();
 		curGFF.strand	= feature.getStrand();
@@ -256,7 +260,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		curGene.strand 	= feature.getStrand();
 		curGene.start	= feature.getStart();
 		curGene.end		= feature.getEnd();
-		curGene.chromosom = feature.getSequence_id();
+		curGene.chromosom = identifier2chromosom.get(feature.sequence_id);
 		// extract the Genesymbol
 		if(feature.getAttribute("Name") != null)
 			curGene.name = feature.getAttribute("Name");
@@ -303,7 +307,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 	 */
 	private class GFFstruct implements Comparable<GFFstruct>{
 		ArrayList<GFFstruct> parents;
-		String chromosom;
+		byte chromosom;
 		String name;
 		String id;
 		int start	= Integer.MAX_VALUE;
@@ -321,7 +325,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		 * differs.
 		 */
 		public int compareTo(GFFstruct o) {
-			if(chromosom.compareTo(o.chromosom) == 0){
+			if(chromosom == o.chromosom){
 				
 				if(start == o.start){
 					if(end == o.end)
@@ -339,7 +343,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 						return 1;
 				}
 			}else{
-				if(chromosom.compareTo(o.chromosom) < 0)
+				if(chromosom < o.chromosom)
 					return -1;
 				else
 					return 1;
@@ -356,7 +360,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		ArrayList<GFFstruct> exons;
 		ArrayList<GFFstruct> cdss;
 		
-		public Transcript(String id, String name, String chr,boolean strand) {
+		public Transcript(String id, String name, byte chr,boolean strand) {
 			this.id	= id;
 			this.name	= name;
 			this.chromosom	= chr;
@@ -462,7 +466,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 //		ArrayList<GFFstruct> cdss;
 		HashMap<String,Transcript> rnas;
 		
-		public Gene(String id, String name, String chr, boolean strand) {
+		public Gene(String id, String name, byte chr, boolean strand) {
 			this.id	= id;
 			this.name	= name;
 			this.chromosom	= chr;
