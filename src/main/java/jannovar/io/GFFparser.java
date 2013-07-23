@@ -62,6 +62,9 @@ public class GFFparser {
 	private String rawfeature;
 	private String valueSeparator = " ";
 	
+	public void setValueSeperator(String sep){
+		valueSeparator = sep;
+	}
 	
 	public GFFparser(){
 		
@@ -81,6 +84,14 @@ public class GFFparser {
 	 */
 	public int getGFFversion(){
 		return gff_version;
+	}
+	
+	/**
+	 * Returns the GFF version of the parsed file.
+	 * @return the GFF version
+	 */
+	public void setGFFversion(int i){
+		gff_version = i;
 	}
 	
 	/**
@@ -281,40 +292,43 @@ public class GFFparser {
 			attributeString	= attributeString.substring(1);
 		while((index = attributeString.indexOf(";", start)) > 0){
 			rawfeature = attributeString.substring(start, index);
-//			System.out.println(rawfeature);
-			if((subIndex = rawfeature.indexOf(valueSeparator)) > 0){
-				if(gff_version == 3){
-					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1));
-//					System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1)));
-				}
-				else
-					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1));
-			}
-			else
-				throw new FeatureFormatException("attribute String without valid value separator ("+valueSeparator+"): "+rawfeature+" - "+attributeString);
+			splitNaddAttribute(rawfeature, attributes);
 			
 			if(gff_version == 3)
 				start	= index+1;
 			else
 				start	= index+2;
 		}
-//		if(start != attributeString.length()){
-//			rawfeature = attributeString.substring(start);
-//			if((subIndex = rawfeature.indexOf(valueSeparator)) > 0){
-//				if(gff_version == 3){
-//					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1));
-////					System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1)));
-//				}
-//				else
-//					attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1));
-//			}
-//			else
-//				throw new FeatureFormatException("attribute String without valid value separator ("+valueSeparator+"): "+rawfeature+" - "+attributeString);
-//			
-//		}
+		// for GFF3 we need to add the last element
+		if(start < attributeString.length()){
+			rawfeature = attributeString.substring(start);
+			splitNaddAttribute(rawfeature, attributes);
+		}
+
 		return attributes;
 	}
-
+	
+	/**
+	 * Split up the attribute, value pair and add this pair to the attributes Map.
+	 * @param attribute 
+	 * @param attributes {@link Map} with attribute - value pairs
+	 * @throws FeatureFormatException is thrown if attribute String does not contain the 
+	 * {@link #valueSeparator separator} for this GFF file format. 
+	 */
+	private void splitNaddAttribute(String attribute, HashMap<String, String> attributes) throws FeatureFormatException{
+		if((subIndex = rawfeature.indexOf(valueSeparator)) > 0){
+			if(gff_version == 3){
+				attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1));
+//				System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+1)));
+			}
+			else{
+				attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1));
+//				System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex), rawfeature.substring(subIndex+2,rawfeature.length()-1)));
+			}
+		}
+		else
+			throw new FeatureFormatException("attribut String without valid value separator ('"+valueSeparator+"'): '"+attribute+"'");
+	}
 //	/**
 //	 * Processes the attributes in GTF2.2 file format.<br>
 //	 * e.g.:<br>
