@@ -121,7 +121,10 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * Calculate the position of the CDS start (i.e., the start codon) within the entire transcript,
      * essentially equal to the length of the 5' UTR plus one. If the 5' UTR contains
      * one or more introns, then we compensate for this by the cumlenintron calculation
-     * (see the code). 
+     * (see the code). <br>
+     * Due to the format restrictions of the Ensembl GFF format, the position of the CDS start can also 
+     * be a negative value, if the starting exon is completely spanned by CDS area and there is still a
+     * phase offset in the GFF definition.  
      * <P>
      * Note that we calculate the rcdslength when we find the exon which it is contained in.
      * We know this because {@code cdsStart >= this.getExonStart(k) && this.cdsStart <= this.getExonEnd(k))}
@@ -132,6 +135,10 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	//System.out.println("calculateRefCDSStart:" + getName());
 	//System.out.println("cdsStart=" + cdsStart);
 	if (this.isPlusStrand()) {
+		if(this.cdsStart < this.txStart){
+			this.rcdsStart = this.cdsStart - this.txStart +1;
+			return;
+		}
 	    for (int k=0; k< this.exonCount;++k) {
 		//System.out.println("k=" + k);
 		if (k>0)
@@ -150,6 +157,10 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		//System.out.println("cumlenintron=" + cumlenintron);
 	    }
 	} else { /* i.e., minus strand */
+		if(this.cdsEnd > this.txEnd){
+			this.rcdsStart = this.txEnd - this.cdsEnd +1;
+			return;
+		}
 	    for (int k = this.exonCount-1; k>=0; k--) {
 		if (k < this.exonCount-1) {
 		    //$lenintron += ($exonstart[$k+1]-$exonend[$k]-1);
@@ -459,6 +470,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	    /* This indicates a database error. */
 	    return null;
 	}
+	if(start < 0)
+		return null;
+	
 	return this.sequence.substring(start, start+3); /* for + strand */
     }
 	

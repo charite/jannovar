@@ -218,6 +218,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		curGFF.id		= curID;
 		// for CDSs
 		if(feature.getType() == FeatureType.CDS){
+			curGFF.frame	= feature.phase;
 			if(!(curRna.cdss.contains(curGFF)))
 					curRna.cdss.add(curGFF);
 		}
@@ -308,6 +309,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 	private class GFFstruct implements Comparable<GFFstruct>{
 		ArrayList<GFFstruct> parents;
 		byte chromosom;
+		byte frame;
 		String name;
 		String id;
 		int start	= Integer.MAX_VALUE;
@@ -426,28 +428,40 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		}
 		
 		/**
-		 * Returns the highest cds start index. 
+		 * Returns the highest cds start index.<br>
+		 * The index can be extended when the phase of the CDS feature
+		 * contains an offset.
 		 * @return translation start index (1-based, including)
 		 */
 		int getCdsStart(){
 			if(cdsStart == Integer.MAX_VALUE)
 				for (GFFstruct cds : cdss) 
-					if(cdsStart > cds.start)
+					if(cdsStart > cds.start){
 						cdsStart = cds.start;
+						if(cds.strand){
+							cdsStart -= (3-cds.frame)%3;
+						}
+					}
 			if(cdsStart == Integer.MAX_VALUE)
 				cdsStart = getTxStart()+1;
 			return cdsStart;
 		}
 		
 		/**
-		 * Returns the highest cds end  index.
+		 * Returns the highest cds end  index.<br>
+		 * The index can be extended when the phase of the CDS feature
+		 * contains an offset.
 		 * @return translation end index (1-based, including)
 		 */
 		int getCdsEnd(){
 			if(cdsEnd == Integer.MIN_VALUE)
 				for (GFFstruct cds : cdss) 
-					if(cdsEnd < cds.end)
+					if(cdsEnd < cds.end){
 						cdsEnd = cds.end;
+						if(!cds.strand){
+							cdsEnd += (3-cds.frame)%3;
+						}
+					}
 			if(cdsEnd == Integer.MIN_VALUE)
 				cdsEnd = getTxStart();
 			return cdsEnd;
