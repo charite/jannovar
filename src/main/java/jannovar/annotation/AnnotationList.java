@@ -3,11 +3,11 @@ package jannovar.annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 
 
 /**
@@ -235,22 +235,19 @@ public class AnnotationList {
      * cases with multiple annotations.
      */
     public String getMultipleGeneList() {
-	StringBuilder sb = new StringBuilder();
+	StringBuilder sb = new StringBuilder();                                                                                      
 	/** First we need to get a list of the genesymbols. */
-	HashSet<String> geneSymbolSet = new HashSet<String>();
-	for (Annotation a : annotationList) {
-	    geneSymbolSet.add(a.getGeneSymbol());
-	}
-	Iterator<String> it = geneSymbolSet.iterator();
-	int i=0;
-	while (it.hasNext()) {
-	    String s = it.next();
-	    if (i>0)
-		sb.append(", " + s);
-	    else
-		sb.append(s);
-	    i++;
-	}
+    HashSet<String> geneSymbolSet = new HashSet<String>();
+    int i=0;
+    for (Annotation a : annotationList) {
+        if (!geneSymbolSet.contains(a.getGeneSymbol())){
+            if (i>0)
+                sb.append(", ");
+            i++;
+            sb.append(a.getGeneSymbol());
+        }
+        geneSymbolSet.add(a.getGeneSymbol());
+    }
 	return sb.toString();
 
     }
