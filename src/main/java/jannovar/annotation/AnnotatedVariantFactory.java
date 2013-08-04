@@ -18,7 +18,8 @@ import java.util.HashSet;
  * multiple transcripts will have multiple annotations. 
  * <P>
  * This class creates one {@link jannovar.annotation.AnnotationList AnnotationList} object for each
- * variant, that can return both an ArrayList of all annotations, a list of all annotations of the highest
+ * variant (with one or more {@link jannovar.annotation.Annotation Annotation} objects), 
+ * that can return both an ArrayList of all annotations, a list of all annotations of the highest
  * priority level for the variant, and a single representative Annotation.
  * <P>
  * The default preference for annotations is thus
@@ -47,7 +48,7 @@ import java.util.HashSet;
  * <P>
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation Annotation} object.
  * These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
- * @version 0.23 (8 July, 2013)
+ * @version 0.24 (3 August, 2013)
  * @author Peter N Robinson
  */
 
@@ -99,7 +100,12 @@ public class AnnotatedVariantFactory implements Constants {
     private int annotationCount;
 
     
-
+    /**
+     * The constructor initializes an ArrayList of 
+     * {@link jannovar.annotation.Annotation Annotation} objects as well as
+     * a HashSet of Gene symbols (Strings).
+     * @param initialCapacity The initial capacity of the arraylist and hashset.
+     */
     public AnnotatedVariantFactory(int initialCapacity) {
 	this.annotationLst = new ArrayList<Annotation>(initialCapacity);
 	this.geneSymbolSet = new HashSet<String>();

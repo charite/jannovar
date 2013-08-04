@@ -558,5 +558,35 @@ jannovar says, annovar finds a "C")
 	Assert.assertEquals("OLFM1(uc010naq.2:exon2:c.328_329insAA:p.G110fs)",annot);
     }
 }
+
+
+/**
+ *<P>
+
+g19:chr17:g.37830925_37830926insG. This is reported as
+NM_033419.3:c.440_441insC in Annovar. Correct nomenclature in HGVS
+should be: NM_033419.3:c.441dup, NM_033419.3:p.(Asn148Glnfs*15).
+
+However, I think there is also a position bug. Correct cDNA code
+should be:NM_033419.3:c.439dup,
+p.(Leu147Profs*16)
+ *</P>
+ */
+@Test public void testInsertionVar49() throws AnnotationException  {
+    byte chr = 17;
+    int pos = 37830925;
+    String ref = "-";
+    String alt = "C";
+    Chromosome c = chromosomeMap.get(chr); 
+    if (c==null) {
+	Assert.fail("Could not identify chromosome \"" + chr + "\"");
+    } else {
+	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
+	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	String annot = ann.getVariantAnnotation();
+	//Assert.assertEquals("xx",annot);
+    }
+}
     
 }

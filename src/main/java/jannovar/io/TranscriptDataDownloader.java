@@ -64,8 +64,10 @@ public class TranscriptDataDownloader implements Constants {
 	
 	/**
 	 * This function first checks if the download directory already exists. If
-	 * not, it tries to create the directory. Then the {@link #source} (UCSC, ENsembl, ...) 
-	 * dependent download method is called.
+	 * not, it tries to create the directory. Then the
+	 * download method is called.
+	 * @param source an integer constant (see {@link jannovar.common.Constants Constants})
+	 * that indicates whether to download UCSC, Ensembl, or RefSeq.
 	 * @throws FileDownloadException
 	 */
 	public void downloadTranscriptFiles(int source) throws FileDownloadException {

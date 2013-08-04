@@ -1,6 +1,3 @@
-/**
- * 
- */
 package jannovar.io;
 
 import java.io.BufferedReader;
@@ -72,7 +69,6 @@ public class GFFparser {
 	
 	/**
 	 * Checks if the specified file can be accessed.
-	 * @return
 	 */
 	public boolean checkFile(){
 		return this.file.canRead();
@@ -87,8 +83,8 @@ public class GFFparser {
 	}
 	
 	/**
-	 * Returns the GFF version of the parsed file.
-	 * @return the GFF version
+	 * Sets the GFF version of the parsed file.
+	 * @param i The GFF version number.
 	 */
 	public void setGFFversion(int i){
 		gff_version = i;
@@ -137,7 +133,7 @@ public class GFFparser {
 	}
 	
 	/**
-	 * Parse the file and feeds the {@link TranscriptModelFactory}.
+	 * Parses the file and feeds the {@link TranscriptModelBuilder}.
 	 * First the GFF format version is verified. If there is no header containing the <code>##gff-version</code> 
 	 * tag, we assume it is GFF version 2/2.5 aka. GTF.
 	 */
@@ -187,13 +183,13 @@ public class GFFparser {
 //	}
 	
 	/**
-	 * Returns the {@link TranscriptModelFactory}.
+	 * Returns the {@link TranscriptModelBuilder}.
 	 * @return the transcriptFactory
 	 */
 	public TranscriptModelBuilder getTranscriptModelBuilder() {
 		return transcriptBuilder;
 	}
-
+    
 	/**
 	 * Processes a single feature / line from a GTF or GFF file.<br>
 	 * e.g.<br>
@@ -259,8 +255,8 @@ public class GFFparser {
 	
 	/**
 	 * Codes the phase of the CDS reading frame in the exon. A simple cast from String to byte.  
-	 * @param phase
-	 * @return
+	 * @param phase The phase of the CDS reading frame 
+	 * @return the phase of the CDS reading frame as a byte.
 	 */
 	private byte codePhase(String phase) {
 
@@ -281,7 +277,7 @@ public class GFFparser {
 	 * or
 	 * GTF2.2 file format - e.g.:<br>
 	 * gene_id "uc007aet.1"; transcript_id "uc007aet.1";
-	 * @return
+	 * @return a HashMap with attributes
 	 * @throws FeatureFormatException 
 	 */
 	private HashMap<String, String> processAttributes(String attributeString) throws FeatureFormatException {

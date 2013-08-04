@@ -21,35 +21,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
      <version>1.1</version>
     </dependency>
 
-   <!-- <dependency>
-     <groupId>log4j</groupId>
-     <artifactId>log4j</artifactId>
-     <version>1.2.16</version>
-    </dependency>
-    -->
+   
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
   
   
 
   <build>
    <plugins>
-     <!--
-    <plugin>
-     <groupId>org.apache.maven.plugins</groupId>
-     <artifactId>maven-compiler-plugin</artifactId>
-     <version>3.1</version>
-      <configuration>
-          <compilerArgument>-Xlint</compilerArgument>
-        </configuration>
-    </plugin>
-    -->
      <plugin>
        <!-- Build an executable JAR -->
        <groupId>org.apache.maven.plugins</groupId>
@@ -102,9 +86,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-javadoc-plugin</artifactId>
       <version>2.9</version>
+      <!-- Uncomment this to get the Javadoc to show all members
       <configuration>
 	<show>private</show>
       </configuration>
+      -->
     </plugin>
    <!-- This plugin generates a test coverage analysis
     <plugin>

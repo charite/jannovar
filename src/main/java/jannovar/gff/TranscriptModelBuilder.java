@@ -106,7 +106,7 @@ public class TranscriptModelBuilder implements ChromosomMap{
 	}
 	
 	/**
-	 * Adds a new Feature to the internal {@link TranscriptModelFactory}.
+	 * Adds a new Feature to the internal {@link TranscriptModelBuilder}.
 	 * @param feature
 	 * @throws InvalidAttributException
 	 * @throws FeatureFormatException

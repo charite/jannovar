@@ -193,8 +193,8 @@ public class Feature {
 	
 	/**
 	 * 
-	 * @param id
-	 * @return
+	 * @param id  The attribute ID
+	 * @return the attribute corresponding to id.
 	 */
 	public String getAttribute(String id){
 		return this.attributes.get(id);
