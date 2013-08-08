@@ -43,6 +43,8 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param p Position of the variant
      * @param r Reference nucleotide
      * @param alternate variant (alt) nucleotide
+     * @param gtype The Genotype call (single or multiple sample)
+     * @param qual The PHRED quality of the variant call.
     */
     public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, int qual) {
 	this.chromosome = c;
@@ -104,6 +106,10 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.annot = a;
     }
 
+
+    public boolean affectsMultipleGenes() {
+	return this.annot.hasMultipleGeneSymbols();
+    }
 
    
     // ###########   GETTERS ######################### //
@@ -295,6 +301,25 @@ public class Variant implements Comparable<Variant>, Constants {
 	}
 	return A;
     }
+
+    public ArrayList<String> getAnnotationListWithGeneSymbol() {
+	if (this.annot == null) {
+	    ArrayList<String> A = new ArrayList<String>();
+	    A.add(".");
+	    return A;
+	}
+	ArrayList<Annotation> alist = this.annot.getAnnotationList();
+	ArrayList<String> A = new ArrayList<String>();
+	for (Annotation ann : alist) {
+	    String s = ann.getVariantAnnotation();
+	    String sym = ann.getGeneSymbol();
+	    A.add(String.format("%s (%s)",s,sym));
+	}
+	return A;
+    }
+
+
+    
 
 
     public String getVariantType() {

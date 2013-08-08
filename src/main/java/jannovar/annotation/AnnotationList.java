@@ -68,12 +68,17 @@ public class AnnotationList {
     public ArrayList<Annotation> getAnnotationList() {
 	return this.annotationList;
     }
+
+  
+
     
     /**
      * This method is called if a variant affects multiple genes (the default is
      * false and this method sets the flag {@link #hasMultipleGeneSymbols} to true.
      */
     public void setHasMultipleGeneSymbols() { this.hasMultipleGeneSymbols = true; }
+
+    public boolean hasMultipleGeneSymbols()  { return this.hasMultipleGeneSymbols; }
 
      /**
      * If there are multiple annotations, this function
@@ -179,13 +184,14 @@ public class AnnotationList {
 
 
     /**
-     * Returns the gene symbol of the annotations. If multiple genes are affected,
-     * it returns the string "MultipleGenes". Probably this needs to be refactored.
+     * Returns the gene symbol of the annotations. If multiple genes are 
+     * affected, it returns the Gene symbol of the most highly prioritized gene.
      */
     public String getGeneSymbol() {
-	if (this.hasMultipleGeneSymbols) {
+	/*if (this.hasMultipleGeneSymbols) {
 	    return getMultipleGeneList();
-	} else if (this.annotationList == null) {
+	    } else */
+	if (this.annotationList == null) {
 	    System.err.println("error-annotationListNull");
 	    System.out.println("VarType = " + type);
 	} else if (this.annotationList.size()==0) {
@@ -237,19 +243,18 @@ public class AnnotationList {
     public String getMultipleGeneList() {
 	StringBuilder sb = new StringBuilder();                                                                                      
 	/** First we need to get a list of the genesymbols. */
-    HashSet<String> geneSymbolSet = new HashSet<String>();
-    int i=0;
-    for (Annotation a : annotationList) {
-        if (!geneSymbolSet.contains(a.getGeneSymbol())){
-            if (i>0)
-                sb.append(", ");
-            i++;
-            sb.append(a.getGeneSymbol());
-        }
-        geneSymbolSet.add(a.getGeneSymbol());
-    }
+	HashSet<String> geneSymbolSet = new HashSet<String>();
+	int i=0;
+	for (Annotation a : annotationList) {
+	    if (!geneSymbolSet.contains(a.getGeneSymbol())){
+		if (i>0)
+		    sb.append(", ");
+		i++;
+		sb.append(a.getGeneSymbol());
+	    }
+	    geneSymbolSet.add(a.getGeneSymbol());
+	}
 	return sb.toString();
-
     }
 
 
