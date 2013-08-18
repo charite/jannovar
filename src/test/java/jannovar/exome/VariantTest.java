@@ -22,7 +22,7 @@ import org.junit.Assert;
 
 /**
  * VariantTest
- * 10 May, 2013.
+ * 16 August, 2013.
  */
 public class VariantTest {
 
@@ -36,7 +36,7 @@ public class VariantTest {
     @Test public void testChromosome1() throws VCFParseException {
 	byte chr5 = 5;
 	Variant v = new Variant(chr5,13,"A","A",null,0);
-        String c= v.get_chrom_string();
+        String c= v.get_chromosome_as_string();
 	Assert.assertEquals("chr5",c);
     }
 
@@ -44,7 +44,7 @@ public class VariantTest {
 	byte chrX = 23;
 	Variant v = new Variant(chrX,13,"A","C",null,0);
 
-        String c= v.get_chrom_string();
+        String c= v.get_chromosome_as_string();
 	Assert.assertEquals("chrX",c);
 	Assert.assertEquals(true,v.is_X_chromosomal());
     }
@@ -53,7 +53,7 @@ public class VariantTest {
 	byte chrY = 24;
 	Variant v = new Variant(chrY,13,"A","C",null,0);
 
-        String c= v.get_chrom_string();
+        String c= v.get_chromosome_as_string();
 	Assert.assertEquals("chrY",c);
 	Assert.assertEquals(false,v.is_X_chromosomal());
     }

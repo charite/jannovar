@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
  * belong to the highest priority class by noting the class of the first annotation, and
  * not returning any annotation  of a lower priority level.
  * @author Peter N Robinson
- * @version 0.17 (7 July, 2013)
+ * @version 0.18 (17 August, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -53,6 +53,14 @@ public class AnnotationList {
 	/* no-op */
     }
 
+    /**
+     * Construction of AnnotationList objects is performed by an
+     * {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} 
+     * object based on the transcripts that are identified by the Interval
+     * tree search. All annotations that affect one variant are passed to
+     * the constructor.
+     * @param lst List of all annotations that affect the current variant.
+     */
     public AnnotationList(ArrayList<Annotation> lst) {
 	this.annotationList = new ArrayList<Annotation>();
 	this.annotationList.addAll(lst);
@@ -63,21 +71,21 @@ public class AnnotationList {
     /**
      * Get a list of all individual
      * {@link jannovar.annotation.Annotation Annotation}
-     * objects.
+     * objects that affect the variant that owns this AnnotationList.
      */
     public ArrayList<Annotation> getAnnotationList() {
 	return this.annotationList;
     }
-
-  
-
     
     /**
      * This method is called if a variant affects multiple genes (the default is
      * false and this method sets the flag {@link #hasMultipleGeneSymbols} to true.
      */
     public void setHasMultipleGeneSymbols() { this.hasMultipleGeneSymbols = true; }
-
+    
+    /**
+     * @return true if the variant is located within multiple (overlapping) genes.
+     */
     public boolean hasMultipleGeneSymbols()  { return this.hasMultipleGeneSymbols; }
 
      /**

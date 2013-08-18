@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.27 (7 July, 2013)
+ * @version 0.28 (17 August, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -31,7 +31,8 @@ public class Annotation implements Constants, Comparable<Annotation> {
     /** The string representing the actual annotation, but
      * not including the gene symbol. For instance, for the
      * complete annotation "KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q",
-     * this field would include "uc001aim.1:exon18:c.T2287C:p.X763Q"*/
+     * this field would include "uc001aim.1:exon18:c.T2287C:p.X763Q"
+     */
     private String variantAnnotation=null;
 
     /** The gene symbol for this annotation. Thus, for the complete

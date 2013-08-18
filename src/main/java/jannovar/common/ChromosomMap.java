@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 /**
  * This is a map for all currently known mappings used in the GTF/GFF files from various 
- * databases for the chromosoms of the reference assembly.<br>
- * Version 0.1 contains actual mappings (2013-06-17) for mouse and human from
+ * databases for the chromosomes of the reference assembly.<br>
+ * Version 0.1 contains current mappings (2013-06-17) for mouse and human from
  * <UL>
  * <LI> UCSC (hg19,mm9,mm10)
  * <LI> NCBI (GRCh37.p10,GRCm38.p1)

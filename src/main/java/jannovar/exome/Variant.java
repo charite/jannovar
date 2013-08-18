@@ -35,7 +35,7 @@ public class Variant implements Comparable<Variant>, Constants {
     private int variant_quality;
     /** {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from 
 	Jannovar-type annotation of this variant. */
-    private AnnotationList annot=null;
+    private AnnotationList annotList=null;
 
    
      /**
@@ -91,24 +91,29 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.alt = s;
     }
     
+    /**
+     * @param q The PHRED score for the variant call.
+     */
     public void set_variant_quality(int q) { this.variant_quality = q; }
     
 
     /**
      * Set the {@link jannovar.annotation.AnnotationList AnnotationList} object for this variant. 
-     * This method is intended to be
-     * used by our annovar-style annotation code in order to provide transcript-
+     * This method is intended to provide transcript-
      * level annotation for the variants, for example, to annotate the chromosomal
      * variant {@code chr7:34889222:T>C} to {@code NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R) (Type:STOPLOSS)}.
      * @param a An annotationList object representing annotations of all affected transcripts.
      */
     public void setAnnotation(AnnotationList a) {
-	this.annot = a;
+	this.annotList = a;
     }
 
-
+    /**
+     * Some variants are located in positions where multiple genes overlap.
+     * @return true if the variant is located within more than one gene
+     */
     public boolean affectsMultipleGenes() {
-	return this.annot.hasMultipleGeneSymbols();
+	return this.annotList.hasMultipleGeneSymbols();
     }
 
    
@@ -129,8 +134,8 @@ public class Variant implements Comparable<Variant>, Constants {
      * Get the genesymbol of the gene associated with this variant, if possible 
      */
     public String getGeneSymbol() { 
-	if (this.annot != null)  {
-	    return annot.getGeneSymbol();
+	if (this.annotList != null)  {
+	    return annotList.getGeneSymbol();
 	} else {
 	    return ".";
 	} 
@@ -140,7 +145,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return the NCBI Entrez Gene ID 
      */
     public int getEntrezGeneID() {
-	return annot.getEntrezGeneID();
+	return annotList.getEntrezGeneID();
     }
 
 
@@ -150,16 +155,18 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return true if this variant is a nonsynonymous substitution (missense).
      */
     public boolean is_nonsynonymous_variant() { 
-	if (annot == null)
+	if (annotList == null)
 	    return false;
-	else return (annot.getVariantType() == VariantType.NONSYNONYMOUS);
+	else return (annotList.getVariantType() == VariantType.NONSYNONYMOUS);
     }
   
-  
+    /**
+     * @return true if both the reference and the alternate sequence have a length of one nucleotide.
+     */
     public boolean is_single_nucleotide_variant () { return (this.ref.length()==1 && this.alt.length()==1); }
     
     /**
-     * @return an integer representation of the chromosome  (note: X=23, Y=24).
+     * @return an integer representation of the chromosome  (note: X=23, Y=24, MT=25).
      */
     public int get_chromosome() { return chromosome; }
     /**
@@ -168,21 +175,21 @@ public class Variant implements Comparable<Variant>, Constants {
     public byte getChromosomeAsByte() { return chromosome; }
 
     public String get_chromosome_as_string() {
-	if (this.chromosome == (byte)23)
+	if (this.chromosome == X_CHROMOSOME)
 	    return "chrX";
-	else if (this.chromosome == (byte)24)
+	else if (this.chromosome == Y_CHROMOSOME)
 	    return "chrY";
-	else if (this.chromosome == (byte)25)
+	else if (this.chromosome ==  M_CHROMOSOME)
 	    return "chrM";
 	else
 	    return String.format("chr%d",this.chromosome);
-
     }
-   
 
+    /**
+     * @return true if the variant is located on the X chromosome.
+     */
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
     
-   
     /**
      * @return The PHRED quality of this variant call.
      */
@@ -199,11 +206,7 @@ public class Variant implements Comparable<Variant>, Constants {
     public String getGenotypeAsString() {
 	return this.genotype.get_genotype_as_string();
     }
-
-    public String get_genotype_as_string() {
-	return this.genotype.get_genotype_as_string();
-    }
-
+    
     /**
      * This function uses the function of the same name of the 
      * the {@link jannovar.genotype.GenotypeCall GenotypeCall} object
@@ -214,8 +217,6 @@ public class Variant implements Comparable<Variant>, Constants {
 	return this.genotype.getGenotypeList();
     }
 
-    
-
     public String get_position_as_string() { return Integer.toString(this.position); }
    
     /**
@@ -223,22 +224,9 @@ public class Variant implements Comparable<Variant>, Constants {
      */
     public String get_chromosomal_variant() {
 	StringBuilder sb = new StringBuilder();
-	sb.append( get_chrom_string() );
+	sb.append( get_chromosome_as_string() );
 	sb.append(":g.");
 	sb.append(this.position + ref + ">" + alt);
-	return sb.toString();
-    }
-
-    /**
-     * @return an String representation of the chromosome (e.g., chr3, chrX).
-     */
-    public String get_chrom_string() {
-	StringBuilder sb = new StringBuilder();
-	sb.append("chr");
-	if (chromosome ==  X_CHROMOSOME ) sb.append("X");
-	else if (chromosome ==  Y_CHROMOSOME ) sb.append("Y");
-	else if (chromosome ==  M_CHROMOSOME ) sb.append("M");
-	else sb.append(chromosome);
 	return sb.toString();
     }
 
@@ -249,12 +237,9 @@ public class Variant implements Comparable<Variant>, Constants {
      * {@link jannovar.annotation.Annotation Annotation} object. If this
      * is not initialized (which should never happen), it returns ".".
      *<p>
-     * Note: This function returns a String that summarizes all of the annotations
-     * of the current variant, e.g., 
+     * Note: This function returns a String with one representative annotation
+     * for the current variant
      * <p>
-     * LTF(uc003cpr.3:exon5:c.30_31insAAG:p.R10delinsRR,uc003cpq.3:exon2:c.69_70insAAG:p.R23delinsRR,
-     * uc010hjh.3:exon2:c.69_70insAAG:p.R23delinsRR)
-     * </P>
      * If client code wants to get a list of each individual annotation, it should instead call 
      * the function {@link #getAnnotationList}.
      * @return The annotation of the current variant.
@@ -262,13 +247,12 @@ public class Variant implements Comparable<Variant>, Constants {
     public String getAnnotation()
     {
 	try { 
-	    if (this.annot != null)
-		return this.annot.getVariantAnnotation();
+	    if (this.annotList != null)
+		return this.annotList.getVariantAnnotation();
 	     else return ".";
 	} catch (AnnotationException e) {
 	    return ".";
 	}
-	   
     }
 
     /**
@@ -288,13 +272,13 @@ public class Variant implements Comparable<Variant>, Constants {
      * call the function {@link #getAnnotation}.
      */
     public ArrayList<String> getAnnotationList() {
-	if (this.annot == null) {
-	    ArrayList<String> A = new ArrayList<String>();
+	ArrayList<String> A = new ArrayList<String>();
+	if (this.annotList == null) {
 	    A.add(".");
 	    return A;
 	}
-	ArrayList<Annotation> alist = this.annot.getAnnotationList();
-	ArrayList<String> A = new ArrayList<String>();
+	ArrayList<Annotation> alist = this.annotList.getAnnotationList();
+
 	for (Annotation ann : alist) {
 	    String s = ann.getVariantAnnotation();
 	    A.add(s);
@@ -303,12 +287,12 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
     public ArrayList<String> getAnnotationListWithGeneSymbol() {
-	if (this.annot == null) {
+	if (this.annotList == null) {
 	    ArrayList<String> A = new ArrayList<String>();
 	    A.add(".");
 	    return A;
 	}
-	ArrayList<Annotation> alist = this.annot.getAnnotationList();
+	ArrayList<Annotation> alist = this.annotList.getAnnotationList();
 	ArrayList<String> A = new ArrayList<String>();
 	for (Annotation ann : alist) {
 	    String s = ann.getVariantAnnotation();
@@ -318,13 +302,79 @@ public class Variant implements Comparable<Variant>, Constants {
 	return A;
     }
 
+    /**
+     * This method combines the fields of the String array s using
+     * a colon (":") as a separator, similar to the way that the Perl
+     * function join works. However, this function removes the first
+     * element of the array because it contains the transcript id
+     * in our application (e.g., uc003szt.3). For certain types of
+     * annotation, however, there is only one field (intronic annotations
+     * are currently handled this way). If so, return just this field.
+     */
+    private String combineWithoutID(String[] s)
+    {
+	int k=s.length;
+	if (k==0)
+	    return null;
+	if (k==1)
+	    return s[0];
+	StringBuilder out=new StringBuilder();
+	out.append(s[1]);
+	for (int x=2;x<k;++x)
+	    out.append(":").append(s[x]);
+	return out.toString();
+    }
+
+    /**
+     * This method is intended to be used by programs such as Exomiser that
+     * add URLs or other additional information to the annotations. The method
+     * works under the assumption that the Annotation object will return a
+     * string that may be separated by ":" into fields. The first field should
+     * then represent a database identifier such as an UCSC gene ID. This
+     * field is then split into a separate string, and separated from the 
+     * remaining part of the annotation by a "pipe" ("|") symbol. This should
+     * make it easy to create HTML links from the accession number and to display
+     * the rest of the annotation as text or part of the link using program-specific
+     * logic.
+     * <P>
+     * note that some variants affect multiple genes because they overlap. Application
+     * software generally wants to display this in a special way. We signal this
+     * here by adding a third field whose last field in the gene symbol.
+     */
+    public ArrayList<String> getTranscriptAnnotations() {
+	ArrayList<String> A = new ArrayList<String>();
+	if (this.annotList == null) {
+	    A.add(".|."); /* empty ID, empty annotation. This should actually never happen, but it
+			     is better than returning null. */
+	    return A;
+	}
+	boolean mult = this.affectsMultipleGenes();
+	ArrayList<Annotation> alist = this.annotList.getAnnotationList();
+	for (Annotation ann : alist) {
+	    String s = ann.getVariantAnnotation();
+	    String F[] = s.split(":");
+	    String id  = F[0]; /* this will be something like "uc003szt.3" */
+	    s = combineWithoutID(F);
+	    if (ann.getVariantType() == VariantType.INTRONIC) {
+		s = String.format("%s:intronic",s);
+	    }
+	    
+	    s = String.format("%s|%s",id,s);
+	    if (mult) {
+		s = String.format("%s|%s",s,ann.getGeneSymbol());
+	    }
+	    A.add(s);
+	}
+	return A;
+    }
+
 
     
 
 
     public String getVariantType() {
-	if (this.annot != null)
-	    return this.annot.getVariantType().toString();
+	if (this.annotList != null)
+	    return this.annotList.getVariantType().toString();
 	else return "?";
     }
 
@@ -333,8 +383,8 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return a enum constant representing the variant class (NONSENSE, INTRONIC etc)
      */
     public VariantType getVariantTypeConstant() {
-	if (this.annot != null)
-	    return this.annot.getVariantType();
+	if (this.annotList != null)
+	    return this.annotList.getVariantType();
 	else
 	    return VariantType.ERROR;
     }
@@ -347,28 +397,26 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return A String representing the variant in the chromosomal sequence, e.g., chr17:c.73221527G>A
      */
     public String getChromosomalVariant() {
-	return String.format("%s:c.%d%s>%s",get_chrom_string(), position, ref, alt);
+	return String.format("%s:c.%d%s>%s",get_chromosome_as_string(), position, ref, alt);
     }
 
 
     /**
-     * Represent the Variant and its genotype as a string
+     * Represent the Variant and its genotype as a string. This method
+     * is intended primarily for debugging, use other access methods to
+     * output information about the variant.
      */
     public String toString() {
 	StringBuilder sb = new StringBuilder();
 	String chr = getChromosomalVariant();
 	sb.append("\t"+ chr);
-	if (annot != null)
+	if (annotList != null)
 	    sb.append("\t: "+ getAnnotation() + "\n");
 	else
 	    sb.append("\tcds mutation not initialized\n");
-
 	sb.append("\tGenotype: " + this.genotype.get_genotype_as_string() + "\n");
-
 	sb.append("\tType: " + get_variant_type_as_string() );
-	
 	return sb.toString();
-
     }
     /**
      * The variant types (e.e., MISSENSE, NONSENSE) are stored internally as byte values.
@@ -377,10 +425,10 @@ public class Variant implements Comparable<Variant>, Constants {
      */
      public String get_variant_type_as_string()
     {
-	if (this.annot == null)
+	if (this.annotList == null)
 	    return "uninitialized";
 	else
-	    return this.annot.getVariantType().toString();
+	    return this.annotList.getVariantType().toString();
     }
 
 
