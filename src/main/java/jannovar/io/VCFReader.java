@@ -434,8 +434,6 @@ public class VCFReader {
     {
 	String A[] = line.split("\t");
 	/* First check that obligatory format is correct */
-
-	this.errorList.add("VCF File: " + this.base_filename + ".");
 	if (! A[0].equals("#CHROM") ) {
 	    throw new VCFParseException("[parse_chrom_line]: Malformed #CHROM field in #CHROM line: " + line);
 	}
