@@ -38,7 +38,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * {@link jannovar.genotype.GenotypeCall GenotypeCall}
  * objects depending on whether we have a single-sample or multiple-sample VCF file.
  * @author Peter Robinson 
- * @version 0.17 (10 July, 2013)
+ * @version 0.18 (17 August, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -246,11 +246,18 @@ public class VCFReader {
     }
 
     /**
+     * This function returns status messages representing the results of parsing.
+     * The messages can represent errors, if any occured. There is always at least one
+     * message indicating the total number of variants encountered during parsing. The
+     * messages are intended to be use for HTML output or logs etc.
      * @return list of any errors encountered during VCF parsing, or  null to indicate no error.
      */
     public ArrayList<String> get_html_message() { 
 	ArrayList<String> msg = new ArrayList<String>();
-	msg.add(String.format("VCF file: %s (number of variants: %d)",base_filename,this.total_number_of_variants));
+	if (this.base_filename != null)
+	    msg.add(String.format("VCF file: %s (number of variants: %d)",base_filename,this.total_number_of_variants));
+	else
+	     msg.add(String.format("Number of variants in VCF file: %d",this.total_number_of_variants));
 	if (this.errorList.size() != 0) {
 	    msg.add("Errors encountered while parsing VCF file:");
 	    msg.addAll(this.errorList);
