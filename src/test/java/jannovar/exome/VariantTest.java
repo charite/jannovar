@@ -58,5 +58,49 @@ public class VariantTest {
 	Assert.assertEquals(false,v.is_X_chromosomal());
     }
 
+     @Test public void testTransition1() {
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"A","G",null,0);
+	boolean b = v.isTransition();
+	Assert.assertEquals(true,b);
+    }
+
+    /* A<->T is not a transition */
+     @Test public void testTransition2() {
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"A","T",null,0); 
+	boolean b = v.isTransition();
+	Assert.assertEquals(false,b);
+    }
+
+    /* A<->GC is not a transition because not a SNV */
+     @Test public void testTransition3() {
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"A","GC",null,0); 
+	boolean b = v.isTransition();
+	Assert.assertEquals(false,b);
+    }
+
+     @Test public void testTransversion1() {
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"C","G",null,0);
+	boolean b = v.isTransversion();
+	Assert.assertEquals(true,b);
+    }
+
+      @Test public void testTransversion2() {
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"A","T",null,0);
+	boolean b = v.isTransversion();
+	Assert.assertEquals(true,b);
+    }
+
+     @Test public void testTransversion3() {
+	byte chr = 3;
+	Variant v = new Variant(chr,13,"C","T",null,0);
+	boolean b = v.isTransversion();
+	Assert.assertEquals(false,b);
+    }
+
 
 }

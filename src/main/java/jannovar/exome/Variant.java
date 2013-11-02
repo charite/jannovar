@@ -13,7 +13,7 @@ import jannovar.genotype.GenotypeCall;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.21 (17 July, 2013)
+ * @version 0.22 (1 November, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -159,6 +159,51 @@ public class Variant implements Comparable<Variant>, Constants {
 	    return false;
 	else return (annotList.getVariantType() == VariantType.NONSYNONYMOUS);
     }
+
+    /**
+     * A transition is purine <-> purine or pyrimidine <-> pyrimidine.
+     * Only applies to single nucleotide subsitutions.
+     * @return true if the variant is a SNV and a transition.
+     */
+    public boolean isTransition() {
+	if (! is_single_nucleotide_variant () )
+	    return false;
+	/* purine to purine change */
+	if (this.ref.equals("A") && this.alt.equals("G"))
+	    return true;
+	else if (this.ref.equals("G") && this.alt.equals("A"))
+	    return true;
+	/* pyrimidine to pyrimidine change */
+	if (this.ref.equals("C") && this.alt.equals("T"))
+	    return true;
+	else if (this.ref.equals("T") && this.alt.equals("C"))
+	    return true;
+	/* If we get here, the variant must be a transversion. */
+	return false;
+    }
+
+     /**
+     * A transversion is purine <-> pyrimidine.
+     * Only applies to single nucleotide subsitutions.
+     * @return true if the variant is a SNV and a transversion.
+     */
+    public boolean isTransversion() {
+	if (! is_single_nucleotide_variant () )
+	    return false;
+	/* purine to purine change */
+	if (this.ref.equals("A") && this.alt.equals("G"))
+	    return false;
+	else if (this.ref.equals("G") && this.alt.equals("A"))
+	    return false;
+	/* pyrimidine to pyrimidine change */
+	if (this.ref.equals("C") && this.alt.equals("T"))
+	    return false;
+	else if (this.ref.equals("T") && this.alt.equals("C"))
+	    return false;
+	/* If we get here, the variant must be a SNV and a transversion. */
+	return true;
+    }
+
   
     /**
      * @return true if both the reference and the alternate sequence have a length of one nucleotide.
