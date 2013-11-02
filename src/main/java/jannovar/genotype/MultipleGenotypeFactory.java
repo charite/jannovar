@@ -40,7 +40,7 @@ import jannovar.exception.VCFParseException;
  * @see jannovar.genotype.SingleGenotypeFactory
  * @see jannovar.genotype.GenotypeCall
  * @author Peter N Robinson
- * @version 0.13 (7 July, 2013)
+ * @version 0.14 (1 November, 2013)
  */
 public class MultipleGenotypeFactory extends GenotypeFactoryA {
     /**
@@ -51,6 +51,10 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
      * A list of the genotype qualities of each sample (needs to be reset for each VCF line).
      */
     private ArrayList<Integer> qualityList=null;
+    /**
+     * A list of the genotype depths (DP) of each sample (needs to be reset for each VCF line).
+     */
+    private ArrayList<Integer> depthList=null;
     
     
     private int UNINITIALIZED_INT=-10;
@@ -60,11 +64,11 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
      * theoretically be different in different lines, thus we parse this once for
      * each line.
      */
-    private int gt_index = UNINITIALIZED_INT;
-    /**
-     * The index of the genotype quality field in the current VCF line.
-     */
+    private int gt_idx = UNINITIALIZED_INT;
+    /** The index of the genotype quality field (GQ) in the current VCF line.*/
     private int qual_idx = UNINITIALIZED_INT; 
+    /** y The index of the read depth field (DP) in the current VCF line. */
+    private int depth_idx = UNINITIALIZED_INT; 
 
     /** 
      * This is the core method of the factory, and creates
@@ -81,6 +85,7 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 	  * for each new line. */
 	this.callList = new ArrayList<Genotype>();
 	this.qualityList = new ArrayList<Integer>();
+	this.depthList = new ArrayList<Integer>();
 	String format = A[8]; /* The ninth field (i.e., 8) of a VCF line is FORMAT */
 	/* iterate over all remaining fields, which are the individual genotypes for
 	 * each of the samples in the file. */
@@ -90,15 +95,16 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 	    //System.out.println("i="+i+": " + A[i]);
 	    parseGenotypeField(A[i]);
 	}
-	GenotypeCall  mgt = new GenotypeCall(callList,qualityList);
+	GenotypeCall mgt = new GenotypeCall(callList,qualityList,depthList);
 	return mgt;
     }
 
     /**
-     * The constructor just initializes two ArrayLists. 
+     * The constructor is initialized once, but the state is initialized once
+     * for each VCF line.
      */
     public MultipleGenotypeFactory() {
-	
+	/* no-op */
     }
 
 
@@ -112,14 +118,15 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
      */
     private void parseFORMATfield(String format) throws VCFParseException {
 	String A[] = format.split(":");
-	this.gt_index = UNINITIALIZED_INT;
+	this.gt_idx = UNINITIALIZED_INT;
 	this.qual_idx = UNINITIALIZED_INT;
-	
+	this.depth_idx = UNINITIALIZED_INT; // index of the depth field.
 	for (int i=0;i<A.length; ++i) {
-	    if (A[i].equals("GT")) { this.gt_index = i;}
-	    if (A[i].equals("GQ")) { this.qual_idx =i; }
+	    if (A[i].equals("GT")) { gt_idx = i;}
+	    if (A[i].equals("GQ")) { qual_idx =i; }
+	    if (A[i].equals("DP")) { depth_idx =i; }
 	}
-	if (gt_index < 0) {
+	if (gt_idx < 0) {
 	    String s = String.format("Could not find genotype field in FORMAT field: \"%s\"",format);
 	    throw new VCFParseException(s);
 	}
@@ -139,24 +146,21 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 	/* The overall genotype quality as parsed from the QUAL field. If this field was given as
 	   a float, then it is rounded to the nearest integer. */
 	int genotype_quality=UNINITIALIZED_INT;
+	int genotype_depth =UNINITIALIZED_INT;
 	
 	String B[] = sample.split(":");
-	String genot = B[this.gt_index];
+	String genot = B[this.gt_idx];
 
-	if (genot.equals("0/1") || genot.equals("0|1") || genot.equals("1|0") || genot.equals("0/2"))
-	    call = Genotype.HETEROZYGOUS; 
-	else if (genot.equals("1/1") || genot.equals("1|1") || genot.equals("2/2") || genot.equals("1"))
-	    call = Genotype.HOMOZYGOUS_ALT;
-	else if (genot.equals("0/0") || genot.equals("0|0"))
-	    call = Genotype.HOMOZYGOUS_REF;
-	else if (genot.equals("./.") || genot.equals(".")) {
-	    /* In this case, there is only one subfield, "./." 
-	       instead of say "0/0:1,0:1:3:0,3,33" */
-	    call = Genotype.NOT_OBSERVED;
-	    qual_idx = -1; /* Even though the FORMAT field is OK, there is only ./. for the genotype field, 
-			      and there is no quality subfield. Resetting qual_idx to -1 causes the following
-			      if clause to be skipped. */
-	} if (this.qual_idx >= 0) {
+	call = parseGenotypeString(genot);
+
+	if (call == Genotype.NOT_OBSERVED) {
+	    qual_idx = UNINITIALIZED_INT; 
+	    depth_idx = UNINITIALIZED_INT;
+	    /* Even though the FORMAT field is OK, there is only ./. for the genotype field, 
+	       and there is no quality/depth subfield. Resetting qual_idx to -1 causes the following
+	       if clause to be skipped. */
+	} 
+	if (this.qual_idx != UNINITIALIZED_INT) {
 	    try {
 		genotype_quality = parseGenotypeQuality(B[qual_idx]); 
 	    } catch (NumberFormatException e) {
@@ -169,12 +173,30 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 		throw new VCFParseException(err); 
 	    }
 	}
+	if (this.depth_idx != UNINITIALIZED_INT) {
+	    try {
+		genotype_depth = parseGenotypeDepth(B[depth_idx]); 
+	    } catch (NumberFormatException e) {
+		String err = "Could not parse genotype depth field \"" + B[depth_idx] 
+		    +  "\" due to a Number Format Exception:" + e.toString();
+		throw new VCFParseException(err); 
+	    } catch (Exception e) {
+		String err = "Could not parse genotype depth field in sample: " 
+		    + sample +": Exception:\n\t" + e.toString();
+		throw new VCFParseException(err); 
+	    }
+	}
+
+
 	/* when we get here, we have successfully parsed the GT field. If there was a QC field,
 	   we have successfully parsed it, otherwise, genotype_quality is still UNINITIALIZED_INT.
+	   Similary, if there was a DP field, genotype_depth has a value, otherwise it is still
+	   UNINITIALIZED_INT.
 	*/
 	this.callList.add(call);
-	//System.out.println("\tAdded call " + call);
 	this.qualityList.add(genotype_quality);
+	this.depthList.add(genotype_depth);
+
     }
 
 

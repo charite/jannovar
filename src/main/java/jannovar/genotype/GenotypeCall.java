@@ -13,18 +13,18 @@ import jannovar.common.Genotype;
  * samples. The individual calls for each sample are stored in 
  * {@link #callList}, and the corresponding qualities are stored in {@link #qualityList}.
  * <P>
- * TODO: Probably it will be good to make a separate class to store the quality of the
- * calls in a more sophisticated way.
- * <P>
- * Note that this class was renamed from MultipleGenotypwe on 9 May, 2013, and the
- * class SingleGenotype was merged into it.
+ * The class also stores the values for DP (read depth at this position for this sample) and
+ * GQ (genotype quality, encoded as a phred quality -10log_10p(genotype call is wrong), both
+ * stored as lists of Integer values. These fields are present in all VCF files that we are interested in.
+ * If there is no value for it, we return 0.
  * @author Peter Robinson
- * @version 0.08 (17 June, 2013)
+ * @version 0.09 (1 November, 2013)
  */
 public class GenotypeCall  {
 
   
-    /**  List of genotype calls (See {@link jannovar.common.Genotype Genotype})
+    /**  
+     * List of genotype calls (See {@link jannovar.common.Genotype Genotype})
      * for one variant.
      */
     private ArrayList<Genotype> callList = null;
@@ -32,6 +32,11 @@ public class GenotypeCall  {
      * List of Phred-scaled qualities for the genotype calls in {@link #callList}.
      */
     private ArrayList<Integer> qualityList = null;
+
+    /**
+     * List of read depth values for the genotypes at hand (VCF DP field).
+     */
+    private ArrayList<Integer> depthList=null;
     
     /**
      * The constructor takes lists of calls and qualities that have been parsed from 
@@ -46,6 +51,20 @@ public class GenotypeCall  {
 	//System.out.println("Warning: GenotypeCall  not fully implemented");
     }
 
+    /**
+     * The constructor takes lists of calls and qualities that have been parsed from 
+     * a single VCF line by the {@link jannovar.genotype.MultipleGenotypeFactory MultipleGenotypeFactory}.
+     * By assumption, there are multiple samples, which are described elsewhere by a PED file.
+     * @param calls A list of the genotype calls, one for each sample
+     * @param qualities A list of the genotype Phred qualities, one for each sample.
+     * @param depths A list of the genotype read depth values, one for each sample.
+     */
+    public GenotypeCall(ArrayList<Genotype> calls,ArrayList<Integer> qualities,ArrayList<Integer> depths) {
+	this.callList = calls;
+	this.qualityList = qualities;
+	this.depthList = depths;
+    }
+
 
     /**
      * This constructor is inteded to be used for VCF files with a single
@@ -56,6 +75,20 @@ public class GenotypeCall  {
 	this.callList.add(gt);
 	this.qualityList = new ArrayList<Integer>();
 	this.qualityList.add(qual);
+    }
+
+     /**
+     * This constructor is inteded to be used for VCF files with a single
+     * sample, which by assumption contains data from a patient. This constructor
+     * is used to register data about the read depth of the call.
+     */
+    public GenotypeCall(Genotype gt, Integer qual, Integer depth) {
+	this.callList = new ArrayList<Genotype>();
+	this.callList.add(gt);
+	this.qualityList = new ArrayList<Integer>();
+	this.qualityList.add(qual);
+	this.depthList = new ArrayList<Integer>();
+	this.depthList.add(depth);
     }
 
 
@@ -77,7 +110,6 @@ public class GenotypeCall  {
 	    }
 	}
 	return lst;
-
     }
    
     /**
@@ -115,6 +147,27 @@ public class GenotypeCall  {
 	return this.callList.get(n);
     }
 
+    /**
+     * @param n The number of the sample in the VCF file.
+     * @return the read depth (DP) for the current variant as found in individual N
+     */
+    public int getReadDepthInIndividualN(int n){
+	if (this.depthList==null) return 0;
+	if (n<0 || n>=this.depthList.size() )
+	    throw new IllegalArgumentException();
+	return this.depthList.get(n);
+    }
+    
+    /**
+     * @param n The number of the sample in the VCF file.
+     * @return the PHRED quality for the current variant as found in individual N
+     */
+    public int getQualityInIndividualN(int n){
+	if (this.qualityList==null) return 0;
+	if (n<0 || n>=this.callList.size() )
+	    throw new IllegalArgumentException();
+	return this.qualityList.get(n);
+    }
    
 
     /**

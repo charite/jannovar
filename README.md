@@ -12,12 +12,15 @@ downloaded the source code from github by using the command
 The source code of Jannovar is organized as a maven project 
 that integrates the test and build phases. Here are the most important commands:
 
-$ mvn compile
--> This compiles all the Java classes
 
-$ mvn jar:jar
--> This builds a jar archive with all the classes but no Manifest for the
-   main class
+* Compile all the Java classes
+
+`$ mvn compile`
+ 
+* Build a jar archive with all the classes but no Manifest for the main class
+
+`$ mvn jar:jar`
+ 
 
 $ mvn test
 -> This causes all of the test classes to be executed. It is also possible

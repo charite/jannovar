@@ -31,8 +31,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * genotypes for for VCF files with multiple samples.
      */
     private GenotypeCall genotype=null;
-    /** The PHRED score for the variant call. */
-    private int variant_quality;
+   
     /** {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from 
 	Jannovar-type annotation of this variant. */
     private AnnotationList annotList=null;
@@ -46,13 +45,12 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param gtype The Genotype call (single or multiple sample)
      * @param qual The PHRED quality of the variant call.
     */
-    public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, int qual) {
+    public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype) {
 	this.chromosome = c;
 	this.position=p;
 	this.ref = r;
 	this.alt = alternate;
 	this.genotype = gtype;
-	this.variant_quality = qual;
     }
 
     
@@ -91,12 +89,6 @@ public class Variant implements Comparable<Variant>, Constants {
 	this.alt = s;
     }
     
-    /**
-     * @param q The PHRED score for the variant call.
-     */
-    public void set_variant_quality(int q) { this.variant_quality = q; }
-    
-
     /**
      * Set the {@link jannovar.annotation.AnnotationList AnnotationList} object for this variant. 
      * This method is intended to provide transcript-
@@ -236,9 +228,25 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
     
     /**
+     * This function returns the quality of the first sample in the VCF file.
      * @return The PHRED quality of this variant call.
      */
-    public float get_variant_quality() { return this.variant_quality; }
+    public float get_variant_quality() { return this.genotype.getQualityInIndividualN(0); }
+
+    /**
+     * This function returns the quality of the first sample in the VCF file.
+     * @return The PHRED quality of this variant call.
+     */
+    public float get_variant_quality_individualN(int n) { return this.genotype.getQualityInIndividualN(n); }
+
+    /**
+     * @return the Read Depth (DP) of this variant (in first or only individual in VCF file)
+     */
+    public int getVariantReadDepth() {return this.genotype.getReadDepthInIndividualN(0); }
+     /**
+     * @return the Read Depth (DP) of this variant (in  individual n of VCF file)
+     */
+    public int getVariantReadDepthIndividualN(int n) {return this.genotype.getReadDepthInIndividualN(n); }
 
     /**
      * @return the {@link jannovar.genotype.GenotypeCall GenotypeCall} object corresponding to this variant.

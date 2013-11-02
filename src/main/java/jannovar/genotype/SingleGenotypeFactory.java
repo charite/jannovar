@@ -14,7 +14,7 @@ import jannovar.exception.VCFParseException;
  * should be fixed in a future version of this class, but it occurs relatively
  * rarely in VCF files that are of interest to us.
  * @author Peter N Robinson
- * @version 0.06 (10 July, 2013)
+ * @version 0.07 (1 November, 2013)
  */
 public class SingleGenotypeFactory extends GenotypeFactoryA  {
 
@@ -49,31 +49,32 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
 	/* The overall genotype quality as parsed from the QUAL field. If this field was given as
 	   a float, then it is rounded to the nearest integer. */
 	int genotype_quality=UNINITIALIZED_INT;
+	int genotype_depth=UNINITIALIZED_INT;
 	String A[] = format.split(":");
-	int gt_index = -1; // index of genotype field
-	int qual_idx = -1; //index of genotype quality field
+	int gt_idx = UNINITIALIZED_INT; // index of genotype field
+	int qual_idx = UNINITIALIZED_INT; //index of genotype quality field
+	int depth_idx = UNINITIALIZED_INT; // index of the depth field.
 	for (int i=0;i<A.length; ++i) {
-	    if (A[i].equals("GT")) { gt_index = i;}
+	    if (A[i].equals("GT")) { gt_idx = i;}
 	    if (A[i].equals("GQ")) { qual_idx =i; }
+	    if (A[i].equals("DP")) { depth_idx =i; }
 	}
-	if (gt_index < 0) {
+	if (gt_idx == UNINITIALIZED_INT) {
 	    String s = String.format("Could not find genotype field in FORMAT field: \"%s\"",format);
 	    throw new VCFParseException(s);
 	}
 	String B[] = sample.split(":");
-	String genot = B[gt_index];
-	//Added code to deal with male chr X genotypes
+	String genot = B[gt_idx];
 	
-	if (genot.equals("0/1") || genot.equals("0|1") || genot.equals("1|0") || genot.equals("0/2"))
-	    call = Genotype.HETEROZYGOUS; 
-	else if (genot.equals("1/1") || genot.equals("1|1") || genot.equals("2/2"))
-	    call = Genotype.HOMOZYGOUS_ALT;
-	else if (genot.equals("0/0") || genot.equals("0|0"))
-	    call = Genotype.HOMOZYGOUS_REF;
-	else if (genot.equals("1"))
-	    call = Genotype.HOMOZYGOUS_ALT;
-
-	if (qual_idx >= 0) {
+	call = parseGenotypeString(genot);
+	if (call == Genotype.NOT_OBSERVED) {
+	    qual_idx = UNINITIALIZED_INT; 
+	    depth_idx = UNINITIALIZED_INT;
+	    /* Even though the FORMAT field is OK, there is only ./. for the genotype field, 
+	       and there is no quality/depth subfield. Resetting qual_idx to -1 causes the following
+	       if clause to be skipped. */
+	} 
+	if (qual_idx != UNINITIALIZED_INT) {
 	    try {
 		genotype_quality = parseGenotypeQuality(B[qual_idx]); 
 	    } catch (NumberFormatException e) {
@@ -81,12 +82,28 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
 		    +  "\" due to a Number Format Exception:" + e.toString();
 		throw new VCFParseException(err); 
 	    } catch (Exception e) {
-		String err = "Could not parse format field: " + format +": Exception:\n\t" + e.toString();
+		String err = "Could not parse genotype quality field: " + format +": Exception:\n\t" + e.toString();
 		throw new VCFParseException(err); 
 	    }
 	}
-	GenotypeCall gt = new GenotypeCall(call,genotype_quality);
-	return gt;
+	if (depth_idx != UNINITIALIZED_INT) {
+	    try {
+		genotype_depth = parseGenotypeDepth(B[depth_idx]); 
+	    } catch (NumberFormatException e) {
+		String err = "Could not parse genotype depth field \"" + B[depth_idx] 
+		    +  "\" due to a Number Format Exception:" + e.toString();
+		throw new VCFParseException(err); 
+	    } catch (Exception e) {
+		String err = "Could not parse genotype depth field: " + format +": Exception:\n\t" + e.toString();
+		throw new VCFParseException(err); 
+	    }
+	}
+
+	if (genotype_depth != UNINITIALIZED_INT) {
+	    return new GenotypeCall(call,genotype_quality,genotype_depth);
+	} else {
+	    return new GenotypeCall(call,genotype_quality);
+	}
     }
 
     
