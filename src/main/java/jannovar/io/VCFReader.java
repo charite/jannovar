@@ -36,9 +36,10 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * <P>
  * The classes relies on the abstract factory pattern to create appropriate
  * {@link jannovar.genotype.GenotypeCall GenotypeCall}
- * objects depending on whether we have a single-sample or multiple-sample VCF file.
+ * objects depending on whether we have a single-sample or multiple-sample VCF file. Note that
+ * these objects contain data on variant quality (GQ) and read depth (DP).
  * @author Peter Robinson 
- * @version 0.18 (17 August, 2013)
+ * @version 0.21 (1 November, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -110,6 +111,8 @@ public class VCFReader {
      * @return the total number of samples represented in this VCF file 
      */
     public int getNumberOfSamples() { return this.sample_name_list.size(); }
+
+    public String getVCFFileName() { return this.base_filename; }
     
 
     /**
@@ -160,8 +163,7 @@ public class VCFReader {
 				    line.get_position(),
 				    line.get_reference_sequence(),
 				    line.get_alternate_sequence(),
-				    line.getGenotype(),
-				    line.getVariantQuality());
+				    line.getGenotype());
 	    vars.add(v);
 	}
 	return vars;
@@ -178,8 +180,7 @@ public class VCFReader {
 				    line.get_position(),
 				    line.get_reference_sequence(),
 				    line.get_alternate_sequence(),
-				    line.getGenotype(),
-				    line.getVariantQuality());
+				    line.getGenotype());
 	return v;
     }
 

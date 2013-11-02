@@ -73,7 +73,7 @@ public class PedigreeADTest {
 	    lst.add(g);
 	}
 	GenotypeCall gc = new GenotypeCall(lst,null);
-	Variant v = new Variant ((byte)1, 1, "A", "C", gc, 20); 
+	Variant v = new Variant ((byte)1, 1, "A", "C", gc); 
 	varList.add(v);
         return varList;
     }

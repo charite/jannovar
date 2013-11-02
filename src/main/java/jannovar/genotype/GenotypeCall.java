@@ -168,6 +168,34 @@ public class GenotypeCall  {
 	    throw new IllegalArgumentException();
 	return this.qualityList.get(n);
     }
+
+
+    public boolean isHomozygousAltInIndividualN(int n) {
+	if (n<0 || n>=this.callList.size() )
+	    throw new IllegalArgumentException();
+	Genotype gt = this.callList.get(n);
+	return gt == Genotype.HOMOZYGOUS_ALT;
+    }
+
+    public boolean isHeterozygousInIndividualN(int n) {
+	if (n<0 || n>=this.callList.size() )
+	    throw new IllegalArgumentException();
+	Genotype gt = this.callList.get(n);
+	return gt == Genotype.HETEROZYGOUS;
+    }
+
+
+    /**
+     * @param n Number of the individual in the VCF file 
+     * @return true if the genotype is called as "./." in individual n
+     */
+    public boolean isMissingInIndividualN(int n) {
+	if (n<0 || n>=this.callList.size() )
+	    throw new IllegalArgumentException();
+	Genotype gt = this.callList.get(n);
+	return gt == Genotype.NOT_OBSERVED;
+    }
+
    
 
     /**

@@ -119,4 +119,36 @@ public enum  VariantType {
 	}
     }
 
+    /**
+     * Return a string representation of the variant type
+     * passed as an argument.
+     * @param vt The variant type of a variant.
+     */
+    public static String variantTypeAsString(VariantType vt) {
+	switch (vt) {
+	case FS_DELETION: return "frameshift deletion";
+	case FS_INSERTION: return "frameshift insertion";
+	case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
+	case FS_SUBSTITUTION:  return "frameshift substitution";
+	case NONSYNONYMOUS:  return "missense";
+	case NON_FS_DELETION: return "nonframeshift deletion";
+	case NON_FS_INSERTION:return "nonframeshift insertion";
+	case SPLICING: return "splicing";
+	case STOPGAIN:return "stopgain";
+	case STOPLOSS: return "stoploss";
+	case ncRNA_EXONIC: return "noncoding RNA exonic";
+	case ncRNA_SPLICING:return "noncoding RNA splicing";
+	case UTR3: return "UTR3";
+	case UTR5: return "UTR5";
+	case SYNONYMOUS: return "synonymous";
+	case INTRONIC: return "intronic";
+	case ncRNA_INTRONIC:return "noncoding RNA intronic";
+	case UPSTREAM:return "upstream";
+	case DOWNSTREAM:return "downstream";
+	case INTERGENIC:return "intergenic";
+	default:
+	    return "unknown variant type (error)";
+	}
+    }
+
 }

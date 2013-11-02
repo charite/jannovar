@@ -152,6 +152,21 @@ public class Variant implements Comparable<Variant>, Constants {
 	else return (annotList.getVariantType() == VariantType.NONSYNONYMOUS);
     }
 
+
+    /**
+     * Synonymous variant defined as a single nucleotide variant within a coding
+     * sequence that does not change the encoded amino acid.
+     * @return true if this variant is a SYNONYMOUS variant
+     */
+    public boolean isSynonymousVariant() {
+	if (annotList == null)
+	    return false;
+	else return (annotList.getVariantType() == VariantType.SYNONYMOUS);
+    }
+
+   
+
+
     /**
      * A transition is purine <-> purine or pyrimidine <-> pyrimidine.
      * Only applies to single nucleotide subsitutions.
@@ -247,6 +262,19 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return the Read Depth (DP) of this variant (in  individual n of VCF file)
      */
     public int getVariantReadDepthIndividualN(int n) {return this.genotype.getReadDepthInIndividualN(n); }
+
+    public boolean isHomozygousAlt() { return this.genotype.isHomozygousAltInIndividualN(0); }
+
+    public boolean isHomozygousAltInIndividualN(int n) { return this.genotype.isHomozygousAltInIndividualN(n); }
+
+    public boolean isHeterozygous() { return this.genotype.isHeterozygousInIndividualN(0); }
+
+    public boolean isHeterozygousInIndividualN(int n) { return this.genotype.isHeterozygousInIndividualN(n); }
+
+   
+
+    public boolean isMissingInIndividualN(int n) { return this.genotype.isMissingInIndividualN(n); }
+
 
     /**
      * @return the {@link jannovar.genotype.GenotypeCall GenotypeCall} object corresponding to this variant.
