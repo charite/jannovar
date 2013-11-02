@@ -7,7 +7,7 @@ gene/transcript-based annotations and performing simple pedigree/genotype
 filtering. If you are reading this, then preumably you have already 
 downloaded the source code from github by using the command
 
-  $ git clone https://github.com/charite/jannovar
+`$ git clone https://github.com/charite/jannovar`
 
 The source code of Jannovar is organized as a maven project 
 that integrates the test and build phases. Here are the most important commands:
@@ -21,46 +21,60 @@ that integrates the test and build phases. Here are the most important commands:
 
 `$ mvn jar:jar`
  
-
-$ mvn test
--> This causes all of the test classes to be executed. It is also possible
+* Cause all of the test classes to be executed. It is also possible
    to run the the cobertura test-coverage pluging. To do so, you need to 
    uncomment the corresponding lines in the pom.xml file. The results of
    test coverage analysis will then be writtten to the 
    target/site/cobertura directory.
 
-$ mvn javadoc:javadoc
--> This causes javadoc to be written to the directory target/site/apidocs
+`$ mvn test`
 
-$ mvn package
--> This causes an executable Jar file to be created in the directory target. It 
+*  Generate javadoc and output it to the directory target/site/apidocs
+
+`$ mvn javadoc:javadoc`
+
+* Create an executable Jar file the directory "target". This command 
    makes use of the shade:shade maven goal to package a Jar file that also 
    includes the Apache CLI library, i.e., it stands on its own. It does however 
    require that all of the test phase be performed as part of the 
    build.
 
+`$ mvn package`
+
+Note
+--------
+
 Note that currently, full testing of Jannovar requires that a transcript datafile
 from the UCSC website be built. To do this, first run mvn package as above. This
 will generate an executable in the target directory (jannovar-0.1.1-SNAPSHOT.jar).
 For simplicity, copy this into the current directory with the name Jannovar:
-$ cp target/jannovar-0.1.1-SNAPSHOT.jar Jannovar.jar
+
+`$ cp target/jannovar-0.1.1-SNAPSHOT.jar Jannovar.jar`
+
 Now create the transcript datafile
-$ java -jar Jannovar.jar --create-ucsc
+
+`$ java -jar Jannovar.jar --create-ucsc`
+
 This will create a file called "ucsc.ser" with the transcript definition data. To
 run all of the unit tests (which is required by maven for the package task), copy this
 file to the resources directory of the test subdirectory:
-$ cp ucsc.ser src/test/resources/.
+
+`$ cp ucsc.ser src/test/resources/.`
+
 Now you can run either
-$ mvn test
+
+`$ mvn test`
 or
-$ mvn package
+`$ mvn package`
 and all of the tests should now run correctly.
 For more information, see the main tutorial or enter
-$ java -jar Jannovar.jar -H
+`$ java -jar Jannovar.jar -H`
 
 See the tutorial at http://compbio.charite.de/contao/index.php/jannovar.html for 
 further information.
 
+License
+===========
 Jannovar is licenced under a BSD2 license.
 
 
