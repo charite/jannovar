@@ -13,7 +13,7 @@ import jannovar.genotype.GenotypeCall;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.22 (1 November, 2013)
+ * @version 0.24 (17 November, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -270,8 +270,21 @@ public class Variant implements Comparable<Variant>, Constants {
     public boolean isHeterozygous() { return this.genotype.isHeterozygousInIndividualN(0); }
 
     public boolean isHeterozygousInIndividualN(int n) { return this.genotype.isHeterozygousInIndividualN(n); }
-
-   
+    /**
+     * @return true if the variant belongs to a class that is non-exonic and nonsplicing. */
+    public boolean isOffExomeTarget() {
+	VariantType vt = getVariantTypeConstant();
+	switch (vt){
+	case INTRONIC:
+	case ncRNA_INTRONIC:
+	case UPSTREAM:
+	case DOWNSTREAM:
+	case INTERGENIC:
+	    return true;
+	default:
+	    return false;
+	}
+    }
 
     public boolean isMissingInIndividualN(int n) { return this.genotype.isMissingInIndividualN(n); }
 
