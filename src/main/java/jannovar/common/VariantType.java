@@ -13,7 +13,7 @@ package jannovar.common;
  * the document for the class
   {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.08 (12 July, 2013)
+ * @version 0.12 (17 November, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -120,6 +120,28 @@ public enum  VariantType {
     }
 
     /**
+     * This returns an array with the VariantTypes arranged according to 
+     * their priority. It can used to arrange output of Variants ranked
+     * accordingto presumed pathogenicity.
+     */
+    public static VariantType[] getPrioritySortedList() {
+	VariantType[] vta = new VariantType[] { NONSYNONYMOUS, STOPGAIN, SPLICING,
+						FS_DELETION,FS_INSERTION,FS_SUBSTITUTION,
+						NON_FS_DELETION,NON_FS_INSERTION,NON_FS_SUBSTITUTION,
+						STOPLOSS,
+						ncRNA_EXONIC,ncRNA_SPLICING,
+						UTR3, UTR5,
+						SYNONYMOUS,INTRONIC,
+						ncRNA_INTRONIC,
+						UPSTREAM,DOWNSTREAM,INTERGENIC,
+						ERROR };
+	return vta;
+
+    }
+
+
+
+    /**
      * Return a string representation of the variant type
      * passed as an argument.
      * @param vt The variant type of a variant.
@@ -150,5 +172,13 @@ public enum  VariantType {
 	    return "unknown variant type (error)";
 	}
     }
+    
+    /** A static constant that returns the number of
+     * different values in this enumeration.
+     */
+    private static final int size = VariantType.values().length;
+
+    /** @return the number of different values in this enumeration. */
+    public static int size() { return VariantType.size; }
 
 }

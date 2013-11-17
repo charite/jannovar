@@ -18,7 +18,7 @@ import jannovar.common.Genotype;
  * stored as lists of Integer values. These fields are present in all VCF files that we are interested in.
  * If there is no value for it, we return 0.
  * @author Peter Robinson
- * @version 0.09 (1 November, 2013)
+ * @version 0.11 (17 November, 2013)
  */
 public class GenotypeCall  {
 
@@ -169,7 +169,10 @@ public class GenotypeCall  {
 	return this.qualityList.get(n);
     }
 
-
+    /**
+     * @param n Number of individual in pedigree.
+     * @return True, if person N in the VCF file is hom-alt for this variant.
+     */
     public boolean isHomozygousAltInIndividualN(int n) {
 	if (n<0 || n>=this.callList.size() )
 	    throw new IllegalArgumentException();
@@ -177,11 +180,31 @@ public class GenotypeCall  {
 	return gt == Genotype.HOMOZYGOUS_ALT;
     }
 
+    /**
+     * @param n Number of individual in pedigree.
+     * @return True, if person N in the VCF file is het for this variant.
+     */
     public boolean isHeterozygousInIndividualN(int n) {
 	if (n<0 || n>=this.callList.size() )
 	    throw new IllegalArgumentException();
 	Genotype gt = this.callList.get(n);
 	return gt == Genotype.HETEROZYGOUS;
+    }
+
+    /**
+     * This function returns true if the individual concerned has
+     * a heterozygous or homozyous ALT (variant) call for the
+     * current position.
+     * @param n Number of individual in pedigree.
+     * @return True, if person N in the VCF file is het or hom-alt for this variant.
+     */
+    public boolean isALTInIndividualN(int n) {
+	if (n<0 || n>=this.callList.size() )
+	    throw new IllegalArgumentException();
+	Genotype gt = this.callList.get(n);
+	if (gt == Genotype.HETEROZYGOUS) return true;
+	else if (gt == Genotype.HOMOZYGOUS_ALT) return true;
+	else return false;
     }
 
 

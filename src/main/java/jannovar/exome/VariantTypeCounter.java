@@ -1,166 +1,188 @@
 package jannovar.exome;
 
-import java.util.HashMap;
+
 import java.io.Writer;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
+import jannovar.exception.JannovarException;
+import jannovar.exome.Variant;
+import jannovar.genotype.GenotypeCall;
 
 /**
  * This class is intended to provide a simple way of counting up all of the
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.11 (8 July,2013)
+ * @version 0.12 (18 November,2013)
  */
 
 public class VariantTypeCounter implements Constants {
 
     private HashMap<VariantType,Integer> variantCountMap=null;
 
+    private HashMap<VariantType,Integer> variantTypeInd=null;
+
+
+    /** The first dimension (rows) represents the samples, the
+     * second dimension (columns) represents the variant types.
+     * Thus, countMatrix[i][j] represents the count in sample
+     * i for variantType j. Note that the indices for the 
+     * variantTypes are stored in the HashMap 
+     * {@link #variantTypeInd}.
+     */
+    private int[][] countMatrix=null;
+    /** Number of persons represented in the VCF file. */
+    private int n_persons;
+    /** Number of variant types */
+    private int n_var_types;
+
+
+    /**
+     * Disallow construction of an object with no parameters.
+     */
+    private VariantTypeCounter() {
+
+    }
+
     /**
      * Construct the map of variant type counts and initialize it to zero.
      */
-    public VariantTypeCounter() {
-	variantCountMap = new HashMap<VariantType,Integer>();
-	for (VariantType vt : VariantType.values()) {
-	    variantCountMap.put(vt,0);
+    public VariantTypeCounter(int n) {
+	this.n_var_types = VariantType.size();
+	this.n_persons = n;
+	/* Note that the following command automatically sets all of the values to zero. */
+	this.countMatrix = new int[this.n_persons][this.n_var_types];
+	initializeVarTypeIndices();
+    }
+
+    
+
+    /**
+     * The constructor takes a list of all variants found in 
+     * the VCF file and generates a list of counts, one for each
+     * variant type.
+     * @param variantList List of all variants found in the VCF file.
+     */
+    public VariantTypeCounter(ArrayList<Variant> variantList) throws JannovarException {
+	this.n_var_types = VariantType.size();
+	
+	this.n_persons = variantList.get(0).getGenotype().getNumberOfIndividuals();
+	/* Note that the following command automatically sets all of the values to zero. */
+	this.countMatrix = new int[this.n_persons][this.n_var_types];
+	initializeVarTypeIndices();
+	countVariants(variantList);
+    }
+
+    /**
+     * Increment the counts for the VariantType represented
+     * by this Variant. Note that we extract the 
+     * GenotypeCall for all persons in the VCF file, and update
+     * the corresponding fields in 
+     * {@link #countMatrix}.
+     */
+    public void incrementCount(Variant v) {
+	VariantType vtype = v.getVariantTypeConstant();
+	GenotypeCall gtc = v.getGenotype();
+	int vtypeIndex = this.variantTypeInd.get(vtype);
+	for (int i=0; i<this.n_persons;++i) {
+	    if (gtc.isALTInIndividualN(i)){
+		this.countMatrix[i][vtypeIndex]++;
+	    }
+	}
+    }
+
+
+
+    private void countVariants(ArrayList<Variant> variantList) throws JannovarException {
+	int N = variantList.size();
+	for (int j=0;j<N;++j) {
+	    Variant v = variantList.get(j);
+	    VariantType vt = v.getVariantTypeConstant();
+	    int vtypeIndex = this.variantTypeInd.get(vt);
+	    GenotypeCall gtc = v.getGenotype();
+	    for (int i=0; i<this.n_persons;++i) {
+		if (gtc.isALTInIndividualN(i)){
+		    this.countMatrix[i][vtypeIndex]++;
+		}
+	    }
 	}
     }
 
     /**
-     * Increment the count for the VariantType in question by one. Note that 
-     * because of the constructor, all possible VariantTypes are guaranteed to 
-     * already be in the HashMap before this method gets called.
-     * @param vt the VariantType (e.g., MISSENSE) to be incremented
+     * We store the indices of the VariantTypes in the
+     * HashMap {@link #variantTypeInd}. For instance,
+     * FS_INSERTION might have the index 5. This function
+     * initializes that HashMap.
      */
-    public void incrementCount(VariantType vt) {
-	Integer i = this.variantCountMap.get(vt);
-	this.variantCountMap.put(vt,i+1);
+    private void initializeVarTypeIndices() {
+	this.variantTypeInd=new HashMap<VariantType,Integer>();
+	VariantType[] vtypes = VariantType.getPrioritySortedList();
+	for (int i=0;i<vtypes.length;++i) {
+	    this.variantTypeInd.put(vtypes[i],i);
+	}
     }
 
+
     /**
-     * @param sampleName The name of the exome sample as given in the VCF file.
-     * @param out a java.io.Writer handle (can be either BufferedWriter or StringWriter)
+     * This will write the summary of variants using as sample
+     * names "sample 1", "sample 2", etc.
      */
-    public void writeSummary(String sampleName, Writer out) throws IOException {
-	out.write("<a name=\"#Distribution\">\n"+
+    public void writeSummaryTable(Writer out) 
+	throws IOException, JannovarException
+    {
+	 ArrayList<String> lst = new ArrayList<String>();
+	 for (int i=0;i<this.n_persons;++i) {
+	     String s = String.format("sample %d",i+1);
+	     lst.add(s);
+	 }
+	 writeSummaryTable(lst,out);
+     }
+
+
+     public void writeSummaryTable(String sampleName, Writer out) 
+	 throws IOException, JannovarException 
+    {
+	 ArrayList<String> lst = new ArrayList<String>();
+	 lst.add(sampleName);
+	 writeSummaryTable(lst,out);
+     }
+
+    public void writeSummaryTable(ArrayList<String> sampleNames, Writer out) 
+	throws IOException, JannovarException 
+    {
+	int ncol = sampleNames.size();
+	if (ncol != this.n_persons) {
+	    String s = "Error: Attempt to write variant distribution table for " +
+		ncol + " samples but data was entered for " + this.n_persons + " persons";
+	    throw new JannovarException(s);
+	}
+	VariantType[] vta = VariantType.getPrioritySortedList();
+	out.write("<a name=\"Distribution\">\n"+
 		  "<h2>Distribution of Variant Types</h2>\n"+
 		  "</a>\n");
-	out.write("<table id=\"ztable\">\n");
+	out.write("<table id=\"variantDistribution\">\n");
 	out.write("<thead><tr>\n");
-	out.write("<th>Sample</th>");
-	out.write("<th>NS/SS/I</th>");
-	out.write("<th>Deemed nonpathogenic</th>");
+	out.write("<th>Variant Type</th>");
+	for (int i=0;i<ncol;i++) {
+	    out.write(String.format("<th>%s</th>",sampleNames.get(i)));
+	}
 	out.write("</tr></thead>\n");
 	out.write("<tbody>\n");
-	int nonsyn = this.variantCountMap.get(VariantType.NONSYNONYMOUS);
-	int nonsense = this.variantCountMap.get(VariantType.STOPGAIN);
-	int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION) + this.variantCountMap.get(VariantType.FS_DELETION);
-	int splice = this.variantCountMap.get(VariantType.SPLICING);
-	int nonfs = this.variantCountMap.get(VariantType.NON_FS_SUBSTITUTION) +
-	    this.variantCountMap.get(VariantType.NON_FS_DELETION) +
-	    this.variantCountMap.get(VariantType.NON_FS_INSERTION);
-	String nsssiCell = String.format("<tr><th>%s</th><td><ul><li>Nonsynonymous: %d</li><li>nonsense: %d</li>"+
-					 "<li>frameshift: %d</li><li>splice: %s</li>"+
-					 "<li>non-fs indel: %d</li></ul></td>", sampleName, nonsyn,nonsense,frameshift,splice,nonfs);
-
-	out.write(nsssiCell);
-	outputNonpathogenicTableCell(out);
-	out.write("</tr></tbody>\n");
-
-	out.write("</table><p>&nbsp;</p>\n");
-
-
+	for (int i=0;i<vta.length;++i) {
+	    out.write(String.format("<tr><td>%s</td>", VariantType.variantTypeAsString(vta[i])));
+	    for (int k=0;k<ncol;++k) {
+		out.write(String.format("<td>%d</td>",this.countMatrix[k][i]));
+	    }
+	    out.write("</tr>\n");
+	}
+	out.write("</tbody>\n</table><p>&nbsp;</p>\n");
     }
-
-    /**
-     * TODO. This method should be extended to get an entire row of statistics for
-     * a single sample. Also, the HTML code needs to be removed from this class and
-     * put into the main HTML interface classes.
-     */
-    
-    public String getSummaryRow(String sampleName) throws IOException {
-        StringBuffer row = new StringBuffer();
-        int nonsynonymous = this.variantCountMap.get(VariantType.NONSYNONYMOUS);
-        int nonsense = this.variantCountMap.get(VariantType.STOPGAIN);
-        int frameshift = this.variantCountMap.get(VariantType.FS_INSERTION) + this.variantCountMap.get(VariantType.FS_DELETION);
-        int splice = this.variantCountMap.get(VariantType.SPLICING);
-        int nonfs = this.variantCountMap.get(VariantType.NON_FS_SUBSTITUTION) +
-            this.variantCountMap.get(VariantType.NON_FS_DELETION) +
-            this.variantCountMap.get(VariantType.NON_FS_INSERTION);     
-        int ncrna = this.variantCountMap.get(VariantType.ncRNA_EXONIC) +
-	    this.variantCountMap.get(VariantType.ncRNA_SPLICING);
-	int intron = this.variantCountMap.get(VariantType.INTRONIC) +
-	    this.variantCountMap.get(VariantType.ncRNA_INTRONIC);
-	int upstream = this.variantCountMap.get(VariantType.UPSTREAM);
-	int downstream = this.variantCountMap.get(VariantType.DOWNSTREAM);
-	int intergen =  this.variantCountMap.get(VariantType.INTERGENIC);
-	int utr = this.variantCountMap.get(VariantType.UTR3) + 
-	    this.variantCountMap.get(VariantType.UTR5);
-	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
-	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
-	int posErr = this.variantCountMap.get(VariantType.ERROR);
-	row.append(String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td>\n",
-				 sampleName,nonsynonymous,nonsense,frameshift,splice,nonfs));
-	row.append("<td><ul>\n");
-	row.append(String.format("<li>ncRNA: %d</li>\n<li>intronic: %d</li>",ncrna, intron));
-	row.append(String.format("<li>upstream: %d</li>\n<li>downstream: %d</li>",upstream,downstream));
-	row.append(String.format("<li>intergenic: %d</li>\n<li>UTR3/UTR5: %d</li>",intergen,utr));
-	row.append(String.format("<li>Synonymous: %d</li>\n",synonym));
-	row.append(String.format("<li>Total: %d</li>\n",total));
-	if (posErr>0)
-	    row.append(String.format("<li>Possible annotation errors: %d</li>\n",posErr));
-	row.append("</ul></td>\n");
-	return row.toString();
-    }
-
-
-
-    /**
-     * Write an unordered list with the variants deeemed to be nonpathogenic.
-     */
-    private void outputNonpathogenicTableCell(Writer out) throws IOException {
-	
-	int ncrna = this.variantCountMap.get(VariantType.ncRNA_EXONIC) +
-	    this.variantCountMap.get(VariantType.ncRNA_SPLICING);
-	int intron = this.variantCountMap.get(VariantType.INTRONIC) +
-	    this.variantCountMap.get(VariantType.ncRNA_INTRONIC);
-	int upstream = this.variantCountMap.get(VariantType.UPSTREAM);
-	int downstream = this.variantCountMap.get(VariantType.DOWNSTREAM);
-	int intergen =  this.variantCountMap.get(VariantType.INTERGENIC);
-	int utr = this.variantCountMap.get(VariantType.UTR3) + 
-	    this.variantCountMap.get(VariantType.UTR5);
-	int synonym = this.variantCountMap.get(VariantType.SYNONYMOUS);
-	int total = ncrna + intron + upstream + downstream + intergen + utr + synonym;
-	int posErr = this.variantCountMap.get(VariantType.ERROR);
-
-	out.write("<td><ul>\n");
-
-	out.write(String.format("<li>ncRNA: %d</li>\n<li>intronic: %d</li>",ncrna, intron));
-	out.write(String.format("<li>upstream: %d</li>\n<li>downstream: %d</li>",upstream,downstream));
-	out.write(String.format("<li>intergenic: %d</li>\n<li>UTR3/UTR5: %d</li>",intergen,utr));
-	out.write(String.format("<li>Synonymous: %d</li>\n",synonym));
-	out.write(String.format("<li>Total: %d</li>\n",total));
-	if (posErr>0)
-	    out.write(String.format("<li>Possible annotation errors: %d</li>\n",posErr));
-	out.write("</ul></td>\n");
-
-    }
-
-
-
 
 }
 
-/**
-Have: SPLICING, STOPGAIN,FS_DELETION, FS_INSERTION,MISSENSE, ncRNA_EXONIC, ncRNA_INTRONIC, ncRNA_SPLICING,ncRNA_UTR5,NON_FS_SUBSTITUTION
-
-
-  public static enum VariantType { DOWNSTREAM, EXONIC,  NON_FS_SUBSTITUTION,
-	    FS_SUBSTITUTION , INTERGENIC, INTRONIC, ,
-	      NON_FS_DELETION , NON_FS_INSERTION, 
-
-	    STOPLOSS, SYNONYMOUS, UNKNOWN, UPSTREAM, UTR3, UTR5, UTR53,POSSIBLY_ERRONEOUS};
-*/
+/* eof.*/
