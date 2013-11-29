@@ -195,17 +195,17 @@ public class VCFLine {
     private int parseVariantQuality(String q) throws NumberFormatException {
 	if (q.equals("."))
 	    return 0;
-	int pos = q.indexOf(".");
+//	int pos = q.indexOf(".");
 	int qual;
-	if (pos < 0) {
-	    /* i.e., an Integer and not a float or lacking value */
-	    qual = Integer.parseInt(q);
-	}
-	else { /* i.e., the quality is a number such as 55.16 */
+//	if (pos < 0) {
+//	    /* i.e., an Integer and not a float or lacking value */
+//	    qual = Integer.parseInt(q);
+//	}
+//	else { /* i.e., the quality is a number such as 55.16 */
 	    Float fQ = Float.parseFloat(q);
 	    float f = Math.round(fQ.floatValue());
 	    qual = (int) f;
-	}
+//	}
 	return qual;
     }
   
