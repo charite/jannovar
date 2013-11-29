@@ -126,8 +126,7 @@ public class InsertionAnnotationTest implements Constants {
 //	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
-//	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92dupA:p.N31fs)",annot);
-	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92_93insA:p.N31fs)",annot);
+	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92dupA:p.N31fs)",annot);
 	}
 }
 

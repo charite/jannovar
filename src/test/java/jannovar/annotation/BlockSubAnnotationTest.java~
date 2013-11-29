@@ -50,9 +50,7 @@ public class BlockSubAnnotationTest implements Constants {
     @BeforeClass 
 	public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
-	System.out.println(UCSCserializationTestFileName);
 	java.net.URL url = BlockSubAnnotationTest.class.getResource(UCSCserializationTestFileName);
-//	java.net.URL url = BlockSubAnnotationTest.class.getResource("/ucsc_test.ser");
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(path);
@@ -83,7 +81,7 @@ public class BlockSubAnnotationTest implements Constants {
 	VariantType varType = ann.getVariantType();
 	Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION,varType);
 	String annot = ann.getVariantAnnotation();
-	Assert.assertEquals("LOC100132247(uc002djq.3:exon7:c.993_1029TCCACCCTCAGCTCTACCCTCAGCG,uc010vbn.1:exon8:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG,uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG)",annot);
+	Assert.assertEquals("LOC100132247(uc002djq.3:exon7:c.993_1029TCCACCCTCAGCTCTACCCTCAGCG,uc002djr.3:exon9:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG,uc010vbn.1:exon8:c.1050_1086TCCACCCTCAGCTCTACCCTCAGCG)",annot);
 	}
 }
 

@@ -78,7 +78,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("THAP3(uc001aod.3:c.*28_29insTA,uc001aoc.3:c.*28_29insTA)",annot);
+	    Assert.assertEquals("THAP3(uc001aoc.3:c.*28_29insTA,uc001aod.3:c.*28_29insTA)",annot);
 	}
 }
 
@@ -291,7 +291,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LMOD1(uc021phl.1:c.*1643T>C,uc010ppu.2:c.*1643T>C,uc021phm.1:c.*1737T>C)",annot);
+	    Assert.assertEquals("LMOD1(uc010ppu.2:c.*1643T>C,uc021phl.1:c.*1643T>C,uc021phm.1:c.*1737T>C)",annot);
 	}
 }
 
@@ -338,7 +338,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GPBAR1(uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T,uc010zjx.1:c.*66C>T)",annot);
+	    Assert.assertEquals("GPBAR1(uc010zjx.1:c.*66C>T,uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T)",annot);
 	}
 }
 
@@ -361,7 +361,7 @@ public class UTR3AnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GLT8D1(uc003dfn.3:c.*57G>A,uc003dfl.3:c.*57G>A,uc003dfm.3:c.*57G>A,uc003dfi.4:c.*57G>A,uc003dfk.3:c.*57G>A)",annot);
+	    Assert.assertEquals("GLT8D1(uc003dfl.3:c.*57G>A,uc003dfm.3:c.*57G>A,uc003dfn.3:c.*57G>A,uc003dfk.3:c.*57G>A,uc003dfi.4:c.*57G>A)",annot);
 	}
 }
 
@@ -575,7 +575,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("CDCA7L(uc003svf.4:c.*71_74delAAGA,uc010kul.3:c.*71_74delAAGA,uc010kuk.3:c.*71_74delAAGA,uc003sve.4:c.*71_74delAAGA)",annot);
+	    Assert.assertEquals("CDCA7L(uc003sve.4:c.*71_74delAAGA,uc003svf.4:c.*71_74delAAGA,uc010kuk.3:c.*71_74delAAGA,uc010kul.3:c.*71_74delAAGA)",annot);
 	}
 }
 
@@ -622,7 +622,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("HGF(uc003uhn.1:c.*102T>C,uc003uho.1:c.*102T>C)",annot);
+	    Assert.assertEquals("HGF(uc003uho.1:c.*102T>C,uc003uhn.1:c.*102T>C)",annot);
 	}
 }
 
@@ -697,7 +697,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DDX31(uc010mzu.1:c.*77G>C,uc004cbq.1:c.*77G>C)",annot);
+	    Assert.assertEquals("DDX31(uc004cbq.1:c.*77G>C,uc010mzu.1:c.*77G>C)",annot);
 	}
 }
 
@@ -767,7 +767,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC440040(uc009ymb.3:c.*317delG,uc010rhy.2:c.*317delG)",annot);
+	    Assert.assertEquals("LOC440040(uc010rhy.2:c.*317delG,uc009ymb.3:c.*317delG)",annot);
 	}
 }
 
@@ -837,7 +837,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KDELC2(uc001pki.2:c.*39_40insT,uc001pkj.2:c.*39_40insT)",annot);
+	    Assert.assertEquals("KDELC2(uc001pkj.2:c.*39_40insT,uc001pki.2:c.*39_40insT)",annot);
 	}
 }
 
@@ -914,7 +914,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("WIBG(uc001sie.1:c.*105_108delCTTA,uc001sif.1:c.*105_108delCTTA)",annot);
+	    Assert.assertEquals("WIBG(uc001sif.1:c.*105_108delCTTA,uc001sie.1:c.*105_108delCTTA)",annot);
 	}
 }
 
@@ -944,7 +944,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AHNAK2(uc021seo.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc010axc.1:c.*16A>G,uc021sen.1:c.*16A>G)",annot);
+	    Assert.assertEquals("AHNAK2(uc010axc.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc021seo.1:c.*16A>G,uc021sen.1:c.*16A>G)",annot);
 	}
 }
 
@@ -969,7 +969,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SNX11(uc010wlg.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wli.1:c.*6G>C,uc002inf.1:c.*6G>C,uc002inh.1:c.*6G>C)",annot);
+	    Assert.assertEquals("SNX11(uc002inf.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc010wli.1:c.*6G>C,uc010wlg.1:c.*6G>C,uc002inh.1:c.*6G>C)",annot);
 	}
 }
 
@@ -992,7 +992,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ATP5G1(uc002iog.3:c.*15delG,uc002ioh.3:c.*15delG)",annot);
+	    Assert.assertEquals("ATP5G1(uc002ioh.3:c.*15delG,uc002iog.3:c.*15delG)",annot);
 	}
 }
 
@@ -1016,7 +1016,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("EXOC7(uc002jqq.3:c.*2232C>G,uc010wsw.2:c.*2232C>G,uc002jqr.3:c.*2232C>G,uc010wsx.2:c.*2232C>G,uc002jqs.3:c.*2232C>G,uc010wsv.2:c.*2232C>G,uc010dgv.2:c.*2232C>G,uc002jqp.2:c.*2261C>G)",annot);
+	    Assert.assertEquals("EXOC7(uc002jqr.3:c.*2232C>G,uc002jqs.3:c.*2232C>G,uc002jqq.3:c.*2232C>G,uc010wsw.2:c.*2232C>G,uc010wsx.2:c.*2232C>G,uc010wsv.2:c.*2232C>G,uc010dgv.2:c.*2232C>G,uc002jqp.2:c.*2261C>G)",annot);
 	}
 }
 
@@ -1134,7 +1134,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LGI4(uc002nxx.2:c.*11G>A,uc002nxy.1:c.*11G>A,uc002nxz.1:c.*986G>A)",annot);
+	    Assert.assertEquals("LGI4(uc002nxy.1:c.*11G>A,uc002nxx.2:c.*11G>A,uc002nxz.1:c.*986G>A)",annot);
 	}
 }
 
@@ -1180,7 +1180,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MIA(uc021uuu.1:c.*40C>G,uc002opb.4:c.*40C>G)",annot);
+	    Assert.assertEquals("MIA(uc002opb.4:c.*40C>G,uc021uuu.1:c.*40C>G)",annot);
 	}
 }
 
@@ -1204,7 +1204,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PLA2G4C(uc010xzd.2:c.*54T>A,uc002phx.3:c.*54T>A,uc010elr.3:c.*139T>A,uc002phw.3:c.*54T>A)",annot);
+	    Assert.assertEquals("PLA2G4C(uc002phx.3:c.*54T>A,uc010elr.3:c.*139T>A,uc010xzd.2:c.*54T>A,uc002phw.3:c.*54T>A)",annot);
 	}
 }
 
@@ -1253,7 +1253,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TRAPPC10(uc011afa.2:c.*4C>T,uc010gpo.3:c.*4C>T,uc002zea.3:c.*4C>T)",annot);
+	    Assert.assertEquals("TRAPPC10(uc002zea.3:c.*4C>T,uc010gpo.3:c.*4C>T,uc011afa.2:c.*4C>T)",annot);
 	}
 }
 
@@ -1324,7 +1324,7 @@ expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc01
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.UTR3,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("GUCD1(uc003aah.2:c.*2004T>C,uc003aal.2:c.*2004T>C)",annot);
+	    Assert.assertEquals("GUCD1(uc003aal.2:c.*2004T>C,uc003aah.2:c.*2004T>C)",annot);
 	}
 }
 

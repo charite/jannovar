@@ -46,7 +46,7 @@ public class DeletionAnnotationTest implements Constants {
     @BeforeClass 
 	public static void setUp() throws IOException, JannovarException  {
 	ArrayList<TranscriptModel> kgList=null;
-	java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
+	java.net.URL url = DeletionAnnotationTest.class.getResource(UCSCserializationTestFileName);
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(path);
@@ -299,7 +299,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("KCNK17(uc003ooo.3:exon2:c.318_320del:p.106_107del,uc003oop.3:exon2:c.318_320del:p.106_107del)",annot);
+	    Assert.assertEquals("KCNK17(uc003oop.3:exon2:c.318_320del:p.106_107del,uc003ooo.3:exon2:c.318_320del:p.106_107del)",annot);
 	}
 }
 

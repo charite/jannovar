@@ -47,7 +47,7 @@ public class NonsynonymousAnnotationTest implements Constants {
     @BeforeClass 
 	public static void setUp() throws IOException, JannovarException  {
 	ArrayList<TranscriptModel> kgList=null;
-	java.net.URL url = NonsynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
+	java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(path);

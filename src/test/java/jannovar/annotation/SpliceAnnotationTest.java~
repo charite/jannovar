@@ -263,7 +263,7 @@ public class SpliceAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NSL1(uc001hjn.3:exon2:c.234+2T>C,uc001hjm.3:exon2:c.234+2T>C,uc010pti.2:exon2:c.234+2T>C)",annot);
+	    Assert.assertEquals("NSL1(uc010pti.2:exon2:c.234+2T>C,uc001hjm.3:exon2:c.234+2T>C,uc001hjn.3:exon2:c.234+2T>C)",annot);
 	}
 }
 
@@ -302,7 +302,7 @@ but was:<MTA3(uc002rs[o.1:exon7:c.214-2A>G,uc002rsp.1:exon6]:c.214-2A>G,uc002rsq
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MTA3(uc002rso.1:exon7:c.214-2A>G,uc002rsp.1:exon6:c.214-2A>G,uc002rsq.3:exon6:c.382-2A>G)",annot);
+	    Assert.assertEquals("MTA3(uc002rsp.1:exon6:c.214-2A>G,uc002rso.1:exon7:c.214-2A>G,uc002rsq.3:exon6:c.382-2A>G)",annot);
 	}
 }
 
@@ -359,7 +359,7 @@ but was:<...exon5:c.337-1G>A,uc0[02tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.SPLICING,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NPHP1(uc002tfo.4:exon5:c.337-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc002tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc010ywx.2:exon7:c.523-1G>A,uc010fjv.1:exon7:c.523-1G>A)",annot);
+	    Assert.assertEquals("NPHP1(uc002tfo.4:exon5:c.337-1G>A,uc002tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc010ywx.2:exon7:c.523-1G>A,uc010fjv.1:exon7:c.523-1G>A)",annot);
 	}
 }
 

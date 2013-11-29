@@ -76,7 +76,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PLEKHN1(uc001acf.3)",annot);
+	    Assert.assertEquals("PLEKHN1(uc001acd.3)",annot);
 	}
 }
 
@@ -99,7 +99,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC35E2B(uc001ahh.4),CDK11A(uc009vkr.3),CDK11B(uc001agv.1)",annot);
+	    Assert.assertEquals("SLC35E2B(uc001ahh.4),CDK11B(uc001agz.1),CDK11A(uc009vkr.3)",annot);
 	   
 	}
 }
@@ -125,7 +125,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MORN1(uc009vld.3)",annot);
+	    Assert.assertEquals("MORN1(uc001ajb.1)",annot);
 	}
 }
 
@@ -171,7 +171,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TNFRSF1B(uc001atu.3)",annot);
+	    Assert.assertEquals("TNFRSF1B(uc001att.3)",annot);
 	}
 }
 
@@ -224,7 +224,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("LOC100505666(uc021pan.2),ADAM15(uc001fgq.1)",annot);
+	    Assert.assertEquals("LOC100505666(uc021pan.2),ADAM15(uc001fgv.2)",annot);
 	}
 }
 
@@ -248,7 +248,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PPFIBP1(uc001rib.2)",annot);
+	    Assert.assertEquals("PPFIBP1(uc001ric.2)",annot);
 	}
 }
 
@@ -317,7 +317,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("NELL2(uc009zkd.2)",annot);
+	    Assert.assertEquals("NELL2(uc010sla.1)",annot);
 	}
 }
 
@@ -340,7 +340,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SLC38A1(uc001rpd.3)",annot);
+	    Assert.assertEquals("SLC38A1(uc001rpe.3)",annot);
 	}
 }
 
@@ -388,7 +388,7 @@ public class IntronicAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.INTRONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TMBIM6(uc001rux.2)",annot);
+	    Assert.assertEquals("TMBIM6(uc001ruz.2)",annot);
 	}
 }
 
