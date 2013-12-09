@@ -39,16 +39,14 @@ public interface Constants {
     public static final String ENSEMBL_GTF_BASE	= "gtf/homo_sapiens/";
     public static final String ENSEMBL_FASTA_BASE	= "fasta/homo_sapiens/";
     public static final String REFSEQ_FTP_BASE		= "ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/";
-//    public static final String REFSEQ_GFF_BASE		= "GFF_interim/";
-    public static final String REFSEQ_GFF_BASE		= "GFF/";
+    public static final String REFSEQ_GFF_BASE		= "GFF_interim/";
     public static final String REFSEQ_FASTA_BASE	= "RNA/";
 
     public static final String ensembl_gtf		= "Homo_sapiens.GRCh37.72.gtf.gz";
     public static final String ensembl_cdna		= "Homo_sapiens.GRCh37.72.cdna.all.fa.gz";
     public static final String ensembl_ncrna	= "Homo_sapiens.GRCh37.72.ncrna.fa.gz";
     
-//    public static final String refseq_gff		= "interim_GRCh37.p13_top_level_2013-07-05.gff3.gz";
-    public static final String refseq_gff		= "ref_GRCh37.p13_top_level.gff3.gz";
+    public static final String refseq_gff		= "interim_GRCh37.p13_top_level_2013-07-05.gff3.gz";
     public static final String refseq_rna		= "rna.fa.gz";
     
     
@@ -77,5 +75,10 @@ public interface Constants {
     public static final String refFlat = "refFlat.txt";
    
 
+    /* TESTING */
+    
+    /**  Name of the UCSC serialized data file that will be used by Jannovar-testing. */
+    public static final String UCSCserializationTestFileName="/ucsc_test.ser";
+    
 
 }
