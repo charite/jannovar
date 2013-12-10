@@ -39,7 +39,16 @@ public class InsertionAnnotation {
     
     public static Annotation  getAnnotationPlusStrand(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
 						      String ref, String var,int refvarstart,int exonNumber) throws AnnotationException  {
-	String annotation = null;
+			/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
+    	if(trmdl.isMinusStrand())
+    		refvarstart--;
+
+
+    	int refcdsstart = trmdl.getRefCDSStart() ;
+    	int startPosMutationInCDS = refvarstart-refcdsstart+1; 
+    	int aavarpos = (int)Math.floor(startPosMutationInCDS/3)+1;    	
+    	String annotation = null;
+
 	//String annovarClass = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	String varnt3 = null;
@@ -69,10 +78,10 @@ public class InsertionAnnotation {
 	 * example:17        53588444        53588444        -       T
 	 */
 	String varaa = translator.translateDNA(varnt3);
-	int refcdsstart = trmdl.getRefCDSStart() ;
+//	int refcdsstart = trmdl.getRefCDSStart() ;
 
-	int aavarpos = (int) Math.floor((refvarstart-refcdsstart)/3)+1;  
-	int startPosMutationInCDS = refvarstart-refcdsstart+1;
+//	int aavarpos = (int) Math.floor((refvarstart-refcdsstart)/3)+1;  
+//	int startPosMutationInCDS = refvarstart-refcdsstart+1;
 	
 	/* Annovar: $canno = "c." . ($refvarstart-$refcdsstart+1) .  "_" . 
 	 * 				($refvarstart-$refcdsstart+2) . "ins$obs";		
