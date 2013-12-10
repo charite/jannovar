@@ -53,7 +53,7 @@ public class GFFparserTest {
 
 //		reader = new GFFparser(tmp.getAbsolutePath());
 		reader = new GFFparser();
-		reader.parse("data/interim_GRCh37.p13_top_level_2013-07-05.gff3.gz");
+//		reader.parse("data/interim_GRCh37.p13_top_level_2013-07-05.gff3.gz");
 	}
 
 	@AfterClass
@@ -71,6 +71,7 @@ public class GFFparserTest {
 	public void testProcessFeatureRNAGFF3(){
 		String line = "ctg123\t.\texon\t5000\t5500\t.\t+\t.\tID=exon00004;Parent=mRNA00001,mRNA00002,mRNA00003";
 		try {
+			reader.setGFFversion(3);
 			Feature feature	= reader.processFeature(line);
 			assertEquals(FeatureType.EXON, feature.getType());
 			assertEquals(5000, feature.getStart());
@@ -93,6 +94,7 @@ public class GFFparserTest {
 	public void testProcessFeatureGeneGFF3(){
 		String line = "ctg123\t.\tgene\t1000\t9000\t.\t+\t.\tID=gene00001;Name=EDEN";
 		try {
+			reader.setGFFversion(3);
 			Feature feature	= reader.processFeature(line);
 			assertEquals(FeatureType.GENE, feature.getType());
 			assertEquals(1000, feature.getStart());

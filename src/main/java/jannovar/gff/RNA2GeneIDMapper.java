@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class RNA2GeneIDMapper {
 	
-	private static String ensemblRegex = "ENSG0+([0-9]+)";
+	private static String ensemblRegex = "ENS[MUS]*G0+([0-9]+)";
 	private static Pattern ensemblPattern = Pattern.compile(ensemblRegex);
 	
 	private static String refseqRegex	= "gene([0-9]+)";

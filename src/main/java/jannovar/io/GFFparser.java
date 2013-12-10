@@ -88,6 +88,7 @@ public class GFFparser {
 	 */
 	public void setGFFversion(int i){
 		gff_version = i;
+		valueSeparator = i == 3 ? "=" : " ";
 	}
 	
 	/**
