@@ -57,8 +57,15 @@ public enum  VariantType {
 	/** Variant is located in the 5' untranslated region */
 	UTR5, 
 	/** Variant assesed as probably erroneous (may indicate an error in the VCF file)*/
-	ERROR;
-
+	ERROR,
+	/** Nucleotide duplication that does not result in a frameshift. */
+	NON_FS_DUPLICATION,
+	/** Nucleotide duplication that results in a frameshift. */
+	FS_DUPLICATION,
+	/** Variation leads to the loss of the start codon */
+	START_LOSS,
+	/** Variation leads to the gain of a new the start codon e.g. translation initiation site up- or downstream*/
+	START_GAIN;
 
 
     /**
@@ -93,6 +100,10 @@ public enum  VariantType {
 	case SPLICING: 
 	case STOPGAIN:
 	case STOPLOSS:
+	case FS_DUPLICATION:
+	case NON_FS_DUPLICATION:
+	case START_LOSS:
+	case START_GAIN:
 	    return 1;
 	case ncRNA_EXONIC:
 	case ncRNA_SPLICING:
