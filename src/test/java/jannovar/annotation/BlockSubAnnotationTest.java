@@ -52,7 +52,6 @@ public class BlockSubAnnotationTest implements Constants {
 	ArrayList<TranscriptModel> kgList=null;
 	System.out.println(UCSCserializationTestFileName);
 	java.net.URL url = BlockSubAnnotationTest.class.getResource(UCSCserializationTestFileName);
-//	java.net.URL url = BlockSubAnnotationTest.class.getResource("/ucsc_test.ser");
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(path);
