@@ -101,6 +101,7 @@ public class InsertionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    String annot = ann.getVariantAnnotation();
+//	    Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.D756fs)",annot);
 	    Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.D756fs)",annot);
 	}
 }
@@ -114,7 +115,7 @@ public class InsertionAnnotationTest implements Constants {
  */
 @Test public void testNcRnaExonicVar152() throws AnnotationException  {
 	byte chr = 5;
-	int pos = 135272375;
+	int pos = 135272376;
 	String ref = "-";
 	String alt = "A";
 	Chromosome c = chromosomeMap.get(chr); 
@@ -123,11 +124,9 @@ public class InsertionAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-//	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
-	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	    String annot = ann.getVariantAnnotation();
-//	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92dupA:p.N31fs)",annot);
-	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92_93insA:p.N31fs)",annot);
+	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92dupA:p.N31fs)",annot);
 	}
 }
 
@@ -317,11 +316,9 @@ public class InsertionAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-//	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
-	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	    String annot = ann.getVariantAnnotation();
-//	    Assert.assertEquals("FRG1(uc003izs.3:exon6:c.439dupA:p.M147fs)",annot);
-	    Assert.assertEquals("FRG1(uc003izs.3:exon6:c.439_440insA:p.M147fs)",annot);
+	    Assert.assertEquals("FRG1(uc003izs.3:exon6:c.439dupA:p.M147fs)",annot);
 	}
 }
 
@@ -561,11 +558,9 @@ p.(Leu147Profs*16)
     } else {
 	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	VariantType varType = ann.getVariantType();
-//	Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
-	Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	String annot = ann.getVariantAnnotation();
-//&	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.286dupC:p.L96fs,uc002hsj.3:exon4:c.439dupC:p.L147fs)",annot);
-	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.286_287insC:p.L96fs,uc002hsj.3:exon4:c.439_440insC:p.L147fs)",annot);
+	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.286dupC:p.L96fs,uc002hsj.3:exon4:c.439dupC:p.L147fs)",annot);
     }
 }
 

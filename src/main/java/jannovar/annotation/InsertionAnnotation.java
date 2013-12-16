@@ -32,6 +32,8 @@ public class InsertionAnnotation {
      * @param frame_s the location within the frame (0,1,2) in which mutation occurs
      * @param wtnt3 The three nucleotides of codon affected by start of mutation
      * @param wtnt3_after the three nucleotides of the codon following codon affected by mutation
+	 * @param ref - never used, could be removed
+	 * @param var
      * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
      * @param exonNumber Number (one-based) of affected exon.
      * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
@@ -39,7 +41,22 @@ public class InsertionAnnotation {
     
     public static Annotation  getAnnotationPlusStrand(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
 						      String ref, String var,int refvarstart,int exonNumber) throws AnnotationException  {
-			/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
+ 
+     	// check if the insertion in truth is a duplication,
+    	if(trmdl.isPlusStrand()){
+    		if(trmdl.getCdnaSequence().substring(refvarstart-var.length()-1, refvarstart-1).equals(var)){
+        		Annotation ann = DuplicationAnnotation.getAnnotation2(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+        		return ann;
+        	}
+    	}else{
+    		if(trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
+        		Annotation ann = DuplicationAnnotation.getAnnotation2(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+        		return ann;
+        	}
+           	
+    	}
+
+		/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
     	if(trmdl.isMinusStrand())
     		refvarstart--;
 

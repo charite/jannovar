@@ -1,6 +1,8 @@
 package jannovar.reference;
 
 
+import java.util.ArrayList;
+
 import jannovar.common.Constants;
 
 
@@ -243,6 +245,12 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
     }
 
+    /**
+     * Returns the cDNA sequence belonging to this {@link TranscriptModel} as {@link String}.
+     * @return cDNA sequence
+     */
+    public String getCdnaSequence(){return this.sequence;}
+    
     /** 
      * @param end The position of the end of the mutation on the chromosome
      * @param k The exon number in which we have found the variant
@@ -367,28 +375,30 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      *   we can add its entire length as exonEnds[i] - exonStarts[i] + 1.
      *  </OL>
      */
-    private void calculateCDSLength() {
-	this.CDSlength = 0;
-	for (int i=0;i<this.exonCount;++i) {
-	    if (this.cdsStart >= this.exonStarts[i] && this.cdsStart <= exonEnds[i]) { 
-		if (this.cdsEnd <= exonEnds[i]) {
-		    this.CDSlength = cdsEnd - cdsStart + 1; /* one-exon gene */
-		} else {
-		    this.CDSlength += this.exonEnds[i] - cdsStart + 1; /* currently in first or last CDS exon of multiexon gene */
-		    continue; // go to next exon.
+	private void calculateCDSLength() {
+		this.CDSlength = 0;
+		for (int i = 0; i < this.exonCount; ++i) {
+			if (this.cdsStart >= this.exonStarts[i] && this.cdsStart <= exonEnds[i]) {
+				if (this.cdsEnd <= exonEnds[i]) {
+					this.CDSlength = cdsEnd - cdsStart + 1; /* one-exon gene */
+					break;
+				} else {
+					this.CDSlength += this.exonEnds[i] - cdsStart + 1; /* currently in first or last CDS exon of multiexon gene */
+					continue; // go to next exon.
+				}
+			}
+			if (CDSlength > 0 && cdsEnd < exonStarts[i]) {
+				System.err.println("Impossible parsing scenario for " + this.accession
+						+ " (CDSend is less than exon start)");
+				System.exit(1);
+			} else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
+				CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
+				break;
+			} else if (CDSlength > 0 && this.cdsEnd > exonEnds[i]) {
+				CDSlength += exonEnds[i] - exonStarts[i] + 1; /* currently in middle exon */
+			}
 		}
-	    } 
-	    if ( CDSlength > 0 && cdsEnd < exonStarts[i])  {
-		System.err.println("Impossible parsing scenario for " + this.accession + " (CDSend is less than exon start)");
-		System.exit(1);
-	    } else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
-		CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
-		break;
-	    } else if (CDSlength > 0 && this.cdsEnd > exonEnds[i]) {
-		CDSlength += exonEnds[i] - exonStarts[i] + 1; /* currently in middle exon */
-	    }
 	}
-    }
 
     /**
      * If this gene is not coding, then cdsStart is one more than cdsEnd.
@@ -466,7 +476,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/* Substract one to get back to zero-based numbering.
 	 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
 	 */
-	if (start+3>this.sequence.length()-1) {
+	if (start+3>this.sequence.length()) {
 	    /* This indicates a database error. */
 	    return null;
 	}
@@ -730,5 +740,67 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     	return cumlen;
     }
 
+    /**
+     * Returns the corresponding chromosomal coordinates for the cDNA start and end position given with 
+     * <code>start</code> and <code>end</code>.<br> 
+     * If the start and end coordinates are spanning an intron border multiple start and end coordinates 
+     * are given, where the first pair is from start to the border, ...<br>
+     * Checks if the start is smaller than the end otherwise switch.<br>
+     * NOTICE:<br>
+     * The chromosomal coordinates are both 1-based and inclusive.
+     * @param start start position within the cDNA (incl. 1-based)
+     * @param end end position the cDNA (incl. 1-based)
+     * @return start1,end1[,start2,end2]
+     */
+    public Integer[] getChromosomalCoordinates(int start, int end){
+    	
+    	// set start to the minor value
+    	if(start > end){
+    		int c = start;
+    		start = end;
+    		end = c;
+    	}
+    	
+    	Integer[] chromCoord = null;
+    	ArrayList<Integer> chromCoordTemp	= new ArrayList<Integer>();
+    	int cumlength	= 0;
+    	int exonlength;
+    	if(this.isMinusStrand()){
+    		int c = start;
+    		start	= this.mRNAlength-end;
+    		end		= this.mRNAlength-c;
+    	}
+//    	System.out.println("start: "+start+"\tend: "+end+"\tmRNAlength: "+this.mRNAlength);
+    	for(int i=0;i<exonCount;i++){
+//    		System.out.println("Exon "+i);
+    		exonlength = exonEnds[i]-exonStarts[i]+1;
+//    		System.out.println(String.format("cumlength: %d\texonlength: %d", cumlength,exonlength));
+    		if(start > (cumlength +exonlength)){
+//    			System.out.println(start+" > "+(cumlength +exonlength));
+    			cumlength += exonlength;
+    			continue;
+    		}else{
+//    			System.out.println(start+" <= "+(cumlength +exonlength));
+    			chromCoordTemp.add((start-cumlength)+exonStarts[i]-1);
+//    			System.out.println("add [s] "+((start-cumlength)+exonStarts[i]-1));
+    			if(end > (cumlength +exonlength)){
+//        			System.out.println(end+" > "+(cumlength +exonlength));
+    				chromCoordTemp.add(exonEnds[i]);
+//    				System.out.println("add [e] "+exonEnds[i]);
+        			cumlength += exonlength;
+    				start = cumlength;
+    			}else{
+//        			System.out.println(end+" <= "+(cumlength +exonlength));
+    				chromCoordTemp.add((end-cumlength)+exonStarts[i]-1);
+//    				System.out.println("add [e] "+((end-cumlength)+exonStarts[i]-1));
+    				break;
+    			}
+    		}
+    	}
+
+    	chromCoord = chromCoordTemp.toArray(new Integer[0]);
+    			
+    	return chromCoord;
+    }
 }
 
