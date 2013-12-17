@@ -137,6 +137,14 @@ public class Chromosome {
      * (often just one annotation, but potentially multiple ones).
      */
     public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {
+    	
+    	/* prepare and adapt for duplications (e.g. get rid of the repeated reference base in insertions) */
+    	if(ref.length() < alt.length() && alt.substring(0,ref.length()).equals(ref)){
+    		alt = alt.substring(ref.length());
+    		position += ref.length();
+    		ref = "-";
+    	}
+    	
 	//System.out.println("getAnnotationList position = " + position);
 	TranscriptModel leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	TranscriptModel rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
