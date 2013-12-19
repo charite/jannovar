@@ -180,6 +180,35 @@ public class VCFLineTest {
     }
 
 
+    /** The following test was added to check whether we are getting the PHRED variant quality
+     * correctly. 
+     */
+    private String qLine1 = "10	123256215	.	T	G	100	PASS	GENE=FGFR2;INHERITANCE=AD;MIM=101600	GT:DS:GL	1|0:2.000:-5.00,-1.10,-0.04";
+
+     /** The following test was added to check whether we are getting the PHRED variant quality
+     * correctly. 
+     */
+    private String qLine2 = "10	123256215	.	T	G	168.56	PASS	GENE=FGFR2;INHERITANCE=AD;MIM=101600	GT:DS:GL	1|0:2.000:-5.00,-1.10,-0.04";
+
+    @Test public void testQline2()  throws VCFParseException {
+	VCFLine line = new VCFLine(qLine2);
+	int q = line.getVariantQuality();
+	Assert.assertEquals(169,q);
+    }
+
+
+     /** The following test was added to check whether we are getting the PHRED variant quality
+     * correctly. 
+     */
+    private String qLine3 = "10	123256215	.	T	G	227.23	PASS	GENE=FGFR2;INHERITANCE=AD;MIM=101600	GT:DS:GL	1|0:2.000:-5.00,-1.10,-0.04";
+
+    @Test public void testQline3()  throws VCFParseException {
+	VCFLine line = new VCFLine(qLine3);
+	int q = line.getVariantQuality();
+	Assert.assertEquals(227,q);
+    }
+
+
    
 
     

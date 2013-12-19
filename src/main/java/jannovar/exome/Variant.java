@@ -13,7 +13,7 @@ import jannovar.genotype.GenotypeCall;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.24 (17 November, 2013)
+ * @version 0.25 (17 December, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     
@@ -530,6 +530,9 @@ public class Variant implements Comparable<Variant>, Constants {
     
     /**
      * Sort based on chromosome and position.
+     * If these are equal, sort based on the lexicographic
+     * order of the reference sequence. If this is equal, sort
+     * based on the lexicographic order of the alt sequence.
      */
     @Override
     public int compareTo(Variant other) {
@@ -537,6 +540,10 @@ public class Variant implements Comparable<Variant>, Constants {
 	else if (other.chromosome < this.chromosome) return 1;
 	else if (other.position > this.position) return -1;
 	else if (other.position < this.position) return 1;
+	else if (! other.ref.equals(this.ref))
+	    return other.ref.compareTo(this.ref);
+	else if (! other.alt.equals(this.alt))
+	    return other.alt.compareTo(this.alt);
 	else return 0;
     }
 }

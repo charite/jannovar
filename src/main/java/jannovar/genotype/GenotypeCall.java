@@ -48,7 +48,6 @@ public class GenotypeCall  {
     public GenotypeCall(ArrayList<Genotype> calls,ArrayList<Integer> qualities) {
 	this.callList = calls;
 	this.qualityList = qualities;
-	//System.out.println("Warning: GenotypeCall  not fully implemented");
     }
 
     /**
