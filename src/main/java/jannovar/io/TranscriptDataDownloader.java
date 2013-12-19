@@ -23,7 +23,7 @@ public class TranscriptDataDownloader implements Constants {
 
 //	private int source	= UCSC;
 
-	/** Path of direrctory to which the files will be downloaded. */
+	/** Path of directory to which the files will be downloaded. */
 	private String directory_path;
 
 	/**
@@ -70,17 +70,17 @@ public class TranscriptDataDownloader implements Constants {
 	 * that indicates whether to download UCSC, Ensembl, or RefSeq.
 	 * @throws FileDownloadException
 	 */
-	public void downloadTranscriptFiles(int source) throws FileDownloadException {
+	public void downloadTranscriptFiles(int source, Release r) throws FileDownloadException {
 		makeDirectoryIfNotExist();
 		switch (source) {
 		case UCSC:
-			downloadUCSCfiles();
+			downloadUCSCfiles(r);
 			break;
 		case ENSEMBL:
-			downloadEnsemblFiles();
+			downloadEnsemblFiles(r);
 			break;
 		case REFSEQ:
-			downloadRefseqFiles();
+			downloadRefseqFiles(r);
 			break;
 //			throw new FileDownloadException("RefSeq as source of transcript currently not implemented.");
 		default:
@@ -92,11 +92,37 @@ public class TranscriptDataDownloader implements Constants {
 	 * Downloads the ensembl transcript data files (if a file already exists, 
 	 * it emits a warning message and skips it).
 	 */
-	public void downloadRefseqFiles() throws FileDownloadException{
-		String gff	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_GFF_BASE);
-		String rna	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_FASTA_BASE);
-		download_file(rna, refseq_rna);
-		download_file(gff, refseq_gff);
+	public void downloadRefseqFiles(Release r) throws FileDownloadException{
+		
+		String gff_base = null;
+		String rna_base = null;
+		String gff_name = null;
+		String rna_name = refseq_rna;
+		switch(r){
+		case MM9:
+			gff_base	= String.format("%s%s%s", REFSEQ_FTP_BASE_MOUSE,REFSEQ_MM9,REFSEQ_GFF_BASE);
+			rna_base	= String.format("%s%s%s", REFSEQ_FTP_BASE_MOUSE,REFSEQ_MM9,REFSEQ_FASTA_BASE);
+			gff_name	= refseq_gff_mm9;
+			break;
+		case MM10:
+			gff_base	= String.format("%s%s%s", REFSEQ_FTP_BASE_MOUSE,REFSEQ_MM10,REFSEQ_GFF_BASE);
+			rna_base	= String.format("%s%s%s", REFSEQ_FTP_BASE_MOUSE,REFSEQ_MM10,REFSEQ_FASTA_BASE);
+			gff_name	= refseq_gff_mm10;
+			break;
+		case HG18:
+			gff_base	= String.format("%s%s%s", REFSEQ_FTP_BASE,REFSEQ_HG18,REFSEQ_GFF_BASE);
+			rna_base	= String.format("%s%s%s", REFSEQ_FTP_BASE,REFSEQ_HG18,REFSEQ_FASTA_BASE);
+			gff_name	= refseq_gff_hg18;
+			break;
+		case HG19:			
+		default:
+			gff_base	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_GFF_BASE);
+			rna_base	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_FASTA_BASE);
+			gff_name	= refseq_gff_hg19;
+//			rna_name	= refseq_rna;
+		}
+		download_file(gff_base, gff_name);
+		download_file(rna_base, rna_name);
 //		String refFlatCompressed = String.format("%s.gz",Constants.refFlat);
 //		download_file(UCSC_FTP_BASE, refFlatCompressed);
 //		downloadUCSCfiles();
@@ -106,13 +132,52 @@ public class TranscriptDataDownloader implements Constants {
 	 * Downloads the ensembl transcript data files (if a file already exists, 
 	 * it emits a warning message and skips it).
 	 */
-	public void downloadEnsemblFiles() throws FileDownloadException{
-		String gtf	= String.format("%s%s", ENSEMBL_FTP_BASE,ENSEMBL_GTF_BASE);
-		String cdna	= String.format("%s%s%s", ENSEMBL_FTP_BASE,ENSEMBL_FASTA_BASE,"cdna/");
-		String ncrna	= String.format("%s%s%s", ENSEMBL_FTP_BASE,ENSEMBL_FASTA_BASE,"ncrna/");
-		download_file(ncrna, ensembl_ncrna);
-		download_file(cdna, ensembl_cdna);
-		download_file(gtf, ensembl_gtf);
+	public void downloadEnsemblFiles(Release r) throws FileDownloadException{
+		String gtf_base		= null;
+		String cdna_base	= null;
+		String ncrna_base	= null;
+		String gtf_name		= null;
+		String cdna_name	= null;
+		String ncrna_name	= null;
+		System.out.println("release: "+r.getUCSCString(r));
+		switch (r) {
+		case MM9:
+			gtf_base	= String.format("%s%s%s", ENSEMBL_FTP_BASE_MM9,ENSEMBL_GTF_BASE,ENSEMBL_MOUSE_BASE);
+			cdna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9,ENSEMBL_FASTA_BASE,ENSEMBL_MOUSE_BASE,"cdna/");
+			ncrna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9,ENSEMBL_FASTA_BASE,ENSEMBL_MOUSE_BASE,"ncrna/");
+			gtf_name	= String.format("%s%s", ensembl_mm9, ensembl_gtf);
+			cdna_name	= String.format("%s%s", ensembl_mm9, ensembl_cdna);
+			ncrna_name	= String.format("%s%s", ensembl_mm9, ensembl_ncrna);
+			break;
+		case MM10:
+			gtf_base	= String.format("%s%s%s", ENSEMBL_FTP_BASE_MM10,ENSEMBL_GTF_BASE,ENSEMBL_MOUSE_BASE);
+			cdna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10,ENSEMBL_FASTA_BASE,ENSEMBL_MOUSE_BASE,"cdna/");
+			ncrna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10,ENSEMBL_FASTA_BASE,ENSEMBL_MOUSE_BASE,"ncrna/");
+			gtf_name	= String.format("%s%s", ensembl_mm10, ensembl_gtf);
+			cdna_name	= String.format("%s%s", ensembl_mm10, ensembl_cdna);
+			ncrna_name	= String.format("%s%s", ensembl_mm10, ensembl_ncrna);
+			break;		
+		case HG18:
+			gtf_base	= String.format("%s%s%s", ENSEMBL_FTP_BASE_HG18,ENSEMBL_GTF_BASE,ENSEMBL_HUMAN_BASE);
+			cdna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18,ENSEMBL_FASTA_BASE,ENSEMBL_HUMAN_BASE,"cdna/");
+			ncrna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18,ENSEMBL_FASTA_BASE,ENSEMBL_HUMAN_BASE,"ncrna/");
+			gtf_name	= String.format("%s%s", ensembl_hg18, ensembl_gtf);
+			cdna_name	= String.format("%s%s", ensembl_hg18, ensembl_cdna);
+			ncrna_name	= String.format("%s%s", ensembl_hg18, ensembl_ncrna);
+			break;
+		case HG19:
+		default:
+			gtf_base	= String.format("%s%s%s", ENSEMBL_FTP_BASE_HG19,ENSEMBL_GTF_BASE,ENSEMBL_HUMAN_BASE);
+			cdna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19,ENSEMBL_FASTA_BASE,ENSEMBL_HUMAN_BASE,"cdna/");
+			ncrna_base	= String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19,ENSEMBL_FASTA_BASE,ENSEMBL_HUMAN_BASE,"ncrna/");
+			gtf_name	= String.format("%s%s", ensembl_hg19, ensembl_gtf);
+			cdna_name	= String.format("%s%s", ensembl_hg19, ensembl_cdna);
+			ncrna_name	= String.format("%s%s", ensembl_hg19, ensembl_ncrna);
+			break;
+		}
+		download_file(ncrna_base, ncrna_name);
+		download_file(cdna_base, cdna_name);
+		download_file(gtf_base, gtf_name);
 	}
 
 	/**
@@ -120,15 +185,32 @@ public class TranscriptDataDownloader implements Constants {
 	 * required files from the UCSC genome browser (if a file already exists, it
 	 * emits a warning message and skips it).
 	 */
-	public void downloadUCSCfiles() throws FileDownloadException {
+	public void downloadUCSCfiles(Release r) throws FileDownloadException {
 		String knownGene = String.format("%s.gz", Constants.knownGene);
 		String knownGeneMrna = String.format("%s.gz", Constants.knownGeneMrna);
 		String kgXref = String.format("%s.gz", Constants.kgXref);
 		String known2locus = String.format("%s.gz", Constants.known2locus);
-		download_file(UCSC_FTP_BASE, knownGene);
-		download_file(UCSC_FTP_BASE, knownGeneMrna);
-		download_file(UCSC_FTP_BASE, kgXref);
-		download_file(UCSC_FTP_BASE, known2locus);
+		
+		String ucsc_ftp_base	= null;
+		switch (r) {
+		case MM9:
+			ucsc_ftp_base	= UCSC_FTP_BASE_MM9;
+			break;
+		case MM10:
+			ucsc_ftp_base	= UCSC_FTP_BASE_MM10;
+			break;
+		case HG18:
+			ucsc_ftp_base	= UCSC_FTP_BASE_HG18;
+			break;
+		case HG19:
+		default:
+			ucsc_ftp_base	= UCSC_FTP_BASE_HG19;
+			break;
+		}
+		download_file(ucsc_ftp_base, knownGene);
+		download_file(ucsc_ftp_base, knownGeneMrna);
+		download_file(ucsc_ftp_base, kgXref);
+		download_file(ucsc_ftp_base, known2locus);
 	}
 
 	/**
