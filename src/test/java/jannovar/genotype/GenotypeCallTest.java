@@ -1,7 +1,10 @@
 package jannovar.io;
 
 
+import java.util.ArrayList;
+
 import jannovar.genotype.GenotypeCall;
+import jannovar.common.Genotype;
 
 import org.junit.Test;
 import org.junit.AfterClass;
@@ -10,20 +13,31 @@ import org.junit.Assert;
 
 
 /**
- * Note that this class inputs the file exomizer/data/TestExome.vcf, which is a small
- * excerpt of the Manuel Corpas VCF file for the f1000 research article.
- * <p>
- * Refactored on 13 April, 2013 to take changes in the API of VCFLine into account.
- * <P>
- * The test cases were made by examining some of the lines from that file.
+ * Test adding and retireving data about the genotype.
  */
-public class VCFLineTest {
+public class GenotypeCallTest {
 
 
-     @Test public void testGetReferenceSequence() throws VCFParseException 
+     @Test public void testGetQuality()  
     {
-	
-	Assert.assertEquals(2,1);
+	ArrayList<Genotype> calls = new ArrayList<Genotype> ();
+	calls.add(Genotype.HETEROZYGOUS);
+	ArrayList<Integer> qualities = new ArrayList<Integer> ();
+	qualities.add(100);
+	GenotypeCall gc = new GenotypeCall(calls,qualities);
+	int q = gc.getQualityInIndividualN(0);
+	Assert.assertEquals(100,q);
+    }
+
+     @Test public void testGetGenotype()  
+    {
+	ArrayList<Genotype> calls = new ArrayList<Genotype> ();
+	calls.add(Genotype.HETEROZYGOUS);
+	ArrayList<Integer> qualities = new ArrayList<Integer> ();
+	qualities.add(100);
+	GenotypeCall gc = new GenotypeCall(calls,qualities);
+	Genotype g = gc.getGenotypeInIndividualN(0);
+	Assert.assertEquals(Genotype.HETEROZYGOUS,g);
     }
 
 
