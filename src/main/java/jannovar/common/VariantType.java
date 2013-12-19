@@ -11,9 +11,9 @@ package jannovar.common;
  * {@link jannovar.reference.Chromosome Chromosome}.
  * Note that this class implements the assignment of a priority level to the variant classes. See
  * the document for the class
-  {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
+ * {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.12 (17 November, 2013)
+ * @version 0.13 (17 December, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -72,7 +72,8 @@ public enum  VariantType {
      * The preference level for annotations is 
      * <OL>
      * <LI><B>exonic (1)</B>: FS_DELETION, FS_INSERTION, NON_FS_SUBSTITUTION, FS_SUBSTITUTION, 
-     * NONSYNONYMOUS, NON_FS_DELETION, NON_FS_INSERTION, STOPGAIN, STOPLOSS.
+     * NONSYNONYMOUS, NON_FS_DELETION, NON_FS_INSERTION, STOPGAIN, STOPLOSS, FS_DUPLICATION,
+     * NON_FS_DUPLICATION, START_LOSS, START_GAIN.
      * <LI><B>splicing (1)</B>: SPLICING.
      * <LI><B>ncRNA (2)</B>:ncRNA_EXONIC, ncRNA_SPLICING.
      * <LI><B>UTR3 (3)</B>: UTR3
@@ -139,7 +140,8 @@ public enum  VariantType {
 	VariantType[] vta = new VariantType[] { NONSYNONYMOUS, STOPGAIN, SPLICING,
 						FS_DELETION,FS_INSERTION,FS_SUBSTITUTION,
 						NON_FS_DELETION,NON_FS_INSERTION,NON_FS_SUBSTITUTION,
-						STOPLOSS,
+						STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION,
+						START_LOSS,START_GAIN,
 						ncRNA_EXONIC,ncRNA_SPLICING,
 						UTR3, UTR5,
 						SYNONYMOUS,INTRONIC,
