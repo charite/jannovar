@@ -161,12 +161,16 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		curRna.id			= curRnaID;
 		curRna.name			= feature.getAttribute("Name");
 		curRna.chromosom	= identifier2chromosom.get(feature.getSequence_id());
-		if(curGene.chromosom != curRna.chromosom)
-			throw new InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match.");
+		if(curGene.chromosom != curRna.chromosom){
+//			throw new InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match: "+curGene.chromosom+ " != "+curRna.chromosom+"\n"+feature);
+			return;
+		}
 		curRna.strand		= feature.getStrand();
 		// check strand of transcript and gene
-		if(curGene.strand != feature.getStrand())
-			throw new InvalidAttributException("The strand of the gene and transcript do not match.");
+		if(curGene.strand != feature.getStrand()){
+//			throw new InvalidAttributException("The strand of the gene and transcript do not match: "+curGene.strand+ " != "+feature.getStrand()+"\n"+feature);
+			return;
+		}
 		// add transcript to the gene
 		curGene.rnas.put(curRnaID, curRna);
 	}
@@ -208,6 +212,9 @@ public class TranscriptModelBuilder implements ChromosomMap{
 		}
 		// get RNA
 		curRna	= curGene.rnas.get(curRnaID);
+		
+		if(curRna == null || curGene.id == null)
+			return;
 		
 		// now finally process the Subregion
 		curGFF	= new GFFstruct();
