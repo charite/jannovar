@@ -687,10 +687,11 @@ public class Jannovar {
 	    	if(g.equals("mm10")){this.genomeRelease = Release.MM10;}
 	    	if(g.equals("hg18")){this.genomeRelease = Release.HG18;}
 	    	if(g.equals("hg19")){this.genomeRelease = Release.HG19;}
-	    	this.dirPath += genomeRelease.getUCSCString(genomeRelease);
 	    }else{
+	    	System.out.println("[Jannovar] genome release set to default: hg19");
 	    	this.genomeRelease = Release.HG19; 
 	    }
+	    this.dirPath += genomeRelease.getUCSCString(genomeRelease);
 	    	
 
 	    if (cmd.hasOption('S')) {
