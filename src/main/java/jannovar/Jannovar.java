@@ -357,8 +357,6 @@ public class Jannovar {
      */
     private void outputAnnotatedVCF(VCFReader parser) 
     {
-	this.variantList = parser.getVariantList();
-	ArrayList<VCFLine> lineList = parser.getVCFLineList();
 	File f = new File(this.VCFfilePath);
 	String outname = f.getName(); 
 	int i = outname.lastIndexOf("vcf");
@@ -379,13 +377,19 @@ public class Jannovar {
 		out.write(s + "\n");
 	    }
 	    /** Now write each of the variants. */
-	    for (VCFLine  line : lineList) {
-		Variant v = parser.VCFline2Variant(line);
-		try{
-		    annotateVCFLine(line,v,out);
-		} catch (AnnotationException e) {
-		    System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
-		}
+	    VCFLine line;
+	    Variant v;
+	    while(parser.hasnext()){
+	    	line = parser.next(false);
+	    	// skip misformed VCFline (null)
+	    	if(line == null)
+	    		continue;
+	    	v = parser.VCFline2Variant(line);
+	    	try {
+	    		annotateVCFLine(line,v,out);
+			} catch (AnnotationException e) {
+				System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
+			}
 	    }
 	    out.close();
 	}catch (IOException e){
@@ -413,13 +417,20 @@ public class Jannovar {
 	    BufferedWriter out = new BufferedWriter(fstream);
 	    /**  Output each of the variants. */
 	    int n=0;
-	    for (Variant v : variantList) {
-		n++;
-		try{
-		    outputJannovarLine(n,v,out);
-		} catch (AnnotationException e) {
-		    System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
-		}
+	    VCFLine line;
+	    Variant v;
+	    while(parser.hasnext()){
+			n++;
+	    	line = parser.next();
+	    	// skip misformed VCFline (null)
+	    	if(line == null)
+	    		continue;
+	    	v = parser.VCFline2Variant(line);
+	    	try {
+	    		outputJannovarLine(n,v,out);
+			} catch (AnnotationException e) {
+				System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
+			}
 	    }
 	    out.close();
 	}catch (IOException e){
@@ -437,7 +448,7 @@ public class Jannovar {
      * to a file (name of the original file with the suffix .jannovar).
      */
     public void annotateVCF() {
-	VCFReader parser = new VCFReader();
+    	VCFReader parser = new VCFReader(true);
 	VCFLine.setStoreVCFLines();
 	try{
 	    parser.parseFile(this.VCFfilePath);
@@ -688,7 +699,8 @@ public class Jannovar {
 	    	if(g.equals("hg18")){this.genomeRelease = Release.HG18;}
 	    	if(g.equals("hg19")){this.genomeRelease = Release.HG19;}
 	    }else{
-	    	System.out.println("[Jannovar] genome release set to default: hg19");
+	    	if(performSerialization)
+	    		System.out.println("[Jannovar] genome release set to default: hg19");
 	    	this.genomeRelease = Release.HG19; 
 	    }
 	    this.dirPath += genomeRelease.getUCSCString(genomeRelease);
