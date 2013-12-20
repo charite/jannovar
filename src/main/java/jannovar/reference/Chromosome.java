@@ -841,6 +841,7 @@ public class Chromosome {
 	    case 'C': match='G'; break;
 	    case 'G': match='C'; break;
 	    case 'T': match='A'; break;
+	    case 'N': match='N'; break;
 	    }
 	    if (match>0) sb.append(match);
 	}

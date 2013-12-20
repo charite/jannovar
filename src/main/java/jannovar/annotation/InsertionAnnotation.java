@@ -41,16 +41,15 @@ public class InsertionAnnotation {
     
     public static Annotation  getAnnotationPlusStrand(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
 						      String ref, String var,int refvarstart,int exonNumber) throws AnnotationException  {
- 
      	// check if the insertion in truth is a duplication,
     	if(trmdl.isPlusStrand()){
     		if(trmdl.getCdnaSequence().substring(refvarstart-var.length()-1, refvarstart-1).equals(var)){
-        		Annotation ann = DuplicationAnnotation.getAnnotation2(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+        		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
         		return ann;
         	}
     	}else{
     		if(trmdl.getCdnaSequence().length() > refvarstart+var.length() && trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
-        		Annotation ann = DuplicationAnnotation.getAnnotation2(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+        		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
         		return ann;
         	}
            	

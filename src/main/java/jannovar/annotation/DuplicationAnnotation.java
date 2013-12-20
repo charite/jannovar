@@ -3,7 +3,6 @@
  */
 package jannovar.annotation;
 
-import javax.sound.sampled.ReverbType;
 
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
@@ -19,7 +18,7 @@ import jannovar.reference.Translator;
  * g.7_8[4] (or g.5_6[4], or g.5TG[4], not g.7_10dup) is the preferred description of  the addition of two extra TG's to the variable TG repeated sequence changing ACTTTGTGCC to ACTTTGTGTGTGCC
  * 
  * @author mjaeger
- * @version 0.1 (07-08-2013)
+ * @version 0.2 (20-12-2013)
  */
 public class DuplicationAnnotation {
 
@@ -73,7 +72,7 @@ public class DuplicationAnnotation {
 	 *         representing the current variant
 	 * @throws AnnotationException
 	 */
-	public static Annotation getAnnotation2(TranscriptModel trmdl, int frame_s, String wtnt3,
+	public static Annotation getAnnotation(TranscriptModel trmdl, int frame_s, String wtnt3,
 			String wtnt3_after, String ref, String var, int refvarstart, int exonNumber) throws AnnotationException {
 		
 		String annot;
