@@ -49,7 +49,7 @@ public class InsertionAnnotation {
         		return ann;
         	}
     	}else{
-    		if(trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
+    		if(trmdl.getCdnaSequence().length() > refvarstart+var.length() && trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
         		Annotation ann = DuplicationAnnotation.getAnnotation2(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
         		return ann;
         	}
