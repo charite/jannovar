@@ -330,8 +330,7 @@ public class VCFReader {
 
      	VCFLine line;
      	while((line = next(true)) != null){
-     		if(line != null)
-     			variant_list.add(line);
+     		
      	}
      }	
 
@@ -520,7 +519,7 @@ public class VCFReader {
 		            in.close(); 
 				else{
 					ln = new VCFLine(nextline);
-					if(add)
+					if(add && ln != null)
 					    variant_list.add(ln);
 					this.total_number_of_variants++;
 				}
