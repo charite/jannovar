@@ -305,7 +305,13 @@ public class Jannovar {
 	for (int i=0;i<7;++i)
 	    out.write(A[i] + "\t");
 	/* Now add the stuff to the INFO line */
-	String INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[7]);
+	String INFO = null;
+	/* The if clause is necessary to avoid writing a final ";" if the INFO lineis empty,
+	   which wouldbe invalid VCF format. */
+	if (A[7].length()>0)
+	    INFO = String.format("EFFECT=%s;HGVS=%s;%s",effect,annotation,A[7]);
+	else
+	    INFO = String.format("EFFECT=%s;HGVS=%s",effect,annotation,A[7]);
 	out.write(INFO + "\t");
 	for (int i=8;i<A.length;++i)
 	     out.write(A[i] + "\t");
