@@ -85,7 +85,7 @@ public class SynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)",annot);
 	}

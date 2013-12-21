@@ -19,14 +19,11 @@ import jannovar.exception.AnnotationException;
  * the sequence that is typically used for variant calling and thus informs the variant calls in the
  * VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this case, as in versions
  * of this class up to the 15th of December, 2012 (v. 0.04).
- * @version 0.09 (6 July, 2013)
+ * @version 0.11 (21 December, 2013)
  * @author Peter N Robinson
  */
 
 public class SingleNucleotideSubstitution {
-
-
-
      /**
      * Creates annotation for a single-nucleotide substitution.
      * <P>
@@ -71,14 +68,12 @@ public class SingleNucleotideSubstitution {
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
-	 //$do_trim = 3;   # Trim first 3 nt of post_pad for variant, as wtnt3_after is being added here.
 	String canno=null; // cDNA annotation.
 	String panno=null;
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
 	int cdspos = refvarstart - refcdsstart + 1; /* position of mutation in CDS, numbered from start codon */
 
-	//System.out.println("refcdsstart=" + refcdsstart);
 	if (ref.length() != 1) {
 	    throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s",
 							ref,kgl.getGeneSymbol()));
@@ -98,7 +93,6 @@ public class SingleNucleotideSubstitution {
 		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
 					    ref,wtnt3.charAt(1),strand);
 		canno = String.format("%s [%s]",canno,wrng);
-		//throw new AnnotationException(canno);
 	    }
 	} else if (frame_s == 2) {
 	    //$varnt3 = $wtnt3[0] . $wtnt3[1]. $obs;
@@ -111,7 +105,6 @@ public class SingleNucleotideSubstitution {
 					    ref,wtnt3.charAt(1),strand);
 		
 		canno = String.format("%s [%s]",canno,wrng);
-		//throw new AnnotationException(canno);
 	    }
 	} else { /* i.e., frame_s == 0 */
 	    //$varnt3 = $obs . $wtnt3[1] . $wtnt3[2];
@@ -138,13 +131,11 @@ public class SingleNucleotideSubstitution {
 	    //$wtaa eq '*' and ($wtaa, $varaa) = qw/X X/;		#change * to X in the output NO! Not HGVS conform
 	    //$function->{$index}{ssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    //Annotation ann = Annotation.createSynonymousSNVAnnotation(kgl,cdspos,panno);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.SYNONYMOUS,cdspos);
 	    return ann;
 	} else if (varaa.equals("*")) {
 	    //$function->{$index}{stopgain} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa${varpos}X,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d*",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-	    //Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPGAIN,cdspos);
 	    return ann;
 	} else if (wtaa.equals("*")) {
@@ -156,7 +147,7 @@ public class SingleNucleotideSubstitution {
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
 	   
-	    Annotation ann = new Annotation(kgl,panno,VariantType.NONSYNONYMOUS,cdspos);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.MISSENSE,cdspos);
 	    return ann;
 	}
 	
@@ -209,7 +200,6 @@ public class SingleNucleotideSubstitution {
 		String wrng = String.format("WARNING: mRNA/genome discrepancy: \"%s\"/\"%s\" strand=%c",
 					    ref,wtnt3.charAt(1),strand);
 		canno = String.format("%s [%s]",canno,wrng);
-		//throw new AnnotationException(canno);
 	    }
 	} else if (frame_s == 2) {
 	    //$varnt3 = $wtnt3[0] . $wtnt3[1]. $obs;
@@ -246,19 +236,16 @@ public class SingleNucleotideSubstitution {
 	} else if (varaa.equals("*")) {
 	    //$function->{$index}{stopgain} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa${varpos}X,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d*",kgl.getName(),exonNumber,canno,wtaa,aavarpos);
-	    //Annotation ann = Annotation.createStopGainAnnotation(kgl,cdspos,panno);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPGAIN,cdspos);
 	    return ann;
 	} else if (wtaa.equals("*")) {
 	    panno = String.format("%s:exon%d:%s:p.*%d%s",kgl.getName(),exonNumber,canno,aavarpos,varaa);
-	    //Annotation ann = Annotation.createStopLossAnnotation(kgl,cdspos,panno);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.STOPLOSS,cdspos);
 	    return ann;
 	} else { /* Missense */
 	    //    $function->{$index}{nssnv} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos$varaa,";
 	    panno = String.format("%s:exon%d:%s:p.%s%d%s",kgl.getName(),exonNumber,canno,wtaa,aavarpos,varaa);
-	    //Annotation ann = Annotation.createNonSynonymousSNVAnnotation(kgl,cdspos,panno);
-	    Annotation ann = new Annotation(kgl,panno,VariantType.NONSYNONYMOUS,cdspos);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.MISSENSE,cdspos);
 	    return ann;
 	}
 	
@@ -266,3 +253,4 @@ public class SingleNucleotideSubstitution {
     } 
 
 }
+/* eof */

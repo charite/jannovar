@@ -76,7 +76,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)",annot);
 	}
@@ -101,7 +101,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC654433(uc010fks.4:exon3:c.166A>G:p.T56A,uc002tjq.5:exon4:c.166A>G:p.T56A)",annot);
 	}
@@ -128,7 +128,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("SND1-IT1(uc003vmj.2:exon1:c.70A>G:p.T24A)",annot);
 	}
@@ -152,7 +152,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S)",annot);
 	}
@@ -175,7 +175,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("PRAMEF11(uc001auk.2:exon3:c.308A>G:p.E103G)",annot);
 	}
@@ -200,7 +200,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("LOC440563(uc010obg.2:exon2:c.434A>G:p.H145R)",annot);
 	}
@@ -225,7 +225,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FHAD1(uc001awf.3:exon2:c.197A>G:p.E66G,uc001awe.1:exon4:c.320A>G:p.E107G,uc010obl.1:exon5:c.515A>G:p.E172G,uc001awd.1:exon6:c.515A>G:p.E172G,uc001awb.2:exon21:c.2756A>G:p.E919G)",annot);
 	}
@@ -252,7 +252,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CASP9(uc001awp.4:exon5:c.194A>G:p.Q65R,uc009voi.4:exon5:c.194A>G:p.Q65R,uc010obm.3:exon5:c.413A>G:p.Q138R,uc001awn.4:exon5:c.662A>G:p.Q221R,uc001awm.2:exon5:c.662A>G:p.Q221R)",annot);
 	}
@@ -279,7 +279,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AKR7L(uc021oho.1:exon4:c.229G>A:p.A77T,uc021ohn.1:exon6:c.253G>A:p.A85T)",annot);
 	}
@@ -305,7 +305,7 @@ public class NonsynonymousAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("AKR7L(uc021ohn.1:exon4:c.47G>A:p.C16Y)",annot);
 	}
@@ -334,7 +334,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ECE1(uc001bem.2:exon9:c.974C>T:p.T325I,uc001bej.2:exon7:c.986C>T:p.T329I,uc001bei.2:exon8:c.1013C>T:p.T338I,uc010odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon9:c.1022C>T:p.T341I,uc009vqa.1:exon9:c.1022C>T:p.T341I)",annot);
 	}
@@ -359,7 +359,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("USP48(uc001bfa.3:exon1:c.7G>T:p.V3L)",annot);
 	}
@@ -383,7 +383,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ZBTB40(uc009vqi.1:exon12:c.2653G>A:p.V885M,uc001bfu.2:exon14:c.2989G>A:p.V997M,uc001bft.2:exon15:c.2989G>A:p.V997M)",annot);
 	}
@@ -406,7 +406,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FUCA1(uc001bie.3:exon5:c.857A>G:p.Q286R)",annot);
 	}
@@ -430,7 +430,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("CATSPER4(uc010oez.2:exon2:c.230A>G:p.Q77R)",annot);
 	}
@@ -454,7 +454,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("ADC(uc001bwx.1:exon1:c.17A>G:p.H6R)",annot);
 	}
@@ -478,7 +478,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("NBAS(uc002rcc.2:exon9:c.727A>G:p.I243V)",annot);
 	}
@@ -505,7 +505,7 @@ but was:<....1013C>T:p.T338I,uc0[10odl.1:exon9:c.1022C>T:p.T341I,uc001bek.2:exon
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("FAM228B(uc002rew.3:exon10:c.542G>A:p.G181D)",annot);
 	}
@@ -534,7 +534,7 @@ Therefore, the "nonsynonymous" variant "wins", togehther with an error message. 
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NONSYNONYMOUS,varType);
+	    Assert.assertEquals(VariantType.MISSENSE,varType);
 	    String annot = ann.getVariantAnnotation();
 	    Assert.assertEquals("EMILIN1(uc010eyq.2:exon3:c.446A>G:p.Q149R)",annot);
 	}
@@ -542,15 +542,5 @@ Therefore, the "nonsynonymous" variant "wins", togehther with an error message. 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 }
+/* eof */

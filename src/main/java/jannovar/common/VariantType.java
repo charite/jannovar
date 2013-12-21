@@ -30,8 +30,9 @@ public enum  VariantType {
 	INTERGENIC, 
 	/** Variant located in an intron. */
 	INTRONIC, 
-	/** Variant that leads to the subsitution of one amino acid. */
-	NONSYNONYMOUS, 
+	/** Variant that leads to the subsitution of one amino acid (note this was earlier "NONYSYNONYMOUS"
+	    but the term name was changed to conform with the terminology od Sequence Ontology). */
+	MISSENSE, 
 	/** Variant located in an exon of a noncoding RNA gene */
 	ncRNA_EXONIC, 
        /** Variant located in an intron of a noncoding RNA gene */
@@ -72,7 +73,7 @@ public enum  VariantType {
      * The preference level for annotations is 
      * <OL>
      * <LI><B>exonic (1)</B>: FS_DELETION, FS_INSERTION, NON_FS_SUBSTITUTION, FS_SUBSTITUTION, 
-     * NONSYNONYMOUS, NON_FS_DELETION, NON_FS_INSERTION, STOPGAIN, STOPLOSS, FS_DUPLICATION,
+     * MISSENSE, NON_FS_DELETION, NON_FS_INSERTION, STOPGAIN, STOPLOSS, FS_DUPLICATION,
      * NON_FS_DUPLICATION, START_LOSS, START_GAIN.
      * <LI><B>splicing (1)</B>: SPLICING.
      * <LI><B>ncRNA (2)</B>:ncRNA_EXONIC, ncRNA_SPLICING.
@@ -95,7 +96,7 @@ public enum  VariantType {
 	case FS_INSERTION:
 	case NON_FS_SUBSTITUTION:
 	case FS_SUBSTITUTION:
-	case NONSYNONYMOUS:
+	case MISSENSE:
 	case NON_FS_DELETION:
 	case NON_FS_INSERTION:
 	case SPLICING: 
@@ -137,7 +138,7 @@ public enum  VariantType {
      * accordingto presumed pathogenicity.
      */
     public static VariantType[] getPrioritySortedList() {
-	VariantType[] vta = new VariantType[] { NONSYNONYMOUS, STOPGAIN, SPLICING,
+	VariantType[] vta = new VariantType[] { MISSENSE, STOPGAIN, SPLICING,
 						FS_DELETION,FS_INSERTION,FS_SUBSTITUTION,
 						NON_FS_DELETION,NON_FS_INSERTION,NON_FS_SUBSTITUTION,
 						STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION,
@@ -165,7 +166,7 @@ public enum  VariantType {
 	case FS_INSERTION: return "frameshift insertion";
 	case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
 	case FS_SUBSTITUTION:  return "frameshift substitution";
-	case NONSYNONYMOUS:  return "missense";
+	case MISSENSE:  return "missense";
 	case NON_FS_DELETION: return "nonframeshift deletion";
 	case NON_FS_INSERTION:return "nonframeshift insertion";
 	case SPLICING: return "splicing";
