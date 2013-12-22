@@ -120,7 +120,7 @@ public class IntervalTreeTest {
 	List<String> qy = tree.search(30,30);
 	Assert.assertEquals(2,qy.size());
 	Assert.assertEquals(1,1);
-	tree.debugPrint();
+	//tree.debugPrint();
 	}
 
     /*
