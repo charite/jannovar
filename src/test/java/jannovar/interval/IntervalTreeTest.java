@@ -84,6 +84,24 @@ public class IntervalTreeTest {
 
     }
 
+     public List<Interval<String>> getIntervalList3() throws IntervalTreeException {
+	List<Interval<String>> ilist = new ArrayList<Interval<String>>();
+	
+	ilist.add(new Interval(1,8,"a"));
+	ilist.add(new Interval(2,3,"b"));
+	ilist.add(new Interval(4,14,"c"));
+	ilist.add(new Interval(5,7,"d"));
+	ilist.add(new Interval(7,12,"e"));
+	ilist.add(new Interval(9,22,"f"));
+	ilist.add(new Interval(16,19,"g"));
+	ilist.add(new Interval(17,20,"h"));
+	ilist.add(new Interval(29,33,"i"));
+	ilist.add(new Interval(30,32,"j"));
+
+	return ilist;
+
+    }
+
      @Test public void testSearchPub1() throws IntervalTreeException {
 	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList2() );
 	List<String> qy = tree.search(1,1);
@@ -97,14 +115,13 @@ public class IntervalTreeTest {
 	//tree.debugPrint();
      }
 
-    /*  @Test public void testSearchPub3() throws IntervalTreeException {
-	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList2() );
-	List<String> qy = tree.search(29,30);
+      @Test public void testSearchPub3() throws IntervalTreeException {
+	IntervalTree<String> tree = new IntervalTree<String>( getIntervalList3() );
+	List<String> qy = tree.search(30,30);
 	Assert.assertEquals(2,qy.size());
-	Assert.assertEquals("m",qy.get(0));
-	Assert.assertEquals("o",qy.get(1));
+	Assert.assertEquals(1,1);
 	tree.debugPrint();
-	}*/
+	}
 
     /*
     @Test
