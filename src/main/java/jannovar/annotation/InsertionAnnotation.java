@@ -9,7 +9,7 @@ import jannovar.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for insertion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.06 (7 July, 2013)
+ * @version 0.07 (22 December, 2013)
  * @author Peter N Robinson
  */
 
@@ -20,20 +20,22 @@ public class InsertionAnnotation {
      * has been identified by the fact that the start and end positition of the variant 
      * are equal and the reference sequence is indicated as "-".
      * <P>
-     * The insertion coordinate system in ANNOVAR always uses "position after the current site"
-     * in positive strand, this is okay
-     * in negative strand, the "after current site" becomes "before current site" during transcription
+     * The insertion coordinate system uses "position after the current site"
+     * <ul>
+     * <li>"+" strand: refvarstart is the one-based number of the nucleotide just before the insertion
+     * <li>"-" strand, the "after current site" becomes "before current site" during transcription
      * therefore, appropriate handling is necessary to take this into account
      * for example, for a trinucleotide GCC with frameshift of 1 and insertion of CCT
      * in positive strand, it is G-CTT-CC
      * but if the transcript is in negative strand, the genomic sequence should be GC-CCT-C, and transcript is G-AGG-GC
+     * </ul>
      * <P>
      * @param trmdl The gene in which the current mutation is contained
      * @param frame_s the location within the frame (0,1,2) in which mutation occurs
      * @param wtnt3 The three nucleotides of codon affected by start of mutation
      * @param wtnt3_after the three nucleotides of the codon following codon affected by mutation
-	 * @param ref - never used, could be removed
-	 * @param var
+     * @param ref - never used, could be removed
+     * @param var
      * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
      * @param exonNumber Number (one-based) of affected exon.
      * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
@@ -41,21 +43,40 @@ public class InsertionAnnotation {
     
     public static Annotation  getAnnotationPlusStrand(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
 						      String ref, String var,int refvarstart,int exonNumber) throws AnnotationException  {
-     	// check if the insertion in truth is a duplication,
+     	// check if the insertion is actually a duplication,
     	if(trmdl.isPlusStrand()){
-    		if(trmdl.getCdnaSequence().substring(refvarstart-var.length()-1, refvarstart-1).equals(var)){
-        		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
-        		return ann;
-        	}
-    	}else{
-    		if(trmdl.getCdnaSequence().length() > refvarstart+var.length() && trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
-        		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
-        		return ann;
-        	}
-           	
-    	}
-
-		/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
+	    /* "bla".substring(x,y)
+	     * The substring begins at the x and extends to the character at index y - 1. 
+	     * Thus is we have ACGTACGT => ACGTGTACGT there is an insertion of GT 
+	     * c.3_4dupGT
+	     * in this case, ref="-", var="GT", refvarstart="5"
+	     */
+	    /*
+	    System.out.println(trmdl.getGeneSymbol());
+	    System.out.println("frame_s=" + frame_s + ", wtnt3=" + wtnt3 + ", wtnt3_after=" + wtnt3_after +
+			       ", ref=" + ref + ", var=" + var + ", refvarstart="+refvarstart + ", exonNmber=" + exonNumber);
+	    int rvs = trmdl.getRefCDSStart();
+	    System.out.println("refcdsstart=" +  rvs + " and difference is " + (refvarstart - rvs));
+	    */
+	    /* Note that the following two positions refer to the cDNA sequence, not to the
+	     * coding sequence (CDS). To get the coding sequence position, we need to subtract the 
+	     * start position of the CDS.
+	     */
+	    int potentialDuplicationStartPos = refvarstart -var.length(); // go back length of insertion (var.length()).
+	    int potentialDuplicationEndPos = refvarstart; // pos right after insertion
+	    // Note that the "-1" in the following is to transform to zero-based numbers for Java strings.
+	    if(trmdl.getCdnaSequence().substring(potentialDuplicationStartPos-1,potentialDuplicationEndPos-1).equals(var)){
+		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+		return ann;
+	    }
+    	} else {
+	    if(trmdl.getCdnaSequence().length() > refvarstart+var.length() 
+	       && trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
+		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+		return ann;
+	    }
+	}
+	/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
     	if(trmdl.isMinusStrand())
     		refvarstart--;
 

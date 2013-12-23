@@ -49,12 +49,8 @@ import jannovar.interval.IntervalTree;
  * <P>
  * Note that the {@link jannovar.interval.Interval Interval} objects in the
  * interval tree are defined by the transcription start and stop sites of the isoform.
- * <P>
- * Note that this class contains some of the annotation functions of Annovar. It was not
- * attempted to reimplement all of the copious functionality of that nice program,
- * just enough to annotate variants found in VCF files. 
  * @author Peter N Robinson
- * @version 0.27 (7 July, 2013)
+ * @version 0.28 (21 December, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -149,7 +145,7 @@ public class Chromosome {
 	TranscriptModel leftNeighbor=null; /* gene to 5' side of variant (may be null if variant lies within a gene) */
 	TranscriptModel rightNeighbor=null; /* gene to 3' side of variant (may be null if variant lies within a gene) */
 
-	/* The following command "resets" the annovar object */
+	/* The following command "resets" the annovarFactory object */
 	this.annovarFactory.clearAnnotationLists();
 
 	// Define start and end positions of variant
@@ -258,7 +254,7 @@ public class Chromosome {
     public void getPlusStrandAnnotation(int position,String ref, String alt, TranscriptModel kgl)
 	throws AnnotationException  {
 
-	/*System.out.println(String.format("BLA, getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
+	/*System.out.println(String.format("getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
 	  kgl.getGeneSymbol(),kgl.getName(),position,ref,alt)); */
 
 	int txstart = kgl.getTXStart();
@@ -280,7 +276,7 @@ public class Chromosome {
 	rcdsstart = kgl.getRefCDSStart();
 
 	for (int k=0; k< exoncount;++k) {
-	    //System.out.println("BLA getPlusStrandCodingSequenceAnnotation exon " + k);
+	    //System.out.println("getPlusStrandCodingSequenceAnnotation exon " + k);
 	    if (k>0)
 		cumlenintron += kgl.getLengthOfIntron(k);
 	    cumlenexon += kgl.getLengthOfExon(k);
@@ -337,17 +333,13 @@ public class Chromosome {
 			   #gene     <--*---*->
 			*/
 			//Annotation ann = UTRAnnotation.getUTR3Annotation(kgl,start,end,ref,alt);
-			 Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
+			Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 			annovarFactory.addUTR3Annotation(ann);
 			
 			/* positive strand for UTR3 */
 		    } else {	
 			/*  5) If we get here, the variant is located within an exon.
-			 *     Annovar: $exonic{$name2}++; 								
-			 *     Annovar:	not $current_ncRNA and $obs and 
-			 *     push @{$refseqvar{$name}}, [$rcdsstart, $rvarstart, $rvarend, '+', $i, $k+1, $nextline];
-			 */
-			/* Note k in the following is the number (zero-based) of affected exon */
+			 *  Note k in the following is the number (zero-based) of affected exon */
 			annotateExonicVariants(rvarstart,rvarend,start,end,ref,alt,k,kgl);
 		    }
 		    break; /* break out of for loop of exons (k) */
@@ -674,24 +666,15 @@ public class Chromosome {
      * 	my ($refseqvar, $geneidmap, $cdslen, $mrnalen) = @_;
      *   (...)
      * <P>
-     * The variable $refseqhash = readSeqFromFASTADB ($refseqvar); in
-     * annovar holds cDNA sequences of the mRNAs. In this implementation,
-     * the TranscriptModel objects already have this information.
-     * <P>
      * Finally, the $refseqvar in Annovar has the following pieces of information
      *  {@code my ($refcdsstart, $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @{$refseqvar->{$seqid}->[$i]};}
      * Note that refcdsstart and refstrand are contained in the TranscriptModel objects
-     * $exonpos is the number (zero-based) of the exon in which the variant was found.
-     * $nextline is the entire Annovar-formated line with information about the variant.
-     * In contrast to annovar, this function does one annotation at a time
-     * Note that the information in $geneidmap, cdslen, and $mrnalen
-     * is contained within the TranscriptModel objects already
      * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
      * @param refvarend The end position of the variant with respect to the CDS of the mRNA
      * @param start chromosomal start position of variant
      * @param end chromosomal end position of variant
      * @param ref sequence of reference
-     * @param var sequence of variant (in annovar: $obs)
+     * @param var sequence of variant 
      * @param exonNumber Number (zero-based) of affected exon.
      * @param kgl Gene in which variant was localized to one of the exons 
      */
@@ -744,7 +727,7 @@ public class Chromosome {
 
 	}
 	/* wtnt3_after = Sequence of codon right after the variant. 
-	   We may not need this, it was used for padding in annovar */
+	 * It is used for delins mutations. */
 	String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart,frame_s);
 	/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
 	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */

@@ -246,7 +246,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     }
 
     /**
-     * Returns the cDNA sequence belonging to this {@link TranscriptModel} as {@link String}.
+     * Returns the cDNA sequence belonging to this {@link TranscriptModel} as {@link String}. Returns the
+     * entire cDNA sequence, not just the ORF.
      * @return cDNA sequence
      */
     public String getCdnaSequence(){return this.sequence;}

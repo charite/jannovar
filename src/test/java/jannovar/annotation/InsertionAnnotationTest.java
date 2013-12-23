@@ -303,6 +303,24 @@ public class InsertionAnnotationTest implements Constants {
  *<P>
  * annovar: FRG1:uc003izs.3:exon6:c.439_440insA:p.M147fs,
  * chr4:190878559->A
+ * FRG1 is on the "+" strand
+ * Jannovar says: FRG1(uc003izs.3:exon6:c.438dupA:p.M147fs)
+ * expected
+ * <...c003izs.3:exon6:c.43[9]dupA:p.M147fs)> 
+ * but was:
+ * <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)>
+ * is  uc003izs.3 NM_004477.2 
+ * Mutalyzer says
+ * NM_004477.2(FRG1_v001):c.439dup
+ * NM_004477.2(FRG1_i001):p.(Met147Asnfs*8)
+ * Raw variant 1: duplication from 630 to 630
+ * GAACCAGTCTTTCAAAATGGGAAAA - TGGCTTTGTTGGCCTCAAATAGCTG
+ * GAACCAGTCTTTCAAAATGGGAAAA A TGGCTTTGTTGGCCTCAAATAGCTG 
+ * Thus, 439 and not 438 is the correct number for the duplicated nucleotide.
+
+ <...c003izs.3:exon6:c.43[9]dupA:p.M147fs)> but was:
+ <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)>
+
  *</P>
  */
 @Test public void testInsertionVar29() throws AnnotationException  {
@@ -316,11 +334,42 @@ public class InsertionAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	    String annot = ann.getVariantAnnotation();
+	    System.out.println(annot);
+	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
+	   
 	    Assert.assertEquals("FRG1(uc003izs.3:exon6:c.439dupA:p.M147fs)",annot);
 	}
 }
+
+    /**
+<FRG1(uc003izs[FUCK.3:exon6:c.439dupA:p.M147]fs)> but was:
+<FRG1(uc003izs[.3:exon6:c.441_442insGT:p.M148]fs)>
+    */
+@Test public void testInsertionVar29b() throws AnnotationException  {
+	byte chr = 4;
+	int pos = 190878561;
+	String ref = "-";
+	String alt = "GT";
+	Chromosome c = chromosomeMap.get(chr); 
+	if (c==null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
+	    VariantType varType = ann.getVariantType();
+	    String annot = ann.getVariantAnnotation();
+	    System.out.println(annot);
+	    //Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
+	   
+	    Assert.assertEquals("FRG1(uc003izsFUCK.3:exon6:c.439dupA:p.M147fs)",annot);
+	}
+}
+
+
+
+
+
+
 
 /**
  *<P>
@@ -542,9 +591,48 @@ g19:chr17:g.37830925_37830926insG. This is reported as
 NM_033419.3:c.440_441insC in Annovar. Correct nomenclature in HGVS
 should be: NM_033419.3:c.441dup, NM_033419.3:p.(Asn148Glnfs*15).
 
+Position 37,830,924 in a "G"
+Position 37,830,925 is an "A".
+Position 37,830,926 in a "G"
+PGAP3 is on the minus strand.
+This insertion leads to a duplication of the "G" at 37,830,926
+
 However, I think there is also a position bug. Correct cDNA code
 should be:NM_033419.3:c.439dup,
 p.(Leu147Profs*16)
+
+Jannovar gets:
+PGAP3(uc002hsk.3:exon3:c.288dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)
+
+Note:
+
+Mutalyzer says:
+M_033419.3(PGAP3_v001):c.441dup
+NM_033419.3(PGAP3_i001):p.(Asn148Glnfs*15)
+and
+NM_033419(PGAP3_v001):c.288dup
+NM_033419(PGAP3_i001):p.(Ser97Leufs*66)
+
+Note that there is a discrepancy between what UCSC says and what
+the sequences of the several RefSeqs are. According to the
+UCSC browser, I think that Jannovar is producing the correct results, i.e., p.Asn97fs
+
+
+
+expected:
+<...c002hsk.3:exon3:c.28[6dupC:p.L96fs,uc002hsj.3:exon4:c.439dupC:p.L147]fs)> 
+but was:
+<...c002hsk.3:exon3:c.28[8dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)>
+
+
+<...(uc002hsk.3:exon3:c.[288dupC:p.L97fs,uc002hsj.3:exon4:c.441dupC:p.L]148fs)> but was:
+<...(uc002hsk.3:exon3:c.[331dupC:p.N97fs,uc002hsj.3:exon4:c.484dupC:p.N]148fs)>
+
+9:643 expected:
+<...c002hsk.3:exon3:c.28[8dupC:p.L97fs,uc002hsj.3:exon4:c.441]dupC:p.N148fs)> but was:
+<...c002hsk.3:exon3:c.28[7dupC:p.N97fs,uc002hsj.3:exon4:c.440]dupC:p.N148fs)>
+
+
  *</P>
  */
 @Test public void testInsertionVar49() throws AnnotationException  {
@@ -558,11 +646,16 @@ p.(Leu147Profs*16)
     } else {
 	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	VariantType varType = ann.getVariantType();
-	Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	String annot = ann.getVariantAnnotation();
-	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.286dupC:p.L96fs,uc002hsj.3:exon4:c.439dupC:p.L147fs)",annot);
+	System.out.println(annot);
+	Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
+	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.288dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)",annot);
     }
 }
+
+
+
+
 
 
 /**
