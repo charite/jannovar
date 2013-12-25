@@ -36,7 +36,7 @@ public class InsertionAnnotation {
      * @param wtnt3_after the three nucleotides of the codon following codon affected by mutation
      * @param ref - never used, could be removed
      * @param var
-     * @param refvarstart The start position of the variant with respect to the CDS of the mRNA
+     * @param refvarstart The start position of the variant with respect to the cNDA of the mRNA (see comments for "+"/"-" strand)
      * @param exonNumber Number (one-based) of affected exon.
      * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
      */
@@ -51,21 +51,17 @@ public class InsertionAnnotation {
 	     * c.3_4dupGT
 	     * in this case, ref="-", var="GT", refvarstart="5"
 	     */
-	    /*
-	    System.out.println(trmdl.getGeneSymbol());
-	    System.out.println("frame_s=" + frame_s + ", wtnt3=" + wtnt3 + ", wtnt3_after=" + wtnt3_after +
-			       ", ref=" + ref + ", var=" + var + ", refvarstart="+refvarstart + ", exonNmber=" + exonNumber);
-	    int rvs = trmdl.getRefCDSStart();
-	    System.out.println("refcdsstart=" +  rvs + " and difference is " + (refvarstart - rvs));
-	    */
+	    
 	    /* Note that the following two positions refer to the cDNA sequence, not to the
 	     * coding sequence (CDS). To get the coding sequence position, we need to subtract the 
 	     * start position of the CDS.
+	     * The following two variables are zero-based numbering, that is, we can use them to search
+	     * in Java strings.
 	     */
 	    int potentialDuplicationStartPos = refvarstart -var.length(); // go back length of insertion (var.length()).
-	    int potentialDuplicationEndPos = refvarstart; // pos right after insertion
-	    // Note that the "-1" in the following is to transform to zero-based numbers for Java strings.
-	    if(trmdl.getCdnaSequence().substring(potentialDuplicationStartPos-1,potentialDuplicationEndPos-1).equals(var)){
+	    int potentialDuplicationEndPos = refvarstart; // pos right after insertion 
+	    
+	    if(trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos).equals(var)){
 		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
 		return ann;
 	    }

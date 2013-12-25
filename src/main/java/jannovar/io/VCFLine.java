@@ -3,6 +3,7 @@ package jannovar.io;
 import jannovar.common.Genotype;
 import jannovar.exception.ChromosomeScaffoldException;
 import jannovar.exception.VCFParseException;
+import jannovar.exome.Variant;
 import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.GenotypeCall;
 
@@ -21,7 +22,7 @@ import java.util.MissingFormatArgumentException;
  * </PRE>
 
  * <P>Note that for the VCF files we are interested in, there must be a FORMAT field.
- * @version 0.12 (5 May, 2013)
+ * @version 0.13 (25 December, 2013)
  * @author Peter N Robinson
  */
 public class VCFLine {
@@ -180,6 +181,19 @@ public class VCFLine {
 	//dump_VCF_line_for_debug();
     }
 
+
+    /**
+     * @return the variant represented by this VCFline.
+     */
+    public Variant toVariant() {
+	Variant v = new Variant(this.get_chromosome(),
+				this.get_position(),
+				this.get_reference_sequence(),
+				this.get_alternate_sequence(),
+				this.getGenotype());
+	return v;
+    }
+
     
     /**
      * Parses the QUAL field of a VCF file with the PHRED score for the variant.
@@ -216,7 +230,7 @@ public class VCFLine {
      * The VCF format stores some normal sequence together with some indels, and
      * so the positions for indels reported in the VCF file are not necessarily
      * the same as the position of the variants themselves. This function converts
-     * the positions reported in VCF files to the presice position of the variant as
+     * the positions reported in VCF files to the precise position of the variant as
      * would be used by Annovar or reported in HGVS mutation nomenclature. The
      * major topics are
      * <ul>

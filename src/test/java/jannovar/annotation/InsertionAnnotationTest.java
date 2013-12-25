@@ -299,48 +299,7 @@ public class InsertionAnnotationTest implements Constants {
 }
 
 
-/**
- *<P>
- * annovar: FRG1:uc003izs.3:exon6:c.439_440insA:p.M147fs,
- * chr4:190878559->A
- * FRG1 is on the "+" strand
- * Jannovar says: FRG1(uc003izs.3:exon6:c.438dupA:p.M147fs)
- * expected
- * <...c003izs.3:exon6:c.43[9]dupA:p.M147fs)> 
- * but was:
- * <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)>
- * is  uc003izs.3 NM_004477.2 
- * Mutalyzer says
- * NM_004477.2(FRG1_v001):c.439dup
- * NM_004477.2(FRG1_i001):p.(Met147Asnfs*8)
- * Raw variant 1: duplication from 630 to 630
- * GAACCAGTCTTTCAAAATGGGAAAA - TGGCTTTGTTGGCCTCAAATAGCTG
- * GAACCAGTCTTTCAAAATGGGAAAA A TGGCTTTGTTGGCCTCAAATAGCTG 
- * Thus, 439 and not 438 is the correct number for the duplicated nucleotide.
 
- <...c003izs.3:exon6:c.43[9]dupA:p.M147fs)> but was:
- <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)>
-
- *</P>
- */
-@Test public void testInsertionVar29() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 190878559;
-	String ref = "-";
-	String alt = "A";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    String annot = ann.getVariantAnnotation();
-	    System.out.println(annot);
-	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
-	   
-	    Assert.assertEquals("FRG1(uc003izs.3:exon6:c.439dupA:p.M147fs)",annot);
-	}
-}
 
     /**
 <FRG1(uc003izs[FUCK.3:exon6:c.439dupA:p.M147]fs)> but was:

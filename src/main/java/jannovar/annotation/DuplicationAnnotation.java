@@ -20,36 +20,36 @@ import jannovar.reference.Translator;
  * the addition of two extra TG's to the variable TG repeated sequence changing ACTTTGTGCC to ACTTTGTGTGTGCC
  * 
  * @author mjaeger
- * @version 0.2 (20-12-2013)
+ * @version 0.03 (20-25-2013)
  */
 public class DuplicationAnnotation {
-
     /**
-     * Annotates an insertion variant which is an duplication. The fact that a
-     * variant is a duplication variant has been identified by the fact that the
-     * start and end positions of the variant are equal and the reference
-     * sequence is indicated as "-". <br>
-     * e.g. additionally to the conditions for a insertion variant, the
+     * Annotates an insertion variant that is an duplication. 
+     * The methods of this class are called from 
+     * {@link jannovar.annotation.InsertionAnnotation InsertionAnnotation} if that
+     * class determines that the insertion is equal to the preceding nucleotides
+     * in the reference sequence.
+     * That is, in addition to the conditions for a insertion variant, the
      * duplication variant requires a similar sequence to the insertion (before
      * or) after the insertion.
      * <P>
      * There are two possible duplication insertions with or without frameshift
      * causation. e.g. inserting an additional 'C' in the sequence 'ACC,GAG' at
      * position 2 would cause a frameshift, whereas insertion of 'CCG' at
-     * position 2 just inserts an additional triplicate 'ACC GCC GAG'.
+     * position 2 just inserts an additional triple 'ACC GCC GAG'.
      * <P>
      * 
      * if (var.length() % 3 == 0) { /* ORF CONSERVING 
      * 	if(startPosMutationInCDS.length() % 3 == 0){ /* SIMPLE DUPLICATION OF CODONS
-     * 	}else{ /* substitution from original AA to AAs
-     * 		if(wtaa.equals("*")) { /* Mutation affects the wildtype stop codon
-     * 			int idx = varaa.indexOf("*");
-     * 			if (idx < 0) {
-     * 		}
-     * 		/* Substitution
+     * 	} else { /* substitution from original AA to AAs
+     * 	if(wtaa.equals("*")) { /* Mutation affects the wildtype stop codon
+     * 	int idx = varaa.indexOf("*");
+     * 	if (idx < 0) {
+     * 	}
+     * 	/* Substitution
      * 	}
      * }else { /* FRAMESHIFT
-     *      	 * short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected amino acid
+     *   * short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected amino acid
      * }
      * 
      * 
@@ -75,32 +75,42 @@ public class DuplicationAnnotation {
 	if(trmdl.isMinusStrand()){
 	    refvarstart = refvarstart + var.length()+1;
 	}
-	// Note: refvarstart refers to the cDNA position, not the coding (CDS) position.
+
 	int refcdsstart = trmdl.getRefCDSStart();
-	int startPosMutationInCDS = refvarstart - refcdsstart + 1;
-	// Since refvarstart is the position just upstream of the duplication, if we substract the 
-	// length of the variant we need to add back one.
-	int duplicationStartPos = refvarstart-var.length()- refcdsstart+1; // First nucleotide of last duplicated unit
-	int duplicationEndPos = refvarstart - refcdsstart; // Last nucleotide of last duplicated unit
 
+	/* Since refvarstart is the position just upstream of the duplication, if we substract the 
+	 * length of the variant we need to add back one.
+	 * -----ACAC-- (the duplication)
+	 * -----AC---  (the wildtype seq)
+	 * ----- *---  (* shows refvarstart for "+" strand variant)
+	 * Assume that the start codon begins in position 3 (§)
+	 * --§-- *---
+	 * Then, refcdsstart=3, and refvarstart=5 (i.e., last position of wildtype seq that is duplicated is 5 in the CDS)
+	 * Mutation is thus c.4_5dup or c.4_5dupAC
+	 */
 
-	int aavarpos =  startPosMutationInCDS % 3 == 0 ? 
-	    (int) Math.floor(startPosMutationInCDS / 3) : 
-	    (int) Math.floor(startPosMutationInCDS / 3) +1;
-	
+	int cdsEndPos = refvarstart - trmdl.getRefCDSStart() + 1;
+	int cdsStartPos = cdsEndPos - var.length() + 1;
+
+	/** aavarpos is now the LAST position (one-based) of the amino-acid sequence
+	    that was duplicated.*/
+	int aavarpos =  cdsStartPos % 3 == 0 ? 
+	    (int) Math.floor(cdsStartPos / 3) : 
+	    (int) Math.floor(cdsStartPos / 3) +1;
+
 	//		if(trmdl.isMinusStrand())
 	//			aavarpos += startPosMutationInCDS % 3;
-	
+	debugDuplication(trmdl,frame_s, wtnt3, wtnt3_after,ref, var, refvarstart, exonNumber,aavarpos);
 	/* get coding DNA HGVS string */
 	String canno;
 	if(var.length() == 1)
-	    canno = String.format("c.%ddup%s", duplicationStartPos, var); 
+	    canno = String.format("c.%ddup%s", cdsStartPos, var); 
 	else
-	    canno = String.format("c.%d_%ddup%s", duplicationStartPos, duplicationEndPos, var);
+	    canno = String.format("c.%d_%ddup%s", cdsStartPos,cdsEndPos, var);
 	
 	/* now the protein HGVS string */
 	
-	/* generate in frame snippet for translation and correct for '-'-strand */
+	/* generate in-frame snippet for translation and correct for '-'-strand */
 	String varnt3 = null;
 	if (trmdl.isPlusStrand()) {
 	    frame_s = 2 - frame_s;
@@ -130,23 +140,26 @@ public class DuplicationAnnotation {
 	String varaa = translator.translateDNA(varnt3);
 	
 	if (var.length() % 3 == 0) { /* ORF CONSERVING */
-	    if((startPosMutationInCDS-1) % 3 == 0){ /* SIMPLE DUPLICATION OF CODONS */ 
-		
+	    if((cdsStartPos-1) % 3 == 0){ /* SIMPLE DUPLICATION OF CODONS, e.g., nucleotide position 4 starts a
+					   codon, and (4-1)%3==0.*/ 
 		String wtaaDupStart = translator.translateDNA(var.substring(0,3));
-		String wtaaDupEnd	= translator.translateDNA(var.substring(var.length()-3));
-		if (varaa.length() - 1 == 1) {
+		String wtaaDupEnd   = translator.translateDNA(var.substring(var.length()-3));
+		if (varaa.length()-1 == 1) {
 		    // the aavarpos must be decreased because we want
 		    // the duplicated AA position, not the affected
 		    // position
+		  
 		    annot = String.format("%s:exon%d:%s:p.%s%ddup", trmdl.getName(), exonNumber, canno, wtaaDupStart,
-					  aavarpos - 1);
+					  aavarpos);
 		} else {
+		    System.out.println("B aarvarpos=" + aavarpos + " varaa.length()="+varaa.length() );
 		    annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddup", trmdl.getName(), exonNumber,
 					  canno, wtaaDupStart, aavarpos - varaa.length() +1,
-					  wtaaDupEnd, aavarpos-1);
+					  wtaaDupEnd, aavarpos);
+		    System.out.println("annot="+annot);
 		}
-		ann = new Annotation(trmdl, annot, VariantType.NON_FS_DUPLICATION, startPosMutationInCDS);
-	    }else{ /* substitution from original AA to AAs */
+		ann = new Annotation(trmdl, annot, VariantType.NON_FS_DUPLICATION, cdsStartPos);
+	    } else { /* substitution from original AA to AAs */
 		if(wtaa.equals("*")) { /* Mutation affects the wildtype stop codon */
 		    int idx = varaa.indexOf("*");
 		    if (idx < 0) {
@@ -162,17 +175,42 @@ public class DuplicationAnnotation {
 					  canno, wtaa, aavarpos, varaa);
 		}
 		/* Substitution */
-		ann = new Annotation(trmdl, annot, VariantType.NON_FS_DUPLICATION, startPosMutationInCDS);
+		ann = new Annotation(trmdl, annot, VariantType.NON_FS_DUPLICATION, cdsStartPos);
 	    }
 	}else { /* FRAMESHIFT 
 		 * short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected amino acid */ 
 	    
 	    annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber,
 				  canno, wtaa, aavarpos);
-	    ann = new Annotation(trmdl, annot, VariantType.FS_DUPLICATION, startPosMutationInCDS);
+	    ann = new Annotation(trmdl, annot, VariantType.FS_DUPLICATION, cdsStartPos);
 	}
 	return ann;
     }
     
+
+    /**
+     * A convenience method for printing out information about duplication annotations.
+     * Hopefully useful for checking/debugging.
+     */
+    private static void debugDuplication(TranscriptModel trmdl, int frame_s, String wtnt3,
+					   String wtnt3_after, String ref, String var, 
+					 int refvarstart, int exonNumber,int aavarpos)
+    {
+	System.err.println("#--------------- DuplicationAnnotation.java: DEBUG --------------------#");
+	int cdsEndPos = refvarstart - trmdl.getRefCDSStart() + 1;
+	int cdsStartPos = cdsEndPos - var.length() + 1;
+	System.out.println("cdsStartPos="+cdsStartPos);
+	System.out.println("cdsEndPos="+cdsEndPos);
+	System.out.println("refvarstart="+refvarstart);
+	System.out.println("var.length()="+var.length());
+	System.out.println("wtnt3="+wtnt3);
+	System.out.println("wtnt3_after="+wtnt3_after);
+	System.out.println("frame_s="+frame_s);
+	System.out.println("exonNumber="+exonNumber);
+	System.out.println("aavarpos="+aavarpos);
+	trmdl.debugPrint();
+	trmdl.debugPrintCDS();
+    }
+
 }
 /* eof */

@@ -377,28 +377,28 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      *  </OL>
      */
 	private void calculateCDSLength() {
-		this.CDSlength = 0;
-		for (int i = 0; i < this.exonCount; ++i) {
-			if (this.cdsStart >= this.exonStarts[i] && this.cdsStart <= exonEnds[i]) {
-				if (this.cdsEnd <= exonEnds[i]) {
-					this.CDSlength = cdsEnd - cdsStart + 1; /* one-exon gene */
-					break;
-				} else {
-					this.CDSlength += this.exonEnds[i] - cdsStart + 1; /* currently in first or last CDS exon of multiexon gene */
-					continue; // go to next exon.
-				}
-			}
-			if (CDSlength > 0 && cdsEnd < exonStarts[i]) {
-				System.err.println("Impossible parsing scenario for " + this.accession
-						+ " (CDSend is less than exon start)");
-				System.exit(1);
-			} else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
-				CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
-				break;
-			} else if (CDSlength > 0 && this.cdsEnd > exonEnds[i]) {
-				CDSlength += exonEnds[i] - exonStarts[i] + 1; /* currently in middle exon */
-			}
+	    this.CDSlength = 0;
+	    for (int i = 0; i < this.exonCount; ++i) {
+		if (this.cdsStart >= this.exonStarts[i] && this.cdsStart <= exonEnds[i]) {
+		    if (this.cdsEnd <= exonEnds[i]) {
+			this.CDSlength = cdsEnd - cdsStart + 1; /* one-exon gene */
+			break;
+		    } else {
+			this.CDSlength += this.exonEnds[i] - cdsStart + 1; /* currently in first or last CDS exon of multiexon gene */
+			continue; // go to next exon.
+		    }
 		}
+		if (CDSlength > 0 && cdsEnd < exonStarts[i]) {
+		    System.err.println("Impossible parsing scenario for " + this.accession
+				       + " (CDSend is less than exon start)");
+		    System.exit(1);
+		} else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
+		    CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
+		    break;
+		} else if (CDSlength > 0 && this.cdsEnd > exonEnds[i]) {
+		    CDSlength += exonEnds[i] - exonStarts[i] + 1; /* currently in middle exon */
+		}
+	    }
 	}
 
     /**
@@ -424,17 +424,28 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     }
 
 
-    /** @return the transcription start of this gene (for genes on + strand) or the transcription end (for genes on - strand). */
+    /** @return the chromosomal coordinate of the transcription start of this gene (for genes on + strand) 
+     * or the transcription end (for genes on - strand).*/
     public int getTXStart() { return  this.txStart; }
+    /** @return the chromosomal coordinate of the transcription end of this gene (for genes on + strand) 
+     * or the transcription start (for genes on - strand).*/
     public int getTXEnd() { return this.txEnd; }
+    /** @return the chromosomal coordinate of the start of the coding sequence of this gene (for genes on + strand) 
+     * or the end of the CDS (for genes on - strand).*/
     public int getCDSStart() { return this.cdsStart; }
+    /** @return the chromosomal coordinate of the end of the coding sequence of this gene (for genes on + strand) 
+     * or the start of the CDS (for genes on - strand).*/
     public int getCDSEnd() { return this.cdsEnd; }
+    /** @return the length of the transcript.*/
     public int getMRNALength() { return this.mRNAlength; }
+    /** @return the length of the coding sequence of the transcript.*/
     public int getCDSLength() { return this.CDSlength;}
     /** Return length of the actual cDNA sequence (rather than the length calculated from the exon positions,
      * which should however be the same. Can use for sanity checking. */
     public int getActualSequenceLength() { return this.sequence.length(); }
+    /** @return the number of exons of the transcript.*/
     public int getExonCount() { return this.exonCount; }
+    /** @return the chromosome on which the transcript is located (as a Byte).*/
     public byte getChromosome() { return this.chromosome; }
     /** Return position of CDS (start codon) in entire mRNA transcript. 
      * for transcripts on the minus strand, the corresponding position
@@ -452,10 +463,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     /** Return the ucsc kg id, this corresponds to $name in annovar
      * @return name of this transcript, a UCSC knownGene id. */
      public String getName() { return this.accession; }
-    /** Return the gene symbol, corresponds to {@code $name2} in annovar. Note that earlier versions
-     * of the code called this function {@code getName2()}, but this was changed because it is
-     * 	a potentially confusing name.
-     * @return genesymbol of this known gene transcript (if available, otherwise the kgID). */
+    /**
+     * @return genesymbol of this transcript (if available, otherwise the accession number). */
     public String getGeneSymbol() { 
 	if (this.geneSymbol != null) 
 	    return this.geneSymbol;
@@ -546,7 +555,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      *
      * The chromosomal positions themselves are one-based fully closed, so that the length of an
      * exon is end-start+1.
-     * @param k number of exon whose length is to be calculated.
+     * @param k number of exon (zero-based) whose length is to be calculated.
      * @return length of exon in nucleotides.
      * @see jannovar.reference.Chromosome Chromosome (this class makes use of this method)
      */
@@ -619,7 +628,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
 
     /**
-     * This method can be used during development to print all the data contained in this knownGene
+     * This method can be used during development to print all the data contained in this transcript.
+     * In contrast to the method {@link #debugPrintCDS}, it prints out the entire transcript sequence
+     * and not just the coding sequence (CDS).    
      */
     public void debugPrint() {
 	String chr=getChromosomeAsString();
@@ -636,9 +647,38 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	    System.err.print(sequence.charAt(i));
 	}
 	System.err.println();
+	
     }
 
 
+    
+    /**
+     * This method can be used during development to print all the data contained in this transcript.
+     * In contrast to the method {@link #debugPrint}, it prints out the coding sequence (CDS)
+     * and not the entire transcript sequence.
+     */
+    public void debugPrintCDS() {
+	String chr=getChromosomeAsString();
+	System.err.println(String.format("%s:%s [%s (%c)]",accession,geneSymbol,chr,strand));
+	System.err.println(String.format("txStart: %d; txEnd: %d; cdsStart: %d, cdsEnd: %d",txStart,txEnd,cdsStart,cdsEnd));
+	System.err.println(String.format("rcdsStart: %d\tExon count: %d", rcdsStart,exonCount));
+	System.err.println(String.format("mRNAlength: %d, cdslength: %d",mRNAlength,CDSlength));
+	System.err.println("Coding sequence");
+	int max = getCDSLength();
+	for (int j=0,i=this.rcdsStart-1; i<sequence.length();++i,++j) {
+	    if (j>=max) break;
+	    if (j>0 && j%50==0) System.err.println("  " + j);
+	    else if (j>0 && j%10==0) System.err.print(" ");
+	    System.err.print(sequence.charAt(i));
+	}
+	System.err.println();
+    }
+
+
+
+    /**
+     * @return a String representation of the chromosome on which the transcript is located, e.g., chr4 or chrX
+     */
     public String getChromosomeAsString() {
 	if (this.chromosome == X_CHROMOSOME) return "chrX";
 	else if (this.chromosome == Y_CHROMOSOME) return "chrY";
@@ -660,18 +700,18 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     
     
     /**
-     * Returns the distance to the Start position of the CDS or '-1' if the give coordinate is
+     * Returns the distance to the Start position of the CDS or '-1' if the given coordinate is
      * located in inter- or intragenic region or the gene is noncoding.
      * @param pos The coordinate of interest. Should be in the exonic region of the transcriptmodel.
      * @return The distance to the CDS start position (without intronic regions).
      */
     public int getDistanceToCDSstart(int pos){
     	if(!isCodingGene())
-    		return -1;
+	    return -1;
     	if(strand == '+')
-    		return getDistance(pos, getCDSStart());
+	    return getDistance(pos, getCDSStart());
     	else
-    		return getDistance(pos, getCDSEnd());
+	    return getDistance(pos, getCDSEnd());
     }
 
     /**
@@ -682,11 +722,11 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      */
     public int getDistanceToCDSend(int pos){
     	if(!isCodingGene())
-    		return -1;
+	    return -1;
     	if(strand == '+')
-    		return getDistance(pos, getCDSEnd());
+	    return getDistance(pos, getCDSEnd());
     	else
-    		return getDistance(pos, getCDSStart());
+	    return getDistance(pos, getCDSStart());
     }
     
     /**
@@ -699,44 +739,44 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     private int getDistance(int a, int b){
     	// check positions in exons
     	if(a < getTXStart() | b < getTXStart()){
-    		System.out.println(String.format("TXstart: %d\tTXend: %d\tPosA: %d\tPosB: %d",getTXStart(),getTXEnd(),a,b));
-    		return -2;
+	    System.out.println(String.format("TXstart: %d\tTXend: %d\tPosA: %d\tPosB: %d",getTXStart(),getTXEnd(),a,b));
+	    return -2;
     	}
     	if(a > getTXEnd() | b > getTXEnd())
-    		return -3;
+	    return -3;
     	for (int i=0; i<exonCount-1; i++) {
-			if(a > exonEnds[i] & a < exonStarts[i+1])
-				return -4;
-			if(b > exonEnds[i] & b < exonStarts[i+1])
-				return -5;
-		}
-    	// set a to the minor value
+	    if(a > exonEnds[i] & a < exonStarts[i+1])
+		return -4;
+	    if(b > exonEnds[i] & b < exonStarts[i+1])
+		return -5;
+	}
+    	// set a to the smaller value
     	if(a > b){
-    		int c = a;
-    		a = b;
-    		b = c;
+	    int c = a;
+	    a = b;
+	    b = c;
     	}
     	// 
     	int cumlen = 0; // cumulative length of exonic length between the two positions
     	for(int i=0;i<exonCount;i++){
-			if (a >= exonStarts[i]) {
-				if (a <= exonEnds[i]) {
-					// both in the same exon
-					if (b <= exonEnds[i]) {
-						return b - a + 1;
-					} else {
-						cumlen += exonEnds[i] - a + 1;
-						continue;
-					}
-				}else{
-					if(b <= exonEnds[i])
-						return cumlen + b-exonStarts[i] + 1;
-					else{
-						cumlen += exonEnds[i] - exonStarts[i] + 1;
-						continue;
-					}
-				}
-			}
+	    if (a >= exonStarts[i]) {
+		if (a <= exonEnds[i]) {
+		    // both in the same exon
+		    if (b <= exonEnds[i]) {
+			return b - a + 1;
+		    } else {
+			cumlen += exonEnds[i] - a + 1;
+			continue;
+		    }
+		}else{
+		    if(b <= exonEnds[i])
+			return cumlen + b-exonStarts[i] + 1;
+		    else{
+			cumlen += exonEnds[i] - exonStarts[i] + 1;
+			continue;
+		    }
+		}
+	    }
     	}
     	return cumlen;
     }
@@ -754,12 +794,11 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * @return start1,end1[,start2,end2]
      */
     public Integer[] getChromosomalCoordinates(int start, int end){
-    	
-    	// set start to the minor value
+	// set start to the smaller value
     	if(start > end){
-    		int c = start;
-    		start = end;
-    		end = c;
+	    int c = start;
+	    start = end;
+	    end = c;
     	}
     	
     	Integer[] chromCoord = null;
@@ -804,4 +843,5 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     	return chromCoord;
     }
 }
+/* eof. */
 

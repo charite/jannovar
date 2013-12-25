@@ -182,11 +182,7 @@ public class VCFReader {
      * @return the corresponding {@link jannovar.exome.Variant Variant} object.
      */
     public Variant VCFline2Variant(VCFLine line) {
-	Variant v = new Variant(line.get_chromosome(),
-				    line.get_position(),
-				    line.get_reference_sequence(),
-				    line.get_alternate_sequence(),
-				    line.getGenotype());
+	Variant v = line.toVariant();
 	return v;
     }
 
