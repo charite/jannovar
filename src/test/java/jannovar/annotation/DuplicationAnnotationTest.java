@@ -204,5 +204,179 @@ public class DuplicationAnnotationTest implements Constants {
     }
 
 
+    	/**
+	 * <P>
+	 * This is the test for the in-frame duplication of 12 nuc.acids / tree
+	 * amino acids '+' strand
+	 * </P>
+	 */
+	@Test
+	public void testDuplicationVar3() throws  JannovarException {
+	    String s = "1	248637422	.	C	CCTGCTGCTCTTC	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+	    VCFLine line = new VCFLine(s);
+	    Variant v = line.toVariant();
+	    
+	    byte chr = 1;
+	    int pos = v.get_position();
+	    String ref = v.get_ref();
+	    String alt = v.get_alt();
+	    Chromosome c = chromosomeMap.get(chr);
+	    if (c == null) {
+		Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	    } else {
+		AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(248637422,pos);
+		Assert.assertEquals("-",ref);
+		Assert.assertEquals("CTGCTGCTCTTC",alt);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, varType);
+		Assert.assertEquals("OR2T3(uc001iel.1:exon1:c.760_771dupCTGCTGCTCTTC:p.L254_F257dup)", annot);
+	    }
+	}
+
+
+/**
+	 * <P>
+	 * This is the test for the in-frame duplication of a single triplicate /
+	 * one amino acids '-' strand
+	 * </P>
+	 * Mutalyzer:
+	 * NM_022149.4(MAGEF1_v001):c.424_426dup
+	 * NM_022149.4(MAGEF1_i001):p.(Thr142dup)
+	 */
+
+	@Test
+	public void testDuplicationVar4() throws JannovarException {
+	    String s = "3	184429186	.	A	AAGT	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+	    VCFLine line = new VCFLine(s);
+	    Variant v = line.toVariant();
+	    
+	    byte chr = 3;
+	    int pos = v.get_position();
+	    String ref = v.get_ref();
+	    String alt = v.get_alt();
+	    Chromosome c = chromosomeMap.get(chr);
+	    if (c == null) {
+		Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	    } else {
+		AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(184429186,pos);
+		Assert.assertEquals("-",ref);
+		Assert.assertEquals("AGT",alt);
+		String annot = ann.getVariantAnnotation();
+		//System.out.println(annot);
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, varType);
+		Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.424_426dupACT:p.T142dup)", annot);
+	    }
+	}
+
+     /**
+     * <P>
+     * This is the test for the in-frame duplication of 6 nuc.acids / two amino
+     * acids '-' strand
+     * </P>
+     * mutalzyer:
+     * NM_022149.4(MAGEF1_v001):c.439_444dup
+     * NM_022149.4(MAGEF1_i001):p.(Asn147_Lys148dup)
+     */
+    @Test
+	public void testDuplicationVar5() throws JannovarException {
+	byte chr = 3;
+	
+	String s = "3	184429171	.	T	TTTTGTT	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+	VCFLine line = new VCFLine(s);
+	Variant v = line.toVariant();
+	
+	int pos = v.get_position();
+	String ref = v.get_ref();
+	String alt = v.get_alt();
+	
+	Chromosome c = chromosomeMap.get(chr);
+	if (c == null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+	    Assert.assertEquals(184429171,pos);
+	    Assert.assertEquals("-",ref);
+	    Assert.assertEquals("TTTGTT",alt);
+	    String annot = ann.getVariantAnnotation();
+	    //System.out.println(annot);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(VariantType.NON_FS_DUPLICATION, varType);
+	    Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.439_444dupAACAAA:p.N147_K148dup)", annot);
+	}
+    }
+
+
+
+    
+    /**
+     * <P>
+     * This is the test for the in-frame duplication of 12 nuc.acids / three
+     * amino acids '-' strand
+     * </P>
+     */
+    @Test
+	public void testDuplicationVar6() throws JannovarException {
+	byte chr = 3;
+	String s = "3	184429171	.	T	TTTTTAGTTTGTT	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+	VCFLine line = new VCFLine(s);
+	Variant v = line.toVariant();
+	int pos = v.get_position();
+	String ref = v.get_ref();
+	String alt = v.get_alt();
+	Chromosome c = chromosomeMap.get(chr);
+	if (c == null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(184429171,pos);
+	    Assert.assertEquals("-",ref);
+	    Assert.assertEquals("TTTTAGTTTGTT",alt);
+	    Assert.assertEquals(VariantType.NON_FS_DUPLICATION, varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.439_450dupAACAAACTAAAA:p.N147_K150dup)", annot);
+	}
+    }
+
+      /**
+     * <P>
+     * This is the test for the offset (+1) duplication of a single triplicate /
+     * one amino acids shifting the Stop-codon
+     * '+' strand
+     * </P>
+     * mutalyzer:
+     * NM_001005495.1(OR2T3_v001):c.949_954dup
+     * NM_001005495.1(OR2T3_i001):p.(*319Gluext*2)
+     * I think mutalyzer is wrong here, the stop is right after the duplication.
+     */
+    @Test public void testDuplicationVar7() throws JannovarException {
+	
+	String s = "1	248637605	.	G	GGAAAAG	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+	VCFLine line = new VCFLine(s);
+	Variant v = line.toVariant();
+	int pos = v.get_position();
+	String ref = v.get_ref();
+	String alt = v.get_alt();
+	byte chr = (byte) v.get_chromosome();
+	Chromosome c = chromosomeMap.get(chr);
+	if (c == null) {
+	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
+	} else {
+	    AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+	    VariantType varType = ann.getVariantType();
+	    Assert.assertEquals(248637605,pos);
+	    Assert.assertEquals("-",ref);
+	    Assert.assertEquals("GAAAAG",alt);
+	    Assert.assertEquals(VariantType.NON_FS_DUPLICATION, varType);
+	    String annot = ann.getVariantAnnotation();
+	    Assert.assertEquals("OR2T3(uc001iel.1:exon1:c.949_954dupGAAAAG:p.E317_K318dup)", annot);
+	}
+    }
+
+
 }
 /* eof. */

@@ -41,8 +41,14 @@ public class InsertionAnnotation {
      * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
      */
     
-    public static Annotation  getAnnotationPlusStrand(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation  getAnnotation(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
 						      String ref, String var,int refvarstart,int exonNumber) throws AnnotationException  {
+
+	/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
+    	if(trmdl.isMinusStrand())
+	    refvarstart--;
+
+
      	// check if the insertion is actually a duplication,
     	if(trmdl.isPlusStrand()){
 	    /* "bla".substring(x,y)
@@ -62,19 +68,49 @@ public class InsertionAnnotation {
 	    int potentialDuplicationEndPos = refvarstart; // pos right after insertion 
 	    
 	    if(trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos).equals(var)){
-		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, var, potentialDuplicationStartPos,
+								     potentialDuplicationEndPos,exonNumber);
 		return ann;
 	    }
     	} else {
-	    if(trmdl.getCdnaSequence().length() > refvarstart+var.length() 
-	       && trmdl.getCdnaSequence().substring(refvarstart,refvarstart+var.length()).equals(var)){
-		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+	    /* If this variant is a duplication, then
+	     * refvarstart is the last nucleotide 
+	     * position (one-based) on the chromosome
+	     * of the segment that is duplicated. It is thus the
+	     * first nucleotide of the duplication from the perspecitve of
+	     * a gene on the "-" strand. */
+	    // For example
+	    // chr1  177	.	G	GCAG
+	    // the genomic sequence has CAG at 175-177
+	    // The VCF tages the last G at 177 and uses it as an anchor to show the insertion.
+	    // if the gene is minus strand we have
+	    // ATTAGCCGCAGTTACAT
+	    // --------***-----
+	    // the duplicated sequence is
+	    // ATTAGCCGCAGCAGTTACAT
+	    // --------******-----
+	    int potentialDuplicationStartPos = refvarstart; // go back length of insertion (var.length()).
+	    int potentialDuplicationEndPos = refvarstart + var.length(); // pos right after insertion 
+	    
+	    // System.out.println("InsertionAnnotation- potentialDuplicationStartPos = " +potentialDuplicationStartPos);
+	    //System.out.println("InsertionAnnotation- potentialDuplicationEndPos = " +potentialDuplicationEndPos);
+	    //System.out.println("InsertionAnnotation- var = " +var);
+	    //System.out.println("cDBNA="+trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos));
+
+	    if(refvarstart >= var.length() 
+	       && trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos).equals(var)){
+		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, 
+										frame_s,
+										wtnt3, 
+										wtnt3_after, 
+										var, 
+										potentialDuplicationStartPos, 
+										potentialDuplicationEndPos,
+										exonNumber);
 		return ann;
 	    }
 	}
-	/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
-    	if(trmdl.isMinusStrand())
-    		refvarstart--;
+	
 
 
     	int refcdsstart = trmdl.getRefCDSStart() ;

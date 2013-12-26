@@ -50,7 +50,7 @@ import jannovar.interval.IntervalTree;
  * Note that the {@link jannovar.interval.Interval Interval} objects in the
  * interval tree are defined by the transcription start and stop sites of the isoform.
  * @author Peter N Robinson
- * @version 0.28 (21 December, 2013)
+ * @version 0.29 (26 December, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -510,7 +510,7 @@ public class Chromosome {
 	    }
 	    /* --------------------------------------------------------------------------- *
 	     * The variant is not a splice mutation (because of the above code), and it    *
-	     * begins after the end position of exon k (on the minus strand. Therefore,    *
+	     * begins after the end position of exon k on the minus strand. Therefore,    *
 	     * there are several possibilities. 1) It overlaps with the end of exon k      *
 	     * (then, we have that start >=exonend(k). It could be in the 5'UTR, 3UTR, or  *
 	     * a coding exon.                                                              *
@@ -745,8 +745,8 @@ public class Chromosome {
 	//System.out.println("wtnt3=" + wtnt3);
 	if (start == end) { /* SNV or insertion variant */
 	    if (ref.equals("-") ) {  /* "-" stands for an insertion at this position */	
-		Annotation  insrt = InsertionAnnotation.getAnnotationPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,ref,
-										var,refvarstart,exonNumber);
+		Annotation  insrt = InsertionAnnotation.getAnnotation(kgl,frame_s, wtnt3,wtnt3_after,ref,
+								      var,refvarstart,exonNumber);
 		this.annovarFactory.addExonicAnnotation(insrt);
 	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
 		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,

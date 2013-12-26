@@ -21,7 +21,11 @@ import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exome.Variant;
 import jannovar.exception.AnnotationException;
+import jannovar.genotype.GenotypeFactoryA;
+import jannovar.genotype.SingleGenotypeFactory;
+import jannovar.genotype.MultipleGenotypeFactory;
 import jannovar.io.UCSCKGParser;
+import jannovar.io.VCFLine;
 import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptModel;
 
@@ -40,17 +44,19 @@ public class InsertionAnnotationTest implements Constants {
     
     private static HashMap<Byte,Chromosome> chromosomeMap = null;
 
-  
+    /** This is needed for the VCF line initialization, but is not used for anything else. */
+    private static GenotypeFactoryA genofactory=null;
 
     
-    @BeforeClass 
-	public static void setUp() throws IOException, JannovarException {
+    @BeforeClass public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
 	java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(path);
 	chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
+	genofactory = new MultipleGenotypeFactory();
+	VCFLine.setGenotypeFactory(genofactory);
     }
 
      @AfterClass public static void releaseResources() { 
@@ -64,21 +70,28 @@ public class InsertionAnnotationTest implements Constants {
  * chr2:97568428->ATCG
  *</P>
  */
-@Test public void testInsertionVar11() throws AnnotationException  {
-	byte chr = 2;
-	int pos = 97568428;
-	String ref = "-";
-	String alt = "ATCG";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FAM178B(uc002sxk.4:exon7:c.627_628insCGAT:p.L210fs,uc002sxl.4:exon13:c.1578_1579insCGAT:p.L527fs)",annot);
-	}
+@Test public void testInsertionVar11() throws JannovarException  {
+    //byte chr = 2;
+    //int pos = 97568428;
+    String s = "2	97568428	.	G	GATCG	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+    VCFLine line = new VCFLine(s);
+    Variant v = line.toVariant();
+    int pos = v.get_position();
+    String ref = v.get_ref();
+    String alt = v.get_alt();
+    byte chr = (byte) v.get_chromosome();
+    //String ref = "-";
+    //String alt = "ATCG";
+    Chromosome c = chromosomeMap.get(chr); 
+    if (c==null) {
+	Assert.fail("Could not identify chromosome \"" + chr + "\"");
+    } else {
+	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
+	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	String annot = ann.getVariantAnnotation();
+	Assert.assertEquals("FAM178B(uc002sxk.4:exon7:c.627_628insCGAT:p.L210fs,uc002sxl.4:exon13:c.1578_1579insCGAT:p.L527fs)",annot);
+    }
 }
 
 
@@ -112,8 +125,15 @@ public class InsertionAnnotationTest implements Constants {
  * annovar: FBXL21
  * chr5:135272375->A
  *</P>
+ * mutalzyer:
+ * NM_012159(FBXL21_v001):c.93_94insA
+ * NM_012159(FBXL21_i001):p.(Gln32Thrfs*39)
+ * Note that the Asparagine on position 32 is the aminoacid affected
+ * by the insertion. The coded amino acid is unchanged, but the following
+ * aminoacids are. This is why mutalyzer has this output. This needs to be
+ * improved in the future for Jannovar but is not incorrect for now, if suboptimal.
  */
-@Test public void testNcRnaExonicVar152() throws AnnotationException  {
+@Test public void testfsInsertionVar152() throws AnnotationException  {
 	byte chr = 5;
 	int pos = 135272376;
 	String ref = "-";
@@ -124,9 +144,11 @@ public class InsertionAnnotationTest implements Constants {
 	} else {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
+	   
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.92dupA:p.N31fs)",annot);
+	    System.out.println(annot);
+	     Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.93_94insA:p.N32fs)",annot);
 	}
 }
 
@@ -298,31 +320,6 @@ public class InsertionAnnotationTest implements Constants {
 	}
 }
 
-
-
-
-    /**
-<FRG1(uc003izs[FUCK.3:exon6:c.439dupA:p.M147]fs)> but was:
-<FRG1(uc003izs[.3:exon6:c.441_442insGT:p.M148]fs)>
-    */
-@Test public void testInsertionVar29b() throws AnnotationException  {
-	byte chr = 4;
-	int pos = 190878561;
-	String ref = "-";
-	String alt = "GT";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    String annot = ann.getVariantAnnotation();
-	    System.out.println(annot);
-	    //Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
-	   
-	    Assert.assertEquals("FRG1(uc003izsFUCK.3:exon6:c.439dupA:p.M147fs)",annot);
-	}
-}
 
 
 
