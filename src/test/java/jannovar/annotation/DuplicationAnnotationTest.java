@@ -376,7 +376,45 @@ public class DuplicationAnnotationTest implements Constants {
 	    Assert.assertEquals("OR2T3(uc001iel.1:exon1:c.949_954dupGAAAAG:p.E317_K318dup)", annot);
 	}
     }
-
+/**
+ *<P>
+ * annovar: MAGEF1:uc003fpa.3:exon1:c.456_457insGGA:p.L152delinsLE,
+ * chr3:184429154->TCC
+ *</P>
+ * uc003fpa.3:exon1:c.456_458dupGGA:p.L152delinsLG
+ * Refseq:  NM_022149
+ * Mutalyzer:
+ * Note that the position gets shifted downstream to bcome the most 3' position.
+ * NM_022149.4(MAGEF1_v001):c.474_476dup
+ * NM_022149.4(MAGEF1_i001):p.(Glu158dup)
+ */
+@Test public void testInsertionVar25() throws JannovarException  {
+    //	int pos = 184429154;
+    //	String ref = "-";
+    //	String alt = "TCC";
+    String s = "3	184429154	.	C	CTCC	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+    VCFLine line = new VCFLine(s);
+	
+    Variant v = line.toVariant();
+    int pos = v.get_position();
+    String ref = v.get_ref();
+    String alt = v.get_alt();
+    byte chr = (byte) v.get_chromosome();
+    Chromosome c = chromosomeMap.get(chr); 
+    if (c==null) {
+	Assert.fail("Could not identify chromosome \"" + chr + "\"");
+    } else {
+	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
+	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(184429154,pos);
+	Assert.assertEquals("-",ref);
+	Assert.assertEquals("TCC",alt);
+	String annot = ann.getVariantAnnotation();
+	System.out.println("XX" + annot);
+	Assert.assertEquals(VariantType.NON_FS_DUPLICATION,varType);
+	Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.474_476dupGGA:p.E158dup)",annot);
+    }
+}
 
 }
 /* eof. */

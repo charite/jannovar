@@ -21,7 +21,7 @@ import jannovar.common.Constants;
  * This class provides methods that allow the Chromosome class to calculate what annotations are
  * appropriate for a given variant, and thus represents one of the core classes of Jannovar.
  * @author Peter N Robinson
- * @version 0.17, 8 July, 2013
+ * @version 0.18, 27 December, 2013
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
    
@@ -475,10 +475,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     
     /** This function is valid for exonic variants. It extracts the 
      * three nucleotides from the reference sequence that contain the
-     * first nucleotide of the position of the variant
-     * <P>
-     * In annovar: $wtnt3 = substr ($refseqhash->{$seqid}, $refvarstart-$fs-1, 3);
-     * @param refvarstart Position of first nucleotide of variant in cDNA sequence
+     * first nucleotide of the position of the variant. Note that
+     * refvarstart is one-based numbering.
+     * @param refvarstart Position of first nucleotide of variant in cDNA sequence 
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
      */
     public String getWTCodonNucleotides(int refvarstart, int frame_s){
@@ -502,19 +501,6 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * first nucleotide of the position of the variant. If that was the 
      * last codon, the return ""; the empty string.
      * <P>
-     * In annovar: $wtnt3 = substr ($refseqhash->{$seqid}, $refvarstart-$fs-1, 3);
-     * if (length ($refseqhash->{$seqid}) >= $refvarstart-$fs+3) {	#going into UTR
-     * $wtnt3_after = substr ($refseqhash->{$seqid}, $refvarstart-$fs+2, 3);
-     *   } else {
-     * $wtnt3_after = ''; #last amino acid in the sequence without UTR (extremely rare situation) 
-     *  # (example: 17        53588444        53588444        -       T       414     hetero)
-     * }
-     * <P>
-     * TODO: This function is only used for the sequence padding option in annovar, which
-     * we do not have for this (Java) version. In the future, there are better ways
-     * of doing this, and we will attempt to provide accurate HGVS conformant annotations
-     * for indel mutations based on the actual amino acid sequence. This will require new
-     * code.
      * @param refvarstart Position of first nucleotide of variant in cDNA sequence
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
      */
@@ -533,11 +519,6 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * Calculates the length of the k'th intron, where k is a zero-based number.
      * Note that intron 1 begins after exon 1, so there are n-1 introns in a gene
      * with n exons.
-     * <P>
-     * Note that I am worried about whether this is being used sometimes with
-     * k bein gone-based and sometimes with k being zero based. There was a problem
-     * with getRefCDSStart that I solved by looking into this function. TODO
-     * Check me all over and consider refactor.
      * <P>
      * Note that because exonEnds and exonStarts are both one-based, we return start[k]-end[k-1] -1 as the total length.
      * @param k number of intron (zero-based) whose length is to be sought

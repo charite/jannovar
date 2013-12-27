@@ -249,28 +249,7 @@ public class InsertionAnnotationTest implements Constants {
 }
 
 
-/**
- *<P>
- * annovar: MAGEF1:uc003fpa.3:exon1:c.456_457insGGA:p.L152delinsLE,
- * chr3:184429154->TCC
- *</P>
- */
-@Test public void testInsertionVar25() throws AnnotationException  {
-	byte chr = 3;
-	int pos = 184429154;
-	String ref = "-";
-	String alt = "TCC";
-	Chromosome c = chromosomeMap.get(chr); 
-	if (c==null) {
-	    Assert.fail("Could not identify chromosome \"" + chr + "\"");
-	} else {
-	    AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
-	    VariantType varType = ann.getVariantType();
-	    Assert.assertEquals(VariantType.NON_FS_INSERTION,varType);
-	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.455_456insGGA:p.L152delinsLE)",annot);
-	}
-}
+
 
 
 /**
@@ -576,24 +555,21 @@ UCSC browser, I think that Jannovar is producing the correct results, i.e., p.As
 
 
 expected:
-<...c002hsk.3:exon3:c.28[6dupC:p.L96fs,uc002hsj.3:exon4:c.439dupC:p.L147]fs)> 
-but was:
-<...c002hsk.3:exon3:c.28[8dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)>
+<...3:exon3:c.288dupC:p.[N97fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)> but was:
+<...3:exon3:c.288dupC:p.[S96fs,uc002hsj.3:exon4:c.441dupC:p.S147]fs)>
+<...exon3:c.288dupC:p.S9[7fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)> but was:
+<...exon3:c.288dupC:p.S9[6fs,uc002hsj.3:exon4:c.441dupC:p.S147]fs)>
 
-
-<...(uc002hsk.3:exon3:c.[288dupC:p.L97fs,uc002hsj.3:exon4:c.441dupC:p.L]148fs)> but was:
-<...(uc002hsk.3:exon3:c.[331dupC:p.N97fs,uc002hsj.3:exon4:c.484dupC:p.N]148fs)>
-
-9:643 expected:
-<...c002hsk.3:exon3:c.28[8dupC:p.L97fs,uc002hsj.3:exon4:c.441]dupC:p.N148fs)> but was:
-<...c002hsk.3:exon3:c.28[7dupC:p.N97fs,uc002hsj.3:exon4:c.440]dupC:p.N148fs)>
-
+* Note NM_033419 = uc002hsk.3
+* Mutalzyer:
+NM_033419(PGAP3_v001):c.288dup
+NM_033419(PGAP3_i001):p.(Ser97Leufs*66)
 
  *</P>
  */
 @Test public void testInsertionVar49() throws AnnotationException  {
     byte chr = 17;
-    int pos = 37830925;
+    int pos = 37830924;
     String ref = "-";
     String alt = "G";
     Chromosome c = chromosomeMap.get(chr); 
@@ -605,7 +581,7 @@ but was:
 	String annot = ann.getVariantAnnotation();
 	System.out.println(annot);
 	Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
-	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.288dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)",annot);
+	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.288dupC:p.S97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)",annot);
     }
 }
 

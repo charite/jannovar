@@ -1,8 +1,7 @@
-/**
- * 
- */
 package jannovar.annotation;
 
+import java.util.HashMap;
+import java.util.Map;
 
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
@@ -56,40 +55,30 @@ public class DuplicationAnnotation {
      * @param trmdl  The transcriptmodel / gene in which the current mutation is contained
      * @param frame_s the location within the frame (0,1,2) in which mutation occurs
      * @param wtnt3  The three nucleotides of codon affected by start of mutation
-     * @param wtnt3_after  the three nucleotides of the codon following codon affected by  mutation
-     * @param ref reference nucleotide sequence ("-")
      * @param var alternate nucleotide sequence (the duplication)
-     * @param refvarstart  The nucleotide position just upstream of the variant with respect to the cDNA (one-based)
+     * @param startpos The startposition of the duplication (zero based)
+     * @param endpos The endposition of the duplication (zero based)
      * @param exonNumber    Number (one-based) of affected exon.
      * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
      * @throws AnnotationException
      */
     public static Annotation getAnnotation(TranscriptModel trmdl, int frame_s, String wtnt3,
-					   String wtnt3_after, String var, 
-					   int startpos, int endpos, int exonNumber) throws AnnotationException 
+					   String var, int startpos, int endpos, int exonNumber) 
+	throws AnnotationException 
     {
 	String annot;
 	Annotation ann = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
-	/* For the '-'-strand fix the position in the reference */
-	//if(trmdl.isMinusStrand()){
-	//  refvarstart = refvarstart + var.length()+1;
-	//}
-
 	int refcdsstart = trmdl.getRefCDSStart();
 
-	/* Since refvarstart is the position just upstream of the duplication, if we substract the 
-	 * length of the variant we need to add back one.
-	 * -----ACAC-- (the duplication)
-	 * -----AC---  (the wildtype seq)
-	 * ----- *---  (* shows refvarstart for "+" strand variant)
-	 * Assume that the start codon begins in position 3 (§)
-	 * --§-- *---
-	 * Then, refcdsstart=3, and refvarstart=5 (i.e., last position of wildtype seq that is duplicated is 5 in the CDS)
-	 * Mutation is thus c.4_5dup or c.4_5dupAC
-	 */
+	/**/
+	int newpos  =  shiftToThreePrime(trmdl, var, startpos, endpos);
+	if (newpos != startpos) {
+	    startpos = newpos;
+	    endpos = startpos + var.length() - 1;
+	}
 
-	int cdsEndPos = endpos - trmdl.getRefCDSStart() + 1;
+	int cdsEndPos = endpos - refcdsstart + 1;
 	int cdsStartPos = cdsEndPos - var.length() + 1;
 
 	/** aavarpos is now the FIRST position (one-based) of the amino-acid sequence
@@ -98,9 +87,7 @@ public class DuplicationAnnotation {
 	    (int) Math.floor(cdsStartPos / 3) : 
 	    (int) Math.floor(cdsStartPos / 3) +1;
 
-	//		if(trmdl.isMinusStrand())
-	//			aavarpos += startPosMutationInCDS % 3;
-	//debugDuplication(trmdl,frame_s, wtnt3, wtnt3_after,var, startpos, exonNumber,aaVarStartPos);
+	//debugDuplication(trmdl,frame_s, wtnt3, var, startpos, exonNumber,aaVarStartPos);
 	/* get coding DNA HGVS string */
 	String canno;
 	if(var.length() == 1)
@@ -108,7 +95,7 @@ public class DuplicationAnnotation {
 	else
 	    canno = String.format("c.%d_%ddup%s", cdsStartPos,cdsEndPos, var);
 	
-	/* now the protein HGVS string */
+	/* now create the protein HGVS string */
 	
 	/* generate in-frame snippet for translation and correct for '-'-strand */
 	if (trmdl.isMinusStrand()) {
@@ -130,13 +117,11 @@ public class DuplicationAnnotation {
 		    annot=singleAminoAcidInframeDuplication(trmdl.getName(),exonNumber,canno,wtaaDupStart,
 							    aaVarStartPos);
 		} else {
-		    //System.out.println("B aarvarpos=" + aaVarStartPos + " varaa.length()="+varaa.length() );
 		    int aaEndPos=aaVarStartPos + (var.length()/3) - 1; /* last amino acid of duplicated WT seq. */
 		    annot =  multipleAminoAcidInframeDuplication(trmdl.getName(), exonNumber,
 								 canno, wtaaDupStart,aaVarStartPos,
 								 wtaaDupEnd,aaEndPos);
 		    
-		    //System.out.println("annot="+annot);
 		}
 		ann = new Annotation(trmdl, annot, VariantType.NON_FS_DUPLICATION, cdsStartPos);
 	    } else { /* substitution from original AA to AAs */
@@ -146,25 +131,61 @@ public class DuplicationAnnotation {
 			annot = String.format("%s:exon%d:%s:p.*%d%sext*?", trmdl.getName(), exonNumber,
 					      canno, aaVarStartPos, varaa);
 		    }else{
-			
 			annot = String.format("%s:exon%d:%s:p.*%ddelins%s", trmdl.getName(), exonNumber,
 					      canno, aaVarStartPos, varaa.substring(0, idx+1));
 		    }
 		}else{
-		    annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber,
-					  canno, wtaa, aaVarStartPos, varaa);
+		    /* substitution starts not on frame */
+		    annot = shiftedInFrameDuplication(trmdl,exonNumber,canno,var,endpos,aaVarStartPos,frame_s);
 		}
 		/* Substitution */
 		ann = new Annotation(trmdl, annot, VariantType.NON_FS_DUPLICATION, cdsStartPos);
 	    }
 	}else { /* FRAMESHIFT 
 		 * short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected amino acid */ 
-	    
 	    annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber,
 				  canno, wtaa, aaVarStartPos);
 	    ann = new Annotation(trmdl, annot, VariantType.FS_DUPLICATION, cdsStartPos);
 	}
 	return ann;
+    }
+
+
+
+    /**
+     * Note that according to the HGVS, 
+     * for all descriptions the most 3' position possible is arbitrarily assigned to have been changed.
+     * This means that for duplications on the minus strand of a gene, we may need to shift the
+     * position of the variant to 3'. This method does so.
+     * @param trmdl The affected transcript
+     * @param var The variant (the duplicated sequence)
+     * @param startpos zero-based start position of duplication
+     * @param endpos zero-based end position of duplication
+     * @return potentially shifted startpos (zerobased) of variant.
+     */
+    private static int shiftToThreePrime(TranscriptModel trmdl, String var, int startpos, int endpos) 
+    	throws AnnotationException 
+    {
+	String cdna = trmdl.getCdnaSequence();
+	int len = var.length();
+	if ((endpos-startpos) != len) {
+	    String s = String.format("[DuplicationAnnotation.java] shiftToThreePrime: " +
+				     "Error in sequence length; gene=%s, var=%s, len=%d, end=%d,start=%d",
+				     trmdl.getGeneSymbol(),var, len,endpos,startpos);
+	    throw new AnnotationException(s);
+	} 
+	String dup = cdna.substring(startpos,endpos);
+	int diff = 0;
+	//System.out.println(trmdl.getGeneSymbol() + "[startpos="+startpos+"]: " + dup);
+	while( (endpos+len)<cdna.length() &&
+	       dup.equals(cdna.substring(startpos+len,endpos+len)) ) {
+	    startpos += len;
+	    endpos += len;
+	    // System.out.println(trmdl.getGeneSymbol() + "[startpos="+(startpos)+"; endpos="+(endpos)+"]: "
+	    //+ cdna.substring(startpos,endpos));
+	}
+	startpos++; // revert to one-based numbers
+	return startpos;
     }
 
 
@@ -224,6 +245,69 @@ public class DuplicationAnnotation {
 
 
     /**
+     * This function figures out the consequence of a DNA duplication that does not
+     * begin at position zero of a codon, i.e., that is not right in the frame.
+     * This can result in a delins or in a simple dup depending on the surrounding
+     * sequence.
+     * For example, imagine we have the following duplication.
+     * ggaggaggaggaggaggagga (add another gga).
+     * but the frame is gag-gag-gag-...with GAG=Glu/E.
+     * Then the effect of the duplication is to add another
+     * E to the aminoacid sequence. The variable frame_s is
+     * 2 in this case, because gga starts at nucleotide 2 (zero-based)
+     * of the GAG codon.
+     * @param trmdl The affected transcript
+     * @param exonNumber One-based number of the exon
+     * @param cDNAannot Annotation of the cDNA, e.g., c.769_771dupTTC
+     * @param var the duplicated sequence
+     * @param endpos the end position of the duplication (zero-based)
+     * @param frame_s the location within the frame (0,1,2) in which mutation occurs
+     */
+    private static String shiftedInFrameDuplication(TranscriptModel trmdl, int exonNumber,
+						    String cDNAanno, String var, 
+						    int endpos,
+						    int aaVarStartPos,
+						     int frame_s)
+	throws AnnotationException
+    {
+	Translator translator = Translator.getTranslator(); /* Singleton */
+	int len = var.length();
+	if ((len%3)!=0) {
+	    String s = String.format("[ERROR] DuplicationAnnotation:shiftedInFrameDuplication - "+
+				     "variant length not a multiple of 3: %s (len=%d)",
+				     var,len);
+	    throw new AnnotationException(s);
+	}
+	int aalen = len/3;
+
+	String dna = trmdl.getCdnaSequence();
+	int start = endpos-var.length();
+	String prefix = dna.substring(start-frame_s,start);
+	//System.out.println("prefix = " + prefix + ", frame_s="+frame_s + ", var="+var + " endpos=" + endpos);
+	//System.out.println(cDNAanno);
+	String rest = dna.substring(start,start+len);
+	String wt = prefix+rest;
+	String mut = prefix + var + rest;
+	String wtaa = translator.translateDNA(wt);
+	String mutaa = translator.translateDNA(mut);
+	String annot = null;
+	if (mutaa.startsWith(wtaa) && (mutaa.indexOf(wtaa,aalen))>0) {
+	    annot = String.format("%s:exon%d:%s:p.%s%ddup", trmdl.getName(), exonNumber,
+				   cDNAanno, wtaa, aaVarStartPos);
+	    } else {
+	    annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber,
+				  cDNAanno, wtaa, aaVarStartPos, mutaa);
+	}
+	return annot;
+    }
+
+
+
+
+
+
+
+    /**
      * HGVS: p.Gly4_Gln6dup in the sequence MKMGHQQQCC denotes a duplication 
      * of amino acids Glycine-4 (Gly, G) to Glutamine-6 (Gln, Q) (i.e. MKMGHQGHQQQCC)
      * @param transcriptID The accession number of the affected transcript, e.g., uc001iel.1
@@ -257,7 +341,7 @@ public class DuplicationAnnotation {
      * Hopefully useful for checking/debugging.
      */
     private static void debugDuplication(TranscriptModel trmdl, int frame_s, String wtnt3,
-					   String wtnt3_after, String var, 
+					    String var, 
 					 int refvarstart, int exonNumber,int aavarpos)
     {
 	System.err.println("#--------------- DuplicationAnnotation.java: DEBUG --------------------#");
@@ -268,7 +352,6 @@ public class DuplicationAnnotation {
 	System.out.println("refvarstart="+refvarstart);
 	System.out.println("var.length()="+var.length());
 	System.out.println("wtnt3="+wtnt3);
-	System.out.println("wtnt3_after="+wtnt3_after);
 	System.out.println("frame_s="+frame_s);
 	System.out.println("exonNumber="+exonNumber);
 	System.out.println("aavarpos="+aavarpos);

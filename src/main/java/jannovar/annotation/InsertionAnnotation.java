@@ -68,7 +68,7 @@ public class InsertionAnnotation {
 	    int potentialDuplicationEndPos = refvarstart; // pos right after insertion 
 	    
 	    if(trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos).equals(var)){
-		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, wtnt3_after, var, potentialDuplicationStartPos,
+		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos,
 								     potentialDuplicationEndPos,exonNumber);
 		return ann;
 	    }
@@ -100,13 +100,12 @@ public class InsertionAnnotation {
 	    if(refvarstart >= var.length() 
 	       && trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos).equals(var)){
 		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, 
-										frame_s,
-										wtnt3, 
-										wtnt3_after, 
-										var, 
-										potentialDuplicationStartPos, 
-										potentialDuplicationEndPos,
-										exonNumber);
+								     frame_s,
+								     wtnt3, 
+								     var, 
+								     potentialDuplicationStartPos, 
+								     potentialDuplicationEndPos,
+								     exonNumber);
 		return ann;
 	    }
 	}
