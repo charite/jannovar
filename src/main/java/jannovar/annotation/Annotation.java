@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.28 (17 August, 2013)
+ * @version 0.29 (27 December, 2013)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -226,7 +226,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case STOPLOSS: s="Stoploss"; break;
 	case STOPGAIN: s="Stopgain"; break; /* stopgain=nonsense */
 	case SYNONYMOUS: s="Synonymous"; break;
-	case NONSYNONYMOUS: s="Nonsynonymous"; break;
+	case MISSENSE: s="Missense"; break;
 	case NON_FS_SUBSTITUTION: s="Nonframeshit subsitution"; break;
 	case NON_FS_INSERTION: s = "Nonframeshift-insertion"; break;
 	case FS_SUBSTITUTION: s="Frameshift substitution"; break;
@@ -250,7 +250,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	case STOPLOSS: 
 	case STOPGAIN: 
 	case SYNONYMOUS: 
-	case NONSYNONYMOUS:
+	case MISSENSE:
 	case NON_FS_SUBSTITUTION: 
 	case NON_FS_INSERTION:
 	case FS_SUBSTITUTION:

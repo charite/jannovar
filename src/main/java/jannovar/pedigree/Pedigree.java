@@ -48,7 +48,7 @@ import jannovar.exome.Variant;
  * {@link #adjustSampleOrderInPedFile}.
  * 
  * @author Peter Robinson
- * @version 0.16 (17 July, 2013)
+ * @version 0.18 (27 December, 2013)
  */
 public class Pedigree {
     /**
@@ -933,8 +933,39 @@ public class Pedigree {
 	System.out.println("UnaffectedList");
 	for (Person p : unaffectedList) {
 	    System.out.println(p.getIndex() + ": " + p);
-        }
-	
+        }	
+    }
+
+    /**
+     * Get a summary line representing the pedigree that can be used for output
+     */
+    public String getPedigreeSummary()  {
+	StringBuilder sb = new StringBuilder();
+	sb.append(familyID + ":");
+	boolean b = false;
+	for (Person p : personList) {
+	    if (b) sb.append(":");
+	    b = true;
+	    sb.append(p.getIndividualID());
+	    if (p. 	isAffected() )
+		sb.append("[affected");
+	    else
+		sb.append("[unaffected");
+	    if (this.parentList.contains(p)) {
+		if (p.isFemale())
+		    sb.append(";mother]");
+		else
+		    sb.append(";father]");
+	    } else {
+		if (p.isFemale())
+		    sb.append(";female]");
+		else
+		    sb.append(";male]");
+	    }
+	}
+	return sb.toString();
+
+
     }
 
 
