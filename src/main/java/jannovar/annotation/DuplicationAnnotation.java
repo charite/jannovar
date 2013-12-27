@@ -143,8 +143,11 @@ public class DuplicationAnnotation {
 	    }
 	}else { /* FRAMESHIFT 
 		 * short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected amino acid */ 
+	    
 	    annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber,
 				  canno, wtaa, aaVarStartPos);
+	    System.out.println("FS wtaa="+wtaa);
+	    System.out.println(annot);
 	    ann = new Annotation(trmdl, annot, VariantType.FS_DUPLICATION, cdsStartPos);
 	}
 	return ann;

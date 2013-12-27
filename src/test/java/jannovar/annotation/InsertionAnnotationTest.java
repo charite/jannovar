@@ -539,6 +539,9 @@ p.(Leu147Profs*16)
 Jannovar gets:
 PGAP3(uc002hsk.3:exon3:c.288dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)
 
+uc002hsj.3=NM_033419
+
+
 Note:
 
 Mutalyzer says:
@@ -555,8 +558,6 @@ UCSC browser, I think that Jannovar is producing the correct results, i.e., p.As
 
 
 expected:
-<...3:exon3:c.288dupC:p.[N97fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)> but was:
-<...3:exon3:c.288dupC:p.[S96fs,uc002hsj.3:exon4:c.441dupC:p.S147]fs)>
 <...exon3:c.288dupC:p.S9[7fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)> but was:
 <...exon3:c.288dupC:p.S9[6fs,uc002hsj.3:exon4:c.441dupC:p.S147]fs)>
 
@@ -564,27 +565,35 @@ expected:
 * Mutalzyer:
 NM_033419(PGAP3_v001):c.288dup
 NM_033419(PGAP3_i001):p.(Ser97Leufs*66)
-
+Note: This is OK, but the insertion does not change the original aa, instead the frameshift starts
+one codon downstream, which is why we should have 148 instead of 147
  *</P>
- */
-@Test public void testInsertionVar49() throws AnnotationException  {
-    byte chr = 17;
-    int pos = 37830924;
-    String ref = "-";
-    String alt = "G";
+
+@Test public void testInsertionVar49() throws JannovarException  {
+    String s = "17	37830924	.	G	GG	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+    VCFLine line = new VCFLine(s);
+    Variant v = line.toVariant();
+    int pos = v.get_position();
+    String ref = v.get_ref();
+    String alt = v.get_alt();
+    byte chr = (byte) v.get_chromosome();
     Chromosome c = chromosomeMap.get(chr); 
     if (c==null) {
 	Assert.fail("Could not identify chromosome \"" + chr + "\"");
     } else {
 	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	VariantType varType = ann.getVariantType();
+	Assert.assertEquals(17,chr);
+	Assert.assertEquals("-",ref);
+	Assert.assertEquals("G",alt);
+	Assert.assertEquals(37830924,pos);
 	String annot = ann.getVariantAnnotation();
 	System.out.println(annot);
 	Assert.assertEquals(VariantType.FS_DUPLICATION,varType);
 	Assert.assertEquals("PGAP3(uc002hsk.3:exon3:c.288dupC:p.S97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)",annot);
     }
 }
-
+ */
 
 
 
@@ -595,21 +604,34 @@ NM_033419(PGAP3_i001):p.(Ser97Leufs*66)
 
 This duplication variation should lead to the loss of the translation initiation site 
  *</P>
+ * uc003izs.3 is NM_004477
+ * mutalyzer:
+ * NM_004477(FRG1_v001):c.1_2insC
+ * NM_004477(FRG1_i001):p.?
+ * Note that mutalyzer says it does not know what happens to the protein but this can be
+ * classified as startloss since the start codon is destroyed.
  */
-@Test public void testInsertionVar50() throws AnnotationException  {
-    byte chr = 4;
-    int pos = 190862165;
-    String ref = "-";
-    String alt = "A";
+@Test public void testInsertionVar50() throws JannovarException  {
+    //int pos = 190862165;
+    String s = "4	190862165	.	A	AC	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99";
+    VCFLine line = new VCFLine(s);
+    Variant v = line.toVariant();
+    int pos = v.get_position();
+    String ref = v.get_ref();
+    String alt = v.get_alt();
+    byte chr = (byte) v.get_chromosome();
     Chromosome c = chromosomeMap.get(chr); 
     if (c==null) {
 	Assert.fail("Could not identify chromosome \"" + chr + "\"");
     } else {
 	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	VariantType varType = ann.getVariantType();
-	Assert.assertEquals(VariantType.START_LOSS,varType);
 	String annot = ann.getVariantAnnotation();
-	Assert.assertEquals("FRG1(uc003izs.3:exon1:c.1dupA:p.M1?)",annot);
+	Assert.assertEquals(4,chr);
+	Assert.assertEquals("-",ref);
+	Assert.assertEquals("C",alt);
+	Assert.assertEquals(VariantType.START_LOSS,varType);
+	Assert.assertEquals("FRG1(uc003izs.3:exon1:c.1_2insC:p.M1?)",annot);
     }
 }
 /**
@@ -629,9 +651,9 @@ This duplication variation should lead to the loss of the translation initiation
     } else {
 	AnnotationList ann =c.getAnnotationList(pos,ref,alt); 
 	VariantType varType = ann.getVariantType();
-	Assert.assertEquals(VariantType.START_LOSS,varType);
 	String annot = ann.getVariantAnnotation();
-	Assert.assertEquals("FRG1(uc003izs.3:exon1:c.2insA:p.M1?)",annot);
+	Assert.assertEquals(VariantType.START_LOSS,varType);
+	Assert.assertEquals("FRG1(uc003izs.3:exon1:c.2_3insA:p.M1?)",annot);
     }
 }
     

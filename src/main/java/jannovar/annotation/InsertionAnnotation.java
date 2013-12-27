@@ -210,15 +210,11 @@ public class InsertionAnnotation {
 		    varaa = String.format("%sX",varaa.substring(0,idx+1));
 		    String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,aavarpos,varaa);
-		    //Annotation ann = Annotation.createFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
 		    Annotation ann = new Annotation(trmdl,annot,VariantType.FS_INSERTION,startPosMutationInCDS);
 		    return ann;
 		} else { /* var aa is not stop (*) */
-		    /* $function->{$index}{stoploss} .= 
-		     * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa,"; */
 		    String annot = String.format("%s:exon%d:%s:p.X%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,aavarpos,varaa);
-		    //Annotation ann = Annotation.createStopLossAnnotation(trmdl,startPosMutationInCDS,annot);
 		    Annotation ann = new Annotation(trmdl,annot,VariantType.STOPLOSS,startPosMutationInCDS);
 		    return ann;
 		}
@@ -233,9 +229,14 @@ public class InsertionAnnotation {
 						 exonNumber,canno,wtaa,aavarpos,wtaa_after,(aavarpos+1),varaa);
 		    Annotation ann = new Annotation(trmdl, annot,VariantType.STOPGAIN, startPosMutationInCDS);
 		    return ann;
+		} else if (aavarpos==1) { /* mutation of start codon */ 
+		    String annot = String.format("%s:exon%d:%s:p.%s%d?",trmdl.getName(),exonNumber,canno,wtaa,aavarpos);
+		    Annotation ann = new Annotation(trmdl,annot,VariantType.START_LOSS,startPosMutationInCDS);
+		    return ann;
+		
 		} else {
+		    
 		    String annot = String.format("%s:exon%d:%s:p.%s%dfs",trmdl.getName(),exonNumber,canno,wtaa,aavarpos);
-		    //Annotation ann = Annotation.createFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
 		    Annotation ann = new Annotation(trmdl,annot,VariantType.FS_INSERTION,startPosMutationInCDS);
 		    return ann;
 		    
