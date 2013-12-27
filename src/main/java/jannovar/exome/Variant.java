@@ -1,7 +1,6 @@
 package jannovar.exome;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
@@ -140,17 +139,6 @@ public class Variant implements Comparable<Variant>, Constants {
 	return annotList.getEntrezGeneID();
     }
 
-
-
-   
-    /** 
-     * @return true if this variant is a nonsynonymous substitution (missense).
-     */
-    public boolean is_nonsynonymous_variant() { 
-	if (annotList == null)
-	    return false;
-	else return (annotList.getVariantType() == VariantType.NONSYNONYMOUS);
-    }
 
 
     /**
