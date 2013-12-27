@@ -13,7 +13,7 @@ package jannovar.common;
  * the document for the class
  * {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.13 (17 December, 2013)
+ * @version 0.14 (27 December, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */

@@ -146,8 +146,7 @@ public class InsertionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	   
 	    String annot = ann.getVariantAnnotation();
-	    System.out.println(annot);
-	     Assert.assertEquals(VariantType.FS_INSERTION,varType);
+	    Assert.assertEquals(VariantType.FS_INSERTION,varType);
 	    Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.93_94insA:p.N32fs)",annot);
 	}
 }
@@ -656,5 +655,6 @@ This duplication variation should lead to the loss of the translation initiation
 	Assert.assertEquals("FRG1(uc003izs.3:exon1:c.2_3insA:p.M1?)",annot);
     }
 }
-    
+
+ 
 }

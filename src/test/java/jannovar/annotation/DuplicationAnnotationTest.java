@@ -410,7 +410,6 @@ public class DuplicationAnnotationTest implements Constants {
 	Assert.assertEquals("-",ref);
 	Assert.assertEquals("TCC",alt);
 	String annot = ann.getVariantAnnotation();
-	System.out.println("XX" + annot);
 	Assert.assertEquals(VariantType.NON_FS_DUPLICATION,varType);
 	Assert.assertEquals("MAGEF1(uc003fpa.3:exon1:c.474_476dupGGA:p.E158dup)",annot);
     }

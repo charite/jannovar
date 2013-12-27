@@ -10,7 +10,7 @@ import jannovar.common.Disease;
  * In essence, this class stores data representing the six fields of a PED file:
  * 
  * @author Peter Robinson
- * @version 0.05 (17 June, 2013)
+ * @version 0.06 (27 December, 2013)
  */
 public class Person {
     /**

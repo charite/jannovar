@@ -146,8 +146,8 @@ public class DuplicationAnnotation {
 	    
 	    annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber,
 				  canno, wtaa, aaVarStartPos);
-	    System.out.println("FS wtaa="+wtaa);
-	    System.out.println(annot);
+	    //System.out.println("FS wtaa="+wtaa);
+	    //System.out.println(annot);
 	    ann = new Annotation(trmdl, annot, VariantType.FS_DUPLICATION, cdsStartPos);
 	}
 	return ann;

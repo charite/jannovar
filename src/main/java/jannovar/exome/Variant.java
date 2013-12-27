@@ -146,10 +146,10 @@ public class Variant implements Comparable<Variant>, Constants {
     /** 
      * @return true if this variant is a nonsynonymous substitution (missense).
      */
-    public boolean is_nonsynonymous_variant() { 
+    public boolean is_missense_variant() { 
 	if (annotList == null)
 	    return false;
-	else return (annotList.getVariantType() == VariantType.NONSYNONYMOUS);
+	else return (annotList.getVariantType() == VariantType.MISSENSE);
     }
 
 

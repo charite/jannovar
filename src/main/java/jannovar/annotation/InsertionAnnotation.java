@@ -42,7 +42,8 @@ public class InsertionAnnotation {
      */
     
     public static Annotation  getAnnotation(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
-						      String ref, String var,int refvarstart,int exonNumber) throws AnnotationException  {
+						      String ref, String var,int refvarstart,int exonNumber) 
+	throws AnnotationException  {
 
 	/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
     	if(trmdl.isMinusStrand())
@@ -91,13 +92,8 @@ public class InsertionAnnotation {
 	    // --------******-----
 	    int potentialDuplicationStartPos = refvarstart; // go back length of insertion (var.length()).
 	    int potentialDuplicationEndPos = refvarstart + var.length(); // pos right after insertion 
-	    
-	    // System.out.println("InsertionAnnotation- potentialDuplicationStartPos = " +potentialDuplicationStartPos);
-	    //System.out.println("InsertionAnnotation- potentialDuplicationEndPos = " +potentialDuplicationEndPos);
-	    //System.out.println("InsertionAnnotation- var = " +var);
-	    //System.out.println("cDBNA="+trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos));
-
-	    if(refvarstart >= var.length() 
+	    if(potentialDuplicationStartPos >= var.length() 
+	       && potentialDuplicationEndPos < trmdl.getMRNALength()  
 	       && trmdl.getCdnaSequence().substring(potentialDuplicationStartPos,potentialDuplicationEndPos).equals(var)){
 		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, 
 								     frame_s,

@@ -48,7 +48,7 @@ import jannovar.exome.Variant;
  * {@link #adjustSampleOrderInPedFile}.
  * 
  * @author Peter Robinson
- * @version 0.18 (27 December, 2013)
+ * @version 0.21 (27 December, 2013)
  */
 public class Pedigree {
     /**
