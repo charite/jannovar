@@ -87,7 +87,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.26 (14 July, 2013)
+ * @version 0.27 (27 December, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
@@ -147,38 +147,28 @@ public class Jannovar {
     public static void main(String argv[]) {
 	Jannovar anno = new Jannovar(argv);
 	/* Option 1. Download the UCSC files from the server, create the ucsc.ser file, and return. */
-	if (anno.createUCSC()) {
-	    try{
+	try{
+	    if (anno.createUCSC()) {
 		anno.downloadTranscriptFiles(jannovar.common.Constants.UCSC,anno.genomeRelease);
 		anno.inputTranscriptModelDataFromUCSCFiles();
 		anno.serializeUCSCdata();
-	    } catch (JannovarException e) {
-		System.err.println("[Jannovar]: " + e.toString());
-		System.exit(1);
-	    }
-	    return;
-	} 
-	if (anno.createEnsembl()) {
-	    try{
+		return;
+	    } else if  (anno.createEnsembl()) {
 		anno.downloadTranscriptFiles(jannovar.common.Constants.ENSEMBL,anno.genomeRelease);
 		anno.inputTranscriptModelDataFromEnsembl();
 		anno.serializeEnsemblData();
-		} catch (JannovarException e) {
-		System.err.println("[Jannovar]: " + e.toString());
-		System.exit(1);
-		}
-	    return;
-	} 
-	if (anno.createRefseq()) {
-	    try{
+		return;
+	    } else if (anno.createRefseq()) {
 		anno.downloadTranscriptFiles(jannovar.common.Constants.REFSEQ,anno.genomeRelease);
 		anno.inputTranscriptModelDataFromRefseq();
 		anno.serializeRefseqData();
-	    } catch (JannovarException e) {
-		System.err.println("[Jannovar]: " + e.toString());
-		System.exit(1);
+		return;
 	    }
-	    return;
+	} catch (JannovarException e) {
+	    System.err.println("[Jannovar]: error while attempting to download transcript definition files.");
+	    System.err.println("[Jannovar]: " + e.toString());
+	    System.err.println("[Jannovar]: A common error is the failure to set the network proxy (see tutorial).");
+	    System.exit(1);
 	}
 
 	/* Option 2. The user must provide the ucsc.ser file to do analysis. (or the

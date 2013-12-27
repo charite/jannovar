@@ -643,6 +643,111 @@ public class Pedigree {
     }
 
 
+     /**
+     * This function checks whether the gene, whose variants are represented in the list
+     * of genotypes passed to the function, has at least two variants compatible with
+     * autosomal recessive inheritance. It first checks whether there is a homozygous
+     * variant that is compatible with AR. If there is none, it checks for compound hets.
+     * This is a little complicated. The function first checks whether there is a variant
+     * that is heterozygous in the affected and heteroygous in one, but not both, of the
+     * parents. All such variants are stored. If there are such variants, then it checks
+     * whether the maternal-het mutations are compatible with the paternal het mutations, and
+     * it returns all variants for which there are compatible pairs.
+     * @param varList A list of variants (usually all variants in some gene).
+     */
+    public boolean isCompatibleWithAutosomalRecessiveHomozygous(ArrayList<Variant> varList) {
+	if (this.isSingleSample) {
+	    for (Variant v : varList) {
+		GenotypeCall gc = v.getGenotype();
+		Genotype g = gc.getGenotypeInIndividualN(0);
+		if (g == Genotype.HOMOZYGOUS_ALT)
+		    return true;
+	    }
+	    return false; /* if we get here, there is no homozygous var */
+	}
+	/* If we get here, there is a multiple sample VCF plus PED file */
+	if (this.parentList.size()>2) {
+	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
+	}
+	/* Just look and see if there is a homozygous variant that is compatible */
+	for (Variant v : varList) {
+	    GenotypeCall multiGT = v.getGenotype();
+	    if (containsCompatibleHomozygousVariant(multiGT)) {
+		/* If this is the case, we are good. */
+		return true;
+	    }
+	}
+	return false;
+    }
+
+
+      /**
+     * This function checks whether the gene, whose variants are represented in the list
+     * of genotypes passed to the function, has at least two variants compatible with
+     * autosomal recessive inheritance. It first checks whether there is a homozygous
+     * variant that is compatible with AR. If there is none, it checks for compound hets.
+     * This is a little complicated. The function first checks whether there is a variant
+     * that is heterozygous in the affected and heteroygous in one, but not both, of the
+     * parents. All such variants are stored. If there are such variants, then it checks
+     * whether the maternal-het mutations are compatible with the paternal het mutations, and
+     * it returns all variants for which there are compatible pairs.
+     * @param varList A list of variants (usually all variants in some gene).
+     */
+    public boolean isCompatibleWithAutosomalRecessiveCompoundHet(ArrayList<Variant> varList) {
+	if (this.isSingleSample) {
+	    int n_het = 0;
+	    for (Variant v : varList) {
+		GenotypeCall gc = v.getGenotype();
+		Genotype g = gc.getGenotypeInIndividualN(0);
+		if (g == Genotype.HETEROZYGOUS)
+		    n_het++;
+	    }
+	    if (n_het > 1)
+		return true;
+	    else
+		return false;
+	}
+	boolean hasMaternallyInheritedCompatibleVariant = false;
+	boolean hasPaternallyInheritedCompatibleVariant = false;
+	ArrayList<GenotypeCall> paternal = new ArrayList<GenotypeCall> ();
+	ArrayList<GenotypeCall> maternal = new ArrayList<GenotypeCall> ();
+
+	if (this.parentList.size()>2) {
+	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
+	}
+	for (Variant v : varList) {
+	    GenotypeCall multiGT = v.getGenotype();
+	    if (affectedsAreHeterozygous(multiGT) &&
+		onlyOneParentIsHeterozygous(multiGT) &&
+		unaffectedsAreNotHomozygousALT(multiGT) ) {
+		if (fatherIsHeterozygous(multiGT))
+		    paternal.add(multiGT);
+		else if (motherIsHeterozygous(multiGT))
+		    maternal.add(multiGT);
+		else {
+		    /* This can never happen, it is just a sanity check! */
+		    System.err.println("ERROR: Neither mother nor father het with at least one parent being het");
+		    System.exit(1);
+		}
+	    }
+	}  
+	/* When we get here, we have (potentially empty) lists of GenotypeCalls that are
+	   heterozygous in the father or mother. If there is a combination of maternal and paternal
+	   genotypes that could be a valid compound heterozygous mutation, then return true!
+	   The strategy is to iterate over paternal variants and check all maternal variants for
+	   compatibility. */
+	for (GenotypeCall patGT : paternal) {
+	    for (GenotypeCall matGT : maternal) {
+		if (validCompoundHet(matGT,patGT))
+		    return true;
+	    }
+	}
+	return false;
+    }
+
+
+
+
     /**
      * This function checks whether the gene, whose variants are represented in the list
      * of genotypes passed to the function, has at least two variants compatible with
