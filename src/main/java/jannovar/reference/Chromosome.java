@@ -682,13 +682,6 @@ public class Chromosome {
 					int start, int end, String ref, 
 					String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
 	
-	
-	/*System.out.println("bla annotateExonicVariants for KG=" + kgl.getGeneSymbol() + "/" + kgl.getName());
-	   System.out.println("******************************");
-	   System.out.println(String.format("\trefvarstart: %d\trefvarend: %d",refvarstart,refvarend));
-	   System.out.println(String.format("\tstart: %d\tend: %d",start,end));
-	   System.out.println(String.format("\tref=%s\tvar=%s\texon=%d",ref,var,exonNumber));
-	   System.out.println("******************************"); */
 	/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
 	int frame_s = ((refvarstart-kgl.getRefCDSStart() ) % 3); /* annovar: $fs */
 	int frame_end_s = ((refvarend-kgl.getRefCDSStart() ) % 3); /* annovar: $end_fs */
@@ -703,15 +696,7 @@ public class Chromosome {
 	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
 	}
-	/*
-	  @wtnt3 = split (//, $wtnt3);
-	  if (@wtnt3 != 3 and $refvarstart-$fs-1>=0) { 
-	  #some times there are database annotation errors (example: chr17:3,141,674-3,141,683), 
-	  #so the last coding frame is not complete and as a result, the cDNA sequence is not complete
-	  $function->{$index}{unknown} = "UNKNOWN";
-	  next;
-	  }
-	*/
+	
 	// wtnt3 represents the three nucleotides of the wildtype codon.
 	String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
 	if (wtnt3==null) {
@@ -749,8 +734,8 @@ public class Chromosome {
 								      var,refvarstart,exonNumber);
 		this.annovarFactory.addExonicAnnotation(insrt);
 	    } else if (var.equals("-") ) { /* i.e., single nucleotide deletion */
-		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotidePlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
-											    ref, var,refvarstart,exonNumber);
+		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotide(kgl,frame_s, wtnt3,wtnt3_after,
+										  ref, var,refvarstart,exonNumber);
 		this.annovarFactory.addExonicAnnotation(dlt);
 	    } else if (var.length()>1) {
 		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl,frame_s, wtnt3, wtnt3_after,
@@ -770,8 +755,8 @@ public class Chromosome {
 	     * 	deletion variant involving several nucleotides.
 	     */
 	    Annotation dltmnt = 
-		DeletionAnnotation.getAnnotationBlockPlusStrand(kgl, frame_s, wtnt3,wtnt3_after,
-								ref, var, refvarstart, refvarend, exonNumber);
+		DeletionAnnotation.getAnnotationBlock(kgl, frame_s, wtnt3,wtnt3_after,
+						      ref, var, refvarstart, refvarend, exonNumber);
 	    
 	    this.annovarFactory.addExonicAnnotation(dltmnt);
 	} else {

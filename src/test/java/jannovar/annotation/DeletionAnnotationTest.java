@@ -57,12 +57,26 @@ public class DeletionAnnotationTest implements Constants {
 	chromosomeMap = null;
 	System.gc();
     }
-
-/**
+ /**
  *<P>
- * annovar: MST1P9:uc010ock.2:exon2:c.117_121del:p.39_41del,
+ * annovar: MST1P9:uc010ock.2:exon2:c.117_121del:p.39_41del
+ * The protein annotations are not accurate.
  * chr1:17087544GCTGT>-
- * Name change MST1L, Gene: 11223
+ * The deletion goes from 17,087,544-17,087,548, on the rc it is ACAGC
+ * The gene is on the minus strand
+ * the deletion affects 3 codons.
+ * GTG-CTG-TAG
+ * Or reverse-complement
+ * CTA-CAG-CAC: the deletion A-CAG-C
+ * the deletion thus does not change the first amino acid, (CT*****A->CTA=Leu)
+ * Leu-Gln-His  (i.e., LQH)
+ * The mutation changes TELQHLL  -> TELPAT, 
+ * i.e., the Q at position 40 is changed to a P followed by frameshift.
+ * NM_001271733.1:c.117_121del
+ * Mutalzyer:
+ * NM_001271733.1(MST1L_v001):c.119_123del
+ * NM_001271733.1(MST1L_i001):p.(Gln40Profs*18)
+ * Thus, we want p.Q40Pfs
  *</P>
  */
 @Test public void testFSDeletionVar2() throws AnnotationException  {
@@ -78,9 +92,11 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("MST1L(uc010ock.3:exon2:c.117_121del:p.39_41del)",annot);
+	    Assert.assertEquals("MST1L(uc010ock.3:exon2:c.117_121del:p.Q40Pfs)",annot);
 	}
 }
+
+
 
 /**
  *<P>
@@ -134,7 +150,13 @@ public class DeletionAnnotationTest implements Constants {
 /**
  *<P>
  * annovar: ZNF852:uc011azx.2:exon4:c.1472_1473del:p.491_491del,
+ * Annovar is inaccurate here.
  * chr3:44540796TC>-
+ * wt: GGAGAAAAACCTTATGAATGTATTGAGT
+ * mt: GGAAAAACCTTATGAATGTATTGAGT
+ * wt: GEKNLMNVLS
+ * mt: GEKPYECIE
+ * Thus, p.N494Pfs
  *</P>
  */
 @Test public void testFSDeletionVar6() throws AnnotationException  {
@@ -150,7 +172,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("ZNF852(uc011azx.2:exon4:c.1472_1473del:p.491_491del)",annot);
+	    Assert.assertEquals("ZNF852(uc011azx.2:exon4:c.1472_1473del:p.N494Pfs)",annot);
 	}
 }
 
@@ -182,8 +204,12 @@ public class DeletionAnnotationTest implements Constants {
 
 /**
  *<P>
- * annovar: OR5K2:uc011bgx.2:exon1:c.275_285del:p.92_95del,
+ * annovar: OR5K2:uc011bgx.2:exon1:c.275_285del:p.92_95del (wrong)
  * chr3:98216799TTTCCCTCTAT>-
+ * Mutalzyer:
+ * NM_001004737.1(OR5K2_v001):c.275_285del
+ * NM_001004737.1(OR5K2_i001):p.(Ile92Argfs*26)
+ * Thus p.I92Rfs
  *</P>
  */
 @Test public void testFSDeletionVar9() throws AnnotationException  {
@@ -199,7 +225,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR5K2(uc011bgx.2:exon1:c.275_285del:p.92_95del)",annot);
+	    Assert.assertEquals("OR5K2(uc011bgx.2:exon1:c.275_285del:p.I92Rfs)",annot);
 	}
 }
 
@@ -209,6 +235,11 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: PCDHA7:uc003lhq.2:exon1:c.1503_1507del:p.501_503del,PCDHA7:uc011dac.2:exon1:c.1503_1507del:p.501_503del,
  * chr5:140215471GCGCG>-
+ * Thus = NM_031852.1:c.1503_1507del
+ * Mutalyzer:
+ * NM_031852.1(PCDHA7_v001):c.1503_1507del
+ * NM_031852.1(PCDHA7_i001):p.(Glu501Aspfs*96)
+ * Thus p.E501Dfs
  *</P>
  */
 @Test public void testFSDeletionVar10() throws AnnotationException  {
@@ -224,7 +255,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PCDHA7(uc003lhq.2:exon1:c.1503_1507del:p.501_503del,uc011dac.2:exon1:c.1503_1507del:p.501_503del)",annot);
+	    Assert.assertEquals("PCDHA7(uc003lhq.2:exon1:c.1503_1507del:p.E501Dfs,uc011dac.2:exon1:c.1503_1507del:p.E501Dfs)",annot);
 	}
 }
 
@@ -331,6 +362,11 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: AGAP6:uc001jix.4:exon8:c.791_792del:p.264_264del,
  * chr10:51768676AA>-
+ * NM_001077665.2:c.791_792del
+ * Mutalyzer:
+ * NM_001077665.2(AGAP6_v001):c.791_792del
+ * NM_001077665.2(AGAP6_i001):p.(Lys264Argfs*10)
+ * Thus p.K264Rfs
  *</P>
  */
 @Test public void testFSDeletionVar16() throws AnnotationException  {
@@ -346,7 +382,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("AGAP6(uc001jix.4:exon8:c.791_792del:p.264_264del)",annot);
+	    Assert.assertEquals("AGAP6(uc001jix.4:exon8:c.791_792del:p.K264Rfs)",annot);
 	}
 }
 
@@ -377,6 +413,11 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: OR5M1:uc001nja.1:exon1:c.423_426del:p.141_142del,
  * chr11:56380553GACA>-
+ * Thus NM_001004740:c.423_426del
+ * Mutalzyer
+ * NM_001004740(OR5M1_v001):c.429_432del
+ * NM_001004740(OR5M1_i001):p.(Cys143Trpfs*19)
+ * Thus p.C143Wfs
  *</P>
  */
 @Test public void testFSDeletionVar18() throws AnnotationException  {
@@ -392,7 +433,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR5M1(uc001nja.1:exon1:c.423_426del:p.141_142del)",annot);
+	    Assert.assertEquals("OR5M1(uc001nja.1:exon1:c.423_426del:p.C143Wfs)",annot);
 	}
 }
 
@@ -424,6 +465,11 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: SETD8:uc001uew.3:exon5:c.542_543del:p.181_181del,
  * chr12:123880924TT>-
+ * NM_020382:c.542_543del
+ * Mutalyzer:
+ * NM_020382(SETD8_v001):c.542_543del
+ * NM_020382(SETD8_i001):p.(Leu181Hisfs*20)
+ * THus p.L181Hfs
  *</P>
  */
 @Test public void testFSDeletionVar21() throws AnnotationException  {
@@ -439,7 +485,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("SETD8(uc001uew.3:exon5:c.542_543del:p.181_181del)",annot);
+	    Assert.assertEquals("SETD8(uc001uew.3:exon5:c.542_543del:p.L181Hfs)",annot);
 	}
 }
 
@@ -617,7 +663,10 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: DEFB126:uc002wcx.3:exon2:c.317_318del:p.106_106del,
  * chr20:126314CC>-
- *</P>
+ * Mutalzyer:
+ * NM_030931(DEFB126_v001):c.317_318del
+ * NM_030931(DEFB126_i001):p.(Pro106Argfs*27)
+ * p.P106Rfs
  */
 @Test public void testFSDeletionVar32() throws AnnotationException  {
 	byte chr = 20;
@@ -632,7 +681,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DEFB126(uc002wcx.3:exon2:c.317_318del:p.106_106del)",annot);
+	    Assert.assertEquals("DEFB126(uc002wcx.3:exon2:c.317_318del:p.P106Rfs)",annot);
 	}
 }
 
@@ -641,6 +690,11 @@ public class DeletionAnnotationTest implements Constants {
  *<P>
  * annovar: PLAC4:uc002yyz.3:exon1:c.70_88del:p.24_30del,
  * chr21:42551468GTGTCAGGGTGAGTGAGGG>-
+ * minus strand
+ * Mutalyzer:
+ * NM_182832(PLAC4_v001):c.72_90del
+ * NM_182832(PLAC4_i001):p.(Ser25Hisfs*78)
+ * Thus p.S25Hfs
  *</P>
  */
 @Test public void testFSDeletionVar33() throws AnnotationException  {
@@ -656,7 +710,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("PLAC4(uc002yyz.3:exon1:c.70_88del:p.24_30del)",annot);
+	    Assert.assertEquals("PLAC4(uc002yyz.3:exon1:c.70_88del:p.S25Hfs)",annot);
 	}
 }
 
