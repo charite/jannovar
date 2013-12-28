@@ -21,7 +21,7 @@ import jannovar.common.Constants;
  * This class provides methods that allow the Chromosome class to calculate what annotations are
  * appropriate for a given variant, and thus represents one of the core classes of Jannovar.
  * @author Peter N Robinson
- * @version 0.21, 27 December, 2013
+ * @version 0.22, 28 December, 2013
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
    
@@ -266,6 +266,24 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	    return this.sequence;
 	/* Note the -1 to convert to zero-based numbers for java substring */
 	return this.sequence.substring(rcdsStart-1,rcdsStart+CDSlength-1);
+    }
+
+    /**
+     * Returns the entire sequenceof the mRNA starting with 
+     * the stop codon. It is useful to have this because some
+     * deletion mutations extend the mutant coding sequence
+     * past the original stop codon.
+     */
+    public String getCodingSequencePlus3UTR() {
+	/* This should never happen unless for odd
+	   sequences with non 5UTR bases. The following
+	   may cause error with some types of annotation
+	   but will not cause a runtime error.
+	*/
+	if (rcdsStart<1 )
+	    return this.sequence;
+	/* Note the -1 to convert to zero-based numbers for java substring */
+	return this.sequence.substring(rcdsStart-1);
     }
     
     /** 

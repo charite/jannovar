@@ -755,7 +755,7 @@ public class Chromosome {
 	     * 	deletion variant involving several nucleotides.
 	     */
 	    Annotation dltmnt = 
-		DeletionAnnotation.getAnnotationBlock(kgl, frame_s, wtnt3,wtnt3_after,
+		DeletionAnnotation.getMultinucleotideDeletionAnnotation(kgl, frame_s, wtnt3,wtnt3_after,
 						      ref, var, refvarstart, refvarend, exonNumber);
 	    
 	    this.annovarFactory.addExonicAnnotation(dltmnt);

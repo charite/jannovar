@@ -9,7 +9,17 @@ import jannovar.exception.AnnotationException;
  * This class provides static methods to generate annotations for deletion
  * mutations. Updated on 27 December 2013 to provide HGVS conformation
  * annotations for frameshirt deletion mutations.
- * @version 0.13 (27 December, 2013)
+ * Note that if we have the following VCF line:
+ * <pre>
+ * chr11	76895771	.	GGAGGCGGGGACACCAGGGCCTG	G	55.5	.	DP=9;VDB...
+ * </pre>
+ * then the position refers to the nucleotide right before the deletion. That is, the first nucleotide [G]GAGGC..
+ * (the one that is enclosed in square brackets) has the position 76895771, and the deletion begins at
+ * chromosomal position 76895772 and comprises 22 bases: GAG-GCG-GGG-ACA-CCA-GGG-CCT-G. (Note we are using
+ * one-based numbering here).
+ * This particular deletion corresponds to  NM_001127179(MYO7A_v001):c.3515_3536del
+ * NM_001127179(MYO7A_i001):p.(Gly1172Glufs*34).
+ * @version 0.14 (28 December, 2013)
  * @author Peter N Robinson
  */
 
@@ -77,10 +87,9 @@ public class DeletionAnnotation {
 		Annotation ann = new Annotation(kgl,stopgain_ann,VariantType.STOPGAIN,posVariantInCDS);
 		return ann;
 	    } else {
+		/* A deletion affecting an amino-acid in the middle of the protein and leading to a frameshift */
 		String fsdel_ann = String.format("%s:exon%d:%s:p.%s%dfs",kgl.getName(),
 						  exonNumber,canno,wtaa,aavarpos);
-		/*  $function->{$index}{fsdel} .= 
-		    "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "fs,"; */
 		Annotation ann = new Annotation(kgl, fsdel_ann,VariantType.FS_DELETION,posVariantInCDS);
 	
 		return ann;
@@ -91,7 +100,7 @@ public class DeletionAnnotation {
 
 
      /**
-     * Creates annotation for a block deletion.
+     * Creates annotation for a deletion of more than one nucleotide.
      * This is recognized by the fact that the ref sequence has a length greater than one
      * and the variant sequence is "-".
      * <P>
@@ -108,7 +117,7 @@ public class DeletionAnnotation {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationBlock(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation getMultinucleotideDeletionAnnotation(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
 						String ref, String var,int refvarstart,int refvarend, int exonNumber)
 	throws AnnotationException  {
 	String annotation = null;
@@ -127,8 +136,7 @@ public class DeletionAnnotation {
 
 	if (refvarstart <=refcdsstart) { /* first amino acid deleted */
 	    if (refvarend >= cdslen  + refcdsstart) { // i.e., 3' portion of the gene is deleted
-		varposend = (int)Math.floor( cdslen / 3); //int ($cdslen->{$seqid}/3);
-		//$canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($cdslen->{$seqid}+$refcdsstart-1) . "del";
+		varposend = (int)Math.floor( cdslen / 3); 
 		canno = String.format("c.%d_%ddel",refvarstart-refcdsstart,cdslen+refcdsstart-1);
 					
 	    } else { /* deletion encompasses less than entire CDS */
@@ -167,7 +175,12 @@ public class DeletionAnnotation {
 	    varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
 	    int posMutationInCDS = refvarstart-refcdsstart+1; /* start pos of mutation with respect to CDS begin */
 	    canno = String.format("c.%d_%ddel",posMutationInCDS,refvarend-refcdsstart+1);
-	    panno = shiftedFrameDeletion(kgl,exonNumber,canno,ref,posMutationInCDS,aavarpos,frame_s);
+	    try {
+		panno = shiftedFrameDeletion(kgl,exonNumber,canno,ref,posMutationInCDS,aavarpos,frame_s);
+	    } catch (Exception e) {
+		System.err.println("Exception while annotating frame-shift deletion: " + canno);
+		panno=canno; /* just supply the cDNA annotation if there was an error. */
+	    }
 	    Annotation ann = new Annotation(kgl, panno,VariantType.FS_DELETION,posMutationInCDS);
 	    return ann;
 	}
@@ -191,9 +204,13 @@ public class DeletionAnnotation {
 
 	int len = ref.length();
 	// Get the complete coding sequence.
-	String orf = trmdl.getCodingSequence();
+	// Also include the 3UTR because some deletions extend the
+	// mutant coding sequence beyond the stop codon.
+	String orf = trmdl.getCodingSequencePlus3UTR();
+
 	int start = posMutationInCDS-1;  // Convert 1-based to 0-based
 	int endpos = start + ref.length(); // endpos is now 0-based and points to one after the deletion.
+	
 	String deletion = orf.substring(start,endpos);
 	// Get the part of the codon that comes before the deletion
 	String prefix = orf.substring(start-frame_s,start);
@@ -205,14 +222,15 @@ public class DeletionAnnotation {
 	String mut = prefix + rest;
 	String wtaa = translator.translateDNA(wt);
 	String mutaa = translator.translateDNA(mut);
-	/*
-	  System.out.println("start=" + (start+1) + ", end="+(endpos+1));
-	  System.out.println("deletion ="+ deletion);
-	  System.out.println("rest = "+ rest);
-	  System.out.println("prefix ="+ prefix);
-	  System.out.println("wt:" + wtaa);
-	  System.out.println("mt:" + mutaa);
-	  trmdl.debugPrintCDS();
+	
+	/*  
+	    System.out.println("start=" + (start+1) + ", end="+(endpos+1));
+	    System.out.println("deletion ="+ deletion);
+	    System.out.println("rest = "+ rest + ", restlen="+restlen);
+	    System.out.println("prefix ="+ prefix);
+	    System.out.println("wt:" + wtaa);
+	    System.out.println("mt:" + mutaa);
+	    trmdl.debugPrintCDS();
 	*/
 	int aapos = aaVarStartPos;
 	int k = 0;

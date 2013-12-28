@@ -16,6 +16,7 @@ import java.io.BufferedWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
@@ -87,7 +88,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.27 (27 December, 2013)
+ * @version 0.32 (28 December, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
@@ -189,7 +190,12 @@ public class Jannovar {
 	/* When we get here, the program has deserialized data and put it into the
 	   Chromosome objects. We can now start to annotate variants. */
 	if (anno.hasVCFfile()) {
-	    anno.annotateVCF();  /* 3a or 3b */
+	    try{ 
+		anno.annotateVCF();  /* 3a or 3b */
+	    } catch (JannovarException je) {
+		System.out.println("[Jannovar] Could not annotate VCF data: " + je.toString());
+		System.exit(1);
+	    }
 	} else {
 	    System.out.println("[Jannovar] No VCF file found");
 	}
@@ -351,11 +357,12 @@ public class Jannovar {
      * VCF file but additionally has annotations for each variant. A new file
      * is created with the suffix "jv.vcf";
      */
-    private void outputAnnotatedVCF(VCFReader parser) 
+    private void outputAnnotatedVCF(VCFReader parser) throws JannovarException
     {
 	File f = new File(this.VCFfilePath);
 	String outname = f.getName(); 
 	int i = outname.lastIndexOf("vcf");
+	Iterator<VCFLine> iter = parser.getVCFLineIterator();
 	if (i<0) {
 	    i = outname.lastIndexOf("VCF");
 	}
@@ -373,19 +380,14 @@ public class Jannovar {
 		out.write(s + "\n");
 	    }
 	    /** Now write each of the variants. */
-	    VCFLine line;
-	    Variant v;
-	    while(parser.hasnext()){
-	    	line = parser.next(false);
-	    	// skip misformed VCFline (null)
-	    	if(line == null)
-	    		continue;
-	    	v = parser.VCFline2Variant(line);
+	    while(iter.hasNext()){
+		VCFLine line = iter.next();
+		Variant v = line.toVariant();
 	    	try {
-	    		annotateVCFLine(line,v,out);
-			} catch (AnnotationException e) {
-				System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
-			}
+		    annotateVCFLine(line,v,out);
+		} catch (AnnotationException e) {
+		    System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
+		}
 	    }
 	    out.close();
 	}catch (IOException e){
@@ -403,9 +405,8 @@ public class Jannovar {
      * file is a tab-separated file in "Jannovar" format.
      * @param parser The VCFParser that has extracted a list of variants from the VCF file.
      */
-    private void outputJannovarFormatFile(VCFReader parser) 
+    private void outputJannovarFormatFile(VCFReader parser) throws JannovarException
     {
-	this.variantList = parser.getVariantList();
 	File f = new File(this.VCFfilePath);
 	String outname = f.getName() + ".jannovar";
 	try {
@@ -413,20 +414,15 @@ public class Jannovar {
 	    BufferedWriter out = new BufferedWriter(fstream);
 	    /**  Output each of the variants. */
 	    int n=0;
-	    VCFLine line;
-	    Variant v;
-	    while(parser.hasnext()){
-			n++;
-	    	line = parser.next();
-	    	// skip misformed VCFline (null)
-	    	if(line == null)
-	    		continue;
-	    	v = parser.VCFline2Variant(line);
+	    Iterator<Variant> iter = parser.getVariantIterator();
+	    while(iter.hasNext()){
+		n++;
+		Variant v = iter.next();
 	    	try {
-	    		outputJannovarLine(n,v,out);
-			} catch (AnnotationException e) {
-				System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
-			}
+		    outputJannovarLine(n,v,out);
+		} catch (AnnotationException e) {
+		    System.out.println("[Jannovar] Warning: Annotation error: " + e.toString());
+		}
 	    }
 	    out.close();
 	}catch (IOException e){
@@ -443,12 +439,12 @@ public class Jannovar {
      * This function inputs a VCF file, and prints the annotated version thereof
      * to a file (name of the original file with the suffix .jannovar).
      */
-    public void annotateVCF() {
-    	VCFReader parser = new VCFReader(true);
+    public void annotateVCF() throws JannovarException {
+    	VCFReader parser = new VCFReader(this.VCFfilePath);
 	VCFLine.setStoreVCFLines();
 	try{
-	    parser.parseFile(this.VCFfilePath);
-	} catch (VCFParseException e) {
+	    parser.inputVCFheader();
+	} catch (Exception e) {
 	    System.err.println("[Jannovar] Unable to parse VCF file");
 	    System.err.println(e.toString());
 	    System.exit(1);

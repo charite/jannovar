@@ -12,6 +12,7 @@ import java.util.Iterator;
 
 import jannovar.exome.Variant;
 import jannovar.exception.ChromosomeScaffoldException;
+import jannovar.exception.JannovarException;
 import jannovar.exception.VCFParseException;
 import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.SingleGenotypeFactory;
@@ -21,6 +22,46 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * Parses a VCF file and extracts Variants from each of the variant lines of
  * the VCF file. We read and count all of the lines that are
  * represented in the VCF file. 
+ * <P>
+ * There are two ways of using this class: (i) input the entire VCF file to
+ * create an arraylist of Variants represent all of the variants in the VCF file. This is
+ * convenient and should not cause problems with exome files but is noticably slower for genome
+ * sequences; (ii) input first the VCF header and initialize an iterator that returns one
+ * VCF Line at a time; this is flexible and has a small memory footprint.
+ * <P>
+ * Client code for option (i) should look something like the following:
+ * <pre>
+ * String vcfpath="/some/path/sample.vcf";
+ * VCFReader parser = new VCFReader();
+ * parser.parseFile(vcfpath);
+ * ArrayList<Variant> varlist = parser.getVariantList();
+ * </pre>
+ * Note that if the VCF file has already been read into a Buffer (this is the case for
+ * the versions of the Exomiser that work as HTTP servers), substitute the following commands
+ * <pre>
+ * BufferedReader VCFfileContents = getBufferedReaderFromSomewhere();
+ * VCFReader parser = new VCFReader();
+ * parser.parseStringStream(VCFfileContents);
+ * ArrayList<Variant> varlist = parser.getVariantList();
+ * <P>
+ * Client code for option (ii) should look something like the following (note that
+ * the function that initializes the iterator (<code>parser.iterator()</code>) will
+ * ensure that the VCF header has ben input even if client code does not call
+ * <code> parser.inputVCFheader()</code>, but it seems clearer to show it
+ * explicitly.
+ * <pre>
+ * VCFReader parser = new VCFReader(this.VCFfilePath);
+ * parser.inputVCFheader();
+ * Iterator<Variant> it = parser.iterator();
+ * while(it.hasNext()){
+ *   Variant v = it.next();
+ *   // do something with v
+ * }
+ * </pre>
+ * Both ways of using this class will result in identical lists of variants being parsed,
+ * with the first delivering a complete list of Variants all at once with potential 
+ * disadvantages in memory consuption for large VCF files (e.g., genome sequencing), and the
+ * second delivering the Variants as an iterator, with good performance on any size VCF file.
  * <P>
  * We note that this parser demands that there be a FORMAT field and at least one sample id. 
  * Although this is not required in general for VCF files, any VCF file being used for 
@@ -37,7 +78,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * objects depending on whether we have a single-sample or multiple-sample VCF file. Note that
  * these objects contain data on variant quality (GQ) and read depth (DP).
  * @author Peter Robinson, Marten Jäger
- * @version 0.22 (20 Dezember, 2013)
+ * @version 0.23 (28 Dezember, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -102,6 +143,9 @@ public class VCFReader {
     */
     private ArrayList<String> unparsable_line_list=null;
 
+    /** flag indicating whether we have already read the VCF Header. */
+    private boolean vcfHeaderIsInitialized;
+
      /** @return The total number of variants of any kind parsed from the VCF file*/
     public int get_total_number_of_variants() { return this.total_number_of_variants;}
 
@@ -109,29 +153,50 @@ public class VCFReader {
      * @return the total number of samples represented in this VCF file 
      */
     public int getNumberOfSamples() { return this.sample_name_list.size(); }
-
+    /** @return the base file name of the VCF file being analyzed.  */
     public String getVCFFileName() { return this.base_filename; }
-    
-    /** Is the parser initialized in the iterable mode? **/
+    /** Was the parser initialized in the iterable mode? **/
     private boolean iterable = false;
-    
     /** The {@link Reader} for the {@link InputStream}. **/
     private BufferedReader in;
     
- 	/** Return value of next call to next() **/
+    /** Return value of next call to next() **/
     private String nextline = null;
     
     /**
      * The constructor initializes various ArrayLists etc. After calling the constructors,
      * users can call parse_file(String path) to 
-     */
+    
     public VCFReader() {
     	this(false);
-    }
+    } */
     
-    public VCFReader(boolean iterable){
-    	this.iterable	= iterable;
-    	this.variant_list = new ArrayList<VCFLine>();
+    /**
+     * The constructor initializes the file handle but does not
+     * read anything. The constructor can be used if client code
+     * wants to get all Variants at once or if it wants to get a 
+     * Iterator or Variants.
+     * @param vcfPath Complete path to the VCF file.
+     */
+    public VCFReader(String vcfPath) throws VCFParseException {
+	this.file_path = vcfPath;
+	File file = new File(this.file_path);
+	this.base_filename = file.getName();
+	try{
+	    this.in = new BufferedReader(new FileReader(this.file_path));
+	} catch (IOException e) {
+	    String err = String.format("[VCFReader:parseFile]: %s",e.toString());
+	    throw new VCFParseException(err);
+	}
+	init();
+    }
+
+    /**
+     * Initialize all of the variables used for holding
+     * the results of parsing.
+     */
+    private void init() {
+	this.variant_list = new ArrayList<VCFLine>();
     	this.vcf_header= new ArrayList<String>();
     	this.formatLines=new ArrayList<String>();
     	this.infoLines=new ArrayList<String>();
@@ -142,7 +207,196 @@ public class VCFReader {
     	this.unparsableChromosomes = new HashSet<String>();
     	this.errorList = new ArrayList<String>();
     	this.n_unparsable_chromosome_scaffold_variants=0;
+	this.vcfHeaderIsInitialized = false;
     }
+    
+
+
+    /**
+     * This class first ensures that the VCF header has been read, and that
+     * there is a file pointer that points to the first variant
+     * line of the VCF file. Once that has been taken care of, it
+     * returns a iterator over variants.
+     */
+    public Iterator<Variant> getVariantIterator() throws JannovarException {
+	if (this.in == null ) {
+	    String s = "[VCFReader.java] Could not initialize the Variant Iterator";
+	    throw new JannovarException(s);
+	}
+	try {
+	    if (! this.vcfHeaderIsInitialized) {
+		inputVCFheader();
+	    } 
+	} catch (IOException e) {
+	    String s = String.format("[VCFReader.java] Error with VCF Header input: %s",
+				     e.getMessage());
+	    throw  new JannovarException(s);
+	}
+	// When we get here, the #CHROM line (the last line of the header)
+	// has just been read..
+	return new VariantIterator(this.in);
+    }
+
+
+
+     /**
+     * This class first ensures that the VCF header has been read, and that
+     * there is a file pointer that points to the first variant
+     * line of the VCF file. Once that has been taken care of, it
+     * returns a iterator over variants.
+     */
+    public Iterator<VCFLine> getVCFLineIterator() throws JannovarException {
+	if (this.in == null ) {
+	    String s = "[VCFReader.java] Could not initialize the VCFLine Iterator";
+	    throw new JannovarException(s);
+	}
+	try {
+	    if (! this.vcfHeaderIsInitialized) {
+		inputVCFheader();
+	    } 
+	} catch (IOException e) {
+	    String s = String.format("[VCFReader.java] Error with VCF Header input: %s",
+				     e.getMessage());
+	    throw  new JannovarException(s);
+	}
+	// When we get here, the #CHROM line (the last line of the header)
+	// has just been read..
+	return new VCFLineIterator(this.in);
+    }
+
+
+
+    class VariantIterator implements Iterator<Variant> {
+	/** The next line to be input */
+	String nextline = null;
+	/** The VCFLine object corresponding to {@link #nextline}*/
+	VCFLine vcfline = null;
+	/** file handle, referenced from the outer class. */
+	private BufferedReader in;
+	/** The constructor advances the iterator to the first 
+	    Variant line of the VCF file and thereby initializes
+	    the variable {@link #vcfline}.*/
+	VariantIterator(BufferedReader handle)   {
+	    this.in = handle;
+	    try {
+		moveToNextVCFLine();
+	    } catch (IOException e) {
+		String s = String.format("[VCFIterator] IOException while initializing iterator: %s",e.getMessage());
+		throw new RuntimeException(s); // cannot recover from this kind of error.
+	    }
+	}
+	@Override public boolean hasNext() {
+	    return (this.vcfline != null);
+	}
+
+	@Override public Variant next(){
+	    Variant v = this.vcfline.toVariant();
+	    try {
+		moveToNextVCFLine();
+	    } catch (IOException e) {
+		String s = String.format("[VCFIterator] IOException: %s",e.getMessage());
+		throw new RuntimeException(s);
+	    }
+	    return v;
+	}
+
+	@Override public void remove() {
+	    throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * This function will keep trying to get the next VCFLine
+	 * object until the file has no more lines. If there is some problem
+	 * creating the VCFLine object, it will record the error
+	 * message and go on to the next line. At the end, it will close
+	 * the file handle.
+	 */
+	private void moveToNextVCFLine() throws IOException {
+	    while ((this.nextline = this.in.readLine()) != null) {
+		try {
+		    this.vcfline = new VCFLine(nextline);
+		} catch (VCFParseException e) {
+		    VCFReader.this.unparsable_line_list.add(e + ": " + nextline);
+		    System.err.println("Warning: Skipping unparsable line: \n\t" + nextline);
+		    System.err.println("Exception: " + e.toString());
+		}
+		if (this.vcfline != null)
+		    break;
+	    }
+	    this.vcfline=null;
+	    in.close();
+	}
+
+    }
+
+    /** This class implements an iterator over
+     * VCFLine objects.
+     */
+    class VCFLineIterator implements Iterator<VCFLine> {
+	/** The next line to be input */
+	String nextline = null;
+	/** The VCFLine object corresponding to {@link #nextline}*/
+	VCFLine vcfline = null;
+	/** file handle, referenced from the outer class. */
+	private BufferedReader in;
+	/** The constructor advances the iterator to the first 
+	    Variant line of the VCF file and thereby initializes
+	    the variable {@link #vcfline}.*/
+	VCFLineIterator(BufferedReader handle)   {
+	    this.in = handle;
+	    try {
+		moveToNextVCFLine();
+	    } catch (IOException e) {
+		String s = String.format("[VCFLineIterator] IOException while initializing iterator: %s",e.getMessage());
+		throw new RuntimeException(s); // cannot recover from this kind of error.
+	    }
+	}
+	@Override public boolean hasNext() {
+	    return (this.vcfline != null);
+	}
+
+	@Override public VCFLine next(){
+	    VCFLine previous = this.vcfline;
+	    try {
+		moveToNextVCFLine();
+	    } catch (IOException e) {
+		String s = String.format("[VCFIterator] IOException: %s",e.getMessage());
+		throw new RuntimeException(s);
+	    }
+	    return previous;
+	}
+
+	@Override public void remove() {
+	    throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * This function will keep trying to get the next VCFLine
+	 * object until the file has no more lines. If there is some problem
+	 * creating the VCFLine object, it will record the error
+	 * message and go on to the next line. At the end, it will close
+	 * the file handle.
+	 */
+	private void moveToNextVCFLine() throws IOException {
+	    while ((this.nextline = this.in.readLine()) != null) {
+		try {
+		    this.vcfline = new VCFLine(nextline);
+		} catch (VCFParseException e) {
+		    VCFReader.this.unparsable_line_list.add(e + ": " + nextline);
+		    System.err.println("Warning: Skipping unparsable line: \n\t" + nextline);
+		    System.err.println("Exception: " + e.toString());
+		}
+		if (this.vcfline != null)
+		    break;
+	    }
+	    this.vcfline=null;
+	    in.close();
+	}
+
+    }
+
+
+
 
     /**
      * This function is intended to be used to retrieve the original
@@ -169,6 +423,7 @@ public class VCFReader {
      */
     public ArrayList<Variant> getVariantList() { 
 	ArrayList<Variant> vars = new ArrayList<Variant>();
+	System.out.println("in VCFReader,  getVariantList(), size=" + this.variant_list.size());
 	for (VCFLine line : this.variant_list) {
 	    vars.add(this.VCFline2Variant(line));
 	}
@@ -280,10 +535,10 @@ public class VCFReader {
      */
     public void parseStringStream(BufferedReader VCFfileContents) throws VCFParseException {
 	try{
+	    this.in = VCFfileContents;
 	    inputVCFStream();
 	} catch (IOException e) {
-	    String err =
-	      String.format("[VCFReader:parseStringStream]: %s",e.toString());
+	    String err = String.format("[VCFReader:parseStringStream]: %s",e.toString());
 	    throw new VCFParseException(err);
 	 }
     }
@@ -293,18 +548,18 @@ public class VCFReader {
      * This method parses the entire VCF file by creating a Stream from the
      * file path passed to it and calling the method {@link #inputVCFStream}.
      * @param VCFfilePath complete path to a VCF file.
-     */
+    
      public void parseFile(String VCFfilePath) throws VCFParseException {
 	 this.file_path = VCFfilePath;
 	 File file = new File(this.file_path);
 	 this.base_filename = file.getName();
 	 try{
-		 in = new BufferedReader(new FileReader(this.file_path));
+	     in = new BufferedReader(new FileReader(this.file_path));
 	     if(!this.iterable){
 	    	 inputVCFStream();
 	    	 if(in != null)
-	    		 in.close();
-	     }else{
+		     in.close();
+	     } else {
 	    	 inputVCFheader();
 	     }
 	    	 
@@ -312,7 +567,7 @@ public class VCFReader {
 	    String err = String.format("[VCFReader:parseFile]: %s",e.toString());
 	    throw new VCFParseException(err);
 	 }
-     }
+     } */
 
     /**
      * Parse the entire VCF file. It places all header lines into the arraylist 
@@ -416,44 +671,43 @@ public class VCFReader {
      * @throws IOException
      * @throws VCFParseException
      */
-    private void inputVCFheader() throws IOException, VCFParseException {
-//    	String line;
+    public void inputVCFheader() throws IOException, VCFParseException {
+   	String line;
     	// The first line of a VCF file should include the VCF version number
     	// e.g., ##fileformat=VCFv4.0
-    	nextline = in.readLine();
-    	if (nextline == null) {
+    	line = in.readLine();
+    	if (line == null) {
     	    String err =
     		String.format("Error: First line of VCF file (%s) was null",
     				this.file_path);
     	    throw new VCFParseException(err);
     	}
-    	if (!nextline.startsWith("##fileformat=VCF")) {
+    	if (! line.startsWith("##fileformat=VCF")) {
     	    String err = "Error: First line of VCF file did not start with format:" + nextline;
     	    throw new VCFParseException(err);
     	} else {
-    	    this.firstVCFLine = nextline;
+    	    this.firstVCFLine = line;
     	}
-//    	String version = nextline.substring(16).trim();
-    		
-    	while ((nextline = in.readLine()) != null)   {
-    	    if (nextline.isEmpty()) continue;
-    	    if (nextline.startsWith("##")) {
-    		if (nextline.startsWith("##FORMAT")) {
-    		    this.formatLines.add(nextline);
-    		} else if (nextline.startsWith("##INFO")) {
-    		    this.infoLines.add(nextline);
-    		} else if (nextline.startsWith("##contig") || nextline.startsWith("##CONTIG")) {
-    		    this.contigLines.add(nextline);
+    	String version = line.substring(16).trim();
+	while ((line = in.readLine()) != null)   {
+    	    if (line.isEmpty()) continue;
+    	    if (line.startsWith("##")) {
+    		if (line.startsWith("##FORMAT")) {
+    		    this.formatLines.add(line);
+    		} else if (line.startsWith("##INFO")) {
+    		    this.infoLines.add(line);
+    		} else if (line.startsWith("##contig") || line.startsWith("##CONTIG")) {
+    		    this.contigLines.add(line);
     		} else {
-    		    vcf_header.add(nextline); 
+    		    vcf_header.add(line); 
     		}
     		continue; 
-    	    } else if (nextline.startsWith("#CHROM")) {
+    	    } else if (line.startsWith("#CHROM")) {
     		/* The CHROM line is the last line of the header and
     		  includes  the FORMAT AND sample names. */
     		try {
-    		    parse_chrom_line(nextline); 
-    		    vcf_header.add(nextline); 
+    		    parse_chrom_line(line); 
+    		    vcf_header.add(line); 
     		} catch (VCFParseException e) {
     		    String s = String.format("Error parsing #CHROM line: %s",e.toString());
     		    throw new VCFParseException(s);
@@ -473,7 +727,7 @@ public class VCFReader {
     	}
     	/* This tells VCFLine whether to expect single-sample or multiple-sample.*/
     	VCFLine.setGenotypeFactory(genofactory);
-
+	this.vcfHeaderIsInitialized=true;
     }
     
     /**  
@@ -481,7 +735,7 @@ public class VCFReader {
      * a additional {@link VCFLine} and therfore a {@link Variant}. 
      * When the last {@link VCFLine} was processed the bad chromosomes are recorded if 
      * there are any.
-     * @return
+     * @return true if another line is available to be returned by {@link #next}.
      */
     public boolean hasnext(){
     	if(nextline == null && this.unparsableChromosomes.size()>0)
@@ -498,47 +752,47 @@ public class VCFReader {
     	return next(false);
     }
     
-	/**
-	 * Return the next line, but first read the line that follows it.
-	 * If the next line is empty, the end of the file is reached and the Stream 
-	 * will be closed and {@link VCFLine}  
-	 * @param add if <code>true</code> than add the {@link VCFLine} to the list. 
-	 * @return {@link VCFLine} representation of the line in the VCF file
-	 */
+    /**
+     * Return the next line, but first read the line that follows it.
+     * If the next line is empty, the end of the file is reached and the Stream 
+     * will be closed and {@link VCFLine}  
+     * @param add if <code>true</code> than add the {@link VCFLine} to the list. 
+     * @return {@link VCFLine} representation of the line in the VCF file
+     */
     public VCFLine next(boolean add) {
-		VCFLine ln = null;
-//		Variant var;
-		try {
-			if(nextline != null){
-				nextline = in.readLine();
-				if (nextline == null) 
-		            in.close(); 
-				else{
-					ln = new VCFLine(nextline);
-					if(add && ln != null)
-					    variant_list.add(ln);
-					this.total_number_of_variants++;
-				}
-			}
-			
-		} catch (ChromosomeScaffoldException cse) {
-			this.unparsableChromosomes.add(cse.getMessage());
-			this.n_unparsable_chromosome_scaffold_variants++;
-			return ln;
-		} catch (VCFParseException e) {
-			/*
-			 * Note: Do not propagate these exceptions further, but merely
-			 * record what happened.
-			 */
-			this.unparsable_line_list.add(e + ": " + nextline);
-			System.err.println("Warning: Skipping unparsable line: \n\t" + nextline);
-			System.err.println("Exception: " + e.toString());
-			return ln;
-		} catch (IOException e) {
-//			e.printStackTrace();
-			return ln;
+	VCFLine ln = null;
+	//		Variant var;
+	try {
+	    if(nextline != null){
+		nextline = in.readLine();
+		if (nextline == null) 
+		    in.close(); 
+		else{
+		    ln = new VCFLine(nextline);
+		    if(add && ln != null)
+			variant_list.add(ln);
+		    this.total_number_of_variants++;
 		}
-		return ln;
+	    }
+	    
+	} catch (ChromosomeScaffoldException cse) {
+	    this.unparsableChromosomes.add(cse.getMessage());
+	    this.n_unparsable_chromosome_scaffold_variants++;
+	    return ln;
+	} catch (VCFParseException e) {
+	    /*
+	     * Note: Do not propagate these exceptions further, but merely
+	     * record what happened.
+	     */
+	    this.unparsable_line_list.add(e + ": " + nextline);
+	    System.err.println("Warning: Skipping unparsable line: \n\t" + nextline);
+	    System.err.println("Exception: " + e.toString());
+	    return ln;
+	} catch (IOException e) {
+	    //			e.printStackTrace();
+	    return ln;
+	}
+	return ln;
     }
 }
 /* eof */
