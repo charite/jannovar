@@ -14,11 +14,11 @@ import jannovar.exception.VCFParseException;
  * should be fixed in a future version of this class, but it occurs relatively
  * rarely in VCF files that are of interest to us.
  * @author Peter N Robinson
- * @version 0.07 (1 November, 2013)
+ * @version 0.08 (29 December, 2013)
  */
 public class SingleGenotypeFactory extends GenotypeFactoryA  {
-
-    private int UNINITIALIZED_INT = -10;
+    /** A flag that a value has not ben initialized. */
+    private static int UNINITIALIZED_INT = -10;
 
     /** 
      * This is the core method of the factory, and creates
@@ -29,7 +29,7 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
      * @param A an array with the fields of the VCF line.
      */
     public GenotypeCall createGenotype(String A[]) throws VCFParseException {
-	GenotypeCall gt = parse_genotype(A[8],A[9]);
+	GenotypeCall gt = parse_genotype(A[7],A[8],A[9]);
 	return gt;
     }
 
@@ -42,7 +42,7 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
      * @param format VCF FORMAT field, e.g., GT:PL:GQ	
      * @param sample VCF sample field, e.g., 1/1:21,9,0:17
      */
-    private GenotypeCall  parse_genotype(String format, String sample) throws VCFParseException {
+    private GenotypeCall  parse_genotype(String info, String format, String sample) throws VCFParseException {
 	
 	/* one of HOMOZYGOUS_REF,HOMOZYGOUS_VAR, HETEROZYGOUS or UNKNOWN */
 	Genotype call= Genotype.UNINITIALIZED;
@@ -97,6 +97,8 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
 		String err = "Could not parse genotype depth field: " + format +": Exception:\n\t" + e.toString();
 		throw new VCFParseException(err); 
 	    }
+	} else {
+	    genotype_depth = parseDepthFromInfo(info);
 	}
 
 	if (genotype_depth != UNINITIALIZED_INT) {
@@ -106,8 +108,33 @@ public class SingleGenotypeFactory extends GenotypeFactoryA  {
 	}
     }
 
+    /**
+     * In single-sample VCF files, the Read depth (DP) may be stored in the INFO field.
+     * We try to parse that here.  INFO fields are encoded as a semicolon-separated series of short keys.
+     * A typical INFO string might be "DP=20;VDB=0.0141;AF1=1;AC1=12;DP4=0"
+     */
+    //GENE=FGFR2;INHERITANCE=AD;MIM=101600
+    private int parseDepthFromInfo(String info) {
+	int i = info.indexOf("DP="); 
+	if (i<0)
+	    return UNINITIALIZED_INT; // Could not find it.
+	i += 3; // advance to after the "DP="
+	int j = info.indexOf(";",i);
+	Integer dp=null;
+	try {
+	    if (j<0) { // the DP could be the last subfield, then it is not terminated by semicolon
+		dp = Integer.parseInt(info.substring(i));
+	    } else {
+		dp = Integer.parseInt(info.substring(i,j));
+	    }
+	} catch (NumberFormatException e) {
+	    //e.printStackTrace();
+	    System.err.println("INOF=" + info);
+	    System.err.println("i=" + i);
+	    return UNINITIALIZED_INT;
+	}
+	return dp.intValue();
+    }
     
-
-
 }
 /* eof */

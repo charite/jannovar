@@ -40,8 +40,8 @@ public class VCFLineTest {
 
     @BeforeClass public static void setUp() throws IOException,VCFParseException
     {
-	reader = new VCFReader();
-	reader.parseFile(vcfPath);
+	reader = new VCFReader(vcfPath);
+	reader.parseFile();
 	VCFLineList = new ArrayList<VCFLine>();
 	FileInputStream fstream = new FileInputStream(vcfPath);
 	DataInputStream in = new DataInputStream(fstream);
@@ -192,8 +192,9 @@ public class VCFLineTest {
 
     @Test public void testQline2()  throws VCFParseException {
 	VCFLine line = new VCFLine(qLine2);
-	int q = line.getVariantQuality();
-	Assert.assertEquals(169,q);
+	float q = line.getVariantPhredScore();
+	float delta = 0.001f;
+	Assert.assertEquals(168.56,q,delta);
     }
 
 
@@ -204,8 +205,9 @@ public class VCFLineTest {
 
     @Test public void testQline3()  throws VCFParseException {
 	VCFLine line = new VCFLine(qLine3);
-	int q = line.getVariantQuality();
-	Assert.assertEquals(227,q);
+	float q = line.getVariantPhredScore();
+	float delta = 0.001f;
+	Assert.assertEquals(227.23,q,delta);
     }
 
 

@@ -88,7 +88,7 @@ import jannovar.reference.TranscriptModel;
  * test.vcf.jannovar (assuming the original file was named test.vcf).
  * The
  * @author Peter N Robinson
- * @version 0.32 (28 December, 2013)
+ * @version 0.33 (29 December, 2013)
  */
 public class Jannovar {
     /** Location of a directory that must contain the files
@@ -328,7 +328,7 @@ public class Jannovar {
 	String ref = v.get_ref();
 	String alt = v.get_alt();
 	String gtype = v.getGenotypeAsString();
-	float qual = v.get_variant_quality();
+	float qual = v.getVariantPhredScore();
 	Chromosome c = chromosomeMap.get(chr);
 	if (c==null) {
 	    String e = String.format("[Jannovar] Could not identify chromosome \"%d\"", chr );
@@ -362,7 +362,6 @@ public class Jannovar {
 	File f = new File(this.VCFfilePath);
 	String outname = f.getName(); 
 	int i = outname.lastIndexOf("vcf");
-	Iterator<VCFLine> iter = parser.getVCFLineIterator();
 	if (i<0) {
 	    i = outname.lastIndexOf("VCF");
 	}
@@ -376,10 +375,12 @@ public class Jannovar {
 	    BufferedWriter out = new BufferedWriter(fstream);
 	    /** Write the header of the new VCF file */
 	    ArrayList<String> lst = parser.getAnnotatedVCFHeader();
+
 	    for (String s: lst) {
 		out.write(s + "\n");
 	    }
 	    /** Now write each of the variants. */
+	    Iterator<VCFLine> iter = parser.getVCFLineIterator();
 	    while(iter.hasNext()){
 		VCFLine line = iter.next();
 		Variant v = line.toVariant();
@@ -452,6 +453,7 @@ public class Jannovar {
 	if (this.jannovarFormat) {
 	    outputJannovarFormatFile(parser);
 	} else {
+	    System.out.println("ABout to annotated VCF");
 	    outputAnnotatedVCF(parser);
 	}
     }

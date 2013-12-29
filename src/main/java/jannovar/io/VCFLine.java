@@ -22,7 +22,7 @@ import java.util.MissingFormatArgumentException;
  * </PRE>
 
  * <P>Note that for the VCF files we are interested in, there must be a FORMAT field.
- * @version 0.13 (25 December, 2013)
+ * @version 0.14 (29 December, 2013)
  * @author Peter N Robinson
  */
 public class VCFLine {
@@ -37,7 +37,7 @@ public class VCFLine {
     /** Alternate nucleotide/sequence */
     private String alt=null;
     /** The quality of the variant call, the QUAL column in the VCF file. */
-    private float variant_quality=0f;
+    private float phredScore;
    
     /** Factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall}
      * objects. Note that this is an abstract class that will be instantiated
@@ -75,7 +75,7 @@ public class VCFLine {
     /**
      * @return the Phred quality score for the variant call (cast to an integer)
      */
-    public int getVariantQuality() { return (int) this.variant_quality; }
+    public float getVariantPhredScore() { return this.phredScore; }
     
     /**
      * Calling this method causes the static variable {@link #storeVCFlines}
@@ -157,8 +157,7 @@ public class VCFLine {
 	    throw new VCFParseException("Could not parse alt field:\"" + alt + "\"\n" + line);
 	}
 	
-	this.variant_quality = parseVariantQuality(A[5]);
-	
+	this.phredScore = parseVariantQuality(A[5]);
 	this.chromosome = convertChromosomeStringToByteValue(A[0]);
 	try {
 	    Integer pos = Integer.parseInt(A[1]);
@@ -190,7 +189,8 @@ public class VCFLine {
 				this.get_position(),
 				this.get_reference_sequence(),
 				this.get_alternate_sequence(),
-				this.getGenotype());
+				this.getGenotype(),
+				this.getVariantPhredScore());
 	return v;
     }
 
@@ -204,23 +204,18 @@ public class VCFLine {
      * If no quality score is provided, then the VCF format specifies that
      * a period (".") be shown. In this case, the function returns 0.
      * @param q The PHRED quality score represented as a String
-     * @return the quality score parsed to the nearest integer.
+     * @return the PHRED quality score .
      */
-    private int parseVariantQuality(String q) throws NumberFormatException {
+    private float parseVariantQuality(String q) throws NumberFormatException {
 	if (q.equals("."))
-	    return 0;
-//	int pos = q.indexOf(".");
-	int qual;
-//	if (pos < 0) {
-//	    /* i.e., an Integer and not a float or lacking value */
-//	    qual = Integer.parseInt(q);
-//	}
-//	else { /* i.e., the quality is a number such as 55.16 */
+	    return 0f;
+	try {
 	    Float fQ = Float.parseFloat(q);
-	    float f = Math.round(fQ.floatValue());
-	    qual = (int) f;
-//	}
-	return qual;
+	    return fQ.floatValue();
+	} catch (NumberFormatException e) {
+	    System.err.println("[VCFLine] Warning: Unable to parse Phred score: \""+ q + "\"");
+	    return 0f;
+	}
     }
   
   

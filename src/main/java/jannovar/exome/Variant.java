@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.common.Constants;
+import jannovar.common.Genotype;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.genotype.GenotypeCall;
+import jannovar.reference.Chromosome;
 
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.25 (17 December, 2013)
+ * @version 0.26 (29 December, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
-    
-    
     /** chromosome; 23=X, 24=Y */
     private byte chromosome;
     /** position along chromosome; */
@@ -30,6 +30,8 @@ public class Variant implements Comparable<Variant>, Constants {
      * genotypes for for VCF files with multiple samples.
      */
     private GenotypeCall genotype=null;
+
+    private float Phred;
    
     /** {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from 
 	Jannovar-type annotation of this variant. */
@@ -44,15 +46,24 @@ public class Variant implements Comparable<Variant>, Constants {
      * @param gtype The Genotype call (single or multiple sample)
      * @param qual The PHRED quality of the variant call.
     */
-    public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype) {
+    public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, float qual) {
 	this.chromosome = c;
 	this.position=p;
 	this.ref = r;
 	this.alt = alternate;
 	this.genotype = gtype;
+	this.Phred = qual;
     }
 
-    
+    /**
+     * Create an annotation for this variant
+     * Client code needs to pass in the correct
+     * {@link exomizer.reference.Chromosome Chromosome} object.
+     * @param c The Chromosome object representing the location of the variant.
+     */
+    public void annotate(Chromosome c) throws AnnotationException {
+	this.annotList  = c.getAnnotationList(this.position,this.ref,this.alt);
+    }
    
 
     // ###########   SETTERS ######################### //
@@ -241,13 +252,13 @@ public class Variant implements Comparable<Variant>, Constants {
      * This function returns the quality of the first sample in the VCF file.
      * @return The PHRED quality of this variant call.
      */
-    public float get_variant_quality() { return this.genotype.getQualityInIndividualN(0); }
+    public float getVariantPhredScore() { return this.Phred; }
 
     /**
      * This function returns the quality of the first sample in the VCF file.
      * @return The PHRED quality of this variant call.
      */
-    public float get_variant_quality_individualN(int n) { return this.genotype.getQualityInIndividualN(n); }
+    public float getVariantGenotypeQualityIndividualN(int n) { return this.genotype.getQualityInIndividualN(n); }
 
     /**
      * @return the Read Depth (DP) of this variant (in first or only individual in VCF file)
@@ -288,6 +299,16 @@ public class Variant implements Comparable<Variant>, Constants {
      * @return the {@link jannovar.genotype.GenotypeCall GenotypeCall} object corresponding to this variant.
      */
     public GenotypeCall getGenotype() { return this.genotype; }
+
+    /**
+     * The Genotype coresponds to one of HOMOZYGOUS_REF (0/0), 
+     * HOMOZYGOUS_ALT (1/1), HETEROZYGOUS (0/1), 
+     * NOT_OBSERVED (./.), ERROR, UNINITIALIZED.
+     * @return the {@link jannovar.common.Genotype Genotype} object corresponding to this variant.
+     */
+    public Genotype getGenotypeInIndividualN(int n) {
+	return this.genotype.getGenotypeInIndividualN(n);
+    }
 
     /**
      * @return A string representing the genotype of this variant.

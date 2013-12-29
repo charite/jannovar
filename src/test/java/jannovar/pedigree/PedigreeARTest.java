@@ -64,12 +64,13 @@ public class PedigreeARTest {
     }
          
     private Variant constructGenotypeCall(Genotype... calls) {
+	float dummyPhred=100f;
 	ArrayList<Genotype> lst = new ArrayList<Genotype>();
 	for (Genotype g: calls) {
 	    lst.add(g);
 	}
 	GenotypeCall gc = new GenotypeCall(lst,null);
-	Variant v = new Variant ((byte)1, 1, "A", "C", gc); 
+	Variant v = new Variant ((byte)1, 1, "A", "C", gc,dummyPhred); 
 
         return v;
     }

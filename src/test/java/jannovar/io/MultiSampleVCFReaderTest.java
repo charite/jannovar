@@ -19,7 +19,10 @@ import org.junit.BeforeClass;
 import org.junit.AfterClass;
 import org.junit.Assert;
 
-
+/**
+ * @author peter robinson
+ * @version 0.2 December 29, 2013
+ */
 public class MultiSampleVCFReaderTest  {
 
     private static VCFReader reader = null;
@@ -32,8 +35,8 @@ public class MultiSampleVCFReaderTest  {
     {
 	java.net.URL url = MultiSampleVCFReaderTest.class.getResource("/MultiTestExome.vcf");
         String path = url.getPath();
-	reader = new VCFReader();
-        reader.parseFile(path);
+	reader = new VCFReader(path);
+        reader.parseFile();
         vcfList = reader.getVariantList();
         /*for (VCFLine v : vcfList){
             v.dump_VCF_line_for_debug();
@@ -75,7 +78,6 @@ public class MultiSampleVCFReaderTest  {
 
     @Test(expected =  IllegalArgumentException.class)   public void testVariant1genotypeBadIndex() {
         Variant line = this.vcfList.get(0);
-        //line.dump_VCF_line_for_debug();
         GenotypeCall gt = line.getGenotype();
         Genotype g = gt.getGenotypeInIndividualN(17);
         Assert.assertEquals(Genotype.NOT_OBSERVED, g);
@@ -83,8 +85,7 @@ public class MultiSampleVCFReaderTest  {
     
     @Test(expected =  IllegalArgumentException.class)   public void testVariant1genotypeBadIndex2() {
         Variant line = this.vcfList.get(0);
-        //line.dump_VCF_line_for_debug();
-        GenotypeCall gt = line.getGenotype();
+	GenotypeCall gt = line.getGenotype();
         Genotype g = gt.getGenotypeInIndividualN(-1);
         Assert.assertEquals(Genotype.NOT_OBSERVED, g);
     }
@@ -100,18 +101,19 @@ public class MultiSampleVCFReaderTest  {
     
     @Test public void testVariant2() 
 	{
-	   Variant line = this.vcfList.get(1); 
-	   Assert.assertEquals((byte)1,line.get_chromosome());
-            Assert.assertEquals(14930,line.get_position());
-            Assert.assertEquals("A",line.get_ref());
-            Assert.assertEquals("G",line.get_alt());
+	   Variant v = this.vcfList.get(1); 
+	   
+	   Assert.assertEquals((byte)1,v.get_chromosome());
+	   Assert.assertEquals(14930,v.get_position());
+	   Assert.assertEquals("A",v.get_ref());
+	   Assert.assertEquals("G",v.get_alt());
 	}
         
              
     @Test public void testVariant2genotype() {
-        Variant line = this.vcfList.get(1);
+        Variant v = this.vcfList.get(1);
         //line.dump_VCF_line_for_debug();
-        GenotypeCall gt = line.getGenotype();
+        GenotypeCall gt = v.getGenotype();
         //System.out.println(line.get_genotype_as_string());
         Assert.assertEquals(Genotype.HETEROZYGOUS, gt.getGenotypeInIndividualN(0));
         Assert.assertEquals(Genotype.HOMOZYGOUS_ALT, gt.getGenotypeInIndividualN(1));

@@ -10,16 +10,6 @@ import java.util.ArrayList;
 import jannovar.annotation.AnnotatedVariantFactory;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.Annotation;
-
-import jannovar.reference.TranscriptModel;
-
-import jannovar.reference.Translator;
-import jannovar.exception.AnnotationException;
-
-/** The following classes contain static functions used to calculate the 
-    annotations for certain classes of mutation. These functions are put into
-    separate classes just to keep things tidy and comprehensible in this class.
-*/
 import jannovar.annotation.DeletionAnnotation;
 import jannovar.annotation.InsertionAnnotation;
 import jannovar.annotation.IntergenicAnnotation;
@@ -29,8 +19,11 @@ import jannovar.annotation.BlockSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTRAnnotation;
 import jannovar.common.VariantType;
+import jannovar.exception.AnnotationException;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
+import jannovar.reference.TranscriptModel;
+import jannovar.reference.Translator;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.

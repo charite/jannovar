@@ -86,8 +86,8 @@ public class VCFReaderTest  {
       ps.close();
 
 
-      reader = new VCFReader();
-      reader.parseFile(tmp.getAbsolutePath());
+      reader = new VCFReader(tmp.getAbsolutePath());
+      reader.parseFile();
     }
 
      @AfterClass public static void releaseResources() { 
