@@ -14,7 +14,7 @@ import jannovar.reference.Chromosome;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.26 (29 December, 2013)
+ * @version 0.27 (31 December, 2013)
  */
 public class Variant implements Comparable<Variant>, Constants {
     /** chromosome; 23=X, 24=Y */
@@ -30,7 +30,7 @@ public class Variant implements Comparable<Variant>, Constants {
      * genotypes for for VCF files with multiple samples.
      */
     private GenotypeCall genotype=null;
-
+    /** The Quality score for the Variant call expressed as a Phred Score (QUAL column of the VCF file). */
     private float Phred;
    
     /** {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from 
@@ -56,7 +56,7 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
     /**
-     * Create an annotation for this variant
+     * Create an annotation for this variant.
      * Client code needs to pass in the correct
      * {@link exomizer.reference.Chromosome Chromosome} object.
      * @param c The Chromosome object representing the location of the variant.

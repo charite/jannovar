@@ -5,7 +5,7 @@ import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.Iterator;
 
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
@@ -18,13 +18,12 @@ import jannovar.genotype.GenotypeCall;
  * variants found in an exome being analyzed and to provide a method to
  * display these results as HTML or in a table.
  * @author Peter N Robinson
- * @version 0.12 (18 November,2013)
+ * @version 0.16 (29 December,2013)
  */
 
 public class VariantTypeCounter implements Constants {
-
-    private HashMap<VariantType,Integer> variantCountMap=null;
-
+      /** key is a VariantType (e.g., MISSENSE, UTR5) and value is the corresponding index
+       * in {@link #countMatrix}. */
     private HashMap<VariantType,Integer> variantTypeInd=null;
 
 
@@ -127,62 +126,58 @@ public class VariantTypeCounter implements Constants {
 	}
     }
 
-
-    /**
-     * This will write the summary of variants using as sample
-     * names "sample 1", "sample 2", etc.
+    /** This class implements an iterator over
+     * VariantType objects. The order is guaranteed to be
+     * the prioritized order as defined in the VariantType class
+     * of Jannovar. This is intended to be use by client code
+     * to get a list of VariantTypes in order that will allow
+     * HTML rows of variant counts, together with 
+     * {@link #getTypeSpecificCounts}.
      */
-    public void writeSummaryTable(Writer out) 
-	throws IOException, JannovarException
-    {
-	 ArrayList<String> lst = new ArrayList<String>();
-	 for (int i=0;i<this.n_persons;++i) {
-	     String s = String.format("sample %d",i+1);
-	     lst.add(s);
-	 }
-	 writeSummaryTable(lst,out);
-     }
-
-
-     public void writeSummaryTable(String sampleName, Writer out) 
-	 throws IOException, JannovarException 
-    {
-	 ArrayList<String> lst = new ArrayList<String>();
-	 lst.add(sampleName);
-	 writeSummaryTable(lst,out);
-     }
-
-    public void writeSummaryTable(ArrayList<String> sampleNames, Writer out) 
-	throws IOException, JannovarException 
-    {
-	int ncol = sampleNames.size();
-	if (ncol != this.n_persons) {
-	    String s = "Error: Attempt to write variant distribution table for " +
-		ncol + " samples but data was entered for " + this.n_persons + " persons";
-	    throw new JannovarException(s);
+    class VariantTypeIterator implements Iterator<VariantType> {
+	private int max;
+	private int i;
+	VariantType[] vta;
+	VariantTypeIterator()   {
+	    i=0;
+	    this.vta = VariantType.getPrioritySortedList();
+	    max = vta.length;
 	}
-	VariantType[] vta = VariantType.getPrioritySortedList();
-	out.write("<a name=\"Distribution\">\n"+
-		  "<h2>Distribution of Variant Types</h2>\n"+
-		  "</a>\n");
-	out.write("<table id=\"variantDistribution\">\n");
-	out.write("<thead><tr>\n");
-	out.write("<th>Variant Type</th>");
-	for (int i=0;i<ncol;i++) {
-	    out.write(String.format("<th>%s</th>",sampleNames.get(i)));
+	
+	@Override public boolean hasNext() {
+	    return (i<max);
 	}
-	out.write("</tr></thead>\n");
-	out.write("<tbody>\n");
-	for (int i=0;i<vta.length;++i) {
-	    out.write(String.format("<tr><td>%s</td>", VariantType.variantTypeAsString(vta[i])));
-	    for (int k=0;k<ncol;++k) {
-		out.write(String.format("<td>%d</td>",this.countMatrix[k][i]));
-	    }
-	    out.write("</tr>\n");
+
+	@Override public VariantType next(){
+	    VariantType vt = vta[i];
+	    i++;
+	    return vt;
 	}
-	out.write("</tbody>\n</table><p>&nbsp;</p>\n");
+
+	@Override public void remove() {
+	    throw new UnsupportedOperationException();
+	}
     }
 
+
+    public Iterator<VariantType> getVariantTypeIterator() {
+	return new VariantTypeIterator();
+    }
+
+    /**
+     * Returns the number of counts each person in the VCF file
+     * has for a specific VariantType (such as MISSENSE, or UTR3).
+     * The order of the entries is the same as the order of
+     * entries in the VCF file.
+     */
+    public ArrayList<Integer> getTypeSpecificCounts(VariantType vt) {
+	int idx =  this.variantTypeInd.get(vt);
+	ArrayList<Integer> cts = new ArrayList<Integer>();
+	for (int k=0;k<this.n_persons;++k) {
+	    cts.add(this.countMatrix[k][idx]);
+	}
+	return cts;
+    }
 }
 
 /* eof.*/

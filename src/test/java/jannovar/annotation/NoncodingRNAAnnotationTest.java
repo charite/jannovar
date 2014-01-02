@@ -172,7 +172,7 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("DQ658414(uc003lyl.4:exon2:n.316G>C),MIR146A(uc021yhe.1:exon1:n.60G>C)",annot);
+	    Assert.assertEquals("MIR146A(uc021yhe.1:exon1:n.60G>C),DQ658414(uc003lyl.4:exon2:n.316G>C)",annot);
 	}
 }
 
@@ -293,7 +293,7 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("mir-133b(uc002ktr.3:exon1:n.862G>A),mir-133b(uc002kts.3:exon1:n.724G>A)",annot);
+	    Assert.assertEquals("mir-133b(uc002kts.3:exon1:n.724G>A),mir-133b(uc002ktr.3:exon1:n.862G>A)",annot);
 	}
 }
     /**
@@ -315,7 +315,7 @@ public class NoncodingRNAAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.ncRNA_EXONIC,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("BX648489(uc031rsn.1:exon1:n.2233A>G),FAM182B(uc002wvd.1:exon4:n.431A>G),FAM182B(uc002wve.3:exon2:n.375A>G)",annot);
+	    Assert.assertEquals("FAM182B(uc002wve.3:exon2:n.375A>G),FAM182B(uc002wvd.1:exon4:n.431A>G),BX648489(uc031rsn.1:exon1:n.2233A>G)",annot);
 	}
 }
 

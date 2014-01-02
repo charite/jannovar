@@ -95,7 +95,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * objects depending on whether we have a single-sample or multiple-sample VCF file. Note that
  * these objects contain data on variant quality (GQ) and read depth (DP).
  * @author Peter Robinson, Marten Jäger
- * @version 0.26 (29 Dezember, 2013)
+ * @version 0.27 (29 Dezember, 2013)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -523,7 +523,6 @@ public class VCFReader {
      * @param VCFfilePath complete path to a VCF file.
      */
      public void parseFile() throws VCFParseException {
-	 File file = new File(this.file_path);
 	 try{
 	     if (! this.useExternalBufferedReader) {
 		 this.in = new BufferedReader(new FileReader(this.file_path));

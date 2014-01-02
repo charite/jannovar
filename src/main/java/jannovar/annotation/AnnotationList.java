@@ -22,7 +22,7 @@ import java.util.LinkedHashSet;
  * belong to the highest priority class by noting the class of the first annotation, and
  * not returning any annotation  of a lower priority level.
  * @author Peter N Robinson
- * @version 0.18 (17 August, 2013)
+ * @version 0.19 (31 December, 2013)
  */
 public class AnnotationList {
     /** A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated 
@@ -394,28 +394,19 @@ public class AnnotationList {
 
     /**
      * This function returns a String representing ncRNA annotations.  
+     * It basically just lists the annotations in order.
      * Note that this function assumes that there are no UTR annotations
      * (because these are priority). This should have been decided by the 
      * calling function.
      */
     private String getNoncodingRnaAnnotation(ArrayList<Annotation> lst) {
-	ArrayList<String> symbol_list = new ArrayList<String>();
-	HashSet<String> seen = new HashSet<String>();
-	for (Annotation a : lst) {
-	    if (! a.isNonCodingRNA())
-		continue;
-	    String s = a.getVariantAnnotation();
-	    if (seen.contains(s)) continue;
-	    seen.add(s);
-	    symbol_list.add(a.getSymbolAndAnnotation());
-	}
-	java.util.Collections.sort(symbol_list);
-	String s = symbol_list.get(0);
 	StringBuilder sb = new StringBuilder();
-	sb.append(s);
-	for (int i=1;i<symbol_list.size();++i) {
-	    sb.append("," + symbol_list.get(i));
+	boolean notfirst=false;
+	for (Annotation a: lst) {
+	    if (notfirst) { sb.append(",");} else notfirst=true;
+	    sb.append(a.getSymbolAndAnnotation());
 	}
+	    
 	return sb.toString();
     }
 

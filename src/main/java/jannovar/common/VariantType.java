@@ -13,7 +13,7 @@ package jannovar.common;
  * the document for the class
  * {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.14 (27 December, 2013)
+ * @version 0.16 (29 December, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -172,20 +172,27 @@ public enum  VariantType {
 	case SPLICING: return "splicing";
 	case STOPGAIN:return "stopgain";
 	case STOPLOSS: return "stoploss";
+	case NON_FS_DUPLICATION: return "nonframeshift duplication";  
+	case FS_DUPLICATION: return "frameshift duplication";  
+	case START_LOSS: return "start loss";
+	case START_GAIN: return "start gain";
 	case ncRNA_EXONIC: return "noncoding RNA exonic";
+	case ncRNA_INTRONIC:return "noncoding RNA intronic";
 	case ncRNA_SPLICING:return "noncoding RNA splicing";
 	case UTR3: return "UTR3";
 	case UTR5: return "UTR5";
 	case SYNONYMOUS: return "synonymous";
 	case INTRONIC: return "intronic";
-	case ncRNA_INTRONIC:return "noncoding RNA intronic";
+
 	case UPSTREAM:return "upstream";
 	case DOWNSTREAM:return "downstream";
 	case INTERGENIC:return "intergenic";
+	case ERROR: return "error";
 	default:
 	    return "unknown variant type (error)";
 	}
     }
+
     
     /** A static constant that returns the number of
      * different values in this enumeration.

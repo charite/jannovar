@@ -596,6 +596,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     }
     
     /**
+     * Returns the start positions of each of the exons of this transcript. Note
+     * that for genes on the minus strand, the order is "reversed" with respect
+     * to the exon counts of the transcript.
      * @return an integer array with all end positions of the exons of this knowngene
      */
     public int[] getExonEnds() {
@@ -603,7 +606,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     }
 
     /**
-     * @return an integer array with all start positions of the exons of this knowngene
+     * @return an integer array with all start positions of the exons of this transcript. Note
+     * that for genes on the minus strand, the order is "reversed" with respect
+     * to the exon counts of the transcript.
      */
     public int[] getExonStarts() {
 	return this.exonStarts;

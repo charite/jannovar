@@ -50,7 +50,6 @@ public class BlockSubAnnotationTest implements Constants {
     @BeforeClass 
 	public static void setUp() throws IOException, JannovarException {
 	ArrayList<TranscriptModel> kgList=null;
-	System.out.println(UCSCserializationTestFileName);
 	java.net.URL url = BlockSubAnnotationTest.class.getResource(UCSCserializationTestFileName);
 	String path = url.getPath();
 	SerializationManager manager = new SerializationManager();

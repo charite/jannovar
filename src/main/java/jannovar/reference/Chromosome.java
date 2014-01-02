@@ -13,6 +13,7 @@ import jannovar.annotation.Annotation;
 import jannovar.annotation.DeletionAnnotation;
 import jannovar.annotation.InsertionAnnotation;
 import jannovar.annotation.IntergenicAnnotation;
+import jannovar.annotation.IntronicAnnotation;
 import jannovar.annotation.NoncodingAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.BlockSubstitution;
@@ -43,7 +44,7 @@ import jannovar.reference.Translator;
  * Note that the {@link jannovar.interval.Interval Interval} objects in the
  * interval tree are defined by the transcription start and stop sites of the isoform.
  * @author Peter N Robinson
- * @version 0.29 (26 December, 2013)
+ * @version 0.29 (31 December, 2013)
  */
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
@@ -119,7 +120,7 @@ public class Chromosome {
      * the interval tree ({@link #itree}). and then annotated the variants accordingly.
      * If no hit is found in the tree, we identify the left and right neighbor and
      * annotate to intergenic, upstream or downstream
-     * @param position The start position of the variant on this chromosome
+     * @param position The start position of the variant on this chromosome (one-based numbering)
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
      * @return a list of {@link jannovar.annotation.Annotation Annotation} objects corresponding to the mutation described by the object 
@@ -344,14 +345,9 @@ public class Chromosome {
 		     * ----------------------------------------------------------------------- */
 		    Annotation ann = null;
 		    if (kgl.isCodingGene() ) {
-			/* For now, the INTRONIC annotation is just the gene symbol */
-			String annot = kgl.getAccessionNumber();
-			ann = new Annotation(kgl,annot, VariantType.INTRONIC);
-		
+			ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end);
 		    } else {
-			/* For now, the ncRNA_INTRONIC annotation is just the gene symbol */
-			String annot = kgl.getAccessionNumber();
-			ann = new Annotation(kgl,annot, VariantType.ncRNA_INTRONIC);
+			ann = IntronicAnnotation.createNcRNAIntronicAnnotation(kgl, k, start, end);
 		    }
 		    annovarFactory.addIntronicAnnotation(ann);
 		    return; /* Done with this annotation */
@@ -579,13 +575,9 @@ public class Chromosome {
 		    //System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 		     Annotation ann = null;
 		     if (kgl.isCodingGene() ) {
-			 /* For now, the INTRONIC annotation is just the gene symbol */
-			 String annot = kgl.getAccessionNumber();
-		     	ann = new Annotation(kgl,annot, VariantType.INTRONIC);
+			 ann = IntronicAnnotation.createIntronicAnnotation(kgl,k,start, end);
 		     } else {
-			 /* For now, the ncRNA_INTRONIC annotation is just the gene symbol */
-			 String annot = kgl.getAccessionNumber();
-			 ann = new Annotation(kgl,annot, VariantType.ncRNA_INTRONIC);
+			 ann = IntronicAnnotation.createNcRNAIntronicAnnotation(kgl,k,start, end);
 		     }
 		     annovarFactory.addIntronicAnnotation(ann);
 		     return; /* done with this annotation. */
