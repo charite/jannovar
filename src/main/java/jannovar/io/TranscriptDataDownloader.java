@@ -16,13 +16,12 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ * This class is responsible for downloading the data files from UCSC, Ensembl, RefSeq.
+ * @version 0.2 (2 January 2014)
  * @author mjaeger
  * 
  */
 public class TranscriptDataDownloader implements Constants {
-
-//	private int source	= UCSC;
-
 	/** Path of directory to which the files will be downloaded. */
 	private String directory_path;
 
@@ -74,17 +73,16 @@ public class TranscriptDataDownloader implements Constants {
 		makeDirectoryIfNotExist();
 		switch (source) {
 		case UCSC:
-			downloadUCSCfiles(r);
-			break;
+		    downloadUCSCfiles(r);
+		    break;
 		case ENSEMBL:
-			downloadEnsemblFiles(r);
-			break;
+		    downloadEnsemblFiles(r);
+		    break;
 		case REFSEQ:
-			downloadRefseqFiles(r);
-			break;
-//			throw new FileDownloadException("RefSeq as source of transcript currently not implemented.");
+		    downloadRefseqFiles(r);
+		    break;
 		default:
-			throw new FileDownloadException("Unknown source of transcript annotation.");
+		    throw new FileDownloadException("Unknown source of transcript annotation.");
 		}
 	}
 
@@ -213,78 +211,83 @@ public class TranscriptDataDownloader implements Constants {
 		download_file(ucsc_ftp_base, known2locus);
 	}
 
-	/**
-	 * This function creates a new directory to store the downloaded UCSC files.
-	 * If the directory already exists, it just emits a warning and does
-	 * nothing.
-	 */
-	private void makeDirectoryIfNotExist() {
-		File directory = new File(this.directory_path);
-		if (directory.exists()) {
-			System.err.println(String.format("Cowardly refusing to create "
-					+ "directory \"%s\" since it already exists", this.directory_path));
-		} else {
-			directory.mkdir();
-		}
+    /**
+     * This function creates a new directory to store the downloaded UCSC files.
+     * If the directory already exists, it just emits a warning and does
+     * nothing.
+     */
+    private void makeDirectoryIfNotExist() {
+	File directory = new File(this.directory_path);
+	/* first make data directory. This is the top directory that the subdirectories
+	   hg18, hg19, mm9, mm10 etc go into.*/
+	File data = new File("data");
+	if (! data.exists())
+	    data.mkdir();
+	if (directory.exists()) {
+	    System.err.println(String.format("Cowardly refusing to create "
+					     + "directory \"%s\" since it already exists", this.directory_path));
+	} else {
+	    directory.mkdir();
 	}
+    }
 
 	/**
 	 * This method downloads a file to the specified local file path. If the
 	 * file already exists, it emits a warning message and does nothing.
 	 */
 	public boolean download_file(String baseURL, String fname) throws FileDownloadException {
-
-		String urlstring = baseURL + fname;
-		String local_file_path = this.directory_path + fname;
-		File f = new File(local_file_path);
-		if (f.exists()) {
-			System.err.println(String.format(
-					"Timorously refusing to download " + "file \"%s\" since it already exists", local_file_path));
-			return false;
-
+	    
+	    String urlstring = baseURL + fname;
+	    String local_file_path = this.directory_path + fname;
+	    File f = new File(local_file_path);
+	    if (f.exists()) {
+		System.err.println(String.format(
+						 "Timorously refusing to download " + "file \"%s\" since it already exists", local_file_path));
+		return false;
+		
+	    }
+	    //System.err.println("Downloading: \"" + urlstring + "\"");
+	    //System.out.println("File " + local_file_path);
+	    //System.out.println("proxy: " + System.getProperty("http.proxyHost"));
+	    //System.out.println("port: " + System.getProperty("http.proxyPort"));
+	    int threshold = 0;
+	    int block = 250000;
+	    try {
+		URL url = new URL(urlstring);
+		URLConnection urlc = url.openConnection();
+		InputStream reader = urlc.getInputStream();
+		FileOutputStream writer = new FileOutputStream(local_file_path);
+		byte[] buffer = new byte[153600];
+		int totalBytesRead = 0;
+		int bytesRead = 0;
+		int size = urlc.getContentLength();
+		if (size >= 0)
+		    block = size / 20;
+		System.err.println("0%       50%      100%");
+		while ((bytesRead = reader.read(buffer)) > 0) {
+		    writer.write(buffer, 0, bytesRead);
+		    buffer = new byte[153600];
+		    totalBytesRead += bytesRead;
+		    if (totalBytesRead > threshold) {
+			System.err.print("=");
+			threshold += block;
+			// block += 250000; /* reduce number of progress bars for
+			// big files. */
+		    }
 		}
-		System.err.println("Downloading: \"" + urlstring + "\"");
-		// System.out.println("File " + local_file_path);
-		// System.out.println("proxy: " + System.getProperty("http.proxyHost"));
-		// System.out.println("port: " + System.getProperty("http.proxyPort"));
-		int threshold = 0;
-		int block = 250000;
-		try {
-			URL url = new URL(urlstring);
-			URLConnection urlc = url.openConnection();
-			InputStream reader = urlc.getInputStream();
-			FileOutputStream writer = new FileOutputStream(local_file_path);
-			byte[] buffer = new byte[153600];
-			int totalBytesRead = 0;
-			int bytesRead = 0;
-			int size = urlc.getContentLength();
-			if (size >= 0)
-				block = size / 20;
-			System.err.println("0%       50%      100%");
-			while ((bytesRead = reader.read(buffer)) > 0) {
-				writer.write(buffer, 0, bytesRead);
-				buffer = new byte[153600];
-				totalBytesRead += bytesRead;
-				if (totalBytesRead > threshold) {
-					System.err.print("=");
-					threshold += block;
-					// block += 250000; /* reduce number of progress bars for
-					// big files. */
-				}
-			}
-			System.err.println();
-			System.err.println("Done. " + (new Integer(totalBytesRead).toString()) + "(" + size + ") bytes read.");
-			writer.close();
-			reader.close();
-		} catch (MalformedURLException e) {
-			String err = String.format("Could not interpret url: \"%s\"\n%s", urlstring, e.toString());
-			throw new FileDownloadException(err);
-		} catch (IOException e) {
-			String err = String.format("IO Exception reading from URL: \"%s\"\n%s", urlstring, e.toString());
-			throw new FileDownloadException(err);
-		}
-
-		return true;
+		System.err.println();
+		System.err.println("Done. " + (new Integer(totalBytesRead).toString()) + "(" + size + ") bytes read.");
+		writer.close();
+		reader.close();
+	    } catch (MalformedURLException e) {
+		String err = String.format("Could not interpret url: \"%s\"\n%s", urlstring, e.toString());
+		throw new FileDownloadException(err);
+	    } catch (IOException e) {
+		String err = String.format("IO Exception reading from URL: \"%s\"\n%s", urlstring, e.toString());
+		throw new FileDownloadException(err);
+	    }
+	    
+	    return true;
 	}
-
 }
+/* eof */
