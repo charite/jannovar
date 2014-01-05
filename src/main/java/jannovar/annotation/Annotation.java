@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.29 (27 December, 2013)
+ * @version 0.31 (6 January, 2014)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -134,6 +134,25 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	if (geneSymbol==null && variantAnnotation != null)
 	    return variantAnnotation;
 	return String.format("%s(%s)",geneSymbol,variantAnnotation);
+    }
+
+    /**
+     * This method returns the accession number of the
+     * transcript associated with this variant (if possible).
+     * If there is no transcript, e.g., for DOWNSTREAM annotations,
+     * then it returns the geneSymbol (if possible). If there is
+     * no gene symbol (e.g., for INTERGENIC annotations), it returns "."
+     */
+    public String getAccessionNumber() {
+	if (this.variantAnnotation == null) return ".";
+	int i = this.variantAnnotation.indexOf(":");
+	if (i>0) {
+	    return this.variantAnnotation.substring(0,i);
+	}
+	if (this.geneSymbol==null)
+	    return ".";
+	else
+	    return this.geneSymbol;
     }
 
 
