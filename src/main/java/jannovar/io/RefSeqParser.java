@@ -69,11 +69,11 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
 
     public void downloadFiles() throws JannovarException {
 	makeDirectoryIfNotExist();
-	String refFlatCompressed = String.format("%s.gz",this.refFlat);
+	String refFlatCompressed = String.format("%s.gz",RefSeqParser.refFlat);
 	//String knownGeneMrna = String.format("%s.gz",Constants.knownGeneMrna);
 	//String kgXref = String.format("%s.gz",Constants.kgXref);
 	//String known2locus = String.format("%s.gz",Constants.known2locus);
-	download_file(this.hg19base, refFlatCompressed);
+	download_file(RefSeqParser.hg19base, refFlatCompressed);
 	
 
 

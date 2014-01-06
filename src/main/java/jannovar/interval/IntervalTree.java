@@ -58,6 +58,10 @@ import java.util.Comparator;
  * @version 0.12 (13 June, 2013)
  */
 public class IntervalTree<T> implements java.io.Serializable {
+    /** A version numberused during deserialization to verify that 
+     * the sender and receiver of a serialized object have loaded 
+     * classes for that object that are compatible with respect to serialization. */
+    private static final long serialVersionUID = 1L;
     /** The root node of the entire interval tree. */
     private Node<T> root;
     /** All intervals of the entire tree (pointers to these intervals are
@@ -103,10 +107,10 @@ public class IntervalTree<T> implements java.io.Serializable {
      */
     private void initializeComparators() {
 	if (this.leftcomp == null){
-	    this.leftcomp = new LeftComparator();
+	    this.leftcomp = new LeftComparator<T>();
 	}
 	if (this.rightcomp == null) {
-	    this.rightcomp = new RightComparator();
+	    this.rightcomp = new RightComparator<T>();
 	}
 	Node.setLeftComparator(leftcomp);
 	Node.setRightComparator(rightcomp);
@@ -253,7 +257,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		    Interval<T> item = n.getLeftmostItem();
 		    switchRightNeighborIfBetter(item,x);
 		} else {
-		    Node rd = n.getLeftmostDescendentOfRightChild();
+		    Node<T> rd = n.getLeftmostDescendentOfRightChild();
 		    Interval<T> item = rd.getLeftmostItem();  
 		    switchRightNeighborIfBetter(item,x);
 		}
@@ -268,7 +272,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		    /* If the current node has no intervals on its own, then it
 		       is possible that its right child has a better right neighbor than the current
 		       right neighbor. */
-		    Node rd = n.getRightmostDescendentOfLeftChild();
+		    Node<T> rd = n.getRightmostDescendentOfLeftChild();
 		    Interval<T> item = rd.getRightmostItem();  
 		    switchLeftNeighborIfBetter(item,x);
 		}

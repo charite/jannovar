@@ -19,12 +19,10 @@ import java.util.List;
  * stores the same intervals sorted by their right end points (highpoint).
  *
  * @see jannovar.interval.IntervalTree
- * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.06 (8 June, 2013)
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
+ * @version 0.07 (8 January, 2014)
  */
-
-// public class Node<T extends Comparable<T>>  {
-public class Node<T>  {
+public class Node<T>   {
     /** Median of all intervals in this node */
     private int median;
     /** node containing the intervals completely to the left of the median. */ 
@@ -277,21 +275,20 @@ public class Node<T>  {
 	for (Interval<T> i: leftorder) { System.out.println(indent + "##(leftorder):" + i); }
 	for (Interval<T> i: rightorder) { System.out.println(indent + "##(rightorder):" + i); }
 	System.out.println();
-	Node l = getLeft();
+	Node<T> l = getLeft();
 	if (l==null) { 
 	    System.out.print(indent);
 	    System.out.println("-:Left=null");
 	} else {
 	    l.debugPrint("L",level+1);
 	}
-	Node r = getRight();
+	Node<T> r = getRight();
 	if (r==null) { 
 	    System.out.print(indent);
 	    System.out.println("-:Right=null");
 	} else {
 	    r.debugPrint("R",level+1);
-	}
-	
+	}	
     }
 
 

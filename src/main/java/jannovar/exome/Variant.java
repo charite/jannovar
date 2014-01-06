@@ -14,7 +14,7 @@ import jannovar.reference.Chromosome;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.27 (31 December, 2013)
+ * @version 0.28 (3 January, 2014)
  */
 public class Variant implements Comparable<Variant>, Constants {
     /** chromosome; 23=X, 24=Y */
@@ -361,9 +361,26 @@ public class Variant implements Comparable<Variant>, Constants {
 		return this.annotList.getVariantAnnotation();
 	     else return ".";
 	} catch (AnnotationException e) {
-	    return ".";
+	    return "error retrieving annotation";
 	}
     }
+
+    /**
+     * This function returns an annotation for a single transcript
+     * affected by the variant, returning the variant annotation being ranked
+     * with the highest priority. In contrast, the function
+     * {@link #getAnnotation} returns a summarized version of annotations of
+     * all transcripts.
+     * @return a representative annotation of one transcript.
+     */
+    public String getRepresentativeAnnotation() {
+	try { 
+	    return this.annotList.getSingleTranscriptAnnotation();
+	} catch (AnnotationException e) {
+	    return "error retrieving annotation";
+	}
+    }
+
 
     /**
      * This function returns a list of all of the 

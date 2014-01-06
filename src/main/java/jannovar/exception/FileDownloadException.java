@@ -9,19 +9,19 @@ package jannovar.exception;
  * @version 0.1 (2013-07-11)
  */
 public class FileDownloadException extends JannovarException {
-
-	/**
-	 * 
-	 */
-	public FileDownloadException() {
-		super("Unknown Exception while downloading trranscript annotation files");
-	}
-
-	/**
-	 * @param msg
-	 */
-	public FileDownloadException(String msg) {
-		super(msg);
-	}
+    private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    public FileDownloadException() {
+	super("Exception while downloading transcript annotation files");
+    }
+    
+    /**
+     * @param msg
+     */
+    public FileDownloadException(String msg) {
+	super(msg);
+    }
 
 }

@@ -114,10 +114,7 @@ public class AnnotationList {
 	    throw new AnnotationException(e);
 	}
 	Annotation a = this.annotationList.get(0);
-	if (a.getVariantType() ==  VariantType.INTRONIC)
-	    return a.getVariantAnnotation();
-	else
-	    return a.getSymbolAndAnnotation();
+	return a.getSymbolAndAnnotation();
     }
 
     /**
