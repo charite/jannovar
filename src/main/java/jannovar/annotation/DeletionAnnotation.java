@@ -19,7 +19,7 @@ import jannovar.exception.AnnotationException;
  * one-based numbering here).
  * This particular deletion corresponds to  NM_001127179(MYO7A_v001):c.3515_3536del
  * NM_001127179(MYO7A_i001):p.(Gly1172Glufs*34).
- * @version 0.14 (28 December, 2013)
+ * @version 0.15 (14 January, 2014)
  * @author Peter N Robinson
  */
 
@@ -45,33 +45,46 @@ public class DeletionAnnotation {
     {
 	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
-	// deletedNT is the first deleted nucleotide
-	char deletedNT=' ';
 	// varnt3 is the codon affected by the deletion, it is the codon that
 	// results from the deletion at the same position in the aa as the wt codon was.
 	String varnt3=null;
+	int posVariantInCDS = refvarstart-kgl.getRefCDSStart(); /* position of deletion within coding sequence */
+	int aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
+	/*System.out.println(kgl.getGeneSymbol() + "(" + kgl.getAccessionNumber() + ") " +
+			   " frame_s=" + frame_s + "; wtnt3=" + wtnt3 + "; wtnt3_after=" + wtnt3_after
+			   + "; ref=" + ref + ";  alt="+var + "; refvarstart=  "+refvarstart); */
+			   
+	/* Note that in some pathological cases, wtnt3_after is null. This is the case with
+	 * chr11	64366391	.	TG	T, which affects multiple transcripts of
+	 * the SLC22A12 gene including uc009ypr.1. The deletion of a G affects a sequence TGC-TG
+	 * where the transcript ends abruptly with the 2 nucleotide partial transcript TG, so that
+	 * wtnt3=TGC and wtnt3_after=null. In cases like this, we will just return the nucleotide
+	 * deletion and not attempt to translate to protein. */
+	if (wtnt3_after==null || wtnt3_after.length()<3) {
+	    String canno = String.format("c.%ddel%s",(refvarstart-kgl.getRefCDSStart()+1),ref);
+	    Annotation ann = new Annotation(kgl,canno,VariantType.FS_DELETION,posVariantInCDS);
+	    return ann;
+	}
+
 	if (frame_s == 1) {
-	    deletedNT = wtnt3.charAt(1);
 	    varnt3 = String.format("%c%c%s",wtnt3.charAt(0), wtnt3.charAt(2),wtnt3_after.charAt(0));
 	} else if (frame_s == 2) {
-	    deletedNT = wtnt3.charAt(2);
 	    varnt3 = String.format("%c%c%s",wtnt3.charAt(0), wtnt3.charAt(1),wtnt3_after.charAt(0));
 	} else {
-	    deletedNT = wtnt3.charAt(0);
 	    varnt3 = String.format("%c%c%s",wtnt3.charAt(1), wtnt3.charAt(2),wtnt3_after.charAt(0));
 	}
+
 	String wtaa = translator.translateDNA(wtnt3);
 	String varaa = translator.translateDNA(varnt3);
-	int posVariantInCDS = refvarstart-kgl.getRefCDSStart();
-	int aavarpos = (int)Math.floor(posVariantInCDS/3)+1;
+
 	
 	/* The following gives us the cDNA annotation */
-	String canno = String.format("c.%ddel%c",(refvarstart-kgl.getRefCDSStart()+1),deletedNT);
+	String canno = String.format("c.%ddel%s",(refvarstart-kgl.getRefCDSStart()+1),ref);
 	/* Now create amino-acid annotation */
 	if (wtaa.equals("*")) { /* mutation on stop codon */ 
 	    if (varaa.startsWith("*")) { /* #stop codon is still stop codon 	if ($varaa =~ m/\* /)   */
 		String nfsdel_ann = String.format("%s:exon%d:%s:p.X%dX",kgl.getName(),
-						     exonNumber,canno,aavarpos);
+						  exonNumber,canno,aavarpos);
 		Annotation ann= new Annotation(kgl,nfsdel_ann,VariantType.NON_FS_DELETION,posVariantInCDS);
 		return ann;
 	    } else {	 /* stop codon is lost */
@@ -83,19 +96,17 @@ public class DeletionAnnotation {
 	} else {
 	    if (varaa.contains("*")) { /* new stop codon created */
 		String stopgain_ann = String.format("%s:exon%d:%s:p.%s%dX",kgl.getName(),
-						  exonNumber,canno,wtaa, aavarpos);
+						    exonNumber,canno,wtaa, aavarpos);
 		Annotation ann = new Annotation(kgl,stopgain_ann,VariantType.STOPGAIN,posVariantInCDS);
 		return ann;
 	    } else {
 		/* A deletion affecting an amino-acid in the middle of the protein and leading to a frameshift */
 		String fsdel_ann = String.format("%s:exon%d:%s:p.%s%dfs",kgl.getName(),
-						  exonNumber,canno,wtaa,aavarpos);
+						 exonNumber,canno,wtaa,aavarpos);
 		Annotation ann = new Annotation(kgl, fsdel_ann,VariantType.FS_DELETION,posVariantInCDS);
-	
 		return ann;
 	    }
 	}
-
     }
 
 
