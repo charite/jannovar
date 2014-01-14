@@ -19,7 +19,7 @@ import jannovar.exception.AnnotationException;
  * one-based numbering here).
  * This particular deletion corresponds to  NM_001127179(MYO7A_v001):c.3515_3536del
  * NM_001127179(MYO7A_i001):p.(Gly1172Glufs*34).
- * @version 0.15 (14 January, 2014)
+ * @version 0.16 (14 January, 2014)
  * @author Peter N Robinson
  */
 
@@ -48,7 +48,7 @@ public class DeletionAnnotation {
 	// varnt3 is the codon affected by the deletion, it is the codon that
 	// results from the deletion at the same position in the aa as the wt codon was.
 	String varnt3=null;
-	int posVariantInCDS = refvarstart-kgl.getRefCDSStart(); /* position of deletion within coding sequence */
+	int posVariantInCDS = refvarstart-kgl.getRefCDSStart()+1; /* position of deletion within coding sequence */
 	int aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
 	/*System.out.println(kgl.getGeneSymbol() + "(" + kgl.getAccessionNumber() + ") " +
 			   " frame_s=" + frame_s + "; wtnt3=" + wtnt3 + "; wtnt3_after=" + wtnt3_after
@@ -61,7 +61,8 @@ public class DeletionAnnotation {
 	 * wtnt3=TGC and wtnt3_after=null. In cases like this, we will just return the nucleotide
 	 * deletion and not attempt to translate to protein. */
 	if (wtnt3_after==null || wtnt3_after.length()<3) {
-	    String canno = String.format("c.%ddel%s",(refvarstart-kgl.getRefCDSStart()+1),ref);
+	    String canno = String.format("%s:exon%d:c.%ddel%s",kgl.getName(),
+					 exonNumber,posVariantInCDS,ref);
 	    Annotation ann = new Annotation(kgl,canno,VariantType.FS_DELETION,posVariantInCDS);
 	    return ann;
 	}
@@ -76,10 +77,9 @@ public class DeletionAnnotation {
 
 	String wtaa = translator.translateDNA(wtnt3);
 	String varaa = translator.translateDNA(varnt3);
-
 	
 	/* The following gives us the cDNA annotation */
-	String canno = String.format("c.%ddel%s",(refvarstart-kgl.getRefCDSStart()+1),ref);
+	String canno = String.format("c.%ddel%s",posVariantInCDS,ref);
 	/* Now create amino-acid annotation */
 	if (wtaa.equals("*")) { /* mutation on stop codon */ 
 	    if (varaa.startsWith("*")) { /* #stop codon is still stop codon 	if ($varaa =~ m/\* /)   */
