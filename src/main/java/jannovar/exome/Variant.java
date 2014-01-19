@@ -14,7 +14,7 @@ import jannovar.reference.Chromosome;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.28 (3 January, 2014)
+ * @version 0.29 (18 January, 2014)
  */
 public class Variant implements Comparable<Variant>, Constants {
     /** chromosome; 23=X, 24=Y */
@@ -413,6 +413,9 @@ public class Variant implements Comparable<Variant>, Constants {
 	return A;
     }
 
+    /**
+     * @return A list of all annotations for this variant, in the form GeneSymbol(annotation)
+     */
     public ArrayList<String> getAnnotationListWithGeneSymbol() {
 	if (this.annotList == null) {
 	    ArrayList<String> A = new ArrayList<String>();
@@ -428,6 +431,31 @@ public class Variant implements Comparable<Variant>, Constants {
 	}
 	return A;
     }
+
+    /**
+     * Returns a list of annotations for this variant together with their type.
+     * @return A list of all annotations for this variant, in the form type|annotation
+     */
+    public ArrayList<String> getAnnotationListWithAnnotationClass() {
+	if (this.annotList == null) {
+	    ArrayList<String> A = new ArrayList<String>();
+	    A.add(".");
+	    return A;
+	}
+	ArrayList<Annotation> alist = this.annotList.getAnnotationList();
+	ArrayList<String> A = new ArrayList<String>();
+	for (Annotation ann : alist) {
+	    String s = ann.getVariantAnnotation();
+	    String typ = ann.getVariantTypeAsString();
+	    A.add(String.format("%s|%s",typ,s));
+	}
+	return A;
+    }
+
+
+
+
+
 
     /**
      * This method combines the fields of the String array s using
