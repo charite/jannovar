@@ -145,6 +145,8 @@ public class Jannovar {
     
     /** genome release for the download and the creation of the serialized transcript model file */
 	private Release genomeRelease	= Release.HG19;
+	/** Output folder for the annotated VCF files (default: current folder) */ 
+	private String outVCFfolder = null;
 
     public static void main(String argv[]) {
 	Jannovar anno = new Jannovar(argv);
@@ -205,8 +207,10 @@ public class Jannovar {
     /** The constructor parses the command-line arguments. */
     public Jannovar(String argv[]){
 	parseCommandLineArguments(argv);
-	if(!this.dirPath.endsWith("/"))
-		this.dirPath += "/";
+	if(!this.dirPath.endsWith(System.getProperty("file.separator")))
+		this.dirPath += System.getProperty("file.separator");
+	if(this.outVCFfolder != null && !this.outVCFfolder.endsWith(System.getProperty("file.separator")))
+		this.outVCFfolder += System.getProperty("file.separator");	
     }
 
 
@@ -361,6 +365,8 @@ public class Jannovar {
     {
 	File f = new File(this.VCFfilePath);
 	String outname = f.getName(); 
+	if(outVCFfolder != null)
+		outname = outVCFfolder + outname;
 	int i = outname.lastIndexOf("vcf");
 	if (i<0) {
 	    i = outname.lastIndexOf("VCF");
@@ -453,7 +459,7 @@ public class Jannovar {
 	if (this.jannovarFormat) {
 	    outputJannovarFormatFile(parser);
 	} else {
-	    System.out.println("ABout to annotated VCF");
+	    System.out.println("About to annotated VCF");
 	    outputAnnotatedVCF(parser);
 	}
     }
@@ -650,6 +656,7 @@ public class Jannovar {
 	    options.addOption(new Option("S","serialize",false,"Serialize"));
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
 	    options.addOption(new Option("d","data",true,"Path to data storage folder (genome files, serialized files, ...)"));
+	    options.addOption(new Option("o","output",true,"Path to output folder for the annotaed VCF file"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new Option("g","genome",true,"genome build (mm9, mm10, hg18, hg19), default hg19"));
@@ -717,6 +724,12 @@ public class Jannovar {
 	    }
 //	    this.dirPath += genomeRelease.getUCSCString(genomeRelease);
 	    	
+	    if(cmd.hasOption('o')){
+	    	outVCFfolder = cmd.getOptionValue('o');
+	    	File file	= new File(outVCFfolder);
+	    	if(!file.exists())
+	    		file.mkdirs();
+	    }
 
 	    if (cmd.hasOption('S')) {
 		this.performSerialization = true;
