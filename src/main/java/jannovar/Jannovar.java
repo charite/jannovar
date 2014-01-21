@@ -289,12 +289,18 @@ public class Jannovar {
 	int pos = v.get_position();
 	String ref = v.get_ref();
 	String alt = v.get_alt();
+	if(alt.charAt(0) == '[' || alt.charAt(0) == ']'){
+		out.write(line.getOriginalVCFLine()+"\n");
+	}else{
+	
 	Chromosome c = chromosomeMap.get(chr);
 	if (c==null) {
 	    String e = String.format("[Jannovar] Could not identify chromosome \"%d\"", chr );
 	    throw new AnnotationException(e);	
 	} 
+	System.out.println("before annot");
 	AnnotationList anno = c.getAnnotationList(pos,ref,alt);
+	System.out.println("after annot");
 	if (anno==null) {
 	    String e = String.format("[Jannovar] No annotations found for variant %s", v.toString());
 	    throw new AnnotationException(e);	
@@ -316,6 +322,7 @@ public class Jannovar {
 	for (int i=8;i<A.length;++i)
 	     out.write(A[i] + "\t");
 	out.write("\n");
+    }
     }
 
     /**
@@ -390,6 +397,7 @@ public class Jannovar {
 	    while(iter.hasNext()){
 		VCFLine line = iter.next();
 		Variant v = line.toVariant();
+		System.out.println(String.format("Ref: %s\tAlt: %s", v.get_ref(), v.get_alt()));
 	    	try {
 		    annotateVCFLine(line,v,out);
 		} catch (AnnotationException e) {
@@ -459,7 +467,7 @@ public class Jannovar {
 	if (this.jannovarFormat) {
 	    outputJannovarFormatFile(parser);
 	} else {
-	    System.out.println("About to annotated VCF");
+	    System.out.println("About to annotate VCF");
 	    outputAnnotatedVCF(parser);
 	}
     }
