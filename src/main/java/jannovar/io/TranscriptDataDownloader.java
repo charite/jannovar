@@ -27,16 +27,16 @@ public class TranscriptDataDownloader implements Constants {
 
 	/**
 	 * This constructor sets the location of the directory into which the transcript 
-	 * annotation data will be downloaded.
-	 * 
+	 * annotation data will be downloaded.<br>
+	 * Creates the folder if it still not exists.
 	 * @param dirpath
 	 *            Location of download directory.
 	 */
-	public TranscriptDataDownloader(String dirpath) {
-		if (!dirpath.endsWith("/")) {
-			dirpath = dirpath + "/"; // add trailing slash.
-		}
-		this.directory_path = dirpath;
+	public TranscriptDataDownloader(String dirPath) {
+		// add trailing slash.
+		if(!dirPath.endsWith(System.getProperty("file.separator")))
+			dirPath += System.getProperty("file.separator");
+		this.directory_path = dirPath;
 	}
 
 	/**
@@ -220,14 +220,14 @@ public class TranscriptDataDownloader implements Constants {
 	File directory = new File(this.directory_path);
 	/* first make data directory. This is the top directory that the subdirectories
 	   hg18, hg19, mm9, mm10 etc go into.*/
-	File data = new File("data");
-	if (! data.exists())
-	    data.mkdir();
+//	File data = new File("data");
+//	if (! data.exists())
+//	    data.mkdirs();
 	if (directory.exists()) {
 	    System.err.println(String.format("Cowardly refusing to create "
 					     + "directory \"%s\" since it already exists", this.directory_path));
 	} else {
-	    directory.mkdir();
+	    directory.mkdirs();
 	}
     }
 

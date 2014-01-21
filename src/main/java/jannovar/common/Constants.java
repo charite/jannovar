@@ -68,7 +68,7 @@ public interface Constants {
     public static final String refseq_gff_hg19		= "ref_GRCh37.p13_top_level.gff3.gz";
     public static final String refseq_gff_hg18		= "ref_NCBI36_top_level.gff3.gz";
     public static final String refseq_gff_mm9		= "ref_MGSCv37_top_level.gff3.gz";
-    public static final String refseq_gff_mm10		= "ref_GRCm38.p1_top_level.gff3.gz";
+    public static final String refseq_gff_mm10		= "ref_GRCm38.p2_top_level.gff3.gz";
     public static final String refseq_rna			= "rna.fa.gz";
     
     
@@ -149,6 +149,9 @@ public interface Constants {
 			}
     	}
     }
+    
+    /* DEFAUL */
+    public static final String DEFAULT_DATA	= "data/";
 
     /* TESTING */
     

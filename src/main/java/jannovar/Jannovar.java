@@ -91,11 +91,12 @@ import jannovar.reference.TranscriptModel;
  * @version 0.33 (29 December, 2013)
  */
 public class Jannovar {
-    /** Location of a directory that must contain the files
-     * knownGene.txt, kgXref.txt, knownGeneMrnafile knownGene.txt
-     * (the files may or may not be compressed with gzip. The same variable is
-     * also used to indicate the location of the download directory. The default value
-     * is "ucsc".*/
+    /** Location of a directory which will be used as download directory with subfolders 
+     * (by genome release e.g. hg19,mm9) in whichthe files
+     * defining the transcript models will be stored.
+     * (the files may or may not be compressed with gzip). 
+     * The same variable is also used to indicate the output location of the serialized file. The default value
+     * is "data/hg19/" */
     private String dirPath=null;
     /**
      * Flag to indicate that Jannovar should download known gene definitions files from the
@@ -203,7 +204,6 @@ public class Jannovar {
 
     /** The constructor parses the command-line arguments. */
     public Jannovar(String argv[]){
-	this.dirPath="data/"; /* default */
 	parseCommandLineArguments(argv);
 	if(!this.dirPath.endsWith("/"))
 		this.dirPath += "/";
@@ -241,9 +241,9 @@ public class Jannovar {
 	TranscriptDataDownloader downloader = null;
 	try {
 	    if (this.proxy != null && this.proxyPort != null) {
-		downloader = new TranscriptDataDownloader(this.dirPath,this.proxy,this.proxyPort);
+		downloader = new TranscriptDataDownloader(this.dirPath+genomeRelease.getUCSCString(genomeRelease),this.proxy,this.proxyPort);
 	    } else {
-		downloader = new TranscriptDataDownloader(this.dirPath);
+		downloader = new TranscriptDataDownloader(this.dirPath+genomeRelease.getUCSCString(genomeRelease));
 	    }
 	    downloader.downloadTranscriptFiles(source, rel);
 	} catch (FileDownloadException  e) {
@@ -467,7 +467,7 @@ public class Jannovar {
     public void serializeRefseqData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
     	System.out.println("[Jannovar] Serializing RefSeq data as " + String.format(Jannovar.RefseqSerializationFileName,genomeRelease.getUCSCString(genomeRelease)));
-    	manager.serializeKnownGeneList(String.format(Jannovar.RefseqSerializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
+    	manager.serializeKnownGeneList(String.format(dirPath+Jannovar.RefseqSerializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
     }
 
     /**
@@ -479,7 +479,7 @@ public class Jannovar {
     public void serializeEnsemblData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
     	System.out.println("[Jannovar] Serializing Ensembl data as " + String.format(Jannovar.EnsemblSerializationFileName,genomeRelease.getUCSCString(genomeRelease)));
-    	manager.serializeKnownGeneList(String.format(Jannovar.EnsemblSerializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
+    	manager.serializeKnownGeneList(String.format(dirPath+Jannovar.EnsemblSerializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
     }
 
      /**
@@ -491,7 +491,7 @@ public class Jannovar {
     public void serializeUCSCdata() throws JannovarException {
 	SerializationManager manager = new SerializationManager();
 	System.out.println("[Jannovar] Serializing known gene data as " + String.format(Jannovar.UCSCserializationFileName,genomeRelease.getUCSCString(genomeRelease)));
-	manager.serializeKnownGeneList(String.format(Jannovar.UCSCserializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
+	manager.serializeKnownGeneList(String.format(dirPath+Jannovar.UCSCserializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
     }
 
 
@@ -516,18 +516,21 @@ public class Jannovar {
     private void inputTranscriptModelDataFromRefseq() {
     	// parse GFF/GTF
 	GFFparser gff = new GFFparser();
+	String path = this.dirPath + genomeRelease.getUCSCString(genomeRelease);
+	if(!path.endsWith(System.getProperty("file.separator")))
+		path += System.getProperty("file.separator");
 	switch (this.genomeRelease) {
 	case MM9:
-		gff.parse(this.dirPath + Constants.refseq_gff_mm9);
+		gff.parse(path + Constants.refseq_gff_mm9);
 		break;
 	case MM10:
-		gff.parse(this.dirPath + Constants.refseq_gff_mm10);
+		gff.parse(path + Constants.refseq_gff_mm10);
 		break;
 	case HG18:
-		gff.parse(this.dirPath + Constants.refseq_gff_hg18);
+		gff.parse(path + Constants.refseq_gff_hg18);
 		break;
 	case HG19:
-		gff.parse(this.dirPath + Constants.refseq_gff_hg19);
+		gff.parse(path + Constants.refseq_gff_hg19);
 		break;
 	default:
 		System.err.println("Unknown release: "+genomeRelease);
@@ -542,7 +545,7 @@ public class Jannovar {
 	    System.exit(1);
 	}
 	// add sequences
-	FastaParser efp = new RefSeqFastaParser(this.dirPath+Constants.refseq_rna, transcriptModelList);
+	FastaParser efp = new RefSeqFastaParser(path+Constants.refseq_rna, transcriptModelList);
 	int before	= transcriptModelList.size();
 	transcriptModelList = efp.parse();
 	int after = transcriptModelList.size();
@@ -557,26 +560,29 @@ public class Jannovar {
 	// parse GFF/GTF
 
     	GFFparser gff = new GFFparser();
-    	String prefix	= null;
+    	String path	= null;
+    	path = this.dirPath + genomeRelease.getUCSCString(genomeRelease);
+    	if(!path.endsWith(System.getProperty("file.separator")))
+    		path += System.getProperty("file.separator");
     	switch (this.genomeRelease) {
     	case MM9:
-    		prefix = this.dirPath + Constants.ensembl_mm9;
+    		path += Constants.ensembl_mm9;
     		break;
     	case MM10:
-    		prefix = this.dirPath + Constants.ensembl_mm10;
+    		path += Constants.ensembl_mm10;
     		break;
     	case HG18:
-    		prefix = this.dirPath + Constants.ensembl_hg18;
+    		path += Constants.ensembl_hg18;
     		break;
     	case HG19:
-    		prefix = this.dirPath + Constants.ensembl_hg19;
+    		path += Constants.ensembl_hg19;
     		break;
     	default:
     		System.err.println("Unknown release: "+genomeRelease);
     		System.exit(20);
     		break;
     	}
-    	gff.parse(prefix + Constants.ensembl_gtf);
+    	gff.parse(path + Constants.ensembl_gtf);
 	try {
 	    this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
 	    System.out.println("TranscriptmodelList size: "+this.transcriptModelList.size());
@@ -586,7 +592,7 @@ public class Jannovar {
 	    System.exit(1);
 	}
 	// add sequences
-	EnsemblFastaParser efp = new EnsemblFastaParser(prefix+Constants.ensembl_cdna, transcriptModelList);
+	EnsemblFastaParser efp = new EnsemblFastaParser(path+Constants.ensembl_cdna, transcriptModelList);
 	int before	= transcriptModelList.size();
 	transcriptModelList = efp.parse();
 	int after = transcriptModelList.size();
@@ -601,7 +607,10 @@ public class Jannovar {
      * Input the four UCSC files for the KnownGene data.
      */
     private void inputTranscriptModelDataFromUCSCFiles() {
-	UCSCKGParser parser = new UCSCKGParser(this.dirPath);
+    	String path = this.dirPath+ genomeRelease.getUCSCString(genomeRelease);
+    	if(!path.endsWith(System.getProperty("file.separator")))
+    		path += System.getProperty("file.separator");
+	UCSCKGParser parser = new UCSCKGParser(path);
 	try{
 	    parser.parseUCSCFiles();
 	} catch (Exception e) {
@@ -640,6 +649,7 @@ public class Jannovar {
 	    options.addOption(new Option("U","nfsp",true,"Path to directory with UCSC files."));
 	    options.addOption(new Option("S","serialize",false,"Serialize"));
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
+	    options.addOption(new Option("d","data",true,"Path to data storage folder (genome files, serialized files, ...)"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new Option("g","genome",true,"genome build (mm9, mm10, hg18, hg19), default hg19"));
@@ -686,6 +696,14 @@ public class Jannovar {
 		this.createEnsembl = false;
 	    }
 	    
+		// path to the data storage
+		if(cmd.hasOption('d'))
+			this.dirPath = cmd.getOptionValue('d');
+		else
+			this.dirPath = Constants.DEFAULT_DATA;
+		if(!this.dirPath.endsWith(System.getProperty("file.separator")))
+			this.dirPath += System.getProperty("file.separator");
+	    
 	    if(cmd.hasOption("genome")){
 	    	String g = cmd.getOptionValue("genome");
 	    	if(g.equals("mm9")){this.genomeRelease = Release.MM9;}
@@ -697,7 +715,7 @@ public class Jannovar {
 	    		System.out.println("[Jannovar] genome release set to default: hg19");
 	    	this.genomeRelease = Release.HG19; 
 	    }
-	    this.dirPath += genomeRelease.getUCSCString(genomeRelease);
+//	    this.dirPath += genomeRelease.getUCSCString(genomeRelease);
 	    	
 
 	    if (cmd.hasOption('S')) {
