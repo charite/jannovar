@@ -649,9 +649,7 @@ public class Jannovar {
 
     
     /**
-     * Parse the command line. The important options are -n: path to the directory with the NSFP files,
-     * and -C a flag indicating that we want the program to delete the current table in the postgres
-     * database and to create an empty table (using JDBC connection).
+     * Parse the command line. 
      * @param args Copy of the command line arguments.
      */
     private void parseCommandLineArguments(String[] args)
@@ -660,11 +658,11 @@ public class Jannovar {
 	{
 	    Options options = new Options();
 	    options.addOption(new Option("h","help",false,"Shows this help"));
-	    options.addOption(new Option("U","nfsp",true,"Path to directory with UCSC files."));
+	    options.addOption(new Option("U","downloaded-data",true,"Path to directory with previously downloaded transcript definition files."));
 	    options.addOption(new Option("S","serialize",false,"Serialize"));
 	    options.addOption(new Option("D","deserialize",true,"Path to serialized file with UCSC data"));
-	    options.addOption(new Option("d","data",true,"Path to data storage folder (genome files, serialized files, ...)"));
-	    options.addOption(new Option("o","output",true,"Path to output folder for the annotaed VCF file"));
+	    options.addOption(new Option("d","data",true,"Path to write data storage folder (genome files, serialized files, ...)"));
+	    options.addOption(new Option("O","output",true,"Path to output folder for the annotated VCF file"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new Option("g","genome",true,"genome build (mm9, mm10, hg18, hg19), default hg19"));
@@ -730,7 +728,6 @@ public class Jannovar {
 	    		System.out.println("[Jannovar] genome release set to default: hg19");
 	    	this.genomeRelease = Release.HG19; 
 	    }
-//	    this.dirPath += genomeRelease.getUCSCString(genomeRelease);
 	    	
 	    if(cmd.hasOption('o')){
 	    	outVCFfolder = cmd.getOptionValue('o');
@@ -794,8 +791,8 @@ public class Jannovar {
 
     private static void usage() {
 	System.out.println("***   Jannovar: Usage     ****");
-	System.out.println("Use case 1: Download UCSC data and create transcript data file (ucsc.ser)");
-	System.out.println("$ java -jar Jannovar.jar --create-ucsc");
+	System.out.println("Use case 1: Download UCSC data and create transcript data file (ucsc_hg19.ser)");
+	System.out.println("$ java -jar Jannovar.jar --create-ucsc [-U name of output directory]");
 	System.out.println("Use case 2: Add annotations to a VCF file");
 	System.out.println("$ java -jar Jannovar.jar -D ucsc.ser -V example.vcf");
 	System.out.println("Use case 3: Write new file with Jannovar-format annotations of a VCF file");
