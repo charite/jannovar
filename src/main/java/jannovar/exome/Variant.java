@@ -14,7 +14,7 @@ import jannovar.reference.Chromosome;
 /** A class that is used to hold information about the individual variants 
  *  as parsed from the VCF file.
  * @author Peter Robinson
- * @version 0.29 (18 January, 2014)
+ * @version 0.31 (22 January, 2014)
  */
 public class Variant implements Comparable<Variant>, Constants {
     /** chromosome; 23=X, 24=Y */
@@ -248,6 +248,17 @@ public class Variant implements Comparable<Variant>, Constants {
      */
     public boolean is_X_chromosomal() { return this.chromosome == X_CHROMOSOME;  }
     
+     /**
+     * @return true if the variant is located on the Y chromosome.
+     */
+    public boolean is_Y_chromosomal() { return this.chromosome == Y_CHROMOSOME;  }
+      /**
+     * @return true if the variant is located on the mitochondrion.
+     */
+    public boolean is_mitochondrial() { return this.chromosome == M_CHROMOSOME;  }
+
+
+
     /**
      * This function returns the quality of the first sample in the VCF file.
      * @return The PHRED quality of this variant call.
