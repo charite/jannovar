@@ -143,7 +143,7 @@ public class VCFLine {
      * and has an additional field for every additional sample.
      * @param line A single line of a VCF file representing one variant
      */
-    private void parse_line(String line) throws VCFParseException {
+    private void parse_line(String line) throws ChromosomeScaffoldException,VCFParseException {
 	String A[] = line.split("\t");
 	if (A.length < 10) {
 	    throw new VCFParseException("Less than 10 fields in VCF line:" + line);
@@ -206,7 +206,7 @@ public class VCFLine {
      * @param q The PHRED quality score represented as a String
      * @return the PHRED quality score .
      */
-    private float parseVariantQuality(String q) throws NumberFormatException {
+    private float parseVariantQuality(String q)  {
 	if (q.equals("."))
 	    return 0f;
 	try {

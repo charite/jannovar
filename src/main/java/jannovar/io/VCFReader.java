@@ -95,7 +95,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * objects depending on whether we have a single-sample or multiple-sample VCF file. Note that
  * these objects contain data on variant quality (GQ) and read depth (DP).
  * @author Peter Robinson, Marten Jäger
- * @version 0.27 (29 Dezember, 2013)
+ * @version 0.28 (26 January, 2014)
  */
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
@@ -396,6 +396,10 @@ public class VCFReader {
 		    if (this.vcfline != null) {
 			return;
 		    }
+		} catch (ChromosomeScaffoldException e) {
+		    /* The variant was mapped to a non-standard chromosome scaffold. */
+		    unparsableChromosomes.add(e.getMessage());
+		    n_unparsable_chromosome_scaffold_variants++;
 		} catch (VCFParseException e) {
 		    VCFReader.this.unparsable_line_list.add(e + ": " + nextline);
 		    System.err.println("Warning: Skipping unparsable line: \n\t" + nextline);
@@ -719,7 +723,29 @@ public class VCFReader {
 	this.vcfHeaderIsInitialized=true;
     }
     
-   
+    /**
+     * Print some diagnostic warning messages to STDERR. For instance,
+     * print out the number of variants mapped to non-standard chromosome scaffolds
+     * and other parse errors.
+     */
+    public void printWarnings() {
+	if (this.n_unparsable_chromosome_scaffold_variants>0) {
+	    StringBuilder sb = new StringBuilder();
+	    boolean notfirst=false;
+	    for (String s : this.unparsableChromosomes) {
+		if (notfirst)
+		    sb.append("; ");
+		else
+		    notfirst=true;
+		sb.append(s);
+	    }
+	    System.err.println(String.format("[WARN] %d variants found (and skipped) on chromosome scaffolds: %s",
+					     this.n_unparsable_chromosome_scaffold_variants, sb.toString()));
+	}
+	for (String s: this.errorList) {
+	    System.err.println("[WARN] " + s);
+	}
+    }
     
 }
 /* eof */
