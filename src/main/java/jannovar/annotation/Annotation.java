@@ -25,7 +25,15 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	e.g., MISSENSE, 5UTR, etc. */
     private VariantType varType;
     /** The position of the variant in the ORF or mRNA, if applicable. This field is used to
-	sort exonic variants.*/
+     * sort exonic variants. Note that this variable is used differently for non-coding annotations,
+     *  in which case it will indicate the distance of the variant from the nearest exon in nucleotides.
+     * The variable is used by two methods, {@link #compareTo}; the sorting function is meant to be used
+     * to sort variants within a gene, and is used right now by the class
+     * {@link exomizer.annotation.AnnotationList AnnotationList}. One such list is made for each Variant. Therefore,
+     * if the sorting method is called for an intergenic variant, they will be sorted by distance to the exon.
+     * Since the sorting also includes priority class, this will not be a problem for variants that have both
+     * coding and non-coding annotations.
+     */
     private int rvarstart;
 
     /** The string representing the actual annotation, but
@@ -109,6 +117,30 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	a.rvarstart=0;
 	return a;
     } 
+
+    /**
+     * Client code should set the distance to the nearest exon.
+     * This should be used only for INTERGENIC, INTRONIC, and UPSTREAM/DOWNSTREAM
+     * variants.
+     * @param d distance to the nearest exon.
+     */
+    void setDistanceToNearestExon(int d) {
+	this.rvarstart = d;
+    }
+
+
+    /**
+     * @return the distance of the variant-annotation to the nearest exon.
+     */
+    int getDistanceToNearestExon() {
+	if (this.varType == VariantType.INTERGENIC ||
+	    this.varType == VariantType.INTRONIC ||
+	    this.varType == VariantType.UPSTREAM ||
+	    this.varType == VariantType.DOWNSTREAM)
+	    return this.rvarstart;
+	else
+	    return 0;
+    }
 
 
     /**

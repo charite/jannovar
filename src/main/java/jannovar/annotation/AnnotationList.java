@@ -117,6 +117,30 @@ public class AnnotationList {
 	return a.getSymbolAndAnnotation();
     }
 
+
+
+    /**
+     * Return the distance of the variant to the nearest exon.
+     */
+    public int getDistanceFromExon() {
+	if (this.annotationList.size()==0) {
+	    return 0; /* should never happen */
+	}
+	int mindist=Integer.MAX_VALUE;
+	for (Annotation a : this.annotationList) {
+	    int dist = a.getDistanceToNearestExon();
+	    if (dist==0)
+		return 0;
+	    else if (dist < mindist)
+		mindist = dist;
+	}
+	return mindist;
+    }
+
+
+
+
+
     /**
      * @return an annotation consiting of the gene symbol and a list of all affected transcripts 
      * with the HGVS mutation nomenclature.

@@ -110,7 +110,7 @@ TARDBP: chr1:11,072,679-11,085,549
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("TARDBP(dist=549),MASP2(dist=482)",annot);
+	    Assert.assertEquals("MASP2(dist=482),TARDBP(dist=549)",annot);
 	}
 }
 

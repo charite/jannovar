@@ -425,6 +425,13 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
     /**
+     * @return List of {@link jannovar.annotation.Annotation Annotation} objects.
+     */
+    public ArrayList<Annotation> getAnnotationObjectList() {
+	return this.annotList.getAnnotationList();
+    }
+
+    /**
      * @return A list of all annotations for this variant, in the form GeneSymbol(annotation)
      */
     public ArrayList<String> getAnnotationListWithGeneSymbol() {
@@ -596,6 +603,11 @@ public class Variant implements Comparable<Variant>, Constants {
 	else
 	    return this.annotList.getVariantType().toString();
     }
+
+
+     public int getDistanceFromExon() {
+	 return this.annotList.getDistanceFromExon();
+     }
 
 
 
