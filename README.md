@@ -41,22 +41,23 @@ that integrates the test and build phases. Here are the most important commands:
 
 `$ mvn package`
 
-Note
+deprecated: Note
 --------
 
 Note that currently, full testing of Jannovar requires that a transcript datafile
 from the UCSC website be built. To do this, first run mvn package as above. This
-will generate an executable in the target directory (jannovar-0.1.1-SNAPSHOT.jar).
+will generate an executable in the target directory (jannovar-0.5-SNAPSHOT.jar).
 For simplicity, copy this into the current directory with the name Jannovar:
 
-`$ cp target/jannovar-0.1.1-SNAPSHOT.jar Jannovar.jar`
+`$ cp target/jannovar-0.5-SNAPSHOT.jar Jannovar.jar`
 
 Now create the transcript datafile
 
 `$ java -jar Jannovar.jar --create-ucsc`
 
-This will create a file called "ucsc.ser" with the transcript definition data. To
-run all of the unit tests (which is required by maven for the package task), copy this
+By default this will create a file called "ucsc_hg19.ser" in the "data/" folder with the transcript definition data. Depending on the choosen resource (ucsc, refseq, ensembl) and genomebuild (eg. hg18, hg19, mm9, mm10) a file called "\<resource\>_\<genomebuild\>.ser" will be created.
+
+To run all of the unit tests (which is required by maven for the package task), copy this
 file to the resources directory of the test subdirectory:
 
 `$ cp ucsc.ser src/test/resources/.`
