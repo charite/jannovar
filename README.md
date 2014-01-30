@@ -15,6 +15,7 @@ that integrates the test and build phases. Here are the most important commands:
 
 * Compile all the Java classes
 
+`$ cd jannovar`
 `$ mvn compile`
  
 * Build a jar archive with all the classes but no Manifest for the main class
