@@ -61,7 +61,7 @@ By default this will create a file called "ucsc_hg19.ser" in the "data/" folder 
 To run all of the unit tests (which is required by maven for the package task), copy this
 file to the resources directory of the test subdirectory:
 
-`$ cp ucsc.ser src/test/resources/.`
+`$ cp data/ucsc_hg19.ser src/test/resources/.`
 
 Now you can run either
 
