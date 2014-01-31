@@ -9,7 +9,7 @@ import jannovar.exception.AnnotationException;
 /**
  * This class is intended to provide a static method to generate annotations for INTERGENIC,
  * DOWNSTREAM and UPSTREAM variants.
- * @version 0.04 (7 July, 2013)
+ * @version 0.05 (27 January, 2014)
  * @author Peter N Robinson
  */
 
@@ -32,22 +32,26 @@ public class IntergenicAnnotation {
 	String annot = null;
 	/* Note that either the leftGene or the rightGene can be null, if the variant is located
 	   5' (3') to all variants on a chromosome. */
+	int dist;
 	if (leftGene == null) {
-	    int distR =  rightGene.getTXStart() - endpos;
+	    dist =  rightGene.getTXStart() - endpos;
 	    annot = String.format("NONE(dist=NONE),%s(dist=%d)",
-						  rightGene.getGeneSymbol(),distR);
+						  rightGene.getGeneSymbol(),dist);
 	} else if (rightGene == null) {
-	    int distL =  startpos - leftGene.getTXEnd();
+	    dist =  startpos - leftGene.getTXEnd();
 	    annot = String.format("%s(dist=%d),NONE(dist=NONE)",
-						  leftGene.getGeneSymbol(),distL);
+						  leftGene.getGeneSymbol(),dist);
 
 	} else {
 	    int distR =  rightGene.getTXStart() - endpos;
 	    int distL =  startpos - leftGene.getTXEnd();
 	    annot = String.format("%s(dist=%d),%s(dist=%d)",
 				  leftGene.getGeneSymbol(),distL,rightGene.getGeneSymbol(),distR);
+	    dist = Math.min(distR,distL);
 	}
-	return Annotation.createIntergenicAnnotation(annot,VariantType.INTERGENIC);
+	Annotation ann = Annotation.createIntergenicAnnotation(annot,VariantType.INTERGENIC);
+	ann.setDistanceToNearestExon(dist);
+	return ann;
     }
 
 
@@ -64,7 +68,6 @@ public class IntergenicAnnotation {
 	    System.out.println("createUpDownstreamAnnotation, TranscriptModel argument is null, pos=" + pos);
 	    System.exit(1);
 	}
-
 	int dist=0;
 	if (trmdl.isFivePrimeToGene(pos)) {
 	    dist = trmdl.getTXStart() - pos;
@@ -83,8 +86,10 @@ public class IntergenicAnnotation {
 	    }
 	}
 	String annot = String.format("%s(dist=%d)", trmdl.getGeneSymbol(),dist);
-	return new Annotation(trmdl,annot,type);
+	Annotation ann = new Annotation(trmdl,annot,type);
+	ann.setDistanceToNearestExon(dist);
+	return ann;	
     }
 
-
 }
+/* eof.*/

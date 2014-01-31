@@ -298,9 +298,7 @@ public class Jannovar {
 	    String e = String.format("[Jannovar] Could not identify chromosome \"%d\"", chr );
 	    throw new AnnotationException(e);	
 	} 
-	System.out.println("before annot");
 	AnnotationList anno = c.getAnnotationList(pos,ref,alt);
-	System.out.println("after annot");
 	if (anno==null) {
 	    String e = String.format("[Jannovar] No annotations found for variant %s", v.toString());
 	    throw new AnnotationException(e);	

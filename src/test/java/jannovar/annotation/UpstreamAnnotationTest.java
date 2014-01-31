@@ -469,9 +469,8 @@ public class UpstreamAnnotationTest implements Constants {
  * chr5:98861045->CAGG
  * DQ591060 (uc021yby.1) chr5:98,861,082-98,861,113, distance=38 Strand: -
  * DQ596041 (uc011cuv.1) chr5:98,860,479-98,860,510, distance=536
- * Here, there is one annotation for upstream and one for DOWNSTREAM. The option UPSTREAM is
- * chosen arbitrarily for this variant, which is correct, but actually both annotations are made.
- * probably we should change the way such variants are shown.
+ * Here, there is one annotation for upstream and one for DOWNSTREAM. The option DOWNSTREAM is
+ * chosen for this variant, because the variant is closer to DQ591060.
  *</P>
  */
 @Test public void testUpstreamVar36() throws AnnotationException  {
@@ -486,8 +485,9 @@ public class UpstreamAnnotationTest implements Constants {
 	    AnnotationList ann = c.getAnnotationList(pos,ref,alt);
 	    VariantType varType = ann.getVariantType();
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals(VariantType.UPSTREAM,varType);
-	    Assert.assertEquals("DQ596041(dist=535),DQ591060(dist=37)",annot);
+	    System.out.println(annot);
+	    Assert.assertEquals(VariantType.DOWNSTREAM,varType);
+	    Assert.assertEquals("DQ591060(dist=37),DQ596041(dist=535)",annot);
 	}
 }
 
