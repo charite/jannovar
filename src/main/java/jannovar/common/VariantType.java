@@ -193,26 +193,30 @@ public enum  VariantType {
 	}
     }
     
+    /**
+     * A Sequence Ontology (SO) term string representing the variant type (e.g., missense_variant, stop_gained,...)
+     * @return SO-term representation of this {@link VariantType}
+     */
     public String toString(){
     	String soTerm;
     	switch (this) {
     	case FS_DELETION: return "frameshift_truncation";
     	case FS_INSERTION: return "frameshift_elongation";
-    	case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
-    	case FS_SUBSTITUTION:  return "frameshift substitution";
+    	case NON_FS_SUBSTITUTION: return "inframe_substitution";
+    	case FS_SUBSTITUTION:  return "frameshift_substitution";
     	case MISSENSE:  return "missense_variant";
     	case NON_FS_DELETION: return "inframe_deletion";
     	case NON_FS_INSERTION:return "inframe_insertion";
     	case SPLICING: return "splice_region_variant";
-    	case STOPGAIN:return " 	stop_gained";
+    	case STOPGAIN:return " stop_gained";
     	case STOPLOSS: return "stop_lost";
-    	case NON_FS_DUPLICATION: return "nonframeshift duplication";  
-    	case FS_DUPLICATION: return "frameshift duplication";  
-    	case START_LOSS: return "start loss";
-    	case START_GAIN: return "start gain";
+    	case NON_FS_DUPLICATION: return "inframe_duplication";  
+    	case FS_DUPLICATION: return "frameshift_duplication";  
+    	case START_LOSS: return "start_lost";
+    	case START_GAIN: return "start_gain";
     	case ncRNA_EXONIC: return "non_coding_exon_variant";
-    	case ncRNA_INTRONIC:return "noncoding RNA intronic";
-    	case ncRNA_SPLICING:return "noncoding RNA splicing";
+    	case ncRNA_INTRONIC:return "non_coding_intron_variant";
+    	case ncRNA_SPLICING:return "non_coding_splice_region_variant";
     	case UTR3: return "3_prime_UTR_variant";
     	case UTR5: return "5_prime_UTR_variant";
     	case SYNONYMOUS: return "synonymous_variant";

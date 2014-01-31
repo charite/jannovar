@@ -256,12 +256,13 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * @return A string representing the variant type (e.g., MISSENSE, STOPGAIN,...)
      */
     public String getVariantTypeAsString() { 
-	return Annotation.getVariantTypeAsString(this.varType);
+    	return this.varType.toString();
     }
 
 
     /**
      * @param typ A constant from the Constants.VariantType enumeration represent the type of variant.
+     * @deprecated {@link VariantType} has comparable method
      */
     public static String getVariantTypeAsString(VariantType typ) {
 	String s="";
