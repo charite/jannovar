@@ -249,6 +249,11 @@ public class AnnotationList {
 	return this.annotationList.get(0).getEntrezGeneID();
     }
 
+    /**
+     * If the {@link AnnotationList} has multiple Annotation objects, 
+     * then the Annotation most likely to be pathogenic is returned.
+     * @return most pathogenic {@link VariantType} in the list
+     */
     public VariantType getVariantType() {
 	return this.type;
     }
