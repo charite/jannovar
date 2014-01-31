@@ -192,7 +192,73 @@ public enum  VariantType {
 	    return "unknown variant type (error)";
 	}
     }
+    
+    public String toString(){
+    	String soTerm;
+    	switch (this) {
+    	case FS_DELETION: return "frameshift_truncation";
+    	case FS_INSERTION: return "frameshift_elongation";
+    	case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
+    	case FS_SUBSTITUTION:  return "frameshift substitution";
+    	case MISSENSE:  return "missense_variant";
+    	case NON_FS_DELETION: return "inframe_deletion";
+    	case NON_FS_INSERTION:return "inframe_insertion";
+    	case SPLICING: return "splice_region_variant";
+    	case STOPGAIN:return " 	stop_gained";
+    	case STOPLOSS: return "stop_lost";
+    	case NON_FS_DUPLICATION: return "nonframeshift duplication";  
+    	case FS_DUPLICATION: return "frameshift duplication";  
+    	case START_LOSS: return "start loss";
+    	case START_GAIN: return "start gain";
+    	case ncRNA_EXONIC: return "non_coding_exon_variant";
+    	case ncRNA_INTRONIC:return "noncoding RNA intronic";
+    	case ncRNA_SPLICING:return "noncoding RNA splicing";
+    	case UTR3: return "3_prime_UTR_variant";
+    	case UTR5: return "5_prime_UTR_variant";
+    	case SYNONYMOUS: return "synonymous_variant";
+    	case INTRONIC: return "intron_variant";
 
+    	case UPSTREAM:return "upstream_gene_variant";
+    	case DOWNSTREAM:return "downstream_gene_variant";
+    	case INTERGENIC:return "intergenic_variant";
+    	case ERROR: return "error";
+    	default:
+    	    return "unknown variant type (error)";
+    	}
+    }
+    	
+	public String toSOidString() {
+		switch (this) {
+		case FS_DELETION: return "SO:0001910";
+		case FS_INSERTION: return "SO:0001909";
+		case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
+		case FS_SUBSTITUTION: return "frameshift substitution";
+		case MISSENSE: return "SO:0001583";
+		case NON_FS_DELETION: return "SO:0001822";
+		case NON_FS_INSERTION: return "SO:0001821";
+		case SPLICING: return "SO:0001630";
+		case STOPGAIN: return "SO:0001587";
+		case STOPLOSS: return "SO:0001578";
+		case NON_FS_DUPLICATION: return "nonframeshift duplication";
+		case FS_DUPLICATION: return "frameshift duplication";
+		case START_LOSS: return "start loss";
+		case START_GAIN: return "start gain";
+		case ncRNA_EXONIC: return "SO:0001792";
+		case ncRNA_INTRONIC: return "noncoding RNA intronic";
+		case ncRNA_SPLICING: return "noncoding RNA splicing";
+		case UTR3: return "SO:0001624";
+		case UTR5: return "SO:0001623";
+		case SYNONYMOUS: return "SO:0001819";
+		case INTRONIC: return "SO:0001627";
+
+		case UPSTREAM: return "SO:0001631";
+		case DOWNSTREAM: return "SO:0001632";
+		case INTERGENIC: return "SO:0001628";
+		case ERROR: return "error";
+		default: return "unknown variant type (error)";
+		}
+
+	}
     
     /** A static constant that returns the number of
      * different values in this enumeration.
