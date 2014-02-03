@@ -18,7 +18,7 @@ import jannovar.reference.TranscriptModel;
  * object.
  * <P>
  * @author Peter N Robinson
- * @version 0.31 (6 January, 2014)
+ * @version 0.32 (3 February, 2014)
  */
 public class Annotation implements Constants, Comparable<Annotation> {
     /** The type of the variant being annotated, using the constants in  {@link jannovar.common.VariantType VariantType},
@@ -257,39 +257,6 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public String getVariantTypeAsString() { 
     	return this.varType.toString();
-    }
-
-
-    /**
-     * @param typ A constant from the Constants.VariantType enumeration represent the type of variant.
-     * @deprecated {@link VariantType} has comparable method
-     */
-    public static String getVariantTypeAsString(VariantType typ) {
-	String s="";
-	switch(typ) {
-	case INTERGENIC: s="Intergenic";break;
-	case DOWNSTREAM: s="Downstream";break;
-	case INTRONIC: s="Intronic";break;
-	case UPSTREAM: s="Upstream"; break;
-	case ncRNA_EXONIC: s="ncRNA_exonic"; break;
-	case ncRNA_INTRONIC: s="ncRNA_intronic"; break;
-	case ncRNA_SPLICING: s = "ncRNA_splicing"; break;
-	case SPLICING: s="Splicing"; break;
-	case STOPLOSS: s="Stoploss"; break;
-	case STOPGAIN: s="Stopgain"; break; /* stopgain=nonsense */
-	case SYNONYMOUS: s="Synonymous"; break;
-	case MISSENSE: s="Missense"; break;
-	case NON_FS_SUBSTITUTION: s="Nonframeshit subsitution"; break;
-	case NON_FS_INSERTION: s = "Nonframeshift-insertion"; break;
-	case FS_SUBSTITUTION: s="Frameshift substitution"; break;
-	case FS_DELETION: s="Frameshift deletion"; break;
-	case FS_INSERTION: s = "Frameshift insertion"; break;
-	case NON_FS_DELETION: s="Nonframeshift deletion"; break;
-	case ERROR: s="Potential database error"; break;
-	case UTR5: s="UTR5"; break;
-	case UTR3: s="UTR3"; break;
-	}
-	return s;
     }
 
     /**

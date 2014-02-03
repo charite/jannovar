@@ -208,7 +208,7 @@ public enum  VariantType {
     	case NON_FS_DELETION: return "inframe_deletion";
     	case NON_FS_INSERTION:return "inframe_insertion";
     	case SPLICING: return "splice_region_variant";
-    	case STOPGAIN:return " stop_gained";
+    	case STOPGAIN:return "stop_gained";
     	case STOPLOSS: return "stop_lost";
     	case NON_FS_DUPLICATION: return "inframe_duplication";  
     	case FS_DUPLICATION: return "frameshift_duplication";  
@@ -221,7 +221,6 @@ public enum  VariantType {
     	case UTR5: return "5_prime_UTR_variant";
     	case SYNONYMOUS: return "synonymous_variant";
     	case INTRONIC: return "intron_variant";
-
     	case UPSTREAM:return "upstream_gene_variant";
     	case DOWNSTREAM:return "downstream_gene_variant";
     	case INTERGENIC:return "intergenic_variant";
