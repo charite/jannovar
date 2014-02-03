@@ -2,13 +2,16 @@ package jannovar.io;
 
 import java.io.File;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.IOException; 
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.zip.GZIPInputStream;
 
 import jannovar.exome.Variant;
 import jannovar.exception.ChromosomeScaffoldException;
@@ -188,7 +191,10 @@ public class VCFReader {
 	File file = new File(this.file_path);
 	this.base_filename = file.getName();
 	try{
-	    this.in = new BufferedReader(new FileReader(this.file_path));
+		if(file.getName().endsWith(".gz"))
+			this.in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
+		else
+			this.in = new BufferedReader(new FileReader(this.file_path));
 	} catch (IOException e) {
 	    String err = String.format("[VCFReader]: %s",e.toString());
 	    throw new VCFParseException(err);
