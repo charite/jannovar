@@ -42,38 +42,9 @@ that integrates the test and build phases. Here are the most important commands:
 
 `$ mvn package`
 
-deprecated: Note
---------
-
-Note that currently, full testing of Jannovar requires that a transcript datafile
-from the UCSC website be built. To do this, first run mvn package as above. This
-will generate an executable in the target directory (jannovar-0.5-SNAPSHOT.jar).
-For simplicity, copy this into the current directory with the name Jannovar:
-
-`$ cp target/jannovar-0.5-SNAPSHOT.jar Jannovar.jar`
-
-Now create the transcript datafile
-
-`$ java -jar Jannovar.jar --create-ucsc`
-
-By default this will create a file called "ucsc_hg19.ser" in the "data/" folder with the transcript definition data. Depending on the choosen resource (ucsc, refseq, ensembl) and genomebuild (eg. hg18, hg19, mm9, mm10) a file called "\<resource\>_\<genomebuild\>.ser" will be created.
-
-To run all of the unit tests (which is required by maven for the package task), copy this
-file to the resources directory of the test subdirectory:
-
-`$ cp data/ucsc_hg19.ser src/test/resources/.`
-
-Now you can run either
-
-`$ mvn test`
-or
-`$ mvn package`
-and all of the tests should now run correctly.
-For more information, see the main tutorial or enter
-`$ java -jar Jannovar.jar -H`
-
-See the tutorial at http://compbio.charite.de/contao/index.php/jannovar.html for 
-further information.
+Version
+==========
+Jannovar is currently at version 0.5-SNAPSHOT, meaning that we anticipate to extend the public API in the course of 2014 based on comments and suggestions from users. We do not anticipate deprecating or removing functions in the public API, but this cannot be entirely ruled out.
 
 License
 ===========
