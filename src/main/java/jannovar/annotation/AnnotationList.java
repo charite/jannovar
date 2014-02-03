@@ -45,6 +45,9 @@ public class AnnotationList {
      */
     private boolean hasMultipleGeneSymbols = false;
 
+    /** Flag to initial sort the {@link Annotation}s for the multisample output. */
+    private boolean isPrioritySorted = false;
+    
     /**
      * Prevent unwanted initialization of an empty
      * AnnotationList object by making the default constructor private.
@@ -93,14 +96,60 @@ public class AnnotationList {
      * sorts them. This function also sets the overall variant type (the most
      * pathogenic single type found among all annotations).
      */
-    public void  sortAnnotations() throws AnnotationException {
+    public void sortAnnotations() throws AnnotationException {
+    	if(this.isPrioritySorted)
+    		return;
 	if (this.annotationList.size()==0)  {
 	    throw new AnnotationException("No data for annotation");
 	} else {
 	    java.util.Collections.sort(this.annotationList);
+	    this.isPrioritySorted = true;
 	}
     }
-
+    
+    
+    
+    public String getAllTranscriptVariantEffects() throws AnnotationException {
+    	if (this.annotationList.size()==0) {
+    	    String e = String.format("[AnnotationList] Error: No Annotations found");
+    	    throw new AnnotationException(e);
+    	}
+    	if(!this.isPrioritySorted)
+    		this.sortAnnotations();
+    	StringBuffer buff = new StringBuffer();
+    	boolean hasFirst = false;
+    	for (Annotation anno : this.annotationList) {
+    		if(hasFirst)
+    			buff.append(",");
+			buff.append(anno.getVariantType());
+			hasFirst = true;
+		}
+    	return buff.toString();
+    }
+    
+    /**
+     * Get the annotations for all transcript (this will be used to annotate VCF files).
+     * If there are more than one annotation a comma separated list of annotations will be returned.
+     * The annotations are sorted according to the pathogenicity of the variation.
+     * @return String representation of all annotations
+     */
+    public String getAllTranscriptAnnotations() throws AnnotationException {
+    	if (this.annotationList.size()==0) {
+    	    String e = String.format("[AnnotationList] Error: No Annotations found");
+    	    throw new AnnotationException(e);
+    	}
+    	if(!this.isPrioritySorted)
+    		this.sortAnnotations();
+    	StringBuffer buff = new StringBuffer();
+    	boolean hasFirst = false;
+    	for (Annotation anno : this.annotationList) {
+    		if(hasFirst)
+    			buff.append(",");
+			buff.append(anno.getSymbolAndAnnotation());
+			hasFirst = true;
+		}
+    	return buff.toString();
+    }
 
     /**
      * Get an annotation for a single transcript (this will be used to annotated VCF files).
@@ -142,7 +191,7 @@ public class AnnotationList {
 
 
     /**
-     * @return an annotation consiting of the gene symbol and a list of all affected transcripts 
+     * @return an annotation consisting of the gene symbol and a list of all affected transcripts 
      * with the HGVS mutation nomenclature.
      */
     public String getVariantAnnotation() throws AnnotationException {
@@ -392,29 +441,34 @@ public class AnnotationList {
      * genes. It works for coding and ncRNA intronic annotations.
      */
     private String getIntronicAnnotation(ArrayList<Annotation> lst) {
+	   StringBuilder sb = new StringBuilder();
 	if (! hasMultipleGeneSymbols) { /* just a single gene affected */
 	    Annotation ann = lst.get(0);
-	    return ann.getSymbolAndAnnotation();
+	    sb.append(ann.getGeneSymbol());
+	    sb.append("(");
+	    sb.append(ann.getVariantAnnotation());
+	    sb.append(")");
 	} else { /* variant is in intron of multiple genes, get one annotation each */
 	    HashSet<String> seen = new HashSet<String>(); 
-	    StringBuilder sb = new StringBuilder();
-	    boolean first = true;
+	    boolean hasFirst = false;
 	    for (Annotation a: lst) {
 		String sym = a.getGeneSymbol();
 		if (seen.contains(sym)) {
 		    continue;
 		} else {
 		    seen.add(sym);
-		    if (first) {
-			sb.append(a.getSymbolAndAnnotation());
-			first = false;
-		    } else {
-			sb.append("," + a.getSymbolAndAnnotation());
-		    }
+		    if (hasFirst) 
+				sb.append(",");
+		    sb.append(a.getGeneSymbol());
+		    sb.append("(");
+		    sb.append(a.getVariantAnnotation());
+		    sb.append(")");
+			hasFirst = true;
+		    
 		}
 	    }
-	    return sb.toString();
 	}
+	    return sb.toString();
     }
 
 
@@ -430,7 +484,10 @@ public class AnnotationList {
 	boolean notfirst=false;
 	for (Annotation a: lst) {
 	    if (notfirst) { sb.append(",");} else notfirst=true;
-	    sb.append(a.getSymbolAndAnnotation());
+	    sb.append(a.getGeneSymbol());
+	    sb.append("(");
+	    sb.append(a.getVariantAnnotation());
+	    sb.append(")");
 	}
 	    
 	return sb.toString();

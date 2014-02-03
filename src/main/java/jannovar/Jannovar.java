@@ -143,6 +143,9 @@ public class Jannovar {
      */
     private boolean jannovarFormat;
     
+    /** Flag indication whether the annotations for all affected transcripts should be reported.*/
+    private boolean showAll;
+    
     /** genome release for the download and the creation of the serialized transcript model file */
 	private Release genomeRelease	= Release.HG19;
 	/** Output folder for the annotated VCF files (default: current folder) */ 
@@ -303,8 +306,15 @@ public class Jannovar {
 	    String e = String.format("[Jannovar] No annotations found for variant %s", v.toString());
 	    throw new AnnotationException(e);	
 	}
-	String annotation = anno.getSingleTranscriptAnnotation();
-	String effect = anno.getVariantType().toString();
+	String annotation;
+	String effect;
+	if(this.showAll){
+		annotation = anno.getAllTranscriptAnnotations();
+		effect = anno.getAllTranscriptVariantEffects();
+	}else{
+		annotation = anno.getSingleTranscriptAnnotation();
+		effect = anno.getVariantType().toString();
+	}
 	String A[] = line.getOriginalVCFLine().split("\t");
 	for (int i=0;i<7;++i)
 	    out.write(A[i] + "\t");
@@ -395,7 +405,6 @@ public class Jannovar {
 	    while(iter.hasNext()){
 		VCFLine line = iter.next();
 		Variant v = line.toVariant();
-		System.out.println(String.format("Ref: %s\tAlt: %s", v.get_ref(), v.get_alt()));
 	    	try {
 		    annotateVCFLine(line,v,out);
 		} catch (AnnotationException e) {
@@ -662,6 +671,7 @@ public class Jannovar {
 	    options.addOption(new Option("d","data",true,"Path to write data storage folder (genome files, serialized files, ...)"));
 	    options.addOption(new Option("O","output",true,"Path to output folder for the annotated VCF file"));
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
+	    options.addOption(new Option("a","showall",false,"report annotations for all transcripts to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
 	    options.addOption(new Option("g","genome",true,"genome build (mm9, mm10, hg18, hg19), default hg19"));
 	    options.addOption(new Option(null,"create-ucsc",false,"Create UCSC definition file"));
@@ -686,6 +696,11 @@ public class Jannovar {
 		this.jannovarFormat = false;
 	    }
 
+	    if(cmd.hasOption('a'))
+	    	this.showAll = true;
+	    else
+	    	this.showAll = false;
+	    
 	    if (cmd.hasOption("create-ucsc")) {
 		this.createUCSC = true;
 		this.performSerialization = true;

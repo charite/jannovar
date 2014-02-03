@@ -158,14 +158,16 @@ public class Annotation implements Constants, Comparable<Annotation> {
      */
     public String getVariantAnnotation() { return this.variantAnnotation; }
 
+
     /**
      * Get full annotation with gene symbol. If this Annotation does not have a
-     * symbol (e.g., for an intergnic annotation), then just return the annotation string.
+     * symbol (e.g., for an intergenic annotation), then just return the annotation string.<br>
+     * e.g. "KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q"
      */
     public String getSymbolAndAnnotation() {
 	if (geneSymbol==null && variantAnnotation != null)
 	    return variantAnnotation;
-	return String.format("%s(%s)",geneSymbol,variantAnnotation);
+	return String.format("%s:%s",geneSymbol,variantAnnotation);
     }
 
     /**
