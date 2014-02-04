@@ -224,7 +224,7 @@ public class TranscriptDataDownloader implements Constants {
 //	if (! data.exists())
 //	    data.mkdirs();
 	if (directory.exists()) {
-	    System.err.println(String.format("Cowardly refusing to create "
+	    System.err.println(String.format("[INFO] Cowardly refusing to create "
 					     + "directory \"%s\" since it already exists", this.directory_path));
 	} else {
 	    directory.mkdirs();
@@ -241,8 +241,8 @@ public class TranscriptDataDownloader implements Constants {
 	    String local_file_path = this.directory_path + fname;
 	    File f = new File(local_file_path);
 	    if (f.exists()) {
-		System.err.println(String.format(
-						 "Timorously refusing to download " + "file \"%s\" since it already exists", local_file_path));
+		System.err.println(String.format("[INFO] Timorously refusing to download " 
+						 + "file \"%s\" since it already exists", local_file_path));
 		return false;
 		
 	    }

@@ -138,7 +138,6 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
      * construction of {@link #knownGeneMap}.
      */
     public void parseUCSCFiles() {
-	System.out.println("parseUCSCFiles");
 	boolean success = parseGzipUCSCFiles();
 	if (success) return;
 	/* If we get here, then the Gzip files were not found, we need to try unziped files. */
@@ -304,18 +303,15 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 	   
 	    while ((line = br.readLine()) != null)   {
 		linecount++;
-		//System.out.println(line);
 		try {
 		    TranscriptModel kg = parseTranscriptModelFromLine(line);
 		    String id = kg.getAccessionNumber();
 		    this.knownGeneMap.put(id,kg);	   
 		} catch (KGParseException e) {
-		    //System.out.println("Exception parsing KnownGene.txt: " + e.toString());
 		    exceptionCount++;
 		}
 	    }
-	    System.out.println(String.format("lines: %d, exceptions: %d",linecount,exceptionCount));
-	    System.out.println("Size of knownGeneMap: " + knownGeneMap.size());
+	    //System.out.println("[INFO] Parsed " + knownGeneMap.size() + " transcripts from UCSC knownGene resource");
 	} catch (FileNotFoundException fnfe) {
 	    String s = String.format("[Jannovar/USCSKGParser] Could not find KnownGene.txt file: %s\n%s", 
 				     kgpath, fnfe.toString());
@@ -347,9 +343,9 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 	    while ((line = br.readLine()) != null)   {
 		String A[] = line.split("\t");
 		if (A.length != 2) {
-		    System.err.println("Bad format for UCSC KnownToLocusLink.txt file:\n" + line);
-		    System.err.println("Got " + A.length + " fields instead of the expected 2");
-		    System.err.println("Fix problem in UCSC file before continuing");
+		    System.err.println("[ERROR] Bad format for UCSC KnownToLocusLink.txt file:\n" + line);
+		    System.err.println("[ERROR] Got " + A.length + " fields instead of the expected 2");
+		    System.err.println("[ERROR] Fix problem in UCSC file before continuing");
 		    System.exit(1);
 		}
 		String id = A[0];
@@ -357,16 +353,14 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 		TranscriptModel kg = this.knownGeneMap.get(id);
 		if (kg == null) {
 		    /** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
-		    //System.err.println("Error, could not find FASTA sequence for known gene \"" + id + "\"");
 		    notFoundID++;
 		    continue;
-		    //System.exit(1);
 		}
 		foundID++;
 		kg.setGeneID(geneID);
 	    }
 	    br.close();
-	    String msg = String.format("Done parsing knownToLocusLink. Got ids for %d knownGenes. Missed in %d",
+	    String msg = String.format("[INFO] knownToLocusLink contained ids for %d knownGenes (no ids available for %d)",
 				       foundID,notFoundID);
 	    System.out.println(msg);
 	} catch (FileNotFoundException fnfe) {
@@ -401,9 +395,9 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 	    while ((line = br.readLine()) != null)   {
 		String A[] = line.split("\t");
 		if (A.length != 2) {
-		    System.err.println("Bad format for UCSC KnownGeneMrna.txt file:\n" + line);
-		    System.err.println("Got " + A.length + " fields instead of the expected 2");
-		    System.err.println("Fix problem in UCSC file before continueing");
+		    System.err.println("[ERROR] Bad format for UCSC KnownGeneMrna.txt file:\n" + line);
+		    System.err.println("[ERROR] Got " + A.length + " fields instead of the expected 2");
+		    System.err.println("[ERROR] Fix problem in UCSC file before continueing");
 		    System.exit(1);
 		}
 		
@@ -421,7 +415,8 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 		kg.setSequence(seq);
 	    }
 	    br.close();
-	    System.out.println(String.format("Found sequences for %d KGs, did not find sequence for %d",foundSequence,kgWithNoSequence));
+	    System.out.println(String.format("[INFO] Found %d transcript models from UCSC KnownGenes resource, %d of which had sequences",
+					     foundSequence,(foundSequence-kgWithNoSequence)));
 	} catch (FileNotFoundException fnfe) {
 	    String s = String.format("Could not find file: %s\n%s",mrnapath, fnfe.toString());
 	    throw new KGParseException(s);
@@ -489,7 +484,6 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 		//System.out.println("x: \"" + geneSymbol + "\"");
 	    } 
 	    br.close();
-	    System.out.println(String.format("Found kg for %d genes, missed it for %d",kgWithXref,kgWithNoXref));
 	} catch (FileNotFoundException fnfe) {
 	    String err = String.format("Could not find file: %s\n%s",xrefpath,fnfe.toString());
 	    throw new KGParseException(err);
