@@ -13,7 +13,7 @@ package jannovar.common;
  * the document for the class
  * {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
  * @author Peter Robinson
- * @version 0.16 (29 December, 2013)
+ * @version 0.17 (4 February, 2013)
  */
 public enum  VariantType { 
     /** Variant is downstream of a gene */
@@ -132,6 +132,28 @@ public enum  VariantType {
 	}
     }
 
+
+    /**
+     * We do not know, actually, whether any given variant is
+     * pathogenic if we just judge its pathogenicity class. But on
+     * the whole, the VariantTypes that have been given the priority
+     * level one will include the lion's share of true pathogenic
+     * mutations. This function returns true if a variantType has pathogenicity
+     * level one, otherwise false. It is intended to be used by client code
+     * to help sort variants by predicted pathogenicity, in the knowledge that
+     * occasionally we will be wrong, e.g., a variant of priority level 3 might 
+     * actually be the disease causing mutation.
+     */
+    public boolean isTopPriorityVariant() {
+	int p = VariantType.priorityLevel(this);
+	if (p==1)
+	    return true;
+	else
+	    return false;
+    }
+
+
+
     /**
      * This returns an array with the VariantTypes arranged according to 
      * their priority. It can used to arrange output of Variants ranked
@@ -230,38 +252,41 @@ public enum  VariantType {
     	}
     }
     	
-	public String toSOidString() {
-		switch (this) {
-		case FS_DELETION: return "SO:0001910";
-		case FS_INSERTION: return "SO:0001909";
-		case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
-		case FS_SUBSTITUTION: return "frameshift substitution";
-		case MISSENSE: return "SO:0001583";
-		case NON_FS_DELETION: return "SO:0001822";
-		case NON_FS_INSERTION: return "SO:0001821";
-		case SPLICING: return "SO:0001630";
-		case STOPGAIN: return "SO:0001587";
-		case STOPLOSS: return "SO:0001578";
-		case NON_FS_DUPLICATION: return "nonframeshift duplication";
-		case FS_DUPLICATION: return "frameshift duplication";
-		case START_LOSS: return "start loss";
-		case START_GAIN: return "start gain";
-		case ncRNA_EXONIC: return "SO:0001792";
-		case ncRNA_INTRONIC: return "noncoding RNA intronic";
-		case ncRNA_SPLICING: return "noncoding RNA splicing";
-		case UTR3: return "SO:0001624";
-		case UTR5: return "SO:0001623";
-		case SYNONYMOUS: return "SO:0001819";
-		case INTRONIC: return "SO:0001627";
-
-		case UPSTREAM: return "SO:0001631";
-		case DOWNSTREAM: return "SO:0001632";
-		case INTERGENIC: return "SO:0001628";
-		case ERROR: return "error";
-		default: return "unknown variant type (error)";
-		}
-
+    /**
+     * Return the sequence ontology accession number for the
+     * variant class if available, otherwise return the name.
+     */
+    public String toSOidString() {
+	switch (this) {
+	case FS_DELETION: return "SO:0001910";
+	case FS_INSERTION: return "SO:0001909";
+	case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
+	case FS_SUBSTITUTION: return "frameshift substitution";
+	case MISSENSE: return "SO:0001583";
+	case NON_FS_DELETION: return "SO:0001822";
+	case NON_FS_INSERTION: return "SO:0001821";
+	case SPLICING: return "SO:0001630";
+	case STOPGAIN: return "SO:0001587";
+	case STOPLOSS: return "SO:0001578";
+	case NON_FS_DUPLICATION: return "nonframeshift duplication";
+	case FS_DUPLICATION: return "frameshift duplication";
+	case START_LOSS: return "start loss";
+	case START_GAIN: return "start gain";
+	case ncRNA_EXONIC: return "SO:0001792";
+	case ncRNA_INTRONIC: return "noncoding RNA intronic";
+	case ncRNA_SPLICING: return "noncoding RNA splicing";
+	case UTR3: return "SO:0001624";
+	case UTR5: return "SO:0001623";
+	case SYNONYMOUS: return "SO:0001819";
+	case INTRONIC: return "SO:0001627";
+	    
+	case UPSTREAM: return "SO:0001631";
+	case DOWNSTREAM: return "SO:0001632";
+	case INTERGENIC: return "SO:0001628";
+	case ERROR: return "error";
+	default: return "unknown variant type (error)";
 	}
+    }
     
     /** A static constant that returns the number of
      * different values in this enumeration.
