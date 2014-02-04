@@ -137,7 +137,6 @@ public class TranscriptDataDownloader implements Constants {
 		String gtf_name		= null;
 		String cdna_name	= null;
 		String ncrna_name	= null;
-		System.out.println("release: "+r.getUCSCString(r));
 		switch (r) {
 		case MM9:
 			gtf_base	= String.format("%s%s%s", ENSEMBL_FTP_BASE_MM9,ENSEMBL_GTF_BASE,ENSEMBL_MOUSE_BASE);
@@ -224,7 +223,7 @@ public class TranscriptDataDownloader implements Constants {
 //	if (! data.exists())
 //	    data.mkdirs();
 	if (directory.exists()) {
-	    System.err.println(String.format("[INFO] Cowardly refusing to create "
+	    System.out.println(String.format("[INFO] Cowardly refusing to create "
 					     + "directory \"%s\" since it already exists", this.directory_path));
 	} else {
 	    directory.mkdirs();
@@ -241,12 +240,12 @@ public class TranscriptDataDownloader implements Constants {
 	    String local_file_path = this.directory_path + fname;
 	    File f = new File(local_file_path);
 	    if (f.exists()) {
-		System.err.println(String.format("[INFO] Timorously refusing to download " 
-						 + "file \"%s\" since it already exists", local_file_path));
+		System.out.println(String.format("[INFO] Timorously refusing to download " 
+						 + "file \"%s\" since it already exists locally", fname));
 		return false;
 		
 	    }
-	    //System.err.println("Downloading: \"" + urlstring + "\"");
+	    System.out.println("[INFO] Downloading: \"" + fname + "\"");
 	    //System.out.println("File " + local_file_path);
 	    //System.out.println("proxy: " + System.getProperty("http.proxyHost"));
 	    //System.out.println("port: " + System.getProperty("http.proxyPort"));
@@ -263,7 +262,7 @@ public class TranscriptDataDownloader implements Constants {
 		int size = urlc.getContentLength();
 		if (size >= 0)
 		    block = size / 20;
-		System.err.println("0%       50%      100%");
+		System.out.println("0%       50%      100%");
 		while ((bytesRead = reader.read(buffer)) > 0) {
 		    writer.write(buffer, 0, bytesRead);
 		    buffer = new byte[153600];
@@ -275,8 +274,8 @@ public class TranscriptDataDownloader implements Constants {
 			// big files. */
 		    }
 		}
-		System.err.println();
-		System.err.println("Done. " + (new Integer(totalBytesRead).toString()) + "(" + size + ") bytes read.");
+		System.out.println();
+		System.out.println("[INFO] Done. " + (new Integer(totalBytesRead).toString()) + "(" + size + ") bytes read.");
 		writer.close();
 		reader.close();
 	    } catch (MalformedURLException e) {

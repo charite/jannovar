@@ -486,7 +486,7 @@ public class Jannovar {
     */
     public void serializeRefseqData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
-    	System.out.println("[INFO] Serializing RefSeq data as " + String.format(Jannovar.RefseqSerializationFileName,genomeRelease.getUCSCString(genomeRelease)));
+    	System.out.println("[INFO] Serializing RefSeq data as " + String.format(dirPath+Jannovar.RefseqSerializationFileName,genomeRelease.getUCSCString(genomeRelease)));
     	manager.serializeKnownGeneList(String.format(dirPath+Jannovar.RefseqSerializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
     }
 
@@ -498,7 +498,7 @@ public class Jannovar {
     */
     public void serializeEnsemblData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
-    	System.out.println("[INFO] Serializing Ensembl data as " + String.format(Jannovar.EnsemblSerializationFileName,genomeRelease.getUCSCString(genomeRelease)));
+    	System.out.println("[INFO] Serializing Ensembl data as " + String.format(dirPath+Jannovar.EnsemblSerializationFileName,genomeRelease.getUCSCString(genomeRelease)));
     	manager.serializeKnownGeneList(String.format(dirPath+Jannovar.EnsemblSerializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
     }
 
@@ -510,7 +510,7 @@ public class Jannovar {
      */
     public void serializeUCSCdata() throws JannovarException {
 	SerializationManager manager = new SerializationManager();
-	System.out.println("[INFO] Serializing known gene data as " + String.format(Jannovar.UCSCserializationFileName,genomeRelease.getUCSCString(genomeRelease)));
+	System.out.println("[INFO] Serializing UCSC data as " + String.format(dirPath+Jannovar.UCSCserializationFileName,genomeRelease.getUCSCString(genomeRelease)));
 	manager.serializeKnownGeneList(String.format(dirPath+Jannovar.UCSCserializationFileName,genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
     }
 
@@ -569,9 +569,10 @@ public class Jannovar {
 	int before	= transcriptModelList.size();
 	transcriptModelList = efp.parse();
 	int after = transcriptModelList.size();
-	System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
-					 before-after,before, after));
+//	System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
+//					 before-after,before, after));
 	
+	System.out.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences",before,after));
     }
     /**
      * Input the Ensembl data. 
@@ -598,14 +599,14 @@ public class Jannovar {
     		path += Constants.ensembl_hg19;
     		break;
     	default:
-    		System.err.println("Unknown release: "+genomeRelease);
+    		System.err.println("[ERROR] Unknown release: "+genomeRelease);
     		System.exit(20);
     		break;
     	}
     	gff.parse(path + Constants.ensembl_gtf);
 	try {
 	    this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
-	    System.out.println("[INFO] Got: "+this.transcriptModelList.size() + " Ensembl transcripts");
+//	    System.out.println("[INFO] Got: "+this.transcriptModelList.size() + " Ensembl transcripts");
 	} catch (InvalidAttributException e) {
 	    System.err.println("[ERROR] Unable to input data from the Ensembl files");
 	    e.printStackTrace();
@@ -616,9 +617,10 @@ public class Jannovar {
 	int before	= transcriptModelList.size();
 	transcriptModelList = efp.parse();
 	int after = transcriptModelList.size();
-	System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
-					 before-after,before, after));
+//	System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
+//					 before-after,before, after));
 	
+	System.out.println(String.format("[INFO] Found %d transcript models from Ensembl GFF resource, %d of which had sequences",before,after));
     }
 
 
