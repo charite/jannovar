@@ -1,4 +1,4 @@
-package jannovar.pedigree;
+package jannovar.common;
 
 
 
