@@ -114,8 +114,8 @@ public class TranscriptDataDownloader implements Constants {
 			break;
 		case HG19:			
 		default:
-			gff_base	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_GFF_BASE);
-			rna_base	= String.format("%s%s", REFSEQ_FTP_BASE,REFSEQ_FASTA_BASE);
+			gff_base	= String.format("%s%s%s", REFSEQ_FTP_BASE,REFSEQ_HG19,REFSEQ_GFF_BASE);
+			rna_base	= String.format("%s%s%s", REFSEQ_FTP_BASE,REFSEQ_HG19,REFSEQ_FASTA_BASE);
 			gff_name	= refseq_gff_hg19;
 //			rna_name	= refseq_rna;
 		}
