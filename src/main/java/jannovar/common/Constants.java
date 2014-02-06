@@ -53,7 +53,7 @@ public interface Constants {
     public static final String REFSEQ_GFF_BASE		= "GFF/";
     public static final String REFSEQ_FASTA_BASE	= "RNA/";
     public static final String REFSEQ_HG18			= "ARCHIVE/BUILD.36.3/";
-    public static final String REFSEQ_HG19			= "";
+    public static final String REFSEQ_HG19			= "ARCHIVE/ANNOTATION_RELEASE.105/";
     public static final String REFSEQ_MM9			= "ARCHIVE/BUILD.37.2/";
     public static final String REFSEQ_MM10			= "";
 
