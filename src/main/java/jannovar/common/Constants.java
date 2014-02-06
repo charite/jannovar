@@ -54,6 +54,7 @@ public interface Constants {
     public static final String REFSEQ_FASTA_BASE	= "RNA/";
     public static final String REFSEQ_HG18			= "ARCHIVE/BUILD.36.3/";
     public static final String REFSEQ_HG19			= "ARCHIVE/ANNOTATION_RELEASE.105/";
+    public static final String REFSEQ_HG38			= "";
     public static final String REFSEQ_MM9			= "ARCHIVE/BUILD.37.2/";
     public static final String REFSEQ_MM10			= "";
 
@@ -65,6 +66,7 @@ public interface Constants {
     public static final String ensembl_cdna			= ".cdna.all.fa.gz";
     public static final String ensembl_ncrna		= ".ncrna.fa.gz";
 
+    public static final String refseq_gff_hg38		= "ref_GRCh38_top_level.gff3.gz";
     public static final String refseq_gff_hg19		= "ref_GRCh37.p13_top_level.gff3.gz";
     public static final String refseq_gff_hg18		= "ref_NCBI36_top_level.gff3.gz";
     public static final String refseq_gff_mm9		= "ref_MGSCv37_top_level.gff3.gz";
@@ -101,6 +103,7 @@ public interface Constants {
     public enum Release{
     	HG18,
     	HG19,
+	HG38,
     	MM9,
     	MM10;
        	
@@ -113,6 +116,7 @@ public interface Constants {
     		switch (r) {
 			case HG18: return "hg18";
 			case HG19: return "hg19";
+			case HG38: return "hg38";
 			case MM9: return "mm9";
 			case MM10: return "mm10";
 			default: return "error";
@@ -128,6 +132,7 @@ public interface Constants {
     		switch (r) {
 			case HG18: return "NCBI36.3";
 			case HG19: return "GRCh37.p13";
+			case HG38: return "GRCh38";
 			case MM9: return "MGSCv37.2";
 			case MM10: return "GRCm38.p1";
 			default: return "error";

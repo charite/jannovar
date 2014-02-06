@@ -552,6 +552,9 @@ public class Jannovar {
 	case HG19:
 		gff.parse(path + Constants.refseq_gff_hg19);
 		break;
+	case HG38:
+		gff.parse(path + Constants.refseq_gff_hg38);
+		break;
 	default:
 		System.err.println("[ERROR] Unknown release: "+genomeRelease);
 		System.exit(20);
@@ -674,7 +677,7 @@ public class Jannovar {
 	    options.addOption(new Option("V","vcf",true,"Path to VCF file"));
 	    options.addOption(new Option("a","showall",false,"report annotations for all transcripts to VCF file"));
 	    options.addOption(new Option("J","janno",false,"Output Jannovar format"));
-	    options.addOption(new Option("g","genome",true,"genome build (mm9, mm10, hg18, hg19), default hg19"));
+	    options.addOption(new Option("g","genome",true,"genome build (mm9, mm10, hg18, hg19, hg38 - only refseq), default hg19"));
 	    options.addOption(new Option(null,"create-ucsc",false,"Create UCSC definition file"));
 	    options.addOption(new Option(null,"create-refseq",false,"Create RefSeq definition file"));
 	    options.addOption(new Option(null,"create-ensembl",false,"Create Ensembl definition file"));
@@ -737,6 +740,12 @@ public class Jannovar {
 	    	if(g.equals("mm10")){this.genomeRelease = Release.MM10;}
 	    	if(g.equals("hg18")){this.genomeRelease = Release.HG18;}
 	    	if(g.equals("hg19")){this.genomeRelease = Release.HG19;}
+	    	if(g.equals("hg38") && this.createRefseq ){
+			this.genomeRelease = Release.HG38;
+		}else{
+	    		System.out.println("[INFO] Genome release hg38 only available for Refseq");
+			System.exit(0);
+		}
 	    }else{
 	    	if(performSerialization)
 	    		System.out.println("[INFO] Genome release set to default: hg19");
