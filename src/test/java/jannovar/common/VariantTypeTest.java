@@ -191,8 +191,8 @@ public class VariantTypeTest {
 
     @Test public void testFSDeletionString() 
     {
-	String s = VariantType.FS_DELETION.toString();
-	Assert.assertEquals("frameshift_truncation",s);
+	String s = VariantType.FS_DELETION.toDisplayString();
+	Assert.assertEquals("frameshift truncation",s);
     }
 
     @Test public void isTopPriorityTest1() {

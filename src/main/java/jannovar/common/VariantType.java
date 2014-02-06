@@ -172,54 +172,54 @@ public enum  VariantType {
 						UPSTREAM,DOWNSTREAM,INTERGENIC,
 						ERROR };
 	return vta;
-
     }
 
 
 
-    /**
-     * Return a string representation of the variant type
-     * passed as an argument.
-     * @param vt The variant type of a variant.
-     */
-    public static String variantTypeAsString(VariantType vt) {
-	switch (vt) {
-	case FS_DELETION: return "frameshift deletion";
-	case FS_INSERTION: return "frameshift insertion";
-	case NON_FS_SUBSTITUTION: return "nonframeshift substitution";
-	case FS_SUBSTITUTION:  return "frameshift substitution";
-	case MISSENSE:  return "missense";
-	case NON_FS_DELETION: return "nonframeshift deletion";
-	case NON_FS_INSERTION:return "nonframeshift insertion";
-	case SPLICING: return "splicing";
-	case STOPGAIN:return "stopgain";
-	case STOPLOSS: return "stoploss";
-	case NON_FS_DUPLICATION: return "nonframeshift duplication";  
-	case FS_DUPLICATION: return "frameshift duplication";  
-	case START_LOSS: return "start loss";
-	case START_GAIN: return "start gain";
-	case ncRNA_EXONIC: return "noncoding RNA exonic";
-	case ncRNA_INTRONIC:return "noncoding RNA intronic";
-	case ncRNA_SPLICING:return "noncoding RNA splicing";
-	case UTR3: return "UTR3";
-	case UTR5: return "UTR5";
-	case SYNONYMOUS: return "synonymous";
-	case INTRONIC: return "intronic";
-
-	case UPSTREAM:return "upstream";
-	case DOWNSTREAM:return "downstream";
-	case INTERGENIC:return "intergenic";
-	case ERROR: return "error";
-	default:
-	    return "unknown variant type (error)";
-	}
-    }
     
     /**
+     * A string representing the variant type (e.g., missense_variant, stop_gained,...)
+     * @return Name of this {@link VariantType}
+     */
+    public String toDisplayString(){
+    	String soTerm;
+    	switch (this) {
+    	case FS_DELETION: return "frameshift truncation";
+    	case FS_INSERTION: return "frameshift elongation";
+    	case NON_FS_SUBSTITUTION: return "inframe substitution";
+    	case FS_SUBSTITUTION:  return "frameshift substitution";
+    	case MISSENSE:  return "missense";
+    	case NON_FS_DELETION: return "inframe deletion";
+    	case NON_FS_INSERTION:return "inframe insertion";
+    	case SPLICING: return "splicing";
+    	case STOPGAIN:return "stopgain";
+    	case STOPLOSS: return "stoploss";
+    	case NON_FS_DUPLICATION: return "inframe duplication";  
+    	case FS_DUPLICATION: return "frameshift duplication";  
+    	case START_LOSS: return "startloss";
+    	case START_GAIN: return "startgain";
+    	case ncRNA_EXONIC: return "ncRNA exonic";
+    	case ncRNA_INTRONIC:return "ncRNA intronic";
+    	case ncRNA_SPLICING:return "ncRNA splicing";
+    	case UTR3: return "UTR3";
+    	case UTR5: return "UTR5";
+    	case SYNONYMOUS: return "synonymous";
+    	case INTRONIC: return "intronic";
+    	case UPSTREAM:return "upstream";
+    	case DOWNSTREAM:return "downstream";
+    	case INTERGENIC:return "intergenic";
+    	case ERROR: return "error";
+    	default:
+    	    return "unknown variant type (error)";
+    	}
+    }
+
+
+     /**
      * A Sequence Ontology (SO) term string representing the variant type (e.g., missense_variant, stop_gained,...)
      * @return SO-term representation of this {@link VariantType}
      */
-    public String toString(){
+    public String toSequenceOntologyTerm(){
     	String soTerm;
     	switch (this) {
     	case FS_DELETION: return "frameshift_truncation";
@@ -235,7 +235,7 @@ public enum  VariantType {
     	case NON_FS_DUPLICATION: return "inframe_duplication";  
     	case FS_DUPLICATION: return "frameshift_duplication";  
     	case START_LOSS: return "start_lost";
-    	case START_GAIN: return "start_gain";
+    	case START_GAIN: return "start_gained";
     	case ncRNA_EXONIC: return "non_coding_exon_variant";
     	case ncRNA_INTRONIC:return "non_coding_intron_variant";
     	case ncRNA_SPLICING:return "non_coding_splice_region_variant";
@@ -256,7 +256,7 @@ public enum  VariantType {
      * Return the sequence ontology accession number for the
      * variant class if available, otherwise return the name.
      */
-    public String toSOidString() {
+    public String toSequenceOntologyID() {
 	switch (this) {
 	case FS_DELETION: return "SO:0001910";
 	case FS_INSERTION: return "SO:0001909";
@@ -271,15 +271,14 @@ public enum  VariantType {
 	case NON_FS_DUPLICATION: return "nonframeshift duplication";
 	case FS_DUPLICATION: return "frameshift duplication";
 	case START_LOSS: return "start loss";
-	case START_GAIN: return "start gain";
+	case START_GAIN: return "start gained";
 	case ncRNA_EXONIC: return "SO:0001792";
 	case ncRNA_INTRONIC: return "noncoding RNA intronic";
 	case ncRNA_SPLICING: return "noncoding RNA splicing";
 	case UTR3: return "SO:0001624";
 	case UTR5: return "SO:0001623";
 	case SYNONYMOUS: return "SO:0001819";
-	case INTRONIC: return "SO:0001627";
-	    
+	case INTRONIC: return "SO:0001627";   
 	case UPSTREAM: return "SO:0001631";
 	case DOWNSTREAM: return "SO:0001632";
 	case INTERGENIC: return "SO:0001628";
