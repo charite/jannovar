@@ -5,7 +5,6 @@ package jannovar.io;
 
 import jannovar.common.Constants;
 import jannovar.exception.FileDownloadException;
-import jannovar.exception.KGParseException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,7 +28,7 @@ public class TranscriptDataDownloader implements Constants {
 	 * This constructor sets the location of the directory into which the transcript 
 	 * annotation data will be downloaded.<br>
 	 * Creates the folder if it still not exists.
-	 * @param dirpath
+	 * @param dirPath
 	 *            Location of download directory.
 	 */
 	public TranscriptDataDownloader(String dirPath) {
@@ -49,6 +48,9 @@ public class TranscriptDataDownloader implements Constants {
 
 	/**
 	 * Construct the object and also set proxy properties for http connection.
+     * @param dirpath directory path
+     * @param proxyHost proxy host (e.g. http://proxy.company.com)
+     * @param port proxy port (e.g. 8080)
 	 */
 	public TranscriptDataDownloader(String dirpath, String proxyHost, String port) {
 		this(dirpath);
@@ -67,6 +69,7 @@ public class TranscriptDataDownloader implements Constants {
 	 * download method is called.
 	 * @param source an integer constant (see {@link jannovar.common.Constants Constants})
 	 * that indicates whether to download UCSC, Ensembl, or RefSeq.
+     * @param r use {@link jannovar.common.Constants Release}
 	 * @throws FileDownloadException
 	 */
 	public void downloadTranscriptFiles(int source, Release r) throws FileDownloadException {

@@ -57,7 +57,7 @@ public class Node<T>   {
      * 
      * @param intervals A list containing all intervals
      */
-    @SuppressWarnings("unchecked") 
+    //@SuppressWarnings("unchecked") 
     public Node(List<Interval<T>> intervals) {
 	/* helper list to find the median of all interval endpoints */
 	List<Integer> endpointslist = new ArrayList<Integer>();
@@ -129,7 +129,7 @@ public class Node<T>   {
      * node objects.
      * @param rcmp right-comparator
      */
-     @SuppressWarnings("rawtypes")
+     //@SuppressWarnings("rawtypes")
     public static void setRightComparator(Comparator rcmp) { // 
 	Node.rightcomp = rcmp;
     }

@@ -207,13 +207,13 @@ public class VCFReader {
      * The constructor copies an external file handle but does not
      * read anything. It sets the variable
      * {@link #useExternalBufferedReader} to true, which will
-     * cause the function {@link #readFile} to use the 
+     * cause the function {@link #parseFile} to use the 
      * external file handle rather than trying to
      * open a new file handle. 
      * The constructor can be used if client code
      * wants to get all Variants at once or if it wants to get a 
      * Iterator or Variants.
-     * @param vcfPath Complete path to the VCF file.
+     * @param br the {@link Reader}
      */
     public VCFReader(BufferedReader br) {
 	this.in = br;
@@ -530,7 +530,6 @@ public class VCFReader {
      * file path passed to it and calling the method {@link #inputVCFStream}.
      * If the constructor for external BufferedReaders was used, the function
      * will use the external BufferedReader filehandle.
-     * @param VCFfilePath complete path to a VCF file.
      */
      public void parseFile() throws VCFParseException {
 	 try{
