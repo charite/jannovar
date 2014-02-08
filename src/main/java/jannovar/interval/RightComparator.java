@@ -1,11 +1,8 @@
 package jannovar.interval;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Comparator;
 
 
-import jannovar.reference.TranscriptModel;
 
 /**
  * This class is intended to be used to sort
@@ -13,9 +10,11 @@ import jannovar.reference.TranscriptModel;
  * order of their right high-points.
  * @author names
  * @version 0.02 (15 May, 2013)
+ * @param <T>
  */
 public class RightComparator<T> implements Comparator<Interval<T>>  {
     
+    @Override
     public int compare(Interval<T> interval_1, Interval<T> interval_2) {
 	/*
 	 * returns -1 if the highpoint of i is bigger than the highpoint of

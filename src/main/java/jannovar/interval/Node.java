@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * Implements the Node structure of the interval tree. The class is inteded to
+ * Implements the Node structure of the interval tree. The class is intended to
  * store {@link jannovar.interval.Interval Interval} objects. Each node stores
  * all Intervals that intersect with the {@link #median}. The {@link #leftNode}
  * stores all Intervals that are completely to the left of {@link #median}, and
@@ -18,6 +18,7 @@ import java.util.List;
  * sorted by increased left end points (lowpoint), and {@link #rightorder}
  * stores the same intervals sorted by their right end points (highpoint).
  *
+ * @param <T>
  * @see jannovar.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
  * @version 0.08 (9 January, 2014)
@@ -37,12 +38,12 @@ public class Node<T>   {
     public List<Interval<T>> rightorder;
     /** A Comparator that is used to sort intervals by their left endpoint
      * in ascending order. */
-    @SuppressWarnings("rawtypes")
-    private static Comparator leftcomp = null;
+    //@SuppressWarnings("rawtypes")
+    private static Comparator<Interval> leftcomp = null;
     /** A Comparator that is used to sort intervals by their right endpoint
      * in descending order. */
-     @SuppressWarnings("rawtypes")
-    private static Comparator rightcomp = null;
+    // @SuppressWarnings("rawtypes")
+    private static Comparator<Interval> rightcomp = null;
   
 
     /**
@@ -115,8 +116,9 @@ public class Node<T>   {
      * A static method intended to be used by the IntervalTree
      * constructor to set the left-comparator once for all
      * node objects.
+     * @param lcmp left-comparator
      */
-    @SuppressWarnings("rawtypes")
+    //@SuppressWarnings("rawtypes")
     public static void setLeftComparator(Comparator lcmp) { //
 	Node.leftcomp = lcmp;
     }
@@ -125,6 +127,7 @@ public class Node<T>   {
      * A static method intended to be used by the IntervalTree
      * constructor to set the right-comparator once for all
      * node objects.
+     * @param rcmp right-comparator
      */
      @SuppressWarnings("rawtypes")
     public static void setRightComparator(Comparator rcmp) { // 
@@ -148,11 +151,11 @@ public class Node<T>   {
     private Integer calculateMedian(List<Integer> list) {
 	Collections.sort(list);
 	int mid = list.size() / 2;
-	int median = list.get(mid);
+	int mymedian = list.get(mid);
 	if (list.size() % 2 == 0) {
-	    median = (median + list.get(mid - 1)) / 2;
+	    mymedian = (mymedian + list.get(mid - 1)) / 2;
 	}
-	return median;
+	return mymedian;
     }
     
     /**
@@ -176,11 +179,7 @@ public class Node<T>   {
      * @return the left most Interval
      */
     public Interval<T> getLeftmostItem() {
-	if (leftorder.size() == 0) {
-	    return null;
-	} else {
-	    return leftorder.get(0);
-	}
+        return leftorder.isEmpty() ? null : leftorder.get(0);
     }
 
 
@@ -200,8 +199,7 @@ public class Node<T>   {
      * @return the left most Interval
      */
     public Interval<T> getRightmostItem() {
-	if (rightorder.size() == 0) return null;
-	return rightorder.get(0);
+        return rightorder.isEmpty() ? null : rightorder.get(0);
     }
 
 
@@ -212,22 +210,14 @@ public class Node<T>   {
      * @return True, if the node is empty, otherwise False
      */
     public boolean isEmpty() {
-	if (rightorder.size()==0)
-	    return true;
-	else {
-	    return false;
-	}
+        return rightorder.isEmpty();
     }
     
     /**
      * @return true if this Node has at least one interval stored within this node.
      */
     public boolean hasInterval() {
-	if (rightorder.size()>0)
-	    return true;
-	else {
-	    return false;
-	}
+        return rightorder.size() > 0;
     }
 
    
@@ -265,18 +255,20 @@ public class Node<T>   {
     /**
      * This is intended to be used to print out the interval tree
      * for debugging purposes.
+     * @param type
+     * @param level
      */
     public void debugPrint(String type, int level) {
 	
 	StringBuffer sb = new StringBuffer();
 	for (int i=0;i<level;++i) sb.append("-");
-	sb.append("(" + level + ")");
+	sb.append("(").append(level).append(")");
 	String indent = new String(sb);
 	System.out.print(indent);
-	if (type==null)
-	    System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(),median));
+	if (type!=null)
+            System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,this.leftorder.size(),median));
 	else
-	    System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,this.leftorder.size(),median));
+            System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(),median));
 	for (Interval<T> i: leftorder) { System.out.println(indent + "##(leftorder):" + i); }
 	for (Interval<T> i: rightorder) { System.out.println(indent + "##(rightorder):" + i); }
 	System.out.println();
@@ -297,6 +289,7 @@ public class Node<T>   {
     }
 
 
+    @Override
     public String toString() {
 	return String.format("[Node]: median: %d, number of items: %d",this.median, this.leftorder.size());
     }

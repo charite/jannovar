@@ -1,9 +1,5 @@
 package jannovar.interval;
 
-import java.util.Comparator;
-
-import jannovar.exception.IntervalTreeException;
-
 /**
  * This class implements an interval on a numberline with a lowpoint
  * and a highpoint (where lowpoint <= highpoint). The Interval is intended
@@ -11,6 +7,7 @@ import jannovar.exception.IntervalTreeException;
  * need to initialize the template variable T to the corresponding datatype). The
  * intervals are intended to be used with the
  * {@link jannovar.interval.IntervalTree IntervallTree}.
+ * @param <T>
  * @see "jannovar.interval.IntervalTree"
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
@@ -92,6 +89,7 @@ public class Interval<T> implements java.io.Serializable {
 	
 
     /* returns a string that represents the interval */
+    @Override
     public String toString() {
 	return "[" + lowpoint + "," + highpoint + "," + value + "]";
     }

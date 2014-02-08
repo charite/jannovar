@@ -1,10 +1,7 @@
 package jannovar.interval;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Comparator;
 
-import jannovar.reference.TranscriptModel;
 
 /**
  * This class is intended to be used to sort
@@ -12,8 +9,10 @@ import jannovar.reference.TranscriptModel;
  * order of their left low-points.
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
+ * @param <T>
  */
 public class LeftComparator<T> implements Comparator<Interval<T>> {
+    @Override
     public int compare(Interval<T> interval_1, Interval<T> interval_2) {
 	/* returns -1 if the lowpoint of i is smaller than the lowpoint of j */
 	if (interval_1.getLow() < interval_2.getLow())

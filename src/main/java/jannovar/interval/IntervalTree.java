@@ -56,6 +56,7 @@ import java.util.Comparator;
  * 
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
  * @version 0.12 (13 June, 2013)
+ * @param <T>
  */
 public class IntervalTree<T> implements java.io.Serializable {
     /** A version numberused during deserialization to verify that 
@@ -352,12 +353,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 	if (ihigh > n.getMedian() && n.getRight() != null) {
 	    searchInterval(n.getRight(), result, ilow, ihigh);
 	}
-	return;
     }
     
     /**
      * This is intended to be used to print out the interval tree
      * for debugging purposes.
+     * @param n current {@link Node}
      */
     public void debugPrint(Node<T> n) {
 	System.out.println("IntervalTree<T> starting at  " + n.toString());
