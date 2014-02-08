@@ -5,9 +5,7 @@ import jannovar.exception.AnnotationException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 
 
 /**
@@ -75,6 +73,7 @@ public class AnnotationList {
      * Get a list of all individual
      * {@link jannovar.annotation.Annotation Annotation}
      * objects that affect the variant that owns this AnnotationList.
+     * @return {@link ArrayList} of {@link Annotation}s
      */
     public ArrayList<Annotation> getAnnotationList() {
 	return this.annotationList;
@@ -95,11 +94,12 @@ public class AnnotationList {
      * If there are multiple annotations, this function
      * sorts them. This function also sets the overall variant type (the most
      * pathogenic single type found among all annotations).
+     * @throws jannovar.exception.AnnotationException
      */
     public void sortAnnotations() throws AnnotationException {
     	if(this.isPrioritySorted)
     		return;
-	if (this.annotationList.size()==0)  {
+	if (this.annotationList.isEmpty())  {
 	    throw new AnnotationException("No data for annotation");
 	} else {
 	    java.util.Collections.sort(this.annotationList);
@@ -110,7 +110,7 @@ public class AnnotationList {
     
     
     public String getAllTranscriptVariantEffects() throws AnnotationException {
-    	if (this.annotationList.size()==0) {
+    	if (this.annotationList.isEmpty()) {
     	    String e = String.format("[AnnotationList] Error: No Annotations found");
     	    throw new AnnotationException(e);
     	}
@@ -132,9 +132,10 @@ public class AnnotationList {
      * If there are more than one annotation a comma separated list of annotations will be returned.
      * The annotations are sorted according to the pathogenicity of the variation.
      * @return String representation of all annotations
+     * @throws jannovar.exception.AnnotationException
      */
     public String getAllTranscriptAnnotations() throws AnnotationException {
-    	if (this.annotationList.size()==0) {
+    	if (this.annotationList.isEmpty()) {
     	    String e = String.format("[AnnotationList] Error: No Annotations found");
     	    throw new AnnotationException(e);
     	}
@@ -156,9 +157,11 @@ public class AnnotationList {
      * Note that we will return an annotation that matches with the overall type of this
      * annotation, in case there are multiple annotations for this variant (e.g., if there
      * are nonsense and synonymous annotation, return nonsense).
+     * @return annotation for a single transcript
+     * @throws jannovar.exception.AnnotationException
      */
     public String getSingleTranscriptAnnotation() throws AnnotationException {
-	if (this.annotationList.size()==0) {
+	if (this.annotationList.isEmpty()) {
 	    String e = String.format("[AnnotationList] Error: No Annotations found");
 	    throw new AnnotationException(e);
 	}
@@ -169,10 +172,10 @@ public class AnnotationList {
 
 
     /**
-     * Return the distance of the variant to the nearest exon.
+     * @return the distance of the variant to the nearest exon.
      */
     public int getDistanceFromExon() {
-	if (this.annotationList.size()==0) {
+	if (this.annotationList.isEmpty()) {
 	    return 0; /* should never happen */
 	}
 	int mindist=Integer.MAX_VALUE;
@@ -193,9 +196,10 @@ public class AnnotationList {
     /**
      * @return an annotation consisting of the gene symbol and a list of all affected transcripts 
      * with the HGVS mutation nomenclature.
+     * @throws jannovar.exception.AnnotationException
      */
     public String getVariantAnnotation() throws AnnotationException {
-	if (this.annotationList.size()==0) {
+	if (this.annotationList.isEmpty()) {
 	    String e = String.format("[AnnotationList] Error: No Annotations found");
 	    throw new AnnotationException(e);
 	}
@@ -253,7 +257,7 @@ public class AnnotationList {
 		sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
 		needGeneSymbol = false;
 	    } else {
-		sb.append("," + ann.getVariantAnnotation());
+		sb.append(",").append(ann.getVariantAnnotation());
 	    }
 	}
 	sb.append(")");
@@ -264,6 +268,7 @@ public class AnnotationList {
     /**
      * Returns the gene symbol of the annotations. If multiple genes are 
      * affected, it returns the Gene symbol of the most highly prioritized gene.
+     * @return gene symbol of the annotations
      */
     public String getGeneSymbol() {
 	/*if (this.hasMultipleGeneSymbols) {
@@ -272,7 +277,7 @@ public class AnnotationList {
 	if (this.annotationList == null) {
 	    System.err.println("error-annotationListNull");
 	    System.out.println("VarType = " + type);
-	} else if (this.annotationList.size()==0) {
+	} else if (this.annotationList.isEmpty()) {
 	    System.err.println("error-annotationList-zero size");
 	    System.out.println("VarType = " + type);
 	} else {
@@ -314,7 +319,7 @@ public class AnnotationList {
      /**
      * @return true if there are currently no annotations. 
      */
-    public boolean isEmpty() { return this.annotationList.size() == 0; }
+    public boolean isEmpty() { return this.annotationList.isEmpty(); }
 
 
     /**
@@ -322,6 +327,7 @@ public class AnnotationList {
      * gene symbols), return String with a comma-separated list of the
      * symbols. It is assumed that this function is call only for 
      * cases with multiple annotations.
+     * @return all gene symbols of affected genes
      */
     public String getMultipleGeneList() {
 	StringBuilder sb = new StringBuilder();                                                                                      
@@ -348,6 +354,7 @@ public class AnnotationList {
      * have this function, that basically first gets a set of all the gene symbols and
      * then sorts the output accordingly.
      * @return String with the combined annotation.
+     * @throws jannovar.exception.AnnotationException
      */
     public String  getCombinedAnnotationForVariantAffectingMultipleGenes() throws AnnotationException {
 	StringBuilder sb = new StringBuilder();
@@ -361,7 +368,7 @@ public class AnnotationList {
 
 	for (String s: geneSymbolSet) {
 	    ArrayList<String> tmp = new ArrayList<String>();
-	    Annotation ann = this.annotationList.get(0);
+	    Annotation ann;
 	    for (int j=0;j<this.annotationList.size();++j) {
 		ann  = this.annotationList.get(j);
 		if (ann == null)
@@ -370,13 +377,13 @@ public class AnnotationList {
 		if (sym.equals(s))
 		    tmp.add(ann.getVariantAnnotation());
 	    }
-	    if (tmp.size()==0) {
+	    if (tmp.isEmpty()) {
 		continue; /* This can happen if there are multiple genes with missense, ncRNA, synonymous etc 
 			     annotations. */
 	    }
-	    sb.append(s + "(" + tmp.get(0));
+	    sb.append(s).append("(").append(tmp.get(0));
 	    for (int i = 1; i<tmp.size();++i) {
-		sb.append("," + tmp.get(i));
+		sb.append(",").append(tmp.get(i));
 	    }
 	    sb.append(")");
 	}
@@ -403,7 +410,7 @@ public class AnnotationList {
 		    sb.append( a.getVariantAnnotation() );
 		    first = false;
 		} else {
-		    sb.append("," +  a.getVariantAnnotation() );
+		    sb.append(",").append(a.getVariantAnnotation());
 		}
 	    }
 	}
@@ -499,13 +506,13 @@ public class AnnotationList {
      * For now, we will just show the genesymbols (like annovar).
      */
     private String getUTRAnnotation(ArrayList<Annotation> lst) throws AnnotationException {
-	ArrayList<String> symbol_list = new ArrayList<String>();
+	//ArrayList<String> symbol_list = new ArrayList<String>();
 	HashSet<String> seen = new HashSet<String>();
 	for (Annotation a : lst) {
 	    String s = a.getGeneSymbol();
 	    if (seen.contains(s)) continue;
 	    seen.add(s);
-	    symbol_list.add(s);
+	    //symbol_list.add(s);
 	    if (s==null) {
 		String e = "No Gene symbol found for UTR variant";
 		throw new AnnotationException(e);
@@ -527,7 +534,7 @@ public class AnnotationList {
 		sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
 		needGeneSymbol = false;
 	    } else {
-		sb.append("," + ann.getVariantAnnotation());
+		sb.append(",").append(ann.getVariantAnnotation());
 	    }
 	}
 	sb.append(")");

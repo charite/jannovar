@@ -112,7 +112,7 @@ public class Jannovar {
     /** Map of Chromosomes */
     private HashMap<Byte,Chromosome> chromosomeMap=null;
     /** List of variants from input file to be analysed. */
-    private ArrayList<Variant> variantList=null;
+    private final ArrayList<Variant> variantList=null;
     /**  Name of the UCSC serialized data file that will be created by Jannovar. */
     private static final String UCSCserializationFileName="ucsc_%s.ser";
     /**  Name of the Ensembl serialized data file that will be created by Jannovar. */
@@ -207,7 +207,8 @@ public class Jannovar {
 	}
     }
 
-    /** The constructor parses the command-line arguments. */
+    /** The constructor parses the command-line arguments.
+     * @param argv the arguments passed through the command*/
     public Jannovar(String argv[]){
 	parseCommandLineArguments(argv);
 	if(!this.dirPath.endsWith(System.getProperty("file.separator")))
@@ -243,9 +244,11 @@ public class Jannovar {
      * {@link TranscriptDataDownloader} object in order to
      * download the required transcript data files. If the user has set the proxy and
      * proxy port via the command line, we use these to download the files.
+     * @param source the source of the transcript data (e.g. RefSeq, Ensembl, UCSC)
+     * @param rel the genome {@link Release}
      */
     public void downloadTranscriptFiles(int source, Release rel) {
-	TranscriptDataDownloader downloader = null;
+	TranscriptDataDownloader downloader;
 	try {
 	    if (this.proxy != null && this.proxyPort != null) {
 		downloader = new TranscriptDataDownloader(this.dirPath+genomeRelease.getUCSCString(genomeRelease),this.proxy,this.proxyPort);
@@ -319,7 +322,7 @@ public class Jannovar {
 	for (int i=0;i<7;++i)
 	    out.write(A[i] + "\t");
 	/* Now add the stuff to the INFO line */
-	String INFO = null;
+	String INFO;
 	/* The if clause is necessary to avoid writing a final ";" if the INFO lineis empty,
 	   which wouldbe invalid VCF format. */
 	if (A[7].length()>0)
@@ -460,13 +463,14 @@ public class Jannovar {
     /**
      * This function inputs a VCF file, and prints the annotated version thereof
      * to a file (name of the original file with the suffix .jannovar).
+     * @throws jannovar.exception.JannovarException
      */
     public void annotateVCF() throws JannovarException {
     	VCFReader parser = new VCFReader(this.VCFfilePath);
 	VCFLine.setStoreVCFLines();
 	try{
 	    parser.inputVCFheader();
-	} catch (Exception e) {
+	} catch (VCFParseException e) {
 	    System.err.println("[ERROR] Unable to parse VCF file");
 	    System.err.println(e.toString());
 	    System.exit(1);
@@ -483,6 +487,7 @@ public class Jannovar {
     * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
     * objects to {@link jannovar.interval.Interval Interval} objects, and
     * store these in a serialized file.
+     * @throws jannovar.exception.JannovarException
     */
     public void serializeRefseqData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
@@ -495,6 +500,7 @@ public class Jannovar {
     * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
     * objects to {@link jannovar.interval.Interval Interval} objects, and
     * store these in a serialized file.
+     * @throws jannovar.exception.JannovarException
     */
     public void serializeEnsemblData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
@@ -507,6 +513,7 @@ public class Jannovar {
      * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
      * objects to {@link jannovar.interval.Interval Interval} objects, and
      * store these in a serialized file.
+     * @throws jannovar.exception.JannovarException
      */
     public void serializeUCSCdata() throws JannovarException {
 	SerializationManager manager = new SerializationManager();
@@ -521,9 +528,10 @@ public class Jannovar {
      * refseq.ser (or a comparable file) containing a serialized version of the
      * TranscriptModel objects created to contain info about the 
      * transcript definitions (exon positions etc.) extracted from 
-     * UCSC, Ensembl, or Refseq and necessary for annotation. */
+     * UCSC, Ensembl, or Refseq and necessary for annotation.
+     * @throws jannovar.exception.JannovarException */
     public void deserializeTranscriptDefinitionFile() throws JannovarException {
-	ArrayList<TranscriptModel> kgList=null;
+	ArrayList<TranscriptModel> kgList;
 	SerializationManager manager = new SerializationManager();
 	kgList = manager.deserializeKnownGeneList(this.serializedFile);
 	this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
@@ -584,7 +592,7 @@ public class Jannovar {
 	// parse GFF/GTF
 
     	GFFparser gff = new GFFparser();
-    	String path	= null;
+    	String path;
     	path = this.dirPath + genomeRelease.getUCSCString(genomeRelease);
     	if(!path.endsWith(System.getProperty("file.separator")))
     		path += System.getProperty("file.separator");
@@ -693,17 +701,8 @@ public class Jannovar {
 		usage();
 		System.exit(0);
 	    }
-	   
-	    if (cmd.hasOption("J")) {
-		this.jannovarFormat = true; 
-	    } else {
-		this.jannovarFormat = false;
-	    }
-
-	    if(cmd.hasOption('a'))
-	    	this.showAll = true;
-	    else
-	    	this.showAll = false;
+            this.jannovarFormat = cmd.hasOption("J");
+            this.showAll = cmd.hasOption('a');
 	    
 	    if (cmd.hasOption("create-ucsc")) {
 		this.createUCSC = true;

@@ -155,7 +155,7 @@ public class AnnotatedVariantFactory implements Constants {
     public boolean isNS_SS_I() { return hasExonic || hasSplicing; }
 
     /**
-     * True if we have at least one annotation for the classes ncRNA_EXONIC
+     * @return True if we have at least one annotation for the classes ncRNA_EXONIC
      * SPLICING, UTR5, UTR3, EXONIC, INTRONIC
      */
     public boolean hasGenic() { return this.hasGenicMutation; }
@@ -173,6 +173,8 @@ public class AnnotatedVariantFactory implements Constants {
      * all variants that affect other exonic sequences (UTRs, ncRNA). Otherwise,
      * return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return
      * an intergenic Annotation.
+     * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
+     * @throws jannovar.exception.AnnotationException
      */
     public AnnotationList getAnnotationList() throws AnnotationException {
 	Collections.sort(this.annotationLst);
@@ -204,7 +206,7 @@ public class AnnotatedVariantFactory implements Constants {
      * @return most pathogenic variant type for current variant.
      */
     private VariantType getMostPathogenicVariantType() {
-	VariantType vt = null;
+	VariantType vt;
 	Collections.sort(this.annotationLst);
 	Annotation a = this.annotationLst.get(0);
 	//debugPrint();
@@ -292,7 +294,9 @@ public class AnnotatedVariantFactory implements Constants {
 
     /**  The {@link jannovar.reference.Chromosome Chromosome} class calls this
      * function  to register an annotation for a noncoding RNA transcript that 
-     *is affected by a splice mutation.
+     * is affected by a splice mutation.
+     *
+     * @param ann {@link Annotation} to be registered
      */
     public void addNcRNASplicing(Annotation ann) {
 	String s = String.format("%s",ann.getVariantAnnotation());

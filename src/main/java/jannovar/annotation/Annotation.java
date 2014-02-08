@@ -63,15 +63,18 @@ public class Annotation implements Constants, Comparable<Annotation> {
     private int entrezGeneID=UNINITIALIZED_INT;
   
     /**
-     * Return a byte constant the corresponds to the type of the variation. This will be one of the
+     * Return a byte constant that corresponds to the type of the variation. This will be one of the
      * constants in {@link jannovar.common.Constants Constants},
      * e.g., MISSENSE, 5UTR, etc. 
+     * @return the {@link VariantType} the this {@link Annotation}
      */
     public VariantType getVariantType() { return this.varType; }
     /**
      * This function resets the variant type, and should only be used by the AnnotationList class for
      * certain cases of resolving precedence, e.g., if there is already a noncoding RNA intronic
-     * annotation, and we get a new annotation for a coding isoform of the same gene. */
+     * annotation, and we get a new annotation for a coding isoform of the same gene.
+     * @param typ {@link VariantType} to be set for this {@link Annotation}
+     */
     public void setVarType(VariantType typ) { this.varType = typ; }
 
 
@@ -108,8 +111,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * no gene synbol.
      * @param annotation A complete annotation (without the gene symbol)
      * @param type The class of the variant (e.g., INTRONIC).
+     * @return the newly created {@link Annotation}
      */
-    public static  Annotation createIntergenicAnnotation(String annotation, VariantType type) {
+    public static Annotation createIntergenicAnnotation(String annotation, VariantType type) {
 	Annotation a = new Annotation();
 	a.varType = type;
 	a.variantAnnotation = annotation;
@@ -163,6 +167,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * Get full annotation with gene symbol. If this Annotation does not have a
      * symbol (e.g., for an intergenic annotation), then just return the annotation string.<br>
      * e.g. "KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q"
+     * @return the full annotation
      */
     public String getSymbolAndAnnotation() {
 	if (geneSymbol==null && variantAnnotation != null)
@@ -176,6 +181,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * If there is no transcript, e.g., for DOWNSTREAM annotations,
      * then it returns the geneSymbol (if possible). If there is
      * no gene symbol (e.g., for INTERGENIC annotations), it returns "."
+     * @return the accession number
      */
     public String getAccessionNumber() {
 	if (this.variantAnnotation == null) return ".";
@@ -218,16 +224,14 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * case say for two intronic annotations from different
      * isoforms of a gene where we do not care what the exact position is.
      * @param other An annotation to be checked for equivalence.
+     * @return true if the geneSymbol and variantAnnotation are equal
      */
     public boolean equals(Annotation other) {
-	if (varType == other.varType 
-	    && ( ( geneSymbol != null  && geneSymbol.equals(other.geneSymbol) )
-		 || ( geneSymbol == null && other.geneSymbol == null) )
-	    && variantAnnotation != null
-	    && variantAnnotation.equals(other.variantAnnotation))
-	    return true;
-	else
-	    return false;
+        return varType == other.varType 
+                && ( ( geneSymbol != null  && geneSymbol.equals(other.geneSymbol) )
+                || ( geneSymbol == null && other.geneSymbol == null) )
+                && variantAnnotation != null
+                && variantAnnotation.equals(other.variantAnnotation);
     }
 
 
@@ -245,6 +249,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
     /**
      * This method constructs an empty Annotation object. We may be able to 
      * switch to simply the constructor, TODO continue refactoring.
+     * @return an empty {@link Annotation}
      */
     public static Annotation createEmptyAnnotation() {
 	Annotation a = new Annotation();
@@ -301,8 +306,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * @return true if the variant affects an exon of an ncRNA
      */
     public boolean isNonCodingRNA() {
-	if (this.varType == VariantType.ncRNA_EXONIC) return true;
-	else return false;
+        return this.varType == VariantType.ncRNA_EXONIC;
     }
 
 
@@ -313,7 +317,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
      * sorted according to their position
      * in the CDS. For other mutations, rvarstart is 0 and the sorting
      * has no effect.
+     * @param other the {@link Annotation} to be compared with
      */
+    @Override
     public int compareTo(Annotation other) {
 	int mypriority = VariantType.priorityLevel(this.varType);
 	int yourpriority = VariantType.priorityLevel(other.varType);

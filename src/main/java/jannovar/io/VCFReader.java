@@ -176,7 +176,7 @@ public class VCFReader {
     private BufferedReader in;
     /** A flag that indicates whether we are using a file handle (BufferedReader)
 	from somewhere else (e.g., a tomcat server). */
-    private boolean useExternalBufferedReader;
+    private final boolean useExternalBufferedReader;
     
     
     /**
@@ -185,6 +185,7 @@ public class VCFReader {
      * wants to get all Variants at once or if it wants to get a 
      * Iterator or Variants.
      * @param vcfPath Complete path to the VCF file.
+     * @throws jannovar.exception.VCFParseException
      */
     public VCFReader(String vcfPath) throws VCFParseException {
 	this.file_path = vcfPath;
@@ -248,6 +249,8 @@ public class VCFReader {
      * there is a file pointer that points to the first variant
      * line of the VCF file. Once that has been taken care of, it
      * returns a iterator over variants.
+     * @return {@link Iterator} of {@link Variant}s
+     * @throws jannovar.exception.JannovarException 
      */
     public Iterator<Variant> getVariantIterator() throws JannovarException {
 	if (this.in == null ) {
@@ -267,6 +270,8 @@ public class VCFReader {
      * there is a file pointer that points to the first variant
      * line of the VCF file. Once that has been taken care of, it
      * returns a iterator over variants.
+     * @return {@link Iterator} of {@link Variant}s
+     * @throws jannovar.exception.JannovarException
      */
     public Iterator<VCFLine> getVCFLineIterator() throws JannovarException {
 	if (this.in == null ) {
@@ -292,7 +297,7 @@ public class VCFReader {
 	/** The VCFLine object corresponding to {@link #nextline}*/
 	VCFLine vcfline = null;
 	/** file handle, referenced from the outer class. */
-	private BufferedReader in;
+	private final BufferedReader in;
 	/** The constructor advances the iterator to the first 
 	    Variant line of the VCF file and thereby initializes
 	    the variable {@link #vcfline}.*/
@@ -356,7 +361,7 @@ public class VCFReader {
 	/** The VCFLine object corresponding to {@link #nextline}*/
 	VCFLine vcfline = null;
 	/** file handle, referenced from the outer class. */
-	private BufferedReader in;
+	private final BufferedReader in;
 	/** The constructor advances the iterator to the first 
 	    Variant line of the VCF file and thereby initializes
 	    the variable {@link #vcfline}.*/
@@ -513,11 +518,11 @@ public class VCFReader {
 	    msg.add(String.format("VCF file: %s (number of variants: %d)",base_filename,this.total_number_of_variants));
 	else
 	     msg.add(String.format("Number of variants in VCF file: %d",this.total_number_of_variants));
-	if (this.errorList.size() != 0) {
+	if (!this.errorList.isEmpty()) {
 	    msg.add("Errors encountered while parsing VCF file:");
 	    msg.addAll(this.errorList);
 	}
-	if (this.unparsable_line_list.size()!=0) {
+	if (!this.unparsable_line_list.isEmpty()) {
 	    msg.add("Could not parse the following lines:");
 	    msg.addAll(this.unparsable_line_list);
 	}
@@ -530,6 +535,7 @@ public class VCFReader {
      * file path passed to it and calling the method {@link #inputVCFStream}.
      * If the constructor for external BufferedReaders was used, the function
      * will use the external BufferedReader filehandle.
+     * @throws jannovar.exception.VCFParseException
      */
      public void parseFile() throws VCFParseException {
 	 try{
@@ -554,8 +560,8 @@ public class VCFReader {
      * data elements/explanations explicitly.
      */
     private void inputVCFStream() throws IOException, VCFParseException {
-     	String line=null;
-	VCFLine vcfline = null;
+     	String line;
+	VCFLine vcfline;
 	
 	while ((line = in.readLine())!= null) {
 	    try {
@@ -593,14 +599,14 @@ public class VCFReader {
 	Iterator<String> it = this.unparsableChromosomes.iterator();
 	boolean first=true;
 	StringBuffer sb = new StringBuffer();
-	sb.append(n_unparsable_chromosome_scaffold_variants + " variants were identified from the following chromosome scaffolds: ");
+	sb.append(n_unparsable_chromosome_scaffold_variants).append(" variants were identified from the following chromosome scaffolds: ");
 	while (it.hasNext()) {
 	    String s = it.next();
 	    if (first) {
 		sb.append(s);
 		first=false;
 	    } else {
-		sb.append(", " + s);
+		sb.append(", ").append(s);
 	    }
 	}
 	this.errorList.add(sb.toString());
@@ -615,6 +621,8 @@ public class VCFReader {
      * </PRE>
      * We will use the number of sample names to determine which subclass of the abstract
      * factory {@link jannovar.genotype.GenotypeFactoryA GenotypeFactoryA} to instantiate.
+     * @param line column name line of the VCF file
+     * @throws jannovar.exception.VCFParseException
      */
     public void parse_chrom_line(String line) throws VCFParseException
     {
@@ -665,7 +673,6 @@ public class VCFReader {
      * determines the number of samples in the VCF file and sets the {@link GenotypeFactoryA}. 
      * If everything goes well, this function sets the variable
      * {@link #vcfHeaderIsInitialized} to true.
-     * @throws IOException
      * @throws VCFParseException
      */
     public void inputVCFheader() throws VCFParseException {
@@ -699,7 +706,6 @@ public class VCFReader {
 		    } else {
 			vcf_header.add(line); 
 		    }
-		    continue; 
 		} else if (line.startsWith("#CHROM")) {
 		    /* The CHROM line is the last line of the header and
 		       includes  the FORMAT AND sample names. */
