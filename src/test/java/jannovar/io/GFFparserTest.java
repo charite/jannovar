@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public class GFFparserTest {
 
 //	@Test
 //	public void testGFFversion() {
-//		assertEquals(3, reader.getGFFversion());
+//		Assert.assertEquals(3, reader.getGFFversion());
 //	}
 	
 	@Test
@@ -73,16 +73,16 @@ public class GFFparserTest {
 		try {
 			reader.setGFFversion(3);
 			Feature feature	= reader.processFeature(line);
-			assertEquals(FeatureType.EXON, feature.getType());
-			assertEquals(5000, feature.getStart());
-			assertEquals(5500, feature.getEnd());
-//			assertEquals('.', feature.getPhase());
-			assertEquals(true, feature.getStrand());
-//			assertEquals('.', feature.getScore());
-			assertEquals("ctg123", feature.getSequence_id());
-			assertEquals(2, feature.getAttributes().size());
-			assertEquals("exon00004", feature.getAttribute("ID"));
-			assertEquals("mRNA00001,mRNA00002,mRNA00003", feature.getAttribute("Parent"));
+			Assert.assertEquals(FeatureType.EXON, feature.getType());
+			Assert.assertEquals(5000, feature.getStart());
+			Assert.assertEquals(5500, feature.getEnd());
+//			Assert.assertEquals('.', feature.getPhase());
+			Assert.assertEquals(true, feature.getStrand());
+//			Assert.assertEquals('.', feature.getScore());
+			Assert.assertEquals("ctg123", feature.getSequence_id());
+			Assert.assertEquals(2, feature.getAttributes().size());
+			Assert.assertEquals("exon00004", feature.getAttribute("ID"));
+			Assert.assertEquals("mRNA00001,mRNA00002,mRNA00003", feature.getAttribute("Parent"));
 			
 		} catch (FeatureFormatException e) {
 			fail("misformed feature line: "+line+"\n"+e);
@@ -96,16 +96,16 @@ public class GFFparserTest {
 		try {
 			reader.setGFFversion(3);
 			Feature feature	= reader.processFeature(line);
-			assertEquals(FeatureType.GENE, feature.getType());
-			assertEquals(1000, feature.getStart());
-			assertEquals(9000, feature.getEnd());
-//			assertEquals('.', feature.getPhase());
-			assertEquals(true, feature.getStrand());
-//			assertEquals('.', feature.getScore());
-			assertEquals("ctg123", feature.getSequence_id());
-			assertEquals(2, feature.getAttributes().size());
-			assertEquals("gene00001", feature.getAttribute("ID"));
-			assertEquals("EDEN", feature.getAttribute("Name"));
+			Assert.assertEquals(FeatureType.GENE, feature.getType());
+			Assert.assertEquals(1000, feature.getStart());
+			Assert.assertEquals(9000, feature.getEnd());
+//			Assert.assertEquals('.', feature.getPhase());
+			Assert.assertEquals(true, feature.getStrand());
+//			Assert.assertEquals('.', feature.getScore());
+			Assert.assertEquals("ctg123", feature.getSequence_id());
+			Assert.assertEquals(2, feature.getAttributes().size());
+			Assert.assertEquals("gene00001", feature.getAttribute("ID"));
+			Assert.assertEquals("EDEN", feature.getAttribute("Name"));
 			
 		} catch (FeatureFormatException e) {
 			fail("misformed feature line: "+line+"\n"+e);
@@ -120,21 +120,21 @@ public class GFFparserTest {
 			reader.setGFFversion(2);
 			reader.setValueSeperator(" ");
 			Feature feature	= reader.processFeature(line);
-			assertEquals(FeatureType.EXON, feature.getType());
-			assertEquals(246324, feature.getStart());
-			assertEquals(246433, feature.getEnd());
-//			assertEquals('.', feature.getPhase());
-			assertEquals(false, feature.getStrand());
-//			assertEquals('.', feature.getScore());
-			assertEquals("18", feature.getSequence_id());
-			assertEquals(7, feature.getAttributes().size());
-			assertEquals("ENSG00000079134", feature.getAttribute("gene_id"));
-			assertEquals("ENST00000579891", feature.getAttribute("transcript_id"));
-			assertEquals("1", feature.getAttribute("exon_number"));
-			assertEquals("THOC1", feature.getAttribute("gene_name"));
-			assertEquals("protein_coding", feature.getAttribute("gene_biotype"));
-			assertEquals("THOC1-020", feature.getAttribute("transcript_name"));
-			assertEquals("ENSE00002716487", feature.getAttribute("exon_id"));
+			Assert.assertEquals(FeatureType.EXON, feature.getType());
+			Assert.assertEquals(246324, feature.getStart());
+			Assert.assertEquals(246433, feature.getEnd());
+//			Assert.assertEquals('.', feature.getPhase());
+			Assert.assertEquals(false, feature.getStrand());
+//			Assert.assertEquals('.', feature.getScore());
+			Assert.assertEquals("18", feature.getSequence_id());
+			Assert.assertEquals(7, feature.getAttributes().size());
+			Assert.assertEquals("ENSG00000079134", feature.getAttribute("gene_id"));
+			Assert.assertEquals("ENST00000579891", feature.getAttribute("transcript_id"));
+			Assert.assertEquals("1", feature.getAttribute("exon_number"));
+			Assert.assertEquals("THOC1", feature.getAttribute("gene_name"));
+			Assert.assertEquals("protein_coding", feature.getAttribute("gene_biotype"));
+			Assert.assertEquals("THOC1-020", feature.getAttribute("transcript_name"));
+			Assert.assertEquals("ENSE00002716487", feature.getAttribute("exon_id"));
 			
 		} catch (FeatureFormatException e) {
 			fail("misformed feature line: "+line+"\n"+e);

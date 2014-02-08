@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @see jannovar.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
- * @version 0.07 (8 January, 2014)
+ * @version 0.08 (9 January, 2014)
  */
 public class Node<T>   {
     /** Median of all intervals in this node */
@@ -37,9 +37,11 @@ public class Node<T>   {
     public List<Interval<T>> rightorder;
     /** A Comparator that is used to sort intervals by their left endpoint
      * in ascending order. */
+    @SuppressWarnings("rawtypes")
     private static Comparator leftcomp = null;
     /** A Comparator that is used to sort intervals by their right endpoint
      * in descending order. */
+     @SuppressWarnings("rawtypes")
     private static Comparator rightcomp = null;
   
 
@@ -54,6 +56,7 @@ public class Node<T>   {
      * 
      * @param intervals A list containing all intervals
      */
+    @SuppressWarnings("unchecked") 
     public Node(List<Interval<T>> intervals) {
 	/* helper list to find the median of all interval endpoints */
 	List<Integer> endpointslist = new ArrayList<Integer>();
@@ -113,6 +116,7 @@ public class Node<T>   {
      * constructor to set the left-comparator once for all
      * node objects.
      */
+    @SuppressWarnings("rawtypes")
     public static void setLeftComparator(Comparator lcmp) { //
 	Node.leftcomp = lcmp;
     }
@@ -122,6 +126,7 @@ public class Node<T>   {
      * constructor to set the right-comparator once for all
      * node objects.
      */
+     @SuppressWarnings("rawtypes")
     public static void setRightComparator(Comparator rcmp) { // 
 	Node.rightcomp = rcmp;
     }

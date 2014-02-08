@@ -17,7 +17,8 @@ import java.util.HashMap;
  * @author mjaeger
  * @version 0.1
  */
-public interface ChromosomMap extends Constants {
+@SuppressWarnings("serial")
+public interface ChromosomeMap extends Constants {
   
     HashMap<String, Byte> identifier2chromosom 	= new HashMap<String, Byte>(){
 	{

@@ -64,9 +64,7 @@ public enum  VariantType {
 	/** Nucleotide duplication that results in a frameshift. */
 	FS_DUPLICATION,
 	/** Variation leads to the loss of the start codon */
-	START_LOSS,
-	/** Variation leads to the gain of a new the start codon e.g. translation initiation site up- or downstream*/
-	START_GAIN;
+	START_LOSS;
 
 
     /**
@@ -105,7 +103,6 @@ public enum  VariantType {
 	case FS_DUPLICATION:
 	case NON_FS_DUPLICATION:
 	case START_LOSS:
-	case START_GAIN:
 	    return 1;
 	case ncRNA_EXONIC:
 	case ncRNA_SPLICING:
@@ -164,7 +161,7 @@ public enum  VariantType {
 						FS_DELETION,FS_INSERTION,FS_SUBSTITUTION,
 						NON_FS_DELETION,NON_FS_INSERTION,NON_FS_SUBSTITUTION,
 						STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION,
-						START_LOSS,START_GAIN,
+						START_LOSS,
 						ncRNA_EXONIC,ncRNA_SPLICING,
 						UTR3, UTR5,
 						SYNONYMOUS,INTRONIC,
@@ -197,7 +194,6 @@ public enum  VariantType {
     	case NON_FS_DUPLICATION: return "inframe duplication";  
     	case FS_DUPLICATION: return "frameshift duplication";  
     	case START_LOSS: return "startloss";
-    	case START_GAIN: return "startgain";
     	case ncRNA_EXONIC: return "ncRNA exonic";
     	case ncRNA_INTRONIC:return "ncRNA intronic";
     	case ncRNA_SPLICING:return "ncRNA splicing";
@@ -235,7 +231,6 @@ public enum  VariantType {
     	case NON_FS_DUPLICATION: return "inframe_duplication";  
     	case FS_DUPLICATION: return "frameshift_duplication";  
     	case START_LOSS: return "start_lost";
-    	case START_GAIN: return "start_gained";
     	case ncRNA_EXONIC: return "non_coding_exon_variant";
     	case ncRNA_INTRONIC:return "non_coding_intron_variant";
     	case ncRNA_SPLICING:return "non_coding_splice_region_variant";
@@ -271,7 +266,6 @@ public enum  VariantType {
 	case NON_FS_DUPLICATION: return "nonframeshift duplication";
 	case FS_DUPLICATION: return "frameshift duplication";
 	case START_LOSS: return "start loss";
-	case START_GAIN: return "start gained";
 	case ncRNA_EXONIC: return "SO:0001792";
 	case ncRNA_INTRONIC: return "noncoding RNA intronic";
 	case ncRNA_SPLICING: return "noncoding RNA splicing";

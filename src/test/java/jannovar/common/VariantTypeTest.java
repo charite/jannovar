@@ -16,7 +16,7 @@ import org.junit.Assert;
  *Test the class VariantType. This class is pretty simple, but we want to 
  * avoid the possibility of an additional variant type being added to this
  * class and forgotten elsewhere.
- * There are currently 25 constants (Feb 3, 2014), e.g., DOWNSTREAM,  FS_DELETION, 
+ * There are currently 24 constants (Feb 9, 2014), e.g., DOWNSTREAM,  FS_DELETION, 
  */
 public class VariantTypeTest {
    
@@ -24,7 +24,7 @@ public class VariantTypeTest {
     @Test public void testNumberOfConstants() 
     {
 	int n = VariantType.class.getEnumConstants().length;
-	Assert.assertEquals(25,n);
+	Assert.assertEquals(24,n);
     }
 
     @Test public void testAllConstantsAreInPriorityList() 
@@ -110,12 +110,7 @@ public class VariantTypeTest {
 	int n = VariantType.priorityLevel( VariantType.START_LOSS);
 	Assert.assertEquals(1,n);
     }
-    
-    @Test public void testPriorityLevel14() 
-    {
-	int n = VariantType.priorityLevel( VariantType.START_GAIN);
-	Assert.assertEquals(1,n);
-    }
+   
 
     @Test public void testPriorityLevel15() 
     {

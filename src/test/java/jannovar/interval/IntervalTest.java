@@ -21,7 +21,7 @@ import org.junit.Assert;
 /**
  * Tests the Interval class.
  */
-
+@SuppressWarnings("all")
 public class IntervalTest {
     
     
@@ -61,7 +61,6 @@ public class IntervalTest {
 	public void shouldChokeOnIntervalCTOR() throws IntervalTreeException {
 	Interval<String> ivl = new Interval(70,50,"badstring");
 	}*/
-    
     @Test public void testLeftCompare() throws IntervalTreeException {
         Interval<String> i1 = new Interval<String>(3,100,"A");
         Interval<String> i2 = new Interval<String>(7,90,"B");

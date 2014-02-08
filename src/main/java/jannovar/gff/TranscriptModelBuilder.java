@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import jannovar.common.ChromosomMap;
+import jannovar.common.ChromosomeMap;
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
@@ -21,9 +21,9 @@ import jannovar.reference.TranscriptModel;
  * This is the builder for the {@link TranscriptModel}s from GFF- files. It is feed with {@link Feature}s
  * and builds up Genemodels with the 
  * @author mjaeger
- * @version 0.2
+ * @version 0.2 (9 February, 2014)
  */
-public class TranscriptModelBuilder implements ChromosomMap{
+public class TranscriptModelBuilder implements ChromosomeMap{
 	
 	private static final Logger logger = Logger.getLogger(TranscriptModelBuilder.class.getSimpleName());
 	
