@@ -1,8 +1,5 @@
 package jannovar.annotation;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.TranscriptModel;
@@ -178,7 +175,6 @@ public class DuplicationAnnotation {
 	    throw new AnnotationException(s);
 	} 
 	String dup = cdna.substring(startpos,endpos);
-	int diff = 0;
 	//System.out.println(trmdl.getGeneSymbol() + "[startpos="+startpos+"]: " + dup);
 	while( (endpos+len)<cdna.length() &&
 	       dup.equals(cdna.substring(startpos+len,endpos+len)) ) {
@@ -335,17 +331,12 @@ public class DuplicationAnnotation {
     }
 
 
-
-   
-    
-
     /**
      * A convenience method for printing out information about duplication annotations.
      * Hopefully useful for checking/debugging.
      */
     private static void debugDuplication(TranscriptModel trmdl, int frame_s, String wtnt3,
-					    String var, 
-					 int refvarstart, int exonNumber,int aavarpos)
+					    String var, int refvarstart, int exonNumber,int aavarpos)
     {
 	System.err.println("#--------------- DuplicationAnnotation.java: DEBUG --------------------#");
 	int cdsEndPos = refvarstart - trmdl.getRefCDSStart() + 1;

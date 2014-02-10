@@ -66,7 +66,6 @@ public class SingleNucleotideSubstitution {
      */
     public static Annotation getAnnotationPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
-	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	String canno=null; // cDNA annotation.
 	String panno=null;
@@ -170,7 +169,6 @@ public class SingleNucleotideSubstitution {
      */
     public static Annotation getAnnotationMinusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
-	String annotation = null;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 
 	String canno=null; // cDNA annotation.

@@ -2,7 +2,6 @@ package jannovar.annotation;
 
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
 
 
 /**

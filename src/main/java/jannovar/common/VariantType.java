@@ -179,7 +179,6 @@ public enum  VariantType {
      * @return Name of this {@link VariantType}
      */
     public String toDisplayString(){
-    	String soTerm;
     	switch (this) {
     	case FS_DELETION: return "frameshift truncation";
     	case FS_INSERTION: return "frameshift elongation";
@@ -216,7 +215,6 @@ public enum  VariantType {
      * @return SO-term representation of this {@link VariantType}
      */
     public String toSequenceOntologyTerm(){
-    	String soTerm;
     	switch (this) {
     	case FS_DELETION: return "frameshift_truncation";
     	case FS_INSERTION: return "frameshift_elongation";

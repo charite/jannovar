@@ -294,21 +294,21 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
      * Parses the UCSC knownGene.txt file.
      */
     public void parseKnownGeneFile(String kgpath, boolean isGzip) throws KGParseException {
-	int linecount=0;
-	int exceptionCount=0;
+//	int linecount=0;
+//	int exceptionCount=0;
 	try{
 	    BufferedReader br = getBufferedReaderFromFilePath(kgpath,isGzip); 
 	   
 	    String line;
 	   
 	    while ((line = br.readLine()) != null)   {
-		linecount++;
+//		linecount++;
 		try {
 		    TranscriptModel kg = parseTranscriptModelFromLine(line);
 		    String id = kg.getAccessionNumber();
 		    this.knownGeneMap.put(id,kg);	   
 		} catch (KGParseException e) {
-		    exceptionCount++;
+//		    exceptionCount++;
 		}
 	    }
 	    //System.out.println("[INFO] Parsed " + knownGeneMap.size() + " transcripts from UCSC knownGene resource");
@@ -457,8 +457,8 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 	try{
 	    BufferedReader br = getBufferedReaderFromFilePath(xrefpath,isGzip); 
 	    String line;
-	    int kgWithNoXref=0;
-	    int kgWithXref=0;
+//	    int kgWithNoXref=0;
+//	    int kgWithXref=0;
 	    
 	    while ((line = br.readLine()) != null)   {
 		if (line.startsWith("#"))
@@ -475,11 +475,11 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 		if (kg == null) {
 		    /** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 		    //System.err.println("Error, could not find xref sequence for known gene \"" + id + "\"");
-		    kgWithNoXref++;
+//		    kgWithNoXref++;
 		    continue;
 		    //System.exit(1);
 		}
-		kgWithXref++;
+//		kgWithXref++;
 		kg.setGeneSymbol(geneSymbol);
 		//System.out.println("x: \"" + geneSymbol + "\"");
 	    } 

@@ -118,7 +118,7 @@ public class Node<T>   {
      * node objects.
      * @param lcmp left-comparator
      */
-    //@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     public static void setLeftComparator(Comparator lcmp) { //
 	Node.leftcomp = lcmp;
     }
@@ -129,7 +129,7 @@ public class Node<T>   {
      * node objects.
      * @param rcmp right-comparator
      */
-     //@SuppressWarnings("rawtypes")
+     @SuppressWarnings("rawtypes")
     public static void setRightComparator(Comparator rcmp) { // 
 	Node.rightcomp = rcmp;
     }

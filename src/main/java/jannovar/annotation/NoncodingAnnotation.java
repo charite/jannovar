@@ -2,8 +2,6 @@ package jannovar.annotation;
 
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
-import jannovar.exception.AnnotationException;
 
 /**
  * This class provides static methods to generate annotations for non-coding

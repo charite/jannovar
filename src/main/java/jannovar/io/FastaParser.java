@@ -15,8 +15,9 @@ import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * This is the 
  * @author mjaeger
- *
+ * @version 0.1 (2013-07-12)
  */
 public abstract class FastaParser {
 

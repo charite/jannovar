@@ -3,7 +3,6 @@ package jannovar.annotation;
 
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
 
 
 /**
@@ -40,8 +39,6 @@ public class UTRAnnotation {
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to a 3' UTR variant.
      */
     public static Annotation createUTR3Annotation(TranscriptModel trmdl, int rvarstart, String ref, String alt) {
-	String genesymbol = trmdl.getGeneSymbol();
-	int rcdsend = trmdl.getRefCDSEnd();
 	Annotation ann = Annotation.createEmptyAnnotation();
 	ann.setVarType(VariantType.UTR3);
 	ann.setGeneSymbol( trmdl.getGeneSymbol() );
@@ -83,7 +80,6 @@ public class UTRAnnotation {
      * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to a 5' UTR variant.
      */
     public static Annotation createUTR5Annotation(TranscriptModel trmdl, int rvarstart, String ref, String alt) {
-	String genesymbol = trmdl.getGeneSymbol();
 	Annotation ann = Annotation.createEmptyAnnotation();
 	ann.setVarType(VariantType.UTR5);
 	ann.setGeneSymbol( trmdl.getGeneSymbol() );
@@ -100,7 +96,6 @@ public class UTRAnnotation {
 	    }
 	} else if (ref.equals("-")) {
 	    /* i.e., insertion in the UTR5 region */
-	    int len= alt.length();
 	    int d2=distance - 1; /* get end of insertion */ 
 	    String annotation = String.format("%s:c.-%d_-%dins%s",trmdl.getName(),distance,d2,alt);
 	    ann.setVariantAnnotation( annotation );

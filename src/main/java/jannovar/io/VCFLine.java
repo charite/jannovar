@@ -1,13 +1,11 @@
 package jannovar.io;
 
-import jannovar.common.Genotype;
 import jannovar.exception.ChromosomeScaffoldException;
 import jannovar.exception.VCFParseException;
 import jannovar.exome.Variant;
 import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.GenotypeCall;
 
-import java.util.MissingFormatArgumentException;
 /**
  * Parse a VCF line and provide convenient access / getter functions.
  * <P>

@@ -3,8 +3,6 @@ package jannovar.annotation;
 
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
-import jannovar.exception.AnnotationException;
 
 /**
  * This class is intended to provide a static method to generate annotations for INTRONIC variants.

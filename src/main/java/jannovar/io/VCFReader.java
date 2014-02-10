@@ -693,7 +693,7 @@ public class VCFReader {
 	    } else {
 		this.firstVCFLine = line;
 	    }
-	    String version = line.substring(16).trim();
+//	    String version = line.substring(16).trim();
 	    while ((line = in.readLine()) != null)   {
 		if (line.isEmpty()) continue;
 		if (line.startsWith("##")) {

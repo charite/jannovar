@@ -16,7 +16,7 @@ import java.net.URLConnection;
 
 /**
  * This class is responsible for downloading the data files from UCSC, Ensembl, RefSeq.
- * @version 0.2 (2 January 2014)
+ * @version 0.2 (2014-01-02)
  * @author mjaeger
  * 
  */

@@ -106,15 +106,11 @@ public class InsertionAnnotation {
 	    }
 	}
 	
-
-
     	int refcdsstart = trmdl.getRefCDSStart() ;
     	int startPosMutationInCDS = refvarstart-refcdsstart+1; 
     	int aavarpos = (int)Math.floor(startPosMutationInCDS/3)+1;    	
-    	String annotation = null;
 
-	//String annovarClass = null;
-	Translator translator = Translator.getTranslator(); /* Singleton */
+    	Translator translator = Translator.getTranslator(); /* Singleton */
 	String varnt3 = null;
 	if (trmdl.isPlusStrand() ) {
 	    if (frame_s == 1) { /* insertion located at 0-1-INS-2 part of codon */

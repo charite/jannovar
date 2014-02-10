@@ -543,7 +543,19 @@ public class Variant implements Comparable<Variant>, Constants {
     }
 
 
-    
+    /**
+     * 
+     * @return
+     * @throws AnnotationException
+     */
+    public Annotation getMostPathogenicAnnotation() throws AnnotationException{
+    	if (this.annotList.isEmpty()) {
+    	    String e = String.format("[AnnotationList] Error: No Annotations found");
+    	    throw new AnnotationException(e);
+    	}
+    	return this.annotList.getAnnotationList().get(0);
+    }
+ 
 
 
     public String getVariantType() {

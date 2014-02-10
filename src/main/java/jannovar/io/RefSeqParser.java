@@ -27,6 +27,7 @@ import jannovar.reference.TranscriptModel;
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
  * @version 0.02 (10 July, 2013)
+ * @deprecated
  */
 public class RefSeqParser extends TranscriptDataParser implements Constants  {
      /** Number of tab-separated fields in then UCSC refFlat.txt file (build hg19). */

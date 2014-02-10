@@ -21,8 +21,6 @@ import jannovar.reference.TranscriptModel;
  * @author Peter Robinson
  * @version 0.02 (23 May, 2013)
  */
-
-
 public class SerializationManager {
 
     /** Default constructor */

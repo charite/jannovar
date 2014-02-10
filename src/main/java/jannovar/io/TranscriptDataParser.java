@@ -6,20 +6,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException; 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
-
-import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
 import jannovar.reference.TranscriptModel;
 
@@ -108,9 +103,7 @@ public class TranscriptDataParser {
 	FileInputStream fin = new FileInputStream(path);
 	BufferedReader br = null;
 	if (isGzip) {
-	    GZIPInputStream gzis = new GZIPInputStream(fin);
-	    InputStreamReader xover = new InputStreamReader(gzis);
-	    br = new BufferedReader(xover);
+	    br = new BufferedReader(new InputStreamReader(new GZIPInputStream(fin)));
 	} else {
 	    DataInputStream in = new DataInputStream(fin);
 	    br = new BufferedReader(new InputStreamReader(in));

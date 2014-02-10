@@ -42,10 +42,10 @@ public class GFFparser {
 	private final static int ATTRIBUTES	= 8;
 	
 	private File file;
-	private String line;
+//	private String line;
 	private String[] fields;
-	private String[] fields_attribute;
-	private String[] fields_attribute_Pair;
+//	private String[] fields_attribute;
+//	private String[] fields_attribute_Pair;
 	private BufferedReader in;
 	private TranscriptModelBuilder transcriptBuilder;
 	private int gff_version	= 2;

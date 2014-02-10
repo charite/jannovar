@@ -5,10 +5,8 @@ package jannovar.gff;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import jannovar.common.ChromosomeMap;
@@ -71,7 +69,6 @@ public class TranscriptModelBuilder implements ChromosomeMap{
 		ArrayList<TranscriptModel> models	= new ArrayList<TranscriptModel>();
 		TranscriptModel model;
 		int curid;
-		Byte curChrom;
 		for (Gene gene : genes.values()) {
 			if(gene.id == null)
 				continue;

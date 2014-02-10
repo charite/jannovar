@@ -707,8 +707,8 @@ public class Pedigree {
 	    else
 		return false;
 	}
-	boolean hasMaternallyInheritedCompatibleVariant = false;
-	boolean hasPaternallyInheritedCompatibleVariant = false;
+//	boolean hasMaternallyInheritedCompatibleVariant = false;
+//	boolean hasPaternallyInheritedCompatibleVariant = false;
 	ArrayList<GenotypeCall> paternal = new ArrayList<GenotypeCall> ();
 	ArrayList<GenotypeCall> maternal = new ArrayList<GenotypeCall> ();
 
@@ -764,8 +764,8 @@ public class Pedigree {
 	if (this.isSingleSample) {
 	    return singleSampleCompatibleWithAutosomalRecessive(varList);
 	}
-	boolean hasMaternallyInheritedCompatibleVariant = false;
-	boolean hasPaternallyInheritedCompatibleVariant = false;
+//	boolean hasMaternallyInheritedCompatibleVariant = false;
+//	boolean hasPaternallyInheritedCompatibleVariant = false;
 	ArrayList<GenotypeCall> paternal = new ArrayList<GenotypeCall> ();
 	ArrayList<GenotypeCall> maternal = new ArrayList<GenotypeCall> ();
 

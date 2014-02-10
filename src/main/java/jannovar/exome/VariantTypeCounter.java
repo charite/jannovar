@@ -1,8 +1,6 @@
 package jannovar.exome;
 
 
-import java.io.Writer;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
