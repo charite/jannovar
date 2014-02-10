@@ -1,14 +1,5 @@
 package jannovar.reference;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.DataInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException; 
-import java.io.FileNotFoundException;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import jannovar.exception.AnnotationException;
@@ -25,9 +16,9 @@ public class Translator {
     private HashMap<String,String> codon3=null;
     /** Map of IUPAC ambiguity codes.  */
     private HashMap<String,String> iupac=null;
-    /** Sequences of known gene mRNAs. Key, a UCSC identified such as uc010nxr.1; value: A cDNA sequence in
-	lower case letters, such as "cttgccgtcag..." */
-    private HashMap<String,String> fasta=null;
+//    /** Sequences of known gene mRNAs. Key, a UCSC identified such as uc010nxr.1; value: A cDNA sequence in
+//	lower case letters, such as "cttgccgtcag..." */
+//    private HashMap<String,String> fasta=null;
     
     private static Translator translator=null;
 

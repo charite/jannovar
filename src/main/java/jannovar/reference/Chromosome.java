@@ -1,9 +1,6 @@
 package jannovar.reference;
 
 
-import java.util.TreeMap;
-import java.util.Map;
-import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -251,23 +248,22 @@ public class Chromosome {
 	/*System.out.println(String.format("getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
 	  kgl.getGeneSymbol(),kgl.getName(),position,ref,alt)); */
 
-	int txstart = kgl.getTXStart();
-	int txend   = kgl.getTXEnd();
+//	int txstart = kgl.getTXStart();
+//	int txend   = kgl.getTXEnd();
 	int cdsstart = kgl.getCDSStart();
 	int cdsend = kgl.getCDSEnd();
 	int exoncount = kgl.getExonCount();
-	String name2 = kgl.getGeneSymbol(); /* the gene symbol */
-	String name = kgl.getName(); /* the ucsc knowngene id */
+//	String name2 = kgl.getGeneSymbol(); /* the gene symbol */
+//	String name = kgl.getName(); /* the ucsc knowngene id */
 	int start = position;
 	int end = start + ref.length() - 1;
 
 	int cumlenintron = 0; // cumulative length of introns at a given exon
 	int cumlenexon=0; // cumulative length of exons at a given exon
-	int rcdsstart=0; // start of CDS within reference RNA sequence.
 	int rvarstart=-1; // start of variant within reference RNA sequence
 	int rvarend=-1; //end of variant within reference RNA sequence
-	boolean foundexonic=false; // have we found the variant to lie in an exon yet?
-	rcdsstart = kgl.getRefCDSStart();
+//	boolean foundexonic=false; // have we found the variant to lie in an exon yet?
+//	int rcdsstart = kgl.getRefCDSStart(); // start of CDS within reference RNA sequence.
 
 	for (int k=0; k< exoncount;++k) {
 	    //System.out.println("getPlusStrandCodingSequenceAnnotation exon " + k);
@@ -456,18 +452,17 @@ public class Chromosome {
 	int cdsstart = kgl.getCDSStart();
 	int cdsend = kgl.getCDSEnd();
 	int exoncount = kgl.getExonCount();
-	String name2 = kgl.getGeneSymbol(); /* the gene symbol */
-	String name = kgl.getName(); /* the ucsc knowngene id */
+//	String name2 = kgl.getGeneSymbol(); /* the gene symbol */
+//	String name = kgl.getName(); /* the ucsc knowngene id */
 	int start = position;
 	int end = start + ref.length() - 1;
 
 	int cumlenintron = 0; // cumulative length of introns at a given exon
 	int cumlenexon=0; // cumulative length of exons at a given exon
-	int rcdsstart=0; // start of CDS within reference RNA sequence.
 	int rvarstart=-1; // start of variant within reference RNA sequence
 	int rvarend=-1; //end of variant within reference RNA sequence
-	boolean foundexonic=false; // have we found the variant to lie in an exon yet?
-	rcdsstart = kgl.getRefCDSStart();
+//	boolean foundexonic=false; // have we found the variant to lie in an exon yet?
+//	int rcdsstart = kgl.getRefCDSStart(); // start of CDS within reference RNA sequence.
 
 	/*************************************************************************************** *
 	 * Iterate over all exons of the gene. Start with the 3'-most exon, which is the first   *
@@ -479,7 +474,7 @@ public class Chromosome {
 	    }
 	    cumlenexon +=  kgl.getExonEnd(k)-kgl.getExonStart(k)+1;
 	    if (cdsend <= kgl.getExonEnd(k) ) {	 // calculate CDS start accurately by considering intron length
-		rcdsstart = txend-cdsend-cumlenintron+1;
+//		rcdsstart = txend-cdsend-cumlenintron+1;
 		if (cdsend >= kgl.getExonStart(k)) {  //CDS start within this exon
 		    cumlenexon = cdsend-kgl.getExonStart(k)+1;
 		} 
