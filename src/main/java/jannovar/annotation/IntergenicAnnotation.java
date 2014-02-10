@@ -22,12 +22,12 @@ public class IntergenicAnnotation {
      * @param rightGene Gene that is 3' to the variant
      * @param startpos 5' position of the variant (should be the start position)
      * @param endpos 3' position of the variant (should be the end position)
-     * @return Annotation object for internenic variant
+     * @return {@link Annotation} object corresponding to intergenic variant
      */
     public static Annotation createIntergenicAnnotation(TranscriptModel leftGene, TranscriptModel rightGene, int startpos, int endpos) {
 	//Annotation ann = new Annotation();
 	//System.out.println(String.format("Left:%s, right:%s, start %d end %d",leftGene.getName2(),rightGene.getName2(),startpos,endpos));
-	String annot = null;
+	String annot;
 	/* Note that either the leftGene or the rightGene can be null, if the variant is located
 	   5' (3') to all variants on a chromosome. */
 	int dist;
@@ -57,7 +57,8 @@ public class IntergenicAnnotation {
      * Create an Annotation obejct for a variant that is upstream or downstream
      * to a gene (default: within 1000 nt).
      * @param trmdl The transcript that the variant is up/downstream to
-     * @param pos The chromosomal position of the variant 
+     * @param pos The chromosomal position of the variant
+     * @return {@link Annotation} object corresponding to up-/down-stream variant
      */
     public static Annotation createUpDownstreamAnnotation(TranscriptModel trmdl, int pos) {
 

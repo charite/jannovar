@@ -28,6 +28,7 @@ public class IntronicAnnotation {
      * @param k Number of exone (zero based numbering) that is 3' to the variant on chromosome
      * @param start begin position of variant (one-based numbering)
      * @param end end position of variant
+     * @return the {@link Annotation}
      */
     public static Annotation createIntronicAnnotation(TranscriptModel trmdl, int k, int start, int end){
 	String accession = trmdl.getAccessionNumber();
@@ -38,7 +39,7 @@ public class IntronicAnnotation {
 	int exonstart; 
 	int distL;
 	int distR;
-	String annot = null;;
+	String annot;
 	if (trmdl.isPlusStrand() ) {
 	    exonend = trmdl.getExonEnd(k-1);  /* also one-based numbering */
 	    exonstart = trmdl.getExonStart(k); 
@@ -68,6 +69,7 @@ public class IntronicAnnotation {
      * @param k exon number (zero based numbering) that is 3' to the variant on chromosome
      * @param start begin position of variant
      * @param end end position of variant
+     * @return {@link Annotation} object for an intergenic variant
      */
     public static Annotation createNcRNAIntronicAnnotation(TranscriptModel trmdl, int k, int start, int end){
 	Annotation ann = IntronicAnnotation.createIntronicAnnotation(trmdl,k, start,end);

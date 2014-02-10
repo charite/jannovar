@@ -36,6 +36,7 @@ public class DeletionAnnotation {
      * @param refvarstart Position of the variant in the CDS of the known gene
      * @param exonNumber Number of the affected exon.
      * @return An annotation corresponding to the deletion.
+     * @throws jannovar.exception.AnnotationException
      */
     public static Annotation getAnnotationSingleNucleotide(TranscriptModel kgl,int frame_s,
 							   String wtnt3,String wtnt3_after,
@@ -47,7 +48,7 @@ public class DeletionAnnotation {
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	// varnt3 is the codon affected by the deletion, it is the codon that
 	// results from the deletion at the same position in the aa as the wt codon was.
-	String varnt3=null;
+	String varnt3;
 	int posVariantInCDS = refvarstart-kgl.getRefCDSStart()+1; /* position of deletion within coding sequence */
 	int aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
 	/*System.out.println(kgl.getGeneSymbol() + "(" + kgl.getAccessionNumber() + ") " +
@@ -124,9 +125,11 @@ public class DeletionAnnotation {
      * @param wtnt3_after Nucleotide sequence of codon following that affected by variant
      * @param ref sequence of wildtype sequence
      * @param var alternate sequence (should be '-')
-     * @param refvarstart Position of the variant in the CDS of the known gene
+     * @param refvarstart start position of the variant in the CDS of the known gene
+     * @param refvarend end position of the variant in the CDS of the known gene
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
-     * @return An annotation corresponding to the deletion.
+     * @return {@link Annotation} object corresponding to deletion variant
+     * @throws jannovar.exception.AnnotationException
      */
     public static Annotation getMultinucleotideDeletionAnnotation(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
 						String ref, String var,int refvarstart,int refvarend, int exonNumber)
@@ -183,12 +186,12 @@ public class DeletionAnnotation {
 	    /* -------------------------------------------------------------------- *
 	     * Frameshift deletion within the body of the mRNA                      *
 	     * -------------------------------------------------------------------- */
-	    varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
+//	    varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
 	    int posMutationInCDS = refvarstart-refcdsstart+1; /* start pos of mutation with respect to CDS begin */
 	    canno = String.format("c.%d_%ddel",posMutationInCDS,refvarend-refcdsstart+1);
 	    try {
 		panno = shiftedFrameDeletion(kgl,exonNumber,canno,ref,posMutationInCDS,aavarpos,frame_s);
-	    } catch (Exception e) {
+	    } catch (AnnotationException e) {
 		System.err.println("Exception while annotating frame-shift deletion: " + canno);
 		panno=canno; /* just supply the cDNA annotation if there was an error. */
 	    }
@@ -199,7 +202,7 @@ public class DeletionAnnotation {
 
     /**
      * Gets the correct annotation for a deletion that has led to a
-     * framshift, such as p.(Gln40Profs*18), which results from 
+     * frameshift, such as p.(Gln40Profs*18), which results from 
      * a deletion of k nucleotides where k is not a multiple of 3.
      */
      private static String shiftedFrameDeletion(TranscriptModel trmdl, 
@@ -244,10 +247,9 @@ public class DeletionAnnotation {
 	    trmdl.debugPrintCDS();
 	*/
 	int aapos = aaVarStartPos;
-	int k = 0;
 	int endk = mutaa.length();
-	String annot = null;
-	for (k=0;k<endk;++k) {
+	String annot;
+	for (int k=0;k<endk;++k) {
 	    if (wtaa.charAt(k) != mutaa.charAt(k)) {
 		annot = String.format("%s:exon%d:%s:p.%c%d%cfs", 
 				      trmdl.getName(), exonNumber,

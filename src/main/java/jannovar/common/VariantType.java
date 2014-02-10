@@ -12,7 +12,7 @@ package jannovar.common;
  * Note that this class implements the assignment of a priority level to the variant classes. See
  * the document for the class
  * {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
- * @author Peter Robinson
+ * @author Peter Robinson, Marten Jäger
  * @version 0.17 (4 February, 2013)
  */
 public enum  VariantType { 
@@ -140,13 +140,11 @@ public enum  VariantType {
      * to help sort variants by predicted pathogenicity, in the knowledge that
      * occasionally we will be wrong, e.g., a variant of priority level 3 might 
      * actually be the disease causing mutation.
+     * @return <code>true</code> if a variantType has pathogenicity
+     * level one, otherwise <code>false</code>
      */
     public boolean isTopPriorityVariant() {
-	int p = VariantType.priorityLevel(this);
-	if (p==1)
-	    return true;
-	else
-	    return false;
+        return VariantType.priorityLevel(this)==1;
     }
 
 
@@ -154,8 +152,9 @@ public enum  VariantType {
     /**
      * This returns an array with the VariantTypes arranged according to 
      * their priority. It can used to arrange output of Variants ranked
-     * accordingto presumed pathogenicity.
-     */
+     * according to presumed pathogenicity.
+     * @return an array with the VariantTypes priority sorted
+     */ 
     public static VariantType[] getPrioritySortedList() {
 	VariantType[] vta = new VariantType[] { MISSENSE, STOPGAIN, SPLICING,
 						FS_DELETION,FS_INSERTION,FS_SUBSTITUTION,
@@ -248,6 +247,7 @@ public enum  VariantType {
     /**
      * Return the sequence ontology accession number for the
      * variant class if available, otherwise return the name.
+     * @return sequence ontology accession number
      */
     public String toSequenceOntologyID() {
 	switch (this) {

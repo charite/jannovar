@@ -33,9 +33,10 @@ public class SerializationManager {
      * {@link jannovar.reference.TranscriptModel TranscriptModel} objects. 
      * @param filename Name and path of the file to serialize to
      * @param kgList A list of {@link jannovar.reference.TranscriptModel TranscriptModel} objects to be serialized
+     * @throws jannovar.exception.JannovarException
      */
     public void serializeKnownGeneList(String filename, ArrayList<TranscriptModel> kgList) throws JannovarException {
-	if (kgList ==null || kgList.size()==0) {
+	if (kgList == null || kgList.isEmpty()) {
 	    throw new JannovarException("Error: attempt to serialize empty knownGene list");
 	}
 	try {
@@ -56,6 +57,8 @@ public class SerializationManager {
      * objects that were 
      * originally created by parsing the four UCSC known gene files.
      * @param filename name of serialized file
+     * @return list of {@link TranscriptModel}s
+     * @throws jannovar.exception.JannovarException
      */
     @SuppressWarnings (value="unchecked")
     public ArrayList<TranscriptModel> deserializeKnownGeneList(String filename) throws JannovarException  {

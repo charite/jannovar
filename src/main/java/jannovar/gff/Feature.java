@@ -213,18 +213,18 @@ public class Feature {
 	public String toLine(){
 		boolean wroteFirst = false;
 		StringBuffer buffy = new StringBuffer();
-		buffy.append(sequence_id+"\t");
-		buffy.append(source+"\t");
-		buffy.append(FeatureType.toString(type)+"\t");
-		buffy.append(start+"\t");
-		buffy.append(end+"\t");
-		buffy.append((score != 0.0 ? score : ".")+"\t");
-		buffy.append((strand ? "+" : "-")+"\t");
-		buffy.append((phase >-1 ? phase : ".")+"\t");
+		buffy.append(sequence_id).append("\t");
+		buffy.append(source).append("\t");
+		buffy.append(FeatureType.toString(type)).append("\t");
+		buffy.append(start).append("\t");
+		buffy.append(end).append("\t");
+		buffy.append((score != 0.0 ? score : ".")).append("\t");
+		buffy.append(strand ? "+" : "-").append("\t");
+		buffy.append(phase >-1 ? phase : ".").append("\t");
 		for (String key : this.attributes.keySet()) {
 			if(wroteFirst)
 				buffy.append(";");
-			buffy.append(key+"="+this.attributes.get(key));
+			buffy.append(key).append("=").append(this.attributes.get(key));
 			wroteFirst = true;
 		}
 		

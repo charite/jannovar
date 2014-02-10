@@ -26,7 +26,12 @@ public class SpliceAnnotation {
      * being in the SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so,
      * return true, otherwise, return false.
      * @param k Exon number in gene represented by kgl
+     * @param start begin position of variant
+     * @param end end position of variant
+     * @param ref reference sequence
+     * @param alt variant sequence
      * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
+     * @return <code>true</code> if plus strand variant
      */
     public static boolean isSpliceVariantPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns */
@@ -101,7 +106,12 @@ public class SpliceAnnotation {
      * being in the SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so,
      * return true, otherwise, return false.
      * @param k Exon number in gene represented by kgl
+     * @param start begin position of variant
+     * @param end end position of variant
+     * @param ref reference sequence
+     * @param alt variant sequence
      * @param kgl Gene to be checked for splice mutation for current chromosomal variant.
+     * @return <code>true</code> if minus strand variant
      */
     public static boolean isSpliceVariantMinusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
 	if (kgl.getExonCount() == 1) return false; /* Single-exon genes do not have introns: if (@exonstart != 1) */
@@ -206,6 +216,7 @@ public class SpliceAnnotation {
      */
     public static Annotation getSpliceAnnotationPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
 	int cdsstart = kgl.getCDSStart();
+	String anno;
 	if (start == end && start >= cdsstart) { /* single-nucleotide variant */
 	    int exonend = kgl.getExonEnd(k);
 	    int exonstart = kgl.getExonStart(k);
@@ -213,7 +224,6 @@ public class SpliceAnnotation {
 		/*  #------*-<---->------- mutation located right in front of exon */
 		cumlenexon -= (exonend - exonstart);
 		/*  Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.*/
-		String anno = null;
 		if (kgl.isNonCodingGene())
 		    anno = String.format("%s:exon%d:n.%d-%d%s>%s",kgl.getName(),
 					 k+1,cumlenexon,exonstart-start,ref,alt);
@@ -225,7 +235,6 @@ public class SpliceAnnotation {
 		return ann;
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD)  {
 		/* #-------<---->-*--------<-->-- mutation right after exon end */
-		String anno = null;
 		if (kgl.isNonCodingGene())
 		    anno = String.format("%s:exon%d:n.%d+%d%s>%s",kgl.getName(),
 					    k+1,cumlenexon,start-exonend,ref,alt);
@@ -239,7 +248,7 @@ public class SpliceAnnotation {
 	    } 
 	} 
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String anno = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
+	anno = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
 	//Annotation ann = Annotation.createSplicingAnnotation(kgl, 0,annot);
 	Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,0);
 	return ann;
@@ -265,11 +274,11 @@ public class SpliceAnnotation {
 	int exonend = kgl.getExonEnd(k);
 	int exonstart = kgl.getExonStart(k);
 	int exoncount = kgl.getExonCount();
+	String anno;
 	// if ($splicing{$name2} and $start==$end and $start<=$cdsend) {
 	if (start == end && start <= cdsend) { /* single nucleotide splice variant */
 	    if (start >= exonstart-SPLICING_THRESHOLD && start < exonstart) {
 		//------*-<---->---------<-->-------<------>----
-		String anno = null;
 		if (kgl.isNonCodingGene())
 		    anno = String.format("%s:exon%d:n.%d+%d%s>%s",kgl.getName(),
 					 (exoncount-k+1),cumlenexon,exonstart-start,revcom(ref),revcom(alt));
@@ -283,7 +292,6 @@ public class SpliceAnnotation {
 	    } else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 		// -------<---->-*--------<-->-------<------>----
 		cumlenexon -= (exonend-exonstart); //  $lenexon -= ($exonend[$k]-$exonstart[$k]);
-		String anno = null;
 		if (kgl.isNonCodingGene())
 		    anno = String.format("%s:exon%d:n.%d-%d%s>%s",kgl.getName(),
 					 (exoncount-k+1),cumlenexon,start-exonend,revcom(ref),revcom(alt));
@@ -297,7 +305,7 @@ public class SpliceAnnotation {
 	    }
 	}
 	/* If we get here, the is a complicated splice mutation not covered by the above cases.*/
-	String anno = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
+	anno = String.format("%s:exon%d:complicated splice mutation",kgl.getName(),k+1);
 	Annotation ann = new Annotation(kgl,anno,VariantType.SPLICING,0);
 	return ann;
     }

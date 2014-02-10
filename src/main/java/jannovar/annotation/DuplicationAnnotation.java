@@ -64,7 +64,7 @@ public class DuplicationAnnotation {
 	throws AnnotationException 
     {
 	String annot;
-	Annotation ann = null;
+	Annotation ann;
 	Translator translator = Translator.getTranslator(); /* Singleton */
 	int refcdsstart = trmdl.getRefCDSStart();
 
@@ -197,7 +197,7 @@ public class DuplicationAnnotation {
      */
     private static String getVarNt3(TranscriptModel trmdl,String wtnt3, String var, int frame_s)
     {
-	String varnt3 = null;
+	String varnt3;
 	if (trmdl.isPlusStrand()) {
 	    frame_s = 2 - frame_s;
 	    if (frame_s == 0) { /* duplication located at 0-1-INS-2 part of codon */
@@ -289,7 +289,7 @@ public class DuplicationAnnotation {
 	String mut = prefix + var + rest;
 	String wtaa = translator.translateDNA(wt);
 	String mutaa = translator.translateDNA(mut);
-	String annot = null;
+	String annot;
 	if (mutaa.startsWith(wtaa) && (mutaa.indexOf(wtaa,aalen))>0) {
 	    annot = String.format("%s:exon%d:%s:p.%s%ddup", trmdl.getName(), exonNumber,
 				   cDNAanno, wtaa, aaVarStartPos);

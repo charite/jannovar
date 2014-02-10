@@ -38,11 +38,11 @@ public class Node<T>   {
     public List<Interval<T>> rightorder;
     /** A Comparator that is used to sort intervals by their left endpoint
      * in ascending order. */
-    //@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     private static Comparator<Interval> leftcomp = null;
     /** A Comparator that is used to sort intervals by their right endpoint
      * in descending order. */
-    // @SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
     private static Comparator<Interval> rightcomp = null;
   
 

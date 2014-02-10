@@ -23,6 +23,7 @@ public class AnnotationException extends JannovarException {
 	this.mistake = msg;
     }
 
+    @Override
     public String getError()
     {
 	return mistake;

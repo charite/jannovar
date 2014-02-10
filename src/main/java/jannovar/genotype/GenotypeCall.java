@@ -66,8 +66,10 @@ public class GenotypeCall  {
 
 
     /**
-     * This constructor is inteded to be used for VCF files with a single
+     * This constructor is intended to be used for VCF files with a single
      * sample, which by assumption contains data from a patient.
+     * @param gt the {@link Genotype}
+     * @param qual the quality
      */
     public GenotypeCall(Genotype gt, Integer qual) {
 	this.callList = new ArrayList<Genotype>();
@@ -77,9 +79,12 @@ public class GenotypeCall  {
     }
 
      /**
-     * This constructor is inteded to be used for VCF files with a single
+     * This constructor is intended to be used for VCF files with a single
      * sample, which by assumption contains data from a patient. This constructor
      * is used to register data about the read depth of the call.
+     * @param gt the {@link Genotype}
+     * @param qual the quality
+     * @param depth the sequencing depth
      */
     public GenotypeCall(Genotype gt, Integer qual, Integer depth) {
 	this.callList = new ArrayList<Genotype>();
@@ -138,6 +143,7 @@ public class GenotypeCall  {
      * Note that this function expects the parameter n to be zero-based.
      * If the n is invalid, return null.
      * This method is intended mainly for debugging. May need to add exceptions.
+     * @param n entry number
      * @return the Genotype of the Nth individual represented in the VCF file. (0-based)
      */
     public Genotype getGenotypeInIndividualN(int n){
@@ -224,6 +230,7 @@ public class GenotypeCall  {
      * This method gets the number of individuals included in the
      * genotype call. This must be equal to the number of samples
      * in the VCF file.
+     * @return number of individuals
      */
     public int getNumberOfIndividuals() {return this.callList.size(); }
 

@@ -76,6 +76,9 @@ public class PedFileParser {
      * client code (one possible use: a tomcat server). The result is the same
      * as if we passed the file path to the method {@link #parseFile} but
      * is useful in cases where we have a BufferedReader but not a file on disk.
+     * @param PEDfileContents reader object
+     * @return {@link Pedigree} object
+     * @throws jannovar.exception.PedParseException
      */
     public Pedigree parseStream(BufferedReader PEDfileContents) throws PedParseException {
 	try{
@@ -125,6 +128,8 @@ public class PedFileParser {
      * that should have (at least) six fields. Ignore anything more than the first six fields.
      * See the documentation for this class for the structure of the ped file lines.
      * @param A list of fields of a single ped file line
+     * @return {@link Person} object
+     * @throws jannovar.exception.PedParseException
      */
     public Person parsePerson(String [] A) throws PedParseException
     {

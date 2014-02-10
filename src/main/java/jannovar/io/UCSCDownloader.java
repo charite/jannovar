@@ -13,20 +13,20 @@ import java.net.URLConnection;
 
 /**
  * This class downloads the four files we need to
- * generate TranscriptModel obejcts from the UCSC server.
+ * generate TranscriptModel objects from the UCSC server.
  * @version 0.02 (10 July, 2013)
  * @author Peter Robinsin
  */
 public class UCSCDownloader implements Constants {
 	
-    /** Path of direrctory to which the files will be downloaded. */
+    /** Path of directory to which the files will be downloaded. */
     private String directory_path;
     /** Base URI for UCSC hg19 build annotation files */
     private String hg19base = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
    
     
     /**
-     * This constructor sets the locationof the directory into 
+     * This constructor sets the location of the directory into 
      * which the UCSC data will be downloaded.
      * @param dirpath Location of download directory.
      */
@@ -43,6 +43,9 @@ public class UCSCDownloader implements Constants {
     
     /**
      * Construct the object and also set proxy properties for http connection.
+     * @param dirpath Location of a directory that must contain the files that will be downloaded
+     * @param proxyHost PROXY host
+     * @param port PROXY port
      */
     public UCSCDownloader(String dirpath, String proxyHost, String port) {
 	this(dirpath);
@@ -61,6 +64,7 @@ public class UCSCDownloader implements Constants {
      * it tries to create the directory. It then tries to download the four required
      * files from the UCSC genome browser (if a file already exists, it emits a
      * warning message and skips it).
+     * @throws jannovar.exception.KGParseException
      */
     public void downloadUCSCfiles() throws KGParseException {
 	makeDirectoryIfNotExist();
@@ -95,6 +99,10 @@ public class UCSCDownloader implements Constants {
     /**
      * This method downloads a file to the specified local file path.
      * If the file already exists, it emits a warning message and does nothing.
+     * @param baseURL remote directory path
+     * @param fname remote file name
+     * @return <code>true</code> if file was downloaded successfully
+     * @throws jannovar.exception.KGParseException
      */
     public boolean download_file(String baseURL, String fname ) throws KGParseException {
 
@@ -102,16 +110,14 @@ public class UCSCDownloader implements Constants {
 	String local_file_path = this.directory_path + fname;
 	File f = new File(local_file_path);
 	if (f.exists()) {
-	    System.err.println(String.format("Timorously refusing to download "+
+	    System.out.println(String.format("[INFO] Timorously refusing to download "+
 					     "file \"%s\" since it already exists",
 					     local_file_path));
 	    return false;
 
 	}
-	System.err.println("Downloading: \"" + urlstring + "\"");
-	//System.out.println("File " + local_file_path);
-	//System.out.println("proxy: " +  System.getProperty("http.proxyHost"));
-	//System.out.println("port: " +  System.getProperty("http.proxyPort"));
+	System.out.println("[INFO] Downloading: \"" + urlstring + "\"");
+        
 	int threshold = 0;
 	int block = 250000;
 	try{
@@ -125,18 +131,18 @@ public class UCSCDownloader implements Constants {
 	    int size = urlc.getContentLength();
 	    if(size >= 0)
 	    	block = size / 20;
-		System.err.println("0%       50%      100%");
+		System.out.println("0%       50%      100%");
 	    while ((bytesRead = reader.read(buffer)) > 0){ 
 		writer.write(buffer, 0, bytesRead);
 		buffer = new byte[153600];
 		totalBytesRead += bytesRead;
 		if (totalBytesRead > threshold) {
-		    System.err.print("=");
+		    System.out.print("=");
 		    threshold += block; 
 		}
 	    }
-	    System.err.println();
-	    System.err.println("Done. " + (new Integer(totalBytesRead).toString())+"("+size + ") bytes read.");
+	    System.out.println();
+	    System.out.println("[INFO] Done. " + (new Integer(totalBytesRead).toString())+"("+size + ") bytes read.");
 	    writer.close();
 	    reader.close();
 	} catch (MalformedURLException e){

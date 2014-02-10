@@ -3,7 +3,6 @@ package jannovar.genotype;
 import java.util.ArrayList;
 
 
-import jannovar.genotype.GenotypeCall;
 import jannovar.common.Genotype;
 import jannovar.exception.VCFParseException;
 
@@ -57,7 +56,7 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
     private ArrayList<Integer> depthList=null;
     
     
-    private int UNINITIALIZED_INT=-10;
+    private final int UNINITIALIZED_INT=-10;
     
     /**
      * The index of the genotype field in the current VCF line. Note that can
@@ -79,7 +78,10 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
      * genotypes (there should be the same number in every line). However,
      * client code probably should check that the number of individual
      * genotypes is the same for each line.
+     * @return  the newly created {@link GenotypeCall} object
+     * @throws jannovar.exception.VCFParseException
      */
+    @Override
     public GenotypeCall createGenotype(String []A) throws VCFParseException {
 	/* The following two lines have the effect of reseting the ArrayLists
 	  * for each new line. */
@@ -142,7 +144,7 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 	//System.out.println("Parse gt sample="+sample);
 
     /* one of HOMOZYGOUS_REF,HOMOZYGOUS_VAR, HETEROZYGOUS or NOT_OBSERVED ("./.") */
-	Genotype call= Genotype.UNINITIALIZED;
+	Genotype call;
 	/* The overall genotype quality as parsed from the QUAL field. If this field was given as
 	   a float, then it is rounded to the nearest integer. */
 	int genotype_quality=UNINITIALIZED_INT;
@@ -167,10 +169,10 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 		String err = "Could not parse genotype quality field \"" + B[qual_idx] 
 		    +  "\" due to a Number Format Exception:" + e.toString();
 		throw new VCFParseException(err); 
-	    } catch (Exception e) {
-		String err = "Could not parse genotype quality field for sample \"" + sample 
-		    +  "\" due to:" + e.toString();
-		throw new VCFParseException(err); 
+//	    } catch (NumberFormatException e) {
+//		String err = "Could not parse genotype quality field for sample \"" + sample 
+//		    +  "\" due to:" + e.toString();
+//		throw new VCFParseException(err); 
 	    }
 	}
 	if (this.depth_idx != UNINITIALIZED_INT) {
@@ -180,10 +182,10 @@ public class MultipleGenotypeFactory extends GenotypeFactoryA {
 		String err = "Could not parse genotype depth field \"" + B[depth_idx] 
 		    +  "\" due to a Number Format Exception:" + e.toString();
 		throw new VCFParseException(err); 
-	    } catch (Exception e) {
-		String err = "Could not parse genotype depth field in sample: " 
-		    + sample +": Exception:\n\t" + e.toString();
-		throw new VCFParseException(err); 
+//	    } catch (Exception e) {
+//		String err = "Could not parse genotype depth field in sample: " 
+//		    + sample +": Exception:\n\t" + e.toString();
+//		throw new VCFParseException(err); 
 	    }
 	}
 

@@ -330,6 +330,7 @@ public class TranscriptModelBuilder implements ChromosomeMap{
 		 * According to the used {@link Collator}, the exon is smaller/bigger if the chromosom
 		 * differs.
 		 */
+                @Override
 		public int compareTo(GFFstruct o) {
 			if(chromosom == o.chromosom){
 				
@@ -499,6 +500,7 @@ public class TranscriptModelBuilder implements ChromosomeMap{
 			rnas	= new HashMap<String, TranscriptModelBuilder.Transcript>();
 		}
 		
+                @Override
 		public String toString(){
 			return String.format("id: %s\tname: %s\tchr: %s\tstrand: %b\tnexons: %d\tnrna: %d", id, name, chromosom,strand,exons.size(),rnas.size());
 		}

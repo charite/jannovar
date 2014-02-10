@@ -1,6 +1,5 @@
 package jannovar.genotype;
 
-import jannovar.genotype.GenotypeCall;
 import jannovar.common.Genotype;
 import jannovar.exception.VCFParseException;
 
@@ -25,6 +24,8 @@ public abstract class GenotypeFactoryA {
      * This is the core method of the factory, and creates
      * a  {@link jannovar.genotype.GenotypeCall GenotypeCall} object.
      * @param A an array of Strings with the tab-separated fields of a VCF line.
+     * @return the newly created {@link GenotypeCall} object
+     * @throws jannovar.exception.VCFParseException
      */
     public abstract GenotypeCall createGenotype(String A[])  throws VCFParseException;
 

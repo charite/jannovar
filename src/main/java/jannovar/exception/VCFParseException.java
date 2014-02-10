@@ -15,6 +15,7 @@ public class VCFParseException extends JannovarException {
 
     /** Record when there is an unparsable chromosome, usually
      * a scaffold such as GL000225.1
+     * @param c 'bad' chromosome
      */
     public void setBadChromosome(String c) { this.badChromosome = c; }
 

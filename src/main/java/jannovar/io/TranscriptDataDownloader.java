@@ -92,12 +92,14 @@ public class TranscriptDataDownloader implements Constants {
 	/**
 	 * Downloads the ensembl transcript data files (if a file already exists, 
 	 * it emits a warning message and skips it).
+     * @param r {@link Release} version
+     * @throws jannovar.exception.FileDownloadException
 	 */
 	public void downloadRefseqFiles(Release r) throws FileDownloadException{
 		
-		String gff_base = null;
-		String rna_base = null;
-		String gff_name = null;
+		String gff_base;
+		String rna_base;
+		String gff_name;
 		String rna_name = refseq_rna;
 		switch(r){
 		case MM9:
@@ -125,26 +127,24 @@ public class TranscriptDataDownloader implements Constants {
 			gff_base	= String.format("%s%s%s", REFSEQ_FTP_BASE,REFSEQ_HG19,REFSEQ_GFF_BASE);
 			rna_base	= String.format("%s%s%s", REFSEQ_FTP_BASE,REFSEQ_HG19,REFSEQ_FASTA_BASE);
 			gff_name	= refseq_gff_hg19;
-//			rna_name	= refseq_rna;
 		}
 		download_file(gff_base, gff_name);
 		download_file(rna_base, rna_name);
-//		String refFlatCompressed = String.format("%s.gz",Constants.refFlat);
-//		download_file(UCSC_FTP_BASE, refFlatCompressed);
-//		downloadUCSCfiles();
 	}
 
 	/**
 	 * Downloads the ensembl transcript data files (if a file already exists, 
 	 * it emits a warning message and skips it).
+     * @param r {@link Release} version
+     * @throws jannovar.exception.FileDownloadException
 	 */
 	public void downloadEnsemblFiles(Release r) throws FileDownloadException{
-		String gtf_base		= null;
-		String cdna_base	= null;
-		String ncrna_base	= null;
-		String gtf_name		= null;
-		String cdna_name	= null;
-		String ncrna_name	= null;
+		String gtf_base;
+		String cdna_base;
+		String ncrna_base;
+		String gtf_name;
+		String cdna_name;
+		String ncrna_name;
 		switch (r) {
 		case MM9:
 			gtf_base	= String.format("%s%s%s", ENSEMBL_FTP_BASE_MM9,ENSEMBL_GTF_BASE,ENSEMBL_MOUSE_BASE);
@@ -189,6 +189,8 @@ public class TranscriptDataDownloader implements Constants {
 	 * Downloads the four
 	 * required files from the UCSC genome browser (if a file already exists, it
 	 * emits a warning message and skips it).
+     * @param r {@link Release} version
+     * @throws jannovar.exception.FileDownloadException
 	 */
 	public void downloadUCSCfiles(Release r) throws FileDownloadException {
 		String knownGene = String.format("%s.gz", Constants.knownGene);
@@ -196,7 +198,7 @@ public class TranscriptDataDownloader implements Constants {
 		String kgXref = String.format("%s.gz", Constants.kgXref);
 		String known2locus = String.format("%s.gz", Constants.known2locus);
 		
-		String ucsc_ftp_base	= null;
+		String ucsc_ftp_base;
 		switch (r) {
 		case MM9:
 			ucsc_ftp_base	= UCSC_FTP_BASE_MM9;
@@ -241,6 +243,10 @@ public class TranscriptDataDownloader implements Constants {
 	/**
 	 * This method downloads a file to the specified local file path. If the
 	 * file already exists, it emits a warning message and does nothing.
+     * @param baseURL URL to remote directory
+     * @param fname remote file name
+     * @return <code>true</code> if the file was downloaded successfully 
+     * @throws jannovar.exception.FileDownloadException
 	 */
 	public boolean download_file(String baseURL, String fname) throws FileDownloadException {
 	    

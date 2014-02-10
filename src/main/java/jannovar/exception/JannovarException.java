@@ -35,6 +35,7 @@ public class JannovarException extends Exception {
     /**
      * Print a summary of the error
      */
+    @Override
     public String toString() {
 	return getError();
     }

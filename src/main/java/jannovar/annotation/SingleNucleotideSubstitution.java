@@ -40,6 +40,7 @@ public class SingleNucleotideSubstitution {
      * @param refvarstart Position of the variant in the CDS of the known gene
      * @param exonNumber Number of the affected exon (zero-based).
      * @return An annotation corresponding to the deletion.
+     * @throws jannovar.exception.AnnotationException
      */
     public static Annotation getAnnotation(TranscriptModel kgl,int frame_s, int frame_end_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
@@ -63,6 +64,7 @@ public class SingleNucleotideSubstitution {
      * @param refvarstart Position of the variant in the CDS of the known gene
      * @param exonNumber Number of the affected exon (zero-based).
      * @return An annotation corresponding to the deletion.
+     * @throws jannovar.exception.AnnotationException
      */
     public static Annotation getAnnotationPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {
@@ -166,6 +168,7 @@ public class SingleNucleotideSubstitution {
      * @param refvarstart Position of the variant in the CDS of the known gene
      * @param exonNumber Number of the affected exon (zero-based, already corrected for being on minus strand).
      * @return An annotation corresponding to the deletion.
+     * @throws jannovar.exception.AnnotationException
      */
     public static Annotation getAnnotationMinusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 		String ref, String var,int refvarstart,int exonNumber) throws AnnotationException {

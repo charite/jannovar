@@ -57,6 +57,9 @@ public class TranscriptDataParser {
 
      /**
      * Construct the object and also set proxy properties for http connection.
+     * @param dirpath Location of a directory that must contain the files that will be downloaded
+     * @param proxyHost PROXY host
+     * @param port PROXY port
      */
     public TranscriptDataParser(String dirpath, String proxyHost, String port) {
 	this(dirpath);
@@ -96,12 +99,13 @@ public class TranscriptDataParser {
      * @param path Path to the file to be opened
      * @param isGzip true if the file is compressed (gzip).
      * @return Corresponding BufferedReader file handle.
+     * @throws java.io.IOException
      */
     protected BufferedReader getBufferedReaderFromFilePath(String path, boolean isGzip) 
 	throws IOException
     {
 	FileInputStream fin = new FileInputStream(path);
-	BufferedReader br = null;
+	BufferedReader br;
 	if (isGzip) {
 	    br = new BufferedReader(new InputStreamReader(new GZIPInputStream(fin)));
 	} else {
@@ -132,6 +136,10 @@ public class TranscriptDataParser {
     /**
      * This method downloads a file to the specified local file path.
      * If the file already exists, it emits a warning message and does nothing.
+     * @param baseURL remote directory path
+     * @param fname remote file name
+     * @return <code>true</code> if file was downloaded successfully
+     * @throws jannovar.exception.KGParseException
      */
     public boolean download_file(String baseURL, String fname ) throws KGParseException {
 
@@ -139,15 +147,12 @@ public class TranscriptDataParser {
 	String local_file_path = this.directory_path + fname;
 	File f = new File(local_file_path);
 	if (f.exists()) {
-	    System.err.println(String.format("Timorously refusing to download "+
+	    System.out.println(String.format("[INFO] Timorously refusing to download "+
 					     "file \"%s\" since it already exists",
 					     local_file_path));
 	    return false;
 	}
-	System.err.println("Downloading: \"" + urlstring + "\"");
-	//System.out.println("File " + local_file_path);
-	//System.out.println("proxy: " +  System.getProperty("http.proxyHost"));
-	//System.out.println("port: " +  System.getProperty("http.proxyPort"));
+	System.out.println("[INFO] Downloading: \"" + urlstring + "\"");
 	int threshold = 0;
 	int block = 250000;
 	try{
@@ -157,22 +162,22 @@ public class TranscriptDataParser {
 	    FileOutputStream writer = new FileOutputStream(local_file_path);
 	    byte[] buffer = new byte[153600];
 	    int totalBytesRead = 0;
-	    int bytesRead = 0;
+	    int bytesRead;
 	    int size = urlc.getContentLength();
 	    if(size >= 0)
 	    	block = size / 20;
-	    System.err.println("0%       50%      100%");
+	    System.out.println("0%       50%      100%");
 	    while ((bytesRead = reader.read(buffer)) > 0){ 
 		writer.write(buffer, 0, bytesRead);
 		buffer = new byte[153600];
 		totalBytesRead += bytesRead;
 		if (totalBytesRead > threshold) {
-		    System.err.print("=");
+		    System.out.print("=");
 		    threshold += block; 
 		}
 	    }
-	    System.err.println();
-	    System.err.println("Done. " + (new Integer(totalBytesRead).toString())+"("+size + ") bytes read.");
+	    System.out.println();
+	    System.out.println("[INFO] Done. " + (new Integer(totalBytesRead).toString())+"("+size + ") bytes read.");
 	    writer.close();
 	    reader.close();
 	} catch (MalformedURLException e){

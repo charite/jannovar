@@ -1,19 +1,12 @@
 package jannovar.io;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.DataInputStream;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException; 
 import java.io.FileNotFoundException;
 
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.zip.GZIPInputStream;
 
 import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
@@ -187,6 +180,8 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
      * coordinates are typically represented in VCF files and is the way coordinate calculations are done
      * in annovar. At a later date, it may be worthwhile to switch to the UCSC-way of half-open zero based coordinates.
      * @param line A single line of the UCSC knownGene.txt file
+     * @return {@link TranscriptModel} represented by the line
+     * @throws jannovar.exception.KGParseException
      */
     public TranscriptModel parseTranscriptModelFromLine(String line) throws KGParseException  {
 	TranscriptModel model = TranscriptModel.createTranscriptModel();
@@ -292,6 +287,9 @@ public class UCSCKGParser extends TranscriptDataParser implements  Constants {
 
     /** 
      * Parses the UCSC knownGene.txt file.
+     * @param kgpath path to the knownGene.txt file
+     * @param isGzip <code>true</code> if gzipped
+     * @throws jannovar.exception.KGParseException
      */
     public void parseKnownGeneFile(String kgpath, boolean isGzip) throws KGParseException {
 //	int linecount=0;

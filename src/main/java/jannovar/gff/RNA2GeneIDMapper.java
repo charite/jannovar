@@ -14,11 +14,11 @@ import java.util.regex.Pattern;
  */
 public class RNA2GeneIDMapper {
 	
-	private static String ensemblRegex = "ENS[MUS]*G0+([0-9]+)";
-	private static Pattern ensemblPattern = Pattern.compile(ensemblRegex);
+	private static final String ensemblRegex = "ENS[MUS]*G0+([0-9]+)";
+	private static final Pattern ensemblPattern = Pattern.compile(ensemblRegex);
 	
-	private static String refseqRegex	= "gene([0-9]+)";
-	private static Pattern refseqPattern	= Pattern.compile(refseqRegex);
+	private static final String refseqRegex	= "gene([0-9]+)";
+	private static final Pattern refseqPattern	= Pattern.compile(refseqRegex);
 	
 //	private static Matcher matcher;
 

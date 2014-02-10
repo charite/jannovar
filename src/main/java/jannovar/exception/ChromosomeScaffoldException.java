@@ -16,8 +16,10 @@ public class ChromosomeScaffoldException extends VCFParseException {
     /** Record when there is an unparsable chromosome, usually
      * a scaffold such as GL000225.1
      */
+    @Override
     public void setBadChromosome(String c) { this.badChromosome = c; }
 
+    @Override
     public String getBadChromosome() { return this.badChromosome; }
 
     public ChromosomeScaffoldException() {

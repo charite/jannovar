@@ -8,7 +8,6 @@ import java.util.Iterator;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.JannovarException;
-import jannovar.exome.Variant;
 import jannovar.genotype.GenotypeCall;
 
 /**
@@ -48,6 +47,7 @@ public class VariantTypeCounter implements Constants {
 
     /**
      * Construct the map of variant type counts and initialize it to zero.
+     * @param n the nth element
      */
     public VariantTypeCounter(int n) {
 	this.n_var_types = VariantType.size();
@@ -64,6 +64,7 @@ public class VariantTypeCounter implements Constants {
      * the VCF file and generates a list of counts, one for each
      * variant type.
      * @param variantList List of all variants found in the VCF file.
+     * @throws jannovar.exception.JannovarException
      */
     public VariantTypeCounter(ArrayList<Variant> variantList) throws JannovarException {
 	this.n_var_types = VariantType.size();
@@ -81,6 +82,7 @@ public class VariantTypeCounter implements Constants {
      * GenotypeCall for all persons in the VCF file, and update
      * the corresponding fields in 
      * {@link #countMatrix}.
+     * @param v the {@link Variant}
      */
     public void incrementCount(Variant v) {
 	VariantType vtype = v.getVariantTypeConstant();
@@ -95,6 +97,11 @@ public class VariantTypeCounter implements Constants {
 
 
 
+    /**
+     * Counts the types of {@link Variant}s.
+     * @param variantList list of {@link Variant}s
+     * @throws JannovarException 
+     */
     private void countVariants(ArrayList<Variant> variantList) throws JannovarException {
 	int N = variantList.size();
 	for (int j=0;j<N;++j) {
@@ -133,7 +140,7 @@ public class VariantTypeCounter implements Constants {
      * {@link #getTypeSpecificCounts}.
      */
     class VariantTypeIterator implements Iterator<VariantType> {
-	private int max;
+	private final int max;
 	private int i;
 	VariantType[] vta;
 	VariantTypeIterator()   {
@@ -167,6 +174,8 @@ public class VariantTypeCounter implements Constants {
      * has for a specific VariantType (such as MISSENSE, or UTR3).
      * The order of the entries is the same as the order of
      * entries in the VCF file.
+     * @param vt the {@link VariantType}
+     * @return count of this {@link VariantType}
      */
     public ArrayList<Integer> getTypeSpecificCounts(VariantType vt) {
 	int idx =  this.variantTypeInd.get(vt);

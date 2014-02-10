@@ -101,6 +101,7 @@ public class VCFLine {
      * Single- or Multiple-Sample Genotype Factory after it has parsed the header
      * (the #CHROM line contains the names of the sample or samples for which the
      * genotypes are recorded in each variant line of the VCF file).
+     * @param fac genotype factory
      */
     public static void setGenotypeFactory(GenotypeFactoryA fac) {
 	VCFLine.genofactory = fac;
@@ -109,7 +110,10 @@ public class VCFLine {
      
 
     /**
-     * Parses a single line of a VCF file, and initialize all the values of this object. */
+     * Parses a single line of a VCF file, and initialize all the values of this object.
+     * @param line single line from VCF file
+     * @throws jannovar.exception.VCFParseException 
+     */
     public VCFLine(String line) throws VCFParseException {
 	if (VCFLine.storeVCFlines) {
 	    this.vcf_line = line;
@@ -236,6 +240,7 @@ public class VCFLine {
      * </ul>
      * Note that this method should be called once after everything else has been
      * parsed. 
+     * @throws jannovar.exception.VCFParseException
      */
     public void convertToAnnovar() throws VCFParseException {
         /* Note that some nonstandard VCF files may have some bases in lower
@@ -293,6 +298,7 @@ public class VCFLine {
     /**
      * @param c a String representation of a chromosome (e.g., chr3, chrX).
      * @return corresponding integer (e.g., 3, 23).
+     * @throws jannovar.exception.ChromosomeScaffoldException
      */
     public byte convertChromosomeStringToByteValue(String c) throws ChromosomeScaffoldException {
 	if (c.startsWith("chr")) c = c.substring(3);

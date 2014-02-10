@@ -15,6 +15,7 @@ import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
 import jannovar.gff.Feature;
 import jannovar.gff.TranscriptModelBuilder;
+import java.util.logging.Level;
 
 /**
  * This is the second version of the parser w/o any String-switch-case statements to be 
@@ -59,16 +60,24 @@ public class GFFparser {
 	private String rawfeature;
 	private String valueSeparator = " ";
 	
-	public void setValueSeperator(String sep){
+        /**
+         * Set the value separator (e.g. ' ' for GFF2, '=' for GFF3)
+         * @param sep 
+         */
+	public void setValueSeparator(String sep){
 		valueSeparator = sep;
 	}
 	
+        /**
+         * default constructor
+         */
 	public GFFparser(){
 		
 	}
 	
 	/**
 	 * Checks if the specified file can be accessed.
+     * @return <code>true</code> if the file can be accessed
 	 */
 	public boolean checkFile(){
 		return this.file.canRead();
@@ -126,7 +135,7 @@ public class GFFparser {
 				}
 			}
 		}
-		logger.info("gff version: "+gff_version);
+		logger.log(Level.INFO, "gff version: {0}", gff_version);
 	}
 	
 	public void parse(String filename){
@@ -137,6 +146,7 @@ public class GFFparser {
 	 * Parses the file and feeds the {@link TranscriptModelBuilder}.
 	 * First the GFF format version is verified. If there is no header containing the <code>##gff-version</code> 
 	 * tag, we assume it is GFF version 2/2.5 aka. GTF.
+     * @param file {@link File} object of the GTF file
 	 */
 	public void parse(File file){
 		this.file = file;
@@ -160,15 +170,15 @@ public class GFFparser {
 //				break;
 			}
 		} catch (FeatureFormatException e){
-			e.printStackTrace();
+			System.err.println("[WARNING] GFF with wrong Feature format:\n"+e.toString());
 		} catch (IOException e) {
-			e.printStackTrace();
+                            System.err.println("[WARNING] failed to read the GFF file:\n"+e.toString());
 		} finally {
 			try{
 				if(in != null)
 					in.close();
 			}catch (IOException e){
-				e.printStackTrace();
+                            System.err.println("[WARNING] failed to close the GFF file reader:\n"+e.toString());
 			}
 		}
 		
@@ -217,7 +227,7 @@ public class GFFparser {
 				
 
 		if(myfields.size() < 9){
-			logger.warning("skipping malformed feature line (missing columns ("+myfields.size()+")): "+featureLine);
+			logger.warning(String.format("skipping malformed feature line (missing columns (%d)): ",myfields.size(),featureLine));
 			return null;
 		}
 		

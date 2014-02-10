@@ -29,7 +29,10 @@ public abstract class FastaParser {
 	protected HashMap<String, Integer> transcript2index;
 	
 	/**
-	 * 
+	 * Constructs a new {@link FastaParser} and initiates the path to the FastA
+         * file and the {@link TranscriptModel}s
+     * @param filename path to the FastA file
+     * @param models list of {@link TranscriptModel}s w/o mRNA sequence data
 	 */
 	public FastaParser(String filename, ArrayList<TranscriptModel> models) {
 		this.filename	= filename;
@@ -43,6 +46,7 @@ public abstract class FastaParser {
 	
 	/**
 	 * Parse the mRNA sequences and thereby add these to the {@link TranscriptModel}s.
+     * @return list of sequence annotated {@link TranscriptModel}s
 	 */
 	public ArrayList<TranscriptModel> parse(){
 		BufferedReader in = null;
@@ -63,13 +67,13 @@ public abstract class FastaParser {
 			}
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+                            System.err.println("[WARNING] failed to read the FastA file:\n"+e.toString());
 		} finally {
 			try{
 				if(in != null)
 					in.close();
 			}catch (IOException e){
-				e.printStackTrace();
+                            System.err.println("[WARNING] failed to close the FastA file reader:\n"+e.toString());
 			}
 		}
 		return transcriptmodelsProcessed;

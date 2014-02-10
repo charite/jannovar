@@ -39,6 +39,7 @@ public class InsertionAnnotation {
      * @param refvarstart The start position of the variant with respect to the cNDA of the mRNA (see comments for "+"/"-" strand)
      * @param exonNumber Number (one-based) of affected exon.
      * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
+     * @throws jannovar.exception.AnnotationException
      */
     
     public static Annotation  getAnnotation(TranscriptModel trmdl,int frame_s, String wtnt3,String wtnt3_after,
