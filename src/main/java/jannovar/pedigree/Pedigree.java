@@ -90,6 +90,8 @@ public class Pedigree {
     /**
      * Constructs a Pedigree object for a single sample. This object is 
      * used with the same interface as the multisample pedigree 
+     * @param name
+     * @return 
      */
     public static Pedigree constructSingleSamplePedigree(String name) {
 	Pedigree ped = new Pedigree();
@@ -106,7 +108,9 @@ public class Pedigree {
     }
     
     /**
+     * @param pList list of {@link Person}s
      * @param famID the Family ID of this Pedigree.
+     * @throws jannovar.exception.PedParseException
      */
     public Pedigree(ArrayList<Person> pList, String famID) throws PedParseException {
        this.personList = new ArrayList<Person>();
@@ -120,10 +124,7 @@ public class Pedigree {
        }
        setPersonIndices();
        initializeAffectedsParentsSibs();
-       if (personList.size() == 1)
-	   isSingleSample = true;
-       else
-	   isSingleSample = false;
+       isSingleSample = personList.size() == 1;
     }
 
     /**
@@ -144,21 +145,22 @@ public class Pedigree {
     }
 
     /**
+     * Returns true if the nth person is affected.
+     * @param n number of the person
      * @return true if the nth person in the PED file is affected.
      */
     public boolean isNthPersonAffected(int n) {
 	if (n<0 || n>=personList.size())
 	    return false;
 	Person p = this.personList.get(n);
-	if (p.isAffected())
-	    return true;
-	else
-	    return false;
+        return p.isAffected();
     }
 
     /**
      * Returns the PED file data for the nth person in the pedigree.
      * See {@link jannovar.pedigree.Person#getPEDFileData getPEDFileData}.
+     * @param n number of the person
+     * @return the PED file data for the nth person in the pedigree
      */
     public ArrayList<String> getPEDFileDatForNthPerson(int n) {
 	if (n<0 || n>=personList.size())
@@ -168,16 +170,15 @@ public class Pedigree {
     }
 
     /**
+     * Returns if the nth person in the PED file is parent of an affected child.
+     * @param n number of the person
      * @return true if the nth person in the PED file is parent of an affected child.
      */
     public boolean isNthPersonParentOfAffected(int n) {
 	if (n<0 || n>=personList.size())
 	    return false;
 	Person p = this.personList.get(n);
-	if (this.parentList.contains(p))
-	    return true;
-	else
-	    return false;
+        return this.parentList.contains(p);
     }
 
     /**
@@ -203,6 +204,7 @@ public class Pedigree {
      * the VCF file, which makes it easier to visualize and perform the 
      * pedigree analysis.
      * @param sampleNames List of names from the VCF file.
+     * @throws jannovar.exception.PedParseException
      */
     public void adjustSampleOrderInPedFile(ArrayList<String> sampleNames) throws PedParseException {
 	if (sampleNames == null) {
@@ -236,7 +238,7 @@ public class Pedigree {
 		    sb.append(s);
 		    first = false;
 		} else {
-		    sb.append(", " + s);
+		    sb.append(", ").append(s);
 		}
 	    }
 	    throw new PedParseException(sb.toString());
@@ -257,7 +259,7 @@ public class Pedigree {
 		    sb.append(s);
 		    first = false;
 		} else {
-		    sb.append(", " + s);
+		    sb.append(", ").append(s);
 		}
 	    }
 	    throw new PedParseException(sb.toString());
@@ -289,6 +291,7 @@ public class Pedigree {
     /**
      * Add an individual to the current pedigree.
      * @param person
+     * @throws jannovar.exception.PedParseException
      */
     public void addIndividual(Person person) throws PedParseException {
 	if (! this.familyID.equals(person.getFamilyID()) ) {
@@ -400,6 +403,7 @@ public class Pedigree {
     /**
      * Returns the number of parents in the pedigree. If there is only a single sample,
      * returns zero because the assumption is that a single sample is from an affected.
+     * @return the number of parents in the pedigree
      */
     public int getNumberOfParentsInPedigree() {
 	if (isSingleSample) return 0;
@@ -439,6 +443,7 @@ public class Pedigree {
      * {@link jannovar.genotype.GenotypeCall GenotypeCall} must be in
      * the same order as the list of Persons contained in this pedigree.
      * @param varList A list of variants (usually all variants corresponding to one gene).
+     * @return <code>true</code> if gene is autosomal dominant inheritance compatible
      */
     public boolean isCompatibleWithAutosomalDominant(ArrayList<Variant> varList) {
 	
@@ -568,10 +573,7 @@ public class Pedigree {
 	    if (gt == Genotype.HETEROZYGOUS)
 		n++;
 	}
-	if (n==1)
-	    return true;
-	else
-	    return false;
+        return n==1;
     }
 
     
@@ -654,6 +656,7 @@ public class Pedigree {
      * whether the maternal-het mutations are compatible with the paternal het mutations, and
      * it returns all variants for which there are compatible pairs.
      * @param varList A list of variants (usually all variants in some gene).
+     * @return <code>true</code> if gene is autosomal recessive inheritance compatible
      */
     public boolean isCompatibleWithAutosomalRecessiveHomozygous(ArrayList<Variant> varList) {
 	if (this.isSingleSample) {
@@ -692,6 +695,7 @@ public class Pedigree {
      * whether the maternal-het mutations are compatible with the paternal het mutations, and
      * it returns all variants for which there are compatible pairs.
      * @param varList A list of variants (usually all variants in some gene).
+     * @return <code>true</code> if gene is autosomal recessive inheritance compatible
      */
     public boolean isCompatibleWithAutosomalRecessiveCompoundHet(ArrayList<Variant> varList) {
 	if (this.isSingleSample) {
@@ -702,10 +706,7 @@ public class Pedigree {
 		if (g == Genotype.HETEROZYGOUS)
 		    n_het++;
 	    }
-	    if (n_het > 1)
-		return true;
-	    else
-		return false;
+	    return n_het > 1;
 	}
 //	boolean hasMaternallyInheritedCompatibleVariant = false;
 //	boolean hasPaternallyInheritedCompatibleVariant = false;
@@ -758,7 +759,8 @@ public class Pedigree {
      * parents. All such variants are stored. If there are such variants, then it checks
      * whether the maternal-het mutations are compatible with the paternal het mutations, and
      * it returns all variants for which there are compatible pairs.
-     * @param varList A list of variants (usually all variants in some gene).
+     * @param varList A list of {@link Variant}s (usually all variants in some gene).
+     * @return 
      */
     public boolean isCompatibleWithAutosomalRecessive(ArrayList<Variant> varList) {
 	if (this.isSingleSample) {
@@ -834,9 +836,11 @@ public class Pedigree {
      * that has been called homozygous alt)
      * <P>
      * If there are multiple samples, then 
+     * @param varList list of {@link Variant}s (usually all variants in some gene)
+     * @return compatibility with X chromosomal recessiv inheritance 
      */
     public boolean isCompatibleWithXChromosomalRecessive(ArrayList<Variant> varList) {
-	if (varList.size()==0) {
+	if (varList.isEmpty()) {
 	    System.out.println("[Pedigree.java] Warning: attempt to test zero-length variant list");
 	    return false;
 	}
@@ -911,7 +915,9 @@ public class Pedigree {
 	return false;
     }
     
-    
+    /**
+     * Prints Pedigree info for debugging.
+     */
     public void debugPrint() {
         System.out.println("Pedigree: " + familyID + " [n=" + getNumberOfIndividualsInPedigree() + "]");
 	System.out.println(String.format("Parents: n=%d, Affecteds: n=%d, Unaffecteds: n=%d",
@@ -938,16 +944,17 @@ public class Pedigree {
 
     /**
      * Get a summary line representing the pedigree that can be used for output
+     * @return summary of this {@link Pedigree}
      */
     public String getPedigreeSummary()  {
 	StringBuilder sb = new StringBuilder();
-	sb.append(familyID + ":");
+	sb.append(familyID).append(":");
 	boolean b = false;
 	for (Person p : personList) {
 	    if (b) sb.append(":");
 	    b = true;
 	    sb.append(p.getIndividualID());
-	    if (p. 	isAffected() )
+	    if (p.isAffected() )
 		sb.append("[affected");
 	    else
 		sb.append("[unaffected");
@@ -974,6 +981,8 @@ public class Pedigree {
      * of genotypes passed to the function, has at least two variants compatible with
      * autosomal recessive inheritance. Since this is a single sample, we just check
      * in the proband.
+     * @param varList list of {@link Variant}s (usually all variants in some gene)
+     * @return <code>true</code> if gene is autosomal recessive inheritance compatible
      */
     public boolean singleSampleCompatibleWithAutosomalRecessive(ArrayList<Variant> varList) {
 	int n_het = 0;
@@ -985,10 +994,7 @@ public class Pedigree {
 	    else if (g == Genotype.HETEROZYGOUS)
 		n_het++;
 	}
-	if (n_het > 1)
-	    return true;
-	else
-	    return false;
+        return n_het > 1;
     }
     
     /**
@@ -997,6 +1003,8 @@ public class Pedigree {
      * autosomal dominant inheritance or with X-chromosomeal recessive inheritance. 
      * Since this is a single sample, we just check
      * in the proband.
+     * @param varList list of {@link Variant}s (usually all variants in some gene)
+     * @return <code>true</code> if gene is autosomal dominant inheritance or X-chromosomeal recessive inheritance compatible
      */
     public boolean singleSampleHasHeterozygousVariant(ArrayList<Variant> varList) {
 	for (Variant v : varList) {

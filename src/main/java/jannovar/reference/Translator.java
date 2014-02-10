@@ -27,7 +27,9 @@ public class Translator {
 	initializeMaps();
     }
     
-    /** Factory method to get reference to Translator. */
+    /** Factory method to get reference to Translator.
+     * @return  {@link Translator} singleton
+     */
     static public Translator getTranslator() {
 	if (Translator.translator == null) {
 	    Translator.translator = new Translator();
@@ -45,6 +47,7 @@ public class Translator {
      * This may need refactoring in the future. (TODO).
      * @param dnaseq A DNA sequence that is to be translated
      * @return corresonding aminoacid sequence
+     * @throws jannovar.exception.AnnotationException
      */
     public String translateDNA(String dnaseq) throws AnnotationException {
 	StringBuilder aminoAcidSeq = new StringBuilder();

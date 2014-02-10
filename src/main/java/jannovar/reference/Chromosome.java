@@ -20,8 +20,6 @@ import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.interval.Interval;
 import jannovar.interval.IntervalTree;
-import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains.
@@ -46,11 +44,11 @@ import jannovar.reference.Translator;
 public class Chromosome {
     /** Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. 
      TODO. Add more flexible way of dealing with scaffolds etc.*/
-    private byte chromosome;
+    private final byte chromosome;
     /** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
-    private String chromosomeString=null;
+    private final String chromosomeString=null;
     /** Total number of TranscriptModels on the chromosome including multiple transcripts of the same gene. */
-    private int n_genes;
+    private final int n_genes;
     /** The initial capacity for {@link jannovar.reference.TranscriptModel TranscriptModel} objects for the
      * @link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} object.  */
     private static final int CAPACITY = 20;
@@ -122,6 +120,7 @@ public class Chromosome {
      * @param alt String representation of the variant (alt) sequence
      * @return a list of {@link jannovar.annotation.Annotation Annotation} objects corresponding to the mutation described by the object 
      * (often just one annotation, but potentially multiple ones).
+     * @throws jannovar.exception.AnnotationException
      */
     public AnnotationList getAnnotationList(int position,String ref, String alt) throws AnnotationException {
     	
@@ -146,7 +145,7 @@ public class Chromosome {
 	/** Get TranscriptModels that overlap with (start,end). */
 	ArrayList<TranscriptModel> candidateGenes =  itree.search(start, end);
 	//System.out.println("Size of candidate genes = " + candidateGenes.size());
-	if (candidateGenes.size() == 0) {
+	if (candidateGenes.isEmpty()) {
 	    /* The query does not overlap with any transcript!
 	       This means it can be intergenic, upstream or downstream. */
 	    leftNeighbor = itree.getLeftNeighbor();
@@ -168,7 +167,7 @@ public class Chromosome {
       	}
 
 	AnnotationList al = annovarFactory.getAnnotationList();
-	if (al.getAnnotationList().size()==0) {
+	if (al.getAnnotationList().isEmpty()) {
 	    String e = String.format("[Jannovar:Chromosome] Error: No annotations produced for %s:g.%d%s>%s",
 				     chromosomeString, position,ref,alt);
 	    throw new AnnotationException(e);
@@ -241,6 +240,8 @@ public class Chromosome {
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
+     * @param kgl associated {@link TranscriptModel}
+     * @throws jannovar.exception.AnnotationException
      */
     public void getPlusStrandAnnotation(int position,String ref, String alt, TranscriptModel kgl)
 	throws AnnotationException  {
@@ -440,6 +441,8 @@ public class Chromosome {
      * @param position The start position of the variant on this chromosome
      * @param ref String representation of the reference sequence affected by the variant
      * @param alt String representation of the variant (alt) sequence
+     * @param kgl assigned {@link TranscriptModel}
+     * @throws jannovar.exception.AnnotationException
      */
     public void getMinusStrandAnnotation(int position,String ref, String alt, TranscriptModel kgl)
 	throws AnnotationException  {
@@ -568,7 +571,7 @@ public class Chromosome {
 		    }
 		} else if (k < kgl.getExonCount() -1 && end < kgl.getExonStart(k+1)) {
 		    //System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
-		     Annotation ann = null;
+		     Annotation ann;
 		     if (kgl.isCodingGene() ) {
 			 ann = IntronicAnnotation.createIntronicAnnotation(kgl,k,start, end);
 		     } else {
@@ -765,7 +768,6 @@ public class Chromosome {
 		this.annovarFactory.addExonicAnnotation(ann);
 	    }
 	}
-	return;
     }
     
 

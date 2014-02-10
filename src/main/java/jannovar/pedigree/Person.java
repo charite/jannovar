@@ -23,7 +23,7 @@ public class Person {
     private String individualID = null;
     /**
      * The ID of the father of this person in the pedigree. Note: If this
-     * person is a founder, then mther and father ID are both "0".
+     * person is a founder, then mother and father ID are both "0".
      */
     private String fatherID = null;
     /**
@@ -127,6 +127,7 @@ public class Person {
      * This function returns a list with six fields representing the six entries
      * about this Person in the PED file. This is intended to be used by
      * client code to create HTML tables or to report the data in tabular form.
+     * @return list of representative entries
      */
     public ArrayList<String> getPEDFileData() {
 	ArrayList<String> lst = new ArrayList<String>();
@@ -155,6 +156,7 @@ public class Person {
     }
 
     
+    @Override
     public String toString() {
         String s = String.format("%s\t%s\t%s\t%s\t%s\t%s\t",
                                  familyID,individualID,fatherID,motherID,sex,disease);

@@ -238,6 +238,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * @param cumlenintron The cumulative length of then intron sequences (This has
      * been calculated in {@link jannovar.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
      * or the corresponding function for the negative strand).
+     * @return start position on the mRNA
      */
     public int getRVarStart(int varstart, int cumlenintron) {
 	int rvarstart = varstart-this.txStart-cumlenintron+1;
@@ -255,6 +256,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
     /**
      * Returns the coding sequence including the stop codon.
+     * @return coding sequence
      */
     public String getCodingSequence() {
 	/* This should never happen unless for odd
@@ -269,10 +271,11 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     }
 
     /**
-     * Returns the entire sequenceof the mRNA starting with 
+     * Returns the entire sequence of the mRNA starting with 
      * the stop codon. It is useful to have this because some
      * deletion mutations extend the mutant coding sequence
      * past the original stop codon.
+     * @return coding sequence + 3'UTR
      */
     public String getCodingSequencePlus3UTR() {
 	/* This should never happen unless for odd
@@ -293,6 +296,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * been calculated in {@link jannovar.reference.Chromosome#getPlusStrandAnnotation getPlusStrandAnnotation}
      * or the corresponding function for the negative strand).
      * TODO FOr minus strand!
+     * @return end position on the mRNA
      */
     public int getRVarEnd(int end, int k,int cumlenintron) {
 	int rvarend=-1;
@@ -354,26 +358,21 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public boolean isNearFivePrimeEnd(int pos,int threshold) {
 	int distance = this.txStart - pos;
 	if (distance <= 0) return false; /* variant is not 5' to gene start */
-	if (distance < threshold)
-	    return true;
-	else 
-	    return false;
+        return distance < threshold;
     }
 
     /**
      * Calculates whether the position given by {@code pos} is 3' to the
      * end of the gene (i.e., txEnd) and also within
      * {@code threshold} of the 3' end (txEnd) of the gene.
+     * @param pos position of variant (start) on current chromosome
+     * @param threshold Threshold distance to be considered upstream/downstream (set in Chromosome, should be 1000 nt)
+     * @return true if variant is extragenic but within threshold of 5' end of gene (i.e., txStart)
      */
     public boolean isNearThreePrimeEnd(int pos,int threshold) {
 	int distance = pos - this.txEnd;
 	if (distance <= 0) return false; /* variant is not 3' to gene, but 5' to it or within it! */
-	//System.out.println("Threshold: " + threshold + ", pos=" + pos + " txEnd=" + txEnd);
-	//System.out.println(String.format("pos - this.txEnd  =%d; threshold=%d",pos - this.txEnd , threshold));
-	if (distance <  threshold)
-	    return true;
-	else 
-	    return false;
+        return distance < threshold;
     }
 
     /**
@@ -475,7 +474,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     /** @return the length of the coding sequence of the transcript.*/
     public int getCDSLength() { return this.CDSlength;}
     /** Return length of the actual cDNA sequence (rather than the length calculated from the exon positions,
-     * which should however be the same. Can use for sanity checking. */
+     * which should however be the same. Can use for sanity checking.
+     * @return sequence length
+     */
     public int getActualSequenceLength() { return this.sequence.length(); }
     /** @return the number of exons of the transcript.*/
     public int getExonCount() { return this.exonCount; }
@@ -483,7 +484,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     public byte getChromosome() { return this.chromosome; }
     /** Return position of CDS (start codon) in entire mRNA transcript. 
      * for transcripts on the minus strand, the corresponding position
-     * is calculated by {@link #calculateRefCDSStart} . */
+     * is calculated by {@link #calculateRefCDSStart} .
+     * @return mRNA CDS start
+     */
     public int getRefCDSStart() {  return this.rcdsStart;}
     
     /** @return The accession number (e.g., the UCSC Gene ID: uc021olp.1) */
@@ -513,6 +516,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * refvarstart is one-based numbering.
      * @param refvarstart Position of first nucleotide of variant in cDNA sequence 
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
+     * @return 
      */
     public String getWTCodonNucleotides(int refvarstart, int frame_s){
 	int start = refvarstart - frame_s - 1;
@@ -537,6 +541,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
      * <P>
      * @param refvarstart Position of first nucleotide of variant in cDNA sequence
      * @param frame_s The frame of the first nucleotide of the variant {0,1,2}
+     * @return Wild type codon after affected
      */
     public String getWTCodonNucleotidesAfterVariant(int refvarstart, int frame_s){
 	if (getActualSequenceLength() >= refvarstart - frame_s + 5) {
@@ -708,6 +713,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	}
     }
 
+    @Override
     public String toString() {
 	return String.format("%s[%s]:%s:%d-%d [%d exons]",
 			     getGeneSymbol(),
@@ -786,14 +792,12 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 			return b - a + 1;
 		    } else {
 			cumlen += exonEnds[i] - a + 1;
-			continue;
 		    }
 		}else{
 		    if(b <= exonEnds[i])
 			return cumlen + b-exonStarts[i] + 1;
 		    else{
 			cumlen += exonEnds[i] - exonStarts[i] + 1;
-			continue;
 		    }
 		}
 	    }
@@ -838,7 +842,6 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     		if(start > (cumlength +exonlength)){
 //    			System.out.println(start+" > "+(cumlength +exonlength));
     			cumlength += exonlength;
-    			continue;
     		}else{
 //    			System.out.println(start+" <= "+(cumlength +exonlength));
     			chromCoordTemp.add((start-cumlength)+exonStarts[i]-1);
