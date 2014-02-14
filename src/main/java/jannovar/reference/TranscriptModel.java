@@ -159,6 +159,11 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		//System.out.println("cumlenintron=" + cumlenintron);
 	    }
 	} else { /* i.e., minus strand */
+		if(this.isNonCodingGene()){
+			this.rcdsStart = 1;
+			return;
+		}
+			
 		if(this.cdsEnd > this.txEnd){
 			this.rcdsStart = this.txEnd - this.cdsEnd +1;
 			return;
@@ -864,6 +869,43 @@ public class TranscriptModel implements java.io.Serializable, Constants {
     	chromCoord = chromCoordTemp.toArray(new Integer[0]);
     			
     	return chromCoord;
+    }
+    
+    
+    /**
+     * Returns the position on the cDNA string for a given chromosomal position or -1 
+     * if the chromosomal position is not exonic.
+     * @param cpos - chromosomal position
+     * @return position on the cDNA string
+     */
+    public int getRefPosition(int cpos){
+    	if(cpos < this.txStart || cpos > this.txEnd)
+    		return -1;
+    	int refPos = 0;
+    	if(this.isPlusStrand()){
+    		for(int i=0;i<this.exonCount;i++){
+    			if(this.exonEnds[i] < cpos)
+    				refPos += this.exonEnds[i] - this.exonStarts[i] + 1;
+    			else{
+    				if(this.exonStarts[i] <= cpos)
+    					return refPos + (cpos - this.exonStarts[i] + 1);
+    				else
+    					return -1;
+    			}
+    		}
+    	}else{
+    		for(int i=this.exonCount-1;i>=0;i--){
+    			if(this.exonStarts[i] > cpos)
+    				refPos += this.exonEnds[i] - this.exonStarts[i] + 1;
+    			else{
+    				if(this.exonEnds[i] >= cpos)
+    					return refPos + (this.exonEnds[i] - cpos + 1);
+    				else
+    					return -1;
+    			}
+    		}
+    	}
+    	return -1;
     }
 }
 /* eof. */
