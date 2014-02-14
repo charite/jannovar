@@ -39,7 +39,7 @@ public class NodeTest {
 	@Test
 	public void testNodeConstruction1() throws IntervalTreeException {
 		ArrayList<Interval<String>> lst = createIntervalList1();
-		Node n = new Node(lst, new LeftComparator(), new RightComparator());
+		Node<String> n = new Node<String>(lst, new LeftComparator(), new RightComparator());
 		Integer m = n.getMedian();
 		Assert.assertEquals((Integer) 19, m);
 	}
