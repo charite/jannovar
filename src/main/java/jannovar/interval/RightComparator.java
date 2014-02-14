@@ -11,8 +11,8 @@ import java.util.Comparator;
  * @version 0.02 (15 May, 2013)
  * @param <T>
  */
-public class RightComparator<T extends Interval<T>> implements Comparator<Interval<?>> {
-	// compare(Interval<?> interval_1, Interval<?> interval_2) {
+public class RightComparator implements Comparator<Interval<?>> {
+
 	@Override
 	public int compare(Interval<?> interval_1, Interval<?> interval_2) {
 		/*
