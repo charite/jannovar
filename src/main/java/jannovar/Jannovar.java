@@ -54,9 +54,9 @@ import jannovar.reference.TranscriptModel;
  * or as a way of testing the code for the Exomizer.
  * </OL>
  * <P>
- * To run the "Jannotator" exectuable:
+ * To run the "Jannovar" executable:
  * <P>
- * {@code java -Xms1G -Xmx1G -jar Jannotator.jar -V xyz.vcf -D $SERIAL}
+ * {@code java -Xms1G -Xmx1G -jar Jannovar.jar -V xyz.vcf -D $SERIAL}
  * <P>
  * This will annotate a VCF file. The results of jannovar annotation are shown in the form
  * <PRE>
@@ -487,7 +487,7 @@ public class Jannovar {
     * resulting {@link jannovar.reference.TranscriptModel TranscriptModel}
     * objects to {@link jannovar.interval.Interval Interval} objects, and
     * store these in a serialized file.
-     * @throws jannovar.exception.JannovarException
+     * @throws JannovarException
     */
     public void serializeRefseqData() throws JannovarException {
     	SerializationManager manager = new SerializationManager();
@@ -529,7 +529,7 @@ public class Jannovar {
      * TranscriptModel objects created to contain info about the 
      * transcript definitions (exon positions etc.) extracted from 
      * UCSC, Ensembl, or Refseq and necessary for annotation.
-     * @throws jannovar.exception.JannovarException */
+     * @throws JannovarException */
     public void deserializeTranscriptDefinitionFile() throws JannovarException {
 	ArrayList<TranscriptModel> kgList;
 	SerializationManager manager = new SerializationManager();
