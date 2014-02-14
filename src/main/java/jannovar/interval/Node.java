@@ -61,7 +61,7 @@ public class Node<T> {
 	 *            A list containing all intervals
 	 */
 	// @SuppressWarnings("unchecked")
-	public Node(List<Interval<T>> intervals, LeftComparator<? extends Interval<T>> leftcomp2, RightComparator<? extends Interval<T>> rightcomp2) {
+	public Node(List<Interval<T>> intervals, LeftComparator leftcomp2, RightComparator rightcomp2) {
 		/* helper list to find the median of all interval endpoints */
 		List<Integer> endpointslist = new ArrayList<Integer>();
 		/* inserts intervals in endpointslist and sorts them */

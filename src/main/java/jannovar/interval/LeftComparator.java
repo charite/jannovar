@@ -11,11 +11,7 @@ import java.util.Comparator;
  * @version 0.03 (22 May, 2013)
  * @param <T>
  */
-public class LeftComparator<T extends Interval<T>> implements Comparator<Interval<?>> {
-
-	public LeftComparator() {
-		// TODO Auto-generated constructor stub
-	}
+public class LeftComparator implements Comparator<Interval<?>> {
 
 	@Override
 	public int compare(Interval<?> interval_1, Interval<?> interval_2) {

@@ -77,12 +77,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 * A Comparator that is used to sort intervals by their left endpoint in
 	 * ascending order.
 	 */
-	private LeftComparator<? extends Interval<T>> leftcomp = null;
+	private LeftComparator leftcomp = null;
 	/**
 	 * A Comparator that is used to sort intervals by their right endpoint in
 	 * descending order.
 	 */
-	private RightComparator<? extends Interval<T>> rightcomp = null;
+	private RightComparator rightcomp = null;
 	/**
 	 * The left neighbor of the current query position (non-overlapping interval
 	 * to the left of the query that is the closest of all intervals).
