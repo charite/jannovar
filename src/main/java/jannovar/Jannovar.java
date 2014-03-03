@@ -3,6 +3,7 @@ package jannovar;
 /** Command line functions from apache */
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
+import jannovar.common.ChromosomeMap;
 import jannovar.common.Constants;
 import jannovar.common.Constants.Release;
 import jannovar.exception.AnnotationException;
@@ -31,6 +32,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -188,6 +191,9 @@ public class Jannovar {
 	/** Output folder for the annotated VCF files (default: current folder) */
 	private String outVCFfolder = null;
 
+	/** chromosomal position an NA change (e.g. chr1:12345C>A) */
+	private String chromosomalChange;
+
 	public static void main(String argv[]) {
 		Jannovar anno = new Jannovar(argv);
 		/*
@@ -247,7 +253,17 @@ public class Jannovar {
 				System.exit(1);
 			}
 		} else {
-			System.out.println("[ERROR] No VCF file found");
+			if (anno.chromosomalChange == null) {
+				System.out.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
+			} else {
+				try {
+					anno.annotatePosition();
+				} catch (JannovarException je) {
+					System.out.println("[ERROR] Could not annotate input data: " + anno.chromosomalChange);
+					System.exit(1);
+				}
+
+			}
 		}
 	}
 
@@ -517,6 +533,52 @@ public class Jannovar {
 	}
 
 	/**
+	 * THis function will simply annotate given chromosomal position with HGVS
+	 * compliant output e.g. chr1:909238G>C -->
+	 * PLEKHN1:NM_032129.2:c.1460G>C,p.(Arg487Pro)
+	 * 
+	 * @throws AnnotationException
+	 */
+	private void annotatePosition() throws AnnotationException {
+		System.out.println("input: " + this.chromosomalChange);
+		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
+		Matcher mat = pat.matcher(this.chromosomalChange);
+
+		if (!mat.matches() | mat.groupCount() != 4) {
+			System.err.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
+			System.exit(3);
+		}
+
+		byte chr = ChromosomeMap.identifier2chromosom.get(mat.group(1));
+		int pos = Integer.parseInt(mat.group(2));
+		String ref = mat.group(3);
+		String alt = mat.group(4);
+
+		Chromosome c = chromosomeMap.get(chr);
+		if (c == null) {
+			String e = String.format("Could not identify chromosome \"%d\"", chr);
+			throw new AnnotationException(e);
+		}
+		AnnotationList anno = c.getAnnotationList(pos, ref, alt);
+		if (anno == null) {
+			String e = String.format("No annotations found for variant %s", this.chromosomalChange);
+			throw new AnnotationException(e);
+		}
+		String annotation;
+		String effect;
+		if (this.showAll) {
+			annotation = anno.getAllTranscriptAnnotations();
+			effect = anno.getAllTranscriptVariantEffects();
+		} else {
+			annotation = anno.getSingleTranscriptAnnotation();
+			effect = anno.getVariantType().toString();
+		}
+
+		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
+
+	}
+
+	/**
 	 * This function inputs a VCF file, and prints the annotated version thereof
 	 * to a file (name of the original file with the suffix .jannovar).
 	 * 
@@ -741,6 +803,7 @@ public class Jannovar {
 			options.addOption(new Option("O", "output", true, "Path to output folder for the annotated VCF file"));
 			options.addOption(new Option("V", "vcf", true, "Path to VCF file"));
 			options.addOption(new Option("a", "showall", false, "report annotations for all transcripts to VCF file"));
+			options.addOption(new Option("P", "position", true, "chromosomal position to HGVS (e.g. chr1:909238G>C)"));
 			options.addOption(new Option("J", "janno", false, "Output Jannovar format"));
 			options.addOption(new Option("g", "genome", true, "genome build (mm9, mm10, hg18, hg19, hg38 - only refseq), default hg19"));
 			options.addOption(new Option(null, "create-ucsc", false, "Create UCSC definition file"));
@@ -844,6 +907,9 @@ public class Jannovar {
 
 			if (cmd.hasOption("V"))
 				this.VCFfilePath = cmd.getOptionValue("V");
+
+			if (cmd.hasOption("P"))
+				this.chromosomalChange = cmd.getOptionValue("P");
 
 		} catch (ParseException pe) {
 			System.err.println("Error parsing command line options");
