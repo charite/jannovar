@@ -866,11 +866,13 @@ public class Jannovar {
 				if (g.equals("hg19")) {
 					this.genomeRelease = Release.HG19;
 				}
-				if (g.equals("hg38") && this.createRefseq) {
-					this.genomeRelease = Release.HG38;
-				} else {
-					System.out.println("[INFO] Genome release hg38 only available for Refseq");
-					System.exit(0);
+				if (g.equals("hg38")) {
+					if (this.createRefseq)
+						this.genomeRelease = Release.HG38;
+					else {
+						System.out.println("[INFO] Genome release hg38 only available for Refseq");
+						System.exit(0);
+					}
 				}
 			} else {
 				if (performSerialization)
