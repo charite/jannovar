@@ -674,7 +674,7 @@ public class Chromosome {
 	/* The following checks for database errors where the position of the variant in
 	 * the reference sequence is given as longer the actual length of the transcript.*/
 	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength() ) {
-	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d\n",
+	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d",
 				     kgl.getAccessionNumber(), refvarstart,frame_s,kgl.getActualSequenceLength());
 	    Annotation ann = new Annotation(kgl,s,VariantType.ERROR);
 	    this.annovarFactory.addErrorAnnotation(ann);
