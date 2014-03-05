@@ -62,7 +62,7 @@ public class IntronicAnnotation {
 			distR = exonstart - end;
 			int rightexon = trmdl.getExonCount() - k;
 			int leftexon = rightexon - 1;
-			annot = String.format("%s:dist to exon%d=%d: dist to exon%d=%d", accession, leftexon, distR, rightexon, distL);
+			annot = String.format("%s:dist to exon%d=%d:dist to exon%d=%d", accession, leftexon, distR, rightexon, distL);
 		}
 		int m = Math.min(distR, distL);
 		Annotation ann = new Annotation(trmdl, annot, VariantType.INTRONIC);
