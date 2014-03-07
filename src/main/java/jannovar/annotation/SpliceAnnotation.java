@@ -26,17 +26,17 @@ public class SpliceAnnotation {
 	 * SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so, return true, otherwise, return false.<br>
 	 * <br>
 	 * splice boundary<br>
-	 * | |<br>
+	 * 		|    |<br>
 	 * ----------||||||||||||||||--------------<br>
-	 * * --> Y<br>
-	 * * --> N<br>
-	 * * --> Y<br>
-	 * * --> N<br>
-	 * ---- --> Y<br>
-	 * ----- --> Y<br>
-	 * --- --> Y<br>
-	 * ----- --> N<br>
-	 * ---------- --> Y<br>
+	 * 		  * 		--> Y<br>
+	 *     * 			--> N<br>
+	 *      * 			--> Y<br>
+	 * 			 * 		--> N<br>
+	 *    ---- 			--> Y<br>
+	 *        ----- 	--> Y<br>
+	 *       --- 		--> Y<br>
+	 *           ----- 	--> N<br>
+	 *   ---------- 	--> Y<br>
 	 * 
 	 * 
 	 * @param k
@@ -426,9 +426,9 @@ public class SpliceAnnotation {
 			if (start >= exonstart - SPLICING_THRESHOLD && start < exonstart) {
 				// ------*-<---->---------<-->-------<------>----
 				if (kgl.isNonCodingGene())
-					anno = String.format("%s:exon%d:n.%d+%d%s>%s", kgl.getName(), (exoncount - k + 1), cumlenexon, exonstart - start, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:n.%d+%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, exonstart - start, revcom(ref), revcom(alt));
 				else
-					anno = String.format("%s:exon%d:c.%d+%d%s>%s", kgl.getName(), (exoncount - k + 1), cumlenexon, exonstart - start, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:c.%d+%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, exonstart - start, revcom(ref), revcom(alt));
 				/* anno is now something like uc001alq.2:exon22:c.2818+2G>A */
 				int refvarstart = cumlenexon; // position of variant in CDS,
 												// important for sorting
@@ -439,9 +439,9 @@ public class SpliceAnnotation {
 				cumlenexon -= (exonend - exonstart); // $lenexon -=
 														// ($exonend[$k]-$exonstart[$k]);
 				if (kgl.isNonCodingGene())
-					anno = String.format("%s:exon%d:n.%d-%d%s>%s", kgl.getName(), (exoncount - k + 1), cumlenexon, start - exonend, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:n.%d-%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, start - exonend, revcom(ref), revcom(alt));
 				else
-					anno = String.format("%s:exon%d:c.%d-%d%s>%s", kgl.getName(), (exoncount - k + 1), cumlenexon, start - exonend, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:c.%d-%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, start - exonend, revcom(ref), revcom(alt));
 				/* anno is now something like. uc003pdx.3:exon12:c.1039-1G>C */
 				int refvarstart = cumlenexon; // position of variant in CDS,
 												// important for sorting

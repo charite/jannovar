@@ -166,6 +166,24 @@ public class SpliceAnnotationTest implements Constants {
 	}
 
 	@Test
+	public void testSpliceVar1g() throws AnnotationException {
+		byte chr = 1;
+		int pos = 155348181;
+		String ref = "C";
+		String alt = "G";
+		Chromosome c = chromosomeMap.get(chr);
+		if (c == null) {
+			Assert.fail("Could not identify chromosome \"" + chr + "\"");
+		} else {
+			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+			VariantType varType = ann.getVariantType();
+			Assert.assertEquals(VariantType.SPLICING, varType);
+			String annot = ann.getVariantAnnotation();
+			Assert.assertEquals("ASH1L(uc001fkt.3:exon10:c.6224-1G>C,uc009wqq.3:exon10:c.6239-1G>C)", annot);
+		}
+	}
+
+	@Test
 	public void testSpliceVar1h() throws AnnotationException {
 		byte chr = 1;
 		int pos = 155348070;
@@ -179,7 +197,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ASH1L(uc001fkt.3:exon11:c.6332+2T>C,uc009wqq.3:exon11:c.6347+2T>C)", annot);
+			Assert.assertEquals("ASH1L(uc001fkt.3:exon10:c.6332+2T>C,uc009wqq.3:exon11:c.6347+2T>C)", annot);
 		}
 	}
 
@@ -247,6 +265,29 @@ public class SpliceAnnotationTest implements Constants {
 			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
+			String annot = ann.getVariantAnnotation();
+			Assert.assertEquals("ASH1L(uc001fkt.3:exon19:complicated splice mutation,uc009wqq.3:exon19:complicated splice mutation)", annot);
+		}
+	}
+
+	/**
+	 * right overlapping with intronic spicing region--> Intronic
+	 * 
+	 * @throws AnnotationException
+	 */
+	@Test
+	public void testSpliceVar1h5() throws AnnotationException {
+		byte chr = 1;
+		int pos = 155348071;
+		String ref = "CCT";
+		String alt = "AGG";
+		Chromosome c = chromosomeMap.get(chr);
+		if (c == null) {
+			Assert.fail("Could not identify chromosome \"" + chr + "\"");
+		} else {
+			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+			VariantType varType = ann.getVariantType();
+			Assert.assertEquals(VariantType.FS_SUBSTITUTION, varType);
 			String annot = ann.getVariantAnnotation();
 			Assert.assertEquals("ASH1L(uc001fkt.3:exon19:complicated splice mutation,uc009wqq.3:exon19:complicated splice mutation)", annot);
 		}
