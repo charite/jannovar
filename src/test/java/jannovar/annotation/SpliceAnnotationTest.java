@@ -125,7 +125,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("NPHP4(uc001alq.2:exon22:c.2818-2T>A)", annot);
+			Assert.assertEquals("NPHP4(uc001alq.2:exon21:c.2818-2T>A)", annot);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KIAA0319L(uc001byw.3:exon5:c.225-1G>A)", annot);
+			Assert.assertEquals("KIAA0319L(uc001byw.3:exon4:c.225-1G>A)", annot);
 		}
 	}
 
@@ -197,7 +197,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ASH1L(uc001fkt.3:exon10:c.6332+2T>C,uc009wqq.3:exon11:c.6347+2T>C)", annot);
+			Assert.assertEquals("ASH1L(uc001fkt.3:exon10:c.6332+2T>C,uc009wqq.3:exon10:c.6347+2T>C)", annot);
 		}
 	}
 
@@ -270,29 +270,6 @@ public class SpliceAnnotationTest implements Constants {
 		}
 	}
 
-	/**
-	 * right overlapping with intronic spicing region--> Intronic
-	 * 
-	 * @throws AnnotationException
-	 */
-	@Test
-	public void testSpliceVar1h5() throws AnnotationException {
-		byte chr = 1;
-		int pos = 155348071;
-		String ref = "CCT";
-		String alt = "AGG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_SUBSTITUTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ASH1L(uc001fkt.3:exon19:complicated splice mutation,uc009wqq.3:exon19:complicated splice mutation)", annot);
-		}
-	}
-
 	@Test
 	public void testSpliceVar2h() throws AnnotationException {
 		byte chr = 1;
@@ -343,7 +320,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("NSL1(uc001hjn.3:exon2:c.234+2T>C,uc001hjm.3:exon2:c.234+2T>C,uc010pti.2:exon2:c.234+2T>C)", annot);
+			Assert.assertEquals("NSL1(uc001hjn.3:exon1:c.234+2T>C,uc001hjm.3:exon1:c.234+2T>C,uc010pti.2:exon1:c.234+2T>C)", annot);
 		}
 	}
 
@@ -402,7 +379,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("RETSAT(uc010ysm.2:exon8:c.1074-1G>C,uc002spd.3:exon9:c.1257-1G>C)", annot);
+			Assert.assertEquals("RETSAT(uc010ysm.2:exon7:c.1074-1G>C,uc002spd.3:exon8:c.1257-1G>C)", annot);
 		}
 	}
 
@@ -444,7 +421,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("NPHP1(uc002tfo.4:exon5:c.337-1G>A,uc002tfm.4:exon7:c.523-1G>A,uc002tfl.4:exon7:c.523-1G>A,uc002tfn.4:exon7:c.523-1G>A,uc010ywx.2:exon7:c.523-1G>A,uc010fjv.1:exon7:c.523-1G>A)", annot);
+			Assert.assertEquals("NPHP1(uc002tfo.4:exon4:c.337-1G>A,uc002tfm.4:exon6:c.523-1G>A,uc002tfl.4:exon6:c.523-1G>A,uc002tfn.4:exon6:c.523-1G>A,uc010ywx.2:exon6:c.523-1G>A,uc010fjv.1:exon6:c.523-1G>A)", annot);
 		}
 	}
 
