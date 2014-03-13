@@ -485,7 +485,7 @@ public class Chromosome {
 			}
 			cumlenexon += kgl.getExonEnd(k) - kgl.getExonStart(k) + 1;
 			if (cdsend <= kgl.getExonEnd(k)) { // calculate CDS start accurately by considering intron length
-			// rcdsstart = txend-cdsend-cumlenintron+1;
+				// rcdsstart = txend-cdsend-cumlenintron+1;
 				if (cdsend >= kgl.getExonStart(k)) { // CDS start within this exon
 					cumlenexon = cdsend - kgl.getExonStart(k) + 1;
 				}
@@ -651,9 +651,9 @@ public class Chromosome {
 	 * This method corresponds to Annovar function {@code sub annotateExonicVariants} { my ($refseqvar, $geneidmap,
 	 * $cdslen, $mrnalen) = @_; (...)
 	 * <P>
-	 * Finally, the $refseqvar in Annovar has the following pieces of information {@code my ($refcdsstart,
-	 * $refvarstart, $refvarend, $refstrand, $index, $exonpos, $nextline) = @ $refseqvar->{$seqid}->[$i]};} Note that
-	 * refcdsstart and refstrand are contained in the TranscriptModel objects
+	 * Finally, the $refseqvar in Annovar has the following pieces of information {@code my ($refcdsstart, $refvarstart,
+	 * $refvarend, $refstrand, $index, $exonpos, $nextline) = @ $refseqvar-> $seqid}->[$i]};} Note that refcdsstart and
+	 * refstrand are contained in the TranscriptModel objects
 	 * 
 	 * @param refvarstart
 	 *            The start position of the variant with respect to the CDS of the mRNA
@@ -745,7 +745,7 @@ public class Chromosome {
 			/* If we get here, then start==end is false and the variant sequence is not "-",
 			 * i.e., it is not a deletion. Thus, we have a block substitution event.
 			 */
-			String canno = String.format("%s:exon%d:c.%d_%d%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
+			String canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
 			// $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
 			if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
 				/* Non-frameshift substitution */
