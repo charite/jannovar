@@ -366,7 +366,7 @@ public class Jannovar {
 		int pos = v.get_position();
 		String ref = v.get_ref();
 		String alt = v.get_alt();
-		if (alt.charAt(0) == '[' || alt.charAt(0) == ']') {
+		if (alt.charAt(0) == '[' || alt.charAt(0) == ']' || alt.equals(".")) {
 			out.write(line.getOriginalVCFLine() + "\n");
 		} else {
 

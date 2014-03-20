@@ -155,7 +155,8 @@ public class VCFLine {
 	    throw new VCFParseException("Could not parse ref field: \"" + ref + "\"\n" + line);
 	}
 	this.alt = A[4]; 
-	if (alt.equals(".")  || alt.length()<1 ) {
+//	if (alt.equals(".")  || alt.length()<1 ) {
+	if (alt.length()<1 ) {
 	    throw new VCFParseException("Could not parse alt field:\"" + alt + "\"\n" + line);
 	}
 	
