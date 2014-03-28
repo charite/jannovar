@@ -220,7 +220,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.INTRONIC, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ASH1L(uc001fkt.3:dist to exon10=3:dist to exon11=7295)", annot);
+			Assert.assertEquals("ASH1L(uc001fkt.3:intron10:c.6332+3A>C)", annot);
 		}
 	}
 

@@ -349,9 +349,9 @@ public class Chromosome {
 					 * ----------------------------------------------------------------------- */
 					Annotation ann = null;
 					if (kgl.isCodingGene()) {
-						ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end);
+						ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end, ref, alt);
 					} else {
-						ann = IntronicAnnotation.createNcRNAIntronicAnnotation(kgl, k, start, end);
+						ann = IntronicAnnotation.createNcRNAIntronicAnnotation(kgl, k, start, end, ref, alt);
 					}
 					annovarFactory.addIntronicAnnotation(ann);
 					return; /* Done with this annotation */
@@ -580,10 +580,12 @@ public class Chromosome {
 				} else if (k < kgl.getExonCount() - 1 && end < kgl.getExonStart(k + 1)) {
 					// System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 					Annotation ann;
+					alt = revcom(alt);
+					ref = revcom(ref);
 					if (kgl.isCodingGene()) {
-						ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end);
+						ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end, ref, alt);
 					} else {
-						ann = IntronicAnnotation.createNcRNAIntronicAnnotation(kgl, k, start, end);
+						ann = IntronicAnnotation.createNcRNAIntronicAnnotation(kgl, k, start, end, ref, alt);
 					}
 					annovarFactory.addIntronicAnnotation(ann);
 					return; /* done with this annotation. */
