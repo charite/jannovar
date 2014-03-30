@@ -9,7 +9,7 @@ import jannovar.exception.AnnotationException;
  * This class is intended to provide a static method to generate annotations for insertion
  * mutations. This method is put in its own class only for convenience and to at least
  * have a name that is easy to find.
- * @version 0.07 (22 December, 2013)
+ * @version 0.08 (29 March, 2014)
  * @author Peter N Robinson
  */
 
@@ -17,14 +17,14 @@ public class InsertionAnnotation {
 
     /**
      * Annotates an insertion variant. The fact that a variant is an insertion variant
-     * has been identified by the fact that the start and end positition of the variant 
+     * has been identified by the fact that the start and end position of the variant 
      * are equal and the reference sequence is indicated as "-".
      * <P>
      * The insertion coordinate system uses "position after the current site"
      * <ul>
-     * <li>"+" strand: refvarstart is the one-based number of the nucleotide just before the insertion
-     * <li>"-" strand, the "after current site" becomes "before current site" during transcription
-     * therefore, appropriate handling is necessary to take this into account
+     * <li>"+" strand: refvarstart is the one-based number of the nucleotide just before the insertion.
+     * <li>"-" strand, the "after current site" becomes "before current site" during transcription.
+     * Therefore, appropriate handling is necessary to take this into account
      * for example, for a trinucleotide GCC with frameshift of 1 and insertion of CCT
      * in positive strand, it is G-CTT-CC
      * but if the transcript is in negative strand, the genomic sequence should be GC-CCT-C, and transcript is G-AGG-GC
@@ -74,7 +74,32 @@ public class InsertionAnnotation {
 								     potentialDuplicationEndPos,exonNumber);
 		return ann;
 	    }
-    	} else {
+	    /* Note that some duplications are located after the indicated position of the variant in the
+	     * VCF file. The VCF convention seems to be to show the first duplicated base, whereas the HGVS convention
+	     * is to show the last possible duplicated base or sequence. */
+	    int pos = refvarstart - 1; /* the minus one is needed because Java strings are zero-based. */
+	    int varlen = var.length();
+	    boolean haveDuplication=false;
+	    while (trmdl.getCdnaSequence().substring(pos,pos+var.length()).equals(var)) {
+		pos += varlen;
+		frame_s += varlen;
+		haveDuplication=true;
+	    }
+	    if (haveDuplication) {
+		int endpos=pos+var.length();
+		frame_s = (frame_s % 3);
+		// wtnt3 represents the three nucleotides of the wildtype codon.
+		// try to get three new nucleotides affected by the duplication.
+		// if it does not work, chicken out and just keep the previous ones
+		// to avoid a dump
+		String newwtnt3 = trmdl.getWTCodonNucleotides(refvarstart, frame_s);
+		if (newwtnt3 != null && newwtnt3.length()==3) {
+		    wtnt3 = newwtnt3;
+		}
+		Annotation ann = DuplicationAnnotation.getAnnotation(trmdl,frame_s, wtnt3, var, pos,endpos,exonNumber);
+		return ann;
+	    }
+    	} else { /* i.e., we are on the minus strand. */
 	    /* If this variant is a duplication, then
 	     * refvarstart is the last nucleotide 
 	     * position (one-based) on the chromosome
@@ -105,6 +130,7 @@ public class InsertionAnnotation {
 								     exonNumber);
 		return ann;
 	    }
+	  
 	}
 	
     	int refcdsstart = trmdl.getRefCDSStart() ;

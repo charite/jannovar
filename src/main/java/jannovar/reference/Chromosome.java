@@ -34,7 +34,7 @@ import java.util.HashMap;
  * transcription start and stop sites of the isoform.
  * 
  * @author Peter N Robinson
- * @version 0.29 (31 December, 2013)
+ * @version 0.31 (29 March, 2014)
  */
 public class Chromosome {
 	/**
@@ -674,140 +674,140 @@ public class Chromosome {
 	 * @param kgl
 	 *            Gene in which variant was localized to one of the exons
 	 */
-	private void annotateExonicVariants(int refvarstart, int refvarend, int start, int end, String ref, String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
-
-		/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
-		int frame_s = ((refvarstart - kgl.getRefCDSStart()) % 3); /* annovar: $fs */
-		int frame_end_s = ((refvarend - kgl.getRefCDSStart()) % 3); /* annovar: $end_fs */
-		int refcdsstart = kgl.getRefCDSStart();
-
-		// Needed to complete codon following end of multibase ref seq.
-		/* The following checks for database errors where the position of the variant in
-		 * the reference sequence is given as longer the actual length of the transcript.*/
-		if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength()) {
-			String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d", kgl.getAccessionNumber(), refvarstart, frame_s, kgl.getActualSequenceLength());
-			Annotation ann = new Annotation(kgl, s, VariantType.ERROR);
-			this.annovarFactory.addErrorAnnotation(ann);
-		}
-
-		// wtnt3 represents the three nucleotides of the wildtype codon.
-		String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
-		if (wtnt3 == null) {
-			/* This can happen is the KnownGene.txt gene definition indicates that the mRNA sequence is
-			   longer than the actual sequence contained in KnownGeneMrna.txt. This probably reflects
-			   and error in genome annotations. */
-			String s = String.format("Discrepancy between mRNA length and genome annotation ", "(variant at pos. %d of transcript with mRNA length %d):%s[%s]", refvarstart, kgl.getMRNALength(), kgl.getAccessionNumber(), kgl.getName());
-			Annotation ann = new Annotation(kgl, s, VariantType.ERROR);
-			this.annovarFactory.addErrorAnnotation(ann);
-			return; /* Probably reflects some database error. */
-
-		}
-		/* wtnt3_after = Sequence of codon right after the variant. 
-		 * It is used for delins mutations. */
-		String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart, frame_s);
-		/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
-		 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
-		if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
-			String s = String.format("%s, wtnt3-length: %d", kgl.getAccessionNumber(), wtnt3.length());
-			Annotation ann = new Annotation(kgl, s, VariantType.ERROR);
-			this.annovarFactory.addErrorAnnotation(ann);
-			return; /* Probably reflects some database error. */
-		}
-		/* If the gene is on the minus strand, we take the reverse complement of the ref and the var sequence.*/
-		if (kgl.isMinusStrand()) {
-			var = revcom(var);
-			ref = revcom(ref);
-		}
-		// System.out.println("wtnt3=" + wtnt3);
-		if (start == end) { /* SNV or insertion variant */
-			if (ref.equals("-")) { /* "-" stands for an insertion at this position */
-				Annotation insrt = InsertionAnnotation.getAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
-				this.annovarFactory.addExonicAnnotation(insrt);
-			} else if (var.equals("-")) { /* i.e., single nucleotide deletion */
-				Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotide(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
-				this.annovarFactory.addExonicAnnotation(dlt);
-			} else if (var.length() > 1) {
-				Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
-				this.annovarFactory.addExonicAnnotation(blck);
-			} else {
-				// System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
-				Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl, frame_s, frame_end_s, wtnt3, ref, var, refvarstart, exonNumber);
-				this.annovarFactory.addExonicAnnotation(mssns);
-			}
-		} /* if (start==end) */
-		else if (var.equals("-")) {
-			/* If we get here, then the start position of the variant is not the same as the end position,
-			 * i.e., start==end is false, and the variant is "-"; thus there is as
-			 * 	deletion variant involving several nucleotides.
-			 */
-			Annotation dltmnt = DeletionAnnotation.getMultinucleotideDeletionAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
-
-			this.annovarFactory.addExonicAnnotation(dltmnt);
-		} else {
-			/* If we get here, then start==end is false and the variant sequence is not "-",
-			 * i.e., it is not a deletion. Thus, we have a block substitution event.
-			 */
-			String canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
-			// $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
-			if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
-				/* Non-frameshift substitution */
-				// Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
-				/*
-				Annotation ann = new Annotation();
-				ann.varType = VariantType.NON_FS_SUBSTITUTION;
-				ann.geneSymbol=kgl.getGeneSymbol();
-				ann.rvarstart = refvarstart;
-				ann.variantAnnotation = annot;
-				ann.entrezGeneID = kgl.getEntrezGeneID();
-				return ann;*/
-				Annotation ann = new Annotation(kgl, canno, VariantType.NON_FS_SUBSTITUTION, refvarstart);
-				this.annovarFactory.addExonicAnnotation(ann);
-			} else {
-				/* frameshift substitution */
-				Annotation ann = new Annotation(kgl, canno, VariantType.FS_SUBSTITUTION, refvarstart);
-				this.annovarFactory.addExonicAnnotation(ann);
-			}
-		}
+    private void annotateExonicVariants(int refvarstart, int refvarend, int start, int end, String ref, String var, int exonNumber, TranscriptModel kgl) 
+	throws AnnotationException {
+	
+	/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
+	int frame_s = ((refvarstart - kgl.getRefCDSStart()) % 3);
+	int frame_end_s = ((refvarend - kgl.getRefCDSStart()) % 3);
+	int refcdsstart = kgl.getRefCDSStart();
+	
+	// Needed to complete codon following end of multibase ref seq.
+	/* The following checks for database errors where the position of the variant in
+	 * the reference sequence is given as longer the actual length of the transcript.*/
+	if (refvarstart - frame_s - 1 > kgl.getActualSequenceLength()) {
+	    String s = String.format("%s, refvarstart=%d, frame_s=%d, seq len=%d", kgl.getAccessionNumber(), refvarstart, frame_s, kgl.getActualSequenceLength());
+	    Annotation ann = new Annotation(kgl, s, VariantType.ERROR);
+	    this.annovarFactory.addErrorAnnotation(ann);
 	}
-
-	/**
-	 * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
-	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
-	 * are not valid.
-	 * 
-	 * @param sq
-	 *            original, upper-case cDNA string
-	 * @return reverse complement version of the input string sq.
-	 */
-	private String revcom(String sq) {
-		if (sq.equals("-"))
-			return sq; /* deletion, insertion do not need rc */
-		StringBuffer sb = new StringBuffer();
-		for (int i = sq.length() - 1; i >= 0; i--) {
-			char c = sq.charAt(i);
-			char match = 0;
-			switch (c) {
-			case 'A':
-				match = 'T';
-				break;
-			case 'C':
-				match = 'G';
-				break;
-			case 'G':
-				match = 'C';
-				break;
-			case 'T':
-				match = 'A';
-				break;
-			case 'N':
-				match = 'N';
-				break;
-			}
-			if (match > 0)
-				sb.append(match);
-		}
-		return sb.toString();
+	
+	// wtnt3 represents the three nucleotides of the wildtype codon.
+	String wtnt3 = kgl.getWTCodonNucleotides(refvarstart, frame_s);
+	if (wtnt3 == null) {
+	    /* This can happen is the KnownGene.txt gene definition indicates that the mRNA sequence is
+	       longer than the actual sequence contained in KnownGeneMrna.txt. This probably reflects
+	       and error in genome annotations. */
+	    String s = String.format("Discrepancy between mRNA length and genome annotation ", 
+				     "(variant at pos. %d of transcript with mRNA length %d):%s[%s]", 
+				     refvarstart, kgl.getMRNALength(), kgl.getAccessionNumber(), kgl.getName());
+	    Annotation ann = new Annotation(kgl, s, VariantType.ERROR);
+	    this.annovarFactory.addErrorAnnotation(ann);
+	    return; /* Probably reflects a database error. */
 	}
+	/* wtnt3_after = Sequence of codon right after the variant. 
+	 * It is used for delins mutations. */
+	String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart, frame_s);
+	/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
+	 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
+	if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
+	    String s = String.format("%s, wtnt3-length: %d", kgl.getAccessionNumber(), wtnt3.length());
+	    Annotation ann = new Annotation(kgl, s, VariantType.ERROR);
+	    this.annovarFactory.addErrorAnnotation(ann);
+	    return; /* Probably reflects some database error. */
+	}
+	/* If the gene is on the minus strand, we take the reverse complement of the ref and the var sequence.*/
+	if (kgl.isMinusStrand()) {
+	    var = revcom(var);
+	    ref = revcom(ref);
+	}
+	// System.out.println("wtnt3=" + wtnt3);
+	if (start == end) { /* SNV or insertion variant */
+	    if (ref.equals("-")) { /* "-" stands for an insertion at this position */
+		Annotation insrt = InsertionAnnotation.getAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+		this.annovarFactory.addExonicAnnotation(insrt);
+	    } else if (var.equals("-")) { /* i.e., single nucleotide deletion */
+		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotide(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
+		this.annovarFactory.addExonicAnnotation(dlt);
+	    } else if (var.length() > 1) {
+		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
+		this.annovarFactory.addExonicAnnotation(blck);
+	    } else {
+		// System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
+		Annotation mssns = SingleNucleotideSubstitution.getAnnotation(kgl, frame_s, frame_end_s, wtnt3, ref, var, refvarstart, exonNumber);
+		this.annovarFactory.addExonicAnnotation(mssns);
+	    }
+	} else if (var.equals("-")) {
+	    /* If we get here, then the start position of the variant is not the same as the end position,
+	     * i.e., start==end is false, and the variant is "-"; thus there is as
+	     * deletion variant involving several nucleotides.
+	     */
+	    Annotation dltmnt = DeletionAnnotation.getMultinucleotideDeletionAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
+	    this.annovarFactory.addExonicAnnotation(dltmnt);
+	} else {
+	    /* If we get here, then start==end is false and the variant sequence is not "-",
+	     * i.e., it is not a deletion. Thus, we have a block substitution event.
+	     */
+	    String canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
+	    // $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
+	    if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
+		/* Non-frameshift substitution */
+		// Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
+		/*
+		  Annotation ann = new Annotation();
+		  ann.varType = VariantType.NON_FS_SUBSTITUTION;
+		  ann.geneSymbol=kgl.getGeneSymbol();
+		  ann.rvarstart = refvarstart;
+		  ann.variantAnnotation = annot;
+		  ann.entrezGeneID = kgl.getEntrezGeneID();
+		  return ann;*/
+		Annotation ann = new Annotation(kgl, canno, VariantType.NON_FS_SUBSTITUTION, refvarstart);
+		this.annovarFactory.addExonicAnnotation(ann);
+	    } else {
+		/* frameshift substitution */
+		Annotation ann = new Annotation(kgl, canno, VariantType.FS_SUBSTITUTION, refvarstart);
+		this.annovarFactory.addExonicAnnotation(ann);
+	    }
+	}
+    }
+    
+    /**
+     * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
+     * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
+     * are not valid.
+     * 
+     * @param sq
+     *            original, upper-case cDNA string
+     * @return reverse complement version of the input string sq.
+     */
+    private String revcom(String sq) {
+	if (sq.equals("-"))
+	    return sq; /* deletion, insertion do not need rc */
+	StringBuffer sb = new StringBuffer();
+	for (int i = sq.length() - 1; i >= 0; i--) {
+	    char c = sq.charAt(i);
+	    char match = 0;
+	    switch (c) {
+	    case 'A':
+		match = 'T';
+		break;
+	    case 'C':
+		match = 'G';
+		break;
+	    case 'G':
+		match = 'C';
+		break;
+	    case 'T':
+		match = 'A';
+		break;
+	    case 'N':
+		match = 'N';
+		break;
+	    }
+	    if (match > 0)
+		sb.append(match);
+	}
+	return sb.toString();
+    }
 
 	/**
 	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the
