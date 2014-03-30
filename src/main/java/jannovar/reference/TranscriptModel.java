@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * variant, and thus represents one of the core classes of Jannovar.
  * 
  * @author Peter N Robinson
- * @version 0.22, 28 December, 2013
+ * @version 0.23, 29 March, 2014
  */
 public class TranscriptModel implements java.io.Serializable, Constants {
 
@@ -574,10 +574,11 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	}
 
 	/**
-	 * Return position of CDS (start codon) in entire mRNA transcript. for transcripts on the minus strand, the
-	 * corresponding position is calculated by {@link #calculateRefCDSStart} .
+	 * Return position of CDS (start codon) in entire mRNA transcript. The
+	 * corresponding position is calculated by {@link #calculateRefCDSStart}. The return value is
+	 * essentially equal to the 5' UTR length plus one.
 	 * 
-	 * @return mRNA CDS start
+	 * @return The position (one based) of the first nucleotide of the start codon within the entire mRNA.
 	 */
 	public int getRefCDSStart() {
 		return this.rcdsStart;

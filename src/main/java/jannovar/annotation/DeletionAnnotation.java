@@ -19,7 +19,7 @@ import jannovar.exception.AnnotationException;
  * one-based numbering here).
  * This particular deletion corresponds to  NM_001127179(MYO7A_v001):c.3515_3536del
  * NM_001127179(MYO7A_i001):p.(Gly1172Glufs*34).
- * @version 0.16 (14 January, 2014)
+ * @version 0.17 (14 January, 2014)
  * @author Peter N Robinson
  */
 
@@ -33,7 +33,7 @@ public class DeletionAnnotation {
      * @param wtnt3_after Nucleotide sequence of codon following that affected by variant
      * @param ref sequence of wildtype sequence
      * @param var alternate sequence (should be '-')
-     * @param refvarstart Position of the variant in the CDS of the known gene
+     * @param refvarstart Position of the variant in the entire transcript (one-based)
      * @param exonNumber Number of the affected exon.
      * @return An annotation corresponding to the deletion.
      * @throws jannovar.exception.AnnotationException
@@ -50,7 +50,14 @@ public class DeletionAnnotation {
 	// results from the deletion at the same position in the aa as the wt codon was.
 	String varnt3;
 	int posVariantInCDS = refvarstart-kgl.getRefCDSStart()+1; /* position of deletion within coding sequence */
-	int aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
+	/* Note that posVariantInCDS is one-based. If pos%3==0, we are at the last base of a codon, and
+	   we can just divide by 3; otherwise, we need to take the floor, because we are at the first
+	   or second base of a codon. */
+	int aavarpos;
+	if ((posVariantInCDS % 3)==0)
+	    aavarpos = posVariantInCDS/3;
+	else
+	    aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
 	/*System.out.println(kgl.getGeneSymbol() + "(" + kgl.getAccessionNumber() + ") " +
 			   " frame_s=" + frame_s + "; wtnt3=" + wtnt3 + "; wtnt3_after=" + wtnt3_after
 			   + "; ref=" + ref + ";  alt="+var + "; refvarstart=  "+refvarstart); */
@@ -110,7 +117,6 @@ public class DeletionAnnotation {
 	}
     }
 
-
      /**
      * Creates annotation for a deletion of more than one nucleotide.
      * This is recognized by the fact that the ref sequence has a length greater than one
@@ -143,10 +149,19 @@ public class DeletionAnnotation {
 	String wtaa = translator.translateDNA(wtnt3);
 	int refcdsstart = kgl.getRefCDSStart();
 	int cdslen = kgl.getCDSLength();
-
-	int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
+	// Following correction on 30 Mar 2014.
+	//int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
+	/* Note that posVariantInCDS is one-based. If pos%3==0, we are at the last base of a codon, and
+	   we can just divide by 3; otherwise, we need to take the floor, because we are at the first
+	   or second base of a codon. */
+	int posVariantInCDS = refvarstart-kgl.getRefCDSStart()+1; /* position of deletion within coding sequence */
+	int aavarpos;
+	if ((posVariantInCDS % 3)==0)
+	    aavarpos = posVariantInCDS/3;
+	else
+	    aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
 	int varposend = -1; // 	the position of the last amino acid in the deletion
-	int posVariantInCDS = refvarstart-kgl.getRefCDSStart();
+	/// int posVariantInCDS = refvarstart-kgl.getRefCDSStart(); - Why was there no "1" here?
 
 	if (refvarstart <=refcdsstart) { /* first amino acid deleted */
 	    if (refvarend >= cdslen  + refcdsstart) { // i.e., 3' portion of the gene is deleted
