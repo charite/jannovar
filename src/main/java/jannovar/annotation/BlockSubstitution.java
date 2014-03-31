@@ -33,7 +33,7 @@ public class BlockSubstitution {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation getAnnotationPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 						     String ref, String var,int refvarstart,int refvarend, 
 						     int exonNumber) throws AnnotationException {
 	String annotation = null;
@@ -85,7 +85,7 @@ public class BlockSubstitution {
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return An annotation corresponding to the deletion.
      */
-    public static Annotation getAnnotationBlockPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,String wtnt3_after,
+    public static Annotation getAnnotationBlockPlusStrand(TranscriptModel kgl,int frame_s, String wtnt3,
 						     String ref, String var,int refvarstart,int refvarend, 
 						     int exonNumber) throws AnnotationException {
 
@@ -98,12 +98,38 @@ public class BlockSubstitution {
 	int startPosMutationInCDS = refvarstart-refcdsstart+1;
 	//int cdsEndPos = endpos - refcdsstart + 1;
 	//int cdsStartPos = cdsEndPos - var.length() + 1;
+	int posVariantInCDS = refvarstart-kgl.getRefCDSStart()+1; /* position of deletion within coding sequence */
 	int cdsEndPos = startPosMutationInCDS + var.length() - 1;
+	int varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
+	String wtaa = translator.translateDNA(wtnt3);
+	int aavarpos = ((posVariantInCDS % 3)==0) ? 
+	    posVariantInCDS/3 :
+	    (int)Math.floor(posVariantInCDS/3)+1; 
 
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0) {
 	    canno = String.format("%s:%s:exon%d:c.%d_%ddelins%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,
 				  startPosMutationInCDS,refvarend-refcdsstart+1,var);
-	    Annotation ann = new Annotation(kgl,canno,VariantType.NON_FS_SUBSTITUTION,startPosMutationInCDS);
+	    if (frame_s==0) {
+		    String endcodon = kgl.getCodonAt(refvarend-2,frame_s); //??????
+		    String endaa = translator.translateDNA(endcodon);
+		    //System.out.println("END codon=" + endcodon + " aa=" + endaa + " frame_s = " + frame_s);// + " end_frame_s = " + end_frame_s);
+		    //System.out.println("refvarstart=" + refvarstart + ", refvarend = " + refvarend);
+		    String mutaa = translator.translateDNA(var);
+		    panno = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s",kgl.getName(), exonNumber,canno,wtaa, aavarpos,endaa, varposend, mutaa);
+	    } else {
+		
+		    String endcodon = kgl.getCodonAt(refvarend+1,frame_s);
+		    String endaa = translator.translateDNA(endcodon);
+		    String mutcodon=null;
+		    if (frame_s==1) {
+			mutcodon = String.format("%c%s",wtnt3.charAt(2),endcodon.substring(0,2));
+		    } else {
+			mutcodon = String.format("%s%c",wtnt3.substring(1,3),endcodon.charAt(0));
+		    }
+		    String mutaa =  translator.translateDNA(mutcodon);
+		    panno =  String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s",kgl.getName(), exonNumber,canno,wtaa,aavarpos,endaa,varposend,mutaa);
+		}
+	    Annotation ann = new Annotation(kgl,panno,VariantType.NON_FS_SUBSTITUTION,startPosMutationInCDS);
 	    return ann;
 	} else {
 	    canno = String.format("%s:exon%d:c.%d_%ddelins%s",kgl.getName(),exonNumber,
@@ -119,7 +145,7 @@ public class BlockSubstitution {
 		wtnt3 = kgl.getWTCodonNucleotides(startPosMutationInCDS-1+((3 - (var.length() % 3)) % 3), frame_s);
 	    }
 	    //String varnt3 =  DuplicationAnnotation.getVarNt3(kgl,wtnt3,var,frame_s);
-	    String wtaa = translator.translateDNA(wtnt3);		
+	    //String wtaa = translator.translateDNA(wtnt3);		
 	    //String varaa = translator.translateDNA(varnt3);
 	    panno = String.format("%s:p.%s%dfs",canno,wtaa,aaVarStartPos);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION,startPosMutationInCDS);

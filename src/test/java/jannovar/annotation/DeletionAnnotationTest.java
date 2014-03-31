@@ -117,7 +117,7 @@ public class DeletionAnnotationTest implements Constants {
 	    VariantType varType = ann.getVariantType();
 	    Assert.assertEquals(VariantType.NON_FS_DELETION,varType);
 	    String annot = ann.getVariantAnnotation();
-	    Assert.assertEquals("OR14A16(uc001idm.1:exon1:c.486_488del:p.162_163del)",annot);
+	    Assert.assertEquals("OR14A16(uc001idm.1:exon1:c.486_488del:p.163delS)",annot);
 	}
 }
 

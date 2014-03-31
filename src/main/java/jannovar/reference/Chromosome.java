@@ -729,7 +729,7 @@ public class Chromosome {
 		Annotation dlt = DeletionAnnotation.getAnnotationSingleNucleotide(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
 		this.annovarFactory.addExonicAnnotation(dlt);
 	    } else if (var.length() > 1) {
-		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
+		Annotation blck = BlockSubstitution.getAnnotationPlusStrand(kgl, frame_s, wtnt3, ref, var, refvarstart, refvarend, exonNumber);
 		this.annovarFactory.addExonicAnnotation(blck);
 	    } else {
 		// System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
@@ -751,27 +751,13 @@ public class Chromosome {
 	    // $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
 	    if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
 		/* Non-frameshift substitution */
-		// Annotation ann = Annotation.createNonFrameShiftSubstitionAnnotation(kgl,refvarstart,canno);
-		/*
-		  Annotation ann = new Annotation();
-		  ann.varType = VariantType.NON_FS_SUBSTITUTION;
-		  ann.geneSymbol=kgl.getGeneSymbol();
-		  ann.rvarstart = refvarstart;
-		  ann.variantAnnotation = annot;
-		  ann.entrezGeneID = kgl.getEntrezGeneID();
-		  return ann;*/
-		Annotation ann = new Annotation(kgl, canno, VariantType.NON_FS_SUBSTITUTION, refvarstart);
+		Annotation ann = BlockSubstitution.getAnnotationBlockPlusStrand(kgl,frame_s, wtnt3,
+						     ref, var,refvarstart,refvarend, exonNumber);
 		this.annovarFactory.addExonicAnnotation(ann);
 	    } else {
 		/* frameshift substitution; more than one deleted nucleotide with more than one inserted nucleotide */
-		System.out.println("Chreomo ???? ref=" + ref + ", var=" + var);
-		Annotation ann = new Annotation(kgl, canno, VariantType.FS_SUBSTITUTION, refvarstart);
-		System.out.println("OLD=" + ann. 	getSymbolAndAnnotation() );
-		ann = BlockSubstitution.getAnnotationBlockPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
-						     ref, var,refvarstart,refvarend, 
-										 exonNumber);
-		System.out.println("new=" + ann. 	getSymbolAndAnnotation() );
-				
+		Annotation ann = BlockSubstitution.getAnnotationBlockPlusStrand(kgl,frame_s, wtnt3,
+						     ref, var,refvarstart,refvarend, exonNumber);
 		this.annovarFactory.addExonicAnnotation(ann);
 	    }
 	}

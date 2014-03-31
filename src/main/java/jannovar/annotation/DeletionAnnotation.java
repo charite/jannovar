@@ -131,8 +131,8 @@ public class DeletionAnnotation {
      * @param wtnt3_after Nucleotide sequence of codon following that affected by variant
      * @param ref sequence of wildtype sequence
      * @param var alternate sequence (should be '-')
-     * @param refvarstart start position of the variant in the CDS of the known gene
-     * @param refvarend end position of the variant in the CDS of the known gene
+     * @param refvarstart start position of the variant in the  mRNA of the transcript
+     * @param refvarend end position of the variant in the mRNA of the transcript
      * @param exonNumber Number of the affected exon (one-based: TODO chekc this).
      * @return {@link Annotation} object corresponding to deletion variant
      * @throws jannovar.exception.AnnotationException
@@ -149,7 +149,6 @@ public class DeletionAnnotation {
 	String wtaa = translator.translateDNA(wtnt3);
 	int refcdsstart = kgl.getRefCDSStart();
 	int cdslen = kgl.getCDSLength();
-	System.out.println("MN");
 	// Following correction on 30 Mar 2014.
 	//int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
 	/* Note that posVariantInCDS is one-based. If pos%3==0, we are at the last base of a codon, and
@@ -165,6 +164,9 @@ public class DeletionAnnotation {
 	int varposend = -1; // 	the position of the last amino acid in the deletion
 	/// int posVariantInCDS = refvarstart-kgl.getRefCDSStart(); - Why was there no "1" here?
 
+	//System.out.println("refvarend = " + refvarend + ", cdslen="+cdslen + "refcdsstart=" + refcdsstart + 
+	//"( cdslen + refcdsstart )= " +  (cdslen + refcdsstart));
+
 	if (refvarstart <=refcdsstart) { /* first amino acid deleted */
 	    if (refvarend >= cdslen  + refcdsstart) { // i.e., 3' portion of the gene is deleted
 		varposend = (int)Math.floor( cdslen / 3); 
@@ -177,11 +179,12 @@ public class DeletionAnnotation {
 	    panno = String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(), exonNumber,canno,aavarpos,varposend);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION, posVariantInCDS);
 	    return ann;
-	} else if (refvarend >= cdslen + refcdsstart) { 
+	} else if (refvarend >= cdslen + refcdsstart -1) { 
 	    /* -------------------------------------------------------------------- *
 	     * if we get here, then the 3' part of the gene is deleted              *
 	     * -------------------------------------------------------------------- */
-	    varposend = (int)Math.floor(cdslen/3);	
+	    varposend = (int)Math.floor(cdslen/3);
+	    //System.out.println("ref=" + ref + ", var=" +var);
 	    canno = String.format("c.%d_%ddel",refvarstart - refcdsstart +1, cdslen + refcdsstart -1);
 	    panno = String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(),
 				  exonNumber,canno,aavarpos,varposend);
@@ -194,7 +197,34 @@ public class DeletionAnnotation {
 	    varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
 	    posVariantInCDS = refvarstart-refcdsstart+1; /* start pos of mutation */
 	    canno = String.format("c.%d_%ddel",posVariantInCDS,refvarend-refcdsstart+1);
-	    panno =  String.format("%s:exon%d:%s:p.%d_%ddel",kgl.getName(), exonNumber,canno,aavarpos,varposend);
+	    if (aavarpos==varposend) {
+		if (frame_s==0) {
+		    panno =  String.format("%s:exon%d:%s:p.%ddel%s",kgl.getName(), exonNumber,canno,aavarpos,wtaa);
+		} else {
+		    panno =  String.format("%s:exon%d:%s:p.%ddel",kgl.getName(), exonNumber,canno,aavarpos);
+		  
+		}
+	    } else { /* i.e., two or more amino acids are deleted */
+		//		int end_frame_s = (frame_s + var.length() - 1)%3;
+		if (frame_s==0) {
+		    String endcodon = kgl.getCodonAt(refvarend-2,frame_s); //??????
+		    String endaa = translator.translateDNA(endcodon);
+		    //System.out.println("END codon=" + endcodon + " aa=" + endaa + " frame_s = " + frame_s);// + " end_frame_s = " + end_frame_s);
+		    //System.out.println("refvarstart=" + refvarstart + ", refvarend = " + refvarend);
+		    panno = String.format("%s:exon%d:%s:p.%s%d_%s%ddel",kgl.getName(), exonNumber,canno,wtaa, aavarpos,endaa, varposend);
+		} else {
+		    String endcodon = kgl.getCodonAt(refvarend+1,frame_s); //??????
+		    String endaa = translator.translateDNA(endcodon);
+		    String mutcodon=null;
+		    if (frame_s==1) {
+			mutcodon = String.format("%c%s",wtnt3.charAt(2),endcodon.substring(0,2));
+		    } else {
+			mutcodon = String.format("%s%c",wtnt3.substring(1,3),endcodon.charAt(0));
+		    }
+		    String mutaa =  translator.translateDNA(mutcodon);
+		    panno =  String.format("%s:exon%d:%s:p.%s%d_%s%ddel%s",kgl.getName(), exonNumber,canno,wtaa,aavarpos,endaa,varposend,mutaa);
+		}
+	    }
 	   
 	    Annotation ann= new Annotation(kgl,panno,VariantType.NON_FS_DELETION,posVariantInCDS);
 	   
@@ -255,17 +285,17 @@ public class DeletionAnnotation {
 	String mutaa = translator.translateDNA(mut);
 	
 	  
-	    System.out.println("start=" + (start+1) + ", end="+(endpos+1));
+	/*  System.out.println("start=" + (start+1) + ", end="+(endpos+1));
 	    System.out.println("deletion ="+ deletion);
 	    System.out.println("rest = "+ rest + ", restlen="+restlen);
 	    System.out.println("prefix ="+ prefix);
 	    System.out.println("wt:" + wtaa);
 	    System.out.println("mt:" + mutaa);
 	    trmdl.debugPrintCDS();
-	
+	*/
 	int aapos = aaVarStartPos;
 	int endk = mutaa.length();
-	System.out.println("endk = " + endk);
+	
 	String annot;
 	for (int k=0;k<endk;++k) {
 	    if (wtaa.charAt(k) != mutaa.charAt(k)) {
