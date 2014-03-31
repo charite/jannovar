@@ -763,8 +763,15 @@ public class Chromosome {
 		Annotation ann = new Annotation(kgl, canno, VariantType.NON_FS_SUBSTITUTION, refvarstart);
 		this.annovarFactory.addExonicAnnotation(ann);
 	    } else {
-		/* frameshift substitution */
+		/* frameshift substitution; more than one deleted nucleotide with more than one inserted nucleotide */
+		System.out.println("Chreomo ???? ref=" + ref + ", var=" + var);
 		Annotation ann = new Annotation(kgl, canno, VariantType.FS_SUBSTITUTION, refvarstart);
+		System.out.println("OLD=" + ann. 	getSymbolAndAnnotation() );
+		ann = BlockSubstitution.getAnnotationBlockPlusStrand(kgl,frame_s, wtnt3,wtnt3_after,
+						     ref, var,refvarstart,refvarend, 
+										 exonNumber);
+		System.out.println("new=" + ann. 	getSymbolAndAnnotation() );
+				
 		this.annovarFactory.addExonicAnnotation(ann);
 	    }
 	}

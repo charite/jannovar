@@ -149,6 +149,7 @@ public class DeletionAnnotation {
 	String wtaa = translator.translateDNA(wtnt3);
 	int refcdsstart = kgl.getRefCDSStart();
 	int cdslen = kgl.getCDSLength();
+	System.out.println("MN");
 	// Following correction on 30 Mar 2014.
 	//int aavarpos = (int)Math.floor((refvarstart-kgl.getRefCDSStart())/3)+1;
 	/* Note that posVariantInCDS is one-based. If pos%3==0, we are at the last base of a codon, and
@@ -157,9 +158,10 @@ public class DeletionAnnotation {
 	int posVariantInCDS = refvarstart-kgl.getRefCDSStart()+1; /* position of deletion within coding sequence */
 	int aavarpos;
 	if ((posVariantInCDS % 3)==0)
-	    aavarpos = posVariantInCDS/3;
+	  aavarpos = posVariantInCDS/3;
 	else
-	    aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
+	   aavarpos = (int)Math.floor(posVariantInCDS/3)+1; /* position of deletion in protein */
+	//aavarpos = (int) Math.ceil(posVariantInCDS/3);
 	int varposend = -1; // 	the position of the last amino acid in the deletion
 	/// int posVariantInCDS = refvarstart-kgl.getRefCDSStart(); - Why was there no "1" here?
 
@@ -252,7 +254,7 @@ public class DeletionAnnotation {
 	String wtaa = translator.translateDNA(wt);
 	String mutaa = translator.translateDNA(mut);
 	
-	/*  
+	  
 	    System.out.println("start=" + (start+1) + ", end="+(endpos+1));
 	    System.out.println("deletion ="+ deletion);
 	    System.out.println("rest = "+ rest + ", restlen="+restlen);
@@ -260,9 +262,10 @@ public class DeletionAnnotation {
 	    System.out.println("wt:" + wtaa);
 	    System.out.println("mt:" + mutaa);
 	    trmdl.debugPrintCDS();
-	*/
+	
 	int aapos = aaVarStartPos;
 	int endk = mutaa.length();
+	System.out.println("endk = " + endk);
 	String annot;
 	for (int k=0;k<endk;++k) {
 	    if (wtaa.charAt(k) != mutaa.charAt(k)) {

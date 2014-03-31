@@ -64,6 +64,7 @@ public class BlockSubstitution {
 	       ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs,"; */
 	    panno =   String.format("%s:exon:%d:%s",kgl.getName(),exonNumber,canno);
 	    //Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
+	    System.out.println("Panno=" + panno);
 	    Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
 	    return ann;
 					
@@ -95,21 +96,38 @@ public class BlockSubstitution {
 	String varnt3=null;
 	int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
 	int startPosMutationInCDS = refvarstart-refcdsstart+1;
+	//int cdsEndPos = endpos - refcdsstart + 1;
+	//int cdsStartPos = cdsEndPos - var.length() + 1;
+	int cdsEndPos = startPosMutationInCDS + var.length() - 1;
 
 	if ((refvarend-refvarstart+1-var.length()) % 3 == 0) {
-	    canno = String.format("%s:%s:exon%d:c.%d_%d%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,
+	    canno = String.format("%s:%s:exon%d:c.%d_%ddelins%s",kgl.getGeneSymbol(),kgl.getName(),exonNumber,
 				  startPosMutationInCDS,refvarend-refcdsstart+1,var);
 	    Annotation ann = new Annotation(kgl,canno,VariantType.NON_FS_SUBSTITUTION,startPosMutationInCDS);
 	    return ann;
 	} else {
-	    canno = String.format("%s:exon%d:c.%d_%d%s",kgl.getName(),exonNumber,
+	    canno = String.format("%s:exon%d:c.%d_%ddelins%s",kgl.getName(),exonNumber,
 				  refvarstart-refcdsstart+1,refvarend-refcdsstart+1,var);
-	    Annotation ann = new Annotation(kgl,canno,VariantType.FS_SUBSTITUTION,startPosMutationInCDS);
+	    /** aavarpos is now the FIRST position (one-based) of the amino-acid sequence
+		that was duplicated.*/
+	    int aaVarStartPos =  startPosMutationInCDS % 3 == 0 ? 
+		(int) Math.floor(startPosMutationInCDS/ 3) : 
+		(int) Math.floor(startPosMutationInCDS/ 3) +1;
+	    /* generate in-frame snippet for translation and correct for '-'-strand */
+	    if (kgl.isMinusStrand()) {
+		/* Re-adjust the wildtype nucleotides for minus strand */
+		wtnt3 = kgl.getWTCodonNucleotides(startPosMutationInCDS-1+((3 - (var.length() % 3)) % 3), frame_s);
+	    }
+	    //String varnt3 =  DuplicationAnnotation.getVarNt3(kgl,wtnt3,var,frame_s);
+	    String wtaa = translator.translateDNA(wtnt3);		
+	    //String varaa = translator.translateDNA(varnt3);
+	    panno = String.format("%s:p.%s%dfs",canno,wtaa,aaVarStartPos);
+	    Annotation ann = new Annotation(kgl,panno,VariantType.FS_SUBSTITUTION,startPosMutationInCDS);
 	    return ann;
 	}
     }
 
-	
-
+       
 
 }
+/* eof */

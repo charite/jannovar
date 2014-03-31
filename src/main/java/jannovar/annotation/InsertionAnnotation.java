@@ -185,7 +185,7 @@ public class InsertionAnnotation {
 		    varaa = String.format("%s*",varaa.substring(0,idx+1));
 		    String annot = String.format("%s:exon:%d:%s:p.X%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,aavarpos,varaa);
-		    
+		  
 		    /* $function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . 
 		       "delins$varaa,";		#stop codon is stil present */
 		    //Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
@@ -207,13 +207,17 @@ public class InsertionAnnotation {
 		    /* i.e., delete all aa after stop codon, but keep the aa before */
 		    String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,wtaa,aavarpos,varaa);
+		   
+		    
 		    Annotation ann = new Annotation(trmdl,annot,VariantType.STOPGAIN,startPosMutationInCDS);
 		    return ann;
 		} else {
+		    /* in frame, wt aa is not stop codon */
 		    /*$function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
 		     * "delins$varaa,"; */
 		    String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s",trmdl.getName(),
 						 exonNumber,canno,wtaa,aavarpos,varaa);
+		    //System.out.println("XXannot=" + annot +"\n\tframe_s=" + frame_s);
 		    //Annotation ann = Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
 		    Annotation ann = new Annotation(trmdl,annot,VariantType.NON_FS_INSERTION,startPosMutationInCDS);
 		    return ann;
