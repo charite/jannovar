@@ -77,7 +77,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KDM4A(uc001cjx.3:exon4:c.315-2A>-,uc010oki.2:exon4:c.315-2A>-)", annot);
+			Assert.assertEquals("KDM4A(uc001cjx.3:exon4:c.315-2delA,uc010oki.2:exon4:c.315-2delA)", annot);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KDM4A(uc001cjx.3:exon4:c.315-2A>-,uc010oki.2:exon4:c.315-2A>-)", annot);
+			Assert.assertEquals("KDM4A(uc001cjx.3:exon4:c.315-2delA,uc010oki.2:exon4:c.315-2delA)", annot);
 		}
 	}
 
