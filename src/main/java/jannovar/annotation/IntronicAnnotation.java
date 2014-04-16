@@ -7,7 +7,7 @@ import jannovar.reference.TranscriptModel;
  * This class is intended to provide a static method to generate annotations for INTRONIC variants. The main work is in
  * finding the distance to the nearest 5' and 3'
  * 
- * @version 0.06 (25 March 2014)
+ * @version 0.07 (15 April 2014)
  * @author Peter N Robinson, M Jaeger
  */
 
@@ -65,7 +65,10 @@ public class IntronicAnnotation {
 				else
 					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonEnd(k - 1));
 				// dist = "+" + distL;
-				annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distL, ref, alt);
+				if (ref.equals("-"))
+					annot = String.format("%s:intron%d:%s.%s%d+%dins%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distL, alt);
+				else
+					annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distL, ref, alt);
 			} else {
 				if (trmdl.isNonCodingGene()) {
 					posToCDS = trmdl.getDistanceToFivePrimeTerminuscDNA(trmdl.getExonStart(k));
@@ -75,7 +78,10 @@ public class IntronicAnnotation {
 				else
 					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonStart(k));
 				// dist = "-" + distR;
-				annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distR, ref, alt);
+				if (ref.equals("-"))
+					annot = String.format("%s:intron%d:%s.%s%d-%dins%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distR, alt);
+				else
+					annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distR, ref, alt);
 			}
 			// System.out.println("dist to CDS start: " + posToCDS);
 
@@ -100,7 +106,10 @@ public class IntronicAnnotation {
 				else
 					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonStart(k + 1));
 				// dist = "+" + distL;
-				annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distL, ref, alt);
+				if (ref.equals("-"))
+					annot = String.format("%s:intron%d:%s.%s%d+%dins%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distL, alt);
+				else
+					annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distL, ref, alt);
 			} else {
 				// System.out.println("exonend: " + trmdl.getExonEnd(k));
 				// System.out.println("cds start: " + trmdl.getCDSEnd());
@@ -113,7 +122,10 @@ public class IntronicAnnotation {
 				else
 					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonEnd(k));
 				// dist = "-" + distR;
-				annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distR, ref, alt);
+				if (ref.equals("-"))
+					annot = String.format("%s:intron%d:%s.%s%d-%dins%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distR, alt);
+				else
+					annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distR, ref, alt);
 			}
 		}
 		// System.out.println("Pos to CDSStart: " + posToCDS);
