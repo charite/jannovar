@@ -11,7 +11,7 @@ import jannovar.reference.TranscriptModel;
  * accurate, although mutations in this part of exons can indeed disrupt proper splicing. Instead, jannovar takes the
  * SPLICING_THRESHOLD nucleotides on the intronic side.
  * 
- * @version 0.14 (06 March, 2014)
+ * @version 0.15 (15 April, 2014)
  * @author Peter N Robinson, Marten Jäger
  */
 
@@ -26,17 +26,17 @@ public class SpliceAnnotation {
 	 * SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so, return true, otherwise, return false.<br>
 	 * <br>
 	 * splice boundary<br>
-	 * 		|    |<br>
+	 * | |<br>
 	 * ----------||||||||||||||||--------------<br>
-	 * 		  * 		--> Y<br>
-	 *     * 			--> N<br>
-	 *      * 			--> Y<br>
-	 * 			 * 		--> N<br>
-	 *    ---- 			--> Y<br>
-	 *        ----- 	--> Y<br>
-	 *       --- 		--> Y<br>
-	 *           ----- 	--> N<br>
-	 *   ---------- 	--> Y<br>
+	 * .......*.........--> Y<br>
+	 * ....*............--> N<br>
+	 * .....*...........--> Y<br>
+	 * ..........*......--> N<br>
+	 * ...----..........--> Y<br>
+	 * .......-----.....--> Y<br>
+	 * ......---........--> Y<br>
+	 * ..........-----..--> N<br>
+	 * ..----------.....--> Y<br>
 	 * 
 	 * 
 	 * @param k
@@ -352,6 +352,7 @@ public class SpliceAnnotation {
 		if (start == end && start >= cdsstart) { /* single-nucleotide variant */
 			int exonend = kgl.getExonEnd(k);
 			int exonstart = kgl.getExonStart(k);
+			String coding = kgl.isCodingGene() ? "c" : "n";
 			if (start >= exonstart - SPLICING_THRESHOLD && start < exonstart) {
 				/*
 				 * #------*-<---->------- mutation located right in front of
@@ -362,19 +363,23 @@ public class SpliceAnnotation {
 				 * Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1);
 				 * take back but for 1.
 				 */
-				if (kgl.isNonCodingGene())
-					anno = String.format("%s:exon%d:n.%d-%d%s>%s", kgl.getName(), k + 1, cumlenexon, exonstart - start, ref, alt);
+				if (alt.equals("-"))
+					anno = String.format("%s:exon%d:%s.%d-%ddel%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart - start, ref);
+				else if (ref.equals("-"))
+					anno = String.format("%s:exon%d:%s.%d-%dins%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart - start, alt);
 				else
-					anno = String.format("%s:exon%d:c.%d-%d%s>%s", kgl.getName(), k + 1, cumlenexon, exonstart - start, ref, alt);
+					anno = String.format("%s:exon%d:%s.%d-%d%s>%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart - start, ref, alt);
 				int refvarstart = cumlenexon; /* position of mutation in CDS */
 				Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, refvarstart);
 				return ann;
 			} else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 				/* #-------<---->-*--------<-->-- mutation right after exon end */
-				if (kgl.isNonCodingGene())
-					anno = String.format("%s:exon%d:n.%d+%d%s>%s", kgl.getName(), k + 1, cumlenexon, start - exonend, ref, alt);
+				if (alt.equals("-"))
+					anno = String.format("%s:exon%d:%s.%d+%ddel%s", kgl.getName(), k + 1, coding, cumlenexon, start - exonend, ref);
+				else if (alt.equals("-"))
+					anno = String.format("%s:exon%d:%s.%d+%dins%s", kgl.getName(), k + 1, coding, cumlenexon, start - exonend, alt);
 				else
-					anno = String.format("%s:exon%d:c.%d+%d%s>%s", kgl.getName(), k + 1, cumlenexon, start - exonend, ref, alt);
+					anno = String.format("%s:exon%d:%s.%d+%d%s>%s", kgl.getName(), k + 1, coding, cumlenexon, start - exonend, ref, alt);
 				/* anno is now something like uc001alq.2:exon22:c.2818+2G>A */
 				int refvarstart = cumlenexon;
 				Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, refvarstart);
