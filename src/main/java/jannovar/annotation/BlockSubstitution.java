@@ -12,8 +12,8 @@ import jannovar.reference.Translator;
  * Block substitutions are recognized in the calling class {@link jannovar.reference.Chromosome Chromosome} by the fact
  * that the length of the variant sequence is greater than 1.
  * 
- * @version 0.07 (7 July, 2013)
- * @author Peter N Robinson
+ * @version 0.08 (22 April, 2014)
+ * @author Peter N Robinson, Marten Jäger
  */
 
 public class BlockSubstitution {
@@ -101,6 +101,25 @@ public class BlockSubstitution {
 	 * @return An annotation corresponding to the deletion.
 	 */
 	public static Annotation getAnnotationBlockPlusStrand(TranscriptModel kgl, int frame_s, String wtnt3, String ref, String var, int refvarstart, int refvarend, int exonNumber) throws AnnotationException {
+		// shift / remove Overlapp ref/var
+		int i = 0;
+		while (ref.charAt(i) == var.charAt(i)) {
+			i++;
+			refvarstart++;
+			frame_s++;
+		}
+		frame_s = frame_s % 3;
+		int iend = ref.length();
+		int diffnt = ref.length() - var.length();
+		while (iend > i && ref.charAt(iend - 1) == var.charAt(iend - 1 - diffnt)) {
+			iend--;
+			refvarend--;
+		}
+		ref = ref.substring(i, iend);
+		if (i == iend)
+			var = "-";
+		else
+			var = var.substring(i, iend - diffnt);
 
 		String annotation = null;
 		Translator translator = Translator.getTranslator(); /* Singleton */
@@ -117,33 +136,38 @@ public class BlockSubstitution {
 		String wtaa = translator.translateDNA(wtnt3);
 		int aavarpos = ((posVariantInCDS % 3) == 0) ? posVariantInCDS / 3 : (int) Math.floor(posVariantInCDS / 3) + 1;
 
-		if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
-			canno = String.format("c.%d_%ddelins%s", startPosMutationInCDS, refvarend - refcdsstart + 1, var);
-			if (frame_s == 0) {
-				String endcodon = kgl.getCodonAt(refvarend - 2, frame_s); // ??????
-				String endaa = translator.translateDNA(endcodon);
-				// System.out.println("END codon=" + endcodon + " aa=" + endaa + " frame_s = " + frame_s);// +
-				// " end_frame_s = " + end_frame_s);
-				// System.out.println("refvarstart=" + refvarstart + ", refvarend = " + refvarend);
-				String mutaa = translator.translateDNA(var);
-				panno = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", kgl.getName(), exonNumber, canno, wtaa, aavarpos, endaa, varposend, mutaa);
-			} else {
+		canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
 
-				String endcodon = kgl.getCodonAt(refvarend + 1, frame_s);
-				String endaa = translator.translateDNA(endcodon);
-				String mutcodon = null;
-				if (frame_s == 1) {
-					mutcodon = String.format("%c%s", wtnt3.charAt(2), endcodon.substring(0, 2));
-				} else {
-					mutcodon = String.format("%s%c", wtnt3.substring(1, 3), endcodon.charAt(0));
-				}
-				String mutaa = translator.translateDNA(mutcodon);
-				panno = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", kgl.getName(), exonNumber, canno, wtaa, aavarpos, endaa, varposend, mutaa);
+		if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
+			int endframe_s = (frame_s + (ref.length() % 3)) % 3;
+
+			String wtntend = kgl.getCodonAt(refvarend + 1, endframe_s);
+			String wtntSeq = kgl.getCdnaSequence().substring(refvarstart - frame_s - 1, refvarend + (3 - endframe_s));
+			String mutntSeq = String.format("%s%s%s", wtnt3.substring(0, frame_s), var, wtntend.substring(endframe_s));
+
+			String wtAAseq = translator.translateDNA(wtntSeq);
+			String mutAAseq = translator.translateDNA(mutntSeq);
+			int idx = 0;
+			while (wtAAseq.charAt(idx) == mutAAseq.charAt(idx)) {
+				idx++;
 			}
+
+			int xdi = wtAAseq.length();
+			int diff = wtAAseq.length() - mutAAseq.length();
+			while (xdi > idx && wtAAseq.charAt(xdi - 1) == mutAAseq.charAt(xdi - 1 - diff)) {
+				xdi--;
+			}
+			int stopIdx = mutAAseq.indexOf("*");
+			if (stopIdx < 0)
+				panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, xdi - diff));
+			else
+				panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, stopIdx + 1));
+
 			Annotation ann = new Annotation(kgl, panno, VariantType.NON_FS_SUBSTITUTION, startPosMutationInCDS);
 			return ann;
 		} else {
-			canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
+			// canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart +
+			// 1, refvarend - refcdsstart + 1, var);
 			/**
 			 * aavarpos is now the FIRST position (one-based) of the amino-acid sequence that was duplicated.
 			 */
@@ -161,6 +185,5 @@ public class BlockSubstitution {
 			return ann;
 		}
 	}
-
 }
 /* eof */
