@@ -161,7 +161,7 @@ public class DeletionAnnotation {
 	 */
 	public static Annotation getMultinucleotideDeletionAnnotation(TranscriptModel kgl, int frame_s, String wtnt3, String wtnt3_after, String ref, String var, int refvarstart, int refvarend, int exonNumber) throws AnnotationException {
 		// shift
-		while (kgl.getCdnaSequence().charAt(refvarstart - 1) == kgl.getCdnaSequence().charAt(refvarstart + ref.length() - 1)) {
+		while (kgl.getCdnaSequence().length() > refvarstart + ref.length() && kgl.getCdnaSequence().charAt(refvarstart - 1) == kgl.getCdnaSequence().charAt(refvarstart + ref.length() - 1)) {
 			refvarstart++;
 			refvarend++;
 			ref = new StringBuilder().append(ref.substring(1)).append(ref.charAt(0)).toString();

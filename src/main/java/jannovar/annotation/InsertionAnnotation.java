@@ -131,8 +131,8 @@ public class InsertionAnnotation {
 		}
 		if (trmdl.isPlusStrand()) {
 			int idx = 0;
-			while (trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {
-				System.out.println(String.format("shift (%s - %s)", trmdl.getCdnaSequence().charAt(refvarstart), var.charAt(idx)));
+			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {
+			while (var.length() > idx && refvarstart < trmdl.getCdnaSequence().length() && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {
 				refvarstart++;
 				idx++;
 				frame_s++;
@@ -141,7 +141,8 @@ public class InsertionAnnotation {
 			}
 		} else {
 			int idx = 0;
-			while (trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(0)) {
+			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(0)) {
+			while (var.length() > idx && refvarstart < trmdl.getCdnaSequence().length() && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(0)) {
 				refvarstart++;
 				idx++;
 				frame_s++;
@@ -189,7 +190,8 @@ public class InsertionAnnotation {
 		// -------------------------------- end OLD --------------------------------------//
 
 		// new: at least the next 5 codons are used and tarnaslated
-		int end = trmdl.getCdnaSequence().length() >= refvarstart + 15 - frame_s ? refvarstart + 15 - frame_s : trmdl.getCdnaSequence().length();
+		int nupstreamnuc = var.length() + 36;
+		int end = trmdl.getCdnaSequence().length() >= refvarstart + nupstreamnuc - frame_s ? refvarstart + nupstreamnuc - frame_s : trmdl.getCdnaSequence().length();
 		String wtnt = trmdl.isPlusStrand() ? trmdl.getCdnaSequence().substring(refvarstart - 1 - frame_s, end) : trmdl.getCdnaSequence().substring(refvarstart - frame_s, end);
 		;
 		String varnt = null;
@@ -214,7 +216,7 @@ public class InsertionAnnotation {
 		wtaa = translator.translateDNA(wtnt);
 		varaa = translator.translateDNA(varnt);
 		int i = 0;
-		while (wtaa.charAt(i) == varaa.charAt(i)) {
+		while (i < wtaa.length() - 1 && i < varaa.length() && wtaa.charAt(i) == varaa.charAt(i)) {
 			i++;
 		}
 
@@ -282,9 +284,18 @@ public class InsertionAnnotation {
 						String construct = wtaa.substring(0, i) + varaa.substring(i, (var.length() / 3) + i) + wtaa.substring(i);
 						if (varaa.equals(construct)) { // is it possible to simply generate the varAA by inserting the
 														// 'new' AA in the RefAA?
-							if (i > 0)
+							if (i > 0) {
+								// System.out.println(trmdl.getChromosomeAsString());
+								// System.out.println(trmdl.getGeneSymbol());
+								// System.out.println(trmdl.getChromosomalCoordinates(refvarstart, refvarstart)[0] +
+								// "\t" + trmdl.getChromosomalCoordinates(refvarstart, refvarstart)[1]);
+								// System.out.println("ref: " + ref);
+								// System.out.println("alt: " + var);
+								// System.out.println("i: " + i);
+								// System.out.println("wtaa: " + wtaa.length() + "\t" + wtaa);
+								// System.out.println("varaa: " + varaa.length() + "\t" + varaa);
 								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i - 1), aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
-							else
+							} else
 								// if the insertion is at the first position we need the AA before
 								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", trmdl.getName(), exonNumber, canno, ref5upAA, aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
 						} else
@@ -295,9 +306,15 @@ public class InsertionAnnotation {
 				}
 			}
 		} else { /* i.e., length of variant is not a multiple of 3 */
-			if (wtaa.equals("*")) { /* mutation on stop codon */
+			if (wtaa.startsWith("*")) { /* mutation on stop codon */
 				int idx = varaa.indexOf("*"); /* corresponds to : if ($varaa =~ m/\* /) {	 */
-				if (idx >= 0) {
+				if (idx == 0) {
+					String annot = String.format("%s:exon%d:%s:p.=", trmdl.getName(), exonNumber, canno);
+					Annotation ann = new Annotation(trmdl, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
+					return ann;
+				}
+
+				if (idx > 0) {
 					/* in reality, this cannot be differentiated from non-frameshift insertion, but we'll still call it frameshift */
 					/* delete all aa after stop codon, but keep the aa before 
 					 * annovar: $varaa =~ s/\*.* /X/; */
@@ -317,6 +334,7 @@ public class InsertionAnnotation {
 					varaa = String.format("%s*", varaa.substring(0, idx + 1));
 					/*"$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
 					 * 	"_$wtaa_after" . ($varpos+1) . "delins$varaa,"; */
+
 					String annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, wtaa_after, (aavarpos + 1), varaa);
 					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPGAIN, startPosMutationInCDS);
 					return ann;
