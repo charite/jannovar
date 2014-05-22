@@ -484,13 +484,15 @@ public class Jannovar {
 				try {
 					annotateVCFLine(line, v, out);
 				} catch (AnnotationException e) {
-					System.out.println("[WARN] Annotation error: " + e.toString());
+					System.err.println("[WARN] Annotation error on line: " + line + "\n" + e.toString());
+				} catch (Exception e) {
+					System.err.println("[ERROR] Unchecked error on line: " + line + "\n" + e.toString());
 				}
 			}
 			out.close();
 		} catch (IOException e) {
-			System.out.println("[ERROR] Error writing annotated VCF file");
-			System.out.println("[ERROR] " + e.toString());
+			System.err.println("[ERROR] Error writing annotated VCF file");
+			System.err.println("[ERROR] " + e.toString());
 			System.exit(1);
 		}
 		System.out.println("[INFO] Wrote annotated VCF file to \"" + outname + "\"");
