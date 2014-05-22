@@ -484,9 +484,10 @@ public class Jannovar {
 				try {
 					annotateVCFLine(line, v, out);
 				} catch (AnnotationException e) {
-					System.err.println("[WARN] Annotation error on line: " + line + "\n" + e.toString());
+					System.err.println("[WARN] Annotation error on line: " + line.getOriginalVCFLine() + "\n" + e.toString());
 				} catch (Exception e) {
-					System.err.println("[ERROR] Unchecked error on line: " + line + "\n" + e.toString());
+					System.err.println("[ERROR] Unchecked error on line: " + line.getOriginalVCFLine());
+					e.printStackTrace();
 				}
 			}
 			out.close();
