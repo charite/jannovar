@@ -136,7 +136,10 @@ public class BlockSubstitution {
 		String wtaa = translator.translateDNA(wtnt3);
 		int aavarpos = ((posVariantInCDS % 3) == 0) ? posVariantInCDS / 3 : (int) Math.floor(posVariantInCDS / 3) + 1;
 
-		canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
+		if (ref.length() == 1 && var.length() == 1)
+			canno = String.format("%s:exon%d:c.%d%s>%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, ref, var);
+		else
+			canno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber, refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
 
 		if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
 			int endframe_s = (frame_s + (ref.length() % 3)) % 3;
@@ -147,22 +150,26 @@ public class BlockSubstitution {
 
 			String wtAAseq = translator.translateDNA(wtntSeq);
 			String mutAAseq = translator.translateDNA(mutntSeq);
-			int idx = 0;
-			while (wtAAseq.charAt(idx) == mutAAseq.charAt(idx)) {
-				idx++;
-			}
+			if (wtAAseq.equals(mutAAseq)) {
+				panno = String.format("%s:p.(=)", canno);
 
-			int xdi = wtAAseq.length();
-			int diff = wtAAseq.length() - mutAAseq.length();
-			while (xdi > idx && wtAAseq.charAt(xdi - 1) == mutAAseq.charAt(xdi - 1 - diff)) {
-				xdi--;
-			}
-			int stopIdx = mutAAseq.indexOf("*");
-			if (stopIdx < 0)
-				panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, xdi - diff));
-			else
-				panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, stopIdx + 1));
+			} else {
+				int idx = 0;
+				while (wtAAseq.charAt(idx) == mutAAseq.charAt(idx)) {
+					idx++;
+				}
 
+				int xdi = wtAAseq.length();
+				int diff = wtAAseq.length() - mutAAseq.length();
+				while (xdi > idx && wtAAseq.charAt(xdi - 1) == mutAAseq.charAt(xdi - 1 - diff)) {
+					xdi--;
+				}
+				int stopIdx = mutAAseq.indexOf("*");
+				if (stopIdx < 0)
+					panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, xdi - diff));
+				else
+					panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, stopIdx + 1));
+			}
 			Annotation ann = new Annotation(kgl, panno, VariantType.NON_FS_SUBSTITUTION, startPosMutationInCDS);
 			return ann;
 		} else {
