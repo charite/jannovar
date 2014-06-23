@@ -675,6 +675,31 @@ public class Chromosome {
 	 *            Gene in which variant was localized to one of the exons
 	 */
 	private void annotateExonicVariants(int refvarstart, int refvarend, int start, int end, String ref, String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
+		// System.out.println();
+		// System.out.println("refvarstart: " + refvarstart);
+		// System.out.println("refvarend: " + refvarend);
+		// System.out.println("start: " + start);
+		// System.out.println("end: " + end);
+		// System.out.println("ref: " + ref);
+		// System.out.println("var/alt: " + var);
+		// System.out.println("exonNr: " + exonNumber);
+		// System.out.println("kgl: " + kgl);
+		// only blocksubstitution ca start before the actual transcript
+		if (start < kgl.getTXStart()) {
+
+			String anno;
+			if (var.equals("-"))
+				anno = String.format("%s:exon%d:c.%d_%ddel", kgl.getName(), exonNumber + 1, start - kgl.getTXStart(), ref.length() + (start - kgl.getTXStart()));
+			else
+				anno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber + 1, start - kgl.getTXStart(), ref.length() + (start - kgl.getTXStart()), var);
+			Annotation ann;
+			if (ref.length() == var.length())
+				ann = new Annotation(kgl, anno, VariantType.NON_FS_SUBSTITUTION);
+			else
+				ann = new Annotation(kgl, anno, VariantType.FS_SUBSTITUTION);
+			this.annovarFactory.addExonicAnnotation(ann);
+			return;
+		}
 
 		/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
 		int frame_s = ((refvarstart - kgl.getRefCDSStart()) % 3);
@@ -741,6 +766,7 @@ public class Chromosome {
 			Annotation dltmnt = DeletionAnnotation.getMultinucleotideDeletionAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
 			this.annovarFactory.addExonicAnnotation(dltmnt);
 		} else {
+
 			/* If we get here, then start==end is false and the variant sequence is not "-",
 			 * i.e., it is not a deletion. Thus, we have a block substitution event.
 			 */
