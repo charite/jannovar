@@ -384,7 +384,7 @@ public class Chromosome {
 						rvarend = kgl.getExonEnd(m - 1) - kgl.getTXStart() - cumlenintron + 1 + kgl.getLengthOfIntron(m - 1);
 						// $rvarend = $exonend[$m-1]-$txstart-$lenintron+1 + ($exonstart[$m]-$exonend[$m-1]-1);
 						break;
-					} else if (end < kgl.getExonEnd(m)) {
+					} else if (end <= kgl.getExonEnd(m)) {
 						// #query -----------
 						// #gene <--**---******---****---->
 						// $rvarend = $end-$txstart-$lenintron+1;
@@ -745,6 +745,7 @@ public class Chromosome {
 		// System.out.println("wtnt3=" + wtnt3);
 		if (start == end) { /* SNV or insertion variant */
 			if (ref.equals("-")) { /* "-" stands for an insertion at this position */
+				// System.out.println(ref + "\t" + var + "\t" + kgl.getChromosomeAsString() + "\t" + start);
 				Annotation insrt = InsertionAnnotation.getAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(insrt);
 			} else if (var.equals("-")) { /* i.e., single nucleotide deletion */

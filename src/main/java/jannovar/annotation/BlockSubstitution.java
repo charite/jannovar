@@ -70,7 +70,6 @@ public class BlockSubstitution {
 			   ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "delins$obs,"; */
 			panno = String.format("%s:exon:%d:%s", kgl.getName(), exonNumber, canno);
 			// Annotation ann = Annotation.createFrameShiftSubstitionAnnotation(kgl,startPosMutationInCDS,panno);
-			System.out.println("Panno=" + panno);
 			Annotation ann = new Annotation(kgl, panno, VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
 			return ann;
 
@@ -155,7 +154,7 @@ public class BlockSubstitution {
 
 			} else {
 				int idx = 0;
-				while (wtAAseq.charAt(idx) == mutAAseq.charAt(idx)) {
+				while (idx < wtAAseq.length() && wtAAseq.charAt(idx) == mutAAseq.charAt(idx)) {
 					idx++;
 				}
 
@@ -165,10 +164,15 @@ public class BlockSubstitution {
 					xdi--;
 				}
 				int stopIdx = mutAAseq.indexOf("*");
-				if (stopIdx < 0)
-					panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, xdi - diff));
-				else
+				if (stopIdx >= 0)
 					panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, stopIdx + 1));
+				else if (idx < wtAAseq.length())
+					panno = String.format("%s:p.%s%d_%s%ddelins%s", canno, wtAAseq.charAt(idx), aavarpos + idx, wtAAseq.charAt(xdi - 1), varposend, mutAAseq.substring(idx, xdi - diff));
+				else {
+					String wtntSeqAfter = kgl.getCdnaSequence().substring(refvarend + (3 - endframe_s), refvarend + (3 - endframe_s) + 3);
+					String wtAAseqAfter = translator.translateDNA(wtntSeqAfter);
+					panno = String.format("%s:p.%s%d_%s%dins%s", canno, wtAAseq.charAt(idx - 1), aavarpos + idx - 1, wtAAseqAfter, varposend + 1, mutAAseq.substring(idx, xdi - diff));
+				}
 			}
 			Annotation ann = new Annotation(kgl, panno, VariantType.NON_FS_SUBSTITUTION, startPosMutationInCDS);
 			return ann;
