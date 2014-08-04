@@ -69,19 +69,25 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * end
 	 */
 	private void correctVariant() {
+		String tmp = ref;
 		int idx = 0;
+		// beginning
 		while (idx < ref.length() && idx < alt.length() && ref.charAt(idx) == alt.charAt(idx)) {
 			idx++;
 		}
+		position += idx;
+		ref = ref.substring(idx);
+		alt = alt.substring(idx);
 
+		// end
 		int xdi = ref.length();
 		int diff = ref.length() - alt.length();
-		while (xdi > idx && ref.charAt(xdi - 1) == alt.charAt(xdi - 1 - diff)) {
+		while (xdi > 0 && xdi - diff > 0 && ref.charAt(xdi - 1) == alt.charAt(xdi - 1 - diff)) {
 			xdi--;
 		}
-		position += idx;
-		ref = ref.substring(idx, xdi);
-		alt = alt.substring(idx, xdi - diff);
+		ref = xdi == 0 ? "-" : ref.substring(0, xdi);
+		alt = xdi - diff == 0 ? "-" : alt.substring(0, xdi - diff);
+
 	}
 
 	/**
