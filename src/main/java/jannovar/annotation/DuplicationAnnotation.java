@@ -56,6 +56,19 @@ public class DuplicationAnnotation {
 	public static Annotation getAnnotation(TranscriptModel trmdl, int frame_s, String wtnt3, String var, int startpos, int endpos, int exonNumber) throws AnnotationException {
 		String annot;
 		Annotation ann;
+		if (startpos > trmdl.getRefCDSEnd()) {
+			ann = Annotation.createEmptyAnnotation();
+			ann.setVarType(VariantType.UTR3);
+			ann.setGeneSymbol(trmdl.getGeneSymbol());
+			int distance = startpos - trmdl.getRefCDSEnd();
+			if (var.length() == 1)
+				annot = String.format("%s:exon%d:c.*%ddup", trmdl.getName(), exonNumber, distance);
+			else
+				annot = String.format("%s:exon%d:c.*%d_*%ddup", trmdl.getName(), exonNumber, distance, distance + var.length() - 1);
+			ann.setVariantAnnotation(annot);
+			ann.setGeneID(trmdl.getGeneID());
+			return ann;
+		}
 		Translator translator = Translator.getTranslator(); /* Singleton */
 		int refcdsstart = trmdl.getRefCDSStart();
 

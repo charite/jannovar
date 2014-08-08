@@ -85,7 +85,11 @@ public class InsertionAnnotation {
 			int pos = refvarstart - 1; /* the minus one is needed because Java strings are zero-based. */
 			int varlen = var.length();
 			boolean haveDuplication = false;
-			while (trmdl.getCdnaSequence().substring(pos, pos + var.length()).equals(var)) {
+			// System.out.println("substr: '" + trmdl.getCdnaSequence().substring(pos, pos + var.length()) + "'");
+			// System.out.println("ref: '" + ref + "'var: '" + var + "'");
+			while (trmdl.getCdnaSequence().length() > pos + var.length() && trmdl.getCdnaSequence().substring(pos, pos + var.length()).equals(var)) {
+				// System.out.println(" " + pos + "\t" + (pos + var.length()) + "\tvs " +
+				// trmdl.getCdnaSequence().length());
 				pos += varlen;
 				frame_s += varlen;
 				haveDuplication = true;
