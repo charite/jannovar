@@ -174,6 +174,11 @@ public class Jannovar {
 	/** chromosomal position an NA change (e.g. chr1:12345C>A) */
 	private String chromosomalChange;
 
+	/**
+	 * Flag indicating if the RefSeq serialized outputfile should only contain curated entries.
+	 */
+	private boolean onlyCuratedRefSeq;
+
 	public static void main(String argv[]) {
 		Jannovar anno = new Jannovar(argv);
 		/*
@@ -583,8 +588,9 @@ public class Jannovar {
 	 */
 	public void serializeRefseqData() throws JannovarException {
 		SerializationManager manager = new SerializationManager();
-		System.out.println("[INFO] Serializing RefSeq data as " + String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)));
-		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
+		String combiStringRelease = onlyCuratedRefSeq ? "cur_" + genomeRelease.getUCSCString(genomeRelease) : genomeRelease.getUCSCString(genomeRelease);
+		System.out.println("[INFO] Serializing RefSeq data as " + String.format(dirPath + Jannovar.RefseqSerializationFileName, combiStringRelease));
+		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.RefseqSerializationFileName, combiStringRelease), this.transcriptModelList);
 	}
 
 	/**
@@ -659,7 +665,7 @@ public class Jannovar {
 			break;
 		}
 		try {
-			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels(onlyCuratedRefSeq);
 		} catch (InvalidAttributException e) {
 			System.err.println("[ERROR] Unable to input data from the Refseq files");
 			e.printStackTrace();
@@ -672,8 +678,10 @@ public class Jannovar {
 		int after = transcriptModelList.size();
 		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
-
-		System.out.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before, after));
+		if (onlyCuratedRefSeq)
+			System.out.println(String.format("[INFO] Found %d curated transcript models from Refseq GFF resource, %d of which had sequences", before, after));
+		else
+			System.out.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before, after));
 	}
 
 	/**
@@ -776,6 +784,7 @@ public class Jannovar {
 			options.addOption(new Option("g", "genome", true, "genome build (mm9, mm10, hg18, hg19, hg38 - only refseq), default hg19"));
 			options.addOption(new Option(null, "create-ucsc", false, "Create UCSC definition file"));
 			options.addOption(new Option(null, "create-refseq", false, "Create RefSeq definition file"));
+			options.addOption(new Option(null, "create-refseq-c", false, "Create RefSeq definition file w/o predicted transcripts"));
 			options.addOption(new Option(null, "create-ensembl", false, "Create Ensembl definition file"));
 			options.addOption(new Option(null, "proxy", true, "FTP Proxy"));
 			options.addOption(new Option(null, "proxy-port", true, "FTP Proxy Port"));
@@ -798,9 +807,11 @@ public class Jannovar {
 				this.createUCSC = false;
 			}
 
-			if (cmd.hasOption("create-refseq")) {
+			if (cmd.hasOption("create-refseq") | cmd.hasOption("create-refseq-c")) {
 				this.createRefseq = true;
 				this.performSerialization = true;
+				if (cmd.hasOption("create-refseq-c"))
+					this.onlyCuratedRefSeq = true;
 			} else {
 				this.createRefseq = false;
 			}

@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * Genemodels with the
  * 
  * @author mjaeger
- * @version 0.2 (9 February, 2014)
+ * @version 0.3 (08 August, 2014)
  */
 public class TranscriptModelBuilder implements ChromosomeMap {
 
@@ -65,6 +65,19 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 * @throws InvalidAttributException
 	 */
 	public ArrayList<TranscriptModel> buildTranscriptModels() throws InvalidAttributException {
+		return this.buildTranscriptModels(false);
+	}
+
+	/**
+	 * Generates all possible {@link TranscriptModel}s from the given {@link Feature}s. If mapRna2Geneid is not null and
+	 * contains appropriate values a mapping to the corresponding Entrez ids is stored.
+	 * 
+	 * @param useOnlyCurated
+	 *            should only curated transcript be processed (RefSeq only)
+	 * @return {@link ArrayList} with generated {@link TranscriptModel}s
+	 * @throws InvalidAttributException
+	 */
+	public ArrayList<TranscriptModel> buildTranscriptModels(boolean useOnlyCurated) throws InvalidAttributException {
 		logger.info("building transcript models");
 		ArrayList<TranscriptModel> models = new ArrayList<TranscriptModel>();
 		TranscriptModel model;
@@ -73,6 +86,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 			if (gene.id == null)
 				continue;
 			for (Transcript rna : gene.rnas.values()) {
+				if (useOnlyCurated && ((rna.name == null) || rna.name.startsWith("XM_") || rna.name.startsWith("XR_")))
+					continue;
 				model = TranscriptModel.createTranscriptModel();
 				model.setAccessionNumber(rna.name);
 				// System.out.println(rna.chromosom+" --> "+identifier2chromosom.get(rna.chromosom));
