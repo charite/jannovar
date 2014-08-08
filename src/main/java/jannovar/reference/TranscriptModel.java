@@ -261,25 +261,27 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		return rcdsend;
 	}
 
-    /**
-     * @param pos position of the variant in the mRNA of the transcript
-     * @param frame_s Frame of position in the affected codon
-     * @return a three letter string with the nucleotides of the codon that includes pos, or null if there was an error
-     */
-    public String getCodonAt(int pos,int frame_s){
-	if (isNonCodingGene()) {
-	    return null;
-	} else if (pos <rcdsStart) {
-	    /* position is within the 5' UTR of transcript */
-	    return null;
-	} else if (pos > (rcdsStart + CDSlength - 1)) {
-	    /* position is within the 3' UTR of transcript */
-	    return null;
-	} else {
-	    int i = pos - frame_s; /* one-based */
-	    return this.sequence.substring(i-1,i+2);
+	/**
+	 * @param pos
+	 *            position of the variant in the mRNA of the transcript
+	 * @param frame_s
+	 *            Frame of position in the affected codon
+	 * @return a three letter string with the nucleotides of the codon that includes pos, or null if there was an error
+	 */
+	public String getCodonAt(int pos, int frame_s) {
+		if (isNonCodingGene()) {
+			return null;
+		} else if (pos < rcdsStart) {
+			/* position is within the 5' UTR of transcript */
+			return null;
+		} else if (pos > (rcdsStart + CDSlength - 1)) {
+			/* position is within the 3' UTR of transcript */
+			return null;
+		} else {
+			int i = pos - frame_s; /* one-based */
+			return this.sequence.substring(i - 1, i + 2);
+		}
 	}
-    }
 
 	/**
 	 * This functionality appears in several forms in annovar. Essentially, we want to use the information contained in
@@ -523,8 +525,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * If this gene is not coding, then cdsEnd is one more than cdsStart. (Note that in UCSC files, for noncodiing genes
 	 * cdsstart==cdsend. In our implementation, to change to one-based fully close numeration, we increment cdsstart by
-	 * one. Therefore, for noncoding genes cdsstart == cdsend + 1. This is not the case for coding genes).
-	 * 	 * @return true if this is a noncoding gene.
+	 * one. Therefore, for noncoding genes cdsstart == cdsend + 1. This is not the case for coding genes). * @return
+	 * true if this is a noncoding gene.
 	 */
 	public boolean isNonCodingGene() {
 		return (this.cdsStart == cdsEnd + 1);
@@ -593,9 +595,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	}
 
 	/**
-	 * Return position of CDS (start codon) in entire mRNA transcript. The
-	 * corresponding position is calculated by {@link #calculateRefCDSStart}. The return value is
-	 * essentially equal to the 5' UTR length plus one.
+	 * Return position of CDS (start codon) in entire mRNA transcript. The corresponding position is calculated by
+	 * {@link #calculateRefCDSStart}. The return value is essentially equal to the 5' UTR length plus one.
 	 * 
 	 * @return The position (one based) of the first nucleotide of the start codon within the entire mRNA.
 	 */
