@@ -209,10 +209,8 @@ public class IntervalTreeTest {
 	@Test
 	public void testSearch100() throws IntervalTreeException {
 		IntervalTree<String> tree = new IntervalTree<String>(getIntervalList4());
-		tree.debugPrint();
 		List<String> qy = tree.search(5, 5);
-		String rt = tree.getLeftNeighbor();
-		Assert.assertEquals("a", rt);
+		Assert.assertEquals(1, qy.size());
 	}
 
 	/** Tests median */
@@ -220,8 +218,7 @@ public class IntervalTreeTest {
 	public void testSearch101() throws IntervalTreeException {
 		IntervalTree<String> tree = new IntervalTree<String>(getIntervalList4());
 		List<String> qy = tree.search(25, 25);
-		String rt = tree.getLeftNeighbor();
-		Assert.assertEquals("a", rt);
+		Assert.assertEquals(1, qy.size());
 	}
 
 }

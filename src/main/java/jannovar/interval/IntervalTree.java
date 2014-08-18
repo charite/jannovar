@@ -309,7 +309,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		 * if ilow is smaller than the median of n the left side of the tree is
 		 * searched
 		 */
-		if (ilow < n.getMedian()) {
+		if (ilow <= n.getMedian()) {
 			/* as long as the iterator i is smaller than the size of leftorder */
 			int size = n.leftorder.size();
 			for (int i = 0; i < size; i++) {
@@ -347,7 +347,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		 * if the query is to the left of the median and the leftNode is not
 		 * empty the searchInterval method is called recursively
 		 */
-		if (ilow <= n.getMedian() && n.getLeft() != null) {
+		if (ilow < n.getMedian() && n.getLeft() != null) {
 			searchInterval(n.getLeft(), result, ilow, ihigh);
 
 		}
