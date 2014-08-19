@@ -8,89 +8,74 @@ import java.util.List;
  * <P>
  * The construction of the interval tree proceeds in several phases.
  * <ol>
- * <li>The 2n endpoints are sorted for the n intervals and the median point of
- * the endpoints is calculated.
+ * <li>The 2n endpoints are sorted for the n intervals and the median point of the endpoints is calculated.
  * <li>The intervals are divided into three categories.
  * <ol>
  * <li>Intervals that cross the median are stored in the intervals list.
- * <li>Intervals completely to the left of the median are stored in the leftNode
- * list.
+ * <li>Intervals completely to the left of the median are stored in the leftNode list.
  * <li>Intervals completely to the right are stored in the rightNode list.
  * </ol>
- * <li>Each interval in the intervals list is sorted in two lists: leftorder
- * (sorted by increasing left endpoints) and rightorder (sorted by decreasing
- * right endpoints).
+ * <li>Each interval in the intervals list is sorted in two lists: leftorder (sorted by increasing left endpoints) and
+ * rightorder (sorted by decreasing right endpoints).
  * </ol>
- * Note that a Node object may have non-null right and left children while the
- * Node itself has not associated intervals, depending on the relationship of
- * the median value to the values of the intervals.
+ * Note that a Node object may have non-null right and left children while the Node itself has not associated intervals,
+ * depending on the relationship of the median value to the values of the intervals.
  * <P>
  * To search in the interval tree, the following procedure is used.
  * <ol>
- * <li>If the highpoint of the interval is smaller than the median, the right
- * subtree is eliminated. Otherwise, the search method is called recursively.
- * <li>If the lowpoint of the interval is larger than the median, the left
- * subtree is eliminated. Otherwise, the search method is called recursively.
- * <li>Always searches the intervals stored at current node using the two sorted
- * lists leftorder and rightorder.
+ * <li>If the highpoint of the interval is smaller than the median, the right subtree is eliminated. Otherwise, the
+ * search method is called recursively.
+ * <li>If the lowpoint of the interval is larger than the median, the left subtree is eliminated. Otherwise, the search
+ * method is called recursively.
+ * <li>Always searches the intervals stored at current node using the two sorted lists leftorder and rightorder.
  * <ol>
- * <li>If the highpoint is smaller than the median, search the leftorder list
- * and output all intervals until there is one with a left endpoint larger than
- * the lowpoint.
- * <li>If the lowpoint is larger than the median, search the rightorder list and
- * output all intervals until there is one with a right endpoint smaller than
- * the highpoint.
+ * <li>If the highpoint is smaller than the median, search the leftorder list and output all intervals until there is
+ * one with a left endpoint larger than the lowpoint.
+ * <li>If the lowpoint is larger than the median, search the rightorder list and output all intervals until there is one
+ * with a right endpoint smaller than the highpoint.
  * </ol>
  * </ol>
  * <P>
- * A slight modification of the search algorithm is made to search for the left
- * and right neighbors of search queries that do not overlap with any intervals.
- * We make essentially a binary-tree type search using the medians of the nodes.
- * Each time we pass a node, we check whether we can update the neihgbors. One
- * issue is that we have to make special compensation when we update using a
- * node with no intervals on its own.
+ * A slight modification of the search algorithm is made to search for the left and right neighbors of search queries
+ * that do not overlap with any intervals. We make essentially a binary-tree type search using the medians of the nodes.
+ * Each time we pass a node, we check whether we can update the neihgbors. One issue is that we have to make special
+ * compensation when we update using a node with no intervals on its own.
  * <P>
- * The construction of an Interval Tree enables a fast search of overlapping
- * intervals.
+ * The construction of an Interval Tree enables a fast search of overlapping intervals.
  * 
- * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem
- *         Top, Peter Robinson
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
  * @version 0.12 (13 June, 2013)
  * @param <T>
  */
 public class IntervalTree<T> implements java.io.Serializable {
 	/**
-	 * A version numberused during deserialization to verify that the sender and
-	 * receiver of a serialized object have loaded classes for that object that
-	 * are compatible with respect to serialization.
+	 * A version numberused during deserialization to verify that the sender and receiver of a serialized object have
+	 * loaded classes for that object that are compatible with respect to serialization.
 	 */
 	private static final long serialVersionUID = 1L;
 	/** The root node of the entire interval tree. */
 	private Node<T> root;
 	/**
-	 * All intervals of the entire tree (pointers to these intervals are also
-	 * used in the nodes).
+	 * All intervals of the entire tree (pointers to these intervals are also used in the nodes).
 	 */
 	private List<Interval<T>> intervals;
 
 	/**
-	 * A Comparator that is used to sort intervals by their left endpoint in
-	 * ascending order.
+	 * A Comparator that is used to sort intervals by their left endpoint in ascending order.
 	 */
 	private LeftComparator leftcomp = null;
 	/**
-	 * A Comparator that is used to sort intervals by their right endpoint in
-	 * descending order.
+	 * A Comparator that is used to sort intervals by their right endpoint in descending order.
 	 */
 	private RightComparator rightcomp = null;
 	/**
-	 * The left neighbor of the current query position (non-overlapping interval
-	 * to the left of the query that is the closest of all intervals).
+	 * The left neighbor of the current query position (non-overlapping interval to the left of the query that is the
+	 * closest of all intervals).
 	 */
 	private Interval<T> leftNeighbor = null;
 	/**
-	 * The right neighbor of the current query position (non-overlapping
-	 * interval to the right of the query that is the closest of all intervals).
+	 * The right neighbor of the current query position (non-overlapping interval to the right of the query that is the
+	 * closest of all intervals).
 	 */
 	private Interval<T> rightNeighbor = null;
 
@@ -112,9 +97,8 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * A helper method intended to be used by the Constructors of this class to
-	 * initialize the static Comparator objects that will be used to sort
-	 * intervals.
+	 * A helper method intended to be used by the Constructors of this class to initialize the static Comparator objects
+	 * that will be used to sort intervals.
 	 */
 	private void initializeComparators() {
 		if (this.leftcomp == null) {
@@ -130,10 +114,9 @@ public class IntervalTree<T> implements java.io.Serializable {
 	/**
 	 * Search function which calls the method searchInterval to find intervals.
 	 * <P>
-	 * As a side-effect of the search, the variables {@link #rightNeighbor} and
-	 * {@link #leftNeighbor} are set. If this method returns an empty list, then
-	 * these variables contain the intervals that are the closest neighbors to
-	 * the left and the right to the query position.
+	 * As a side-effect of the search, the variables {@link #rightNeighbor} and {@link #leftNeighbor} are set. If this
+	 * method returns an empty list, then these variables contain the intervals that are the closest neighbors to the
+	 * left and the right to the query position.
 	 * 
 	 * @param low
 	 *            The lower element of the interval
@@ -160,15 +143,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * In cases where we do not find an intersection, i.e., when a call to
-	 * {@link #search} reveals an emptylist because none of the items overlaps
-	 * with the search coordinates, then the search function automatically calls
-	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor}
-	 * and {@link #leftNeighbor}, which can then be called by this function and
-	 * {@link #getLeftNeighbor}.
+	 * In cases where we do not find an intersection, i.e., when a call to {@link #search} reveals an emptylist because
+	 * none of the items overlaps with the search coordinates, then the search function automatically calls
+	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}, which can
+	 * then be called by this function and {@link #getLeftNeighbor}.
 	 * 
-	 * @return the right neighbor of the current search query, if no overlapping
-	 *         interval was found.
+	 * @return the right neighbor of the current search query, if no overlapping interval was found.
 	 */
 	public T getRightNeighbor() {
 		if (rightNeighbor == null)
@@ -178,15 +158,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * In cases where we do not find an intersection, i.e., when a call to
-	 * {@link #search} reveals an emptylist because none of the items overlaps
-	 * with the search coordinates, then the search function automatically calls
-	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor}
-	 * and {@link #leftNeighbor}, which can then be called by this function and
-	 * {@link #getRightNeighbor}.
+	 * In cases where we do not find an intersection, i.e., when a call to {@link #search} reveals an emptylist because
+	 * none of the items overlaps with the search coordinates, then the search function automatically calls
+	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}, which can
+	 * then be called by this function and {@link #getRightNeighbor}.
 	 * 
-	 * @return the left neighbor of the current search query, if no overlapping
-	 *         interval was found.
+	 * @return the left neighbor of the current search query, if no overlapping interval was found.
 	 */
 	public T getLeftNeighbor() {
 		if (leftNeighbor == null)
@@ -196,20 +173,16 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * This function checks if {@code item}, which is passed to the function as
-	 * an argument, is a better left neighbor for position x than the current
-	 * value of {@link #leftNeighbor}. It first checks if the currentValue of
-	 * leftNeighbor is null, in which case we simply assign a value. Because of
-	 * the way we traverse the interval tree, this value is guaranteed to be
-	 * valid. We then check whether the item is actually located to the left of
-	 * x (if not, we just return). Finally, we check if the "high" (rightmost)
-	 * value of the interval represented by item is closer to x than the value
-	 * of {@link #leftNeighbor}. If this is the case, then item is a better left
-	 * neighbor, and we assign it to the class variable {@link #leftNeighbor}.
+	 * This function checks if {@code item}, which is passed to the function as an argument, is a better left neighbor
+	 * for position x than the current value of {@link #leftNeighbor}. It first checks if the currentValue of
+	 * leftNeighbor is null, in which case we simply assign a value. Because of the way we traverse the interval tree,
+	 * this value is guaranteed to be valid. We then check whether the item is actually located to the left of x (if
+	 * not, we just return). Finally, we check if the "high" (rightmost) value of the interval represented by item is
+	 * closer to x than the value of {@link #leftNeighbor}. If this is the case, then item is a better left neighbor,
+	 * and we assign it to the class variable {@link #leftNeighbor}.
 	 * <P>
-	 * Note that this function is intended to be used by the function
-	 * {@link #searchInbetween} if there is no interval that overlaps the
-	 * original search query.
+	 * Note that this function is intended to be used by the function {@link #searchInbetween} if there is no interval
+	 * that overlaps the original search query.
 	 * 
 	 * @param item
 	 *            The new candidate left neighbor
@@ -235,15 +208,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * This function checks if {@code item}, which is passed to the function as
-	 * an argument, is a better right neighbor for position x than the current
-	 * value of {@link #rightNeighbor}. If the current value of
-	 * {@link #rightNeighbor} is null, we assign it the value of {@code item}
-	 * (this is guaranteed to be a valid value). Otherwise, we check whether
-	 * item is to the right of {@link #rightNeighbor} (if not, just return).
-	 * Finally, we check whether item is closer to {@code x} than the current
-	 * rightneighbor, and if so, we update the value of {@link #rightNeighbor}
-	 * to {@code item}.#
+	 * This function checks if {@code item}, which is passed to the function as an argument, is a better right neighbor
+	 * for position x than the current value of {@link #rightNeighbor}. If the current value of {@link #rightNeighbor}
+	 * is null, we assign it the value of {@code item} (this is guaranteed to be a valid value). Otherwise, we check
+	 * whether item is to the right of {@link #rightNeighbor} (if not, just return). Finally, we check whether item is
+	 * closer to {@code x} than the current rightneighbor, and if so, we update the value of {@link #rightNeighbor} to
+	 * {@code item}.#
 	 * 
 	 * @param item
 	 *            The new candidate rightt neighbor
@@ -269,14 +239,12 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * This function is called if no inverval is found to overlap with the
-	 * search query. If this method is called, we know that we are "in between"
-	 * two intervals (or at the extreme right or left end of the search space).
+	 * This function is called if no inverval is found to overlap with the search query. If this method is called, we
+	 * know that we are "in between" two intervals (or at the extreme right or left end of the search space).
 	 * 
 	 * @param x
-	 *            The lower range of the oringal search query (it doesnt matter
-	 *            whether we take the lower or the upper range, since both do
-	 *            not overlap).
+	 *            The lower range of the oringal search query (it doesnt matter whether we take the lower or the upper
+	 *            range, since both do not overlap).
 	 */
 	private void searchInbetween(int x) {
 		Node<T> n = this.root;
@@ -289,16 +257,14 @@ public class IntervalTree<T> implements java.io.Serializable {
 				if (n.hasInterval()) {
 					Interval<T> item = n.getLeftmostItem();
 					switchRightNeighborIfBetter(item, x);
-				}
-				else {
+				} else {
 					Node<T> rd = n.getLeftmostDescendentOfRightChild();
 					Interval<T> item = rd.getLeftmostItem();
 					switchRightNeighborIfBetter(item, x);
 				}
 				/* Now continue to navigate the interval tree */
 				n = n.getLeft();
-			}
-			else {
+			} else {
 				/*
 				 * First up date the left neighbor (most right to date that is
 				 * left of query) .
@@ -306,8 +272,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 				if (n.hasInterval()) {
 					Interval<T> item = n.getRightmostItem();
 					switchLeftNeighborIfBetter(item, x);
-				}
-				else {
+				} else {
 					/*
 					 * If the current node has no intervals on its own, then it
 					 * is possible that its right child has a better right
@@ -344,7 +309,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		 * if ilow is smaller than the median of n the left side of the tree is
 		 * searched
 		 */
-		if (ilow < n.getMedian()) {
+		if (ilow <= n.getMedian()) {
 			/* as long as the iterator i is smaller than the size of leftorder */
 			int size = n.leftorder.size();
 			for (int i = 0; i < size; i++) {
@@ -362,8 +327,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 			 * if ihigh is bigger than the median of n the right side of the
 			 * tree is searched
 			 */
-		}
-		else if (ihigh > n.getMedian()) {
+		} else if (ihigh > n.getMedian()) {
 			/* as long as the iterator i is smaller than the size of rightorder */
 			int size = n.rightorder.size();
 			for (int i = 0; i < size; i++) {
@@ -397,8 +361,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * This is intended to be used to print out the interval tree for debugging
-	 * purposes.
+	 * This is intended to be used to print out the interval tree for debugging purposes.
 	 * 
 	 * @param n
 	 *            current {@link Node}

@@ -85,7 +85,11 @@ public class InsertionAnnotation {
 			int pos = refvarstart - 1; /* the minus one is needed because Java strings are zero-based. */
 			int varlen = var.length();
 			boolean haveDuplication = false;
-			while (trmdl.getCdnaSequence().substring(pos, pos + var.length()).equals(var)) {
+			// System.out.println("substr: '" + trmdl.getCdnaSequence().substring(pos, pos + var.length()) + "'");
+			// System.out.println("ref: '" + ref + "'var: '" + var + "'");
+			while (trmdl.getCdnaSequence().length() > pos + var.length() && trmdl.getCdnaSequence().substring(pos, pos + var.length()).equals(var)) {
+				// System.out.println(" " + pos + "\t" + (pos + var.length()) + "\tvs " +
+				// trmdl.getCdnaSequence().length());
 				pos += varlen;
 				frame_s += varlen;
 				haveDuplication = true;
@@ -257,7 +261,17 @@ public class InsertionAnnotation {
 				if (idx >= 0) { /* corresponds to annovar: if ($varaa =~ m/\* /) {  */
 					varaa = String.format("%s*", varaa.substring(0, idx + 1));
 					/* i.e., delete all aa after stop codon, but keep the aa before */
-					String annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, varaa);
+					// System.out.println("wtaa: " + wtaa);
+					// System.out.println("wtnt: " + wtnt + "\tvarnt: " + varnt);
+					// System.out.println("varaa: " + varaa);
+					// System.out.println(String.format("%s:exon%d:%s:p.%s%d_%s%d%ins%s", trmdl.getName(), exonNumber,
+					// canno, wtaa.charAt(i), aavarpos, varaa));
+					String annot;
+					// if(wtnt.length() == 0){
+					// annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno,
+					// wtaa.charAt(i), aavarpos, varaa);
+					// }else
+					annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, varaa);
 
 					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPGAIN, startPosMutationInCDS);
 					return ann;

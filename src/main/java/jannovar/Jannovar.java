@@ -46,25 +46,21 @@ import org.apache.commons.cli.Parser;
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
  * <OL>
- * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and
- * knownToLocusLink.txt, and to create corresponding
- * {@link jannovar.reference.TranscriptModel TranscriptModel} objects and to
- * serialize them. The resulting serialized file can be used both by this
- * program itself (see next item) or by the main Exomizer program to annotated
+ * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt, and to create
+ * corresponding {@link jannovar.reference.TranscriptModel TranscriptModel} objects and to serialize them. The resulting
+ * serialized file can be used both by this program itself (see next item) or by the main Exomizer program to annotated
  * VCF file.
- * <LI>Using the serialized file of {@link jannovar.reference.TranscriptModel
- * TranscriptModel} objects (see above item) annotate a VCF file using
- * annovar-type program logic. Note that this functionality is also used by the
- * main Exomizer program and thus this program can be used as a stand-alone
- * annotator ("Jannovar") or as a way of testing the code for the Exomizer.
+ * <LI>Using the serialized file of {@link jannovar.reference.TranscriptModel TranscriptModel} objects (see above item)
+ * annotate a VCF file using annovar-type program logic. Note that this functionality is also used by the main Exomizer
+ * program and thus this program can be used as a stand-alone annotator ("Jannovar") or as a way of testing the code for
+ * the Exomizer.
  * </OL>
  * <P>
  * To run the "Jannovar" executable:
  * <P>
  * {@code java -Xms1G -Xmx1G -jar Jannovar.jar -V xyz.vcf -D $SERIAL}
  * <P>
- * This will annotate a VCF file. The results of jannovar annotation are shown
- * in the form
+ * This will annotate a VCF file. The results of jannovar annotation are shown in the form
  * 
  * <PRE>
  * Annotation {original VCF line}
@@ -76,58 +72,49 @@ import org.apache.commons.cli.Parser;
  *   perl annotate_variation.pl --downdb knownGene --buildver hg19 humandb/
  * </PRE>
  * 
- * then, to annotate a VCF file called BLA.vcf, we first need to convert it to
- * Annovar input format and run the main annovar program as follows.
+ * then, to annotate a VCF file called BLA.vcf, we first need to convert it to Annovar input format and run the main
+ * annovar program as follows.
  * 
  * <PRE>
  * $ perl convert2annovar.pl BLA.vcf -format vcf4 > BLA.av
  * $ perl annotate_variation.pl -buildver hg19 --geneanno BLA.av --dbtype knowngene humandb/
  * </PRE>
  * 
- * This will create two files with all variants and a special file with exonic
- * variants.
+ * This will create two files with all variants and a special file with exonic variants.
  * <p>
  * There are three ways of using this program.
  * <ol>
- * <li>To create a serialized version of the UCSC gene definition data. In this
- * case, the command-line flag <b>- S</b> is provide as is the path to the four
- * UCSC files. Then, {@code anno.serialize()} is true and a file <b>ucsc.ser</b>
+ * <li>To create a serialized version of the UCSC gene definition data. In this case, the command-line flag <b>- S</b>
+ * is provide as is the path to the four UCSC files. Then, {@code anno.serialize()} is true and a file <b>ucsc.ser</b>
  * is created.
- * <li>To deserialize the serialized data (<b>ucsc.ser</b>). In this case, the
- * flag <b>- D</b> must be used.
+ * <li>To deserialize the serialized data (<b>ucsc.ser</b>). In this case, the flag <b>- D</b> must be used.
  * <li>To simply read in the UCSC data without creating a serialized file.
  * </ol>
- * Whichever of the three versions is chosen, the user may additionally pass the
- * path to a VCF file using the <b>-v</b> flag. If so, then this file will be
- * annotated using the UCSC data, and a new version of the file will be written
- * to a file called test.vcf.jannovar (assuming the original file was named
- * test.vcf). The
+ * Whichever of the three versions is chosen, the user may additionally pass the path to a VCF file using the <b>-v</b>
+ * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
+ * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  * 
  * @author Peter N Robinson
  * @version 0.33 (29 December, 2013)
  */
 public class Jannovar {
 	/**
-	 * Location of a directory which will be used as download directory with
-	 * subfolders (by genome release e.g. hg19,mm9) in whichthe files defining
-	 * the transcript models will be stored. (the files may or may not be
-	 * compressed with gzip). The same variable is also used to indicate the
-	 * output location of the serialized file. The default value is "data/hg19/"
+	 * Location of a directory which will be used as download directory with subfolders (by genome release e.g.
+	 * hg19,mm9) in whichthe files defining the transcript models will be stored. (the files may or may not be
+	 * compressed with gzip). The same variable is also used to indicate the output location of the serialized file. The
+	 * default value is "data/hg19/"
 	 */
 	private String dirPath = null;
 	/**
-	 * Flag to indicate that Jannovar should download known gene definitions
-	 * files from the UCSC server.
+	 * Flag to indicate that Jannovar should download known gene definitions files from the UCSC server.
 	 */
 	private boolean createUCSC;
 	/**
-	 * Flag to indicate Jannovar should download transcript definition files for
-	 * RefSeq.
+	 * Flag to indicate Jannovar should download transcript definition files for RefSeq.
 	 */
 	private boolean createRefseq;
 	/**
-	 * Flag to indicate Jannovar should download transcript definition files for
-	 * Ensembl.
+	 * Flag to indicate Jannovar should download transcript definition files for Ensembl.
 	 */
 	private boolean createEnsembl;
 	/** List of all lines from knownGene.txt file from UCSC */
@@ -139,8 +126,7 @@ public class Jannovar {
 	/** Name of the UCSC serialized data file that will be created by Jannovar. */
 	private static final String UCSCserializationFileName = "ucsc_%s.ser";
 	/**
-	 * Name of the Ensembl serialized data file that will be created by
-	 * Jannovar.
+	 * Name of the Ensembl serialized data file that will be created by Jannovar.
 	 */
 	private static final String EnsemblSerializationFileName = "ensembl_%s.ser";
 	/**
@@ -148,20 +134,17 @@ public class Jannovar {
 	 */
 	private static final String RefseqSerializationFileName = "refseq_%s.ser";
 	/**
-	 * Flag to indicate that Jannovar should serialize the UCSC data. This flag
-	 * is set to true automatically if the user enters --create-ucsc (then, the
-	 * four files are downloaded and subsequently serialized). If the user
-	 * enters the flag {@code -U path}, then Jannovar interprets path as the
-	 * location of a directory that already contains the UCSC files (either
-	 * compressed or uncompressed), and sets this flag to true to perform
-	 * serialization and then to exit. The name of the serialized file that gets
-	 * created is "ucsc.ser" (this cannot be changed from the command line, see
-	 * {@link #UCSCserializationFileName}).
+	 * Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to true automatically if the user
+	 * enters --create-ucsc (then, the four files are downloaded and subsequently serialized). If the user enters the
+	 * flag {@code -U path}, then Jannovar interprets path as the location of a directory that already contains the UCSC
+	 * files (either compressed or uncompressed), and sets this flag to true to perform serialization and then to exit.
+	 * The name of the serialized file that gets created is "ucsc.ser" (this cannot be changed from the command line,
+	 * see {@link #UCSCserializationFileName}).
 	 */
 	private boolean performSerialization = false;
 	/**
-	 * Name of file with serialized UCSC data. This should be the complete path
-	 * to the file, and will be used for annotating VCF files.
+	 * Name of file with serialized UCSC data. This should be the complete path to the file, and will be used for
+	 * annotating VCF files.
 	 */
 	private String serializedFile = null;
 	/** Path to a VCF file waiting to be annotated. */
@@ -172,20 +155,17 @@ public class Jannovar {
 	private String proxyPort = null;
 
 	/**
-	 * Flag indicating whether to output annotations in Jannovar format
-	 * (default: false).
+	 * Flag indicating whether to output annotations in Jannovar format (default: false).
 	 */
 	private boolean jannovarFormat;
 
 	/**
-	 * Flag indication whether the annotations for all affected transcripts
-	 * should be reported.
+	 * Flag indication whether the annotations for all affected transcripts should be reported.
 	 */
 	private boolean showAll;
 
 	/**
-	 * genome release for the download and the creation of the serialized
-	 * transcript model file
+	 * genome release for the download and the creation of the serialized transcript model file
 	 */
 	private Release genomeRelease = Release.HG19;
 	/** Output folder for the annotated VCF files (default: current folder) */
@@ -193,6 +173,11 @@ public class Jannovar {
 
 	/** chromosomal position an NA change (e.g. chr1:12345C>A) */
 	private String chromosomalChange;
+
+	/**
+	 * Flag indicating if the RefSeq serialized outputfile should only contain curated entries.
+	 */
+	private boolean onlyCuratedRefSeq;
 
 	public static void main(String argv[]) {
 		Jannovar anno = new Jannovar(argv);
@@ -303,10 +288,8 @@ public class Jannovar {
 	}
 
 	/**
-	 * This function creates a {@link TranscriptDataDownloader} object in order
-	 * to download the required transcript data files. If the user has set the
-	 * proxy and proxy port via the command line, we use these to download the
-	 * files.
+	 * This function creates a {@link TranscriptDataDownloader} object in order to download the required transcript data
+	 * files. If the user has set the proxy and proxy port via the command line, we use these to download the files.
 	 * 
 	 * @param source
 	 *            the source of the transcript data (e.g. RefSeq, Ensembl, UCSC)
@@ -336,8 +319,7 @@ public class Jannovar {
 	}
 
 	/**
-	 * @return true if we should deserialize a file with UCSC data to perform
-	 *         analysis
+	 * @return true if we should deserialize a file with UCSC data to perform analysis
 	 */
 	public boolean deserialize() {
 		return this.serializedFile != null;
@@ -351,8 +333,8 @@ public class Jannovar {
 	}
 
 	/**
-	 * Annotate a single line of a VCF file, and output the line together with
-	 * the new INFO fields representing the annotations.
+	 * Annotate a single line of a VCF file, and output the line together with the new INFO fields representing the
+	 * annotations.
 	 * 
 	 * @param line
 	 *            an object representing the original VCF line
@@ -449,9 +431,8 @@ public class Jannovar {
 	}
 
 	/**
-	 * This function outputs a VCF file that corresponds to the original VCF
-	 * file but additionally has annotations for each variant. A new file is
-	 * created with the suffix "jv.vcf";
+	 * This function outputs a VCF file that corresponds to the original VCF file but additionally has annotations for
+	 * each variant. A new file is created with the suffix "jv.vcf";
 	 */
 	private void outputAnnotatedVCF(VCFReader parser) throws JannovarException {
 		File f = new File(this.VCFfilePath);
@@ -500,13 +481,11 @@ public class Jannovar {
 	}
 
 	/**
-	 * This function writes detailed annotations to file. One annotation is
-	 * written for each of the transcripts affected by a variant, and the file
-	 * is a tab-separated file in "Jannovar" format.
+	 * This function writes detailed annotations to file. One annotation is written for each of the transcripts affected
+	 * by a variant, and the file is a tab-separated file in "Jannovar" format.
 	 * 
 	 * @param parser
-	 *            The VCFParser that has extracted a list of variants from the
-	 *            VCF file.
+	 *            The VCFParser that has extracted a list of variants from the VCF file.
 	 */
 	private void outputJannovarFormatFile(VCFReader parser) throws JannovarException {
 		File f = new File(this.VCFfilePath);
@@ -536,8 +515,7 @@ public class Jannovar {
 	}
 
 	/**
-	 * THis function will simply annotate given chromosomal position with HGVS
-	 * compliant output e.g. chr1:909238G>C -->
+	 * THis function will simply annotate given chromosomal position with HGVS compliant output e.g. chr1:909238G>C -->
 	 * PLEKHN1:NM_032129.2:c.1460G>C,p.(Arg487Pro)
 	 * 
 	 * @throws AnnotationException
@@ -582,8 +560,8 @@ public class Jannovar {
 	}
 
 	/**
-	 * This function inputs a VCF file, and prints the annotated version thereof
-	 * to a file (name of the original file with the suffix .jannovar).
+	 * This function inputs a VCF file, and prints the annotated version thereof to a file (name of the original file
+	 * with the suffix .jannovar).
 	 * 
 	 * @throws jannovar.exception.JannovarException
 	 */
@@ -605,24 +583,23 @@ public class Jannovar {
 	}
 
 	/**
-	 * Inputs the GFF data from RefSeq files, convert the resulting
-	 * {@link jannovar.reference.TranscriptModel TranscriptModel} objects to
-	 * {@link jannovar.interval.Interval Interval} objects, and store these in a
-	 * serialized file.
+	 * Inputs the GFF data from RefSeq files, convert the resulting {@link jannovar.reference.TranscriptModel
+	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
+	 * file.
 	 * 
 	 * @throws JannovarException
 	 */
 	public void serializeRefseqData() throws JannovarException {
 		SerializationManager manager = new SerializationManager();
-		System.err.println("[INFO] Serializing RefSeq data as " + String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)));
-		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
+		String combiStringRelease = onlyCuratedRefSeq ? "cur_" + genomeRelease.getUCSCString(genomeRelease) : genomeRelease.getUCSCString(genomeRelease);
+		System.err.println("[INFO] Serializing RefSeq data as " + String.format(dirPath + Jannovar.RefseqSerializationFileName, combiStringRelease));
+		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.RefseqSerializationFileName, combiStringRelease), this.transcriptModelList);
 	}
 
 	/**
-	 * Inputs the GFF data from Ensembl files, convert the resulting
-	 * {@link jannovar.reference.TranscriptModel TranscriptModel} objects to
-	 * {@link jannovar.interval.Interval Interval} objects, and store these in a
-	 * serialized file.
+	 * Inputs the GFF data from Ensembl files, convert the resulting {@link jannovar.reference.TranscriptModel
+	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
+	 * file.
 	 * 
 	 * @throws jannovar.exception.JannovarException
 	 */
@@ -633,10 +610,9 @@ public class Jannovar {
 	}
 
 	/**
-	 * Inputs the KnownGenes data from UCSC files, convert the resulting
-	 * {@link jannovar.reference.TranscriptModel TranscriptModel} objects to
-	 * {@link jannovar.interval.Interval Interval} objects, and store these in a
-	 * serialized file.
+	 * Inputs the KnownGenes data from UCSC files, convert the resulting {@link jannovar.reference.TranscriptModel
+	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
+	 * file.
 	 * 
 	 * @throws jannovar.exception.JannovarException
 	 */
@@ -647,12 +623,10 @@ public class Jannovar {
 	}
 
 	/**
-	 * To run Jannovar, the user must pass a transcript definition file with the
-	 * -D flag. This can be one of the files ucsc.ser, ensembl.ser, or
-	 * refseq.ser (or a comparable file) containing a serialized version of the
-	 * TranscriptModel objects created to contain info about the transcript
-	 * definitions (exon positions etc.) extracted from UCSC, Ensembl, or Refseq
-	 * and necessary for annotation.
+	 * To run Jannovar, the user must pass a transcript definition file with the -D flag. This can be one of the files
+	 * ucsc.ser, ensembl.ser, or refseq.ser (or a comparable file) containing a serialized version of the
+	 * TranscriptModel objects created to contain info about the transcript definitions (exon positions etc.) extracted
+	 * from UCSC, Ensembl, or Refseq and necessary for annotation.
 	 * 
 	 * @throws JannovarException
 	 */
@@ -694,7 +668,7 @@ public class Jannovar {
 			break;
 		}
 		try {
-			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
+			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels(onlyCuratedRefSeq);
 		} catch (InvalidAttributException e) {
 			System.err.println("[ERROR] Unable to input data from the Refseq files");
 			e.printStackTrace();
@@ -707,8 +681,10 @@ public class Jannovar {
 		int after = transcriptModelList.size();
 		// System.err.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
-
-		System.err.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before, after));
+		if (onlyCuratedRefSeq)
+			System.err.println(String.format("[INFO] Found %d curated transcript models from Refseq GFF resource, %d of which had sequences", before, after));
+		else
+			System.err.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before, after));
 	}
 
 	/**
@@ -811,6 +787,7 @@ public class Jannovar {
 			options.addOption(new Option("g", "genome", true, "genome build (mm9, mm10, hg18, hg19, hg38 - only refseq), default hg19"));
 			options.addOption(new Option(null, "create-ucsc", false, "Create UCSC definition file"));
 			options.addOption(new Option(null, "create-refseq", false, "Create RefSeq definition file"));
+			options.addOption(new Option(null, "create-refseq-c", false, "Create RefSeq definition file w/o predicted transcripts"));
 			options.addOption(new Option(null, "create-ensembl", false, "Create Ensembl definition file"));
 			options.addOption(new Option(null, "proxy", true, "FTP Proxy"));
 			options.addOption(new Option(null, "proxy-port", true, "FTP Proxy Port"));
@@ -833,9 +810,11 @@ public class Jannovar {
 				this.createUCSC = false;
 			}
 
-			if (cmd.hasOption("create-refseq")) {
+			if (cmd.hasOption("create-refseq") | cmd.hasOption("create-refseq-c")) {
 				this.createRefseq = true;
 				this.performSerialization = true;
+				if (cmd.hasOption("create-refseq-c"))
+					this.onlyCuratedRefSeq = true;
 			} else {
 				this.createRefseq = false;
 			}
@@ -924,12 +903,10 @@ public class Jannovar {
 	}
 
 	/**
-	 * This function is used to ensure that certain options are passed to the
-	 * program before we start execution.
+	 * This function is used to ensure that certain options are passed to the program before we start execution.
 	 * 
 	 * @param cmd
-	 *            An apache CommandLine object that stores the command line
-	 *            arguments
+	 *            An apache CommandLine object that stores the command line arguments
 	 * @param name
 	 *            Name of the argument that must be present
 	 * @return Value of the required option as a String.

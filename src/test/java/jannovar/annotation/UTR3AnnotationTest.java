@@ -552,7 +552,9 @@ public class UTR3AnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.UTR3, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CDCA7L(uc003svf.4:c.*71_*74del,uc010kul.3:c.*71_*74del,uc010kuk.3:c.*71_*74del,uc003sve.4:c.*71_*74del)", annot);
+			Assert.assertEquals("CDCA7L(uc003svf.4:c.*75_*78del,uc010kul.3:c.*75_*78del,uc010kuk.3:c.*75_*78del,uc003sve.4:c.*75_*78del)", annot);
+			// Assert.assertEquals("CDCA7L(uc003svf.4:c.*71_*74del,uc010kul.3:c.*71_*74del,uc010kuk.3:c.*71_*74del,uc003sve.4:c.*71_*74del)",
+			// annot);
 		}
 	}
 
@@ -879,7 +881,7 @@ public class UTR3AnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.UTR3, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("WIBG(uc001sie.1:c.*105_*108del,uc001sif.1:c.*105_*108del)", annot);
+			Assert.assertEquals("WIBG(uc001sie.1:c.*105_*108del,uc001sif.1:c.*108_*111del)", annot);
 		}
 	}
 

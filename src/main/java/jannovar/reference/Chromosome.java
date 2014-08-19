@@ -384,7 +384,7 @@ public class Chromosome {
 						rvarend = kgl.getExonEnd(m - 1) - kgl.getTXStart() - cumlenintron + 1 + kgl.getLengthOfIntron(m - 1);
 						// $rvarend = $exonend[$m-1]-$txstart-$lenintron+1 + ($exonstart[$m]-$exonend[$m-1]-1);
 						break;
-					} else if (end < kgl.getExonEnd(m)) {
+					} else if (end <= kgl.getExonEnd(m)) {
 						// #query -----------
 						// #gene <--**---******---****---->
 						// $rvarend = $end-$txstart-$lenintron+1;
@@ -675,6 +675,31 @@ public class Chromosome {
 	 *            Gene in which variant was localized to one of the exons
 	 */
 	private void annotateExonicVariants(int refvarstart, int refvarend, int start, int end, String ref, String var, int exonNumber, TranscriptModel kgl) throws AnnotationException {
+		// System.out.println();
+		// System.out.println("refvarstart: " + refvarstart);
+		// System.out.println("refvarend: " + refvarend);
+		// System.out.println("start: " + start);
+		// System.out.println("end: " + end);
+		// System.out.println("ref: " + ref);
+		// System.out.println("var/alt: " + var);
+		// System.out.println("exonNr: " + exonNumber);
+		// System.out.println("kgl: " + kgl);
+		// only blocksubstitution ca start before the actual transcript
+		if (start < kgl.getTXStart()) {
+
+			String anno;
+			if (var.equals("-"))
+				anno = String.format("%s:exon%d:c.%d_%ddel", kgl.getName(), exonNumber + 1, start - kgl.getTXStart(), ref.length() + (start - kgl.getTXStart()));
+			else
+				anno = String.format("%s:exon%d:c.%d_%ddelins%s", kgl.getName(), exonNumber + 1, start - kgl.getTXStart(), ref.length() + (start - kgl.getTXStart()), var);
+			Annotation ann;
+			if (ref.length() == var.length())
+				ann = new Annotation(kgl, anno, VariantType.NON_FS_SUBSTITUTION);
+			else
+				ann = new Annotation(kgl, anno, VariantType.FS_SUBSTITUTION);
+			this.annovarFactory.addExonicAnnotation(ann);
+			return;
+		}
 
 		/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
 		int frame_s = ((refvarstart - kgl.getRefCDSStart()) % 3);
@@ -720,6 +745,7 @@ public class Chromosome {
 		// System.out.println("wtnt3=" + wtnt3);
 		if (start == end) { /* SNV or insertion variant */
 			if (ref.equals("-")) { /* "-" stands for an insertion at this position */
+				// System.out.println(ref + "\t" + var + "\t" + kgl.getChromosomeAsString() + "\t" + start);
 				Annotation insrt = InsertionAnnotation.getAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(insrt);
 			} else if (var.equals("-")) { /* i.e., single nucleotide deletion */
@@ -741,6 +767,7 @@ public class Chromosome {
 			Annotation dltmnt = DeletionAnnotation.getMultinucleotideDeletionAnnotation(kgl, frame_s, wtnt3, wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
 			this.annovarFactory.addExonicAnnotation(dltmnt);
 		} else {
+
 			/* If we get here, then start==end is false and the variant sequence is not "-",
 			 * i.e., it is not a deletion. Thus, we have a block substitution event.
 			 */

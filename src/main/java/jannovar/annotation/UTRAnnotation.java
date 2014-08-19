@@ -41,6 +41,12 @@ public class UTRAnnotation {
 	 * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to a 3' UTR variant.
 	 */
 	public static Annotation createUTR3Annotation(TranscriptModel trmdl, int rvarstart, String ref, String alt) {
+		// shift
+		while (alt.equals("-") && trmdl.getCdnaSequence().length() > rvarstart + ref.length() && trmdl.getCdnaSequence().charAt(rvarstart - 1) == trmdl.getCdnaSequence().charAt(rvarstart + ref.length() - 1)) {
+			rvarstart++;
+			ref = new StringBuilder().append(ref.substring(1)).append(ref.charAt(0)).toString();
+		}
+
 		Annotation ann = Annotation.createEmptyAnnotation();
 		ann.setVarType(VariantType.UTR3);
 		ann.setGeneSymbol(trmdl.getGeneSymbol());
@@ -49,6 +55,7 @@ public class UTRAnnotation {
 		// System.out.println(trmdl.getName()+": Rvarstart=" + rvarstart + "distance=" + distance);
 
 		if (alt.equals("-")) {
+
 			/* i.e., deletion in the UTR3 region */
 			if (ref.length() == 1) {
 				String annotation = String.format("%s:c.*%ddel", trmdl.getName(), distance);
