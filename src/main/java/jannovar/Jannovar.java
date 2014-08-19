@@ -233,7 +233,7 @@ public class Jannovar {
 			try {
 				anno.deserializeTranscriptDefinitionFile();
 			} catch (JannovarException je) {
-				System.out.println("[ERROR] Could not deserialize UCSC data: " + je.toString());
+				System.err.println("[ERROR] Could not deserialize UCSC data: " + je.toString());
 				System.exit(1);
 			}
 		} else {
@@ -249,17 +249,17 @@ public class Jannovar {
 			try {
 				anno.annotateVCF(); /* 3a or 3b */
 			} catch (JannovarException je) {
-				System.out.println("[ERROR] Could not annotate VCF data: " + je.toString());
+				System.err.println("[ERROR] Could not annotate VCF data: " + je.toString());
 				System.exit(1);
 			}
 		} else {
 			if (anno.chromosomalChange == null) {
-				System.out.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
+				System.err.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
 			} else {
 				try {
 					anno.annotatePosition();
 				} catch (JannovarException je) {
-					System.out.println("[ERROR] Could not annotate input data: " + anno.chromosomalChange);
+					System.err.println("[ERROR] Could not annotate input data: " + anno.chromosomalChange);
 					System.exit(1);
 				}
 
@@ -496,7 +496,7 @@ public class Jannovar {
 			System.err.println("[ERROR] " + e.toString());
 			System.exit(1);
 		}
-		System.out.println("[INFO] Wrote annotated VCF file to \"" + outname + "\"");
+		System.err.println("[INFO] Wrote annotated VCF file to \"" + outname + "\"");
 	}
 
 	/**
@@ -523,7 +523,7 @@ public class Jannovar {
 				try {
 					outputJannovarLine(n, v, out);
 				} catch (AnnotationException e) {
-					System.out.println("[WARN] Annotation error: " + e.toString());
+					System.err.println("[WARN] Annotation error: " + e.toString());
 				}
 			}
 			out.close();
@@ -532,7 +532,7 @@ public class Jannovar {
 			System.err.println("[ERROR] " + e.toString());
 			System.exit(1);
 		}
-		System.out.println("[INFO] Wrote annotations to \"" + outname + "\"");
+		System.err.println("[INFO] Wrote annotations to \"" + outname + "\"");
 	}
 
 	/**
@@ -614,7 +614,7 @@ public class Jannovar {
 	 */
 	public void serializeRefseqData() throws JannovarException {
 		SerializationManager manager = new SerializationManager();
-		System.out.println("[INFO] Serializing RefSeq data as " + String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)));
+		System.err.println("[INFO] Serializing RefSeq data as " + String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)));
 		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.RefseqSerializationFileName, genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
 	}
 
@@ -628,7 +628,7 @@ public class Jannovar {
 	 */
 	public void serializeEnsemblData() throws JannovarException {
 		SerializationManager manager = new SerializationManager();
-		System.out.println("[INFO] Serializing Ensembl data as " + String.format(dirPath + Jannovar.EnsemblSerializationFileName, genomeRelease.getUCSCString(genomeRelease)));
+		System.err.println("[INFO] Serializing Ensembl data as " + String.format(dirPath + Jannovar.EnsemblSerializationFileName, genomeRelease.getUCSCString(genomeRelease)));
 		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.EnsemblSerializationFileName, genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
 	}
 
@@ -642,7 +642,7 @@ public class Jannovar {
 	 */
 	public void serializeUCSCdata() throws JannovarException {
 		SerializationManager manager = new SerializationManager();
-		System.out.println("[INFO] Serializing UCSC data as " + String.format(dirPath + Jannovar.UCSCserializationFileName, genomeRelease.getUCSCString(genomeRelease)));
+		System.err.println("[INFO] Serializing UCSC data as " + String.format(dirPath + Jannovar.UCSCserializationFileName, genomeRelease.getUCSCString(genomeRelease)));
 		manager.serializeKnownGeneList(String.format(dirPath + Jannovar.UCSCserializationFileName, genomeRelease.getUCSCString(genomeRelease)), this.transcriptModelList);
 	}
 
@@ -705,10 +705,10 @@ public class Jannovar {
 		int before = transcriptModelList.size();
 		transcriptModelList = efp.parse();
 		int after = transcriptModelList.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
+		// System.err.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
 
-		System.out.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before, after));
+		System.err.println(String.format("[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before, after));
 	}
 
 	/**
@@ -743,7 +743,7 @@ public class Jannovar {
 		gff.parse(path + Constants.ensembl_gtf);
 		try {
 			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
-			// System.out.println("[INFO] Got: "+this.transcriptModelList.size()
+			// System.err.println("[INFO] Got: "+this.transcriptModelList.size()
 			// + " Ensembl transcripts");
 		} catch (InvalidAttributException e) {
 			System.err.println("[ERROR] Unable to input data from the Ensembl files");
@@ -755,10 +755,10 @@ public class Jannovar {
 		int before = transcriptModelList.size();
 		transcriptModelList = efp.parse();
 		int after = transcriptModelList.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
+		// System.err.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
 
-		System.out.println(String.format("[INFO] Found %d transcript models from Ensembl GFF resource, %d of which had sequences", before, after));
+		System.err.println(String.format("[INFO] Found %d transcript models from Ensembl GFF resource, %d of which had sequences", before, after));
 	}
 
 	/**
@@ -873,13 +873,13 @@ public class Jannovar {
 					if (this.createRefseq)
 						this.genomeRelease = Release.HG38;
 					else {
-						System.out.println("[INFO] Genome release hg38 only available for Refseq");
+						System.err.println("[INFO] Genome release hg38 only available for Refseq");
 						System.exit(0);
 					}
 				}
 			} else {
 				if (performSerialization)
-					System.out.println("[INFO] Genome release set to default: hg19");
+					System.err.println("[INFO] Genome release set to default: hg19");
 				this.genomeRelease = Release.HG19;
 			}
 
@@ -944,14 +944,14 @@ public class Jannovar {
 	}
 
 	private static void usage() {
-		System.out.println("***   Jannovar: Usage     ****");
-		System.out.println("Use case 1: Download UCSC data and create transcript data file (ucsc_hg19.ser)");
-		System.out.println("$ java -jar Jannovar.jar --create-ucsc [-U name of output directory]");
-		System.out.println("Use case 2: Add annotations to a VCF file");
-		System.out.println("$ java -jar Jannovar.jar -D ucsc_hg19.ser -V example.vcf");
-		System.out.println("Use case 3: Write new file with Jannovar-format annotations of a VCF file");
-		System.out.println("$ java -jar Jannovar -D ucsc_hg19.ser -V vcfPath -J");
-		System.out.println("*** See the tutorial for details ***");
+		System.err.println("***   Jannovar: Usage     ****");
+		System.err.println("Use case 1: Download UCSC data and create transcript data file (ucsc_hg19.ser)");
+		System.err.println("$ java -jar Jannovar.jar --create-ucsc [-U name of output directory]");
+		System.err.println("Use case 2: Add annotations to a VCF file");
+		System.err.println("$ java -jar Jannovar.jar -D ucsc_hg19.ser -V example.vcf");
+		System.err.println("Use case 3: Write new file with Jannovar-format annotations of a VCF file");
+		System.err.println("$ java -jar Jannovar -D ucsc_hg19.ser -V vcfPath -J");
+		System.err.println("*** See the tutorial for details ***");
 	}
 
 }
