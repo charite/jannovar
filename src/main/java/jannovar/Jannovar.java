@@ -679,7 +679,7 @@ public class Jannovar {
 		int before = transcriptModelList.size();
 		transcriptModelList = efp.parse();
 		int after = transcriptModelList.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
+		// System.err.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
 		if (onlyCuratedRefSeq)
 			System.err.println(String.format("[INFO] Found %d curated transcript models from Refseq GFF resource, %d of which had sequences", before, after));
@@ -719,7 +719,7 @@ public class Jannovar {
 		gff.parse(path + Constants.ensembl_gtf);
 		try {
 			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
-			// System.out.println("[INFO] Got: "+this.transcriptModelList.size()
+			// System.err.println("[INFO] Got: "+this.transcriptModelList.size()
 			// + " Ensembl transcripts");
 		} catch (InvalidAttributException e) {
 			System.err.println("[ERROR] Unable to input data from the Ensembl files");
@@ -731,7 +731,7 @@ public class Jannovar {
 		int before = transcriptModelList.size();
 		transcriptModelList = efp.parse();
 		int after = transcriptModelList.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
+		// System.err.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
 
 		System.err.println(String.format("[INFO] Found %d transcript models from Ensembl GFF resource, %d of which had sequences", before, after));
