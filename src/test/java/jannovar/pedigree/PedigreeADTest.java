@@ -74,7 +74,7 @@ public class PedigreeADTest {
 	}
 	GenotypeCall gc = new GenotypeCall(lst,null);
 	float dummyPhred=100f;
-	Variant v = new Variant ((byte)1, 1, "A", "C", gc,dummyPhred); 
+	Variant v = new Variant ((byte)1, 1, "A", "C", gc,dummyPhred,""); 
 	varList.add(v);
         return varList;
     }

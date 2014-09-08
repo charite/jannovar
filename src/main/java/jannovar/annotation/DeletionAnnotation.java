@@ -305,13 +305,16 @@ public class DeletionAnnotation {
 
 		int start = posMutationInCDS - 1; // Convert 1-based to 0-based
 		int endpos = start + ref.length(); // endpos is now 0-based and points to one after the deletion.
+		// int endpos = start + ref.length() > orf.length() ? orf.length() : start + ref.length();
 
+		// System.out.println("start: " + start + "\tend: " + endpos);
+		// System.out.println("orf: " + orf.length() + "\tref: " + ref.length());
 		String deletion = orf.substring(start, endpos);
 		// Get the part of the codon that comes before the deletion
 		String prefix = orf.substring(start - frame_s, start);
 
 		// We do not know when the new sequence will differ from the wt sequence.
-		// Try at least 10 amino acids.
+		// Try at least 30 amino acids.
 		int restlen = (orf.length() - endpos) > 30 ? 30 : orf.length() - endpos;
 		String rest = orf.substring(endpos, endpos + restlen);
 		String wt = prefix + deletion + rest;
@@ -545,7 +548,7 @@ public class DeletionAnnotation {
 					panno = String.format("%s:exon%d:%s:p.%s%d_%s%ddel%s", kgl.getName(), exonNumber, canno, wtaa, aavarpos, endaa, varposend, mutaa);
 				}
 			}
-			System.out.println(panno);
+			// System.out.println(panno);
 			Annotation ann = new Annotation(kgl, panno, VariantType.NON_FS_DELETION, posVariantInCDS);
 
 			return ann;

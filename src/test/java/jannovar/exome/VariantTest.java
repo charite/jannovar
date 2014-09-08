@@ -32,21 +32,21 @@ public class VariantTest {
 
     @Test public void testPosition() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"A","C",null,dummyPhred);
+	Variant v = new Variant(chr,13,"A","C",null,dummyPhred,"");
 	int p = v.get_position();
 	Assert.assertEquals(13,p);
     }
 
     @Test public void testChromosome1() throws VCFParseException {
 	byte chr5 = 5;
-	Variant v = new Variant(chr5,13,"A","A",null,dummyPhred);
+	Variant v = new Variant(chr5,13,"A","A",null,dummyPhred,"");
         String c= v.get_chromosome_as_string();
 	Assert.assertEquals("chr5",c);
     }
 
     @Test public void testChromosomeX() throws VCFParseException {
 	byte chrX = 23;
-	Variant v = new Variant(chrX,13,"A","C",null,dummyPhred);
+	Variant v = new Variant(chrX,13,"A","C",null,dummyPhred,"");
 
         String c= v.get_chromosome_as_string();
 	Assert.assertEquals("chrX",c);
@@ -55,7 +55,7 @@ public class VariantTest {
 
     @Test public void testChromosomeY() throws VCFParseException {
 	byte chrY = 24;
-	Variant v = new Variant(chrY,13,"A","C",null,dummyPhred);
+	Variant v = new Variant(chrY,13,"A","C",null,dummyPhred,"");
 
         String c= v.get_chromosome_as_string();
 	Assert.assertEquals("chrY",c);
@@ -64,7 +64,7 @@ public class VariantTest {
 
      @Test public void testTransition1() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"A","G",null,dummyPhred);
+	Variant v = new Variant(chr,13,"A","G",null,dummyPhred,"");
 	boolean b = v.isTransition();
 	Assert.assertEquals(true,b);
     }
@@ -72,7 +72,7 @@ public class VariantTest {
     /* A<->T is not a transition */
      @Test public void testTransition2() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"A","T",null,dummyPhred); 
+	Variant v = new Variant(chr,13,"A","T",null,dummyPhred,""); 
 	boolean b = v.isTransition();
 	Assert.assertEquals(false,b);
     }
@@ -80,28 +80,28 @@ public class VariantTest {
     /* A<->GC is not a transition because not a SNV */
      @Test public void testTransition3() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"A","GC",null,dummyPhred); 
+	Variant v = new Variant(chr,13,"A","GC",null,dummyPhred,""); 
 	boolean b = v.isTransition();
 	Assert.assertEquals(false,b);
     }
 
      @Test public void testTransversion1() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"C","G",null,dummyPhred);
+	Variant v = new Variant(chr,13,"C","G",null,dummyPhred,"");
 	boolean b = v.isTransversion();
 	Assert.assertEquals(true,b);
     }
 
       @Test public void testTransversion2() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"A","T",null,dummyPhred);
+	Variant v = new Variant(chr,13,"A","T",null,dummyPhred,"");
 	boolean b = v.isTransversion();
 	Assert.assertEquals(true,b);
     }
 
      @Test public void testTransversion3() {
 	byte chr = 3;
-	Variant v = new Variant(chr,13,"C","T",null,dummyPhred);
+	Variant v = new Variant(chr,13,"C","T",null,dummyPhred,"");
 	boolean b = v.isTransversion();
 	Assert.assertEquals(false,b);
     }

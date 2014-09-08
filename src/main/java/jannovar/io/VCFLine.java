@@ -36,7 +36,8 @@ public class VCFLine {
     private String alt=null;
     /** The quality of the variant call, the QUAL column in the VCF file. */
     private float phredScore;
-   
+    /** The original INFO col in VCF file */
+    private String info=null;
     /** Factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall}
      * objects. Note that this is an abstract class that will be instantiated
      * depending on the information in the #CHROM line of the VCF file
@@ -65,6 +66,8 @@ public class VCFLine {
     public String get_reference_sequence() { return this.ref; }
     /** @return The alternate (variant) sequence. */
     public String get_alternate_sequence() { return this.alt; }
+    /** @return INFO col from original VCF */
+    public String getInfo() { return this.info; }
     /**
      * @return A Genotype object representing the genotype of a single sample 
      * or multiple samples for this variant
@@ -162,6 +165,7 @@ public class VCFLine {
 	
 	this.phredScore = parseVariantQuality(A[5]);
 	this.chromosome = convertChromosomeStringToByteValue(A[0]);
+        this.info = A[7];
 	try {
 	    Integer pos = Integer.parseInt(A[1]);
 	    this.position = pos.intValue();
@@ -193,7 +197,8 @@ public class VCFLine {
 				this.get_reference_sequence(),
 				this.get_alternate_sequence(),
 				this.getGenotype(),
-				this.getVariantPhredScore());
+				this.getVariantPhredScore(),
+                this.getInfo());
 	return v;
     }
 

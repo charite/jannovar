@@ -26,6 +26,8 @@ public class Variant implements Comparable<Variant>, Constants {
 	private String ref;
 	/** Variant sequence (called "ALT", alternate, in VCF files). */
 	private String alt;
+    /** The INFO column from VCF file */
+    private String info;
 	/**
 	 * The genotype of this variant (note that {@link jannovar.genotype.GenotypeCall GenotypeCall} objects can hold a
 	 * single genotype for single-sample VCF files or multiple genotypes for for VCF files with multiple samples.
@@ -53,14 +55,17 @@ public class Variant implements Comparable<Variant>, Constants {
 	 *            The Genotype call (single or multiple sample)
 	 * @param qual
 	 *            The PHRED quality of the variant call.
+     * @param info
+     *            The INFO col from original VCF file  
 	 */
-	public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, float qual) {
+	public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, float qual, String info) {
 		this.chromosome = c;
 		this.position = p;
 		this.ref = r;
 		this.alt = alternate;
 		this.genotype = gtype;
 		this.Phred = qual;
+        this.info = info;
 		correctVariant();
 	}
 
@@ -190,6 +195,12 @@ public class Variant implements Comparable<Variant>, Constants {
 		return alt;
 	}
 
+    /**
+     * The INFO column from the original variant VCF entry.
+     */
+    public String get_info() {
+        return info;
+    }
 	/**
 	 * Get the genesymbol of the gene associated with this variant, if possible
 	 */
