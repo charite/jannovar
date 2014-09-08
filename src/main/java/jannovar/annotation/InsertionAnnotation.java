@@ -154,6 +154,9 @@ public class InsertionAnnotation {
 			}
 
 		}
+		if (refvarstart >= trmdl.getCdnaSequence().length()) {
+			return UTRAnnotation.createUTR3Annotation(trmdl, refvarstart, ref, var);
+		}
 		frame_s = frame_s % 3;
 
 		int refcdsstart = trmdl.getRefCDSStart();
@@ -309,9 +312,21 @@ public class InsertionAnnotation {
 								// System.out.println("wtaa: " + wtaa.length() + "\t" + wtaa);
 								// System.out.println("varaa: " + varaa.length() + "\t" + varaa);
 								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i - 1), aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
-							} else
+							} else {
+								// System.out.println("ref: " + ref + "\tvar: " + var);
+								// System.out.println(trmdl.getName());
+								// System.out.println("exon: " + exonNumber);
+								// System.out.println("canno: " + canno);
+								// System.out.println("ref5upAA: " + ref5upAA);
+								// System.out.println("aavarpos: " + aavarpos);
+								// System.out.println("i: " + i);
+								// System.out.println("wtaa length: " + wtaa.length());
+								// System.out.println("wtaa.charAt(i): " + wtaa.charAt(i));
+								// System.out.println("aavarpos: " + aavarpos);
+								// System.out.println("varaa.charAt(i): " + varaa.charAt(i));
 								// if the insertion is at the first position we need the AA before
 								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", trmdl.getName(), exonNumber, canno, ref5upAA, aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
+							}
 						} else
 							annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, varaa.substring(i, (var.length() / 3) + 1 + i));
 					}
@@ -359,7 +374,7 @@ public class InsertionAnnotation {
 
 				} else {
 					String annot;
-					// is its at the last position and
+					// if its at the last position and
 					if ((trmdl.isPlusStrand() && frame_s != 1) | (trmdl.isMinusStrand() && frame_s != 2))
 						annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos);
 					else
