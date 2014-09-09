@@ -7,8 +7,8 @@ import java.util.HashMap;
 /**
  * This class helps to translate DNA sequences.
  * 
- * @author Peter N Robinson
- * @version 0.04 (Dec. 12, 2012)
+ * @author Peter N Robinson, Marten Jäger
+ * @version 0.05 (Dec. 12, 2012)
  */
 public class Translator {
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
