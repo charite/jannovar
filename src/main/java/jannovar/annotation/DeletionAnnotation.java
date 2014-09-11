@@ -249,13 +249,14 @@ public class DeletionAnnotation {
 					/* check that the 'new' aminoacid does'nt match the start or end AA */
 					// System.out.println("refvarstart: " + refvarstart);
 					// System.out.println("refvarend: " + refvarend);
+					// System.out.println("cds end: " + kgl.getRefCDSEnd());
 					// System.out.println("ref.length: " + ref.length());
 					// System.out.println("frame_s: " + frame_s);
 					// System.out.println("kgl: " + kgl);
 					while (startaa.equals(mutaa)) {
 						// this is a somewhat dirty hack. If the end of the deletion is outside of the CDS, we will just
 						// skip the adaption.
-						if (refvarstart + ref.length() > refvarend)
+						if (refvarstart + ref.length() > kgl.getRefCDSEnd() - frame_s)
 							break;
 						refvarstart += 3;
 						startaa = translator.translateDNA(kgl.getCodonAt(refvarstart, frame_s));
