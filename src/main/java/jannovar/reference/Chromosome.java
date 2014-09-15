@@ -165,10 +165,16 @@ public class Chromosome {
 		for (TranscriptModel kgl : candidateGenes) {
 			// System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(),
 			// kgl.getStrand()));
-			if (kgl.isPlusStrand()) {
-				getPlusStrandAnnotation(position, ref, alt, kgl);
-			} else if (kgl.isMinusStrand()) {
-				getMinusStrandAnnotation(position, ref, alt, kgl);
+			try {
+				if (kgl.isPlusStrand()) {
+					getPlusStrandAnnotation(position, ref, alt, kgl);
+				} else if (kgl.isMinusStrand()) {
+					getMinusStrandAnnotation(position, ref, alt, kgl);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				String err = String.format("Encountered error processing variant: %s:g.%d,%s->%s", getChromosomeName(), position, ref, alt);
+				throw new AnnotationException(err);
 			}
 		}
 
