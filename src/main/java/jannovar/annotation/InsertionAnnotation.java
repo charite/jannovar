@@ -222,6 +222,9 @@ public class InsertionAnnotation {
 
 		wtaa = translator.translateDNA(wtnt);
 		varaa = translator.translateDNA(varnt);
+
+		// System.out.println("wtnt: " + wtnt + "\tvarnt: " + varnt);
+		// System.out.println("wtaa: " + wtaa + "\tvaraa: " + varaa);
 		int i = 0;
 		while (i < wtaa.length() - 1 && i < varaa.length() && wtaa.charAt(i) == varaa.charAt(i)) {
 			i++;
@@ -278,7 +281,7 @@ public class InsertionAnnotation {
 
 					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPGAIN, startPosMutationInCDS);
 					return ann;
-				} else {
+				} else { // no new 'STOP' codon inserted
 					String annot;
 					// check for Proteine Duplicates - only possible if there are enough nucleotides before
 					String ref5upAA = "";
@@ -291,6 +294,10 @@ public class InsertionAnnotation {
 						ref5upAA = translator.translateDNA(ref5up);
 
 					}
+					// System.out.println("ref5upAA: " + ref5upAA);
+					// System.out.println("varaa: " + varaa);
+					// System.out.println("i: " + i);
+					// System.out.println("varlength: " + var.length());
 					if (ref5upAA.equals(varaa.substring(i, (var.length() / 3) + i))) { // is the inserted AA a
 																						// Duplication ...?
 						if (var.length() / 3 == 1)

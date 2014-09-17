@@ -348,7 +348,8 @@ public class Jannovar {
 		int pos = v.get_position();
 		String ref = v.get_ref();
 		String alt = v.get_alt();
-		if (alt.charAt(0) == '[' || alt.charAt(0) == ']' || alt.equals(".")) {
+		// if (alt.charAt(0) == '[' || alt.charAt(0) == ']' || alt.equals(".")) {
+		if (alt.contains("[") || alt.contains("]") || alt.equals(".")) {
 			out.write(line.getOriginalVCFLine() + "\n");
 		} else {
 
@@ -364,12 +365,18 @@ public class Jannovar {
 			}
 			String annotation;
 			String effect;
-			if (this.showAll) {
-				annotation = anno.getAllTranscriptAnnotations();
-				effect = anno.getAllTranscriptVariantEffects();
-			} else {
-				annotation = anno.getSingleTranscriptAnnotation();
+			if (anno.isStructural()) {
+				annotation = anno.getCombinedAnnotationForStructuralVariant();// String.format("%s:%s",
+																				// anno.getMultipleGeneList(),anno.getCombinedAnnotationForVariantAffectingMultipleGenes());
 				effect = anno.getVariantType().toString();
+			} else {
+				if (this.showAll) {
+					annotation = anno.getAllTranscriptAnnotations();
+					effect = anno.getAllTranscriptVariantEffects();
+				} else {
+					annotation = anno.getSingleTranscriptAnnotation();
+					effect = anno.getVariantType().toString();
+				}
 			}
 			String A[] = line.getOriginalVCFLine().split("\t");
 			for (int i = 0; i < 7; ++i)

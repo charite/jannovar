@@ -1,6 +1,7 @@
 package jannovar.interval;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -94,6 +95,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		initializeComparators();
 		this.root = new Node<T>(intervals, this.leftcomp, this.rightcomp);
 		this.intervals = intervals;
+		Collections.sort(this.intervals, leftcomp);
 	}
 
 	/**
@@ -112,6 +114,31 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
+	 * Search function which looks up Intervals overlapping the search region [low,high].
+	 * <P>
+	 * This function should only be used for rare big (1000+) regions, since this is a really simple approach.
+	 * <P>
+	 * TODO implement using a faster more fancy algorithm.
+	 * 
+	 * @param low
+	 *            The lower element of the interval
+	 * @param high
+	 *            The higher element of the interval
+	 * @return an {@link ArrayList} containing all overlapping intervals
+	 */
+	public ArrayList<T> searchBigIntervall(int low, int high) {
+		ArrayList<T> obtlst = new ArrayList<T>();
+		for (Interval<T> interval : this.intervals) {
+			if (high < interval.getLow()) // break if the end of the searchregion is smaller than the intervalstart
+				break;
+			if (low > interval.getHigh())
+				continue;
+			obtlst.add(interval.getValue());
+		}
+		return obtlst;
+	}
+
+	/**
 	 * Search function which calls the method searchInterval to find intervals.
 	 * <P>
 	 * As a side-effect of the search, the variables {@link #rightNeighbor} and {@link #leftNeighbor} are set. If this
@@ -122,7 +149,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 *            The lower element of the interval
 	 * @param high
 	 *            The higher element of the interval
-	 * @return result, which is an ArrayList containg the found intervals
+	 * @return result, which is an ArrayList containing the found intervals
 	 */
 	public ArrayList<T> search(int low, int high) {
 		ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();

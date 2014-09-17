@@ -19,6 +19,7 @@ import jannovar.interval.IntervalTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
@@ -149,6 +150,15 @@ public class Chromosome {
 
 		/** Get TranscriptModels that overlap with (start,end). */
 		ArrayList<TranscriptModel> candidateGenes = itree.search(start, end);
+
+		/** for structural variants also check bigintervals search */
+		boolean isStructuralVariant = false;
+		if ((ref.length() >= 1000 || alt.length() >= 1000)) {
+			if (ref.length() >= 1000)
+				candidateGenes.addAll(itree.searchBigIntervall(start, end));
+			isStructuralVariant = true;
+		}
+
 		// System.out.println("Size of candidate genes = " + candidateGenes.size());
 		if (candidateGenes.isEmpty()) {
 			/* The query does not overlap with any transcript!
@@ -163,6 +173,14 @@ public class Chromosome {
 		 */
 
 		for (TranscriptModel kgl : candidateGenes) {
+			if (isStructuralVariant) {
+				if (candidateGenes.size() == 0) {
+					getStructuralVariantAnnotation(position, ref, alt, null);
+					break;
+				}
+				getStructuralVariantAnnotation(position, ref, alt, kgl);
+				continue;
+			}
 			// System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(),
 			// kgl.getStrand()));
 			if (kgl.isPlusStrand()) {
@@ -178,6 +196,99 @@ public class Chromosome {
 			throw new AnnotationException(e);
 		}
 		return annovarFactory.getAnnotationList();
+	}
+
+	/**
+	 * Main entry point to getting structural variant annotations for a variant identified by chromosomal coordinates
+	 * for a Variant bigger than 1000bp. This will create either SV_INSERTION, SV_DELETIONS or SV_SUBSTITUTION type
+	 * Annotations.
+	 * 
+	 * @param position
+	 *            The start position of the variant on this chromosome
+	 * @param ref
+	 *            String representation of the reference sequence affected by the variant
+	 * @param alt
+	 *            String representation of the variant (alt) sequence
+	 * @param kgl
+	 *            associated {@link TranscriptModel}
+	 * @throws AnnotationException
+	 */
+	private void getStructuralVariantAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
+
+		Annotation ann;
+		String annotation;
+
+		// check if this is really a structural Variant
+		if (ref.length() < 1000 && alt.length() < 1000) {
+			if (kgl.isPlusStrand()) {
+				getPlusStrandAnnotation(position, ref, alt, kgl);
+			} else if (kgl.isMinusStrand()) {
+				getMinusStrandAnnotation(position, ref, alt, kgl);
+			}
+			return;
+		}
+
+		// otherwise create structural annotation
+
+		// SV_inversion???
+		if (ref.length() == alt.length()) {
+			StringBuilder sb = new StringBuilder(alt).reverse();
+			if (ref.equals(sb)) {
+				annotation = String.format("%s:g.%d_%dinv", VariantType.SV_INVERSION, position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				ann = new Annotation(kgl, annotation, VariantType.SV_INVERSION);
+				annovarFactory.addStructuralAnnotation(ann);
+				return;
+			}
+		}
+		// SV_insertion
+		if (ref.length() == 1) { // Insertion
+			// if klg is null it is intergenic
+			if (kgl == null) {
+				annotation = String.format("%s:g.%d_%dins%s..%s", VariantType.INTERGENIC, position, position + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
+			} else {
+				annotation = String.format("%s:g.%d_%dins%s..%s", kgl.getChromosomeAsString(), position, position + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				ann = new Annotation(kgl, annotation, VariantType.SV_INSERTION);
+			}
+		} else if (alt.length() == 1) {
+			// if klg is null it is intergenic
+			if (kgl == null) {
+				annotation = String.format("%s:g.%d_%ddel", VariantType.INTERGENIC, position, position + ref.length());
+				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
+			} else {
+				annotation = String.format("%s:g.%d_%ddel", kgl.getChromosomeAsString(), position, position + ref.length());
+				ann = new Annotation(kgl, annotation, VariantType.SV_DELETION);
+			}
+		} else {
+			// if klg is null it is intergenic
+			if (kgl == null) {
+				annotation = String.format("%s:g.%d_%ddelins%s..%s", VariantType.INTERGENIC, position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
+			} else {
+				annotation = String.format("%s:g.%d_%ddelins%s..%s", kgl.getChromosomeAsString(), position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				ann = new Annotation(kgl, annotation, VariantType.SV_SUBSTITUTION);
+			}
+		}
+		// System.out.println(annotation);
+		annovarFactory.addStructuralAnnotation(ann);
+	}
+
+	/**
+	 * Counts the number of affected genes by different GeneSymbol. Returns <code>true</code> if there are more than one
+	 * gensymbols in the candidateGenes list or <code>false</code> otherwise.
+	 * 
+	 * @param candidateGenes
+	 * @return <code>true</code> for multiple genes in the list
+	 */
+	private boolean isMultiGeneAffecting(ArrayList<TranscriptModel> candidateGenes) {
+		HashSet<String> symbols = new HashSet<String>();
+		for (TranscriptModel model : candidateGenes) {
+			symbols.add(model.getGeneSymbol());
+		}
+		if (symbols.size() > 1)
+			return true;
+		else
+			return false;
 	}
 
 	/**
