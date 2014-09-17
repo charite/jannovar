@@ -154,7 +154,8 @@ public class InsertionAnnotation {
 			}
 
 		}
-		if (refvarstart >= trmdl.getCdnaSequence().length()) {
+		// after position correction check if we are still in the CDS
+		if (refvarstart >= trmdl.getRefCDSEnd()) {
 			return UTRAnnotation.createUTR3Annotation(trmdl, refvarstart, ref, var);
 		}
 		frame_s = frame_s % 3;
@@ -200,7 +201,7 @@ public class InsertionAnnotation {
 		int nupstreamnuc = var.length() + 36;
 		int end = trmdl.getCdnaSequence().length() >= refvarstart + nupstreamnuc - frame_s ? refvarstart + nupstreamnuc - frame_s : trmdl.getCdnaSequence().length();
 		String wtnt = trmdl.isPlusStrand() ? trmdl.getCdnaSequence().substring(refvarstart - 1 - frame_s, end) : trmdl.getCdnaSequence().substring(refvarstart - frame_s, end);
-		;
+
 		String varnt = null;
 		if (trmdl.isPlusStrand()) {
 			if (frame_s == 1) { /* insertion located at 0-1-INS-2 part of codon */
