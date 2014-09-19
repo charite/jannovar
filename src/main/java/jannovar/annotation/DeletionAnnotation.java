@@ -286,16 +286,27 @@ public class DeletionAnnotation {
 			/* -------------------------------------------------------------------- *
 			 * Frameshift deletion within the body of the mRNA                      *
 			 * -------------------------------------------------------------------- */
-			// varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
 			int posMutationInCDS = refvarstart - refcdsstart + 1; /* start pos of mutation with respect to CDS begin */
-			canno = String.format("c.%d_%ddel", posMutationInCDS, refvarend - refcdsstart + 1);
+			boolean isStoploss = false;
+			// deletion affects STOP codon
+			if (kgl.getRefCDSEnd() - 3 < refvarstart + ref.length())
+				isStoploss = true;
+			// deletion stretches inside from CDS into 3#UTR
+			if (kgl.getRefCDSEnd() < refvarstart + ref.length()) {
+				canno = String.format("c.%d_*%ddel", posMutationInCDS, kgl.getRefCDSEnd() - (refvarstart + ref.length()));
+			} else {
+
+				// varposend = (int)Math.floor(( refvarend- refcdsstart)/3) + 1;
+				canno = String.format("c.%d_%ddel", posMutationInCDS, refvarend - refcdsstart + 1);
+			}
+			// System.out.println(kgl.getAccessionNumber() + ":" + canno);
 			try {
 				panno = shiftedFrameDeletion(kgl, exonNumber, canno, ref, posMutationInCDS, aavarpos, frame_s);
 			} catch (AnnotationException e) {
 				System.err.println("Exception while annotating frame-shift deletion: " + canno);
 				panno = canno; /* just supply the cDNA annotation if there was an error. */
 			}
-			Annotation ann = new Annotation(kgl, panno, VariantType.FS_DELETION, posMutationInCDS);
+			Annotation ann = isStoploss ? new Annotation(kgl, panno, VariantType.STOPLOSS, posMutationInCDS) : new Annotation(kgl, panno, VariantType.FS_DELETION, posMutationInCDS);
 			return ann;
 		}
 	}
@@ -335,7 +346,33 @@ public class DeletionAnnotation {
 		int aapos = aaVarStartPos;
 		int endk = mutaa.length();
 
+		// System.out.println(trmdl.getAccessionNumber());
+		// System.out.println("wt na: " + wt + "\taa: " + wtaa);
+		// System.out.println("mut na: " + mut + "\taa: " + mutaa);
+		// System.out.println(posMutationInCDS + "\t" + ref.length() + "\t" + trmdl.getCdnaSequence().length());
+		// System.out.println("CDSend: " + trmdl.getRefCDSEnd() + "\t" + trmdl.getCDSLength() + "\t" +
+		// trmdl.getRefCDSStart());
+
+		// We have to check if the deletion affects the stop-codon additionally we have to check if the STop codon
+		// is coplettly deletet, or if there pop-up a new STOP codon, or if there is not enpough sequence info to
+		// predict this and then just say, there is a new STOP at the deletion STart (e.g. if the 3'UTR is missing and
+		// only one or two bp are left)
+
 		String annot = null;
+		if ((trmdl.getRefCDSStart() - 2 + ref.length() + posMutationInCDS - trmdl.getCdnaSequence().length()) < 3 || (wtaa.contains("*") && !mutaa.contains("*"))) {
+			int k;
+			for (k = 0; k < endk; ++k) {
+				if (wtaa.charAt(k) == mutaa.charAt(k)) {
+					aapos++;
+
+				}
+			}
+			int aaend_frame = (posMutationInCDS + ref.length()) % 3;
+			int aaendPos = aaend_frame == 0 ? (posMutationInCDS + ref.length()) / 3 : (posMutationInCDS + ref.length()) / 3 + 1;
+			annot = String.format("%s:exon%d:%s:p.%c%d_%c%ddel", trmdl.getName(), exonNumber, cDNAanno, wtaa.charAt(k), aapos, wtaa.charAt(wtaa.length() - 1), aaendPos);
+			return annot;// e.g. p.(Gln40Profs*18)
+		}
+
 		for (int k = 0; k < endk; ++k) {
 			if (wtaa.charAt(k) != mutaa.charAt(k)) {
 				annot = String.format("%s:exon%d:%s:p.%c%dfs", trmdl.getName(), exonNumber, cDNAanno, wtaa.charAt(k), aapos);
@@ -619,7 +656,26 @@ public class DeletionAnnotation {
 		int aapos = aaVarStartPos;
 		int endk = mutaa.length();
 
-		String annot;
+		// We have to check if the deletion affects the stop-codon additionally we have to check if the STop codon
+		// is coplettly deletet, or if there pop-up a new STOP codon, or if there is not enpough sequence info to
+		// predict this and then just say, there is a new STOP at the deletion STart (e.g. if the 3'UTR is missing and
+		// only one or two bp are left)
+
+		String annot = null;
+		if ((wtaa.contains("*") && !mutaa.contains("*"))) {
+			int k;
+			for (k = 0; k < endk; ++k) {
+				if (wtaa.charAt(k) == mutaa.charAt(k)) {
+					aapos++;
+
+				}
+			}
+			int aaend_frame = (posMutationInCDS + ref.length()) % 3;
+			int aaendPos = aaend_frame == 0 ? (posMutationInCDS + ref.length()) / 3 : (posMutationInCDS + ref.length()) / 3 + 1;
+			annot = String.format("%s:exon%d:%s:p.%c%d_*%ddel", trmdl.getName(), exonNumber, cDNAanno, wtaa.charAt(k), aapos, aaendPos);
+			return annot;// e.g. p.(Gln40Profs*18)
+		}
+
 		for (int k = 0; k < endk; ++k) {
 			if (wtaa.charAt(k) != mutaa.charAt(k)) {
 				annot = String.format("%s:exon%d:%s:p.%c%d%cfs", trmdl.getName(), exonNumber, cDNAanno, wtaa.charAt(k), aapos, mutaa.charAt(k));
