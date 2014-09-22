@@ -211,8 +211,10 @@ public class DeletionAnnotation {
 			varposend = (int) Math.floor(cdslen / 3);
 			// System.out.println("ref=" + ref + ", var=" +var);
 			canno = String.format("c.%d_%ddel", refvarstart - refcdsstart + 1, cdslen + refcdsstart - 1);
-			panno = String.format("%s:exon%d:%s:p.%d_%ddel", kgl.getName(), exonNumber, canno, aavarpos, varposend);
-			Annotation ann = new Annotation(kgl, panno, VariantType.FS_SUBSTITUTION, posVariantInCDS);
+			panno = String.format("%s:exon%d:%s:p.%s%d_*%ddel", kgl.getName(), exonNumber, canno, wtaa.charAt(0), aavarpos, varposend);
+			Annotation ann = new Annotation(kgl, panno, VariantType.STOPLOSS, posVariantInCDS);
+			// panno = String.format("%s:exon%d:%s:p.%d_%ddel", kgl.getName(), exonNumber, canno, aavarpos, varposend);
+			// Annotation ann = new Annotation(kgl, panno, VariantType.FS_SUBSTITUTION, posVariantInCDS);
 			return ann;
 		} else if ((refvarend - refvarstart + 1) % 3 == 0) {
 			/* -------------------------------------------------------------------- *
@@ -349,9 +351,10 @@ public class DeletionAnnotation {
 		// System.out.println(trmdl.getAccessionNumber());
 		// System.out.println("wt na: " + wt + "\taa: " + wtaa);
 		// System.out.println("mut na: " + mut + "\taa: " + mutaa);
-		// System.out.println(posMutationInCDS + "\t" + ref.length() + "\t" + trmdl.getCdnaSequence().length());
-		// System.out.println("CDSend: " + trmdl.getRefCDSEnd() + "\t" + trmdl.getCDSLength() + "\t" +
-		// trmdl.getRefCDSStart());
+		// System.out.println("posMutationInCDS: " + posMutationInCDS + "\tref.length: " + ref.length() +
+		// "\tCdna.length: " + trmdl.getCdnaSequence().length());
+		// System.out.println("RefCDSend: " + trmdl.getRefCDSEnd() + "\tCDSLength: " + trmdl.getCDSLength() +
+		// "\tRefCDSStart: " + trmdl.getRefCDSStart());
 
 		// We have to check if the deletion affects the stop-codon additionally we have to check if the STop codon
 		// is coplettly deletet, or if there pop-up a new STOP codon, or if there is not enpough sequence info to
@@ -359,7 +362,11 @@ public class DeletionAnnotation {
 		// only one or two bp are left)
 
 		String annot = null;
-		if ((trmdl.getRefCDSStart() - 2 + ref.length() + posMutationInCDS - trmdl.getCdnaSequence().length()) < 3 || (wtaa.contains("*") && !mutaa.contains("*"))) {
+		// if ((trmdl.getRefCDSStart() - 2 + ref.length() + posMutationInCDS - trmdl.getCdnaSequence().length()) < 3 ||
+		// (wtaa.contains("*") && !mutaa.contains("*"))) {
+		if (trmdl.getRefCDSEnd() - (trmdl.getRefCDSStart() - 2 + ref.length() + posMutationInCDS) < 3 || (wtaa.substring(0, ref.length() / 3 + 1).contains("*") && !mutaa.contains("*"))) {
+			// System.out.println("RefCDSEnd: " + trmdl.getRefCDSEnd() + "\t" + (trmdl.getRefCDSStart() - 2 +
+			// ref.length() + posMutationInCDS));
 			int k;
 			for (k = 0; k < endk; ++k) {
 				if (wtaa.charAt(k) == mutaa.charAt(k)) {
