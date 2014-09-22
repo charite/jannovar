@@ -99,17 +99,34 @@ public class DuplicationAnnotation {
 		else
 			canno = String.format("c.%d_%ddup", cdsStartPos, cdsEndPos);
 
+		// System.out.println("canno: " + canno);
+		// System.out.println("var.length mod 3:" + var.length() % 3);
+		// System.out.println((3 - (var.length() % 3)));
+		// System.out.println(((3 - (var.length() % 3)) % 3));
+		// System.out.println("startpos: " + startpos);
+		// System.out.println("pos: " + (startpos - 1 + ((3 - (var.length() % 3)) % 3)));
+		// System.out.println("length: " + trmdl.getCdnaSequence().length());
+		// System.out.println(trmdl.getAccessionNumber());
+		// System.out.println("frame_s: " + frame_s);
+		// System.out.println(trmdl.getCdnaSequence().length() - 3);
+		// System.out.println(trmdl.getCdnaSequence().substring(trmdl.getCdnaSequence().length() - 3));
+		// trmdl.setSequence(trmdl.getCdnaSequence() + "AAAAAAAA");
 		/* now create the protein HGVS string */
 
 		/* generate in-frame snippet for translation and correct for '-'-strand */
 		if (trmdl.isMinusStrand()) {
 			/* Re-adjust the wildtype nucleotides for minus strand */
-			wtnt3 = trmdl.getWTCodonNucleotides(startpos - 1 + ((3 - (var.length() % 3)) % 3), frame_s);
+			// wtnt3 = trmdl.getWTCodonNucleotides(startpos - 1 + ((3 - (var.length() % 3)) % 3), frame_s);
+			// System.out.println("startpos2: " + startpos);
+			wtnt3 = trmdl.getWTCodonNucleotides(startpos, frame_s);
 		}
 		String varnt3 = getVarNt3(trmdl, wtnt3, var, frame_s);
 
 		String wtaa = translator.translateDNA(wtnt3);
 		String varaa = translator.translateDNA(varnt3);
+
+		// System.out.println("wt na: " + wtnt3 + "\t" + wtaa);
+		// System.out.println("var na: " + varnt3 + "\t" + varaa);
 
 		if (var.length() % 3 == 0) { /* ORF CONSERVING */
 			if ((cdsStartPos - 1) % 3 == 0) { /* SIMPLE DUPLICATION OF CODONS, e.g., nucleotide position 4 starts a
@@ -147,8 +164,10 @@ public class DuplicationAnnotation {
 			}
 		} else { /* FRAMESHIFT 
 					* short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected amino acid */
-
-			annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber, canno, wtaa, aaVarStartPos);
+			if (wtaa.charAt(0) == '*' && varaa.charAt(0) == '*')
+				annot = String.format("%s:exon%d:%s:p.(=)", trmdl.getName(), exonNumber, canno, wtaa, aaVarStartPos);
+			else
+				annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber, canno, wtaa, aaVarStartPos);
 			// System.out.println("FS wtaa="+wtaa);
 			// System.out.println(annot);
 			ann = new Annotation(trmdl, annot, VariantType.FS_DUPLICATION, cdsStartPos);

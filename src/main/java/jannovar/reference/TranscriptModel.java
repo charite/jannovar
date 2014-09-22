@@ -658,6 +658,9 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		/* Substract one to get back to zero-based numbering.
 		 * Subtract frame_s (i.e., 0,1,2) to get to start of codon in frame.
 		 */
+		// System.out.println("refstart: " + refvarstart);
+		// System.out.println("frame_s: " + frame_s);
+		// System.out.println("start: " + start);
 		if (start + 3 > this.sequence.length()) {
 			/* This indicates a database error. */
 			return null;
