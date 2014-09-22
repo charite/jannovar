@@ -149,6 +149,31 @@ public class DuplicationAnnotationTest implements Constants {
 		}
 	}
 
+	@Test
+	public void testDuplicationVar10() throws JannovarException {
+		String s = "1	248637607	.	A	AA	50	PASS	NS=3;DP=9;AA=G	GT:GQ:DP	0/1:35:4";
+		VCFLine line = new VCFLine(s);
+		Variant v = line.toVariant();
+
+		byte chr = 1;
+		int pos = v.get_position();
+		String ref = v.get_ref();
+		String alt = v.get_alt();
+		Chromosome c = chromosomeMap.get(chr);
+		if (c == null) {
+			Assert.fail("Could not identify chromosome \"" + chr + "\"");
+		} else {
+			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
+			VariantType varType = ann.getVariantType();
+			Assert.assertEquals(248637607, pos);
+			Assert.assertEquals("-", ref);
+			Assert.assertEquals("A", alt);
+			String annot = ann.getVariantAnnotation();
+			Assert.assertEquals(VariantType.FS_DUPLICATION, varType);
+			Assert.assertEquals("OR2T3(uc001iel.1:exon1:c.956dup:p.(=))", annot);
+		}
+	}
+
 	/**
 	 * <P>
 	 * This is the test for the in-frame duplication of six nuc.acids / two amino acids '+' strand
