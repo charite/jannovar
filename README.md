@@ -44,7 +44,7 @@ that integrates the test and build phases. Here are the most important commands:
 
 Version
 ==========
-Jannovar is currently at version 0.6-SNAPSHOT, meaning that we anticipate to extend the public API in the course of 2014 based on comments and suggestions from users. We do not anticipate deprecating or removing functions in the public API, but this cannot be entirely ruled out.
+Jannovar is currently at version 0.9-SNAPSHOT, meaning that we anticipate to extend the public API in the course of 2014 based on comments and suggestions from users. We do not anticipate deprecating or removing functions in the public API, but this cannot be entirely ruled out.
 
 License
 ===========
