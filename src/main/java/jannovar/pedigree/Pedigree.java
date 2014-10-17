@@ -772,7 +772,8 @@ public class Pedigree {
 	ArrayList<GenotypeCall> maternal = new ArrayList<GenotypeCall> ();
 
 	if (this.parentList.size()>2) {
-	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
+		return false;
+//	    throw new UnsupportedOperationException("Autosomal recessive pedigree analysis with more than two parents is not supported!");
 	}
 
 	for (Variant v : varList) {
