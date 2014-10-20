@@ -104,7 +104,7 @@ public class SingleNucleotideSubstitution {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(1), varc);
 			if (refc != wtnt3.charAt(1)) {
 				char strand = kgl.getStrand();
-				wrng = String.format("WARNING: mRNA/genome discrepancy: %s/%s strand=%c", ref, wtnt3.charAt(1), strand);
+				wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
 			}
 		} else if (frame_s == 2) {
 			// $varnt3 = $wtnt3[0] . $wtnt3[1]. $obs;
@@ -113,7 +113,7 @@ public class SingleNucleotideSubstitution {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(2), varc);
 			if (refc != wtnt3.charAt(2)) {
 				char strand = kgl.getStrand();
-				wrng = String.format("WARNING: mRNA/genome discrepancy: %s/%s strand=%c", ref, wtnt3.charAt(1), strand);
+				wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
 			}
 		} else { /* i.e., frame_s == 0 */
 			// $varnt3 = $obs . $wtnt3[1] . $wtnt3[2];
@@ -126,7 +126,7 @@ public class SingleNucleotideSubstitution {
 			// kgl.debugPrint();
 			if (refc != wtnt3.charAt(0)) {
 				char strand = kgl.getStrand();
-				wrng = String.format("WARNING: mRNA/genome discrepancy: %s/%s strand=%c", ref, wtnt3.charAt(1), strand);
+				wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
 			}
 		}
 		String wtaa = translator.translateDNA(wtnt3);
@@ -206,7 +206,7 @@ public class SingleNucleotideSubstitution {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(1), varc);
 			if (refc != wtnt3.charAt(1)) {
 				char strand = kgl.getStrand();
-				String wrng = String.format("WARNING: mRNA/genome discrepancy: %s/%s strand=%c", ref, wtnt3.charAt(1), strand);
+				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
 				canno = String.format("%s [%s]", canno, wrng);
 			}
 		} else if (frame_s == 2) {
@@ -216,7 +216,7 @@ public class SingleNucleotideSubstitution {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(2), varc);
 			if (refc != wtnt3.charAt(2)) {
 				char strand = kgl.getStrand();
-				String wrng = String.format("WARNING: mRNA/genome discrepancy: %s/%s strand=%c", ref, wtnt3.charAt(1), strand);
+				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
 				canno = String.format("%s [%s]", canno, wrng);
 			}
 		} else { /* i.e., frame_s == 0 */
@@ -226,7 +226,7 @@ public class SingleNucleotideSubstitution {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(0), varc);
 			if (refc != wtnt3.charAt(0)) {
 				char strand = kgl.getStrand();
-				String wrng = String.format("WARNING: mRNA/genome discrepancy: %s/%s strand=%c", ref, wtnt3.charAt(1), strand);
+				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
 				canno = String.format("%s [%s]", canno, wrng);
 			}
 		}
