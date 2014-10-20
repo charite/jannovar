@@ -392,8 +392,12 @@ public class Jannovar {
 			else
 				INFO = String.format("EFFECT=%s;HGVS=%s", effect, annotation, A[7]);
 			out.write(INFO + "\t");
-			for (int i = 8; i < A.length; ++i)
-				out.write(A[i] + "\t");
+			for (int i = 8; i < A.length; ++i) {
+				if (i < A.length - 1)
+					out.write(A[i] + "\t");
+				else
+					out.write(A[i]);
+			}
 			out.write("\n");
 		}
 	}
