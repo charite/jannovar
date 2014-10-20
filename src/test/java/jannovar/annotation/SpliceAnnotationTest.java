@@ -266,7 +266,7 @@ public class SpliceAnnotationTest implements Constants {
 			VariantType varType = ann.getVariantType();
 			Assert.assertEquals(VariantType.SPLICING, varType);
 			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ASH1L(uc001fkt.3:exon19:complicated splice mutation,uc009wqq.3:exon19:complicated splice mutation)", annot);
+			Assert.assertEquals("ASH1L(uc001fkt.3:exon19:complicated_splice_mutation,uc009wqq.3:exon19:complicated_splice_mutation)", annot);
 		}
 	}
 

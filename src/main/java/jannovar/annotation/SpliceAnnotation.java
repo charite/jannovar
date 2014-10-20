@@ -387,10 +387,10 @@ public class SpliceAnnotation {
 			}
 		}
 		/*
-		 * If we get here, the is a complicated splice mutation not covered by
+		 * If we get here, the is a complicated_splice_mutation not covered by
 		 * the above cases.
 		 */
-		anno = String.format("%s:exon%d:complicated splice mutation", kgl.getName(), k + 1);
+		anno = String.format("%s:exon%d:complicated_splice_mutation", kgl.getName(), k + 1);
 		// Annotation ann = Annotation.createSplicingAnnotation(kgl, 0,annot);
 		Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, 0);
 		return ann;
@@ -455,10 +455,10 @@ public class SpliceAnnotation {
 			}
 		}
 		/*
-		 * If we get here, the is a complicated splice mutation not covered by
+		 * If we get here, the is a complicated_splice_mutation not covered by
 		 * the above cases.
 		 */
-		anno = String.format("%s:exon%d:complicated splice mutation", kgl.getName(), k + 1);
+		anno = String.format("%s:exon%d:complicated_splice_mutation", kgl.getName(), k + 1);
 		Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, 0);
 		return ann;
 	}
