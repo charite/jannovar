@@ -10,7 +10,9 @@ gene/transcript-based annotations and performing simple pedigree/genotype
 filtering. If you are reading this, then preumably you have already
 downloaded the source code from github by using the command
 
-    $ git clone https://github.com/charite/jannovar
+```
+$ git clone https://github.com/charite/jannovar
+```
 
 The source code of Jannovar is organized as a maven project
 that integrates the test and build phases. Here are the most important commands:
