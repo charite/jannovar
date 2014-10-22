@@ -911,6 +911,7 @@ public class Chromosome {
 	 *            original, upper-case cDNA string
 	 * @return reverse complement version of the input string sq.
 	 */
+	// TODO(holtgrem): Refactor as static function of some Utility class.
 	private String revcom(String sq) {
 		if (sq.equals("-"))
 			return sq; /* deletion, insertion do not need rc */
