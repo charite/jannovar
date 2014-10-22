@@ -49,13 +49,6 @@ public class AnnotationList {
 	private boolean isStructural = false;
 
 	/**
-	 * Prevent unwanted initialization of an empty AnnotationList object by making the default constructor private.
-	 */
-	private AnnotationList() {
-		/* no-op */
-	}
-
-	/**
 	 * Construction of AnnotationList objects is performed by an {@link jannovar.annotation.AnnotatedVariantFactory
 	 * AnnotatedVariantFactory} object based on the transcripts that are identified by the Interval tree search. All
 	 * annotations that affect one variant are passed to the constructor.

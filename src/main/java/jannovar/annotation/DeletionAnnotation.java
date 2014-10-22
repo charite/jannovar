@@ -62,7 +62,6 @@ public class DeletionAnnotation {
 
 			}
 
-		String annotation = null;
 		Translator translator = Translator.getTranslator(); /* Singleton */
 		// varnt3 is the codon affected by the deletion, it is the codon that
 		// results from the deletion at the same position in the aa as the wt codon was.
@@ -169,10 +168,7 @@ public class DeletionAnnotation {
 		}
 		frame_s = frame_s % 3;
 
-		String annotation = null;
 		Translator translator = Translator.getTranslator(); /* Singleton */
-		char deletedNT = ' ';
-		String varnt3 = null;
 		String canno = null;
 		String panno = null;
 		String wtaa = translator.translateDNA(wtnt3);
@@ -419,7 +415,6 @@ public class DeletionAnnotation {
 	 * @throws jannovar.exception.AnnotationException
 	 */
 	public static Annotation getAnnotationSingleNucleotideLong(TranscriptModel kgl, int frame_s, String wtnt3, String wtnt3_after, String ref, String var, int refvarstart, int exonNumber) throws AnnotationException {
-		String annotation = null;
 		Translator translator = Translator.getTranslator(); /* Singleton */
 		// varnt3 is the codon affected by the deletion, it is the codon that
 		// results from the deletion at the same position in the aa as the wt codon was.
@@ -517,10 +512,8 @@ public class DeletionAnnotation {
 	 * @throws jannovar.exception.AnnotationException
 	 */
 	public static Annotation getMultinucleotideDeletionAnnotationLong(TranscriptModel kgl, int frame_s, String wtnt3, String wtnt3_after, String ref, String var, int refvarstart, int refvarend, int exonNumber) throws AnnotationException {
-		String annotation = null;
 		Translator translator = Translator.getTranslator(); /* Singleton */
 		char deletedNT = ' ';
-		String varnt3 = null;
 		String canno = null;
 		String panno = null;
 		String wtaa = translator.translateDNA(wtnt3);

@@ -196,6 +196,8 @@ public class AnnotatedVariantFactory implements Constants {
 		case SV_INVERSION:
 		case SV_SUBSTITUTION:
 			annL.setIsStructural();
+		default:
+			break;  // suppress warning, only do stuff for SVs
 		}
 		return annL;
 	}

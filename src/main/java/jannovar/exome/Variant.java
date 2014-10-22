@@ -74,7 +74,6 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * end
 	 */
 	private void correctVariant() {
-		String tmp = ref;
 		int idx = 0;
 		// beginning
 		while (idx < ref.length() && idx < alt.length() && ref.charAt(idx) == alt.charAt(idx)) {

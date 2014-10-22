@@ -102,7 +102,6 @@ public class PedFileParser {
 	throws IOException, PedParseException
     {	
 	String line;
-	int linecount=0;
 	boolean firstline = true; /* flag for the first line of the ped file. */
 	ArrayList<Person> personList = new ArrayList<Person>();
 	String famID =null;

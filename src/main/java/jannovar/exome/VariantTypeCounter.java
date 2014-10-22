@@ -39,13 +39,6 @@ public class VariantTypeCounter implements Constants {
 
 
     /**
-     * Disallow construction of an object with no parameters.
-     */
-    private VariantTypeCounter() {
-
-    }
-
-    /**
      * Construct the map of variant type counts and initialize it to zero.
      * @param n the nth element
      */
