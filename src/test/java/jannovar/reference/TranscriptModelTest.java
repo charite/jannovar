@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 public class TranscriptModelTest implements Constants {
 
     static TranscriptModel uc0210lp = null;

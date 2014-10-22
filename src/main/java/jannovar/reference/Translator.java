@@ -5,7 +5,7 @@ import jannovar.exception.AnnotationException;
 import java.util.HashMap;
 
 /**
- * This class helps to translate DNA sequences.
+ * This singleton class helps to translate DNA sequences.
  * 
  * @author Peter N Robinson, Marten Jäger
  * @version 0.05 (Dec. 12, 2012)
@@ -23,6 +23,9 @@ public class Translator {
 
 	private static Translator translator = null;
 
+	/**
+	 * Private constructor, initializes singleton instance.  Use {@link getTranslator} for obtaining an object.
+	 */
 	private Translator() {
 		initializeMaps();
 	}
@@ -237,7 +240,5 @@ public class Translator {
 		iupac.put("V", "ACG");
 		iupac.put("W", "AT");
 		iupac.put("Y", "CT");
-
 	}
-
 }
