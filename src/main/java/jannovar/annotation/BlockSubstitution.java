@@ -42,14 +42,23 @@ public class BlockSubstitution {
 	 * @return An annotation corresponding to the deletion.
 	 */
 	public static Annotation getAnnotationPlusStrand(TranscriptModel kgl, int frame_s, String wtnt3, String ref, String var, int refvarstart, int refvarend, int exonNumber) throws AnnotationException {
+		String annotation = null;
+		Translator translator = Translator.getTranslator(); /* Singleton */
 		String canno = null; // cDNA annotation.
 		String panno = null;
+		String varnt3 = null;
 		int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
 		int startPosMutationInCDS = refvarstart - refcdsstart + 1;
 
 		if (frame_s == 1) {
+			// $varnt3 = $wtnt3[0] . $obs . $wtnt3[2];
+			varnt3 = String.format("%c%s%c", wtnt3.charAt(0), var, wtnt3.charAt(2));
 		} else if (frame_s == 2) {
+			// $varnt3 = $wtnt3[0] . $wtnt3[1] . $obs;
+			varnt3 = String.format("%c%c%s", wtnt3.charAt(0), wtnt3.charAt(1), var);
 		} else {
+			// $varnt3 = $obs . $wtnt3[1] . $wtnt3[2];
+			varnt3 = String.format("%s%c%c", var, wtnt3.charAt(1), wtnt3.charAt(2));
 		}
 		canno = String.format("c.%d_%ddelins%s", refvarstart - refcdsstart + 1, refvarend - refcdsstart + 1, var);
 		if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
@@ -111,6 +120,7 @@ public class BlockSubstitution {
 		else
 			var = var.substring(i, iend - diffnt);
 
+		String annotation = null;
 		Translator translator = Translator.getTranslator(); /* Singleton */
 		String canno = null; // cDNA annotation.
 		String panno = null;
