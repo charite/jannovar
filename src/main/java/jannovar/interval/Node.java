@@ -51,6 +51,7 @@ public class Node<T> {
 	/**
 	 * Default constructor is declared private to avoid it from being used..
 	 */
+	@SuppressWarnings("unused")
 	private Node() {
 	}
 

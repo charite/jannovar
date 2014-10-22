@@ -1,22 +1,18 @@
 package jannovar.io;
 
 
+import jannovar.exception.VCFParseException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-
 import java.util.ArrayList;
 
-import jannovar.exception.VCFParseException;
-import jannovar.io.VCFLine;
-import jannovar.io.VCFReader;
-
-
-import org.junit.Test;
-import org.junit.BeforeClass;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 
 public class VCFReaderTest  {

@@ -117,6 +117,7 @@ public class VCFLineTest {
 
 	@Test(expected = VCFParseException.class)
 	public void shouldChokeOnMalformedVCFLine1() throws VCFParseException {
+		@SuppressWarnings("unused")
 		VCFLine line = new VCFLine(badline1);
 	}
 

@@ -51,6 +51,7 @@ public class AnnotationList {
 	/**
 	 * Prevent unwanted initialization of an empty AnnotationList object by making the default constructor private.
 	 */
+	@SuppressWarnings("unused")
 	private AnnotationList() {
 		/* no-op */
 	}

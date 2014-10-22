@@ -81,6 +81,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	private Interval<T> rightNeighbor = null;
 
 	/** The default constructor should not be used and is declared private. */
+	@SuppressWarnings("unused")
 	private IntervalTree() {
 	}
 

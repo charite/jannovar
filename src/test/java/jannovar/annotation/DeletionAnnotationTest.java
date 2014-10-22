@@ -26,7 +26,6 @@ public class DeletionAnnotationTest implements Constants {
 
 	private static HashMap<Byte, Chromosome> chromosomeMap = null;
 
-	@SuppressWarnings(value = "unchecked")
 	@BeforeClass
 	public static void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;

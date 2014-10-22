@@ -1,24 +1,14 @@
 package jannovar.reference;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import jannovar.reference.TranscriptModel;
-import jannovar.io.UCSCKGParser;
 import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
+import jannovar.io.UCSCKGParser;
 
-
-import org.junit.Test;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 
 public class TranscriptModelTest implements Constants {

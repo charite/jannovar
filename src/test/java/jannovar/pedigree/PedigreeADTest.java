@@ -2,26 +2,19 @@ package jannovar.pedigree;
 
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.DataInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException; 
-import java.util.ArrayList;
-
-import jannovar.common.Disease;
 import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
 import jannovar.exome.Variant;
 import jannovar.genotype.GenotypeCall;
 import jannovar.io.PedFileParser;
-import jannovar.pedigree.Pedigree;
 
-import org.junit.Test;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *Test the following pedigree

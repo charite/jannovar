@@ -41,8 +41,8 @@ public class VariantTypeCounter implements Constants {
     /**
      * Disallow construction of an object with no parameters.
      */
-    private VariantTypeCounter() {
-
+    @SuppressWarnings("unused")
+	private VariantTypeCounter() {
     }
 
     /**

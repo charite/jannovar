@@ -1,37 +1,23 @@
 package jannovar.annotation;
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import jannovar.common.Constants;
+import jannovar.common.VariantType;
+import jannovar.exception.AnnotationException;
+import jannovar.exception.JannovarException;
+import jannovar.io.SerializationManager;
+import jannovar.reference.Chromosome;
+import jannovar.reference.TranscriptModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/* serialization */
-import java.io.ObjectInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-
-import jannovar.exception.JannovarException;
-import jannovar.io.SerializationManager;
-import jannovar.io.UCSCKGParser;
-import jannovar.common.Constants;
-import jannovar.common.VariantType;
-import jannovar.reference.TranscriptModel;
-import jannovar.reference.Chromosome;
-import jannovar.annotation.Annotation;
-import jannovar.annotation.AnnotationList;
-import jannovar.exome.Variant;
-import jannovar.exception.AnnotationException;
-
-
-import org.junit.Test;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+/* serialization */
 
 
 /**

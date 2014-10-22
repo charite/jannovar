@@ -73,7 +73,7 @@ public class Person {
 		this.fatherID = fathID;
 		this.motherID = mothID;
 		if (fathID == null && mothID == null)
-			this.isFounder = true;
+			this.setFounder(true);
 		if (sx.equals("1"))
 			this.sex = Sex.MALE;
 		else if (sx.equals("2"))
@@ -195,5 +195,13 @@ public class Person {
 	public String toString() {
 		String s = String.format("%s\t%s\t%s\t%s\t%s\t%s\t", familyID, individualID, fatherID, motherID, sex, disease);
 		return s;
+	}
+
+	public boolean isFounder() {
+		return isFounder;
+	}
+
+	public void setFounder(boolean isFounder) {
+		this.isFounder = isFounder;
 	}
 }
