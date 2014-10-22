@@ -48,27 +48,36 @@ public class PedFileParser {
      */
     private Pedigree pedigree = null;
 
-    public PedFileParser(){
-	/* no-op */
-    }
+	public PedFileParser() {
+		/* no-op */
+	}
     
-    
-    public Pedigree parseFile(String PEDfilePath) throws PedParseException {
-	 this.pedfile_path = PEDfilePath;
-	 File file = new File(this.pedfile_path);
-	 this.base_filename = file.getName();
-	 try{
-	     FileInputStream fstream = new FileInputStream(this.pedfile_path);
-	     DataInputStream in = new DataInputStream(fstream);
-	     BufferedReader br = new BufferedReader(new InputStreamReader(in));
-	     inputPedFileStream(br);
-	     br.close();
-	 } catch (IOException e) {
-	    String err = String.format("[PedFileParser:parseFile]: %s",e.toString());
-	    throw new PedParseException(err);
-	 }
-	 return this.pedigree;
-    }
+	public Pedigree parseFile(String PEDfilePath) throws PedParseException {
+		// Error handling can be improved with Java 7.
+		String err = null;
+		BufferedReader br = null;
+		
+		this.pedfile_path = PEDfilePath;
+		File file = new File(this.pedfile_path);
+		this.base_filename = file.getName();
+		try {
+			FileInputStream fstream = new FileInputStream(this.pedfile_path);
+			DataInputStream in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
+			inputPedFileStream(br);
+		} catch (IOException e) {
+			err = String.format("[PedFileParser:parseFile]: %s", e.toString());
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				// swallow, not much we can do about this
+			}
+		}
+		if (err != null)
+			throw new PedParseException(err);
+		return this.pedigree;
+	}
     
     
     /**
