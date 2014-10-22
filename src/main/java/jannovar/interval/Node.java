@@ -49,13 +49,6 @@ public class Node<T> {
 	private Comparator<? extends Interval> rightcomp = null;
 
 	/**
-	 * Default constructor is declared private to avoid it from being used..
-	 */
-	@SuppressWarnings("unused")
-	private Node() {
-	}
-
-	/**
 	 * Node constructor.
 	 * 
 	 * @param intervals
