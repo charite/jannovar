@@ -389,29 +389,6 @@ public class Jannovar {
 			/* Now add the stuff to the INFO line */
 			variantContext.getCommonInfo().putAttribute("EFFECT", effect);
 			variantContext.getCommonInfo().putAttribute("HGVS", annotation);
-			
-			// ab hier alt
-			/*
-			String A[] = variantContext.getOriginalVCFLine().split("\t");
-			for (int i = 0; i < 7; ++i)
-				out.write(A[i] + "\t");
-			String INFO;
-			 * The if clause is necessary to avoid writing a final ";" if the
-			 * INFO lineis empty, which wouldbe invalid VCF format.
-			 *
-			if (A[7].length() > 0)
-				INFO = String.format("EFFECT=%s;HGVS=%s;%s", effect, annotation, A[7]);
-			else
-				INFO = String.format("EFFECT=%s;HGVS=%s", effect, annotation, A[7]);
-			out.write(INFO + "\t");
-			for (int i = 8; i < A.length; ++i) {
-				if (i < A.length - 1)
-					out.write(A[i] + "\t");
-				else
-					out.write(A[i]);
-			}
-			out.write("\n");
-			*/
 		}
 	}
 
