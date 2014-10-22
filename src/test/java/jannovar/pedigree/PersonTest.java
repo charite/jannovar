@@ -28,26 +28,28 @@ public class PersonTest {
 	/** Tests a few valid cases. */
 	@Test
 	public void testValidPerson_Mother() throws PedParseException {
-		Person mother = new Person("FAM", "MOTHER", "0", "0", "2", "2");
+		Person mother = new Person("FAM", "MOTHER", null, null, "2", "2");
 		Assert.assertEquals("FAM", mother.getFamilyID());
-		Assert.assertEquals("0", mother.getFatherID());
-		Assert.assertEquals("0", mother.getMotherID());
+		Assert.assertEquals(null, mother.getFatherID());
+		Assert.assertEquals(null, mother.getMotherID());
 		Assert.assertFalse(mother.isMale());
 		Assert.assertTrue(mother.isFemale());
 		Assert.assertTrue(mother.isAffected());    // AFFECTED
 		Assert.assertFalse(mother.isUnaffected());  // AFFECTED
+		Assert.assertTrue(mother.isFounder());
 	}
 	
 	@Test
 	public void testValidPerson_Father() throws PedParseException {
-		Person father = new Person("FAM", "FATHER", "0", "0", "1", "2"); 
+		Person father = new Person("FAM", "FATHER", null, null, "1", "2"); 
 		Assert.assertEquals("FAM", father.getFamilyID());
-		Assert.assertEquals("0", father.getFatherID());
-		Assert.assertEquals("0", father.getMotherID());
+		Assert.assertEquals(null, father.getFatherID());
+		Assert.assertEquals(null, father.getMotherID());
 		Assert.assertTrue(father.isMale());
 		Assert.assertFalse(father.isFemale());
 		Assert.assertTrue(father.isAffected());     // AFFECTED
 		Assert.assertFalse(father.isUnaffected());  // AFFECTED
+		Assert.assertTrue(father.isFounder());
 	}
 	
 	@Test
@@ -60,6 +62,7 @@ public class PersonTest {
 		Assert.assertTrue(daughter.isFemale());
 		Assert.assertFalse(daughter.isAffected());   // UNAFFECTED
 		Assert.assertTrue(daughter.isUnaffected());  // UNAFFECTED
+		Assert.assertFalse(daughter.isFounder());
 	}
 	
 	@Test
@@ -72,5 +75,6 @@ public class PersonTest {
 		Assert.assertFalse(son.isFemale());
 		Assert.assertFalse(son.isAffected());   // UNKNOWN
 		Assert.assertFalse(son.isUnaffected());  // UNKNOWN
+		Assert.assertFalse(son.isFounder());
 	}
 }

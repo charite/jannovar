@@ -89,43 +89,47 @@ public class Pedigree {
     
     /**
      * Constructs a Pedigree object for a single sample. This object is 
-     * used with the same interface as the multisample pedigree 
+     * used with the same interface as the multisample pedigree.
+     * 
+     * The pedigree will have one person with unknown sex but AFFECTED disease state.
+     *  
      * @param name
      * @return 
      */
     public static Pedigree constructSingleSamplePedigree(String name) {
-	Pedigree ped = new Pedigree();
-	ped.singleSampleName = name;
-	ped.isSingleSample = true;
-	return ped;
-    }
-
-    /**
-     * Disallow default constructor (The only valid way to construct a Pedigree
-     * object is with a list of Persons and a family ID)
-     */
-    private Pedigree() {
-    }
+    	ArrayList<Person> pList = new ArrayList<Person>();
+		try {
+			pList.add(new Person("FAMILY", name, null, null, "0", "2"));
+			return new Pedigree(pList, "FAMILY");
+		} catch (PedParseException e) {  // should neve happen!
+			e.printStackTrace();
+			throw new RuntimeException("Sample in single-sample pedigree was invalid.");
+		}
+	}
     
     /**
      * @param pList list of {@link Person}s
      * @param famID the Family ID of this Pedigree.
      * @throws jannovar.exception.PedParseException
      */
-    public Pedigree(ArrayList<Person> pList, String famID) throws PedParseException {
-       this.personList = new ArrayList<Person>();
-       this.familyID = famID;
-       for (Person p: pList) {
-	   addIndividual(p);
-       }
-       boolean success = findParentLinks();
-       if (! success) {
-	   throw new PedParseException("Inconsistent Parent Relations in PED file");
-       }
-       setPersonIndices();
-       initializeAffectedsParentsSibs();
-       isSingleSample = personList.size() == 1;
-    }
+	public Pedigree(ArrayList<Person> pList, String famID)
+			throws PedParseException {
+		this.personList = new ArrayList<Person>();
+		this.familyID = famID;
+		for (Person p : pList) {
+			addIndividual(p);
+		}
+		boolean success = findParentLinks();
+		if (!success) {
+			throw new PedParseException(
+					"Inconsistent Parent Relations in PED file");
+		}
+		setPersonIndices();
+		initializeAffectedsParentsSibs();
+		isSingleSample = (personList.size() == 1);
+		if (isSingleSample)
+			singleSampleName = personList.get(0).getIndividualID();
+	}
 
     /**
      * @return number of people represented in the pedigree
@@ -410,6 +414,7 @@ public class Pedigree {
 	else return this.parentList.size();
     }
 
+    // TODO(holtgrew): Document restriction of single sample pedigrees!
     public int getNumberOfAffectedsInPedigree() {
 	if (isSingleSample) return 1;
         else return this.affectedList.size();
