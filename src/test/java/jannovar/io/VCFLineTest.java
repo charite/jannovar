@@ -46,11 +46,6 @@ public class VCFLineTest {
 				continue;
 			if (line.startsWith("#"))
 				continue;
-			if (line == null) {
-				System.err.println("Error: First line of VCF file was not read (null pointer)");
-				System.err.println("File: " + vcfPath);
-				System.exit(1);
-			}
 			VCFLine ln = new VCFLine(line);
 			VCFLineList.add(ln);
 		}
