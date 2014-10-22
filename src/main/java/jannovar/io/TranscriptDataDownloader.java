@@ -313,12 +313,14 @@ public class TranscriptDataDownloader implements Constants {
 			err = String.format("IO Exception reading from URL: \"%s\"\n%s", urlstring, e.toString());
 		} finally {
 			try {
-				writer.close();
+				if (writer != null)
+					writer.close();
 			} catch (IOException e) {
 				// swallow, there is nothing we can do about it
 			}
 			try {
-				reader.close();
+				if (reader != null)
+					reader.close();
 			} catch (IOException e) {
 				// swallow, there is nothing we can do about it
 			}

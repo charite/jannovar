@@ -107,29 +107,31 @@ public class PedFileParser {
      * </pre>
      * @param br An open handle to a PED file.
      */
-    private void inputPedFileStream(BufferedReader br)
-	throws IOException, PedParseException
-    {	
-	String line;
-	boolean firstline = true; /* flag for the first line of the ped file. */
-	ArrayList<Person> personList = new ArrayList<Person>();
-	String famID =null;
-	while (( line = br.readLine()) != null){
-            if (line.isEmpty())
-                continue; /* Should not happen, but skip silently */
-            String A[] = line.split("\\s+");
-        
-            if (A.length < 6){
-                throw new PedParseException("Error: ped file line with less than 6 fields: "+ line);
-            }
-            Person per = parsePerson(A);
-            if (firstline) {
-                famID = per.getFamilyID();
-	    }
-	    personList.add(per);
+	private void inputPedFileStream(BufferedReader br) throws IOException,
+			PedParseException {
+		String line;
+		boolean firstline = true; /* flag for the first line of the ped file. */
+		ArrayList<Person> personList = new ArrayList<Person>();
+		String famID = null;
+		while ((line = br.readLine()) != null) {
+			if (line.isEmpty())
+				continue; /* Should not happen, but skip silently */
+			String A[] = line.split("\\s+");
+
+			if (A.length < 6) {
+				throw new PedParseException(
+						"Error: ped file line with less than 6 fields: " + line);
+			}
+			Person per = parsePerson(A);
+			if (firstline) {
+				famID = per.getFamilyID();
+			}
+			personList.add(per);
+		}
+		if (famID == null)  // PED file was empty
+			throw new PedParseException("PED file was empty");
+		this.pedigree = new Pedigree(personList, famID);
 	}
-	this.pedigree = new Pedigree(personList,famID);
-    }
 
     /**
      * Parse a Person object from a ped file line that has been split into an Array of Strings
