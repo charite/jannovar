@@ -285,10 +285,13 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 	 * @throws jannovar.exception.KGParseException
 	 */
 	public void parseKnownGeneFile(String kgpath, boolean isGzip) throws KGParseException {
+		// Error handling can be improved with Java 7.
+		String s = null;
+		BufferedReader br = null;
 		// int linecount=0;
 		// int exceptionCount=0;
 		try {
-			BufferedReader br = getBufferedReaderFromFilePath(kgpath, isGzip);
+			br = getBufferedReaderFromFilePath(kgpath, isGzip);
 
 			String line;
 
@@ -304,12 +307,19 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 			}
 			// System.out.println("[INFO] Parsed " + knownGeneMap.size() + " transcripts from UCSC knownGene resource");
 		} catch (FileNotFoundException fnfe) {
-			String s = String.format("[Jannovar/USCSKGParser] Could not find KnownGene.txt file: %s\n%s", kgpath, fnfe.toString());
-			throw new KGParseException(s);
+			s = String.format("[Jannovar/USCSKGParser] Could not find KnownGene.txt file: %s\n%s", kgpath, fnfe.toString());
 		} catch (IOException e) {
-			String s = String.format("[Jannovar/USCSKGParser] Exception while parsing UCSC KnownGene file at \"%s\"\n%s", kgpath, e.toString());
-			throw new KGParseException(s);
+			s = String.format("[Jannovar/USCSKGParser] Exception while parsing UCSC KnownGene file at \"%s\"\n%s", kgpath, e.toString());
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				// swallow, nothing we can do about it
+			}
 		}
+		if (s != null)
+			throw new KGParseException(s);
 	}
 
 	/**
@@ -429,8 +439,12 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 	 * </UL>
 	 */
 	private void parseKnownGeneXref(String xrefpath, boolean isGzip) throws KGParseException {
+		// Error handling can be improved in Java 7.
+		String err = null;
+		BufferedReader br = null;
+		
 		try {
-			BufferedReader br = getBufferedReaderFromFilePath(xrefpath, isGzip);
+			br = getBufferedReaderFromFilePath(xrefpath, isGzip);
 			String line;
 			// int kgWithNoXref=0;
 			// int kgWithXref=0;
@@ -440,7 +454,7 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 					continue; /* Skip comment line */
 				String A[] = line.split("\t");
 				if (A.length < 8) {
-					String err = String.format("Error, malformed ucsc xref line: %s\nExpected 8 fields but got %d", line, A.length);
+					err = String.format("Error, malformed ucsc xref line: %s\nExpected 8 fields but got %d", line, A.length);
 					throw new KGParseException(err);
 				}
 				String id = A[0];
@@ -457,13 +471,18 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 				kg.setGeneSymbol(geneSymbol);
 				// System.out.println("x: \"" + geneSymbol + "\"");
 			}
-			br.close();
 		} catch (FileNotFoundException fnfe) {
-			String err = String.format("Could not find file: %s\n%s", xrefpath, fnfe.toString());
-			throw new KGParseException(err);
+			err = String.format("Could not find file: %s\n%s", xrefpath, fnfe.toString());
 		} catch (IOException e) {
-			String err = String.format("Exception while parsing UCSC KnownGene xref file at \"%s\"\n%s", xrefpath, e.toString());
-			throw new KGParseException(err);
+			err = String.format("Exception while parsing UCSC KnownGene xref file at \"%s\"\n%s", xrefpath, e.toString());
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				// swallow, nothing we can do about it
+			}
 		}
+		if (err != null)
+			throw new KGParseException(err);
 	}
 }
