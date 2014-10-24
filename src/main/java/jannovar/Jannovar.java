@@ -514,21 +514,14 @@ public class Jannovar {
 	private void outputJannovarFormatFile(VCFFileReader parser) throws JannovarException {
 		File f = new File(this.VCFfilePath);
 		String outname = f.getName() + ".jannovar";
+		
+		// Error handling can be improved with Java 7.
+		BufferedWriter out = null;
 		try {
 			FileWriter fstream = new FileWriter(outname);
-			BufferedWriter out = new BufferedWriter(fstream);
+			out = new BufferedWriter(fstream);
 			/** Output each of the variants. */
 			int n = 0;
-//			Iterator<Variant> iter = parser.getVariantIterator();
-//			while (iter.hasNext()) {
-//				n++;
-//				Variant v = iter.next();
-//				try {
-//					outputJannovarLine(n, v, out);
-//				} catch (AnnotationException e) {
-//					System.err.println("[WARN] Annotation error: " + e.toString());
-//				}
-//			}
 			for (VariantContext variantContext : parser) {
 				n++;
 				try {
@@ -539,6 +532,12 @@ public class Jannovar {
 			}
 			out.close();
 		} catch (IOException e) {
+			try {
+				if (out != null)
+					out.close(); 
+			} catch (IOException e2) {
+				// swallow, nothing we can do about it
+			}
 			System.err.println("[ERROR] Error writing annotated VCF file");
 			System.err.println("[ERROR] " + e.toString());
 			System.exit(1);

@@ -871,7 +871,6 @@ public class Pedigree {
 		    /* Cannot be disease-causing mutation, 
 		       an affected male does not have it. */
 		}
-		if (! compatible) break;
 	    }
 	    for (Person p : parentList) {
 		int i = p.getIndex();
