@@ -73,6 +73,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/** Class version (for serialization). */
 	public static final long serialVersionUID = 4L;
 
+	// FIXME(holtgrew): Remove this static factory method.
 	/**
 	 * The constructor is private to prevent accidental initialization of an empty TranscriptModel object. The way to
 	 * make TranscriptModels is to use the static method {@link #createTranscriptModel} and then to set the variables.
@@ -308,7 +309,6 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	public int getRVarStart(int varstart, int cumlenintron) {
 		int rvarstart = varstart - this.txStart - cumlenintron + 1;
 		return rvarstart;
-
 	}
 
 	/**
@@ -459,6 +459,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * @return distance of pos to 3' end of the gene (txEnd)
 	 */
 	public int getDistanceToThreePrimeTerminus(int pos) {
+		// TODO(holtgrem): "distance" makes me expect an "abs" here
 		return pos - this.txEnd;
 	}
 
@@ -468,6 +469,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * @return distance of pos to 5' end of the gene (txStart)
 	 */
 	public int getDistanceToFivePrimeTerminus(int pos) {
+		// TODO(holtgrem): "distance" makes me expect an "abs" here
 		return this.txStart - pos;
 	}
 
@@ -572,16 +574,6 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/** @return the length of the coding sequence of the transcript. */
 	public int getCDSLength() {
 		return this.CDSlength;
-	}
-
-	/**
-	 * Return length of the actual cDNA sequence (rather than the length calculated from the exon positions, which
-	 * should however be the same. Can use for sanity checking.
-	 * 
-	 * @return sequence length
-	 */
-	public int getActualSequenceLength() {
-		return this.sequence.length();
 	}
 
 	/** @return the number of exons of the transcript. */
@@ -764,6 +756,16 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	}
 
 	/**
+	 * Return length of the actual cDNA sequence (rather than the length calculated from the exon positions, which
+	 * should however be the same. Can use for sanity checking.
+	 *
+	 * @return sequence length
+	 */
+	public int getActualSequenceLength() {
+		return this.sequence.length();
+	}
+
+	/**
 	 * This method is used by {@link jannovar.io.UCSCKGParser UCSCKGParser} to add sequence data (from
 	 * knownGeneMrna.txt) to the KnownGene object.
 	 * 
@@ -862,9 +864,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 			return "chrY";
 		else if (this.chromosome == M_CHROMOSOME)
 			return "chrM";
-		else {
+		else
 			return String.format("chr%d", this.chromosome);
-		}
 	}
 
 	@Override
@@ -931,6 +932,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * @return the distance of the two position in the mRNA
 	 */
 	private int getDistance(int a, int b) {
+		// TODO(holtgrem): Returning special values here is a bit problematic, as some other distance functions also return negative values
 		// System.out.println("Hallo");
 		// check positions in exons
 		if (a < getTXStart() | b < getTXStart()) {
@@ -1076,5 +1078,3 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		return -1;
 	}
 }
-/* eof. */
-
