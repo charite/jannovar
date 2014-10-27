@@ -425,6 +425,12 @@ public class Pedigree {
         else return this.unaffectedList.size();
     }
     
+    /** Return it-h Person in Pedigree. */
+    public Person get(int idx)
+    {
+    	return this.personList.get(idx);
+    }
+
     public Person getPerson(String id) {
         for (Person p : this.personList) {
             if (id.equals(p.getIndividualID()))
