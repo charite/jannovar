@@ -267,11 +267,11 @@ public class IntervalTree<T> implements java.io.Serializable {
 	}
 
 	/**
-	 * This function is called if no inverval is found to overlap with the search query. If this method is called, we
+	 * This function is called if no interval is found to overlap with the search query. If this method is called, we
 	 * know that we are "in between" two intervals (or at the extreme right or left end of the search space).
 	 * 
 	 * @param x
-	 *            The lower range of the oringal search query (it doesnt matter whether we take the lower or the upper
+	 *            The lower range of the original search query (it doesn't matter whether we take the lower or the upper
 	 *            range, since both do not overlap).
 	 */
 	private void searchInbetween(int x) {

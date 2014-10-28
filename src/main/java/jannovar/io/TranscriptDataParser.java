@@ -148,13 +148,19 @@ public class TranscriptDataParser {
 			return false;
 		}
 		System.err.println("[INFO] Downloading: \"" + urlstring + "\"");
+		
+		// Error handling can be improved with Java 7.
+		String err = null;
+		InputStream reader = null;
+		FileOutputStream writer = null;
+		
 		int threshold = 0;
 		int block = 250000;
 		try {
 			URL url = new URL(urlstring);
 			URLConnection urlc = url.openConnection();
-			InputStream reader = urlc.getInputStream();
-			FileOutputStream writer = new FileOutputStream(local_file_path);
+			reader = urlc.getInputStream();
+			writer = new FileOutputStream(local_file_path);
 			byte[] buffer = new byte[153600];
 			int totalBytesRead = 0;
 			int bytesRead;
@@ -173,15 +179,27 @@ public class TranscriptDataParser {
 			}
 			System.err.println();
 			System.err.println("[INFO] Done. " + (new Integer(totalBytesRead).toString()) + "(" + size + ") bytes read.");
-			writer.close();
-			reader.close();
 		} catch (MalformedURLException e) {
-			String err = String.format("Could not interpret url: \"%s\"\n%s", urlstring, e.toString());
-			throw new KGParseException(err);
+			err = String.format("Could not interpret url: \"%s\"\n%s", urlstring, e.toString());
 		} catch (IOException e) {
-			String err = String.format("IO Exception reading from URL: \"%s\"\n%s", urlstring, e.toString());
-			throw new KGParseException(err);
+			err = String.format("IO Exception reading from URL: \"%s\"\n%s", urlstring, e.toString());
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
+				// swallow, nothing we can do about it
+			}
+			try {
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {
+				// swallow, nothing we can do about it
+			}
 		}
+
+		if (err != null)
+			throw new KGParseException(err);
 		return true;
 	}
 
