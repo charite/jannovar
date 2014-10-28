@@ -152,7 +152,4 @@ public class PedigreeTest {
 		Assert.assertEquals(0, pedigree.getNumberOfParentsInPedigree());
 		Assert.assertEquals(0, pedigree.getNumberOfUnaffectedsInPedigree()); // TODO(holtgrem): should be 1!
 	}
-	// check compatibility functions
-	// Genotype call checks with atomic cases
-	// check existing tests
 }
