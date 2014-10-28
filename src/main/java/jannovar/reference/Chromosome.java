@@ -33,7 +33,7 @@ import java.util.HashSet;
  * <P>
  * Note that the {@link jannovar.interval.Interval Interval} objects in the interval tree are defined by the
  * transcription start and stop sites of the isoform.
- * 
+ *
  * @author Peter N Robinson, Marten Jäger
  * @version 0.32 (15 April, 2014)
  */
@@ -49,7 +49,7 @@ public class Chromosome {
 	private final int n_genes;
 	/**
 	 * The initial capacity for {@link jannovar.reference.TranscriptModel TranscriptModel} objects for the
-	 * 
+	 *
 	 * @link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} object.
 	 */
 	private static final int CAPACITY = 20;
@@ -77,7 +77,7 @@ public class Chromosome {
 	/**
 	 * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or 24=Y_CHROMOSOME (see
 	 * {@link jannovar.common.Constants Constants}).
-	 * 
+	 *
 	 * @param c
 	 *            the chromosome
 	 * @param intrvtree
@@ -117,7 +117,7 @@ public class Chromosome {
 	 * of genes affected by the variant using the interval tree ({@link #itree}). and then annotated the variants
 	 * accordingly. If no hit is found in the tree, we identify the left and right neighbor and annotate to intergenic,
 	 * upstream or downstream
-	 * 
+	 *
 	 * @param position
 	 *            The start position of the variant on this chromosome (one-based numbering)
 	 * @param ref
@@ -208,7 +208,7 @@ public class Chromosome {
 	 * Main entry point to getting structural variant annotations for a variant identified by chromosomal coordinates
 	 * for a Variant bigger than 1000bp. This will create either SV_INSERTION, SV_DELETIONS or SV_SUBSTITUTION type
 	 * Annotations.
-	 * 
+	 *
 	 * @param position
 	 *            The start position of the variant on this chromosome
 	 * @param ref
@@ -282,7 +282,7 @@ public class Chromosome {
 	/**
 	 * Counts the number of affected genes by different GeneSymbol. Returns <code>true</code> if there are more than one
 	 * gensymbols in the candidateGenes list or <code>false</code> otherwise.
-	 * 
+	 *
 	 * @param candidateGenes
 	 * @return <code>true</code> for multiple genes in the list
 	 */
@@ -301,7 +301,7 @@ public class Chromosome {
 	 * This function is called when the query position(s) represented by start and end do not overlap with any isoforms.
 	 * In this case, it must be integenic. UPSTREAM and DOWNSTREAM annotations are special cases of INTERGENIC when the
 	 * variant is within 1000 nucleotides of a transcript.
-	 * 
+	 *
 	 * @param start
 	 *            The start position of the variant on this chromosome
 	 * @param end
@@ -357,7 +357,7 @@ public class Chromosome {
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates for a
 	 * TranscriptModel that is transcribed from the plus strand. This could theoretically be combined with the Minus
 	 * strand functionalities, but separating them makes things easier to comprehend and debug.
-	 * 
+	 *
 	 * @param position
 	 *            The start position of the variant on this chromosome
 	 * @param ref
@@ -431,7 +431,7 @@ public class Chromosome {
 					rvarend = kgl.getRVarEnd(end, k, cumlenintron);
 					if (end < cdsstart && kgl.isCodingGene()) {
 						/* 3) Variant disrupts/changes 5' UTR region.
-						 * Rarely, if the 5' UTR is also separated by introns, the variant 
+						 * Rarely, if the 5' UTR is also separated by introns, the variant
 						 * is more complex.
 						 #query  ----
 						 #gene     <--*---*->
@@ -443,7 +443,7 @@ public class Chromosome {
 						/* Annovar: $utr5{$name2}++;
 						   positive strand for UTR5 */
 					} else if (start > cdsend && kgl.isCodingGene()) {
-						/* 4) The variant disrupts/changes 3' UTR region 
+						/* 4) The variant disrupts/changes 3' UTR region
 						   #query             ----
 						   #gene     <--*---*->
 						*/
@@ -511,7 +511,7 @@ public class Chromosome {
 				}
 				/*
 				  if (not defined $rvarend) {
-					$rvarend = $txend-$txstart-$lenintron+1;		
+					$rvarend = $txend-$txstart-$lenintron+1;
 					#if this value is longer than transcript length, it suggest whole gene deletion
 				}
 				*/
@@ -530,7 +530,7 @@ public class Chromosome {
 					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 				} else if (end < cdsstart) {
-					/* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns 
+					/* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
 					 * #query  ----
 					 * #gene     <--*---*->
 					 * Annovar: $utr5{$name2}++; #positive strand for UTR5
@@ -558,7 +558,7 @@ public class Chromosome {
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates for a
 	 * TranscriptModel that is transcribed from the minus strand. This could theoretically be combined with the Minus
 	 * strand functionalities, but separating them makes things easier to comprehend and debug.
-	 * 
+	 *
 	 * @param position
 	 *            The start position of the variant on this chromosome
 	 * @param ref
@@ -773,7 +773,7 @@ public class Chromosome {
 	 * Finally, the $refseqvar in Annovar has the following pieces of information {@code my ($refcdsstart, $refvarstart,
 	 * $refvarend, $refstrand, $index, $exonpos, $nextline) = @ $refseqvar-> $seqid}->[$i]};} Note that refcdsstart and
 	 * refstrand are contained in the TranscriptModel objects
-	 * 
+	 *
 	 * @param refvarstart
 	 *            The start position of the variant with respect to the CDS of the mRNA
 	 * @param refvarend
@@ -843,10 +843,10 @@ public class Chromosome {
 			this.annovarFactory.addErrorAnnotation(ann);
 			return; /* Probably reflects a database error. */
 		}
-		/* wtnt3_after = Sequence of codon right after the variant. 
+		/* wtnt3_after = Sequence of codon right after the variant.
 		 * It is used for delins mutations. */
 		String wtnt3_after = kgl.getWTCodonNucleotidesAfterVariant(refvarstart, frame_s);
-		/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683), 
+		/* the following checks some  database annotation errors (example: chr17:3,141,674-3,141,683),
 		 * so the last coding frame is not complete and as a result, the cDNA sequence is not complete */
 		if (wtnt3.length() != 3 && refvarstart - frame_s - 1 >= 0) {
 			String s = String.format("%s, wtnt3-length: %d", kgl.getAccessionNumber(), wtnt3.length());
@@ -906,7 +906,7 @@ public class Chromosome {
 	 * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
 	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
 	 * are not valid.
-	 * 
+	 *
 	 * @param sq
 	 *            original, upper-case cDNA string
 	 * @return reverse complement version of the input string sq.
@@ -946,7 +946,7 @@ public class Chromosome {
 	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the
 	 * {@link jannovar.reference.TranscriptModel TranscriptModel} objects are entered into an
 	 * {@link jannovar.interval.IntervalTree IntervalTree} for the appropriate Chromosome.
-	 * 
+	 *
 	 * @param kgList
 	 *            A list of all TranscriptModels for the entire genome
 	 * @return a Map of Chromosome objects with all 22+2+M chromosomes.
