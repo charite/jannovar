@@ -1,10 +1,9 @@
 package jannovar.genotype;
 
+import jannovar.common.Genotype;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-
-
-import jannovar.common.Genotype;
 
 
 /**
