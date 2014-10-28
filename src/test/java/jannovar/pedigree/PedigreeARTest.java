@@ -35,8 +35,7 @@ public class PedigreeARTest {
 	public static void setUp() throws IOException, PedParseException {
 		PedFileParser parser = null;
 		parser = new PedFileParser();
-		java.net.URL url = PedigreeADTest.class
-				.getResource("/TestPedigreeAR.ped");
+		java.net.URL url = PedigreeADTest.class.getResource("/TestPedigreeAR.ped");
 		String path = url.getPath();
 		pedigree = parser.parseFile(path);
 	}
@@ -79,19 +78,13 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance1() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/* mg3 is compatible with linkage. */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 
 		lst.add(mg1);
 		lst.add(mg2);
@@ -108,19 +101,13 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance1homozygousOnly() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/* mg3 is compatible with linkage. */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 
 		lst.add(mg1);
 		lst.add(mg2);
@@ -137,19 +124,13 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance1CompoundHEt() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/* mg3 is compatible with linkage. */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 
 		lst.add(mg1);
 		lst.add(mg2);
@@ -166,19 +147,13 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance3() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/* mg3 is compatible with linkage */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 		lst.add(mg1);
 		lst.add(mg2);
 		lst.add(mg3);
@@ -194,19 +169,13 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance3HomozygousOnly() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/* mg3 is compatible with linkage */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 		lst.add(mg1);
 		lst.add(mg2);
 		lst.add(mg3);
@@ -222,19 +191,13 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance3CompoundHet() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/* mg3 is compatible with linkage */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 		lst.add(mg1);
 		lst.add(mg2);
 		lst.add(mg3);
@@ -250,22 +213,16 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance4() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/*
 		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
 		 * ALT, the other is HET
 		 */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		lst.add(mg1);
 		lst.add(mg2);
 		lst.add(mg3);
@@ -281,22 +238,16 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritance4HomozygousOnly() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_ALT);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/*
 		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
 		 * ALT, the other is HET
 		 */
-		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		lst.add(mg1);
 		lst.add(mg2);
 		lst.add(mg3);
@@ -322,14 +273,10 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritanceCompoundHet1() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		/*
 		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
 		 * ALT, the other is HET
@@ -359,14 +306,10 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritanceCompoundHet1special() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		/*
 		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
 		 * ALT, the other is HET
@@ -397,14 +340,10 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritanceCompoundHet2() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
 		lst.add(mg1);
 		lst.add(mg2);
 		boolean b = pedigree.isCompatibleWithAutosomalRecessive(lst);
@@ -429,14 +368,10 @@ public class PedigreeARTest {
 	@Test
 	public void testARinheritanceCompoundHet2special() {
 		ArrayList<Variant> lst = new ArrayList<Variant>();
-		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
-		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
+		Variant mg1 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
+		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
 		lst.add(mg1);
 		lst.add(mg2);
 		boolean b = pedigree.isCompatibleWithAutosomalRecessiveCompoundHet(lst);
