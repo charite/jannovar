@@ -1,144 +1,158 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>de.charite.compbio</groupId>
-  <artifactId>jannovar</artifactId>
-  <version>0.9-SNAPSHOT</version>
-  <properties>
-    <project.custom.encoding>UTF-8</project.custom.encoding>
-    <project.custom.java.version>1.6</project.custom.java.version>
-    <maven.compiler.source>${project.custom.java.version}</maven.compiler.source>
-    <maven.compiler.target>${project.custom.java.version}</maven.compiler.target>
-    <project.build.sourceEncoding>${project.custom.encoding}</project.build.sourceEncoding>
-    <project.build.outputEncoding>${project.custom.encoding}</project.build.outputEncoding>
-    <project.reporting.outputEncoding>${project.custom.encoding}</project.reporting.outputEncoding>
-  </properties>
-  
-  <dependencies>
-   <dependency>
-     <groupId>commons-cli</groupId>
-     <artifactId>commons-cli</artifactId>
-     <version>1.2</version>
-    </dependency>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.charite.compbio</groupId>
+	<artifactId>jannovar</artifactId>
+	<version>0.9-SNAPSHOT</version>
+	<properties>
+		<project.custom.encoding>UTF-8</project.custom.encoding>
+		<project.custom.java.version>1.6</project.custom.java.version>
+		<maven.compiler.source>${project.custom.java.version}</maven.compiler.source>
+		<maven.compiler.target>${project.custom.java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>${project.custom.encoding}</project.build.sourceEncoding>
+		<project.build.outputEncoding>${project.custom.encoding}</project.build.outputEncoding>
+		<project.reporting.outputEncoding>${project.custom.encoding}</project.reporting.outputEncoding>
+	</properties>
 
-   
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.seqdoop</groupId>
-    	<artifactId>htsjdk</artifactId>
-    	<version>1.118</version>
-    </dependency>
-  </dependencies>
-  
-  
+	<dependencies>
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seqdoop</groupId>
+			<artifactId>htsjdk</artifactId>
+			<version>1.118</version>
+		</dependency>
+	</dependencies>
 
-  <build>
-   <plugins>
-     <plugin>  
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-compiler-plugin</artifactId>  
-       <version>3.0</version>
-       <configuration>  
-	 <source>1.6</source>  
-	 <target>1.6</target>  
-	 <compilerArgument>-Xlint:all</compilerArgument>
-	 <showWarnings>true</showWarnings>
-	 <showDeprecation>true</showDeprecation>
-       </configuration>  
-     </plugin>  
-     <plugin>
-       <!-- Build an executable JAR -->
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-jar-plugin</artifactId>
-       <version>2.3</version>
-       <configuration>
-	 <archive>
-	   <manifest>
-	     <mainClass>jannovar.Jannovar</mainClass>
-	   </manifest>
-	 </archive>
-	 <compilerArgument>-Xlint:all</compilerArgument>
-	 <showWarnings>true</showWarnings>
-	 <showDeprecation>true</showDeprecation>
-       </configuration>
-     </plugin>
-     <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.1</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>jannovar.Jannovar</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- junit testing  -->
-     <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-surefire-plugin</artifactId>
-      <version>2.14.1</version>
-      <configuration>
-	<forkCount>3</forkCount>
-        <reuseForks>true</reuseForks>
-	<argLine>-Xms512m -Xmx1024m</argLine>
-	<testFailureIgnore>true</testFailureIgnore>
-      </configuration>
-    </plugin>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-javadoc-plugin</artifactId>
-      <version>2.9</version>
-      <!-- Uncomment this to get the Javadoc to show all members
-      <configuration>
-	<show>private</show>
-      </configuration>
-      -->
-    </plugin>
-   <!-- This plugin generates a test coverage analysis
-    <plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>cobertura-maven-plugin</artifactId>
-      <version>2.5.1</version>
-      <executions>
-	<execution>
-	  <phase>process-classes</phase>
-	  <goals>
-	    <goal>cobertura</goal>
-	  </goals>
-	</execution>
-      </executions>
-    </plugin>  -->
-   </plugins>
-   <extensions>
-     <extension>
-       <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh-external</artifactId>
-        <version>1.0-beta-6</version>
-     </extension>
-   </extensions>   
-  </build>
-  
-  <distributionManagement>
- 	<repository>
-	   <id>compbio</id>
-	   <name>Computational Biology Group at Charite Berlin</name>
-	   <url>scpexe://compbio/home/contao/contao-2.9.4/tl_files/maven</url>
- 	</repository>
-  </distributionManagement>
-  
+	<build>
+		<plugins>
+			<!-- JUnit testing -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<forkCount>3</forkCount>
+					<reuseForks>true</reuseForks>
+					<argLine>-Xms512m -Xmx1024m</argLine>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
+			</plugin>
+
+			<!-- Javadoc generation. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<!-- Uncomment this to get the Javadoc to show all members <configuration>
+					<show>private</show> </configuration> -->
+			</plugin>
+
+			<!-- Jacoco Coverage Reports -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.2.201409121644</version>
+				<executions>
+					<!-- Prepares the property pointing to the JaCoCo runtime agent which
+						is passed as VM argument when Maven the Surefire plugin is executed. -->
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Ensures that the code coverage report for unit tests is created
+						after unit tests have been run. -->
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Compilation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+
+			<!-- JAR building -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>jannovar.Jannovar</mainClass>
+						</manifest>
+					</archive>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+
+			<!-- More JAR building -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>jannovar.Jannovar</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<!-- Maven Code Handling -->
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>compbio</id>
+			<name>Computational Biology Group at Charite Berlin</name>
+			<url>scpexe://compbio/home/contao/contao-2.9.4/tl_files/maven</url>
+		</repository>
+	</distributionManagement>
 </project>
