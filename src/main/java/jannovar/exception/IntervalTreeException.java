@@ -1,9 +1,8 @@
 package jannovar.exception;
 
-
 /**
- * IntervalTree exceptions are thrown if there is an error during the
- * construction of the IntervalTree.
+ * IntervalTree exceptions are thrown if there is an error during the construction of the IntervalTree.
+ *
  * @see jannovar.interval.IntervalTree
  * @see jannovar.interval.Node
  * @see jannovar.interval.Interval
@@ -12,22 +11,21 @@ package jannovar.exception;
  */
 public class IntervalTreeException extends JannovarException {
 
-    private String mistake=null;
-    
-    public static final long serialVersionUID = 2L;
+	private String mistake = null;
 
-    public IntervalTreeException() {
-	super();
-    }
+	public static final long serialVersionUID = 2L;
 
-    public IntervalTreeException(String msg) {
-	super(msg);
-	this.mistake = msg;
-    }
+	public IntervalTreeException() {
+		super();
+	}
 
-    @Override
-    public String getError()
-    {
-	return mistake;
-    }
+	public IntervalTreeException(String msg) {
+		super(msg);
+		this.mistake = msg;
+	}
+
+	@Override
+	public String getError() {
+		return mistake;
+	}
 }
