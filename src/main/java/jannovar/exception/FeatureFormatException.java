@@ -1,13 +1,14 @@
 /**
- * 
+ *
  */
 package jannovar.exception;
 
 import java.io.IOException;
 
 /**
- * @author mjaeger
+ * Thrown on invalid feature formats.
  *
+ * @author mjaeger
  */
 public class FeatureFormatException extends IOException {
 
@@ -15,11 +16,6 @@ public class FeatureFormatException extends IOException {
 		super(message);
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
-	
 
 }
