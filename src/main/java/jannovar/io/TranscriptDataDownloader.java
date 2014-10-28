@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package jannovar.io;
 
@@ -16,10 +16,10 @@ import java.net.URLConnection;
 
 /**
  * This class is responsible for downloading the data files from UCSC, Ensembl, RefSeq.
- * 
+ *
  * @version 0.2 (2014-01-02)
  * @author mjaeger
- * 
+ *
  */
 public class TranscriptDataDownloader implements Constants {
 	/** Path of directory to which the files will be downloaded. */
@@ -28,7 +28,7 @@ public class TranscriptDataDownloader implements Constants {
 	/**
 	 * This constructor sets the location of the directory into which the transcript annotation data will be downloaded.<br>
 	 * Creates the folder if it still not exists.
-	 * 
+	 *
 	 * @param dirPath
 	 *            Location of download directory.
 	 */
@@ -41,7 +41,7 @@ public class TranscriptDataDownloader implements Constants {
 
 	/**
 	 * Returns the path to the download directory were the transcript annotation files are stored.
-	 * 
+	 *
 	 * @return The path to the download directory.
 	 */
 	public String getDownloadDirectory() {
@@ -50,7 +50,7 @@ public class TranscriptDataDownloader implements Constants {
 
 	/**
 	 * Construct the object and also set proxy properties for http connection.
-	 * 
+	 *
 	 * @param dirpath
 	 *            directory path
 	 * @param proxyHost
@@ -72,7 +72,7 @@ public class TranscriptDataDownloader implements Constants {
 	/**
 	 * This function first checks if the download directory already exists. If not, it tries to create the directory.
 	 * Then the download method is called.
-	 * 
+	 *
 	 * @param source
 	 *            an integer constant (see {@link jannovar.common.Constants Constants}) that indicates whether to
 	 *            download UCSC, Ensembl, or RefSeq.
@@ -99,9 +99,9 @@ public class TranscriptDataDownloader implements Constants {
 
 	/**
 	 * Downloads the ensembl transcript data files (if a file already exists, it emits a warning message and skips it).
-	 * 
+	 *
 	 * @param r
-	 *            {@link Release} version
+	 *            The Release version
 	 * @throws jannovar.exception.FileDownloadException
 	 */
 	public void downloadRefseqFiles(Release r) throws FileDownloadException {
@@ -143,9 +143,9 @@ public class TranscriptDataDownloader implements Constants {
 
 	/**
 	 * Downloads the ensembl transcript data files (if a file already exists, it emits a warning message and skips it).
-	 * 
+	 *
 	 * @param r
-	 *            {@link Release} version
+	 *            Release version
 	 * @throws jannovar.exception.FileDownloadException
 	 */
 	public void downloadEnsemblFiles(Release r) throws FileDownloadException {
@@ -198,9 +198,9 @@ public class TranscriptDataDownloader implements Constants {
 	/**
 	 * Downloads the four required files from the UCSC genome browser (if a file already exists, it emits a warning
 	 * message and skips it).
-	 * 
+	 *
 	 * @param r
-	 *            {@link Release} version
+	 *            The Release version
 	 * @throws jannovar.exception.FileDownloadException
 	 */
 	public void downloadUCSCfiles(Release r) throws FileDownloadException {
@@ -252,7 +252,7 @@ public class TranscriptDataDownloader implements Constants {
 	/**
 	 * This method downloads a file to the specified local file path. If the file already exists, it emits a warning
 	 * message and does nothing.
-	 * 
+	 *
 	 * @param baseURL
 	 *            URL to remote directory
 	 * @param fname
@@ -274,12 +274,12 @@ public class TranscriptDataDownloader implements Constants {
 		// System.out.println("File " + local_file_path);
 		// System.out.println("proxy: " + System.getProperty("http.proxyHost"));
 		// System.out.println("port: " + System.getProperty("http.proxyPort"));
-		
+
 		// Error handling can be improved with Java 7.
 		String err = null;
 		InputStream reader = null;
 		FileOutputStream writer = null;
-		
+
 		int threshold = 0;
 		int block = 250000;
 		try {

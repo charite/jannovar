@@ -3,13 +3,11 @@ package jannovar.interval;
 import java.util.Comparator;
 
 /**
- * This class is intended to be used to sort lists of
- * {@link jannovar.interval.Interval Interval} objects by descending order of
- * their right high-points.
- * 
+ * This class is intended to be used to sort lists of {@link jannovar.interval.Interval Interval} objects by descending
+ * order of their right high-points.
+ *
  * @author names
  * @version 0.02 (15 May, 2013)
- * @param <T>
  */
 public class RightComparator implements Comparator<Interval<?>> {
 

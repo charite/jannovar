@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  * A class that is used to hold information about the individual variants as parsed from the VCF file.
- * 
+ *
  * @author Peter Robinson
  * @version 0.31 (22 January, 2014)
  */
@@ -56,7 +56,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * @param qual
 	 *            The PHRED quality of the variant call.
      * @param info
-     *            The INFO col from original VCF file  
+     *            The INFO col from original VCF file
 	 */
 	public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, float qual, String info) {
 		this.chromosome = c;
@@ -97,7 +97,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	/**
 	 * Create an annotation for this variant. Client code needs to pass in the correct
 	 * {@link jannovar.reference.Chromosome Chromosome} object.
-	 * 
+	 *
 	 * @param c
 	 *            The Chromosome object representing the location of the variant.
 	 * @throws jannovar.exception.AnnotationException
@@ -109,7 +109,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	// ########### SETTERS ######################### //
 	/**
 	 * Initialize the {@link #chromosome} field
-	 * 
+	 *
 	 * @param chr
 	 *            A string representation of the chromosome such as chr3 or chrX
 	 */
@@ -119,7 +119,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * Initialize the {@link #position} field
-	 * 
+	 *
 	 * @param p
 	 *            Position of the alternate sequence on the chromosome
 	 */
@@ -129,7 +129,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * Initialize the {@link #ref} field
-	 * 
+	 *
 	 * @param s
 	 *            sequence of reference
 	 */
@@ -143,7 +143,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * Initialize the {@link #alt} field
-	 * 
+	 *
 	 * @param s
 	 *            sequence of variant
 	 */
@@ -155,7 +155,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * Set the {@link jannovar.annotation.AnnotationList AnnotationList} object for this variant. This method is
 	 * intended to provide transcript- level annotation for the variants, for example, to annotate the chromosomal
 	 * variant {@code chr7:34889222:T>C} to {@code NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R) (Type:STOPLOSS)}.
-	 * 
+	 *
 	 * @param a
 	 *            An annotationList object representing annotations of all affected transcripts.
 	 */
@@ -165,7 +165,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * Some variants are located in positions where multiple genes overlap.
-	 * 
+	 *
 	 * @return true if the variant is located within more than one gene
 	 */
 	public boolean affectsMultipleGenes() {
@@ -231,7 +231,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	/**
 	 * Synonymous variant defined as a single nucleotide variant within a coding sequence that does not change the
 	 * encoded amino acid.
-	 * 
+	 *
 	 * @return true if this variant is a SYNONYMOUS variant
 	 */
 	public boolean isSynonymousVariant() {
@@ -243,7 +243,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * A transition is purine <-> purine or pyrimidine <-> pyrimidine. Only applies to single nucleotide subsitutions.
-	 * 
+	 *
 	 * @return true if the variant is a SNV and a transition.
 	 */
 	public boolean isTransition() {
@@ -265,7 +265,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * A transversion is purine <-> pyrimidine. Only applies to single nucleotide subsitutions.
-	 * 
+	 *
 	 * @return true if the variant is a SNV and a transversion.
 	 */
 	public boolean isTransversion() {
@@ -340,7 +340,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * This function returns the quality of the first sample in the VCF file.
-	 * 
+	 *
 	 * @return The PHRED quality of this variant call.
 	 */
 	public float getVariantPhredScore() {
@@ -349,7 +349,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * This function returns the quality of the first sample in the VCF file.
-	 * 
+	 *
 	 * @return The PHRED quality of this variant call.
 	 */
 	public float getVariantGenotypeQualityIndividualN(int n) {
@@ -417,7 +417,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	/**
 	 * The Genotype coresponds to one of HOMOZYGOUS_REF (0/0), HOMOZYGOUS_ALT (1/1), HETEROZYGOUS (0/1), NOT_OBSERVED
 	 * (./.), ERROR, UNINITIALIZED.
-	 * 
+	 *
 	 * @return the {@link jannovar.common.Genotype Genotype} object corresponding to this variant.
 	 */
 	public Genotype getGenotypeInIndividualN(int n) {
@@ -434,7 +434,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	/**
 	 * This function uses the function of the same name of the the {@link jannovar.genotype.GenotypeCall GenotypeCall}
 	 * object corresponding to this variant.
-	 * 
+	 *
 	 * @return A list of genotype calls, e.g., "0/0","0/1","1/1"
 	 */
 	public ArrayList<String> getGenotypeList() {
@@ -465,7 +465,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * <p>
 	 * If client code wants to get a list of each individual annotation, it should instead call the function
 	 * {@link #getAnnotationList}.
-	 * 
+	 *
 	 * @return The annotation of the current variant.
 	 */
 	public String getAnnotation() {
@@ -483,7 +483,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * This function returns an annotation for a single transcript affected by the variant, returning the variant
 	 * annotation being ranked with the highest priority. In contrast, the function {@link #getAnnotation} returns a
 	 * summarized version of annotations of all transcripts.
-	 * 
+	 *
 	 * @return a representative annotation of one transcript.
 	 */
 	public String getRepresentativeAnnotation() {
@@ -550,7 +550,7 @@ public class Variant implements Comparable<Variant>, Constants {
 
 	/**
 	 * Returns a list of annotations for this variant together with their type.
-	 * 
+	 *
 	 * @return A list of all annotations for this variant, in the form type|annotation
 	 */
 	public ArrayList<String> getAnnotationListWithAnnotationClass() {
@@ -627,8 +627,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * @return the most pathogenic {@link Annotation}.
 	 * @throws AnnotationException
 	 */
 	public Annotation getMostPathogenicAnnotation() throws AnnotationException {
@@ -668,6 +667,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * Represent the Variant and its genotype as a string. This method is intended primarily for debugging, use other
 	 * access methods to output information about the variant.
 	 */
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		String chr = getChromosomalVariant();
@@ -684,7 +684,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	/**
 	 * The variant types (e.e., MISSENSE, NONSENSE) are stored internally as byte values. This function converts these
 	 * byte values into strings.
-	 * 
+	 *
 	 * @return A string representing the type of the current variant.
 	 */
 	public String get_variant_type_as_string() {
