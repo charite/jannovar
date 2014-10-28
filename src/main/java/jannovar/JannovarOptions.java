@@ -5,9 +5,29 @@ import jannovar.common.Constants.Release;
 /**
  * Configuration for the Jannovar annotation process.
  *
- * @author holtgrem
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Peter Robinson <peter.robinson@charite.de>
  */
 public class JannovarOptions {
+	/**
+	 * Flag to indicate that Jannovar should download known gene definitions files from the UCSC server.
+	 */
+	public boolean createUCSC = false;
+
+	/**
+	 * Flag to indicate Jannovar should download transcript definition files for RefSeq.
+	 */
+	public boolean createRefseq = false;
+
+	/**
+	 * Flag to indicate Jannovar should download transcript definition files for Ensembl.
+	 */
+	public boolean createEnsembl = false;
+
+	/**
+	 * Flag indicating if the RefSeq serialized outputfile should only contain curated entries.
+	 */
+	public boolean onlyCuratedRefSeq = false;
 
 	/**
 	 * Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to true automatically if the user
@@ -18,6 +38,14 @@ public class JannovarOptions {
 	 * see {@link #UCSCserializationFileName}).
 	 */
 	public boolean performSerialization = false;
+
+	/**
+	 * Location of a directory which will be used as download directory with subfolders (by genome release e.g.
+	 * hg19,mm9) in whichthe files defining the transcript models will be stored. (the files may or may not be
+	 * compressed with gzip). The same variable is also used to indicate the output location of the serialized file. The
+	 * default value is "data/hg19/"
+	 */
+	public String dirPath = null;
 
 	/**
 	 * Name of file with serialized UCSC data. This should be the complete path to the file, and will be used for
@@ -43,6 +71,9 @@ public class JannovarOptions {
 	 * Flag indication whether the annotations for all affected transcripts should be reported.
 	 */
 	public boolean showAll = false;
+
+	/** chromosomal position an NA change (e.g. chr1:12345C>A) */
+	public String chromosomalChange = null;
 
 	/**
 	 * genome release for the download and the creation of the serialized transcript model file
