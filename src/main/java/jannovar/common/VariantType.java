@@ -3,76 +3,78 @@ package jannovar.common;
 /**
  * These codes reflect the possible types of variants that we call for an exome. Note that the codes have the obvious
  * meanings, but UTR53 means a variant that is in the 3' UTR of one transcript and the 5' UTR of another transcript.
- * <p>
+ *
  * Note that the an intergenic variant is considered UPSTREAM or DOWNSTREAM if it is within 1000 nucleotides of a gene,
  * otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in {@link jannovar.reference.Chromosome
  * Chromosome}. Note that this class implements the assignment of a priority level to the variant classes. See the
  * document for the class {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
- * 
- * TODO the outputnames for structural variants...
- * 
- * @author Peter Robinson, Marten Jäger
+ *
+ *
+ * @author Peter Robinson <peter.robinson@charite.de>
+ * @author Marten Jäger <marten.jaeger@charite.de>
  * @version 0.18 (12. September, 2014)
  */
+// TODO(mjaeger): the outputnames for structural variants...
 public enum VariantType {
-	/** Variant is downstream of a gene */
+	/** variant is downstream of a gene */
 	DOWNSTREAM,
-	/** Deletion resulting in a frameshift. */
+	/** deletion resulting in a frameshift */
 	FS_DELETION,
-	/** Insertion resulting in a frameshift. */
+	/** insertion resulting in a frameshift */
 	FS_INSERTION,
-	/** Nucleotide substitution that does not result in a frameshift. */
+	/** nucleotide substitution that does not result in a frameshift */
 	NON_FS_SUBSTITUTION,
-	/** Nucleotide substitution that results in a frameshift. */
+	/** nucleotide substitution that results in a frameshift */
 	FS_SUBSTITUTION,
 	/** variant located between two genes (far enough away not to qualify as upstream/downstream) */
 	INTERGENIC,
-	/** Variant located in an intron. */
+	/** variant located in an intron */
 	INTRONIC,
 	/**
 	 * Variant that leads to the subsitution of one amino acid (note this was earlier "NONYSYNONYMOUS" but the term name
-	 * was changed to conform with the terminology od Sequence Ontology).
+	 * was changed to conform with the terminology of the <a href="http://www.sequenceontology.org/">Sequence
+	 * Ontology</a>).
 	 */
 	MISSENSE,
-	/** Variant located in an exon of a noncoding RNA gene */
+	/** variant located in an exon of a noncoding RNA gene */
 	ncRNA_EXONIC,
-	/** Variant located in an intron of a noncoding RNA gene */
+	/** variant located in an intron of a noncoding RNA gene */
 	ncRNA_INTRONIC,
-	/** Variant located in a splice site of a noncoding RNA gene */
+	/** variant located in a splice site of a noncoding RNA gene */
 	ncRNA_SPLICING,
-	/** Deletion that does not result in a frameshift. */
+	/** deletion that does not result in a frameshift */
 	NON_FS_DELETION,
-	/** Insertion that does not result in a frameshift. */
+	/** insertion that does not result in a frameshift */
 	NON_FS_INSERTION,
 	/** variant located in a splice site */
 	SPLICING,
-	/** Variant that induces a new stop codon (i.e., nonsense) */
+	/** variant that induces a new stop codon (i.e., nonsense) */
 	STOPGAIN,
-	/** Variant that alters and removes a wildtype stop codon */
+	/** variant that alters and removes a wildtype stop codon */
 	STOPLOSS,
-	/** Nucleotide substitution that does not alter the encoded amino acid of the affected codon. */
+	/** nucleotide substitution that does not alter the encoded amino acid of the affected codon */
 	SYNONYMOUS,
-	/** Variant is upstream of a gene */
+	/** variant is upstream of a gene */
 	UPSTREAM,
-	/** Variant is located in the 3' untranslated region */
+	/** variant is located in the 3' untranslated region */
 	UTR3,
-	/** Variant is located in the 5' untranslated region */
+	/** variant is located in the 5' untranslated region */
 	UTR5,
-	/** Variant assessed as probably erroneous (may indicate an error in the VCF file) */
+	/** variant assessed as probably erroneous (may indicate an error in the VCF file) */
 	ERROR,
-	/** Nucleotide duplication that does not result in a frameshift. */
+	/** nucleotide duplication that does not result in a frameshift */
 	NON_FS_DUPLICATION,
-	/** Nucleotide duplication that results in a frameshift. */
+	/** nucleotide duplication that results in a frameshift */
 	FS_DUPLICATION,
-	/** Variation leads to the loss of the start codon */
+	/** variation leads to the loss of the start codon */
 	START_LOSS,
-	/** Variant is a structual insertion variant 1000bp+ */
+	/** variant is a structural insertion variant &gt;=1000bp */
 	SV_INSERTION,
-	/** Variant is a structual deletion variant 1000bp+ */
+	/** variant is a structural deletion variant &gt;=1000bp */
 	SV_DELETION,
-	/** Variant is a structual substitution variant 1000bp+ */
+	/** variant is a structural substitution variant &gt;=1000bp */
 	SV_SUBSTITUTION,
-	/** Variant is a structual inversion variant 1000bp+ */
+	/** variant is a structural inversion variant &gt;=1000bp */
 	SV_INVERSION;
 
 	/**
@@ -93,7 +95,7 @@ public enum VariantType {
 	 * <LI><B>intergenic (10)</B>: INTERGENIC.
 	 * <LI><B>error (11)</B>: ERROR.
 	 * </OL>
-	 * 
+	 *
 	 * @param vt
 	 *            Type of the variant
 	 * @return priority level for sorting lists of variants.
@@ -150,7 +152,7 @@ public enum VariantType {
 	 * It is intended to be used by client code to help sort variants by predicted pathogenicity, in the knowledge that
 	 * occasionally we will be wrong, e.g., a variant of priority level 3 might actually be the disease causing
 	 * mutation.
-	 * 
+	 *
 	 * @return <code>true</code> if a variantType has pathogenicity level one, otherwise <code>false</code>
 	 */
 	public boolean isTopPriorityVariant() {
@@ -160,18 +162,21 @@ public enum VariantType {
 	/**
 	 * This returns an array with the VariantTypes arranged according to their priority. It can used to arrange output
 	 * of Variants ranked according to presumed pathogenicity.
-	 * 
+	 *
 	 * @return an array with the VariantTypes priority sorted
 	 */
 	public static VariantType[] getPrioritySortedList() {
-		VariantType[] vta = new VariantType[] { SV_DELETION, SV_INSERTION, SV_SUBSTITUTION, SV_INVERSION, MISSENSE, STOPGAIN, SPLICING, FS_DELETION, FS_INSERTION, FS_SUBSTITUTION, NON_FS_DELETION, NON_FS_INSERTION, NON_FS_SUBSTITUTION, STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION, START_LOSS,
-				ncRNA_EXONIC, ncRNA_SPLICING, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM, DOWNSTREAM, INTERGENIC, ERROR };
+		VariantType[] vta = new VariantType[] { SV_DELETION, SV_INSERTION, SV_SUBSTITUTION, SV_INVERSION, MISSENSE,
+				STOPGAIN, SPLICING, FS_DELETION, FS_INSERTION, FS_SUBSTITUTION, NON_FS_DELETION, NON_FS_INSERTION,
+				NON_FS_SUBSTITUTION, STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION, START_LOSS, ncRNA_EXONIC,
+				ncRNA_SPLICING, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM, DOWNSTREAM, INTERGENIC,
+				ERROR };
 		return vta;
 	}
 
 	/**
 	 * A string representing the variant type (e.g., missense_variant, stop_gained,...)
-	 * 
+	 *
 	 * @return Name of this {@link VariantType}
 	 */
 	public String toDisplayString() {
@@ -239,7 +244,7 @@ public enum VariantType {
 
 	/**
 	 * A Sequence Ontology (SO) term string representing the variant type (e.g., missense_variant, stop_gained,...)
-	 * 
+	 *
 	 * @return SO-term representation of this {@link VariantType}
 	 */
 	public String toSequenceOntologyTerm() {
@@ -307,7 +312,7 @@ public enum VariantType {
 
 	/**
 	 * Return the sequence ontology accession number for the variant class if available, otherwise return the name.
-	 * 
+	 *
 	 * @return sequence ontology accession number
 	 */
 	public String toSequenceOntologyID() {

@@ -1,29 +1,40 @@
-/**
- * 
- */
 package jannovar.common;
 
 /**
- * This are the up to now known Feature types in GFF/GFT3 files
- * @author mjaeger
+ * This are the currently known feature types in GFF/GFT3 files.
+ *
+ * @see <a href="http://www.sequenceontology.org/gff3.shtml">http://www.sequenceontology.org/gff3.shtml</a>
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  * @version 0.1
  */
 public enum FeatureType {
-	
+
+	/** unknown feature type */
 	UNKNOWN,
+	/** coding sequence */
 	CDS,
+	/** exon */
 	EXON,
+	/** messenger RNA */
 	MRNA,
+	/** transcript */
 	TRANSCRIPT,
+	/** region */
 	REGION,
+	/** gene */
 	GENE,
+	/** start codon */
 	START_CODON,
+	/** stop codon */
 	STOP_CODON,
+	/** non-coding RNA */
 	NCRNA,
+	/** transfer RNA */
 	TRNA,
+	/** ribosomal RNA */
 	RRNA;
-	
-	public static String toString(FeatureType type){
+
+	public static String toString(FeatureType type) {
 		switch (type) {
 		case STOP_CODON:
 			return "stop_codon";
@@ -50,6 +61,5 @@ public enum FeatureType {
 		default:
 			return ".";
 		}
-		
 	}
 }
