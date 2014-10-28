@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * <P>
  * This class provides methods that allow the Chromosome class to calculate what annotations are appropriate for a given
  * variant, and thus represents one of the core classes of Jannovar.
- * 
+ *
  * @author Peter N Robinson
  * @version 0.23, 29 March, 2014
  */
@@ -77,7 +77,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * The constructor is private to prevent accidental initialization of an empty TranscriptModel object. The way to
 	 * make TranscriptModels is to use the static method {@link #createTranscriptModel} and then to set the variables.
-	 * 
+	 *
 	 * @see jannovar.io.UCSCKGParser
 	 */
 	private TranscriptModel() { /* no op */
@@ -296,7 +296,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * partially in the flanking intron sequence, we take the first exon position)
 	 * <LI>
 	 * <P>
-	 * 
+	 *
 	 * @param varstart
 	 *            The start position of the variant on the chromosome (can be the actual start position or the start of
 	 *            the exon for variants that are )
@@ -314,7 +314,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the cDNA sequence belonging to this {@link TranscriptModel} as {@link String}. Returns the entire cDNA
 	 * sequence, not just the ORF.
-	 * 
+	 *
 	 * @return cDNA sequence
 	 */
 	public String getCdnaSequence() {
@@ -323,7 +323,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
 	/**
 	 * Returns the coding sequence including the stop codon.
-	 * 
+	 *
 	 * @return coding sequence
 	 */
 	public String getCodingSequence() {
@@ -341,7 +341,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the entire sequence of the mRNA starting with the stop codon. It is useful to have this because some
 	 * deletion mutations extend the mutant coding sequence past the original stop codon.
-	 * 
+	 *
 	 * @return coding sequence + 3'UTR
 	 */
 	public String getCodingSequencePlus3UTR() {
@@ -389,7 +389,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 		}
 		if (rvarend < 0) { /* i.e., rvarend has not be initialized yet */
 			rvarend = this.txEnd - this.txStart - cumlenintron + 1;
-			/* if this value is longer than transcript length, 
+			/* if this value is longer than transcript length,
 			   it suggests whole gene deletion. */
 		}
 		return rvarend;
@@ -397,7 +397,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
 	/**
 	 * Checks is the position passed to the function lies 3' to the gene on the chromosome.
-	 * 
+	 *
 	 * @param pos
 	 *            position of the variant along the current chromosome
 	 * @return true if position is 3' to the end (txEnd) of this gene.
@@ -410,7 +410,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
 	/**
 	 * Checks is the position passed to the function lies 5' to the gene on the chromosome.
-	 * 
+	 *
 	 * @param pos
 	 *            position of the variant along the current chromosome
 	 * @return true if position is 5' to the end (txStart) of this gene.
@@ -422,7 +422,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Calculates whether the position given by {@code pos} is 5' to the start of the gene (i.e., txStart) and also
 	 * within {@code threshold} of the 5' end (txStart) of the gene.
-	 * 
+	 *
 	 * @param pos
 	 *            position of variant (end) on current chromosome
 	 * @param threshold
@@ -439,7 +439,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Calculates whether the position given by {@code pos} is 3' to the end of the gene (i.e., txEnd) and also within
 	 * {@code threshold} of the 3' end (txEnd) of the gene.
-	 * 
+	 *
 	 * @param pos
 	 *            position of variant (start) on current chromosome
 	 * @param threshold
@@ -517,7 +517,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * If this gene is not coding, then cdsStart is one more than cdsEnd. (Note that in UCSC files, for noncodiing genes
 	 * cdsstart==cdsend. In our implementation, to change to one-based fully close numeration, we increment cdsstart by
 	 * one. Therefore, for noncoding genes cdsstart == cdsend + 1. This is not the case for coding genes).
-	 * 
+	 *
 	 * @return true if this is a coding gene.
 	 */
 	public boolean isCodingGene() {
@@ -589,7 +589,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Return position of CDS (start codon) in entire mRNA transcript. The corresponding position is calculated by
 	 * {@link #calculateRefCDSStart}. The return value is essentially equal to the 5' UTR length plus one.
-	 * 
+	 *
 	 * @return The position (one based) of the first nucleotide of the start codon within the entire mRNA.
 	 */
 	public int getRefCDSStart() {
@@ -618,7 +618,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
 	/**
 	 * Return the ucsc kg id, this corresponds to $name in annovar
-	 * 
+	 *
 	 * @return name of this transcript, a UCSC knownGene id.
 	 */
 	public String getName() {
@@ -638,12 +638,12 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * This function is valid for exonic variants. It extracts the three nucleotides from the reference sequence that
 	 * contain the first nucleotide of the position of the variant. Note that refvarstart is one-based numbering.
-	 * 
+	 *
 	 * @param refvarstart
 	 *            Position of first nucleotide of variant in cDNA sequence
 	 * @param frame_s
 	 *            The frame of the first nucleotide of the variant {0,1,2}
-	 * @return
+	 * @return <code>String</code> with the wild type nucldeotide codon's sequence
 	 */
 	public String getWTCodonNucleotides(int refvarstart, int frame_s) {
 		int start = refvarstart - frame_s - 1;
@@ -668,7 +668,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * are directly 3' to the codon that contains the first nucleotide of the position of the variant. If that was the
 	 * last codon, the return ""; the empty string.
 	 * <P>
-	 * 
+	 *
 	 * @param refvarstart
 	 *            Position of first nucleotide of variant in cDNA sequence
 	 * @param frame_s
@@ -691,7 +691,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * so there are n-1 introns in a gene with n exons.
 	 * <P>
 	 * Note that because exonEnds and exonStarts are both one-based, we return start[k]-end[k-1] -1 as the total length.
-	 * 
+	 *
 	 * @param k
 	 *            number of intron (zero-based) whose length is to be sought
 	 * @return length of the k<superscript>th</superscript> intron (returns zero if k is 0)
@@ -708,7 +708,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * Calculates the length of exon k. Note that we assume that k is a valid exon count (zero-based).
 	 *
 	 * The chromosomal positions themselves are one-based fully closed, so that the length of an exon is end-start+1.
-	 * 
+	 *
 	 * @param k
 	 *            number of exon (zero-based) whose length is to be calculated.
 	 * @return length of exon in nucleotides.
@@ -740,7 +740,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the start positions of each of the exons of this transcript. Note that for genes on the minus strand, the
 	 * order is "reversed" with respect to the exon counts of the transcript.
-	 * 
+	 *
 	 * @return an integer array with all end positions of the exons of this knowngene
 	 */
 	public int[] getExonEnds() {
@@ -768,7 +768,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * This method is used by {@link jannovar.io.UCSCKGParser UCSCKGParser} to add sequence data (from
 	 * knownGeneMrna.txt) to the KnownGene object.
-	 * 
+	 *
 	 * @param seq
 	 *            cDNA sequence of this knownGene transcript.
 	 */
@@ -779,7 +779,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * This method is used by {@link jannovar.io.UCSCKGParser UCSCKGParser} to add the Gene id (from
 	 * knowntoLocusLink.txt) to the KnownGene object.
-	 * 
+	 *
 	 * @param id
 	 *            an Gene id
 	 */
@@ -797,7 +797,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Sets the gene symbol. This method is intended to be used while parsing the UCSC kgXref.txt file. By comparing the
 	 * ucscid, we identify the corresponding transcript.
-	 * 
+	 *
 	 * @param sym
 	 *            Gene symbol corresponding to this knownGene
 	 */
@@ -875,7 +875,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 
 	/**
 	 * Returns the distance to the 5' start of the cDNA
-	 * 
+	 *
 	 * @param pos
 	 *            The coordinate of interest. Should be in the exonic region of the transcriptmodel.
 	 * @return The distance to the CDS start position (without intronic regions).
@@ -890,7 +890,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the distance to the Start position of the CDS or '-1' if the given coordinate is located in inter- or
 	 * intragenic region or the gene is noncoding.
-	 * 
+	 *
 	 * @param pos
 	 *            The coordinate of interest. Should be in the exonic region of the transcriptmodel.
 	 * @return The distance to the CDS start position (without intronic regions).
@@ -907,7 +907,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the distance to the end position of the CDS or '-1' if the give coordinate is located in inter- or
 	 * intragenic region or the gene is noncoding.
-	 * 
+	 *
 	 * @param pos
 	 *            The coordinate of interest. Should be in the exonic region of the transcriptmodel.
 	 * @return The distance to the CDS end position (without intronic regions).
@@ -924,7 +924,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the mRNA length between the two positions given in chromosomal coordinates. First it is checked that both
 	 * positions are located in exonic regions of this {@link TranscriptModel}.
-	 * 
+	 *
 	 * @param a
 	 *            first exonic position
 	 * @param b
@@ -984,7 +984,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 * Checks if the start is smaller than the end otherwise switch.<br>
 	 * NOTICE:<br>
 	 * The chromosomal coordinates are both 1-based and inclusive.
-	 * 
+	 *
 	 * @param start
 	 *            start position within the cDNA (incl. 1-based)
 	 * @param end
@@ -1043,7 +1043,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	/**
 	 * Returns the position on the cDNA string for a given chromosomal position or -1 if the chromosomal position is not
 	 * exonic.
-	 * 
+	 *
 	 * @param cpos
 	 *            - chromosomal position
 	 * @return position on the cDNA string

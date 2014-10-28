@@ -92,14 +92,13 @@ public class Pedigree {
 	private boolean isSingleSample;
 
 	/**
-	 * Constructs a Pedigree object for a single sample. This object is used
-	 * with the same interface as the multisample pedigree.
+	 * Constructs a Pedigree object for a single sample. This object is used with the same interface as the multisample
+	 * pedigree.
 	 *
-	 * The pedigree will have one person with unknown sex but AFFECTED disease
-	 * state.
+	 * The pedigree will have one person with unknown sex but AFFECTED disease state.
 	 *
 	 * @param name
-	 * @return
+	 * @return new {@link Pedigree} with one male individual, the given name and in the family <tt>"FAMILY"</tt>.
 	 */
 	public static Pedigree constructSingleSamplePedigree(String name) {
 		ArrayList<Person> pList = new ArrayList<Person>();
@@ -851,22 +850,17 @@ public class Pedigree {
 	}
 
 	/**
-	 * This function checks whether the gene, whose variants are represented in
-	 * the list of genotypes passed to the function, has at least two variants
-	 * compatible with autosomal recessive inheritance. It first checks whether
-	 * there is a homozygous variant that is compatible with AR. If there is
-	 * none, it checks for compound hets. This is a little complicated. The
-	 * function first checks whether there is a variant that is heterozygous in
-	 * the affected and heteroygous in one, but not both, of the parents. All
-	 * such variants are stored. If there are such variants, then it checks
-	 * whether the maternal-het mutations are compatible with the paternal het
-	 * mutations, and it returns all variants for which there are compatible
-	 * pairs.
+	 * This function checks whether the gene, whose variants are represented in the list of genotypes passed to the
+	 * function, has at least two variants compatible with autosomal recessive inheritance. It first checks whether
+	 * there is a homozygous variant that is compatible with AR. If there is none, it checks for compound hets. This is
+	 * a little complicated. The function first checks whether there is a variant that is heterozygous in the affected
+	 * and heteroygous in one, but not both, of the parents. All such variants are stored. If there are such variants,
+	 * then it checks whether the maternal-het mutations are compatible with the paternal het mutations, and it returns
+	 * all variants for which there are compatible pairs.
 	 *
 	 * @param varList
-	 *            A list of {@link Variant}s (usually all variants in some
-	 *            gene).
-	 * @return
+	 *            A list of {@link Variant}s (usually all variants in some gene).
+	 * @return whether the list of variant is compatible with automal recessive inheritance
 	 */
 	public boolean isCompatibleWithAutosomalRecessive(ArrayList<Variant> varList) {
 		if (this.isSingleSample) {

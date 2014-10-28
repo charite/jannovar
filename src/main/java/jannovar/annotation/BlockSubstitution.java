@@ -27,8 +27,6 @@ public class BlockSubstitution {
 	 *            0 if deletion begins at first base of codon, 1 if it begins at second base, 2 if at third base
 	 * @param wtnt3
 	 *            Nucleotide sequence of wildtype codon
-	 * @param wtnt3_after
-	 *            Nucleotide sequence of codon following that affected by variant
 	 * @param ref
 	 *            sequence of wildtype sequence
 	 * @param var
@@ -85,8 +83,6 @@ public class BlockSubstitution {
 	 *            0 if deletion begins at first base of codon, 1 if it begins at second base, 2 if at third base
 	 * @param wtnt3
 	 *            Nucleotide sequence of wildtype codon
-	 * @param wtnt3_after
-	 *            Nucleotide sequence of codon following that affected by variant
 	 * @param ref
 	 *            sequence of wildtype sequence
 	 * @param var

@@ -7,15 +7,16 @@ import jannovar.reference.TranscriptModel;
 
 
 /**
- * This class coordinates the downloading and parsing of the RefSeq
- * transcript definition files from the UCSC database (hg19). 
- * It is possible to parse directly from the gzip file without decompressing them, or the start from the
+ * This class coordinates the downloading and parsing of the RefSeq transcript definition files from the UCSC database
+ * (hg19). It is possible to parse directly from the gzip file without decompressing them, or the start from the
  * decompressed files. The class checks of the files exist and if they have the suffix "gz".
+ * 
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
  * @version 0.02 (10 July, 2013)
- * @Deprecated
+ * @deprecated
  */
+@Deprecated
 public class RefSeqParser extends TranscriptDataParser implements Constants  {
      /** Number of tab-separated fields in then UCSC refFlat.txt file (build hg19). */
     public static final int NFIELDS=11;
@@ -62,7 +63,7 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
 	//String kgXref = String.format("%s.gz",Constants.kgXref);
 	//String known2locus = String.format("%s.gz",Constants.known2locus);
 	download_file(RefSeqParser.hg19base, refFlatCompressed);
-	
+
 
 
     }
@@ -71,8 +72,8 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
 
 
      /**
-     * The constructor parses a single line of the refseqFlat.txt file. 
-   
+     * The constructor parses a single line of the refseqFlat.txt file.
+
     * <ol>
      * <li>geneName: e.g., ANAPC13, Name of gene as it appears in genome browser.
      * <li>name: e.g., NM_001242374, Name of gene (refseq accession number)
@@ -86,7 +87,7 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
      * <li>exonStarts: e.g., 134196545,134201647,134204161, Exon start positions
      * <li>exonEnds: e.g., 134197557,134201773,13420486
      * </ol>
-     * The function additionalls parses the start and end of the exons. 
+     * The function additionalls parses the start and end of the exons.
      * Note that in the UCSC database, positions are represented using
      * half-open, zero-based coordinates. That is, if start is 2 and end is 7, then the first nucleotide is at
      * position 3 (one-based) and the last nucleotide is at positon 7 (one-based). For now, we are switching
@@ -168,7 +169,7 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
 	    String error = String.format("[RefSeqParser] Malformed exonStarts list: found %d but I expected %d exons",
 					 B.length,exonCount);
 	    error = String.format("%s. This should never happen, the refFlat.txt file may be corrupted", error);
-	    throw new KGParseException(error); 
+	    throw new KGParseException(error);
 	}
 	for (int i=0;i<exonCount;++i) {
 	    try {
@@ -195,7 +196,7 @@ public class RefSeqParser extends TranscriptDataParser implements Constants  {
 
 	return model;
     }
-   
+
 
 
 }

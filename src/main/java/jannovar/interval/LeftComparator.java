@@ -3,13 +3,11 @@ package jannovar.interval;
 import java.util.Comparator;
 
 /**
- * This class is intended to be used to sort lists of
- * {@link jannovar.interval.Interval Interval} objects by ascending order of
- * their left low-points.
- * 
+ * This class is intended to be used to sort lists of {@link jannovar.interval.Interval Interval} objects by ascending
+ * order of their left low-points.
+ *
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
- * @param <T>
  */
 public class LeftComparator implements Comparator<Interval<?>> {
 

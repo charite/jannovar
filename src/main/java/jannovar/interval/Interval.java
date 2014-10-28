@@ -5,8 +5,10 @@ package jannovar.interval;
  * Interval is intended to contain some other kind of data (clients of this templated class will need to initialize the
  * template variable T to the corresponding datatype). The intervals are intended to be used with the
  * {@link jannovar.interval.IntervalTree IntervallTree}.
- * 
+ *
  * @param <T>
+ *            The value attached to each node/interval.
+ * 
  * @see "jannovar.interval.IntervalTree"
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
@@ -71,7 +73,7 @@ public class Interval<T> implements java.io.Serializable {
 
 	/**
 	 * Interval constructor.
-	 * 
+	 *
 	 * @param low
 	 *            lower endpoint of the interval (cannot be higher than the upper endpoint or exception is thrown)
 	 * @param high
