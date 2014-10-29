@@ -52,6 +52,7 @@ public class Chromosome {
 	 * way of dealing with scaffolds etc.
 	 */
 	private final byte chromosome;
+	// TODO(holtgrem): this is always null!
 	/** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
 	private final String chromosomeString = null;
 	/** Total number of TranscriptModels on the chromosome including multiple transcripts of the same gene. */
@@ -65,6 +66,7 @@ public class Chromosome {
 	/** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
 	private static final int NEARGENE = 1000;
 
+	// TODO(holtgrem): Remove this here?
 	/** Class object encapsulating rules to translate DNA. */
 	private Translator translator = null;
 	/**
@@ -286,6 +288,7 @@ public class Chromosome {
 		annovarFactory.addStructuralAnnotation(ann);
 	}
 
+	// TODO(holtgrem): can this go away?
 	/**
 	 * Counts the number of affected genes by different GeneSymbol. Returns <code>true</code> if there are more than one
 	 * gensymbols in the candidateGenes list or <code>false</code> otherwise.
@@ -373,9 +376,10 @@ public class Chromosome {
 	 *            String representation of the variant (alt) sequence
 	 * @param kgl
 	 *            associated {@link TranscriptModel}
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws AnnotationException
 	 */
-	public void getPlusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
+	private void getPlusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl)
+			throws AnnotationException {
 
 		/*System.out.println(String.format("getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
 		  kgl.getGeneSymbol(),kgl.getName(),position,ref,alt)); */
@@ -576,7 +580,8 @@ public class Chromosome {
 	 *            assigned {@link TranscriptModel}
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public void getMinusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
+	private void getMinusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl)
+			throws AnnotationException {
 
 		/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
 		  kgl.getGeneSymbol(),kgl.getName() ,position,ref,alt));   */
@@ -982,4 +987,3 @@ public class Chromosome {
 	}
 
 }
-/* EoF*/
