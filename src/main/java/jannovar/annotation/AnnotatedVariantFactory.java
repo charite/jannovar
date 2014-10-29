@@ -15,13 +15,14 @@ import java.util.HashSet;
  * Variant}. Each {@link jannovar.exome.Variant Variant} should receive at least one
  * {@link jannovar.annotation.Annotation Annotation}, but variants that affect multiple transcripts will have multiple
  * annotations.
- * <P>
+ *
  * This class creates one {@link jannovar.annotation.AnnotationList AnnotationList} object for each variant (with one or
  * more {@link jannovar.annotation.Annotation Annotation} objects), that can return both an ArrayList of all
  * annotations, a list of all annotations of the highest priority level for the variant, and a single representative
  * Annotation.
- * <P>
+ *
  * The default preference for annotations is thus
+ *
  * <OL>
  * <LI><B>exonic</B>: variant overlaps a coding exon (does not include 5' or 3' UTR, and also does not include
  * synonymous).
@@ -36,9 +37,10 @@ import java.util.HashSet;
  * this)
  * <LI><B>intergenic</B>: variant is in intergenic region
  * </OL>
+ *
  * Note that the class of <B>exonic</B> and <B>splicing</B> mutations as defined here comprises the class of
  * "obvious candidates" for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
- * <P>
+ *
  * One object of this class is created for each variant we want to annotate. The {@link jannovar.reference.Chromosome
  * Chromosome} class goes through a list of genes in the vicinity of the variant and adds one
  * {@link jannovar.annotation.Annotation Annotation} object for each gene. These are essentially candidates for the
@@ -46,15 +48,14 @@ import java.util.HashSet;
  * enough candidates. Therefore, once we have gone through the candidates, this class decides what the best annotation
  * is and returns the corresponding {@link jannovar.annotation.Annotation Annotation} object (in some cases, this class
  * may modify the {@link jannovar.annotation.Annotation Annotation} object before returning it).
- * <P>
+ *
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation
  * Annotation} object. These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the
  * precedence classes.
- * 
+ *
  * @version 0.24 (3 August, 2013)
  * @author Peter N Robinson
  */
-
 public class AnnotatedVariantFactory implements Constants {
 
 	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
@@ -103,7 +104,7 @@ public class AnnotatedVariantFactory implements Constants {
 	/**
 	 * The constructor initializes an ArrayList of {@link jannovar.annotation.Annotation Annotation} objects as well as
 	 * a HashSet of Gene symbols (Strings).
-	 * 
+	 *
 	 * @param initialCapacity
 	 *            The initial capacity of the arraylist and hashset.
 	 */
@@ -146,7 +147,7 @@ public class AnnotatedVariantFactory implements Constants {
 	/**
 	 * Note that this function is used by {@link jannovar.reference.Chromosome Chromosome} during the construction of an
 	 * {@link jannovar.annotation.AnnotationList AnnotationList} for a given {@link jannovar.exome.Variant Variant}.
-	 * 
+	 *
 	 * @return true if there are currently no annotations.
 	 */
 	public boolean isEmpty() {
@@ -177,7 +178,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * The strategy is to return all variants that affect coding exons (and only these) if such variants exist, as they
 	 * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
 	 * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
-	 * 
+	 *
 	 * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
 	 * @throws jannovar.exception.AnnotationException
 	 */
@@ -212,7 +213,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * is returned.
 	 * <P>
 	 * There should always be at least one annotation type. If not return ERROR (should never happen).
-	 * 
+	 *
 	 * @return most pathogenic variant type for current variant.
 	 */
 	private VariantType getMostPathogenicVariantType() {
@@ -227,7 +228,7 @@ public class AnnotatedVariantFactory implements Constants {
 	/**
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add a non-coding RNA exon
 	 * variant. From the program logic, only one such Annotation should be added per variant.
-	 * 
+	 *
 	 * @param ann
 	 *            A noncoding RNA exonic annotation object.
 	 */
@@ -239,7 +240,7 @@ public class AnnotatedVariantFactory implements Constants {
 
 	/**
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add a 5' UTR variant.
-	 * 
+	 *
 	 * @param ann
 	 *            A 5' UTR annotation object.
 	 */
@@ -252,7 +253,7 @@ public class AnnotatedVariantFactory implements Constants {
 
 	/**
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add a 3' UTR variant.
-	 * 
+	 *
 	 * @param ann
 	 *            A 3' UTR annotation object.
 	 */
@@ -267,7 +268,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an Annotation for a
 	 * variant that is located between two genes. From the program logic, only one such Annotation should be added per
 	 * variant.
-	 * 
+	 *
 	 * @param ann
 	 *            An Annotation with type INTERGENIC
 	 */
@@ -281,7 +282,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an Annotation for a
 	 * variant that affects the coding sequence of an exon. Many different variant types are summarized (NONSYNONYMOUS,
 	 * DELETION etc.).
-	 * 
+	 *
 	 * @param ann
 	 *            An Annotation to be added.
 	 */
@@ -317,7 +318,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add an annotation for an
 	 * intronic variant. Note that if the same intronic annotation already exists, nothing is done, i.e., this method
 	 * avoids duplicate annotations.
-	 * 
+	 *
 	 * @param ann
 	 *            the Intronic annotation to be added.
 	 */
@@ -342,7 +343,7 @@ public class AnnotatedVariantFactory implements Constants {
 	/**
 	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an annotation for a
 	 * transcript inside a structural variant.
-	 * 
+	 *
 	 * @param ann
 	 *            the Structual annotation to be added
 	 */
@@ -355,7 +356,7 @@ public class AnnotatedVariantFactory implements Constants {
 
 	/**
 	 * An error annotation is created in a few cases where there data seem to be inconsistent.
-	 * 
+	 *
 	 * @param ann
 	 *            An Annotation object that contains a String representing the error.
 	 */
@@ -369,7 +370,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * Adds an annotation for an upstream or downstream variant. Note that currently, we add only one such annotation
 	 * for each gene, that is, we do not add a separate annotation for each isoform of a gene. This method avaoid such
 	 * duplicate annotations.
-	 * 
+	 *
 	 * @param ann
 	 *            The annotation that is to be added to the list of annotations for the current sequence variant.
 	 */
