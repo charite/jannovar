@@ -12,6 +12,7 @@ import jannovar.annotation.NoncodingAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTRAnnotation;
+import jannovar.common.DNAUtils;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.interval.Interval;
@@ -536,8 +537,8 @@ public class Chromosome {
 				 * a coding gene within the actual coding sequence (not UTR).                *
 				 * ------------------------------------------------------------------------- */
 				if (kgl.isNonCodingGene()) {
-					// ref = revcom(ref);
-					// alt = revcom(alt);
+					// ref = DNAUtils.reverseComplement(ref);
+					// alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 				} else if (end < cdsstart) {
@@ -681,8 +682,8 @@ public class Chromosome {
 						// query ----
 						// gene <--*---*->
 						// Note this is UTR3 on negative strand
-						alt = revcom(alt);
-						ref = revcom(ref);
+						alt = DNAUtils.reverseComplement(alt);
+						ref = DNAUtils.reverseComplement(ref);
 						Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 						annovarFactory.addUTR3Annotation(ann);
 						return; /* done with this annotation. */
@@ -690,8 +691,8 @@ public class Chromosome {
 						// query ----
 						// gene <--*---*->
 						// Note this is UTR5 on negative strand
-						alt = revcom(alt);
-						ref = revcom(ref);
+						alt = DNAUtils.reverseComplement(alt);
+						ref = DNAUtils.reverseComplement(ref);
 						Annotation ann = UTRAnnotation.createUTR5Annotation(kgl, rvarstart, ref, alt);
 						annovarFactory.addUTR5Annotation(ann);
 						return; /* done with this annotation. */
@@ -709,8 +710,8 @@ public class Chromosome {
 				} else if (k < kgl.getExonCount() - 1 && end < kgl.getExonStart(k + 1)) {
 					// System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 					Annotation ann;
-					alt = revcom(alt);
-					ref = revcom(ref);
+					alt = DNAUtils.reverseComplement(alt);
+					ref = DNAUtils.reverseComplement(ref);
 					if (kgl.isCodingGene()) {
 						ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end, ref, alt);
 					} else {
@@ -748,8 +749,8 @@ public class Chromosome {
 				 * a coding gene within the actual coding sequence (not UTR).                *
 				 * ------------------------------------------------------------------------- */
 				if (kgl.isNonCodingGene()) {
-					ref = revcom(ref);
-					alt = revcom(alt);
+					ref = DNAUtils.reverseComplement(ref);
+					alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 					return; /* done with this annotation. */
@@ -757,8 +758,8 @@ public class Chromosome {
 					/* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 					// query ----
 					// gene <--*---*->
-					ref = revcom(ref);
-					alt = revcom(alt);
+					ref = DNAUtils.reverseComplement(ref);
+					alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 					annovarFactory.addUTR3Annotation(ann);
 					return; /* done with this annotation. */
@@ -767,8 +768,8 @@ public class Chromosome {
 					// query ----
 					// gene <--*---*->
 					// System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getGeneSymbol()));
-					ref = revcom(ref);
-					alt = revcom(alt);
+					ref = DNAUtils.reverseComplement(ref);
+					alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = UTRAnnotation.createUTR5Annotation(kgl, rvarstart, ref, alt);
 					annovarFactory.addUTR5Annotation(ann);
 				} else {
@@ -868,8 +869,8 @@ public class Chromosome {
 		}
 		/* If the gene is on the minus strand, we take the reverse complement of the ref and the var sequence.*/
 		if (kgl.isMinusStrand()) {
-			var = revcom(var);
-			ref = revcom(ref);
+			var = DNAUtils.reverseComplement(var);
+			ref = DNAUtils.reverseComplement(ref);
 		}
 		// System.out.println("wtnt3=" + wtnt3);
 		if (start == end) { /* SNV or insertion variant */
@@ -912,46 +913,6 @@ public class Chromosome {
 				this.annovarFactory.addExonicAnnotation(ann);
 			}
 		}
-	}
-
-	/**
-	 * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
-	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
-	 * are not valid.
-	 *
-	 * @param sq
-	 *            original, upper-case cDNA string
-	 * @return reverse complement version of the input string sq.
-	 */
-	// TODO(holtgrem): Refactor as static function of some Utility class.
-	private String revcom(String sq) {
-		if (sq.equals("-"))
-			return sq; /* deletion, insertion do not need rc */
-		StringBuffer sb = new StringBuffer();
-		for (int i = sq.length() - 1; i >= 0; i--) {
-			char c = sq.charAt(i);
-			char match = 0;
-			switch (c) {
-			case 'A':
-				match = 'T';
-				break;
-			case 'C':
-				match = 'G';
-				break;
-			case 'G':
-				match = 'C';
-				break;
-			case 'T':
-				match = 'A';
-				break;
-			case 'N':
-				match = 'N';
-				break;
-			}
-			if (match > 0)
-				sb.append(match);
-		}
-		return sb.toString();
 	}
 
 	/**
