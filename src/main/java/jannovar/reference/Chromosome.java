@@ -322,7 +322,8 @@ public class Chromosome {
 	 * @param rightNeighbor
 	 *            The transcript that is closest to the variant on the right
 	 */
-	public void createIntergenicAnnotations(int start, int end, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor) {
+	private void createIntergenicAnnotations(int start, int end, TranscriptModel leftNeighbor,
+			TranscriptModel rightNeighbor) {
 
 		/* ***************************************************************************************** *
 		 * The following code block is executed if the variant has not hit a genic region yet and    *
