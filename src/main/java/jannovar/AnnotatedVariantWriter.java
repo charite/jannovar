@@ -8,8 +8,15 @@ import java.io.IOException;
 /**
  * Interface for output writers in Jannovar class.
  *
+ * The task of such a writer is to take a HTSJDK annotation, perform annotation with the Jannovar code and then write it
+ * out into some output format.
+ *
+ * Currently, we have to convert HTSJDK VariantContext objects into Jannovar Variant objects but that should be
+ * simplified later on.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
+// TODO(holtgrew): Update comment above once we use VariantContext everywhere.
 public abstract class AnnotatedVariantWriter {
 	/**
 	 * Write out the given VariantContext with additional annotation.
