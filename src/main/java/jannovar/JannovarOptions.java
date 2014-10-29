@@ -83,6 +83,18 @@ public class JannovarOptions {
 	/** Output folder for the annotated VCF files (default: current folder) */
 	public String outVCFfolder = null;
 
+	/** @return true if we should annotate a VCF file */
+	public boolean hasVCFfile() {
+		return VCFfilePath != null;
+	}
+
+	/**
+	 * @return true if we should deserialize a file with transcript model data to perform analysis
+	 */
+	public boolean deserialize() {
+		return serializedFile != null;
+	}
+
 	public JannovarOptions() {
 	}
 }

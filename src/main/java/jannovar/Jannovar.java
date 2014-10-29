@@ -6,20 +6,10 @@ import htsjdk.variant.vcf.VCFFileReader;
 import jannovar.CommandLineParser.HelpRequestedException;
 import jannovar.annotation.AnnotationList;
 import jannovar.common.ChromosomeMap;
-import jannovar.common.Constants;
-import jannovar.common.Constants.Release;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
-import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
-import jannovar.exome.Variant;
-import jannovar.io.EnsemblFastaParser;
-import jannovar.io.FastaParser;
-import jannovar.io.GFFparser;
-import jannovar.io.RefSeqFastaParser;
 import jannovar.io.SerializationManager;
-import jannovar.io.TranscriptDataDownloader;
-import jannovar.io.UCSCKGParser;
 import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptModel;
 
@@ -87,25 +77,11 @@ import org.apache.commons.cli.ParseException;
  * @version 0.33 (29 December, 2013)
  */
 public class Jannovar {
-	/** List of all lines from knownGene.txt file from UCSC */
-	private ArrayList<TranscriptModel> transcriptModelList = null;
-	/** Map of Chromosomes */
+	/** Map of Chromosomes, used in the annotation. */
 	private HashMap<Byte, Chromosome> chromosomeMap = null;
-	/** List of variants from input file to be analysed. */
-	private final ArrayList<Variant> variantList = null;
-	/** Name of the UCSC serialized data file that will be created by Jannovar. */
-	private static final String UCSCserializationFileName = "ucsc_%s.ser";
-	/**
-	 * Name of the Ensembl serialized data file that will be created by Jannovar.
-	 */
-	private static final String EnsemblSerializationFileName = "ensembl_%s.ser";
-	/**
-	 * Name of the refSeq serialized data file that will be created by Jannovar.
-	 */
-	private static final String RefseqSerializationFileName = "refseq_%s.ser";
 
 	/** Configuration for the Jannovar program. */
-	JannovarOptions options = new JannovarOptions();
+	JannovarOptions options = null;
 
 	public static void main(String argv[]) {
 		// Create Jannovar object, this includes parsing the command line.
@@ -115,75 +91,58 @@ public class Jannovar {
 		} catch (ParseException e1) {
 			System.exit(1); // something went wrong, return 1
 		} catch (HelpRequestedException e1) {
-			System.exit(0); // help requested and printed, return 0
+			return;  // help requested and printed, return 0
 		}
 
-		/*
-		 * Option 1. Download the UCSC files from the server, create the ucsc.ser file, and return.
-		 */
+		// Option 1: download transcript files and serialize
 		try {
-			if (anno.createUCSC()) {
-				anno.downloadTranscriptFiles(jannovar.common.Constants.UCSC, anno.options.genomeRelease);
-				anno.inputTranscriptModelDataFromUCSCFiles();
-				anno.serializeUCSCdata();
-				return;
-			} else if (anno.createEnsembl()) {
-				anno.downloadTranscriptFiles(jannovar.common.Constants.ENSEMBL, anno.options.genomeRelease);
-				anno.inputTranscriptModelDataFromEnsembl();
-				anno.serializeEnsemblData();
-				return;
-			} else if (anno.createRefseq()) {
-				anno.downloadTranscriptFiles(jannovar.common.Constants.REFSEQ, anno.options.genomeRelease);
-				anno.inputTranscriptModelDataFromRefseq();
-				anno.serializeRefseqData();
-				return;
-			}
+			if (anno.download())
+				return;  // stop after downloading
+		} catch (FileDownloadException e) {
+			System.err.println("[ERROR] Error while attempting to parse transcript definition files.");
+			System.err.println("[ERROR] " + e.toString());
+			System.err.println("[ERROR] A common error is the failure to set the network proxy (see tutorial).");
+			System.exit(1);
 		} catch (JannovarException e) {
-			System.err.println("[ERROR] Error while attempting to download transcript definition files.");
+			System.err.println("[ERROR] Error while attempting to parse transcript definition files.");
 			System.err.println("[ERROR] " + e.toString());
 			System.err.println("[ERROR] A common error is the failure to set the network proxy (see tutorial).");
 			System.exit(1);
 		}
 
-		/*
-		 * Option 2. The user must provide the ucsc.ser file to do analysis. (or the ensembl.ser or refseq.ser files).
-		 * We can either annotate a VCF file (3a) or create a separate annotation file (3b).
-		 */
-		if (anno.deserialize()) {
-			try {
-				anno.deserializeTranscriptDefinitionFile();
-			} catch (JannovarException je) {
-				System.err.println("[ERROR] Could not deserialize UCSC data: " + je.toString());
+		// Option 2/3, Step 1: deserialize data, if any, required for annotation of VCF or creating annotation file
+		try {
+			if (!anno.deserialize())
+			{
+				System.err.println("[INFO] You need to pass a file to deserialize for annotation.");
 				System.exit(1);
 			}
-		} else {
-			System.err.println("[ERROR] You need to pass ucscs.ser file to perform analysis.");
-			CommandLineParser.printUsage();
+		} catch (JannovarException je) {
+			System.err.println("[ERROR] Could not deserialize UCSC data: " + je.toString());
 			System.exit(1);
 		}
-		/*
-		 * When we get here, the program has deserialized data and put it into the Chromosome objects. We can now start
-		 * to annotate variants.
-		 */
-		if (anno.hasVCFfile()) {
+
+		// Option 2, Step 2: perform VCF annotation or create annotation file
+		if (anno.options.hasVCFfile()) {
 			try {
-				anno.annotateVCF(); /* 3a or 3b */
+				anno.annotateVCF(); // annotate VCF or create Jannovar output file
+				return;
 			} catch (JannovarException je) {
 				System.err.println("[ERROR] Could not annotate VCF data: " + je.toString());
 				System.exit(1);
 			}
-		} else {
-			if (anno.options.chromosomalChange == null) {
-				System.err.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
-			} else {
-				try {
-					anno.annotatePosition();
-				} catch (JannovarException je) {
-					System.err.println("[ERROR] Could not annotate input data: " + anno.options.chromosomalChange);
-					System.exit(1);
-				}
+		}
 
-			}
+		// Option 3, Step 2: output chromosomal change at the given position
+		if (anno.options.chromosomalChange == null) {
+			System.err.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
+			System.exit(1);
+		}
+		try {
+			anno.annotatePosition();
+		} catch (JannovarException je) {
+			System.err.println("[ERROR] Could not annotate input data: " + anno.options.chromosomalChange);
+			System.exit(1);
 		}
 	}
 
@@ -202,72 +161,35 @@ public class Jannovar {
 	}
 
 	/**
-	 * @return true if user wants to download UCSC files
-	 */
-	public boolean createUCSC() {
-		return options.createUCSC;
-	}
-
-	/**
-	 * @return true if user wants to download refseq files
-	 */
-	public boolean createRefseq() {
-		return options.createRefseq;
-	}
-
-	/**
-	 * @return true if user wants to download ENSEMBL files
-	 */
-	public boolean createEnsembl() {
-		return options.createEnsembl;
-	}
-
-	/**
-	 * This function creates a {@link TranscriptDataDownloader} object in order to download the required transcript data
-	 * files. If the user has set the proxy and proxy port via the command line, we use these to download the files.
+	 * Perform downloading and serialization of transcript data.
 	 *
-	 * @param source
-	 *            the source of the transcript data (e.g. RefSeq, Ensembl, UCSC)
-	 * @param rel
-	 *            the genome {@link Release}
+	 * @return true if the user instructed us to download data, the program hast to stop afterwards
+	 *
+	 * @throws JannovarException
+	 *             on problems with parsing or serialization
+	 * @throws FileDownloadException
+	 *             on problems with file download
 	 */
-	public void downloadTranscriptFiles(int source, Release rel) {
-		TranscriptDataDownloader downloader;
-		try {
-			if (this.options.proxy != null && this.options.proxyPort != null) {
-				downloader = new TranscriptDataDownloader(options.dirPath
-						+ options.genomeRelease.getUCSCString(options.genomeRelease), this.options.proxy,
-						this.options.proxyPort);
-			} else {
-				downloader = new TranscriptDataDownloader(options.dirPath
-						+ options.genomeRelease.getUCSCString(options.genomeRelease));
-			}
-			downloader.downloadTranscriptFiles(source, rel);
-		} catch (FileDownloadException e) {
-			System.err.println(e);
-			System.exit(1);
-		}
+	boolean download() throws FileDownloadException, JannovarException {
+		DownloadManager manager = DownloadManagerFactory.build(options);
+		if (manager == null)
+			return false;
+		manager.run();
+		return true;
 	}
 
 	/**
-	 * @return true if we should serialize the UCSC data.
+	 * Perform deserialization of transcript data.
+	 *
+	 * @return true if the user gave a path to serialized data that was then serialized
+	 * @throws JannovarException
+	 *             on deserialization problems
 	 */
-	public boolean serialize() {
-		return this.options.performSerialization;
-	}
-
-	/**
-	 * @return true if we should deserialize a file with UCSC data to perform analysis
-	 */
-	public boolean deserialize() {
-		return this.options.serializedFile != null;
-	}
-
-	/**
-	 * @return true if we should annotate a VCF file
-	 */
-	public boolean hasVCFfile() {
-		return this.options.VCFfilePath != null;
+	boolean deserialize() throws JannovarException {
+		if (!options.deserialize())
+			return false;
+		deserializeTranscriptDefinitionFile();
+		return true;
 	}
 
 	/**
@@ -313,7 +235,6 @@ public class Jannovar {
 		}
 
 		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
-
 	}
 
 	/**
@@ -352,60 +273,6 @@ public class Jannovar {
 	}
 
 	/**
-	 * Inputs the GFF data from RefSeq files, convert the resulting {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
-	 * file.
-	 *
-	 * @throws JannovarException
-	 */
-	public void serializeRefseqData() throws JannovarException {
-		SerializationManager manager = new SerializationManager();
-		String combiStringRelease = options.onlyCuratedRefSeq ? "cur_"
-				+ options.genomeRelease.getUCSCString(options.genomeRelease) : options.genomeRelease
-				.getUCSCString(options.genomeRelease);
-		System.err.println("[INFO] Serializing RefSeq data as "
-				+ String.format(options.dirPath + Jannovar.RefseqSerializationFileName, combiStringRelease));
-		manager.serializeKnownGeneList(
-				String.format(options.dirPath + Jannovar.RefseqSerializationFileName, combiStringRelease),
-				this.transcriptModelList);
-	}
-
-	/**
-	 * Inputs the GFF data from Ensembl files, convert the resulting {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
-	 * file.
-	 *
-	 * @throws jannovar.exception.JannovarException
-	 */
-	public void serializeEnsemblData() throws JannovarException {
-		SerializationManager manager = new SerializationManager();
-		System.err.println("[INFO] Serializing Ensembl data as "
-				+ String.format(options.dirPath + Jannovar.EnsemblSerializationFileName,
-						options.genomeRelease.getUCSCString(options.genomeRelease)));
-		manager.serializeKnownGeneList(
-				String.format(options.dirPath + Jannovar.EnsemblSerializationFileName,
-						options.genomeRelease.getUCSCString(options.genomeRelease)), this.transcriptModelList);
-	}
-
-	/**
-	 * Inputs the KnownGenes data from UCSC files, convert the resulting {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
-	 * file.
-	 *
-	 * @throws jannovar.exception.JannovarException
-	 */
-	public void serializeUCSCdata() throws JannovarException {
-		SerializationManager manager = new SerializationManager();
-		System.err.println("[INFO] Serializing UCSC data as "
-				+ String.format(options.dirPath + Jannovar.UCSCserializationFileName,
-						options.genomeRelease.getUCSCString(options.genomeRelease)));
-		manager.serializeKnownGeneList(
-				String.format(options.dirPath + Jannovar.UCSCserializationFileName,
-						options.genomeRelease.getUCSCString(options.genomeRelease)),
-				this.transcriptModelList);
-	}
-
-	/**
 	 * To run Jannovar, the user must pass a transcript definition file with the -D flag. This can be one of the files
 	 * ucsc.ser, ensembl.ser, or refseq.ser (or a comparable file) containing a serialized version of the
 	 * TranscriptModel objects created to contain info about the transcript definitions (exon positions etc.) extracted
@@ -418,130 +285,6 @@ public class Jannovar {
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(this.options.serializedFile);
 		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	/**
-	 * Input the RefSeq data.
-	 */
-	private void inputTranscriptModelDataFromRefseq() {
-		// parse GFF/GTF
-		GFFparser gff = new GFFparser();
-		String path = options.dirPath + options.genomeRelease.getUCSCString(options.genomeRelease);
-		if (!path.endsWith(System.getProperty("file.separator")))
-			path += System.getProperty("file.separator");
-		switch (this.options.genomeRelease) {
-		case MM9:
-			gff.parse(path + Constants.refseq_gff_mm9);
-			break;
-		case MM10:
-			gff.parse(path + Constants.refseq_gff_mm10);
-			break;
-		case HG18:
-			gff.parse(path + Constants.refseq_gff_hg18);
-			break;
-		case HG19:
-			gff.parse(path + Constants.refseq_gff_hg19);
-			break;
-		case HG38:
-			gff.parse(path + Constants.refseq_gff_hg38);
-			break;
-		default:
-			System.err.println("[ERROR] Unknown release: " + options.genomeRelease);
-			System.exit(20);
-			break;
-		}
-		try {
-			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels(options.onlyCuratedRefSeq);
-		} catch (InvalidAttributException e) {
-			System.err.println("[ERROR] Unable to input data from the Refseq files");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		// add sequences
-		FastaParser efp = new RefSeqFastaParser(path + Constants.refseq_rna, transcriptModelList);
-		int before = transcriptModelList.size();
-		transcriptModelList = efp.parse();
-		int after = transcriptModelList.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
-		// before-after,before, after));
-		if (options.onlyCuratedRefSeq)
-			System.err.println(String.format(
-					"[INFO] Found %d curated transcript models from Refseq GFF resource, %d of which had sequences",
-					before, after));
-		else
-			System.err.println(String.format(
-					"[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before,
-					after));
-	}
-
-	/**
-	 * Input the Ensembl data.
-	 */
-	private void inputTranscriptModelDataFromEnsembl() {
-		// parse GFF/GTF
-
-		GFFparser gff = new GFFparser();
-		String path;
-		path = options.dirPath + options.genomeRelease.getUCSCString(options.genomeRelease);
-		if (!path.endsWith(System.getProperty("file.separator")))
-			path += System.getProperty("file.separator");
-		switch (this.options.genomeRelease) {
-		case MM9:
-			path += Constants.ensembl_mm9;
-			break;
-		case MM10:
-			path += Constants.ensembl_mm10;
-			break;
-		case HG18:
-			path += Constants.ensembl_hg18;
-			break;
-		case HG19:
-			path += Constants.ensembl_hg19;
-			break;
-		default:
-			System.err.println("[ERROR] Unknown release: " + options.genomeRelease);
-			System.exit(20);
-			break;
-		}
-		gff.parse(path + Constants.ensembl_gtf);
-		try {
-			this.transcriptModelList = gff.getTranscriptModelBuilder().buildTranscriptModels();
-			// System.out.println("[INFO] Got: "+this.transcriptModelList.size()
-			// + " Ensembl transcripts");
-		} catch (InvalidAttributException e) {
-			System.err.println("[ERROR] Unable to input data from the Ensembl files");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		// add sequences
-		EnsemblFastaParser efp = new EnsemblFastaParser(path + Constants.ensembl_cdna, transcriptModelList);
-		int before = transcriptModelList.size();
-		transcriptModelList = efp.parse();
-		int after = transcriptModelList.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
-		// before-after,before, after));
-
-		System.err.println(String
-				.format("[INFO] Found %d transcript models from Ensembl GFF resource, %d of which had sequences",
-						before, after));
-	}
-
-	/**
-	 * Input the four UCSC files for the KnownGene data.
-	 */
-	private void inputTranscriptModelDataFromUCSCFiles() {
-		String path = options.dirPath + options.genomeRelease.getUCSCString(options.genomeRelease);
-		if (!path.endsWith(System.getProperty("file.separator")))
-			path += System.getProperty("file.separator");
-		UCSCKGParser parser = new UCSCKGParser(path);
-		try {
-			parser.parseUCSCFiles();
-		} catch (Exception e) {
-			System.err.println("[ERROR] Unable to input data from the UCSC files");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		this.transcriptModelList = parser.getKnownGeneList();
 	}
 
 	/**
