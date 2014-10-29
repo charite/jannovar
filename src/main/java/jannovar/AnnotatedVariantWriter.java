@@ -37,6 +37,7 @@ public abstract class AnnotatedVariantWriter {
 	/**
 	 * Temporary helper code for converting VCF data to Jannovar representation.
 	 */
+	// TODO(holtgrem): remove this class eventually once using HTSJDK VariantContext everywhere.
 	protected class VariantDataCorrector {
 		protected String ref;
 		protected String alt;
