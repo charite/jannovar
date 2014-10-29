@@ -170,16 +170,11 @@ public class Chromosome {
 			createIntergenicAnnotations(start, end, leftNeighbor, rightNeighbor);
 			return annovarFactory.getAnnotationList();
 		}
-		/**
-		 * If we get here, then there is at least one transcript that overlaps with the query.
-		 */
 
+		// TODO(holtgrem): kgl => transcript, candidateGenes => candidateTranscripts?
+		// If we get here, then there is at least one transcript that overlaps with the query.
 		for (TranscriptModel kgl : candidateGenes) {
 			if (isStructuralVariant) {
-				if (candidateGenes.size() == 0) {
-					getStructuralVariantAnnotation(position, ref, alt, null);
-					break;
-				}
 				getStructuralVariantAnnotation(position, ref, alt, kgl);
 				continue;
 			}
