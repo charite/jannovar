@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+// TODO(holtgrew): Rename to AnnotatedVariantCollector? It only has some remote resemblance to the Factory pattern
+// and there is no reason to name classes after GoF patterns.
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
  * a given variant. The {@link jannovar.reference.Chromosome Chromosome} objects each use an instance of this class to
