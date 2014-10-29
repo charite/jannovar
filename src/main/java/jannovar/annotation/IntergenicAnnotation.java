@@ -3,10 +3,11 @@ package jannovar.annotation;
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 
+// TODO(holtgrem): This class could well be called IntergenicAnnotationFactory, same with similar classes.
 /**
  * This class is intended to provide a static method to generate annotations for INTERGENIC, DOWNSTREAM and UPSTREAM
  * variants.
- * 
+ *
  * @version 0.05 (27 January, 2014)
  * @author Peter N Robinson
  */
@@ -16,11 +17,11 @@ public class IntergenicAnnotation {
 	/**
 	 * This factory method creates an annotation object for an intergenic variant that is located between two genes and
 	 * is not nearby (threshold default of 1000 nt) to either of them. For example the annotation should look like
-	 * 
+	 *
 	 * <PRE>
 	 * HGVS=LOC100288069(dist=39337),LINC00115(dist=8181)
 	 * </PRE>
-	 * 
+	 *
 	 * @param leftGene
 	 *            Gene that is 5' to the variant
 	 * @param rightGene
@@ -58,7 +59,7 @@ public class IntergenicAnnotation {
 
 	/**
 	 * Create an Annotation obejct for a variant that is upstream or downstream to a gene (default: within 1000 nt).
-	 * 
+	 *
 	 * @param trmdl
 	 *            The transcript that the variant is up/downstream to
 	 * @param pos
@@ -69,6 +70,7 @@ public class IntergenicAnnotation {
 
 		VariantType type = null;
 		if (trmdl == null) {
+			// TODO(holtgrem): throw unchecked exception instead, gives trace, do the same for similar cases
 			System.err.println("createUpDownstreamAnnotation, TranscriptModel argument is null, pos=" + pos);
 			System.exit(1);
 		}

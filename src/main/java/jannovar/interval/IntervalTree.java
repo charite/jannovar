@@ -114,6 +114,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		// Node.setRightComparator(rightcomp);
 	}
 
+	// TODO(holtgrem): What's the difference to search()?
 	/**
 	 * Search function which looks up Intervals overlapping the search region [low,high].
 	 *

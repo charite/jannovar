@@ -64,6 +64,7 @@ public class Chromosome {
 	 * @link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} object.
 	 */
 	private static final int CAPACITY = 20;
+	// TODO(holtgrew): we could make this threshold available through configuration
 	/** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
 	private static final int NEARGENE = 1000;
 
@@ -120,6 +121,7 @@ public class Chromosome {
 		return this.n_genes;
 	}
 
+	// TODO(holtgrem): Rename to buildAnnotationList()?
 	/**
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates. When we
 	 * get to this point, the client code has identified the right chromosome, and we are provided the coordinates on
@@ -289,7 +291,7 @@ public class Chromosome {
 		annovarFactory.addStructuralAnnotation(ann);
 	}
 
-	// TODO(holtgrem): can this go away?
+	// TODO(holtgrem): can this be removed?
 	/**
 	 * Counts the number of affected genes by different GeneSymbol. Returns <code>true</code> if there are more than one
 	 * gensymbols in the candidateGenes list or <code>false</code> otherwise.
@@ -353,11 +355,12 @@ public class Chromosome {
 			Annotation ann = IntergenicAnnotation.createUpDownstreamAnnotation(rightNeighbor, end);
 			annovarFactory.addUpDownstreamAnnotation(ann);
 		}
-		/* If we get here, and annotation_list is still empty, then the variant is not
-		   nearby to any gene (i.e., it is not upstream/downstream). Therefore, the variant
-		   is intergenic */
+		// If we get here, and annovarFactory is still empty, then the variant is not nearby to any gene (i.e., it is
+		// not upstream/downstream). Therefore, the variant is considered intergenic.
 		if (annovarFactory.isEmpty()) {
 			if (leftNeighbor == null && rightNeighbor == null) {
+				// TODO(holtgrem): here, we should throw an unchecked exception, createInterneicAnnotation would throw a
+				// NullPointerException
 				System.out.println("Both neighbors are null");
 			}
 			Annotation ann = IntergenicAnnotation.createIntergenicAnnotation(leftNeighbor, rightNeighbor, start, end);
