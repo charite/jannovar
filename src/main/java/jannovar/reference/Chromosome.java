@@ -38,6 +38,15 @@ import java.util.HashSet;
  * @version 0.32 (15 April, 2014)
  */
 public class Chromosome {
+	// format string used for annotating SV inversions
+	private static final String FORMAT_SV_INVERSION = "%s:g.%d_%dinv";
+	// format string used for annotating SV insertions
+	private static final String FORMAT_SV_INSERTION = "%s:g.%d_%dins%s..%s";
+	// format string used for annotating SV deletions
+	private static final String FORMAT_SV_DELETION = "%s:g.%d_%ddel";
+	// format string used for annotating SV substitutions
+	private static final String FORMAT_SV_SUBSTITUTION = "%s:g.%d_%ddelins%s..%s";
+
 	/**
 	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
 	 * way of dealing with scaffolds etc.
@@ -129,7 +138,6 @@ public class Chromosome {
 	 * @throws jannovar.exception.AnnotationException
 	 */
 	public AnnotationList getAnnotationList(int position, String ref, String alt) throws AnnotationException {
-
 		// TODO(holtgrem): duplicate of the calling code?
 		/* prepare and adapt for duplications (e.g. get rid of the repeated reference base in insertions) */
 		if (ref.length() < alt.length() && alt.substring(0, ref.length()).equals(ref)) {
@@ -149,8 +157,8 @@ public class Chromosome {
 		int start = position;
 		int end = start + ref.length() - 1;
 
-		// TODO(holtgrem): don't we have closed intervals?
-		// get TranscriptModels that overlap with (start, end)
+		// TODO(holtgrem): don't we have use intervals? update comment below
+		// Get the TranscriptModel objects that overlap with (start, end).
 		ArrayList<TranscriptModel> candidateGenes = itree.search(start, end);
 
 		// for structural variants we also perform a big intervals search
@@ -212,10 +220,10 @@ public class Chromosome {
 	 * @throws AnnotationException
 	 */
 	private void getStructuralVariantAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
-
 		Annotation ann;
 		String annotation;
 
+		// TODO(holtgrem): logically dead code, checked above.
 		// check if this is really a structural Variant
 		if (ref.length() < 1000 && alt.length() < 1000) {
 			if (kgl.isPlusStrand()) {
@@ -228,42 +236,49 @@ public class Chromosome {
 
 		// otherwise create structural annotation
 
+		// TODO(holtgrem): Currently, kgl is always != null since this function is called when iterating over
+		// candidateGenes in getAnnotationList(). I removed the code for the call with kgl=null since it was logically
+		// dead. Can we now remove these cases below or is this function called incorrectly?
+
 		// SV_inversion???
-		if (ref.length() == alt.length()) {
-			StringBuilder sb = new StringBuilder(alt).reverse();
-			if (ref.equals(sb)) {
-				annotation = String.format("%s:g.%d_%dinv", VariantType.SV_INVERSION, position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
-				ann = new Annotation(kgl, annotation, VariantType.SV_INVERSION);
-				annovarFactory.addStructuralAnnotation(ann);
-				return;
-			}
+		if (ref.length() == alt.length() && ref.equals(new StringBuilder(alt).reverse())) {
+			annotation = String.format(FORMAT_SV_INVERSION, VariantType.SV_INVERSION, position, position + ref.length(),
+					alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+			ann = new Annotation(kgl, annotation, VariantType.SV_INVERSION);
+			annovarFactory.addStructuralAnnotation(ann);
+			return;
 		}
 		// SV_insertion
 		if (ref.length() == 1) { // Insertion
-			// if klg is null it is intergenic
+			// if kgl is null it is intergenic
 			if (kgl == null) {
-				annotation = String.format("%s:g.%d_%dins%s..%s", VariantType.INTERGENIC, position, position + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_INSERTION, VariantType.INTERGENIC, position, position + 1,
+						alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
 			} else {
-				annotation = String.format("%s:g.%d_%dins%s..%s", kgl.getChromosomeAsString(), position, position + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_INSERTION, kgl.getChromosomeAsString(), position, position + 1,
+						alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.SV_INSERTION);
 			}
 		} else if (alt.length() == 1) {
-			// if klg is null it is intergenic
+			// if kgl is null it is intergenic
 			if (kgl == null) {
-				annotation = String.format("%s:g.%d_%ddel", VariantType.INTERGENIC, position, position + ref.length());
+				annotation = String.format(FORMAT_SV_DELETION, VariantType.INTERGENIC, position, position + ref.length());
 				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
 			} else {
-				annotation = String.format("%s:g.%d_%ddel", kgl.getChromosomeAsString(), position, position + ref.length());
+				annotation = String.format(FORMAT_SV_DELETION, kgl.getChromosomeAsString(), position,
+						position + ref.length());
 				ann = new Annotation(kgl, annotation, VariantType.SV_DELETION);
 			}
 		} else {
-			// if klg is null it is intergenic
+			// if kgl is null it is intergenic
 			if (kgl == null) {
-				annotation = String.format("%s:g.%d_%ddelins%s..%s", VariantType.INTERGENIC, position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_SUBSTITUTION, VariantType.INTERGENIC, position,
+						position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
 			} else {
-				annotation = String.format("%s:g.%d_%ddelins%s..%s", kgl.getChromosomeAsString(), position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_SUBSTITUTION, kgl.getChromosomeAsString(), position, position
+						+ ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.SV_SUBSTITUTION);
 			}
 		}
