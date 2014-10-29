@@ -172,33 +172,28 @@ public class Chromosome {
 		}
 
 		// TODO(holtgrem): kgl => transcript, candidateGenes => candidateTranscripts?
-		// If we get here, then there is at least one transcript that overlaps with the query.
+		// If we get here, then there is at least one transcript that overlaps with the query. Iterate over these
+		// transcripts and collect annotations for each (they are collected in annovarFactory).
 		for (TranscriptModel kgl : candidateGenes) {
 			if (isStructuralVariant) {
 				getStructuralVariantAnnotation(position, ref, alt, kgl);
-				continue;
-			}
-			// System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(),
-			// kgl.getStrand()));
-			try {
-				if (kgl.isPlusStrand()) {
+			} else {
+				if (kgl.isPlusStrand())
 					getPlusStrandAnnotation(position, ref, alt, kgl);
-				} else if (kgl.isMinusStrand()) {
+				else if (kgl.isMinusStrand())
 					getMinusStrandAnnotation(position, ref, alt, kgl);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				String err = String.format("Encountered error processing variant: %s:g.%d,%s->%s", getChromosomeName(), position, ref, alt);
-				throw new AnnotationException(err);
 			}
 		}
 
+		// Obtain annotation list from annovarFactory, if we could not find any annotations then this is a logical
+		// error.
+		// TODO(holtgrew): Throw unchecked exception instead? This no annotations here would be a bug!
 		AnnotationList al = annovarFactory.getAnnotationList();
 		if (al.getAnnotationList().isEmpty()) {
 			String e = String.format("[Jannovar:Chromosome] Error: No annotations produced for %s:g.%d%s>%s", chromosomeString, position, ref, alt);
 			throw new AnnotationException(e);
 		}
-		return annovarFactory.getAnnotationList();
+		return al;
 	}
 
 	/**
