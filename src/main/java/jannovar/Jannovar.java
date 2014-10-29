@@ -1,22 +1,13 @@
 package jannovar;
 
 /** Command line functions from apache */
-import htsjdk.variant.variantcontext.Allele;
-import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.writer.VariantContextWriter;
-import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
 import htsjdk.variant.vcf.VCFFileReader;
-import htsjdk.variant.vcf.VCFHeader;
-import htsjdk.variant.vcf.VCFHeaderLineType;
-import htsjdk.variant.vcf.VCFInfoHeaderLine;
 import jannovar.CommandLineParser.HelpRequestedException;
-import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.common.ChromosomeMap;
 import jannovar.common.Constants;
 import jannovar.common.Constants.Release;
-import jannovar.common.VCFStrings;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.InvalidAttributException;
@@ -32,11 +23,8 @@ import jannovar.io.UCSCKGParser;
 import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptModel;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -283,287 +271,6 @@ public class Jannovar {
 	}
 
 	/**
-	 * Temporary helper code for converting VCF data to Jannovar representation.
-	 */
-	private class VariantDataCorrector {
-		private String ref;
-		private String alt;
-		private int position;
-
-		public VariantDataCorrector(String ref, String alt, int position) {
-			this.ref = ref;
-			this.alt = alt;
-			this.position = position;
-
-			correct();
-		}
-
-		private void correct() {
-			int idx = 0;
-			// beginning
-			while (idx < ref.length() && idx < alt.length() && ref.charAt(idx) == alt.charAt(idx)) {
-				idx++;
-			}
-			position += idx;
-			ref = ref.substring(idx);
-			alt = alt.substring(idx);
-
-			// end
-			int xdi = ref.length();
-			int diff = ref.length() - alt.length();
-			while (xdi > 0 && xdi - diff > 0 && ref.charAt(xdi - 1) == alt.charAt(xdi - 1 - diff)) {
-				xdi--;
-			}
-			ref = xdi == 0 ? "-" : ref.substring(0, xdi);
-			alt = xdi - diff == 0 ? "-" : alt.substring(0, xdi - diff);
-		}
-
-		public String getRef() {
-			return ref;
-		}
-
-		public void setRef(String ref) {
-			this.ref = ref;
-		}
-
-		public String getAlt() {
-			return alt;
-		}
-
-		public void setAlt(String alt) {
-			this.alt = alt;
-		}
-
-		public int getPosition() {
-			return position;
-		}
-
-		public void setPosition(int position) {
-			this.position = position;
-		}
-	}
-
-	/**
-	 * Annotate a single line of a VCF file, and output the line together with the new INFO fields representing the
-	 * annotations.
-	 *
-	 * @param variantContext
-	 *            an object representing the original VCF line
-	 * @param out
-	 *            A file handle to write to.
-	 */
-	private void annotateVCFLine(VariantContext variantContext, VariantContextWriter out) throws IOException,
-			AnnotationException {
-		// Catch the case that variantContext.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
-		// for the "random" contigs etc. In this case, we simply write the record out unmodified.
-		Byte boxedChr = ChromosomeMap.identifier2chromosom.get(variantContext.getChr());
-		if (boxedChr == null) {
-			out.add(variantContext);
-			return;
-		}
-		byte chr = boxedChr.byteValue();
-
-		// FIXME(mjaeger): We should care about more than just the first alternative allele.
-		VariantDataCorrector corr = new VariantDataCorrector(variantContext.getReference().getBaseString(),
-				variantContext.getAlternateAllele(0).getBaseString(), variantContext.getStart());
-		String ref = corr.ref;
-		String alt = corr.alt;
-		int pos = corr.position;
-
-		if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
-			Chromosome c = chromosomeMap.get(chr);
-			if (c == null) {
-				String e = String.format("Could not identify chromosome \"%d\"", chr);
-				throw new AnnotationException(e);
-			}
-			AnnotationList anno = c.getAnnotationList(pos, ref, alt);
-			if (anno == null) {
-				String e = String.format("No annotations found for variant %s", variantContext.toString());
-				throw new AnnotationException(e);
-			}
-			String annotation;
-			String effect;
-			if (anno.isStructural()) {
-				annotation = anno.getCombinedAnnotationForStructuralVariant();// String.format("%s:%s",
-																				// anno.getMultipleGeneList(),anno.getCombinedAnnotationForVariantAffectingMultipleGenes());
-				effect = anno.getVariantType().toString();
-			} else {
-				if (this.options.showAll) {
-					annotation = anno.getAllTranscriptAnnotations();
-					effect = anno.getAllTranscriptVariantEffects();
-				} else {
-					annotation = anno.getSingleTranscriptAnnotation();
-					effect = anno.getVariantType().toString();
-				}
-			}
-
-			/* Now add the stuff to the INFO line */
-			variantContext.getCommonInfo().putAttribute("EFFECT", effect);
-			variantContext.getCommonInfo().putAttribute("HGVS", annotation);
-		}
-
-		/* Write out variantContext to out. */
-		out.add(variantContext);
-	}
-
-	/**
-	 * Return genotype string as in VCF for the i-th individual at the position in variantContext.
-	 *
-	 * @param variantContext
-	 *            The VariantContext to query.
-	 * @param i
-	 *            Index of individual.
-	 * @return String with the genotype call string, e.g. "0/1" or "1|1".
-	 */
-	private String stringForGenotype(VariantContext variantContext, int i) {
-		Genotype gt = variantContext.getGenotype(i);
-		StringBuilder builder = new StringBuilder();
-		for (Allele allele : gt.getAlleles()) {
-			if (builder.length() > 0)
-				builder.append(gt.isPhased() ? '|' : '/');
-			builder.append(variantContext.getAlleleIndex(allele));
-		}
-		return builder.toString();
-	}
-
-	/**
-	 * This function outputs a single line in Jannovar format.
-	 *
-	 * @param n
-	 *            The current number (one for each variant in the VCF file)
-	 * @param variantContext
-	 *            The current variant with one or more annotations
-	 * @param out
-	 *            File handle to write Jannovar file.
-	 */
-	private void outputJannovarLine(int n, VariantContext variantContext, Writer out) throws IOException,
-			AnnotationException {
-		byte chr = ChromosomeMap.identifier2chromosom.get(variantContext.getChr());
-		String chrStr = variantContext.getChr();
-		int pos = variantContext.getStart();
-		String ref = variantContext.getReference().getBaseString();
-		// FIXME(mjaeger): We should care about more than just the first alternative allele.
-		String alt = variantContext.getAlternateAllele(0).getBaseString();
-		String gtype = stringForGenotype(variantContext, 0);
-		float qual = (float) variantContext.getPhredScaledQual();
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			String e = String.format("Could not identify chromosome \"%d\"", chr);
-			throw new AnnotationException(e);
-		}
-		AnnotationList anno = c.getAnnotationList(pos, ref, alt);
-		if (anno == null) {
-			String e = String.format("No annotations found for variant %s", variantContext.toString());
-			throw new AnnotationException(e);
-		}
-
-		ArrayList<Annotation> lst = anno.getAnnotationList();
-		for (Annotation a : lst) {
-			String effect = a.getVariantTypeAsString();
-			String annt = a.getVariantAnnotation();
-			String sym = a.getGeneSymbol();
-			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f", n, effect, sym, annt, chrStr, pos,
-					ref, alt, gtype, qual);
-			out.write(s + "\n");
-		}
-	}
-
-	/**
-	 * This function outputs a VCF file that corresponds to the original VCF file but additionally has annotations for
-	 * each variant. A new file is created with the suffix "jv.vcf";
-	 */
-	private void outputAnnotatedVCF(VCFFileReader parser) throws JannovarException {
-		File f = new File(this.options.VCFfilePath);
-		String outname = f.getName();
-		if (options.outVCFfolder != null)
-			outname = options.outVCFfolder + outname;
-		int i = outname.lastIndexOf("vcf");
-		if (i < 0) {
-			i = outname.lastIndexOf("VCF");
-		}
-		if (i < 0) {
-			outname = outname + ".jv.vcf";
-		} else {
-			outname = outname.substring(0, i) + "jv.vcf";
-		}
-		try {
-			VariantContextWriterBuilder builder = new VariantContextWriterBuilder();
-			builder.setReferenceDictionary(parser.getFileHeader().getSequenceDictionary());
-			builder.setOutputFile(new File(outname));
-			VariantContextWriter out = builder.build();
-
-			VCFHeader header = parser.getFileHeader();
-
-			// Extend header before writing out to file.
-			VCFInfoHeaderLine effectLine = new VCFInfoHeaderLine("EFFECT", 1, VCFHeaderLineType.String,
-					VCFStrings.INFO_EFFECT);
-			header.addMetaDataLine(effectLine);
-			VCFInfoHeaderLine hgvsLine = new VCFInfoHeaderLine("HGVS", 1, VCFHeaderLineType.String,
-					VCFStrings.INFO_HGVS);
-			header.addMetaDataLine(hgvsLine);
-			// Write the header of the new VCF file
-			out.writeHeader(header);
-
-			/** Now write each of the variants. */
-			for (VariantContext variantContext : parser) {
-				try {
-					annotateVCFLine(variantContext, out);
-				} catch (AnnotationException e) {
-					System.err.println("[WARN] Annotation error on line: " + variantContext.toString() + "\n"
-							+ e.toString());
-				}
-			}
-			out.close();
-		} catch (IOException e) {
-			System.err.println("[ERROR] Error writing annotated VCF file");
-			System.err.println("[ERROR] " + e.toString());
-			System.exit(1);
-		}
-		System.err.println("[INFO] Wrote annotated VCF file to \"" + outname + "\"");
-	}
-
-	/**
-	 * This function writes detailed annotations to file. One annotation is written for each of the transcripts affected
-	 * by a variant, and the file is a tab-separated file in "Jannovar" format.
-	 *
-	 * @param parser
-	 *            The VCFParser that has extracted a list of variants from the VCF file.
-	 */
-	private void outputJannovarFormatFile(VCFFileReader parser) throws JannovarException {
-		File f = new File(this.options.VCFfilePath);
-		String outname = f.getName() + ".jannovar";
-
-		// Error handling can be improved with Java 7.
-		BufferedWriter out = null;
-		try {
-			FileWriter fstream = new FileWriter(outname);
-			out = new BufferedWriter(fstream);
-			/** Output each of the variants. */
-			int n = 0;
-			for (VariantContext variantContext : parser) {
-				n++;
-				try {
-					outputJannovarLine(n, variantContext, out);
-				} catch (AnnotationException e) {
-					System.err.println("[WARN] Annotation error: " + e.toString());
-				}
-			}
-			out.close();
-		} catch (IOException e) {
-			try {
-				if (out != null)
-					out.close();
-			} catch (IOException e2) {
-				// swallow, nothing we can do about it
-			}
-			System.err.println("[ERROR] Error writing annotated VCF file");
-			System.err.println("[ERROR] " + e.toString());
-			System.exit(1);
-		}
-		System.err.println("[INFO] Wrote annotations to \"" + outname + "\"");
-	}
-
-	/**
 	 * THis function will simply annotate given chromosomal position with HGVS compliant output e.g. chr1:909238G>C -->
 	 * PLEKHN1:NM_032129.2:c.1460G>C,p.(Arg487Pro)
 	 *
@@ -616,21 +323,32 @@ public class Jannovar {
 	 * @throws jannovar.exception.JannovarException
 	 */
 	public void annotateVCF() throws JannovarException {
-		// VCFReader parser = new VCFReader(this.VCFfilePath);
-		// VCFLine.setStoreVCFLines();
-		// try {
-		// parser.inputVCFheader();
-		// } catch (VCFParseException e) {
-		// System.err.println("[ERROR] Unable to parse VCF file");
-		// System.err.println(e.toString());
-		// System.exit(1);
-		// }
+		// initialize the VCF reader
 		VCFFileReader parser = new VCFFileReader(new File(this.options.VCFfilePath), false);
-		if (this.options.jannovarFormat) {
-			outputJannovarFormatFile(parser);
-		} else {
-			outputAnnotatedVCF(parser);
+
+		AnnotatedVariantWriter writer = null;
+		try {
+			// construct the variant writer
+			if (this.options.jannovarFormat)
+				writer = new AnnotatedJannovarWriter(chromosomeMap, options);
+			else
+				writer = new AnnotatedVCFWriter(parser, chromosomeMap, options);
+
+			// annotate and write out all variants
+			for (VariantContext vc : parser)
+				writer.put(vc);
+
+			// close parser writer again
+			parser.close();
+			writer.close();
+		} catch (IOException e) {
+			// convert exception to JannovarException and throw, writer can only be null here
+			parser.close();
+			throw new JannovarException(e.getMessage());
 		}
+
+		// TODO(holtgrem): use logger
+		System.err.println("[INFO] Wrote annotations to \"" + writer.getOutFileName() + "\"");
 	}
 
 	/**
