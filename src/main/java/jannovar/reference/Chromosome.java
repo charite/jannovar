@@ -112,9 +112,9 @@ public class Chromosome {
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates. When we
 	 * get to this point, the client code has identified the right chromosome, and we are provided the coordinates on
 	 * that chromosome.
-	 * <P>
+	 *
 	 * The strategy for finding annotations is based on the perl code in Annovar. Roughly speaking, we identify a list
-	 * of genes affected by the variant using the interval tree ({@link #itree}). and then annotated the variants
+	 * of genes affected by the variant using the interval tree ({@link #itree}) and then annotated the variants
 	 * accordingly. If no hit is found in the tree, we identify the left and right neighbor and annotate to intergenic,
 	 * upstream or downstream
 	 *
@@ -130,6 +130,7 @@ public class Chromosome {
 	 */
 	public AnnotationList getAnnotationList(int position, String ref, String alt) throws AnnotationException {
 
+		// TODO(holtgrem): duplicate of the calling code?
 		/* prepare and adapt for duplications (e.g. get rid of the repeated reference base in insertions) */
 		if (ref.length() < alt.length() && alt.substring(0, ref.length()).equals(ref)) {
 			alt = alt.substring(ref.length());
@@ -148,14 +149,15 @@ public class Chromosome {
 		int start = position;
 		int end = start + ref.length() - 1;
 
-		/** Get TranscriptModels that overlap with (start,end). */
+		// TODO(holtgrem): don't we have closed intervals?
+		// get TranscriptModels that overlap with (start, end)
 		ArrayList<TranscriptModel> candidateGenes = itree.search(start, end);
 
-		/** for structural variants also check bigintervals search */
+		// for structural variants we also perform a big intervals search
 		boolean isStructuralVariant = false;
 		if ((ref.length() >= 1000 || alt.length() >= 1000)) {
 			if (ref.length() >= 1000)
-				candidateGenes.addAll(itree.searchBigIntervall(start, end));
+				candidateGenes.addAll(itree.searchBigInterval(start, end));
 			isStructuralVariant = true;
 		}
 
