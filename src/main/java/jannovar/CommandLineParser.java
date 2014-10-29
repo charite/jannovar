@@ -22,7 +22,7 @@ import org.apache.commons.cli.Parser;
 public class CommandLineParser {
 
 	public class HelpRequestedException extends Exception {
-
+		private static final long serialVersionUID = 1L;
 	}
 
 	/** The Options object. */

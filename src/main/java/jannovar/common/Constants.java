@@ -177,4 +177,14 @@ public interface Constants {
 
 	/** Name of the UCSC serialized data file that will be used by Jannovar-testing. */
 	public static final String UCSCserializationTestFileName = "/ucsc_test.ser";
+	/** Name of the UCSC serialized data file that will be created by Jannovar. */
+	public static final String UCSCserializationFileName = "ucsc_%s.ser";
+	/**
+	 * Name of the Ensembl serialized data file that will be created by Jannovar.
+	 */
+	public static final String EnsemblSerializationFileName = "ensembl_%s.ser";
+	/**
+	 * Name of the refSeq serialized data file that will be created by Jannovar.
+	 */
+	public static final String RefseqSerializationFileName = "refseq_%s.ser";
 }
