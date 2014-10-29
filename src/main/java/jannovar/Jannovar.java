@@ -74,6 +74,7 @@ import org.apache.commons.cli.ParseException;
  * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  *
  * @author Peter N Robinson
+ * @author mjaeger
  * @version 0.33 (29 December, 2013)
  */
 public class Jannovar {
