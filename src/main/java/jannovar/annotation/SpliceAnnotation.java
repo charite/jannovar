@@ -6,15 +6,14 @@ import jannovar.reference.TranscriptModel;
 /**
  * This class is intended to provide a static method to generate annotations for splice mutations. This method is put in
  * its own class only for convenience and to at least have a name that is easy to find.
- * <P>
+ *
  * Annovar reports the two nucleotides on the boundary of the exon as being splice mutations, which is not entirely
  * accurate, although mutations in this part of exons can indeed disrupt proper splicing. Instead, jannovar takes the
  * SPLICING_THRESHOLD nucleotides on the intronic side.
- * 
+ *
  * @version 0.15 (15 April, 2014)
  * @author Peter N Robinson, Marten Jäger
  */
-
 public class SpliceAnnotation {
 	/**
 	 * Number of nucleotides away from exon/intron boundary to be considered as potential splicing mutation.
@@ -23,10 +22,12 @@ public class SpliceAnnotation {
 
 	/**
 	 * Determine if the variant under consideration represents a splice variant, defined as being in the
-	 * SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so, return true, otherwise, return false.<br>
-	 * <br>
+	 * SPLICING_THRESHOLD nucleotides within the exon/intron boundry. If so, return true, otherwise, return false.
+	 *
 	 * splice boundary<br>
 	 * | |<br>
+	 *
+	 * <pre>
 	 * ----------||||||||||||||||--------------<br>
 	 * .......*.........--> Y<br>
 	 * ....*............--> N<br>
@@ -37,8 +38,8 @@ public class SpliceAnnotation {
 	 * ......---........--> Y<br>
 	 * ..........-----..--> N<br>
 	 * ..----------.....--> Y<br>
-	 * 
-	 * 
+	 * </pre>
+	 *
 	 * @param k
 	 *            Exon number in transcript model represented by tmdl
 	 * @param start
@@ -97,7 +98,7 @@ public class SpliceAnnotation {
 	 * Determine if the variant under consideration (which the calling code has determined to be on the plus strand)
 	 * represents a splice variant, defined as being in the SPLICING_THRESHOLD nucleotides within the exon/intron
 	 * boundry. If so, return true, otherwise, return false.
-	 * 
+	 *
 	 * @param k
 	 *            Exon number in gene represented by kgl
 	 * @param start
@@ -112,30 +113,28 @@ public class SpliceAnnotation {
 	 *            Gene to be checked for splice mutation for current chromosomal variant.
 	 * @return <code>true</code> if plus strand variant
 	 */
-	public static boolean isSpliceVariantPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
+	public static boolean isSpliceVariantPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt,
+			int k) {
 		if (kgl.getExonCount() == 1)
 			return false; /* Single-exon genes do not have introns */
 		int exonend = kgl.getExonEnd(k);
 		int exonstart = kgl.getExonStart(k);
 		if (k == 0 && start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 			/*
-			 * In annovar: start >= exonend-SPLICING_THRESHOLD+1 instead of
-			 * start > exonend
+			 * In annovar: start >= exonend-SPLICING_THRESHOLD+1 instead of start > exonend
 			 */
 			/*
-			 * variation is located right after (3' to) first exon. For
-			 * instance, if SPLICING_THRESHOLD is 2, we get the first 2
-			 * nucleotides of the following intron
+			 * variation is located right after (3' to) first exon. For instance, if SPLICING_THRESHOLD is 2, we get the
+			 * first 2 nucleotides of the following intron
 			 */
 			return true;
 		} else if (k == kgl.getExonCount() - 1 && start >= exonstart - SPLICING_THRESHOLD && start < exonstart) {
 			/*
-			 * In annovar, we had start <= exonstart + SPLICING_THRESHOLD -1
-			 * instead of start < exonstart
+			 * In annovar, we had start <= exonstart + SPLICING_THRESHOLD -1 instead of start < exonstart
 			 */
 			/*
-			 * variation is located right before (5' to) the last exon, +/-
-			 * SPLICING_THRESHOLD nucleotides of the exon/intron boundary
+			 * variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD nucleotides of the
+			 * exon/intron boundary
 			 */
 			return true;
 		} else if (k > 0 && k < kgl.getExonCount() - 1) {
@@ -148,21 +147,19 @@ public class SpliceAnnotation {
 				return true;
 		}
 		/*
-		 * Now repeat the above calculations for "end", the end position of the
-		 * variation. TODO: in many cases, start==end, this calculation is then
-		 * superfluous. Refactor.
+		 * Now repeat the above calculations for "end", the end position of the variation.
 		 */
+		// TODO: in many cases, start==end, this calculation is then superfluous. Refactor.
 		if (k == 0 && end > exonend && end <= exonend + SPLICING_THRESHOLD) {
 			/*
-			 * variation is located right after (3' to) first exon. For
-			 * instance, if SPLICING_THRESHOLD is 2, we get the first 2
-			 * nucleotides of the following intron
+			 * variation is located right after (3' to) first exon. For instance, if SPLICING_THRESHOLD is 2, we get the
+			 * first 2 nucleotides of the following intron
 			 */
 			return true;
 		} else if (k == kgl.getExonCount() - 1 && end >= exonstart - SPLICING_THRESHOLD && end < exonstart) {
 			/*
-			 * variation is located right before (5' to) the last exon, +/-
-			 * SPLICING_THRESHOLD nucleotides of the exon/intron boundary
+			 * variation is located right before (5' to) the last exon, +/- SPLICING_THRESHOLD nucleotides of the
+			 * exon/intron boundary
 			 */
 			return true;
 		} else if (k > 0 && k < kgl.getExonCount() - 1) {
@@ -177,14 +174,12 @@ public class SpliceAnnotation {
 		/* Check whether start/end are different and overlap with splice region. */
 		if (k == 0 && start <= exonend && end > exonend) {
 			/*
-			 * first exon, start is 5' to exon/intron boundry and end is 3' to
-			 * boundary
+			 * first exon, start is 5' to exon/intron boundry and end is 3' to boundary
 			 */
 			return true;
 		} else if (k == kgl.getExonCount() - 1 && start < exonstart && end >= exonstart) {
 			/*
-			 * last exon, start is 5' to exon/intron boundry and end is 3' to
-			 * boundary
+			 * last exon, start is 5' to exon/intron boundry and end is 3' to boundary
 			 */
 			return true;
 		} else if (k > 0 && k < kgl.getExonCount() - 1) {
@@ -204,7 +199,7 @@ public class SpliceAnnotation {
 	 * Determine if the variant under consideration (which the calling code has determined to be on the plus strand)
 	 * represents a splice variant, defined as being in the SPLICING_THRESHOLD nucleotides within the exon/intron
 	 * boundry. If so, return true, otherwise, return false.
-	 * 
+	 *
 	 * @param k
 	 *            Exon number in gene represented by kgl
 	 * @param start
@@ -219,12 +214,12 @@ public class SpliceAnnotation {
 	 *            Gene to be checked for splice mutation for current chromosomal variant.
 	 * @return <code>true</code> if minus strand variant
 	 */
-	public static boolean isSpliceVariantMinusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k) {
+	public static boolean isSpliceVariantMinusStrand(TranscriptModel kgl, int start, int end, String ref, String alt,
+			int k) {
 		if (kgl.getExonCount() == 1)
 			return false; /*
-							* Single-exon genes do not have introns: if (@exonstart
-							* != 1)
-							*/
+						 * Single-exon genes do not have introns: if (@exonstart != 1)
+						 */
 		int exonend = kgl.getExonEnd(k);
 		int exonstart = kgl.getExonStart(k);
 		int exoncount = kgl.getExonCount();
@@ -234,38 +229,24 @@ public class SpliceAnnotation {
 
 		if (k == 0 /* This is the last exon of a gene on the minus strand */
 				/*
-				 * the following two lines give us the last two bp of the last
-				 * intron (Splice acceptor sequence).
+				 * the following two lines give us the last two bp of the last intron (Splice acceptor sequence).
 				 */
 				&& start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 			return true;
 		} else if (k == (exoncount - 1) /* first exon of gene on minus strand */
 				&& start >= exonstart - SPLICING_THRESHOLD && start < exonstart) { /*
-																					 * first
-																					 * two
-																					 * nt
-																					 * of
-																					 * splice
-																					 * donor
+																					 * first two nt of splice donor
 																					 */
 			return true;
 		} else if (k > 0 && k < (exoncount - 1)) { /* internal exon */
 			if (start >= exonstart - SPLICING_THRESHOLD && start < exonstart) { /*
-																				 * splice
-																				 * donor
-																				 * ,
-																				 * minus
-																				 * strand
+																				 * splice donor , minus strand
 																				 */
 				return true;
 			}
 			if (start > exonend && start <= exonend + SPLICING_THRESHOLD) /*
-																			* splice
-																			* acceptor
-																			* ,
-																			* minus
-																			* strand
-																			*/
+																		 * splice acceptor , minus strand
+																		 */
 				return true;
 		}
 		if (k == 0 /* last exon of gene on minus strand */
@@ -286,14 +267,12 @@ public class SpliceAnnotation {
 		/* overlap with splice sequence at exon/intron boundary */
 		if (k == 0 && start <= exonend && end > exonend) {
 			/*
-			 * last exon on minus strand. start is within exon and end is in
-			 * intron
+			 * last exon on minus strand. start is within exon and end is in intron
 			 */
 			return true;
 		} else if (k == (exoncount - 1) && start < exonstart && end >= exonstart) {
 			/*
-			 * first exon for minus-strand gene, start is within intron and end
-			 * is in exon
+			 * first exon for minus-strand gene, start is within intron and end is in exon
 			 */
 			return true;
 		} else if (k > 0 && k < (exoncount - 1)) {
@@ -329,7 +308,7 @@ public class SpliceAnnotation {
 	 * I am unsure what this comment in annovar is supposed to mean: if name2 is already a splicing variant, but its
 	 * detailed annotation (like c150-2A>G) is not available, and if this splicing leads to amino acid change (rather
 	 * than UTR change)
-	 * 
+	 *
 	 * @param kgl
 	 *            Gene with splice mutation for current chromosomal variant.
 	 * @param start
@@ -346,7 +325,8 @@ public class SpliceAnnotation {
 	 *            cumulative length up the end of exon k
 	 * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the splice mutation.
 	 */
-	public static Annotation getSpliceAnnotationPlusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
+	public static Annotation getSpliceAnnotationPlusStrand(TranscriptModel kgl, int start, int end, String ref,
+			String alt, int k, int cumlenexon) {
 		int cdsstart = kgl.getCDSStart();
 		String anno;
 		if (start == end && start >= cdsstart) { /* single-nucleotide variant */
@@ -355,31 +335,35 @@ public class SpliceAnnotation {
 			String coding = kgl.isCodingGene() ? "c" : "n";
 			if (start >= exonstart - SPLICING_THRESHOLD && start < exonstart) {
 				/*
-				 * #------*-<---->------- mutation located right in front of
-				 * exon
+				 * #------*-<---->------- mutation located right in front of exon
 				 */
 				cumlenexon -= (exonend - exonstart);
 				/*
-				 * Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1);
-				 * take back but for 1.
+				 * Above, we had $lenexon += ($exonend[$k]-$exonstart[$k]+1); take back but for 1.
 				 */
 				if (alt.equals("-"))
-					anno = String.format("%s:exon%d:%s.%d-%ddel%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart - start, ref);
+					anno = String.format("%s:exon%d:%s.%d-%ddel%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart
+							- start, ref);
 				else if (ref.equals("-"))
-					anno = String.format("%s:exon%d:%s.%d-%dins%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart - start, alt);
+					anno = String.format("%s:exon%d:%s.%d-%dins%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart
+							- start, alt);
 				else
-					anno = String.format("%s:exon%d:%s.%d-%d%s>%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart - start, ref, alt);
+					anno = String.format("%s:exon%d:%s.%d-%d%s>%s", kgl.getName(), k + 1, coding, cumlenexon, exonstart
+							- start, ref, alt);
 				int refvarstart = cumlenexon; /* position of mutation in CDS */
 				Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, refvarstart);
 				return ann;
 			} else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 				/* #-------<---->-*--------<-->-- mutation right after exon end */
 				if (alt.equals("-"))
-					anno = String.format("%s:exon%d:%s.%d+%ddel%s", kgl.getName(), k + 1, coding, cumlenexon, start - exonend, ref);
+					anno = String.format("%s:exon%d:%s.%d+%ddel%s", kgl.getName(), k + 1, coding, cumlenexon, start
+							- exonend, ref);
 				else if (alt.equals("-"))
-					anno = String.format("%s:exon%d:%s.%d+%dins%s", kgl.getName(), k + 1, coding, cumlenexon, start - exonend, alt);
+					anno = String.format("%s:exon%d:%s.%d+%dins%s", kgl.getName(), k + 1, coding, cumlenexon, start
+							- exonend, alt);
 				else
-					anno = String.format("%s:exon%d:%s.%d+%d%s>%s", kgl.getName(), k + 1, coding, cumlenexon, start - exonend, ref, alt);
+					anno = String.format("%s:exon%d:%s.%d+%d%s>%s", kgl.getName(), k + 1, coding, cumlenexon, start
+							- exonend, ref, alt);
 				/* anno is now something like uc001alq.2:exon22:c.2818+2G>A */
 				int refvarstart = cumlenexon;
 				Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, refvarstart);
@@ -387,8 +371,7 @@ public class SpliceAnnotation {
 			}
 		}
 		/*
-		 * If we get here, the is a complicated_splice_mutation not covered by
-		 * the above cases.
+		 * If we get here, the is a complicated_splice_mutation not covered by the above cases.
 		 */
 		anno = String.format("%s:exon%d:complicated_splice_mutation", kgl.getName(), k + 1);
 		// Annotation ann = Annotation.createSplicingAnnotation(kgl, 0,annot);
@@ -400,7 +383,7 @@ public class SpliceAnnotation {
 	/**
 	 * Write a splice annotation for a gene on the minus strand. When we get here, the calling code has already checked
 	 * that the mutation is in the 2 nucleotides before or after the exon/intron boundary.
-	 * 
+	 *
 	 * @param kgl
 	 *            Gene with splice mutation for current chromosomal variant.
 	 * @param start
@@ -413,11 +396,12 @@ public class SpliceAnnotation {
 	 *            variant sequence
 	 * @param k
 	 *            number (zero-based) of the affected exon.
-	 * @param cumlenexon
+	 * @param cumLenExon
 	 *            cumulative length up the end of exon k
 	 * @return An {@link jannovar.annotation.Annotation Annotation} object corresponding to the splice mutation.
 	 */
-	public static Annotation getSpliceAnnotationMinusStrand(TranscriptModel kgl, int start, int end, String ref, String alt, int k, int cumlenexon) {
+	public static Annotation getSpliceAnnotationMinusStrand(TranscriptModel kgl, int start, int end, String ref,
+			String alt, int k, int cumLenExon) {
 		int cdsend = kgl.getCDSEnd();
 		int exonend = kgl.getExonEnd(k);
 		int exonstart = kgl.getExonStart(k);
@@ -425,38 +409,40 @@ public class SpliceAnnotation {
 		String anno;
 		// if ($splicing{$name2} and $start==$end and $start<=$cdsend) {
 		if (start == end && start <= cdsend) { /*
-												 * single nucleotide splice
-												 * variant
+												 * single nucleotide splice variant
 												 */
 			if (start >= exonstart - SPLICING_THRESHOLD && start < exonstart) {
 				// ------*-<---->---------<-->-------<------>----
 				if (kgl.isNonCodingGene())
-					anno = String.format("%s:exon%d:n.%d+%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, exonstart - start, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:n.%d+%d%s>%s", kgl.getName(), (exoncount - k), cumLenExon,
+							exonstart - start, revcom(ref), revcom(alt));
 				else
-					anno = String.format("%s:exon%d:c.%d+%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, exonstart - start, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:c.%d+%d%s>%s", kgl.getName(), (exoncount - k), cumLenExon,
+							exonstart - start, revcom(ref), revcom(alt));
 				/* anno is now something like uc001alq.2:exon22:c.2818+2G>A */
-				int refvarstart = cumlenexon; // position of variant in CDS,
+				int refvarstart = cumLenExon; // position of variant in CDS,
 												// important for sorting
 				Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, refvarstart);
 				return ann;
 			} else if (start > exonend && start <= exonend + SPLICING_THRESHOLD) {
 				// -------<---->-*--------<-->-------<------>----
-				cumlenexon -= (exonend - exonstart); // $lenexon -=
+				cumLenExon -= (exonend - exonstart); // $lenexon -=
 														// ($exonend[$k]-$exonstart[$k]);
 				if (kgl.isNonCodingGene())
-					anno = String.format("%s:exon%d:n.%d-%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, start - exonend, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:n.%d-%d%s>%s", kgl.getName(), (exoncount - k), cumLenExon, start
+							- exonend, revcom(ref), revcom(alt));
 				else
-					anno = String.format("%s:exon%d:c.%d-%d%s>%s", kgl.getName(), (exoncount - k), cumlenexon, start - exonend, revcom(ref), revcom(alt));
+					anno = String.format("%s:exon%d:c.%d-%d%s>%s", kgl.getName(), (exoncount - k), cumLenExon, start
+							- exonend, revcom(ref), revcom(alt));
 				/* anno is now something like. uc003pdx.3:exon12:c.1039-1G>C */
-				int refvarstart = cumlenexon; // position of variant in CDS,
+				int refvarstart = cumLenExon; // position of variant in CDS,
 												// important for sorting
 				Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, refvarstart);
 				return ann;
 			}
 		}
 		/*
-		 * If we get here, the is a complicated_splice_mutation not covered by
-		 * the above cases.
+		 * If we get here, the is a complicated_splice_mutation not covered by the above cases.
 		 */
 		anno = String.format("%s:exon%d:complicated_splice_mutation", kgl.getName(), k + 1);
 		Annotation ann = new Annotation(kgl, anno, VariantType.SPLICING, 0);
@@ -467,7 +453,7 @@ public class SpliceAnnotation {
 	 * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
 	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
 	 * are not valid.
-	 * 
+	 *
 	 * @param sq
 	 *            original, upper-case cDNA string
 	 * @return reverse complement version of the input string sq.
