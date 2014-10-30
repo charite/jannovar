@@ -317,7 +317,7 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 *
 	 * @return cDNA sequence
 	 */
-	public String getCdnaSequence() {
+	public String getCDNASequence() {
 		return this.sequence;
 	}
 

@@ -12,12 +12,12 @@ import java.util.HashSet;
  * {@link jannovar.exome.Variant Variant} and provides some access functions that summarize, sort, or display the
  * objects. Note that rarely, a variant annotation is made to more than one Gene symbol. In this case, we represent the
  * affected gene as a comma-separated list of symbols.
- * <P>
+ *
  * The list {@link #annotationList} contains all of the {@link jannovar.annotation.Annotation Annotation} objects but
  * they are sorted according to priority. We can take advantage of this if we want to return only those annotations that
  * belong to the highest priority class by noting the class of the first annotation, and not returning any annotation of
  * a lower priority level.
- * 
+ *
  * @author Peter N Robinson
  * @version 0.19 (31 December, 2013)
  */
@@ -49,10 +49,10 @@ public class AnnotationList {
 	private boolean isStructural = false;
 
 	/**
-	 * Construction of AnnotationList objects is performed by an {@link jannovar.annotation.AnnotatedVariantFactory
+	 * Construction of AnnotationList objects is performed by an {@link jannovar.annotation.AnnotationCollector
 	 * AnnotatedVariantFactory} object based on the transcripts that are identified by the Interval tree search. All
 	 * annotations that affect one variant are passed to the constructor.
-	 * 
+	 *
 	 * @param lst
 	 *            List of all annotations that affect the current variant.
 	 */
@@ -64,7 +64,7 @@ public class AnnotationList {
 	/**
 	 * Get a list of all individual {@link jannovar.annotation.Annotation Annotation} objects that affect the variant
 	 * that owns this AnnotationList.
-	 * 
+	 *
 	 * @return {@link ArrayList} of {@link Annotation}s
 	 */
 	public ArrayList<Annotation> getAnnotationList() {
@@ -103,7 +103,7 @@ public class AnnotationList {
 	/**
 	 * If there are multiple annotations, this function sorts them. This function also sets the overall variant type
 	 * (the most pathogenic single type found among all annotations).
-	 * 
+	 *
 	 * @throws jannovar.exception.AnnotationException
 	 */
 	public void sortAnnotations() throws AnnotationException {
@@ -118,6 +118,10 @@ public class AnnotationList {
 		}
 	}
 
+	/**
+	 * @return String with sorted list of all variant effects, separated by <code>","</code>.
+	 * @throws AnnotationException
+	 */
 	public String getAllTranscriptVariantEffects() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
 			String e = String.format("[AnnotationList] Error: No Annotations found");
@@ -140,7 +144,7 @@ public class AnnotationList {
 	 * Get the annotations for all transcript (this will be used to annotate VCF files). If there are more than one
 	 * annotation a comma separated list of annotations will be returned. The annotations are sorted according to the
 	 * pathogenicity of the variation.
-	 * 
+	 *
 	 * @return String representation of all annotations
 	 * @throws jannovar.exception.AnnotationException
 	 */
@@ -166,7 +170,7 @@ public class AnnotationList {
 	 * Get an annotation for a single transcript (this will be used to annotated VCF files). Note that we will return an
 	 * annotation that matches with the overall type of this annotation, in case there are multiple annotations for this
 	 * variant (e.g., if there are nonsense and synonymous annotation, return nonsense).
-	 * 
+	 *
 	 * @return annotation for a single transcript
 	 * @throws jannovar.exception.AnnotationException
 	 */
@@ -251,9 +255,11 @@ public class AnnotationList {
 
 	private String getExonicAnnotations(ArrayList<Annotation> lst) {
 		StringBuilder sb = new StringBuilder();
-		/* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
-		   If there are multiple transcript annotations they are separated by comma.
-		   After the last annotation, there is a closing parenthesis. */
+		/*
+		 * The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S... If there are multiple
+		 * transcript annotations they are separated by comma. After the last annotation, there is a closing
+		 * parenthesis.
+		 */
 		boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
 		for (int j = 0; j < lst.size(); ++j) {
 			Annotation ann = lst.get(j);
@@ -271,13 +277,13 @@ public class AnnotationList {
 	/**
 	 * Returns the gene symbol of the annotations. If multiple genes are affected, it returns the Gene symbol of the
 	 * most highly prioritized gene.
-	 * 
+	 *
 	 * @return gene symbol of the annotations
 	 */
 	public String getGeneSymbol() {
-		/*if (this.hasMultipleGeneSymbols) {
-		    return getMultipleGeneList();
-		    } else */
+		/*
+		 * if (this.hasMultipleGeneSymbols) { return getMultipleGeneList(); } else
+		 */
 		if (this.annotationList == null) {
 			System.err.println("error-annotationListNull");
 			System.out.println("VarType = " + type);
@@ -300,7 +306,7 @@ public class AnnotationList {
 	 * TODO: Some variants have multiple genes affected. For the most part, this affects noncoding transcripts and not
 	 * the transcripts typically interesting in exome sequencing. However, we may want to refactor the interface to
 	 * return a list of ids in thus future.
-	 * 
+	 *
 	 * @return EntrezGene id of gene affected by variant
 	 */
 	public int getEntrezGeneID() {
@@ -310,7 +316,7 @@ public class AnnotationList {
 	/**
 	 * If the {@link AnnotationList} has multiple Annotation objects, then the Annotation most likely to be pathogenic
 	 * is returned.
-	 * 
+	 *
 	 * @return most pathogenic {@link VariantType} in the list
 	 */
 	public VariantType getVariantType() {
@@ -331,7 +337,7 @@ public class AnnotationList {
 	/**
 	 * For annotations that affect multiple genes (i.e., multiple gene symbols), return String with a comma-separated
 	 * list of the symbols. It is assumed that this function is call only for cases with multiple annotations.
-	 * 
+	 *
 	 * @return all gene symbols of affected genes
 	 */
 	public String getMultipleGeneList() {
@@ -352,7 +358,7 @@ public class AnnotationList {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return String with the combined annotation.
 	 * @throws AnnotationException
 	 */
@@ -383,7 +389,7 @@ public class AnnotationList {
 	 * Note that it is pretty rare to have an annotation that affects multiple genes (although it is common to have a
 	 * variant affect multiple transcripts that all have the same gene symbol). Therefore, for these rare cases we have
 	 * this function, that basically first gets a set of all the gene symbols and then sorts the output accordingly.
-	 * 
+	 *
 	 * @return String with the combined annotation.
 	 * @throws jannovar.exception.AnnotationException
 	 */
@@ -394,8 +400,10 @@ public class AnnotationList {
 		for (Annotation a : annotationList) {
 			geneSymbolSet.add(a.getGeneSymbol());
 		}
-		/* Second we need to sort the annotations according to gene symbol.
-		* Note that they already should be sorted according to position.*/
+		/*
+		 * Second we need to sort the annotations according to gene symbol. Note that they already should be sorted
+		 * according to position.
+		 */
 
 		for (String s : geneSymbolSet) {
 			ArrayList<String> tmp = new ArrayList<String>();
@@ -409,8 +417,9 @@ public class AnnotationList {
 					tmp.add(ann.getVariantAnnotation());
 			}
 			if (tmp.isEmpty()) {
-				continue; /* This can happen if there are multiple genes with missense, ncRNA, synonymous etc 
-							annotations. */
+				continue; /*
+						 * This can happen if there are multiple genes with missense, ncRNA, synonymous etc annotations.
+						 */
 			}
 			sb.append(s).append("(").append(tmp.get(0));
 			for (int i = 1; i < tmp.size(); ++i) {
@@ -448,9 +457,11 @@ public class AnnotationList {
 
 	/**
 	 * For variants that affect multiple transcripts, we sometimes want to list all of the gene symbols alphabetically.
-	 * 
+	 *
 	 * @return alphabetical list of gene symbols affected by the current variant.
+	 * @deprecated
 	 */
+	@Deprecated
 	private ArrayList<String> getSortedListOfGeneSymbols() {
 		HashSet<String> set = new HashSet<String>();
 		ArrayList<String> list = new ArrayList<String>();
@@ -542,16 +553,19 @@ public class AnnotationList {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		/* The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S...
-		   If there are multiple transcript annotations they are separated by comma.
-		   After the last annotation, there is a closing parenthesis. */
+		/*
+		 * The annotation begins as (e.g.) RNF207(uc001amg.3:exon17:c.1718A>G:p.N573S... If there are multiple
+		 * transcript annotations they are separated by comma. After the last annotation, there is a closing
+		 * parenthesis.
+		 */
 		boolean needGeneSymbol = true; /* flag to show that we still need to add the gene symbol */
 		for (int j = 0; j < lst.size(); ++j) {
 			Annotation ann = lst.get(j);
 			if (!ann.isUTRVariant())
-				continue; /* this skips over non UTR annotations of alternative transcripts
-							for variants that have at least one UTR annotation. Note this
-							will break for variants affecting multiple genes.*/
+				continue; /*
+						 * this skips over non UTR annotations of alternative transcripts for variants that have at
+						 * least one UTR annotation. Note this will break for variants affecting multiple genes.
+						 */
 			if (needGeneSymbol) {
 				sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
 				needGeneSymbol = false;
@@ -571,7 +585,8 @@ public class AnnotationList {
 		System.out.println("Total annotations: " + annotationList.size());
 		for (Annotation a : annotationList) {
 			int level = VariantType.priorityLevel(a.getVariantType());
-			System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation() + " [" + level + "]");
+			System.out.println("[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> "
+					+ a.getVariantAnnotation() + " [" + level + "]");
 		}
 		System.out.println("*******");
 	}
