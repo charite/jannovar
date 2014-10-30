@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -24,22 +22,16 @@ import org.junit.Test;
  */
 public class UTR3AnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	/**
@@ -53,16 +45,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 6693165;
 		String ref = "-";
 		String alt = "TA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("THAP3(uc001aod.3:c.*28_*29insTA,uc001aoc.3:c.*28_*29insTA)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("THAP3(uc001aod.3:c.*28_*29insTA,uc001aoc.3:c.*28_*29insTA)", annot);
 	}
 
 	/**
@@ -76,16 +64,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 19315621;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CLEC19A(uc002dga.5:c.*81C>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CLEC19A(uc002dga.5:c.*81C>G)", annot);
 	}
 
 	/**
@@ -99,16 +83,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 63070540;
 		String ref = "TAATGTGGT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ANGPTL3(uc001das.2:c.*52_*60del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ANGPTL3(uc001das.2:c.*52_*60del)", annot);
 	}
 
 	/**
@@ -122,16 +102,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 89597755;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("GBP7(uc001dna.2:c.*77A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("GBP7(uc001dna.2:c.*77A>G)", annot);
 	}
 
 	/**
@@ -145,16 +121,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 161643333;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FCGR2B(uc009wum.2:c.*21A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FCGR2B(uc009wum.2:c.*21A>G)", annot);
 	}
 
 	/**
@@ -168,16 +140,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 165533075;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LRRC52(uc001gde.2:c.*14C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LRRC52(uc001gde.2:c.*14C>T)", annot);
 	}
 
 	/**
@@ -191,23 +159,19 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 168550535;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("XCL1(uc001gfo.2:c.*77A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("XCL1(uc001gfo.2:c.*77A>G)", annot);
 	}
 
 	/**
 	 * <P>
 	 * annovar: RGS21 chr1:192335274->CTAA expected:<...S21(uc001gsh.3:c.*20[->]CTAA)> but
 	 * was:<...S21(uc001gsh.3:c.*20[_21ins]CTAA)>
-	 * 
+	 *
 	 * </P>
 	 */
 	@Test
@@ -216,16 +180,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 192335274;
 		String ref = "-";
 		String alt = "CTAA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("RGS21(uc001gsh.3:c.*20_*21insCTAA)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("RGS21(uc001gsh.3:c.*20_*21insCTAA)", annot);
 	}
 
 	/**
@@ -239,16 +199,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 192335275;
 		String ref = "-";
 		String alt = "TAAT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("RGS21(uc001gsh.3:c.*21_*22insTAAT)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("RGS21(uc001gsh.3:c.*21_*22insTAAT)", annot);
 	}
 
 	/**
@@ -262,16 +218,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 201865763;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LMOD1(uc021phl.1:c.*1643T>C,uc010ppu.2:c.*1643T>C,uc021phm.1:c.*1737T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LMOD1(uc021phl.1:c.*1643T>C,uc010ppu.2:c.*1643T>C,uc021phm.1:c.*1737T>C)", annot);
 	}
 
 	/**
@@ -286,16 +238,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 170606300;
 		String ref = "-";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PHOSPHO2-KLHL23(uc002ufh.2:c.*58_*59insA,uc002ufi.2:c.*58_*59insA)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PHOSPHO2-KLHL23(uc002ufh.2:c.*58_*59insA,uc002ufi.2:c.*58_*59insA)", annot);
 	}
 
 	/**
@@ -309,16 +257,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 219128506;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("GPBAR1(uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T,uc010zjx.1:c.*66C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("GPBAR1(uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T,uc010zjx.1:c.*66C>T)", annot);
 	}
 
 	/**
@@ -332,16 +276,14 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 52728804;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("GLT8D1(uc003dfn.3:c.*57G>A,uc003dfl.3:c.*57G>A,uc003dfm.3:c.*57G>A,uc003dfi.4:c.*57G>A,uc003dfk.3:c.*57G>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"GLT8D1(uc003dfn.3:c.*57G>A,uc003dfl.3:c.*57G>A,uc003dfm.3:c.*57G>A,uc003dfi.4:c.*57G>A,uc003dfk.3:c.*57G>A)",
+				annot);
 	}
 
 	/**
@@ -355,23 +297,19 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 189038648;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("TPRG1(uc003frw.2:c.*39T>C,uc003frv.2:c.*39T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("TPRG1(uc003frw.2:c.*39T>C,uc003frv.2:c.*39T>C)", annot);
 	}
 
 	/**
 	 * <P>
 	 * annovar: AK308309 chr4:119435320CAAGAA>- expected:<AK308309(uc010[1]my.1:c.*99_104delCAA...> but
 	 * was:<AK308309(uc010[i]my.1:c.*99_104delCAA...>
-	 * 
+	 *
 	 * </P>
 	 */
 	@Test
@@ -380,16 +318,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 119435320;
 		String ref = "CAAGAA";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AK308309(uc010imy.1:c.*99_*104del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AK308309(uc010imy.1:c.*99_*104del)", annot);
 	}
 
 	/**
@@ -403,16 +337,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 190884289;
 		String ref = "-";
 		String alt = "GACA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FRG1(uc003izs.3:c.*5_*6insGACA)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FRG1(uc003izs.3:c.*5_*6insGACA)", annot);
 	}
 
 	/**
@@ -426,16 +356,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 1393761;
 		String ref = "-";
 		String alt = "GG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SLC6A3(uc003jck.3:c.*1089_*1090insCC)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SLC6A3(uc003jck.3:c.*1089_*1090insCC)", annot);
 	}
 
 	/**
@@ -449,16 +375,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 160039687;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ATP10B(uc003lyn.3:c.*52A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ATP10B(uc003lyn.3:c.*52A>G)", annot);
 	}
 
 	/**
@@ -472,16 +394,14 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 31477771;
 		String ref = "GA";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MICB(uc031snm.1:c.*85_*86del,uc011dnm.2:c.*85_*86del,uc003nto.4:c.*85_*86del,uc003ntn.4:c.*85_*86del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"MICB(uc031snm.1:c.*85_*86del,uc011dnm.2:c.*85_*86del,uc003nto.4:c.*85_*86del,uc003ntn.4:c.*85_*86del)",
+				annot);
 	}
 
 	/**
@@ -495,16 +415,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 42666020;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PRPH2(uc003osk.3:c.*13C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PRPH2(uc003osk.3:c.*13C>T)", annot);
 	}
 
 	/**
@@ -518,16 +434,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 150385730;
 		String ref = "T";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ULBP3(uc011eej.1:c.*13A>C,uc003qns.3:c.*13A>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ULBP3(uc011eej.1:c.*13A>C,uc003qns.3:c.*13A>C)", annot);
 	}
 
 	/**
@@ -535,7 +447,7 @@ public class UTR3AnnotationTest implements Constants {
 	 * annovar: CDCA7L chr7:21941866TCTT>-
 	 * expected:<...74delTCTT,uc003svf.4[c.*71_74delTCTT,uc010kuk.3c.*71_74delTCTT,uc010kul.3]c.*71_74delTCTT)> but was:
 	 * <...74delTCTT,uc003svf.4[:c.*71_74delTCTT,uc010kuk.3:c.*71_74delTCTT,uc010kul.3:]c.*71_74delTCTT)>
-	 * 
+	 *
 	 * </P>
 	 */
 	@Test
@@ -544,18 +456,16 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 21941866;
 		String ref = "TCTT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CDCA7L(uc003svf.4:c.*75_*78del,uc010kul.3:c.*75_*78del,uc010kuk.3:c.*75_*78del,uc003sve.4:c.*75_*78del)", annot);
-			// Assert.assertEquals("CDCA7L(uc003svf.4:c.*71_*74del,uc010kul.3:c.*71_*74del,uc010kuk.3:c.*71_*74del,uc003sve.4:c.*71_*74del)",
-			// annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"CDCA7L(uc003svf.4:c.*75_*78del,uc010kul.3:c.*75_*78del,uc010kuk.3:c.*75_*78del,uc003sve.4:c.*75_*78del)",
+				annot);
+		// Assert.assertEquals("CDCA7L(uc003svf.4:c.*71_*74del,uc010kul.3:c.*71_*74del,uc010kuk.3:c.*71_*74del,uc003sve.4:c.*71_*74del)",
+		// annot);
 	}
 
 	/**
@@ -569,16 +479,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 73118196;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("WBSCR22(uc003tyw.1:c.*337T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("WBSCR22(uc003tyw.1:c.*337T>C)", annot);
 	}
 
 	/**
@@ -592,16 +498,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 81372156;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HGF(uc003uhn.1:c.*102T>C,uc003uho.1:c.*102T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("HGF(uc003uhn.1:c.*102T>C,uc003uho.1:c.*102T>C)", annot);
 	}
 
 	/**
@@ -615,16 +517,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 84563495;
 		String ref = "-";
 		String alt = "CTAC";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SPATA31D3(uc010mpt.2:c.*573_*574insCTAC)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SPATA31D3(uc010mpt.2:c.*573_*574insCTAC)", annot);
 	}
 
 	/**
@@ -638,16 +536,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 94456643;
 		String ref = "G";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ROR2(uc004ari.1:c.*1C>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ROR2(uc004ari.1:c.*1C>G)", annot);
 	}
 
 	/**
@@ -661,16 +555,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 135470176;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DDX31(uc010mzu.1:c.*77G>C,uc004cbq.1:c.*77G>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("DDX31(uc010mzu.1:c.*77G>C,uc004cbq.1:c.*77G>C)", annot);
 	}
 
 	/**
@@ -684,16 +574,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 50190799;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("WDFY4(uc001jha.4:c.*179C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("WDFY4(uc001jha.4:c.*179C>T)", annot);
 	}
 
 	/**
@@ -707,16 +593,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 88769678;
 		String ref = "-";
 		String alt = "TGC";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AGAP11(uc001kee.2:c.*16_*17insTGC,uc031pwm.1:c.*16_*17insTGC)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AGAP11(uc001kee.2:c.*16_*17insTGC,uc031pwm.1:c.*16_*17insTGC)", annot);
 	}
 
 	/**
@@ -730,16 +612,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 49831603;
 		String ref = "G";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LOC440040(uc009ymb.3:c.*317del,uc010rhy.2:c.*317del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LOC440040(uc009ymb.3:c.*317del,uc010rhy.2:c.*317del)", annot);
 	}
 
 	/**
@@ -753,16 +631,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 64993197;
 		String ref = "-";
 		String alt = "TAAG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SLC22A20(uc021qlg.1:c.*30_*31insTAAG)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SLC22A20(uc021qlg.1:c.*30_*31insTAAG)", annot);
 	}
 
 	/**
@@ -776,16 +650,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 64993200;
 		String ref = "-";
 		String alt = "GCAA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SLC22A20(uc021qlg.1:c.*33_*34insGCAA)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SLC22A20(uc021qlg.1:c.*33_*34insGCAA)", annot);
 	}
 
 	/**
@@ -799,16 +669,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 108345515;
 		String ref = "-";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KDELC2(uc001pki.2:c.*39_*40insT,uc001pkj.2:c.*39_*40insT)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("KDELC2(uc001pki.2:c.*39_*40insT,uc001pkj.2:c.*39_*40insT)", annot);
 	}
 
 	/**
@@ -822,23 +688,19 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 7869698;
 		String ref = "-";
 		String alt = "CCCG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DPPA3(uc001qtf.3:c.*25_*26insCCCG)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("DPPA3(uc001qtf.3:c.*25_*26insCCCG)", annot);
 	}
 
 	/**
 	 * <P>
 	 * annovar: STRAP chr12:16055927->T :<...nsT,uc001rdc.4:c.*15[->]T,uc010shw.2:c.*15_1...> but was:
 	 * <...nsT,uc001rdc.4:c.*15[_16ins]T,uc010shw.2:c.*15_1...>
-	 * 
+	 *
 	 * </P>
 	 */
 	@Test
@@ -847,24 +709,20 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 16055927;
 		String ref = "-";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("STRAP(uc001rdd.4:c.*15_*16insT,uc001rdc.4:c.*15_*16insT,uc010shw.2:c.*15_*16insT)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("STRAP(uc001rdd.4:c.*15_*16insT,uc001rdc.4:c.*15_*16insT,uc010shw.2:c.*15_*16insT)", annot);
 	}
 
 	/**
 	 * <P>
 	 * annovar: WIBG chr12:56295548TAAG>- <...1sif.1:c.*105_108del[CTTA,uc001sie.1:c.*105_108delCTTA])> but was:
 	 * <...1sif.1:c.*105_108del[TAAG,uc001sie.1:c.*105_108delTAAG])>
-	 * 
-	 * 
+	 *
+	 *
 	 * </P>
 	 */
 	@Test
@@ -873,16 +731,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 56295548;
 		String ref = "TAAG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("WIBG(uc001sie.1:c.*105_*108del,uc001sif.1:c.*108_*111del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("WIBG(uc001sie.1:c.*105_*108del,uc001sif.1:c.*108_*111del)", annot);
 	}
 
 	/**
@@ -898,16 +752,13 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 105404384;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AHNAK2(uc021seo.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc010axc.1:c.*16A>G,uc021sen.1:c.*16A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AHNAK2(uc021seo.1:c.*16A>G,uc001ypx.2:c.*16A>G,uc010axc.1:c.*16A>G,uc021sen.1:c.*16A>G)",
+				annot);
 	}
 
 	/**
@@ -921,16 +772,14 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 46198876;
 		String ref = "G";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SNX11(uc010wlg.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wli.1:c.*6G>C,uc002inf.1:c.*6G>C,uc002inh.1:c.*6G>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"SNX11(uc010wlg.1:c.*6G>C,uc010wlj.1:c.*6G>C,uc010wlh.1:c.*6G>C,uc002ing.1:c.*6G>C,uc010wli.1:c.*6G>C,uc002inf.1:c.*6G>C,uc002inh.1:c.*6G>C)",
+				annot);
 	}
 
 	/**
@@ -944,16 +793,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 46973146;
 		String ref = "G";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ATP5G1(uc002iog.3:c.*15del,uc002ioh.3:c.*15del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ATP5G1(uc002iog.3:c.*15del,uc002ioh.3:c.*15del)", annot);
 	}
 
 	/**
@@ -967,16 +812,14 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 74077497;
 		String ref = "G";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("EXOC7(uc002jqq.3:c.*2232C>G,uc010wsw.2:c.*2232C>G,uc002jqr.3:c.*2232C>G,uc010wsx.2:c.*2232C>G,uc002jqs.3:c.*2232C>G,uc010wsv.2:c.*2232C>G,uc010dgv.2:c.*2232C>G,uc002jqp.2:c.*2261C>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"EXOC7(uc002jqq.3:c.*2232C>G,uc010wsw.2:c.*2232C>G,uc002jqr.3:c.*2232C>G,uc010wsx.2:c.*2232C>G,uc002jqs.3:c.*2232C>G,uc010wsv.2:c.*2232C>G,uc010dgv.2:c.*2232C>G,uc002jqp.2:c.*2261C>G)",
+				annot);
 	}
 
 	/**
@@ -990,16 +833,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 43262532;
 		String ref = "C";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SLC14A2(uc002lbe.3:c.*48C>A,uc010dnj.3:c.*48C>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SLC14A2(uc002lbe.3:c.*48C>A,uc010dnj.3:c.*48C>A)", annot);
 	}
 
 	/**
@@ -1013,16 +852,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 47918639;
 		String ref = "A";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SKA1(uc002let.3:c.*22A>C,uc002leu.3:c.*22A>C,uc010xdl.2:c.*22A>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SKA1(uc002let.3:c.*22A>C,uc002leu.3:c.*22A>C,uc010xdl.2:c.*22A>C)", annot);
 	}
 
 	/**
@@ -1036,16 +871,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 3534842;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FZR1(uc010dtk.2:c.*8G>A,uc002lxv.2:c.*8G>A,uc002lxt.2:c.*8G>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FZR1(uc010dtk.2:c.*8G>A,uc002lxv.2:c.*8G>A,uc002lxt.2:c.*8G>A)", annot);
 	}
 
 	/**
@@ -1059,16 +890,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 33467620;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("C19orf40(uc002nud.4:c.*32T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("C19orf40(uc002nud.4:c.*32T>C)", annot);
 	}
 
 	/**
@@ -1082,16 +909,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 35616086;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LGI4(uc002nxx.2:c.*11G>A,uc002nxy.1:c.*11G>A,uc002nxz.1:c.*986G>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LGI4(uc002nxx.2:c.*11G>A,uc002nxy.1:c.*11G>A,uc002nxz.1:c.*986G>A)", annot);
 	}
 
 	/**
@@ -1105,16 +928,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 36259494;
 		String ref = "C";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("C19orf55(uc021usz.1:c.*47C>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("C19orf55(uc021usz.1:c.*47C>A)", annot);
 	}
 
 	/**
@@ -1128,16 +947,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 41283365;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MIA(uc021uuu.1:c.*40C>G,uc002opb.4:c.*40C>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MIA(uc021uuu.1:c.*40C>G,uc002opb.4:c.*40C>G)", annot);
 	}
 
 	/**
@@ -1151,16 +966,13 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 48551546;
 		String ref = "A";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PLA2G4C(uc010xzd.2:c.*54T>A,uc002phx.3:c.*54T>A,uc010elr.3:c.*139T>A,uc002phw.3:c.*54T>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"PLA2G4C(uc010xzd.2:c.*54T>A,uc002phx.3:c.*54T>A,uc010elr.3:c.*139T>A,uc002phw.3:c.*54T>A)", annot);
 	}
 
 	/**
@@ -1174,16 +986,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 53576589;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ZNF160(uc002qas.4:c.*1G>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ZNF160(uc002qas.4:c.*1G>C)", annot);
 	}
 
 	/**
@@ -1197,16 +1005,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 45523416;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("TRAPPC10(uc011afa.2:c.*4C>T,uc010gpo.3:c.*4C>T,uc002zea.3:c.*4C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("TRAPPC10(uc011afa.2:c.*4C>T,uc010gpo.3:c.*4C>T,uc002zea.3:c.*4C>T)", annot);
 	}
 
 	/**
@@ -1220,16 +1024,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 45565473;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("C21orf33(uc002zec.4:c.*642C>T,uc002zed.4:c.*642C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("C21orf33(uc002zec.4:c.*642C>T,uc002zed.4:c.*642C>T)", annot);
 	}
 
 	/**
@@ -1243,16 +1043,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 47608580;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LSS(uc002zij.3:c.*194C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LSS(uc002zij.3:c.*194C>T)", annot);
 	}
 
 	/**
@@ -1266,16 +1062,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 24936970;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("GUCD1(uc003aah.2:c.*2004T>C,uc003aal.2:c.*2004T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("GUCD1(uc003aah.2:c.*2004T>C,uc003aal.2:c.*2004T>C)", annot);
 	}
 
 	/**
@@ -1289,16 +1081,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 37196871;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PVALB(uc010gwz.3:c.*63C>T,uc003apx.3:c.*63C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PVALB(uc010gwz.3:c.*63C>T,uc003apx.3:c.*63C>T)", annot);
 	}
 
 	/**
@@ -1312,16 +1100,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 50961854;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("NCAPH2(uc003blx.4:c.*50T>C,uc003blr.4:c.*50T>C,uc003blv.3:c.*166T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("NCAPH2(uc003blx.4:c.*50T>C,uc003blr.4:c.*50T>C,uc003blv.3:c.*166T>C)", annot);
 	}
 
 	/**
@@ -1335,16 +1119,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 34962909;
 		String ref = "A";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FAM47B(uc004ddi.2:c.*23A>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FAM47B(uc004ddi.2:c.*23A>C)", annot);
 	}
 
 	/**
@@ -1358,16 +1138,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 134994622;
 		String ref = "T";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SAGE1(uc010nry.1:c.*481T>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SAGE1(uc010nry.1:c.*481T>G)", annot);
 	}
 
 	/**
@@ -1381,16 +1157,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 134994633;
 		String ref = "G";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SAGE1(uc010nry.1:c.*492G>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SAGE1(uc010nry.1:c.*492G>C)", annot);
 	}
 
 	/**
@@ -1404,16 +1176,12 @@ public class UTR3AnnotationTest implements Constants {
 		int pos = 21154323;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CD24(uc004ftz.1:c.*30C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CD24(uc004ftz.1:c.*30C>T)", annot);
 	}
 
 }

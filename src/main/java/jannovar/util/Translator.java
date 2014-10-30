@@ -1,4 +1,4 @@
-package jannovar.reference;
+package jannovar.util;
 
 import jannovar.exception.AnnotationException;
 

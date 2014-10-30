@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -24,22 +22,16 @@ import org.junit.Test;
  */
 public class NoncodingRNAAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	@Test
@@ -48,16 +40,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 20620683;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR3, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SLIT2(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR3, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SLIT2(uc003gpr.1:c.*51G>A,uc003gps.1:c.*51G>A)", annot);
 	}
 
 	/**
@@ -73,16 +61,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 48883012;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("C12orf54(uc009zky.1:exon5:n.359T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("C12orf54(uc009zky.1:exon5:n.359T>C)", annot);
 	}
 
 	/**
@@ -96,16 +80,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 173429995;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("BC136808(uc010pmp.1:exon2:n.507C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("BC136808(uc010pmp.1:exon2:n.507C>T)", annot);
 	}
 
 	/**
@@ -119,16 +99,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 90458648;
 		String ref = "T";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("abParts(uc031rom.1:exon43:n.5842del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("abParts(uc031rom.1:exon43:n.5842del)", annot);
 	}
 
 	/**
@@ -142,16 +118,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 159912418;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MIR146A(uc021yhe.1:exon1:n.60C>G),DQ658414(uc003lyl.4:exon2:n.316C>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MIR146A(uc021yhe.1:exon1:n.60C>G),DQ658414(uc003lyl.4:exon2:n.316C>G)", annot);
 	}
 
 	/**
@@ -165,16 +137,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 31803065;
 		String ref = "T";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SNORD48(uc003nxo.1:exon1:n.26del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SNORD48(uc003nxo.1:exon1:n.26del)", annot);
 	}
 
 	/**
@@ -188,16 +156,13 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 97329738;
 		String ref = "-";
 		String alt = "GA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("BC042913(uc004aus.1:exon3:n.494_495insGA),BC080653(uc004aut.1:exon3:n.542_543insGA)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("BC042913(uc004aus.1:exon3:n.494_495insGA),BC080653(uc004aut.1:exon3:n.542_543insGA)",
+				annot);
 	}
 
 	/**
@@ -211,16 +176,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 73079294;
 		String ref = "-";
 		String alt = "AA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AK024141(uc010arh.1:exon1:n.512_513insTT)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AK024141(uc010arh.1:exon1:n.512_513insTT)", annot);
 	}
 
 	/**
@@ -234,16 +195,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 36353761;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LOC440434(uc010wdn.1:exon7:n.876G>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LOC440434(uc010wdn.1:exon7:n.876G>A)", annot);
 	}
 
 	/**
@@ -257,16 +214,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 19408950;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("mir-133b(uc002kts.3:exon1:n.724G>A),mir-133b(uc002ktr.3:exon1:n.862G>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("mir-133b(uc002kts.3:exon1:n.724G>A),mir-133b(uc002ktr.3:exon1:n.862G>A)", annot);
 	}
 
 	/**
@@ -280,16 +233,14 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 25829352;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FAM182B(uc002wve.3:exon2:n.375A>G),FAM182B(uc002wvd.1:exon4:n.431A>G),BX648489(uc031rsn.1:exon1:n.2233A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"FAM182B(uc002wve.3:exon2:n.375A>G),FAM182B(uc002wvd.1:exon4:n.431A>G),BX648489(uc031rsn.1:exon1:n.2233A>G)",
+				annot);
 	}
 
 	/**
@@ -303,16 +254,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 70711958;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("INGX(uc004dzz.3:exon1:n.647A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("INGX(uc004dzz.3:exon1:n.647A>G)", annot);
 	}
 
 	/**
@@ -326,16 +273,12 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 8657215;
 		String ref = "C";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("TTTY11(uc004frk.2:exon3:n.250G>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("TTTY11(uc004frk.2:exon3:n.250G>T)", annot);
 	}
 
 	/**
@@ -349,16 +292,11 @@ public class NoncodingRNAAnnotationTest implements Constants {
 		int pos = 23749507;
 		String ref = "G";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("TTTY13(uc004fus.3:exon3:n.385del)", annot);
-		}
-	}
 
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_EXONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("TTTY13(uc004fus.3:exon3:n.385del)", annot);
+	}
 }

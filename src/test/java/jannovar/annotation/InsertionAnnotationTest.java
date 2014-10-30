@@ -14,11 +14,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -28,27 +26,21 @@ import org.junit.Test;
  */
 public class InsertionAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
 	/** This is needed for the VCF line initialization, but is not used for anything else. */
 	private static GenotypeFactoryA genofactory = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 		genofactory = new MultipleGenotypeFactory();
 		VCFLine.setGenotypeFactory(genofactory);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
 	}
 
 	/**
@@ -71,16 +63,14 @@ public class InsertionAnnotationTest implements Constants {
 		byte chr = (byte) v.get_chromosome();
 		// String ref = "-";
 		// String alt = "ATCG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FAM178B(uc002sxk.4:exon7:c.628_629insGATC:p.L210fs,uc002sxl.4:exon13:c.1579_1580insGATC:p.L527fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"FAM178B(uc002sxk.4:exon7:c.628_629insGATC:p.L210fs,uc002sxl.4:exon13:c.1579_1580insGATC:p.L527fs)",
+				annot);
 	}
 
 	/**
@@ -94,17 +84,13 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 109371423;
 		String ref = "-";
 		String alt = "CC";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.D756fs)",annot);
-			Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.Y756fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.D756fs)",annot);
+		Assert.assertEquals("RANBP2(uc002tem.4:exon16:c.2265_2266insCC:p.Y756fs)", annot);
 	}
 
 	/**
@@ -122,17 +108,13 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 135272376;
 		String ref = "-";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
 
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.93_94insA:p.Q32fs)", annot);
-		}
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		Assert.assertEquals("FBXL21(uc031sld.1:exon5:c.93_94insA:p.Q32fs)", annot);
 	}
 
 	/**
@@ -146,16 +128,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 109383313;
 		String ref = "-";
 		String alt = "AGCG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("RANBP2(uc002tem.4:exon20:c.6318_6319insAGCG:p.W2107fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("RANBP2(uc002tem.4:exon20:c.6318_6319insAGCG:p.W2107fs)", annot);
 	}
 
 	/**
@@ -169,16 +147,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 109383877;
 		String ref = "-";
 		String alt = "CAT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("RANBP2(uc002tem.4:exon20:c.6882_6883insCAT:p.D2294_E2295insH)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("RANBP2(uc002tem.4:exon20:c.6882_6883insCAT:p.D2294_E2295insH)", annot);
 	}
 
 	/**
@@ -192,16 +166,14 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 179519685;
 		String ref = "-";
 		String alt = "AAGT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("TTN(uc002umz.1:exon112:c.21594_21595insCTTA:p.V7199fs,uc031rqc.1:exon190:c.38076_38077insCTTA:p.V12693fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"TTN(uc002umz.1:exon112:c.21594_21595insCTTA:p.V7199fs,uc031rqc.1:exon190:c.38076_38077insCTTA:p.V12693fs)",
+				annot);
 	}
 
 	/**
@@ -215,16 +187,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 211421454;
 		String ref = "-";
 		String alt = "TTC";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CPS1(uc010fur.3:exon2:c.15_16insTTC:p.I5_K6insF)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CPS1(uc010fur.3:exon2:c.15_16insTTC:p.I5_K6insF)", annot);
 	}
 
 	/**
@@ -238,16 +206,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 195510343;
 		String ref = "-";
 		String alt = "CA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MUC4(uc021xjp.1:exon2:c.8107_8108insTG:p.T2703fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MUC4(uc021xjp.1:exon2:c.8107_8108insTG:p.T2703fs)", annot);
 	}
 
 	/**
@@ -261,16 +225,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 195511593;
 		String ref = "-";
 		String alt = "CTG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MUC4(uc021xjp.1:exon2:c.6859_6860insGCA:p.T2286_T2287insS)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MUC4(uc021xjp.1:exon2:c.6859_6860insGCA:p.T2286_T2287insS)", annot);
 	}
 
 	/**
@@ -284,16 +244,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 190881973;
 		String ref = "-";
 		String alt = "GACT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FRG1(uc003izs.3:exon7:c.608_609insGACT:p.Q204fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FRG1(uc003izs.3:exon7:c.608_609insGACT:p.Q204fs)", annot);
 	}
 
 	/**
@@ -307,16 +263,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 23526344;
 		String ref = "-";
 		String alt = "TGA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PRDM9(uc003jgo.3:exon11:c.1147_1148insTGA:p.P383delinsLT)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PRDM9(uc003jgo.3:exon11:c.1147_1148insTGA:p.P383delinsLT)", annot);
 	}
 
 	/**
@@ -332,16 +284,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 77745856;
 		String ref = "-";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SCAMP1(uc003kfl.3:exon8:c.730_731insT:p.N244fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SCAMP1(uc003kfl.3:exon8:c.730_731insT:p.N244fs)", annot);
 	}
 
 	/**
@@ -355,16 +303,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 140573931;
 		String ref = "-";
 		String alt = "ATGC";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PCDHB10(uc003lix.3:exon1:c.1806_1807insATGC:p.S603fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PCDHB10(uc003lix.3:exon1:c.1806_1807insATGC:p.S603fs)", annot);
 	}
 
 	/**
@@ -378,16 +322,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 30782220;
 		String ref = "-";
 		String alt = "TTTG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AK098012(uc003nrp.1:exon2:c.255_256insAACA:p.V86fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AK098012(uc003nrp.1:exon2:c.255_256insAACA:p.V86fs)", annot);
 	}
 
 	/**
@@ -401,16 +341,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 41754575;
 		String ref = "-";
 		String alt = "TCT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PRICKLE4(uc011duf.1:exon8:c.863_864insTCT:p.L288dup)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PRICKLE4(uc011duf.1:exon8:c.863_864insTCT:p.L288dup)", annot);
 	}
 
 	/**
@@ -424,16 +360,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 44144382;
 		String ref = "-";
 		String alt = "AAAA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AEBP1(uc003tkb.4:exon1:c.118_119insAAAA:p.G40fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AEBP1(uc003tkb.4:exon1:c.118_119insAAAA:p.G40fs)", annot);
 	}
 
 	/**
@@ -447,16 +379,12 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 100637286;
 		String ref = "-";
 		String alt = "GTA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MUC12(uc003uxo.3:exon2:c.3442_3443insGTA:p.S1147dup)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MUC12(uc003uxo.3:exon2:c.3442_3443insGTA:p.S1147dup)", annot);
 	}
 
 	/**
@@ -470,53 +398,49 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 137968919;
 		String ref = "-";
 		String alt = "AA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_INSERTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OLFM1(uc010naq.2:exon2:c.328_329insAA:p.G110fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_INSERTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OLFM1(uc010naq.2:exon2:c.328_329insAA:p.G110fs)", annot);
 	}
 
 	/**
 	 * <P>
-	 * 
+	 *
 	 * g19:chr17:g.37830925_37830926insG. This is reported as NM_033419.3:c.440_441insC in Annovar. Correct nomenclature
 	 * in HGVS should be: NM_033419.3:c.441dup, NM_033419.3:p.(Asn148Glnfs*15).
-	 * 
+	 *
 	 * Position 37,830,924 in a "G" Position 37,830,925 is an "A". Position 37,830,926 in a "G" PGAP3 is on the minus
 	 * strand. This insertion leads to a duplication of the "G" at 37,830,926
-	 * 
+	 *
 	 * However, I think there is also a position bug. Correct cDNA code should be:NM_033419.3:c.439dup,
 	 * p.(Leu147Profs*16)
-	 * 
+	 *
 	 * Jannovar gets: PGAP3(uc002hsk.3:exon3:c.288dupC:p.N97fs,uc002hsj.3:exon4:c.441dupC:p.N148fs)
-	 * 
+	 *
 	 * uc002hsj.3=NM_033419
-	 * 
-	 * 
+	 *
+	 *
 	 * Note:
-	 * 
+	 *
 	 * Mutalyzer says: M_033419.3(PGAP3_v001):c.441dup NM_033419.3(PGAP3_i001):p.(Asn148Glnfs*15) and
 	 * NM_033419(PGAP3_v001):c.288dup NM_033419(PGAP3_i001):p.(Ser97Leufs*66)
-	 * 
+	 *
 	 * Note that there is a discrepancy between what UCSC says and what the sequences of the several RefSeqs are.
 	 * According to the UCSC browser, I think that Jannovar is producing the correct results, i.e., p.Asn97fs
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * expected: <...exon3:c.288dupC:p.S9[7fs,uc002hsj.3:exon4:c.441dupC:p.N148]fs)> but was:
 	 * <...exon3:c.288dupC:p.S9[6fs,uc002hsj.3:exon4:c.441dupC:p.S147]fs)>
-	 * 
+	 *
 	 * Note NM_033419 = uc002hsk.3 Mutalzyer: NM_033419(PGAP3_v001):c.288dup NM_033419(PGAP3_i001):p.(Ser97Leufs*66)
 	 * Note: This is OK, but the insertion does not change the original aa, instead the frameshift starts one codon
 	 * downstream, which is why we should have 148 instead of 147
 	 * </P>
-	 * 
+	 *
 	 * @Test public void testInsertionVar49() throws JannovarException { String s =
 	 *       "17	37830924	.	G	GG	100	PASS	QD=11.71;	GT:GQ	0/1:99	0/0:99	0/1:99	0/0:99	0/1:99"; VCFLine line = new
 	 *       VCFLine(s); Variant v = line.toVariant(); int pos = v.get_position(); String ref = v.get_ref(); String alt
@@ -532,7 +456,7 @@ public class InsertionAnnotationTest implements Constants {
 
 	/**
 	 * <P>
-	 * 
+	 *
 	 * This duplication variation should lead to the loss of the translation initiation site
 	 * </P>
 	 * uc003izs.3 is NM_004477 mutalyzer: NM_004477(FRG1_v001):c.1_2insC NM_004477(FRG1_i001):p.? Note that mutalyzer
@@ -549,24 +473,20 @@ public class InsertionAnnotationTest implements Constants {
 		String ref = v.get_ref();
 		String alt = v.get_alt();
 		byte chr = (byte) v.get_chromosome();
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals(4, chr);
-			Assert.assertEquals("-", ref);
-			Assert.assertEquals("C", alt);
-			Assert.assertEquals(VariantType.START_LOSS, varType);
-			Assert.assertEquals("FRG1(uc003izs.3:exon1:c.1_2insC:p.M1?)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(4, chr);
+		Assert.assertEquals("-", ref);
+		Assert.assertEquals("C", alt);
+		Assert.assertEquals(VariantType.START_LOSS, varType);
+		Assert.assertEquals("FRG1(uc003izs.3:exon1:c.1_2insC:p.M1?)", annot);
 	}
 
 	/**
 	 * <P>
-	 * 
+	 *
 	 * This duplication variation should lead to the loss of the translation initiation site
 	 * </P>
 	 */
@@ -576,16 +496,11 @@ public class InsertionAnnotationTest implements Constants {
 		int pos = 190862166;
 		String ref = "-";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals(VariantType.START_LOSS, varType);
-			Assert.assertEquals("FRG1(uc003izs.3:exon1:c.2_3insA:p.M1?)", annot);
-		}
-	}
 
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(VariantType.START_LOSS, varType);
+		Assert.assertEquals("FRG1(uc003izs.3:exon1:c.2_3insA:p.M1?)", annot);
+	}
 }

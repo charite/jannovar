@@ -1,4 +1,4 @@
-package jannovar.io;
+package jannovar.gff;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,8 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
-import jannovar.gff.Feature;
-import jannovar.gff.TranscriptModelBuilder;
+
 import java.util.logging.Level;
 
 /**

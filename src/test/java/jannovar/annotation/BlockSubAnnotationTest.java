@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -24,25 +22,19 @@ import org.junit.Test;
  */
 public class BlockSubAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
 	/**
 	 * Set up test by importing Chromosome objects from serialized file.
 	 */
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = BlockSubAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	/**
@@ -71,7 +63,7 @@ public class BlockSubAnnotationTest implements Constants {
 
 	/**
 	 * <P>
-	 * 
+	 *
 	 * chr15 7453640074536400 74536416 TAAGAAGGAGACCATCA TAAGGAGACCATCA line36947 nonframeshift substitution
 	 * CCDC33:NM_025055:exon2:c.96_112TAAGGAGACCATCA, chr15 74536400
 	 * </P>
@@ -82,16 +74,12 @@ public class BlockSubAnnotationTest implements Constants {
 		int pos = 74536400;
 		String ref = "TAAGAAGGAGACCATCA";
 		String alt = "ACTACCAGAGGAAT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CCDC33(uc002axo.4:exon2:c.96_112delinsACTACCAGAGGAAT:p.K33_M38delinsLPEEL)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CCDC33(uc002axo.4:exon2:c.96_112delinsACTACCAGAGGAAT:p.K33_M38delinsLPEEL)", annot);
 	}
 
 	@Test
@@ -100,25 +88,20 @@ public class BlockSubAnnotationTest implements Constants {
 		int pos = 5475431;
 		String ref = "TCAACA";
 		String alt = "ACAACACT";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_SUBSTITUTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR51I2(uc010qzf.2:exon1:c.713_718delinsACAACACT:p.L238fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_SUBSTITUTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR51I2(uc010qzf.2:exon1:c.713_718delinsACAACACT:p.L238fs)", annot);
 	}
 
-	/*	nonframeshift substitution	HAVCR1:NM_012206:exon3:c.460_480ACGACTGTTCCAATGACGACGACT,HAVCR1:NM_001173393:exon4:c.460_480ACGACTGTTCCAATGACGACGACT,HAVCR1:NM_001099414:exon4:c.460_480ACGACTGTTCCAATGACGACGACT,	chr5	156479565	156479585	
-	AGTCGT	
-	AGTGAG	
-	expected:<[OR51I2(uc010qzf.2:exon1:c.713_718TCACAACA])> but was:<[HAVCR1(uc021ygj.1:exon4:c.475_480CTCACT,uc011ddm.2:exon4:c.475_480CTCACT,uc010jij.1:exon4:c.475_480CTCACT,uc003lwi.2:exon3:c.475_480CTCACT])>
-
-
-
+	/*
+	 * nonframeshift substitution HAVCR1:NM_012206:exon3:c
+	 * .460_480ACGACTGTTCCAATGACGACGACT,HAVCR1:NM_001173393:exon4:c.460_480ACGACTGTTCCAATGACGACGACT,HAVCR1:NM_001099414:exon4:c.460_480ACGACTGTTCCAATGACGACGACT,
+	 * chr5 156479565 156479585 AGTCGT AGTGAG expected:<[OR51I2(uc010qzf.2:exon1:c.713_718TCACAACA])> but
+	 * was:<[HAVCR1(uc021ygj.1:exon4:c
+	 * .475_480CTCACT,uc011ddm.2:exon4:c.475_480CTCACT,uc010jij.1:exon4:c.475_480CTCACT,uc003lwi.2:exon3:c.475_480CTCACT])>
 	 */
 
 	@Test
@@ -127,16 +110,14 @@ public class BlockSubAnnotationTest implements Constants {
 		int pos = 156479565;
 		String ref = "AGTCGT";
 		String alt = "AGTGAG";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HAVCR1(uc011ddm.2:exon4:c.475_477delinsCTC:p.T159_T159delinsL,uc021ygj.1:exon4:c.475_477delinsCTC:p.T159_T159delinsL,uc003lwi.2:exon3:c.475_477delinsCTC:p.T159_T159delinsL,uc010jij.1:exon4:c.475_477delinsCTC:p.T159_T159delinsL)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"HAVCR1(uc011ddm.2:exon4:c.475_477delinsCTC:p.T159_T159delinsL,uc021ygj.1:exon4:c.475_477delinsCTC:p.T159_T159delinsL,uc003lwi.2:exon3:c.475_477delinsCTC:p.T159_T159delinsL,uc010jij.1:exon4:c.475_477delinsCTC:p.T159_T159delinsL)",
+				annot);
 	}
 
 	@Test
@@ -145,16 +126,14 @@ public class BlockSubAnnotationTest implements Constants {
 		int pos = 156479565;
 		String ref = "AGTCGT";
 		String alt = "GAGCTA";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HAVCR1(uc011ddm.2:exon4:c.475_480delinsTAGCTC:p.T159_T160delins*,uc021ygj.1:exon4:c.475_480delinsTAGCTC:p.T159_T160delins*,uc003lwi.2:exon3:c.475_480delinsTAGCTC:p.T159_T160delins*,uc010jij.1:exon4:c.475_480delinsTAGCTC:p.T159_T160delins*)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"HAVCR1(uc011ddm.2:exon4:c.475_480delinsTAGCTC:p.T159_T160delins*,uc021ygj.1:exon4:c.475_480delinsTAGCTC:p.T159_T160delins*,uc003lwi.2:exon3:c.475_480delinsTAGCTC:p.T159_T160delins*,uc010jij.1:exon4:c.475_480delinsTAGCTC:p.T159_T160delins*)",
+				annot);
 	}
 
 }

@@ -1,9 +1,10 @@
-package jannovar.annotation;
+package jannovar.annotation.builders;
 
+import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
+import jannovar.util.Translator;
 
 // TODO: currently, the handling of tandem repeats is not as recommended
 /**
@@ -22,7 +23,7 @@ import jannovar.reference.Translator;
 public class DuplicationAnnotationBuilder {
 	/**
 	 * Annotates an insertion variant that is an duplication. The methods of this class are called from
-	 * {@link jannovar.annotation.InsertionAnnotationBuilder InsertionAnnotation} if that class determines that the insertion
+	 * {@link jannovar.annotation.builders.InsertionAnnotationBuilder InsertionAnnotation} if that class determines that the insertion
 	 * is equal to the preceding nucleotides in the reference sequence. That is, in addition to the conditions for a
 	 * insertion variant, the duplication variant requires a similar sequence to the insertion (before or) after the
 	 * insertion.

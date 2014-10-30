@@ -1,4 +1,4 @@
-package jannovar.io;
+package jannovar.pedigree;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import jannovar.exception.PedParseException;
-import jannovar.pedigree.Person;
-import jannovar.pedigree.Pedigree;
 
 /**
  * A class to parse standard Pedfiles (pedigree files) as known from linkage.

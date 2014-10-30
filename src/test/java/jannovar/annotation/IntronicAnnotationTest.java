@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -24,22 +22,16 @@ import org.junit.Test;
  */
 public class IntronicAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	/**
@@ -53,17 +45,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 909768;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("PLEKHN1(uc001acf.3:intron14:c.1597+24A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("PLEKHN1(uc001acf.3:intron14:c.1597+24A>G)", annot);
 	}
 
 	// /**
@@ -105,17 +93,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 48876500;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("C12orf54(uc001rrr.3:intron1:c.-59+141C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("C12orf54(uc001rrr.3:intron1:c.-59+141C>T)", annot);
 	}
 
 	/**
@@ -131,17 +115,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 48877000;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("C12orf54(uc001rrr.3:intron1:c.-58-23C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("C12orf54(uc001rrr.3:intron1:c.-58-23C>T)", annot);
 	}
 
 	/**
@@ -157,17 +137,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 48888800;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("C12orf54(uc001rrr.3:intron8:c.*41+38C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("C12orf54(uc001rrr.3:intron8:c.*41+38C>T)", annot);
 	}
 
 	/**
@@ -183,17 +159,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 48889800;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("C12orf54(uc001rrr.3:intron8:c.*42-164T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("C12orf54(uc001rrr.3:intron8:c.*42-164T>C)", annot);
 	}
 
 	/**
@@ -209,17 +181,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 48880600;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("C12orf54(uc001rrr.3:intron4:c.135+91T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("C12orf54(uc001rrr.3:intron4:c.135+91T>C)", annot);
 	}
 
 	/**
@@ -235,17 +203,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 48882700;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("C12orf54(uc001rrr.3:intron4:c.136-7C>T)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("C12orf54(uc001rrr.3:intron4:c.136-7C>T)", annot);
 	}
 
 	/**
@@ -261,17 +225,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 222762000;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("TAF1A(uc001hni.2:intron1:c.-175-93T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("TAF1A(uc001hni.2:intron1:c.-175-93T>C)", annot);
 	}
 
 	/**
@@ -287,17 +247,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 222763000;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("TAF1A(uc001hni.2:intron1:c.-176+69A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("TAF1A(uc001hni.2:intron1:c.-176+69A>G)", annot);
 	}
 
 	/**
@@ -313,17 +269,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 222731700;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("TAF1A(uc009xdy.1:intron4:c.*39-90T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("TAF1A(uc009xdy.1:intron4:c.*39-90T>C)", annot);
 	}
 
 	/**
@@ -339,17 +291,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 222731900;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("TAF1A(uc009xdy.1:intron4:c.*38+65A>G)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("TAF1A(uc009xdy.1:intron4:c.*38+65A>G)", annot);
 	}
 
 	/**
@@ -365,17 +313,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 222736700;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("TAF1A(uc001hni.2:intron7:c.620-62T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("TAF1A(uc001hni.2:intron7:c.620-62T>C)", annot);
 	}
 
 	/**
@@ -391,17 +335,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 222737200;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("TAF1A(uc001hni.2:intron7:c.619+201T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("TAF1A(uc001hni.2:intron7:c.619+201T>C)", annot);
 	}
 
 	/**
@@ -417,17 +357,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 25944000;
 		String ref = "C";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("BC052952(uc002wvf.3:intron3:n.313+168C>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("BC052952(uc002wvf.3:intron3:n.313+168C>A)", annot);
 	}
 
 	/**
@@ -443,17 +379,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 25945000;
 		String ref = "C";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("BC052952(uc002wvf.3:intron3:n.314-639C>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("BC052952(uc002wvf.3:intron3:n.314-639C>A)", annot);
 	}
 
 	/**
@@ -469,17 +401,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 36361000;
 		String ref = "A";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("LOC440434(uc010wdn.1:intron4:n.424+697T>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("LOC440434(uc010wdn.1:intron4:n.424+697T>A)", annot);
 	}
 
 	/**
@@ -495,17 +423,13 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 36359600;
 		String ref = "G";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
-			Assert.assertEquals("LOC440434(uc010wdn.1:intron4:n.425-558C>A)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		// Assert.assertEquals("PLEKHN1(uc001acf.3:dist to exon14=24:dist to exon15=54)", annot);
+		Assert.assertEquals("LOC440434(uc010wdn.1:intron4:n.425-558C>A)", annot);
 	}
 
 	/**
@@ -513,7 +437,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: MORN1 chr1:2286947A>G
 	 * </P>
 	 * TODO check distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar42() throws AnnotationException { byte chr = 1; int pos = 2286947; String ref =
 	 *       "A"; String alt = "G"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -533,16 +457,12 @@ public class IntronicAnnotationTest implements Constants {
 		int pos = 6204222;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.INTRONIC, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CHD5(uc001amb.2:intron11:c.1803-7G>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.INTRONIC, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CHD5(uc001amb.2:intron11:c.1803-7G>C)", annot);
 	}
 
 	/**
@@ -550,7 +470,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: TNFRSF1B chr1:12248965A>G
 	 * </P>
 	 * TODO test distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar150() throws AnnotationException { byte chr = 1; int pos = 12248965; String ref
 	 *       = "A"; String alt = "G"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -564,7 +484,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: NBPF14,NBPF9,PDE4DIP chr1:144915412T>C
 	 * </P>
 	 * -- Wierd part of genome with lots of transcripts. All intronic variants.
-	 * 
+	 *
 	 * @Test public void testIntronicVar967() throws AnnotationException { byte chr = 1; int pos = 144915412; String ref
 	 *       = "T"; String alt = "C"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -579,7 +499,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * noncoding RNA intron chr1:155028522G>A
 	 * </P>
 	 * TODO check distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar1095() throws AnnotationException { byte chr = 1; int pos = 155028522; String
 	 *       ref = "G"; String alt = "A"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -593,7 +513,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: PPFIBP1 chr12:27832582G>A
 	 * </P>
 	 * TODO check distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar11478() throws AnnotationException { byte chr = 12; int pos = 27832582; String
 	 *       ref = "G"; String alt = "A"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -607,7 +527,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: TMTC1 chr12:29920791->CATA
 	 * </P>
 	 * TODO check distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar11489() throws AnnotationException { byte chr = 12; int pos = 29920791; String
 	 *       ref = "-"; String alt = "CATA"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -621,7 +541,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: BICD1 chr12:32459070T>G
 	 * </P>
 	 * TODO check distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar11500() throws AnnotationException { byte chr = 12; int pos = 32459070; String
 	 *       ref = "T"; String alt = "G"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =
@@ -635,7 +555,7 @@ public class IntronicAnnotationTest implements Constants {
 	 * annovar: NELL2 chr12:44926334T>A
 	 * </P>
 	 * TODO check distance
-	 * 
+	 *
 	 * @Test public void testIntronicVar11543() throws AnnotationException { byte chr = 12; int pos = 44926334; String
 	 *       ref = "T"; String alt = "A"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann =

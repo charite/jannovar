@@ -5,6 +5,7 @@ import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.VariantAnnotator;
 import jannovar.common.ChromosomeMap;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.Chromosome;
@@ -21,8 +22,8 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** configuration to use */
 	private JannovarOptions options;
 
-	/** map of Chromosomes */
-	private HashMap<Byte, Chromosome> chromosomeMap = null;
+	/** the VariantAnnotator to use. */
+	private VariantAnnotator annotator;
 
 	/** BufferedWriter to use for writing */
 	BufferedWriter out = null;
@@ -31,7 +32,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	int currentLine = 0;
 
 	public AnnotatedJannovarWriter(HashMap<Byte, Chromosome> chromosomeMap, JannovarOptions options) throws IOException {
-		this.chromosomeMap = chromosomeMap;
+		this.annotator = new VariantAnnotator(chromosomeMap);
 		this.options = options;
 		this.openBufferedWriter();
 	}
@@ -101,12 +102,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			String e = String.format("Could not identify chromosome \"%d\"", chr);
-			throw new AnnotationException(e);
-		}
-		AnnotationList anno = c.getAnnotationList(pos, ref, alt);
+		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", vc.toString());
 			throw new AnnotationException(e);

@@ -146,14 +146,14 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	 * @param d
 	 *            distance to the nearest exon.
 	 */
-	void setDistanceToNearestExon(int d) {
+	public void setDistanceToNearestExon(int d) {
 		this.rvarstart = d;
 	}
 
 	/**
 	 * @return the distance of the variant-annotation to the nearest exon.
 	 */
-	int getDistanceToNearestExon() {
+	public int getDistanceToNearestExon() {
 		if (this.varType == VariantType.INTERGENIC || this.varType == VariantType.INTRONIC
 				|| this.varType == VariantType.UPSTREAM || this.varType == VariantType.DOWNSTREAM)
 			return this.rvarstart;
