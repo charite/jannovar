@@ -6,7 +6,7 @@ import jannovar.annotation.AnnotationList;
 import jannovar.annotation.BlockSubstitutionAnnotationBuilder;
 import jannovar.annotation.DeletionAnnotationBuilder;
 import jannovar.annotation.InsertionAnnotationBuilder;
-import jannovar.annotation.IntergenicAnnotation;
+import jannovar.annotation.IntergenicAnnotationBuilder;
 import jannovar.annotation.IntronicAnnotation;
 import jannovar.annotation.NoncodingAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
@@ -306,13 +306,13 @@ public class Chromosome {
 
 		if (leftNeighbor != null && leftNeighbor.isNearThreePrimeEnd(start, NEARGENE)) {
 			/** The following function creates an upstream or downstream annotation as appropriate. */
-			Annotation ann = IntergenicAnnotation.createUpDownstreamAnnotation(leftNeighbor, start);
+			Annotation ann = IntergenicAnnotationBuilder.createUpDownstreamAnnotation(leftNeighbor, start);
 			annovarFactory.addUpDownstreamAnnotation(ann);
 		}
 
 		if (rightNeighbor != null && rightNeighbor.isNearFivePrimeEnd(end, NEARGENE)) {
 			/** The following function creates an upstream or downstream annotation as appropriate. */
-			Annotation ann = IntergenicAnnotation.createUpDownstreamAnnotation(rightNeighbor, end);
+			Annotation ann = IntergenicAnnotationBuilder.createUpDownstreamAnnotation(rightNeighbor, end);
 			annovarFactory.addUpDownstreamAnnotation(ann);
 		}
 		// If we get here, and annovarFactory is still empty, then the variant is not nearby to any gene (i.e., it is
@@ -323,7 +323,7 @@ public class Chromosome {
 				// NullPointerException
 				System.out.println("Both neighbors are null");
 			}
-			Annotation ann = IntergenicAnnotation.createIntergenicAnnotation(leftNeighbor, rightNeighbor, start, end);
+			Annotation ann = IntergenicAnnotationBuilder.createIntergenicAnnotation(leftNeighbor, rightNeighbor, start, end);
 			annovarFactory.addIntergenicAnnotation(ann);
 		}
 	}

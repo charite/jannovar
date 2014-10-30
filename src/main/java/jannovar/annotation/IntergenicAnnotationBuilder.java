@@ -10,7 +10,7 @@ import jannovar.reference.TranscriptModel;
  * @version 0.05 (27 January, 2014)
  * @author Peter N Robinson
  */
-public class IntergenicAnnotation {
+public class IntergenicAnnotationBuilder {
 
 	/**
 	 * This factory method creates an annotation object for an intergenic variant that is located between two genes and
