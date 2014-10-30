@@ -11,7 +11,7 @@ import jannovar.annotation.IntronicAnnotationBuilder;
 import jannovar.annotation.NoncodingAnnotationBuilder;
 import jannovar.annotation.SingleNucleotideSubstitutionBuilder;
 import jannovar.annotation.SpliceAnnotationBuilder;
-import jannovar.annotation.UTRAnnotation;
+import jannovar.annotation.UTRAnnotationBuilder;
 import jannovar.common.DNAUtils;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
@@ -415,7 +415,7 @@ public class Chromosome {
 						 #query  ----
 						 #gene     <--*---*->
 						*/
-						Annotation ann = UTRAnnotation.createUTR5Annotation(tm, rvarstart, ref, alt);
+						Annotation ann = UTRAnnotationBuilder.createUTR5Annotation(tm, rvarstart, ref, alt);
 						// Annotation.createUTR5Annotation(tm,rvarstart,ref,alt);
 						annovarFactory.addUTR5Annotation(ann);
 
@@ -427,7 +427,7 @@ public class Chromosome {
 						   #gene     <--*---*->
 						*/
 						// Annotation ann = UTRAnnotation.getUTR3Annotation(tm,start,end,ref,alt);
-						Annotation ann = UTRAnnotation.createUTR3Annotation(tm, rvarstart, ref, alt);
+						Annotation ann = UTRAnnotationBuilder.createUTR3Annotation(tm, rvarstart, ref, alt);
 						annovarFactory.addUTR3Annotation(ann);
 
 						/* positive strand for UTR3 */
@@ -515,7 +515,7 @@ public class Chromosome {
 					 * #gene     <--*---*->
 					 * Annovar: $utr5{$name2}++; #positive strand for UTR5
 					 */
-					Annotation ann = UTRAnnotation.createUTR5Annotation(tm, rvarstart, ref, alt);
+					Annotation ann = UTRAnnotationBuilder.createUTR5Annotation(tm, rvarstart, ref, alt);
 					annovarFactory.addUTR5Annotation(ann);
 
 				} else if (start > cdsend) {
@@ -524,7 +524,7 @@ public class Chromosome {
 					 * Annovar: $utr3{$name2}++; #positive strand for UTR3
 					 */
 					// Annotation ann = UTRAnnotation.getUTR3Annotation(tm,start,end,ref,alt);
-					Annotation ann = UTRAnnotation.createUTR3Annotation(tm, rvarstart, ref, alt);
+					Annotation ann = UTRAnnotationBuilder.createUTR3Annotation(tm, rvarstart, ref, alt);
 					annovarFactory.addUTR3Annotation(ann);
 				} else {
 					/* Note that the following function adds annotations to annovar */
@@ -656,7 +656,7 @@ public class Chromosome {
 						// Note this is UTR3 on negative strand
 						alt = DNAUtils.reverseComplement(alt);
 						ref = DNAUtils.reverseComplement(ref);
-						Annotation ann = UTRAnnotation.createUTR3Annotation(tm, rvarstart, ref, alt);
+						Annotation ann = UTRAnnotationBuilder.createUTR3Annotation(tm, rvarstart, ref, alt);
 						annovarFactory.addUTR3Annotation(ann);
 						return; /* done with this annotation. */
 					} else if (start > cdsend) {
@@ -665,7 +665,7 @@ public class Chromosome {
 						// Note this is UTR5 on negative strand
 						alt = DNAUtils.reverseComplement(alt);
 						ref = DNAUtils.reverseComplement(ref);
-						Annotation ann = UTRAnnotation.createUTR5Annotation(tm, rvarstart, ref, alt);
+						Annotation ann = UTRAnnotationBuilder.createUTR5Annotation(tm, rvarstart, ref, alt);
 						annovarFactory.addUTR5Annotation(ann);
 						return; /* done with this annotation. */
 					} else {
@@ -733,7 +733,7 @@ public class Chromosome {
 					// gene <--*---*->
 					ref = DNAUtils.reverseComplement(ref);
 					alt = DNAUtils.reverseComplement(alt);
-					Annotation ann = UTRAnnotation.createUTR3Annotation(tm, rvarstart, ref, alt);
+					Annotation ann = UTRAnnotationBuilder.createUTR3Annotation(tm, rvarstart, ref, alt);
 					annovarFactory.addUTR3Annotation(ann);
 					return; /* done with this annotation. */
 				} else if (start > cdsend) {
@@ -743,7 +743,7 @@ public class Chromosome {
 					// System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,tm.getGeneSymbol()));
 					ref = DNAUtils.reverseComplement(ref);
 					alt = DNAUtils.reverseComplement(alt);
-					Annotation ann = UTRAnnotation.createUTR5Annotation(tm, rvarstart, ref, alt);
+					Annotation ann = UTRAnnotationBuilder.createUTR5Annotation(tm, rvarstart, ref, alt);
 					annovarFactory.addUTR5Annotation(ann);
 				} else {
 					annotateExonicVariants(rvarstart, rvarend, start, end, ref, alt, exoncount - k, tm);

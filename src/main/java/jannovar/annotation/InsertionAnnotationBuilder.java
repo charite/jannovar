@@ -165,7 +165,7 @@ public class InsertionAnnotationBuilder {
 		}
 		// after position correction check if we are still in the CDS
 		if (refVarStart >= tm.getRefCDSEnd()) {
-			return UTRAnnotation.createUTR3Annotation(tm, refVarStart, ref, var);
+			return UTRAnnotationBuilder.createUTR3Annotation(tm, refVarStart, ref, var);
 		}
 		frameShift = frameShift % 3;
 

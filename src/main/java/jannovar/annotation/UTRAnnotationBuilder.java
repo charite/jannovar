@@ -26,7 +26,7 @@ import jannovar.reference.TranscriptModel;
  * @author Peter N Robinson
  */
 
-public class UTRAnnotation {
+public class UTRAnnotationBuilder {
 	/**
 	 * Return an annotation for a UTR3 mutation for a gene.
 	 *
