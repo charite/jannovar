@@ -7,7 +7,7 @@ package jannovar.common;
  * Note that the an intergenic variant is considered UPSTREAM or DOWNSTREAM if it is within 1000 nucleotides of a gene,
  * otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in {@link jannovar.reference.Chromosome
  * Chromosome}. Note that this class implements the assignment of a priority level to the variant classes. See the
- * document for the class {@link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} for details.
+ * document for the class {@link jannovar.annotation.AnnotationCollector AnnotatedVariantFactory} for details.
  *
  *
  * @author Peter Robinson <peter.robinson@charite.de>

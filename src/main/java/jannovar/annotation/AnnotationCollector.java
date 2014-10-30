@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-// TODO(holtgrew): Rename to AnnotatedVariantCollector? It only has some remote resemblance to the Factory pattern
-// and there is no reason to name classes after GoF patterns.
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
  * a given variant. The {@link jannovar.reference.Chromosome Chromosome} objects each use an instance of this class to
@@ -58,7 +56,7 @@ import java.util.HashSet;
  * @version 0.24 (3 August, 2013)
  * @author Peter N Robinson
  */
-public class AnnotatedVariantFactory implements Constants {
+public class AnnotationCollector implements Constants {
 
 	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;
@@ -110,7 +108,7 @@ public class AnnotatedVariantFactory implements Constants {
 	 * @param initialCapacity
 	 *            The initial capacity of the arraylist and hashset.
 	 */
-	public AnnotatedVariantFactory(int initialCapacity) {
+	public AnnotationCollector(int initialCapacity) {
 		this.annotationLst = new ArrayList<Annotation>(initialCapacity);
 		this.geneSymbolSet = new HashSet<String>();
 	}

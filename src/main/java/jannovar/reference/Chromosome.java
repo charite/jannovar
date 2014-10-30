@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.annotation.AnnotatedVariantFactory;
+import jannovar.annotation.AnnotationCollector;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.BlockSubstitution;
@@ -73,7 +73,7 @@ public class Chromosome {
 	 * the lists of potential annotations get initialized. We will take 2*SPAN because this is the maximum number of
 	 * annotations any variant can get with this program.
 	 */
-	private AnnotatedVariantFactory annovarFactory = null;
+	private AnnotationCollector annovarFactory = null;
 
 	/**
 	 * An {@link jannovar.interval.IntervalTree IntervalTree} that contains all of the
@@ -94,7 +94,7 @@ public class Chromosome {
 		this.chromosome = c;
 		this.itree = intrvtree;
 		this.n_genes = 0; /* TODO: Need to get this information from the IntervalTree */
-		this.annovarFactory = new AnnotatedVariantFactory(CAPACITY); /* the argument is the initial capacity of the arrayLists of vars */
+		this.annovarFactory = new AnnotationCollector(CAPACITY); /* the argument is the initial capacity of the arrayLists of vars */
 	}
 
 	/**

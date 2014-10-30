@@ -49,7 +49,7 @@ public class AnnotationList {
 	private boolean isStructural = false;
 
 	/**
-	 * Construction of AnnotationList objects is performed by an {@link jannovar.annotation.AnnotatedVariantFactory
+	 * Construction of AnnotationList objects is performed by an {@link jannovar.annotation.AnnotationCollector
 	 * AnnotatedVariantFactory} object based on the transcripts that are identified by the Interval tree search. All
 	 * annotations that affect one variant are passed to the constructor.
 	 * 
