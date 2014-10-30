@@ -9,7 +9,7 @@ import jannovar.annotation.InsertionAnnotationBuilder;
 import jannovar.annotation.IntergenicAnnotationBuilder;
 import jannovar.annotation.IntronicAnnotationBuilder;
 import jannovar.annotation.NoncodingAnnotationBuilder;
-import jannovar.annotation.SingleNucleotideSubstitution;
+import jannovar.annotation.SingleNucleotideSubstitutionBuilder;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTRAnnotation;
 import jannovar.common.DNAUtils;
@@ -868,7 +868,7 @@ public class Chromosome {
 				this.annovarFactory.addExonicAnnotation(blck);
 			} else {
 				// System.out.println("!!!!! SNV ref=" + ref + " var=" + var);
-				Annotation mssns = SingleNucleotideSubstitution.getAnnotation(tm, frame_s, frame_end_s, wtnt3, ref,
+				Annotation mssns = SingleNucleotideSubstitutionBuilder.getAnnotation(tm, frame_s, frame_end_s, wtnt3, ref,
 						var, refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(mssns);
 			}

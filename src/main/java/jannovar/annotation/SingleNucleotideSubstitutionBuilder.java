@@ -21,7 +21,7 @@ import jannovar.reference.Translator;
  * @author Peter N Robinson, Marten Jäger
  */
 
-public class SingleNucleotideSubstitution {
+public class SingleNucleotideSubstitutionBuilder {
 	/**
 	 * Creates annotation for a single-nucleotide substitution.
 	 * <P>
