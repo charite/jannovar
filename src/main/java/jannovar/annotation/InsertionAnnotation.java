@@ -8,7 +8,7 @@ import jannovar.reference.Translator;
 /**
  * This class is intended to provide a static method to generate annotations for insertion mutations. This method is put
  * in its own class only for convenience and to at least have a name that is easy to find.
- * 
+ *
  * @version 0.09 (17 April, 2014)
  * @author Peter N Robinson, M Jäger
  */
@@ -18,8 +18,9 @@ public class InsertionAnnotation {
 	/**
 	 * Annotates an insertion variant. The fact that a variant is an insertion variant has been identified by the fact
 	 * that the start and end position of the variant are equal and the reference sequence is indicated as "-".
-	 * <P>
+	 *
 	 * The insertion coordinate system uses "position after the current site"
+	 *
 	 * <ul>
 	 * <li>"+" strand: refvarstart is the one-based number of the nucleotide just before the insertion.
 	 * <li>"-" strand, the "after current site" becomes "before current site" during transcription. Therefore,
@@ -27,20 +28,19 @@ public class InsertionAnnotation {
 	 * of 1 and insertion of CCT in positive strand, it is G-CTT-CC but if the transcript is in negative strand, the
 	 * genomic sequence should be GC-CCT-C, and transcript is G-AGG-GC
 	 * </ul>
-	 * <P>
-	 * 
-	 * @param trmdl
+	 *
+	 * @param tm
 	 *            The gene in which the current mutation is contained
-	 * @param frame_s
+	 * @param frameShift
 	 *            the location within the frame (0,1,2) in which mutation occurs
 	 * @param wtnt3
 	 *            The three nucleotides of codon affected by start of mutation
-	 * @param wtnt3_after
+	 * @param wtnt3After
 	 *            the three nucleotides of the codon following codon affected by mutation
 	 * @param ref
 	 *            - never used, could be removed
 	 * @param var
-	 * @param refvarstart
+	 * @param refVarStart
 	 *            The start position of the variant with respect to the cNDA of the mRNA (see comments for "+"/"-"
 	 *            strand)
 	 * @param exonNumber
@@ -49,72 +49,75 @@ public class InsertionAnnotation {
 	 * @throws jannovar.exception.AnnotationException
 	 */
 
-	public static Annotation getAnnotation(TranscriptModel trmdl, int frame_s, String wtnt3, String wtnt3_after, String ref, String var, int refvarstart, int exonNumber) throws AnnotationException {
+	public static Annotation getAnnotation(TranscriptModel tm, int frameShift, String wtnt3, String wtnt3After,
+			String ref, String var, int refVarStart, int exonNumber) throws AnnotationException {
 
 		/* for transcriptmodels on the '-' strand the mRNA position has to be adapted */
-		if (trmdl.isMinusStrand())
-			refvarstart--;
+		if (tm.isMinusStrand())
+			refVarStart--;
 
 		// check if the insertion is actually a duplication,
-		if (trmdl.isPlusStrand()) {
+		if (tm.isPlusStrand()) {
 
-			/* "bla".substring(x,y)
-			 * The substring begins at the x and extends to the character at index y - 1. 
-			 * Thus is we have ACGTACGT => ACGTGTACGT there is an insertion of GT 
-			 * c.3_4dupGT
-			 * in this case, ref="-", var="GT", refvarstart="5"
+			/*
+			 * "bla".substring(x,y) The substring begins at the x and extends to the character at index y - 1. Thus is
+			 * we have ACGTACGT => ACGTGTACGT there is an insertion of GT c.3_4dupGT in this case, ref="-", var="GT",
+			 * refvarstart="5"
 			 */
 
-			/* Note that the following two positions refer to the cDNA sequence, not to the
-			 * coding sequence (CDS). To get the coding sequence position, we need to subtract the 
-			 * start position of the CDS.
-			 * The following two variables are zero-based numbering, that is, we can use them to search
-			 * in Java strings.
+			/*
+			 * Note that the following two positions refer to the cDNA sequence, not to the coding sequence (CDS). To
+			 * get the coding sequence position, we need to subtract the start position of the CDS. The following two
+			 * variables are zero-based numbering, that is, we can use them to search in Java strings.
 			 */
-			int potentialDuplicationStartPos = refvarstart - var.length(); // go back length of insertion
+			int potentialDuplicationStartPos = refVarStart - var.length(); // go back length of insertion
 																			// (var.length()).
-			int potentialDuplicationEndPos = refvarstart; // pos right after insertion
+			int potentialDuplicationEndPos = refVarStart; // pos right after insertion
 
-			if (trmdl.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
-				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
+			if (tm.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
+				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(tm, frameShift, wtnt3, var,
+						potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
 				return ann;
 			}
-			/* Note that some duplications are located after the indicated position of the variant in the
-			 * VCF file. The VCF convention seems to be to show the first duplicated base, whereas the HGVS convention
-			 * is to show the last possible duplicated base or sequence. */
-			int pos = refvarstart - 1; /* the minus one is needed because Java strings are zero-based. */
+			/*
+			 * Note that some duplications are located after the indicated position of the variant in the VCF file. The
+			 * VCF convention seems to be to show the first duplicated base, whereas the HGVS convention is to show the
+			 * last possible duplicated base or sequence.
+			 */
+			int pos = refVarStart - 1; /* the minus one is needed because Java strings are zero-based. */
 			int varlen = var.length();
 			boolean haveDuplication = false;
 			// System.out.println("substr: '" + trmdl.getCdnaSequence().substring(pos, pos + var.length()) + "'");
 			// System.out.println("ref: '" + ref + "'var: '" + var + "'");
-			while (trmdl.getCDNASequence().length() > pos + var.length() && trmdl.getCDNASequence().substring(pos, pos + var.length()).equals(var)) {
+			while (tm.getCDNASequence().length() > pos + var.length()
+					&& tm.getCDNASequence().substring(pos, pos + var.length()).equals(var)) {
 				// System.out.println(" " + pos + "\t" + (pos + var.length()) + "\tvs " +
 				// trmdl.getCdnaSequence().length());
 				pos += varlen;
-				frame_s += varlen;
+				frameShift += varlen;
 				haveDuplication = true;
 			}
 			if (haveDuplication) {
 				int endpos = pos + var.length();
-				frame_s = (frame_s % 3);
+				frameShift = (frameShift % 3);
 				// wtnt3 represents the three nucleotides of the wildtype codon.
 				// try to get three new nucleotides affected by the duplication.
 				// if it does not work, chicken out and just keep the previous ones
 				// to avoid a dump
-				String newwtnt3 = trmdl.getWTCodonNucleotides(refvarstart, frame_s);
+				String newwtnt3 = tm.getWTCodonNucleotides(refVarStart, frameShift);
 				if (newwtnt3 != null && newwtnt3.length() == 3) {
 					wtnt3 = newwtnt3;
 				}
-				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(trmdl, frame_s, wtnt3, var, pos, endpos, exonNumber);
+				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(tm, frameShift, wtnt3, var, pos, endpos,
+						exonNumber);
 				return ann;
 			}
 		} else { /* i.e., we are on the minus strand. */
-			/* If this variant is a duplication, then
-			 * refvarstart is the last nucleotide 
-			 * position (one-based) on the chromosome
-			 * of the segment that is duplicated. It is thus the
-			 * first nucleotide of the duplication from the perspecitve of
-			 * a gene on the "-" strand. */
+			/*
+			 * If this variant is a duplication, then refvarstart is the last nucleotide position (one-based) on the
+			 * chromosome of the segment that is duplicated. It is thus the first nucleotide of the duplication from the
+			 * perspecitve of a gene on the "-" strand.
+			 */
 			// For example
 			// chr1 177 . G GCAG
 			// the genomic sequence has CAG at 175-177
@@ -125,59 +128,65 @@ public class InsertionAnnotation {
 			// the duplicated sequence is
 			// ATTAGCCGCAGCAGTTACAT
 			// --------******-----
-			int potentialDuplicationStartPos = refvarstart; // go back length of insertion (var.length()).
-			int potentialDuplicationEndPos = refvarstart + var.length(); // pos right after insertion
-			if (potentialDuplicationStartPos >= var.length() && potentialDuplicationEndPos < trmdl.getMRNALength() && trmdl.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
-				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
+			int potentialDuplicationStartPos = refVarStart; // go back length of insertion (var.length()).
+			int potentialDuplicationEndPos = refVarStart + var.length(); // pos right after insertion
+			if (potentialDuplicationStartPos >= var.length()
+					&& potentialDuplicationEndPos < tm.getMRNALength()
+					&& tm.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos)
+							.equals(var)) {
+				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(tm, frameShift, wtnt3, var,
+						potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
 				return ann;
 			}
 
 		}
-		if (trmdl.isPlusStrand()) {
+		if (tm.isPlusStrand()) {
 			int idx = 0;
 			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {
-			while (var.length() > idx && refvarstart < trmdl.getCDNASequence().length() && trmdl.getCDNASequence().charAt(refvarstart) == var.charAt(idx)) {
-				refvarstart++;
+			while (var.length() > idx && refVarStart < tm.getCDNASequence().length()
+					&& tm.getCDNASequence().charAt(refVarStart) == var.charAt(idx)) {
+				refVarStart++;
 				idx++;
-				frame_s++;
+				frameShift++;
 				var = new StringBuilder().append(var.substring(1)).append(var.charAt(0)).toString();
 
 			}
 		} else {
 			int idx = 0;
 			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(0)) {
-			while (var.length() > idx && refvarstart < trmdl.getCDNASequence().length() && trmdl.getCDNASequence().charAt(refvarstart) == var.charAt(0)) {
-				refvarstart++;
+			while (var.length() > idx && refVarStart < tm.getCDNASequence().length()
+					&& tm.getCDNASequence().charAt(refVarStart) == var.charAt(0)) {
+				refVarStart++;
 				idx++;
-				frame_s++;
+				frameShift++;
 				var = new StringBuilder().append(var.substring(1)).append(var.charAt(0)).toString();
 			}
 
 		}
 		// after position correction check if we are still in the CDS
-		if (refvarstart >= trmdl.getRefCDSEnd()) {
-			return UTRAnnotation.createUTR3Annotation(trmdl, refvarstart, ref, var);
+		if (refVarStart >= tm.getRefCDSEnd()) {
+			return UTRAnnotation.createUTR3Annotation(tm, refVarStart, ref, var);
 		}
-		frame_s = frame_s % 3;
+		frameShift = frameShift % 3;
 
-		int refcdsstart = trmdl.getRefCDSStart();
-		int startPosMutationInCDS = refvarstart - refcdsstart + 1;
+		int refcdsstart = tm.getRefCDSStart();
+		int startPosMutationInCDS = refVarStart - refcdsstart + 1;
 		int aavarpos = (int) Math.floor(startPosMutationInCDS / 3) + 1;
 
 		Translator translator = Translator.getTranslator(); /* Singleton */
 		String varnt3 = null;
-		if (trmdl.isPlusStrand()) {
-			if (frame_s == 1) { /* insertion located at 0-1-INS-2 part of codon */
+		if (tm.isPlusStrand()) {
+			if (frameShift == 1) { /* insertion located at 0-1-INS-2 part of codon */
 				varnt3 = String.format("%c%c%s%c", wtnt3.charAt(0), wtnt3.charAt(1), var, wtnt3.charAt(2));
-			} else if (frame_s == 2) {
+			} else if (frameShift == 2) {
 				varnt3 = String.format("%s%s", wtnt3, var);
 			} else { /* i.e., frame_s == 0 */
 				varnt3 = String.format("%c%s%c%c", wtnt3.charAt(0), var, wtnt3.charAt(1), wtnt3.charAt(2));
 			}
-		} else if (trmdl.isMinusStrand()) {
-			if (frame_s == 1) {
+		} else if (tm.isMinusStrand()) {
+			if (frameShift == 1) {
 				varnt3 = String.format("%c%s%c%c", wtnt3.charAt(0), var, wtnt3.charAt(1), wtnt3.charAt(2));
-			} else if (frame_s == 2) {
+			} else if (frameShift == 2) {
 				varnt3 = String.format("%c%c%s%c", wtnt3.charAt(0), wtnt3.charAt(1), var, wtnt3.charAt(2));
 			} else { /* i.e., frame_s == 0 */
 				varnt3 = String.format("%s%s", var, wtnt3);
@@ -185,12 +194,12 @@ public class InsertionAnnotation {
 		}
 		String wtaa = translator.translateDNA(wtnt3);
 		String wtaa_after = null;
-		if (wtnt3_after != null && wtnt3_after.length() > 0) {
-			wtaa_after = translator.translateDNA(wtnt3_after);
+		if (wtnt3After != null && wtnt3After.length() > 0) {
+			wtaa_after = translator.translateDNA(wtnt3After);
 		}
 
-		/* wtaa_after could be undefined, if the current aa is the stop codon (X) 
-		 * example:17        53588444        53588444        -       T
+		/*
+		 * wtaa_after could be undefined, if the current aa is the stop codon (X) example:17 53588444 53588444 - T
 		 */
 		String varaa = translator.translateDNA(varnt3);
 		// int refcdsstart = trmdl.getRefCDSStart() ;
@@ -199,22 +208,24 @@ public class InsertionAnnotation {
 
 		// new: at least the next 5 codons are used and tarnaslated
 		int nupstreamnuc = var.length() + 36;
-		int end = trmdl.getCDNASequence().length() >= refvarstart + nupstreamnuc - frame_s ? refvarstart + nupstreamnuc - frame_s : trmdl.getCDNASequence().length();
-		String wtnt = trmdl.isPlusStrand() ? trmdl.getCDNASequence().substring(refvarstart - 1 - frame_s, end) : trmdl.getCDNASequence().substring(refvarstart - frame_s, end);
+		int end = tm.getCDNASequence().length() >= refVarStart + nupstreamnuc - frameShift ? refVarStart + nupstreamnuc
+				- frameShift : tm.getCDNASequence().length();
+		String wtnt = tm.isPlusStrand() ? tm.getCDNASequence().substring(refVarStart - 1 - frameShift, end) : tm
+				.getCDNASequence().substring(refVarStart - frameShift, end);
 
 		String varnt = null;
-		if (trmdl.isPlusStrand()) {
-			if (frame_s == 1) { /* insertion located at 0-1-INS-2 part of codon */
+		if (tm.isPlusStrand()) {
+			if (frameShift == 1) { /* insertion located at 0-1-INS-2 part of codon */
 				varnt = String.format("%c%c%s%s", wtnt.charAt(0), wtnt.charAt(1), var, wtnt.substring(2));
-			} else if (frame_s == 2) {
+			} else if (frameShift == 2) {
 				varnt = String.format("%s%s%s", wtnt.substring(0, 3), var, wtnt.substring(3));
 			} else { /* i.e., frame_s == 0 */
 				varnt = String.format("%c%s%s", wtnt.charAt(0), var, wtnt.substring(1));
 			}
-		} else if (trmdl.isMinusStrand()) {
-			if (frame_s == 1) {
+		} else if (tm.isMinusStrand()) {
+			if (frameShift == 1) {
 				varnt = String.format("%c%s%s", wtnt.charAt(0), var, wtnt.substring(1));
-			} else if (frame_s == 2) {
+			} else if (frameShift == 2) {
 				varnt = String.format("%c%c%s%s", wtnt.charAt(0), wtnt.charAt(1), var, wtnt.substring(2));
 			} else { /* i.e., frame_s == 0 */
 				varnt = String.format("%s%s", var, wtnt);
@@ -234,38 +245,45 @@ public class InsertionAnnotation {
 		// int aavarpos = (int) Math.floor((refvarstart-refcdsstart)/3)+1;
 		// int startPosMutationInCDS = refvarstart-refcdsstart+1;
 
-		/* Annovar: $canno = "c." . ($refvarstart-$refcdsstart+1) .  "_" . 
-		 * 				($refvarstart-$refcdsstart+2) . "ins$obs";		
+		/*
+		 * Annovar: $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarstart-$refcdsstart+2) . "ins$obs";
 		 */
-		String canno = String.format("c.%d_%dins%s", startPosMutationInCDS, refvarstart - refcdsstart + 2, var);
+		String canno = String.format("c.%d_%dins%s", startPosMutationInCDS, refVarStart - refcdsstart + 2, var);
 		/* If length of insertion is a multiple of 3 */
 		if (var.length() % 3 == 0) {
 			if (wtaa.equals("*")) { /* Mutation affects the wildtype stop codon */
 				int idx = varaa.indexOf("*");
 				if (idx >= 0) {
-					/* delete all aa after stop codon, but keep the aa before 
-					 * Note we use an asterisk (*) to denote the stop codon according to HGVS nomenclature
-					 * annovar: $varaa =~ s/\*.* /X/; */
+					/*
+					 * delete all aa after stop codon, but keep the aa before Note we use an asterisk (*) to denote the
+					 * stop codon according to HGVS nomenclature annovar: $varaa =~ s/\*.* /X/;
+					 */
 					varaa = String.format("%s*", varaa.substring(0, idx + 1));
-					String annot = String.format("%s:exon:%d:%s:p.X%ddelins%s", trmdl.getName(), exonNumber, canno, aavarpos, varaa);
+					String annot = String.format("%s:exon:%d:%s:p.X%ddelins%s", tm.getName(), exonNumber, canno,
+							aavarpos, varaa);
 
-					/* $function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" . 
-					   "delins$varaa,";		#stop codon is stil present */
+					/*
+					 * $function->{$index}{nfsins} .= "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.X$varpos" .
+					 * "delins$varaa,"; #stop codon is stil present
+					 */
 					// Annotation ann =
 					// Annotation.createNonFrameshiftInsertionAnnotation(trmdl,startPosMutationInCDS,annot);
-					Annotation ann = new Annotation(trmdl, annot, VariantType.NON_FS_INSERTION, startPosMutationInCDS);
+					Annotation ann = new Annotation(tm, annot, VariantType.NON_FS_INSERTION, startPosMutationInCDS);
 					return ann;
 				} else {
-					/* Mutation => stop codon is lost, i.e., STOPLOSS 
-					 *  Annovar: $seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa";   */
-					String annot = String.format("%s:exon%d:%s:p.X%ddelins%s", trmdl.getName(), exonNumber, canno, aavarpos, varaa.charAt(i));
+					/*
+					 * Mutation => stop codon is lost, i.e., STOPLOSS Annovar:
+					 * $seqid:exon$exonpos:$canno:p.X$varpos" . "delins$varaa";
+					 */
+					String annot = String.format("%s:exon%d:%s:p.X%ddelins%s", tm.getName(), exonNumber, canno,
+							aavarpos, varaa.charAt(i));
 					// Annotation ann = Annotation.createStopLossAnnotation(trmdl,startPosMutationInCDS,annot);
-					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPLOSS, startPosMutationInCDS);
+					Annotation ann = new Annotation(tm, annot, VariantType.STOPLOSS, startPosMutationInCDS);
 					return ann;
 				}
-			} else { /* i.w., wtaa is not equal to '*'  */
+			} else { /* i.w., wtaa is not equal to '*' */
 				int idx = varaa.indexOf("*");
-				if (idx >= 0) { /* corresponds to annovar: if ($varaa =~ m/\* /) {  */
+				if (idx >= 0) { /* corresponds to annovar: if ($varaa =~ m/\* /) { */
 					varaa = String.format("%s*", varaa.substring(0, idx + 1));
 					/* i.e., delete all aa after stop codon, but keep the aa before */
 					// System.out.println("wtaa: " + wtaa);
@@ -278,20 +296,23 @@ public class InsertionAnnotation {
 					// annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno,
 					// wtaa.charAt(i), aavarpos, varaa);
 					// }else
-					annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, varaa);
+					annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", tm.getName(), exonNumber, canno,
+							wtaa.charAt(i), aavarpos, varaa);
 
-					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPGAIN, startPosMutationInCDS);
+					Annotation ann = new Annotation(tm, annot, VariantType.STOPGAIN, startPosMutationInCDS);
 					return ann;
 				} else { // no new 'STOP' codon inserted
 					String annot;
 					// check for Proteine Duplicates - only possible if there are enough nucleotides before
 					String ref5upAA = "";
-					if (refvarstart - frame_s - var.length() >= 0) {
+					if (refVarStart - frameShift - var.length() >= 0) {
 						String ref5up;
-						if (trmdl.isPlusStrand()) // correct for "-"-strand
-							ref5up = trmdl.getCDNASequence().substring(refvarstart - 1 - frame_s - var.length(), refvarstart - frame_s - 1);
+						if (tm.isPlusStrand()) // correct for "-"-strand
+							ref5up = tm.getCDNASequence().substring(refVarStart - 1 - frameShift - var.length(),
+									refVarStart - frameShift - 1);
 						else
-							ref5up = trmdl.getCDNASequence().substring(refvarstart - frame_s - var.length(), refvarstart - frame_s);
+							ref5up = tm.getCDNASequence().substring(refVarStart - frameShift - var.length(),
+									refVarStart - frameShift);
 						ref5upAA = translator.translateDNA(ref5up);
 
 					}
@@ -302,11 +323,15 @@ public class InsertionAnnotation {
 					if (ref5upAA.equals(varaa.substring(i, (var.length() / 3) + i))) { // is the inserted AA a
 																						// Duplication ...?
 						if (var.length() / 3 == 1)
-							annot = String.format("%s:exon%d:%s:p.%s%ddup", trmdl.getName(), exonNumber, canno, ref5upAA, aavarpos - 1 + i);
+							annot = String.format("%s:exon%d:%s:p.%s%ddup", tm.getName(), exonNumber, canno, ref5upAA,
+									aavarpos - 1 + i);
 						else
-							annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddup", trmdl.getName(), exonNumber, canno, ref5upAA.charAt(0), aavarpos - 1 - (var.length() / 3) + i, ref5upAA.charAt(ref5upAA.length() - 1), aavarpos - 1 + i);
+							annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddup", tm.getName(), exonNumber, canno,
+									ref5upAA.charAt(0), aavarpos - 1 - (var.length() / 3) + i,
+									ref5upAA.charAt(ref5upAA.length() - 1), aavarpos - 1 + i);
 					} else {
-						String construct = wtaa.substring(0, i) + varaa.substring(i, (var.length() / 3) + i) + wtaa.substring(i);
+						String construct = wtaa.substring(0, i) + varaa.substring(i, (var.length() / 3) + i)
+								+ wtaa.substring(i);
 						if (varaa.equals(construct)) { // is it possible to simply generate the varAA by inserting the
 														// 'new' AA in the RefAA?
 							if (i > 0) {
@@ -319,7 +344,8 @@ public class InsertionAnnotation {
 								// System.out.println("i: " + i);
 								// System.out.println("wtaa: " + wtaa.length() + "\t" + wtaa);
 								// System.out.println("varaa: " + varaa.length() + "\t" + varaa);
-								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i - 1), aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
+								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", tm.getName(), exonNumber, canno,
+										wtaa.charAt(i - 1), aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
 							} else {
 								// System.out.println("ref: " + ref + "\tvar: " + var);
 								// System.out.println(trmdl.getName());
@@ -333,35 +359,43 @@ public class InsertionAnnotation {
 								// System.out.println("aavarpos: " + aavarpos);
 								// System.out.println("varaa.charAt(i): " + varaa.charAt(i));
 								// if the insertion is at the first position we need the AA before
-								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", trmdl.getName(), exonNumber, canno, ref5upAA, aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
+								annot = String.format("%s:exon%d:%s:p.%s%d_%s%dins%s", tm.getName(), exonNumber, canno,
+										ref5upAA, aavarpos - 1, wtaa.charAt(i), aavarpos, varaa.charAt(i));
 							}
 						} else
-							annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, varaa.substring(i, (var.length() / 3) + 1 + i));
+							annot = String.format("%s:exon%d:%s:p.%s%ddelins%s", tm.getName(), exonNumber, canno,
+									wtaa.charAt(i), aavarpos, varaa.substring(i, (var.length() / 3) + 1 + i));
 					}
-					Annotation ann = new Annotation(trmdl, annot, VariantType.NON_FS_INSERTION, startPosMutationInCDS);
+					Annotation ann = new Annotation(tm, annot, VariantType.NON_FS_INSERTION, startPosMutationInCDS);
 					return ann;
 				}
 			}
 		} else { /* i.e., length of variant is not a multiple of 3 */
 			if (wtaa.startsWith("*")) { /* mutation on stop codon */
-				int idx = varaa.indexOf("*"); /* corresponds to : if ($varaa =~ m/\* /) {	 */
+				int idx = varaa.indexOf("*"); /* corresponds to : if ($varaa =~ m/\* /) { */
 				if (idx == 0) {
-					String annot = String.format("%s:exon%d:%s:p.=", trmdl.getName(), exonNumber, canno);
-					Annotation ann = new Annotation(trmdl, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
+					String annot = String.format("%s:exon%d:%s:p.=", tm.getName(), exonNumber, canno);
+					Annotation ann = new Annotation(tm, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
 					return ann;
 				}
 
 				if (idx > 0) {
-					/* in reality, this cannot be differentiated from non-frameshift insertion, but we'll still call it frameshift */
-					/* delete all aa after stop codon, but keep the aa before 
-					 * annovar: $varaa =~ s/\*.* /X/; */
+					/*
+					 * in reality, this cannot be differentiated from non-frameshift insertion, but we'll still call it
+					 * frameshift
+					 */
+					/*
+					 * delete all aa after stop codon, but keep the aa before annovar: $varaa =~ s/\*.* /X/;
+					 */
 					varaa = String.format("%sX", varaa.substring(0, idx + 1));
-					String annot = String.format("%s:exon%d:%s:p.X%ddelins%s", trmdl.getName(), exonNumber, canno, aavarpos, varaa.charAt(i));
-					Annotation ann = new Annotation(trmdl, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
+					String annot = String.format("%s:exon%d:%s:p.X%ddelins%s", tm.getName(), exonNumber, canno,
+							aavarpos, varaa.charAt(i));
+					Annotation ann = new Annotation(tm, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
 					return ann;
 				} else { /* var aa is not stop (*) */
-					String annot = String.format("%s:exon%d:%s:p.X%ddelins%s", trmdl.getName(), exonNumber, canno, aavarpos, varaa.charAt(i));
-					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPLOSS, startPosMutationInCDS);
+					String annot = String.format("%s:exon%d:%s:p.X%ddelins%s", tm.getName(), exonNumber, canno,
+							aavarpos, varaa.charAt(i));
+					Annotation ann = new Annotation(tm, annot, VariantType.STOPLOSS, startPosMutationInCDS);
 					return ann;
 				}
 			} else { /* i.e., wtaa not a stop codon */
@@ -369,25 +403,31 @@ public class InsertionAnnotation {
 				if (idx >= 0 && idx < Math.ceil((double) var.length() / 3)) {
 					/** Note use of asterisk (*) to denote stop codon as per HGVS recommendation. */
 					varaa = String.format("%s*", varaa.substring(0, idx + 1));
-					/*"$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . 
-					 * 	"_$wtaa_after" . ($varpos+1) . "delins$varaa,"; */
+					/*
+					 * "$geneidmap->{$seqid}:$seqid:exon$exonpos:$canno:p.$wtaa$varpos" . "_$wtaa_after" . ($varpos+1) .
+					 * "delins$varaa,";
+					 */
 
-					String annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos, wtaa_after, (aavarpos + 1), varaa);
-					Annotation ann = new Annotation(trmdl, annot, VariantType.STOPGAIN, startPosMutationInCDS);
+					String annot = String.format("%s:exon%d:%s:p.%s%d_%s%ddelins%s", tm.getName(), exonNumber, canno,
+							wtaa.charAt(i), aavarpos, wtaa_after, (aavarpos + 1), varaa);
+					Annotation ann = new Annotation(tm, annot, VariantType.STOPGAIN, startPosMutationInCDS);
 					return ann;
 				} else if (aavarpos == 1) { /* mutation of start codon */
-					String annot = String.format("%s:exon%d:%s:p.%s%d?", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos);
-					Annotation ann = new Annotation(trmdl, annot, VariantType.START_LOSS, startPosMutationInCDS);
+					String annot = String.format("%s:exon%d:%s:p.%s%d?", tm.getName(), exonNumber, canno,
+							wtaa.charAt(i), aavarpos);
+					Annotation ann = new Annotation(tm, annot, VariantType.START_LOSS, startPosMutationInCDS);
 					return ann;
 
 				} else {
 					String annot;
 					// if its at the last position and
-					if ((trmdl.isPlusStrand() && frame_s != 1) | (trmdl.isMinusStrand() && frame_s != 2))
-						annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos);
+					if ((tm.isPlusStrand() && frameShift != 1) | (tm.isMinusStrand() && frameShift != 2))
+						annot = String.format("%s:exon%d:%s:p.%s%dfs", tm.getName(), exonNumber, canno, wtaa.charAt(i),
+								aavarpos);
 					else
-						annot = String.format("%s:exon%d:%s:p.%s%dfs", trmdl.getName(), exonNumber, canno, wtaa.charAt(i), aavarpos + 1);
-					Annotation ann = new Annotation(trmdl, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
+						annot = String.format("%s:exon%d:%s:p.%s%dfs", tm.getName(), exonNumber, canno, wtaa.charAt(i),
+								aavarpos + 1);
+					Annotation ann = new Annotation(tm, annot, VariantType.FS_INSERTION, startPosMutationInCDS);
 					return ann;
 
 				}
@@ -395,4 +435,3 @@ public class InsertionAnnotation {
 		}
 	}
 }
-/* end of file */
