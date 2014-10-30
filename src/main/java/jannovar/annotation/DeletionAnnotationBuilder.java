@@ -23,7 +23,7 @@ import jannovar.reference.Translator;
  * @author Peter N Robinson
  */
 
-public class DeletionAnnotation {
+public class DeletionAnnotationBuilder {
 
 	/**
 	 * Creates annotation for a single-nucleotide deletion.
