@@ -7,7 +7,6 @@ import jannovar.common.Genotype;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.genotype.GenotypeCall;
-import jannovar.reference.Chromosome;
 
 import java.util.ArrayList;
 
@@ -92,18 +91,6 @@ public class Variant implements Comparable<Variant>, Constants {
 		ref = xdi == 0 ? "-" : ref.substring(0, xdi);
 		alt = xdi - diff == 0 ? "-" : alt.substring(0, xdi - diff);
 
-	}
-
-	/**
-	 * Create an annotation for this variant. Client code needs to pass in the correct
-	 * {@link jannovar.reference.Chromosome Chromosome} object.
-	 *
-	 * @param c
-	 *            The Chromosome object representing the location of the variant.
-	 * @throws jannovar.exception.AnnotationException
-	 */
-	public void annotate(Chromosome c) throws AnnotationException {
-		this.annotList = c.getAnnotationList(this.position, this.ref, this.alt);
 	}
 
 	// ########### SETTERS ######################### //

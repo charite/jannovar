@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -24,22 +22,16 @@ import org.junit.Test;
  */
 public class StopAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	/**
@@ -53,16 +45,12 @@ public class StopAnnotationTest implements Constants {
 		int pos = 212799882;
 		String ref = "A";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.STOPGAIN, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FAM71A(uc001hjk.3:exon1:c.1663A>T:p.K555*)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.STOPGAIN, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FAM71A(uc001hjk.3:exon1:c.1663A>T:p.K555*)", annot);
 	}
 
 	/**
@@ -76,16 +64,12 @@ public class StopAnnotationTest implements Constants {
 		int pos = 30229463;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.STOPGAIN, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HLA-L(uc003npv.2:exon5:c.431G>A:p.W144*)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.STOPGAIN, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("HLA-L(uc003npv.2:exon5:c.431G>A:p.W144*)", annot);
 	}
 
 	/**
@@ -93,7 +77,7 @@ public class StopAnnotationTest implements Constants {
 	 * annovar: PTCRA:uc011duz.1:exon3:c.348G>A:p.W116X,PTCRA:uc010jxx.1:exon2:c.198G>A:p.W66X, chr6:42891022G>A
 	 * </P>
 	 * --Seems correct in jannovar, potential bug in annovar, which doesnt get the missese. I asked Kai.
-	 * 
+	 *
 	 * @Test public void testStopVar5() throws AnnotationException { byte chr = 6; int pos = 42891022; String ref = "G";
 	 *       String alt = "A"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann
@@ -113,16 +97,12 @@ public class StopAnnotationTest implements Constants {
 		int pos = 48286231;
 		String ref = "T";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.STOPGAIN, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR4X1(uc010rht.2:exon1:c.819T>A:p.Y273*)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.STOPGAIN, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR4X1(uc010rht.2:exon1:c.819T>A:p.Y273*)", annot);
 	}
 
 	/**
@@ -137,16 +117,14 @@ public class StopAnnotationTest implements Constants {
 		int pos = 172180771;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.STOPLOSS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("METTL8(uc010zdp.2:exon9:c.1000T>C:p.*334R,uc010zdo.2:exon10:c.1134+1T>C,uc002ugu.4:exon11:c.1135T>C:p.*379R)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.STOPLOSS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"METTL8(uc010zdp.2:exon9:c.1000T>C:p.*334R,uc010zdo.2:exon10:c.1134+1T>C,uc002ugu.4:exon11:c.1135T>C:p.*379R)",
+				annot);
 	}
 
 	/**
@@ -161,16 +139,12 @@ public class StopAnnotationTest implements Constants {
 		int pos = 34889222;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.STOPLOSS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.STOPLOSS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("NPSR1(uc003teh.1:exon10:c.1171T>C:p.*391R)", annot);
 	}
 
 }

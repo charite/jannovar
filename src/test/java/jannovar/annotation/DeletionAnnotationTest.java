@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -24,22 +22,16 @@ import org.junit.Test;
  */
 public class DeletionAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	/**
@@ -59,16 +51,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 17087544;
 		String ref = "GCTGT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MST1L(uc010ock.3:exon2:c.119_123del:p.Q40fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MST1L(uc010ock.3:exon2:c.119_123del:p.Q40fs)", annot);
 	}
 
 	/**
@@ -82,16 +70,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 247978544;
 		String ref = "GAG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR14A16(uc001idm.1:exon1:c.488_490del:p.S163del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR14A16(uc001idm.1:exon1:c.488_490del:p.S163del)", annot);
 	}
 
 	// /**
@@ -131,16 +115,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 44540796;
 		String ref = "TC";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ZNF852(uc011azx.2:exon4:c.1476_1477del:p.N494fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ZNF852(uc011azx.2:exon4:c.1476_1477del:p.N494fs)", annot);
 	}
 
 	/**
@@ -154,16 +134,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 97983497;
 		String ref = "TGTAACCAC";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR5H6(uc003dsi.1:exon1:c.369_377del:p.V124_T126del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR5H6(uc003dsi.1:exon1:c.369_377del:p.V124_T126del)", annot);
 	}
 
 	/**
@@ -178,16 +154,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 98216799;
 		String ref = "TTTCCCTCTAT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR5K2(uc011bgx.2:exon1:c.275_285del:p.I92fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR5K2(uc011bgx.2:exon1:c.275_285del:p.I92fs)", annot);
 	}
 
 	/**
@@ -203,16 +175,13 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 140215471;
 		String ref = "GCGCG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PCDHA7(uc003lhq.2:exon1:c.1503_1507del:p.E501fs,uc011dac.2:exon1:c.1503_1507del:p.E501fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"PCDHA7(uc003lhq.2:exon1:c.1503_1507del:p.E501fs,uc011dac.2:exon1:c.1503_1507del:p.E501fs)", annot);
 	}
 
 	/**
@@ -226,16 +195,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 140615504;
 		String ref = "GTC";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PCDHB18(uc003ljc.1:exon1:c.1219_1221del:p.V407del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PCDHB18(uc003ljc.1:exon1:c.1219_1221del:p.V407del)", annot);
 	}
 
 	/**
@@ -249,16 +214,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 27879113;
 		String ref = "T";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR2B2(uc011dkw.2:exon1:c.985del:p.T329fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR2B2(uc011dkw.2:exon1:c.985del:p.T329fs)", annot);
 	}
 
 	/**
@@ -273,16 +234,13 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 39278701;
 		String ref = "AAG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KCNK17(uc003ooo.3:exon2:c.323_325del:p.S108del,uc003oop.3:exon2:c.324_326del:p.F109del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("KCNK17(uc003ooo.3:exon2:c.323_325del:p.S108del,uc003oop.3:exon2:c.324_326del:p.F109del)",
+				annot);
 	}
 
 	/**
@@ -298,16 +256,13 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 5921980;
 		String ref = "GTT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KIAA2026(uc010mht.3:exon4:c.1542_1544del:p.T517del,uc003zjq.4:exon8:c.4017_4019del:p.T1342del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"KIAA2026(uc010mht.3:exon4:c.1542_1544del:p.T517del,uc003zjq.4:exon8:c.4017_4019del:p.T1342del)", annot);
 	}
 
 	/**
@@ -322,16 +277,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 51768676;
 		String ref = "AA";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AGAP6(uc001jix.4:exon8:c.791_792del:p.K264fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AGAP6(uc001jix.4:exon8:c.791_792del:p.K264fs)", annot);
 	}
 
 	/**
@@ -345,16 +296,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 51768775;
 		String ref = "TGA";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AGAP6(uc001jix.4:exon8:c.890_892del:p.L297_K298delinsQ)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AGAP6(uc001jix.4:exon8:c.890_892del:p.L297_K298delinsQ)", annot);
 	}
 
 	/**
@@ -369,16 +316,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 56380553;
 		String ref = "GACA";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OR5M1(uc001nja.1:exon1:c.429_432del:p.C143fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("OR5M1(uc001nja.1:exon1:c.429_432del:p.C143fs)", annot);
 	}
 
 	/**
@@ -393,16 +336,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 8376101;
 		String ref = "G";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FAM90A1(uc001qui.2:exon6:c.377del:p.P126fs,uc001quh.2:exon5:c.377del:p.P126fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FAM90A1(uc001qui.2:exon6:c.377del:p.P126fs,uc001quh.2:exon5:c.377del:p.P126fs)", annot);
 	}
 
 	/**
@@ -417,16 +356,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 123880924;
 		String ref = "TT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SETD8(uc001uew.3:exon5:c.542_543del:p.L181fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SETD8(uc001uew.3:exon5:c.542_543del:p.L181fs)", annot);
 	}
 
 	/**
@@ -445,16 +380,14 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 46170726;
 		String ref = "ACTCTTCCTCCTCCAGAT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FAM194B(uc001val.2:exon3:c.404_421del:p.E135_L140del,uc001vam.1:exon2:c.404_421del:p.E135_L140del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"FAM194B(uc001val.2:exon3:c.404_421del:p.E135_L140del,uc001vam.1:exon2:c.404_421del:p.E135_L140del)",
+				annot);
 	}
 
 	/**
@@ -468,16 +401,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 74536404;
 		String ref = "AAG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CCDC33(uc002axo.4:exon2:c.100_102del:p.K34del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CCDC33(uc002axo.4:exon2:c.100_102del:p.K34del)", annot);
 	}
 
 	/**
@@ -491,16 +420,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 74536404;
 		String ref = "AAG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CCDC33(uc002axo.4:exon2:c.100_102del:p.K34del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CCDC33(uc002axo.4:exon2:c.100_102del:p.K34del)", annot);
 	}
 
 	/**
@@ -514,16 +439,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 78208899;
 		String ref = "CTC";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LOC645752(uc010bky.2:exon14:c.842_844del:p.E281del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LOC645752(uc010bky.2:exon14:c.842_844del:p.E281del)", annot);
 	}
 
 	/**
@@ -537,16 +458,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 7470288;
 		String ref = "A";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("SENP3(uc002ghm.3:exon8:c.1308del:p.K436fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("SENP3(uc002ghm.3:exon8:c.1308del:p.K436fs)", annot);
 	}
 
 	/**
@@ -561,16 +478,14 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 29161960;
 		String ref = "GTCAAT";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ATAD5(uc002hft.1:exon1:c.552_557del:p.M184_S185del,uc002hfs.1:exon2:c.864_869del:p.M288_S289del)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"ATAD5(uc002hft.1:exon1:c.552_557del:p.M184_S185del,uc002hfs.1:exon2:c.864_869del:p.M288_S289del)",
+				annot);
 	}
 
 	/**
@@ -584,16 +499,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 61660895;
 		String ref = "G";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DCAF7(uc002jbc.4:exon6:c.561del:p.G187fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("DCAF7(uc002jbc.4:exon6:c.561del:p.G187fs)", annot);
 	}
 
 	/**
@@ -607,16 +518,12 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 126314;
 		String ref = "CC";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DEFB126(uc002wcx.3:exon2:c.317_318del:p.P106fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("DEFB126(uc002wcx.3:exon2:c.317_318del:p.P106fs)", annot);
 	}
 
 	/**
@@ -631,23 +538,19 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 42551468;
 		String ref = "GTGTCAGGGTGAGTGAGGG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("PLAC4(uc002yyz.3:exon1:c.72_90del:p.S25fs)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("PLAC4(uc002yyz.3:exon1:c.72_90del:p.S25fs)", annot);
 	}
 
 	/**
 	 * <P>
 	 * annovar: ZNF135:uc010yhq.2:exon5:c
-	 * .1992_1997del:p.664_666del,ZNF135:uc002qre.3:exon5:c.1956_1961del:p.652_654del,ZNF135:uc002qrg.3:exon4:c.2028_2033del:p.676_678del,ZNF135:uc002qrd.2:exon5:c.1152_1157del:p.384_386del,ZNF135:uc010yhr.2:exon3:c.1419_1424del:p.473_475del,ZNF135:uc002qrf.3:exon5:c.1830_1835del:p.61
-	 * 0 _ 6 1 2 d e l , chr19:58579808CCAGAG>-
+	 * .1992_1997del:p.664_666del,ZNF135:uc002qre.3:exon5:c.1956_1961del:p.652_654del,ZNF135:uc002qrg.3:exon4:c.2028_2033del:p.676_678del,ZNF135:uc002qrd.2:exon5:c.1152_1157del:p.384_386del,ZNF135:uc010yhr.2:exon3:c.1419_1424del:p.473_475del,ZNF135:uc002qrf.3:exon5:c.1830_1835del:p.
+	 * 6 1 0 _ 6 1 2 d e l , chr19:58579808CCAGAG>-
 	 * </P>
 	 */
 	@Test
@@ -656,18 +559,14 @@ public class DeletionAnnotationTest implements Constants {
 		int pos = 58579808;
 		String ref = "CCAGAG";
 		String alt = "-";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals(
-					"ZNF135(uc002qrd.2:exon5:c.1152_1157del:p.H384_R386delinsQ,uc010yhr.2:exon3:c.1419_1424del:p.H473_R475delinsQ,uc002qrf.3:exon5:c.1830_1835del:p.H610_R612delinsQ,uc002qre.3:exon5:c.1956_1961del:p.H652_R654delinsQ,uc010yhq.2:exon5:c.1992_1997del:p.H664_R666delinsQ,uc002qrg.3:exon4:c.2028_2033del:p.H676_R678delinsQ)",
-					annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.NON_FS_DELETION, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"ZNF135(uc002qrd.2:exon5:c.1152_1157del:p.H384_R386delinsQ,uc010yhr.2:exon3:c.1419_1424del:p.H473_R475delinsQ,uc002qrf.3:exon5:c.1830_1835del:p.H610_R612delinsQ,uc002qre.3:exon5:c.1956_1961del:p.H652_R654delinsQ,uc010yhq.2:exon5:c.1992_1997del:p.H664_R666delinsQ,uc002qrg.3:exon4:c.2028_2033del:p.H676_R678delinsQ)",
+				annot);
 	}
 
 }

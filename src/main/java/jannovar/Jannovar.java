@@ -5,6 +5,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 import jannovar.CommandLineParser.HelpRequestedException;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.VariantAnnotator;
 import jannovar.common.ChromosomeMap;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.FileDownloadException;
@@ -215,12 +216,8 @@ public class Jannovar {
 		String ref = mat.group(3);
 		String alt = mat.group(4);
 
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			String e = String.format("Could not identify chromosome \"%d\"", chr);
-			throw new AnnotationException(e);
-		}
-		AnnotationList anno = c.getAnnotationList(pos, ref, alt);
+		VariantAnnotator annotator = new VariantAnnotator(chromosomeMap);
+		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", options.chromosomalChange);
 			throw new AnnotationException(e);

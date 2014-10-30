@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.util;
 
 /**
  * Utility class for DNA string manipulation.

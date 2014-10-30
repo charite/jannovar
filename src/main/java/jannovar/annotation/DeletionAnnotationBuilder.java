@@ -3,7 +3,7 @@ package jannovar.annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
+import jannovar.util.Translator;
 
 /**
  * This class provides static methods to generate annotations for deletion mutations. Updated on 27 December 2013 to

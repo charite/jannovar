@@ -8,6 +8,7 @@ import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.VariantAnnotator;
 import jannovar.common.ChromosomeMap;
 import jannovar.common.VCFStrings;
 import jannovar.exception.AnnotationException;
@@ -21,14 +22,14 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	/** configuration to use */
 	private JannovarOptions options;
 
-	/** map of Chromosomes */
-	private HashMap<Byte, Chromosome> chromosomeMap = null;
+	/** the VariantAnnotator to use. */
+	private VariantAnnotator annotator;
 
 	/** writer for annotated VariantContext objects */
 	VariantContextWriter out = null;
 
 	public AnnotatedVCFWriter(VCFFileReader reader, HashMap<Byte, Chromosome> chromosomeMap, JannovarOptions options) {
-		this.chromosomeMap = chromosomeMap;
+		this.annotator = new VariantAnnotator(chromosomeMap);
 		this.options = options;
 		openVariantContextWriter(reader);
 	}
@@ -99,13 +100,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		String alt = corr.alt;
 		int pos = corr.position;
 
+		// TODO(holtgrem): better checking of structural variants?
 		if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
-			Chromosome c = chromosomeMap.get(chr);
-			if (c == null) {
-				String e = String.format("Could not identify chromosome \"%d\"", chr);
-				throw new AnnotationException(e);
-			}
-			AnnotationList anno = c.getAnnotationList(pos, ref, alt);
+			AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
 			if (anno == null) {
 				String e = String.format("No annotations found for variant %s", vc.toString());
 				throw new AnnotationException(e);

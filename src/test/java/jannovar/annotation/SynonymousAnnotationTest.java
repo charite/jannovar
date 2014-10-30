@@ -10,11 +10,9 @@ import jannovar.reference.TranscriptModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /* serialization */
@@ -26,22 +24,16 @@ import org.junit.Test;
  */
 public class SynonymousAnnotationTest implements Constants {
 
-	private static HashMap<Byte, Chromosome> chromosomeMap = null;
+	private VariantAnnotator annotator = null;
 
-	@BeforeClass
-	public static void setUp() throws IOException, JannovarException {
+	@Before
+	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
 		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);
-		chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	@AfterClass
-	public static void releaseResources() {
-		chromosomeMap = null;
-		System.gc();
+		annotator = new VariantAnnotator(Chromosome.constructChromosomeMapWithIntervalTree(kgList));
 	}
 
 	/**
@@ -51,8 +43,8 @@ public class SynonymousAnnotationTest implements Constants {
 	 * ,uc010nvg.2:exon11:c.A1090T:p.T364S,uc011mzw.2:exon11:c.A1099T:p.T367S,uc004fmp.2:exon11:c.A1150]T:p.T384S)> but
 	 * was:<...uc011mzv.2:exon12:c.[1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.
 	 * T367S,uc004fmp.2:exon11:c.1150A>]T:p.T384S)>
-	 * 
-	 * 
+	 *
+	 *
 	 * </P>
 	 */
 	@Test
@@ -61,16 +53,14 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 154009588;
 		String ref = "T";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.MISSENSE, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.MISSENSE, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"MPP1(uc011mzv.2:exon12:c.1060A>T:p.T354S,uc010nvg.2:exon11:c.1090A>T:p.T364S,uc011mzw.2:exon11:c.1099A>T:p.T367S,uc004fmp.2:exon11:c.1150A>T:p.T384S)",
+				annot);
 	}
 
 	/**
@@ -78,7 +68,7 @@ public class SynonymousAnnotationTest implements Constants {
 	 * annovar: EPHA2:uc010oca.2:exon3:c.573G>A:p.L191L,EPHA2:uc001aya.2:exon3:c.573G>A:p.L191L, chr1:16475123C>T
 	 * expected:<EPHA2(uc0[10oca.2:exon3:c.573G>A:p.L191L,uc001ay]a.2:exon3:c.573G>A:p...> but
 	 * was:<EPHA2(uc0[01aya.2:exon3:c.573G>A:p.L191L,uc010oc]a.2:exon3:c.573G>A:p...>
-	 * 
+	 *
 	 * </P>
 	 */
 	@Test
@@ -87,16 +77,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 16475123;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("EPHA2(uc001aya.2:exon3:c.573G>A:p.=,uc010oca.2:exon3:c.573G>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("EPHA2(uc001aya.2:exon3:c.573G>A:p.=,uc010oca.2:exon3:c.573G>A:p.=)", annot);
 	}
 
 	/**
@@ -110,16 +96,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 19447843;
 		String ref = "C";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("UBR4(uc001bbk.1:exon21:c.2922G>C:p.=,uc001bbi.3:exon68:c.9981G>C:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("UBR4(uc001bbk.1:exon21:c.2922G>C:p.=,uc001bbi.3:exon68:c.9981G>C:p.=)", annot);
 	}
 
 	/**
@@ -137,16 +119,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 34329897;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.UTR5, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HMGB4(uc001bxq.3:c.-118T>C)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.UTR5, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("HMGB4(uc001bxq.3:c.-118T>C)", annot);
 	}
 
 	/**
@@ -160,16 +138,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 36927733;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MRPS15(uc001cas.2:exon3:c.207C>T:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MRPS15(uc001cas.2:exon3:c.207C>T:p.=)", annot);
 	}
 
 	/**
@@ -183,16 +157,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 100203693;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("FRRS1(uc001dsh.1:exon7:c.708C>T:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("FRRS1(uc001dsh.1:exon7:c.708C>T:p.=)", annot);
 	}
 
 	/**
@@ -206,16 +176,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 109794252;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CELSR2(uc001dxa.4:exon1:c.1551T>C:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CELSR2(uc001dxa.4:exon1:c.1551T>C:p.=)", annot);
 	}
 
 	/**
@@ -231,16 +197,14 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 112308972;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DDX20(uc001ebt.3:exon3:c.750G>A:p.=,uc010owf.2:exon10:c.1212G>A:p.=,uc001ebs.3:exon11:c.1926G>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"DDX20(uc001ebt.3:exon3:c.750G>A:p.=,uc010owf.2:exon10:c.1212G>A:p.=,uc001ebs.3:exon11:c.1926G>A:p.=)",
+				annot);
 	}
 
 	/**
@@ -254,23 +218,19 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 152193291;
 		String ref = "G";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HRNR(uc001ezt.2:exon3:c.814C>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("HRNR(uc001ezt.2:exon3:c.814C>A:p.=)", annot);
 	}
 
 	/**
 	 * <P>
 	 * annovar: LRRC52:uc001gde.2:exon2:c.886C>A:p.R296R, chr1:165533005C>A <...n2:c.886C>A:p.R296R)[]> but was:
 	 * <...n2:c.886C>A:p.R296R)[LOC400794(LOC400794)]>
-	 * 
+	 *
 	 * </P>
 	 */
 	@Test
@@ -279,16 +239,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 165533005;
 		String ref = "C";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			Assert.assertEquals("LRRC52(uc001gde.2:exon2:c.886C>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		Assert.assertEquals("LRRC52(uc001gde.2:exon2:c.886C>A:p.=)", annot);
 	}
 
 	/**
@@ -298,7 +254,7 @@ public class SynonymousAnnotationTest implements Constants {
 	 * C:p.G32G, chr1:170501385A>C
 	 * </P>
 	 * --- Annotation error in sMrna.
-	 * 
+	 *
 	 * @Test public void testSynonymousVar16() throws AnnotationException { byte chr = 1; int pos = 170501385; String
 	 *       ref = "A"; String alt = "C"; Chromosome c = chromosomeMap.get(chr); if (c==null) {
 	 *       Assert.fail("Could not identify chromosome \"" + chr + "\""); } else { AnnotationList ann
@@ -322,16 +278,14 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 172356437;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DNM3(uc001gih.1:exon2:c.291A>G:p.=,uc001gif.4:exon18:c.2211A>G:p.=,uc001gie.4:exon19:c.2223A>G:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"DNM3(uc001gih.1:exon2:c.291A>G:p.=,uc001gif.4:exon18:c.2211A>G:p.=,uc001gie.4:exon19:c.2223A>G:p.=)",
+				annot);
 	}
 
 	/**
@@ -345,16 +299,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 183105534;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("LAMC1(uc001gpy.4:exon25:c.4128T>C:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("LAMC1(uc001gpy.4:exon25:c.4128T>C:p.=)", annot);
 	}
 
 	/**
@@ -368,16 +318,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 201969082;
 		String ref = "G";
 		String alt = "A";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("RNPEP(uc001gxe.3:exon5:c.246G>A:p.=,uc001gxd.3:exon6:c.1143G>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("RNPEP(uc001gxe.3:exon5:c.246G>A:p.=,uc001gxd.3:exon6:c.1143G>A:p.=)", annot);
 	}
 
 	/**
@@ -391,16 +337,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 222721288;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HHIPL2(uc001hnh.1:exon1:c.99G>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("HHIPL2(uc001hnh.1:exon1:c.99G>A:p.=)", annot);
 	}
 
 	/**
@@ -413,16 +355,14 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 228402047;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("OBSCN(uc009xez.2:exon4:c.1431A>G:p.=,uc001hsq.2:exon4:c.1431A>G:p.=,uc001hsn.4:exon4:c.1431A>G:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals(
+				"OBSCN(uc009xez.2:exon4:c.1431A>G:p.=,uc001hsq.2:exon4:c.1431A>G:p.=,uc001hsn.4:exon4:c.1431A>G:p.=)",
+				annot);
 	}
 
 	/**
@@ -436,16 +376,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 16834597;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("AGR2(uc003str.3:exon7:c.441T>C:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("AGR2(uc003str.3:exon7:c.441T>C:p.=)", annot);
 	}
 
 	/**
@@ -459,16 +395,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 18993870;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("HDAC9(uc003suh.3:exon23:c.3030C>T:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("HDAC9(uc003suh.3:exon23:c.3030C>T:p.=)", annot);
 	}
 
 	/**
@@ -482,16 +414,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 63981563;
 		String ref = "A";
 		String alt = "G";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("ZNF680(uc003tta.2:exon4:c.1569T>C:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("ZNF680(uc003tta.2:exon4:c.1569T>C:p.=)", annot);
 	}
 
 	/**
@@ -505,16 +433,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 98782750;
 		String ref = "C";
 		String alt = "T";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("KPNA7(uc010lft.2:exon7:c.936G>A:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("KPNA7(uc010lft.2:exon7:c.936G>A:p.=)", annot);
 	}
 
 	/**
@@ -528,16 +452,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 137128830;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("DGKI(uc003vtu.3:exon28:c.1785A>G:p.=,uc003vtt.3:exon29:c.2778A>G:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("DGKI(uc003vtu.3:exon28:c.1785A>G:p.=,uc003vtt.3:exon29:c.2778A>G:p.=)", annot);
 	}
 
 	/**
@@ -551,16 +471,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 4251069;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("CCDC94(uc002lzv.4:exon3:c.171T>C:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("CCDC94(uc002lzv.4:exon3:c.171T>C:p.=)", annot);
 	}
 
 	/**
@@ -574,16 +490,12 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 9090531;
 		String ref = "T";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MUC16(uc002mkp.3:exon1:c.1284A>G:p.=)", annot);
-		}
+
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MUC16(uc002mkp.3:exon1:c.1284A>G:p.=)", annot);
 	}
 
 	/**
@@ -597,16 +509,11 @@ public class SynonymousAnnotationTest implements Constants {
 		int pos = 36691607;
 		String ref = "A";
 		String alt = "C";
-		Chromosome c = chromosomeMap.get(chr);
-		if (c == null) {
-			Assert.fail("Could not identify chromosome \"" + chr + "\"");
-		} else {
-			AnnotationList ann = c.getAnnotationList(pos, ref, alt);
-			VariantType varType = ann.getVariantType();
-			Assert.assertEquals(VariantType.SYNONYMOUS, varType);
-			String annot = ann.getVariantAnnotation();
-			Assert.assertEquals("MYH9(uc003apg.3:exon26:c.3429T>G:p.=)", annot);
-		}
-	}
 
+		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
+		VariantType varType = ann.getVariantType();
+		Assert.assertEquals(VariantType.SYNONYMOUS, varType);
+		String annot = ann.getVariantAnnotation();
+		Assert.assertEquals("MYH9(uc003apg.3:exon26:c.3429T>G:p.=)", annot);
+	}
 }

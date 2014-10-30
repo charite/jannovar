@@ -3,7 +3,7 @@ package jannovar.annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
+import jannovar.util.Translator;
 
 /**
  * This class is intended to provide a static method to generate annotations for insertion mutations. This method is put

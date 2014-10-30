@@ -3,7 +3,7 @@ package jannovar.annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.Translator;
+import jannovar.util.Translator;
 
 // TODO: currently, the handling of tandem repeats is not as recommended
 /**
