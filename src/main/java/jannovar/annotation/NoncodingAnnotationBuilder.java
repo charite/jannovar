@@ -9,7 +9,7 @@ import jannovar.reference.TranscriptModel;
  * @version 0.04 (15 April, 2014)
  * @author Peter N Robinson, Marten Jäger
  */
-public class NoncodingAnnotation {
+public class NoncodingAnnotationBuilder {
 
 	/**
 	 * Return an annotation for a UTR3 mutation for a gene.

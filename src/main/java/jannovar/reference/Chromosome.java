@@ -8,7 +8,7 @@ import jannovar.annotation.DeletionAnnotationBuilder;
 import jannovar.annotation.InsertionAnnotationBuilder;
 import jannovar.annotation.IntergenicAnnotationBuilder;
 import jannovar.annotation.IntronicAnnotationBuilder;
-import jannovar.annotation.NoncodingAnnotation;
+import jannovar.annotation.NoncodingAnnotationBuilder;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTRAnnotation;
@@ -507,7 +507,7 @@ public class Chromosome {
 				if (tm.isNonCodingGene()) {
 					// ref = DNAUtils.reverseComplement(ref);
 					// alt = DNAUtils.reverseComplement(alt);
-					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(tm, rvarstart, ref, alt, k);
+					Annotation ann = NoncodingAnnotationBuilder.createNoncodingExonicAnnotation(tm, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 				} else if (end < cdsstart) {
 					/* #usually disrupt/change 5' UTR region, unless the UTR per se is also separated by introns
@@ -724,7 +724,7 @@ public class Chromosome {
 				if (tm.isNonCodingGene()) {
 					ref = DNAUtils.reverseComplement(ref);
 					alt = DNAUtils.reverseComplement(alt);
-					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(tm, rvarstart, ref, alt, k);
+					Annotation ann = NoncodingAnnotationBuilder.createNoncodingExonicAnnotation(tm, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 					return; /* done with this annotation. */
 				} else if (end < cdsstart) {
