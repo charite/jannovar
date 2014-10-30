@@ -418,8 +418,8 @@ public class AnnotationList {
 			}
 			if (tmp.isEmpty()) {
 				continue; /*
-						 * This can happen if there are multiple genes with missense, ncRNA, synonymous etc annotations.
-						 */
+				 * This can happen if there are multiple genes with missense, ncRNA, synonymous etc annotations.
+				 */
 			}
 			sb.append(s).append("(").append(tmp.get(0));
 			for (int i = 1; i < tmp.size(); ++i) {
@@ -459,9 +459,9 @@ public class AnnotationList {
 	 * For variants that affect multiple transcripts, we sometimes want to list all of the gene symbols alphabetically.
 	 *
 	 * @return alphabetical list of gene symbols affected by the current variant.
-	 * @deprecated
 	 */
-	@Deprecated
+	// TODO(holtgrem): remove this method?
+	@SuppressWarnings("unused")
 	private ArrayList<String> getSortedListOfGeneSymbols() {
 		HashSet<String> set = new HashSet<String>();
 		ArrayList<String> list = new ArrayList<String>();
@@ -563,9 +563,9 @@ public class AnnotationList {
 			Annotation ann = lst.get(j);
 			if (!ann.isUTRVariant())
 				continue; /*
-						 * this skips over non UTR annotations of alternative transcripts for variants that have at
-						 * least one UTR annotation. Note this will break for variants affecting multiple genes.
-						 */
+				 * this skips over non UTR annotations of alternative transcripts for variants that have at
+				 * least one UTR annotation. Note this will break for variants affecting multiple genes.
+				 */
 			if (needGeneSymbol) {
 				sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
 				needGeneSymbol = false;
