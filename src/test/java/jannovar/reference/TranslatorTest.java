@@ -1,26 +1,25 @@
 package jannovar.reference;
 
-import static org.junit.Assert.*;
 import jannovar.exception.AnnotationException;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test for the TranscriptModel class.
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class TranslatorTest {
 
 	Translator translator;
-	
+
 	@Before
 	public void setUp() {
 		translator = Translator.getTranslator();
 	}
-	
+
 	/** Test for translateDNA() with too short input */
 	@Test
 	public void testTranslateDna_tooShort() throws AnnotationException {
