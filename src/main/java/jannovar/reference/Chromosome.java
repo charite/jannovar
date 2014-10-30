@@ -3,7 +3,7 @@ package jannovar.reference;
 import jannovar.annotation.AnnotationCollector;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-import jannovar.annotation.BlockSubstitution;
+import jannovar.annotation.BlockSubstitutionAnnotationBuilder;
 import jannovar.annotation.DeletionAnnotation;
 import jannovar.annotation.InsertionAnnotation;
 import jannovar.annotation.IntergenicAnnotation;
@@ -863,7 +863,7 @@ public class Chromosome {
 						var, refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(dlt);
 			} else if (var.length() > 1) {
-				Annotation blck = BlockSubstitution.getAnnotationPlusStrand(tm, frame_s, wtnt3, ref, var, refvarstart,
+				Annotation blck = BlockSubstitutionAnnotationBuilder.getAnnotationPlusStrand(tm, frame_s, wtnt3, ref, var, refvarstart,
 						refvarend, exonNumber);
 				this.annovarFactory.addExonicAnnotation(blck);
 			} else {
@@ -890,12 +890,12 @@ public class Chromosome {
 			// $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
 			if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
 				/* Non-frameshift substitution */
-				Annotation ann = BlockSubstitution.getAnnotationBlockPlusStrand(tm, frame_s, wtnt3, ref, var,
+				Annotation ann = BlockSubstitutionAnnotationBuilder.getAnnotationBlockPlusStrand(tm, frame_s, wtnt3, ref, var,
 						refvarstart, refvarend, exonNumber);
 				this.annovarFactory.addExonicAnnotation(ann);
 			} else {
 				/* frameshift substitution; more than one deleted nucleotide with more than one inserted nucleotide */
-				Annotation ann = BlockSubstitution.getAnnotationBlockPlusStrand(tm, frame_s, wtnt3, ref, var,
+				Annotation ann = BlockSubstitutionAnnotationBuilder.getAnnotationBlockPlusStrand(tm, frame_s, wtnt3, ref, var,
 						refvarstart, refvarend, exonNumber);
 				this.annovarFactory.addExonicAnnotation(ann);
 			}

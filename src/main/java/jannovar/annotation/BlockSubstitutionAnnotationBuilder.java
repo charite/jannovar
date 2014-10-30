@@ -17,7 +17,7 @@ import jannovar.reference.Translator;
  * @author Peter N Robinson
  * @author Marten Jäger
  */
-public class BlockSubstitution {
+public class BlockSubstitutionAnnotationBuilder {
 	/**
 	 * Creates annotation for a block substitution on the plus strand.
 	 *
