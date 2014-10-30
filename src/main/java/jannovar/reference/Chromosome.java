@@ -10,7 +10,7 @@ import jannovar.annotation.IntergenicAnnotationBuilder;
 import jannovar.annotation.IntronicAnnotationBuilder;
 import jannovar.annotation.NoncodingAnnotationBuilder;
 import jannovar.annotation.SingleNucleotideSubstitutionBuilder;
-import jannovar.annotation.SpliceAnnotation;
+import jannovar.annotation.SpliceAnnotationBuilder;
 import jannovar.annotation.UTRAnnotation;
 import jannovar.common.DNAUtils;
 import jannovar.common.VariantType;
@@ -380,8 +380,8 @@ public class Chromosome {
 			/* 1) First check whether variant is a splice variant */
 			// System.out.println("BLA, About to check for splice for gene " + tm.getGeneSymbol());
 			// isSpliceVariantPositiveStrand(TranscriptModel tm, int start, int end, String ref, String alt, int k) {
-			if (SpliceAnnotation.isSpliceVariant(tm, start, end, ref, alt, k)) {
-				Annotation ann = SpliceAnnotation
+			if (SpliceAnnotationBuilder.isSpliceVariant(tm, start, end, ref, alt, k)) {
+				Annotation ann = SpliceAnnotationBuilder
 						.getSpliceAnnotationPlusStrand(tm, start, end, ref, alt, k, cumlenexon);
 				if (tm.isCodingGene()) {
 					annovarFactory.addExonicAnnotation(ann);
@@ -593,8 +593,8 @@ public class Chromosome {
 
 			/* 1) First check whether variant is a splice variant */
 			// System.out.println("BLA, About to check for splice for gene " + tm.getGeneSymbol());
-			if (SpliceAnnotation.isSpliceVariant(tm, start, end, ref, alt, k)) {
-				Annotation ann = SpliceAnnotation.getSpliceAnnotationMinusStrand(tm, start, end, ref, alt, k,
+			if (SpliceAnnotationBuilder.isSpliceVariant(tm, start, end, ref, alt, k)) {
+				Annotation ann = SpliceAnnotationBuilder.getSpliceAnnotationMinusStrand(tm, start, end, ref, alt, k,
 						cumlenexon);
 				if (tm.isCodingGene()) {
 					annovarFactory.addExonicAnnotation(ann);

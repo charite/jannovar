@@ -14,7 +14,7 @@ import jannovar.reference.TranscriptModel;
  * @version 0.15 (15 April, 2014)
  * @author Peter N Robinson, Marten Jäger
  */
-public class SpliceAnnotation {
+public class SpliceAnnotationBuilder {
 	/**
 	 * Number of nucleotides away from exon/intron boundary to be considered as potential splicing mutation.
 	 */
