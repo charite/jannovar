@@ -28,14 +28,12 @@ public class Chromosome {
 	 * way of dealing with scaffolds etc.
 	 */
 	private final byte chromosome;
-	/** Total number of TranscriptModels on the chromosome including multiple transcripts of the same gene. */
-	private final int n_genes;
 
 	/**
-	 * An {@link jannovar.interval.IntervalTree IntervalTree} that contains all of the
-	 * {@link jannovar.reference.TranscriptModel TranscriptModel} objects for transcripts located on this chromosome.
+	 * An {@link IntervalTree} that contains all of the {@link TranscriptModel} objects for transcripts located on this
+	 * chromosome.
 	 */
-	private IntervalTree<TranscriptModel> itree = null;
+	private IntervalTree<TranscriptModel> tmIntervalTree = null;
 
 	/**
 	 * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or 24=Y_CHROMOSOME (see
@@ -43,13 +41,12 @@ public class Chromosome {
 	 *
 	 * @param c
 	 *            the chromosome
-	 * @param intrvtree
+	 * @param tmIntervalTree
 	 *            An interval tree with all transcripts on this chromosome.
 	 */
-	public Chromosome(byte c, IntervalTree<TranscriptModel> intrvtree) {
+	public Chromosome(byte c, IntervalTree<TranscriptModel> tmIntervalTree) {
 		this.chromosome = c;
-		this.itree = intrvtree;
-		this.n_genes = 0; /* TODO: Need to get this information from the IntervalTree */
+		this.tmIntervalTree = tmIntervalTree;
 	}
 
 	/**
@@ -64,7 +61,7 @@ public class Chromosome {
 	 * @return Number of genes contained in this chromosome.
 	 */
 	public int getNumberOfGenes() {
-		return this.n_genes;
+		return this.tmIntervalTree.size();
 	}
 
 	/**
@@ -102,7 +99,7 @@ public class Chromosome {
 	/**
 	 * @return the {@link IntervalTree} of the chromosome.
 	 */
-	public IntervalTree<TranscriptModel> getItree() {
-		return itree;
+	public IntervalTree<TranscriptModel> getTMIntervalTree() {
+		return tmIntervalTree;
 	}
 }

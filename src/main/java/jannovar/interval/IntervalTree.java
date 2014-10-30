@@ -50,39 +50,66 @@ import java.util.List;
  */
 public class IntervalTree<T> implements java.io.Serializable {
 	/**
+	 * Encapsulates the algorithm state such that the current query position is not
+	 */
+	public class AlgorithmState {
+		/**
+		 * The left neighbor of the current query position (non-overlapping interval to the left of the query that is
+		 * the closest of all intervals).
+		 */
+		public Interval<T> leftNeighbor = null;
+
+		/**
+		 * The right neighbor of the current query position (non-overlapping interval to the right of the query that is
+		 * the closest of all intervals).
+		 */
+		public Interval<T> rightNeighbor = null;
+	}
+
+	/**
+	 * Stores the result of an interval tree query.
+	 */
+	public class QueryResult extends AlgorithmState {
+		public final ArrayList<T> result;
+		public final Interval<T> leftNeighbor;
+		public final Interval<T> rightNeighbor;
+
+		public QueryResult(ArrayList<T> result, Interval<T> leftNeighbor, Interval<T> rightNeighbor) {
+			this.result = result;
+			this.leftNeighbor = leftNeighbor;
+			this.rightNeighbor = rightNeighbor;
+		}
+	}
+
+	/**
 	 * A version numberused during deserialization to verify that the sender and receiver of a serialized object have
 	 * loaded classes for that object that are compatible with respect to serialization.
 	 */
 	private static final long serialVersionUID = 1L;
+
 	/** The root node of the entire interval tree. */
-	private Node<T> root;
+	private final Node<T> root;
+
 	/**
 	 * All intervals of the entire tree (pointers to these intervals are also used in the nodes).
 	 */
-	private List<Interval<T>> intervals;
+	private final List<Interval<T>> intervals;
 
 	/**
 	 * A Comparator that is used to sort intervals by their left endpoint in ascending order.
 	 */
-	private LeftComparator leftcomp = null;
+	private final LeftComparator leftcomp = new LeftComparator();
+
 	/**
 	 * A Comparator that is used to sort intervals by their right endpoint in descending order.
 	 */
-	private RightComparator rightcomp = null;
-	/**
-	 * The left neighbor of the current query position (non-overlapping interval to the left of the query that is the
-	 * closest of all intervals).
-	 */
-	private Interval<T> leftNeighbor = null;
-	/**
-	 * The right neighbor of the current query position (non-overlapping interval to the right of the query that is the
-	 * closest of all intervals).
-	 */
-	private Interval<T> rightNeighbor = null;
+	private final RightComparator rightcomp = new RightComparator();
 
-	/** The default constructor should not be used and is declared private. */
-	protected IntervalTree() {
-		/* not to be used */
+	/**
+	 * @return number of intervals in the tree
+	 */
+	public int size() {
+		return this.intervals.size();
 	}
 
 	/**
@@ -93,25 +120,9 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 */
 	public IntervalTree(List<Interval<T>> intervals) {
 		/* sets the root and calls the node constructor with list */
-		initializeComparators();
 		this.root = new Node<T>(intervals, this.leftcomp, this.rightcomp);
 		this.intervals = intervals;
 		Collections.sort(this.intervals, leftcomp);
-	}
-
-	/**
-	 * A helper method intended to be used by the Constructors of this class to initialize the static Comparator objects
-	 * that will be used to sort intervals.
-	 */
-	private void initializeComparators() {
-		if (this.leftcomp == null) {
-			this.leftcomp = new LeftComparator();
-		}
-		if (this.rightcomp == null) {
-			this.rightcomp = new RightComparator();
-		}
-		// Node.setLeftComparator(leftcomp);
-		// Node.setRightComparator(rightcomp);
 	}
 
 	// TODO(holtgrem): What's the difference to search()?
@@ -167,7 +178,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 		}
 		/* Search for neighbors if there are no hits */
 		if (obtlst.isEmpty())
-			searchInbetween(low);
+			searchInBetween(low);
 		return obtlst;
 	}
 
@@ -275,7 +286,7 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 *            The lower range of the original search query (it doesn't matter whether we take the lower or the upper
 	 *            range, since both do not overlap).
 	 */
-	private void searchInbetween(int x) {
+	private void searchInBetween(int x) {
 		Node<T> n = this.root;
 		while (n != null) {
 			if (x < n.getMedian()) {

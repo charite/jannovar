@@ -108,13 +108,13 @@ public class VariantAnnotator {
 
 		// TODO(holtgrem): don't we have use intervals? update comment below
 		// Get the TranscriptModel objects that overlap with (start, end).
-		ArrayList<TranscriptModel> candidateTranscripts = chr.getItree().search(start, end);
+		ArrayList<TranscriptModel> candidateTranscripts = chr.getTMIntervalTree().search(start, end);
 
 		// for structural variants we also perform a big intervals search
 		boolean isStructuralVariant = false;
 		if ((ref.length() >= 1000 || alt.length() >= 1000)) {
 			if (ref.length() >= 1000)
-				candidateTranscripts.addAll(chr.getItree().searchBigInterval(start, end));
+				candidateTranscripts.addAll(chr.getTMIntervalTree().searchBigInterval(start, end));
 			isStructuralVariant = true;
 		}
 
@@ -123,7 +123,7 @@ public class VariantAnnotator {
 			if (isStructuralVariant)
 				getStructuralVariantAnnotation(position, ref, alt, null);
 			else
-				createIntergenicAnnotations(start, end, chr.getItree().getLeftNeighbor(), chr.getItree().getRightNeighbor());
+				createIntergenicAnnotations(start, end, chr.getTMIntervalTree().getLeftNeighbor(), chr.getTMIntervalTree().getRightNeighbor());
 			return annovarFactory.getAnnotationList();
 		}
 
