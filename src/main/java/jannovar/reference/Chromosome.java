@@ -7,7 +7,7 @@ import jannovar.annotation.BlockSubstitutionAnnotationBuilder;
 import jannovar.annotation.DeletionAnnotationBuilder;
 import jannovar.annotation.InsertionAnnotationBuilder;
 import jannovar.annotation.IntergenicAnnotationBuilder;
-import jannovar.annotation.IntronicAnnotation;
+import jannovar.annotation.IntronicAnnotationBuilder;
 import jannovar.annotation.NoncodingAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.SpliceAnnotation;
@@ -445,9 +445,9 @@ public class Chromosome {
 					 * ----------------------------------------------------------------------- */
 					Annotation ann = null;
 					if (tm.isCodingGene()) {
-						ann = IntronicAnnotation.createIntronicAnnotation(tm, k, start, end, ref, alt);
+						ann = IntronicAnnotationBuilder.createIntronicAnnotation(tm, k, start, end, ref, alt);
 					} else {
-						ann = IntronicAnnotation.createNcRNAIntronicAnnotation(tm, k, start, end, ref, alt);
+						ann = IntronicAnnotationBuilder.createNcRNAIntronicAnnotation(tm, k, start, end, ref, alt);
 					}
 					annovarFactory.addIntronicAnnotation(ann);
 					return; /* Done with this annotation */
@@ -685,9 +685,9 @@ public class Chromosome {
 					alt = DNAUtils.reverseComplement(alt);
 					ref = DNAUtils.reverseComplement(ref);
 					if (tm.isCodingGene()) {
-						ann = IntronicAnnotation.createIntronicAnnotation(tm, k, start, end, ref, alt);
+						ann = IntronicAnnotationBuilder.createIntronicAnnotation(tm, k, start, end, ref, alt);
 					} else {
-						ann = IntronicAnnotation.createNcRNAIntronicAnnotation(tm, k, start, end, ref, alt);
+						ann = IntronicAnnotationBuilder.createNcRNAIntronicAnnotation(tm, k, start, end, ref, alt);
 					}
 					annovarFactory.addIntronicAnnotation(ann);
 					return; /* done with this annotation. */

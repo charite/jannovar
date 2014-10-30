@@ -10,7 +10,7 @@ import jannovar.reference.TranscriptModel;
  * @version 0.07 (15 April 2014)
  * @author Peter N Robinson, M Jaeger
  */
-public class IntronicAnnotation {
+public class IntronicAnnotationBuilder {
 	/**
 	 * Create an intronic annotation with a description of the length to the neighboring exon boundaries. When we get
 	 * here, the start of exon k is 3' to the variant on the chromosome and the end of exon k-1 is 5' to the variant. We
@@ -149,7 +149,7 @@ public class IntronicAnnotation {
 	 * @return {@link Annotation} object for an intergenic variant
 	 */
 	public static Annotation createNcRNAIntronicAnnotation(TranscriptModel tm, int k, int start, int end, String ref, String alt) {
-		Annotation ann = IntronicAnnotation.createIntronicAnnotation(tm, k, start, end, ref, alt);
+		Annotation ann = IntronicAnnotationBuilder.createIntronicAnnotation(tm, k, start, end, ref, alt);
 		ann.setVarType(VariantType.ncRNA_INTRONIC);
 		return ann;
 	}
