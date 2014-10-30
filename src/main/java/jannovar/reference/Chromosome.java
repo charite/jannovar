@@ -5,7 +5,7 @@ import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.BlockSubstitutionAnnotationBuilder;
 import jannovar.annotation.DeletionAnnotationBuilder;
-import jannovar.annotation.InsertionAnnotation;
+import jannovar.annotation.InsertionAnnotationBuilder;
 import jannovar.annotation.IntergenicAnnotation;
 import jannovar.annotation.IntronicAnnotation;
 import jannovar.annotation.NoncodingAnnotation;
@@ -855,7 +855,7 @@ public class Chromosome {
 		if (start == end) { /* SNV or insertion variant */
 			if (ref.equals("-")) { /* "-" stands for an insertion at this position */
 				// System.out.println(ref + "\t" + var + "\t" + tm.getChromosomeAsString() + "\t" + start);
-				Annotation insrt = InsertionAnnotation.getAnnotation(tm, frame_s, wtnt3, wtnt3_after, ref, var,
+				Annotation insrt = InsertionAnnotationBuilder.getAnnotation(tm, frame_s, wtnt3, wtnt3_after, ref, var,
 						refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(insrt);
 			} else if (var.equals("-")) { /* i.e., single nucleotide deletion */

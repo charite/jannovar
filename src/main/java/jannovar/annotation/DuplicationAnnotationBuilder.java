@@ -22,7 +22,7 @@ import jannovar.reference.Translator;
 public class DuplicationAnnotationBuilder {
 	/**
 	 * Annotates an insertion variant that is an duplication. The methods of this class are called from
-	 * {@link jannovar.annotation.InsertionAnnotation InsertionAnnotation} if that class determines that the insertion
+	 * {@link jannovar.annotation.InsertionAnnotationBuilder InsertionAnnotation} if that class determines that the insertion
 	 * is equal to the preceding nucleotides in the reference sequence. That is, in addition to the conditions for a
 	 * insertion variant, the duplication variant requires a similar sequence to the insertion (before or) after the
 	 * insertion.

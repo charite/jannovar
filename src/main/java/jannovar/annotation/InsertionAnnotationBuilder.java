@@ -13,7 +13,7 @@ import jannovar.reference.Translator;
  * @author Peter N Robinson, M Jäger
  */
 
-public class InsertionAnnotation {
+public class InsertionAnnotationBuilder {
 
 	/**
 	 * Annotates an insertion variant. The fact that a variant is an insertion variant has been identified by the fact
