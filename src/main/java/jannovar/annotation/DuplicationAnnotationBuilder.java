@@ -19,7 +19,7 @@ import jannovar.reference.Translator;
  * @version 0.04 (22 April, 2014)
  * @author Peter N Robinson, Marten Jäger
  */
-public class DuplicationAnnotation {
+public class DuplicationAnnotationBuilder {
 	/**
 	 * Annotates an insertion variant that is an duplication. The methods of this class are called from
 	 * {@link jannovar.annotation.InsertionAnnotation InsertionAnnotation} if that class determines that the insertion

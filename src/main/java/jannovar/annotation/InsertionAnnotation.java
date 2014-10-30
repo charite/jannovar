@@ -76,7 +76,7 @@ public class InsertionAnnotation {
 			int potentialDuplicationEndPos = refvarstart; // pos right after insertion
 
 			if (trmdl.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
-				Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
+				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
 				return ann;
 			}
 			/* Note that some duplications are located after the indicated position of the variant in the
@@ -105,7 +105,7 @@ public class InsertionAnnotation {
 				if (newwtnt3 != null && newwtnt3.length() == 3) {
 					wtnt3 = newwtnt3;
 				}
-				Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, var, pos, endpos, exonNumber);
+				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(trmdl, frame_s, wtnt3, var, pos, endpos, exonNumber);
 				return ann;
 			}
 		} else { /* i.e., we are on the minus strand. */
@@ -128,7 +128,7 @@ public class InsertionAnnotation {
 			int potentialDuplicationStartPos = refvarstart; // go back length of insertion (var.length()).
 			int potentialDuplicationEndPos = refvarstart + var.length(); // pos right after insertion
 			if (potentialDuplicationStartPos >= var.length() && potentialDuplicationEndPos < trmdl.getMRNALength() && trmdl.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
-				Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
+				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
 				return ann;
 			}
 
