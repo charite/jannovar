@@ -10,9 +10,7 @@ import jannovar.reference.TranscriptModel;
  * @version 0.07 (15 April 2014)
  * @author Peter N Robinson, M Jaeger
  */
-
 public class IntronicAnnotation {
-
 	/**
 	 * Create an intronic annotation with a description of the length to the neighboring exon boundaries. When we get
 	 * here, the start of exon k is 3' to the variant on the chromosome and the end of exon k-1 is 5' to the variant. We
@@ -21,7 +19,7 @@ public class IntronicAnnotation {
 	 * G of the previous exon is 6. This makes a standard intronic variant CGG[g/a]ttagtg have the expected numbering
 	 * (+1, in this case).
 	 * 
-	 * @param trmdl
+	 * @param tm
 	 *            The affected transcript
 	 * @param k
 	 *            Number of exone (zero based numbering) that is 3' to the variant on chromosome
@@ -33,7 +31,7 @@ public class IntronicAnnotation {
 	 * @param ref
 	 * @return the {@link Annotation}
 	 */
-	public static Annotation createIntronicAnnotation(TranscriptModel trmdl, int k, int start, int end, String ref, String alt) {
+	public static Annotation createIntronicAnnotation(TranscriptModel tm, int k, int start, int end, String ref, String alt) {
 		String annot;
 		String prefix = "";
 		String code = "c";
@@ -41,96 +39,96 @@ public class IntronicAnnotation {
 		int distL;
 		int distR;
 		int posToCDS;
-		if (trmdl.isNonCodingGene())
+		if (tm.isNonCodingGene())
 			code = "n";
 		// System.out.println("code: " + code);
-		if (trmdl.isPlusStrand()) {
+		if (tm.isPlusStrand()) {
 
-			if (start < trmdl.getCDSStart()) {// 5'UTR
+			if (start < tm.getCDSStart()) {// 5'UTR
 				prefix = "-";
 			}
-			if (start > trmdl.getCDSEnd()) {// 3'UTR
+			if (start > tm.getCDSEnd()) {// 3'UTR
 				prefix = "*";
 			}
-			distL = start - trmdl.getExonEnd(k - 1);
-			distR = trmdl.getExonStart(k) - end;
+			distL = start - tm.getExonEnd(k - 1);
+			distR = tm.getExonStart(k) - end;
 			// System.out.println(distL + " vs. " + distR);
 			if (distL <= distR) {
 				// System.out.println("hoho");
-				if (trmdl.isNonCodingGene()) {
-					posToCDS = trmdl.getDistanceToFivePrimeTerminuscDNA(trmdl.getExonEnd(k - 1));
+				if (tm.isNonCodingGene()) {
+					posToCDS = tm.getDistanceToFivePrimeTerminuscDNA(tm.getExonEnd(k - 1));
 					prefix = "";
-				} else if (start > trmdl.getCDSEnd()) // 3'UTR distance to CDS end
-					posToCDS = trmdl.getDistanceToCDSend(trmdl.getExonEnd(k - 1));
+				} else if (start > tm.getCDSEnd()) // 3'UTR distance to CDS end
+					posToCDS = tm.getDistanceToCDSend(tm.getExonEnd(k - 1));
 				else
-					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonEnd(k - 1));
+					posToCDS = tm.getDistanceToCDSstart(tm.getExonEnd(k - 1));
 				// dist = "+" + distL;
 				if (ref.equals("-"))
-					annot = String.format("%s:intron%d:%s.%s%d+%dins%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distL, alt);
+					annot = String.format("%s:intron%d:%s.%s%d+%dins%s", tm.getAccessionNumber(), k, code, prefix, posToCDS, distL, alt);
 				else
-					annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distL, ref, alt);
+					annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", tm.getAccessionNumber(), k, code, prefix, posToCDS, distL, ref, alt);
 			} else {
-				if (trmdl.isNonCodingGene()) {
-					posToCDS = trmdl.getDistanceToFivePrimeTerminuscDNA(trmdl.getExonStart(k));
+				if (tm.isNonCodingGene()) {
+					posToCDS = tm.getDistanceToFivePrimeTerminuscDNA(tm.getExonStart(k));
 					prefix = "";
-				} else if (start > trmdl.getCDSEnd())
-					posToCDS = trmdl.getDistanceToCDSend(trmdl.getExonStart(k));
+				} else if (start > tm.getCDSEnd())
+					posToCDS = tm.getDistanceToCDSend(tm.getExonStart(k));
 				else
-					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonStart(k));
+					posToCDS = tm.getDistanceToCDSstart(tm.getExonStart(k));
 				// dist = "-" + distR;
 				if (ref.equals("-"))
-					annot = String.format("%s:intron%d:%s.%s%d-%dins%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distR, alt);
+					annot = String.format("%s:intron%d:%s.%s%d-%dins%s", tm.getAccessionNumber(), k, code, prefix, posToCDS, distR, alt);
 				else
-					annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", trmdl.getAccessionNumber(), k, code, prefix, posToCDS, distR, ref, alt);
+					annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", tm.getAccessionNumber(), k, code, prefix, posToCDS, distR, ref, alt);
 			}
 			// System.out.println("dist to CDS start: " + posToCDS);
 
 		} else { // "-"-Strand
-			if (start > trmdl.getCDSEnd()) { // 5'UTR
+			if (start > tm.getCDSEnd()) { // 5'UTR
 				prefix = "-";
 			}
-			if (end < trmdl.getCDSStart()) { // 3'UTR
+			if (end < tm.getCDSStart()) { // 3'UTR
 				prefix = "*";
 			}
 			// System.out.println("k: " + k);
-			distL = trmdl.getExonStart(k + 1) - end;
+			distL = tm.getExonStart(k + 1) - end;
 			// System.out.println(trmdl.getAccessionNumber() + "  start: " + trmdl.getExonStart(k + 2));
-			distR = start - trmdl.getExonEnd(k);
+			distR = start - tm.getExonEnd(k);
 			// System.out.println("distL: " + distL + "\tdistR: " + distR);
 			if (distL <= distR) {
-				if (trmdl.isNonCodingGene()) {
-					posToCDS = trmdl.getDistanceToFivePrimeTerminuscDNA(trmdl.getExonStart(k + 1));
+				if (tm.isNonCodingGene()) {
+					posToCDS = tm.getDistanceToFivePrimeTerminuscDNA(tm.getExonStart(k + 1));
 					prefix = "";
-				} else if (end < trmdl.getCDSStart()) // 3'UTR distance to CDS end
-					posToCDS = trmdl.getDistanceToCDSend(trmdl.getExonStart(k + 1));
+				} else if (end < tm.getCDSStart()) // 3'UTR distance to CDS end
+					posToCDS = tm.getDistanceToCDSend(tm.getExonStart(k + 1));
 				else
-					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonStart(k + 1));
+					posToCDS = tm.getDistanceToCDSstart(tm.getExonStart(k + 1));
 				// dist = "+" + distL;
 				if (ref.equals("-"))
-					annot = String.format("%s:intron%d:%s.%s%d+%dins%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distL, alt);
+					annot = String.format("%s:intron%d:%s.%s%d+%dins%s", tm.getAccessionNumber(), tm.getExonCount() - k - 1, code, prefix, posToCDS, distL, alt);
 				else
-					annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distL, ref, alt);
+					annot = String.format("%s:intron%d:%s.%s%d+%d%s>%s", tm.getAccessionNumber(), tm.getExonCount() - k - 1, code, prefix, posToCDS, distL, ref, alt);
 			} else {
 				// System.out.println("exonend: " + trmdl.getExonEnd(k));
 				// System.out.println("cds start: " + trmdl.getCDSEnd());
 				// System.out.println(trmdl);
-				if (trmdl.isNonCodingGene()) {
-					posToCDS = trmdl.getDistanceToFivePrimeTerminuscDNA(trmdl.getExonEnd(k));
+				if (tm.isNonCodingGene()) {
+					posToCDS = tm.getDistanceToFivePrimeTerminuscDNA(tm.getExonEnd(k));
 					prefix = "";
-				} else if (end < trmdl.getCDSStart()) // 3'UTR distance to CDS end
-					posToCDS = trmdl.getDistanceToCDSend(trmdl.getExonEnd(k));
+				} else if (end < tm.getCDSStart()) // 3'UTR distance to CDS end
+					posToCDS = tm.getDistanceToCDSend(tm.getExonEnd(k));
 				else
-					posToCDS = trmdl.getDistanceToCDSstart(trmdl.getExonEnd(k));
+					posToCDS = tm.getDistanceToCDSstart(tm.getExonEnd(k));
 				// dist = "-" + distR;
 				if (ref.equals("-"))
-					annot = String.format("%s:intron%d:%s.%s%d-%dins%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distR, alt);
+					annot = String.format("%s:intron%d:%s.%s%d-%dins%s", tm.getAccessionNumber(), tm.getExonCount() - k - 1, code, prefix, posToCDS, distR, alt);
 				else
-					annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", trmdl.getAccessionNumber(), trmdl.getExonCount() - k - 1, code, prefix, posToCDS, distR, ref, alt);
+					annot = String.format("%s:intron%d:%s.%s%d-%d%s>%s", tm.getAccessionNumber(), tm.getExonCount() - k - 1, code, prefix, posToCDS, distR, ref, alt);
 			}
 		}
 		// System.out.println("Pos to CDSStart: " + posToCDS);
 		int m = Math.min(distR, distL);
-		Annotation ann = new Annotation(trmdl, annot, VariantType.INTRONIC);
+		Annotation ann = new Annotation(tm, annot, VariantType.INTRONIC);
 		ann.setDistanceToNearestExon(m);
 		return ann;
 	}
@@ -138,7 +136,7 @@ public class IntronicAnnotation {
 	/**
 	 * Create an intronic annotation with a description of the length to the neighboring exon boundaries.
 	 * 
-	 * @param trmdl
+	 * @param tm
 	 *            The affected transcript
 	 * @param k
 	 *            exon number (zero based numbering) that is 3' to the variant on chromosome
@@ -150,11 +148,9 @@ public class IntronicAnnotation {
 	 * @param ref
 	 * @return {@link Annotation} object for an intergenic variant
 	 */
-	public static Annotation createNcRNAIntronicAnnotation(TranscriptModel trmdl, int k, int start, int end, String ref, String alt) {
-
-		Annotation ann = IntronicAnnotation.createIntronicAnnotation(trmdl, k, start, end, ref, alt);
+	public static Annotation createNcRNAIntronicAnnotation(TranscriptModel tm, int k, int start, int end, String ref, String alt) {
+		Annotation ann = IntronicAnnotation.createIntronicAnnotation(tm, k, start, end, ref, alt);
 		ann.setVarType(VariantType.ncRNA_INTRONIC);
 		return ann;
 	}
-
 }
