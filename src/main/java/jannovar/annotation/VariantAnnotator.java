@@ -11,6 +11,7 @@ import jannovar.annotation.builders.SpliceAnnotationBuilder;
 import jannovar.annotation.builders.UTRAnnotationBuilder;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
+import jannovar.interval.IntervalTree;
 import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptModel;
 import jannovar.util.DNAUtils;
@@ -90,8 +91,7 @@ public class VariantAnnotator {
 	 *         described by the object (often just one annotation, but potentially multiple ones).
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public AnnotationList getAnnotationList(byte c, int position, String ref, String alt)
-			throws AnnotationException {
+	public AnnotationList getAnnotationList(byte c, int position, String ref, String alt) throws AnnotationException {
 		// Get chromosome by id.
 		Chromosome chr = chromosomeMap.get(c);
 		if (chr == null) {
@@ -108,7 +108,8 @@ public class VariantAnnotator {
 
 		// TODO(holtgrem): don't we have use intervals? update comment below
 		// Get the TranscriptModel objects that overlap with (start, end).
-		ArrayList<TranscriptModel> candidateTranscripts = chr.getTMIntervalTree().search(start, end);
+		IntervalTree<TranscriptModel>.QueryResult qr = chr.getTMIntervalTree().search(start, end);
+		ArrayList<TranscriptModel> candidateTranscripts = qr.result;
 
 		// for structural variants we also perform a big intervals search
 		boolean isStructuralVariant = false;
@@ -123,7 +124,7 @@ public class VariantAnnotator {
 			if (isStructuralVariant)
 				getStructuralVariantAnnotation(position, ref, alt, null);
 			else
-				createIntergenicAnnotations(start, end, chr.getTMIntervalTree().getLeftNeighbor(), chr.getTMIntervalTree().getRightNeighbor());
+				createIntergenicAnnotations(start, end, qr.getLeftNeighbor(), qr.getRightNeighbor());
 			return annovarFactory.getAnnotationList();
 		}
 
