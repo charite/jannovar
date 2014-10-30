@@ -4,7 +4,6 @@ import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
 import jannovar.exome.Variant;
 import jannovar.genotype.GenotypeCall;
-import jannovar.io.PedFileParser;
 
 import java.io.IOException;
 import java.util.ArrayList;

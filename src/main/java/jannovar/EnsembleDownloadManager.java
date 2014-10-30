@@ -3,8 +3,8 @@ package jannovar;
 import jannovar.common.Constants;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
+import jannovar.gff.GFFparser;
 import jannovar.io.EnsemblFastaParser;
-import jannovar.io.GFFparser;
 import jannovar.io.SerializationManager;
 import jannovar.reference.TranscriptModel;
 

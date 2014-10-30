@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
 import jannovar.gff.Feature;
+import jannovar.gff.GFFparser;
 
 import java.io.File;
 import java.io.FileOutputStream;
