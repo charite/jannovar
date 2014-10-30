@@ -1,5 +1,14 @@
 package jannovar.annotation;
 
+import jannovar.annotation.builders.BlockSubstitutionAnnotationBuilder;
+import jannovar.annotation.builders.DeletionAnnotationBuilder;
+import jannovar.annotation.builders.InsertionAnnotationBuilder;
+import jannovar.annotation.builders.IntergenicAnnotationBuilder;
+import jannovar.annotation.builders.IntronicAnnotationBuilder;
+import jannovar.annotation.builders.NoncodingAnnotationBuilder;
+import jannovar.annotation.builders.SingleNucleotideSubstitutionBuilder;
+import jannovar.annotation.builders.SpliceAnnotationBuilder;
+import jannovar.annotation.builders.UTRAnnotationBuilder;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.Chromosome;

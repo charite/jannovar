@@ -1,5 +1,6 @@
-package jannovar.annotation;
+package jannovar.annotation.builders;
 
+import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.TranscriptModel;
