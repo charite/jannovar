@@ -459,7 +459,9 @@ public class AnnotationList {
 	 * For variants that affect multiple transcripts, we sometimes want to list all of the gene symbols alphabetically.
 	 *
 	 * @return alphabetical list of gene symbols affected by the current variant.
+	 * @deprecated
 	 */
+	@Deprecated
 	private ArrayList<String> getSortedListOfGeneSymbols() {
 		HashSet<String> set = new HashSet<String>();
 		ArrayList<String> list = new ArrayList<String>();
