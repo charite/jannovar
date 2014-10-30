@@ -23,10 +23,10 @@ import jannovar.util.Translator;
 public class DuplicationAnnotationBuilder {
 	/**
 	 * Annotates an insertion variant that is an duplication. The methods of this class are called from
-	 * {@link jannovar.annotation.builders.InsertionAnnotationBuilder InsertionAnnotation} if that class determines that the insertion
-	 * is equal to the preceding nucleotides in the reference sequence. That is, in addition to the conditions for a
-	 * insertion variant, the duplication variant requires a similar sequence to the insertion (before or) after the
-	 * insertion.
+	 * {@link jannovar.annotation.builders.InsertionAnnotationBuilder InsertionAnnotation} if that class determines that
+	 * the insertion is equal to the preceding nucleotides in the reference sequence. That is, in addition to the
+	 * conditions for a insertion variant, the duplication variant requires a similar sequence to the insertion (before
+	 * or) after the insertion.
 	 *
 	 * There are two possible duplication insertions with or without frameshift causation. e.g. inserting an additional
 	 * 'C' in the sequence 'ACC,GAG' at position 2 would cause a frameshift, whereas insertion of 'CCG' at position 2
@@ -357,6 +357,8 @@ public class DuplicationAnnotationBuilder {
 	 * A convenience method for printing out information about duplication annotations. Hopefully useful for
 	 * checking/debugging.
 	 */
+	// TODO(holtgrem): remove this method?
+	@SuppressWarnings("unused")
 	private static void debugDuplication(TranscriptModel tm, int frameShift, String wtnt3, String var, int refVarStart,
 			int exonNumber, int aaVarPos) {
 		System.err.println("#--------------- DuplicationAnnotation.java: DEBUG --------------------#");

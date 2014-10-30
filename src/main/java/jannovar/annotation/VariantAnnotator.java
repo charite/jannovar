@@ -11,6 +11,7 @@ import jannovar.annotation.builders.SpliceAnnotationBuilder;
 import jannovar.annotation.builders.UTRAnnotationBuilder;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
+import jannovar.interval.IntervalTree;
 import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptModel;
 import jannovar.util.DNAUtils;
@@ -21,6 +22,9 @@ import java.util.HashSet;
 
 /**
  * Main driver class for annotating variants.
+ *
+ * Given, a chromosome map, objects of this class can be used to annotate variants identified by a genomic position
+ * (chr, pos), a reference, and an alternative nucleotide String.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Marten Jaeger <marten.jaeger@charite.de>
@@ -90,8 +94,7 @@ public class VariantAnnotator {
 	 *         described by the object (often just one annotation, but potentially multiple ones).
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public AnnotationList getAnnotationList(byte c, int position, String ref, String alt)
-			throws AnnotationException {
+	public AnnotationList getAnnotationList(byte c, int position, String ref, String alt) throws AnnotationException {
 		// Get chromosome by id.
 		Chromosome chr = chromosomeMap.get(c);
 		if (chr == null) {
@@ -108,7 +111,8 @@ public class VariantAnnotator {
 
 		// TODO(holtgrem): don't we have use intervals? update comment below
 		// Get the TranscriptModel objects that overlap with (start, end).
-		ArrayList<TranscriptModel> candidateTranscripts = chr.getTMIntervalTree().search(start, end);
+		IntervalTree<TranscriptModel>.QueryResult qr = chr.getTMIntervalTree().search(start, end);
+		ArrayList<TranscriptModel> candidateTranscripts = qr.result;
 
 		// for structural variants we also perform a big intervals search
 		boolean isStructuralVariant = false;
@@ -123,7 +127,7 @@ public class VariantAnnotator {
 			if (isStructuralVariant)
 				getStructuralVariantAnnotation(position, ref, alt, null);
 			else
-				createIntergenicAnnotations(start, end, chr.getTMIntervalTree().getLeftNeighbor(), chr.getTMIntervalTree().getRightNeighbor());
+				createIntergenicAnnotations(start, end, qr.getLeftNeighbor(), qr.getRightNeighbor());
 			return annovarFactory.getAnnotationList();
 		}
 
@@ -221,9 +225,9 @@ public class VariantAnnotator {
 	 *
 	 * @param candidateGenes
 	 * @return <code>true</code> for multiple genes in the list
-	 * @deprecated
 	 */
-	@Deprecated
+	// TODO(holtgrem): remove this method?
+	@SuppressWarnings("unused")
 	private boolean isMultiGeneAffecting(ArrayList<TranscriptModel> candidateGenes) {
 		HashSet<String> symbols = new HashSet<String>();
 		for (TranscriptModel model : candidateGenes) {
@@ -775,7 +779,6 @@ public class VariantAnnotator {
 		/* frame_s indicates frame of variant, can be 0, i.e., on first base of codon, 1, or 2 */
 		int frame_s = ((refvarstart - tm.getRefCDSStart()) % 3);
 		int frame_end_s = ((refvarend - tm.getRefCDSStart()) % 3);
-		int refcdsstart = tm.getRefCDSStart();
 
 		// Needed to complete codon following end of multibase ref seq.
 		/*
@@ -853,14 +856,6 @@ public class VariantAnnotator {
 					wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
 			this.annovarFactory.addExonicAnnotation(dltmnt);
 		} else {
-
-			/*
-			 * If we get here, then start==end is false and the variant sequence is not "-", i.e., it is not a deletion.
-			 * Thus, we have a block substitution event.
-			 */
-			String canno = String.format("%s:exon%d:c.%d_%ddelins%s", tm.getName(), exonNumber, refvarstart
-					- refcdsstart + 1, refvarend - refcdsstart + 1, var);
-			// $canno = "c." . ($refvarstart-$refcdsstart+1) . "_" . ($refvarend-$refcdsstart+1) . "$obs";
 			if ((refvarend - refvarstart + 1 - var.length()) % 3 == 0) {
 				/* Non-frameshift substitution */
 				Annotation ann = BlockSubstitutionAnnotationBuilder.getAnnotationBlockPlusStrand(tm, frame_s, wtnt3,

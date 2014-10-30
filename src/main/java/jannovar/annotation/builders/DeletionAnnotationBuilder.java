@@ -551,7 +551,6 @@ public class DeletionAnnotationBuilder {
 			String wtnt3_after, String ref, String var, int refVarStart, int refVarEnd, int exonNumber)
 			throws AnnotationException {
 		Translator translator = Translator.getTranslator(); /* Singleton */
-		char deletedNT = ' ';
 		String cDNAAnno = null;
 		String protAnno = null;
 		String wtaa = translator.translateDNA(wtnt3);
@@ -585,7 +584,8 @@ public class DeletionAnnotationBuilder {
 				varPosEnd = (int) Math.floor((refVarEnd - refcdsstart) / 3) + 1;
 				cDNAAnno = String.format("c.1_%ddel%s", refVarEnd - refVarStart + 1, ref);
 			}
-			protAnno = String.format("%s:exon%d:%s:p.%d_%ddel", tm.getName(), exonNumber, cDNAAnno, aavarpos, varPosEnd);
+			protAnno = String
+					.format("%s:exon%d:%s:p.%d_%ddel", tm.getName(), exonNumber, cDNAAnno, aavarpos, varPosEnd);
 			Annotation ann = new Annotation(tm, protAnno, VariantType.FS_SUBSTITUTION, posVariantInCDS);
 			return ann;
 		} else if (refVarEnd >= cdslen + refcdsstart - 1) {
@@ -595,7 +595,8 @@ public class DeletionAnnotationBuilder {
 			varPosEnd = (int) Math.floor(cdslen / 3);
 			// System.out.println("ref=" + ref + ", var=" +var);
 			cDNAAnno = String.format("c.%d_%ddel%s", refVarStart - refcdsstart + 1, cdslen + refcdsstart - 1, ref);
-			protAnno = String.format("%s:exon%d:%s:p.%d_%ddel", tm.getName(), exonNumber, cDNAAnno, aavarpos, varPosEnd);
+			protAnno = String
+					.format("%s:exon%d:%s:p.%d_%ddel", tm.getName(), exonNumber, cDNAAnno, aavarpos, varPosEnd);
 			Annotation ann = new Annotation(tm, protAnno, VariantType.FS_SUBSTITUTION, posVariantInCDS);
 			return ann;
 		} else if ((refVarEnd - refVarStart + 1) % 3 == 0) {
@@ -607,7 +608,8 @@ public class DeletionAnnotationBuilder {
 			cDNAAnno = String.format("c.%d_%ddel%s", posVariantInCDS, refVarEnd - refcdsstart + 1, ref);
 			if (aavarpos == varPosEnd) {
 				if (frameShift == 0) {
-					protAnno = String.format("%s:exon%d:%s:p.%s%ddel", tm.getName(), exonNumber, cDNAAnno, wtaa, aavarpos);
+					protAnno = String.format("%s:exon%d:%s:p.%s%ddel", tm.getName(), exonNumber, cDNAAnno, wtaa,
+							aavarpos);
 				} else {
 					protAnno = String.format("%s:exon%d:%s:p.%ddel", tm.getName(), exonNumber, cDNAAnno, aavarpos);
 
@@ -648,7 +650,8 @@ public class DeletionAnnotationBuilder {
 			int posMutationInCDS = refVarStart - refcdsstart + 1; /* start pos of mutation with respect to CDS begin */
 			cDNAAnno = String.format("c.%d_%ddel%s", posMutationInCDS, refVarEnd - refcdsstart + 1, ref);
 			try {
-				protAnno = shiftedFrameDeletionLong(tm, exonNumber, cDNAAnno, ref, posMutationInCDS, aavarpos, frameShift);
+				protAnno = shiftedFrameDeletionLong(tm, exonNumber, cDNAAnno, ref, posMutationInCDS, aavarpos,
+						frameShift);
 			} catch (AnnotationException e) {
 				System.err.println("Exception while annotating frame-shift deletion: " + cDNAAnno);
 				protAnno = cDNAAnno; /* just supply the cDNA annotation if there was an error. */
@@ -666,7 +669,6 @@ public class DeletionAnnotationBuilder {
 			int posMutationInCDS, int aaVarStartPos, int frameShift) throws AnnotationException {
 		Translator translator = Translator.getTranslator(); /* Singleton */
 
-		int len = ref.length();
 		// Get the complete coding sequence.
 		// Also include the 3UTR because some deletions extend the
 		// mutant coding sequence beyond the stop codon.

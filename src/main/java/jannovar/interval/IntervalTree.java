@@ -44,34 +44,117 @@ import java.util.List;
  * <P>
  * The construction of an Interval Tree enables a fast search of overlapping intervals.
  *
- * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
+ * @author Christopher Dommaschenz
+ * @author Radostina Misirkova
+ * @author Nadine Taube
+ * @author Gizem Top
+ * @author Peter Robinson
+ * @author Manuel Holtgrewe
  * @version 0.12 (13 June, 2013)
+ *
  * @param <T>
+ *            The contained type to attach to the intervals.
  */
 public class IntervalTree<T> implements java.io.Serializable {
 	/**
 	 * Encapsulates the algorithm state such that the current query position is not
+	 *
+	 * In cases where we do not find an intersection, i.e., when a call to {@link #search} reveals an empty list because
+	 * none of the items overlaps with the search coordinates, then the search function automatically calls
+	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}.
 	 */
-	public class AlgorithmState {
+	private class AlgorithmState {
+		/** A buffer for collecting intervals during the query. */
+		public ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
+
 		/**
 		 * The left neighbor of the current query position (non-overlapping interval to the left of the query that is
 		 * the closest of all intervals).
 		 */
-		public Interval<T> leftNeighbor = null;
+		private Interval<T> leftNeighbor = null;
 
 		/**
 		 * The right neighbor of the current query position (non-overlapping interval to the right of the query that is
 		 * the closest of all intervals).
 		 */
-		public Interval<T> rightNeighbor = null;
+		private Interval<T> rightNeighbor = null;
+
+		/**
+		 * This function checks if {@code item}, which is passed to the function as an argument, is a better left
+		 * neighbor for position x than the current value of {@link #leftNeighbor}. It first checks if the currentValue
+		 * of leftNeighbor is null, in which case we simply assign a value. Because of the way we traverse the interval
+		 * tree, this value is guaranteed to be valid. We then check whether the item is actually located to the left of
+		 * x (if not, we just return). Finally, we check if the "high" (rightmost) value of the interval represented by
+		 * item is closer to x than the value of {@link #leftNeighbor}. If this is the case, then item is a better left
+		 * neighbor, and we assign it to the class variable {@link #leftNeighbor}.
+		 *
+		 * Note that this function is intended to be used by the function {@link #searchInbetween} if there is no
+		 * interval that overlaps the original search query.
+		 *
+		 * @param item
+		 *            The new candidate left neighbor
+		 * @param x
+		 *            the search position
+		 */
+		private void switchLeftNeighborIfBetter(Interval<T> item, int x) {
+			if (item == null)
+				return;
+			// System.out.println("TOP: switchLefttNeighborIfBetter item=" + item +
+			// " current leftN=" + leftNeighbor);
+			if (this.leftNeighbor == null) {
+				this.leftNeighbor = item;
+				return;
+			}
+			/* 1) Return if item is not to left of x */
+			if (item.getHigh() >= x)
+				return;
+			/* 2) if item is closer to x than current leftNeighbor, replace it */
+			if (item.getHigh() > this.leftNeighbor.getHigh()) {
+				this.leftNeighbor = item;
+			}
+		}
+
+		/**
+		 * This function checks if {@code item}, which is passed to the function as an argument, is a better right
+		 * neighbor for position x than the current value of {@link #rightNeighbor}. If the current value of
+		 * {@link #rightNeighbor} is null, we assign it the value of {@code item} (this is guaranteed to be a valid
+		 * value). Otherwise, we check whether item is to the right of {@link #rightNeighbor} (if not, just return).
+		 * Finally, we check whether item is closer to {@code x} than the current rightneighbor, and if so, we update
+		 * the value of {@link #rightNeighbor} to {@code item}.#
+		 *
+		 * @param item
+		 *            The new candidate rightt neighbor
+		 * @param x
+		 *            the search position
+		 */
+		private void switchRightNeighborIfBetter(Interval<T> item, int x) {
+			if (item == null)
+				return;
+			// System.out.println("TOP: switchRightNeighborIfBetter item=" + item +
+			// " current rightN=" + rightNeighbor);
+			if (this.rightNeighbor == null) {
+				this.rightNeighbor = item;
+				return;
+			}
+			/* 1) Return if item is not to right of x */
+			if (item.getLow() <= x)
+				return;
+			/* 2) if item is closer to x than current leftNeighbor, replace it */
+			if (item.getLow() < this.rightNeighbor.getLow()) {
+				this.rightNeighbor = item;
+			}
+		}
 	}
 
 	/**
-	 * Stores the result of an interval tree query.
+	 * Immutable result of an interval tree query.
 	 */
-	public class QueryResult extends AlgorithmState {
+	public class QueryResult {
+		/** The resulting element list. */
 		public final ArrayList<T> result;
+		/** Left neighboring interval. */
 		public final Interval<T> leftNeighbor;
+		/** Right neighboring interval. */
 		public final Interval<T> rightNeighbor;
 
 		public QueryResult(ArrayList<T> result, Interval<T> leftNeighbor, Interval<T> rightNeighbor) {
@@ -79,10 +162,26 @@ public class IntervalTree<T> implements java.io.Serializable {
 			this.leftNeighbor = leftNeighbor;
 			this.rightNeighbor = rightNeighbor;
 		}
+
+		/** @return contained value of left neighbor */
+		public T getLeftNeighbor() {
+			if (leftNeighbor == null)
+				return null;
+			else
+				return leftNeighbor.getValue();
+		}
+
+		/** @return contained value of left neighbor */
+		public T getRightNeighbor() {
+			if (rightNeighbor == null)
+				return null;
+			else
+				return rightNeighbor.getValue();
+		}
 	}
 
 	/**
-	 * A version numberused during deserialization to verify that the sender and receiver of a serialized object have
+	 * A version number used during deserialization to verify that the sender and receiver of a serialized object have
 	 * loaded classes for that object that are compatible with respect to serialization.
 	 */
 	private static final long serialVersionUID = 1L;
@@ -164,163 +263,63 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 *            The higher element of the interval
 	 * @return result, which is an ArrayList containing the found intervals
 	 */
-	public ArrayList<T> search(int low, int high) {
-		ArrayList<Interval<T>> result = new ArrayList<Interval<T>>();
-		/* reset */
-		this.leftNeighbor = null;
-		this.rightNeighbor = null;
+	public QueryResult search(int low, int high) {
+		AlgorithmState state = new AlgorithmState();
 		// System.out.println("Search for (" + low + "," + high + ")");
 		// debugPrint(this.root);
-		searchInterval(root, result, low, high);
+		searchInterval(root, state, low, high);
 		ArrayList<T> obtlst = new ArrayList<T>();
-		for (Interval<T> it : result) {
+		for (Interval<T> it : state.result) {
 			obtlst.add(it.getValue());
 		}
 		/* Search for neighbors if there are no hits */
 		if (obtlst.isEmpty())
-			searchInBetween(low);
-		return obtlst;
-	}
-
-	/**
-	 * In cases where we do not find an intersection, i.e., when a call to {@link #search} reveals an emptylist because
-	 * none of the items overlaps with the search coordinates, then the search function automatically calls
-	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}, which can
-	 * then be called by this function and {@link #getLeftNeighbor}.
-	 *
-	 * @return the right neighbor of the current search query, if no overlapping interval was found.
-	 */
-	public T getRightNeighbor() {
-		if (rightNeighbor == null)
-			return null;
-		else
-			return rightNeighbor.getValue();
-	}
-
-	/**
-	 * In cases where we do not find an intersection, i.e., when a call to {@link #search} reveals an emptylist because
-	 * none of the items overlaps with the search coordinates, then the search function automatically calls
-	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}, which can
-	 * then be called by this function and {@link #getRightNeighbor}.
-	 *
-	 * @return the left neighbor of the current search query, if no overlapping interval was found.
-	 */
-	public T getLeftNeighbor() {
-		if (leftNeighbor == null)
-			return null;
-		else
-			return leftNeighbor.getValue();
-	}
-
-	/**
-	 * This function checks if {@code item}, which is passed to the function as an argument, is a better left neighbor
-	 * for position x than the current value of {@link #leftNeighbor}. It first checks if the currentValue of
-	 * leftNeighbor is null, in which case we simply assign a value. Because of the way we traverse the interval tree,
-	 * this value is guaranteed to be valid. We then check whether the item is actually located to the left of x (if
-	 * not, we just return). Finally, we check if the "high" (rightmost) value of the interval represented by item is
-	 * closer to x than the value of {@link #leftNeighbor}. If this is the case, then item is a better left neighbor,
-	 * and we assign it to the class variable {@link #leftNeighbor}.
-	 * <P>
-	 * Note that this function is intended to be used by the function {@link #searchInbetween} if there is no interval
-	 * that overlaps the original search query.
-	 *
-	 * @param item
-	 *            The new candidate left neighbor
-	 * @param x
-	 *            the search position
-	 */
-	private void switchLeftNeighborIfBetter(Interval<T> item, int x) {
-		if (item == null)
-			return;
-		// System.out.println("TOP: switchLefttNeighborIfBetter item=" + item +
-		// " current leftN=" + leftNeighbor);
-		if (this.leftNeighbor == null) {
-			this.leftNeighbor = item;
-			return;
-		}
-		/* 1) Return if item is not to left of x */
-		if (item.getHigh() >= x)
-			return;
-		/* 2) if item is closer to x than current leftNeighbor, replace it */
-		if (item.getHigh() > this.leftNeighbor.getHigh()) {
-			this.leftNeighbor = item;
-		}
-	}
-
-	/**
-	 * This function checks if {@code item}, which is passed to the function as an argument, is a better right neighbor
-	 * for position x than the current value of {@link #rightNeighbor}. If the current value of {@link #rightNeighbor}
-	 * is null, we assign it the value of {@code item} (this is guaranteed to be a valid value). Otherwise, we check
-	 * whether item is to the right of {@link #rightNeighbor} (if not, just return). Finally, we check whether item is
-	 * closer to {@code x} than the current rightneighbor, and if so, we update the value of {@link #rightNeighbor} to
-	 * {@code item}.#
-	 *
-	 * @param item
-	 *            The new candidate rightt neighbor
-	 * @param x
-	 *            the search position
-	 */
-	private void switchRightNeighborIfBetter(Interval<T> item, int x) {
-		if (item == null)
-			return;
-		// System.out.println("TOP: switchRightNeighborIfBetter item=" + item +
-		// " current rightN=" + rightNeighbor);
-		if (this.rightNeighbor == null) {
-			this.rightNeighbor = item;
-			return;
-		}
-		/* 1) Return if item is not to right of x */
-		if (item.getLow() <= x)
-			return;
-		/* 2) if item is closer to x than current leftNeighbor, replace it */
-		if (item.getLow() < this.rightNeighbor.getLow()) {
-			this.rightNeighbor = item;
-		}
+			searchInBetween(state, low);
+		return new QueryResult(obtlst, state.leftNeighbor, state.rightNeighbor);
 	}
 
 	/**
 	 * This function is called if no interval is found to overlap with the search query. If this method is called, we
 	 * know that we are "in between" two intervals (or at the extreme right or left end of the search space).
 	 *
+	 * @param state
+	 *            The AlgorithmState to use for keeping the algorithm's state.
 	 * @param x
 	 *            The lower range of the original search query (it doesn't matter whether we take the lower or the upper
 	 *            range, since both do not overlap).
 	 */
-	private void searchInBetween(int x) {
+	private void searchInBetween(AlgorithmState state, int x) {
 		Node<T> n = this.root;
 		while (n != null) {
 			if (x < n.getMedian()) {
 				/*
-				 * First up date the right neighbor (most left to date that is
-				 * right of query) .
+				 * First up date the right neighbor (most left to date that is right of query) .
 				 */
 				if (n.hasInterval()) {
 					Interval<T> item = n.getLeftmostItem();
-					switchRightNeighborIfBetter(item, x);
+					state.switchRightNeighborIfBetter(item, x);
 				} else {
 					Node<T> rd = n.getLeftmostDescendentOfRightChild();
 					Interval<T> item = rd.getLeftmostItem();
-					switchRightNeighborIfBetter(item, x);
+					state.switchRightNeighborIfBetter(item, x);
 				}
 				/* Now continue to navigate the interval tree */
 				n = n.getLeft();
 			} else {
 				/*
-				 * First up date the left neighbor (most right to date that is
-				 * left of query) .
+				 * First up date the left neighbor (most right to date that is left of query) .
 				 */
 				if (n.hasInterval()) {
 					Interval<T> item = n.getRightmostItem();
-					switchLeftNeighborIfBetter(item, x);
+					state.switchLeftNeighborIfBetter(item, x);
 				} else {
 					/*
-					 * If the current node has no intervals on its own, then it
-					 * is possible that its right child has a better right
-					 * neighbor than the current right neighbor.
+					 * If the current node has no intervals on its own, then it is possible that its right child has a
+					 * better right neighbor than the current right neighbor.
 					 */
 					Node<T> rd = n.getRightmostDescendentOfLeftChild();
 					Interval<T> item = rd.getRightmostItem();
-					switchLeftNeighborIfBetter(item, x);
+					state.switchLeftNeighborIfBetter(item, x);
 				}
 				/* Now continue to navigate the interval tree */
 				n = n.getRight();
@@ -333,70 +332,66 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 *
 	 * @param n
 	 *            A node of the interval tree
-	 * @param result
-	 *            An ArrayList containg the found intervals
+	 * @param state
+	 *            An AlgorithmState with the mutable algorithm state for a query.
 	 * @param ilow
 	 *            The lower element of the search interval
 	 * @param ihigh
 	 *            The higher element of the search interval
 	 */
-	private void searchInterval(Node<T> n, ArrayList<Interval<T>> result, int ilow, int ihigh) {
+	private void searchInterval(Node<T> n, AlgorithmState state, int ilow, int ihigh) {
 		/* ends if the node n is empty */
 		if (n == null) {
 			return;
 		}
 		/*
-		 * if ilow is smaller than the median of n the left side of the tree is
-		 * searched
+		 * if ilow is smaller than the median of n the left side of the tree is searched
 		 */
 		if (ilow <= n.getMedian()) {
 			/* as long as the iterator i is smaller than the size of leftorder */
 			int size = n.leftorder.size();
 			for (int i = 0; i < size; i++) {
 				/*
-				 * breaks if the lowpoint at position i is bigger than the
-				 * wanted high point
+				 * breaks if the lowpoint at position i is bigger than the wanted high point
 				 */
 				if (n.leftorder.get(i).getLow() > ihigh) {
 					break;
 				}
 				/* adds the interval at position i of leftorder to result */
-				result.add(n.leftorder.get(i));
+				state.result.add(n.leftorder.get(i));
 			}
 			/*
-			 * if ihigh is bigger than the median of n the right side of the
-			 * tree is searched
+			 * if ihigh is bigger than the median of n the right side of the tree is searched
 			 */
 		} else if (ihigh > n.getMedian()) {
 			/* as long as the iterator i is smaller than the size of rightorder */
 			int size = n.rightorder.size();
 			for (int i = 0; i < size; i++) {
 				/*
-				 * breaks if the highpoint at position i is smaller than the
-				 * wanted low point
+				 * breaks if the highpoint at position i is smaller than the wanted low point
 				 */
 				if (n.rightorder.get(i).getHigh() < ilow) {
 					break;
 				}
 				/* adds the interval at position i of rightorder to result */
-				result.add(n.rightorder.get(i));
+				state.result.add(n.rightorder.get(i));
 			}
 		}
 
 		/*
-		 * if the query is to the left of the median and the leftNode is not
-		 * empty the searchInterval method is called recursively
+		 * if the query is to the left of the median and the leftNode is not empty the searchInterval method is called
+		 * recursively
 		 */
 		if (ilow < n.getMedian() && n.getLeft() != null) {
-			searchInterval(n.getLeft(), result, ilow, ihigh);
+			searchInterval(n.getLeft(), state, ilow, ihigh);
 
 		}
 		/*
-		 * if the query is to the right of the median and the rightNode is not
-		 * empty the searchInterval method is called recursively
+		 * if the query is to the right of the median and the rightNode is not empty the searchInterval method is called
+		 * recursively
 		 */
 		if (ihigh > n.getMedian() && n.getRight() != null) {
-			searchInterval(n.getRight(), result, ilow, ihigh);
+			searchInterval(n.getRight(), state, ilow, ihigh);
 		}
 	}
 
@@ -406,15 +401,14 @@ public class IntervalTree<T> implements java.io.Serializable {
 	 * @param n
 	 *            current {@link Node}
 	 */
-	public void debugPrint(Node<T> n) {
+	public void debugPrint(Node<T> n, AlgorithmState state) {
 		System.out.println("IntervalTree<T> starting at  " + n.toString());
 		n.debugPrint(null, 0);
-		System.out.println("LeftNeighbor:" + leftNeighbor);
-		System.out.println("RightNeighbor:" + rightNeighbor);
+		System.out.println("LeftNeighbor:" + state.leftNeighbor.getValue());
+		System.out.println("RightNeighbor:" + state.rightNeighbor.getValue());
 	}
 
-	public void debugPrint() {
-		debugPrint(this.root);
+	public void debugPrint(AlgorithmState state) {
+		debugPrint(this.root, state);
 	}
-
 }

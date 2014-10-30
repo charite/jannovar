@@ -53,10 +53,12 @@ import java.util.HashSet;
  * Annotation} object. These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the
  * precedence classes.
  *
+ * Used for the implementation of VariantAnnotator.
+ *
  * @version 0.24 (3 August, 2013)
  * @author Peter N Robinson
  */
-public class AnnotationCollector implements Constants {
+class AnnotationCollector implements Constants {
 
 	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;
@@ -198,7 +200,7 @@ public class AnnotationCollector implements Constants {
 		case SV_SUBSTITUTION:
 			annL.setIsStructural();
 		default:
-			break;  // suppress warning, only do stuff for SVs
+			break; // suppress warning, only do stuff for SVs
 		}
 		return annL;
 	}
@@ -386,7 +388,8 @@ public class AnnotationCollector implements Constants {
 		} else if (type == VariantType.UPSTREAM) {
 			this.hasUpstream = true;
 		} else {
-			System.err.println("Warning [AnnotatedVar.java]: Was expecting UPSTREAM or DOWNSTREAM" + " type of variant but got " + type);
+			System.err.println("Warning [AnnotatedVar.java]: Was expecting UPSTREAM or DOWNSTREAM"
+					+ " type of variant but got " + type);
 			/* TODO -- Add Exception! */
 			System.exit(1);
 		}
@@ -400,7 +403,8 @@ public class AnnotationCollector implements Constants {
 		System.out.println("[AnnotatedVariantFactory]:debugPrint");
 		System.out.println("Total annotations: " + annotationCount);
 		for (Annotation a : this.annotationLst) {
-			System.out.println("\t[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> " + a.getVariantAnnotation());
+			System.out.println("\t[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> "
+					+ a.getVariantAnnotation());
 		}
 	}
 
