@@ -75,7 +75,7 @@ public class InsertionAnnotation {
 																			// (var.length()).
 			int potentialDuplicationEndPos = refvarstart; // pos right after insertion
 
-			if (trmdl.getCdnaSequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
+			if (trmdl.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
 				Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
 				return ann;
 			}
@@ -87,7 +87,7 @@ public class InsertionAnnotation {
 			boolean haveDuplication = false;
 			// System.out.println("substr: '" + trmdl.getCdnaSequence().substring(pos, pos + var.length()) + "'");
 			// System.out.println("ref: '" + ref + "'var: '" + var + "'");
-			while (trmdl.getCdnaSequence().length() > pos + var.length() && trmdl.getCdnaSequence().substring(pos, pos + var.length()).equals(var)) {
+			while (trmdl.getCDNASequence().length() > pos + var.length() && trmdl.getCDNASequence().substring(pos, pos + var.length()).equals(var)) {
 				// System.out.println(" " + pos + "\t" + (pos + var.length()) + "\tvs " +
 				// trmdl.getCdnaSequence().length());
 				pos += varlen;
@@ -127,7 +127,7 @@ public class InsertionAnnotation {
 			// --------******-----
 			int potentialDuplicationStartPos = refvarstart; // go back length of insertion (var.length()).
 			int potentialDuplicationEndPos = refvarstart + var.length(); // pos right after insertion
-			if (potentialDuplicationStartPos >= var.length() && potentialDuplicationEndPos < trmdl.getMRNALength() && trmdl.getCdnaSequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
+			if (potentialDuplicationStartPos >= var.length() && potentialDuplicationEndPos < trmdl.getMRNALength() && trmdl.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
 				Annotation ann = DuplicationAnnotation.getAnnotation(trmdl, frame_s, wtnt3, var, potentialDuplicationStartPos, potentialDuplicationEndPos, exonNumber);
 				return ann;
 			}
@@ -136,7 +136,7 @@ public class InsertionAnnotation {
 		if (trmdl.isPlusStrand()) {
 			int idx = 0;
 			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {
-			while (var.length() > idx && refvarstart < trmdl.getCdnaSequence().length() && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {
+			while (var.length() > idx && refvarstart < trmdl.getCDNASequence().length() && trmdl.getCDNASequence().charAt(refvarstart) == var.charAt(idx)) {
 				refvarstart++;
 				idx++;
 				frame_s++;
@@ -146,7 +146,7 @@ public class InsertionAnnotation {
 		} else {
 			int idx = 0;
 			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(0)) {
-			while (var.length() > idx && refvarstart < trmdl.getCdnaSequence().length() && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(0)) {
+			while (var.length() > idx && refvarstart < trmdl.getCDNASequence().length() && trmdl.getCDNASequence().charAt(refvarstart) == var.charAt(0)) {
 				refvarstart++;
 				idx++;
 				frame_s++;
@@ -199,8 +199,8 @@ public class InsertionAnnotation {
 
 		// new: at least the next 5 codons are used and tarnaslated
 		int nupstreamnuc = var.length() + 36;
-		int end = trmdl.getCdnaSequence().length() >= refvarstart + nupstreamnuc - frame_s ? refvarstart + nupstreamnuc - frame_s : trmdl.getCdnaSequence().length();
-		String wtnt = trmdl.isPlusStrand() ? trmdl.getCdnaSequence().substring(refvarstart - 1 - frame_s, end) : trmdl.getCdnaSequence().substring(refvarstart - frame_s, end);
+		int end = trmdl.getCDNASequence().length() >= refvarstart + nupstreamnuc - frame_s ? refvarstart + nupstreamnuc - frame_s : trmdl.getCDNASequence().length();
+		String wtnt = trmdl.isPlusStrand() ? trmdl.getCDNASequence().substring(refvarstart - 1 - frame_s, end) : trmdl.getCDNASequence().substring(refvarstart - frame_s, end);
 
 		String varnt = null;
 		if (trmdl.isPlusStrand()) {
@@ -289,9 +289,9 @@ public class InsertionAnnotation {
 					if (refvarstart - frame_s - var.length() >= 0) {
 						String ref5up;
 						if (trmdl.isPlusStrand()) // correct for "-"-strand
-							ref5up = trmdl.getCdnaSequence().substring(refvarstart - 1 - frame_s - var.length(), refvarstart - frame_s - 1);
+							ref5up = trmdl.getCDNASequence().substring(refvarstart - 1 - frame_s - var.length(), refvarstart - frame_s - 1);
 						else
-							ref5up = trmdl.getCdnaSequence().substring(refvarstart - frame_s - var.length(), refvarstart - frame_s);
+							ref5up = trmdl.getCDNASequence().substring(refvarstart - frame_s - var.length(), refvarstart - frame_s);
 						ref5upAA = translator.translateDNA(ref5up);
 
 					}

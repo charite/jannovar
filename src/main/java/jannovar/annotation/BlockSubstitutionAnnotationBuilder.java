@@ -116,7 +116,7 @@ public class BlockSubstitutionAnnotationBuilder {
 			int endframe_s = (frameShift + (ref.length() % 3)) % 3;
 
 			String wtntend = tm.getCodonAt(refVarEnd + 1, endframe_s);
-			String wtntSeq = tm.getCdnaSequence().substring(refVarStart - frameShift - 1, refVarEnd + (3 - endframe_s));
+			String wtntSeq = tm.getCDNASequence().substring(refVarStart - frameShift - 1, refVarEnd + (3 - endframe_s));
 			String mutntSeq = String.format("%s%s%s", wtnt3.substring(0, frameShift), var, wtntend.substring(endframe_s));
 
 			String wtAAseq = translator.translateDNA(wtntSeq);
@@ -142,7 +142,7 @@ public class BlockSubstitutionAnnotationBuilder {
 					protAnno = String.format("%s:p.%s%d_%s%ddelins%s", cDNAAnno, wtAAseq.charAt(idx), aavarpos + idx,
 							wtAAseq.charAt(xdi - 1), varPosEnd, mutAAseq.substring(idx, xdi - diff));
 				else {
-					String wtntSeqAfter = tm.getCdnaSequence().substring(refVarEnd + (3 - endframe_s), refVarEnd + (3 - endframe_s) + 3);
+					String wtntSeqAfter = tm.getCDNASequence().substring(refVarEnd + (3 - endframe_s), refVarEnd + (3 - endframe_s) + 3);
 					String wtAAseqAfter = translator.translateDNA(wtntSeqAfter);
 					protAnno = String.format("%s:p.%s%d_%s%dins%s", cDNAAnno, wtAAseq.charAt(idx - 1), aavarpos + idx
 							- 1, wtAAseqAfter, varPosEnd + 1, mutAAseq.substring(idx, xdi - diff));

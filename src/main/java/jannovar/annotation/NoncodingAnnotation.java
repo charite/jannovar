@@ -31,7 +31,7 @@ public class NoncodingAnnotation {
 		// shift
 		if (!(ref.length() == 1 && alt.length() == 1 && !alt.equals("-"))) { // only for non singlenucleotide
 																				// substitutions
-			while (rvarstart + ref.length() < trmdl.getCdnaSequence().length() && trmdl.getCdnaSequence().charAt(rvarstart - 1) == trmdl.getCdnaSequence().charAt(rvarstart + ref.length() - 1)) {
+			while (rvarstart + ref.length() < trmdl.getCDNASequence().length() && trmdl.getCDNASequence().charAt(rvarstart - 1) == trmdl.getCDNASequence().charAt(rvarstart + ref.length() - 1)) {
 				rvarstart++;
 				ref = new StringBuilder().append(ref.substring(1)).append(ref.charAt(0)).toString();
 			}

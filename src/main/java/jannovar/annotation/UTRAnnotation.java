@@ -42,7 +42,7 @@ public class UTRAnnotation {
 	 */
 	public static Annotation createUTR3Annotation(TranscriptModel trmdl, int rvarstart, String ref, String alt) {
 		// shift
-		while (alt.equals("-") && trmdl.getCdnaSequence().length() > rvarstart + ref.length() && trmdl.getCdnaSequence().charAt(rvarstart - 1) == trmdl.getCdnaSequence().charAt(rvarstart + ref.length() - 1)) {
+		while (alt.equals("-") && trmdl.getCDNASequence().length() > rvarstart + ref.length() && trmdl.getCDNASequence().charAt(rvarstart - 1) == trmdl.getCDNASequence().charAt(rvarstart + ref.length() - 1)) {
 			rvarstart++;
 			ref = new StringBuilder().append(ref.substring(1)).append(ref.charAt(0)).toString();
 		}

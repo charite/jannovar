@@ -51,14 +51,14 @@ public class DeletionAnnotationBuilder {
 			String wtnt3After, String ref, String var, int refVarStart, int exonNumber) throws AnnotationException {
 		// shift
 		if (kgl.isPlusStrand())
-			while (kgl.getCdnaSequence().charAt(refVarStart - 2) == kgl.getCdnaSequence().charAt(
+			while (kgl.getCDNASequence().charAt(refVarStart - 2) == kgl.getCDNASequence().charAt(
 					refVarStart + ref.length() - 2)) {
 				refVarStart++;
 				ref = new StringBuilder().append(ref.substring(1)).append(ref.charAt(0)).toString();
 
 			}
 		else
-			while (kgl.getCdnaSequence().charAt(refVarStart - 1) == kgl.getCdnaSequence().charAt(
+			while (kgl.getCDNASequence().charAt(refVarStart - 1) == kgl.getCDNASequence().charAt(
 					refVarStart + ref.length() - 1)) {
 				refVarStart++;
 				ref = new StringBuilder().append(ref.substring(1)).append(ref.charAt(0)).toString();
@@ -172,8 +172,8 @@ public class DeletionAnnotationBuilder {
 			String wtnt3After, String ref, String var, int refVarStart, int refVarEnd, int exonNumber)
 			throws AnnotationException {
 		// shift
-		while (kgl.getCdnaSequence().length() > refVarStart + ref.length()
-				&& kgl.getCdnaSequence().charAt(refVarStart - 1) == kgl.getCdnaSequence().charAt(
+		while (kgl.getCDNASequence().length() > refVarStart + ref.length()
+				&& kgl.getCDNASequence().charAt(refVarStart - 1) == kgl.getCDNASequence().charAt(
 						refVarStart + ref.length() - 1)) {
 			refVarStart++;
 			refVarEnd++;
@@ -257,8 +257,8 @@ public class DeletionAnnotationBuilder {
 
 					String startAA = translator.translateDNA(startCodon);
 					String endAA = translator.translateDNA(endCodon);
-					String mutCodon = kgl.getCdnaSequence().substring(refVarStart - frameShift - 1, refVarStart - 1)
-							+ kgl.getCdnaSequence().substring(refVarEnd, refVarEnd + (3 - frameShift));
+					String mutCodon = kgl.getCDNASequence().substring(refVarStart - frameShift - 1, refVarStart - 1)
+							+ kgl.getCDNASequence().substring(refVarEnd, refVarEnd + (3 - frameShift));
 					String mutAA = translator.translateDNA(mutCodon);
 					boolean newsameAA = false;
 					/* check that the 'new' aminoacid does'nt match the start or end AA */

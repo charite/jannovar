@@ -95,7 +95,7 @@ public class TranscriptModelTest implements Constants {
 	@Test
 	public void testSequence_uc0210lp() {
 		uc0210lp.setSequence(LONG_STRING);
-		Assert.assertEquals(LONG_STRING, uc0210lp.getCdnaSequence());
+		Assert.assertEquals(LONG_STRING, uc0210lp.getCDNASequence());
 		Assert.assertEquals(5734, uc0210lp.getActualSequenceLength());
 		
 		Assert.assertEquals(LONG_STRING.substring(63, 441), uc0210lp.getCodingSequence());
