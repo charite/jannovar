@@ -12,6 +12,7 @@ import jannovar.annotation.NoncodingAnnotation;
 import jannovar.annotation.SingleNucleotideSubstitution;
 import jannovar.annotation.SpliceAnnotation;
 import jannovar.annotation.UTRAnnotation;
+import jannovar.common.DNAUtils;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.interval.Interval;
@@ -38,11 +39,21 @@ import java.util.HashSet;
  * @version 0.32 (15 April, 2014)
  */
 public class Chromosome {
+	// format string used for annotating SV inversions
+	private static final String FORMAT_SV_INVERSION = "%s:g.%d_%dinv";
+	// format string used for annotating SV insertions
+	private static final String FORMAT_SV_INSERTION = "%s:g.%d_%dins%s..%s";
+	// format string used for annotating SV deletions
+	private static final String FORMAT_SV_DELETION = "%s:g.%d_%ddel";
+	// format string used for annotating SV substitutions
+	private static final String FORMAT_SV_SUBSTITUTION = "%s:g.%d_%ddelins%s..%s";
+
 	/**
 	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
 	 * way of dealing with scaffolds etc.
 	 */
 	private final byte chromosome;
+	// TODO(holtgrem): this is always null!
 	/** Alternative String for Chromosome. Use for scaffolds and "random" chromosomes. TODO: Refactor */
 	private final String chromosomeString = null;
 	/** Total number of TranscriptModels on the chromosome including multiple transcripts of the same gene. */
@@ -53,9 +64,11 @@ public class Chromosome {
 	 * @link jannovar.annotation.AnnotatedVariantFactory AnnotatedVariantFactory} object.
 	 */
 	private static final int CAPACITY = 20;
+	// TODO(holtgrew): we could make this threshold available through configuration
 	/** The distance threshold in nucleotides for calling a variant upstream/downstream to a gene, */
 	private static final int NEARGENE = 1000;
 
+	// TODO(holtgrem): Remove this here?
 	/** Class object encapsulating rules to translate DNA. */
 	private Translator translator = null;
 	/**
@@ -108,13 +121,14 @@ public class Chromosome {
 		return this.n_genes;
 	}
 
+	// TODO(holtgrem): Rename to buildAnnotationList()?
 	/**
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates. When we
 	 * get to this point, the client code has identified the right chromosome, and we are provided the coordinates on
 	 * that chromosome.
-	 * <P>
+	 *
 	 * The strategy for finding annotations is based on the perl code in Annovar. Roughly speaking, we identify a list
-	 * of genes affected by the variant using the interval tree ({@link #itree}). and then annotated the variants
+	 * of genes affected by the variant using the interval tree ({@link #itree}) and then annotated the variants
 	 * accordingly. If no hit is found in the tree, we identify the left and right neighbor and annotate to intergenic,
 	 * upstream or downstream
 	 *
@@ -129,7 +143,7 @@ public class Chromosome {
 	 * @throws jannovar.exception.AnnotationException
 	 */
 	public AnnotationList getAnnotationList(int position, String ref, String alt) throws AnnotationException {
-
+		// TODO(holtgrem): duplicate of the calling code?
 		/* prepare and adapt for duplications (e.g. get rid of the repeated reference base in insertions) */
 		if (ref.length() < alt.length() && alt.substring(0, ref.length()).equals(ref)) {
 			alt = alt.substring(ref.length());
@@ -148,14 +162,15 @@ public class Chromosome {
 		int start = position;
 		int end = start + ref.length() - 1;
 
-		/** Get TranscriptModels that overlap with (start,end). */
+		// TODO(holtgrem): don't we have use intervals? update comment below
+		// Get the TranscriptModel objects that overlap with (start, end).
 		ArrayList<TranscriptModel> candidateGenes = itree.search(start, end);
 
-		/** for structural variants also check bigintervals search */
+		// for structural variants we also perform a big intervals search
 		boolean isStructuralVariant = false;
 		if ((ref.length() >= 1000 || alt.length() >= 1000)) {
 			if (ref.length() >= 1000)
-				candidateGenes.addAll(itree.searchBigIntervall(start, end));
+				candidateGenes.addAll(itree.searchBigInterval(start, end));
 			isStructuralVariant = true;
 		}
 
@@ -168,40 +183,30 @@ public class Chromosome {
 			createIntergenicAnnotations(start, end, leftNeighbor, rightNeighbor);
 			return annovarFactory.getAnnotationList();
 		}
-		/**
-		 * If we get here, then there is at least one transcript that overlaps with the query.
-		 */
 
+		// TODO(holtgrem): kgl => transcript, candidateGenes => candidateTranscripts?
+		// If we get here, then there is at least one transcript that overlaps with the query. Iterate over these
+		// transcripts and collect annotations for each (they are collected in annovarFactory).
 		for (TranscriptModel kgl : candidateGenes) {
 			if (isStructuralVariant) {
-				if (candidateGenes.size() == 0) {
-					getStructuralVariantAnnotation(position, ref, alt, null);
-					break;
-				}
 				getStructuralVariantAnnotation(position, ref, alt, kgl);
-				continue;
-			}
-			// System.out.println(String.format("Top of for loop: %S[%s][%c]", kgl.getGeneSymbol(),kgl.getName(),
-			// kgl.getStrand()));
-			try {
-				if (kgl.isPlusStrand()) {
+			} else {
+				if (kgl.isPlusStrand())
 					getPlusStrandAnnotation(position, ref, alt, kgl);
-				} else if (kgl.isMinusStrand()) {
+				else if (kgl.isMinusStrand())
 					getMinusStrandAnnotation(position, ref, alt, kgl);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				String err = String.format("Encountered error processing variant: %s:g.%d,%s->%s", getChromosomeName(), position, ref, alt);
-				throw new AnnotationException(err);
 			}
 		}
 
+		// Obtain annotation list from annovarFactory, if we could not find any annotations then this is a logical
+		// error.
+		// TODO(holtgrew): Throw unchecked exception instead? This no annotations here would be a bug!
 		AnnotationList al = annovarFactory.getAnnotationList();
 		if (al.getAnnotationList().isEmpty()) {
 			String e = String.format("[Jannovar:Chromosome] Error: No annotations produced for %s:g.%d%s>%s", chromosomeString, position, ref, alt);
 			throw new AnnotationException(e);
 		}
-		return annovarFactory.getAnnotationList();
+		return al;
 	}
 
 	/**
@@ -220,10 +225,10 @@ public class Chromosome {
 	 * @throws AnnotationException
 	 */
 	private void getStructuralVariantAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
-
 		Annotation ann;
 		String annotation;
 
+		// TODO(holtgrem): logically dead code, checked above.
 		// check if this is really a structural Variant
 		if (ref.length() < 1000 && alt.length() < 1000) {
 			if (kgl.isPlusStrand()) {
@@ -236,42 +241,49 @@ public class Chromosome {
 
 		// otherwise create structural annotation
 
+		// TODO(holtgrem): Currently, kgl is always != null since this function is called when iterating over
+		// candidateGenes in getAnnotationList(). I removed the code for the call with kgl=null since it was logically
+		// dead. Can we now remove these cases below or is this function called incorrectly?
+
 		// SV_inversion???
-		if (ref.length() == alt.length()) {
-			StringBuilder sb = new StringBuilder(alt).reverse();
-			if (ref.equals(sb)) {
-				annotation = String.format("%s:g.%d_%dinv", VariantType.SV_INVERSION, position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
-				ann = new Annotation(kgl, annotation, VariantType.SV_INVERSION);
-				annovarFactory.addStructuralAnnotation(ann);
-				return;
-			}
+		if (ref.length() == alt.length() && ref.equals(new StringBuilder(alt).reverse())) {
+			annotation = String.format(FORMAT_SV_INVERSION, VariantType.SV_INVERSION, position, position + ref.length(),
+					alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+			ann = new Annotation(kgl, annotation, VariantType.SV_INVERSION);
+			annovarFactory.addStructuralAnnotation(ann);
+			return;
 		}
 		// SV_insertion
 		if (ref.length() == 1) { // Insertion
-			// if klg is null it is intergenic
+			// if kgl is null it is intergenic
 			if (kgl == null) {
-				annotation = String.format("%s:g.%d_%dins%s..%s", VariantType.INTERGENIC, position, position + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_INSERTION, VariantType.INTERGENIC, position, position + 1,
+						alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
 			} else {
-				annotation = String.format("%s:g.%d_%dins%s..%s", kgl.getChromosomeAsString(), position, position + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_INSERTION, kgl.getChromosomeAsString(), position, position + 1,
+						alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.SV_INSERTION);
 			}
 		} else if (alt.length() == 1) {
-			// if klg is null it is intergenic
+			// if kgl is null it is intergenic
 			if (kgl == null) {
-				annotation = String.format("%s:g.%d_%ddel", VariantType.INTERGENIC, position, position + ref.length());
+				annotation = String.format(FORMAT_SV_DELETION, VariantType.INTERGENIC, position, position + ref.length());
 				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
 			} else {
-				annotation = String.format("%s:g.%d_%ddel", kgl.getChromosomeAsString(), position, position + ref.length());
+				annotation = String.format(FORMAT_SV_DELETION, kgl.getChromosomeAsString(), position,
+						position + ref.length());
 				ann = new Annotation(kgl, annotation, VariantType.SV_DELETION);
 			}
 		} else {
-			// if klg is null it is intergenic
+			// if kgl is null it is intergenic
 			if (kgl == null) {
-				annotation = String.format("%s:g.%d_%ddelins%s..%s", VariantType.INTERGENIC, position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_SUBSTITUTION, VariantType.INTERGENIC, position,
+						position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.INTERGENIC);
 			} else {
-				annotation = String.format("%s:g.%d_%ddelins%s..%s", kgl.getChromosomeAsString(), position, position + ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
+				annotation = String.format(FORMAT_SV_SUBSTITUTION, kgl.getChromosomeAsString(), position, position
+						+ ref.length(), alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length()));
 				ann = new Annotation(kgl, annotation, VariantType.SV_SUBSTITUTION);
 			}
 		}
@@ -279,6 +291,7 @@ public class Chromosome {
 		annovarFactory.addStructuralAnnotation(ann);
 	}
 
+	// TODO(holtgrem): can this be removed?
 	/**
 	 * Counts the number of affected genes by different GeneSymbol. Returns <code>true</code> if there are more than one
 	 * gensymbols in the candidateGenes list or <code>false</code> otherwise.
@@ -311,7 +324,8 @@ public class Chromosome {
 	 * @param rightNeighbor
 	 *            The transcript that is closest to the variant on the right
 	 */
-	public void createIntergenicAnnotations(int start, int end, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor) {
+	private void createIntergenicAnnotations(int start, int end, TranscriptModel leftNeighbor,
+			TranscriptModel rightNeighbor) {
 
 		/* ***************************************************************************************** *
 		 * The following code block is executed if the variant has not hit a genic region yet and    *
@@ -341,11 +355,12 @@ public class Chromosome {
 			Annotation ann = IntergenicAnnotation.createUpDownstreamAnnotation(rightNeighbor, end);
 			annovarFactory.addUpDownstreamAnnotation(ann);
 		}
-		/* If we get here, and annotation_list is still empty, then the variant is not
-		   nearby to any gene (i.e., it is not upstream/downstream). Therefore, the variant
-		   is intergenic */
+		// If we get here, and annovarFactory is still empty, then the variant is not nearby to any gene (i.e., it is
+		// not upstream/downstream). Therefore, the variant is considered intergenic.
 		if (annovarFactory.isEmpty()) {
 			if (leftNeighbor == null && rightNeighbor == null) {
+				// TODO(holtgrem): here, we should throw an unchecked exception, createInterneicAnnotation would throw a
+				// NullPointerException
 				System.out.println("Both neighbors are null");
 			}
 			Annotation ann = IntergenicAnnotation.createIntergenicAnnotation(leftNeighbor, rightNeighbor, start, end);
@@ -366,9 +381,10 @@ public class Chromosome {
 	 *            String representation of the variant (alt) sequence
 	 * @param kgl
 	 *            associated {@link TranscriptModel}
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws AnnotationException
 	 */
-	public void getPlusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
+	private void getPlusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl)
+			throws AnnotationException {
 
 		/*System.out.println(String.format("getPLusStrand for %s [%s] at position=%d, ref=%s, alt=%s",
 		  kgl.getGeneSymbol(),kgl.getName(),position,ref,alt)); */
@@ -525,8 +541,8 @@ public class Chromosome {
 				 * a coding gene within the actual coding sequence (not UTR).                *
 				 * ------------------------------------------------------------------------- */
 				if (kgl.isNonCodingGene()) {
-					// ref = revcom(ref);
-					// alt = revcom(alt);
+					// ref = DNAUtils.reverseComplement(ref);
+					// alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 				} else if (end < cdsstart) {
@@ -569,7 +585,8 @@ public class Chromosome {
 	 *            assigned {@link TranscriptModel}
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public void getMinusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl) throws AnnotationException {
+	private void getMinusStrandAnnotation(int position, String ref, String alt, TranscriptModel kgl)
+			throws AnnotationException {
 
 		/*System.out.println(String.format("BLA, getMinusString: %s[%s], position=%d, ref=%s, alt=%s",
 		  kgl.getGeneSymbol(),kgl.getName() ,position,ref,alt));   */
@@ -669,8 +686,8 @@ public class Chromosome {
 						// query ----
 						// gene <--*---*->
 						// Note this is UTR3 on negative strand
-						alt = revcom(alt);
-						ref = revcom(ref);
+						alt = DNAUtils.reverseComplement(alt);
+						ref = DNAUtils.reverseComplement(ref);
 						Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 						annovarFactory.addUTR3Annotation(ann);
 						return; /* done with this annotation. */
@@ -678,8 +695,8 @@ public class Chromosome {
 						// query ----
 						// gene <--*---*->
 						// Note this is UTR5 on negative strand
-						alt = revcom(alt);
-						ref = revcom(ref);
+						alt = DNAUtils.reverseComplement(alt);
+						ref = DNAUtils.reverseComplement(ref);
 						Annotation ann = UTRAnnotation.createUTR5Annotation(kgl, rvarstart, ref, alt);
 						annovarFactory.addUTR5Annotation(ann);
 						return; /* done with this annotation. */
@@ -697,8 +714,8 @@ public class Chromosome {
 				} else if (k < kgl.getExonCount() - 1 && end < kgl.getExonStart(k + 1)) {
 					// System.out.println("- gene intron kgl=" + kgl.getGeneSymbol() + ":" + kgl.getName());
 					Annotation ann;
-					alt = revcom(alt);
-					ref = revcom(ref);
+					alt = DNAUtils.reverseComplement(alt);
+					ref = DNAUtils.reverseComplement(ref);
 					if (kgl.isCodingGene()) {
 						ann = IntronicAnnotation.createIntronicAnnotation(kgl, k, start, end, ref, alt);
 					} else {
@@ -736,8 +753,8 @@ public class Chromosome {
 				 * a coding gene within the actual coding sequence (not UTR).                *
 				 * ------------------------------------------------------------------------- */
 				if (kgl.isNonCodingGene()) {
-					ref = revcom(ref);
-					alt = revcom(alt);
+					ref = DNAUtils.reverseComplement(ref);
+					alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = NoncodingAnnotation.createNoncodingExonicAnnotation(kgl, rvarstart, ref, alt, k);
 					annovarFactory.addNonCodingRNAExonicAnnotation(ann);
 					return; /* done with this annotation. */
@@ -745,8 +762,8 @@ public class Chromosome {
 					/* Negative strand, mutation located 5' to CDS start, i.e., 3UTR */
 					// query ----
 					// gene <--*---*->
-					ref = revcom(ref);
-					alt = revcom(alt);
+					ref = DNAUtils.reverseComplement(ref);
+					alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = UTRAnnotation.createUTR3Annotation(kgl, rvarstart, ref, alt);
 					annovarFactory.addUTR3Annotation(ann);
 					return; /* done with this annotation. */
@@ -755,8 +772,8 @@ public class Chromosome {
 					// query ----
 					// gene <--*---*->
 					// System.out.println(String.format("start:%d, cdsend:%d, gene:%s",start,cdsend,kgl.getGeneSymbol()));
-					ref = revcom(ref);
-					alt = revcom(alt);
+					ref = DNAUtils.reverseComplement(ref);
+					alt = DNAUtils.reverseComplement(alt);
 					Annotation ann = UTRAnnotation.createUTR5Annotation(kgl, rvarstart, ref, alt);
 					annovarFactory.addUTR5Annotation(ann);
 				} else {
@@ -856,8 +873,8 @@ public class Chromosome {
 		}
 		/* If the gene is on the minus strand, we take the reverse complement of the ref and the var sequence.*/
 		if (kgl.isMinusStrand()) {
-			var = revcom(var);
-			ref = revcom(ref);
+			var = DNAUtils.reverseComplement(var);
+			ref = DNAUtils.reverseComplement(ref);
 		}
 		// System.out.println("wtnt3=" + wtnt3);
 		if (start == end) { /* SNV or insertion variant */
@@ -903,46 +920,6 @@ public class Chromosome {
 	}
 
 	/**
-	 * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
-	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions
-	 * are not valid.
-	 *
-	 * @param sq
-	 *            original, upper-case cDNA string
-	 * @return reverse complement version of the input string sq.
-	 */
-	// TODO(holtgrem): Refactor as static function of some Utility class.
-	private String revcom(String sq) {
-		if (sq.equals("-"))
-			return sq; /* deletion, insertion do not need rc */
-		StringBuffer sb = new StringBuffer();
-		for (int i = sq.length() - 1; i >= 0; i--) {
-			char c = sq.charAt(i);
-			char match = 0;
-			switch (c) {
-			case 'A':
-				match = 'T';
-				break;
-			case 'C':
-				match = 'G';
-				break;
-			case 'G':
-				match = 'C';
-				break;
-			case 'T':
-				match = 'A';
-				break;
-			case 'N':
-				match = 'N';
-				break;
-			}
-			if (match > 0)
-				sb.append(match);
-		}
-		return sb.toString();
-	}
-
-	/**
 	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the
 	 * {@link jannovar.reference.TranscriptModel TranscriptModel} objects are entered into an
 	 * {@link jannovar.interval.IntervalTree IntervalTree} for the appropriate Chromosome.
@@ -975,4 +952,3 @@ public class Chromosome {
 	}
 
 }
-/* EoF*/

@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * explanation of the structure of individual lines. Note that for now, we are not including scaffolds such as
  * chr4_ctg9_hap1 in the parsed lines (they throw an {@link jannovar.exception.KGParseException} and are discarded by
  * {@link jannovar.io.UCSCKGParser}).
- * <P>
+ *
  * Additionally, it is possible to create comparable {@code TranscriptModel} objects by parsing other data sources (GTF
  * files, for instance).
- * <P>
+ *
  * This class provides methods that allow the Chromosome class to calculate what annotations are appropriate for a given
  * variant, and thus represents one of the core classes of Jannovar.
  *
