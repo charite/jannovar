@@ -79,7 +79,7 @@ public class SpliceAnnotationBuilder {
 					return true;
 				if ((exonStart - end) > 0 && (exonStart - end) <= SPLICING_THRESHOLD) // end in region
 					return true;
-				if (start <= exonStart - SPLICING_THRESHOLD && end >= exonStart) // variant overspans the splice region
+				if (start <= exonStart && end >= exonStart) // variant overspans the splice region
 					return true;
 			}
 			// same for the 3' intronic splicing region
@@ -88,7 +88,7 @@ public class SpliceAnnotationBuilder {
 					return true;
 				if ((end - exonEnd) > 0 && (end - exonEnd) <= SPLICING_THRESHOLD) // end in region
 					return true;
-				if (start <= exonEnd - SPLICING_THRESHOLD && end >= exonEnd) // variant overspans the splice region
+				if (start <= exonEnd && end >= exonEnd) // variant overspans the splice region
 					return true;
 			}
 		}
