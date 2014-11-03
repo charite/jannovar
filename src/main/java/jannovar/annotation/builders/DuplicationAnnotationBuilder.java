@@ -123,7 +123,15 @@ public class DuplicationAnnotationBuilder {
 			/* Re-adjust the wildtype nucleotides for minus strand */
 			// wtnt3 = trmdl.getWTCodonNucleotides(startpos - 1 + ((3 - (var.length() % 3)) % 3), frame_s);
 			// System.out.println("startpos2: " + startpos);
-			wtnt3 = tm.getWTCodonNucleotides(startPos, frameShift);
+
+			// wtnt3 represents the three nucleotides of the wildtype codon.
+			// try to get three new nucleotides affected by the duplication.
+			// if it does not work, chicken out and just keep the previous ones
+			// to avoid a dump
+			String newwtnt3 = tm.getWTCodonNucleotides(startPos, frameShift);
+			if (newwtnt3 != null && newwtnt3.length() == 3) {
+				wtnt3 = newwtnt3;
+			}
 		}
 		String varnt3 = getVarNT3(tm, wtnt3, var, frameShift);
 

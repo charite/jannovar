@@ -149,19 +149,12 @@ public class BlockSubstitutionAnnotationBuilder {
 							- 1, wtAAseqAfter, varPosEnd + 1, mutAAseq.substring(idx, xdi - diff));
 				}
 			}
-			Annotation ann = new Annotation(tm, protAnno, VariantType.NON_FS_SUBSTITUTION, startPosMutationInCDS);
-			return ann;
+			return new Annotation(tm, protAnno, VariantType.NON_FS_SUBSTITUTION, startPosMutationInCDS);
 		} else {
 			// aaVarStartPos is now the FIRST position (one-based) of the amino-acid sequence that was duplicated.
 			int aaVarStartPos = startPosMutationInCDS % 3 == 0 ? (int) Math.floor(startPosMutationInCDS / 3) : (int) Math.floor(startPosMutationInCDS / 3) + 1;
-			// generate in-frame snippet for translation and correct for '-'-strand
-			if (tm.isMinusStrand()) {
-				// Re-adjust the wildtype nucleotides for minus strand
-				wtnt3 = tm.getWTCodonNucleotides(startPosMutationInCDS - 1 + ((3 - (var.length() % 3)) % 3), frameShift);
-			}
 			protAnno = String.format("%s:p.%s%dfs", cDNAAnno, wtaa, aaVarStartPos);
-			Annotation ann = new Annotation(tm, protAnno, VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
-			return ann;
+			return new Annotation(tm, protAnno, VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
 		}
 	}
 }
