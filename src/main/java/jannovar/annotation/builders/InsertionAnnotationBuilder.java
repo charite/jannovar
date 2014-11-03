@@ -71,9 +71,9 @@ public class InsertionAnnotationBuilder {
 			 * get the coding sequence position, we need to subtract the start position of the CDS. The following two
 			 * variables are zero-based numbering, that is, we can use them to search in Java strings.
 			 */
-			int potentialDuplicationStartPos = refVarStart - var.length(); // go back length of insertion
+			int potentialDuplicationStartPos = refVarStart - var.length() - 1; // go back length of insertion
 																			// (var.length()).
-			int potentialDuplicationEndPos = refVarStart; // pos right after insertion
+			int potentialDuplicationEndPos = refVarStart - 1; // pos right after insertion
 
 			if (tm.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos).equals(var)) {
 				Annotation ann = DuplicationAnnotationBuilder.getAnnotation(tm, frameShift, wtnt3, var,
@@ -129,8 +129,8 @@ public class InsertionAnnotationBuilder {
 			// the duplicated sequence is
 			// ATTAGCCGCAGCAGTTACAT
 			// --------******-----
-			int potentialDuplicationStartPos = refVarStart; // go back length of insertion (var.length()).
-			int potentialDuplicationEndPos = refVarStart + var.length(); // pos right after insertion
+			int potentialDuplicationStartPos = refVarStart + 1; // go back length of insertion (var.length()).
+			int potentialDuplicationEndPos = refVarStart + var.length() + 1; // pos right after insertion
 			if (potentialDuplicationStartPos >= var.length()
 					&& potentialDuplicationEndPos < tm.getMRNALength()
 					&& tm.getCDNASequence().substring(potentialDuplicationStartPos, potentialDuplicationEndPos)

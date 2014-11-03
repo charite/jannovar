@@ -3,8 +3,8 @@ package jannovar.io;
 import jannovar.exception.ChromosomeScaffoldException;
 import jannovar.exception.VCFParseException;
 import jannovar.exome.Variant;
-import jannovar.genotype.GenotypeFactoryA;
 import jannovar.genotype.GenotypeCall;
+import jannovar.genotype.GenotypeFactoryA;
 
 /**
  * Parse a VCF line and provide convenient access / getter functions.
@@ -23,6 +23,7 @@ import jannovar.genotype.GenotypeCall;
  * @version 0.14 (29 December, 2013)
  * @author Peter N Robinson
  */
+@Deprecated
 public class VCFLine {
     /** This field stores the original VCF file for debugging purposes (or leave null). */
     private String vcf_line = null;
@@ -47,7 +48,7 @@ public class VCFLine {
     private static GenotypeFactoryA genofactory=null;
     /**
      * An object that represents the genotype either of a single file or
-     * of each of the samples in a multiple-sample VCF file. 
+     * of each of the samples in a multiple-sample VCF file.
      */
     private GenotypeCall gtype=null;
     /**
@@ -55,8 +56,8 @@ public class VCFLine {
      * individual {@link jannovar.io.VCFLine VCFLine} objects.
      */
     private static boolean storeVCFlines=false;
-      
-  
+
+
     /** getters */
     /** @return a byte representationof the chromosome, 1-22, 23=X, 24=Y, 25=MT */
     public byte get_chromosome() { return this.chromosome; }
@@ -69,7 +70,7 @@ public class VCFLine {
     /** @return INFO col from original VCF */
     public String getInfo() { return this.info; }
     /**
-     * @return A Genotype object representing the genotype of a single sample 
+     * @return A Genotype object representing the genotype of a single sample
      * or multiple samples for this variant
      */
     public GenotypeCall getGenotype() { return this.gtype; }
@@ -77,7 +78,7 @@ public class VCFLine {
      * @return the Phred quality score for the variant call (cast to an integer)
      */
     public float getVariantPhredScore() { return this.phredScore; }
-    
+
     /**
      * Calling this method causes the static variable {@link #storeVCFlines}
      * to be set to true, which causes the original VCF lines to be stored by the
@@ -93,7 +94,7 @@ public class VCFLine {
     public static void unsetStoreVCFLines() {
 	VCFLine.storeVCFlines = false;
     }
-   
+
 
     /**
      * Set the factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall} objects.
@@ -109,13 +110,13 @@ public class VCFLine {
     public static void setGenotypeFactory(GenotypeFactoryA fac) {
 	VCFLine.genofactory = fac;
     }
-   
-     
+
+
 
     /**
      * Parses a single line of a VCF file, and initialize all the values of this object.
      * @param line single line from VCF file
-     * @throws jannovar.exception.VCFParseException 
+     * @throws jannovar.exception.VCFParseException
      */
     public VCFLine(String line) throws VCFParseException {
 	if (VCFLine.storeVCFlines) {
@@ -139,7 +140,7 @@ public class VCFLine {
      * <li> 6) FILTER  e.g.  PASS
      * <li> 7) INFO   e.g.   AC=2;AF=1.00;AN=2;DB;DP  (....)
      * </ul>
-     * All data lines are tab-delimited. In all cases, missing values are specified with a dot (”.”). 
+     * All data lines are tab-delimited. In all cases, missing values are specified with a dot (”.”).
      * <P>
      * The code passes the remaining fields, FORMAT (the 8th field) and
      * the sample fields (the 9th... field(s)), to the corresponding
@@ -157,12 +158,12 @@ public class VCFLine {
 	if (ref.equals(".")  || ref.length()<1 ) {
 	    throw new VCFParseException("Could not parse ref field: \"" + ref + "\"\n" + line);
 	}
-	this.alt = A[4]; 
+	this.alt = A[4];
 //	if (alt.equals(".")  || alt.length()<1 ) {
 	if (alt.length()<1 ) {
 	    throw new VCFParseException("Could not parse alt field:\"" + alt + "\"\n" + line);
 	}
-	
+
 	this.phredScore = parseVariantQuality(A[5]);
 	this.chromosome = convertChromosomeStringToByteValue(A[0]);
         this.info = A[7];
@@ -202,11 +203,11 @@ public class VCFLine {
 	return v;
     }
 
-    
+
     /**
      * Parses the QUAL field of a VCF file with the PHRED score for the variant.
      * Note that the quality is most often given as an integer, but occasionally
-     * may be a floating number. In the latter case, we will round the quality to 
+     * may be a floating number. In the latter case, we will round the quality to
      * the nearest integer.
      * <p>
      * If no quality score is provided, then the VCF format specifies that
@@ -225,10 +226,10 @@ public class VCFLine {
 	    return 0f;
 	}
     }
-  
-  
-	    
-    
+
+
+
+
     /**
      * The VCF format stores some normal sequence together with some indels, and
      * so the positions for indels reported in the VCF file are not necessarily
@@ -245,7 +246,7 @@ public class VCFLine {
      * original VCF file.
      * </ul>
      * Note that this method should be called once after everything else has been
-     * parsed. 
+     * parsed.
      * @throws jannovar.exception.VCFParseException
      */
     public void convertToAnnovar() throws VCFParseException {
@@ -260,11 +261,11 @@ public class VCFLine {
         if (idx>0) {
             alt = alt.substring(0,idx);
         }
-        if (this.ref.length() == 1 && 
+        if (this.ref.length() == 1 &&
             this.alt.length() == 1) {
             /* i.e., single nucleotide variant . THere is
             * no need to correct anything. */
-            return; 
+            return;
         } else if (ref.length() > alt.length()) {
             /* deletion or block substitution */
             String head = ref.substring(0,alt.length());
@@ -283,7 +284,7 @@ public class VCFLine {
             } else {
 		return; /* block substition, nothing to be done. */
             }
-        } else if (alt.length() >= ref.length ()) { 
+        } else if (alt.length() >= ref.length ()) {
             /*  insertion or block substitution */
             String head = alt.substring(0,ref.length()); /* get first L nt of ALT (where L is length of REF) */
             /* System.out.println(String.format("2) ref=%s (%d nt), alt=%s (%d nt), head=%s (%d nt)",
@@ -331,8 +332,8 @@ public class VCFLine {
     public String getOriginalVCFLine() {
 	return this.vcf_line;
     }
-    
-	  
+
+
 
     /**
      * This method can be used to show the state of the current VCFLine

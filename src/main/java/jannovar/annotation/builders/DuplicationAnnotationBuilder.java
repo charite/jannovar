@@ -42,7 +42,7 @@ public class DuplicationAnnotationBuilder {
 	 *            The transcriptmodel / gene in which the current mutation is contained
 	 * @param frameShift
 	 *            the location within the frame (0,1,2) in which mutation occurs
-	 * @param wtnt3
+	 * @param wtNT3
 	 *            The three nucleotides of codon affected by start of mutation
 	 * @param var
 	 *            alternate nucleotide sequence (the duplication)
@@ -55,7 +55,7 @@ public class DuplicationAnnotationBuilder {
 	 * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
 	 * @throws AnnotationException
 	 */
-	public static Annotation getAnnotation(TranscriptModel tm, int frameShift, String wtnt3, String var, int startPos,
+	public static Annotation getAnnotation(TranscriptModel tm, int frameShift, String wtNT3, String var, int startPos,
 			int endPos, int exonNumber) throws AnnotationException {
 		String annot;
 		Annotation ann;
@@ -128,15 +128,15 @@ public class DuplicationAnnotationBuilder {
 			// try to get three new nucleotides affected by the duplication.
 			// if it does not work, chicken out and just keep the previous ones
 			// to avoid a dump
-			String newwtnt3 = tm.getWTCodonNucleotides(startPos, frameShift);
+			String newwtnt3 = tm.getWTCodonNucleotides(startPos - 1, frameShift);
 			if (newwtnt3 != null && newwtnt3.length() == 3) {
-				wtnt3 = newwtnt3;
+				wtNT3 = newwtnt3;
 			}
 		}
-		String varnt3 = getVarNT3(tm, wtnt3, var, frameShift);
+		String varNT3 = getVarNT3(tm, wtNT3, var, frameShift);
 
-		String wtaa = translator.translateDNA(wtnt3);
-		String varaa = translator.translateDNA(varnt3);
+		String wtAA = translator.translateDNA(wtNT3);
+		String varAA = translator.translateDNA(varNT3);
 
 		// System.out.println("wt na: " + wtnt3 + "\t" + wtaa);
 		// System.out.println("var na: " + varnt3 + "\t" + varaa);
@@ -146,11 +146,11 @@ public class DuplicationAnnotationBuilder {
 											 * SIMPLE DUPLICATION OF CODONS, e.g., nucleotide position 4 starts a codon,
 											 * and (4-1)%3==0.
 											 */
-				String wtaaDupStart = translator.translateDNA(var.substring(0, 3));
-				String wtaaDupEnd = translator.translateDNA(var.substring(var.length() - 3));
+				String wtAADupStart = translator.translateDNA(var.substring(0, 3));
+				String wtAADupEnd = translator.translateDNA(var.substring(var.length() - 3));
 				if (var.length() == 3) {
 					// Three nucleotides affected, inframe, single aminoacid duplication.
-					annot = singleAminoAcidInframeDuplication(tm.getName(), exonNumber, canno, wtaaDupStart,
+					annot = singleAminoAcidInframeDuplication(tm.getName(), exonNumber, canno, wtAADupStart,
 							aaVarStartPos);
 				} else {
 					int aaEndPos = aaVarStartPos + (var.length() / 3) - 1; /* last amino acid of duplicated WT seq. */
@@ -161,20 +161,20 @@ public class DuplicationAnnotationBuilder {
 						annot = String.format("%s:exon%d:%s:p.*%dext*%d", tm.getName(), exonNumber, canno,
 								aaEndPos + 1, var.length() / 3);
 					else
-						annot = multipleAminoAcidInframeDuplication(tm.getName(), exonNumber, canno, wtaaDupStart,
-								aaVarStartPos, wtaaDupEnd, aaEndPos);
+						annot = multipleAminoAcidInframeDuplication(tm.getName(), exonNumber, canno, wtAADupStart,
+								aaVarStartPos, wtAADupEnd, aaEndPos);
 
 				}
 				ann = new Annotation(tm, annot, VariantType.NON_FS_DUPLICATION, cdsStartPos);
 			} else { /* substitution from original AA to AAs */
-				if (wtaa.equals("*")) { /* Mutation affects the wildtype stop codon */
-					int idx = varaa.indexOf("*");
+				if (wtAA.equals("*")) { /* Mutation affects the wildtype stop codon */
+					int idx = varAA.indexOf("*");
 					if (idx < 0) {
 						annot = String.format("%s:exon%d:%s:p.*%d%sext*?", tm.getName(), exonNumber, canno,
-								aaVarStartPos, varaa);
+								aaVarStartPos, varAA);
 					} else {
 						annot = String.format("%s:exon%d:%s:p.*%ddelins%s", tm.getName(), exonNumber, canno,
-								aaVarStartPos, varaa.substring(0, idx + 1));
+								aaVarStartPos, varAA.substring(0, idx + 1));
 					}
 				} else {
 					/* substitution starts not on frame */
@@ -187,10 +187,10 @@ public class DuplicationAnnotationBuilder {
 				 * FRAMESHIFT short p.(Arg97fs)) denotes a frame shifting change with Arginine-97 as the first affected
 				 * amino acid
 				 */
-			if (wtaa.charAt(0) == '*' && varaa.charAt(0) == '*')
-				annot = String.format("%s:exon%d:%s:p.(=)", tm.getName(), exonNumber, canno, wtaa, aaVarStartPos);
+			if (wtAA.charAt(0) == '*' && varAA.charAt(0) == '*')
+				annot = String.format("%s:exon%d:%s:p.(=)", tm.getName(), exonNumber, canno, wtAA, aaVarStartPos);
 			else
-				annot = String.format("%s:exon%d:%s:p.%s%dfs", tm.getName(), exonNumber, canno, wtaa, aaVarStartPos);
+				annot = String.format("%s:exon%d:%s:p.%s%dfs", tm.getName(), exonNumber, canno, wtAA, aaVarStartPos);
 			// System.out.println("FS wtaa="+wtaa);
 			// System.out.println(annot);
 			ann = new Annotation(tm, annot, VariantType.FS_DUPLICATION, cdsStartPos);

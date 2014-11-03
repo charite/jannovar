@@ -1,11 +1,19 @@
 package jannovar.io;
 
-import java.io.File;
+import jannovar.exception.ChromosomeScaffoldException;
+import jannovar.exception.JannovarException;
+import jannovar.exception.VCFParseException;
+import jannovar.exome.Variant;
+import jannovar.genotype.GenotypeFactoryA;
+import jannovar.genotype.MultipleGenotypeFactory;
+import jannovar.genotype.SingleGenotypeFactory;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.IOException; 
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -13,18 +21,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
-import jannovar.exome.Variant;
-import jannovar.exception.ChromosomeScaffoldException;
-import jannovar.exception.JannovarException;
-import jannovar.exception.VCFParseException;
-import jannovar.genotype.GenotypeFactoryA;
-import jannovar.genotype.SingleGenotypeFactory;
-import jannovar.genotype.MultipleGenotypeFactory;
-
 /**
  * Parses a VCF file and extracts Variants from each of the variant lines of
  * the VCF file. We read and count all of the lines that are
- * represented in the VCF file. 
+ * represented in the VCF file.
  * <P>
  * There are two ways of using this class: (i) input the entire VCF file to
  * create an arraylist of Variants represent all of the variants in the VCF file. This is
@@ -61,7 +61,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  *   // do something with v
  * }
  * </pre>
- * Note that if you want to print out an annotated VCF file, you can use the 
+ * Note that if you want to print out an annotated VCF file, you can use the
  * following function to get a list of lines representing the VCF header with two
  * additional INFO lines explaining the new annotation fields (see {@link #infoEFFECT}
  * and {@link #infoHGVS}):
@@ -79,18 +79,18 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * }
  * </pre>
  * Both ways of using this class will result in identical lists of variants being parsed,
- * with the first delivering a complete list of Variants all at once with potential 
+ * with the first delivering a complete list of Variants all at once with potential
  * disadvantages in memory consuption for large VCF files (e.g., genome sequencing), and the
  * second delivering the Variants as an iterator, with good performance on any size VCF file.
  * <P>
- * We note that this parser demands that there be a FORMAT field and at least one sample id. 
- * Although this is not required in general for VCF files, any VCF file being used for 
+ * We note that this parser demands that there be a FORMAT field and at least one sample id.
+ * Although this is not required in general for VCF files, any VCF file being used for
  * exome analysis needs to have these fields. Here is the description from the VCF format
  * description at http://www.1000genomes.org:
  * <P>
- * If genotype information is present, then the same types of data must be present for all samples. 
- * First a FORMAT field is given specifying the data types and order. This is followed by one 
- * field per sample, with the colon-separated data in this field corresponding to the types 
+ * If genotype information is present, then the same types of data must be present for all samples.
+ * First a FORMAT field is given specifying the data types and order. This is followed by one
+ * field per sample, with the colon-separated data in this field corresponding to the types
  * specified in the format. The first sub-field must always be the genotype (GT).
  * <P>
  * The classes relies on the abstract factory pattern to create appropriate
@@ -100,6 +100,7 @@ import jannovar.genotype.MultipleGenotypeFactory;
  * @author Peter Robinson, Marten Jäger
  * @version 0.28 (26 January, 2014)
  */
+@Deprecated
 public class VCFReader {
     /** Complete path of the VCF file being parsed */
     private String file_path=null;
@@ -114,14 +115,14 @@ public class VCFReader {
     private ArrayList<String> formatLines=null;
     /** All of the INFO lines from the VCF header */
     private ArrayList<String> infoLines=null;
-    /** All of the contig lines from the VCF header, e.g., 
+    /** All of the contig lines from the VCF header, e.g.,
 	{@code ##contig=<ID=chr22,length=51304566,assembly=hg19>}. */
     private ArrayList<String> contigLines=null;
-   
+
     /** List of all variants parsed from this VCF file */
     private ArrayList<Variant> variantList=null;
     /** Short messages describing any errors encountered in parsing the VCF file,
-	useful for output messages. */ 
+	useful for output messages. */
     private ArrayList<String> errorList=null;
     /** Set of all of the chromosomes that could not be parsed correctly, usually
 	scaffolds such as chr11_random.*/
@@ -129,11 +130,11 @@ public class VCFReader {
     /** The total number of variants located in chromosome scaffolds other than the
 	canonical 1-22, X,Y,M. */
     private int n_unparsable_chromosome_scaffold_variants;
-    
-   
+
+
     /** The total number of lines with variants.*/
     private int total_number_of_variants;
-    
+
     /** Factory object to create {@link jannovar.genotype.GenotypeCall GenotypeCall} objects. Note that
      * this is an abstract class that will be instantiated depending on the information in the
      * #CHROM line of the VCF file (especially, whether there is a single sample or multiple
@@ -153,8 +154,8 @@ public class VCFReader {
     /** Phred-scaled strand bias P-value  (FORMAT)*/
     public static final int FORMAT_PHRED_STRAND_BIAS = 5;
     /** List of Phred-scaled genotype likelihoods (FORMAT)*/
-    public static final int FORMAT_PHRED_GENOTYPE_LIKELIHOODS = 6; 
-  
+    public static final int FORMAT_PHRED_GENOTYPE_LIKELIHOODS = 6;
+
     /** List of samples on this VCF file. */
     private ArrayList<String> sample_name_list = null;
     /** List of lines that could not be successfully parsed.
@@ -167,7 +168,7 @@ public class VCFReader {
     public int get_total_number_of_variants() { return this.total_number_of_variants;}
 
     /**
-     * @return the total number of samples represented in this VCF file 
+     * @return the total number of samples represented in this VCF file
      */
     public int getNumberOfSamples() { return this.sample_name_list.size(); }
     /** @return the base file name of the VCF file being analyzed.  */
@@ -177,12 +178,12 @@ public class VCFReader {
     /** A flag that indicates whether we are using a file handle (BufferedReader)
 	from somewhere else (e.g., a tomcat server). */
     private final boolean useExternalBufferedReader;
-    
-    
+
+
     /**
      * The constructor initializes the file handle but does not
      * read anything. The constructor can be used if client code
-     * wants to get all Variants at once or if it wants to get a 
+     * wants to get all Variants at once or if it wants to get a
      * Iterator or Variants.
      * @param vcfPath Complete path to the VCF file.
      * @throws jannovar.exception.VCFParseException
@@ -208,11 +209,11 @@ public class VCFReader {
      * The constructor copies an external file handle but does not
      * read anything. It sets the variable
      * {@link #useExternalBufferedReader} to true, which will
-     * cause the function {@link #parseFile} to use the 
+     * cause the function {@link #parseFile} to use the
      * external file handle rather than trying to
-     * open a new file handle. 
+     * open a new file handle.
      * The constructor can be used if client code
-     * wants to get all Variants at once or if it wants to get a 
+     * wants to get all Variants at once or if it wants to get a
      * Iterator or Variants.
      * @param br the {@link Reader}
      */
@@ -241,7 +242,7 @@ public class VCFReader {
     	this.n_unparsable_chromosome_scaffold_variants=0;
 	this.vcfHeaderIsInitialized = false;
     }
-    
+
 
 
     /**
@@ -250,7 +251,7 @@ public class VCFReader {
      * line of the VCF file. Once that has been taken care of, it
      * returns a iterator over variants.
      * @return {@link Iterator} of {@link Variant}s
-     * @throws jannovar.exception.JannovarException 
+     * @throws jannovar.exception.JannovarException
      */
     public Iterator<Variant> getVariantIterator() throws JannovarException {
 	if (this.in == null ) {
@@ -259,7 +260,7 @@ public class VCFReader {
 	}
 	if (! this.vcfHeaderIsInitialized) {
 	    inputVCFheader();
-	} 
+	}
 	// When we get here, the #CHROM line (the last line of the header)
 	// has just been read..
 	return new VariantIterator(this.in);
@@ -280,7 +281,7 @@ public class VCFReader {
 	}
 	if (! this.vcfHeaderIsInitialized) {
 	    inputVCFheader();
-	} 
+	}
 	// When we get here, the #CHROM line (the last line of the header)
 	// has just been read..
 	return new VCFLineIterator(this.in);
@@ -298,7 +299,7 @@ public class VCFReader {
 	VCFLine vcfline = null;
 	/** file handle, referenced from the outer class. */
 	private final BufferedReader in;
-	/** The constructor advances the iterator to the first 
+	/** The constructor advances the iterator to the first
 	    Variant line of the VCF file and thereby initializes
 	    the variable {@link #vcfline}.*/
 	VariantIterator(BufferedReader handle)   {
@@ -362,7 +363,7 @@ public class VCFReader {
 	VCFLine vcfline = null;
 	/** file handle, referenced from the outer class. */
 	private final BufferedReader in;
-	/** The constructor advances the iterator to the first 
+	/** The constructor advances the iterator to the first
 	    Variant line of the VCF file and thereby initializes
 	    the variable {@link #vcfline}.*/
 	VCFLineIterator(BufferedReader handle)   {
@@ -426,14 +427,14 @@ public class VCFReader {
     /* end of inner class VCFLineIterator */
 
     /**
-     * @return a list of {@link jannovar.exome.Variant Variant} objects extracted from the VCF file. 
+     * @return a list of {@link jannovar.exome.Variant Variant} objects extracted from the VCF file.
      */
-    public ArrayList<Variant> getVariantList() { 
+    public ArrayList<Variant> getVariantList() {
 	return this.variantList;
-    } 
+    }
 
     /**
-     * Transform a VCF variant line into a 
+     * Transform a VCF variant line into a
      * {@link jannovar.exome.Variant Variant} object.
      * @param line a line of a VCF file that represents a variant
      * @return the corresponding {@link jannovar.exome.Variant Variant} object.
@@ -453,26 +454,26 @@ public class VCFReader {
      * @return A list of VCF lines that could not be parsed correctly.
      */
     public ArrayList<String> getListOfUnparsableLines() { return this.unparsable_line_list; }
-    
+
     /**
      * The parsing process stores a list with each of the header lines of the original VCF file.
      * @return List of lines of the original VCF file.
      */
-    public ArrayList<String> get_vcf_header() { 
+    public ArrayList<String> get_vcf_header() {
 	ArrayList<String> lst = new ArrayList<String>();
 	lst.add(this.firstVCFLine);
 	lst.addAll(this.formatLines);
 	lst.addAll(this.infoLines);
 	lst.addAll(this.contigLines);
-	lst.addAll(this.vcf_header); 
+	lst.addAll(this.vcf_header);
 	return lst;
     }
 
-   
+
 
     /**
      * This line is added to the output of a VCF file annotated by Jannovar and describes the new field
-     * for the INFO section entitled EFFECT, which decribes the effects of variants 
+     * for the INFO section entitled EFFECT, which decribes the effects of variants
      * (splicing,missense,stoploss, etc).
      */
     private static final String infoEFFECT="##INFO=<ID=EFFECT,Number=1,Type=String,Description=\""+
@@ -493,7 +494,7 @@ public class VCFReader {
      * about the annotations added to the output VCF file.
      * @return List of lines of the original VCF file.
      */
-    public ArrayList<String> getAnnotatedVCFHeader() { 
+    public ArrayList<String> getAnnotatedVCFHeader() {
 	ArrayList<String> lst = new ArrayList<String>();
 	lst.add(this.firstVCFLine);
 	lst.addAll(this.formatLines);
@@ -501,7 +502,7 @@ public class VCFReader {
 	lst.add(infoEFFECT);
 	lst.add(infoHGVS);
 	lst.addAll(this.contigLines);
-	lst.addAll(this.vcf_header); 
+	lst.addAll(this.vcf_header);
 	return lst;
     }
 
@@ -512,7 +513,7 @@ public class VCFReader {
      * messages are intended to be use for HTML output or logs etc.
      * @return list of any errors encountered during VCF parsing, or  null to indicate no error.
      */
-    public ArrayList<String> get_html_message() { 
+    public ArrayList<String> get_html_message() {
 	ArrayList<String> msg = new ArrayList<String>();
 	if (this.base_filename != null)
 	    msg.add(String.format("VCF file: %s (number of variants: %d)",base_filename,this.total_number_of_variants));
@@ -529,7 +530,7 @@ public class VCFReader {
 	return msg;
     }
 
-   
+
     /**
      * This method parses the entire VCF file by creating a Stream from the
      * file path passed to it and calling the method {@link #inputVCFStream}.
@@ -554,7 +555,7 @@ public class VCFReader {
      }
 
     /**
-     * Parse the entire VCF file. It places all header lines into the arraylist 
+     * Parse the entire VCF file. It places all header lines into the arraylist
      * {@link #vcf_header} and the remaining lines are parsed into
      * Variant objects.  This class could be improved by storing various
      * data elements/explanations explicitly.
@@ -562,7 +563,7 @@ public class VCFReader {
     private void inputVCFStream() throws IOException, VCFParseException {
      	String line;
 	VCFLine vcfline;
-	
+
 	while ((line = in.readLine())!= null) {
 	    try {
 		vcfline =  new VCFLine(line);
@@ -584,17 +585,17 @@ public class VCFReader {
 	    this.variantList.add(v);
 	    this.total_number_of_variants++;
 	}
-     }	
+     }
 
     /**
-     * This function gets called when there was difficulty in 
+     * This function gets called when there was difficulty in
      * parsing the chromosomes of some variants, e.g., GL000192.1.
      * We add a list of the chromosomes to messages, this can be used
      * to produce error messages for user output.
      */
     private void recordBadChromosomeParses()
     {
-	if (n_unparsable_chromosome_scaffold_variants == 0) 
+	if (n_unparsable_chromosome_scaffold_variants == 0)
 	    return;
 	Iterator<String> it = this.unparsableChromosomes.iterator();
 	boolean first=true;
@@ -666,11 +667,11 @@ public class VCFReader {
 	    sample_name_list.add(A[i]);
 	}
 
-    } 
-    
+    }
+
     /**
-     * Processes the header of the VCF file. Checks the first line, 
-     * determines the number of samples in the VCF file and sets the {@link GenotypeFactoryA}. 
+     * Processes the header of the VCF file. Checks the first line,
+     * determines the number of samples in the VCF file and sets the {@link GenotypeFactoryA}.
      * If everything goes well, this function sets the variable
      * {@link #vcfHeaderIsInitialized} to true.
      * @throws VCFParseException
@@ -704,13 +705,13 @@ public class VCFReader {
 		    } else if (line.startsWith("##contig") || line.startsWith("##CONTIG")) {
 			this.contigLines.add(line);
 		    } else {
-			vcf_header.add(line); 
+			vcf_header.add(line);
 		    }
 		} else if (line.startsWith("#CHROM")) {
 		    /* The CHROM line is the last line of the header and
 		       includes  the FORMAT AND sample names. */
-		    parse_chrom_line(line); 
-		    vcf_header.add(line); 
+		    parse_chrom_line(line);
+		    vcf_header.add(line);
 		    /* Note that a side effect of the function parse_chrom_line
 		       is to add sample names to sample_name_map. We can now instantiate the
 		       genotype factory depending on whether there is more than one sample.
@@ -720,8 +721,8 @@ public class VCFReader {
 			this.genofactory = new SingleGenotypeFactory();
 		    } else {
 			this.genofactory = new MultipleGenotypeFactory();
-		    } 
-		    break; /* The #CHROM line is the last line of the header */ 
+		    }
+		    break; /* The #CHROM line is the last line of the header */
 		}
 	    }
 	} catch (IOException e) {
@@ -733,7 +734,7 @@ public class VCFReader {
 	VCFLine.setGenotypeFactory(genofactory);
 	this.vcfHeaderIsInitialized=true;
     }
-    
+
     /**
      * Print some diagnostic warning messages to STDERR. For instance,
      * print out the number of variants mapped to non-standard chromosome scaffolds
@@ -757,6 +758,6 @@ public class VCFReader {
 	    System.err.println("[WARN] " + s);
 	}
     }
-    
+
 }
 /* eof */

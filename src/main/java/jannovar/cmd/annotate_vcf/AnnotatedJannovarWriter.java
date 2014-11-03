@@ -7,6 +7,7 @@ import jannovar.JannovarOptions;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
+import jannovar.annotation.VariantDataCorrector;
 import jannovar.common.ChromosomeMap;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.Chromosome;

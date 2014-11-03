@@ -10,6 +10,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 import jannovar.JannovarOptions;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
+import jannovar.annotation.VariantDataCorrector;
 import jannovar.common.ChromosomeMap;
 import jannovar.common.VCFStrings;
 import jannovar.exception.AnnotationException;
