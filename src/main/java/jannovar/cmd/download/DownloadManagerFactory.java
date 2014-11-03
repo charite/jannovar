@@ -1,8 +1,12 @@
-package jannovar;
+package jannovar.cmd.download;
+
+import jannovar.JannovarOptions;
 
 /**
  * Allows easy building of DownloadOrchestrators.
  *
+ * @author Peter N Robinson
+ * @author Marten Jaeger
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class DownloadManagerFactory {

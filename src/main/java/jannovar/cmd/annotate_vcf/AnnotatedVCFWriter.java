@@ -1,4 +1,4 @@
-package jannovar;
+package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
@@ -7,6 +7,7 @@ import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
+import jannovar.JannovarOptions;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
 import jannovar.common.ChromosomeMap;

@@ -1,8 +1,9 @@
-package jannovar;
+package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
+import jannovar.JannovarOptions;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;

@@ -1,5 +1,6 @@
-package jannovar;
+package jannovar.cmd.download;
 
+import jannovar.JannovarOptions;
 import jannovar.common.Constants;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.JannovarException;

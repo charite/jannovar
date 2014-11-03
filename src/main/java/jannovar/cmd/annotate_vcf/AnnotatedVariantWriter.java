@@ -1,4 +1,4 @@
-package jannovar;
+package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import jannovar.exception.AnnotationException;
