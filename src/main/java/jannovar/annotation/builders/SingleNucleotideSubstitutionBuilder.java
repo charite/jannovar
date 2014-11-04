@@ -7,31 +7,32 @@ import jannovar.reference.TranscriptModel;
 import jannovar.util.Translator;
 
 /**
- * This class provides static methods to generate annotations for single nucleotide substitution mutations.
- * <P>
+ * This class provides static methods to generate annotations for SNVs in exons.
+ *
  * Note that there are numerous variants in positions that show a discrepancy between the genomic sequence of hg19 and
  * the UCSC knownGene mRNA sequences. This is a difficult issue because it is uncertain which sequence is correct.
- * Annovar uses its own version of the KnownGenesMrna.txt file that is made to conform exactly with the genome sequence.
- * However, by inspection, of the mRNA sequence actually appears to be the correct one. Therefore, our strategy is to
- * base annotations upon the mRNA sequence of the original USCS KnownGenesMrna.txt file but additionally to report that
- * there is a discrepancy between the genomic sequence (which is the sequence that is typically used for variant calling
- * and thus informs the variant calls in the VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in
- * this case, as in versions of this class up to the 15th of December, 2012 (v. 0.04).
+ * Annovar uses its own version of the knownGeneMrna.txt file that is made to conform exactly with the genome sequence.
  *
- * @version 0.12 (15 April 2014)
- * @author Peter N Robinson, Marten Jäger
+ * However, by inspection, the mRNA sequence actually appears to be the correct one. Therefore, our strategy is to base
+ * annotations upon the mRNA sequence of the original USCS knownGeneMrna.txt file but additionally to report that there
+ * is a discrepancy between the genomic sequence (which is the sequence that is typically used for variant calling and
+ * thus informs the variant calls in the VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this
+ * case, as in versions of this class up to the 15th of December, 2012 (v. 0.04).
+ *
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jäger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-
 public class SingleNucleotideSubstitutionBuilder {
+
 	/**
 	 * Creates annotation for a single-nucleotide substitution.
-	 * <P>
-	 * This function decides what strand the affected {@link jannovar.reference.TranscriptModel TranscriptModel} is
-	 * located on and calls either {@link #getAnnotationPlusStrand} or {@link #getAnnotationMinusStrand} to do the
-	 * calculations.
 	 *
-	 * @param kgl
-	 *            The known gene that corresponds to the deletion caused by the variant.
+	 * This function decides what strand the affected {@link TranscriptModel} is located on and calls either
+	 * {@link #getAnnotationPlusStrand} or {@link #getAnnotationMinusStrand} to do the calculations.
+	 *
+	 * @param tm
+	 *            The {@link TranscriptModel} that is affected by the SNV.
 	 * @param frameShift
 	 *            0 if variant begins at first base of codon, 1 if it begins at second base, 2 if at third base (same
 	 *            for SNV)
@@ -48,14 +49,14 @@ public class SingleNucleotideSubstitutionBuilder {
 	 *            Position of the variant in the CDS of the known gene
 	 * @param exonNumber
 	 *            Number of the affected exon (zero-based).
-	 * @return An annotation corresponding to the deletion.
+	 * @return An annotation corresponding to the SNV.
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public static Annotation getAnnotation(TranscriptModel kgl, int frameShift, int frameEndShift, String wtnt3, String ref, String var, int refVarStart, int exonNumber) throws AnnotationException {
-		if (kgl.isPlusStrand())
-			return getAnnotationPlusStrand(kgl, frameShift, wtnt3, ref, var, refVarStart, exonNumber);
+	public static Annotation getAnnotation(TranscriptModel tm, int frameShift, int frameEndShift, String wtnt3, String ref, String var, int refVarStart, int exonNumber) throws AnnotationException {
+		if (tm.isPlusStrand())
+			return getAnnotationPlusStrand(tm, frameShift, wtnt3, ref, var, refVarStart, exonNumber);
 		else
-			return getAnnotationPlusStrand(kgl, frameShift, wtnt3, ref, var, refVarStart, exonNumber);
+			return getAnnotationPlusStrand(tm, frameShift, wtnt3, ref, var, refVarStart, exonNumber);
 
 	}
 
@@ -76,7 +77,7 @@ public class SingleNucleotideSubstitutionBuilder {
 	 *            Position of the variant in the CDS of the known gene
 	 * @param exonNumber
 	 *            Number of the affected exon (zero-based).
-	 * @return An annotation corresponding to the deletion.
+	 * @return An annotation corresponding to the SNV.
 	 * @throws jannovar.exception.AnnotationException
 	 */
 	public static Annotation getAnnotationPlusStrand(TranscriptModel tm, int frameShift, String wtnt3, String ref,
