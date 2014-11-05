@@ -42,6 +42,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 						.toUpperCase());
 		this.transcriptReverse.setGeneSymbol("ZNF436");
 		this.infoReverse = new TranscriptInfo(this.transcriptReverse);
+		// RefSeq: NM_001077195.1
 	}
 
 	@Test(expected = InvalidGenomeChange.class)
@@ -54,7 +55,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	public void testForwardFirstCDSBases() throws InvalidGenomeChange {
 		// We check the first 10 CDS bases and compared them by hand to Mutalyzer results.
 		//
-		// TODO(holtgrem): the first three changes should be in the start codon but are not
+		// TODO(holtgrem): the first three changes should be in the start codon (as Mutalyzers says) but are not
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6640669, PositionType.ZERO_BASED), "A", "T");
 		Assert.assertEquals("uc001anx.3:exon2:c.1A>T:p.Met1Leu",
 				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1).getVariantAnnotation());
@@ -149,6 +150,114 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	public void testForwardOneAfterLastCDSBase() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6649272, PositionType.ZERO_BASED), "T", "A");
 		SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change);
+	}
+
+	@Test(expected = InvalidGenomeChange.class)
+	public void testReverseOneBeforeFirstCDSBase() throws InvalidGenomeChange {
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 23688460, PositionType.ZERO_BASED), "T", "A");
+		SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change);
+	}
+
+	@Test
+	public void testReverseFirstCDSBases() throws InvalidGenomeChange {
+		// We check the first 10 CDS bases and compared them by hand to Mutalyzer results.
+		//
+		// TODO(holtgrem): the first three changes should be in the start codon (as Mutalyzers says) but are not
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED), "A", "T");
+		Assert.assertEquals("uc001bgu.3:exon3:c.1A>T:p.Met1Leu",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change1).getVariantAnnotation());
+
+		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 23694496, PositionType.ZERO_BASED), "T", "C");
+		Assert.assertEquals("uc001bgu.3:exon3:c.2T>C:p.Met1Thr",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change2).getVariantAnnotation());
+
+		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 23694495, PositionType.ZERO_BASED), "G", "A");
+		Assert.assertEquals("uc001bgu.3:exon3:c.3G>A:p.Met1Ile",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change3).getVariantAnnotation());
+
+		GenomeChange change4 = new GenomeChange(new GenomePosition('+', 1, 23694494, PositionType.ZERO_BASED), "G", "T");
+		Assert.assertEquals("uc001bgu.3:exon3:c.4G>T:p.Ala2Ser",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change4).getVariantAnnotation());
+
+		GenomeChange change5 = new GenomeChange(new GenomePosition('+', 1, 23694493, PositionType.ZERO_BASED), "C", "T");
+		Assert.assertEquals("uc001bgu.3:exon3:c.5C>T:p.Ala2Val",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change5).getVariantAnnotation());
+
+		GenomeChange change6 = new GenomeChange(new GenomePosition('+', 1, 23694492, PositionType.ZERO_BASED), "A", "C");
+		Assert.assertEquals("uc001bgu.3:exon3:c.6A>C:p.(=)",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change6).getVariantAnnotation());
+
+		GenomeChange change7 = new GenomeChange(new GenomePosition('+', 1, 23694491, PositionType.ZERO_BASED), "G", "A");
+		Assert.assertEquals("uc001bgu.3:exon3:c.7G>A:p.Ala3Thr",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change7).getVariantAnnotation());
+
+		GenomeChange change8 = new GenomeChange(new GenomePosition('+', 1, 23694490, PositionType.ZERO_BASED), "C", "T");
+		Assert.assertEquals("uc001bgu.3:exon3:c.8C>T:p.Ala3Val",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change8).getVariantAnnotation());
+
+		GenomeChange change9 = new GenomeChange(new GenomePosition('+', 1, 23694489, PositionType.ZERO_BASED), "C", "G");
+		Assert.assertEquals("uc001bgu.3:exon3:c.9C>G:p.(=)",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change9).getVariantAnnotation());
+
+		GenomeChange change10 = new GenomeChange(new GenomePosition('+', 1, 23694488, PositionType.ZERO_BASED), "A",
+				"G");
+		Assert.assertEquals("uc001bgu.3:exon3:c.10A>G:p.Thr4Ala",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change10).getVariantAnnotation());
+
+	}
+
+	@Test
+	public void testReverseLastCDSBases() throws InvalidGenomeChange {
+		// Here, we start off 3 positions before the end (2 positions before the inclusive end).
+		// TODO(holtgrem): Here, Mutalizer converted to "p.(*689Trpext*23)"
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 23688461, PositionType.ZERO_BASED), "A", "G");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1413A>G:p.(=)",
+				SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change1).getVariantAnnotation());
+
+		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 23688462, PositionType.ZERO_BASED), "A", "C");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1412A>C:p.*471Ser",
+				SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change2).getVariantAnnotation());
+		// TODO(holtgrem): Mutalizer annotates "NM_001077195.1(ZNF436_i001):p.(*471Lysext*9)"
+		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 23688463, PositionType.ZERO_BASED), "T", "A");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1411T>A:p.*471Lys",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change3).getVariantAnnotation());
+
+		GenomeChange change4 = new GenomeChange(new GenomePosition('+', 1, 23688464, PositionType.ZERO_BASED), "C", "G");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1410C>G:p.Asp470Glu", SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change4).getVariantAnnotation());
+
+		GenomeChange change5 = new GenomeChange(new GenomePosition('+', 1, 23688465, PositionType.ZERO_BASED), "A", "G");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1409A>G:p.Asp470Gly", SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change5).getVariantAnnotation());
+
+		GenomeChange change6 = new GenomeChange(new GenomePosition('+', 1, 23688466, PositionType.ZERO_BASED), "G", "T");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1408G>T:p.Asp470Tyr", SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change6).getVariantAnnotation());
+
+		GenomeChange change7 = new GenomeChange(new GenomePosition('+', 1, 23688467, PositionType.ZERO_BASED), "G", "C");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1407G>C:p.(=)",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change7).getVariantAnnotation());
+
+		GenomeChange change8 = new GenomeChange(new GenomePosition('+', 1, 23688468, PositionType.ZERO_BASED), "C", "A");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1406C>A:p.Thr469Lys", SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change8).getVariantAnnotation());
+
+		GenomeChange change9 = new GenomeChange(new GenomePosition('+', 1, 23688469, PositionType.ZERO_BASED), "A", "G");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1405A>G:p.Thr469Ala", SingleNucleotideSubstitutionBuilder
+				.buildAnnotation(infoReverse, change9).getVariantAnnotation());
+
+		GenomeChange change10 = new GenomeChange(new GenomePosition('+', 1, 23688470, PositionType.ZERO_BASED), "T",
+				"C");
+		Assert.assertEquals("uc001bgu.3:exon1:c.1404T>C:p.(=)",
+				SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change10).getVariantAnnotation());
+	}
+
+	@Test(expected = InvalidGenomeChange.class)
+	public void testReverseOneAfterLastCDSBase() throws InvalidGenomeChange {
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 23694498, PositionType.ZERO_BASED), "T", "A");
+		SingleNucleotideSubstitutionBuilder.buildAnnotation(infoReverse, change);
 	}
 
 }

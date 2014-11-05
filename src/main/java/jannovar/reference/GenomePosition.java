@@ -54,14 +54,12 @@ public class GenomePosition {
 		this.strand = strand;
 		this.chr = other.chr;
 
-		if (strand == other.strand) {
+		int delta = (positionType == PositionType.ONE_BASED) ? 1 : -1;
+
+		if (strand == other.strand)
 			this.pos = other.pos;
-		} else {
-			int delta = 0;
-			if (this.positionType == PositionType.ONE_BASED)
-				delta = 1;
+		else
 			this.pos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.pos + delta;
-		}
 	}
 
 	/** convert into GenomePosition of the given strand */

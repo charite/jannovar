@@ -80,15 +80,15 @@ public class TranscriptInfo {
 		exonRegions = new GenomeInterval[tm.getExonCount()];
 		if (strand == '+')
 		{
-			for (int i = 0; i < tm.getExonCount(); ++i) {
-				GenomeInterval exonFwdRegion = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i));
-				exonRegions[i] = exonFwdRegion.withStrand(strand);
-			}
+			for (int i = 0; i < tm.getExonCount(); ++i)
+				exonRegions[i] = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
+						PositionType.ONE_BASED);
 		}
 		else
 		{
 			for (int i = 0, j = tm.getExonCount() - 1; i < tm.getExonCount(); ++i, --j) {
-				GenomeInterval exonFwdRegion = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i));
+				GenomeInterval exonFwdRegion = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
+						PositionType.ONE_BASED);
 				exonRegions[j] = exonFwdRegion.withStrand(strand);
 			}
 		}

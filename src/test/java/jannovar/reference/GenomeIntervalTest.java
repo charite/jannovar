@@ -5,6 +5,8 @@ import org.junit.Test;
 
 public class GenomeIntervalTest {
 
+	// TODO(holtgrew): Test conversion from forward to reverse strand.
+
 	@Test
 	public void testConstructorDefaultPositionType() {
 		GenomeInterval interval = new GenomeInterval('+', 1, 23, 45);
@@ -64,8 +66,8 @@ public class GenomeIntervalTest {
 	}
 
 	@Test
-	public void testForwardToReverse() {
-		GenomeInterval fwdInterval = new GenomeInterval('+', 1, 1000, 1100);
+	public void testConstructForwardToReverseOneBased() {
+		GenomeInterval fwdInterval = new GenomeInterval('+', 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval revInterval = new GenomeInterval(fwdInterval, '-');
 
 		Assert.assertEquals(revInterval.getStrand(), '-');
@@ -74,11 +76,17 @@ public class GenomeIntervalTest {
 		Assert.assertEquals(revInterval.getEndPos(), 249249622);
 		Assert.assertEquals(revInterval.getPositionType(), PositionType.ONE_BASED);
 		Assert.assertEquals(revInterval.length(), 101);
+
+		// check contains() after flip
+		Assert.assertFalse(revInterval.contains(new GenomePosition('+', 1, 999)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('+', 1, 1100)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('+', 1, 1000)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition('+', 1, 1101)));
 	}
 
 	@Test
-	public void testForwardToForward() {
-		GenomeInterval fwdInterval = new GenomeInterval('+', 1, 1000, 1100);
+	public void testConstructForwardToForwardOneBased() {
+		GenomeInterval fwdInterval = new GenomeInterval('+', 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval fwdInterval2 = new GenomeInterval(fwdInterval, '+');
 
 		Assert.assertEquals(fwdInterval2.getStrand(), '+');
@@ -90,8 +98,8 @@ public class GenomeIntervalTest {
 	}
 
 	@Test
-	public void testReverseToForward() {
-		GenomeInterval revInterval = new GenomeInterval('-', 1, 1000, 1100);
+	public void testConstructReverseToForwardOneBased() {
+		GenomeInterval revInterval = new GenomeInterval('-', 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval fwdInterval = new GenomeInterval(revInterval, '+');
 
 		Assert.assertEquals(fwdInterval.getStrand(), '+');
@@ -100,11 +108,17 @@ public class GenomeIntervalTest {
 		Assert.assertEquals(fwdInterval.getEndPos(), 249249622);
 		Assert.assertEquals(fwdInterval.getPositionType(), PositionType.ONE_BASED);
 		Assert.assertEquals(fwdInterval.length(), 101);
+
+		// check contains() after flip
+		Assert.assertFalse(revInterval.contains(new GenomePosition('-', 1, 999)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('-', 1, 1100)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('-', 1, 1000)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition('-', 1, 1101)));
 	}
 
 	@Test
-	public void testReverseToReverse() {
-		GenomeInterval revInterval = new GenomeInterval('-', 1, 1000, 1100);
+	public void testConstructReverseToReverseOneBased() {
+		GenomeInterval revInterval = new GenomeInterval('-', 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval revInterval2 = new GenomeInterval(revInterval, '-');
 
 		Assert.assertEquals(revInterval2.getStrand(), '-');
@@ -113,6 +127,44 @@ public class GenomeIntervalTest {
 		Assert.assertEquals(revInterval2.getEndPos(), 1100);
 		Assert.assertEquals(revInterval2.getPositionType(), PositionType.ONE_BASED);
 		Assert.assertEquals(revInterval2.length(), 101);
+	}
+
+	@Test
+	public void testConstructForwardToReverseZeroBased() {
+		GenomeInterval fwdInterval = new GenomeInterval('+', 1, 999, 1100, PositionType.ZERO_BASED);
+		GenomeInterval revInterval = new GenomeInterval(fwdInterval, '-');
+
+		Assert.assertEquals(revInterval.getStrand(), '-');
+		Assert.assertEquals(revInterval.getChr(), 1);
+		Assert.assertEquals(revInterval.getBeginPos(), 249249521);
+		Assert.assertEquals(revInterval.getEndPos(), 249249622);
+		Assert.assertEquals(revInterval.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(revInterval.length(), 101);
+
+		// check contains() after flip
+		Assert.assertFalse(revInterval.contains(new GenomePosition('+', 1, 999)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('+', 1, 1100)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('+', 1, 1000)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition('+', 1, 1101)));
+	}
+
+	@Test
+	public void testConstructReverseToForwardZeroBased() {
+		GenomeInterval revInterval = new GenomeInterval('-', 1, 999, 1100, PositionType.ZERO_BASED);
+		GenomeInterval fwdInterval = new GenomeInterval(revInterval, '+');
+
+		Assert.assertEquals(fwdInterval.getStrand(), '+');
+		Assert.assertEquals(fwdInterval.getChr(), 1);
+		Assert.assertEquals(fwdInterval.getBeginPos(), 249249521);
+		Assert.assertEquals(fwdInterval.getEndPos(), 249249622);
+		Assert.assertEquals(fwdInterval.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(fwdInterval.length(), 101);
+
+		// check contains() after flip
+		Assert.assertFalse(revInterval.contains(new GenomePosition('-', 1, 999)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('-', 1, 1100)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition('-', 1, 1000)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition('-', 1, 1101)));
 	}
 
 	@Test
@@ -150,5 +202,3 @@ public class GenomeIntervalTest {
 	}
 
 }
-
-

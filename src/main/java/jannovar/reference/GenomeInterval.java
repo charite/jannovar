@@ -56,12 +56,14 @@ public class GenomeInterval {
 		this.strand = strand;
 		this.chr = other.chr;
 
+		int delta = (positionType == PositionType.ONE_BASED) ? 1 : 0;
+
 		if (strand == other.strand) {
 			this.beginPos = other.beginPos;
 			this.endPos = other.endPos;
 		} else {
-			int beginPos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.beginPos + 1;
-			int endPos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.endPos + 1;
+			int beginPos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.beginPos + delta;
+			int endPos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.endPos + delta;
 			this.endPos = beginPos;
 			this.beginPos = endPos;
 		}
