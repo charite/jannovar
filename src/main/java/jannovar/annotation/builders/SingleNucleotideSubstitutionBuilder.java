@@ -14,6 +14,8 @@ import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
 import jannovar.util.Translator;
 
+// TODO(holtgrem): We are basing the annotation on the var base from the VCF file and not the transcript. Ask Marten about this. See post-transcription update below.
+
 /**
  * This class provides static methods to generate annotations for SNVs in exons.
  *
@@ -22,10 +24,9 @@ import jannovar.util.Translator;
  * Annovar uses its own version of the knownGeneMrna.txt file that is made to conform exactly with the genome sequence.
  *
  * However, by inspection, the mRNA sequence actually appears to be the correct one. Therefore, our strategy is to base
- * annotations upon the mRNA sequence of the original USCS knownGeneMrna.txt file but additionally to report that there
- * is a discrepancy between the genomic sequence (which is the sequence that is typically used for variant calling and
- * thus informs the variant calls in the VCF file) and the UCSC mRNA sequence. We no longer throw an Exception in this
- * case, as in versions of this class up to the 15th of December, 2012 (v. 0.04).
+ * annotations upon the mRNA sequence of the original USCS knownGeneMrna.txt.gz file but additionally to report that
+ * there is a discrepancy between the genomic sequence (which is the sequence that is typically used for variant calling
+ * and thus informs the variant calls in the VCF file) and the UCSC mRNA sequence.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Marten Jäger <marten.jaeger@charite.de>
@@ -54,7 +55,7 @@ public class SingleNucleotideSubstitutionBuilder {
 	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		// guard against invalid genome change
 		if (change.getRef().length() != 1 || change.getAlt().length() != 1)
-			throw new InvalidGenomeChange("GenomeChange at does not describe a SNV " + change);
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
 
 		// ensure that the position falls into the CDS region
 		if (!transcript.cdsRegion.contains(change.getPos()))
@@ -85,14 +86,16 @@ public class SingleNucleotideSubstitutionBuilder {
 		exonID = projector.exonIDInReferenceOrder(exonID) + 1;
 
 		// If we reach here then change describes a SNV and the position points into the CDS of the given transcript.
-		// We can now create an Annotation for this GenomeChange in all cases without any exceptions.
+		// We can now create an Annotation for this GenomeChange without catching exceptions.
 		return buildAnnotation(transcript, change, txPos, cdsPos, exonID);
 	}
 
 	/**
 	 * Build SNV annotation from <code>transcript</code>, <code>change</code> and the position on the transcript.
 	 *
-	 * The arguments have already been checked, nothing can go wrong.
+	 * The position arguments have already been checked for being valid and no exception is thrown. The only thing that
+	 * can go wrong are inconsistencies between the transcript sequence and the variant from the VCF file (in which case
+	 * we add a warning to the HGSV annotation string).
 	 *
 	 * @param transcript
 	 *            information of the transcript to generate annotation for
@@ -104,11 +107,11 @@ public class SingleNucleotideSubstitutionBuilder {
 	 *            CDS position of the genome change
 	 * @param exonNumber
 	 *            1-based exon number for display
-	 * @return
+	 * @return the {@link Annotation} describing the {@link GenomeChange} in <code>change</code>
 	 */
 	private static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change, TranscriptPosition txPos,
 			TranscriptPosition cdsPos, int exonNumber) {
-		// ensure that txPos and cdsPos are 0-based
+		// Ensure that txPos and cdsPos are 0-based.
 		txPos = txPos.withPositionType(PositionType.ZERO_BASED);
 		cdsPos = cdsPos.withPositionType(PositionType.ZERO_BASED);
 
@@ -122,30 +125,32 @@ public class SingleNucleotideSubstitutionBuilder {
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.getPos() % 3;
 		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
-		// Get the transcript codon. From this, we generate the WT and the variant codon, this is important in the case
+		// Get the transcript codon. From this, we generate the WT and the variant codon. This is important in the case
 		// where the transcript differs from the reference. This inconsistency of the reference and the transcript is
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
 		// the transcript.
 		String transcriptCodon = transcript.sequence.substring(codonStart, codonStart + 3);
 		String wtCodon = updateCodonBase(transcriptCodon, frameShift, change.getRef().charAt(0));
 		String varCodon = updateCodonBase(transcriptCodon, frameShift, change.getAlt().charAt(0));
-		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
-		String varAA = Translator.getTranslator().translateDNA3(varCodon);
-		VariantType varType = computeVariantType(wtAA, varAA);
 
-		// Construct the HGSV annotation from this information (note that HGSV uses 1-based positions).
+		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
+		// positions).
 		String locAnno = String.format("%s:exon%d", transcript.accession, exonNumber);
 		char wtNT = wtCodon.charAt(frameShift); // wild type nucleotide
 		char varNT = varCodon.charAt(frameShift); // wild type amino acid
 		String cDNAAnno = String.format("c.%d%c>%c", cdsPos.getPos() + 1, wtNT, varNT);
+		// Construct annotation part for the protein.
+		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
+		String varAA = Translator.getTranslator().translateDNA3(varCodon);
+		VariantType varType = computeVariantType(wtAA, varAA);
 		String protAnno = String.format("p.%s%d%s", wtAA, cdsPos.getPos() / 3 + 1, varAA);
-		if (wtAA.equals(varAA)) // simplify in the case of synonymous
+		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
 			protAnno = String.format("p.(=)", cdsPos.getPos() / 3 + 1);
+		// Glue together the annotations and warning message in annotation if any.
 		String annotationStr = String.format("%s:%s:%s", locAnno, cDNAAnno, protAnno);
-
-		// Include warning message in annotation if any, build and return a new Annotation object.
 		if (warningMsg != null)
 			annotationStr = String.format("%s:[%s]", annotationStr, warningMsg);
+
 		return new Annotation(transcript.transcriptModel, annotationStr, varType, cdsPos.getPos() + 1);
 	}
 
@@ -186,6 +191,10 @@ public class SingleNucleotideSubstitutionBuilder {
 		else
 			return String.format("%c%c%c", transcriptCodon.charAt(0), transcriptCodon.charAt(1), targetNC);
 	}
+
+	//
+	// The code below can go away.
+	//
 
 	/**
 	 * Creates annotation for a single-nucleotide substitution.
