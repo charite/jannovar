@@ -27,7 +27,7 @@ public class TranscriptModelFactory {
 		String[] startFields = fields[8].split(",");
 		int[] starts = new int[result.getExonCount()];
 		for (int i = 0; i < result.getExonCount(); ++i)
-			starts[i] = Integer.parseInt(startFields[i]);
+			starts[i] = Integer.parseInt(startFields[i]) + 1; // knownGenes is 0-based
 		String[] endFields = fields[9].split(",");
 		int[] ends = new int[result.getExonCount()];
 		for (int i = 0; i < result.getExonCount(); ++i)

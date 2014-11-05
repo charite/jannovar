@@ -107,4 +107,53 @@ public class GenomePositionTest {
 		Assert.assertEquals(shifted.getPos(), 90);
 	}
 
+	@Test
+	public void testLt() {
+		GenomePosition posL = new GenomePosition('+', 1, 100);
+		GenomePosition posR = new GenomePosition('+', 1, 101);
+
+		Assert.assertTrue(posL.isLt(posR));
+		Assert.assertFalse(posL.isLt(posL));
+		Assert.assertFalse(posR.isLt(posL));
+	}
+
+	@Test
+	public void testLeq() {
+		GenomePosition posL = new GenomePosition('+', 1, 100);
+		GenomePosition posR = new GenomePosition('+', 1, 101);
+
+		Assert.assertTrue(posL.isLeq(posR));
+		Assert.assertTrue(posL.isLeq(posL));
+		Assert.assertFalse(posR.isLeq(posL));
+	}
+
+	@Test
+	public void testGt() {
+		GenomePosition posL = new GenomePosition('+', 1, 100);
+		GenomePosition posR = new GenomePosition('+', 1, 101);
+
+		Assert.assertFalse(posL.isGt(posR));
+		Assert.assertFalse(posL.isGt(posL));
+		Assert.assertTrue(posR.isGt(posL));
+	}
+
+	@Test
+	public void testGeq() {
+		GenomePosition posL = new GenomePosition('+', 1, 100);
+		GenomePosition posR = new GenomePosition('+', 1, 101);
+
+		Assert.assertFalse(posL.isGeq(posR));
+		Assert.assertTrue(posL.isGeq(posL));
+		Assert.assertTrue(posR.isGeq(posL));
+	}
+
+	@Test
+	public void testEq() {
+		GenomePosition posL = new GenomePosition('+', 1, 100);
+		GenomePosition posR = new GenomePosition('+', 1, 101);
+
+		Assert.assertFalse(posL.isEq(posR));
+		Assert.assertTrue(posL.isEq(posL));
+		Assert.assertFalse(posR.isEq(posL));
+	}
 }

@@ -1,12 +1,10 @@
 package jannovar.util;
 
-import jannovar.exception.AnnotationException;
-
 import java.util.HashMap;
 
 /**
  * This singleton class helps to translate DNA sequences.
- * 
+ *
  * @author Peter N Robinson, Marten Jäger
  * @version 0.05 (Dec. 12, 2012)
  */
@@ -32,7 +30,7 @@ public class Translator {
 
 	/**
 	 * Factory method to get reference to Translator.
-	 * 
+	 *
 	 * @return {@link Translator} singleton
 	 */
 	static public Translator getTranslator() {
@@ -48,13 +46,21 @@ public class Translator {
 	 * Currently, there is no need to translate more than a single codon. However, some portions of the code are trying
 	 * to translate DNA that is not a multiple of 3 nt long (from indel code). Therefore, we will translate as much as
 	 * possible here. This may need refactoring in the future. (TODO).
-	 * 
+	 *
 	 * @param dnaseq
 	 *            A DNA sequence that is to be translated
 	 * @return corresonding aminoacid sequence
-	 * @throws jannovar.exception.AnnotationException
 	 */
-	public String translateDNA(String dnaseq) throws AnnotationException {
+	public String translateDNA(String dnaseq) {
+		return translateDNA(dnaseq, this.codon1);
+	}
+
+	// same as above but returning 3-letter AA codes
+	public String translateDNA3(String dnaseq) {
+		return translateDNA(dnaseq, this.codon3);
+	}
+
+	private String translateDNA(String dnaseq, HashMap<String, String> codonTable) {
 		StringBuilder aminoAcidSeq = new StringBuilder();
 		int len = dnaseq.length();
 		if (!(len % 3 == 0)) {
@@ -66,13 +72,13 @@ public class Translator {
 		}
 		for (int i = 0; i < len; i += 3) {
 			String nt3 = dnaseq.substring(i, i + 3);
-			String aa = this.codon1.get(nt3);
+			String aa = codonTable.get(nt3);
 			if (aa == null) {
 				if (nt3.contains("N")) {
 					aa = "X";
 				} else {
 					/*
-					  String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"", 
+					  String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"",
 								   nt3, dnaseq);
 								   throw new AnnotationException(err);
 					*/

@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.common.ChromosomeMap;
+import jannovar.exception.InvalidCoordinateException;
 
 /**
  * Representation of a position on a genome (chromosome, position).
@@ -18,7 +19,7 @@ public class GenomePosition {
 	private final int pos;
 
 	/** construct genome position with one-based coordinate system */
-	GenomePosition(char strand, int chr, int pos) {
+	public GenomePosition(char strand, int chr, int pos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.strand = strand;
 		this.chr = chr;
@@ -26,7 +27,7 @@ public class GenomePosition {
 	}
 
 	/** construct genome position with selected coordinate system */
-	GenomePosition(char strand, int chr, int pos, PositionType positionType) {
+	public GenomePosition(char strand, int chr, int pos, PositionType positionType) {
 		this.positionType = positionType;
 		this.strand = strand;
 		this.chr = chr;
@@ -34,7 +35,7 @@ public class GenomePosition {
 	}
 
 	/** construct genome position from other with selected coordinate system */
-	GenomePosition(GenomePosition other, PositionType positionType) {
+	public GenomePosition(GenomePosition other, PositionType positionType) {
 		this.positionType = positionType;
 		this.strand = other.strand;
 		this.chr = other.chr;
@@ -48,7 +49,7 @@ public class GenomePosition {
 	}
 
 	/** construct genome position from other with the selected strand */
-	GenomePosition(GenomePosition other, char strand) {
+	public GenomePosition(GenomePosition other, char strand) {
 		this.positionType = other.positionType;
 		this.strand = strand;
 		this.chr = other.chr;
@@ -64,16 +65,14 @@ public class GenomePosition {
 	}
 
 	/** convert into GenomePosition of the given strand */
-	GenomePosition withStrand(char strand) {
+	public GenomePosition withStrand(char strand) {
 		return new GenomePosition(this, strand);
 	}
 
 	/** convert into GenomePosition of the given position type */
-	GenomePosition withPositionType(PositionType positionType) {
+	public GenomePosition withPositionType(PositionType positionType) {
 		return new GenomePosition(this, positionType);
 	}
-
-	// TODO(holtgrem): is* functions are untested at the moment
 
 	/** @return <tt>true</tt> if this position is left of the other (on this strand). */
 	public boolean isLt(GenomePosition other) {
@@ -133,6 +132,25 @@ public class GenomePosition {
 	 */
 	public char getStrand() {
 		return strand;
+	}
+
+	/**
+	 * @param pos
+	 *            other position to compute distance to
+	 * @return the result of <code>(this.pos - pos.pos)</code> (<code>pos</code> is adjusted to the coordinate system
+	 *         and strand of <code>this</code>)
+	 * @throws InvalidCoordinateException
+	 *             if <code>this</code> and <code>pos</code> are on different chromosomes
+	 */
+	// TODO(holtgrem): test this!
+	public int differenceTo(GenomePosition pos) {
+		if (chr != pos.chr)
+			throw new InvalidCoordinateException("Coordinates are on different chromosomes " + this + " vs. " + pos);
+		if (pos.strand != strand)
+			pos = pos.withStrand(strand);
+		if (pos.positionType != positionType)
+			pos = pos.withPositionType(positionType);
+		return (this.pos - pos.pos);
 	}
 
 	/**

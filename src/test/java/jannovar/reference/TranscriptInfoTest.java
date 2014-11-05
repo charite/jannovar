@@ -78,11 +78,11 @@ public class TranscriptInfoTest {
 		Assert.assertEquals(info.exonRegions[0].getStrand(), this.transcriptReverse.getStrand());
 		Assert.assertEquals(info.exonRegions[0].getChr(), this.transcriptReverse.getChromosome());
 		Assert.assertEquals(info.exonRegions[0].getBeginPos(), 248355943);
-		Assert.assertEquals(info.exonRegions[0].getEndPos(), 248356028);
+		Assert.assertEquals(info.exonRegions[0].getEndPos(), 248356027);
 		Assert.assertEquals(info.exonRegions[1].getStrand(), this.transcriptReverse.getStrand());
 		Assert.assertEquals(info.exonRegions[1].getChr(), this.transcriptReverse.getChromosome());
 		Assert.assertEquals(info.exonRegions[1].getBeginPos(), 248356161);
-		Assert.assertEquals(info.exonRegions[1].getEndPos(), 248356974);
+		Assert.assertEquals(info.exonRegions[1].getEndPos(), 248356973);
 
 		Assert.assertEquals(info.sequence, this.transcriptReverse.getSequence());
 	}

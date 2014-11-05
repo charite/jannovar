@@ -26,7 +26,11 @@ public class TranscriptInfo {
 	/** Genomic interval with transcript begin/end. */
 	public final GenomeInterval txRegion;
 
-	/** Genomic interval with CDS begin/end. */
+	/**
+	 * Genomic interval with CDS begin/end.
+	 *
+	 * @note Note that in Jannovar, the CDS region includes the start and stop codon.
+	 */
 	public final GenomeInterval cdsRegion;
 
 	// TODO(holtgrem): use some immutable container here as well
@@ -45,6 +49,10 @@ public class TranscriptInfo {
 	/** Class version (for serialization). */
 	public static final long serialVersionUID = 1L;
 
+	/** The underlying TranscriptModel */
+	// TODO(holtgrem): remove, all in favor of TranscriptInfo?
+	public final TranscriptModel transcriptModel;
+
 	/**
 	 * Initialize the TranscriptInfo object with the TranscriptModel data.
 	 *
@@ -52,6 +60,7 @@ public class TranscriptInfo {
 	 *            transcript data source
 	 */
 	public TranscriptInfo(TranscriptModel tm) {
+		transcriptModel = tm;
 		accession = tm.getAccessionNumber();
 		geneSymbol = tm.getGeneSymbol();
 		sequence = tm.getSequence();

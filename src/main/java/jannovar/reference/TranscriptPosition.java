@@ -1,5 +1,7 @@
 package jannovar.reference;
 
+// TODO(holtgrem): Introduce CDSPosition for explicitely expressing this third coordinate system?
+
 /**
  * Position on a transcript.
  *
@@ -42,6 +44,17 @@ public class TranscriptPosition {
 	/** create a copy with the given position type. */
 	public TranscriptPosition withPositionType(PositionType positionType) {
 		return new TranscriptPosition(this, positionType);
+	}
+
+	/**
+	 * Return shifted TranscriptPosition.
+	 *
+	 * @param delta
+	 *            the value to add to the position
+	 * @return the position shifted by <tt>delta</tt>
+	 */
+	public TranscriptPosition shifted(int delta) {
+		return new TranscriptPosition(transcript, pos + delta, positionType);
 	}
 
 	/**

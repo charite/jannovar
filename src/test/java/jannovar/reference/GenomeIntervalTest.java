@@ -114,4 +114,41 @@ public class GenomeIntervalTest {
 		Assert.assertEquals(revInterval2.getPositionType(), PositionType.ONE_BASED);
 		Assert.assertEquals(revInterval2.length(), 101);
 	}
+
+	@Test
+	public void testIsLeftOf() {
+		GenomeInterval interval = new GenomeInterval('+', 1, 1000, 1200);
+		Assert.assertTrue(interval.isRightOf(new GenomePosition('+', 1, 999)));
+		Assert.assertFalse(interval.isRightOf(new GenomePosition('+', 1, 1000)));
+	}
+
+	@Test
+	public void testIsRightOf() {
+		GenomeInterval interval = new GenomeInterval('+', 1, 1000, 1200);
+		Assert.assertFalse(interval.isLeftOf(new GenomePosition('+', 1, 1200)));
+		Assert.assertTrue(interval.isLeftOf(new GenomePosition('+', 1, 1201)));
+	}
+
+	@Test
+	public void testContainsSameChrYes() {
+		GenomeInterval interval = new GenomeInterval('+', 1, 1000, 1200);
+		Assert.assertTrue(interval.contains(new GenomePosition('+', 1, 1000)));
+		Assert.assertTrue(interval.contains(new GenomePosition('+', 1, 1200)));
+	}
+
+	@Test
+	public void testContainsSameChrNo() {
+		GenomeInterval interval = new GenomeInterval('+', 1, 1000, 1200);
+		Assert.assertFalse(interval.contains(new GenomePosition('+', 1, 999)));
+		Assert.assertFalse(interval.contains(new GenomePosition('+', 1, 1201)));
+	}
+
+	@Test
+	public void testContainsDifferentChr() {
+		GenomeInterval interval = new GenomeInterval('+', 1, 1000, 1200);
+		Assert.assertFalse(interval.contains(new GenomePosition('+', 2, 1100)));
+	}
+
 }
+
+

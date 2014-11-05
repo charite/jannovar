@@ -59,6 +59,14 @@ public class GenomeChange {
 		return alt;
 	}
 
+	/**
+	 * @return human-readable {@link String} describing the genome change
+	 */
+	@Override
+	public String toString() {
+		return pos.toString() + ":" + ref + ">" + alt;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
