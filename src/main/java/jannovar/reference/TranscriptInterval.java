@@ -100,7 +100,7 @@ public class TranscriptInterval {
 	@Override
 	public String toString() {
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:%d-%d", this.transcript.getAccessionNumber(), beginPos, endPos);
+		return String.format("%s:n.%d-%d", this.transcript.getAccessionNumber(), beginPos, endPos);
 	}
 
 	/*

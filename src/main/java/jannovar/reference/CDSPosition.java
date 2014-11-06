@@ -86,7 +86,7 @@ public class CDSPosition {
 	@Override
 	public String toString() {
 		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:%d", this.transcript.getAccessionNumber(), pos);
+		return String.format("%s:c.%d", this.transcript.getAccessionNumber(), pos);
 	}
 
 	/*
