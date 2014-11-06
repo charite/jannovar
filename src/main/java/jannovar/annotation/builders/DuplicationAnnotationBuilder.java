@@ -3,6 +3,9 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
+import jannovar.exception.InvalidGenomeChange;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 import jannovar.util.Translator;
 
@@ -21,6 +24,10 @@ import jannovar.util.Translator;
  * @author Peter N Robinson, Marten Jäger
  */
 public class DuplicationAnnotationBuilder {
+	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+		throw new InvalidGenomeChange("Write me!");
+	}
+
 	/**
 	 * Annotates an insertion variant that is an duplication. The methods of this class are called from
 	 * {@link jannovar.annotation.builders.InsertionAnnotationBuilder InsertionAnnotation} if that class determines that

@@ -5,7 +5,7 @@ package jannovar.annotation.builders;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DuplicationChecker {
+class DuplicationTester {
 
 	/**
 	 * * @param ref reference string for insertion

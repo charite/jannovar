@@ -1,5 +1,8 @@
-package jannovar.annotation;
+package jannovar.annotation.builders;
 
+import jannovar.annotation.AnnotationList;
+import jannovar.annotation.SynonymousAnnotationTest;
+import jannovar.annotation.VariantAnnotator;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;

@@ -2,6 +2,9 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
+import jannovar.exception.InvalidGenomeChange;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 
 /**
@@ -28,6 +31,12 @@ import jannovar.reference.TranscriptModel;
  */
 
 public class UTRAnnotationBuilder {
+
+	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+		throw new InvalidGenomeChange("Implement me!");
+	}
+
+
 	/**
 	 * Return an annotation for a UTR3 mutation for a gene.
 	 *

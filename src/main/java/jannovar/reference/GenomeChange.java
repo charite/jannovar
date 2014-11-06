@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.annotation.VariantDataCorrector;
+import jannovar.util.DNAUtils;
 
 // TODO(holtgrew): enforce immutability of pos
 /**
@@ -39,6 +40,58 @@ public class GenomeChange {
 	}
 
 	/**
+	 * Construct object given the position, reference, alternative nucleic acid string, and strand.
+	 *
+	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
+	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
+	 */
+	public GenomeChange(GenomePosition pos, String ref, String alt, char strand) {
+		// TODO(holtgrem): test this function
+		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
+		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
+		if (corr.ref.equals("-"))
+			corr.ref = "";
+		if (corr.alt.equals("-"))
+			corr.alt = "";
+
+		int shift = ref.length() + (pos.getPositionType() == PositionType.ONE_BASED ? -1 : 0);
+
+		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, pos.getPositionType()).
+				shifted(shift).withStrand(strand);
+		if (strand == '+') {
+			this.ref = corr.ref;
+			this.alt = corr.alt;
+		} else {
+			this.ref = DNAUtils.reverseComplement(corr.ref);
+			this.alt = DNAUtils.reverseComplement(corr.alt);
+		}
+	}
+
+	/**
+	 * Construct object and enforce strand.
+	 */
+	public GenomeChange(GenomeChange other, char strand) {
+		// TODO(holtgrem): test this function
+		VariantDataCorrector corr = new VariantDataCorrector(other.ref, other.alt, other.pos.getPos());
+		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
+		if (corr.ref.equals("-"))
+			corr.ref = "";
+		if (corr.alt.equals("-"))
+			corr.alt = "";
+
+		this.pos = new GenomePosition(other.pos.getStrand(), other.pos.getChr(), corr.position,
+				other.pos.getPositionType())
+				.withStrand(strand);
+		if (strand == '+') {
+			this.ref = corr.ref;
+			this.alt = corr.alt;
+		} else {
+			this.ref = DNAUtils.reverseComplement(corr.ref);
+			this.alt = DNAUtils.reverseComplement(corr.alt);
+		}
+	}
+
+	/**
 	 * @return the pos
 	 */
 	public GenomePosition getPos() {
@@ -57,6 +110,14 @@ public class GenomeChange {
 	 */
 	public String getAlt() {
 		return alt;
+	}
+
+	/**
+	 * @return the GenomeChange on the given strand
+	 */
+	public GenomeChange withStrand(char strand) {
+		// TODO(holtgrem): test this function
+		return new GenomeChange(this, strand);
 	}
 
 	/**

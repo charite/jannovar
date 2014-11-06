@@ -154,6 +154,9 @@ public class GenomePosition {
 	/**
 	 * Return shifted GenomePosition.
 	 *
+	 * The position is shifted towards the 3' end of current strand if <code>delta &gt; 0</code> and towards the 5' end
+	 * otherwise.
+	 *
 	 * @param delta
 	 *            the value to add to the position
 	 * @return the position shifted by <tt>delta</tt>
@@ -227,6 +230,8 @@ public class GenomePosition {
 		if (getClass() != obj.getClass())
 			return false;
 		GenomePosition other = (GenomePosition) obj;
+		if (strand != other.strand)
+			return false;
 		if (chr != other.chr)
 			return false;
 		if (pos != other.pos)

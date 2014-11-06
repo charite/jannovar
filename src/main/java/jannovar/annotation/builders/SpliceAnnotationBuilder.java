@@ -2,6 +2,9 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
+import jannovar.exception.InvalidGenomeChange;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 
 /**
@@ -16,6 +19,10 @@ import jannovar.reference.TranscriptModel;
  * @author Peter N Robinson, Marten Jäger
  */
 public class SpliceAnnotationBuilder {
+	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+		throw new InvalidGenomeChange("Implement me!");
+	}
+
 	/**
 	 * Number of nucleotides away from exon/intron boundary to be considered as potential splicing mutation.
 	 */

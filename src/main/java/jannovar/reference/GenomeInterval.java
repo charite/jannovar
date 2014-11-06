@@ -69,9 +69,14 @@ public class GenomeInterval {
 		}
 	}
 
-	/** convert into GenomePosition of the given strand */
+	/** convert into GenomeInterval of the given strand */
 	public GenomeInterval withStrand(char strand) {
 		return new GenomeInterval(this, strand);
+	}
+
+	/** convert into GenomeInterval with the given position type */
+	public GenomeInterval withPositionType(PositionType positionType) {
+		return new GenomeInterval(this, positionType);
 	}
 
 	/** return the genome begin position */
@@ -140,6 +145,27 @@ public class GenomeInterval {
 			return (pos.getPos() >= beginPos && pos.getPos() <= endPos);
 		else
 			return (pos.getPos() >= beginPos && pos.getPos() < endPos);
+	}
+
+	/**
+	 * @return a {@link GenomeInterval} that has <code>padding</code> more bases towards each side as padding
+	 */
+	public GenomeInterval withMorePadding(int padding) {
+		return new GenomeInterval(strand, chr, beginPos - padding, endPos + padding, positionType);
+	}
+
+	/**
+	 * @param other
+	 *            other {@link GenomeInterval} to check with overlap for
+	 * @return whether <code>other</code> overlaps with <code>this</code>
+	 */
+	public boolean overlapsWith(GenomeInterval other) {
+		// TODO(holtgrem): add test for this
+		if (chr != other.chr)
+			return false;
+		GenomeInterval thisZero = withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval otherZero = other.withStrand(strand).withPositionType(PositionType.ZERO_BASED);
+		return (otherZero.beginPos < thisZero.endPos && this.beginPos < other.endPos);
 	}
 
 	/**

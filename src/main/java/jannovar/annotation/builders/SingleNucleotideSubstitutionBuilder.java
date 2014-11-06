@@ -42,10 +42,10 @@ import jannovar.util.Translator;
 public class SingleNucleotideSubstitutionBuilder {
 
 	/**
-	 * Returns a {@link Annotation} for the {@link GenomeChange} in the given {@link TranscriptInfo}.
+	 * Returns a {@link Annotation} for the SNV {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
-	 * This function can only be used for {@link GenomeChange}s that fall into the CDS of the {@link TranscriptInfo}.
-	 * Use the {@link UTRAnnotationBuilder} for variants in the non-CDS/UTR region of the transcript.
+	 * This function can only be used for SNV {@link GenomeChange}s that fall into the CDS of the {@link TranscriptInfo}
+	 * . Use the {@link UTRAnnotationBuilder} for variants in the non-CDS/UTR region of the transcript.
 	 *
 	 * @param transcript
 	 *            {@link TranscriptInfo} for the transcript to compute the affection for
@@ -63,6 +63,9 @@ public class SingleNucleotideSubstitutionBuilder {
 		// guard against invalid genome change
 		if (change.getRef().length() != 1 || change.getAlt().length() != 1)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
+
+		// project the strand of change to the same strand as transcript
+		change = change.withStrand(transcript.getStrand());
 
 		// ensure that the position falls into the CDS region
 		if (!transcript.cdsRegion.contains(change.getPos()))
@@ -98,7 +101,8 @@ public class SingleNucleotideSubstitutionBuilder {
 	}
 
 	/**
-	 * Build SNV annotation from <code>transcript</code>, <code>change</code> and the position on the transcript.
+	 * Build SNV annotation from <code>transcript</code>, <code>change</code> and the position on the transcript and the
+	 * CDS.
 	 *
 	 * The position arguments have already been checked for being valid and no exception is thrown. The only thing that
 	 * can go wrong are inconsistencies between the transcript sequence and the variant from the VCF file (in which case

@@ -1,9 +1,18 @@
 package jannovar.annotation.builders;
 
+import static jannovar.reference.TranscriptProjectionDecorator.INVALID_EXON_ID;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
+import jannovar.exception.InvalidGenomeChange;
+import jannovar.exception.ProjectionException;
+import jannovar.reference.CDSPosition;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptPosition;
+import jannovar.reference.TranscriptProjectionDecorator;
+import jannovar.reference.TranscriptSpliceSiteDecorator;
 import jannovar.util.Translator;
 
 /**
@@ -14,6 +23,130 @@ import jannovar.util.Translator;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class InsertionAnnotationBuilder {
+
+	/**
+	 * Returns a {@link Annotation} for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
+	 *
+	 * This function can only be used for insertion {@link GenomeChange}s that fall into the CDS of the
+	 * {@link TranscriptInfo}. Use the {@link UTRAnnotationBuilder} for variants in the non-CDS/UTR region of the
+	 * transcript. However, this function might forward to the {@link UTRAnnotationBuilder} or
+	 * {@link SpliceAnnotationBuilder} if the mutation is shifted into the UTR or splice site.
+	 *
+	 * <h2>Duplications</h2>
+	 *
+	 * Insertions can also introduce duplications. This function checks for the insertion described in
+	 * <code>change</code> to be a duplication and forwards to {@link DuplicationAnnotationBuilder} in this case.
+	 *
+	 * <h2>Shifting of Insertions</h2>
+	 *
+	 * In the case of ambiguities, the HGVS specification requires the variant to be shifted towards the 3' end of the
+	 * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site.
+	 * The function detects this and forwards to the {@link UTRAnnotationBuilder}.
+	 *
+	 * @param transcript
+	 *            {@link TranscriptInfo} for the transcript to compute the affection for
+	 * @param change
+	 *            {@link GenomeChange} to compute the annotation for
+	 * @return annotation for the given change to the given transcript
+	 *
+	 * @throws InvalidGenomeChange
+	 *             if there are problems with the position in <code>change</code> (position out of CDS) or when
+	 *             <code>change</code> does not describe an insertion
+	 */
+	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+		// Guard against invalid genome change.
+		if (change.getRef().length() != 0 || change.getAlt().length() == 0)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe an insertion.");
+
+		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
+		change = change.withStrand(transcript.getStrand());
+
+		// Ensure that the position falls into the CDS region.
+		if (!transcript.cdsRegion.contains(change.getPos()))
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not fall into CDS region "
+					+ transcript.cdsRegion);
+
+		// Project genome position to transcript and CDS position and handle inconsistent positions.
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		TranscriptPosition txPos = null;
+		CDSPosition cdsPos = null;
+		try {
+			txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
+			cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
+		} catch (ProjectionException e) {
+			throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
+		}
+
+		// Check whether the insertion describes a duplication and forward to the DuplicationAnnotationBuilder.
+		if (DuplicationTester.isDuplication(transcript.sequence, change.getAlt(), txPos.getPos()))
+			return DuplicationAnnotationBuilder.buildAnnotation(transcript, change);
+
+		// Shift the variant towards the 3' end (right) of the transcript in the case of ambiguities.
+		GenomeChange origChange = change; // for detecting update
+		change = GenomeChangeNormalizer.normalizeInsertion(transcript, change, txPos);
+		if (!change.getPos().equals(origChange.getPos())) { // update change if necessary
+			// Handle the case where we ended up around an exon border and forward to SpliceAnnotationBuilder.
+			TranscriptSpliceSiteDecorator splicingDetector = new TranscriptSpliceSiteDecorator(transcript);
+			if (splicingDetector.doesChangeAffectSpliceSite(change))
+				return SpliceAnnotationBuilder.buildAnnotation(transcript, change);
+			// Handle the case where we ended up in the 3' UTR and forward to UTRAnnotationBuilder.
+			if (!transcript.cdsRegion.contains(change.getPos()))
+				return UTRAnnotationBuilder.buildAnnotation(transcript, change);
+			// Update the transcription and CDS position previously computed to the situation after the change.
+			try {
+				txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
+				cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
+			} catch (ProjectionException e) {
+				throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
+			}
+		}
+
+		// Obtain exon ID.
+		int exonID = INVALID_EXON_ID;
+		try {
+			exonID = projector.locateExon(change.getPos());
+		} catch (ProjectionException e) {
+			throw new InvalidGenomeChange("Problem translating GenomeChange to exon: " + e.getMessage());
+		}
+		if (exonID == INVALID_EXON_ID)
+			throw new InvalidGenomeChange("GenomeChange " + change.getPos() + " does not point to exon.");
+		// Translate exon ID to reference order and make 1-based for display.
+		exonID = projector.exonIDInReferenceOrder(exonID) + 1;
+
+		// If we reach here then change describes an insertion and the position points into the CDS of the given
+		// transcript. We can now create an Annotation for this GenomeChange without catching exceptions.
+		return buildAnnotation(transcript, change, txPos, cdsPos, exonID);
+	}
+
+	/**
+	 * Build insert annotation from <code>transcript</code>, <code>change</code>, and the position on the transcript and
+	 * CDS..
+	 *
+	 *
+	 * After guarding against these cases, building the insertion annotations is forwarded to
+	 * {@link InsertionAnnotationBuilderImpl}.
+	 *
+	 * @param transcript
+	 *            information of the transcript to generate annotation for
+	 * @param change
+	 *            genome change, consistently describes a SNV in a CDS and exon region
+	 * @param txPos
+	 *            transcript position of the genome change
+	 * @param cdsPos
+	 *            CDS position of the genome change
+	 * @param exonNumber
+	 *            1-based exon number for display
+	 * @return the {@link Annotation} describing the {@link GenomeChange} in <code>change</code>
+	 */
+	private static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change, TranscriptPosition txPos,
+			CDSPosition cdsPos, int exonNumber) {
+
+		return null;
+	}
+
+	//
+	// old code below
+	//
 
 	/**
 	 * Annotates an insertion variant. The fact that a variant is an insertion variant has been identified by the fact
@@ -46,6 +179,7 @@ public class InsertionAnnotationBuilder {
 	 * @param exonNumber
 	 *            Number (one-based) of affected exon.
 	 * @return an {@link jannovar.annotation.Annotation Annotation} object representing the current variant
+	 *
 	 * @throws jannovar.exception.AnnotationException
 	 */
 
