@@ -7,13 +7,12 @@ import jannovar.reference.TranscriptModel;
 import jannovar.util.Translator;
 
 /**
- * This class is intended to provide a static method to generate annotations for insertion mutations. This method is put
- * in its own class only for convenience and to at least have a name that is easy to find.
+ * This class provides static methods to generate annotations for insertions in exons.
  *
- * @version 0.09 (17 April, 2014)
- * @author Peter N Robinson, M Jäger
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jäger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-
 public class InsertionAnnotationBuilder {
 
 	/**
@@ -141,6 +140,7 @@ public class InsertionAnnotationBuilder {
 			}
 
 		}
+		// in the case of ambiguities, shift towards 3' end of reference coordinate system
 		if (tm.isPlusStrand()) {
 			int idx = 0;
 			// while (var.length() > idx + 1 && trmdl.getCdnaSequence().charAt(refvarstart) == var.charAt(idx)) {

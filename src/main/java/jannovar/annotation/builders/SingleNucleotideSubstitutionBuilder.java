@@ -14,19 +14,25 @@ import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
 import jannovar.util.Translator;
 
-// TODO(holtgrem): We are basing the annotation on the var base from the VCF file and not the transcript. Ask Marten about this. See post-transcription update below.
-
 /**
  * This class provides static methods to generate annotations for SNVs in exons.
+ *
+ * <h1>Caveats with Mismatches Between mRNA and Reference Sequence</h1>
  *
  * Note that there are numerous variants in positions that show a discrepancy between the genomic sequence of hg19 and
  * the UCSC knownGene mRNA sequences. This is a difficult issue because it is uncertain which sequence is correct.
  * Annovar uses its own version of the knownGeneMrna.txt file that is made to conform exactly with the genome sequence.
  *
- * However, by inspection, the mRNA sequence actually appears to be the correct one. Therefore, our strategy is to base
- * annotations upon the mRNA sequence of the original USCS knownGeneMrna.txt.gz file but additionally to report that
- * there is a discrepancy between the genomic sequence (which is the sequence that is typically used for variant calling
- * and thus informs the variant calls in the VCF file) and the UCSC mRNA sequence.
+ * However, by inspection, the mRNA sequence actually appears to be the correct one. Therefore, our strategy is as
+ * follows:
+ *
+ * <ul>
+ * <li>for the changed bases (i.e., the REF bases from the VCF file), we use these bases instead of the mRNA bases,</li>
+ * <li>for all other bases (including the neighboring ones, also those used for translating into amino acids), we use
+ * the mRNA bases, and</li>
+ * <li>a warning is added to the annotation whenever a discrepancy between the VCF REF value and the mRNA bases is
+ * detected.</li>
+ * </ul>
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Marten Jäger <marten.jaeger@charite.de>
@@ -223,7 +229,8 @@ public class SingleNucleotideSubstitutionBuilder {
 	 * @return An annotation corresponding to the SNV.
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public static Annotation getAnnotation(TranscriptModel tm, int frameShift, int frameEndShift, String wtnt3, String ref, String var, int refVarStart, int exonNumber) throws AnnotationException {
+	public static Annotation getAnnotation(TranscriptModel tm, int frameShift, int frameEndShift, String wtnt3,
+			String ref, String var, int refVarStart, int exonNumber) throws AnnotationException {
 		if (tm.isPlusStrand())
 			return getAnnotationPlusStrand(tm, frameShift, wtnt3, ref, var, refVarStart, exonNumber);
 		else
@@ -357,7 +364,8 @@ public class SingleNucleotideSubstitutionBuilder {
 	 * @return An annotation corresponding to the deletion.
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public static Annotation getAnnotationMinusStrand(TranscriptModel kgl, int frame_s, String wtnt3, String ref, String var, int refvarstart, int exonNumber) throws AnnotationException {
+	public static Annotation getAnnotationMinusStrand(TranscriptModel kgl, int frame_s, String wtnt3, String ref,
+			String var, int refvarstart, int exonNumber) throws AnnotationException {
 		Translator translator = Translator.getTranslator(); /* Singleton */
 
 		String canno = null; // cDNA annotation.
@@ -366,12 +374,16 @@ public class SingleNucleotideSubstitutionBuilder {
 
 		int refcdsstart = kgl.getRefCDSStart(); /* position of start codon in transcript. */
 		int cdspos = refvarstart - refcdsstart + 1; /* position of mutation in CDS, numbered from start codon */
-		/*System.out.println(String.format("GetAnnMinus refcdsstart=%d,refvarstart=%d,diff=%d",
-		  refcdsstart,refvarstart,refvarstart-refcdsstart));*/
+		/*
+		 * System.out.println(String.format("GetAnnMinus refcdsstart=%d,refvarstart=%d,diff=%d",
+		 * refcdsstart,refvarstart,refvarstart-refcdsstart));
+		 */
 		if (ref.length() != 1) {
-			throw new AnnotationException(String.format("Error: Malformed reference sequence (%s) for SNV annotation of %s", ref, kgl.getGeneSymbol()));
+			throw new AnnotationException(String.format(
+					"Error: Malformed reference sequence (%s) for SNV annotation of %s", ref, kgl.getGeneSymbol()));
 		} else if (var.length() != 1) {
-			throw new AnnotationException(String.format("Error: Malformed variant sequence (%s) for SNV annotation of %s", var, kgl.getGeneSymbol()));
+			throw new AnnotationException(String.format(
+					"Error: Malformed variant sequence (%s) for SNV annotation of %s", var, kgl.getGeneSymbol()));
 		}
 		char refc = ref.charAt(0);
 		char varc = var.charAt(0);
@@ -382,7 +394,8 @@ public class SingleNucleotideSubstitutionBuilder {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(1), varc);
 			if (refc != wtnt3.charAt(1)) {
 				char strand = kgl.getStrand();
-				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
+				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1),
+						strand);
 				canno = String.format("%s [%s]", canno, wrng);
 			}
 		} else if (frame_s == 2) {
@@ -392,7 +405,8 @@ public class SingleNucleotideSubstitutionBuilder {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(2), varc);
 			if (refc != wtnt3.charAt(2)) {
 				char strand = kgl.getStrand();
-				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
+				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1),
+						strand);
 				canno = String.format("%s [%s]", canno, wrng);
 			}
 		} else { /* i.e., frame_s == 0 */
@@ -402,7 +416,8 @@ public class SingleNucleotideSubstitutionBuilder {
 			canno = String.format("c.%d%c>%c", (refvarstart - refcdsstart + 1), wtnt3.charAt(0), varc);
 			if (refc != wtnt3.charAt(0)) {
 				char strand = kgl.getStrand();
-				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1), strand);
+				String wrng = String.format("WARNING:_mRNA/genome_discrepancy:_%s/%s_strand=%c", ref, wtnt3.charAt(1),
+						strand);
 				canno = String.format("%s [%s]", canno, wrng);
 			}
 		}
