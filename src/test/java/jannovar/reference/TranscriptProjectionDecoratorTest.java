@@ -215,17 +215,17 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
 		// first base in CDS (on second exon)
-		Assert.assertEquals(new TranscriptPosition(transForward, 1, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transForward, 1, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 6640670, PositionType.ONE_BASED)));
 		// last base of second exon (first exon in CDS)
-		Assert.assertEquals(new TranscriptPosition(transForward, 690, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transForward, 690, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 6641359, PositionType.ONE_BASED)));
 
 		// first base of last exon
-		Assert.assertEquals(new TranscriptPosition(transForward, 1771, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transForward, 1771, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 6648976, PositionType.ONE_BASED)));
 		// last base of CDS
-		Assert.assertEquals(new TranscriptPosition(transForward, 2067, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transForward, 2067, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 6649272, PositionType.ONE_BASED)));
 	}
 
@@ -236,17 +236,17 @@ public class TranscriptProjectionDecoratorTest {
 		// 23688461\t23694498
 
 		// first base of CDS (second exon)
-		Assert.assertEquals(new TranscriptPosition(transReverse, 1, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transReverse, 1, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 23694498, PositionType.ONE_BASED)));
 		// last base of second exon (first exon in CDS)
-		Assert.assertEquals(new TranscriptPosition(transReverse, 33, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transReverse, 33, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 23694466, PositionType.ONE_BASED)));
 
 		// first base of last exon
-		Assert.assertEquals(new TranscriptPosition(transReverse, 161, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transReverse, 161, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 23689714, PositionType.ONE_BASED)));
 		// last base of last exon
-		Assert.assertEquals(new TranscriptPosition(transReverse, 1413, PositionType.ONE_BASED),
+		Assert.assertEquals(new CDSPosition(transReverse, 1413, PositionType.ONE_BASED),
 				projector.genomeToCDSPos(new GenomePosition('+', 1, 23688462, PositionType.ONE_BASED)));
 	}
 }

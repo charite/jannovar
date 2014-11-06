@@ -71,7 +71,7 @@ public class TranscriptProjectionDecorator {
 	 * @throws ProjectionException
 	 *             if the genome position was not valid
 	 */
-	public TranscriptPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
+	public CDSPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.cdsRegion.contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the CDS region " + transcript.cdsRegion);
 
@@ -81,7 +81,7 @@ public class TranscriptProjectionDecorator {
 		TranscriptPosition txPos = genomeToTranscriptPos(pos);
 		// now, compute offset of CDS start in transcript and shift txPos by this to obtain CDS position
 		TranscriptPosition cdsStartPos = genomeToTranscriptPos(transcript.cdsRegion.getGenomeBeginPos());
-		return txPos.shifted(-cdsStartPos.getPos() + delta);
+		return new CDSPosition(txPos.getTranscript(), txPos.getPos() - cdsStartPos.getPos() + delta);
 	}
 
 	/**

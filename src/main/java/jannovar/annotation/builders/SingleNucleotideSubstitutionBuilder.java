@@ -6,6 +6,7 @@ import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.InvalidGenomeChange;
 import jannovar.exception.ProjectionException;
+import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
@@ -71,7 +72,7 @@ public class SingleNucleotideSubstitutionBuilder {
 		// project genome position to transcript and CDS position and handle inconsistent positions
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		TranscriptPosition txPos = null;
-		TranscriptPosition cdsPos = null;
+		CDSPosition cdsPos = null;
 		try {
 			txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
 			cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
@@ -116,7 +117,7 @@ public class SingleNucleotideSubstitutionBuilder {
 	 * @return the {@link Annotation} describing the {@link GenomeChange} in <code>change</code>
 	 */
 	private static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change, TranscriptPosition txPos,
-			TranscriptPosition cdsPos, int exonNumber) {
+			CDSPosition cdsPos, int exonNumber) {
 		// Ensure that txPos and cdsPos are 0-based.
 		txPos = txPos.withPositionType(PositionType.ZERO_BASED);
 		cdsPos = cdsPos.withPositionType(PositionType.ZERO_BASED);
