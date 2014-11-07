@@ -13,6 +13,7 @@ import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
+import jannovar.reference.TranscriptSequenceDecorator;
 import jannovar.util.Translator;
 
 /**
@@ -135,14 +136,16 @@ public class SingleNucleotideSubstitutionBuilder {
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.getPos() % 3;
-		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
 		// Get the transcript codon. From this, we generate the WT and the variant codon. This is important in the case
 		// where the transcript differs from the reference. This inconsistency of the reference and the transcript is
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
 		// the transcript.
-		String transcriptCodon = transcript.sequence.substring(codonStart, codonStart + 3);
-		String wtCodon = updateCodonBase(transcriptCodon, frameShift, change.getRef().charAt(0));
-		String varCodon = updateCodonBase(transcriptCodon, frameShift, change.getAlt().charAt(0));
+		TranscriptSequenceDecorator seqDecorator = new TranscriptSequenceDecorator(transcript);
+		String transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
+		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift, change.getRef()
+				.charAt(0));
+		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift, change.getAlt()
+				.charAt(0));
 
 		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
 		// positions).
@@ -172,7 +175,7 @@ public class SingleNucleotideSubstitutionBuilder {
 	 *            variant amino acid
 	 * @return variant type described by single amino acid change
 	 */
-	protected static VariantType computeVariantType(String wtAA, String varAA) {
+	private static VariantType computeVariantType(String wtAA, String varAA) {
 		assert (wtAA.length() == 1 && varAA.length() == 1);
 		if (wtAA.equals(varAA))
 			return VariantType.SYNONYMOUS;
@@ -182,25 +185,6 @@ public class SingleNucleotideSubstitutionBuilder {
 			return VariantType.STOPGAIN;
 		else
 			return VariantType.MISSENSE;
-	}
-
-	/**
-	 * @param transcriptCodon
-	 *            the wild type codon nucleotide string from the codon
-	 * @param frameShift
-	 *            the frame within the codon
-	 * @param targetNC
-	 *            the target nucleotide
-	 * @return variant codon string
-	 */
-	protected static String updateCodonBase(String transcriptCodon, int frameShift, char targetNC) {
-		assert (0 <= frameShift && frameShift <= 2);
-		if (frameShift == 0)
-			return String.format("%c%c%c", targetNC, transcriptCodon.charAt(1), transcriptCodon.charAt(2));
-		else if (frameShift == 1)
-			return String.format("%c%c%c", transcriptCodon.charAt(0), targetNC, transcriptCodon.charAt(2));
-		else
-			return String.format("%c%c%c", transcriptCodon.charAt(0), transcriptCodon.charAt(1), targetNC);
 	}
 
 	//

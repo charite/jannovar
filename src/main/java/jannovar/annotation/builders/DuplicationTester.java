@@ -13,7 +13,7 @@ class DuplicationTester {
 	 * @param insertion
 	 *            the string to be inserted at <code>pos</code>
 	 * @param pos
-	 *            the position in <code>ref</code> that <code>insertion</code> is to be inserted
+	 *            the 0-based position in <code>ref</code> that <code>insertion</code> is to be inserted
 	 *
 	 * @return <code>true</code> if the described insertion is a duplication
 	 */
