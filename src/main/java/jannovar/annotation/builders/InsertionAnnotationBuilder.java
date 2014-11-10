@@ -197,10 +197,8 @@ public class InsertionAnnotationBuilder {
 				// The variant peptide contains a stop codon but does not start with it, is frameshift insertion. In
 				// this case we cannot really differentiate this from a non-frameshift insertion but we still call it
 				// so.
-				//
-				// We delete all AA after the stop codon but keep the AAs before in the amino acid annotation.
-				varAA = String.format("%sX", varAA.substring(0, idx + 1));
-				protAnno = String.format("p.X%ddelins%s", varAAPos + 1, t.toLong(varAA.charAt(varAAIdx)));
+				protAnno = String.format("p.*%d%sext*%d", varAAPos + 1, t.toLong(varAA.charAt(varAAIdx)),
+						(idx - varAAIdx)); // last is stop codon AA pos
 				varType = VariantType.FS_INSERTION;
 			} else {
 				// The variant AA does not contain a stop codon, is stop loss.
