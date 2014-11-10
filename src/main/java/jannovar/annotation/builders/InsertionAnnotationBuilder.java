@@ -25,8 +25,6 @@ import jannovar.util.Translator;
  */
 public class InsertionAnnotationBuilder {
 
-	// TODO(holtgrem): Can we end up in start codon? We forward to the
-
 	/**
 	 * Returns a {@link Annotation} for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
@@ -152,8 +150,6 @@ public class InsertionAnnotationBuilder {
 		else
 			return helper.buildFrameShiftAnnotation();
 	}
-
-	
 
 	//
 	// old code below
