@@ -50,6 +50,70 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
+	public void testForwardThreeBasesNoFrameShiftInsertion() throws InvalidGenomeChange {
+		// Tests insertion of three bases (smallest no-frameshift insertion).
+
+		// TODO(holtgrem): The WT stop codon is replaced by another one -- duplication.
+		// TODO(holtgrem): The WT start codon is replaced by another one -- duplication.
+
+		// The WT stop codon is replaced by another one.
+		GenomeChange change1agc = new GenomeChange(new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED), "",
+				"AGC");
+		Annotation annotation1agc = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1agc);
+		Assert.assertEquals("uc001anx.3:exon11:c.2066_2067insAGC:p.(=)", annotation1agc.getVariantAnnotation());
+		Assert.assertEquals(VariantType.SYNONYMOUS, annotation1agc.getVariantType());
+
+		// The WT stop codon is destroyed but there is a new one downstream
+		GenomeChange change1tgc = new GenomeChange(new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED), "",
+				"TGC");
+		Annotation annotation1tgc = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1tgc);
+		// TODO(holtgrem): Mutalyzer does not have the Met1
+		Assert.assertEquals("uc001anx.3:exon11:c.2066_2067insTGC:p.*689Tyrext*24",
+				annotation1tgc.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, annotation1tgc.getVariantType());
+
+		// Test case where the start codon is destroyed.
+		GenomeChange change2agc = new GenomeChange(new GenomePosition('+', 1, 6640670, PositionType.ZERO_BASED), "",
+				"AGC");
+		Annotation annotation2agc = InsertionAnnotationBuilder.buildAnnotation(infoForward, change2agc);
+		Assert.assertEquals("uc001anx.3:exon2:c.1_2insAGC:p.Met1?", annotation2agc.getVariantAnnotation());
+		Assert.assertEquals(VariantType.START_LOSS, annotation2agc.getVariantType());
+
+		// Test cases where the start codon is not subjected to an insertion.
+
+		// Directly insert stop codon.
+		GenomeChange change3taa = new GenomeChange(new GenomePosition('+', 1, 6640672, PositionType.ZERO_BASED), "",
+				"TAA");
+		Annotation annotation3taa = InsertionAnnotationBuilder.buildAnnotation(infoForward, change3taa);
+		Assert.assertEquals("uc001anx.3:exon2:c.3_4insTAA:p.Asp2*", annotation3taa.getVariantAnnotation());
+		Assert.assertEquals(VariantType.STOPGAIN, annotation3taa.getVariantType());
+
+		// Directly insert some base and then a stop codon.
+		GenomeChange change3tcctaa = new GenomeChange(new GenomePosition('+', 1, 6640672, PositionType.ZERO_BASED), "",
+				"TCCTAA");
+		Annotation annotation3tcctaa = InsertionAnnotationBuilder.buildAnnotation(infoForward, change3tcctaa);
+		Assert.assertEquals("uc001anx.3:exon2:c.3_4insTCCTAA:p.Asp2_Gly3delinsSer",
+				annotation3tcctaa.getVariantAnnotation());
+		Assert.assertEquals(VariantType.STOPGAIN, annotation3tcctaa.getVariantType());
+
+		// Insertion without a new stop codon that is no duplication.
+		GenomeChange change4tcctcctcc = new GenomeChange(new GenomePosition('+', 1, 6640672, PositionType.ZERO_BASED),
+				"", "TCCTCCTCC");
+		Annotation annotation4tcctcctcc = InsertionAnnotationBuilder.buildAnnotation(infoForward, change4tcctcctcc);
+		Assert.assertEquals("uc001anx.3:exon2:c.3_4insTCCTCCTCC:p.Asp2_Gly3insSerSerSer",
+				annotation4tcctcctcc.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_INSERTION, annotation4tcctcctcc.getVariantType());
+
+		// Insertion without a new stop codon that is a duplication.
+		GenomeChange change5gatggc = new GenomeChange(new GenomePosition('+', 1, 6640672, PositionType.ZERO_BASED), "",
+				"GATGGC");
+		Annotation annotation5gatggc = InsertionAnnotationBuilder.buildAnnotation(infoForward, change5gatggc);
+		Assert.assertEquals("uc001anx.3:exon2:c.5_6insTGGCGA:p.Asp2_Gly3dup",
+				annotation5gatggc.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation5gatggc.getVariantType());
+	}
+
+	@Test
 	public void testForwardOneBaseFrameShiftInsertion() throws InvalidGenomeChange {
 		// We check some one-nucleotide insertions in the first ten bases and compared them by hand to Mutalyzer
 		// results.
@@ -124,7 +188,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change7g = new GenomeChange(new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED), "", "G");
 		Annotation annotation7g = InsertionAnnotationBuilder.buildAnnotation(infoForward, change7g);
 		Assert.assertEquals("uc001anx.3:exon11:c.2065_2066insG:p.(=)", annotation7g.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_INSERTION, annotation7g.getVariantType());
+		Assert.assertEquals(VariantType.SYNONYMOUS, annotation7g.getVariantType());
 	}
 
 	@Test
@@ -273,7 +337,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation4c = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change4c);
 		// TODO(holtgrem): Mutalyzer does not have the Met1
 		Assert.assertEquals("uc001bgu.3:exon1:c.1411_1412insG:p.(=)", annotation4c.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_INSERTION, annotation4c.getVariantType());
+		Assert.assertEquals(VariantType.SYNONYMOUS, annotation4c.getVariantType());
 	}
 
 	@Test

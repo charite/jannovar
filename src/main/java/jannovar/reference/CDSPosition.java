@@ -65,6 +65,13 @@ public class CDSPosition {
 	}
 
 	/**
+	 * @return the frameshift of the given CDS position.
+	 */
+	public int getFrameshift() {
+		return pos % 3;
+	}
+
+	/**
 	 * @return the positionType
 	 */
 	public PositionType getPositionType() {

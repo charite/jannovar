@@ -8,8 +8,8 @@ package jannovar.annotation.builders;
 class DuplicationTester {
 
 	/**
-	 * * @param ref reference string for insertion
-	 *
+	 * @param ref
+	 *            reference string for insertion
 	 * @param insertion
 	 *            the string to be inserted at <code>pos</code>
 	 * @param pos

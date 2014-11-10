@@ -13,7 +13,6 @@ import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
-import jannovar.reference.TranscriptSequenceDecorator;
 import jannovar.reference.TranscriptSpliceSiteDecorator;
 import jannovar.util.Translator;
 
@@ -145,110 +144,16 @@ public class InsertionAnnotationBuilder {
 		txPos = txPos.withPositionType(PositionType.ZERO_BASED);
 		cdsPos = cdsPos.withPositionType(PositionType.ZERO_BASED);
 
+		// Use the AnnotationBuilderHelper for building the annotation.
+		InsertionAnnotationBuilderHelper helper = new InsertionAnnotationBuilderHelper(transcript, change, txPos,
+				cdsPos, exonNumber);
 		if (change.getAlt().length() % 3 == 0)
-			return buildNoFrameShiftAnnotation(transcript, change, txPos, cdsPos, exonNumber);
+			return helper.buildNoFrameShiftAnnotation();
 		else
-			return buildFrameShiftAnnotation(transcript, change, txPos, cdsPos, exonNumber);
+			return helper.buildFrameShiftAnnotation();
 	}
 
-	/**
-	 * Annotation building implementation, frame shift case.
-	 *
-	 * @see {@link InsertionAnnotationBuilder#buildAnnotation(TranscriptInfo, GenomeChange, TranscriptPosition,
-	 *      CDSPosition int)}
-	 */
-	private static Annotation buildFrameShiftAnnotation(TranscriptInfo transcript, GenomeChange change,
-			TranscriptPosition txPos, CDSPosition cdsPos, int exonNumber) {
-		TranscriptSequenceDecorator seqDecorator = new TranscriptSequenceDecorator(transcript);
-		// Get shortcut for Translator singleton instance.
-		Translator t = Translator.getTranslator();
-
-		// Build location and cDNA annotation strings.
-		String locAnno = String.format("%s:exon%d", transcript.accession, exonNumber);
-		String cDNAAnno = String.format("c.%d_%dins%s", cdsPos.getPos(), cdsPos.getPos() + 1, change.getAlt());
-
-		// Get wild type codons (the affected plus some upstream) and translate into amino acids.
-		String wtNT = seqDecorator.getCodonsStartingFrom(txPos, cdsPos);
-		String wtAA = Translator.getTranslator().translateDNA(wtNT);
-		// Get variant NT string and translate into amino acids.
-		String varNT = TranscriptSequenceDecorator.nucleotidesWithInsertion(wtNT, cdsPos.getPos() % 3, change.getAlt());
-		String varAA = Translator.getTranslator().translateDNA(varNT);
-		// Shift amino acid insertion to the right (3' end of transcript) as far as possible.
-		int varAAPos = cdsPos.getPos() / 3; // original change in AA as position in protein
-		int varAAIdx = 0; // original change in AA as index in varAA
-		while (varAAIdx + 1 < varAA.length() && varAA.charAt(varAAIdx) == wtAA.charAt(varAAIdx)) {
-			++varAAPos;
-			++varAAIdx;
-		}
-
-		// The code below builds the protein annotation string and the variant type.
-		String protAnno = null;
-		VariantType varType = null;
-		// Check whether there is a stop codon in the variant peptide.
-		int idx = varAA.indexOf("*");
-
-		if (wtAA.startsWith("*")) {
-			// The WT peptide starts with a stop codon. Can be frameshift insertion or stop loss.
-			if (idx == 0) {
-				// The variant peptide also starts with a stop codon, is frameshift insertion.
-				protAnno = "p.(=)";
-				varType = VariantType.FS_INSERTION;
-			} else if (idx > 0) {
-				// The variant peptide contains a stop codon but does not start with it, is frameshift insertion. In
-				// this case we cannot really differentiate this from a non-frameshift insertion but we still call it
-				// so.
-				protAnno = String.format("p.*%d%sext*%d", varAAPos + 1, t.toLong(varAA.charAt(varAAIdx)),
-						(idx - varAAIdx)); // last is stop codon AA pos
-				varType = VariantType.FS_INSERTION;
-			} else {
-				// The variant AA does not contain a stop codon, is stop loss.
-				protAnno = String.format("p.X%ddelins%s", varAAPos + 1, t.toLong(varAA.charAt(varAAIdx)));
-				varType = VariantType.STOPLOSS;
-			}
-		} else {
-			// The wild type peptide does not start with a stop codon.
-			if (cdsPos.getPos() / 3 == 0) {
-				// The mutation affects the start codon, is start loss.
-				// TODO(holtgrem): Mutalyzer says p.?, by HGVS we could say "p.0? -- probably no protein is produced"
-				protAnno = String.format("p.%s%d?", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1);
-				varType = VariantType.START_LOSS;
-			} else {
-				// The start codon is not affected.
-				if (idx == 0) {
-					// The insertion directly creates a stop codon, is stop gain.
-					protAnno = String.format("p.%s%d*", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1);
-					varType = VariantType.STOPGAIN;
-				} else if (idx > 0) {
-					// The insertion is a frameshift variant that leads to a transcript still having a stop codon,
-					// simple frameshift insertion.
-					protAnno = String.format("p.%s%d%sfs*%d", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1,
-							t.toLong(varAA.charAt(varAAIdx)), (idx + 1 - varAAIdx)); // last is stop codon AA pos
-					varType = VariantType.FS_INSERTION;
-				} else {
-					// The insertion is a frameshift variant that leads to the loss of the stop codon, is stop loss.
-					protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1,
-							t.toLong(varAA.charAt(varAAIdx)));
-					varType = VariantType.STOPLOSS;
-				}
-			}
-		}
-
-		// Glue together the annotation string and return the annotation.
-		String annotationString = String.format("%s:%s:%s", locAnno, cDNAAnno, protAnno);
-		return new Annotation(transcript.transcriptModel, annotationString, varType, cdsPos.getPos() + 1);
-	}
-
-	/**
-	 * Annotation building implementatino, no frame shift case.
-	 *
-	 * @see {@link InsertionAnnotationBuilder#buildAnnotation(TranscriptInfo, GenomeChange, TranscriptPosition,
-	 *      CDSPosition int)}
-	 */
-	private static Annotation buildNoFrameShiftAnnotation(TranscriptInfo transcript, GenomeChange change,
-			TranscriptPosition txPos, CDSPosition cdsPos, int exonNumber) {
-		assert (false);
-		return null;
-	}
+	
 
 	//
 	// old code below
