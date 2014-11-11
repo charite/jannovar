@@ -1,12 +1,26 @@
 package jannovar.annotation.builders;
 
+import static jannovar.reference.TranscriptProjectionDecorator.INVALID_EXON_ID;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
+import jannovar.exception.InvalidGenomeChange;
+import jannovar.exception.ProjectionException;
+import jannovar.reference.CDSPosition;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.PositionType;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptPosition;
+import jannovar.reference.TranscriptProjectionDecorator;
+import jannovar.reference.TranscriptSequenceOntologyDecorator;
 import jannovar.util.Translator;
 
 /**
+ * This class provides static methods to generate annotations for deletions in exons.
+ *
+ * <h2>Older Comment</h2>
+ *
  * This class provides static methods to generate annotations for deletion mutations. Updated on 27 December 2013 to
  * provide HGVS conformation annotations for frameshirt deletion mutations. Note that if we have the following VCF line:
  *
@@ -22,9 +36,108 @@ import jannovar.util.Translator;
  *
  * @version 0.17 (14 January, 2014)
  * @author Peter N Robinson
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 
 public class DeletionAnnotationBuilder {
+
+	/**
+	 * Returns a {@link Annotation} for the deletion {@link GenomeChange} in the given {@link TranscriptInfo}.
+	 *
+	 * <h2>Algorithm</h2>
+	 *
+	 * The algorithm implemented by this function roughly looks as follows:
+	 *
+	 * <ul>
+	 * <li>check that <code>change</code> describes a deletion and overlaps with <code>transcript</code>, otherwise
+	 * throw {@link InvalidGenomeChange}</li>
+	 * <li>check whether <code>change</code> overlaps with the start or stop codon and return a start/stop loss
+	 * annotation if necessary. Also, it could turn out that a start/stop codon remains and we can have a frameshift or
+	 * non-frameshift deletion</li>
+	 * <li>check whether the deletion falls into the 5' or 3' UTR and return annotation for this</li>
+	 * <li>check whether the deletion overlaps with a splice site and return annotation for this</li>
+	 * <li>check whether the deletion falls directly into an intronic region and return annotation for this</li>
+	 * <li>otherwise, the deletion has fallen into an exonic region and we return a frameshift/non-frameshift deletion.</li>
+	 * </ul>
+	 *
+	 * @param transcript
+	 *            {@link TranscriptInfo} for the transcript to compute the affection for
+	 * @param change
+	 *            {@link GenomeChange} to compute the annotation for, must describe a deletion in
+	 *            <code>transcript</code>
+	 * @return annotation for the given change to the given transcript
+	 *
+	 * @throws InvalidGenomeChange
+	 *             if there are problems with the position in <code>change</code> (position out of CDS) or when
+	 *             <code>change</code> does not describe an insertion
+	 */
+	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+		// Guard against invalid genome change.
+		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a deletion.");
+
+		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
+		change = change.withStrand(transcript.getStrand());
+
+		// Ensure that the change overlaps with the transcript region.
+		if (!transcript.txRegion.overlapsWith(change.getGenomeInterval()))
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not overlap with transcript region "
+					+ transcript.txRegion);
+
+		// Perform distinction between the various cases.
+
+		// Project genome position to transcript and CDS position and handle inconsistent positions.
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		TranscriptPosition txPos = null;
+		CDSPosition cdsPos = null;
+		try {
+			txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
+			cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
+		} catch (ProjectionException e) {
+			throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
+		}
+
+		// Check whether the insertion describes a duplication and forward to the DuplicationAnnotationBuilder.
+		if (DuplicationTester.isDuplication(transcript.sequence, change.getAlt(),
+				txPos.withPositionType(PositionType.ZERO_BASED).getPos()))
+			return DuplicationAnnotationBuilder.buildAnnotation(transcript, change);
+
+		// Shift the variant towards the 3' end (right) of the transcript in the case of ambiguities.
+		GenomeChange origChange = change; // for detecting update
+		change = GenomeChangeNormalizer.normalizeInsertion(transcript, change, txPos);
+		if (!change.getPos().equals(origChange.getPos())) { // update change if necessary
+			// Handle the case where we ended up around an exon border and forward to SpliceAnnotationBuilder.
+			TranscriptSequenceOntologyDecorator splicingDetector = new TranscriptSequenceOntologyDecorator(transcript);
+			if (splicingDetector.doesChangeAffectSpliceSite(change))
+				return SpliceAnnotationBuilder.buildAnnotation(transcript, change);
+			// Handle the case where we ended up in the 3' UTR and forward to UTRAnnotationBuilder.
+			if (!transcript.cdsRegion.contains(change.getPos()))
+				return UTRAnnotationBuilder.buildAnnotation(transcript, change);
+			// Update the transcription and CDS position previously computed to the situation after the change.
+			try {
+				txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
+				cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
+			} catch (ProjectionException e) {
+				throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
+			}
+		}
+
+		// Obtain exon ID.
+		int exonID = INVALID_EXON_ID;
+		try {
+			exonID = projector.locateExon(change.getPos());
+		} catch (ProjectionException e) {
+			throw new InvalidGenomeChange("Problem translating GenomeChange to exon: " + e.getMessage());
+		}
+		if (exonID == INVALID_EXON_ID)
+			throw new InvalidGenomeChange("GenomeChange " + change.getPos() + " does not point to exon.");
+		// Translate exon ID to reference order and make 1-based for display.
+		exonID = projector.exonIDInReferenceOrder(exonID) + 1;
+
+		// If we reach here then change describes an insertion and the position points into the CDS of the given
+		// transcript. We can now create an Annotation for this GenomeChange without catching exceptions.
+		return null;// buildAnnotation(transcript, change, txPos, cdsPos, exonID);
+	}
 
 	/**
 	 * Creates annotation for a single-nucleotide deletion.

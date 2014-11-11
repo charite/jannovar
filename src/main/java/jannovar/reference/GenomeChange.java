@@ -56,8 +56,8 @@ public class GenomeChange {
 
 		int shift = ref.length() + (pos.getPositionType() == PositionType.ONE_BASED ? -1 : 0);
 
-		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, pos.getPositionType()).
-				shifted(shift).withStrand(strand);
+		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, pos.getPositionType()).shifted(
+				shift).withStrand(strand);
 		if (strand == '+') {
 			this.ref = corr.ref;
 			this.alt = corr.alt;
@@ -80,8 +80,7 @@ public class GenomeChange {
 			corr.alt = "";
 
 		this.pos = new GenomePosition(other.pos.getStrand(), other.pos.getChr(), corr.position,
-				other.pos.getPositionType())
-				.withStrand(strand);
+				other.pos.getPositionType()).withStrand(strand);
 		if (strand == '+') {
 			this.ref = corr.ref;
 			this.alt = corr.alt;
@@ -92,10 +91,19 @@ public class GenomeChange {
 	}
 
 	/**
-	 * @return the pos
+	 * @return the position of the genome change
 	 */
 	public GenomePosition getPos() {
 		return pos;
+	}
+
+	/**
+	 * @return interval of the genome change
+	 */
+	public GenomeInterval getGenomeInterval() {
+		GenomePosition pos = this.pos.withPositionType(PositionType.ZERO_BASED);
+		return new GenomeInterval(pos.getStrand(), pos.getChr(), pos.getPos(), pos.getPos() + this.ref.length(),
+				PositionType.ZERO_BASED).withPositionType(this.pos.getPositionType());
 	}
 
 	/**

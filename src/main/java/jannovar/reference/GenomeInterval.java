@@ -39,6 +39,7 @@ public class GenomeInterval {
 
 	/** construct genome interval from other with selected coordinate system */
 	public GenomeInterval(GenomeInterval other, PositionType positionType) {
+		this.strand = other.strand;
 		this.positionType = positionType;
 		this.chr = other.chr;
 		this.beginPos = other.beginPos;
@@ -67,6 +68,17 @@ public class GenomeInterval {
 			this.endPos = beginPos;
 			this.beginPos = endPos;
 		}
+	}
+
+	/** construct genome interval from {@link GenomePosition} with a length towards 3' of pos' coordinate system */
+	public GenomeInterval(GenomePosition pos, int length) {
+		this.positionType = pos.getPositionType();
+		this.strand = pos.getStrand();
+		this.chr = pos.getChr();
+		this.beginPos = pos.getPos();
+
+		int delta = (positionType == PositionType.ZERO_BASED) ? 0 : -1;
+		this.endPos = pos.getPos() + length + delta;
 	}
 
 	/** convert into GenomeInterval of the given strand */
@@ -148,9 +160,26 @@ public class GenomeInterval {
 	}
 
 	/**
+	 * @param pos
+	 *            query position
+	 * @return <tt>true</tt> if the interval contains <code>other</code>
+	 */
+	public boolean contains(GenomeInterval other) {
+		// TODO(holtgrem): Test this.
+		if (chr != other.chr)
+			return false; // wrong chromosome
+		if (other.getStrand() != strand)
+			other = other.withStrand(strand); // ensure that we are on the correct strand
+		if (other.getPositionType() != positionType)
+			other = other.withPositionType(positionType);
+		return (other.beginPos >= beginPos && other.endPos <= endPos);
+	}
+
+	/**
 	 * @return a {@link GenomeInterval} that has <code>padding</code> more bases towards each side as padding
 	 */
 	public GenomeInterval withMorePadding(int padding) {
+		// TODO(holtgrem): throw when going outside of chromosome?
 		return new GenomeInterval(strand, chr, beginPos - padding, endPos + padding, positionType);
 	}
 
@@ -248,6 +277,56 @@ public class GenomeInterval {
 		// TODO(holtgrem): Update once we have better chromosome id to reference name mapping.
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
 		return String.format("chr%d:%d-%d", chr, beginPos, this.endPos);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		if (this.positionType == PositionType.ONE_BASED)
+			return withPositionType(PositionType.ZERO_BASED).withStrand('+').hashCode();
+
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + beginPos;
+		result = prime * result + chr;
+		result = prime * result + endPos;
+		result = prime * result + ((positionType == null) ? 0 : positionType.hashCode());
+		result = prime * result + strand;
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		if (positionType == PositionType.ONE_BASED)
+			return this.withPositionType(PositionType.ZERO_BASED).equals(obj);
+		GenomeInterval other = (GenomeInterval) obj;
+		other = other.withPositionType(PositionType.ZERO_BASED).withStrand(strand);
+		if (beginPos != other.beginPos)
+			return false;
+		if (chr != other.chr)
+			return false;
+		if (endPos != other.endPos)
+			return false;
+		if (positionType != other.positionType)
+			return false;
+		if (strand != other.strand)
+			return false;
+		return true;
 	}
 
 }

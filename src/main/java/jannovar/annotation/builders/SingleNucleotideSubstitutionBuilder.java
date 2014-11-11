@@ -42,6 +42,8 @@ import jannovar.util.Translator;
  */
 public class SingleNucleotideSubstitutionBuilder {
 
+	// TODO(holtgrew): Should also forward for splice/intro/utr changes and not throw.
+
 	/**
 	 * Returns a {@link Annotation} for the SNV {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *

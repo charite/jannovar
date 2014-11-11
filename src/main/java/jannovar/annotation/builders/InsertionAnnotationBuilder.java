@@ -13,7 +13,7 @@ import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
-import jannovar.reference.TranscriptSpliceSiteDecorator;
+import jannovar.reference.TranscriptSequenceOntologyDecorator;
 import jannovar.util.Translator;
 
 /**
@@ -25,13 +25,15 @@ import jannovar.util.Translator;
  */
 public class InsertionAnnotationBuilder {
 
+	// TODO(holtgrew): Should also forward for splice/intro/utr changes and not throw.
+
 	/**
 	 * Returns a {@link Annotation} for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
 	 * This function can only be used for insertion {@link GenomeChange}s that fall into the CDS of the
 	 * {@link TranscriptInfo}. Use the {@link UTRAnnotationBuilder} for variants in the non-CDS/UTR region of the
 	 * transcript. However, this function might forward to the {@link UTRAnnotationBuilder} or
-	 * {@link SpliceAnnotationBuilder} if the mutation is shifted into the UTR or splice site.
+	 * {@link SpliceAnnotationBuilder} if the insertion is shifted into the UTR or splice site.
 	 *
 	 * <h2>Duplications</h2>
 	 *
@@ -88,8 +90,8 @@ public class InsertionAnnotationBuilder {
 		change = GenomeChangeNormalizer.normalizeInsertion(transcript, change, txPos);
 		if (!change.getPos().equals(origChange.getPos())) { // update change if necessary
 			// Handle the case where we ended up around an exon border and forward to SpliceAnnotationBuilder.
-			TranscriptSpliceSiteDecorator splicingDetector = new TranscriptSpliceSiteDecorator(transcript);
-			if (splicingDetector.doesChangeAffectSpliceSite(change))
+			TranscriptSequenceOntologyDecorator splicingDetector = new TranscriptSequenceOntologyDecorator(transcript);
+			if (splicingDetector.overlapsWithSpliceSite(change.getGenomeInterval()))
 				return SpliceAnnotationBuilder.buildAnnotation(transcript, change);
 			// Handle the case where we ended up in the 3' UTR and forward to UTRAnnotationBuilder.
 			if (!transcript.cdsRegion.contains(change.getPos()))
