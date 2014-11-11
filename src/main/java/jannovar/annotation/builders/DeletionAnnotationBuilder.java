@@ -1,20 +1,19 @@
 package jannovar.annotation.builders;
 
-import static jannovar.reference.TranscriptProjectionDecorator.INVALID_EXON_ID;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.InvalidGenomeChange;
 import jannovar.exception.ProjectionException;
-import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
-import jannovar.reference.PositionType;
+import jannovar.reference.GenomeInterval;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
 import jannovar.reference.TranscriptSequenceOntologyDecorator;
 import jannovar.util.Translator;
+
+// TODO(holtgrem): Add case for non-coding transcripts.
 
 /**
  * This class provides static methods to generate annotations for deletions in exons.
@@ -60,6 +59,12 @@ public class DeletionAnnotationBuilder {
 	 * <li>otherwise, the deletion has fallen into an exonic region and we return a frameshift/non-frameshift deletion.</li>
 	 * </ul>
 	 *
+	 * <h2>Notes</h2>
+	 *
+	 * <ul>
+	 * <li>The position of deletions cannot be normalized/shifted since we have no sequence for the intronic regions.</li>
+	 * </ul>
+	 *
 	 * @param transcript
 	 *            {@link TranscriptInfo} for the transcript to compute the affection for
 	 * @param change
@@ -85,59 +90,80 @@ public class DeletionAnnotationBuilder {
 					+ transcript.txRegion);
 
 		// Perform distinction between the various cases.
-
-		// Project genome position to transcript and CDS position and handle inconsistent positions.
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		TranscriptPosition txPos = null;
-		CDSPosition cdsPos = null;
+		GenomeInterval changeInterval = change.getGenomeInterval();
+		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		try {
-			txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
-			cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
+			if (soDecorator.overlapsWithTranslationalStartSite(changeInterval))
+				return buildStartLossAnnotation(transcript, change);
+			else if (soDecorator.overlapsWithTranslationalStopSite(changeInterval))
+				return null;
+			else if (soDecorator.overlapsWithSpliceSite(changeInterval))
+				return null;
+			else if (soDecorator.overlapsWithFivePrimeUTR(changeInterval))
+				return null;
+			else if (soDecorator.overlapsWithThreePrimeUTR(changeInterval))
+				return null;
+			else if (soDecorator.liesInIntron(changeInterval))
+				return null;
+			else if (soDecorator.liesInCDSExon(changeInterval))
+				return null;
+			else
+				throw new Error("Could not classify " + change + ", should never happen!");
 		} catch (ProjectionException e) {
-			throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
+			throw new InvalidGenomeChange("Problem with the genome change position of " + change + ": "
+					+ e.getMessage());
 		}
-
-		// Check whether the insertion describes a duplication and forward to the DuplicationAnnotationBuilder.
-		if (DuplicationTester.isDuplication(transcript.sequence, change.getAlt(),
-				txPos.withPositionType(PositionType.ZERO_BASED).getPos()))
-			return DuplicationAnnotationBuilder.buildAnnotation(transcript, change);
-
-		// Shift the variant towards the 3' end (right) of the transcript in the case of ambiguities.
-		GenomeChange origChange = change; // for detecting update
-		change = GenomeChangeNormalizer.normalizeInsertion(transcript, change, txPos);
-		if (!change.getPos().equals(origChange.getPos())) { // update change if necessary
-			// Handle the case where we ended up around an exon border and forward to SpliceAnnotationBuilder.
-			TranscriptSequenceOntologyDecorator splicingDetector = new TranscriptSequenceOntologyDecorator(transcript);
-			if (splicingDetector.doesChangeAffectSpliceSite(change))
-				return SpliceAnnotationBuilder.buildAnnotation(transcript, change);
-			// Handle the case where we ended up in the 3' UTR and forward to UTRAnnotationBuilder.
-			if (!transcript.cdsRegion.contains(change.getPos()))
-				return UTRAnnotationBuilder.buildAnnotation(transcript, change);
-			// Update the transcription and CDS position previously computed to the situation after the change.
-			try {
-				txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
-				cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
-			} catch (ProjectionException e) {
-				throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
-			}
-		}
-
-		// Obtain exon ID.
-		int exonID = INVALID_EXON_ID;
-		try {
-			exonID = projector.locateExon(change.getPos());
-		} catch (ProjectionException e) {
-			throw new InvalidGenomeChange("Problem translating GenomeChange to exon: " + e.getMessage());
-		}
-		if (exonID == INVALID_EXON_ID)
-			throw new InvalidGenomeChange("GenomeChange " + change.getPos() + " does not point to exon.");
-		// Translate exon ID to reference order and make 1-based for display.
-		exonID = projector.exonIDInReferenceOrder(exonID) + 1;
-
-		// If we reach here then change describes an insertion and the position points into the CDS of the given
-		// transcript. We can now create an Annotation for this GenomeChange without catching exceptions.
-		return null;// buildAnnotation(transcript, change, txPos, cdsPos, exonID);
 	}
+
+	private static Annotation buildStartLossAnnotation(TranscriptInfo transcript, GenomeChange change)
+			throws ProjectionException {
+		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+
+		// The deletion can either limit itself to the exon with the start codon or not, create location annotation
+		// string depending on this.
+		String locAnno = null;
+		if (soDecorator.liesInExon(change.getGenomeInterval()))
+			locAnno = String.format("%s:exon%d", transcript.accession, projector.locateExon(change.getPos()));
+		else
+			locAnno = transcript.accession;
+
+		// The complex part of building the cDNA annotation is taking care of all the upstream/exonic/intronic
+		// coordinates and offsets.
+		String cDNAAnno = String.format("c.%s_%s");
+
+		// We currently limit ourselves to saying that the protein will not be transcribed. Theoretically, a frameshift
+		// deletion could create a new start codon and then we would have a frameshift deletion but we do not handle
+		// this at the moment.
+		// TODO(holtgrem): Should we handle this case at all?
+		String protAnno = "p.?";
+
+		return new Annotation(transcript.transcriptModel, String.format("%s:%s:%s", locAnno, cDNAAnno, protAnno),
+				VariantType.INTRONIC);
+	}
+
+	// public static Annotation buildAnnotationIntron(TranscriptInfo transcript, GenomeChange change)
+	// throws ProjectionException {
+	// TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+	//
+	// // Compute location annotation string.
+	// int intronNumber = projector.locateIntron(change.getPos());
+	// assert (intronNumber != INVALID_INTRON_ID);
+	// String locAnno = String.format("%s:intron%d", transcript.accession, intronNumber);
+	//
+	// // Compute cDNA annotation string.
+	// GenomeInterval exonRegion = transcript.exonRegions[intronNumber]; // is 0-based
+	// int posOffset = change.getPos().withPositionType(PositionType.ZERO_BASED)
+	// .differenceTo(exonRegion.getGenomeEndPos()) + 1; // 1-based position in intron
+	// TranscriptPosition lastExonPos = projector.genomeToTranscriptPos(exonRegion.getGenomeEndPos().shifted(-1));
+	// int exonBasePos = lastExonPos.withPositionType(PositionType.ONE_BASED).getPos();
+	// String cDNAAnno = String.format("c.%d+%d_%d+%ddel%s", exonBasePos, posOffset, exonBasePos, posOffset
+	// + change.getAlt().length(), change.getAlt());
+	//
+	// // Build annotation.
+	// return new Annotation(transcript.transcriptModel, String.format("%s:%s", locAnno, cDNAAnno),
+	// VariantType.INTRONIC);
+	// }
 
 	/**
 	 * Creates annotation for a single-nucleotide deletion.

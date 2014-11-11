@@ -108,11 +108,10 @@ public class TranscriptInfo {
 	}
 
 	/**
-	 * @return <tt>true</tt> if this is a gene-coding transcript, marked by <tt>txRegion</tt>'s start position being
-	 *         before its end position.
+	 * @return <tt>true</tt> if this is a gene-coding transcript, marked by <tt>cdsRegion</tt> being empty.
 	 */
 	public boolean isCoding() {
-		return (this.txRegion.getBeginPos() != this.txRegion.getEndPos() + 1);
+		return (this.cdsRegion.getBeginPos() < this.cdsRegion.getEndPos());
 	}
 
 	/**

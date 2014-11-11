@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import static jannovar.reference.TranscriptProjectionDecorator.INVALID_EXON_ID;
+import static jannovar.reference.TranscriptProjectionDecorator.INVALID_INTRON_ID;
 import jannovar.exception.ProjectionException;
 
 import org.junit.Assert;
@@ -84,6 +85,36 @@ public class TranscriptProjectionDecoratorTest {
 	public void testProjectionTranscriptToGenomeThrowsRight() throws ProjectionException {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 		projector.transcriptToGenomePos(new TranscriptPosition(transForward, 2350));
+	}
+
+	@Test
+	public void testLocateIntronFromGenomePosForward() throws ProjectionException {
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
+
+		this.transForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001anx.3\tchr1\t+\t6640062\t6649340\t6640669\t6649272\t11"
+						+ "\t6640062,6640600,6642117,6645978,6646754,6647264,6647537,"
+						+ "6648119,6648337,6648815,6648975,\t6640196,6641359,6642359,"
+						+ "6646090,6646847,6647351,6647692,6648256,6648502,6648904,6649340,\tP10074\tuc001anx.3");
+		this.transForward.setGeneSymbol("ZBTB48");
+
+		// last base of first exon
+		Assert.assertEquals(INVALID_INTRON_ID, projector.locateIntron(new GenomePosition('+', 1, 6640196)));
+		// first base of first intron
+		Assert.assertEquals(0, projector.locateIntron(new GenomePosition('+', 1, 6640197)));
+		// last base of first intron
+		Assert.assertEquals(0, projector.locateIntron(new GenomePosition('+', 1, 6640600)));
+		// first base of second exon
+		Assert.assertEquals(INVALID_INTRON_ID, projector.locateIntron(new GenomePosition('+', 1, 6640601)));
+
+		// last base of second-last exon
+		Assert.assertEquals(INVALID_INTRON_ID, projector.locateIntron(new GenomePosition('+', 1, 6648904)));
+		// first base of last intron
+		Assert.assertEquals(9, projector.locateIntron(new GenomePosition('+', 1, 6648905)));
+		// last base of last intron
+		Assert.assertEquals(9, projector.locateIntron(new GenomePosition('+', 1, 6648975)));
+		// first base of last exon
+		Assert.assertEquals(INVALID_INTRON_ID, projector.locateIntron(new GenomePosition('+', 1, 6648976)));
 	}
 
 	@Test

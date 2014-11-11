@@ -10,6 +10,8 @@ import jannovar.exception.ProjectionException;
 public class TranscriptProjectionDecorator {
 	/** constant for invalid exon index */
 	public static final int INVALID_EXON_ID = -1;
+	/** constant for invalid intron index */
+	public static final int INVALID_INTRON_ID = -1;
 
 	/** the transcript information to perform the projection upon. */
 	private final TranscriptInfo transcript;
@@ -122,6 +124,40 @@ public class TranscriptProjectionDecorator {
 			return exonID;
 		else
 			return transcript.exonRegions.length - exonID - 1;
+	}
+
+	/**
+	 * Returns (0-based) index of the intron (in the order determined by the transcript's strand).
+	 *
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return (0-based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt> is not in exonic
+	 *         region but in transcript interval
+	 * @throws ProjectionException
+	 *             if the position does not fall within the intron regions of the transcript
+	 */
+	public int locateIntron(GenomePosition pos) throws ProjectionException {
+		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
+			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
+					+ transcript.txRegion);
+		if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
+			pos = pos.withStrand(transcript.getStrand());
+
+		// handle the case that the position is outside the transcript region
+		if (transcript.txRegion.isLeftOf(pos) || transcript.txRegion.isRightOf(pos))
+			throw new ProjectionException("Position " + pos + " outside of tx region " + transcript.txRegion);
+
+		// find exon containing pos or return null
+		int i = 0;
+		for (GenomeInterval region : transcript.exonRegions) {
+			if (region.withPositionType(PositionType.ZERO_BASED).isRightOf(pos))
+				return i - 1;
+			if (region.contains(pos))
+				return INVALID_INTRON_ID; // not in intron
+			++i;
+		}
+
+		return INVALID_INTRON_ID;
 	}
 
 	/**
