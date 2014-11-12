@@ -1,7 +1,7 @@
 package jannovar.annotation;
 
 import jannovar.annotation.builders.BlockSubstitutionAnnotationBuilder;
-import jannovar.annotation.builders.DeletionAnnotationBuilder;
+import jannovar.annotation.builders.DeletionAnnotationBuilderTest;
 import jannovar.annotation.builders.InsertionAnnotationBuilder;
 import jannovar.annotation.builders.IntergenicAnnotationBuilder;
 import jannovar.annotation.builders.IntronicAnnotationBuilder;
@@ -833,7 +833,7 @@ public class VariantAnnotator {
 						refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(insrt);
 			} else if (var.equals("-")) { /* i.e., single nucleotide deletion */
-				Annotation dlt = DeletionAnnotationBuilder.getAnnotationSingleNucleotide(tm, frame_s, wtnt3,
+				Annotation dlt = DeletionAnnotationBuilderTest.getAnnotationSingleNucleotide(tm, frame_s, wtnt3,
 						wtnt3_after, ref, var, refvarstart, exonNumber);
 				this.annovarFactory.addExonicAnnotation(dlt);
 			} else if (var.length() > 1) {
@@ -852,7 +852,7 @@ public class VariantAnnotator {
 			 * start==end is false, and the variant is "-"; thus there is as deletion variant involving several
 			 * nucleotides.
 			 */
-			Annotation dltmnt = DeletionAnnotationBuilder.getMultinucleotideDeletionAnnotation(tm, frame_s, wtnt3,
+			Annotation dltmnt = DeletionAnnotationBuilderTest.getMultinucleotideDeletionAnnotation(tm, frame_s, wtnt3,
 					wtnt3_after, ref, var, refvarstart, refvarend, exonNumber);
 			this.annovarFactory.addExonicAnnotation(dltmnt);
 		} else {

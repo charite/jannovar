@@ -42,13 +42,19 @@ public class HGVSPositionBuilder {
 			return getCDNAPosStrForIntronPos(pos);
 	}
 
+	/**
+	 * Return HGVS position string in case of exon positions.
+	 *
+	 * @param pos
+	 *            position to get the HGVS position for
+	 * @return HGVS position string
+	 */
 	private String getCDNAPosStrForExonPos(GenomePosition pos) {
 		try {
 			GenomePosition zeroCDSStartPos = getCDSRegion().withPositionType(PositionType.ZERO_BASED)
 					.getGenomeBeginPos();
 			TranscriptPosition tCDSStartPos = projector.genomeToTranscriptPos(zeroCDSStartPos);
-			GenomePosition zeroCDSEndPos = getCDSRegion().withPositionType(PositionType.ZERO_BASED)
-					.getGenomeEndPos();
+			GenomePosition zeroCDSEndPos = getCDSRegion().withPositionType(PositionType.ZERO_BASED).getGenomeEndPos();
 			TranscriptPosition tCDSEndPos = projector.genomeToTranscriptPos(zeroCDSEndPos.shifted(-1));
 			TranscriptPosition tPos = projector.genomeToTranscriptPos(pos);
 
@@ -67,6 +73,13 @@ public class HGVSPositionBuilder {
 		}
 	}
 
+	/**
+	 * Return HGVS position string in case of intron positions.
+	 *
+	 * @param pos
+	 *            position to get the HGVS position for
+	 * @return HGVS position string
+	 */
 	private String getCDNAPosStrForIntronPos(GenomePosition pos) {
 		try {
 			// Determine which exon is the closest one, ties are broken to the downstream direction as in HGVS,
@@ -93,6 +106,13 @@ public class HGVSPositionBuilder {
 		}
 	}
 
+	/**
+	 * Return HGVS position string in case of upstream positions.
+	 *
+	 * @param pos
+	 *            position to get the HGVS position for
+	 * @return HGVS position string
+	 */
 	private String getCDNAPosStrForUpstreamPos(GenomePosition pos) {
 		// The upstream position is simply given as "-$count" where $count is the transcript position of the CDS
 		// start plus the genomic base distance of pos to the CDS start.
@@ -101,17 +121,23 @@ public class HGVSPositionBuilder {
 					PositionType.ZERO_BASED).getGenomeBeginPos());
 			int numBases = transcript.txRegion.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos()
 					.differenceTo(pos);
-			return String.format("-%d", tPos.getPos() + numBases - 1);
+			return String.format("-%d", tPos.getPos() + numBases);
 		} catch (ProjectionException e) {
 			throw new Error("CDS end position must be translatable to transcript position.");
 		}
 	}
 
+	/**
+	 * Return HGVS position string in case of downstream positions.
+	 *
+	 * @param pos
+	 *            position to get the HGVS position for
+	 * @return HGVS position string
+	 */
 	private String getCDNAPosStrForDownstreamPos(GenomePosition pos) {
 		// The downstream position is simply given as "*$count" where $count is the genomic base offset after the CDS
 		// region.
-		int numBases = -getCDSRegion().withPositionType(PositionType.ZERO_BASED).getGenomeEndPos()
-				.differenceTo(pos);
+		int numBases = -getCDSRegion().withPositionType(PositionType.ZERO_BASED).getGenomeEndPos().differenceTo(pos);
 		return String.format("*%d", numBases + 1);
 	}
 

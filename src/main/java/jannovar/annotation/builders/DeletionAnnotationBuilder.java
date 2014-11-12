@@ -7,6 +7,7 @@ import jannovar.exception.InvalidGenomeChange;
 import jannovar.exception.ProjectionException;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
+import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptProjectionDecorator;
@@ -96,7 +97,7 @@ public class DeletionAnnotationBuilder {
 			if (soDecorator.overlapsWithTranslationalStartSite(changeInterval))
 				return buildStartLossAnnotation(transcript, change);
 			else if (soDecorator.overlapsWithTranslationalStopSite(changeInterval))
-				return null;
+				return buildStopLossAnnotation(transcript, change);
 			else if (soDecorator.overlapsWithSpliceSite(changeInterval))
 				return null;
 			else if (soDecorator.overlapsWithFivePrimeUTR(changeInterval))
@@ -117,20 +118,21 @@ public class DeletionAnnotationBuilder {
 
 	private static Annotation buildStartLossAnnotation(TranscriptInfo transcript, GenomeChange change)
 			throws ProjectionException {
-		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-
 		// The deletion can either limit itself to the exon with the start codon or not, create location annotation
 		// string depending on this.
+		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		String locAnno = null;
 		if (soDecorator.liesInExon(change.getGenomeInterval()))
 			locAnno = String.format("%s:exon%d", transcript.accession, projector.locateExon(change.getPos()));
 		else
 			locAnno = transcript.accession;
 
-		// The complex part of building the cDNA annotation is taking care of all the upstream/exonic/intronic
-		// coordinates and offsets.
-		String cDNAAnno = String.format("c.%s_%s");
+		// Using HGVSPositionBuilder, translating the DNA positions is fairly simple.
+		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+		GenomeInterval genomeInterval = change.getGenomeInterval();
+		String cDNAAnno = String.format("c.%s_%sdel", posBuilder.getCDNAPosStr(genomeInterval.getGenomeBeginPos()),
+				posBuilder.getCDNAPosStr(genomeInterval.getGenomeEndPos().shifted(-1)));
 
 		// We currently limit ourselves to saying that the protein will not be transcribed. Theoretically, a frameshift
 		// deletion could create a new start codon and then we would have a frameshift deletion but we do not handle
@@ -139,7 +141,33 @@ public class DeletionAnnotationBuilder {
 		String protAnno = "p.?";
 
 		return new Annotation(transcript.transcriptModel, String.format("%s:%s:%s", locAnno, cDNAAnno, protAnno),
-				VariantType.INTRONIC);
+				VariantType.START_LOSS);
+	}
+
+	private static Annotation buildStopLossAnnotation(TranscriptInfo transcript, GenomeChange change)
+			throws ProjectionException {
+		// The deletion can either limit itself to the exon with the stop codon or not, create location annotation
+		// string depending on this.
+		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		String locAnno = null;
+		if (soDecorator.liesInExon(change.getGenomeInterval()))
+			locAnno = String.format("%s:exon%d", transcript.accession, projector.locateExon(change.getPos()));
+		else
+			locAnno = transcript.accession;
+
+		// Using HGVSPositionBuilder, translating the DNA positions is fairly simple.
+		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+		GenomeInterval genomeInterval = change.getGenomeInterval();
+		String cDNAAnno = String.format("c.%s_%sdel", posBuilder.getCDNAPosStr(genomeInterval.getGenomeBeginPos()),
+				posBuilder.getCDNAPosStr(genomeInterval.getGenomeEndPos().shifted(-1)));
+
+		// Simply compute the changed protein.
+		throw Error("Continue here!");
+		String protAnno = "p.";
+
+		return new Annotation(transcript.transcriptModel, String.format("%s:%s:%s", locAnno, cDNAAnno, protAnno),
+				VariantType.STOP_LOSS);
 	}
 
 	// public static Annotation buildAnnotationIntron(TranscriptInfo transcript, GenomeChange change)

@@ -103,6 +103,8 @@ public class CDSPosition {
 	 */
 	@Override
 	public int hashCode() {
+		if (positionType != PositionType.ZERO_BASED)
+			return withPositionType(PositionType.ZERO_BASED).hashCode();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + pos;
@@ -125,6 +127,9 @@ public class CDSPosition {
 		if (getClass() != obj.getClass())
 			return false;
 		CDSPosition other = (CDSPosition) obj;
+		other = other.withPositionType(PositionType.ZERO_BASED);
+		if (positionType != PositionType.ZERO_BASED)
+			return withPositionType(PositionType.ZERO_BASED).equals(other);
 		if (pos != other.pos)
 			return false;
 		if (positionType != other.positionType)

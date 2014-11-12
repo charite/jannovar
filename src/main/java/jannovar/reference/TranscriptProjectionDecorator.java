@@ -44,8 +44,7 @@ public class TranscriptProjectionDecorator {
 	public TranscriptPosition genomeToTranscriptPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.txRegion.contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the transcript region " + transcript.txRegion);
-
-		int delta = (transcript.txRegion.getPositionType() == PositionType.ONE_BASED) ? 1 : 0;
+		pos = pos.withStrand(transcript.getStrand());
 
 		// Look through all exons, find containing one, and compute the position.
 		int transcriptPos = 0; // offset in transcript
@@ -55,7 +54,9 @@ public class TranscriptProjectionDecorator {
 				// the case of the transcript on the reverse strand but position on forward strand is handled correctly.
 				// Consequently, we have to *subtract* this difference from transcriptPos.
 				return new TranscriptPosition(transcript.transcriptModel, transcriptPos
-						- region.getGenomeBeginPos().differenceTo(pos) + delta);
+						+ pos.withPositionType(PositionType.ZERO_BASED).differenceTo(
+								region.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos()),
+						PositionType.ZERO_BASED);
 			transcriptPos += region.length();
 		}
 
@@ -76,6 +77,7 @@ public class TranscriptProjectionDecorator {
 	public CDSPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.cdsRegion.contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the CDS region " + transcript.cdsRegion);
+		pos = pos.withStrand(transcript.getStrand());
 
 		int delta = (transcript.txRegion.getPositionType() == PositionType.ONE_BASED) ? 1 : 0;
 

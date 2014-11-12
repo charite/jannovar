@@ -94,6 +94,8 @@ public class TranscriptPosition {
 	 */
 	@Override
 	public int hashCode() {
+		if (positionType != PositionType.ZERO_BASED)
+			return withPositionType(PositionType.ZERO_BASED).hashCode();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + pos;
@@ -114,6 +116,9 @@ public class TranscriptPosition {
 		if (getClass() != obj.getClass())
 			return false;
 		TranscriptPosition other = (TranscriptPosition) obj;
+		other = other.withPositionType(PositionType.ZERO_BASED);
+		if (positionType != PositionType.ZERO_BASED)
+			return withPositionType(PositionType.ZERO_BASED).equals(other);
 		if (pos != other.pos)
 			return false;
 		if (positionType != other.positionType)

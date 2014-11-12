@@ -96,6 +96,118 @@ public class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
+	 * Returns whether the given <code>interval</code> overlaps with a splice region.
+	 *
+	 * We define the splice region to be the first/last 3 bases of an exon (towards an intron) and the first/last 8
+	 * bases of an intron. Note that this <b>includes</b> the splice donor and acceptor sites.
+	 *
+	 * @param interval
+	 *            the {@link GenomeInterval} to use for querying
+	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with a splice region.
+	 */
+	public boolean overlapsWithSpliceRegion(GenomeInterval interval) {
+		boolean inCDS = false;
+		for (int i = 0; i < transcript.exonRegions.length; ++i) {
+			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
+			if (inCDS)
+				inCDS = liesInCDSExon(exonInterval.getGenomeBeginPos().shifted(1)); // first base
+			if (inCDS) {
+				// check for acceptor region
+				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8),
+						11);
+				if (interval.overlapsWith(spliceRegionInterval))
+					return true;
+			}
+			if (!inCDS)
+				inCDS = liesInCDSExon(exonInterval.getGenomeEndPos().shifted(-1)); // last base
+			if (inCDS) {
+				// check for donor region
+				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
+				if (interval.overlapsWith(spliceRegionInterval))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether the given <code>interval</code> overlaps with a splice donor site.
+	 *
+	 * The splice donor site is the first two bases of an intron.
+	 *
+	 * @param interval
+	 *            the {@link GenomeInterval} to use for querying
+	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with a splice donor site.
+	 */
+	public boolean overlapsWithSpliceDonorSite(GenomeInterval interval) {
+		boolean inCDS = false;
+		for (int i = 0; i < transcript.exonRegions.length; ++i) {
+			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
+			if (!inCDS)
+				inCDS = liesInCDSExon(exonInterval.getGenomeEndPos().shifted(-1)); // last base
+			if (inCDS) {
+				GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
+				if (interval.overlapsWith(donorInterval))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether the given <code>interval</code> overlaps with a splice acceptor site.
+	 *
+	 * The splice acceptor site is the last two bases of an intron.
+	 *
+	 * @param interval
+	 *            the {@link GenomeInterval} to use for querying
+	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with a splice acceptor site.
+	 */
+	public boolean overlapsWithSpliceAcceptorSite(GenomeInterval interval) {
+		boolean inCDS = false;
+		for (int i = 0; i < transcript.exonRegions.length; ++i) {
+			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
+			if (!inCDS) {
+				inCDS = liesInCDSExon(exonInterval.getGenomeEndPos().shifted(-1)); // last base
+			} else {
+				GenomeInterval acceptorInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
+				if (interval.overlapsWith(acceptorInterval))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether the given <code>interval</code> overlaps with the upstream region of the transcript.
+	 *
+	 * The upstream region of the transcript is up to 1000 bp upstream of the transcript.
+	 *
+	 * @param interval
+	 *            the {@link GenomeInterval} to use for querying
+	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with the upstream region of the transcript.
+	 */
+	public boolean overlapsWithUpstreamRegion(GenomeInterval interval) {
+		GenomeInterval upstream = new GenomeInterval(transcript.txRegion.getGenomeBeginPos().shifted(-1000), 1000);
+		return interval.overlapsWith(upstream);
+	}
+
+	/**
+	 * Returns whether the given <code>interval</code> overlaps with the downstream region of the transcript.
+	 *
+	 * The upstream region of the transcript is up to 1000 bp upstream of the transcript.
+	 *
+	 * @param interval
+	 *            the {@link GenomeInterval} to use for querying
+	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with the downstream region of the transcript.
+	 */
+	public boolean overlapsWithDownstreamRegion(GenomeInterval interval) {
+		GenomeInterval downstream = new GenomeInterval(transcript.txRegion.withPositionType(PositionType.ZERO_BASED)
+				.getGenomeEndPos(), 1000);
+		return interval.overlapsWith(downstream);
+	}
+
+	/**
 	 * @param interval
 	 *            the {@link GenomeInterval} to use for querying
 	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with the 5' UTR
@@ -119,7 +231,19 @@ public class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomeInterval} falls fully into an intron
 	 */
 	public boolean liesInIntron(GenomeInterval interval) {
-		throw new Error("Implement me!");
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+
+		// locate intron, return false on any errors
+		int intronNo = -1;
+		try {
+			intronNo = projector.locateIntron(interval.getGenomeBeginPos());
+		} catch (ProjectionException e) {
+			return false;
+		}
+		if (intronNo == -1)
+			return false;
+
+		return !transcript.exonRegions[intronNo + 1].contains(interval.getGenomeEndPos().shifted(-1));
 	}
 
 	/**
@@ -145,11 +269,43 @@ public class TranscriptSequenceOntologyDecorator {
 
 	/**
 	 * @param interval
+	 *            the {@link GenomeInterval} to use for the overlap checking
+	 * @return <code>true</code> if the interval overlaps with an exon
+	 */
+	public boolean overlapsWithExon(GenomeInterval interval) {
+		for (int i = 0; i < transcript.exonRegions.length; ++i)
+			if (interval.overlapsWith(transcript.exonRegions[i]))
+				return true;
+		return false;
+	}
+
+	/**
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return <code>true</code> if the {@link GenomePosition} points to a base an exon
+	 */
+	public boolean liesInExon(GenomePosition pos) {
+		GenomeInterval interval = new GenomeInterval(pos.withPositionType(PositionType.ZERO_BASED), 1);
+		return liesInExon(interval);
+	}
+
+	/**
+	 * @param interval
 	 *            the {@link GenomeInterval} to use for querying
 	 * @return <code>true</code> if the {@link GenomeInterval} falls fully into the coding part of an exon
 	 */
 	public boolean liesInCDSExon(GenomeInterval interval) {
 		return (transcript.cdsRegion.contains(interval) && liesInExon(interval));
+	}
+
+	/**
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return <code>true</code> if the {@link GenomePosition} points to a base in the coding part of an exon
+	 */
+	public boolean liesInCDSExon(GenomePosition pos) {
+		GenomeInterval interval = new GenomeInterval(pos.withPositionType(PositionType.ZERO_BASED), 1);
+		return liesInCDSExon(interval);
 	}
 
 	/**
@@ -159,8 +315,7 @@ public class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean overlapsWithSpliceSite(GenomeInterval interval) {
 		interval = interval.withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval paddedInterval = interval
-				.withMorePadding(SpliceAnnotationBuilder.SPLICING_THRESHOLD);
+		GenomeInterval paddedInterval = interval.withMorePadding(SpliceAnnotationBuilder.SPLICING_THRESHOLD);
 
 		for (GenomeInterval region : transcript.exonRegions)
 			if (paddedInterval.contains(region.getGenomeBeginPos())

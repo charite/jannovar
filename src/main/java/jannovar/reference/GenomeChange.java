@@ -102,8 +102,7 @@ public class GenomeChange {
 	 */
 	public GenomeInterval getGenomeInterval() {
 		GenomePosition pos = this.pos.withPositionType(PositionType.ZERO_BASED);
-		return new GenomeInterval(pos.getStrand(), pos.getChr(), pos.getPos(), pos.getPos() + this.ref.length(),
-				PositionType.ZERO_BASED).withPositionType(this.pos.getPositionType());
+		return new GenomeInterval(pos, this.ref.length()).withPositionType(this.pos.getPositionType());
 	}
 
 	/**
@@ -134,6 +133,20 @@ public class GenomeChange {
 	@Override
 	public String toString() {
 		return pos.toString() + ":" + ref + ">" + alt;
+	}
+
+	/**
+	 * @return the {@link GenomeChangeType} of this GenomeChange
+	 */
+	public GenomeChangeType getType() {
+		if (getRef().length() > 0 && getAlt().length() == 0)
+			return GenomeChangeType.DELETION;
+		else if (getRef().length() == 0 && getAlt().length() > 0)
+			return GenomeChangeType.INSERTION;
+		else if (getRef().length() == 1 && getAlt().length() == 1)
+			return GenomeChangeType.SNV;
+		else
+			return GenomeChangeType.BLOCK_SUBSTITUTION;
 	}
 
 	/*
