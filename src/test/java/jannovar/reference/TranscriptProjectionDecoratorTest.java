@@ -40,6 +40,7 @@ public class TranscriptProjectionDecoratorTest {
 						+ "\t23685940,23693534,23694465,23695858,\t23689714,23693661,23694558,"
 						+ "23696357,\tQ9C0F3\tuc001bgu.3");
 		this.transReverse.setGeneSymbol("ZNF436");
+		// RefSeq: NM_001077195.1
 
 		this.infoForward = new TranscriptInfo(this.transForward);
 		this.infoReverse = new TranscriptInfo(this.transReverse);

@@ -115,6 +115,26 @@ public class TranscriptInfo {
 	}
 
 	/**
+	 * @return the length of the coding exon sequence
+	 */
+	public int cdsTranscriptLength() {
+		int result = 0;
+		for (int i = 0; i < exonRegions.length; ++i)
+			result += exonRegions[i].intersection(cdsRegion).length();
+		return result;
+	}
+
+	/**
+	 * @return the length of the exon sequences
+	 */
+	public int transcriptLength() {
+		int result = 0;
+		for (int i = 0; i < exonRegions.length; ++i)
+			result += exonRegions[i].length();
+		return result;
+	}
+
+	/**
 	 * Ensures that the strands are consistent.
 	 */
 	private void checkForConsistency() {

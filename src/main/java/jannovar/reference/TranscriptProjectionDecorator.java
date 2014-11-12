@@ -33,6 +33,21 @@ public class TranscriptProjectionDecorator {
 	}
 
 	/**
+	 * @return the CDS transcript string
+	 */
+	public String getCDSTranscript() {
+		try {
+			TranscriptPosition tBeginPos = genomeToTranscriptPos(transcript.cdsRegion.withPositionType(
+					PositionType.ZERO_BASED).getGenomeBeginPos());
+			TranscriptPosition tEndPos = genomeToTranscriptPos(transcript.cdsRegion.withPositionType(
+					PositionType.ZERO_BASED).getGenomeEndPos());
+			return transcript.sequence.substring(tBeginPos.getPos(), tEndPos.getPos());
+		} catch (ProjectionException e) {
+			throw new Error("Bug: CDS begin/end must be translatable into transcript positions");
+		}
+	}
+
+	/**
 	 * Coordinate conversion from genome position to transcript position.
 	 *
 	 * @param pos
@@ -77,15 +92,14 @@ public class TranscriptProjectionDecorator {
 	public CDSPosition genomeToCDSPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.cdsRegion.contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the CDS region " + transcript.cdsRegion);
-		pos = pos.withStrand(transcript.getStrand());
-
-		int delta = (transcript.txRegion.getPositionType() == PositionType.ONE_BASED) ? 1 : 0;
+		pos = pos.withPositionType(PositionType.ZERO_BASED).withStrand(transcript.getStrand());
 
 		// first convert from genome to transcript position
-		TranscriptPosition txPos = genomeToTranscriptPos(pos);
+		TranscriptPosition txPos = genomeToTranscriptPos(pos).withPositionType(PositionType.ZERO_BASED);
 		// now, compute offset of CDS start in transcript and shift txPos by this to obtain CDS position
-		TranscriptPosition cdsStartPos = genomeToTranscriptPos(transcript.cdsRegion.getGenomeBeginPos());
-		return new CDSPosition(txPos.getTranscript(), txPos.getPos() - cdsStartPos.getPos() + delta);
+		TranscriptPosition cdsStartPos = genomeToTranscriptPos(transcript.cdsRegion.getGenomeBeginPos())
+				.withPositionType(PositionType.ZERO_BASED);
+		return new CDSPosition(txPos.getTranscript(), txPos.getPos() - cdsStartPos.getPos(), PositionType.ZERO_BASED);
 	}
 
 	/**

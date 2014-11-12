@@ -159,4 +159,14 @@ public class GenomeChangeNormalizerTest {
 		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-4), "", "TTATGGG", '-');
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
+
+	@Test
+	public void testForwardDeletionNormalization() {
+		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 24, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 6640062 + 24, PositionType.ZERO_BASED);
+		GenomeChange change = new GenomeChange(gPos, "GGAGTCTCCGCACT", "", '+');
+		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeDeletion(this.infoForward, change, txPos);
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "GAGTCTCCGCACTG", "", '+');
+		Assert.assertEquals(expectedChange, updatedChange);
+	}
 }

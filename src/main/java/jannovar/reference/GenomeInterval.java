@@ -106,7 +106,22 @@ public class GenomeInterval {
 		return this.endPos - this.beginPos + (positionType == PositionType.ONE_BASED ? 1 : 0);
 	}
 
-	// TODO(holtgrem): is* functions are untested at the moment
+	/**
+	 * @return GenomeInterval with intersection of <code>this</code> and <code>other</code>
+	 */
+	public GenomeInterval intersection(GenomeInterval other) {
+		if (chr != other.chr)
+			return new GenomeInterval(strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
+		other = other.withStrand(strand).withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval me = withPositionType(PositionType.ZERO_BASED);
+
+		int beginPos = Math.max(me.beginPos, other.beginPos);
+		int endPos = Math.min(me.endPos, other.endPos);
+		if (endPos < beginPos)
+			beginPos = endPos;
+
+		return new GenomeInterval(me.strand, me.chr, beginPos, endPos, PositionType.ZERO_BASED);
+	}
 
 	/**
 	 * @param pos

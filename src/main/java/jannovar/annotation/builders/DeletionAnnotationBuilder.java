@@ -7,7 +7,9 @@ import jannovar.exception.InvalidGenomeChange;
 import jannovar.exception.ProjectionException;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
+import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
+import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptProjectionDecorator;
@@ -85,6 +87,11 @@ public class DeletionAnnotationBuilder {
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
 		change = change.withStrand(transcript.getStrand());
 
+		// Build the location annotation (transcript name and exon number if within one exon).
+		String locAnno = buildLocAnno(transcript, change);
+		// Build the cDNA annotation (or ncDNA annotation for non-coding transcripts).
+		String dnaAnno = buildDNAAnno(transcript, change);
+
 		// Ensure that the change overlaps with the transcript region.
 		if (!transcript.txRegion.overlapsWith(change.getGenomeInterval()))
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not overlap with transcript region "
@@ -114,6 +121,58 @@ public class DeletionAnnotationBuilder {
 			throw new InvalidGenomeChange("Problem with the genome change position of " + change + ": "
 					+ e.getMessage());
 		}
+	}
+
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build annotation for
+	 * @return String with the HGVS location string
+	 */
+	private static String buildLocAnno(TranscriptInfo transcript, GenomeChange change) {
+		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+
+		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+				.getGenomeBeginPos();
+		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+				.getGenomeEndPos().shifted(-1);
+
+		// Handle the cases for which no exon number is available.
+		if (!soDecorator.liesInExon(firstChangePos) || !soDecorator.liesInExon(lastChangePos))
+			return transcript.accession; // no exon information if either does not lie in exon
+		int exonNum;
+		try {
+			exonNum = projector.locateExon(firstChangePos);
+			if (exonNum != projector.locateExon(lastChangePos))
+				return transcript.accession; // no exon information if the deletion spans more than one exon
+		} catch (ProjectionException e) {
+			throw new Error("Bug: positions should be in CDS if we reach here");
+		}
+
+		return String.format("%s:exon%d", transcript.accession, exonNum + 1);
+	}
+
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build annotation for
+	 * @return String with the HGVS DNA Annotation string (with coordinates for this transcript).
+	 */
+	private static String buildDNAAnno(TranscriptInfo transcript, GenomeChange change) {
+		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+				.getGenomeBeginPos();
+		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+				.getGenomeEndPos().shifted(-1);
+		char prefix = transcript.isCoding() ? 'c' : 'n';
+		if (firstChangePos.equals(lastChangePos))
+			return String.format("%c.%s", prefix, posBuilder.getCDNAPosStr(firstChangePos));
+		else
+			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
+					posBuilder.getCDNAPosStr(lastChangePos));
 	}
 
 	private static Annotation buildStartLossAnnotation(TranscriptInfo transcript, GenomeChange change)

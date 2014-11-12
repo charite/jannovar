@@ -55,6 +55,9 @@ public class TranscriptInfoTest {
 		Assert.assertEquals(info.exonRegions[1].getEndPos(), this.transcriptForward.getExonEnd(1));
 
 		Assert.assertEquals(info.sequence, this.transcriptForward.getSequence());
+
+		Assert.assertEquals(0, info.cdsTranscriptLength());
+		Assert.assertEquals(759, info.transcriptLength());
 	}
 
 	@Test
@@ -87,5 +90,7 @@ public class TranscriptInfoTest {
 		Assert.assertEquals(info.exonRegions[1].getEndPos(), 248356973);
 
 		Assert.assertEquals(info.sequence, this.transcriptReverse.getSequence());
+		Assert.assertEquals(477, info.cdsTranscriptLength());
+		Assert.assertEquals(898, info.transcriptLength());
 	}
 }

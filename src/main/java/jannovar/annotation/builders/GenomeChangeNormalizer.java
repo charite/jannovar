@@ -57,4 +57,44 @@ class GenomeChangeNormalizer {
 			return new GenomeChange(change.getPos().shifted(shift), "", seq.substring(pos, pos + LEN));
 	}
 
+	/**
+	 * Transform a deletion {@link GenomeChange} into its HGVS-normalized representation.
+	 *
+	 * This simply works by shifting the interval to the left as long as the first deleted character equals the
+	 * character after the deleetion.
+	 *
+	 * Note that this function should <b>only</b> be called if the change's deletion interval does not span a splice
+	 * site.
+	 *
+	 * @param transcript
+	 *            the transcript with the sequence that should be used
+	 * @param change
+	 *            the genome change for which we want to return the HGVS-normalized representation for
+	 * @param txPos
+	 *            the corresponding position on the transcript
+	 * @return normalized {@link GenomeChange}
+	 */
+	public static GenomeChange normalizeDeletion(TranscriptInfo transcript, GenomeChange change,
+			TranscriptPosition txPos) {
+		// TODO(holtgrem): check the splice site invariant?
+		assert (change.getRef().length() != 0 && change.getAlt().length() == 0);
+		if (change.getPos().getStrand() != transcript.getStrand()) // ensure that we have the correct strand
+			change = change.withStrand(transcript.getStrand());
+
+		// Shift the deletion to the right.
+		int pos = txPos.withPositionType(PositionType.ZERO_BASED).getPos();
+		final int LEN = change.getRef().length(); // length of the deletion
+		final String seq = transcript.sequence;
+		int shift = 0;
+
+		while ((pos + LEN < seq.length()) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {
+			++shift;
+			++pos;
+		}
+
+		if (shift == 0) // only rebuild if shift > 0
+			return change;
+		else
+			return new GenomeChange(change.getPos().shifted(shift), seq.substring(pos, pos + LEN), "");
+	}
 }

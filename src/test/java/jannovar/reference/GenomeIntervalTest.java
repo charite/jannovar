@@ -201,4 +201,12 @@ public class GenomeIntervalTest {
 		Assert.assertFalse(interval.contains(new GenomePosition('+', 2, 1100)));
 	}
 
+	@Test
+	public void testIntersection() {
+		GenomeInterval intervalL = new GenomeInterval('+', 1, 1000, 1200);
+		GenomeInterval intervalR = new GenomeInterval('+', 1, 1100, 1300);
+		GenomeInterval intervalE = new GenomeInterval('+', 1, 1100, 1200);
+		Assert.assertEquals(intervalE, intervalL.intersection(intervalR));
+		Assert.assertEquals(intervalE, intervalR.intersection(intervalL));
+	}
 }
