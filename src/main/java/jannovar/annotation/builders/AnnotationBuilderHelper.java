@@ -179,16 +179,22 @@ abstract class AnnotationBuilderHelper {
 	 */
 	private String buildDNAAnno(TranscriptInfo transcript, GenomeChange change) {
 		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+
 		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
 				.getGenomeBeginPos();
 		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
 				.getGenomeEndPos().shifted(-1);
 		char prefix = transcript.isCoding() ? 'c' : 'n';
-		if (firstChangePos.equals(lastChangePos))
+		if (change.getGenomeInterval().length() == 0)
+			// case of zero-base change (insertion)
+			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(lastChangePos),
+					posBuilder.getCDNAPosStr(firstChangePos));
+		else if (firstChangePos.equals(lastChangePos))
+			// case of single-base change (SNV)
 			return String.format("%c.%s", prefix, posBuilder.getCDNAPosStr(firstChangePos));
 		else
+			// case of multi-base change (deletion, block substitution)
 			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
 					posBuilder.getCDNAPosStr(lastChangePos));
 	}
-
 }

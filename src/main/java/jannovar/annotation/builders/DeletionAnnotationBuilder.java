@@ -39,27 +39,7 @@ public class DeletionAnnotationBuilder {
 	/**
 	 * Returns a {@link Annotation} for the deletion {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
-	 * <h2>Algorithm</h2>
-	 *
-	 * The algorithm implemented by this function roughly looks as follows:
-	 *
-	 * <ul>
-	 * <li>check that <code>change</code> describes a deletion and overlaps with <code>transcript</code>, otherwise
-	 * throw {@link InvalidGenomeChange}</li>
-	 * <li>check whether <code>change</code> overlaps with the start or stop codon and return a start/stop loss
-	 * annotation if necessary. Also, it could turn out that a start/stop codon remains and we can have a frameshift or
-	 * non-frameshift deletion</li>
-	 * <li>check whether the deletion falls into the 5' or 3' UTR and return annotation for this</li>
-	 * <li>check whether the deletion overlaps with a splice site and return annotation for this</li>
-	 * <li>check whether the deletion falls directly into an intronic region and return annotation for this</li>
-	 * <li>otherwise, the deletion has fallen into an exonic region and we return a frameshift/non-frameshift deletion.</li>
-	 * </ul>
-	 *
-	 * <h2>Notes</h2>
-	 *
-	 * <ul>
-	 * <li>The position of deletions cannot be normalized/shifted since we have no sequence for the intronic regions.</li>
-	 * </ul>
+	 * @note The position of deletions cannot be normalized/shifted since we have no sequence for the intronic regions.
 	 *
 	 * @param transcript
 	 *            {@link TranscriptInfo} for the transcript to compute the affection for

@@ -30,6 +30,7 @@ class GenomeChangeNormalizer {
 		case INSERTION:
 			return normalizeInsertion(info, change, txPos);
 		default:
+			// TODO(holtgrem): Handle block substitution cse.
 			return change;
 		}
 	}

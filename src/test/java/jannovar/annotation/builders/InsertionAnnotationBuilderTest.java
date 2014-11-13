@@ -52,22 +52,40 @@ public class InsertionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardUpstream() throws InvalidGenomeChange {
-		fail("Write me!");
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640061, PositionType.ZERO_BASED), "", "A");
+		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
+		Assert.assertEquals("uc001anx.3:c.-205_-204insA", anno.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UPSTREAM, anno.getVariantType());
 	}
 
 	@Test
 	public void testForwardDownstream() throws InvalidGenomeChange {
-		fail("Write me!");
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6649340, PositionType.ZERO_BASED), "", "A");
+		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
+		Assert.assertEquals("uc001anx.3:c.*68_*69insA", anno.getVariantAnnotation());
+		Assert.assertEquals(VariantType.DOWNSTREAM, anno.getVariantType());
 	}
 
 	@Test
 	public void testForwardIntergenic() throws InvalidGenomeChange {
-		fail("Write me!");
+		// upstream intergenic
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6639061, PositionType.ZERO_BASED), "", "A");
+		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
+		Assert.assertEquals("uc001anx.3:c.-1205_-1204insA", anno.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTERGENIC, anno.getVariantType());
+		// downstream intergenic
+		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6650340, PositionType.ZERO_BASED), "", "A");
+		Annotation anno2 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change2);
+		Assert.assertEquals("uc001anx.3:c.*1068_*1069insA", anno2.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTERGENIC, anno2.getVariantType());
 	}
 
 	@Test
 	public void testForwardIntronic() throws InvalidGenomeChange {
-		fail("Write me!");
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6646098, PositionType.ZERO_BASED), "", "A");
+		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
+		Assert.assertEquals("uc001anx.3:c.1044+8_1044+9insA", anno.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTRONIC, anno.getVariantType());
 	}
 
 	@Test

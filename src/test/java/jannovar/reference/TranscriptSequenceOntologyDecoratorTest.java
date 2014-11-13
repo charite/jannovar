@@ -1,7 +1,5 @@
 package jannovar.reference;
 
-import jannovar.exception.ProjectionException;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,108 +34,6 @@ public class TranscriptSequenceOntologyDecoratorTest {
 
 		this.infoForward = new TranscriptInfo(this.transForward);
 		this.infoReverse = new TranscriptInfo(this.transReverse);
-	}
-
-	@Test
-	public void testSpliceSiteDetectionChangeOneRefNucleotideForward() throws ProjectionException {
-		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
-
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640059, 6640060,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640060, 6640061,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640061, 6640062,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640062, 6640063,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640063, 6640064,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640064, 6640065,
-				PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640065, 6640066,
-				PositionType.ZERO_BASED)));
-	}
-
-	@Test
-	public void testSpliceSiteDetectionChangeTwoRefNucleotidesForward() throws ProjectionException {
-		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
-
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640058, 6640060,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640059, 6640061,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640060, 6640062,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640061, 6640063,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640062, 6640064,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640063, 6640065,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640064, 6640066,
-				PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640065, 6640067,
-				PositionType.ZERO_BASED)));
-	}
-
-	@Test
-	public void testSpliceSiteDetectionChangeZeroRefNucleotidesReverse() throws ProjectionException {
-		TranscriptSequenceOntologyDecorator detector = new TranscriptSequenceOntologyDecorator(infoReverse);
-
-		Assert.assertFalse(detector.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685938, 23685938,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(detector.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685939, 23685939,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(detector.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685940, 23685940,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(detector.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685941, 23685941,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(detector.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685942, 23685942,
-				PositionType.ZERO_BASED)));
-		Assert.assertFalse(detector.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685943, 23685943,
-				PositionType.ZERO_BASED)));
-	}
-
-	@Test
-	public void testSpliceSiteDetectionChangeOneRefNucleotideReverse() throws ProjectionException {
-		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoReverse);
-
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685937, 23685938,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685938, 23685939,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685939, 23685940,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685940, 23685941,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685941, 23685942,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685942, 23685943,
-				PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685943, 23685944,
-				PositionType.ZERO_BASED)));
-	}
-
-	@Test
-	public void testSpliceSiteDetectionChangeTwoRefNucleotidesReverse() throws ProjectionException {
-		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoReverse);
-
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685936, 23685937,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685937, 23685939,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685938, 23685940,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685939, 23685942,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685940, 23685943,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685941, 23685944,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685942, 23685945,
-				PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 23685943, 23685946,
-				PositionType.ZERO_BASED)));
 	}
 
 	@Test

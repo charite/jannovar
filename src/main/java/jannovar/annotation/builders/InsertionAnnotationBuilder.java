@@ -1,19 +1,12 @@
 package jannovar.annotation.builders;
 
-import static jannovar.reference.TranscriptProjectionDecorator.INVALID_EXON_ID;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.InvalidGenomeChange;
-import jannovar.exception.ProjectionException;
-import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
-import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.TranscriptPosition;
-import jannovar.reference.TranscriptProjectionDecorator;
-import jannovar.reference.TranscriptSequenceOntologyDecorator;
 import jannovar.util.Translator;
 
 /**
@@ -30,15 +23,10 @@ public class InsertionAnnotationBuilder {
 	/**
 	 * Returns a {@link Annotation} for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
-	 * This function can only be used for insertion {@link GenomeChange}s that fall into the CDS of the
-	 * {@link TranscriptInfo}. Use the {@link UTRAnnotationBuilder} for variants in the non-CDS/UTR region of the
-	 * transcript. However, this function might forward to the {@link UTRAnnotationBuilder} or
-	 * {@link SpliceAnnotationBuilder} if the insertion is shifted into the UTR or splice site.
-	 *
 	 * <h2>Duplications</h2>
 	 *
-	 * Insertions can also introduce duplications. This function checks for the insertion described in
-	 * <code>change</code> to be a duplication and forwards to {@link DuplicationAnnotationBuilder} in this case.
+	 * In the case of insertions that are duplications are annotated as such. These insertions must be in the coding
+	 * region, such that the duplication can be recognized from the transcript sequence.
 	 *
 	 * <h2>Shifting of Insertions</h2>
 	 *
@@ -64,93 +52,8 @@ public class InsertionAnnotationBuilder {
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
 		change = change.withStrand(transcript.getStrand());
 
-		// Ensure that the position falls into the CDS region.
-		if (!transcript.cdsRegion.contains(change.getPos()))
-			throw new InvalidGenomeChange("GenomeChange " + change + " does not fall into CDS region "
-					+ transcript.cdsRegion);
-
-		// Project genome position to transcript and CDS position and handle inconsistent positions.
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		TranscriptPosition txPos = null;
-		CDSPosition cdsPos = null;
-		try {
-			txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
-			cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
-		} catch (ProjectionException e) {
-			throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
-		}
-
-		// Check whether the insertion describes a duplication and forward to the DuplicationAnnotationBuilder.
-		if (DuplicationTester.isDuplication(transcript.sequence, change.getAlt(),
-				txPos.withPositionType(PositionType.ZERO_BASED).getPos()))
-			return DuplicationAnnotationBuilder.buildAnnotation(transcript, change);
-
-		// Shift the variant towards the 3' end (right) of the transcript in the case of ambiguities.
-		GenomeChange origChange = change; // for detecting update
-		change = GenomeChangeNormalizer.normalizeInsertion(transcript, change, txPos);
-		if (!change.getPos().equals(origChange.getPos())) { // update change if necessary
-			// Handle the case where we ended up around an exon border and forward to SpliceAnnotationBuilder.
-			TranscriptSequenceOntologyDecorator splicingDetector = new TranscriptSequenceOntologyDecorator(transcript);
-			if (splicingDetector.overlapsWithSpliceSite(change.getGenomeInterval()))
-				return SpliceAnnotationBuilder.buildAnnotation(transcript, change);
-			// Handle the case where we ended up in the 3' UTR and forward to UTRAnnotationBuilder.
-			if (!transcript.cdsRegion.contains(change.getPos()))
-				return UTRAnnotationBuilder.buildAnnotation(transcript, change);
-			// Update the transcription and CDS position previously computed to the situation after the change.
-			try {
-				txPos = projector.genomeToTranscriptPos(change.getPos()); // position in tx region
-				cdsPos = projector.genomeToCDSPos(change.getPos()); // position in CDS region
-			} catch (ProjectionException e) {
-				throw new InvalidGenomeChange("Problems with GenomeChange:" + e.getMessage());
-			}
-		}
-
-		// Obtain exon ID.
-		int exonID = INVALID_EXON_ID;
-		try {
-			exonID = projector.locateExon(change.getPos());
-		} catch (ProjectionException e) {
-			throw new InvalidGenomeChange("Problem translating GenomeChange to exon: " + e.getMessage());
-		}
-		if (exonID == INVALID_EXON_ID)
-			throw new InvalidGenomeChange("GenomeChange " + change.getPos() + " does not point to exon.");
-		// Translate exon ID to reference order and make 1-based for display.
-		exonID = projector.exonIDInReferenceOrder(exonID) + 1;
-
-		// If we reach here then change describes an insertion and the position points into the CDS of the given
-		// transcript. We can now create an Annotation for this GenomeChange without catching exceptions.
-		return buildAnnotation(transcript, change, txPos, cdsPos, exonID);
-	}
-
-	/**
-	 * Build insert annotation from <code>transcript</code>, <code>change</code>, and the position on the transcript and
-	 * CDS.
-	 *
-	 * @param transcript
-	 *            information of the transcript to generate annotation for
-	 * @param change
-	 *            genome change, consistently describes a SNV in a CDS and exon region
-	 * @param txPos
-	 *            transcript position of the genome change
-	 * @param cdsPos
-	 *            CDS position of the genome change
-	 * @param exonNumber
-	 *            1-based exon number for display
-	 * @return the {@link Annotation} describing the {@link GenomeChange} in <code>change</code>
-	 */
-	private static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change, TranscriptPosition txPos,
-			CDSPosition cdsPos, int exonNumber) {
-		// ensure that we work with 0-based positions
-		txPos = txPos.withPositionType(PositionType.ZERO_BASED);
-		cdsPos = cdsPos.withPositionType(PositionType.ZERO_BASED);
-
-		// Use the AnnotationBuilderHelper for building the annotation.
-		InsertionAnnotationBuilderHelper helper = new InsertionAnnotationBuilderHelper(transcript, change, txPos,
-				cdsPos, exonNumber);
-		if (change.getAlt().length() % 3 == 0)
-			return helper.buildNoFrameShiftAnnotation();
-		else
-			return helper.buildFrameShiftAnnotation();
+		// Forward everything to the helper.
+		return new InsertionAnnotationBuilderHelper(transcript, change).build();
 	}
 
 	//
