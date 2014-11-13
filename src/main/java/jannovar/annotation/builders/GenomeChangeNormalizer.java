@@ -13,6 +13,28 @@ import jannovar.reference.TranscriptPosition;
 class GenomeChangeNormalizer {
 
 	/**
+	 * Transform a {@link GenomeChange} to its HGVS-normalized representation.
+	 *
+	 * @param transcript
+	 *            the transcript with the sequence that should be used
+	 * @param change
+	 *            the genome change for which we want to return the HGVS-normalized representation for
+	 * @param txPos
+	 *            the corresponding position on the transcript
+	 * @return normalized {@link GenomeChange}
+	 */
+	public static GenomeChange normalizeGenomeChange(TranscriptInfo info, GenomeChange change, TranscriptPosition txPos) {
+		switch (change.getType()) {
+		case DELETION:
+			return normalizeDeletion(info, change, txPos);
+		case INSERTION:
+			return normalizeInsertion(info, change, txPos);
+		default:
+			return change;
+		}
+	}
+
+	/**
 	 * Transform an insertion {@link GenomeChange} to its HGVS-normalized representation.
 	 *
 	 * The algorithm works as follows. <code>String alt = change.getAlt()</code> is inserted into

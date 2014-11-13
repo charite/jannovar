@@ -170,21 +170,16 @@ public class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with a splice region.
 	 */
 	public boolean overlapsWithSpliceRegion(GenomeInterval interval) {
-		boolean inCDS = false;
 		for (int i = 0; i < transcript.exonRegions.length; ++i) {
 			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
-			if (inCDS)
-				inCDS = liesInCDSExon(exonInterval.getGenomeBeginPos().shifted(1)); // first base
-			if (inCDS) {
+			if (i + 1 < transcript.exonRegions.length) {
 				// check for acceptor region
 				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8),
 						11);
 				if (interval.overlapsWith(spliceRegionInterval))
 					return true;
 			}
-			if (!inCDS)
-				inCDS = liesInCDSExon(exonInterval.getGenomeEndPos().shifted(-1)); // last base
-			if (inCDS) {
+			if (i > 0) {
 				// check for donor region
 				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
 				if (interval.overlapsWith(spliceRegionInterval))
@@ -204,16 +199,11 @@ public class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with a splice donor site.
 	 */
 	public boolean overlapsWithSpliceDonorSite(GenomeInterval interval) {
-		boolean inCDS = false;
-		for (int i = 0; i < transcript.exonRegions.length; ++i) {
+		for (int i = 0; i + 1 < transcript.exonRegions.length; ++i) {
 			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
-			if (!inCDS)
-				inCDS = liesInCDSExon(exonInterval.getGenomeEndPos().shifted(-1)); // last base
-			if (inCDS) {
-				GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
-				if (interval.overlapsWith(donorInterval))
-					return true;
-			}
+			GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
+			if (interval.overlapsWith(donorInterval))
+				return true;
 		}
 		return false;
 	}
@@ -228,16 +218,11 @@ public class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomeInterval} overlaps with a splice acceptor site.
 	 */
 	public boolean overlapsWithSpliceAcceptorSite(GenomeInterval interval) {
-		boolean inCDS = false;
-		for (int i = 0; i < transcript.exonRegions.length; ++i) {
+		for (int i = 1; i < transcript.exonRegions.length; ++i) {
 			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
-			if (!inCDS) {
-				inCDS = liesInCDSExon(exonInterval.getGenomeEndPos().shifted(-1)); // last base
-			} else {
-				GenomeInterval acceptorInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
-				if (interval.overlapsWith(acceptorInterval))
-					return true;
-			}
+			GenomeInterval acceptorInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
+			if (interval.overlapsWith(acceptorInterval))
+				return true;
 		}
 		return false;
 	}

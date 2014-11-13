@@ -2,89 +2,29 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
-import jannovar.exception.ProjectionException;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
-import jannovar.reference.GenomePosition;
-import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptProjectionDecorator;
-import jannovar.reference.TranscriptSequenceChangeHelper;
-import jannovar.reference.TranscriptSequenceOntologyDecorator;
 import jannovar.util.Translator;
 
-// TODO(holtgrem): We could collect more than one variant type.
-
 /**
- * This class provides static methods to generate annotations for insertions in exons.
+ * Helper class for the {@link DeletionAnnotationBuilder}.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Marten Jäger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class DeletionAnnotationBuilderHelper {
-	/** transcript to annotate. */
-	private final TranscriptInfo transcript;
-	/** genome change to use for annotation */
-	private final GenomeChange change;
-	/** helper for sequence ontology terms */
-	private final TranscriptSequenceOntologyDecorator so;
-	/** helper for coordinate transformations */
-	private final TranscriptProjectionDecorator projector;
-	/** helper for updating CDS/TX sequence */
-	private final TranscriptSequenceChangeHelper seqChangeHelper;
+class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 
-	/** location annotation string */
-	private final String locAnno;
-	/** cDNA/ncDNA annotation string */
-	private final String dnaAnno;
-
-	/**
-	 * Initialize the helper object with the given <code>transcript</code> and <code>change</code>.
-	 *
-	 * Note that {@link #change} will be initialized with normalized positions (shifted to the left) if possible.
-	 *
-	 * @param transcript
-	 * @param change
-	 */
 	DeletionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
-		this.transcript = transcript;
-
-		this.so = new TranscriptSequenceOntologyDecorator(transcript);
-		this.projector = new TranscriptProjectionDecorator(transcript);
-		this.seqChangeHelper = new TranscriptSequenceChangeHelper(transcript);
-
-		// Shift the GenomeChange if lies within precisely one exon.
-		if (so.liesInExon(change.getGenomeInterval())) {
-			try {
-				this.change = GenomeChangeNormalizer.normalizeDeletion(transcript, change,
-						projector.genomeToTranscriptPos(change.getPos()));
-			} catch (ProjectionException e) {
-				throw new Error("Bug: change begin position must be on transcript.");
-			}
-		} else {
-			this.change = change;
-		}
-
-		this.locAnno = buildLocAnno(transcript, this.change);
-		this.dnaAnno = buildDNAAnno(transcript, this.change);
+		super(transcript, change);
 	}
 
-	/**
-	 * Build annotation for {@link #transcript} and {@link #change}
-	 *
-	 * @return {@link Annotation} for the given {@link #transcript} and {@link #change}.
-	 */
+	@Override
 	Annotation build() {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
-		//
-		// We forward to many small private functions to make the structure very clear here. Alternatively, we could
-		// also compress things further by having getVariantType(), getPastedAnnotationString() etc. but that would make
-		// the different cases less clear.
 
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.containsExon(changeInterval)) // deletion of whole exon
@@ -103,14 +43,17 @@ class DeletionAnnotationBuilderHelper {
 			return buildIntergenicAnnotation();
 	}
 
+	@Override
+	String ncHGVS() {
+		return String.format("%s:%sdel", locAnno, dnaAnno);
+	}
+
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-				VariantType.TRANSCRIPT_ABLATION);
+		return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.TRANSCRIPT_ABLATION);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("%s:%sdel:p.?", locAnno, dnaAnno),
-				VariantType.START_LOSS);
+		return new Annotation(transcript.transcriptModel, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
 	}
 
 	private Annotation buildCDSExonicAnnotation() {
@@ -206,92 +149,4 @@ class DeletionAnnotationBuilderHelper {
 				varType);
 	}
 
-	private Annotation buildIntronicAnnotation() {
-		// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
-		GenomeInterval changeInterval = change.getGenomeInterval();
-		if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
-				|| so.overlapsWithSpliceRegion(changeInterval))
-			return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-					VariantType.SPLICING);
-		else
-			return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-					VariantType.INTRONIC);
-	}
-
-	private Annotation buildUTRAnnotation() {
-		if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-			return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-					VariantType.UTR5);
-		else
-			// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-			return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-					VariantType.UTR3);
-	}
-
-	private Annotation buildUpOrDownstreamAnnotation() {
-		if (so.overlapsWithUpstreamRegion(change.getGenomeInterval()))
-			return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-					VariantType.UPSTREAM);
-		else
-			// so.overlapsWithDownstreamRegion(changeInterval)
-			return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-					VariantType.DOWNSTREAM);
-	}
-
-	private Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("%s:%sdel", locAnno, dnaAnno),
-				VariantType.INTERGENIC);
-	}
-
-	/**
-	 * @param transcript
-	 *            {@link TranscriptInfo} to build annotation for
-	 * @param change
-	 *            {@link GenomeChange} to build annotation for
-	 * @return String with the HGVS location string
-	 */
-	private String buildLocAnno(TranscriptInfo transcript, GenomeChange change) {
-		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-
-		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeBeginPos();
-		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeEndPos().shifted(-1);
-
-		// Handle the cases for which no exon number is available.
-		if (!soDecorator.liesInExon(firstChangePos) || !soDecorator.liesInExon(lastChangePos))
-			return transcript.accession; // no exon information if either does not lie in exon
-		int exonNum;
-		try {
-			exonNum = projector.locateExon(firstChangePos);
-			if (exonNum != projector.locateExon(lastChangePos))
-				return transcript.accession; // no exon information if the deletion spans more than one exon
-		} catch (ProjectionException e) {
-			throw new Error("Bug: positions should be in CDS if we reach here");
-		}
-
-		return String.format("%s:exon%d", transcript.accession, exonNum + 1);
-	}
-
-	/**
-	 * @param transcript
-	 *            {@link TranscriptInfo} to build annotation for
-	 * @param change
-	 *            {@link GenomeChange} to build annotation for
-	 * @return String with the HGVS DNA Annotation string (with coordinates for this transcript).
-	 */
-	private String buildDNAAnno(TranscriptInfo transcript, GenomeChange change) {
-		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
-		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeBeginPos();
-		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeEndPos().shifted(-1);
-		char prefix = transcript.isCoding() ? 'c' : 'n';
-		if (firstChangePos.equals(lastChangePos))
-			return String.format("%c.%s", prefix, posBuilder.getCDNAPosStr(firstChangePos));
-		else
-			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
-					posBuilder.getCDNAPosStr(lastChangePos));
-	}
 }

@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+//TODO(holtgrem): Extend tests to also use reverse transcript?
+
 public class DeletionAnnotationBuilderTest {
 
 	/** transcript on forward strand */
@@ -119,21 +121,21 @@ public class DeletionAnnotationBuilderTest {
 		// Delete one base of start codon.
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6640669, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:exon2:c.1del:p.?", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon2:c.1del:p.0?", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation1.getVariantType());
 
 		// Delete chunk out of first exon, spanning start codon from the left.
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6640660, PositionType.ZERO_BASED),
 				"CCCTCCAGACC", "");
 		Annotation annotation2 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:exon2:c.-9_2del:p.?", annotation2.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon2:c.-9_2del:p.0?", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation2.getVariantType());
 
 		// Delete chunk out of first exon, spanning start codon from the right.
 		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 6640671, PositionType.ZERO_BASED),
 				"GGACGGCTCCT", "");
 		Annotation annotation3 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change3);
-		Assert.assertEquals("uc001anx.3:exon2:c.3_13del:p.?", annotation3.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon2:c.3_13del:p.0?", annotation3.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation3.getVariantType());
 
 		// Deletion from before transcript, reaching into the start codon.
@@ -142,7 +144,7 @@ public class DeletionAnnotationBuilderTest {
 				"TCTCACCAGGCCCTTCTTCACGACCCTGGCCCCCCATCCAGCATCCCCCCTGGCCAATCCAATATGGCCCCCGGCCCCCGGGAGGCTGTCAGTGTGTTCCAGCCCTCCGCGTGCACCCCTCACCCTGACCCAAGCCCTCGTGCTGATAAATATGATTATTTGAGTAGAGGCCAACTTCCCGTTTCTCTCTCTTGACTCCAGGAGCTTTCTCTTGCATACCCTCGCTTAGGCTGGCCGGGGTGTCACTTCTGCCTCCCTGCCCTCCAGACCA",
 				"");
 		Annotation annotation4 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change4);
-		Assert.assertEquals("uc001anx.3:c.-69-201_1del:p.?", annotation4.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:c.-69-201_1del:p.0?", annotation4.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation4.getVariantType());
 	}
 

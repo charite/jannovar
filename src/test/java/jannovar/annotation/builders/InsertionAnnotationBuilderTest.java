@@ -1,5 +1,6 @@
 package jannovar.annotation.builders;
 
+import static org.junit.Assert.fail;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.InvalidGenomeChange;
@@ -47,6 +48,51 @@ public class InsertionAnnotationBuilderTest {
 		this.transcriptReverse.setGeneSymbol("ZNF436");
 		this.infoReverse = new TranscriptInfo(this.transcriptReverse);
 		// RefSeq: NM_001077195.1
+	}
+
+	@Test
+	public void testForwardUpstream() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardDownstream() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardIntergenic() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardIntronic() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardSplicing() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardStartLoss() throws InvalidGenomeChange {
+		fail("Write me!");
+	}
+
+	@Test
+	public void testForwardStopGain() throws InvalidGenomeChange {
+		fail("Write me!");
 	}
 
 	@Test
