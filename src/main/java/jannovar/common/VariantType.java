@@ -16,6 +16,8 @@ package jannovar.common;
  */
 // TODO(mjaeger): the outputnames for structural variants...
 public enum VariantType {
+	/** whole exon los, SO:"A feature ablation whereby the deleted region includes a transcript feature */
+	TRANSCRIPT_ABLATION,
 	/** variant is downstream of a gene */
 	DOWNSTREAM,
 	/** deletion resulting in a frameshift */
@@ -82,7 +84,7 @@ public enum VariantType {
 	 * <OL>
 	 * <LI><B>exonic (1)</B>: FS_DELETION, FS_INSERTION, NON_FS_SUBSTITUTION, FS_SUBSTITUTION, MISSENSE,
 	 * NON_FS_DELETION, NON_FS_INSERTION, STOPGAIN, STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION, START_LOSS,
-	 * START_GAIN.
+	 * START_GAIN, TRANSCRIPT_ABLATION.
 	 * <LI><B>splicing (1)</B>: SPLICING.
 	 * <LI><B>ncRNA (2)</B>:ncRNA_EXONIC, ncRNA_SPLICING.
 	 * <LI><B>UTR3 (3)</B>: UTR3
@@ -102,6 +104,7 @@ public enum VariantType {
 	 */
 	public static int priorityLevel(VariantType vt) {
 		switch (vt) {
+		case TRANSCRIPT_ABLATION:
 		case FS_DELETION:
 		case FS_INSERTION:
 		case NON_FS_SUBSTITUTION:
@@ -166,11 +169,11 @@ public enum VariantType {
 	 * @return an array with the VariantTypes priority sorted
 	 */
 	public static VariantType[] getPrioritySortedList() {
-		VariantType[] vta = new VariantType[] { SV_DELETION, SV_INSERTION, SV_SUBSTITUTION, SV_INVERSION, MISSENSE,
-				STOPGAIN, SPLICING, FS_DELETION, FS_INSERTION, FS_SUBSTITUTION, NON_FS_DELETION, NON_FS_INSERTION,
-				NON_FS_SUBSTITUTION, STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION, START_LOSS, ncRNA_EXONIC,
-				ncRNA_SPLICING, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM, DOWNSTREAM, INTERGENIC,
-				ERROR };
+		VariantType[] vta = new VariantType[] { TRANSCRIPT_ABLATION, SV_DELETION, SV_INSERTION, SV_SUBSTITUTION,
+				SV_INVERSION, MISSENSE, STOPGAIN, SPLICING, FS_DELETION, FS_INSERTION, FS_SUBSTITUTION,
+				NON_FS_DELETION, NON_FS_INSERTION, NON_FS_SUBSTITUTION, STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION,
+				START_LOSS, ncRNA_EXONIC, ncRNA_SPLICING, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM,
+				DOWNSTREAM, INTERGENIC, ERROR };
 		return vta;
 	}
 
@@ -181,6 +184,8 @@ public enum VariantType {
 	 */
 	public String toDisplayString() {
 		switch (this) {
+		case TRANSCRIPT_ABLATION:
+			return "transcript ablation";
 		case FS_DELETION:
 			return "frameshift truncation";
 		case FS_INSERTION:
@@ -249,6 +254,8 @@ public enum VariantType {
 	 */
 	public String toSequenceOntologyTerm() {
 		switch (this) {
+		case TRANSCRIPT_ABLATION:
+			return "transcript_ablation";
 		case FS_DELETION:
 			return "frameshift_truncation";
 		case FS_INSERTION:
@@ -317,6 +324,8 @@ public enum VariantType {
 	 */
 	public String toSequenceOntologyID() {
 		switch (this) {
+		case TRANSCRIPT_ABLATION:
+			return "SO:0001893";
 		case FS_DELETION:
 			return "SO:0001910";
 		case FS_INSERTION:

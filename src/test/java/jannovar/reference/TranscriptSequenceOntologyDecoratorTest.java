@@ -39,24 +39,6 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	}
 
 	@Test
-	public void testSpliceSiteDetectionChangeZeroRefNucleotidesForward() throws ProjectionException {
-		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
-
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640060, 6640060,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640061, 6640061,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640062, 6640062,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640063, 6640063,
-				PositionType.ZERO_BASED)));
-		Assert.assertTrue(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640064, 6640064,
-				PositionType.ZERO_BASED)));
-		Assert.assertFalse(decorator.overlapsWithSpliceSite(new GenomeInterval('+', 1, 6640065, 6640065,
-				PositionType.ZERO_BASED)));
-	}
-
-	@Test
 	public void testSpliceSiteDetectionChangeOneRefNucleotideForward() throws ProjectionException {
 		TranscriptSequenceOntologyDecorator decorator = new TranscriptSequenceOntologyDecorator(infoForward);
 

@@ -2,8 +2,6 @@ package jannovar.reference;
 
 import jannovar.exception.ProjectionException;
 
-// TODO(holtgrem): Test me!
-
 /**
  * Helper class for getting updated transcript sequence for deletions and block substitutions.
  *
@@ -134,7 +132,10 @@ public class TranscriptSequenceChangeHelper {
 	}
 
 	/**
-	 * Similar to {@link #getCDSWithChange} but limited to CDS.
+	 * Similar to {@link #getTranscriptWithChange} but <b>starting</b> at the CDS begin position.
+	 *
+	 * We <b>extend</b> the CDS transcript to the right so that the changed protein sequence can be computed for
+	 * frameshift changes.
 	 *
 	 * @param change
 	 *            {@link GenomeChange} to apply to the CDS region of the transcript
@@ -158,7 +159,7 @@ public class TranscriptSequenceChangeHelper {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 
 		// Obtain CDS transcript sequence.
-		String cdsSeq = projector.getCDSTranscript();
+		String cdsSeq = projector.getTranscriptStartingAtCDS();
 
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (!transcript.cdsRegion.overlapsWith(change.getGenomeInterval())
@@ -187,7 +188,7 @@ public class TranscriptSequenceChangeHelper {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 
 		// Obtain CDS transcript sequence.
-		String cdsSeq = projector.getCDSTranscript();
+		String cdsSeq = projector.getTranscriptStartingAtCDS();
 
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (!transcript.cdsRegion.overlapsWith(change.getGenomeInterval())
@@ -197,60 +198,17 @@ public class TranscriptSequenceChangeHelper {
 		// Get transcript begin and end position.
 		GenomePosition changeBeginPos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
 				.getGenomeBeginPos();
-		CDSPosition cdsChangeBeginPos;
-		try {
-			cdsChangeBeginPos = translateGenomeToCDSPosition(changeBeginPos);
-		} catch (ProjectionException e) {
-			throw new Error("Bug: should be able to translate change begin position to transcript position.");
-		}
+		CDSPosition cdsChangeBeginPos = projector.projectGenomeToCDSPosition(changeBeginPos);
 
 		// Get transcript end position.
 		GenomePosition changeEndPos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
 				.getGenomeEndPos();
-		CDSPosition cdsChangeEndPos;
-		try {
-			cdsChangeEndPos = translateGenomeToCDSPosition(changeEndPos);
-		} catch (ProjectionException e) {
-			throw new Error("Bug: should be able to translate change end position to transcript position.");
-		}
+		CDSPosition cdsChangeEndPos = projector.projectGenomeToCDSPosition(changeEndPos);
 
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(cdsSeq);
 		builder.delete(cdsChangeBeginPos.getPos(), cdsChangeEndPos.getPos());
 		builder.insert(cdsChangeBeginPos.getPos(), change.getAlt());
 		return builder.toString();
-	}
-
-	/**
-	 * Translate {@link GenomePosition} to {@link TranscriptPosition} for {@link #transcript}.
-	 *
-	 * Positions upstream of CDS region are projected to the CDS begin position, downstream of CDS are projected to the
-	 * CDS end, positions in CDS introns are projected to first position of the next CDS exon.
-	 *
-	 * @param pos
-	 *            the position to translate
-	 * @return the corresponding position in the transcript sequence
-	 * @throws ProjectionException
-	 *             in case of problems with the position conversion
-	 */
-	private CDSPosition translateGenomeToCDSPosition(GenomePosition pos) throws ProjectionException {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
-
-		// Get transcript begin position.
-		if (transcript.cdsRegion.isRightOf(pos)) {
-			// Deletion begins left of CDS, project to begin of CDS.
-			return new CDSPosition(transcript.transcriptModel, 0, PositionType.ZERO_BASED);
-		} else if (transcript.cdsRegion.isLeftOf(pos)) {
-			// Deletion begins right of CDS, project to end of CDS.
-			return new CDSPosition(transcript.transcriptModel, transcript.cdsTranscriptLength(),
-					PositionType.ZERO_BASED);
-		} else if (soDecorator.liesInExon(pos)) {
-			return projector.genomeToCDSPos(pos);
-		} else { // lies in intron, project to begin position of next exon
-			int intronNum = projector.locateIntron(pos);
-			return projector.genomeToCDSPos(transcript.exonRegions[intronNum].withPositionType(
-					PositionType.ZERO_BASED).getGenomeBeginPos());
-		}
 	}
 }

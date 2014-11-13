@@ -1,5 +1,6 @@
 package jannovar.reference;
 
+
 // TODO(holtgrem): Test this class!
 
 /**
@@ -113,5 +114,4 @@ public class TranscriptSequenceDecorator {
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos) {
 		return getCodonsStartingFrom(txPos, cdsPos, transcript.sequence.length());
 	}
-
 }

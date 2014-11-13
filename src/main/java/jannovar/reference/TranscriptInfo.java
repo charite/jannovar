@@ -135,6 +135,19 @@ public class TranscriptInfo {
 	}
 
 	/**
+	 * @param i
+	 *            0-based index of the intron's region to return
+	 * @return {@link GenomeInterval} with the intron's region
+	 */
+	public GenomeInterval intronRegion(int i) {
+		// TODO(holtgrem): test me!
+		GenomeInterval exonRegionL = exonRegions[i].withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval exonRegionR = exonRegions[i + 1].withPositionType(PositionType.ZERO_BASED);
+		return new GenomeInterval(exonRegionL.getStrand(), exonRegionL.getChr(),
+				exonRegionL.getEndPos(), exonRegionR.getBeginPos(), PositionType.ZERO_BASED);
+	}
+
+	/**
 	 * Ensures that the strands are consistent.
 	 */
 	private void checkForConsistency() {

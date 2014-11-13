@@ -1,6 +1,5 @@
 package jannovar.reference;
 
-import jannovar.annotation.builders.SpliceAnnotationBuilder;
 import jannovar.exception.ProjectionException;
 
 /**
@@ -75,6 +74,71 @@ public class TranscriptSequenceOntologyDecorator {
 		int threePrimeUTRLen = transcript.txRegion.withPositionType(PositionType.ZERO_BASED).getGenomeEndPos()
 				.differenceTo(threePrimeUTRBeginPos);
 		return new GenomeInterval(threePrimeUTRBeginPos, threePrimeUTRLen);
+	}
+
+	/**
+	 * @param interval
+	 *            query whether <code>interval</code> contains an exon
+	 * @return <code>true</code> if <code>interval</code> contains a full exon (coding or non-coding).
+	 */
+	public boolean containsExon(GenomeInterval interval) {
+		for (int i = 0; i < transcript.exonRegions.length; ++i)
+			if (interval.contains(transcript.exonRegions[i]))
+				return true;
+		return false;
+	}
+
+	/**
+	 * @param interval
+	 *            query whether <code>interval</code> overlaps with a CDS exon (exon that overlaps with CDS)
+	 * @return <code>true</code> if <code>interval</code> overlaps with a CDS-overlapping exon
+	 */
+	public boolean overlapsWithCDSExon(GenomeInterval interval) {
+		for (int i = 0; i < transcript.exonRegions.length; ++i)
+			if (transcript.cdsRegion.overlapsWith(transcript.exonRegions[i])
+					&& interval.overlapsWith(transcript.exonRegions[i]))
+				return true;
+		return false;
+	}
+
+	/**
+	 * @param interval
+	 *            query whether <code>interval</code> overlaps with the CDS region
+	 * @return <code>true</code> if <code>interval</code> overlaps with the CDS region of the transcript
+	 */
+	public boolean overlapsWithCDS(GenomeInterval interval) {
+		return transcript.cdsRegion.overlapsWith(interval);
+	}
+
+	/**
+	 * @param changeInterval
+	 *            the {@link GenomeInterval} to use for the query
+	 * @return <code>true</code> if <code>changeInterval</code> overlaps with an intron of {@link #transcript}
+	 */
+	public boolean overlapsWithIntron(GenomeInterval changeInterval) {
+		// TODO(holtgrem): Test me!
+		for (int i = 0; i + 1 < transcript.exonRegions.length; ++i) {
+			GenomeInterval intronRegion = transcript.intronRegion(i);
+			if (changeInterval.overlapsWith(intronRegion))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param changeInterval
+	 *            the {@link GenomeInterval} to use for the query
+	 * @return <code>true</code> if <code>changeInterval</code> overlaps with an intron of {@link #transcript} that
+	 *         overlaps with the CDS
+	 */
+	public boolean overlapsWithCDSIntron(GenomeInterval changeInterval) {
+		// TODO(holtgrem): Test me!
+		for (int i = 0; i + 1 < transcript.exonRegions.length; ++i) {
+			GenomeInterval intronRegion = transcript.intronRegion(i);
+			if (transcript.cdsRegion.overlapsWith(intronRegion) && changeInterval.overlapsWith(intronRegion))
+				return true;
+		}
+		return false;
 	}
 
 	/**
@@ -308,20 +372,4 @@ public class TranscriptSequenceOntologyDecorator {
 		return liesInCDSExon(interval);
 	}
 
-	/**
-	 * @param interval
-	 *            the {@link GenomeInterval} to use for querying
-	 * @return <code>true</code> if the {@link GenomeInterval} falls within 2 bases of an exon begin/end position.
-	 */
-	public boolean overlapsWithSpliceSite(GenomeInterval interval) {
-		interval = interval.withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval paddedInterval = interval.withMorePadding(SpliceAnnotationBuilder.SPLICING_THRESHOLD);
-
-		for (GenomeInterval region : transcript.exonRegions)
-			if (paddedInterval.contains(region.getGenomeBeginPos())
-					|| paddedInterval.contains(region.getGenomeEndPos()))
-				return true;
-
-		return false;
-	}
 }

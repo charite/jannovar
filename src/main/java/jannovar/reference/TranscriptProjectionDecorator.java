@@ -48,6 +48,19 @@ public class TranscriptProjectionDecorator {
 	}
 
 	/**
+	 * @return the CDS transcript string extended to the right for the full transcript
+	 */
+	public String getTranscriptStartingAtCDS() {
+		try {
+			TranscriptPosition tBeginPos = genomeToTranscriptPos(transcript.cdsRegion.withPositionType(
+					PositionType.ZERO_BASED).getGenomeBeginPos());
+			return transcript.sequence.substring(tBeginPos.getPos(), transcript.sequence.length());
+		} catch (ProjectionException e) {
+			throw new Error("Bug: CDS begin must be translatable into transcript positions");
+		}
+	}
+
+	/**
 	 * Coordinate conversion from genome position to transcript position.
 	 *
 	 * @param pos
@@ -239,4 +252,41 @@ public class TranscriptProjectionDecorator {
 		throw new ProjectionException("Problem with transcript position " + pos + " (after last exon)");
 	}
 
+	/**
+	 * Translate {@link GenomePosition} to {@link TranscriptPosition} for {@link #transcript}.
+	 *
+	 * Positions upstream of CDS region are projected to the CDS begin position, downstream of CDS are projected to the
+	 * CDS end, positions in CDS introns are projected to first position of the next CDS exon.
+	 *
+	 * @param pos
+	 *            the position to translate
+	 * @return the corresponding position in the transcript sequence
+	 * @throws ProjectionException
+	 *             in case of problems with the position conversion
+	 */
+	public CDSPosition projectGenomeToCDSPosition(GenomePosition pos) {
+		// TODO(holtgrem): Test me!
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
+
+		try {
+			// Get transcript begin position.
+			if (transcript.cdsRegion.isRightOf(pos)) {
+				// Deletion begins left of CDS, project to begin of CDS.
+				return new CDSPosition(transcript.transcriptModel, 0, PositionType.ZERO_BASED);
+			} else if (transcript.cdsRegion.isLeftOf(pos)) {
+				// Deletion begins right of CDS, project to end of CDS.
+				return new CDSPosition(transcript.transcriptModel, transcript.cdsTranscriptLength(),
+						PositionType.ZERO_BASED);
+			} else if (soDecorator.liesInExon(pos)) {
+				return projector.genomeToCDSPos(pos);
+			} else { // lies in intron, project to begin position of next exon
+				int intronNum = projector.locateIntron(pos);
+				return projector.genomeToCDSPos(transcript.exonRegions[intronNum + 1].withPositionType(
+						PositionType.ZERO_BASED).getGenomeBeginPos());
+			}
+		} catch (ProjectionException e) {
+			throw new Error("Bug: must be able to convert exon position! " + e.getMessage());
+		}
+	}
 }
