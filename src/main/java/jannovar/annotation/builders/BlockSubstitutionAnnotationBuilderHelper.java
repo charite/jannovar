@@ -10,6 +10,8 @@ import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 import jannovar.util.Translator;
 
+// TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
+
 /**
  * Helper class for the {@link BlockSubstitutionAnnotationBuilder}.
  *
@@ -55,9 +57,6 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 		return new Annotation(transcript.transcriptModel, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
 	}
 
-	// TODO(holtgrem): CDSExonicAnnotationBuilder contains a some copy and paste code from DeletionAnnotationBuilder.
-	// TODO(holtgrem): We should take some time later to clean this up.
-
 	/**
 	 * Helper class for generating annotations for exonic CDS variants.
 	 *
@@ -77,8 +76,10 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 		final String varAASeq;
 		final int varAAStopPos;
 
-		final CDSPosition changeBeginPos;
-		final CDSPosition changeLastPos;
+		final CDSPosition refChangeBeginPos;
+		final CDSPosition refChangeLastPos;
+		final CDSPosition varChangeBeginPos;
+		final CDSPosition varChangeLastPos;
 
 		// We keep the following three variables as state of the algorithm since we do not have easy-to-use triples in
 		// Java.
@@ -104,21 +105,34 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 			this.varAASeq = t.translateDNA(varCDSSeq);
 			this.varAAStopPos = varAASeq.indexOf('*');
 
-			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
-			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
+			// Get the reference change begin position as CDS coordinate, handling introns and positions outside of CDS.
+			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
 					.withPositionType(PositionType.ZERO_BASED);
-			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1))
+			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(
+					changeInterval.getGenomeEndPos().shifted(-1)).withPositionType(PositionType.ZERO_BASED);
+			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+				refChangeLastPos = refChangeLastPos.shifted(-1); // shift if projected to end position
+			this.refChangeLastPos = refChangeLastPos;
+			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
+			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
 					.withPositionType(PositionType.ZERO_BASED);
+			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
+					changeInterval.getGenomeBeginPos().shifted(change.getAlt().length() - 1)).withPositionType(
+					PositionType.ZERO_BASED);
+			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
+			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
-			this.aaChange = new AminoAcidChange(changeBeginPos.getPos() / 3, wtAASeq.substring(
-					changeBeginPos.getPos() / 3, (changeLastPos.getPos() + 1 + 2) / 3), "");
+			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3, wtAASeq.substring(
+					refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3), varAASeq.substring(
+					varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
 		}
 
 		public Annotation build() {
 			if (delFrameShift == 0)
-				handleFrameShiftCase();
-			else
 				handleNonFrameShiftCase();
+			else
+				handleFrameShiftCase();
 
 			return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno), varType);
 		}
@@ -137,21 +151,26 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
-				if (changeBeginPos.getFrameshift() == 0) {
+				if (refChangeBeginPos.getFrameshift() == 0) {
 					// TODO(holtgrem): Implement shifting for substitutions for AA string
 				}
 
 				char wtAAFirst = wtAASeq.charAt(aaChange.pos);
 				char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
 				String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
-
-				// Handle the case of stop
+				String wtAAFirstLong = (wtAAFirst == '*') ? "*" : t.toLong(wtAAFirst);
+				String wtAALastLong = (wtAALast == '*') ? "*" : t.toLong(wtAALast);
 
 				if (aaChange.pos == aaChange.getLastPos())
-					protAnno = String.format("p.%s%ddelins%s", t.toLong(wtAAFirst), aaChange.pos + 1, insertedAAs);
+					protAnno = String.format("p.%s%d%s", wtAAFirstLong, aaChange.pos + 1,
+							t.toLong(insertedAAs.charAt(0)));
 				else
-					protAnno = String.format("p.%s%d_%s%ddelins%s", t.toLong(wtAAFirst), aaChange.pos + 1,
-							t.toLong(wtAALast), aaChange.getLastPos() + 1, insertedAAs);
+					protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
+							aaChange.getLastPos() + 1, insertedAAs);
+
+				// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
+				if (so.overlapsWithTranslationalStopSite(changeInterval))
+					protAnno = String.format("%sext*%d", protAnno, varAAStopPos - aaChange.pos + 1);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
 				protAnno = "p.0?";
@@ -162,8 +181,9 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 			// The variant is a frameshift deletion. The deletion could span more than one exon and thus also affect a
 			// splice donor or acceptor site. Further, the variant might also be stop lost or splice region variant but
 			// that has a lower priority than a frameshift deletion.
-			if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICING; // TODO(holtgrem): refine which of both cases we have
+			if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
+					|| so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICING; // TODO(holtgrem): refine which of the cases we have
 			else if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varType = VariantType.STOPLOSS;
 			else
@@ -175,7 +195,12 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 				char wtAA = wtAASeq.charAt(aaChange.pos);
 				char varAA = varAASeq.charAt(aaChange.pos);
 				int stopCodonOffset = varAAStopPos - aaChange.pos + 1;
-				protAnno = String.format("p.%s%d%sfs*%d", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA),
+				String wtAALong = (wtAA == '*') ? "*" : t.toLong(wtAA);
+				String varAALong = (varAA == '*') ? "*" : t.toLong(varAA);
+				String opDesc = "fs"; // operation description
+				if (aaChange.ref.indexOf('*') >= 0)
+					opDesc = "ext"; // stop codon deleted
+				protAnno = String.format("p.%s%d%s%s*%d", wtAALong, aaChange.pos + 1, varAALong, opDesc,
 						stopCodonOffset);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".

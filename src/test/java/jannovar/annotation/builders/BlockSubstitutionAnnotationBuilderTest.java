@@ -161,22 +161,27 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// Replace bases of stop codon by 4 nucleotides, frameshift case.
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED), "ACG",
 				"CGTT");
+		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:exon11:c.2067_*2delinsCGTT:p.*689Tyrext*15", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon11:c.2067_*2delinsCGTT:p.*689Tyrext*25", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation1.getVariantType());
 
 		// Replace stop codon by 6 nucleotides, non-frameshift case.
-		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED), "ACG",
-				"CGGTCC");
+		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED), "ACT",
+				"CGGTCG");
 		Annotation annotation2 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:exon11:c.2066del:p.0?", annotation2.getVariantAnnotation());
+		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
+		Assert.assertEquals("uc001anx.3:exon11:c.2066_*1delinsCGGTCG:p.*689Serext*17",
+				annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation2.getVariantType());
 
 		// Delete first base of stop codon, leads to complete loss.
 		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 6649269, PositionType.ZERO_BASED), "ACG",
 				"CGGT");
 		Annotation annotation3 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change3);
-		Assert.assertEquals("uc001anx.3:exon11:c.2065del:p.0?", annotation3.getVariantAnnotation());
+		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
+		Assert.assertEquals("uc001anx.3:exon11:c.2065_2067delinsCGGT:p.*689Argext*16",
+				annotation3.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation3.getVariantType());
 	}
 
@@ -192,42 +197,44 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6642117, PositionType.ZERO_BASED), "TGG",
 				"AA");
 		Annotation annotation2 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:exon3:c.691_693del:p.Trp231del", annotation2.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon3:c.691_693delinsAA:p.Trp231Lysfs*23", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.SPLICING, annotation2.getVariantType());
 	}
 
 	@Test
 	public void testForwardFrameShiftBlockSubstitution() throws InvalidGenomeChange {
 		// The following case contains a shift in the nucleotide sequence.
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6645978, PositionType.ZERO_BASED),
-				"GAAACATACT", "TAA");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6647537, PositionType.ZERO_BASED),
+				"TGCCCCACCT", "CCC");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:exon4:c.934_943del:p.Lys312Glyfs*29", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
+		Assert.assertEquals("uc001anx.3:exon7:c.1225_1234delinsCCC:p.Cys409Profs*127",
+				annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
 
 	@Test
 	public void testForwardNonFrameBlockSubstitution() throws InvalidGenomeChange {
 		// deletion of two codons, insertion of one
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6642114, PositionType.ZERO_BASED), "GAAACA",
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6642114, PositionType.ZERO_BASED), "TAAACA",
 				"GTT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.691-3_693del:p.Trp231del", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:c.691-3_693delinsGTT:p.Trp231Val", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 
 		// deletion of three codons, insertion of one
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6642126, PositionType.ZERO_BASED),
 				"GTGGTTCAA", "ACC");
 		Annotation annotation2 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:exon3:c.704_712del:p.Val235_Val237del", annotation2.getVariantAnnotation());
-		Assert.assertEquals(VariantType.NON_FS_DELETION, annotation2.getVariantType());
+		Assert.assertEquals("uc001anx.3:exon3:c.700_708delinsACC:p.Val234_Gln236delinsT",
+				annotation2.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, annotation2.getVariantType());
 
-		// deletion of three codons, insertion of one
+		// deletion of three codons, insertion of one, includes truncation of replacement ref from the right
 		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 6642134, PositionType.ZERO_BASED),
-				"AGTGGAGGA", "CTT");
+				"AGTGGAGGAT", "CTT");
 		Annotation annotation3 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change3);
-		Assert.assertEquals("uc001anx.3:exon3:c.708_716del:p.Gln236_Asp239delinsHis",
+		Assert.assertEquals("uc001anx.3:exon3:c.708_716delinsCT:p.Gln236Hisfs*16",
 				annotation3.getVariantAnnotation());
-		Assert.assertEquals(VariantType.NON_FS_DELETION, annotation3.getVariantType());
+		Assert.assertEquals(VariantType.FS_SUBSTITUTION, annotation3.getVariantType());
 	}
 }

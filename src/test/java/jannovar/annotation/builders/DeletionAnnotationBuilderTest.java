@@ -203,10 +203,10 @@ public class DeletionAnnotationBuilderTest {
 	@Test
 	public void testForwardFrameShiftDeletion() throws InvalidGenomeChange {
 		// The following case contains a shift in the nucleotide sequence.
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6645978, PositionType.ZERO_BASED),
-				"AAACATACTG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6645988, PositionType.ZERO_BASED),
+				"TGGGGAGAAA", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:exon4:c.934_943del:p.Lys312Glyfs*29", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon4:c.943_952del:p.Gly315Profs*26", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
 	}
 
