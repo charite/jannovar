@@ -150,6 +150,9 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardStopLoss() throws InvalidGenomeChange {
+		// Note that Mutalyzer has a different transcript sequence such that it does not report full loss for the cases
+		// below.
+
 		// Delete last base of stop codon, leads to complete loss.
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
@@ -162,11 +165,24 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals("uc001anx.3:exon11:c.2066del:p.0?", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation2.getVariantType());
 
-		// Delete first base of stop codon, leads to complete loss.
+		// Delete first base of stop codon, leads to extension
 		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 6649269, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation3 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change3);
 		Assert.assertEquals("uc001anx.3:exon11:c.2065del:p.0?", annotation3.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation3.getVariantType());
+
+		// Delete two bases of stop codon.
+		GenomeChange change4 = new GenomeChange(new GenomePosition('+', 1, 6649269, PositionType.ZERO_BASED), "AT", "");
+		Annotation annotation4 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change4);
+		Assert.assertEquals("uc001anx.3:exon11:c.2065_2066del:p.*689Alaext*14", annotation4.getVariantAnnotation());
+		Assert.assertEquals(VariantType.STOPLOSS, annotation4.getVariantType());
+
+		// Delete from before into the stop codon.
+		GenomeChange change5 = new GenomeChange(new GenomePosition('+', 1, 6649267, PositionType.ZERO_BASED),
+				"CATAGCCC", "");
+		Annotation annotation5 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change5);
+		Assert.assertEquals("uc001anx.3:exon11:c.2063_*3del:p.*689Hisext*13", annotation5.getVariantAnnotation());
+		Assert.assertEquals(VariantType.STOPLOSS, annotation5.getVariantType());
 	}
 
 	@Test
@@ -188,7 +204,7 @@ public class DeletionAnnotationBuilderTest {
 	public void testForwardFrameShiftDeletion() throws InvalidGenomeChange {
 		// The following case contains a shift in the nucleotide sequence.
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6645978, PositionType.ZERO_BASED),
-				"GAAACATACT", "");
+				"AAACATACTG", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001anx.3:exon4:c.934_943del:p.Lys312Glyfs*29", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());

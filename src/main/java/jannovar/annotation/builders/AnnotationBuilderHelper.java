@@ -15,6 +15,8 @@ import jannovar.reference.TranscriptSequenceDecorator;
 import jannovar.reference.TranscriptSequenceOntologyDecorator;
 
 // TODO(holtgrem): We could collect more than one variant type.
+// TODO(holtgrem): Handle case of start gain => ext
+// TODO(holtgrem): Extension without a stop codon should be "p.*327Rext*?".
 
 /**
  * Base class for the annotation builder helper classes.

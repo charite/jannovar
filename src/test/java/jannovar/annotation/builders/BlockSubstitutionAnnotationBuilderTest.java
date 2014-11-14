@@ -158,16 +158,16 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardStopLoss() throws InvalidGenomeChange {
-		// Delete last base of stop codon, leads to complete loss.
+		// Replace bases of stop codon by 4 nucleotides, frameshift case.
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED), "ACG",
 				"CGTT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:exon11:c.2067del:p.0?", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon11:c.2067_*2delinsCGTT:p.*689Tyrext*15", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation1.getVariantType());
 
-		// Delete middle base of stop codon, leads to complete loss.
+		// Replace stop codon by 6 nucleotides, non-frameshift case.
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED), "ACG",
-				"CGGT");
+				"CGGTCC");
 		Annotation annotation2 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change2);
 		Assert.assertEquals("uc001anx.3:exon11:c.2066del:p.0?", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation2.getVariantType());
