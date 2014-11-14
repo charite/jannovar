@@ -53,14 +53,20 @@ public class AminoAcidChange {
 	 * @return new {@link AminoAcidChange} that is shifted one to the right
 	 */
 	public AminoAcidChange shiftRight() {
-		return new AminoAcidChange(pos + 1, ref.substring(1, ref.length()), "");
+		if (alt.length() > 0)
+			return new AminoAcidChange(pos + 1, ref.substring(1, ref.length()), alt.substring(1, alt.length()));
+		else
+			return new AminoAcidChange(pos + 1, ref.substring(1, ref.length()), "");
 	}
 
 	/**
 	 * @return new {@link AminoAcidChange} that is shifted one to the left
 	 */
 	public AminoAcidChange shiftLeft() {
-		return new AminoAcidChange(pos, ref.substring(0, ref.length() - 1), "");
+		if (alt.length() > 0)
+			return new AminoAcidChange(pos, ref.substring(0, ref.length() - 1), alt.substring(1, alt.length()));
+		else
+			return new AminoAcidChange(pos, ref.substring(0, ref.length() - 1), "");
 	}
 
 	/*

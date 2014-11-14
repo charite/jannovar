@@ -155,6 +155,11 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 					// TODO(holtgrem): Implement shifting for substitutions for AA string
 				}
 
+				// Normalize the amino acid change with the var AA sequence.
+				while (aaChange.ref.length() > 0 && aaChange.alt.length() > 0
+						&& aaChange.ref.charAt(0) == aaChange.alt.charAt(0))
+					aaChange = aaChange.shiftRight();
+
 				char wtAAFirst = wtAASeq.charAt(aaChange.pos);
 				char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
 				String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
@@ -166,7 +171,7 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 							t.toLong(insertedAAs.charAt(0)));
 				else
 					protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
-							aaChange.getLastPos() + 1, insertedAAs);
+							aaChange.getLastPos() + 1, t.toLong(insertedAAs));
 
 				// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
 				if (so.overlapsWithTranslationalStopSite(changeInterval))
