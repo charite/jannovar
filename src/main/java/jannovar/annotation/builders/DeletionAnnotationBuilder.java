@@ -39,7 +39,8 @@ public class DeletionAnnotationBuilder {
 	/**
 	 * Returns a {@link Annotation} for the deletion {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
-	 * @note The position of deletions cannot be normalized/shifted since we have no sequence for the intronic regions.
+	 * @note In some cases, the position of deletions cannot be normalized/shifted since we have no sequence for the
+	 *       intronic regions.
 	 *
 	 * @param transcript
 	 *            {@link TranscriptInfo} for the transcript to compute the affection for

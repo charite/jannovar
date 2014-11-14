@@ -50,8 +50,6 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			return String.format("%s:%sins%s", locAnno, dnaAnno, hgvsInsOverride);
 	}
 
-	// TODO(holtgrem): shifting and normalization
-
 	private Annotation buildCDSExonicAnnotation() {
 		// Translate the change position to the transcript and the CDS position.
 		TranscriptPosition txPos;
@@ -66,12 +64,16 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		return new CDSExonicAnnotationBuilder(this, txPos, cdsPos).build();
 	}
 
+	/**
+	 * Helper class for generating annotations for exonic CDS variants.
+	 *
+	 * We use this helper class to simplify the access to the parameters such as {@link #cdsPos} etc.
+	 */
 	private class CDSExonicAnnotationBuilder {
 		final InsertionAnnotationBuilderHelper owner;
 
 		final Translator t = Translator.getTranslator();
 
-		final TranscriptPosition txPos;
 		final CDSPosition cdsPos;
 		final String wtNT;
 		final String wtAA;
@@ -83,7 +85,6 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		public CDSExonicAnnotationBuilder(InsertionAnnotationBuilderHelper owner, TranscriptPosition txPos,
 				CDSPosition cdsPos) {
 			this.owner = owner;
-			this.txPos = txPos;
 			this.cdsPos = cdsPos;
 
 			// TODO(holtgrem): Get sequence of smaller environment to save memory?
@@ -95,6 +96,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			this.varNT = TranscriptSequenceDecorator.nucleotidesWithInsertion(wtNT, cdsPos.getPos() % 3,
 					change.getAlt());
 			this.varAA = Translator.getTranslator().translateDNA(varNT);
+			// TODO(holtgrem): use the *Normalizer classes for shifting
 			// Shift amino acid insertion to the right (3' end of transcript) as far as possible.
 			int varAAPos = cdsPos.getPos() / 3; // original change in AA as position in protein
 			int varAAIdx = 0; // original change in AA as index in varAA
