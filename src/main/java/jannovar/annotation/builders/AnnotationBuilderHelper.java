@@ -96,40 +96,79 @@ abstract class AnnotationBuilderHelper {
 	 * @return intronic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntronicAnnotation() {
-		// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
-		GenomeInterval changeInterval = change.getGenomeInterval();
-		if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
-				|| so.overlapsWithSpliceRegion(changeInterval))
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
-		else
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.INTRONIC);
+		if (change.getGenomeInterval().length() == 0) {
+			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			GenomePosition lPos = pos.shifted(-1);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
+					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
+					|| (so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			else
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.INTRONIC);
+		} else {
+			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
+			GenomeInterval changeInterval = change.getGenomeInterval();
+			if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
+					|| so.overlapsWithSpliceRegion(changeInterval))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			else
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.INTRONIC);
+		}
 	}
 
 	/**
 	 * @return 3'/5' UTR anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUTRAnnotation() {
-		// TODO(holtgrem): differentiate splicing cases further!
-		if (so.overlapsWithSpliceAcceptorSite(change.getGenomeInterval())
-				|| so.overlapsWithSpliceDonorSite(change.getGenomeInterval())
-				|| so.overlapsWithSpliceRegion(change.getGenomeInterval()))
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
-		else if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR5);
-		else
-			// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR3);
+		if (change.getGenomeInterval().length() == 0) {
+			// TODO(holtgrem): differentiate splicing cases further!
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			GenomePosition lPos = pos.shifted(-1);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
+					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
+					|| (so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			else if (so.liesInFivePrimeUTR(lPos))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR5);
+			else
+				// so.liesInThreePrimeUTR(pos)
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR3);
+		} else {
+			// TODO(holtgrem): differentiate splicing cases further!
+			GenomeInterval changeInterval = change.getGenomeInterval();
+			if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
+					|| so.overlapsWithSpliceRegion(changeInterval))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			else if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR5);
+			else
+				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR3);
+		}
 	}
 
 	/**
 	 * @return upstream/downstream anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUpOrDownstreamAnnotation() {
-		if (so.overlapsWithUpstreamRegion(change.getGenomeInterval()))
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UPSTREAM);
-		else
-			// so.overlapsWithDownstreamRegion(changeInterval)
-			return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.DOWNSTREAM);
+		if (change.getGenomeInterval().length() == 0) {
+			// Empty interval, is insertion.
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			if (so.liesInUpstreamRegion(pos))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UPSTREAM);
+			else
+				// so.liesInDownstreamRegion(lPos))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.DOWNSTREAM);
+		} else {
+			// Non-empty interval, at least one reference base changed/deleted.
+			GenomeInterval changeInterval = change.getGenomeInterval();
+			if (so.overlapsWithUpstreamRegion(changeInterval))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UPSTREAM);
+			else
+				// so.overlapsWithDownstreamRegion(changeInterval)
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.DOWNSTREAM);
+		}
 	}
 
 	/**
@@ -150,21 +189,40 @@ abstract class AnnotationBuilderHelper {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
-		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeBeginPos();
-		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeEndPos().shifted(-1);
-
-		// Handle the cases for which no exon number is available.
-		if (!soDecorator.liesInExon(firstChangePos) || !soDecorator.liesInExon(lastChangePos))
-			return transcript.accession; // no exon information if either does not lie in exon
 		int exonNum;
-		try {
-			exonNum = projector.locateExon(firstChangePos);
-			if (exonNum != projector.locateExon(lastChangePos))
-				return transcript.accession; // no exon information if the deletion spans more than one exon
-		} catch (ProjectionException e) {
-			throw new Error("Bug: positions should be in CDS if we reach here");
+
+		if (change.getGenomeInterval().length() == 0) {
+			// no base is change => insertion
+			GenomePosition changePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+					.getGenomeBeginPos();
+
+			// Handle the cases for which no exon number is available.
+			if (!soDecorator.liesInExon(changePos))
+				return transcript.accession; // no exon information if change pos does not lie in exon
+			try {
+				exonNum = projector.locateExon(changePos);
+			} catch (ProjectionException e) {
+				throw new Error("Bug: position should be in exon if we reach here");
+			}
+		} else {
+			// at least one base is changed
+			GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+					.getGenomeBeginPos();
+			GenomeInterval firstChangeBase = new GenomeInterval(firstChangePos, 1);
+			GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
+					.getGenomeEndPos().shifted(-1);
+			GenomeInterval lastChangeBase = new GenomeInterval(firstChangePos, 1);
+
+			// Handle the cases for which no exon number is available.
+			if (!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
+				return transcript.accession; // no exon information if either does not lie in exon
+			try {
+				exonNum = projector.locateExon(firstChangePos);
+				if (exonNum != projector.locateExon(lastChangePos))
+					return transcript.accession; // no exon information if the deletion spans more than one exon
+			} catch (ProjectionException e) {
+				throw new Error("Bug: positions should be in exons if we reach here");
+			}
 		}
 
 		return String.format("%s:exon%d", transcript.accession, exonNum + 1);

@@ -211,9 +211,10 @@ public class TranscriptProjectionDecorator {
 			throw new ProjectionException("Position " + pos + " outside of tx region " + transcript.txRegion);
 
 		// find exon containing pos or return null
+		GenomeInterval posBase = new GenomeInterval(pos, 1); // region of referenced base
 		int i = 0;
 		for (GenomeInterval region : transcript.exonRegions) {
-			if (region.contains(pos))
+			if (region.contains(posBase))
 				return i;
 			++i;
 		}
@@ -266,6 +267,7 @@ public class TranscriptProjectionDecorator {
 	 */
 	public CDSPosition projectGenomeToCDSPosition(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
+		pos = pos.withPositionType(PositionType.ZERO_BASED);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 

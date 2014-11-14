@@ -113,11 +113,11 @@ public class TranscriptSequenceOntologyDecorator {
 	/**
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying
+	 * @param
 	 * @return <code>true</code> if the {@link GenomePosition} points to a base in the coding part of an exon
 	 */
 	public boolean liesInCDSExon(GenomePosition pos) {
-		GenomeInterval interval = new GenomeInterval(pos.withPositionType(PositionType.ZERO_BASED), 1);
-		return liesInCDSExon(interval);
+		return (transcript.cdsRegion.contains(pos) && liesInExon(pos));
 	}
 
 	/**
@@ -230,15 +230,15 @@ public class TranscriptSequenceOntologyDecorator {
 		for (int i = 0; i < transcript.exonRegions.length; ++i) {
 			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
 			if (i + 1 < transcript.exonRegions.length) {
-				// check for acceptor region
-				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8),
-						11);
+				// check for donor region
+				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
 				if (interval.overlapsWith(spliceRegionInterval))
 					return true;
 			}
 			if (i > 0) {
-				// check for donor region
-				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
+				// check for acceptor region
+				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8),
+						11);
 				if (interval.overlapsWith(spliceRegionInterval))
 					return true;
 			}
@@ -252,15 +252,15 @@ public class TranscriptSequenceOntologyDecorator {
 		for (int i = 0; i < transcript.exonRegions.length; ++i) {
 			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
 			if (i + 1 < transcript.exonRegions.length) {
-				// check for acceptor region
-				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8),
-						11);
+				// check for donor region
+				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
 				if (spliceRegionInterval.contains(pos))
 					return true;
 			}
 			if (i > 0) {
-				// check for donor region
-				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
+				// check for acceptor region
+				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-8),
+						11);
 				if (spliceRegionInterval.contains(pos))
 					return true;
 			}
@@ -289,7 +289,7 @@ public class TranscriptSequenceOntologyDecorator {
 	}
 
 	// TODO(holtgrem): Document me!
-	public boolean liesInSpliceSpliceDonorSite(GenomePosition pos) {
+	public boolean liesInSpliceDonorSite(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
 		for (int i = 0; i + 1 < transcript.exonRegions.length; ++i) {
 			GenomeInterval exonInterval = transcript.exonRegions[i].withPositionType(PositionType.ZERO_BASED);
@@ -454,8 +454,20 @@ public class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomePosition} points to a base an exon
 	 */
 	public boolean liesInExon(GenomePosition pos) {
-		GenomeInterval interval = new GenomeInterval(pos.withPositionType(PositionType.ZERO_BASED), 1);
-		return liesInExon(interval);
+		// TODO(holtgrem): Test me!
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+
+		// locate exon, return false on any errors
+		int exonNo = -1;
+		try {
+			exonNo = projector.locateExon(pos);
+		} catch (ProjectionException e) {
+			return false;
+		}
+		if (exonNo == -1)
+			return false;
+
+		return transcript.exonRegions[exonNo].contains(pos);
 	}
 
 	/**

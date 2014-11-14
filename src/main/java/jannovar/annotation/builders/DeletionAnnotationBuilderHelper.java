@@ -145,7 +145,7 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			}
 		}
 
-		return new Annotation(transcript.transcriptModel, String.format("%s:%sdel:%s", locAnno, dnaAnno, protAnno),
+		return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno),
 				varType);
 	}
 
