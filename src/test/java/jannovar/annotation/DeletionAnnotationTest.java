@@ -211,7 +211,7 @@ public class DeletionAnnotationTest implements Constants {
 	@Test
 	public void testFSDeletionVar12() throws AnnotationException {
 		byte chr = 6;
-		// int pos = 27879113;
+		int pos = 27879113;
 		String ref = "T";
 		String alt = "-";
 
