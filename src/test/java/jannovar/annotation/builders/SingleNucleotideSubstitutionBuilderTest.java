@@ -2047,6 +2047,29 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 
+	/**
+	 * <P>
+	 * annovar: GPBAR1 chr2:219128506C>T
+	 * </P>
+	 */
+	@Test
+	public void testRealWorldCase_uc010zjy_1() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc010zjy.1	chr2	+	219125737	219128582	219127447	219128440	2	219125737,219127289,	219125939,219128582,	Q8TDU6	uc010zjy.1");
+		this.transcriptForward
+				.setSequence("gagaacccagacgggcagagcctgggtaggagagcctggccccgctgtccccactgggtggagacaccatgcacttggtccacttgtgctcttcagccaggacaccagacatggtccaaaccgctgcagggctggctgcagcaactccctgacactcaggaaggcccaggctgggcaggcaatacctgctcccaacagccatcgaacatgatacagcccacagcctgcgggtctgcgcccctggattaacatgctgccctgccaggaggacacgacctgcagccccatcctaactctggccaccccatcctgcaggcatgccggctgccgctccaggactcccctgtccccaggaccaagatgacgcccaacagcactggcgaggtgcccagccccattcccaagggggctttggggctctccctggccctggcaagcctcatcatcaccgcgaacctgctcctagccctgggcatcgcctgggaccgccgcctgcgcagcccacctgctggctgcttcttcctgagcctactgctggctgggctgctcacgggtctggcattgcccacattgccagggctgtggaaccagagtcgccggggttactggtcctgcctcctcgtctacttggctcccaacttctccttcctctccctgcttgccaacctcttgctggtgcacggggagcgctacatggcagtcctgaggccactccagccccctgggagcattcggctggccctgctcctcacctgggctggtcccctgctctttgccagtctgcccgctctggggtggaaccactggacccctggtgccaactgcagctcccaggctatcttcccagccccctacctgtacctcgaagtctatgggctcctgctgcccgccgtgggtgctgctgccttcctctctgtccgcgtgctggccactgcccaccgccagctgcaggacatctgccggctggagcgggcagtgtgccgcgatgagccctccgccctggcccgggcccttacctggaggcaggcaagggcacaggctggagccatgctgctcttcgggctgtgctgggggccctacgtggccacactgctcctctcagtcctggcctatgagcagcgcccgccactggggcctgggacactgttgtccctcctctccctaggaagtgccagtgcagcggcagtgcccgtagccatggggctgggcgatcagcgctacacagccccctggagggcagccgcccaaaggtgcctgcaggggctgtggggaagagcctcccgggacagtcccggccccagcattgcctaccacccaagcagccaaagcagtgtcgacctggacttgaactaaaggaagggcctctgctgactcctaccagagcatccgtccagctcagccatccagcctgtctctaccgggccccacttctctggatcagagaccctgcctctgtttgaccccgcactgactgaataaagctcctctggccgttaaaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("GPBAR1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 219128505, PositionType.ZERO_BASED), "C",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc010zjy.1:exon2:c.*66C>T", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
 	//
 	// Various Downstream Variants
 	//

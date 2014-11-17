@@ -14,8 +14,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-// TODO(holtgrem): Mutalyzer uses parantheses () to indicate non-validated prediction.
 // TODO(holtgrem): What exactly should be counted as stop gain?
+// TODO(holtgrem): Convert more from UTR3AnnotationTest from the old tests, also for other variant types
 
 public class InsertionAnnotationBuilderTest {
 
@@ -1212,6 +1212,74 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc003izs.3:exon1:c.2_3insA:p.0?", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation1.getVariantType());
+	}
+
+	//
+	// Various UTR 3' Variants Below
+	//
+
+	/**
+	 * annovar: THAP3 chr1:6693165->TA
+	 */
+	@Test
+	public void testRealWorldCase_uc001aod_3() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001aod.3	chr1	+	6685209	6693642	6685278	6693137	5	6685209,6688558,6690350,6692450,6692855,	6685352,6688751,6690413,6692555,6693642,	Q8WTV1-3	uc001aod.3");
+		this.transcriptForward
+				.setSequence("gtccctcccctctccgcaggccccgccgccgccgccatctttgttgggggcagccaggcctggctcgagatgccgaagtcgtgcgcggcccggcagtgctgcaaccgctacagcagccgcaggaagcagctcaccttccaccggtttccgttcagccgcccggagctgctgaaggaatgggtgctgaacatcggccggggcaacttcaagcccaagcagcacacggtcatctgctccgagcacttccggccagagtgcttcagcgcctttggaaaccgcaagaacctaaagcacaatgccgtgcccacggtgttcgcctttcaggaccccacacaggtgagggagaacacagaccctgccagtgagagaggaaatgccagctcttctcagaaagaaaaggtcctccctgaggcgggggccggagaggacagtcctgggagaaacatggacactgcacttgaagagcttcagttgcccccaaatgccgaaggccacgtaaaacaggtctcgccacggaggccgcaagcaacagaggctgttggccggccgactggccctgcaggcctgagaaggacccccaacaagcagccatctgatcacagctatgcccttttggacttagattccctgaagaaaaaactcttcctcactctgaaggaaaatgaaaagctccggaagcgcttgcaggcccagaggctggtgatgcgaaggatgtccagccgcctccgtgcttgcaaagggcaccagggactccaggccagacttgggccagagcagcagagctgagccccacaggctccggacgcagaggtggcagtggcaccagggccggcagagctttggagctctggctgtggacatttttgtctgctgtggacactgagaaagttggccatgaggcctgcttggccggggatcgagacagtagccaagctccccggcgagagccccaatgccgtctgggggacgtttagaggcgtggcactaggagtgcacatctgtgagcatgacaagcttatcctcccatggtaacagaagtccaggctgaggctgattctggacgctgtcctttcagcacacgcagagcaaagatcgttggaagccccagtgtgggagatgctcctcagggaggaagccatgtgagggggctggctctgtggcgggtgagtggtcccctcctccatcagcctggacagccgctcggggttctaaggagtgactcctgtcccggcctggtgtgagtgggcagtgtaataaagtgtctttctatacggtgtcgctcccatcatcaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("THAP3");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6693165, PositionType.ZERO_BASED), "", "TA");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001aod.3:exon5:c.*28_*29insTA", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * annovar: RGS21 chr1:192335275->TAAT
+	 */
+	@Test
+	public void testRealWorldCase_uc001gsh_3() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001gsh.3	chr1	+	192286121	192336414	192312166	192335254	5	192286121,192312106,192316442,192321176,192335050,	192286235,192312177,192316519,192321343,192336414,	Q2M5E4	uc001gsh.3");
+		this.transcriptForward
+				.setSequence("gttaccacttggaaaacaattcatctgaaagaagcacagattttctcatctatcctgtcaacaaagaaggaatcaagagagcaaggacagtgatttcccctgcattgcatttgtcttgaagatcagtcagaaagagaaactcggcatcatctgtgacagacagtggaacgaaaaatgccagtgaaatgctgtttctacaggtcaccaactgcggaaacaatgacatggtctgaaaatatggacacgcttttagccaaccaagctggtctagatgcttttcgaatatttctaaaatcagagtttagtgaagaaaatgttgagttctggcttgcctgtgaagactttaagaaaacgaaaaatgcagacaaaattgcttccaaagccaagatgatttattctgaattcattgaagctgatgcacctaaagagattaacattgacttcggtaccagagacctcatctcaaagaatattgctgaaccaacactcaaatgctttgatgaggctcagaaattaatctattgtctcatggccaaggattctttccctcgatttctgaagtcagagatttataaaaaactggtaaatagccaacaggttccaaatcataaaaaatggctcccttttttgtgaggaaggtaaaagttaactaatcactatacttcagggctacaatattttaaatatacaagcatgatgcattgtcttttgttttgtttttaggatttagaaaacattttttacccaaacagatgaataacgttttatacaacaagcctgaatttctaactcagttgtttagaatgtatttgctttaccagctatttaatctcctactgggggagtacaaagaaagtttatagagatacaatatagtcttaaaccaaaactgaatattcttattatattataatgtaaggaattatacatatcttcacgtggcagaatgaaagacttttgagcatcatatacacaattttaaataccattgctttattcaaaaaaatctcacttttgtaaaaagagaatttctgaaccaaaatacaagctttcatttaatatatttaactgttttttttctgccatttctttccaactatttctaataatgtggttatgaaaactgctacgcctctcaaattatattttttaaatcacaggaatgtatacacatttatatgtatgtcttgaatgcaccatggaccaaagtttttcaaaatatatcacttggctcaattcaatggcatcacatataaaatgtgatgagttatgtatgaaaaggcctcaagggtggggaatactgattttcttatgttaacagaaatataaaagaaagtggaagactaaggagcatagataaatccttataagatgaagtatatagcaagtcataaaatttaagaatttgcaacattatctactcaattgtggggaagtatctattcactccttcagcactgatacttgtttataaaacccaaacaatttttaaatgcatttattttgagatgttcctaaaattgtttcattctatatgtaaatatcctgtgataaatacgaataatttcatttcaatatgagaagctgtaaagattcaacagatctcccacgtttccattttctttgcacagatttatttatctgcattgatatttctgcttttagattgtttgaacattaaaaaatggaggaaaaatagcatggcttattttatgttttcacaaactactcatttgatagacaaaattttgtcttcccttcatcatgagaaataaacatttaaacatattcaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("RGS21");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 192335275, PositionType.ZERO_BASED), "",
+				"TAAT");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001gsh.3:exon5:c.*21_*22insTAAT", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * <P>
+	 * annovar: FRG1 chr4:190884289->GACA
+	 * </P>
+	 */
+	@Test
+	public void testRealWorldCase_uc003izs_3() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003izs.3	chr4	+	190861973	190884359	190862164	190884284	9	190861973,190864356,190873316,190874222,190876191,190878552,190881902,190882976,190884247,	190862226,190864427,190873442,190874280,190876306,190878657,190881994,190883087,190884359,	Q14331	uc003izs.3");
+		this.transcriptForward
+				.setSequence("gaaacccggaagtggaactctgagccattcagcgtttgggtgaagacggaggcgggttctacagagacgtaggctgtcagggagtgtttatttcgcgtccgcttctgtttctccgcgcccctgtgctgccccgactcacatactcgtccagaaccggcctcagcctctccgcgcagaagtttcccggagccatggccgagtactcctacgtgaagtctaccaagctcgtgctcaagggaaccaagacgaagagtaagaagaaaaagagcaaagataagaaaagaaaaagagaagaagatgaagaaacccagcttgatattgttggaatctggtggacagtaacaaactttggtgaaatttcaggaaccatagccattgaaatggataagggaacctatatacatgcactcgacaatggtctttttaccctgggagctccacacaaagaagttgatgagggccctagtcctccagagcagtttacggctgtcaaattatctgattccagaatcgccctgaagtctggctatggaaaatatcttggtataaattcagatggacttgttgttgggcgttcagatgcaattggaccaagagaacaatgggaaccagtctttcaaaatgggaaaatggctttgttggcctcaaatagctgctttattagatgcaatgaagcaggggacatagaagcaaaaagtaaaacagcaggagaagaagaaatgatcaagattagatcctgtgctgaaagagaaaccaagaaaaaagatgacattccagaagaagacaaaggaaatgtaaaacaatgtgaaatcaattatgtaaagaaatttcagagcttccaagaccacaaacttaaaataagtaaagaagacagtaaaattcttaaaaaggctcggaaagatggatttttgcatgagacgcttctggacaggagagccaaattgaaagccgacagatactgcaagtgactgggatttttgtttctgccttatctttctgtgtttttttctgaataaaatattcagaggaaatgcttttacagaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("FRG1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 4, 190884289, PositionType.ZERO_BASED), "",
+				"GACA");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003izs.3:c.*5_*6insGACA", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
 	}
 
 }

@@ -36,25 +36,6 @@ public class UTR3AnnotationTest implements Constants {
 
 	/**
 	 * <P>
-	 * annovar: THAP3 chr1:6693165->TA
-	 * </P>
-	 */
-	@Test
-	public void testUTR3Var7() throws AnnotationException {
-		byte chr = 1;
-		int pos = 6693165;
-		String ref = "-";
-		String alt = "TA";
-
-		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
-		VariantType varType = ann.getVariantType();
-		Assert.assertEquals(VariantType.UTR3, varType);
-		String annot = ann.getVariantAnnotation();
-		Assert.assertEquals("THAP3(uc001aod.3:c.*28_*29insTA,uc001aoc.3:c.*28_*29insTA)", annot);
-	}
-
-	/**
-	 * <P>
 	 * annovar: UNQ5810 chr16:19315621C>G
 	 * </P>
 	 */
@@ -190,25 +171,6 @@ public class UTR3AnnotationTest implements Constants {
 
 	/**
 	 * <P>
-	 * annovar: RGS21 chr1:192335275->TAAT
-	 * </P>
-	 */
-	@Test
-	public void testUTR3Var116() throws AnnotationException {
-		byte chr = 1;
-		int pos = 192335275;
-		String ref = "-";
-		String alt = "TAAT";
-
-		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
-		VariantType varType = ann.getVariantType();
-		Assert.assertEquals(VariantType.UTR3, varType);
-		String annot = ann.getVariantAnnotation();
-		Assert.assertEquals("RGS21(uc001gsh.3:c.*21_*22insTAAT)", annot);
-	}
-
-	/**
-	 * <P>
 	 * annovar: LMOD1 chr1:201865763A>G Minus strand
 	 * </P>
 	 */
@@ -246,24 +208,6 @@ public class UTR3AnnotationTest implements Constants {
 		Assert.assertEquals("PHOSPHO2-KLHL23(uc002ufh.2:c.*58_*59insA,uc002ufi.2:c.*58_*59insA)", annot);
 	}
 
-	/**
-	 * <P>
-	 * annovar: GPBAR1 chr2:219128506C>T
-	 * </P>
-	 */
-	@Test
-	public void testUTR3Var205() throws AnnotationException {
-		byte chr = 2;
-		int pos = 219128506;
-		String ref = "C";
-		String alt = "T";
-
-		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
-		VariantType varType = ann.getVariantType();
-		Assert.assertEquals(VariantType.UTR3, varType);
-		String annot = ann.getVariantAnnotation();
-		Assert.assertEquals("GPBAR1(uc010zjy.1:c.*66C>T,uc010zjw.1:c.*66C>T,uc010zjx.1:c.*66C>T)", annot);
-	}
 
 	/**
 	 * <P>
@@ -324,25 +268,6 @@ public class UTR3AnnotationTest implements Constants {
 		Assert.assertEquals(VariantType.UTR3, varType);
 		String annot = ann.getVariantAnnotation();
 		Assert.assertEquals("AK308309(uc010imy.1:c.*99_*104del)", annot);
-	}
-
-	/**
-	 * <P>
-	 * annovar: FRG1 chr4:190884289->GACA
-	 * </P>
-	 */
-	@Test
-	public void testUTR3Var352() throws AnnotationException {
-		byte chr = 4;
-		int pos = 190884289;
-		String ref = "-";
-		String alt = "GACA";
-
-		AnnotationList ann = annotator.getAnnotationList(chr, pos, ref, alt);
-		VariantType varType = ann.getVariantType();
-		Assert.assertEquals(VariantType.UTR3, varType);
-		String annot = ann.getVariantAnnotation();
-		Assert.assertEquals("FRG1(uc003izs.3:c.*5_*6insGACA)", annot);
 	}
 
 	/**
