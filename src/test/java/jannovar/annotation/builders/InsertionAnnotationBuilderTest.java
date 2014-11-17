@@ -489,4 +489,274 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals("uc010arh.1:exon1:n.512_513insTT", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
+
+	//
+	// Various Duplication Variants
+	//
+
+	/**
+	 * This is the test for the in-frame duplication of a single triplicate / one amino acids '+' strand
+	 *
+	 * Mutalyzer: NM_001005495(OR2T3_v001):c.769_771dup NM_001005495(OR2T3_i001):p.(Phe257dup)
+	 */
+	@Test
+	public void testRealWorldCase_uc001iel_1_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
+		this.transcriptForward
+				.setSequence("atgtgctcagggaatcagacttctcagaatcaaacagcaagcactgatttcaccctcacgggactctttgctgagagcaagcatgctgccctcctctacaccgtgaccttccttcttttcttgatggccctcactgggaatgccctcctcatcctcctcatccactcagagccccgcctccacacccccatgtacttcttcatcagccagctcgcgctcatggatctcatgtacctatgcgtgactgtgcccaagatgcttgtgggccaggtcactggagatgataccatttccccgtcaggctgtgggatccagatgttcttctacctgaccctggctggagctgaggttttcctcctggctgccatggcctatgaccgatatgctgctgtttgcagacctctccattacccactgctgatgaaccagagggtgtgccagctcctggtgtcagcctgctgggttttgggaatggttgatggtttgttgctcacccccattaccatgagcttccccttttgccagtctaggaaaatcctgagttttttctgtgagactcctgccctgctgaagctctcctgctctgacgtctccctctataagacgctcatgtacctgtgctgcatcctcatgcttctcgcccccatcatggtcatctccagctcatacaccctcatcctgcatctcatccacaggatgaattctgccgccggccacaggaaggccttggccacctgctcctcccacatgatcatagtgctgctgctcttcggtgcttccttctacacctacatgctcccgagttcctaccacacagctgagcaggacatgatggtgtctgccttttacaccatcttcactcctgtgctgaaccccctcatttacagtctccgcaacaaagatgtcaccagggctctgaggagcatgatgcagtcaagaatgaaccaagaaaagtag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("OR2T3");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637422, PositionType.ZERO_BASED), "",
+				"TTC");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001iel.1:exon1:c.769_771dup:p.F257dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 * annovar: FRG1:uc003izs.3:exon6:c.439_440insA:p.M147fs, chr4:190878559->A FRG1 is on the "+" strand
+	 *
+	 * Jannovar says: FRG1(uc003izs.3:exon6:c.438dupA:p.M147fs) expected <...c003izs.3:exon6:c.43[9]dupA:p.M147fs)> but
+	 * was: <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)> is uc003izs.3 NM_004477.2
+	 *
+	 * Mutalyzer says NM_004477.2(FRG1_v001):c.439dup NM_004477.2(FRG1_i001):p.(Met147Asnfs*8)
+	 *
+	 * Raw variant 1: duplication from 630 to 630 GAACCAGTCTTTCAAAATGGGAAAA - TGGCTTTGTTGGCCTCAAATAGCTG
+	 * GAACCAGTCTTTCAAAATGGGAAAA A TGGCTTTGTTGGCCTCAAATAGCTG
+	 *
+	 * Thus, 439 and not 438 is the correct number for the duplicated nucleotide. Jannovar lists refvarstart as 630.
+	 * This is the last "A" of a polyA tract in the gene (see genbank L76159.1). Jannovar lists refcdsstart as 192. This
+	 * is the position of the start of the start codon in FRG1 (L76159.1). <...c003izs.3:exon6:c.43[9]dupA:p.M147fs)>
+	 * but was: <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)>
+	 */
+	@Test
+	public void testRealWorldCase_uc003izs_3() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003izs.3	chr4	+	190861973	190884359	190862164	190884284	9	190861973,190864356,190873316,190874222,190876191,190878552,190881902,190882976,190884247,	190862226,190864427,190873442,190874280,190876306,190878657,190881994,190883087,190884359,	Q14331	uc003izs.3");
+		this.transcriptForward
+				.setSequence("gaaacccggaagtggaactctgagccattcagcgtttgggtgaagacggaggcgggttctacagagacgtaggctgtcagggagtgtttatttcgcgtccgcttctgtttctccgcgcccctgtgctgccccgactcacatactcgtccagaaccggcctcagcctctccgcgcagaagtttcccggagccatggccgagtactcctacgtgaagtctaccaagctcgtgctcaagggaaccaagacgaagagtaagaagaaaaagagcaaagataagaaaagaaaaagagaagaagatgaagaaacccagcttgatattgttggaatctggtggacagtaacaaactttggtgaaatttcaggaaccatagccattgaaatggataagggaacctatatacatgcactcgacaatggtctttttaccctgggagctccacacaaagaagttgatgagggccctagtcctccagagcagtttacggctgtcaaattatctgattccagaatcgccctgaagtctggctatggaaaatatcttggtataaattcagatggacttgttgttgggcgttcagatgcaattggaccaagagaacaatgggaaccagtctttcaaaatgggaaaatggctttgttggcctcaaatagctgctttattagatgcaatgaagcaggggacatagaagcaaaaagtaaaacagcaggagaagaagaaatgatcaagattagatcctgtgctgaaagagaaaccaagaaaaaagatgacattccagaagaagacaaaggaaatgtaaaacaatgtgaaatcaattatgtaaagaaatttcagagcttccaagaccacaaacttaaaataagtaaagaagacagtaaaattcttaaaaaggctcggaaagatggatttttgcatgagacgcttctggacaggagagccaaattgaaagccgacagatactgcaagtgactgggatttttgtttctgccttatctttctgtgtttttttctgaataaaatattcagaggaaatgcttttacagaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("FRG1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 4, 190878559, PositionType.ZERO_BASED), "", "A");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003izs.3:exon6:c.439dup:p.Met147fs", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 * This is the test for the in-frame duplication of a single triplicate / one amino acids '+' strand
+	 */
+	@Test
+	public void testRealWorldCase_uc010naq_2() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc010naq.2	chr9	+	137967088	137969237	137967582	137969065	2	137967088,137968657,	137967648,137969237,	Q6IMJ6	uc010naq.2");
+		this.transcriptForward
+				.setSequence("atcctgtcccagcctgcttccccgccggccgccgccctcctccccgggagagagcgaggcgcgcgggtccctctgcgccacccccgcccccgccccttccgagcaaacttttggcacccaccgcagcccagcgcgcgttcgtgctccgcagggcgcgcctctctccgccaatgccaggcgcgcgggggagccattaggaggcgaggagagaggagggcgcagctcccgcccagcccagccctgcccagccctgcccggaggcagacgcgccggaaccgggacgcgataaatatgcagagcggaggcttcgcgcagcagagcccgcgcgccgcccgctccgggtgctgaatccaggcgtggggacacgagccaggcgccgccgccggagccagcggagccggggccagagccggagcgcgtccgcgtccacgcagccgccggccggccagcacccagggccctgcatgccaggtcgttggaggtggcagcgagacatgcacccggcccggaagctcctcagcctcctcttcctcatcctgatgggcactgaactcactcaaaataaaagagaaaacaaagcagagaagatgggagggccagagagcgagaggaagaccacaggagagaagacactgaacgagcttcccttgttttgcctggaagcccacgctggctccctggctctgcccaggatgtgcagtccaaatcccaatccagcagtggggttatgtcgtcccgcttaccctcagagcccttctcctggtgctgcccagacgatcagccagtccctcctggagaggttctgcatggcctctaggagaggttttcttggccccaggaaggcctggtggagggtggtggttgtgcactgttgctggacagatgcattcattcatgtgcacacacacacacacacatgcacacacaggggagcagatacctgcagagaagagccaaccaggtcctgattagtggcaagctgccccacaaagggctatgcctgtgtcttattgagacaccttggcaaagagatggctgattctgggtggtcctggacatggccgcacccaagggccctccaagccttaatggcaccctgaagcctccatgcccaggccaaaagatgcttttcctccctaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("OLFM1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 9, 137968918, PositionType.ZERO_BASED), "",
+				"AGA");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc010naq.2:exon2:c.325_327dup:p.Arg109dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	@Test
+	public void testRealWorldCase_uc001iel_1_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
+		this.transcriptForward
+				.setSequence("atgtgctcagggaatcagacttctcagaatcaaacagcaagcactgatttcaccctcacgggactctttgctgagagcaagcatgctgccctcctctacaccgtgaccttccttcttttcttgatggccctcactgggaatgccctcctcatcctcctcatccactcagagccccgcctccacacccccatgtacttcttcatcagccagctcgcgctcatggatctcatgtacctatgcgtgactgtgcccaagatgcttgtgggccaggtcactggagatgataccatttccccgtcaggctgtgggatccagatgttcttctacctgaccctggctggagctgaggttttcctcctggctgccatggcctatgaccgatatgctgctgtttgcagacctctccattacccactgctgatgaaccagagggtgtgccagctcctggtgtcagcctgctgggttttgggaatggttgatggtttgttgctcacccccattaccatgagcttccccttttgccagtctaggaaaatcctgagttttttctgtgagactcctgccctgctgaagctctcctgctctgacgtctccctctataagacgctcatgtacctgtgctgcatcctcatgcttctcgcccccatcatggtcatctccagctcatacaccctcatcctgcatctcatccacaggatgaattctgccgccggccacaggaaggccttggccacctgctcctcccacatgatcatagtgctgctgctcttcggtgcttccttctacacctacatgctcccgagttcctaccacacagctgagcaggacatgatggtgtctgccttttacaccatcttcactcctgtgctgaaccccctcatttacagtctccgcaacaaagatgtcaccagggctctgaggagcatgatgcagtcaagaatgaaccaagaaaagtag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("OR2T3");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637607, PositionType.ZERO_BASED), "", "A");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001iel.1:exon1:c.956dup:p.=", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+	}
+
+
+	/**
+	 * This is the test for the in-frame duplication of six nuc.acids / two amino acids '+' strand
+	 *
+	 * Mutalyzer: NM_001005495.1(OR2T3_v001):c.766_771dup NM_001005495.1(OR2T3_i001):p.(Leu256_Phe257dup)
+	 *
+	 *
+	 * <...6_771dupCTCTTC:p.L25[6_F257]dup)> but was: <...6_771dupCTCTTC:p.L25[4_F256]dup)>
+	 */
+	@Test
+	public void testRealWorldCase_uc001iel_1_third() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
+		this.transcriptForward
+				.setSequence("atgtgctcagggaatcagacttctcagaatcaaacagcaagcactgatttcaccctcacgggactctttgctgagagcaagcatgctgccctcctctacaccgtgaccttccttcttttcttgatggccctcactgggaatgccctcctcatcctcctcatccactcagagccccgcctccacacccccatgtacttcttcatcagccagctcgcgctcatggatctcatgtacctatgcgtgactgtgcccaagatgcttgtgggccaggtcactggagatgataccatttccccgtcaggctgtgggatccagatgttcttctacctgaccctggctggagctgaggttttcctcctggctgccatggcctatgaccgatatgctgctgtttgcagacctctccattacccactgctgatgaaccagagggtgtgccagctcctggtgtcagcctgctgggttttgggaatggttgatggtttgttgctcacccccattaccatgagcttccccttttgccagtctaggaaaatcctgagttttttctgtgagactcctgccctgctgaagctctcctgctctgacgtctccctctataagacgctcatgtacctgtgctgcatcctcatgcttctcgcccccatcatggtcatctccagctcatacaccctcatcctgcatctcatccacaggatgaattctgccgccggccacaggaaggccttggccacctgctcctcccacatgatcatagtgctgctgctcttcggtgcttccttctacacctacatgctcccgagttcctaccacacagctgagcaggacatgatggtgtctgccttttacaccatcttcactcctgtgctgaaccccctcatttacagtctccgcaacaaagatgtcaccagggctctgaggagcatgatgcagtcaagaatgaaccaagaaaagtag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("OR2T3");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637422, PositionType.ZERO_BASED), "",
+				"CTCTTC");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001iel.1:exon1:c.766_771dup:p.L256_F257dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 * This is the test for the in-frame duplication of 12 nuc.acids / tree amino acids '+' strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001iel_1_fourth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
+		this.transcriptForward
+				.setSequence("atgtgctcagggaatcagacttctcagaatcaaacagcaagcactgatttcaccctcacgggactctttgctgagagcaagcatgctgccctcctctacaccgtgaccttccttcttttcttgatggccctcactgggaatgccctcctcatcctcctcatccactcagagccccgcctccacacccccatgtacttcttcatcagccagctcgcgctcatggatctcatgtacctatgcgtgactgtgcccaagatgcttgtgggccaggtcactggagatgataccatttccccgtcaggctgtgggatccagatgttcttctacctgaccctggctggagctgaggttttcctcctggctgccatggcctatgaccgatatgctgctgtttgcagacctctccattacccactgctgatgaaccagagggtgtgccagctcctggtgtcagcctgctgggttttgggaatggttgatggtttgttgctcacccccattaccatgagcttccccttttgccagtctaggaaaatcctgagttttttctgtgagactcctgccctgctgaagctctcctgctctgacgtctccctctataagacgctcatgtacctgtgctgcatcctcatgcttctcgcccccatcatggtcatctccagctcatacaccctcatcctgcatctcatccacaggatgaattctgccgccggccacaggaaggccttggccacctgctcctcccacatgatcatagtgctgctgctcttcggtgcttccttctacacctacatgctcccgagttcctaccacacagctgagcaggacatgatggtgtctgccttttacaccatcttcactcctgtgctgaaccccctcatttacagtctccgcaacaaagatgtcaccagggctctgaggagcatgatgcagtcaagaatgaaccaagaaaagtag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("OR2T3");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637422, PositionType.ZERO_BASED), "",
+				"CTGCTGCTCTTC");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001iel.1:exon1:c.760_771dup:p.L254_F257dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 * This is the test for the in-frame duplication of a single triplicate / one amino acids '-' strand
+	 *
+	 * Mutalyzer: NM_022149.4(MAGEF1_v001):c.424_426dup NM_022149.4(MAGEF1_i001):p.(Thr142dup)
+	 */
+	@Test
+	public void testRealWorldCase_uc003fpa_3_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
+		this.transcriptForward
+				.setSequence("gcgggcgcggactgaggctgcgcgccgcaggttccggctgctggcggcgttgcggccgcaggtttgactcccgtgcggtgcggcccagcagccacaaagctcccgctgccattgctccttgtactcccgccgtcactgccgctgtccaacccctcccccggggcttgcgcggcggctcccacacccctcggcccgtgtacgcgctctgcacctgcctgcccgaaaacatgttgcagacaccagagagcagggggctcccggtcccgcaggccgagggggagaaggatggcggccatgatggtgagacccgggccccgaccgcctcgcaggagcgccccaaggaggagcttggcgccgggagggaggagggggctgcggagcccgccctcacccggaaaggcgcgagggccttggcggccaaagccttggcaaggcgcagggcctaccgccggctgaatcggacggtggcggagttggtgcagttcctcctggtgaaagacaagaagaagagtcccatcacacgctcggagatggtgaaatacgttattggagacttgaagattctgttcccggacatcatcgcaagggccgcagagcatctgcggtatgtctttggttttgagctgaaacagtttgaccgcaagcaccacacttacatcctgatcaacaaactaaaacctctggaggaggaggaggaggaggatctgggaggagatggccccagattgggtctgttaatgatgatcctgggccttatctatatgagaggtaatagcgccagggaggcccaggtctgggagatgctgcgtcggttgggggtgcaaccctcaaagtatcatttcctctttgggtatccgaagaggcttattatggaagattttgtgcagcagcgatatctcagttacaggcgggtgcctcacaccaatccaccagaatatgaattctcttggggtccccgaagcaacctggaaatcagcaagatggaagtcctggggttcgtggccaaactgcataagaaggaaccgcagcactggccagtgcagtaccgtgaggccctagcagacgaggccgacagggccagagccaaggccagagctgaagccagtatgagggccagggccagtgctagggccggcatccacctctggtgagggttggtgaaaagttggccagtgggtccccgtgaggacgaactactgtcctgagtcataagtaatatgggtggggcgagggtcttatttctgtagaaatcgtgtgactttaaggatttagattttgtatcttatgttttgtaacatttaataattactgttaaaatgctgtttgtaaatgagattggtctactttttcctgtaggattttattgtagagttttgctggttttgtaaaatggatggaagaactttgtatttatactgtgattttgaacagattatgcaacattggaaggaaggctgtactttgatggtttgaaggaactcagcagtatgatgatctggttccaggggaaaaaaatagctggttggtgtctagccccccaacacttttgtctgttgtgtataaaagaagaaagactggcatgtaccttcatttgcttagctatttgagtatctagagaaaaattaaaatgcaatgagttagcagtataccctggcacacttaataaattaaacatttgtggaaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("MAGEF1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429186, PositionType.ZERO_BASED), "",
+				"AGT");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003fpa.3:exon1:c.424_426dup:p.T142dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 *
+	 * This is the test for the in-frame duplication of 6 nuc.acids / two amino acids '-' strand
+	 *
+	 * mutalzyer: NM_022149.4(MAGEF1_v001):c.439_444dup NM_022149.4(MAGEF1_i001):p.(Asn147_Lys148dup)
+	 */
+	@Test
+	public void testRealWorldCase_uc003fpa_3_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
+		this.transcriptForward
+				.setSequence("gcgggcgcggactgaggctgcgcgccgcaggttccggctgctggcggcgttgcggccgcaggtttgactcccgtgcggtgcggcccagcagccacaaagctcccgctgccattgctccttgtactcccgccgtcactgccgctgtccaacccctcccccggggcttgcgcggcggctcccacacccctcggcccgtgtacgcgctctgcacctgcctgcccgaaaacatgttgcagacaccagagagcagggggctcccggtcccgcaggccgagggggagaaggatggcggccatgatggtgagacccgggccccgaccgcctcgcaggagcgccccaaggaggagcttggcgccgggagggaggagggggctgcggagcccgccctcacccggaaaggcgcgagggccttggcggccaaagccttggcaaggcgcagggcctaccgccggctgaatcggacggtggcggagttggtgcagttcctcctggtgaaagacaagaagaagagtcccatcacacgctcggagatggtgaaatacgttattggagacttgaagattctgttcccggacatcatcgcaagggccgcagagcatctgcggtatgtctttggttttgagctgaaacagtttgaccgcaagcaccacacttacatcctgatcaacaaactaaaacctctggaggaggaggaggaggaggatctgggaggagatggccccagattgggtctgttaatgatgatcctgggccttatctatatgagaggtaatagcgccagggaggcccaggtctgggagatgctgcgtcggttgggggtgcaaccctcaaagtatcatttcctctttgggtatccgaagaggcttattatggaagattttgtgcagcagcgatatctcagttacaggcgggtgcctcacaccaatccaccagaatatgaattctcttggggtccccgaagcaacctggaaatcagcaagatggaagtcctggggttcgtggccaaactgcataagaaggaaccgcagcactggccagtgcagtaccgtgaggccctagcagacgaggccgacagggccagagccaaggccagagctgaagccagtatgagggccagggccagtgctagggccggcatccacctctggtgagggttggtgaaaagttggccagtgggtccccgtgaggacgaactactgtcctgagtcataagtaatatgggtggggcgagggtcttatttctgtagaaatcgtgtgactttaaggatttagattttgtatcttatgttttgtaacatttaataattactgttaaaatgctgtttgtaaatgagattggtctactttttcctgtaggattttattgtagagttttgctggttttgtaaaatggatggaagaactttgtatttatactgtgattttgaacagattatgcaacattggaaggaaggctgtactttgatggtttgaaggaactcagcagtatgatgatctggttccaggggaaaaaaatagctggttggtgtctagccccccaacacttttgtctgttgtgtataaaagaagaaagactggcatgtaccttcatttgcttagctatttgagtatctagagaaaaattaaaatgcaatgagttagcagtataccctggcacacttaataaattaaacatttgtggaaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("MAGEF1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429171, PositionType.ZERO_BASED), "",
+				"TTTGTT");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003fpa.3:exon1:c.439_444dup:p.N147_K148du", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 * This is the test for the in-frame duplication of 12 nuc.acids / three amino acids '-' strand
+	 */
+	@Test
+	public void testRealWorldCase_uc003fpa_3_third() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
+		this.transcriptForward
+				.setSequence("gcgggcgcggactgaggctgcgcgccgcaggttccggctgctggcggcgttgcggccgcaggtttgactcccgtgcggtgcggcccagcagccacaaagctcccgctgccattgctccttgtactcccgccgtcactgccgctgtccaacccctcccccggggcttgcgcggcggctcccacacccctcggcccgtgtacgcgctctgcacctgcctgcccgaaaacatgttgcagacaccagagagcagggggctcccggtcccgcaggccgagggggagaaggatggcggccatgatggtgagacccgggccccgaccgcctcgcaggagcgccccaaggaggagcttggcgccgggagggaggagggggctgcggagcccgccctcacccggaaaggcgcgagggccttggcggccaaagccttggcaaggcgcagggcctaccgccggctgaatcggacggtggcggagttggtgcagttcctcctggtgaaagacaagaagaagagtcccatcacacgctcggagatggtgaaatacgttattggagacttgaagattctgttcccggacatcatcgcaagggccgcagagcatctgcggtatgtctttggttttgagctgaaacagtttgaccgcaagcaccacacttacatcctgatcaacaaactaaaacctctggaggaggaggaggaggaggatctgggaggagatggccccagattgggtctgttaatgatgatcctgggccttatctatatgagaggtaatagcgccagggaggcccaggtctgggagatgctgcgtcggttgggggtgcaaccctcaaagtatcatttcctctttgggtatccgaagaggcttattatggaagattttgtgcagcagcgatatctcagttacaggcgggtgcctcacaccaatccaccagaatatgaattctcttggggtccccgaagcaacctggaaatcagcaagatggaagtcctggggttcgtggccaaactgcataagaaggaaccgcagcactggccagtgcagtaccgtgaggccctagcagacgaggccgacagggccagagccaaggccagagctgaagccagtatgagggccagggccagtgctagggccggcatccacctctggtgagggttggtgaaaagttggccagtgggtccccgtgaggacgaactactgtcctgagtcataagtaatatgggtggggcgagggtcttatttctgtagaaatcgtgtgactttaaggatttagattttgtatcttatgttttgtaacatttaataattactgttaaaatgctgtttgtaaatgagattggtctactttttcctgtaggattttattgtagagttttgctggttttgtaaaatggatggaagaactttgtatttatactgtgattttgaacagattatgcaacattggaaggaaggctgtactttgatggtttgaaggaactcagcagtatgatgatctggttccaggggaaaaaaatagctggttggtgtctagccccccaacacttttgtctgttgtgtataaaagaagaaagactggcatgtaccttcatttgcttagctatttgagtatctagagaaaaattaaaatgcaatgagttagcagtataccctggcacacttaataaattaaacatttgtggaaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("MAGEF1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429171, PositionType.ZERO_BASED), "",
+				"TTTTAGTTTGTT");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003fpa.3:exon1:c.439_450dup:p.N147_K150dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 *
+	 * This is the test for the offset (+1) duplication of a single triplicate / one amino acids shifting the Stop-codon
+	 * '+' strand
+	 *
+	 * mutalyzer: NM_001005495.1(OR2T3_v001):c.949_954dup NM_001005495.1(OR2T3_i001):p.(*319Gluext*2) I think mutalyzer
+	 * is wrong here, the stop is right after the duplication.
+	 */
+	@Test
+	public void testRealWorldCase_uc001iel_1_fifth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
+		this.transcriptForward
+				.setSequence("atgtgctcagggaatcagacttctcagaatcaaacagcaagcactgatttcaccctcacgggactctttgctgagagcaagcatgctgccctcctctacaccgtgaccttccttcttttcttgatggccctcactgggaatgccctcctcatcctcctcatccactcagagccccgcctccacacccccatgtacttcttcatcagccagctcgcgctcatggatctcatgtacctatgcgtgactgtgcccaagatgcttgtgggccaggtcactggagatgataccatttccccgtcaggctgtgggatccagatgttcttctacctgaccctggctggagctgaggttttcctcctggctgccatggcctatgaccgatatgctgctgtttgcagacctctccattacccactgctgatgaaccagagggtgtgccagctcctggtgtcagcctgctgggttttgggaatggttgatggtttgttgctcacccccattaccatgagcttccccttttgccagtctaggaaaatcctgagttttttctgtgagactcctgccctgctgaagctctcctgctctgacgtctccctctataagacgctcatgtacctgtgctgcatcctcatgcttctcgcccccatcatggtcatctccagctcatacaccctcatcctgcatctcatccacaggatgaattctgccgccggccacaggaaggccttggccacctgctcctcccacatgatcatagtgctgctgctcttcggtgcttccttctacacctacatgctcccgagttcctaccacacagctgagcaggacatgatggtgtctgccttttacaccatcttcactcctgtgctgaaccccctcatttacagtctccgcaacaaagatgtcaccagggctctgaggagcatgatgcagtcaagaatgaaccaagaaaagtag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("OR2T3");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637605, PositionType.ZERO_BASED), "",
+				"GAAAAG");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001iel.1:exon1:c.949_954dup:p.*319ext*2", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
+	/**
+	 * annovar: MAGEF1:uc003fpa.3:exon1:c.456_457insGGA:p.L152delinsLE, chr3:184429154->TCC
+	 *
+	 * uc003fpa.3:exon1:c.456_458dupGGA:p.L152delinsLG
+	 *
+	 * Refseq: NM_022149
+	 *
+	 * Mutalyzer: Note that the position gets shifted downstream to bcome the most 3' position.
+	 *
+	 * NM_022149.4(MAGEF1_v001):c.474_476dup NM_022149.4(MAGEF1_i001):p.(Glu158dup)
+	 */
+	@Test
+	public void testRealWorldCase_uc003fpa_3_fourth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
+		this.transcriptForward
+				.setSequence("gcgggcgcggactgaggctgcgcgccgcaggttccggctgctggcggcgttgcggccgcaggtttgactcccgtgcggtgcggcccagcagccacaaagctcccgctgccattgctccttgtactcccgccgtcactgccgctgtccaacccctcccccggggcttgcgcggcggctcccacacccctcggcccgtgtacgcgctctgcacctgcctgcccgaaaacatgttgcagacaccagagagcagggggctcccggtcccgcaggccgagggggagaaggatggcggccatgatggtgagacccgggccccgaccgcctcgcaggagcgccccaaggaggagcttggcgccgggagggaggagggggctgcggagcccgccctcacccggaaaggcgcgagggccttggcggccaaagccttggcaaggcgcagggcctaccgccggctgaatcggacggtggcggagttggtgcagttcctcctggtgaaagacaagaagaagagtcccatcacacgctcggagatggtgaaatacgttattggagacttgaagattctgttcccggacatcatcgcaagggccgcagagcatctgcggtatgtctttggttttgagctgaaacagtttgaccgcaagcaccacacttacatcctgatcaacaaactaaaacctctggaggaggaggaggaggaggatctgggaggagatggccccagattgggtctgttaatgatgatcctgggccttatctatatgagaggtaatagcgccagggaggcccaggtctgggagatgctgcgtcggttgggggtgcaaccctcaaagtatcatttcctctttgggtatccgaagaggcttattatggaagattttgtgcagcagcgatatctcagttacaggcgggtgcctcacaccaatccaccagaatatgaattctcttggggtccccgaagcaacctggaaatcagcaagatggaagtcctggggttcgtggccaaactgcataagaaggaaccgcagcactggccagtgcagtaccgtgaggccctagcagacgaggccgacagggccagagccaaggccagagctgaagccagtatgagggccagggccagtgctagggccggcatccacctctggtgagggttggtgaaaagttggccagtgggtccccgtgaggacgaactactgtcctgagtcataagtaatatgggtggggcgagggtcttatttctgtagaaatcgtgtgactttaaggatttagattttgtatcttatgttttgtaacatttaataattactgttaaaatgctgtttgtaaatgagattggtctactttttcctgtaggattttattgtagagttttgctggttttgtaaaatggatggaagaactttgtatttatactgtgattttgaacagattatgcaacattggaaggaaggctgtactttgatggtttgaaggaactcagcagtatgatgatctggttccaggggaaaaaaatagctggttggtgtctagccccccaacacttttgtctgttgtgtataaaagaagaaagactggcatgtaccttcatttgcttagctatttgagtatctagagaaaaattaaaatgcaatgagttagcagtataccctggcacacttaataaattaaacatttgtggaaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("MAGEF1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429154, PositionType.ZERO_BASED), "",
+				"TCC");
+		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003fpa.3:exon1:c.474_476dup:p.E158dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
+	}
+
 }
