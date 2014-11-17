@@ -1,6 +1,5 @@
-package jannovar.annotation.builders;
+package jannovar.reference;
 
-import jannovar.reference.AminoAcidChange;
 
 /**
  * Helper for normalizing changes in amino acid sequences.

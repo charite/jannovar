@@ -10,6 +10,7 @@ import jannovar.reference.TranscriptModel;
 import jannovar.util.Translator;
 
 // TODO(holtgrem): Add case for non-coding transcripts.
+// TODO(holtgrem): Add deleted nucleotide base values for non-transcript parts?
 
 /**
  * This class provides static methods to generate annotations for deletions in exons.

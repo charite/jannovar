@@ -38,7 +38,7 @@ public class DuplicationAnnotationTest extends AnnotationTest implements Constan
 
 		// fill this.annotator
 		ArrayList<TranscriptModel> kgList = null;
-		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
+		java.net.URL url = DuplicationAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);

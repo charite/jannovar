@@ -1,7 +1,5 @@
 package jannovar.annotation;
 
-import jannovar.annotation.AnnotationList;
-import jannovar.annotation.VariantAnnotator;
 import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
@@ -36,7 +34,7 @@ public class InsertionAnnotationTest implements Constants {
 	@Before
 	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
-		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
+		java.net.URL url = InsertionAnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);

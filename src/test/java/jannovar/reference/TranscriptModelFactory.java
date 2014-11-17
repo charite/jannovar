@@ -1,5 +1,7 @@
 package jannovar.reference;
 
+import jannovar.common.Constants;
+
 /**
  * Allows the easy creation of transcript models from knownGenes.txt.gz lines.
  *
@@ -17,7 +19,15 @@ public class TranscriptModelFactory {
 		String[] fields = s.split("\t");
 		TranscriptModel result = TranscriptModel.createTranscriptModel();
 		result.setAccessionNumber(fields[0]);
-		result.setChromosome((byte) Integer.parseInt(fields[1].substring(3)));
+		String chrNum = fields[1].substring(3);
+		if (chrNum.equals("X"))
+			result.setChromosome(Constants.X_CHROMOSOME);
+		else if (chrNum.equals("Y"))
+			result.setChromosome(Constants.Y_CHROMOSOME);
+		else if (chrNum.equals("M"))
+			result.setChromosome(Constants.M_CHROMOSOME);
+		else
+			result.setChromosome((byte) Integer.parseInt(chrNum));
 		result.setStrand(fields[2].charAt(0));
 		result.setTranscriptionStart(Integer.parseInt(fields[3]) + 1); // knownGenes is 0-based
 		result.setTranscriptionEnd(Integer.parseInt(fields[4]));

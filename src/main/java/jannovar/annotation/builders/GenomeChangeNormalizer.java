@@ -10,7 +10,7 @@ import jannovar.reference.TranscriptPosition;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class GenomeChangeNormalizer {
+public class GenomeChangeNormalizer {
 
 	/**
 	 * Transform a {@link GenomeChange} to its HGVS-normalized representation.

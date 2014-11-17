@@ -1,6 +1,4 @@
-package jannovar.annotation.builders;
-
-import jannovar.annotation.builders.DuplicationTester;
+package jannovar.reference;
 
 import org.junit.Assert;
 import org.junit.Before;

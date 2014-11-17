@@ -1,11 +1,11 @@
-package jannovar.annotation.builders;
+package jannovar.reference;
 
 /**
  * Helper class for checking whether an insertion in a string is a duplication.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class DuplicationTester {
+public class DuplicationTester {
 
 	/**
 	 * @param ref

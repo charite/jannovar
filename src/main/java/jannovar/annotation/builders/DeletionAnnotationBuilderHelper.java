@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.reference.AminoAcidChange;
+import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;

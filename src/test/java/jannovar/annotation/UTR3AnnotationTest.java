@@ -27,7 +27,7 @@ public class UTR3AnnotationTest implements Constants {
 	@Before
 	public void setUp() throws IOException, JannovarException {
 		ArrayList<TranscriptModel> kgList = null;
-		java.net.URL url = SynonymousAnnotationTest.class.getResource(UCSCserializationTestFileName);
+		java.net.URL url = UTR3AnnotationTest.class.getResource(UCSCserializationTestFileName);
 		String path = url.getPath();
 		SerializationManager manager = new SerializationManager();
 		kgList = manager.deserializeKnownGeneList(path);

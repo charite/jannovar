@@ -1,11 +1,11 @@
-package jannovar.annotation.builders;
+package jannovar.reference;
 
+import jannovar.annotation.builders.GenomeChangeNormalizer;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
-import jannovar.reference.TranscriptModelFactory;
 import jannovar.reference.TranscriptPosition;
 
 import org.junit.Assert;

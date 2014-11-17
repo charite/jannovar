@@ -4,6 +4,7 @@ import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.ProjectionException;
 import jannovar.reference.CDSPosition;
+import jannovar.reference.DuplicationTester;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.TranscriptInfo;
