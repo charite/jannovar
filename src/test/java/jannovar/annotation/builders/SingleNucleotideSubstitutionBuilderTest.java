@@ -1515,7 +1515,9 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	public void testRealWorldCase_uc010kdf_3() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
 				.parseKnownGenesLine("uc010kdf.3	chr6	-	108023363	108145521	108026403	108093531	8	108023363,108029069,108041906,108066152,108067892,108070887,108093375,108145329,	108026529,108029215,108042197,108066347,108068093,108071017,108093590,108145521,	Q8N228	uc010kdf.3");
-		this.transcriptForward.setSequence("gaatgcattagtctaatgagatgtttgcagctggagcgcagggctgctggagactaactgtgagctactaacacgggtggaagatagcttttgcaatactcggtttgcatgtgctgaaagtcatctgtcttctgagtcaacactcccgacctggtaaacaacctgctcagggctctggtgaacaagctgtagcacctcttctgcctgtgagcgatttgtcacctcattctgtaagactggcaccagcagaaatgcagtctcaaaggatcccggggagaaagcgaggccgaccctcacttcactccacgcctatgaagatggcagttcataacctttattctgcttcagctggctctttaccagcagtgaagatcccaaagaaaagagggcggaaacccgggtacaagatcaagtctcgggttctcatgactcccttagccctctcacctccgcggagtaccccagagcccgacctcagctccatccctcaggacgcagccacggtccccagcttggcggccccacaggctctcacagtctgcctctacatcaacaagcaggccaatgcggggccctatctggagaggaagaaggtgcagcagctcccggagcattttgggcccgagcggccatcggcggtgctgcagcaggccgtccaagcctgcatcgactgcgcccaccagcagaagctggtcttctccctggtcaagcagggctatggtggtgagatggtgtcagtctcggcttcctttgatggcaaacagcacctgcggagcctgcctgtggtgaacagcatcggctatgtcctccgcttcctcgccaagctgtgccgaagcctcctgtgcgatgacctcttcagccaccagcccttccccaggggctgcagtgcctctgagaaagtccaggagaaagaggaagggaggatggaatcagtcaagacagtcaccaccgaagagtacctggtgaaccctgtgggcatgaaccgctacagcgtggacacctccgcctccacctttaaccacaggggctccttgcacccctcctcctcgctgtactgcaagaggcagaactctggagacagccaccttgggggtggtcctgctgccaccgctggtggtccccgcactagccccatgtcttctggtggcccctcggcacctgggctgaggcctccagcctccagccccaagagaaacacgacctctcttgaaggaaacagatgtgcctcaagcccttctcaggatgcgcaggatgccaggcggccacggagcaggaacccctccgcctggactgtggaggacgtggtgtggtttgtgaaggacgccgacccacaggctctggggcctcacgtggagctcttcagaaagcacgagattgatggcaacgctctgctgttgctgaagagtgacatggtcatgaagtacctgggcctgaagctgggacctgcactgaaactctgctaccacattgacaaactgaagcaagccaagttctgacttttttaaaaagacagaagcgaaacccaaaacaacagatcccaagattatcttctgccttaccaatatcccgccaacatcacaaactagactctcctcttaaaattaacagccacagagacgtggtctttttataaaacttgtgaatctttgccttttgaagaatttaacatggaccttttcgagaggctcctctgtgttcataatttgccaaaaaattacaaaagcctgtgatttttaacatccctgttatgctggtttctcttaaagtgggtcctatttgcataacgagagagtggggaactgaatgcttatgcccaaggagagttctggagggttcaaaggatgaaagaaggacctttgtccctgcggtctctgcagggacaaccccctcagcaccatctgcctctaactctgacctggggacctatccatgtgagccttgtttgcctcagctctggaagctgacttctgaagatgactgcctcaccttgcactgtctggaaaacttgaattattttacgccgtgaaagaaaaaggaaaaaaaaaaaaatcttttctgttcctagaaaatctgaagtactgtgtttctccgctagagggcagactgctaatgaaatttcaggaccctcactgactgcagtagcaggattgttcagtactgagtggatgggttagggtgtctgtgaacaagatctagcccacacagaaacaggggatttattccacagttagcaccacagattgcgacttgggaagaaaccatcagctagaggggtctagttcgtatccaatcattattgactgactgactgatactcaactagcaaaggcaagaatttggaagcacgctctacccagatgggactttggagttccttcccttccagagtccttattgaggtgttgaagtgttggcatgccgaagaatcttagtgacatttagccatgggtgtttctttaaaaaaggaaaagaaaatgtctcaacgaagctttgaaatgggagagtgttgatttctagttacattgctgggttatgtagttgtatctgtggctaatttttctagtcctcaacaaatacacagacatgctattatggggtttaattcaatttacaaataggttttccttcctcacagtggagtaatagaaaaaattgattttctgctcctttgcagctgtgtccagagacggacaatgaatccacaatttattaggcagaggcacaacttctccaccattcgttttatccttctcttttctctgtttccctccacctctcttcttcttctttcacactgagcagaaaacatatcttcaaaatgaattcgcctttgccatgtgcatattctcttccttaaaaggacatcaacagtgttggagatgaggagatgaacattagattttggaatttctgggagggagagggttagggatgactcagggcctcccttcgcccaaaggtgaatcagaaaaggcacccctttctctgggatacaacctgagcaggggtctcagctggcaagtggagcagggtgggggctcaacctcctcaccgcttgatcagctgccgttgtacagagcatgacctgtataaccttgagggcagccctgggtagatctgcagagtgaccctctatatagttagaatccagatgaaggccataagaaatagtccatgccatgccgttaggcccactttcatgtgcagtacttgagaaagcacatcgtagcctccttttcagacacacaaatggcggctggactgagagcatggcagagaaggggaggaggagaatgtactaaacttgctcactgaattgagcttgagttattagattgtagaagagcttgatgtctggtgattttgttacaggaagggggtcccgatccagaccccaagagagggctcttggatctcatgcaagaaagaattcagggtgagtccataaagtaaagtgaaagcaagtttattaagaaagtaaaggaaggaaagaatggctaccccatagtcaaagcagctctgagggctgctggttgcccatttttatgtttatttcttgatatgctaaacaaggggtggattattcatgcctcccccttttagatcatatagggtaacttcctgatgttgccatggcatttgtaaaccgtcatggcactggtggtagtatagcagcgaggacaaccagaggtcactctcgttgccatcttggttttggtgggttttagccaacttctttactgcaacctgttttatcagaaggtctttatgacctatatcttgtgctgacctcctgtctcatcctgtgactcagaatgctttagccatctgggaatgcagcccagtaggtctcagcctcattttacccagctcccattcaagatggagttgctctggttcaaatgcctctgacaggttcagcacctgagaaaagtaccttgaatcaggccttggggcagagtcttcaagattttaaggtgatagggcctgtctcttaagaatttattaatcgtaagtgctcactgctggtttagagttagatacatttccctcaaaacagccatgggcaggttatgtactcagaactgccagggtgaaaacaatgagatccagaaaaatcccacaacaatccaggtttttcactcctcttttttttctcaatcttccgatacttgtggtacctcttccatcaacagatacctcatgtagtgacttccagtatcaagttttcaaaacttcctacccaccctcatcagtgcctccttcactacagagtcacaaacattggtgctctcaaataaaaatcagccccaaacaatgtcaaagagatcccttgagtagttttcaggcgagagatatgttctcatttcaagtcttggagaaaactggatccatgttcacgtggaacttctctcgcggaggtgctatctcattttgcattaaactttaagcaggacagattgctgaagccatgatatttaaggtttgactttttaaaaatctcattactcttaaaataaatgctgccacatcagaaaaa".toUpperCase());
+		this.transcriptForward
+				.setSequence("gaatgcattagtctaatgagatgtttgcagctggagcgcagggctgctggagactaactgtgagctactaacacgggtggaagatagcttttgcaatactcggtttgcatgtgctgaaagtcatctgtcttctgagtcaacactcccgacctggtaaacaacctgctcagggctctggtgaacaagctgtagcacctcttctgcctgtgagcgatttgtcacctcattctgtaagactggcaccagcagaaatgcagtctcaaaggatcccggggagaaagcgaggccgaccctcacttcactccacgcctatgaagatggcagttcataacctttattctgcttcagctggctctttaccagcagtgaagatcccaaagaaaagagggcggaaacccgggtacaagatcaagtctcgggttctcatgactcccttagccctctcacctccgcggagtaccccagagcccgacctcagctccatccctcaggacgcagccacggtccccagcttggcggccccacaggctctcacagtctgcctctacatcaacaagcaggccaatgcggggccctatctggagaggaagaaggtgcagcagctcccggagcattttgggcccgagcggccatcggcggtgctgcagcaggccgtccaagcctgcatcgactgcgcccaccagcagaagctggtcttctccctggtcaagcagggctatggtggtgagatggtgtcagtctcggcttcctttgatggcaaacagcacctgcggagcctgcctgtggtgaacagcatcggctatgtcctccgcttcctcgccaagctgtgccgaagcctcctgtgcgatgacctcttcagccaccagcccttccccaggggctgcagtgcctctgagaaagtccaggagaaagaggaagggaggatggaatcagtcaagacagtcaccaccgaagagtacctggtgaaccctgtgggcatgaaccgctacagcgtggacacctccgcctccacctttaaccacaggggctccttgcacccctcctcctcgctgtactgcaagaggcagaactctggagacagccaccttgggggtggtcctgctgccaccgctggtggtccccgcactagccccatgtcttctggtggcccctcggcacctgggctgaggcctccagcctccagccccaagagaaacacgacctctcttgaaggaaacagatgtgcctcaagcccttctcaggatgcgcaggatgccaggcggccacggagcaggaacccctccgcctggactgtggaggacgtggtgtggtttgtgaaggacgccgacccacaggctctggggcctcacgtggagctcttcagaaagcacgagattgatggcaacgctctgctgttgctgaagagtgacatggtcatgaagtacctgggcctgaagctgggacctgcactgaaactctgctaccacattgacaaactgaagcaagccaagttctgacttttttaaaaagacagaagcgaaacccaaaacaacagatcccaagattatcttctgccttaccaatatcccgccaacatcacaaactagactctcctcttaaaattaacagccacagagacgtggtctttttataaaacttgtgaatctttgccttttgaagaatttaacatggaccttttcgagaggctcctctgtgttcataatttgccaaaaaattacaaaagcctgtgatttttaacatccctgttatgctggtttctcttaaagtgggtcctatttgcataacgagagagtggggaactgaatgcttatgcccaaggagagttctggagggttcaaaggatgaaagaaggacctttgtccctgcggtctctgcagggacaaccccctcagcaccatctgcctctaactctgacctggggacctatccatgtgagccttgtttgcctcagctctggaagctgacttctgaagatgactgcctcaccttgcactgtctggaaaacttgaattattttacgccgtgaaagaaaaaggaaaaaaaaaaaaatcttttctgttcctagaaaatctgaagtactgtgtttctccgctagagggcagactgctaatgaaatttcaggaccctcactgactgcagtagcaggattgttcagtactgagtggatgggttagggtgtctgtgaacaagatctagcccacacagaaacaggggatttattccacagttagcaccacagattgcgacttgggaagaaaccatcagctagaggggtctagttcgtatccaatcattattgactgactgactgatactcaactagcaaaggcaagaatttggaagcacgctctacccagatgggactttggagttccttcccttccagagtccttattgaggtgttgaagtgttggcatgccgaagaatcttagtgacatttagccatgggtgtttctttaaaaaaggaaaagaaaatgtctcaacgaagctttgaaatgggagagtgttgatttctagttacattgctgggttatgtagttgtatctgtggctaatttttctagtcctcaacaaatacacagacatgctattatggggtttaattcaatttacaaataggttttccttcctcacagtggagtaatagaaaaaattgattttctgctcctttgcagctgtgtccagagacggacaatgaatccacaatttattaggcagaggcacaacttctccaccattcgttttatccttctcttttctctgtttccctccacctctcttcttcttctttcacactgagcagaaaacatatcttcaaaatgaattcgcctttgccatgtgcatattctcttccttaaaaggacatcaacagtgttggagatgaggagatgaacattagattttggaatttctgggagggagagggttagggatgactcagggcctcccttcgcccaaaggtgaatcagaaaaggcacccctttctctgggatacaacctgagcaggggtctcagctggcaagtggagcagggtgggggctcaacctcctcaccgcttgatcagctgccgttgtacagagcatgacctgtataaccttgagggcagccctgggtagatctgcagagtgaccctctatatagttagaatccagatgaaggccataagaaatagtccatgccatgccgttaggcccactttcatgtgcagtacttgagaaagcacatcgtagcctccttttcagacacacaaatggcggctggactgagagcatggcagagaaggggaggaggagaatgtactaaacttgctcactgaattgagcttgagttattagattgtagaagagcttgatgtctggtgattttgttacaggaagggggtcccgatccagaccccaagagagggctcttggatctcatgcaagaaagaattcagggtgagtccataaagtaaagtgaaagcaagtttattaagaaagtaaaggaaggaaagaatggctaccccatagtcaaagcagctctgagggctgctggttgcccatttttatgtttatttcttgatatgctaaacaaggggtggattattcatgcctcccccttttagatcatatagggtaacttcctgatgttgccatggcatttgtaaaccgtcatggcactggtggtagtatagcagcgaggacaaccagaggtcactctcgttgccatcttggttttggtgggttttagccaacttctttactgcaacctgttttatcagaaggtctttatgacctatatcttgtgctgacctcctgtctcatcctgtgactcagaatgctttagccatctgggaatgcagcccagtaggtctcagcctcattttacccagctcccattcaagatggagttgctctggttcaaatgcctctgacaggttcagcacctgagaaaagtaccttgaatcaggccttggggcagagtcttcaagattttaaggtgatagggcctgtctcttaagaatttattaatcgtaagtgctcactgctggtttagagttagatacatttccctcaaaacagccatgggcaggttatgtactcagaactgccagggtgaaaacaatgagatccagaaaaatcccacaacaatccaggtttttcactcctcttttttttctcaatcttccgatacttgtggtacctcttccatcaacagatacctcatgtagtgacttccagtatcaagttttcaaaacttcctacccaccctcatcagtgcctccttcactacagagtcacaaacattggtgctctcaaataaaaatcagccccaaacaatgtcaaagagatcccttgagtagttttcaggcgagagatatgttctcatttcaagtcttggagaaaactggatccatgttcacgtggaacttctctcgcggaggtgctatctcattttgcattaaactttaagcaggacagattgctgaagccatgatatttaaggtttgactttttaaaaatctcattactcttaaaataaatgctgccacatcagaaaaa"
+						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("SCML4");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
@@ -1683,7 +1685,6 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		Assert.assertEquals("uc001fkt.3:c.6332+2T>C", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
-
 
 	@Test
 	public void testRealWorldCase_uc001fkt_3_third() throws InvalidGenomeChange {
@@ -1857,8 +1858,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 85662247, PositionType.ZERO_BASED), "T",
-				"A");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 85662247, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002spq.3:c.168+2T>A", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
@@ -1958,7 +1958,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010wdn_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010wdn_1_first() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
 				.parseKnownGenesLine("uc010wdn.1	chr17	-	36344875	36375177	36344875	36344875	15	36344875,36345438,36346761,36347009,36351935,36352421,36353600,36357157,36358124,36358298,36358841,36361696,36365054,36367406,36375099,	36344956,36345478,36346847,36347082,36351996,36352526,36353765,36357272,36358158,36358395,36359042,36361804,36365176,36367522,36375177,		uc010wdn.1");
 		this.transcriptForward
@@ -2045,6 +2045,490 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc004frk.2:exon3:n.250G>T", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
+	}
+
+	//
+	// Various Downstream Variants
+	//
+
+	@Test
+	public void testRealWorldCase_uc001abo_3_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3");
+		this.transcriptForward
+				.setSequence("acaagggcgggtcttcgccgacaccatagaggtgggccgttggcgacgttagaggcgcgggtgttcggctacatcactggggcgccatggtgcctggagctgggcagttttctcatcagagtggggactggtaagagtgacctccccgccaggttctgtgtgttgccggctgaagaagggtagctgaaaaattcagacccagcacagtgtttatgttggtcaaaaatagaaaactatgtctggcgcggccgaggcgggaggacccttcaggccaagagcagcctagcaacatggcgcaaccccatctctgtagtcctacctcagccccccagctacttgaacccaaaggttcaaggctccagtgagctatgatcccaccacagcattccagcctgcgagattgagatgatgattattccccaccttctaagagacaaagaccaacgagccaccacagccaccagtcccagaacccgccaatgctggggaacggaaaatgagggagttcaactctggccctcacaatccagtggaggagacgcaactcatctgcctctgtccctctgggcacgcctcatgccaggtgcatctgtggacaggggccatgctcctgggcttccaaagttggagaaagctgccaggctcaggtctgaaggccagaattctacagtaagtcctactgagtcaaggtgggagcagggtcggtagcttccgaggctctgcgggagaatctgtttcctggccgtagaggtggcctgcactcctcagcctgtgctgcccgtctcgaatgactggagtttcctgcttctgtcactacacctcccaccctctccatcacctgctctgctcttacaaggatccgaagaaatggaatcatcgtatcgctgatctacgtaaacaaactgaagaattgtctgaaagaaaatatgacatgaacttatgaattcaacaggtgaagatttacaacttgataaatcaactttgtcagctcgagctgtaaaagccaaaggtccggtgatgatcccatacccttttttccagtctcatgttgaagatttttatgtagaaggccttcccaaaggaattttttttttttttttttgagatggagttttcactcttatcgcccaggctggggtgcaatggcgcaaccttgctggtcactgcaacctctgcctcctgggttcaagaaattctcctgccttagcctcccaagtcactgggattacaggtgcccaccaccacaccaggctaatttttgtatttttagtggagatgcggtttcaccatgttggccgggccagtctcgaactcctgacgtcaagtgatcttcccgcctcgactcctgatatcaagtgatcttcccgcctc"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("LOC100288069");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 753404, PositionType.ZERO_BASED), "C", "T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("dist=39337", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
+	}
+
+	@Test
+	public void testRealWorldCase_uc021vpr_2() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc021vpr.2	chr2	+	132285406	132291239	132285543	132290971	8	132285406,132287219,132288151,132289236,132290296,132290436,132290585,132290841,	132285919,132287264,132288400,132289375,132290354,132290510,132290642,132291239,	NP_001245233	uc021vpr.2");
+		this.transcriptForward
+				.setSequence("agcgacaggccccgcccccgccaaccgcctcgcgccttccgtcgcccggtttccatggtgacggggcgccaggctagggcggcctggccactgagccggggtgcagtggcagcgggagagtacctggcgatggcgatatgagcggtgcgggggtggcggctgggacgcggccccccagctcgccgaccccgggctctcggcgccggcgccagcgcccctctgtgggcgtccagtccttgaggccgcagagcccgcagctcaggcagagcgacccgcagaaacggaacctggacctggagaaaagcctgcagttcctgcagcagcagcactcggagatgctggccaagctccatgaggagatcgagcatctgaagcgggaaaacaagggtgagccggcgcggggccctaggccggccctgcctccccaggcacactcaacactgccgctcccgcagcacagaaacacagccatcaactccagcacacgcctgggctcagggggaacacaggacgatctccattacaagctcataatgaatcagacatcacagaagaaagatggcccctcaggaaaccacctttccagggcctctgctcccttgggcgctcgctgggtctgcatcaacggagtgtgggtagagccgggaggacccagccctgccaggctgaaggagggctcctcacggacacacaggccaggaggcaagcgtgggcgtcttgcgggcggtagcgccgacactgtgcgctctcctgcagacagcctctccatgtcaagcttccagtctgtcaagtccatctctaattcaggcaaggccaggccccagcccggctccttcaacaagcaagattcaaaagctgacgtctcccagaaggcggacctggaagaggagcccctacttcacaacagcaagctggacaaagttcctggggtacaagggcaggccaggcagtgcgaagtgctcatccgcgagctgtggaataccaacctcctgcagacccaagagctgcggcacctcaagtccctcctggaagggagccagaggccccaggcagccccggaggaagctagctttcccagggaccaagaagccacgcatttccccaaggtctccaccaagagcctctccaagaaatgcctgagcccacctgtggcggagcgtgccatcctgcccgcactgaagcagaccccgaagaacaactttgccgagaggcagaagaggctgcaggcaatgcagaaacggcgcctgcatcgctcagtgctttgagccaccccaatctggtcagtgccaggcccaccaacctgcagctggagactggctctctatagcatttcctgatacttccgctacttttaggcctggctaaattccaagacagataacactcaagatagataaagtacttgatctccaaactgacaaactgtttattttctagctgttattttgctatttggcatttacataaaagcacacgatgaagcaggtatcgccttacctgttgaaactgaaaataaagcttgtttatttccaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("CCDC74A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 132349412, PositionType.ZERO_BASED), "G",
+				"A");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("dist=58174", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
+	}
+
+	/**
+	 * <P>
+	 * annovar: AK025975(dist=42221),LOC729059(dist=47759) chr1:23289568T>C
+	 * </P>
+	 */
+	@Test
+	public void testRealWorldCase_uc001abo_3_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3");
+		this.transcriptForward
+				.setSequence("uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("AK025975");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 23289567, PositionType.ZERO_BASED), "T", "C");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("dist=42221", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
+	}
+
+	// Various Intronic Variants
+
+	/**
+	 * An intron of PLEKHN1 gtgagtaagg atcctgcctc ctg [a] ggtgagtgcc tgttgcctcc cacaggctga cacatctctg ccttccctac cag
+	 * Result hand-checked OK.
+	 */
+	@Test
+	public void testRealWorldCase_uc001acf_3() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001acf.3	chr1	+	901876	910484	901911	909955	15	901876,902083,905656,905900,906065,906258,906456,906703,907454,907667,908240,908879,909212,909695,909821,	901994,902183,905803,905981,906138,906386,906588,906784,907530,907804,908390,909020,909431,909744,910484,	Q494U1-3	uc001acf.3");
+		this.transcriptForward
+				.setSequence("gggacccagacttgccgacctgtacgactctggccatggggaacagccactgtgtccctcaggcccccaggaggctccgggcctccttctccagaaagccctcgctgaagggaaacagagaggacagcgcgcggatgtcggccggcctgccgggccccgaggctgctcgaagcggggacgccgccgccaacaagctcttccactacatcccgggcacggacatcctggacctggagaaccagcgagaaaacctggagcagccattcctgagtgtgttcaagaaggggcggcggagggtgcctgtgaggaacctgggaaaagttgtgcattacgccaaggtccagctgcggttccagcacagccaggatgtcagcgactgctacctggagctattccccgcccacctgtacttccaggcccacggctcggaaggactcacatttcaggggctgttaccgctgacggagctgagtgtctgcccgctcgaggggtcccgagagcacgccttccagatcacaggcccactgcccgcacccctcctggtgctctgccccagccgggccgagctggaccgctggctttaccacctggagaagcagacggccctcctcggggggccgcggcgctgccactcggcacccccacaggggtcctgcggagacgaactcccctggactttgcagcgccgtctaacccggctgcggacggcgtcagggcacgaacccggcggcagtgctgtctgtgcctcgagggtcaagctgcagcacctgcccgcacaggagcagtgggaccggctcttggtcctgtacccaacgtccttggccattttctccgaggagctggacgggctttgcttcaagggggagctcccactccgtgccgtccacatcaacctggaggagaaggagaagcagatccgctccttcctgattgaaggccccctcatcaacaccatccgcgtggtgtgcgccagctacgaggactacggtcactggctgctgtgccttcgcgctgtcacccacagggagggggccccgccgctgcctggtgccgagagcttcccagggtcgcaggttatgggcagtggccgaggctcactctcctcaggcggacagaccagctgggactcggggtgcttggcgcccccctccacccgcaccagccactccctgcctgagtcctcagtgccatccaccgtgggctgctcctcccagcacacaccgctgcacaggctgagcctggagagcagcccagatgcccctgaccacacttcggaaacatcacactcgcccctctatgccgacccctacacaccacccgccacctcccaccgcagggtcacagatgtccggggcctggaggagttcctcagtgccatgcagagtgcacgtggacccacgccctcgagcccactcccctcggtgcctgtgtctgtgcctgcctctgaccctcgctcctgctcctccggccccgctggcccctacttgctctccaagaagggagccctgcagtccagagccgctcagagacaccggggctcagccaaggatggggggccgcagcccccagacgcccctcagcttgtctcctctgccagggaaggttcgcccgaaccctggctgcctctgacagatggtcggtcccccaggaggagccgggaccccggctacgaccacctctgggacgagactttgtcttcctcccaccagaagtgcccccagcttggagggcctgaggccagtggggggcttgtgcagtggatctgatggccgcggtgaggtgggttctcaggaccaccctcgccaagctccagggtacctgcccctctaacccacttcaaattacaagtcagggtctgaacccagtgtgatggggggagtctctggggccctgagttcagagcccgtccctcagctcctgttccttggtgccagcagctggggcagggaagggtgggaggggccccatccaaaggatgccctggccagcgaggctgggtcacaggtcagggaggtcctggccgtccacagggtcggccctcagctcagcccgccaggagtcagggaggagactcgctgggagtgggagggcagcacgggcgtgaaggtcggaggacagagaaaggtcagcagggtcagagtatgtgaggtcagagggcatgagggtcacaggtcagcaaggtgtgaggagcacaagccagggtgccccgaggaggagggtgggtgggtccttgtgtggcctggcgcgcaccacagggcagcacgggagacgttgacaccaccggacgagaaagaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("PLEKHN1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 909767, PositionType.ZERO_BASED), "A", "G");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001acf.3:c.1597+24A>G", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTRONIC, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of C12orf54<br>
+	 * 5'UTR <br>
+	 * closer to left exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001rrr_3_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001rrr.3	chr12	+	48876285	48890297	48877079	48888722	9	48876285,48877022,48879960,48880470,48882706,48884594,48886729,48888580,48889963,	48876359,48877144,48879991,48880509,48882739,48884619,48886778,48888762,48890297,	Q6X4T0	uc001rrr.3");
+		this.transcriptForward
+				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("C12orf54");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 48876499, PositionType.ZERO_BASED), "C",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001rrr.3:c.-58+141C>T", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of C12orf54<br>
+	 * 5'UTR <br>
+	 * closer to right exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001rrr_3_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001rrr.3	chr12	+	48876285	48890297	48877079	48888722	9	48876285,48877022,48879960,48880470,48882706,48884594,48886729,48888580,48889963,	48876359,48877144,48879991,48880509,48882739,48884619,48886778,48888762,48890297,	Q6X4T0	uc001rrr.3");
+		this.transcriptForward
+				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("C12orf54");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 48876999, PositionType.ZERO_BASED), "C",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001rrr.3:c.-57-23C>T", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of C12orf54<br>
+	 * 3'UTR <br>
+	 * closer to left exon<br>
+	 * '+'-strand
+	 */
+
+	@Test
+	public void testRealWorldCase_uc001rrr_3_third() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001rrr.3	chr12	+	48876285	48890297	48877079	48888722	9	48876285,48877022,48879960,48880470,48882706,48884594,48886729,48888580,48889963,	48876359,48877144,48879991,48880509,48882739,48884619,48886778,48888762,48890297,	Q6X4T0	uc001rrr.3");
+		this.transcriptForward
+				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("PLEKHN1");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 48888799, PositionType.ZERO_BASED), "C",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001rrr.3:c.*40+38C>T", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of C12orf54<br>
+	 * 3'UTR <br>
+	 * closer to right exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001rrr_3_fourth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001rrr.3	chr12	+	48876285	48890297	48877079	48888722	9	48876285,48877022,48879960,48880470,48882706,48884594,48886729,48888580,48889963,	48876359,48877144,48879991,48880509,48882739,48884619,48886778,48888762,48890297,	Q6X4T0	uc001rrr.3");
+		this.transcriptForward
+				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("C12orf54");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 48889799, PositionType.ZERO_BASED), "T",
+				"C");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001rrr.3:c.*41-164T>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of C12orf54<br>
+	 * CDS <br>
+	 * closer to left exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001rrr_3_fifth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001rrr.3	chr12	+	48876285	48890297	48877079	48888722	9	48876285,48877022,48879960,48880470,48882706,48884594,48886729,48888580,48889963,	48876359,48877144,48879991,48880509,48882739,48884619,48886778,48888762,48890297,	Q6X4T0	uc001rrr.3");
+		this.transcriptForward
+				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("C12orf54");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 48880599, PositionType.ZERO_BASED), "T",
+				"C");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001rrr.3:c.135+91T>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTRONIC, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of C12orf54<br>
+	 * CDS <br>
+	 * closer to right exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001rrr_3_sixth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001rrr.3	chr12	+	48876285	48890297	48877079	48888722	9	48876285,48877022,48879960,48880470,48882706,48884594,48886729,48888580,48889963,	48876359,48877144,48879991,48880509,48882739,48884619,48886778,48888762,48890297,	Q6X4T0	uc001rrr.3");
+		this.transcriptForward
+				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("C12orf54");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 48882699, PositionType.ZERO_BASED), "C",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001rrr.3:c.136-7C>T", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of TAF1A<br>
+	 * 5'UTR <br>
+	 * closer to trailing exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001hni_2_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001hni.2	chr1	-	222731243	222763275	222732001	222753163	11	222731243,222731964,222734705,222736514,222737400,222742851,222743876,222750786,222753100,222761784,222763068,	222731610,222732114,222734860,222736638,222737467,222743010,222744007,222750985,222753214,222761907,222763275,	NP_647603	uc001hni.2");
+		this.transcriptForward.setSequence("SEQ".toUpperCase());
+		this.transcriptForward.setGeneSymbol("TAF1A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 222761999, PositionType.ZERO_BASED), "A",
+				"G");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001hni.2:c.-174-93T>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of TAF1A<br>
+	 * 5'UTR <br>
+	 * closer to leading exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001hni_2_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001hni.2	chr1	-	222731243	222763275	222732001	222753163	11	222731243,222731964,222734705,222736514,222737400,222742851,222743876,222750786,222753100,222761784,222763068,	222731610,222732114,222734860,222736638,222737467,222743010,222744007,222750985,222753214,222761907,222763275,	NP_647603	uc001hni.2");
+		this.transcriptForward.setSequence("SEQ".toUpperCase());
+		this.transcriptForward.setGeneSymbol("TAF1A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 222762999, PositionType.ZERO_BASED), "T",
+				"C");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001hni.2:c.-175+69A>G", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of TAF1A<br>
+	 * 3'UTR <br>
+	 * closer to trailing exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc009xdy_1_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc009xdy.1	chr1	-	222731243	222737640	222732001	222737434	5	222731243,222731964,222734705,222736514,222737400,	222731610,222732114,222734860,222736638,222737640,	NP_647603	uc009xdy.1");
+		this.transcriptForward
+				.setSequence("atgcttttctatacttagattgaaactagataaagagccagggtatttttaaaatacttaataaatttaaagggagcatattagacagtaagaactttattttgaaagtaagctgaaatttgagaaatgcttttacaagtatgtaaagattacaagactgttctttctttcagattttgtatcagattgtaccatctcataaattgatgttggaattccatacattacttagaaaatcagaaaaagaagaacaccgtaaactggggttggaggtattatttggagtcttagattttgccggatgcactaagaatataactgcttggaaatacttggcaaaatatctgaaaaatatcttaatgggaaaccaccttgcgtgggttcaagaagagtggaactccaggaaaaactggtggccaggctttcatttcagctacttttgggcaaaaagtgattggaaggaagatacagctttggcctgtgagaaagcttttgtggctggtttactgttaggaaaaggttgtagatatttccggtatattttaaagcaagatcaccaaatcttagggaagaaaattaagcggatgaagagatctgtgaaaaaatacagtattgtaaatccaagactctgatactgaattttagttatttcacagttgtagctacacagtataccaccatgaagaaatatattggtgatgagttctattgaggaattttgaaaagagagaaggatttagaaaaaagactctttctcggccgggcgcagtggctcacacttctaatcccagcacttgggaggccgaggtgggtggatcatgaggtcaggagttcaagaccagcctggccaacacagtgaaaccctgtctctactaaaaatacaaaaagtagctgggcgcagtggcgggcatttgtaatcccagatactcgggaggctgaagcaggagaattgcttgaacccgggaggtggaggttgcagtgagccgagattgcaccaccgtactcctgcctgggcgacagaactagactctgtctc"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("TAF1A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 222731699, PositionType.ZERO_BASED), "A",
+				"G");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc009xdy.1:c.*38-90T>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of TAF1A<br>
+	 * 3'UTR <br>
+	 * closer to leading exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc009xdy_1_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc009xdy.1	chr1	-	222731243	222737640	222732001	222737434	5	222731243,222731964,222734705,222736514,222737400,	222731610,222732114,222734860,222736638,222737640,	NP_647603	uc009xdy.1");
+		this.transcriptForward
+				.setSequence("atgcttttctatacttagattgaaactagataaagagccagggtatttttaaaatacttaataaatttaaagggagcatattagacagtaagaactttattttgaaagtaagctgaaatttgagaaatgcttttacaagtatgtaaagattacaagactgttctttctttcagattttgtatcagattgtaccatctcataaattgatgttggaattccatacattacttagaaaatcagaaaaagaagaacaccgtaaactggggttggaggtattatttggagtcttagattttgccggatgcactaagaatataactgcttggaaatacttggcaaaatatctgaaaaatatcttaatgggaaaccaccttgcgtgggttcaagaagagtggaactccaggaaaaactggtggccaggctttcatttcagctacttttgggcaaaaagtgattggaaggaagatacagctttggcctgtgagaaagcttttgtggctggtttactgttaggaaaaggttgtagatatttccggtatattttaaagcaagatcaccaaatcttagggaagaaaattaagcggatgaagagatctgtgaaaaaatacagtattgtaaatccaagactctgatactgaattttagttatttcacagttgtagctacacagtataccaccatgaagaaatatattggtgatgagttctattgaggaattttgaaaagagagaaggatttagaaaaaagactctttctcggccgggcgcagtggctcacacttctaatcccagcacttgggaggccgaggtgggtggatcatgaggtcaggagttcaagaccagcctggccaacacagtgaaaccctgtctctactaaaaatacaaaaagtagctgggcgcagtggcgggcatttgtaatcccagatactcgggaggctgaagcaggagaattgcttgaacccgggaggtggaggttgcagtgagccgagattgcaccaccgtactcctgcctgggcgacagaactagactctgtctc"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("TAF1A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 222731899, PositionType.ZERO_BASED), "T",
+				"C");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc009xdy.1:c.*37+65A>G", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of TAF1A<br>
+	 * CDS <br>
+	 * closer to trailing exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001hni_2_third() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001hni.2	chr1	-	222731243	222763275	222732001	222753163	11	222731243,222731964,222734705,222736514,222737400,222742851,222743876,222750786,222753100,222761784,222763068,	222731610,222732114,222734860,222736638,222737467,222743010,222744007,222750985,222753214,222761907,222763275,	NP_647603	uc001hni.2");
+		this.transcriptForward.setSequence("SEQ".toUpperCase());
+		this.transcriptForward.setGeneSymbol("TAF1A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 222736699, PositionType.ZERO_BASED), "A",
+				"G");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001hni.2:c.620-62T>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of TAF1A<br>
+	 * CDS <br>
+	 * closer to leading exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc001hni_2_fourth() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001hni.2	chr1	-	222731243	222763275	222732001	222753163	11	222731243,222731964,222734705,222736514,222737400,222742851,222743876,222750786,222753100,222761784,222763068,	222731610,222732114,222734860,222736638,222737467,222743010,222744007,222750985,222753214,222761907,222763275,	NP_647603	uc001hni.2");
+		this.transcriptForward.setSequence("SEQ".toUpperCase());
+		this.transcriptForward.setGeneSymbol("TAF1A");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 222737199, PositionType.ZERO_BASED), "A",
+				"G");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001hni.2:c.619+201T>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.INTRONIC, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of BC052952<br>
+	 * non-coding <br>
+	 * closer to leading exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc002wvf_3_first() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc002wvf.3	chr20	+	25936452	25949924	25936452	25936452	4	25936452,25936721,25943697,25945638,	25936505,25936846,25943832,25949924,		uc002wvf.3");
+		this.transcriptForward
+				.setSequence("ccatacttcaaccactcttacactactgagtgttcaaactgtgctcaactaagatggtgtcagaagtaggatctgaagaagagacttaacaatccccaggagtgctgagtgaacaagcaaggtacctgcaaggacctacttttgtcccttgatctctcaaagtggctggggatcatggatggatacatgtgaccaagcattgcaagttaaagatatttctgaatcttggacctcttatttacagtgaagccccctcatgcatagtaaagcagagaggaatgtaaaaggttgctgcatggataatcaatttctgatggagtctcactctgttgcccaagctggagtgcaacagcatgatcttggcttactgcaacctctgcctcccgggttcaagcgattctgctgcctcagcctcctgaatagctggaattacaggcacccaccaccatacccagctaattttttgtatttttagtagagacggggtttcaccgtgttagccaggatggtcttaatctgctgacctcttgatccacccaccttgccctcccaaagtgcttagattactggcatgagccattgcaccaggtcttatttatctttttgagacaggttttagctctgtcactcaggctggagtgcagtggtgcaatgatggctcaatgcagcaccaacctccagggctcaagtaaccctcccacctcagcttcctgagtagctgggaccacaagcgtgtgtcaccatacctgacacatttcttagacctcagaaaagatgctcaacaccataagtcactaggaatattcagtattcaaatagaggcttcaatgggctccgaactatcccctcctgaactctataaaaagcgtgtttccaaccggctgaatgaaaacaaaggtttacatctgtgagatgaattcacacatcagaaagcattttcaccaagaacttttctagttttatagcaagatgttcattttttcaatattggtctcaatgggctccaaaatgtccctttgtacagtctacaaaaatttttgccaaagtactgaatcaaaacaaatgtttaacactgtgagatgaattttcaagtcaccaaacatttttacagatagtttgtatctactttttaatcacaaaacttagaattgttcactataagcctcaaagggctctaaattgtcccccttagcttctactaaaagagagttttgaacctagtgtgtagaaacaaaagtttaagtctgtgaaataaatccccacattgcaaagctatttcacagatagcttgcttctagtttttatcatgaattattcaacttttcactacaggcctcaatgggctctgaaatgtcccttcatacattctacaaaaagagtgtttccaacttagctgaatcaaaaggaagtttaaactgtatgagatgaaaccgcaaattgcaaagcattttcacatatagcttctatagtttctatcatataatattcagtttttcactgtaggcctccatgggctatgaaatgtcccctcataggttctacagaaaggtgtttccaacatgctgaatgaaaacaaagatttaactttgtgagatgaacccacacatcacaaaacatttttatggatggattttctctagtttttattgcagaatatttgatttcatgctgtaggtctcaattttctccaaaatttccccttgtagattctacaaaaagaatatttccaatctgctgaatcaaaaccgatgttcaattctgtgagatgatatgcaaagctttttcacagatagcctgtttctagtttttattgtgggatatttggtttttcactataagcatcagtgggctctgaaattgtccctttgtagattctacaaaaagagggtttccaacctgttgaatcaaaataaagttttaactttgtaagatgaacccacacatcgcaaagcattttcacccatagcttgtttctaatttttaccatgggttattggtttttcactaaatgcctcagtggactaggaattgttgccttgtagattgtacaaccaaagagtttccaacctgctgaagcaaaacacaggtttaactttgtaagatgaatctacacattgcaaagcatttttacagataggttgctttgagtttttatcaagagatatttgatttttcacagtatgcttcaatgggttatgaaatctccccttgtagattctacaaaaaaagtttccaaactgatgaatcaaaagaaaagttcaacttgtgagatgaaatcacacattacaaagtattttcagaaatagcttctttatagtatttctcgcaggatattagattttccaatattagcctcaacgagctctgaaatgtccctttgtagattgtacaaaatgagtgtttccaacctatggaataaaaaggaaggtttaactctgtgagataaatccacacatcacaaagcatcttcacagatggcttgtttctaatttttattgtgggatattcggtttttcactaaaggcctcaagcactccgaaatgtccttttgtagattctataacaagagtgttttaaaactgctgaatcaaaacaaacgtgtaactctttgagaggaacccacacatcacaaagcatattttcagatcacttgtttctagtttttaaagcatgatattcggtttttcactatatgcctcatcagactcagaaatgtctcatagtagattttacaaaaacagtgtttcctacctgctgaatcaaaacaacagtttaaatctgtgagatgactccaaacctcgcaaagcattttcacagatagttttttcctagtttttttcgcaggatatttggtttttcagtataggcctcaatgaactctgaaatgtccattcataggttctataaaagtgtgttcccaactccctgtataatagcaaaggtttaactctgtgaaatgaatctatacattggaaaacattttcacaaatagcttgttcctagcttttatgatgagacatttgattttttactattggcctcaatgggttcagaaatgtctctttgcagattctacaaaaaaaaaagtttttcatttttctgaacaaaaataaaggtttaactctttgatatgaaatcagacatcacaaagaattttcacacatagcttgtttctagggttcatcactggatattgtgtttttcattataggcttcaaaggagtcttaattgtaacttcctaattctacaaaaagagtgtcccccaacctgctgtatgtaaataaaggtttacctctgtgagataaatcttcacattgcaaagcattttccccgatagcttgtttctagtttttatatcgggatattgatttttcactataggcttcaatgggctttgaaagattcctctgtagattgtacaaaaagagtgttttaacctgctgaatcaaaacaacgtttaactttttgagatacatccacacatcacaaagtattttcacggataggtttttattttattttattttattttttttagatggagtctcactcagtcacccaggctggagtgcagtggcacgatcttggcttcccgggttcatgccattctcctgcctcagcctcccaagtagctgagactacaggtgtctgccaccaggccaggctaattttttgtgtttttagtagagatggggtttcaccatgttagccaggatggtctcgatctcctgacctcgtgatccacccgcctcagcctttcaaagtgctgggactacaggcgtgagccaccatgcctggccaatagcttttttttacttttattgtggaatattggtttttcactacaggctgatattggcttcaaattgtaccctcacagattctacaaacagtgaattttcaagcttctgaagcaaaataaaggtttaaccttgtaagatgaatctgcacattattgctggatattcggtttttcaccgtaggcatcgattttctctgaaatgtcctattgaagattttgccaaaagagtgtttctaccctgctgaatcaaaagaatggtttaattctgtgagatgaaatcacccatcgtaaattattttcagagacatcttcatatagtttttacctcagaatattcggtttttcactataagcctcaatgggctttgaaatgtctcccataaattgtacaaaaaaaaaaaggaatttccaacctgttgaatcaaaacaaatatttaatgttgtgagataaattcaaatatcgcaaagcattttcacagattttttttctactttttatcacggaatatttggtttttcactatagtcctcagtgggctcagaaatgccccttgtagattctacaaaaagaatgtttctaacctgctgaaccaaaacaatactttaactctttgaggtgaatccacacattgcaaacattttcacagatagcttgtttttagttttgatcacgtaatattggatgttttacaataggcctcaacgggctcagaattgtcccctcttagattctactaaaagagtgtttccaaaatgctgtgtaaaaataaaggcttaacactgtgagatgaatcga"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("BC052952");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 20, 25943999, PositionType.ZERO_BASED), "C",
+				"A");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc002wvf.3:n.313+168C>A", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of BC052952<br>
+	 * non-coding <br>
+	 * closer to trailing exon<br>
+	 * '+'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc002wvf_3_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc002wvf.3	chr20	+	25936452	25949924	25936452	25936452	4	25936452,25936721,25943697,25945638,	25936505,25936846,25943832,25949924,		uc002wvf.3");
+		this.transcriptForward
+				.setSequence("ccatacttcaaccactcttacactactgagtgttcaaactgtgctcaactaagatggtgtcagaagtaggatctgaagaagagacttaacaatccccaggagtgctgagtgaacaagcaaggtacctgcaaggacctacttttgtcccttgatctctcaaagtggctggggatcatggatggatacatgtgaccaagcattgcaagttaaagatatttctgaatcttggacctcttatttacagtgaagccccctcatgcatagtaaagcagagaggaatgtaaaaggttgctgcatggataatcaatttctgatggagtctcactctgttgcccaagctggagtgcaacagcatgatcttggcttactgcaacctctgcctcccgggttcaagcgattctgctgcctcagcctcctgaatagctggaattacaggcacccaccaccatacccagctaattttttgtatttttagtagagacggggtttcaccgtgttagccaggatggtcttaatctgctgacctcttgatccacccaccttgccctcccaaagtgcttagattactggcatgagccattgcaccaggtcttatttatctttttgagacaggttttagctctgtcactcaggctggagtgcagtggtgcaatgatggctcaatgcagcaccaacctccagggctcaagtaaccctcccacctcagcttcctgagtagctgggaccacaagcgtgtgtcaccatacctgacacatttcttagacctcagaaaagatgctcaacaccataagtcactaggaatattcagtattcaaatagaggcttcaatgggctccgaactatcccctcctgaactctataaaaagcgtgtttccaaccggctgaatgaaaacaaaggtttacatctgtgagatgaattcacacatcagaaagcattttcaccaagaacttttctagttttatagcaagatgttcattttttcaatattggtctcaatgggctccaaaatgtccctttgtacagtctacaaaaatttttgccaaagtactgaatcaaaacaaatgtttaacactgtgagatgaattttcaagtcaccaaacatttttacagatagtttgtatctactttttaatcacaaaacttagaattgttcactataagcctcaaagggctctaaattgtcccccttagcttctactaaaagagagttttgaacctagtgtgtagaaacaaaagtttaagtctgtgaaataaatccccacattgcaaagctatttcacagatagcttgcttctagtttttatcatgaattattcaacttttcactacaggcctcaatgggctctgaaatgtcccttcatacattctacaaaaagagtgtttccaacttagctgaatcaaaaggaagtttaaactgtatgagatgaaaccgcaaattgcaaagcattttcacatatagcttctatagtttctatcatataatattcagtttttcactgtaggcctccatgggctatgaaatgtcccctcataggttctacagaaaggtgtttccaacatgctgaatgaaaacaaagatttaactttgtgagatgaacccacacatcacaaaacatttttatggatggattttctctagtttttattgcagaatatttgatttcatgctgtaggtctcaattttctccaaaatttccccttgtagattctacaaaaagaatatttccaatctgctgaatcaaaaccgatgttcaattctgtgagatgatatgcaaagctttttcacagatagcctgtttctagtttttattgtgggatatttggtttttcactataagcatcagtgggctctgaaattgtccctttgtagattctacaaaaagagggtttccaacctgttgaatcaaaataaagttttaactttgtaagatgaacccacacatcgcaaagcattttcacccatagcttgtttctaatttttaccatgggttattggtttttcactaaatgcctcagtggactaggaattgttgccttgtagattgtacaaccaaagagtttccaacctgctgaagcaaaacacaggtttaactttgtaagatgaatctacacattgcaaagcatttttacagataggttgctttgagtttttatcaagagatatttgatttttcacagtatgcttcaatgggttatgaaatctccccttgtagattctacaaaaaaagtttccaaactgatgaatcaaaagaaaagttcaacttgtgagatgaaatcacacattacaaagtattttcagaaatagcttctttatagtatttctcgcaggatattagattttccaatattagcctcaacgagctctgaaatgtccctttgtagattgtacaaaatgagtgtttccaacctatggaataaaaaggaaggtttaactctgtgagataaatccacacatcacaaagcatcttcacagatggcttgtttctaatttttattgtgggatattcggtttttcactaaaggcctcaagcactccgaaatgtccttttgtagattctataacaagagtgttttaaaactgctgaatcaaaacaaacgtgtaactctttgagaggaacccacacatcacaaagcatattttcagatcacttgtttctagtttttaaagcatgatattcggtttttcactatatgcctcatcagactcagaaatgtctcatagtagattttacaaaaacagtgtttcctacctgctgaatcaaaacaacagtttaaatctgtgagatgactccaaacctcgcaaagcattttcacagatagttttttcctagtttttttcgcaggatatttggtttttcagtataggcctcaatgaactctgaaatgtccattcataggttctataaaagtgtgttcccaactccctgtataatagcaaaggtttaactctgtgaaatgaatctatacattggaaaacattttcacaaatagcttgttcctagcttttatgatgagacatttgattttttactattggcctcaatgggttcagaaatgtctctttgcagattctacaaaaaaaaaagtttttcatttttctgaacaaaaataaaggtttaactctttgatatgaaatcagacatcacaaagaattttcacacatagcttgtttctagggttcatcactggatattgtgtttttcattataggcttcaaaggagtcttaattgtaacttcctaattctacaaaaagagtgtcccccaacctgctgtatgtaaataaaggtttacctctgtgagataaatcttcacattgcaaagcattttccccgatagcttgtttctagtttttatatcgggatattgatttttcactataggcttcaatgggctttgaaagattcctctgtagattgtacaaaaagagtgttttaacctgctgaatcaaaacaacgtttaactttttgagatacatccacacatcacaaagtattttcacggataggtttttattttattttattttattttttttagatggagtctcactcagtcacccaggctggagtgcagtggcacgatcttggcttcccgggttcatgccattctcctgcctcagcctcccaagtagctgagactacaggtgtctgccaccaggccaggctaattttttgtgtttttagtagagatggggtttcaccatgttagccaggatggtctcgatctcctgacctcgtgatccacccgcctcagcctttcaaagtgctgggactacaggcgtgagccaccatgcctggccaatagcttttttttacttttattgtggaatattggtttttcactacaggctgatattggcttcaaattgtaccctcacagattctacaaacagtgaattttcaagcttctgaagcaaaataaaggtttaaccttgtaagatgaatctgcacattattgctggatattcggtttttcaccgtaggcatcgattttctctgaaatgtcctattgaagattttgccaaaagagtgtttctaccctgctgaatcaaaagaatggtttaattctgtgagatgaaatcacccatcgtaaattattttcagagacatcttcatatagtttttacctcagaatattcggtttttcactataagcctcaatgggctttgaaatgtctcccataaattgtacaaaaaaaaaaaggaatttccaacctgttgaatcaaaacaaatatttaatgttgtgagataaattcaaatatcgcaaagcattttcacagattttttttctactttttatcacggaatatttggtttttcactatagtcctcagtgggctcagaaatgccccttgtagattctacaaaaagaatgtttctaacctgctgaaccaaaacaatactttaactctttgaggtgaatccacacattgcaaacattttcacagatagcttgtttttagttttgatcacgtaatattggatgttttacaataggcctcaacgggctcagaattgtcccctcttagattctactaaaagagtgtttccaaaatgctgtgtaaaaataaaggcttaacactgtgagatgaatcga"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("BC052952");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 20, 25944999, PositionType.ZERO_BASED), "C",
+				"A");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc002wvf.3:n.314-639C>A", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+	}
+
+
+	/**
+	 * An intron of BC052952<br>
+	 * non-coding <br>
+	 * closer to leading exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc010wdn_1_second() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc010wdn.1	chr17	-	36344875	36375177	36344875	36344875	15	36344875,36345438,36346761,36347009,36351935,36352421,36353600,36357157,36358124,36358298,36358841,36361696,36365054,36367406,36375099,	36344956,36345478,36346847,36347082,36351996,36352526,36353765,36357272,36358158,36358395,36359042,36361804,36365176,36367522,36375177,		uc010wdn.1");
+		this.transcriptForward
+				.setSequence("aaatacatgctacaggatttaactatcagaatgaagatgaaaaagtcaccttgtctttccctagtactctgcaaacaggtaataactctttccaatactttgtattttgtttagtatgccactttttggaagtggtcactgtcaatatcttgttatggtttgatggccttggagatttaaaaccgagtaaaagtgtacgggaaccttaaagatagattttgttggagagctgaatgacaaaatgaaaggtttctatagaagtaagtatactaccccttctggagaggtgcgctatgctgctgtaacacagtttgaggctactgatgcccgaagggcttttccttgctgggatgagcctgctatcaaagcaacttttgatatctcattggttgttcctaaagacagagtagctttatcaaacatgaatgtaattgaccggaaaccataccctgatgatgaaaatttagtggaagtgaagtttgcccgcacacctgttacatctacatatctggtggcatttgttgtgggtgaatatgactttgtagaaacaaggtcaaaagatggtgtgtgtgtctgtgtttacactcctgttggcaaagcagaacaaggaaaatttgcaatagaggttgctgctaaaaccttgcctttttataaggactacttcaatgttccttatcctctacctaaaattgatctcattgctattgcagactttgcagctggtgccatggagaactgggaccttgttacttatagggagactgcattgcttattgatccaaaaaattcctgttcttcatcccgccagtgggttgctctggttgtgggacatgaacttgcccatcaatggtttggaaatcttgttactatggaatggtggactcatctttggttaaatgaaggttttgcatcctggattgaatatctgtgtgtagaccactgcttcccagagtatgatatttggactcagtttgtttctgctgattacacccgtgcccaggagcttgacgccttagataacagccatcctattgaagtcagtgtgggccatccatctgaggttgatgagatatttgatgctatatcatatagcaaaggtgcatctgtcatccgaatgctgcatgactacattggggataaggactttaagaaaggaatgaacatgtatttaaccaagttccaacaaaagaatgctgccgcaggatggacgtggtagaggtcgcgggcagttggtgggcacaagagcgagaggacatcattatgaaatacgaaaagggacaccgagctgggctgccagaggacaaggggcctaagccttttcgaagctacaacaacaacgtcgatcatttggggattgtacatgagacggagctgcctcctctgactgcgcgggaggcgaagcaaattcggcgggagatcagccgaaagagcaagtgggtggatatgctgggagactgggagaaatacaaaagcagcagaaag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("LOC440434");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 36360999, PositionType.ZERO_BASED), "A",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc010wdn.1:n.424+697T>A", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, annotation1.getVariantType());
+	}
+
+	/**
+	 * An intron of BC052952<br>
+	 * non-coding <br>
+	 * closer to trailing exon<br>
+	 * '-'-strand
+	 */
+	@Test
+	public void testRealWorldCase_uc010wdn_1_third() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc010wdn.1	chr17	-	36344875	36375177	36344875	36344875	15	36344875,36345438,36346761,36347009,36351935,36352421,36353600,36357157,36358124,36358298,36358841,36361696,36365054,36367406,36375099,	36344956,36345478,36346847,36347082,36351996,36352526,36353765,36357272,36358158,36358395,36359042,36361804,36365176,36367522,36375177,		uc010wdn.1");
+		this.transcriptForward
+				.setSequence("aaatacatgctacaggatttaactatcagaatgaagatgaaaaagtcaccttgtctttccctagtactctgcaaacaggtaataactctttccaatactttgtattttgtttagtatgccactttttggaagtggtcactgtcaatatcttgttatggtttgatggccttggagatttaaaaccgagtaaaagtgtacgggaaccttaaagatagattttgttggagagctgaatgacaaaatgaaaggtttctatagaagtaagtatactaccccttctggagaggtgcgctatgctgctgtaacacagtttgaggctactgatgcccgaagggcttttccttgctgggatgagcctgctatcaaagcaacttttgatatctcattggttgttcctaaagacagagtagctttatcaaacatgaatgtaattgaccggaaaccataccctgatgatgaaaatttagtggaagtgaagtttgcccgcacacctgttacatctacatatctggtggcatttgttgtgggtgaatatgactttgtagaaacaaggtcaaaagatggtgtgtgtgtctgtgtttacactcctgttggcaaagcagaacaaggaaaatttgcaatagaggttgctgctaaaaccttgcctttttataaggactacttcaatgttccttatcctctacctaaaattgatctcattgctattgcagactttgcagctggtgccatggagaactgggaccttgttacttatagggagactgcattgcttattgatccaaaaaattcctgttcttcatcccgccagtgggttgctctggttgtgggacatgaacttgcccatcaatggtttggaaatcttgttactatggaatggtggactcatctttggttaaatgaaggttttgcatcctggattgaatatctgtgtgtagaccactgcttcccagagtatgatatttggactcagtttgtttctgctgattacacccgtgcccaggagcttgacgccttagataacagccatcctattgaagtcagtgtgggccatccatctgaggttgatgagatatttgatgctatatcatatagcaaaggtgcatctgtcatccgaatgctgcatgactacattggggataaggactttaagaaaggaatgaacatgtatttaaccaagttccaacaaaagaatgctgccgcaggatggacgtggtagaggtcgcgggcagttggtgggcacaagagcgagaggacatcattatgaaatacgaaaagggacaccgagctgggctgccagaggacaaggggcctaagccttttcgaagctacaacaacaacgtcgatcatttggggattgtacatgagacggagctgcctcctctgactgcgcgggaggcgaagcaaattcggcgggagatcagccgaaagagcaagtgggtggatatgctgggagactgggagaaatacaaaagcagcagaaag"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("LOC440434");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 36359599, PositionType.ZERO_BASED), "G",
+				"T");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc010wdn.1:n.425-558C>A", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, annotation1.getVariantType());
+	}
+
+	/**
+	 * <P>
+	 * annovar: CHD5 chr1:6204222C>G distance of 7 hand-checked
+	 * </P>
+	 */
+	@Test
+	public void testRealWorldCase_uc001amb_2() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc001amb.2	chr1	-	6161846	6240194	6166339	6240083	42	6161846,6166293,6166454,6166675,6169854,6170453,6171834,6172199,6172968,6181164,6181553,6184007,6184576,6185159,6185583,6185825,6186631,6188105,6188558,6188897,6190263,6191690,6194187,6194777,6195289,6196576,6196787,6202187,6202473,6203882,6204083,6206271,6206724,6208913,6209305,6211091,6212471,6214719,6215658,6219395,6228209,6240004,	6165487,6166347,6166569,6166839,6170050,6170586,6171943,6172337,6173058,6181297,6181633,6184167,6184721,6185293,6185672,6185918,6186806,6188278,6188669,6189129,6190388,6191808,6194319,6194919,6195463,6196698,6196925,6202388,6202665,6203991,6204215,6206483,6206931,6209135,6209472,6211215,6212596,6214958,6215777,6219575,6228337,6240194,	Q8TDI0	uc001amb.2");
+		this.transcriptForward
+				.setSequence("ccgaggccgcctcgcccgccgcgcgcgccggtccggcagcgcacgggttaaggctggcaccgcgcccggcgggagggggggcgcccacctcccctcctccccgcgccgggcatgcggggcccagtgggcaccgaggaggagctgccgcggctgttcgccgaggagatggagaatgaggacgagatgtcagaagaagaagatggtggtcttgaagccttcgatgactttttccctgtggagcccgtgagccttcctaagaagaagaaacccaagaagctcaaggaaaacaagtgtaaagggaagcggaagaagaaagaggggagcaatgatgagctatcagagaatgaagaggatctggaagagaagtcggagagtgaaggcagtgactactccccgaataaaaagaagaagaagaaactcaaggacaagaaggagaaaaaagccaagcgaaaaaagaaggatgaggatgaggatgataatgatgatggatgcttaaaggagcccaagtcctcggggcagctcatggccgagtggggcctggacgacgtggactacctgttctcggaggaggattaccacacgctgaccaactacaaggccttcagccagttcctcaggccactcattgccaagaagaacccgaagatccccatgtccaaaatgatgaccgtcctgggtgccaagtggcgggagttcagcgccaacaaccccttcaagggcagctccgcggcagcagcggcggcggcggtggctgcggctgtagagacggtcaccatctcccctccgctagccgtcagccccccgcaggtgccccagcctgtgcctatccgcaaggccaagaccaaggagggcaaagggcctggagtgaggaagaagatcaaaggctccaaagatgggaagaaaaagggcaaagggaaaaagacggccgggctcaagttccgcttcggggggatcagcaacaagaggaagaaaggctcctcgagtgaagaagatgagagggaggagtcggacttcgacagcgccagcatccacagtgcctccgtgcgctccgaatgctctgcagccctgggcaagaagagcaagaggaggcgcaagaagaagaggattgatgatggtgacggctatgagacagaccaccaggattactgtgaggtgtgccagcagggtggggagatcatcctgtgcgacacctgcccgagggcctaccatctcgtatgcctggacccagagctggagaaggctcccgagggcaagtggagctgcccccactgtgagaaggaggggatccagtgggagccgaaggacgacgacgatgaagaggaggagggcggctgcgaggaggaggaggacgaccacatggagttctgccgcgtgtgcaaggacgggggcgagctgctctgctgcgacgcctgcccctcctcctaccacctgcattgcctcaacccgccgctgcccgagatcccaaacggtgaatggctctgcccgcgctgtacttgccccccactgaagggcaaagtccagcggattctacactggaggtggacggagccccctgcccccttcatggtggggctgccggggcctgacgtggagcccagcctccctccacctaagcccctggagggcatccctgagagagagttctttgtcaagtgggcagggctgtcctactggcattgctcctgggtgaaggagctacagctggagctgtaccacacggtgatgtatcgcaactaccaaagaaagaacgacatggatgagccgcccccctttgactacggctctggggatgaagacggcaagagcgagaagaggaagaacaaggaccccctctatgccaagatggaggagcgcttctaccgctatggcatcaagccagagtggatgatgattcaccgaatcctgaaccatagctttgacaagaagggggatgtgcactacctgatcaagtggaaagacctgccctacgaccagtgcacctgggagatcgatgacatcgacatcccctactacgacaacctcaagcaggcctactggggccacagggagctgatgctgggagaagacaccaggctgcccaagaggctgctcaagaagggcaagaagctgagggacgacaagcaggagaagccgccggacacgcccattgtggaccccacggtcaagttcgacaagcagccatggtacatcgactccacaggcggcacactgcacccgtaccagctggagggcctcaactggctgcgcttctcttgggcccagggcactgacaccatcctggccgatgagatgggtctgggcaagacggtgcagaccatcgtgttcctttactccctctacaaggagggccactccaaagggccctacctggttagcgcgcccctctccaccatcatcaactgggaacgcgagtttgagatgtgggcgcccgacttctacgtggtcacctacacgggggacaaggagagccgctcggtgattcgggagaacgagttttcctttgaggacaacgccattcggagtgggaagaaggtattccgtatgaagaaagaagtgcagatcaaattccacgtgctgctcacctcctatgagctcatcaccattgaccaggccatcctgggctccatcgagtgggcctgcctggtggtagatgaggcccaccgcctcaagaacaaccagtccaagttttttagggtcttaaacagctacaagattgattacaagctgctgctgacagggaccccccttcagaacaacctggaggagctgttccatctcctcaacttcctgactccagagaggttcaacaacctggagggcttcctggaggagtttgctgacatctccaaggaagaccagatcaagaagctgcatgacctgctggggccgcacatgctcaggcggctcaaggctgacgtgttcaagaacatgccggccaagaccgagctcattgtccgggtggagctgagccagatgcagaagaagtactacaagttcatcctcacacggaactttgaggcactgaactccaaggggggcgggaaccaagtatcgctgctcaacatcatgatggacctgaaaaagtgctgcaaccacccctacctcttccctgtggctgccgtggaggcccctgtcttgcccaatggctcctacgatggaagctccctggtcaagtcttcagggaagctcatgctgctacagaagatgctgaagaaactgcgggatgaggggcaccgtgtgctcatcttctcccagatgaccaagatgctggacctcctggaggacttcctggagtacgaaggctacaagtatgagcggattgatggtggcatcaccgggggcctccggcaggaggcaatcgacagattcaatgcccccggggcccagcagttctgcttcctcctctcaacccgggcaggtggtctgggcatcaacctggccacggcggacactgtcatcatctacgactcggactggaacccgcacaatgacatccaggccttcagccgcgcccaccgcatcggccagaacaagaaggtgatgatctaccgcttcgtgactcgggcctcggtggaggagcgcatcacgcaggtggccaagcgcaagatgatgctcacccacctggtggtgcggcccggcctcggctccaagtcggggtccatgaccaagcaggagctggacgacatcctcaagttcggcacggaggaactcttcaaggacgacgtggagggcatgatgtctcagggccagaggccggtcacacccatccctgatgtccagtcctccaaaggggggaacttggccgccagtgcaaagaagaagcacggtagcaccccgccaggtgacaacaaggacgtggaggacagcagtgtgatccactatgacgatgcggccatctccaagctgctggaccggaaccaggacgctacagatgacacggagctacagaacatgaacgagtacctgagctccttcaaggtggcgcagtacgtggtgcgcgaggaggacggcgtggaggaggtggagcgggaaatcatcaagcaggaggagaacgtggaccccgactactgggagaagctgctgcggcaccactatgagcagcagcaggaggacctggcccgcaacctgggcaagggcaagcgcatccgcaagcaggtcaactacaacgatgcctcccaggaggaccaggagtggcaggatgagctctctgataaccagtcagaatattccattggctctgaggatgaggatgaggactttgaagagaggccggaagggcagagtggacgacgacaatcccggaggcagctgaagagtgacagggacaagcccctgcccccgcttctcgcccgagttggtggcaacatcgaggtgctgggcttcaatgcccgacagcggaaggcctttctgaacgccatcatgcgctggggcatgcccccgcaggacgccttcaactcccactggctggtgcgggaccttcgagggaagagcgagaaggagtttagagcctatgtgtccctcttcatgcggcacctgtgtgagccgggggcggatggtgcagagaccttcgcagacggcgtgccccgggagggcctctccaggcagcacgtgctgacccgcatcggggtcatgtcactagttaggaagaaggttcaggagtttgagcatgtcaacgggaagtacagcaccccagacttgatccctgaggggcccgaggggaagaagtcgggcgaggtgatctcctcggaccccaacacaccagtgcccgccagccctgcccacctcctgccagccccgctgggcctgccagacaaaatggaagcccagctgggctacatggatgagaaagaccccggggcacagaagccaaggcagcccctggaagtccaggcccttccagccgccttggatagagtggagagtgaggacaagcacgagagcccagccagcaaggagagagcccgagaggagcggccagaggagacggagaaggccccgccctccccggagcagctgccgagagaggaggtgcttcctgagaaggagaagatcctggacaagctggagctgagcttgatccacagcagaggggacagttccgaactcaggccagatgacaccaaggctgaggagaaggagcccattgaaacacagcaaaatggtgacaaagaggaagatgacgaggggaagaaggaggacaagaaggggaaattcaagttcatgttcaacatcgcggacgggggcttcacggagttgcacacgctgtggcagaacgaggagcgggctgctgtatcctctgggaaaatctacgacatctggcaccggcgccatgactactggctgctggcgggcatcgtgacgcacggctacgcccgctggcaggacatccagaatgacccacggtacatgatcctcaacgagcccttcaagtctgaggtccacaagggcaactacctggagatgaagaacaagttcctggcccgcaggtttaagctgctggagcaggcgttggtcattgaggagcagctccggagggccgcgtacctgaacatgacgcaggaccccaaccaccccgccatggccctcaacgcccgcctggctgaagtggagtgcctcgccgagagccaccagcacctgtccaaggagtcccttgctgggaacaagcctgccaatgccgtcctgcacaaggtcctgaaccagctggaggagctgctgagcgacatgaaggccgacgtgacccggctgccatccatgctgtcccgcatccccccggtggccgcccggctgcagatgtcggagcgcagcatcctgagccgcctgaccaaccgcgccggggaccccaccatccagcagggcgctttcggctcctcccagatgtacagcaacaactttgggcccaacttccggggccctggaccgggagggattgtcaactacaaccagatgcccctggggccctatgtgaccgatatctagccgtcctcgagacttccctgtgttgcagcgctcatttccagctgagccacgcctgccgggccacctgcccgacccacatgggagagaaaagctgccacctttttaggagccagcgccaccttgggacaaaaagggaaacctagtaatgccatcacatggaggacgaggcccagctcagctgggccagagcccagaagtgccacctcatcataattcaagtgttcttccacacagcgttgcccccacaaccacgccggacgtgccccctcgccaccttttccagacgacttcttagaagagatttcatttatttgtacatcttttgcactttcctattgaagacttgaacacgtttgtcttgataaaagttggatgacgtatggaagattcgaacctgcagcactgatgtctctttaccgatgggttccagacccaaggtagtcctggcactgccctgtggactcagcccagctggggaggacatggcgcccggtgccctaggagccctcagtgtcccctacctgacctgtctgcacctgtgtgacagccccttctgatttggccccctgcccgcttggagcctcccagcaccagacagggcaggtttggggagccgctgtccagccctatggtgagaccctggctgacatttcccctccttcctgccaaggctggaggccgccaggtgtttgctctctccttgtggggaggtggatcctctgccagcaggtgtctgtccccggcccagcgcatcttgaaggccctggactctgttaccagtggggggcctgtggccccggctcttcacagcaggcagaagcgtatgatcccagggagggtgggctggggggggggcagcacttgcctcggagccactgctgcgttgggtttgccttctgccagaggtgtggttaagggcagtgatagctgcgccccagcaaggagggtcatgggccctgagctggcccaggagaccctggccctgccctgtgccctgggatgcctaccctgcccacctccggaggtggaaccgggctgcccctgggggcctggacttgtcccattcccctgtccctggaaaggccttcccgggggctttttgcctgaggctgcactcttggaaggcgtggggagagttctgcctggagggggactggacccagtgccctctgcagacccctcccagccgcagcaccaagggcttgctgccttgtttcctgccaggagcgccctgacatcccaaaaccatcttcccacatgtgggttgttggaatcccacccactcccccggaccctgcccctccaagttggggacggagatggggagcaggtcaggccctccctaggcctgtttgtgtgtgatccttctcctggccccaggtcgacctggaaggcgtttctgagtcttgtactgggaccttcccagggaaggtgccttggggtgcagaatcctgggaatgttaggaaagggctgcgtgaaaaacccagctgggcctggggtggaggtgcacacgggctggggctcagctccttggagagggcctgcctgggactgagggggccagggctgggtcaggattcaccagcttgtgttgcagacactggagcgattgcctggccctccctaagccctatatgcctcactcataatgaggctgtctctgaaccccggagggcgggacctacaagtccttcctcttggcgcattcccacactccagtctggatccaggtctgcaaggccagcccgaccctgacactgcacgtgggcgtagtggggagcaccctggagtggagatgattgtcagcgggctcacatgttatggttcatccacatgcgtgttgtgtgctctgcggtgcctcctggcaaagggtcctggctcgggtcagaagctcactcccgtgccctcgtccccaaacaagcagtggcaagcactggggttggccctcgttgggagcagtgcccaccttccttggcccacagcagataggtcccgagcagcaggactggaggcctgtggcggtcagggcaggggtctgtgtctccaccccaagggctgatggtccctcccctgtgcgccttcctctcaggcaggcttgctctgtcccttcctctctgcttccctcccaggcctcgccagggctcccttctcctctgcctggttagactcgggcacccaggaaagcctggccagggctcctttgggcctgggccccctgcactgcctggtccagaaggggtggtgctgtccgtggccagcaccccggggcccgggaggggtgggctactagagtcagagcgggtttggggctgaccagtttgggagaggagaaaagatctgagaatgtccttcttggtttgtcagtcatctctgccaaaagtggtgatggtggtgtccgtatgtttggcgtctttgggctgggtttggtttttgctgctggtagaatcagggtcctcgggcatgaacgcgagcccaaagtgccagtctgcgattggaaatttccagccactttaagccagtgctgagtagggcttctgcagagccatgtttgagccaaggtcttggaaggcattgccccatgggctcaggtgactcggggtggagtgagcacgtctgcagggccctctcatacacgcctgaggcagaagcagcgtcccccgtgaaagccaccttccgaagctcctgcgttttttgcaaacttggcttcccccaggggcaggctggactttccctgccccctatgattgaagtcctcctgcttttgggggctgccttcccagagtcccccgggtgctcccctgccgaggtcaggagctgaccaagccttggcccggtgacacctgcagccctcactcctgtcatcccaggacacttgaggcccaaggaggtggagtggagagtgggctcgggtacatgggagccagaagccagatggacttggtcaagtgtcggtcacttggagcctccagtgtgcgtcagggtctgtgggcaggggacagggcgtgggtgggggccgaggctggcacgcccctctgccctcaccgtcttggtgacctggcctcggcccctcccccaagtctcttctgtgcaaggcccgcctcggcctcggcagctggttcctgtcctgttttctgtgtctgaaagtttacaggttgtggtgcatcagcccaaactcactggcgttgtgttttttttttctttaattttcagattttttttttaaacaaagtatttttttaggtgcgataacccagaaagggcccgttgggtgtgtgtgtgtgtcctgaactcctcaagcagcgattggagcccaagcacccctggagaggaagggagggtccccactggcccgtggggtctgagttcaggggtgtggagggagcagactccaccggcccaggcccagctaagagggggccgacccctttccccaggcacagccccaggctggcaaagggagggccctgggctgggtgcaaggcgcgccaggagtcccagccagggtggccccggcgggggcgggtccagctttggaagccaggctcccctgtgagccgtggcttgtctggtcttcgcccacgggaggctggacagaggctgtagccaacacaatcacctttactttgtactctgtgtgtatgttttggttttctgtgttttaataaatcctttgggaaaggatttaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("CHD5");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6204221, PositionType.ZERO_BASED), "C", "G");
+		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc001amb.2:c.1803-7G>C", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
 
 }

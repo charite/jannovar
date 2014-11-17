@@ -152,7 +152,7 @@ abstract class AnnotationBuilderHelper {
 	}
 
 	/**
-	 * @return upstream/downstream anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
+	 * @return upstream/downstream annotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUpOrDownstreamAnnotation() {
 		if (change.getGenomeInterval().length() == 0) {
