@@ -35,7 +35,7 @@ public class BlockSubstitutionAnnotationBuilder {
 	 *
 	 * @throws InvalidGenomeChange
 	 *             if there are problems with the position in <code>change</code> (position out of CDS) or when
-	 *             <code>change</code> does not describe an insertion
+	 *             <code>change</code> does not describe a block substitution
 	 */
 	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		// Guard against invalid genome change.
