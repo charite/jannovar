@@ -44,6 +44,7 @@ public class GenomeInterval {
 		this.chr = other.chr;
 		this.beginPos = other.beginPos;
 		this.endPos = other.endPos;
+
 		// transform coordinate system
 		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
 			this.beginPos += 1;
@@ -57,8 +58,8 @@ public class GenomeInterval {
 		this.strand = strand;
 		this.chr = other.chr;
 
+		// transform coordinate system
 		int delta = (positionType == PositionType.ONE_BASED) ? 1 : 0;
-
 		if (strand == other.strand) {
 			this.beginPos = other.beginPos;
 			this.endPos = other.endPos;
@@ -301,7 +302,7 @@ public class GenomeInterval {
 	 */
 	@Override
 	public int hashCode() {
-		if (this.positionType == PositionType.ONE_BASED)
+		if (this.positionType == PositionType.ONE_BASED || strand != '+')
 			return withPositionType(PositionType.ZERO_BASED).withStrand('+').hashCode();
 
 		final int prime = 31;

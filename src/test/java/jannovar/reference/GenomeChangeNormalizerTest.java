@@ -1,12 +1,6 @@
 package jannovar.reference;
 
 import jannovar.annotation.builders.GenomeChangeNormalizer;
-import jannovar.reference.GenomeChange;
-import jannovar.reference.GenomePosition;
-import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptModel;
-import jannovar.reference.TranscriptPosition;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -105,7 +99,7 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNoNormalizationNecessaryOneBaseFirst() {
 		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 23694498, PositionType.ZERO_BASED);
 		GenomeChange change = new GenomeChange(gPos, "", "G", '-');
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
@@ -114,7 +108,7 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNoNormalizationNecessaryOneBaseSecond() {
 		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 23694498, PositionType.ZERO_BASED);
 		GenomeChange change = new GenomeChange(gPos, "", "A", '-');
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
@@ -123,7 +117,7 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNoNormalizationNecessaryMoreBasesSecond() {
 		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED);
 		GenomeChange change = new GenomeChange(gPos, "", "AAA", '-');
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
@@ -132,7 +126,7 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNormalizationNecessaryOneBaseFirst() {
 		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED);
 		GenomeChange change = new GenomeChange(gPos, "", "T", '+');
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-2), "", "T", '-');
@@ -143,7 +137,7 @@ public class GenomeChangeNormalizerTest {
 	public void testReverseInsertNormalizationNecessaryOneBaseSecond() {
 		// one base at second CDS position
 		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED);
 		GenomeChange change = new GenomeChange(gPos, "", "T", '+');
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "", "T", '-');
@@ -153,7 +147,7 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNormalizationNecessaryMoreBasesSecond() {
 		TranscriptPosition txPos = new TranscriptPosition(transcriptReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED);
+		GenomePosition gPos = new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED);
 		GenomeChange change = new GenomeChange(gPos, "", "GGGTTAT", '+');
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-4), "", "TTATGGG", '-');

@@ -46,7 +46,10 @@ public class GenomeChange {
 	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
 	 */
 	public GenomeChange(GenomePosition pos, String ref, String alt, char strand) {
-		// TODO(holtgrem): test this function
+		// Normalize position type to zero-based.
+		pos = pos.withPositionType(PositionType.ZERO_BASED);
+
+		// Correct variant data.
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
 		if (corr.ref.equals("-"))
@@ -54,39 +57,44 @@ public class GenomeChange {
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		int shift = ref.length() + (pos.getPositionType() == PositionType.ONE_BASED ? -1 : 0);
-
-		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, pos.getPositionType()).shifted(
-				shift).withStrand(strand);
-		if (strand == '+') {
+		if (strand == pos.getStrand()) {
 			this.ref = corr.ref;
 			this.alt = corr.alt;
 		} else {
 			this.ref = DNAUtils.reverseComplement(corr.ref);
 			this.alt = DNAUtils.reverseComplement(corr.alt);
 		}
+
+		int delta = 0;
+		if (strand != pos.getStrand() && ref.length() == 0)
+			delta = -1;
+		else if (strand != pos.getStrand() /* && ref.length() != 0 */)
+			delta = ref.length() - 1;
+
+		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, PositionType.ZERO_BASED).shifted(
+				delta).withStrand(strand);
 	}
 
 	/**
 	 * Construct object and enforce strand.
 	 */
 	public GenomeChange(GenomeChange other, char strand) {
-		// TODO(holtgrem): test this function
-		VariantDataCorrector corr = new VariantDataCorrector(other.ref, other.alt, other.pos.getPos());
-		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
-		if (corr.ref.equals("-"))
-			corr.ref = "";
-		if (corr.alt.equals("-"))
-			corr.alt = "";
-
-		this.pos = new GenomePosition(other.pos.getStrand(), other.pos.getChr(), corr.position,
-				other.pos.getPositionType()).withStrand(strand);
-		if (strand == '+') {
-			this.ref = corr.ref;
-			this.alt = corr.alt;
+		if (strand == other.pos.getStrand()) {
+			this.ref = other.ref;
+			this.alt = other.alt;
 		} else {
-			this.ref = DNAUtils.reverseComplement(corr.ref);
-			this.alt = DNAUtils.reverseComplement(corr.alt);
+			this.ref = DNAUtils.reverseComplement(other.ref);
+			this.alt = DNAUtils.reverseComplement(other.alt);
+		}
+
+		// Get position as 0-based position.
+
+		if (strand == other.pos.getStrand()) {
+			this.pos = other.pos;
+		} else {
+			GenomePosition pos = other.pos.withPositionType(PositionType.ZERO_BASED);
+			this.pos = pos.shifted(this.ref.length() - 1).withStrand(strand)
+					.withPositionType(other.pos.getPositionType());
 		}
 	}
 
@@ -123,7 +131,6 @@ public class GenomeChange {
 	 * @return the GenomeChange on the given strand
 	 */
 	public GenomeChange withStrand(char strand) {
-		// TODO(holtgrem): test this function
 		return new GenomeChange(this, strand);
 	}
 

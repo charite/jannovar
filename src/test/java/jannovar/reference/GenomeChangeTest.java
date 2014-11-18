@@ -52,7 +52,7 @@ public class GenomeChangeTest {
 	@Test
 	public void testConstructorChangeStrandZeroRefBasesZeroBased() {
 		GenomeChange change = new GenomeChange(this.genomePosZeroBasedForward, "", "C", '-');
-		Assert.assertEquals(this.genomePosZeroBasedForward.withStrand('-'), change.getPos());
+		Assert.assertEquals(this.genomePosZeroBasedForward.shifted(-1).withStrand('-'), change.getPos());
 		Assert.assertEquals("", change.getRef());
 		Assert.assertEquals("G", change.getAlt());
 	}
@@ -60,7 +60,7 @@ public class GenomeChangeTest {
 	@Test
 	public void testConstructorChangeStrandOneRefBaseZeroBased() {
 		GenomeChange change = new GenomeChange(this.genomePosZeroBasedForward, "A", "C", '-');
-		Assert.assertEquals(this.genomePosZeroBasedForward.shifted(1).withStrand('-'), change.getPos());
+		Assert.assertEquals(this.genomePosZeroBasedForward.shifted(0).withStrand('-'), change.getPos());
 		Assert.assertEquals("T", change.getRef());
 		Assert.assertEquals("G", change.getAlt());
 	}
@@ -68,7 +68,7 @@ public class GenomeChangeTest {
 	@Test
 	public void testConstructorChangeStrandThreeRefBasesZeroBased() {
 		GenomeChange change = new GenomeChange(this.genomePosZeroBasedForward, "AAA", "CCC", '-');
-		Assert.assertEquals(this.genomePosZeroBasedForward.shifted(3).withStrand('-'), change.getPos());
+		Assert.assertEquals(this.genomePosZeroBasedForward.shifted(2).withStrand('-'), change.getPos());
 		Assert.assertEquals("TTT", change.getRef());
 		Assert.assertEquals("GGG", change.getAlt());
 	}
@@ -102,10 +102,42 @@ public class GenomeChangeTest {
 	}
 
 	@Test
-	public void testWithStrand() {
+	public void testWithStrandZeroBases() {
+		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "", "C").withStrand('-');
+		GenomePosition expected = this.genomePosOneBasedForward.shifted(-1);
+		GenomePosition actual = change.getPos();
+		Assert.assertEquals(expected, actual);
+		Assert.assertEquals("", change.getRef());
+		Assert.assertEquals("G", change.getAlt());
+	}
+
+	@Test
+	public void testWithStrandOneBase() {
 		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "A", "C").withStrand('-');
-		Assert.assertEquals(this.genomePosOneBasedForward.withStrand('-'), change.getPos());
+		GenomePosition expected = this.genomePosOneBasedForward.shifted(0);
+		GenomePosition actual = change.getPos();
+		Assert.assertEquals(expected, actual);
 		Assert.assertEquals("T", change.getRef());
+		Assert.assertEquals("G", change.getAlt());
+	}
+
+	@Test
+	public void testWithStrandTwoBases() {
+		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "AA", "C").withStrand('-');
+		GenomePosition expected = this.genomePosOneBasedForward.shifted(1);
+		GenomePosition actual = change.getPos();
+		Assert.assertEquals(expected, actual);
+		Assert.assertEquals("TT", change.getRef());
+		Assert.assertEquals("G", change.getAlt());
+	}
+
+	@Test
+	public void testWithStrandThreeBases() {
+		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "AAA", "C").withStrand('-');
+		GenomePosition expected = this.genomePosOneBasedForward.shifted(2);
+		GenomePosition actual = change.getPos();
+		Assert.assertEquals(expected, actual);
+		Assert.assertEquals("TTT", change.getRef());
 		Assert.assertEquals("G", change.getAlt());
 	}
 

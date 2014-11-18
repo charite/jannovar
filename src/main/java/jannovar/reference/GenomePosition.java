@@ -6,6 +6,15 @@ import jannovar.exception.InvalidCoordinateException;
 /**
  * Representation of a position on a genome (chromosome, position).
  *
+ * In the case of one-based position, {@link #pos} points to the {@link #pos}-th base in string from the left when
+ * starting to count at 1. In the case of zero-based positions, {@link #pos} points to the gap left of the character in
+ * the case of positions on the forward strand and to the gap right of the character in the case of positions on the
+ * reverse strand. When interpreting this for the reverse strand (i.e. counting from the right), the position right of a
+ * character is interpreted as the gap <b>before</b> the character.
+ *
+ * Reverse-complementing a zero-based GenomePosition must be equivalent to reverse-complementing one-based positions.
+ * Thus, they are shifted towards teh right gap besides the character they point at when changing the strand.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class GenomePosition {
@@ -39,6 +48,7 @@ public class GenomePosition {
 		this.positionType = positionType;
 		this.strand = other.strand;
 		this.chr = other.chr;
+
 		// transform coordinate system
 		int delta = 0;
 		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
@@ -54,8 +64,8 @@ public class GenomePosition {
 		this.strand = strand;
 		this.chr = other.chr;
 
+		// transform coordinate system
 		int delta = (positionType == PositionType.ONE_BASED) ? 1 : -1;
-
 		if (strand == other.strand)
 			this.pos = other.pos;
 		else
@@ -208,6 +218,9 @@ public class GenomePosition {
 	 */
 	@Override
 	public int hashCode() {
+		if (this.positionType == PositionType.ONE_BASED || strand != '+')
+			return withPositionType(PositionType.ZERO_BASED).withStrand('+').hashCode();
+
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + chr;
@@ -229,7 +242,12 @@ public class GenomePosition {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+
+		if (positionType == PositionType.ONE_BASED || strand == '-')
+			return this.withPositionType(PositionType.ZERO_BASED).withStrand('+').equals(obj);
 		GenomePosition other = (GenomePosition) obj;
+		other = other.withPositionType(PositionType.ZERO_BASED).withStrand('+');
+
 		if (strand != other.strand)
 			return false;
 		if (chr != other.chr)
