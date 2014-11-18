@@ -98,8 +98,10 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	public Annotation(TranscriptModel tmdl, String annotation, VariantType type) {
 		this.varType = type;
 		this.variantAnnotation = annotation;
-		this.geneSymbol = tmdl == null ? null : tmdl.getGeneSymbol();
-		this.entrezGeneID = tmdl == null ? null : tmdl.getGeneID();
+		if (tmdl != null) {
+			this.geneSymbol = tmdl.getGeneSymbol();
+			this.entrezGeneID = tmdl.getGeneID();
+		}
 	}
 
 	/**
