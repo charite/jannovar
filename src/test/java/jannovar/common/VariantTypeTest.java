@@ -13,7 +13,7 @@ public class VariantTypeTest {
 	@Test
 	public void testNumberOfConstants() {
 		int n = VariantType.class.getEnumConstants().length;
-		Assert.assertEquals(28, n);
+		Assert.assertEquals(29, n);
 	}
 
 	@Test
@@ -223,11 +223,12 @@ public class VariantTypeTest {
 
 	@Test
 	public void testSize() {
-		Assert.assertEquals(28, VariantType.size());
+		Assert.assertEquals(29, VariantType.size());
 	}
 
 	@Test
 	public void testToDisplayString() {
+		Assert.assertEquals("transcript ablation", VariantType.TRANSCRIPT_ABLATION.toDisplayString());
 		Assert.assertEquals("downstream", VariantType.DOWNSTREAM.toDisplayString());
 		Assert.assertEquals("frameshift elongation", VariantType.FS_INSERTION.toDisplayString());
 		Assert.assertEquals("inframe substitution", VariantType.NON_FS_SUBSTITUTION.toDisplayString());
@@ -260,6 +261,7 @@ public class VariantTypeTest {
 
 	@Test
 	public void toSequenceOntologyTerm() {
+		Assert.assertEquals("transcript_ablation", VariantType.TRANSCRIPT_ABLATION.toSequenceOntologyTerm());
 		Assert.assertEquals("downstream_gene_variant", VariantType.DOWNSTREAM.toSequenceOntologyTerm());
 		Assert.assertEquals("frameshift_elongation", VariantType.FS_INSERTION.toSequenceOntologyTerm());
 		Assert.assertEquals("inframe_substitution", VariantType.NON_FS_SUBSTITUTION.toSequenceOntologyTerm());
@@ -292,6 +294,7 @@ public class VariantTypeTest {
 
 	@Test
 	public void toSequenceOntologyID() {
+		Assert.assertEquals("SO:0001893", VariantType.TRANSCRIPT_ABLATION.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001632", VariantType.DOWNSTREAM.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001909", VariantType.FS_INSERTION.toSequenceOntologyID());
 		Assert.assertEquals("nonframeshift substitution", VariantType.NON_FS_SUBSTITUTION.toSequenceOntologyID());
