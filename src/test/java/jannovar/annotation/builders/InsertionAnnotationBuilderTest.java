@@ -343,48 +343,48 @@ public class InsertionAnnotationBuilderTest {
 
 		// Insert C and G between nucleotides 1 and 2.
 
-		GenomeChange change1c = new GenomeChange(new GenomePosition('+', 1, 23694496, PositionType.ZERO_BASED), "", "C");
+		GenomeChange change1c = new GenomeChange(new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED), "", "C");
 		Annotation annotation1c = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change1c);
 		Assert.assertEquals("uc001bgu.3:exon2:c.1_2insG:p.0?", annotation1c.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation1c.getVariantType());
 
-		GenomeChange change1g = new GenomeChange(new GenomePosition('+', 1, 23694496, PositionType.ZERO_BASED), "", "G");
+		GenomeChange change1g = new GenomeChange(new GenomePosition('+', 1, 23694497, PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1g = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change1g);
 		Assert.assertEquals("uc001bgu.3:exon2:c.1_2insC:p.0?", annotation1g.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation1g.getVariantType());
 
 		// Insert A and C between nucleotides 2 and 3.
 
-		GenomeChange change2a = new GenomeChange(new GenomePosition('+', 1, 23694495, PositionType.ZERO_BASED), "", "T");
+		GenomeChange change2a = new GenomeChange(new GenomePosition('+', 1, 23694496, PositionType.ZERO_BASED), "", "T");
 		Annotation annotation2a = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change2a);
 		Assert.assertEquals("uc001bgu.3:exon2:c.2_3insA:p.0?", annotation2a.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation2a.getVariantType());
 
-		GenomeChange change2c = new GenomeChange(new GenomePosition('+', 1, 23694495, PositionType.ZERO_BASED), "", "G");
+		GenomeChange change2c = new GenomeChange(new GenomePosition('+', 1, 23694496, PositionType.ZERO_BASED), "", "G");
 		Annotation annotation2c = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change2c);
 		Assert.assertEquals("uc001bgu.3:exon2:c.2_3insC:p.0?", annotation2c.getVariantAnnotation());
 		Assert.assertEquals(VariantType.START_LOSS, annotation2c.getVariantType());
 
 		// Insertions between nucleotides 3 and 4.
 
-		GenomeChange change3a = new GenomeChange(new GenomePosition('+', 1, 23694494, PositionType.ZERO_BASED), "", "T");
+		GenomeChange change3a = new GenomeChange(new GenomePosition('+', 1, 23694495, PositionType.ZERO_BASED), "", "T");
 		Annotation annotation3a = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change3a);
 		Assert.assertEquals("uc001bgu.3:exon2:c.3_4insA:p.Ala2Serfs*16", annotation3a.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation3a.getVariantType());
 
-		GenomeChange change3c = new GenomeChange(new GenomePosition('+', 1, 23694494, PositionType.ZERO_BASED), "", "G");
+		GenomeChange change3c = new GenomeChange(new GenomePosition('+', 1, 23694495, PositionType.ZERO_BASED), "", "G");
 		Annotation annotation3c = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change3c);
 		Assert.assertEquals("uc001bgu.3:exon2:c.3_4insC:p.Ala2Argfs*16", annotation3c.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation3c.getVariantType());
 
 		// Some insertions into stop codon
 
-		GenomeChange change4g = new GenomeChange(new GenomePosition('+', 1, 23688462, PositionType.ZERO_BASED), "", "G");
+		GenomeChange change4g = new GenomeChange(new GenomePosition('+', 1, 23688463, PositionType.ZERO_BASED), "", "G");
 		Annotation annotation4g = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change4g);
 		Assert.assertEquals("uc001bgu.3:exon4:c.1411_1412insC:p.*471Serext*7", annotation4g.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation4g.getVariantType());
 
-		GenomeChange change4c = new GenomeChange(new GenomePosition('+', 1, 23688462, PositionType.ZERO_BASED), "", "C");
+		GenomeChange change4c = new GenomeChange(new GenomePosition('+', 1, 23688463, PositionType.ZERO_BASED), "", "C");
 		Annotation annotation4c = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change4c);
 		Assert.assertEquals("uc001bgu.3:exon4:c.1411_1412insG:p.=", annotation4c.getVariantAnnotation());
 		Assert.assertEquals(VariantType.SYNONYMOUS, annotation4c.getVariantType());
@@ -397,7 +397,7 @@ public class InsertionAnnotationBuilderTest {
 
 		// Try to insert some non-duplicate NT pairs between 4 and 5.
 
-		GenomeChange change4actagact = new GenomeChange(new GenomePosition('+', 1, 23694493, PositionType.ZERO_BASED),
+		GenomeChange change4actagact = new GenomeChange(new GenomePosition('+', 1, 23694494, PositionType.ZERO_BASED),
 				"", "ACTAGACT");
 		Annotation annotation4actagact = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change4actagact);
 		Assert.assertEquals("uc001bgu.3:exon2:c.4_5insAGTCTAGT:p.Ala2Glufs*16",
@@ -405,14 +405,14 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation4actagact.getVariantType());
 
 		// This insertion will be shifted.
-		GenomeChange change4cgtg = new GenomeChange(new GenomePosition('+', 1, 23694493, PositionType.ZERO_BASED), "",
+		GenomeChange change4cgtg = new GenomeChange(new GenomePosition('+', 1, 23694494, PositionType.ZERO_BASED), "",
 				"CGTG");
 		Annotation annotation4cgtg = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change4cgtg);
 		Assert.assertEquals("uc001bgu.3:exon2:c.6_7insCGCA:p.Ala3Argfs*16", annotation4cgtg.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation4cgtg.getVariantType());
 
 		// Insert whole stop codon.
-		GenomeChange change5cgtg = new GenomeChange(new GenomePosition('+', 1, 23694491, PositionType.ZERO_BASED), "",
+		GenomeChange change5cgtg = new GenomeChange(new GenomePosition('+', 1, 23694492, PositionType.ZERO_BASED), "",
 				"ATTA");
 		Annotation annotation5cgtg = InsertionAnnotationBuilder.buildAnnotation(infoReverse, change5cgtg);
 		Assert.assertEquals("uc001bgu.3:exon2:c.6_7insTAAT:p.Ala3*", annotation5cgtg.getVariantAnnotation());
