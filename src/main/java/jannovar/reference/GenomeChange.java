@@ -163,6 +163,8 @@ public class GenomeChange {
 	 */
 	@Override
 	public int hashCode() {
+		if (strand != '+')
+			return withStrand('+').hashCode();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
@@ -184,7 +186,12 @@ public class GenomeChange {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+
 		GenomeChange other = (GenomeChange) obj;
+		if (pos.getStrand() != '+')
+			return withStrand('+').equals(obj);
+		other = other.withStrand('+');
+
 		if (alt == null) {
 			if (other.alt != null)
 				return false;
