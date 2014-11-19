@@ -53,7 +53,7 @@ public class DeletionAnnotationBuilderTest {
 	public void testForwardUstream() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6640061, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.-204del", annotation1.getVariantAnnotation());
+		Assert.assertEquals("dist=0", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UPSTREAM, annotation1.getVariantType());
 	}
 
@@ -61,7 +61,7 @@ public class DeletionAnnotationBuilderTest {
 	public void testForwardDownstream() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6649340, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.*69del", annotation1.getVariantAnnotation());
+		Assert.assertEquals("dist=0", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.DOWNSTREAM, annotation1.getVariantType());
 	}
 
@@ -70,12 +70,12 @@ public class DeletionAnnotationBuilderTest {
 		// intergenic upstream
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6639061, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.-1204del", annotation1.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
 		// intergenic downstream
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6650340, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation2 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:c.*1069del", annotation2.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, annotation2.getVariantType());
 	}
 

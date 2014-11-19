@@ -51,9 +51,9 @@ public class InsertionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardUpstream() throws InvalidGenomeChange {
-		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640061, PositionType.ZERO_BASED), "", "A");
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640062, PositionType.ZERO_BASED), "", "A");
 		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
-		Assert.assertEquals("uc001anx.3:c.-205_-204insA", anno.getVariantAnnotation());
+		Assert.assertEquals("dist=0", anno.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UPSTREAM, anno.getVariantType());
 	}
 
@@ -61,22 +61,22 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardDownstream() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6649340, PositionType.ZERO_BASED), "", "A");
 		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
-		Assert.assertEquals("uc001anx.3:c.*68_*69insA", anno.getVariantAnnotation());
+		Assert.assertEquals("dist=0", anno.getVariantAnnotation());
 		Assert.assertEquals(VariantType.DOWNSTREAM, anno.getVariantType());
 	}
 
 	@Test
 	public void testForwardIntergenic() throws InvalidGenomeChange {
 		// upstream intergenic
-		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6639061, PositionType.ZERO_BASED), "", "A");
+		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6639062, PositionType.ZERO_BASED), "", "A");
 		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
-		Assert.assertEquals("uc001anx.3:c.-1205_-1204insA", anno.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", anno.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, anno.getVariantType());
 
 		// downstream intergenic
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6650340, PositionType.ZERO_BASED), "", "A");
 		Annotation anno2 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:c.*1068_*1069insA", anno2.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", anno2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, anno2.getVariantType());
 	}
 

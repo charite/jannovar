@@ -53,7 +53,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6640059, PositionType.ZERO_BASED), "ACG",
 				"CGTT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.-206_-204delinsCGTT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("dist=0", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UPSTREAM, annotation1.getVariantType());
 	}
 
@@ -62,7 +62,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6649340, PositionType.ZERO_BASED), "ACG",
 				"CGTT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.*69_*71delinsCGTT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("dist=0", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.DOWNSTREAM, annotation1.getVariantType());
 	}
 
@@ -72,13 +72,13 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6639059, PositionType.ZERO_BASED), "ACG",
 				"CGTT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.-1206_-1204delinsCGTT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
 		// intergenic downstream
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6650340, PositionType.ZERO_BASED), "ACG",
 				"CGTT");
 		Annotation annotation2 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:c.*1069_*1071delinsCGTT", annotation2.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, annotation2.getVariantType());
 	}
 

@@ -104,9 +104,16 @@ abstract class AnnotationBuilderHelper {
 	 * @return annotation for ncRNA HGVS annotations
 	 */
 	protected Annotation buildNonCodingAnnotation() {
-		if (change.getGenomeInterval().length() == 0) {
+		// Handle the upstream/downstream and intergenic case for non-coding transcripts.
+		GenomeInterval changeInterval = change.getGenomeInterval();
+		if (so.overlapsWithUpstreamRegion(changeInterval) || so.overlapsWithDownstreamRegion(changeInterval))
+			return buildUpOrDownstreamAnnotation();
+		else if (!changeInterval.overlapsWith(transcript.txRegion))
+			return buildIntergenicAnnotation();
+
+		if (changeInterval.length() == 0) {
 			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
-			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			GenomePosition pos = changeInterval.getGenomeBeginPos();
 			GenomePosition lPos = pos.shifted(-1);
 			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
 					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
@@ -118,7 +125,6 @@ abstract class AnnotationBuilderHelper {
 				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_INTRONIC);
 		} else {
 			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
-			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
 					|| so.overlapsWithSpliceRegion(changeInterval))
 				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_SPLICING);
@@ -189,22 +195,23 @@ abstract class AnnotationBuilderHelper {
 	 * @return upstream/downstream annotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUpOrDownstreamAnnotation() {
+		String annoString = String.format("dist=%d", distance());
 		if (change.getGenomeInterval().length() == 0) {
 			// Empty interval, is insertion.
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			if (so.liesInUpstreamRegion(pos))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UPSTREAM);
+				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
 			else
 				// so.liesInDownstreamRegion(lPos))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.DOWNSTREAM);
+				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UPSTREAM);
+				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.DOWNSTREAM);
+				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
 		}
 	}
 
@@ -212,7 +219,22 @@ abstract class AnnotationBuilderHelper {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.INTERGENIC);
+		return new Annotation(transcript.transcriptModel, String.format("dist=%d", distance()),
+				VariantType.INTERGENIC);
+	}
+
+	/**
+	 * @return base pair distance of transcript and variant
+	 */
+	private int distance() {
+		GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval txInterval = transcript.txRegion.withPositionType(PositionType.ZERO_BASED);
+		if (changeInterval.overlapsWith(txInterval))
+			return 0;
+		else if (changeInterval.isLeftOf(txInterval.getGenomeBeginPos()))
+			return txInterval.getGenomeBeginPos().differenceTo(changeInterval.getGenomeEndPos());
+		else
+			return changeInterval.getGenomeBeginPos().differenceTo(txInterval.getGenomeEndPos());
 	}
 
 	/**

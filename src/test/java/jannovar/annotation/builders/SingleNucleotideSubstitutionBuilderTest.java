@@ -53,7 +53,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	public void testForwardUpstream() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640061, PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change);
-		Assert.assertEquals("uc001anx.3:c.-204T>A", anno.getVariantAnnotation());
+		Assert.assertEquals("dist=0", anno.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UPSTREAM, anno.getVariantType());
 	}
 
@@ -61,7 +61,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	public void testForwardDownstream() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6649340, PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change);
-		Assert.assertEquals("uc001anx.3:c.*69T>A", anno.getVariantAnnotation());
+		Assert.assertEquals("dist=0", anno.getVariantAnnotation());
 		Assert.assertEquals(VariantType.DOWNSTREAM, anno.getVariantType());
 	}
 
@@ -70,13 +70,13 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		// upstream intergenic
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6639061, PositionType.ZERO_BASED), "T", "A");
 		Annotation anno1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:c.-1204T>A", anno1.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", anno1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, anno1.getVariantType());
 
 		// downstream intergenic
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6650340, PositionType.ZERO_BASED), "T", "A");
 		Annotation anno2 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:c.*1069T>A", anno2.getVariantAnnotation());
+		Assert.assertEquals("dist=1000", anno2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, anno2.getVariantType());
 	}
 
@@ -1737,8 +1737,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 155348067, PositionType.ZERO_BASED), "GTA",
 				"AGG");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		// TODO(holtgrem): WAS: uc001fkt.3:exon19:complicated_splice_mutation ?!
-		Assert.assertEquals("uc001fkt.3:c.6332+4_6332+6delinsCCT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001fkt.3:c.6332+2_6332+4delinsCCT", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
 
@@ -1936,7 +1935,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 173429994, PositionType.ZERO_BASED), "G",
 				"A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010pmp.1:exon2:n.507C>T", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc010pmp.1:exon1:n.507C>T", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 
@@ -1972,7 +1971,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 36353760, PositionType.ZERO_BASED), "C",
 				"T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010wdn.1:exon7:n.876G>A", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc010wdn.1:exon9:n.876G>A", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 
@@ -2076,7 +2075,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc001abo_3_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001abo_3() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
 				.parseKnownGenesLine("uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3");
 		this.transcriptForward
@@ -2086,7 +2085,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 753404, PositionType.ZERO_BASED), "C", "T");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 753405, PositionType.ZERO_BASED), "C", "T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("dist=39337", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
@@ -2103,7 +2102,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 132349412, PositionType.ZERO_BASED), "G",
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 132349413, PositionType.ZERO_BASED), "G",
 				"A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("dist=58174", annotation1.getVariantAnnotation());
@@ -2116,17 +2115,17 @@ public class SingleNucleotideSubstitutionBuilderTest {
 	 * </P>
 	 */
 	@Test
-	public void testRealWorldCase_uc001abo_3_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bgg_1() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
-				.parseKnownGenesLine("uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3");
+				.parseKnownGenesLine("uc001bgg.1	chr1	+	23243782	23247347	23243782	23243782	1	23243782,	23247347,		uc001bgg.1");
 		this.transcriptForward
-				.setSequence("uc001abo.3	chr1	-	700244	714068	700244	700244	7	700244,701708,703927,704876,708355,709550,713663,	700627,701767,703993,705092,708487,709660,714068,		uc001abo.3"
+				.setSequence("ctgcctcactgaagcacaggaaggacccaggccccagaccatcacccaccccagggctgggccctgggccactcctggctcactccagggcccctgttgtttgaagatggtaccaaaggctggaagactcttgctagggaagataacgtaaatgcattcaaaagacagggtaccacatgatgctagggaaagtgcgtcatgaccgcagggtagcagcctgctcctgtcactagggatgtgaatctggggagacacttcccctcactgagccatctgtaaaatgagagcattggactgggtgaggcaggctgtgcaaaacacttatacaccttagtcccatgaggaaggagtattccccctgcatattttggggggaaactgaggctcagggggatgaagtactttgctcagggtaacacagccaggaaggagcagagcaaggccatgagctttggatttttctgtttccaatgtctcctctaccgtgctcaattagatgatgagaaacagttggtgtctgatgctggccaataagagaaaagaaagctcaagtgggctggggctgtcagggagggcttcatggagaggctgtcttgaaaatgacagaggtcaaaagaaaggtcactccaagacgcagctgccagaatggtccaacacagtgaggagttgtgtctggatgggccagtggaacgggggaagtgaaggttgatataagtggaggttgaggcagtttaggcgtgatgtacagtccagccacagcaggttcttgagcaggagggtagcatagtgagcatcaggttctaggaagaagcaccagttcagccatcagatggggcaggatgcctcccagctactcctctccccgagaaggaattgcccccggagcggccctcatttattccaggagaagccaggccctgctgcttcagtttccatcctcactgacgcagataatccaaagagtcacttcagctgcttggaacagcagggttgggtcttgtgctacctgattcttaatttggctgatgtctaccccatttcctccaggcttctctagaggtggcaggggtggggtggggagaaagctgccagacaccaaaggagctgagcctggcgggggcgggcgtgcgggtgggcatgagaaattgctcaggaaacccatccctgccctggtcaccctagtcctggagagatcacccagacatgttggaatgagtctggggtcctgtcttttccaataatgtgttatcctggggaaacccagagggaagttgagggagccccactgtgctgtgtgatgctacatacgcatgcgaatacaccaccgggtggccttgacccagccttctgcaaaatggcttctgccatcaaacttaaggtggagaatggtcttgcagctgccagtttttccttcagagaaactaaggtcagagtgttggctgcagaaaaggacttggcctttgtcacataacaggaaagagagtcaactccgggcacaccccctcggaggctaatctcaggaggttggaaccacagggattgcaataatcgctgaatacttaccatatgccaggtgccaaagcattatcctctccactttatgagtgaggaaactgattcccagaggtgattcccagaagattccaaccaggccatctgtctgtagtccttccttcccacctcctgggatttctcaaaatgtttgccatcgcccacctgtatcagaatctcctgggctatttattgtttaacttgcagactcctgggcgccaccccaaccccctaaatcagaatccctggggttgggcccaagagtctccattttttgacaagctcctccaggagattcctccagacatggaaatcctcacttgactcttcccccataacaaactgccctgatgtctgcagagagagggtctgctgtagacagggattaagaaaaagcaggacattttcagataggatgcccaaacccagacgcagattaggacccatgaagtagggggtagagctgaccctcaggaatgtgcccagacagagctaagctttcaggaaaattagaaagaccctcagacccagagtctgtctgagtttagcttcgcagcatgaaggctgccttgagaaagctgatataacaagaagcagcagaaatttaatactttggaggggcccagcaacccactcagggccaccctgggagaccccacagaccccaaggctatggtccagacctgttcactcaacacctggccaggcggggcctccagctggacctagagctacagatgccccaccaccactaccaagcccggctacccagaccaagacacggcttttcctggaggagagagagagcaaaggccctgtctctacccaagacctaacggcccctgttgaaggagagggagcaggagagggaggagggaggaggtcacagccaggaccacatacactcttgggggccctgctgagactgcaagagtcatgaattctaacgttccacaggtgaaagattccaagattctaggattgcaaaaccccatcattctaagattccaatggaatgattccatgtttctaagattccatcacactatgattctatgctgctaattcttgaaatttcgagtctcattgttcgttgctgttccccagacctgtgggccctagcatttttttaaaagcacaaaaaaaaaagagcaagaaagagagaaagagatggggagggagacagctgaaaacagatactaagaaaagctccatcccttggatctgagttacagatgcaccttggcaagggccaaagaccctccttttgagtggggtgcagaacgtctttccctggtagagtggcagaattgcatgcatcaggccttcctgggggtaaaaggggctggctgttccaggctacagctgagtaaagccccacacaggccacagtgcccactggctggtggacctaggaaccaagcagggccccactggctcagtctggggagggactcatctggggtggaatttccctccctgcagcaaggaagctgcagggccaggaatttgccttgggagacccccactgaggaatatttccgaagcagaaccccttcctattcagagccagagtcttaacactggacaaccacagggtgttgctgcaaactccagagccaggtgccttccctctgacatttgggacatagcttccatggccacacagccttcgcccccttccaagaccccccttgacctttctaatcttagtcactgccttccagagctgggaggccacacggcagaggtgcctgtgaatcactccgtcatcagcctggccgctttcccctctgtggagagggactctgatgggcagggggcaccaagttgagcctctgaggctggcccagcataggccaggcagggacattcactcacaaccagcctttttggactctagagaagagtaattaccacttggtcatgcccagcccccaaatcataatcatagctgctatttcttgagtgccagcaatgtgccaggcaccgtgcccaactttttatacacaat"
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("AK025975");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 23289567, PositionType.ZERO_BASED), "T", "C");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 23289568, PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("dist=42221", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.INTERGENIC, annotation1.getVariantType());
@@ -2411,7 +2410,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001hni.2:c.620-62T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.INTRONIC, annotation1.getVariantType());
 	}
 
 	/**
@@ -2457,7 +2456,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002wvf.3:n.313+168C>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, annotation1.getVariantType());
 	}
 
 	/**
@@ -2481,7 +2480,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002wvf.3:n.314-639C>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.ncRNA_INTRONIC, annotation1.getVariantType());
 	}
 
 	/**
