@@ -330,7 +330,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"AGTCGT", "GAGCTA");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc011ddm.2:exon4:c.475_480delinsTAGCTC:p.Thr159*", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.STOPGAIN, annotation1.getVariantType());
 	}
 
 }

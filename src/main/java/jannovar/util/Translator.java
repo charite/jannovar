@@ -295,8 +295,10 @@ public class Translator {
 		longToShort.put("Val", "V");
 		longToShort.put("Trp", "W");
 		longToShort.put("Tyr", "Y");
+		longToShort.put("*", "*");
 
 		for (Map.Entry<String, String> entry : longToShort.entrySet())
 			shortToLong.put(entry.getValue(), entry.getKey());
+		shortToLong.put("*", "*");
 	}
 }
