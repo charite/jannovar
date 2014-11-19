@@ -743,12 +743,12 @@ public class DeletionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("PADI6");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_207421.3
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 17718673, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001bak.1:exon10:c.1027del:p.Val343Trpfs*33", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
 
 	@Test
