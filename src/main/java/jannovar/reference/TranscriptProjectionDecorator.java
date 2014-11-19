@@ -72,20 +72,21 @@ public class TranscriptProjectionDecorator {
 	public TranscriptPosition genomeToTranscriptPos(GenomePosition pos) throws ProjectionException {
 		if (!transcript.txRegion.contains(pos)) // guard against incorrect position
 			throw new ProjectionException("Position " + pos + " is not in the transcript region " + transcript.txRegion);
-		pos = pos.withStrand(transcript.getStrand());
+		pos = pos.withStrand(transcript.getStrand()).withPositionType(PositionType.ZERO_BASED);
 
 		// Look through all exons, find containing one, and compute the position.
-		int transcriptPos = 0; // offset in transcript
+		int tOffset = 0; // offset in transcript
 		for (GenomeInterval region : transcript.exonRegions) {
-			if (region.contains(pos))
+			region = region.withPositionType(PositionType.ZERO_BASED);
+			if (region.contains(pos)) {
 				// Note that we have to use *the region's position* as the base object for the difference operation so
 				// the case of the transcript on the reverse strand but position on forward strand is handled correctly.
 				// Consequently, we have to *subtract* this difference from transcriptPos.
-				return new TranscriptPosition(transcript.transcriptModel, transcriptPos
-						+ pos.withPositionType(PositionType.ZERO_BASED).differenceTo(
-								region.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos()),
-						PositionType.ZERO_BASED);
-			transcriptPos += region.length();
+				int posInExon = pos.differenceTo(region.getGenomeBeginPos());
+				int transcriptPos = tOffset + posInExon;
+				return new TranscriptPosition(transcript.transcriptModel, transcriptPos, PositionType.ZERO_BASED);
+			}
+			tOffset += region.length();
 		}
 
 		throw new ProjectionException("Position " + pos + " does not lie in an exon.");

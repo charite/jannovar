@@ -13,6 +13,7 @@ import jannovar.reference.TranscriptModelFactory;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 // TODO(holtgrem): Extend tests to also use reverse transcript?
@@ -379,10 +380,39 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
 	}
 
+	/**
+	 * Fails because of discrepancy of UCSC and RefSeq, see the *_REFSEQ variant of this test below. The problem was
+	 * that UCSC predicted the first and last exon one base too large which in turn led to insufficient shifting. In the
+	 * test below, we adjusted the first and last exon by one base at the outside and use the RefSeq sequence as
+	 * obtained from Mutalyzer.
+	 */
+	@Ignore("See method comment.")
 	@Test
 	public void testRealWorldCase_uc003ooo_3() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
-				.parseKnownGenesLine("uc003ooo.3	chr6	-	39266776	39282237	39267202	39282096	5	39266776,39271732,39272270,39278668,39281859,	39267513,39271907,39272431,39278783,39282237,	Q96T54	uc003ooo.3");
+				.parseKnownGenesLine("uc003ooo.3	chr6	-	39266776	39282237	39267202	39282096	"
+						+ "5	39266776,39271732,39272270,39278668,39281859,	"
+						+ "39267513,39271907,39272431,39278783,39282237,	Q96T54	uc003ooo.3");
+		this.transcriptForward
+				.setSequence("ttccccaacactcctcctccccggcgaaaccgggcaccagcaggcgtttgcgagaggagatacgagctggacgcctggcccttccctcccaccgggtcctagtccaccgctcccggcgccggctccccgcctctcccgctatgtaccgaccgcgagcccgggcggctcccgagggcagggtccggggctgcgcggtgcccagcaccgtgctcctgctgctcgcctacctggcttacctggcgctgggcaccggcgtgttctggacgctggagggccgcgcggcgcaggactccagccgcagcttccagcgcgacaagtgggagctgttgcagaacttcacgtgtctggaccgcccggcgctggactcgctgatccgggatgtcgtccaagcatacaaaaacggagccagcctcctcagcaacaccaccagcatggggcgctgggagctcgtgggctccttcttcttttctgtgtccaccatcaccaccattggctatggcaacctgagccccaacacgatggctgcccgcctcttctgcatcttctttgcccttgtggggatcccactcaacctcgtggtgctcaaccgactggggcatctcatgcagcagggagtaaaccactgggccagcaggctggggggcacctggcaggatcctgacaaggcgcggtggctggcgggctctggcgccctcctctcgggcctcctgctcttcctgctgctgccaccgctgctcttctcccacatggagggctggagctacacagagggcttctacttcgccttcatcaccctcagcaccgtgggcttcggcgactacgtgattggaatgaacccctcccagaggtacccactgtggtacaagaacatggtgtccctgtggatcctctttgggatggcatggctggccttgatcatcaaactcatcctctcccagctggagacgccagggagggtatgttcctgctgccaccacagctctaaggaagacttcaagtcccaaagctggagacagggacctgaccgggagccagagtcccactccccacagcaaggatgctatccagagggacccatgggaatcatacagcatctggaaccttctgctcacgctgcaggctgtggcaaggacagctagttatactccattctttggtcgtcgtcctcggtagcaagacccctgattttaagctttgcacatgtccacccaaactaaagactacattttccatccaccctagaggctgggtgcagctatatgattaattctgcccaatagggtatacagagacatgtcctgggtgacatgggatgtgactttcgggtgtcggggcagcatgcccttctcccccacttccttactttagcgggctgcaatgccgccgatatgatggctgggagctctggcagccatacggcaccatgaagtagcggcaatgtttgagcggcacaataagataggaagagtctggatctctgatgatcacagagccatcctaacaaacggaatatcacccgacctcctttatgtgagagagaaataaacatcttatgtaaaataccaaaaaaaaaaaaaaaaaaaaaaaaa"
+						.toUpperCase());
+		this.transcriptForward.setGeneSymbol("KCNK17");
+		this.infoForward = new TranscriptInfo(this.transcriptForward);
+		// RefSeq NM_031460.3
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 6, 39278700, PositionType.ZERO_BASED), "AAG",
+				"");
+		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
+		Assert.assertEquals("uc003ooo.3:exon2:c.324_326del:p.Phe109del", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DELETION, annotation1.getVariantType());
+	}
+
+	@Test
+	public void testRealWorldCase_uc003ooo_3_REFSEQ() throws InvalidGenomeChange {
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003ooo.3	chr6	-	39266777	39282236	39267202	39282096	"
+						+ "5	39266777,39271732,39272270,39278668,39281859,	"
+						+ "39267513,39271907,39272431,39278783,39282236,	Q96T54	uc003ooo.3");
 		this.transcriptForward
 				.setSequence("ttccccaacactcctcctccccggcgaaaccgggcaccagcaggcgtttgcgagaggagatacgagctggacgcctggcccttccctcccaccgggtcctagtccaccgctcccggcgccggctccccgcctctcccgctatgtaccgaccgcgagcccgggcggctcccgagggcagggtccggggctgcgcggtgcccagcaccgtgctcctgctgctcgcctacctggcttacctggcgctgggcaccggcgtgttctggacgctggagggccgcgcggcgcaggactccagccgcagcttccagcgcgacaagtgggagctgttgcagaacttcacgtgtctggaccgcccggcgctggactcgctgatccgggatgtcgtccaagcatacaaaaacggagccagcctcctcagcaacaccaccagcatggggcgctgggagctcgtgggctccttcttcttttctgtgtccaccatcaccaccattggctatggcaacctgagccccaacacgatggctgcccgcctcttctgcatcttctttgcccttgtggggatcccactcaacctcgtggtgctcaaccgactggggcatctcatgcagcagggagtaaaccactgggccagcaggctggggggcacctggcaggatcctgacaaggcgcggtggctggcgggctctggcgccctcctctcgggcctcctgctcttcctgctgctgccaccgctgctcttctcccacatggagggctggagctacacagagggcttctacttcgccttcatcaccctcagcaccgtgggcttcggcgactacgtgattggaatgaacccctcccagaggtacccactgtggtacaagaacatggtgtccctgtggatcctctttgggatggcatggctggccttgatcatcaaactcatcctctcccagctggagacgccagggagggtatgttcctgctgccaccacagctctaaggaagacttcaagtcccaaagctggagacagggacctgaccgggagccagagtcccactccccacagcaaggatgctatccagagggacccatgggaatcatacagcatctggaaccttctgctcacgctgcaggctgtggcaaggacagctagttatactccattctttggtcgtcgtcctcggtagcaagacccctgattttaagctttgcacatgtccacccaaactaaagactacattttccatccaccctagaggctgggtgcagctatatgattaattctgcccaatagggtatacagagacatgtcctgggtgacatgggatgtgactttcgggtgtcggggcagcatgcccttctcccccacttccttactttagcgggctgcaatgccgccgatatgatggctgggagctctggcagccatacggcaccatgaagtagcggcaatgtttgagcggcacaataagataggaagagtctggatctctgatgatcacagagccatcctaacaaacggaatatcacccgacctcctttatgtgagagagaaataaacatcttatgtaaaataccaaaaaaaaaaaaaaaaaaaaaaaaa"
 						.toUpperCase());
@@ -554,8 +584,8 @@ public class DeletionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 15, 78208898, PositionType.ZERO_BASED), "CTC",
 				"");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010bky.2:exon14:c.845_847del:p.E281del", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
+		Assert.assertEquals("uc010bky.2:exon14:c.842_844del:p.Glu281del", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DELETION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -612,7 +642,12 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(VariantType.NON_FS_DELETION, annotation1.getVariantType());
 	}
 
-	// TODO(holtgrem): Marten should look at this case.
+	/**
+	 * In this test, there is a discrepancy between Mutalyzer and Jannovar. From manual inspection, I (Manuel) think
+	 * that this is caused because of a discrepancy between UCSC and RefSeq.
+	 *
+	 * @throws InvalidGenomeChange
+	 */
 	@Test
 	public void testRealWorldCase_uc002jbc_4() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
@@ -626,8 +661,8 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 61660894, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002jbc.4:exon6:c.561del:p.Gly188Alafs*22", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
+		Assert.assertEquals("uc002jbc.4:exon6:c.560del:p.Gly187Valfs*23", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
 
 	@Test
