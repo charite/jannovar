@@ -27,6 +27,9 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
 
+		if (!transcript.isCoding())
+			return buildNonCodingAnnotation();
+
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.containsExon(changeInterval)) // deletion of whole exon
 			return buildFeatureAblationAnnotation();

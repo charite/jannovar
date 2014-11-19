@@ -28,6 +28,9 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
 
+		if (!transcript.isCoding())
+			return buildNonCodingAnnotation();
+
 		// We have the base left and/or right of the insertion to determine the cases.
 		final GenomePosition pos = change.getPos();
 		final GenomePosition lPos = change.getPos().shifted(-1);

@@ -1880,7 +1880,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002tfo.4:c.337-1G>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1987,10 +1987,10 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 18, 19408950, PositionType.ZERO_BASED), "C",
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 18, 19408949, PositionType.ZERO_BASED), "C",
 				"T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002kts.3:exon1:n.724G>A", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc002kts.3:exon3:n.724G>A", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 
@@ -2008,7 +2008,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 20, 25829351, PositionType.ZERO_BASED), "T",
 				"C");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002wve.3:exon2:n.375A>G)", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc002wve.3:exon2:n.375A>G", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 

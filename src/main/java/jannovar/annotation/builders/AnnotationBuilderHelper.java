@@ -96,6 +96,40 @@ abstract class AnnotationBuilderHelper {
 	abstract String ncHGVS();
 
 	/**
+	 * Build and return annotation for non-coding RNA.
+	 *
+	 * We can handle these cases quite easily from the location and amino acid change and just have to check the
+	 * splicing and intronic/exonic cases.
+	 *
+	 * @return annotation for ncRNA HGVS annotations
+	 */
+	protected Annotation buildNonCodingAnnotation() {
+		if (change.getGenomeInterval().length() == 0) {
+			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			GenomePosition lPos = pos.shifted(-1);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
+					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
+					|| (so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_SPLICING);
+			else if (so.liesInExon(lPos) && so.liesInExon(pos))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_EXONIC);
+			else
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_INTRONIC);
+		} else {
+			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
+			GenomeInterval changeInterval = change.getGenomeInterval();
+			if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
+					|| so.overlapsWithSpliceRegion(changeInterval))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_SPLICING);
+			else if (so.overlapsWithExon(changeInterval))
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_EXONIC);
+			else
+				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_INTRONIC);
+		}
+	}
+
+	/**
 	 * @return intronic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntronicAnnotation() {
