@@ -286,14 +286,12 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq NM_012206.2
 
-		// TODO(holtgrem): This fails since we have (wrong) assumption that each WT transcript contains a stop codon.
-
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 5, 156479564, PositionType.ZERO_BASED),
 				"AGTCGT", "AGTGAG");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc011ddm.2:exon4:c.475_477delinsCTC:p.Thr159Leu",
 				annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_SUBSTITUTION, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, annotation1.getVariantType());
 	}
 
 	@Test

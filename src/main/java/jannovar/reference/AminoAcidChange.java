@@ -34,21 +34,6 @@ public class AminoAcidChange {
 		return String.format("%d:%s>%s", pos + 1, ref, alt);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
-		result = prime * result + pos;
-		result = prime * result + ((ref == null) ? 0 : ref.hashCode());
-		return result;
-	}
-
 	/**
 	 * @return new {@link AminoAcidChange} that is shifted one to the right
 	 */
@@ -71,7 +56,22 @@ public class AminoAcidChange {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
+		result = prime * result + pos;
+		result = prime * result + ((ref == null) ? 0 : ref.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

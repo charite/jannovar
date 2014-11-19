@@ -9,6 +9,20 @@ package jannovar.reference;
 public class AminoAcidChangeNormalizer {
 
 	/**
+	 * Search for stop codon in <code>change.alt</code> and truncate afterwards.
+	 *
+	 * @param change
+	 *            the {@link AminoAcidChange} to normalize
+	 * @return normalized {@link AminoAcidChange}
+	 */
+	public static AminoAcidChange truncateAltAfterStopCodon(AminoAcidChange change) {
+		int stopCodonPos = change.alt.indexOf('*');
+		if (stopCodonPos == -1)
+			return change; // no stop codon found in change.alt
+		return new AminoAcidChange(change.pos, change.ref, change.alt.substring(0, stopCodonPos + 1));
+	}
+
+	/**
 	 * Normalize deletion {@link AminoAcidChange} for amino acid string
 	 *
 	 * @param ref

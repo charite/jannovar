@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.reference.AminoAcidChange;
+import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
@@ -149,36 +150,41 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 			else
 				varType = VariantType.NON_FS_SUBSTITUTION;
 
-			// Differentiate between the cases where we have a stop codon and those where we don't.
-			if (varAAStopPos >= 0) {
-				if (refChangeBeginPos.getFrameshift() == 0) {
-					// TODO(holtgrem): Implement shifting for substitutions for AA string
-				}
+			if (refChangeBeginPos.getFrameshift() == 0) {
+				// TODO(holtgrem): Implement shifting for substitutions for AA string
+			}
 
-				// Normalize the amino acid change with the var AA sequence.
-				while (aaChange.ref.length() > 0 && aaChange.alt.length() > 0
-						&& aaChange.ref.charAt(0) == aaChange.alt.charAt(0))
-					aaChange = aaChange.shiftRight();
+			// Normalize the amino acid change with the var AA sequence.
+			while (aaChange.ref.length() > 0 && aaChange.alt.length() > 0
+					&& aaChange.ref.charAt(0) == aaChange.alt.charAt(0))
+				aaChange = aaChange.shiftRight();
+			// Truncate change.alt after stop codon.
+			aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
+			if (aaChange.alt.equals("*"))
+				varType = VariantType.STOPGAIN;
 
-				char wtAAFirst = wtAASeq.charAt(aaChange.pos);
-				char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
-				String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
-				String wtAAFirstLong = (wtAAFirst == '*') ? "*" : t.toLong(wtAAFirst);
-				String wtAALastLong = (wtAALast == '*') ? "*" : t.toLong(wtAALast);
+			char wtAAFirst = wtAASeq.charAt(aaChange.pos);
+			char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
+			String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
+			String wtAAFirstLong = (wtAAFirst == '*') ? "*" : t.toLong(wtAAFirst);
+			String wtAALastLong = (wtAALast == '*') ? "*" : t.toLong(wtAALast);
 
-				if (aaChange.pos == aaChange.getLastPos())
-					protAnno = String.format("p.%s%d%s", wtAAFirstLong, aaChange.pos + 1,
-							t.toLong(insertedAAs.charAt(0)));
-				else
-					protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
-							aaChange.getLastPos() + 1, t.toLong(insertedAAs));
+			// We differentiate the case of replacing a single amino acid and replacing multiple ones. Note that
+			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
+			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
+			if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
+				protAnno = String.format("p.%s%d%s", wtAAFirstLong, aaChange.pos + 1, t.toLong(insertedAAs.charAt(0)));
+			else
+				protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
+						aaChange.getLastPos() + 1, t.toLong(insertedAAs));
 
-				// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
-				if (so.overlapsWithTranslationalStopSite(changeInterval))
+			// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
+			if (so.overlapsWithTranslationalStopSite(changeInterval)) {
+				// Differentiate between the variant AA string containing a stop codon or not.
+				if (varAAStopPos >= 0)
 					protAnno = String.format("%sext*%d", protAnno, varAAStopPos - aaChange.pos + 1);
-			} else {
-				// There is no stop codon any more! Create a "probably no protein is produced".
-				protAnno = "p.0?";
+				else
+					protAnno = String.format("%sext*?", protAnno);
 			}
 		}
 

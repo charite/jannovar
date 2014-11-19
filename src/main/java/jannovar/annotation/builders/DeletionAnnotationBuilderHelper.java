@@ -178,7 +178,7 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			else
 				varType = VariantType.FS_DELETION;
 
-			// Normalize the amino acid change with the var AA sequence.
+			// Normalize the amino acid change, shifting to the right as long as change ref char equals var ref char.
 			while (aaChange.ref.length() > 0 && aaChange.ref.charAt(0) == varAASeq.charAt(aaChange.pos))
 				aaChange = aaChange.shiftRight();
 
