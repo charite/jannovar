@@ -7,6 +7,7 @@ import jannovar.reference.CDSPosition;
 import jannovar.reference.DuplicationTester;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
+import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptSequenceDecorator;
@@ -16,8 +17,6 @@ import jannovar.util.Translator;
  * Helper class that allows to remove various copy and paste code in {@link InsertionAnnotationBuilder}.
  */
 class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
-	/** Override insertion base annotation string in the case of shifting insertions. */
-	private String hgvsInsOverride = null;
 
 	InsertionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
 		super(transcript, change);
@@ -48,10 +47,35 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 
 	@Override
 	String ncHGVS() {
-		if (hgvsInsOverride == null)
+		if (!so.liesInExon(change.getPos()))
 			return String.format("%s:%sins%s", locAnno, dnaAnno, change.getAlt());
-		else
-			return String.format("%s:%sins%s", locAnno, dnaAnno, hgvsInsOverride);
+
+		// For building the HGVS string in transcript locations, we have to check for duplications.
+		//
+		// The super class constructor will normalize the insertion. Thus, we can work with he assumption that any
+		// duplicated characters are left of the insertion.
+		TranscriptPosition txPos;
+		try {
+			txPos = projector.genomeToTranscriptPos(change.getPos());
+		} catch (ProjectionException e) {
+			throw new Error("Bug: at this point, the position must be a transcript position");
+		}
+		if (DuplicationTester.isDuplication(transcript.sequence, change.getAlt(), txPos.getPos())) {
+			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+			char prefix = transcript.isCoding() ? 'c' : 'n';
+			String dnaAnno = null; // override this.dnaAnno
+			if (change.getAlt().length() == 1) {
+				dnaAnno = String.format("%c.%sdup", prefix, posBuilder.getCDNAPosStr(change.getPos().shifted(-1)));
+			} else {
+				dnaAnno = String.format("%c.%s_%sdup", prefix,
+						posBuilder.getCDNAPosStr(change.getPos().shifted(-change.getAlt().length())),
+						posBuilder.getCDNAPosStr(change.getPos().shifted(-1)));
+			}
+
+			return String.format("%s:%s", locAnno, dnaAnno);
+		} else {
+			return String.format("%s:%sins%s", locAnno, dnaAnno, change.getAlt());
+		}
 	}
 
 	private Annotation buildCDSExonicAnnotation() {

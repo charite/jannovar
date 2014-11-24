@@ -92,7 +92,7 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640669, PositionType.ZERO_BASED), "", "C");
 		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
-		Assert.assertEquals("uc001anx.3:exon2:c.-1_1insC", anno.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon2:c.-1dup", anno.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UTR5, anno.getVariantType());
 	}
 
@@ -428,11 +428,11 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("CACNB3");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// no RefSeq
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 12, 49218811, PositionType.ZERO_BASED), "", "T");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010slx.2:exon5:c.*255_*256insT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc010slx.2:exon5:c.*255dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
 	}
 
@@ -450,7 +450,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 4544982, PositionType.ZERO_BASED), "",
 				"AAG");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010vsd.2:c.-37_-36insCTT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc010vsd.2:exon1:c.-37_-36insCTT", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
 	}
 
@@ -463,11 +463,11 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("BC042913");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq XR_242648.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 9, 97329738, PositionType.ZERO_BASED), "", "GA");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 9, 97329737, PositionType.ZERO_BASED), "", "GA");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc004aus.1:exon3:n.494_495insGA", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc004aus.1:exon3:n.492_493insGA", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 
@@ -482,10 +482,10 @@ public class InsertionAnnotationBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 13, 73079293, PositionType.ZERO_BASED), "",
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 14, 73079293, PositionType.ZERO_BASED), "",
 				"AA");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010arh.1:exon1:n.512_513insTT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc010arh.1:exon1:n.511_512dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.getVariantType());
 	}
 
@@ -545,7 +545,7 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 4, 190878559, PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003izs.3:exon6:c.439dup:p.Met147fs", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc003izs.3:exon6:c.439dup:p.Met147Asnfs*8", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_DUPLICATION, annotation1.getVariantType());
 	}
 
@@ -584,7 +584,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637607, PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001iel.1:exon1:c.956dup:p.=", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.UTR5, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SYNONYMOUS, annotation1.getVariantType());
 	}
 
 	/**
@@ -648,12 +648,12 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("MAGEF1");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_022149.4
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429186, PositionType.ZERO_BASED), "",
 				"AGT");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003fpa.3:exon1:c.424_426dup:p.T142dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc003fpa.3:exon1:c.424_426dup:p.Thr142dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
 	}
 
@@ -672,12 +672,12 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("MAGEF1");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_022149.4
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429171, PositionType.ZERO_BASED), "",
 				"TTTGTT");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003fpa.3:exon1:c.439_444dup:p.N147_K148du", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc003fpa.3:exon1:c.439_444dup:p.Asn147_Lys148dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
 	}
 
@@ -693,12 +693,12 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("MAGEF1");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_022149.4
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429171, PositionType.ZERO_BASED), "",
 				"TTTTAGTTTGTT");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003fpa.3:exon1:c.439_450dup:p.N147_K150dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc003fpa.3:exon1:c.439_450dup:p.Asn147_Lys150dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
 	}
 
@@ -748,12 +748,12 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("MAGEF1");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_022149.4
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 184429154, PositionType.ZERO_BASED), "",
 				"TCC");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003fpa.3:exon1:c.474_476dup:p.E158dup", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc003fpa.3:exon1:c.474_476dup:p.Glu158dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.getVariantType());
 	}
 
@@ -771,12 +771,12 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("FAM178B");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_001122646.2
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 97568427, PositionType.ZERO_BASED), "",
 				"ATCG");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002sxk.4:exon7:c.628_629insGATC:p.Leu210Argfs*61", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc002sxk.4:exon7:c.628_629insCGAT:p.Leu210Profs*61", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
 	}
 
@@ -885,7 +885,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 179519684, PositionType.ZERO_BASED), "",
 				"AAGT");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002umz.1:exon112:c.21594_21595insCTTA:p.Val7199Leufs*8",
+		Assert.assertEquals("uc002umz.1:exon112:c.21594_21595insACTT:p.Val7199Thrfs*8",
 				annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
 	}
@@ -917,8 +917,7 @@ public class InsertionAnnotationBuilderTest {
 	/**
 	 * annovar: MUC4:uc021xjp.1:exon2:c.8108_8109insTG:p.T2703fs, chr3:195510343->CA
 	 *
-	 * Mutalyzer: NM_018406.6:n.8263_8264insTG NM_018406.6(MUC4_v001):c.8107_8108insTG
-	 * NM_018406.6(MUC4_i001):p.(Thr2703Metfs*302)
+	 * Mutalyzer: NM_018406.6:n.8263_8264insTG NM_018406.6:c.8108_8109insTG NM_018406.6:p.(Ser2704Alafs*301)
 	 */
 	@Test
 	public void testRealWorldCase_uc021xjp_1_first() throws InvalidGenomeChange {
@@ -934,7 +933,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 3, 195510342, PositionType.ZERO_BASED), "",
 				"CA");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc021xjp.1:exon2:c.8107_8108insTG:p.Thr2703Metfs*302", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc021xjp.1:exon2:c.8108_8109insTG:p.Ser2704Alafs*301", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
 	}
 
@@ -993,7 +992,7 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("PRDM9");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_020227.2
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 5, 23526344, PositionType.ZERO_BASED), "",
 				"TGA");
@@ -1054,16 +1053,18 @@ public class InsertionAnnotationBuilderTest {
 	public void testRealWorldCase_uc003nrp_1() throws InvalidGenomeChange {
 		this.transcriptForward = TranscriptModelFactory
 				.parseKnownGenesLine("uc003nrp.1	chr6	-	30780642	30798436	30781987	30782473	2	30780642,30798291,	30782549,30798436,	uc003nrp.1");
-		this.transcriptForward.setSequence("SEQ".toUpperCase());
 		this.transcriptForward
-				.setGeneSymbol("attccaggaagcgtttgcacatcctggccccagaagattttgcgtagcctcaccaagagaagaagttggaaagaaaaaaaaagaagttggcaaggcatccagaggagaccccgccagcacctgggttctctgccaggggagagagttatgaagaagacttgagcaggcagtccagagctgatacagctgctccaatcaccagagatgcaatctcctgctagatgtcttcacatctacctttctatgtcacatgtgcaagatggttgctctgccttcagacatcacatttacattccaggcagaaaggagaaggaaagagcaaaagatgtgttccgaacaaatccatcttaaaaacaaacaaggggaggggtagcaggagaaaatttaaaaagaagaagaagaaaaacaaaaacaggaaagccgttgtttccctaaaagccccatcaagccgacttctaccggtgactcattacccagtcatgtggccacccctggattcaaggcagtctgaggaggtgagtgtttcaaagaggcacatggatgccacagacaaaatcaagtttccatggttgaaggagaagaggacgatagagtttggggaggcagcaggctacgtctgccacagaagatataaagatatggagccacacgagaagatgggggaggctgccaaaaaagtccactgggtacaggtgaggagcaggtgacattggagttgctccatctgaggagcccgcacctgcaatggcttgtgctcctgctcctgtgggtataggcacaaggctgatgccgagagagtgagttgtttctgttggggttcagaacacaataccccaaagtatggcgatgagtacttaactaaaggacattggaaggcctcagaagcagcctcagatccaaggtccctctgacctgctcctgccctcctgtctctctcgtccctcgttctcccctgaagtgagtcatagaaaccagaatcctcttccccacggtaggtcctagaaactagaaccctttttccccgaagcaaaagccataaaaactggaattattactctaaactctccttgactttttgtccagaagatggccataaagaaattctcagctaggtgtggtggctcgtatctgtaatcccagcactttgagaggccaaggtgggaggatcacttgaggccaggagtttgagatcggcctgggcaacatagtaagacccccatctctacaaaacttttttttttaaacttacctaagcgtggtggtacacctgtagtctcagctacttaggaggctgaggtgggagggaccctgctctggctgtgactgctttatcacagggagtgcctatctgtgggctgctttctacacattaaagcattttcagaaagggccaacatcagccttggaaaaaaggaggaagagccacggagagtctccctttatcttccccttatgtgatgtgagagtgcacatgactgtgtgcacatacacacacacacacacaccacacacacacaccccacaggcacacagggtcaagaacatgctgggcagagcttaagccactgaatgtttcagtaggaatcatgatatctaaaaataggacagctgataagggggttcttactactcacagttcctggaattatatgcaattgcatcttggaaactcaacaaataaacagttagtatggaattaaggaattaagtttggtgaagttcaaagaagctgatgttactcacaagagtaaatagagaggaaaccgggcgtggtggcttcacgcctgtaattctagcactttgggaggccaagacgagcagatcacttgaggtagagagtttgagaccagcctggccaacatgatgaaaccctgttctctactaaaaatacaaaaattagctgggtgtggtggcaggcacctgcaatcccagctacatgggaggctgaggcaggagaatcgcttgaacccaggagacaggggttgcagtgagccaagatcacaccactgcactccagcctgggcgacagagcaagactccctctcaggaaag");
+				.setSequence("attccaggaagcgtttgcacatcctggccccagaagattttgcgtagcctcaccaagagaagaagttggaaagaaaaaaaaagaagttggcaaggcatccagaggagaccccgccagcacctgggttctctgccaggggagagagttatgaagaagacttgagcaggcagtccagagctgatacagctgctccaatcaccagagatgcaatctcctgctagatgtcttcacatctacctttctatgtcacatgtgcaagatggttgctctgccttcagacatcacatttacattccaggcagaaaggagaaggaaagagcaaaagatgtgttccgaacaaatccatcttaaaaacaaacaaggggaggggtagcaggagaaaatttaaaaagaagaagaagaaaaacaaaaacaggaaagccgttgtttccctaaaagccccatcaagccgacttctaccggtgactcattacccagtcatgtggccacccctggattcaaggcagtctgaggaggtgagtgtttcaaagaggcacatggatgccacagacaaaatcaagtttccatggttgaaggagaagaggacgatagagtttggggaggcagcaggctacgtctgccacagaagatataaagatatggagccacacgagaagatgggggaggctgccaaaaaagtccactgggtacaggtgaggagcaggtgacattggagttgctccatctgaggagcccgcacctgcaatggcttgtgctcctgctcctgtgggtataggcacaaggctgatgccgagagagtgagttgtttctgttggggttcagaacacaataccccaaagtatggcgatgagtacttaactaaaggacattggaaggcctcagaagcagcctcagatccaaggtccctctgacctgctcctgccctcctgtctctctcgtccctcgttctcccctgaagtgagtcatagaaaccagaatcctcttccccacggtaggtcctagaaactagaaccctttttccccgaagcaaaagccataaaaactggaattattactctaaactctccttgactttttgtccagaagatggccataaagaaattctcagctaggtgtggtggctcgtatctgtaatcccagcactttgagaggccaaggtgggaggatcacttgaggccaggagtttgagatcggcctgggcaacatagtaagacccccatctctacaaaacttttttttttaaacttacctaagcgtggtggtacacctgtagtctcagctacttaggaggctgaggtgggagggaccctgctctggctgtgactgctttatcacagggagtgcctatctgtgggctgctttctacacattaaagcattttcagaaagggccaacatcagccttggaaaaaaggaggaagagccacggagagtctccctttatcttccccttatgtgatgtgagagtgcacatgactgtgtgcacatacacacacacacacacaccacacacacacaccccacaggcacacagggtcaagaacatgctgggcagagcttaagccactgaatgtttcagtaggaatcatgatatctaaaaataggacagctgataagggggttcttactactcacagttcctggaattatatgcaattgcatcttggaaactcaacaaataaacagttagtatggaattaaggaattaagtttggtgaagttcaaagaagctgatgttactcacaagagtaaatagagaggaaaccgggcgtggtggcttcacgcctgtaattctagcactttgggaggccaagacgagcagatcacttgaggtagagagtttgagaccagcctggccaacatgatgaaaccctgttctctactaaaaatacaaaaattagctgggtgtggtggcaggcacctgcaatcccagctacatgggaggctgaggcaggagaatcgcttgaacccaggagacaggggttgcagtgagccaagatcacaccactgcactccagcctgggcgacagagcaagactccctctcaggaaag"
+						.toUpperCase());
+		this.transcriptForward
+.setGeneSymbol("AK098012");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 6, 30782220, PositionType.ZERO_BASED), "",
 				"TTTG");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003nrp.1:exon2:c.255_256insAACA:p.V86fs", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc003nrp.1:exon2:c.255_256insAACA:p.Val86Asnfs*13", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
 	}
 
@@ -1093,8 +1094,11 @@ public class InsertionAnnotationBuilderTest {
 	 */
 	@Test
 	public void testRealWorldCase_uc003tkb_4() throws InvalidGenomeChange {
-		this.transcriptForward = TranscriptModelFactory.parseKnownGenesLine("uc003tkb.4	chr7	+	44143959	44154164	44144264	44153860	21	44143959,44146144,44147037,44147227,44147407,44147605,44148497,44148705,44148886,44149613,44149805,44150323,44150511,44150752,44151105,44151452,44151740,44152156,44152589,44152850,44153192,	44144517,44146486,44147109,44147299,44147530,44147683,44148575,44148783,44148940,44149723,44149945,44150408,44150656,44150838,44151229,44151649,44151920,44152508,44152729,44152950,44154164,	Q8IUX7	uc003tkb.4");
-		this.transcriptForward.setSequence("cggctatccgcgcgggagtgcgccacgcggggccggagcgcctattagccgccaggacctcggagcgccccgaccacccctgagcccctctggcttcggagccccccagcaccccttcccgggtcccctcgcccaccctaatccactctccctccctttcccggattccctcgctcaccccatcctctctcccgccccttcctggattccctcacccgtctcgatcccctctccgccctttcccagagacccagagcccctgaccccccgcgccctccccggagccccccgcgcgtgccgcggccatggcggccgtgcgcggggcgcccctgctcagctgcctcctggcgttgctggccctgtgccctggagggcgcccgcagacggtgctgaccgacgacgagatcgaggagttcctcgagggcttcctgtcagagctagaacctgagccccgggaggacgacgtggaggccccgccgcctcccgagcccaccccgcgggtccgaaaagcccaggcggggggcaagccagggaagcggccagggacggccgcagaagtgcctccggaaaagaccaaagacaaagggaagaaaggcaagaaagacaaaggccccaaggtgcccaaggagtccttggaggggtcccccaggccgcccaagaaggggaaggagaagccacccaaggccaccaagaagcccaaggagaagccacctaaggccaccaagaagcccaaggagaagccacccaaggccaccaagaagcccaaagagaagccacccaaggccaccaagaagcccccgtcagggaagaggccccccattctggctccctcagaaaccctggagtggccactgcccccaccccccagccctggccccgaggagctaccccaggagggaggggcgcccctctcaaataactggcagaatccaggagaggagacccatgtggaggcacgggagcaccagcctgagccggaggaggagaccgagcaacccacactggactacaatgaccagatcgagagggaggactatgaggactttgagtacattcggcgccagaagcaacccaggccacccccaagcagaaggaggaggcccgagcgggtctggccagagccccctgaggagaaggccccggccccagccccggaggagaggattgagcctcctgtgaagcctctgctgcccccgctgccccctgactatggtgatggttacgtgatccccaactacgatgacatggactattactttgggcctcctccgccccagaagcccgatgctgagcgccagacagacgaagagaaggaggagctgaagaaacccaaaaaggaggacagcagccccaaggaggagaccgacaagtgggcagtggagaagggcaaggaccacaaagagccccgaaagggcgaggagttggaggaggagtggacgcctacggagaaagtcaagtgtccccccattgggatggagtcacaccgtattgaggacaaccagatccgagcctcctccatgctgcgccacggcctgggggcacagcgcggccggctcaacatgcagaccggtgccactgaggacgactactatgatggtgcgtggtgtgccgaggacgatgccaggacccagtggatagaggtggacaccaggaggactacccggttcacaggcgtcatcacccagggcagagactccagcatccatgacgattttgtgaccaccttcttcgtgggcttcagcaatgacagccagacatgggtgatgtacaccaacggctatgaggaaatgacctttcatgggaacgtggacaaggacacacccgtgctgagtgagctcccagagccggtggtggctcgtttcatccgcatctacccactcacctggaatggcagcctgtgcatgcgcctggaggtgctggggtgctctgtggcccctgtctacagctactacgcacagaatgaggtggtggccaccgatgacctggatttccggcaccacagctacaaggacatgcgccagctcatgaaggtggtgaacgaggagtgccccaccatcacccgcacttacagcctgggcaagagctcacgaggcctcaagatctatgccatggagatctcagacaaccctggggagcatgaactgggggagcccgagttccgctacactgctgggatccatggcaacgaggtgctgggccgagagctgttgctgctgctcatgcagtacctgtgccgagagtaccgcgatgggaacccacgtgtgcgcagcctggtgcaggacacacgcatccacctggtgccctcactgaaccctgatggctacgaggtggcagcgcagatgggctcagagtttgggaactgggcgctgggactgtggactgaggagggctttgacatctttgaagatttcccggatctcaactctgtgctctggggagctgaggagaggaaatgggtcccctaccgggtccccaacaataacttgcccatccctgaacgctacctttcgccagatgccacggtatccacggaggtccgggccatcattgcctggatggagaagaaccccttcgtgctgggagcaaatctgaacggcggcgagcggctagtatcctacccctacgatatggcccgcacgcctacccaggagcagctgctggccgcagccatggcagcagcccggggggaggatgaggacgaggtctccgaggcccaggagactccagaccacgccatcttccggtggcttgccatctccttcgcctccgcacacctcaccttgaccgagccctaccgcggaggctgccaagcccaggactacaccggcggcatgggcatcgtcaacggggccaagtggaacccccggaccgggactatcaatgacttcagttacctgcataccaactgcctggagctctccttctacctgggctgtgacaagttccctcatgagagtgagctgccccgcgagtgggagaacaacaaggaggcgctgctcaccttcatggagcaggtgcaccgcggcattaagggggtggtgacggacgagcaaggcatccccattgccaacgccaccatctctgtgagtggcattaatcacggcgtgaagacagccagtggtggtgattactggcgaatcttgaacccgggtgagtaccgcgtgacagcccacgcggagggctacaccccgagcgccaagacctgcaatgttgactatgacatcggggccactcagtgcaacttcatcctggctcgctccaactggaagcgcatccgggagatcatggccatgaacgggaaccggcctatcccacacatagacccatcgcgccctatgaccccccaacagcgacgcctgcagcagcgacgcctacaacaccgcctgcggcttcgggcacagatgcggctgcggcgcctcaacgccaccaccaccctaggcccccacactgtgcctcccacgctgccccctgcccctgccaccaccctgagcactaccatagagccctggggcctcataccgccaaccaccgctggctgggaggagtcggagactgagacctacacagaggtggtgacagagtttgggaccgaggtggagcccgagtttgggaccaaggtggagcccgagtttgagacccagttggagcctgagtttgagacccagctggaacccgagtttgaggaagaggaggaggaggagaaagaggaggagatagccactggccaggcattccccttcacaacagtagagacctacacagtgaactttggggacttctgagatcagcgtcctaccaagaccccagcccaactcaagctacagcagcagcacttcccaagcctgctgaccacagtcacatcacccatcagcacatggaaggcccctggtatggacactgaaaggaagggctggtcctgcccctttgagggggtgcaaacatgactgggacctaagagccagaggctgtgtagaggctcctgctccacctgccagtctcgtaagagatggggttgctgcagtgttggagtaggggcagagggagggagccaaggtcactccaataaaacaagctcatggcacggacaaaaaaaaaaaaaaaa".toUpperCase());
+		this.transcriptForward = TranscriptModelFactory
+				.parseKnownGenesLine("uc003tkb.4	chr7	+	44143959	44154164	44144264	44153860	21	44143959,44146144,44147037,44147227,44147407,44147605,44148497,44148705,44148886,44149613,44149805,44150323,44150511,44150752,44151105,44151452,44151740,44152156,44152589,44152850,44153192,	44144517,44146486,44147109,44147299,44147530,44147683,44148575,44148783,44148940,44149723,44149945,44150408,44150656,44150838,44151229,44151649,44151920,44152508,44152729,44152950,44154164,	Q8IUX7	uc003tkb.4");
+		this.transcriptForward
+				.setSequence("cggctatccgcgcgggagtgcgccacgcggggccggagcgcctattagccgccaggacctcggagcgccccgaccacccctgagcccctctggcttcggagccccccagcaccccttcccgggtcccctcgcccaccctaatccactctccctccctttcccggattccctcgctcaccccatcctctctcccgccccttcctggattccctcacccgtctcgatcccctctccgccctttcccagagacccagagcccctgaccccccgcgccctccccggagccccccgcgcgtgccgcggccatggcggccgtgcgcggggcgcccctgctcagctgcctcctggcgttgctggccctgtgccctggagggcgcccgcagacggtgctgaccgacgacgagatcgaggagttcctcgagggcttcctgtcagagctagaacctgagccccgggaggacgacgtggaggccccgccgcctcccgagcccaccccgcgggtccgaaaagcccaggcggggggcaagccagggaagcggccagggacggccgcagaagtgcctccggaaaagaccaaagacaaagggaagaaaggcaagaaagacaaaggccccaaggtgcccaaggagtccttggaggggtcccccaggccgcccaagaaggggaaggagaagccacccaaggccaccaagaagcccaaggagaagccacctaaggccaccaagaagcccaaggagaagccacccaaggccaccaagaagcccaaagagaagccacccaaggccaccaagaagcccccgtcagggaagaggccccccattctggctccctcagaaaccctggagtggccactgcccccaccccccagccctggccccgaggagctaccccaggagggaggggcgcccctctcaaataactggcagaatccaggagaggagacccatgtggaggcacgggagcaccagcctgagccggaggaggagaccgagcaacccacactggactacaatgaccagatcgagagggaggactatgaggactttgagtacattcggcgccagaagcaacccaggccacccccaagcagaaggaggaggcccgagcgggtctggccagagccccctgaggagaaggccccggccccagccccggaggagaggattgagcctcctgtgaagcctctgctgcccccgctgccccctgactatggtgatggttacgtgatccccaactacgatgacatggactattactttgggcctcctccgccccagaagcccgatgctgagcgccagacagacgaagagaaggaggagctgaagaaacccaaaaaggaggacagcagccccaaggaggagaccgacaagtgggcagtggagaagggcaaggaccacaaagagccccgaaagggcgaggagttggaggaggagtggacgcctacggagaaagtcaagtgtccccccattgggatggagtcacaccgtattgaggacaaccagatccgagcctcctccatgctgcgccacggcctgggggcacagcgcggccggctcaacatgcagaccggtgccactgaggacgactactatgatggtgcgtggtgtgccgaggacgatgccaggacccagtggatagaggtggacaccaggaggactacccggttcacaggcgtcatcacccagggcagagactccagcatccatgacgattttgtgaccaccttcttcgtgggcttcagcaatgacagccagacatgggtgatgtacaccaacggctatgaggaaatgacctttcatgggaacgtggacaaggacacacccgtgctgagtgagctcccagagccggtggtggctcgtttcatccgcatctacccactcacctggaatggcagcctgtgcatgcgcctggaggtgctggggtgctctgtggcccctgtctacagctactacgcacagaatgaggtggtggccaccgatgacctggatttccggcaccacagctacaaggacatgcgccagctcatgaaggtggtgaacgaggagtgccccaccatcacccgcacttacagcctgggcaagagctcacgaggcctcaagatctatgccatggagatctcagacaaccctggggagcatgaactgggggagcccgagttccgctacactgctgggatccatggcaacgaggtgctgggccgagagctgttgctgctgctcatgcagtacctgtgccgagagtaccgcgatgggaacccacgtgtgcgcagcctggtgcaggacacacgcatccacctggtgccctcactgaaccctgatggctacgaggtggcagcgcagatgggctcagagtttgggaactgggcgctgggactgtggactgaggagggctttgacatctttgaagatttcccggatctcaactctgtgctctggggagctgaggagaggaaatgggtcccctaccgggtccccaacaataacttgcccatccctgaacgctacctttcgccagatgccacggtatccacggaggtccgggccatcattgcctggatggagaagaaccccttcgtgctgggagcaaatctgaacggcggcgagcggctagtatcctacccctacgatatggcccgcacgcctacccaggagcagctgctggccgcagccatggcagcagcccggggggaggatgaggacgaggtctccgaggcccaggagactccagaccacgccatcttccggtggcttgccatctccttcgcctccgcacacctcaccttgaccgagccctaccgcggaggctgccaagcccaggactacaccggcggcatgggcatcgtcaacggggccaagtggaacccccggaccgggactatcaatgacttcagttacctgcataccaactgcctggagctctccttctacctgggctgtgacaagttccctcatgagagtgagctgccccgcgagtgggagaacaacaaggaggcgctgctcaccttcatggagcaggtgcaccgcggcattaagggggtggtgacggacgagcaaggcatccccattgccaacgccaccatctctgtgagtggcattaatcacggcgtgaagacagccagtggtggtgattactggcgaatcttgaacccgggtgagtaccgcgtgacagcccacgcggagggctacaccccgagcgccaagacctgcaatgttgactatgacatcggggccactcagtgcaacttcatcctggctcgctccaactggaagcgcatccgggagatcatggccatgaacgggaaccggcctatcccacacatagacccatcgcgccctatgaccccccaacagcgacgcctgcagcagcgacgcctacaacaccgcctgcggcttcgggcacagatgcggctgcggcgcctcaacgccaccaccaccctaggcccccacactgtgcctcccacgctgccccctgcccctgccaccaccctgagcactaccatagagccctggggcctcataccgccaaccaccgctggctgggaggagtcggagactgagacctacacagaggtggtgacagagtttgggaccgaggtggagcccgagtttgggaccaaggtggagcccgagtttgagacccagttggagcctgagtttgagacccagctggaacccgagtttgaggaagaggaggaggaggagaaagaggaggagatagccactggccaggcattccccttcacaacagtagagacctacacagtgaactttggggacttctgagatcagcgtcctaccaagaccccagcccaactcaagctacagcagcagcacttcccaagcctgctgaccacagtcacatcacccatcagcacatggaaggcccctggtatggacactgaaaggaagggctggtcctgcccctttgagggggtgcaaacatgactgggacctaagagccagaggctgtgtagaggctcctgctccacctgccagtctcgtaagagatggggttgctgcagtgttggagtaggggcagagggagggagccaaggtcactccaataaaacaagctcatggcacggacaaaaaaaaaaaaaaaa"
+						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("AEBP1");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq REFSEQ_ID
@@ -1149,8 +1153,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	/**
-	 * Mutalyzer: XM_005257813.1:n.329dup XM_005257813.1(PGAP3_v001):c.286dup
-	 * XM_005257813.1(PGAP3_i001):p.(Leu96Profs*16)
+	 * Mutalyzer: NM_033419.3:n.328dup NM_033419.3(PGAP3_v001):c.285dup NM_033419.3(PGAP3_i001):p.(Phe96Leufs*67)
 	 */
 	@Test
 	public void testRealWorldCase_uc002hsk_3() throws InvalidGenomeChange {
@@ -1163,12 +1166,11 @@ public class InsertionAnnotationBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq NM_033419.4
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 37830925, PositionType.ZERO_BASED), "", "G");
+		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 37830926, PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002hsk.3:exon3:c.288dupC:p.S97fs", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc002hsk.3:exon3:c.286dup:p.Leu96Profs*16", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
 	}
-
 
 	/**
 	 * This duplication variation should lead to the loss of the translation initiation site
@@ -1255,7 +1257,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 192335275, PositionType.ZERO_BASED), "",
 				"TAAT");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001gsh.3:exon5:c.*21_*22insTAAT", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001gsh.3:exon5:c.*18_*21dup", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
 	}
 
@@ -1278,8 +1280,8 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 4, 190884289, PositionType.ZERO_BASED), "",
 				"GACA");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc003izs.3:c.*5_*6insGACA", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_INSERTION, annotation1.getVariantType());
+		Assert.assertEquals("uc003izs.3:exon9:c.*5_*6insGACA", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.UTR3, annotation1.getVariantType());
 	}
 
 }

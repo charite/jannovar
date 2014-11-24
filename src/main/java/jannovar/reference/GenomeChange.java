@@ -163,7 +163,7 @@ public class GenomeChange {
 	 */
 	@Override
 	public int hashCode() {
-		if (strand != '+')
+		if (pos.getStrand() != '+')
 			return withStrand('+').hashCode();
 		final int prime = 31;
 		int result = 1;

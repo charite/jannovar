@@ -199,10 +199,11 @@ abstract class AnnotationBuilderHelper {
 		if (change.getGenomeInterval().length() == 0) {
 			// Empty interval, is insertion.
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-			if (so.liesInUpstreamRegion(pos))
+			GenomePosition lPos = pos.shifted(-1);
+			if (so.liesInUpstreamRegion(lPos))
 				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
 			else
-				// so.liesInDownstreamRegion(lPos))
+				// so.liesInDownstreamRegion(pos))
 				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
