@@ -5,6 +5,8 @@ import jannovar.common.Constants.Release;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.JannovarException;
 import jannovar.io.TranscriptDataDownloader;
+import jannovar.reference.GenomeInterval;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 
 import java.util.ArrayList;
@@ -37,7 +39,46 @@ public abstract class DownloadManager {
 	 *             on problems with the file download
 	 */
 	public final void run() throws FileDownloadException, JannovarException {
-		serializeTranscriptModelList(downloadAndBuildTranscriptModelList());
+		serializeTranscriptModelList(cleanTranscriptModelList(downloadAndBuildTranscriptModelList()));
+	}
+
+	/**
+	 * Clean list of {@link TranscriptModel} objects and return this.
+	 *
+	 * Inspect the downloaded data for inconsistencies and remove defective transcripts. Print warnings in case of
+	 * defects. Currently, the following defects are checked for:
+	 *
+	 * <ul>
+	 * <li>The sum of the exon lengths is longer than the sequence length. This happens for UCSC transcript uc003lkb.4,
+	 * for example which has one exon of length 7kb but only has 3.5kb of RNA.</li>
+	 * </ul>
+	 *
+	 * @param downloadAndBuildTranscriptModelList
+	 * @return filtered list of {@link TranscriptModel} objects
+	 */
+	private ArrayList<TranscriptModel> cleanTranscriptModelList(ArrayList<TranscriptModel> input) {
+		ArrayList<TranscriptModel> result = new ArrayList<TranscriptModel>();
+
+		int numWarnings = 0;
+		for (TranscriptModel tm : input) {
+			TranscriptInfo transcript = new TranscriptInfo(tm);
+			int lenSum = 0;
+			for (GenomeInterval region: transcript.exonRegions)
+				lenSum += region.length();
+			if (lenSum > transcript.sequence.length()) {
+				System.err.println("WARNING: Inconsistent transcript length for " + transcript.accession
+						+ "! The length as indicated by transcript record is " + lenSum
+						+ " and the length of the RNA sequence is " + transcript.sequence.length()
+						+ " The record will be ignored.");
+				numWarnings += 1;
+			} else {
+				result.add(tm);
+			}
+		}
+
+		System.err.println("Number of warnings: " + numWarnings);
+
+		return result;
 	}
 
 	/**
