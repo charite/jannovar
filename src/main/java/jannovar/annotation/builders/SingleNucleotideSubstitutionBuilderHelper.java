@@ -139,7 +139,6 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 	 * @return variant type described by single amino acid change
 	 */
 	private VariantType computeVariantType(String wtAA, String varAA) {
-		assert (wtAA.length() == 1 && varAA.length() == 1);
 		if (wtAA.equals(varAA))
 			return VariantType.SYNONYMOUS;
 		else if (wtAA.equals("*"))
