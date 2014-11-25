@@ -155,22 +155,22 @@ public class DeletionAnnotationBuilderTest {
 		// Note that Mutalyzer has a different transcript sequence such that it does not report full loss for the cases
 		// below.
 
-		// Delete last base of stop codon, leads to complete loss.
+		// Delete last base of stop codon, leads to complete loss of stop codon (different from Mutalyzer).
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6649271, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc001anx.3:exon11:c.2067del:p.0?", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon11:c.2067del:p.*689Tyrext*?", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation1.getVariantType());
 
 		// Delete middle base of stop codon, leads to complete loss.
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6649270, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation2 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change2);
-		Assert.assertEquals("uc001anx.3:exon11:c.2066del:p.0?", annotation2.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon11:c.2066del:p.*689Cysext*?", annotation2.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation2.getVariantType());
 
 		// Delete first base of stop codon, leads to extension
 		GenomeChange change3 = new GenomeChange(new GenomePosition('+', 1, 6649269, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation3 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change3);
-		Assert.assertEquals("uc001anx.3:exon11:c.2065del:p.0?", annotation3.getVariantAnnotation());
+		Assert.assertEquals("uc001anx.3:exon11:c.2065del:p.*689Serext*?", annotation3.getVariantAnnotation());
 		Assert.assertEquals(VariantType.STOPLOSS, annotation3.getVariantType());
 
 		// Delete two bases of stop codon.
@@ -440,8 +440,8 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 9, 5921979, PositionType.ZERO_BASED), "GTT", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc010mht.3:exon4:c.1542_1544del:p.Asp515del", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
+		Assert.assertEquals("uc010mht.3:exon4:c.1542_1544del:p.Thr517del", annotation1.getVariantAnnotation());
+		Assert.assertEquals(VariantType.NON_FS_DELETION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -676,9 +676,11 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
 		// RefSeq NM_030931.3
 
+		// Note that we here have a deviation from Mutalyzer, in that the UCSC sequence does not have a stop codon after
+		// the deletion.
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 20, 126313, PositionType.ZERO_BASED), "CC", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
-		Assert.assertEquals("uc002wcx.3:exon2:c.317_318del:p.Pro106Argfs*27", annotation1.getVariantAnnotation());
+		Assert.assertEquals("uc002wcx.3:exon2:c.317_318del:p.Pro106Argfs*?", annotation1.getVariantAnnotation());
 		Assert.assertEquals(VariantType.FS_DELETION, annotation1.getVariantType());
 	}
 

@@ -109,11 +109,15 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
 					.withPositionType(PositionType.ZERO_BASED);
-			this.changeLastPos = projector.projectGenomeToCDSPosition(
-					changeInterval.getGenomeEndPos().shifted(-1)).withPositionType(PositionType.ZERO_BASED);
+			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1))
+					.withPositionType(PositionType.ZERO_BASED);
 			// "(...+2)/3" => round up integer division result
-			this.aaChange = new AminoAcidChange(changeBeginPos.getPos() / 3, wtAASeq.substring(
-					changeBeginPos.getPos() / 3, (changeLastPos.getPos() + 1 + 2) / 3), "");
+			final String delAA = wtAASeq.substring(changeBeginPos.getPos() / 3, (changeLastPos.getPos() + 1 + 2) / 3);
+			final int delta = (changeBeginPos.getFrameshift() == 0 ? 0 : 1);
+			final String insAA = varAASeq.substring(changeBeginPos.getPos() / 3, changeBeginPos.getPos() / 3 + delta);
+			this.aaChange = new AminoAcidChange(changeBeginPos.getPos() / 3, delAA, insAA);
+			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(this.aaChange);
+			this.aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, this.aaChange);
 		}
 
 		public Annotation build() {
@@ -122,8 +126,7 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno),
-					varType);
+			return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno), varType);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -141,20 +144,8 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
 				String suffix = ""; // for "ins${aminoAcidCode}" in case of "delins" on AA level
-				if (changeBeginPos.getFrameshift() == 0) {
-					// Is clean deletion on the amino acid level. There might be ambiguities, thus we have to shift.
-					aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, aaChange);
-				} else {
-					// We do not have an deletion between two ORFs but instead within the ORFs. This could lead to an
-					// "delins" case or not (if the AA change is truncated by one from left or right).
-					String insCandidate = varAASeq.substring(aaChange.pos, aaChange.pos + 1);
-					if (aaChange.ref.startsWith(insCandidate))
-						aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, aaChange.shiftRight());
-					else if (aaChange.ref.endsWith(insCandidate))
-						aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, aaChange.shiftLeft());
-					else
-						suffix = String.format("ins%s", t.toLong(varAASeq.charAt(aaChange.pos)));
-				}
+				if (aaChange.alt.length() > 0)
+					suffix = String.format("ins%s", t.toLong(aaChange.alt));
 
 				char wtAAFirst = wtAASeq.charAt(aaChange.pos);
 				char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
@@ -185,23 +176,20 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			while (aaChange.ref.length() > 0 && aaChange.ref.charAt(0) == varAASeq.charAt(aaChange.pos))
 				aaChange = aaChange.shiftRight();
 
-			// Differentiate between the cases where we have a stop codon and those where we don't.
+			char wtAA = wtAASeq.charAt(aaChange.pos);
+			char varAA = varAASeq.charAt(aaChange.pos);
+			int delta = (wtAA == '*') ? 0 : 1;
+
+			// Compute suffix for HGVS protein annotation.
+			String suffix = "*?"; // "?" or "*${distance}" in case of extension/frameshift
 			if (varAAStopPos >= 0) {
-				// We have a stop codon, yay!
-				char wtAA = wtAASeq.charAt(aaChange.pos);
-				char varAA = varAASeq.charAt(aaChange.pos);
-				int delta = (wtAA == '*') ? 0 : 1;
 				int stopCodonOffset = varAAStopPos - aaChange.pos + delta;
-				if (varType == VariantType.STOPLOSS)
-					protAnno = String.format("p.*%d%sext*%d", aaChange.pos + 1, t.toLong(varAA), stopCodonOffset);
-				else
-					protAnno = String.format("p.%s%d%sfs*%d", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA),
-							stopCodonOffset);
-			} else {
-				// There is no stop codon any more! Create a "probably no protein is produced".
-				protAnno = "p.0?";
-				varType = VariantType.STOPLOSS;
+				suffix = String.format("*%d", stopCodonOffset);
 			}
+			if (varType == VariantType.STOPLOSS)
+				protAnno = String.format("p.*%d%sext%s", aaChange.pos + 1, t.toLong(varAA), suffix);
+			else
+				protAnno = String.format("p.%s%d%sfs%s", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), suffix);
 		}
 	}
 

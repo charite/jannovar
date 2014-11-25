@@ -154,7 +154,9 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// insertions
 			final int insertAAPos = this.insertPos.getPos() / 3;
 			final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
-			final int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
+			int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
+			if (insertAAPos + insertAALength > varAASeq.length())
+				insertAALength = varAASeq.length() - insertAAPos;
 			final String delAA = wtAASeq.substring(insertAAPos, insertAAPos + delta);
 			final String insertAA = varAASeq.substring(insertAAPos, insertAAPos + insertAALength);
 			this.aaChange = new AminoAcidChange(insertAAPos, delAA, insertAA);

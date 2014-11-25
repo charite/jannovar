@@ -580,7 +580,7 @@ public class InsertionAnnotationBuilderTest {
 						.toUpperCase());
 		this.transcriptForward.setGeneSymbol("OR2T3");
 		this.infoForward = new TranscriptInfo(this.transcriptForward);
-		// RefSeq REFSEQ_ID
+		// RefSeq NM_001005495.1
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 248637607, PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = InsertionAnnotationBuilder.buildAnnotation(infoForward, change1);

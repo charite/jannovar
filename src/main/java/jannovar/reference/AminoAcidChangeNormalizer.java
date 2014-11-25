@@ -24,6 +24,8 @@ public class AminoAcidChangeNormalizer {
 	/**
 	 * Normalize deletion {@link AminoAcidChange} for amino acid string
 	 *
+	 * Return <code>change</code> if it is not a clean deletion.
+	 *
 	 * @param ref
 	 *            reference amino acid string to change
 	 * @param change
@@ -31,8 +33,8 @@ public class AminoAcidChangeNormalizer {
 	 * @return normalized AminoAcidChange
 	 */
 	public static AminoAcidChange normalizeDeletion(String ref, AminoAcidChange change) {
-		if (change.ref.length() == 0 || change.alt.length() > 0)
-			throw new Error("Invalid AminoAcidChange: " + change);
+		if (change.ref.length() == 0 || change.alt.length() != 0)
+			return change;
 
 		// Compute shift of deletion.
 		int shift = 0;
@@ -45,9 +47,7 @@ public class AminoAcidChangeNormalizer {
 
 		// Build new AminoAcidChange.
 		StringBuilder changeRefBuilder = new StringBuilder();
-		changeRefBuilder.append(change.ref.substring(shift, change.ref.length()));
-		changeRefBuilder.append(ref.substring(change.pos + change.ref.length(), change.pos + change.ref.length()
-				+ shift));
+		changeRefBuilder.append(ref.substring(change.pos + shift, change.pos + shift + change.ref.length()));
 		return new AminoAcidChange(change.pos + shift, changeRefBuilder.toString(), "");
 	}
 
