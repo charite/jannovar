@@ -77,16 +77,17 @@ public class TranscriptInfo {
 				PositionType.ONE_BASED);
 		cdsRegion = fwdCDSRegion.withStrand(strand);
 
-		exonRegions = new GenomeInterval[tm.getExonCount()];
+		int exonCount = tm.getExonEnds().length; // getExonCount() broken for some RefSeq
+		exonRegions = new GenomeInterval[exonCount];
 		if (strand == '+')
 		{
-			for (int i = 0; i < tm.getExonCount(); ++i)
+			for (int i = 0; i < exonCount; ++i)
 				exonRegions[i] = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
 						PositionType.ONE_BASED);
 		}
 		else
 		{
-			for (int i = 0, j = tm.getExonCount() - 1; i < tm.getExonCount(); ++i, --j) {
+			for (int i = 0, j = exonCount - 1; i < exonCount; ++i, --j) {
 				GenomeInterval exonFwdRegion = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
 						PositionType.ONE_BASED);
 				exonRegions[j] = exonFwdRegion.withStrand(strand);
