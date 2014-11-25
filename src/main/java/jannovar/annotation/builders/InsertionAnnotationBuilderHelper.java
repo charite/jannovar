@@ -3,14 +3,16 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
 import jannovar.exception.ProjectionException;
+import jannovar.reference.AminoAcidChange;
+import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.DuplicationTester;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
+import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
-import jannovar.reference.TranscriptSequenceDecorator;
 import jannovar.util.Translator;
 
 /**
@@ -89,7 +91,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			throw new Error("Bug: exonic CDS positions must be translatable to transcript and CDs positions");
 		}
 
-		return new CDSExonicAnnotationBuilder(this, txPos, cdsPos).build();
+		return new CDSExonicAnnotationBuilder(this).build();
 	}
 
 	/**
@@ -102,187 +104,226 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 
 		final Translator t = Translator.getTranslator();
 
-		final CDSPosition cdsPos;
-		final String wtNT;
-		final String wtAA;
-		final String varNT;
-		final String varAA;
-		final int varAAPos;
-		final int varAAIdx;
+		// wild type CDS nucleotide sequence
+		final String wtCDSSeq;
+		// variant CDS nucleotide sequence
+		final String varCDSSeq;
 
-		public CDSExonicAnnotationBuilder(InsertionAnnotationBuilderHelper owner, TranscriptPosition txPos,
-				CDSPosition cdsPos) {
+		// wild type amino acid sequence
+		final String wtAASeq;
+		// position of stop codon in wtAASeq, or -1 if none
+		final int wtAAStopPos;
+		// variant amino acid sequence
+		final String varAASeq;
+		// position of stop codon in varAASeq, or -1 if none
+		final int varAAStopPos;
+
+		// Insertion position on CDS.
+		final CDSPosition insertPos;
+		// Insert position in amino acid string.
+		final int varAAInsertPos; // TODO(holtgrem): replace with aaChange.pos
+
+		// We keep the following three variables as state of the algorithm since we do not have easy-to-use triples in
+		// Java.
+
+		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		VariantType varType;
+		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		AminoAcidChange aaChange;
+		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		String protAnno;
+
+		public CDSExonicAnnotationBuilder(InsertionAnnotationBuilderHelper owner) {
 			this.owner = owner;
-			this.cdsPos = cdsPos;
 
-			// TODO(holtgrem): Get sequence of smaller environment to save memory?
-			// Get wild type codons (the affected plus some upstream) and translate into amino acids.
-			this.wtNT = seqDecorator.getCodonsStartingFrom(txPos, cdsPos);
-			this.wtAA = Translator.getTranslator().translateDNA(wtNT);
+			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
+			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 
-			// Get variant NT string and translate into amino acids.
-			this.varNT = TranscriptSequenceDecorator.nucleotidesWithInsertion(wtNT, cdsPos.getPos() % 3,
-					change.getAlt());
-			this.varAA = Translator.getTranslator().translateDNA(varNT);
-			// TODO(holtgrem): use the *Normalizer classes for shifting
-			// Shift amino acid insertion to the right (3' end of transcript) as far as possible.
-			int varAAPos = cdsPos.getPos() / 3; // original change in AA as position in protein
-			int varAAIdx = 0; // original change in AA as index in varAA
-			while (varAAIdx + 1 < varAA.length() && varAA.charAt(varAAIdx) == wtAA.charAt(varAAIdx)) {
-				++varAAPos;
-				++varAAIdx;
-			}
-			this.varAAPos = varAAPos;
-			this.varAAIdx = varAAIdx;
+			// TODO(holtgrem): Not translating in the cases we don't need it might save time
+			// Translate the variant CDS sequence and look for stop codon.
+			this.wtAASeq = t.translateDNA(wtCDSSeq);
+			this.wtAAStopPos = wtAASeq.indexOf('*');
+			this.varAASeq = t.translateDNA(varCDSSeq);
+			this.varAAStopPos = varAASeq.indexOf('*');
+
+			// Get position of insertion on CDS level, will obtain AA chnage pos after normalization.
+			this.insertPos = projector.projectGenomeToCDSPosition(change.getPos()).withPositionType(
+					PositionType.ZERO_BASED);
+
+			// Build initial aaChange. This is correct for non-FS insertions, and the first affected bases for FS
+			// insertions
+			final int insertAAPos = this.insertPos.getPos() / 3;
+			final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
+			final int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
+			final String delAA = wtAASeq.substring(insertAAPos, insertAAPos + delta);
+			final String insertAA = varAASeq.substring(insertAAPos, insertAAPos + insertAALength);
+			this.aaChange = new AminoAcidChange(insertAAPos, delAA, insertAA);
+			this.aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
+			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(aaChange);
+			this.aaChange = AminoAcidChangeNormalizer.shiftInsertion(aaChange, wtAASeq);
+			// Obtain amino acid insertion position.
+			this.varAAInsertPos = this.aaChange.pos;
 		}
 
 		public Annotation build() {
-			if (owner.change.getAlt().length() % 3 == 0)
-				return buildNonFrameShiftAnnotation();
-			else
-				return buildFrameShiftAnnotation();
-		}
-
-		private Annotation buildFrameShiftAnnotation() {
-			// The code below builds the protein annotation string and the variant type.
-			String protAnno = null;
-			VariantType varType = null;
-			// Check whether there is a stop codon in the variant peptide.
-			int stopCodonVarAAIdx = varAA.indexOf("*");
-
-			if (wtAA.startsWith("*")) {
-				// The WT peptide starts with a stop codon. Can be frameshift insertion or stop loss.
-				if (stopCodonVarAAIdx == 0) {
-					// The variant peptide also starts with a stop codon, is frameshift insertion.
-					protAnno = "p.=";
-					varType = VariantType.SYNONYMOUS;
-				} else if (stopCodonVarAAIdx > 0) {
-					// The variant peptide contains a stop codon but does not start with it, is frameshift insertion. In
-					// this case we cannot really differentiate this from a non-frameshift insertion but we still call
-					// it
-					// so.
-					protAnno = String.format("p.*%d%sext*%d", varAAPos + 1, t.toLong(varAA.charAt(varAAIdx)),
-							(stopCodonVarAAIdx - varAAIdx)); // last is stop codon AA pos
-					varType = VariantType.FS_INSERTION;
-				} else {
-					// The variant AA does not contain a stop codon, is stop loss.
-					protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1,
-							t.toLong(varAA.charAt(varAAIdx)));
-					varType = VariantType.STOPLOSS;
-				}
+			// Guard against the case that aaChange describes a "" -> "" change (synonymous change in stop codon).
+			if (aaChange.ref.length() == 0 && aaChange.alt.length() == 0) {
+				protAnno = "p.=";
+				varType = VariantType.SYNONYMOUS;
 			} else {
-				// The wild type peptide does not start with a stop codon.
-				if (cdsPos.getPos() / 3 == 0) {
-					// The mutation affects the start codon, is start loss.
-					protAnno = "p.0?";
-					varType = VariantType.START_LOSS;
-				} else {
-					// The start codon is not affected.
-					if (stopCodonVarAAIdx == 0) {
-						// The insertion directly creates a stop codon, is stop gain.
-						protAnno = String.format("p.%s%d*", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1);
-						varType = VariantType.STOPGAIN;
-					} else if (stopCodonVarAAIdx > 0) {
-						// The insertion is a frameshift variant that leads to a transcript still having a stop codon,
-						// simple frameshift insertion.
-						protAnno = String.format("p.%s%d%sfs*%d", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1,
-								t.toLong(varAA.charAt(varAAIdx)), (stopCodonVarAAIdx + 1 - varAAIdx)); // last is stop
-																										// codon
-																										// AA pos
-						varType = VariantType.FS_INSERTION;
-					} else {
-						// The insertion is a frameshift variant that leads to the loss of the stop codon, is stop loss.
-						protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1,
-								t.toLong(varAA.charAt(varAAIdx)));
-						varType = VariantType.STOPLOSS;
-					}
-				}
+				// We do not have the corner case of "">"" but can go on with frameshift/non-frameshift distinction.
+				if (change.getAlt().length() % 3 == 0)
+					handleNonFrameShiftCase();
+				else
+					handleFrameShiftCase();
 			}
 
-			// Glue together the annotation string and return the annotation.
-			String annotationString = String.format("%s:%s", owner.ncHGVS(), protAnno);
-			return new Annotation(transcript.transcriptModel, annotationString, varType, cdsPos.getPos() + 1);
+			return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno), varType);
 		}
 
-		private Annotation buildNonFrameShiftAnnotation() {
-			// The code below builds the protein annotation string and the variant type.
-			String protAnno = null;
-			VariantType varType = null;
-			// Check whether there is a stop codon in the variant peptide.
-			int stopCodonVarAAIdx = varAA.indexOf("*");
-			// Compute position of stop codon in WT AA string.
-			int stopCodonWTAAIdx = wtAA.indexOf("*");
+		private void handleFrameShiftCase() {
+			// Differentiate the cases where the WT has a stop codon at the change position.
+			if (wtAASeq.charAt(varAAInsertPos) == '*')
+				handleFrameShiftCaseWTStartWithStopCodon();
+			else
+				handleFrameShiftCaseWTStartsWithNoStopCodon();
+		}
 
-			if (wtAA.charAt(0) == '*') {
-				// WT stop codon is subjected to insertion (start codon untouched).
-				if (stopCodonVarAAIdx == 0) {
-					// varAA starts with a stop codon
-					protAnno = "p.=";
-					varType = VariantType.SYNONYMOUS;
-				} else if (stopCodonVarAAIdx > 0) {
-					// varAA contains a stop codon
-					protAnno = String.format("p.*%d%sext*%d", varAAPos + 1, t.toLong(varAA.charAt(varAAIdx)),
-							(stopCodonVarAAIdx - varAAIdx)); // last is stop codon AA pos
-					varType = VariantType.NON_FS_INSERTION;
+		private void handleFrameShiftCaseWTStartWithStopCodon() {
+			// The WT has a stop codon at the insert position.
+			if (varAAStopPos == varAAInsertPos) {
+				// The variant peptide also starts with a stop codon, is synonymous frameshift insertion.
+				protAnno = "p.=";
+				varType = VariantType.SYNONYMOUS;
+			} else if (varAAStopPos > varAAInsertPos) {
+				// The variant peptide contains a stop codon but does not start with it, is frameshift insertion. In
+				// this case we cannot really differentiate this from a non-frameshift insertion but we still call
+				// it
+				// so.
+				protAnno = String.format("p.*%d%sext*%d", varAAInsertPos + 1,
+						t.toLong(varAASeq.charAt(varAAInsertPos)), (varAAStopPos - varAAInsertPos));
+				varType = VariantType.FS_INSERTION;
+			} else {
+				// The variant AA does not contain a stop codon, is stop loss.
+				protAnno = String.format("p.%s%d%sfs*?", t.toLong(varAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1,
+						t.toLong(varAASeq.charAt(varAAInsertPos)));
+				varType = VariantType.STOPLOSS;
+			}
+		}
+
+		private void handleFrameShiftCaseWTStartsWithNoStopCodon() {
+			// The wild type peptide does not start with a stop codon.
+			if (varAAInsertPos == 0) {
+				// The mutation affects the start codon, is start loss.
+				protAnno = "p.0?";
+				varType = VariantType.START_LOSS;
+			} else {
+				// The start codon is not affected.
+				if (varAAStopPos == varAAInsertPos) {
+					// The insertion directly creates a stop codon, is stop gain.
+					protAnno = String.format("p.%s%d*", t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1);
+					varType = VariantType.STOPGAIN;
+				} else if (varAAStopPos > varAAInsertPos) {
+					// The insertion is a frameshift variant that leads to a transcript still having a stop codon,
+					// simple frameshift insertion.
+					protAnno = String.format("p.%s%d%sfs*%d", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)),
+							(varAAStopPos + 1 - varAAInsertPos));
+					varType = VariantType.FS_INSERTION;
 				} else {
-					// varAA contains no stop codon
-					protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1,
-							t.toLong(varAA.charAt(varAAIdx)));
+					// The insertion is a frameshift variant that leads to the loss of the stop codon, is stop loss.
+					protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)));
 					varType = VariantType.STOPLOSS;
 				}
+			}
+		}
+
+		private void handleNonFrameShiftCase() {
+			if (wtAASeq.charAt(varAAInsertPos) == '*')
+				handleNonFrameShiftCaseStartsWithStopCodon();
+			else
+				handleNonFrameShiftCaseStartsWithNoStopCodon();
+		}
+
+		private void handleNonFrameShiftCaseStartsWithStopCodon() {
+			// WT stop codon is subjected to insertion (start codon untouched).
+			if (varAAStopPos == 0) {
+				// varAA starts with a stop codon
+				protAnno = "p.=";
+				varType = VariantType.SYNONYMOUS;
+			} else if (varAAStopPos > 0) {
+				// varAA contains a stop codon
+				protAnno = String.format("p.*%d%sext*%d", aaChange.pos + 1, t.toLong(varAASeq.charAt(aaChange.pos)),
+						(varAAStopPos - aaChange.pos)); // last is stop codon AA pos
+				varType = VariantType.STOPLOSS;
 			} else {
-				// WT stop codon is not subjected to insertion.
-				if (cdsPos.getPos() / 3 == 0) {
-					// The mutation affects the start codon, is start loss (in the case of keeping the start codon
-					// intact, we would have jumped into a shifted duplication case earlier.
-					protAnno = "p.0?";
-					varType = VariantType.START_LOSS;
+				// varAA contains no stop codon
+				protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
+						t.toLong(varAASeq.charAt(aaChange.pos)));
+				varType = VariantType.STOPLOSS;
+			}
+		}
+
+		private void handleNonFrameShiftCaseStartsWithNoStopCodon() {
+			// WT stop codon is not subjected to insertion.
+			if (aaChange.pos == 0) {
+				// The mutation affects the start codon, is start loss (in the case of keeping the start codon
+				// intact, we would have jumped into a shifted duplication case earlier.
+				protAnno = "p.0?";
+				varType = VariantType.START_LOSS;
+			} else {
+				// The start codon is not affected. Since it is a non-FS insertion, the stop codon cannot be
+				// affected.
+				if (varAAStopPos == varAAInsertPos) {
+					// The insertion directly starts with a stop codon, is stop gain.
+					protAnno = String.format("p.%s%d*", t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1);
+					varType = VariantType.STOPGAIN;
 				} else {
-					// The start codon is not affected. Since it is a non-FS insertion, the stop codon cannot be
-					// affected.
-					if (stopCodonVarAAIdx == 0) {
-						// The insertion directly starts with a stop codon, is stop gain.
-						protAnno = String.format("p.%s%d*", t.toLong(wtAA.charAt(varAAIdx)), varAAPos + 1);
+					if (varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
+						// The insertion does not directly start with a stop codon but the insertion leads to a stop
+						// codon in the affected amino acids. This leads to an "delins" protein annotation.
+						protAnno = String.format("p.%s%d_%s%ddelins%s", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+								varAAInsertPos + 1, t.toLong(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 2,
+								t.toLong(varAASeq.substring(varAAInsertPos, varAAStopPos)));
 						varType = VariantType.STOPGAIN;
 					} else {
-						if (varAA.length() - stopCodonVarAAIdx != wtAA.length() - stopCodonWTAAIdx) {
-							// The insertion does not directly start with a stop codon but the insertion leads to a stop
-							// codon in the affected amino acids. This leads to an "delins" protein annotation.
-							protAnno = String.format("p.%s%d_%s%ddelins%s", t.toLong(wtAA.charAt(varAAIdx)),
-									varAAPos + 1, t.toLong(wtAA.charAt(varAAIdx + 1)), varAAPos + 2,
-									t.toLong(varAA.substring(varAAIdx, stopCodonVarAAIdx)));
-							varType = VariantType.STOPGAIN;
-						} else {
-							// The changes on the amino acid level do not lead to a new stop codon, is non-FS insertion.
+						// The changes on the amino acid level do not lead to a new stop codon, is non-FS insertion.
 
-							// Compute the insertion AA string and check whether the insertion actually is a
-							// duplication.
-							String insAA = varAA.substring(varAAIdx, varAAIdx + change.getAlt().length() / 3);
-
-							if (DuplicationTester.isDuplication(wtAA, insAA, varAAIdx)) {
+						// Differentiate the ins and the delins case.
+						if (aaChange.ref.equals("")) {
+							// Clean insertion.
+							if (DuplicationTester.isDuplication(wtAASeq, aaChange.alt, varAAInsertPos)) {
 								// We have a duplication, can only be duplication of AAs to the left because of
-								// shifting.
-								protAnno = String.format("p.%s%d_%s%ddup",
-										t.toLong(wtAA.charAt(varAAIdx - insAA.length())),
-										varAAPos - insAA.length() + 1,
-										t.toLong(wtAA.charAt(varAAIdx - insAA.length() + 1)), varAAPos - insAA.length()
-												+ 2);
+								// normalization in CDSExonicAnnotationBuilder constructor.
+								if (aaChange.alt.length() == 1) {
+									protAnno = String.format("p.%s%ddup",
+											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos);
+								} else {
+									protAnno = String.format("p.%s%d_%s%ddup",
+											t.toLong(wtAASeq.charAt(varAAInsertPos - aaChange.alt.length())),
+											varAAInsertPos - aaChange.alt.length() + 1,
+											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)),
+											varAAInsertPos);
+								}
 								varType = VariantType.NON_FS_DUPLICATION;
 							} else {
 								// We have a simple insertion.
-								protAnno = String.format("p.%s%d_%s%dins%s", t.toLong(wtAA.charAt(varAAIdx)),
-										varAAPos + 1, t.toLong(wtAA.charAt(varAAIdx + 1)), varAAPos + 2,
-										t.toLong(insAA));
+								protAnno = String.format("p.%s%d_%s%dins%s",
+										t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
+										t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1,
+										t.toLong(aaChange.alt));
 								varType = VariantType.NON_FS_INSERTION;
 							}
+						} else {
+							// The delins/substitution case.
+							protAnno = String.format("p.%s%ddelins%s", t.toLong(aaChange.ref), varAAInsertPos + 1,
+									t.toLong(aaChange.alt));
+							varType = VariantType.NON_FS_SUBSTITUTION;
 						}
 					}
 				}
 			}
-
-			// Glue together the annotation string and return the annotation.
-			String annotationString = String.format("%s:%s", owner.ncHGVS(), protAnno);
-			return new Annotation(transcript.transcriptModel, annotationString, varType, cdsPos.getPos() + 1);
 		}
 	}
 

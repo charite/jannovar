@@ -162,9 +162,18 @@ public class TranscriptSequenceChangeHelper {
 		String cdsSeq = projector.getTranscriptStartingAtCDS();
 
 		// Short-circuit in the case of change that does not affect the transcript.
-		if (!transcript.cdsRegion.overlapsWith(change.getGenomeInterval())
-				|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
-			return cdsSeq;
+		if (change.getType() == GenomeChangeType.SNV) {
+			if (!transcript.cdsRegion.overlapsWith(change.getGenomeInterval())
+					|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
+				return cdsSeq;
+		} else { // insertion
+			// Get change position and the one left of it.
+			GenomePosition pos = change.getPos().withPositionType(PositionType.ZERO_BASED);
+			GenomePosition lPos = change.getPos().shifted(-1);
+			if (!transcript.cdsRegion.contains(pos) || !transcript.cdsRegion.contains(lPos)
+					|| !soDecorator.liesInExon(pos) || !soDecorator.liesInExon(lPos))
+				return cdsSeq;
+		}
 
 		// Get transcript position for the change position.
 		CDSPosition cdsChangePos;
