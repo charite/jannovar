@@ -128,13 +128,13 @@ public class VariantAnnotator {
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
 			throws AnnotationException {
 		if (leftNeighbor == null)
-			buildSVAnnotation(change, null);
+			buildNonSVAnnotation(change, null);
 		else
-			buildSVAnnotation(change, new TranscriptInfo(leftNeighbor));
+			buildNonSVAnnotation(change, new TranscriptInfo(leftNeighbor));
 		if (rightNeighbor == null)
-			buildSVAnnotation(change, null);
+			buildNonSVAnnotation(change, null);
 		else
-			buildSVAnnotation(change, new TranscriptInfo(rightNeighbor));
+			buildNonSVAnnotation(change, new TranscriptInfo(rightNeighbor));
 	}
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws InvalidGenomeChange {

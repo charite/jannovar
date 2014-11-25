@@ -139,16 +139,16 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 
+			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
+			this.insertPos = projector.projectGenomeToCDSPosition(change.getPos()).withPositionType(
+					PositionType.ZERO_BASED);
+
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
-			this.wtAAStopPos = wtAASeq.indexOf('*');
+			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.getPos() / 3);
 			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*');
-
-			// Get position of insertion on CDS level, will obtain AA chnage pos after normalization.
-			this.insertPos = projector.projectGenomeToCDSPosition(change.getPos()).withPositionType(
-					PositionType.ZERO_BASED);
+			this.varAAStopPos = varAASeq.indexOf('*', this.insertPos.getPos() / 3);
 
 			// Build initial aaChange. This is correct for non-FS insertions, and the first affected bases for FS
 			// insertions
@@ -282,7 +282,8 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 					protAnno = String.format("p.%s%d*", t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1);
 					varType = VariantType.STOPGAIN;
 				} else {
-					if (varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
+					if (varAAStopPos != -1 && wtAAStopPos != -1
+							&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
 						// The insertion does not directly start with a stop codon but the insertion leads to a stop
 						// codon in the affected amino acids. This leads to an "delins" protein annotation.
 						protAnno = String.format("p.%s%d_%s%ddelins%s", t.toLong(wtAASeq.charAt(varAAInsertPos)),
@@ -299,14 +300,13 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 								// We have a duplication, can only be duplication of AAs to the left because of
 								// normalization in CDSExonicAnnotationBuilder constructor.
 								if (aaChange.alt.length() == 1) {
-									protAnno = String.format("p.%s%ddup",
-											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos);
+									protAnno = String.format("p.%s%ddup", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)),
+											varAAInsertPos);
 								} else {
 									protAnno = String.format("p.%s%d_%s%ddup",
 											t.toLong(wtAASeq.charAt(varAAInsertPos - aaChange.alt.length())),
 											varAAInsertPos - aaChange.alt.length() + 1,
-											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)),
-											varAAInsertPos);
+											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos);
 								}
 								varType = VariantType.NON_FS_DUPLICATION;
 							} else {

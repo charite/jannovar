@@ -107,7 +107,7 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 				varType = VariantType.STOPLOSS;
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
-				int stopCodonPos = varAAString.indexOf('*');
+				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
 				protAnno = String.format("%sext*%d", protAnno, stopCodonPos - cdsPos.getPos() / 3);
 			}
 		} else if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)

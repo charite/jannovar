@@ -104,10 +104,9 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 			this.delFrameShift = (varCDSSeq.length() - wtCDSSeq.length()) % 3;
 
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
-			// Translate the variant CDS sequence and look for stop codon.
+			// Translate the variant CDS sequence.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
 			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*');
 
 			// Get the reference change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
@@ -130,6 +129,9 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3, wtAASeq.substring(
 					refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3), varAASeq.substring(
 					varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
+
+			// Look for stop codon, starting at change position.
+			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.getPos() / 3);
 		}
 
 		public Annotation build() {

@@ -1,6 +1,7 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
+import jannovar.common.VariantType;
 import jannovar.exception.InvalidGenomeChange;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.TranscriptInfo;
@@ -28,6 +29,9 @@ public class AnnotationBuilderDispatcher {
 	 *             if there is a problem with {@link #change}
 	 */
 	public Annotation build() throws InvalidGenomeChange {
+		if (transcript == null)
+			return new Annotation(null, "INTERGENIC", VariantType.INTERGENIC);
+
 		switch (change.getType()) {
 		case SNV:
 			return SingleNucleotideSubstitutionBuilder.buildAnnotation(transcript, change);

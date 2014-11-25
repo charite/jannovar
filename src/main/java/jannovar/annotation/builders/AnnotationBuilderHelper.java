@@ -271,7 +271,7 @@ abstract class AnnotationBuilderHelper {
 			GenomeInterval firstChangeBase = new GenomeInterval(firstChangePos, 1);
 			GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
 					.getGenomeEndPos().shifted(-1);
-			GenomeInterval lastChangeBase = new GenomeInterval(firstChangePos, 1);
+			GenomeInterval lastChangeBase = new GenomeInterval(lastChangePos, 1);
 
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))

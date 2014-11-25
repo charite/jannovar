@@ -100,17 +100,18 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 			this.delFrameShift = owner.change.getRef().length() % 3;
 
-			// TODO(holtgrem): Not translating in the cases we don't need it might save time
-			// Translate the variant CDS sequence and look for stop codon.
-			this.wtAASeq = t.translateDNA(wtCDSSeq);
-			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*');
-
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
 					.withPositionType(PositionType.ZERO_BASED);
 			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1))
 					.withPositionType(PositionType.ZERO_BASED);
+
+			// TODO(holtgrem): Not translating in the cases we don't need it might save time
+			// Translate the variant CDS sequence and look for stop codon.
+			this.wtAASeq = t.translateDNA(wtCDSSeq);
+			this.varAASeq = t.translateDNA(varCDSSeq);
+			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.getPos() / 3);
+
 			// "(...+2)/3" => round up integer division result
 			final String delAA = wtAASeq.substring(changeBeginPos.getPos() / 3, (changeLastPos.getPos() + 1 + 2) / 3);
 			final int delta = (changeBeginPos.getFrameshift() == 0 ? 0 : 1);
