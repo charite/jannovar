@@ -7,13 +7,13 @@ package jannovar.reference;
  */
 public class CDSInterval {
 	/** the selected coordinate system (0-based, 1-based) */
-	private final PositionType positionType;
+	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	private final TranscriptModel transcript;
+	public final TranscriptModel transcript;
 	/** the begin position within the transcript */
-	private int beginPos;
+	public final int beginPos;
 	/** the end position within the transcript */
-	private int endPos;
+	public final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
 	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos) {
@@ -35,61 +35,19 @@ public class CDSInterval {
 	public CDSInterval(CDSInterval other, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = other.transcript;
-		this.beginPos = other.beginPos;
 		this.endPos = other.endPos;
+
+		int beginPos = other.beginPos;
 		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
-			this.beginPos += 1;
+			beginPos += 1;
 		else if (other.positionType == PositionType.ONE_BASED && this.positionType == PositionType.ZERO_BASED)
-			this.beginPos -= 1;
+			beginPos -= 1;
+		this.beginPos = beginPos;
 	}
 
 	/** returns length of the interval */
 	public int length() {
 		return this.endPos - this.beginPos + (positionType == PositionType.ONE_BASED ? 1 : 0);
-	}
-
-	/**
-	 * @return the beginPos
-	 */
-	public int getBeginPos() {
-		return beginPos;
-	}
-
-	/**
-	 * @param beginPos
-	 *            the beginPos to set
-	 */
-	public void setBeginPos(int beginPos) {
-		this.beginPos = beginPos;
-	}
-
-	/**
-	 * @return the endPos
-	 */
-	public int getEndPos() {
-		return endPos;
-	}
-
-	/**
-	 * @param endPos
-	 *            the endPos to set
-	 */
-	public void setEndPos(int endPos) {
-		this.endPos = endPos;
-	}
-
-	/**
-	 * @return the positionType
-	 */
-	public PositionType getPositionType() {
-		return positionType;
-	}
-
-	/**
-	 * @return the transcript
-	 */
-	public TranscriptModel getTranscript() {
-		return transcript;
 	}
 
 	/*
