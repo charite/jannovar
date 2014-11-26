@@ -2,6 +2,8 @@ package jannovar.reference;
 
 import jannovar.common.Constants;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * The core information about a transcript, in an immutable object.
  *
@@ -33,9 +35,8 @@ public class TranscriptInfo {
 	 */
 	public final GenomeInterval cdsRegion;
 
-	// TODO(holtgrem): use some immutable container here as well
 	/** Genomic intervals with the exons, order is dictated by strand of transcript. */
-	public final GenomeInterval[] exonRegions;
+	public final ImmutableList<GenomeInterval> exonRegions;
 
 	/** cDNA sequence of the spliced RNA of this known gene transcript. */
 	public final String sequence;
@@ -78,21 +79,20 @@ public class TranscriptInfo {
 		cdsRegion = fwdCDSRegion.withStrand(strand);
 
 		int exonCount = tm.getExonEnds().length; // getExonCount() broken for some RefSeq
-		exonRegions = new GenomeInterval[exonCount];
+		ImmutableList.Builder<GenomeInterval> exonRegionsBuilder = new ImmutableList.Builder<GenomeInterval>();
 		if (strand == '+')
 		{
 			for (int i = 0; i < exonCount; ++i)
-				exonRegions[i] = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
-						PositionType.ONE_BASED);
+				exonRegionsBuilder.add(new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
+						PositionType.ONE_BASED));
 		}
 		else
 		{
-			for (int i = 0, j = exonCount - 1; i < exonCount; ++i, --j) {
-				GenomeInterval exonFwdRegion = new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
-						PositionType.ONE_BASED);
-				exonRegions[j] = exonFwdRegion.withStrand(strand);
-			}
+			for (int i = 0, j = exonCount - 1; i < exonCount; ++i, --j)
+				exonRegionsBuilder.add(new GenomeInterval('+', chr, tm.getExonStart(j), tm.getExonEnd(j),
+						PositionType.ONE_BASED).withStrand(strand));
 		}
+		exonRegions = exonRegionsBuilder.build();
 
 		// ensure that the strands are consistent
 		checkForConsistency();
@@ -120,8 +120,8 @@ public class TranscriptInfo {
 	 */
 	public int cdsTranscriptLength() {
 		int result = 0;
-		for (int i = 0; i < exonRegions.length; ++i)
-			result += exonRegions[i].intersection(cdsRegion).length();
+		for (GenomeInterval region : exonRegions)
+			result += region.intersection(cdsRegion).length();
 		return result;
 	}
 
@@ -130,8 +130,8 @@ public class TranscriptInfo {
 	 */
 	public int transcriptLength() {
 		int result = 0;
-		for (int i = 0; i < exonRegions.length; ++i)
-			result += exonRegions[i].length();
+		for (GenomeInterval region : exonRegions)
+			result += region.length();
 		return result;
 	}
 
@@ -142,8 +142,8 @@ public class TranscriptInfo {
 	 */
 	public GenomeInterval intronRegion(int i) {
 		// TODO(holtgrem): test me!
-		GenomeInterval exonRegionL = exonRegions[i].withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval exonRegionR = exonRegions[i + 1].withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval exonRegionL = exonRegions.get(i).withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval exonRegionR = exonRegions.get(i + 1).withPositionType(PositionType.ZERO_BASED);
 		return new GenomeInterval(exonRegionL.strand, exonRegionL.chr, exonRegionL.endPos, exonRegionR.beginPos,
 				PositionType.ZERO_BASED);
 	}
@@ -155,7 +155,7 @@ public class TranscriptInfo {
 		char strand = txRegion.strand;
 		assert (txRegion.strand == strand);
 		assert (cdsRegion.strand == strand);
-		for (int i = 0; i < exonRegions.length; ++i)
-			assert (exonRegions[i].strand == strand);
+		for (GenomeInterval region : exonRegions)
+			assert (region.strand == strand);
 	}
 }

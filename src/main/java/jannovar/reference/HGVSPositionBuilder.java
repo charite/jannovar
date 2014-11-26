@@ -85,9 +85,11 @@ public class HGVSPositionBuilder {
 			// Determine which exon is the closest one, ties are broken to the downstream direction as in HGVS,
 			// generate offset position within exon.
 			int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
-			GenomePosition exonEndPos = transcript.exonRegions[exonNumber].withPositionType(PositionType.ZERO_BASED)
+			GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber)
+					.withPositionType(PositionType.ZERO_BASED)
 					.getGenomeEndPos();
-			GenomePosition nextExonBeginPos = transcript.exonRegions[exonNumber + 1].withPositionType(
+			GenomePosition nextExonBeginPos = transcript.exonRegions.get(exonNumber + 1)
+					.withPositionType(
 					PositionType.ZERO_BASED).getGenomeBeginPos();
 			GenomePosition basePos = null;
 			String offsetStr = null;

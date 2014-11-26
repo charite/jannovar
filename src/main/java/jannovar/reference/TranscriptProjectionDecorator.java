@@ -153,7 +153,7 @@ public class TranscriptProjectionDecorator {
 		if (transcript.getStrand() == '+')
 			return exonID;
 		else
-			return transcript.exonRegions.length - exonID - 1;
+			return transcript.exonRegions.size() - exonID - 1;
 	}
 
 	/**
@@ -285,8 +285,8 @@ public class TranscriptProjectionDecorator {
 				return projector.genomeToCDSPos(pos);
 			} else { // lies in intron, project to begin position of next exon
 				int intronNum = projector.locateIntron(pos);
-				return projector.genomeToCDSPos(transcript.exonRegions[intronNum + 1].withPositionType(
-						PositionType.ZERO_BASED).getGenomeBeginPos());
+				return projector.genomeToCDSPos(transcript.exonRegions.get(intronNum + 1)
+						.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos());
 			}
 		} catch (ProjectionException e) {
 			throw new Error("Bug: must be able to convert exon position! " + e.getMessage());

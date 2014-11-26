@@ -126,8 +126,8 @@ public class TranscriptSequenceChangeHelper {
 			return projector.genomeToTranscriptPos(pos);
 		} else { // lies in intron, project to begin position of next exon
 			int intronNum = projector.locateIntron(pos);
-			return projector.genomeToTranscriptPos(transcript.exonRegions[intronNum].withPositionType(
-					PositionType.ZERO_BASED).getGenomeBeginPos());
+			return projector.genomeToTranscriptPos(transcript.exonRegions.get(intronNum)
+					.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos());
 		}
 	}
 
