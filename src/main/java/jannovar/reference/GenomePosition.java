@@ -136,13 +136,6 @@ public class GenomePosition {
 	}
 
 	/**
-	 * @return the strand
-	 */
-	public char getStrand() {
-		return strand;
-	}
-
-	/**
 	 * @param pos
 	 *            other position to compute distance to
 	 * @return the result of <code>(this.pos - pos.pos)</code> (<code>pos</code> is adjusted to the coordinate system
@@ -173,27 +166,6 @@ public class GenomePosition {
 	 */
 	public GenomePosition shifted(int delta) {
 		return new GenomePosition(strand, chr, pos + delta, positionType);
-	}
-
-	/**
-	 * @return the chromosome id
-	 */
-	public int getChr() {
-		return chr;
-	}
-
-	/**
-	 * @return the position
-	 */
-	public int getPos() {
-		return pos;
-	}
-
-	/**
-	 * @return the positionType
-	 */
-	public PositionType getPositionType() {
-		return positionType;
 	}
 
 	/*

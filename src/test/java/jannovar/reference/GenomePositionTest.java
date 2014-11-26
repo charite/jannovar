@@ -11,20 +11,20 @@ public class GenomePositionTest {
 	public void testConstructorDefaultPositionType() {
 		GenomePosition pos = new GenomePosition('+', 1, 23, PositionType.ONE_BASED);
 
-		Assert.assertEquals(pos.getStrand(), '+');
-		Assert.assertEquals(pos.getChr(), 1);
-		Assert.assertEquals(pos.getPos(), 23);
-		Assert.assertEquals(pos.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(pos.strand, '+');
+		Assert.assertEquals(pos.chr, 1);
+		Assert.assertEquals(pos.pos, 23);
+		Assert.assertEquals(pos.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		GenomePosition pos = new GenomePosition('+', 1, 23, PositionType.ZERO_BASED);
 
-		Assert.assertEquals(pos.getStrand(), '+');
-		Assert.assertEquals(pos.getChr(), 1);
-		Assert.assertEquals(pos.getPos(), 23);
-		Assert.assertEquals(pos.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(pos.strand, '+');
+		Assert.assertEquals(pos.chr, 1);
+		Assert.assertEquals(pos.pos, 23);
+		Assert.assertEquals(pos.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -32,10 +32,10 @@ public class GenomePositionTest {
 		GenomePosition onePos = new GenomePosition('+', 1, 23, PositionType.ONE_BASED);
 		GenomePosition zeroPos = new GenomePosition(onePos, PositionType.ZERO_BASED);
 
-		Assert.assertEquals(zeroPos.getStrand(), '+');
-		Assert.assertEquals(zeroPos.getChr(), 1);
-		Assert.assertEquals(zeroPos.getPos(), 22);
-		Assert.assertEquals(zeroPos.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(zeroPos.strand, '+');
+		Assert.assertEquals(zeroPos.chr, 1);
+		Assert.assertEquals(zeroPos.pos, 22);
+		Assert.assertEquals(zeroPos.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -43,10 +43,10 @@ public class GenomePositionTest {
 		GenomePosition zeroPos = new GenomePosition('+', 1, 23, PositionType.ZERO_BASED);
 		GenomePosition onePos = new GenomePosition(zeroPos, PositionType.ONE_BASED);
 
-		Assert.assertEquals(onePos.getStrand(), '+');
-		Assert.assertEquals(onePos.getChr(), 1);
-		Assert.assertEquals(onePos.getPos(), 24);
-		Assert.assertEquals(onePos.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(onePos.strand, '+');
+		Assert.assertEquals(onePos.chr, 1);
+		Assert.assertEquals(onePos.pos, 24);
+		Assert.assertEquals(onePos.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -54,10 +54,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('+', 1, 1000, PositionType.ONE_BASED);
 		GenomePosition revPos = new GenomePosition(fwdPos, '-');
 
-		Assert.assertEquals(revPos.getStrand(), '-');
-		Assert.assertEquals(revPos.getChr(), 1);
-		Assert.assertEquals(revPos.getPos(), 249249622);
-		Assert.assertEquals(revPos.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(revPos.strand, '-');
+		Assert.assertEquals(revPos.chr, 1);
+		Assert.assertEquals(revPos.pos, 249249622);
+		Assert.assertEquals(revPos.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -65,10 +65,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('+', 1, 1000, PositionType.ONE_BASED);
 		GenomePosition fwdPos2 = new GenomePosition(fwdPos, '+');
 
-		Assert.assertEquals(fwdPos2.getStrand(), '+');
-		Assert.assertEquals(fwdPos2.getChr(), 1);
-		Assert.assertEquals(fwdPos2.getPos(), 1000);
-		Assert.assertEquals(fwdPos2.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(fwdPos2.strand, '+');
+		Assert.assertEquals(fwdPos2.chr, 1);
+		Assert.assertEquals(fwdPos2.pos, 1000);
+		Assert.assertEquals(fwdPos2.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -76,10 +76,10 @@ public class GenomePositionTest {
 		GenomePosition revPos = new GenomePosition('-', 1, 1000, PositionType.ONE_BASED);
 		GenomePosition fwdPos = new GenomePosition(revPos, '+');
 
-		Assert.assertEquals(fwdPos.getStrand(), '+');
-		Assert.assertEquals(fwdPos.getChr(), 1);
-		Assert.assertEquals(fwdPos.getPos(), 249249622);
-		Assert.assertEquals(fwdPos.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(fwdPos.strand, '+');
+		Assert.assertEquals(fwdPos.chr, 1);
+		Assert.assertEquals(fwdPos.pos, 249249622);
+		Assert.assertEquals(fwdPos.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -87,10 +87,10 @@ public class GenomePositionTest {
 		GenomePosition revPos = new GenomePosition('-', 1, 1000, PositionType.ONE_BASED);
 		GenomePosition revPos2 = new GenomePosition(revPos, '-');
 
-		Assert.assertEquals(revPos2.getStrand(), '-');
-		Assert.assertEquals(revPos2.getChr(), 1);
-		Assert.assertEquals(revPos2.getPos(), 1000);
-		Assert.assertEquals(revPos2.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(revPos2.strand, '-');
+		Assert.assertEquals(revPos2.chr, 1);
+		Assert.assertEquals(revPos2.pos, 1000);
+		Assert.assertEquals(revPos2.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -98,10 +98,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('+', 1, 1000, PositionType.ZERO_BASED);
 		GenomePosition revPos = new GenomePosition(fwdPos, '-');
 
-		Assert.assertEquals(revPos.getStrand(), '-');
-		Assert.assertEquals(revPos.getChr(), 1);
-		Assert.assertEquals(revPos.getPos(), 249249620);
-		Assert.assertEquals(revPos.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(revPos.strand, '-');
+		Assert.assertEquals(revPos.chr, 1);
+		Assert.assertEquals(revPos.pos, 249249620);
+		Assert.assertEquals(revPos.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -109,10 +109,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('-', 1, 1000, PositionType.ZERO_BASED);
 		GenomePosition fwdPos2 = new GenomePosition(fwdPos, '+');
 
-		Assert.assertEquals(fwdPos2.getStrand(), '+');
-		Assert.assertEquals(fwdPos2.getChr(), 1);
-		Assert.assertEquals(fwdPos2.getPos(), 249249620);
-		Assert.assertEquals(fwdPos2.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(fwdPos2.strand, '+');
+		Assert.assertEquals(fwdPos2.chr, 1);
+		Assert.assertEquals(fwdPos2.pos, 249249620);
+		Assert.assertEquals(fwdPos2.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -120,10 +120,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('+', 1, 1000, PositionType.ZERO_BASED);
 		GenomePosition fwdPos2 = fwdPos.withStrand('-').withStrand('+');
 
-		Assert.assertEquals(fwdPos2.getStrand(), '+');
-		Assert.assertEquals(fwdPos2.getChr(), 1);
-		Assert.assertEquals(fwdPos2.getPos(), 1000);
-		Assert.assertEquals(fwdPos2.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(fwdPos2.strand, '+');
+		Assert.assertEquals(fwdPos2.chr, 1);
+		Assert.assertEquals(fwdPos2.pos, 1000);
+		Assert.assertEquals(fwdPos2.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -131,10 +131,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('-', 1, 1000, PositionType.ZERO_BASED);
 		GenomePosition fwdPos2 = fwdPos.withStrand('+').withStrand('-');
 
-		Assert.assertEquals(fwdPos2.getStrand(), '-');
-		Assert.assertEquals(fwdPos2.getChr(), 1);
-		Assert.assertEquals(fwdPos2.getPos(), 1000);
-		Assert.assertEquals(fwdPos2.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(fwdPos2.strand, '-');
+		Assert.assertEquals(fwdPos2.chr, 1);
+		Assert.assertEquals(fwdPos2.pos, 1000);
+		Assert.assertEquals(fwdPos2.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -142,10 +142,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('+', 1, 1000, PositionType.ONE_BASED);
 		GenomePosition fwdPos2 = fwdPos.withStrand('-').withStrand('+');
 
-		Assert.assertEquals(fwdPos2.getStrand(), '+');
-		Assert.assertEquals(fwdPos2.getChr(), 1);
-		Assert.assertEquals(fwdPos2.getPos(), 1000);
-		Assert.assertEquals(fwdPos2.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(fwdPos2.strand, '+');
+		Assert.assertEquals(fwdPos2.chr, 1);
+		Assert.assertEquals(fwdPos2.pos, 1000);
+		Assert.assertEquals(fwdPos2.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -153,10 +153,10 @@ public class GenomePositionTest {
 		GenomePosition fwdPos = new GenomePosition('-', 1, 1000, PositionType.ONE_BASED);
 		GenomePosition fwdPos2 = fwdPos.withStrand('+').withStrand('-');
 
-		Assert.assertEquals(fwdPos2.getStrand(), '-');
-		Assert.assertEquals(fwdPos2.getChr(), 1);
-		Assert.assertEquals(fwdPos2.getPos(), 1000);
-		Assert.assertEquals(fwdPos2.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(fwdPos2.strand, '-');
+		Assert.assertEquals(fwdPos2.chr, 1);
+		Assert.assertEquals(fwdPos2.pos, 1000);
+		Assert.assertEquals(fwdPos2.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -164,7 +164,7 @@ public class GenomePositionTest {
 		GenomePosition pos = new GenomePosition('+', 1, 100);
 		GenomePosition shifted = pos.shifted(10);
 
-		Assert.assertEquals(shifted.getPos(), 110);
+		Assert.assertEquals(shifted.pos, 110);
 	}
 
 	@Test
@@ -172,7 +172,7 @@ public class GenomePositionTest {
 		GenomePosition pos = new GenomePosition('+', 1, 100);
 		GenomePosition shifted = pos.shifted(-10);
 
-		Assert.assertEquals(shifted.getPos(), 90);
+		Assert.assertEquals(shifted.pos, 90);
 	}
 
 	@Test

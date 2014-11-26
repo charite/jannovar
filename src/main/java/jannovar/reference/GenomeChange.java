@@ -27,14 +27,14 @@ public class GenomeChange {
 	 * longest common prefix and suffix of ref and alt.
 	 */
 	public GenomeChange(GenomePosition pos, String ref, String alt) {
-		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
+		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
 		if (corr.ref.equals("-"))
 			corr.ref = "";
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, pos.getPositionType());
+		this.pos = new GenomePosition(pos.strand, pos.chr, corr.position, pos.positionType);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
@@ -50,14 +50,14 @@ public class GenomeChange {
 		pos = pos.withPositionType(PositionType.ZERO_BASED);
 
 		// Correct variant data.
-		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
+		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
 		if (corr.ref.equals("-"))
 			corr.ref = "";
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		if (strand == pos.getStrand()) {
+		if (strand == pos.strand) {
 			this.ref = corr.ref;
 			this.alt = corr.alt;
 		} else {
@@ -66,20 +66,20 @@ public class GenomeChange {
 		}
 
 		int delta = 0;
-		if (strand != pos.getStrand() && ref.length() == 0)
+		if (strand != pos.strand && ref.length() == 0)
 			delta = -1;
-		else if (strand != pos.getStrand() /* && ref.length() != 0 */)
+		else if (strand != pos.strand /* && ref.length() != 0 */)
 			delta = ref.length() - 1;
 
-		this.pos = new GenomePosition(pos.getStrand(), pos.getChr(), corr.position, PositionType.ZERO_BASED).shifted(
-				delta).withStrand(strand);
+		this.pos = new GenomePosition(pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED).shifted(delta)
+				.withStrand(strand);
 	}
 
 	/**
 	 * Construct object and enforce strand.
 	 */
 	public GenomeChange(GenomeChange other, char strand) {
-		if (strand == other.pos.getStrand()) {
+		if (strand == other.pos.strand) {
 			this.ref = other.ref;
 			this.alt = other.alt;
 		} else {
@@ -89,12 +89,11 @@ public class GenomeChange {
 
 		// Get position as 0-based position.
 
-		if (strand == other.pos.getStrand()) {
+		if (strand == other.pos.strand) {
 			this.pos = other.pos;
 		} else {
 			GenomePosition pos = other.pos.withPositionType(PositionType.ZERO_BASED);
-			this.pos = pos.shifted(this.ref.length() - 1).withStrand(strand)
-					.withPositionType(other.pos.getPositionType());
+			this.pos = pos.shifted(this.ref.length() - 1).withStrand(strand).withPositionType(other.pos.positionType);
 		}
 	}
 
@@ -103,7 +102,7 @@ public class GenomeChange {
 	 */
 	public GenomeInterval getGenomeInterval() {
 		GenomePosition pos = this.pos.withPositionType(PositionType.ZERO_BASED);
-		return new GenomeInterval(pos, this.ref.length()).withPositionType(this.pos.getPositionType());
+		return new GenomeInterval(pos, this.ref.length()).withPositionType(this.pos.positionType);
 	}
 
 	/**
@@ -142,7 +141,7 @@ public class GenomeChange {
 	 */
 	@Override
 	public int hashCode() {
-		if (pos.getStrand() != '+')
+		if (pos.strand != '+')
 			return withStrand('+').hashCode();
 		final int prime = 31;
 		int result = 1;
@@ -167,7 +166,7 @@ public class GenomeChange {
 			return false;
 
 		GenomeChange other = (GenomeChange) obj;
-		if (pos.getStrand() != '+')
+		if (pos.strand != '+')
 			return withStrand('+').equals(obj);
 		other = other.withStrand('+');
 

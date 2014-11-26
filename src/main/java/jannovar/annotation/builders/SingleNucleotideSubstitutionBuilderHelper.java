@@ -65,9 +65,9 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
 		String warningMsg = null;
-		if (transcript.sequence.charAt(txPos.getPos()) != change.ref.charAt(0))
+		if (transcript.sequence.charAt(txPos.pos) != change.ref.charAt(0))
 			warningMsg = String.format("WARNING:_mRNA/genome_discrepancy:_%c/%s_strand=%c",
-					transcript.sequence.charAt(txPos.getPos()), change.ref.charAt(0), transcript.getStrand());
+					transcript.sequence.charAt(txPos.pos), change.ref.charAt(0), transcript.getStrand());
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.pos % 3;

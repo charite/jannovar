@@ -43,7 +43,7 @@ public class TranscriptSequenceOntologyDecorator {
 	 */
 	public GenomeInterval getStopCodonInterval() {
 		GenomePosition pos = transcript.cdsRegion.getGenomeEndPos();
-		int delta = (pos.getPositionType() == PositionType.ONE_BASED) ? 1 : 0;
+		int delta = (pos.positionType == PositionType.ONE_BASED) ? 1 : 0;
 		return new GenomeInterval(pos.withPositionType(PositionType.ZERO_BASED).shifted(-3 + delta), 3);
 	}
 

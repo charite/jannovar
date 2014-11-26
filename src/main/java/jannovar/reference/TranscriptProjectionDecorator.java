@@ -41,7 +41,7 @@ public class TranscriptProjectionDecorator {
 					PositionType.ZERO_BASED).getGenomeBeginPos());
 			TranscriptPosition tEndPos = genomeToTranscriptPos(transcript.cdsRegion.withPositionType(
 					PositionType.ZERO_BASED).getGenomeEndPos());
-			return transcript.sequence.substring(tBeginPos.getPos(), tEndPos.getPos());
+			return transcript.sequence.substring(tBeginPos.pos, tEndPos.pos);
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS begin/end must be translatable into transcript positions");
 		}
@@ -54,7 +54,7 @@ public class TranscriptProjectionDecorator {
 		try {
 			TranscriptPosition tBeginPos = genomeToTranscriptPos(transcript.cdsRegion.withPositionType(
 					PositionType.ZERO_BASED).getGenomeBeginPos());
-			return transcript.sequence.substring(tBeginPos.getPos(), transcript.sequence.length());
+			return transcript.sequence.substring(tBeginPos.pos, transcript.sequence.length());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS begin must be translatable into transcript positions");
 		}
@@ -113,7 +113,7 @@ public class TranscriptProjectionDecorator {
 		// now, compute offset of CDS start in transcript and shift txPos by this to obtain CDS position
 		TranscriptPosition cdsStartPos = genomeToTranscriptPos(transcript.cdsRegion.getGenomeBeginPos())
 				.withPositionType(PositionType.ZERO_BASED);
-		return new CDSPosition(txPos.getTranscript(), txPos.getPos() - cdsStartPos.getPos(), PositionType.ZERO_BASED);
+		return new CDSPosition(txPos.transcript, txPos.pos - cdsStartPos.pos, PositionType.ZERO_BASED);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class TranscriptProjectionDecorator {
 	 *             on problems with the coordinate transformation (outside of the transcript)
 	 */
 	public GenomePosition transcriptToGenomePos(TranscriptPosition pos) throws ProjectionException {
-		final int targetPos = pos.withPositionType(PositionType.ZERO_BASED).getPos(); // 0-based target pos
+		final int targetPos = pos.withPositionType(PositionType.ZERO_BASED).pos; // 0-based target pos
 		if (targetPos < 0)
 			throw new ProjectionException("Invalid transcript position " + targetPos);
 
@@ -167,10 +167,10 @@ public class TranscriptProjectionDecorator {
 	 *             if the position does not fall within the intron regions of the transcript
 	 */
 	public int locateIntron(GenomePosition pos) throws ProjectionException {
-		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
+		if (pos.chr != transcript.getChr()) // guard against different chromosomes
 			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
 					+ transcript.txRegion);
-		if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
+		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
@@ -201,10 +201,10 @@ public class TranscriptProjectionDecorator {
 	 *             if the position does not fall within the transcription region of the transcripts
 	 */
 	public int locateExon(GenomePosition pos) throws ProjectionException {
-		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
+		if (pos.chr != transcript.getChr()) // guard against different chromosomes
 			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
 					+ transcript.txRegion);
-		if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
+		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
@@ -237,14 +237,14 @@ public class TranscriptProjectionDecorator {
 		// ensure that we have a zero-based position
 		pos = pos.withPositionType(PositionType.ZERO_BASED);
 		// handle the case of transcript position being negative
-		if (pos.getPos() < 0)
+		if (pos.pos < 0)
 			throw new ProjectionException("Problem with transcript position " + pos + " (< 0)");
 
 		// find exon containing pos or return null
 		int currEndPos = 0; // current end position of exon in transcript
 		int i = 0;
 		for (GenomeInterval region : transcript.exonRegions) {
-			if (pos.getPos() < currEndPos + region.length())
+			if (pos.pos < currEndPos + region.length())
 				return i;
 			++i;
 			currEndPos += region.length();

@@ -8,7 +8,7 @@ import jannovar.exception.ProjectionException;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class HGVSPositionBuilder {
-	public TranscriptInfo transcript;
+	final TranscriptInfo transcript;
 	final TranscriptProjectionDecorator projector;
 	final TranscriptSequenceOntologyDecorator soDecorator;
 
@@ -121,7 +121,7 @@ public class HGVSPositionBuilder {
 					PositionType.ZERO_BASED).getGenomeBeginPos());
 			int numBases = transcript.txRegion.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos()
 					.differenceTo(pos);
-			return String.format("-%d", tPos.getPos() + numBases);
+			return String.format("-%d", tPos.pos + numBases);
 		} catch (ProjectionException e) {
 			throw new Error("CDS end position must be translatable to transcript position.");
 		}

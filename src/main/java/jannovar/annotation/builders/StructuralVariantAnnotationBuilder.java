@@ -40,7 +40,7 @@ public class StructuralVariantAnnotationBuilder {
 	private static Annotation getStructuralVariantAnnotation(TranscriptInfo transcript, GenomeChange change) {
 		// Obtain shortcuts.
 		GenomePosition position = change.pos.withPositionType(PositionType.ZERO_BASED);
-		final int beginPos = position.getPos();
+		final int beginPos = position.pos;
 		final String ref = change.ref;
 		final String alt = change.alt;
 

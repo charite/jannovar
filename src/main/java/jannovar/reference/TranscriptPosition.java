@@ -9,11 +9,11 @@ package jannovar.reference;
  */
 public class TranscriptPosition {
 	/** the selected coordinate system (0-based, 1-based) */
-	private final PositionType positionType;
+	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	private final TranscriptModel transcript;
+	public final TranscriptModel transcript;
 	/** the position within the transcript */
-	final int pos;
+	public final int pos;
 
 	/** construct transcript position with one-based coordinate system */
 	public TranscriptPosition(TranscriptModel transcript, int pos) {
@@ -55,27 +55,6 @@ public class TranscriptPosition {
 	 */
 	public TranscriptPosition shifted(int delta) {
 		return new TranscriptPosition(transcript, pos + delta, positionType);
-	}
-
-	/**
-	 * @return the pos
-	 */
-	public int getPos() {
-		return pos;
-	}
-
-	/**
-	 * @return the positionType
-	 */
-	public PositionType getPositionType() {
-		return positionType;
-	}
-
-	/**
-	 * @return the transcript
-	 */
-	public TranscriptModel getTranscript() {
-		return transcript;
 	}
 
 	/*

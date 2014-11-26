@@ -93,8 +93,8 @@ public class TranscriptSequenceChangeHelper {
 
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(transcript.sequence);
-		builder.delete(tBeginPos.getPos(), tEndPos.getPos());
-		builder.insert(tBeginPos.getPos(), change.alt);
+		builder.delete(tBeginPos.pos, tEndPos.pos);
+		builder.insert(tBeginPos.pos, change.alt);
 		return builder.toString();
 	}
 

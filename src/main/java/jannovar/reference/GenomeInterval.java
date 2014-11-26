@@ -73,13 +73,13 @@ public class GenomeInterval {
 
 	/** construct genome interval from {@link GenomePosition} with a length towards 3' of pos' coordinate system */
 	public GenomeInterval(GenomePosition pos, int length) {
-		this.positionType = pos.getPositionType();
-		this.strand = pos.getStrand();
-		this.chr = pos.getChr();
-		this.beginPos = pos.getPos();
+		this.positionType = pos.positionType;
+		this.strand = pos.strand;
+		this.chr = pos.chr;
+		this.beginPos = pos.pos;
 
 		int delta = (positionType == PositionType.ZERO_BASED) ? 0 : -1;
-		this.endPos = pos.getPos() + length + delta;
+		this.endPos = pos.pos + length + delta;
 	}
 
 	/** convert into GenomeInterval of the given strand */
@@ -130,16 +130,16 @@ public class GenomeInterval {
 	 * @return <tt>true</tt> if the interval is truly left of the position
 	 */
 	public boolean isLeftOf(GenomePosition pos) {
-		if (chr != pos.getChr())
+		if (chr != pos.chr)
 			return false; // wrong chromosome
-		if (pos.getStrand() != strand)
+		if (pos.strand != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		if (pos.getPositionType() != positionType)
+		if (pos.positionType != positionType)
 			pos = pos.withPositionType(positionType);
 		if (positionType == PositionType.ONE_BASED)
-			return (pos.getPos() > endPos);
+			return (pos.pos > endPos);
 		else
-			return (pos.getPos() >= endPos);
+			return (pos.pos >= endPos);
 	}
 
 	/**
@@ -148,13 +148,13 @@ public class GenomeInterval {
 	 * @return <tt>true</tt> if the interval is truly right of the position
 	 */
 	public boolean isRightOf(GenomePosition pos) {
-		if (chr != pos.getChr())
+		if (chr != pos.chr)
 			return false; // wrong chromosome
-		if (pos.getStrand() != strand)
+		if (pos.strand != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		if (pos.getPositionType() != positionType)
+		if (pos.positionType != positionType)
 			pos = pos.withPositionType(positionType);
-		return (pos.getPos() < beginPos);
+		return (pos.pos < beginPos);
 	}
 
 	/**
@@ -163,16 +163,16 @@ public class GenomeInterval {
 	 * @return <tt>true</tt> if the interval contains <tt>pos</tt>
 	 */
 	public boolean contains(GenomePosition pos) {
-		if (chr != pos.getChr())
+		if (chr != pos.chr)
 			return false; // wrong chromosome
-		if (pos.getStrand() != strand)
+		if (pos.strand != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		if (pos.getPositionType() != positionType)
+		if (pos.positionType != positionType)
 			pos = pos.withPositionType(positionType);
 		if (positionType == PositionType.ONE_BASED)
-			return (pos.getPos() >= beginPos && pos.getPos() <= endPos);
+			return (pos.pos >= beginPos && pos.pos <= endPos);
 		else
-			return (pos.getPos() >= beginPos && pos.getPos() < endPos);
+			return (pos.pos >= beginPos && pos.pos < endPos);
 	}
 
 	/**

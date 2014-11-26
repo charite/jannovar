@@ -57,11 +57,11 @@ public class GenomeChangeNormalizer {
 	public static GenomeChange normalizeInsertion(TranscriptInfo transcript, GenomeChange change,
 			TranscriptPosition txPos) {
 		assert (change.ref.length() == 0);
-		if (change.pos.getStrand() != transcript.getStrand()) // ensure that we have the correct strand
+		if (change.pos.strand != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
 		// Insert the ALT bases at the position indicated by txPos.
-		int pos = txPos.withPositionType(PositionType.ZERO_BASED).getPos();
+		int pos = txPos.withPositionType(PositionType.ZERO_BASED).pos;
 		StringBuilder builder = new StringBuilder(transcript.sequence);
 		builder.insert(pos, change.alt);
 
@@ -101,11 +101,11 @@ public class GenomeChangeNormalizer {
 			TranscriptPosition txPos) {
 		// TODO(holtgrem): check the splice site invariant?
 		assert (change.ref.length() != 0 && change.alt.length() == 0);
-		if (change.pos.getStrand() != transcript.getStrand()) // ensure that we have the correct strand
+		if (change.pos.strand != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
 		// Shift the deletion to the right.
-		int pos = txPos.withPositionType(PositionType.ZERO_BASED).getPos();
+		int pos = txPos.withPositionType(PositionType.ZERO_BASED).pos;
 		final int LEN = change.ref.length(); // length of the deletion
 		final String seq = transcript.sequence;
 		int shift = 0;
