@@ -89,15 +89,15 @@ public class VariantAnnotator {
 		GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ONE_BASED);
 
 		// Get the TranscriptModel objects that overlap with changeInterval.
-		IntervalTree<TranscriptModel>.QueryResult qr = chr.getTMIntervalTree().search(changeInterval.getBeginPos(),
-				changeInterval.getEndPos());
+		IntervalTree<TranscriptModel>.QueryResult qr = chr.getTMIntervalTree().search(changeInterval.beginPos,
+				changeInterval.endPos);
 		ArrayList<TranscriptModel> candidateTranscripts = qr.result;
 
 		// Check whether this is a SV, if true then also perform a big intervals search.
 		boolean isStructuralVariant = (ref.length() >= 1000 || alt.length() >= 1000);
 		if (isStructuralVariant && ref.length() >= 1000)
-			candidateTranscripts.addAll(chr.getTMIntervalTree().searchBigInterval(changeInterval.getBeginPos(),
-					changeInterval.getEndPos()));
+			candidateTranscripts.addAll(chr.getTMIntervalTree().searchBigInterval(changeInterval.beginPos,
+					changeInterval.endPos));
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.

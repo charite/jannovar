@@ -9,15 +9,15 @@ import jannovar.common.ChromosomeMap;
  */
 public class GenomeInterval {
 	/** the used position type */
-	private final PositionType positionType;
+	public final PositionType positionType;
 	/** the strand that the position is located on */
-	private char strand;
+	public char strand;
 	/** the chromosome number, as index in chromosome dictionary */
-	private int chr;
+	public int chr;
 	/** the begin position on the chromosome */
-	private int beginPos;
+	public int beginPos;
 	/** the end position on the chromosome */
-	private int endPos;
+	public int endPos;
 
 	/** construct genome interval with one-based coordinate system */
 	public GenomeInterval(char strand, int chr, int beginPos, int endPos) {
@@ -184,9 +184,9 @@ public class GenomeInterval {
 		// TODO(holtgrem): Test this.
 		if (chr != other.chr)
 			return false; // wrong chromosome
-		if (other.getStrand() != strand)
+		if (other.strand != strand)
 			other = other.withStrand(strand); // ensure that we are on the correct strand
-		if (other.getPositionType() != positionType)
+		if (other.positionType != positionType)
 			other = other.withPositionType(positionType);
 		return (other.beginPos >= beginPos && other.endPos <= endPos);
 	}
@@ -211,73 +211,6 @@ public class GenomeInterval {
 		GenomeInterval thisZero = withPositionType(PositionType.ZERO_BASED);
 		GenomeInterval otherZero = other.withStrand(strand).withPositionType(PositionType.ZERO_BASED);
 		return (otherZero.beginPos < thisZero.endPos && this.beginPos < other.endPos);
-	}
-
-	/**
-	 * @return the strand
-	 */
-	public char getStrand() {
-		return strand;
-	}
-
-	/**
-	 * @param strand
-	 *            the strand to set
-	 */
-	public void setStrand(char strand) {
-		this.strand = strand;
-	}
-
-	/**
-	 * @return the chr
-	 */
-	public int getChr() {
-		return chr;
-	}
-
-	/**
-	 * @param chr
-	 *            the chr to set
-	 */
-	public void setChr(int chr) {
-		this.chr = chr;
-	}
-
-	/**
-	 * @return the beginPos
-	 */
-	public int getBeginPos() {
-		return beginPos;
-	}
-
-	/**
-	 * @param beginPos
-	 *            the beginPos to set
-	 */
-	public void setBeginPos(int beginPos) {
-		this.beginPos = beginPos;
-	}
-
-	/**
-	 * @return the endPos
-	 */
-	public int getEndPos() {
-		return endPos;
-	}
-
-	/**
-	 * @param endPos
-	 *            the endPos to set
-	 */
-	public void setEndPos(int endPos) {
-		this.endPos = endPos;
-	}
-
-	/**
-	 * @return the positionType
-	 */
-	public PositionType getPositionType() {
-		return positionType;
 	}
 
 	/*

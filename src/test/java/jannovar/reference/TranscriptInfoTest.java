@@ -34,25 +34,25 @@ public class TranscriptInfoTest {
 		Assert.assertEquals(info.accession, this.transcriptForward.getAccessionNumber());
 		Assert.assertEquals(info.geneSymbol, this.transcriptForward.getGeneSymbol());
 
-		Assert.assertEquals(info.txRegion.getStrand(), '+');
-		Assert.assertEquals(info.txRegion.getChr(), this.transcriptForward.getChromosome());
-		Assert.assertEquals(info.txRegion.getBeginPos(), this.transcriptForward.getTXStart());
-		Assert.assertEquals(info.txRegion.getEndPos(), this.transcriptForward.getTXEnd());
+		Assert.assertEquals(info.txRegion.strand, '+');
+		Assert.assertEquals(info.txRegion.chr, this.transcriptForward.getChromosome());
+		Assert.assertEquals(info.txRegion.beginPos, this.transcriptForward.getTXStart());
+		Assert.assertEquals(info.txRegion.endPos, this.transcriptForward.getTXEnd());
 
-		Assert.assertEquals(info.cdsRegion.getStrand(), '+');
-		Assert.assertEquals(info.cdsRegion.getChr(), this.transcriptForward.getChromosome());
-		Assert.assertEquals(info.cdsRegion.getBeginPos(), this.transcriptForward.getCDSStart());
-		Assert.assertEquals(info.cdsRegion.getEndPos(), this.transcriptForward.getCDSEnd());
+		Assert.assertEquals(info.cdsRegion.strand, '+');
+		Assert.assertEquals(info.cdsRegion.chr, this.transcriptForward.getChromosome());
+		Assert.assertEquals(info.cdsRegion.beginPos, this.transcriptForward.getCDSStart());
+		Assert.assertEquals(info.cdsRegion.endPos, this.transcriptForward.getCDSEnd());
 
 		Assert.assertEquals(info.exonRegions.length, 2);
-		Assert.assertEquals(info.exonRegions[0].getStrand(), '+');
-		Assert.assertEquals(info.exonRegions[0].getChr(), this.transcriptForward.getChromosome());
-		Assert.assertEquals(info.exonRegions[0].getBeginPos(), this.transcriptForward.getExonStart(0));
-		Assert.assertEquals(info.exonRegions[0].getEndPos(), this.transcriptForward.getExonEnd(0));
-		Assert.assertEquals(info.exonRegions[1].getStrand(), '+');
-		Assert.assertEquals(info.exonRegions[1].getChr(), this.transcriptForward.getChromosome());
-		Assert.assertEquals(info.exonRegions[1].getBeginPos(), this.transcriptForward.getExonStart(1));
-		Assert.assertEquals(info.exonRegions[1].getEndPos(), this.transcriptForward.getExonEnd(1));
+		Assert.assertEquals(info.exonRegions[0].strand, '+');
+		Assert.assertEquals(info.exonRegions[0].chr, this.transcriptForward.getChromosome());
+		Assert.assertEquals(info.exonRegions[0].beginPos, this.transcriptForward.getExonStart(0));
+		Assert.assertEquals(info.exonRegions[0].endPos, this.transcriptForward.getExonEnd(0));
+		Assert.assertEquals(info.exonRegions[1].strand, '+');
+		Assert.assertEquals(info.exonRegions[1].chr, this.transcriptForward.getChromosome());
+		Assert.assertEquals(info.exonRegions[1].beginPos, this.transcriptForward.getExonStart(1));
+		Assert.assertEquals(info.exonRegions[1].endPos, this.transcriptForward.getExonEnd(1));
 
 		Assert.assertEquals(info.sequence, this.transcriptForward.getSequence());
 
@@ -67,27 +67,27 @@ public class TranscriptInfoTest {
 		Assert.assertEquals(info.accession, this.transcriptReverse.getAccessionNumber());
 		Assert.assertEquals(info.geneSymbol, this.transcriptReverse.getGeneSymbol());
 
-		Assert.assertEquals(info.txRegion.getStrand(), '-');
-		Assert.assertEquals(info.txRegion.getChr(), this.transcriptReverse.getChromosome());
-		Assert.assertEquals(info.txRegion.getBeginPos(), 248355943);
-		Assert.assertEquals(info.txRegion.getEndPos(), 248356973);
+		Assert.assertEquals(info.txRegion.strand, '-');
+		Assert.assertEquals(info.txRegion.chr, this.transcriptReverse.getChromosome());
+		Assert.assertEquals(info.txRegion.beginPos, 248355943);
+		Assert.assertEquals(info.txRegion.endPos, 248356973);
 
-		Assert.assertEquals(info.cdsRegion.getStrand(), this.transcriptReverse.getStrand());
-		Assert.assertEquals(info.cdsRegion.getChr(), this.transcriptReverse.getChromosome());
-		Assert.assertEquals(info.cdsRegion.getBeginPos(), 248356002);
-		Assert.assertEquals(info.cdsRegion.getEndPos(), 248356611);
+		Assert.assertEquals(info.cdsRegion.strand, this.transcriptReverse.getStrand());
+		Assert.assertEquals(info.cdsRegion.chr, this.transcriptReverse.getChromosome());
+		Assert.assertEquals(info.cdsRegion.beginPos, 248356002);
+		Assert.assertEquals(info.cdsRegion.endPos, 248356611);
 
 		Assert.assertEquals(info.exonRegions.length, 2);
-		Assert.assertEquals(info.exonRegions[0].getPositionType(), PositionType.ONE_BASED);
-		Assert.assertEquals(info.exonRegions[0].getStrand(), this.transcriptReverse.getStrand());
-		Assert.assertEquals(info.exonRegions[0].getChr(), this.transcriptReverse.getChromosome());
-		Assert.assertEquals(info.exonRegions[0].getBeginPos(), 248355943);
-		Assert.assertEquals(info.exonRegions[0].getEndPos(), 248356027);
-		Assert.assertEquals(info.exonRegions[1].getPositionType(), PositionType.ONE_BASED);
-		Assert.assertEquals(info.exonRegions[1].getStrand(), this.transcriptReverse.getStrand());
-		Assert.assertEquals(info.exonRegions[1].getChr(), this.transcriptReverse.getChromosome());
-		Assert.assertEquals(info.exonRegions[1].getBeginPos(), 248356161);
-		Assert.assertEquals(info.exonRegions[1].getEndPos(), 248356973);
+		Assert.assertEquals(info.exonRegions[0].positionType, PositionType.ONE_BASED);
+		Assert.assertEquals(info.exonRegions[0].strand, this.transcriptReverse.getStrand());
+		Assert.assertEquals(info.exonRegions[0].chr, this.transcriptReverse.getChromosome());
+		Assert.assertEquals(info.exonRegions[0].beginPos, 248355943);
+		Assert.assertEquals(info.exonRegions[0].endPos, 248356027);
+		Assert.assertEquals(info.exonRegions[1].positionType, PositionType.ONE_BASED);
+		Assert.assertEquals(info.exonRegions[1].strand, this.transcriptReverse.getStrand());
+		Assert.assertEquals(info.exonRegions[1].chr, this.transcriptReverse.getChromosome());
+		Assert.assertEquals(info.exonRegions[1].beginPos, 248356161);
+		Assert.assertEquals(info.exonRegions[1].endPos, 248356973);
 
 		Assert.assertEquals(info.sequence, this.transcriptReverse.getSequence());
 		Assert.assertEquals(477, info.cdsTranscriptLength());

@@ -100,19 +100,19 @@ public class TranscriptInfo {
 
 	/** @return the strand of the transcript */
 	public char getStrand() {
-		return txRegion.getStrand();
+		return txRegion.strand;
 	}
 
 	/** @return the chromosome of the transcript */
 	public int getChr() {
-		return txRegion.getChr();
+		return txRegion.chr;
 	}
 
 	/**
 	 * @return <tt>true</tt> if this is a gene-coding transcript, marked by <tt>cdsRegion</tt> being empty.
 	 */
 	public boolean isCoding() {
-		return (this.cdsRegion.getBeginPos() < this.cdsRegion.getEndPos());
+		return (this.cdsRegion.beginPos < this.cdsRegion.endPos);
 	}
 
 	/**
@@ -144,18 +144,18 @@ public class TranscriptInfo {
 		// TODO(holtgrem): test me!
 		GenomeInterval exonRegionL = exonRegions[i].withPositionType(PositionType.ZERO_BASED);
 		GenomeInterval exonRegionR = exonRegions[i + 1].withPositionType(PositionType.ZERO_BASED);
-		return new GenomeInterval(exonRegionL.getStrand(), exonRegionL.getChr(),
-				exonRegionL.getEndPos(), exonRegionR.getBeginPos(), PositionType.ZERO_BASED);
+		return new GenomeInterval(exonRegionL.strand, exonRegionL.chr, exonRegionL.endPos, exonRegionR.beginPos,
+				PositionType.ZERO_BASED);
 	}
 
 	/**
 	 * Ensures that the strands are consistent.
 	 */
 	private void checkForConsistency() {
-		char strand = txRegion.getStrand();
-		assert (txRegion.getStrand() == strand);
-		assert (cdsRegion.getStrand() == strand);
+		char strand = txRegion.strand;
+		assert (txRegion.strand == strand);
+		assert (cdsRegion.strand == strand);
 		for (int i = 0; i < exonRegions.length; ++i)
-			assert (exonRegions[i].getStrand() == strand);
+			assert (exonRegions[i].strand == strand);
 	}
 }
