@@ -17,27 +17,27 @@ public class DuplicationTesterTest {
 
 	@Test
 	public void testFalse() {
-		Assert.assertFalse(DuplicationTester.isDuplication(ref, insertion, 3));
-		Assert.assertFalse(DuplicationTester.isDuplication(ref, insertion, 5));
+		Assert.assertFalse(DuplicationChecker.isDuplication(ref, insertion, 3));
+		Assert.assertFalse(DuplicationChecker.isDuplication(ref, insertion, 5));
 	}
 
 	@Test
 	public void testOnBorders() {
-		Assert.assertFalse(DuplicationTester.isDuplication(ref, insertion, 0));
-		Assert.assertFalse(DuplicationTester.isDuplication(ref, insertion, 1));
-		Assert.assertFalse(DuplicationTester.isDuplication(ref, insertion, 7));
-		Assert.assertTrue(DuplicationTester.isDuplication(ref, insertion, 8));
+		Assert.assertFalse(DuplicationChecker.isDuplication(ref, insertion, 0));
+		Assert.assertFalse(DuplicationChecker.isDuplication(ref, insertion, 1));
+		Assert.assertFalse(DuplicationChecker.isDuplication(ref, insertion, 7));
+		Assert.assertTrue(DuplicationChecker.isDuplication(ref, insertion, 8));
 	}
 
 	@Test
 	public void testBeforeTrue() {
-		Assert.assertTrue(DuplicationTester.isDuplication(ref, insertion, 4));
+		Assert.assertTrue(DuplicationChecker.isDuplication(ref, insertion, 4));
 	}
 
 	@Test
 	public void testAfterTrue() {
-		Assert.assertTrue(DuplicationTester.isDuplication(ref, insertion, 2));
-		Assert.assertTrue(DuplicationTester.isDuplication(ref, insertion, 6));
+		Assert.assertTrue(DuplicationChecker.isDuplication(ref, insertion, 2));
+		Assert.assertTrue(DuplicationChecker.isDuplication(ref, insertion, 6));
 	}
 
 }

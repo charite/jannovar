@@ -6,7 +6,7 @@ import jannovar.exception.ProjectionException;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
-import jannovar.reference.DuplicationTester;
+import jannovar.reference.DuplicationChecker;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
@@ -62,7 +62,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		} catch (ProjectionException e) {
 			throw new Error("Bug: at this point, the position must be a transcript position");
 		}
-		if (DuplicationTester.isDuplication(transcript.sequence, change.alt, txPos.getPos())) {
+		if (DuplicationChecker.isDuplication(transcript.sequence, change.alt, txPos.getPos())) {
 			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
@@ -292,7 +292,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 						// Differentiate the ins and the delins case.
 						if (aaChange.ref.equals("")) {
 							// Clean insertion.
-							if (DuplicationTester.isDuplication(wtAASeq, aaChange.alt, varAAInsertPos)) {
+							if (DuplicationChecker.isDuplication(wtAASeq, aaChange.alt, varAAInsertPos)) {
 								// We have a duplication, can only be duplication of AAs to the left because of
 								// normalization in CDSExonicAnnotationBuilder constructor.
 								if (aaChange.alt.length() == 1) {
