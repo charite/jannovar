@@ -81,16 +81,6 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 	}
 
 	private Annotation buildCDSExonicAnnotation() {
-		// Translate the change position to the transcript and the CDS position.
-		TranscriptPosition txPos;
-		CDSPosition cdsPos;
-		try {
-			txPos = projector.genomeToTranscriptPos(change.pos);
-			cdsPos = projector.genomeToCDSPos(change.pos);
-		} catch (ProjectionException e) {
-			throw new Error("Bug: exonic CDS positions must be translatable to transcript and CDs positions");
-		}
-
 		return new CDSExonicAnnotationBuilder().build();
 	}
 
