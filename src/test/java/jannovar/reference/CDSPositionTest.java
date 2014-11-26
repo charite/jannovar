@@ -24,17 +24,17 @@ public class CDSPositionTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		CDSPosition pos = new CDSPosition(this.transcriptForward, 10);
-		Assert.assertEquals(pos.getTranscript(), this.transcriptForward);
-		Assert.assertEquals(pos.getPos(), 10);
-		Assert.assertEquals(pos.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(pos.transcript, this.transcriptForward);
+		Assert.assertEquals(pos.pos, 10);
+		Assert.assertEquals(pos.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		CDSPosition pos = new CDSPosition(this.transcriptForward, 10, PositionType.ZERO_BASED);
-		Assert.assertEquals(pos.getTranscript(), this.transcriptForward);
-		Assert.assertEquals(pos.getPos(), 10);
-		Assert.assertEquals(pos.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(pos.transcript, this.transcriptForward);
+		Assert.assertEquals(pos.pos, 10);
+		Assert.assertEquals(pos.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -42,9 +42,9 @@ public class CDSPositionTest {
 		CDSPosition onePos = new CDSPosition(this.transcriptForward, 23, PositionType.ONE_BASED);
 		CDSPosition zeroPos = new CDSPosition(onePos, PositionType.ZERO_BASED);
 
-		Assert.assertEquals(zeroPos.getTranscript(), this.transcriptForward);
-		Assert.assertEquals(zeroPos.getPos(), 22);
-		Assert.assertEquals(zeroPos.getPositionType(), PositionType.ZERO_BASED);
+		Assert.assertEquals(zeroPos.transcript, this.transcriptForward);
+		Assert.assertEquals(zeroPos.pos, 22);
+		Assert.assertEquals(zeroPos.positionType, PositionType.ZERO_BASED);
 	}
 
 	@Test
@@ -52,9 +52,9 @@ public class CDSPositionTest {
 		CDSPosition onePos = new CDSPosition(this.transcriptForward, 23, PositionType.ZERO_BASED);
 		CDSPosition zeroPos = new CDSPosition(onePos, PositionType.ONE_BASED);
 
-		Assert.assertEquals(zeroPos.getTranscript(), this.transcriptForward);
-		Assert.assertEquals(zeroPos.getPos(), 24);
-		Assert.assertEquals(zeroPos.getPositionType(), PositionType.ONE_BASED);
+		Assert.assertEquals(zeroPos.transcript, this.transcriptForward);
+		Assert.assertEquals(zeroPos.pos, 24);
+		Assert.assertEquals(zeroPos.positionType, PositionType.ONE_BASED);
 	}
 
 }

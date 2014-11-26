@@ -9,11 +9,11 @@ package jannovar.reference;
  */
 public class CDSPosition {
 	/** the selected coordinate system (0-based, 1-based) */
-	private final PositionType positionType;
+	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	private final TranscriptModel transcript;
+	public final TranscriptModel transcript;
 	/** the position within the transcript */
-	final int pos;
+	public final int pos;
 
 	/** construct transcript position with one-based coordinate system */
 	public CDSPosition(TranscriptModel transcript, int pos) {
@@ -58,31 +58,10 @@ public class CDSPosition {
 	}
 
 	/**
-	 * @return the pos
-	 */
-	public int getPos() {
-		return pos;
-	}
-
-	/**
 	 * @return the frameshift of the given CDS position.
 	 */
 	public int getFrameshift() {
 		return pos % 3;
-	}
-
-	/**
-	 * @return the positionType
-	 */
-	public PositionType getPositionType() {
-		return positionType;
-	}
-
-	/**
-	 * @return the transcript
-	 */
-	public TranscriptModel getTranscript() {
-		return transcript;
 	}
 
 	/*

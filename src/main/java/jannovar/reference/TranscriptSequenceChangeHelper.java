@@ -216,8 +216,8 @@ public class TranscriptSequenceChangeHelper {
 
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(cdsSeq);
-		builder.delete(cdsChangeBeginPos.getPos(), cdsChangeEndPos.getPos());
-		builder.insert(cdsChangeBeginPos.getPos(), change.getAlt());
+		builder.delete(cdsChangeBeginPos.pos, cdsChangeEndPos.pos);
+		builder.insert(cdsChangeBeginPos.pos, change.getAlt());
 		return builder.toString();
 	}
 }

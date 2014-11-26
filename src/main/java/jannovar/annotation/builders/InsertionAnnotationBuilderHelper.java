@@ -146,13 +146,13 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
-			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.getPos() / 3);
+			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.pos / 3);
 			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*', this.insertPos.getPos() / 3);
+			this.varAAStopPos = varAASeq.indexOf('*', this.insertPos.pos / 3);
 
 			// Build initial aaChange. This is correct for non-FS insertions, and the first affected bases for FS
 			// insertions
-			final int insertAAPos = this.insertPos.getPos() / 3;
+			final int insertAAPos = this.insertPos.pos / 3;
 			final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
 			int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
 			if (insertAAPos + insertAALength > varAASeq.length())

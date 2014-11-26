@@ -126,12 +126,12 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
-			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3, wtAASeq.substring(
-					refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3), varAASeq.substring(
-					varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
+			this.aaChange = new AminoAcidChange(refChangeBeginPos.pos / 3, wtAASeq.substring(refChangeBeginPos.pos / 3,
+					(refChangeLastPos.pos + 1 + 2) / 3), varAASeq.substring(varChangeBeginPos.pos / 3,
+					(varChangeLastPos.pos + 1 + 2) / 3));
 
 			// Look for stop codon, starting at change position.
-			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.getPos() / 3);
+			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.pos / 3);
 		}
 
 		public Annotation build() {

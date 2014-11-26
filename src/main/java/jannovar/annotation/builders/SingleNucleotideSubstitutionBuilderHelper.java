@@ -70,7 +70,7 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 					transcript.sequence.charAt(txPos.getPos()), change.getRef().charAt(0), transcript.getStrand());
 
 		// Compute the frame shift and codon start position.
-		int frameShift = cdsPos.getPos() % 3;
+		int frameShift = cdsPos.pos % 3;
 		// Get the transcript codon. From this, we generate the WT and the variant codon. This is important in the case
 		// where the transcript differs from the reference. This inconsistency of the reference and the transcript is
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
@@ -90,9 +90,9 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 		// Construct annotation part for the protein.
 		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
 		String varAA = Translator.getTranslator().translateDNA3(varCodon);
-		String protAnno = String.format("p.%s%d%s", wtAA, cdsPos.getPos() / 3 + 1, varAA);
+		String protAnno = String.format("p.%s%d%s", wtAA, cdsPos.pos / 3 + 1, varAA);
 		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
-			protAnno = String.format("p.=", cdsPos.getPos() / 3 + 1);
+			protAnno = String.format("p.=", cdsPos.pos / 3 + 1);
 
 		// Compute variant type.
 		VariantType varType = computeVariantType(wtAA, varAA);
@@ -107,8 +107,8 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 				varType = VariantType.STOPLOSS;
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
-				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
-				protAnno = String.format("%sext*%d", protAnno, stopCodonPos - cdsPos.getPos() / 3);
+				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
+				protAnno = String.format("%sext*%d", protAnno, stopCodonPos - cdsPos.pos / 3);
 			}
 		} else if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
 				|| so.overlapsWithSpliceRegion(changeInterval)) {
@@ -120,7 +120,7 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 		String annotationStr = String.format("%s:%s", ncHGVS(), protAnno);
 		if (warningMsg != null)
 			annotationStr = String.format("%s:[%s]", annotationStr, warningMsg);
-		return new Annotation(transcript.transcriptModel, annotationStr, varType, cdsPos.getPos() + 1);
+		return new Annotation(transcript.transcriptModel, annotationStr, varType, cdsPos.pos + 1);
 	}
 
 	@Override
