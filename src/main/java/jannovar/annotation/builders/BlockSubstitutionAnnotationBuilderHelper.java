@@ -37,7 +37,7 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 		else if (so.overlapsWithTranslationalStartSite(changeInterval))
 			return buildStartLossAnnotation();
 		else if (so.overlapsWithCDSExon(changeInterval) && so.overlapsWithCDS(changeInterval))
-			return new CDSExonicAnnotationBuilder(this).build(); // can affect amino acids
+			return new CDSExonicAnnotationBuilder().build(); // can affect amino acids
 		else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
 			return buildIntronicAnnotation(); // intron but no exon => intronic variant
 		else if (so.overlapsWithFivePrimeUTR(changeInterval) || so.overlapsWithThreePrimeUTR(changeInterval))
@@ -50,7 +50,7 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 
 	@Override
 	String ncHGVS() {
-		return String.format("%s:%sdelins%s", locAnno, dnaAnno, change.getAlt());
+		return String.format("%s:%sdelins%s", locAnno, dnaAnno, change.alt);
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
@@ -67,7 +67,6 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
-		final BlockSubstitutionAnnotationBuilderHelper owner;
 		final GenomeInterval changeInterval;
 
 		final Translator t = Translator.getTranslator();
@@ -95,9 +94,7 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		String protAnno;
 
-		public CDSExonicAnnotationBuilder(BlockSubstitutionAnnotationBuilderHelper owner) {
-			this.owner = owner;
-
+		public CDSExonicAnnotationBuilder() {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
@@ -120,7 +117,7 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
 					.withPositionType(PositionType.ZERO_BASED);
 			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
-					changeInterval.getGenomeBeginPos().shifted(change.getAlt().length() - 1)).withPositionType(
+					changeInterval.getGenomeBeginPos().shifted(change.alt.length() - 1)).withPositionType(
 					PositionType.ZERO_BASED);
 			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position

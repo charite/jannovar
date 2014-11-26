@@ -14,11 +14,11 @@ import jannovar.util.DNAUtils;
  */
 public class GenomeChange {
 	/** position of the change */
-	private final GenomePosition pos;
+	public final GenomePosition pos;
 	/** nucleic acid reference string */
-	private final String ref;
+	public final String ref;
 	/** nucleic acid alternative string */
-	private final String alt;
+	public final String alt;
 
 	/**
 	 * Construct object given the position, reference, and alternative nucleic acid string.
@@ -99,32 +99,11 @@ public class GenomeChange {
 	}
 
 	/**
-	 * @return the position of the genome change
-	 */
-	public GenomePosition getPos() {
-		return pos;
-	}
-
-	/**
 	 * @return interval of the genome change
 	 */
 	public GenomeInterval getGenomeInterval() {
 		GenomePosition pos = this.pos.withPositionType(PositionType.ZERO_BASED);
 		return new GenomeInterval(pos, this.ref.length()).withPositionType(this.pos.getPositionType());
-	}
-
-	/**
-	 * @return the ref
-	 */
-	public String getRef() {
-		return ref;
-	}
-
-	/**
-	 * @return the alt
-	 */
-	public String getAlt() {
-		return alt;
 	}
 
 	/**
@@ -146,11 +125,11 @@ public class GenomeChange {
 	 * @return the {@link GenomeChangeType} of this GenomeChange
 	 */
 	public GenomeChangeType getType() {
-		if (getRef().length() > 0 && getAlt().length() == 0)
+		if (ref.length() > 0 && alt.length() == 0)
 			return GenomeChangeType.DELETION;
-		else if (getRef().length() == 0 && getAlt().length() > 0)
+		else if (ref.length() == 0 && alt.length() > 0)
 			return GenomeChangeType.INSERTION;
-		else if (getRef().length() == 1 && getAlt().length() == 1)
+		else if (ref.length() == 1 && alt.length() == 1)
 			return GenomeChangeType.SNV;
 		else
 			return GenomeChangeType.BLOCK_SUBSTITUTION;

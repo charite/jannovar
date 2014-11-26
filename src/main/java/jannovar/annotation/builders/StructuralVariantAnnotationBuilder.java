@@ -39,10 +39,10 @@ public class StructuralVariantAnnotationBuilder {
 
 	private static Annotation getStructuralVariantAnnotation(TranscriptInfo transcript, GenomeChange change) {
 		// Obtain shortcuts.
-		GenomePosition position = change.getPos().withPositionType(PositionType.ZERO_BASED);
+		GenomePosition position = change.pos.withPositionType(PositionType.ZERO_BASED);
 		final int beginPos = position.getPos();
-		final String ref = change.getRef();
-		final String alt = change.getAlt();
+		final String ref = change.ref;
+		final String alt = change.alt;
 
 		// Build reverse-complement of alt string.
 		StringBuilder altRC = new StringBuilder(alt).reverse();

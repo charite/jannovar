@@ -48,7 +48,7 @@ public class SingleNucleotideSubstitutionBuilder {
 	 */
 	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		// guard against invalid genome change
-		if (change.getRef().length() != 1 || change.getAlt().length() != 1)
+		if (change.ref.length() != 1 || change.alt.length() != 1)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
 
 		// project the strand of change to the same strand as transcript

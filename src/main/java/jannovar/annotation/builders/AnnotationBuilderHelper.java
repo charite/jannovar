@@ -71,7 +71,7 @@ abstract class AnnotationBuilderHelper {
 		if (so.liesInExon(change.getGenomeInterval())) {
 			try {
 				this.change = GenomeChangeNormalizer.normalizeGenomeChange(transcript, change,
-						projector.genomeToTranscriptPos(change.getPos()));
+						projector.genomeToTranscriptPos(change.pos));
 			} catch (ProjectionException e) {
 				throw new Error("Bug: change begin position must be on transcript.");
 			}

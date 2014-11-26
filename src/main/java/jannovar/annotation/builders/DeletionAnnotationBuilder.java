@@ -52,7 +52,7 @@ public class DeletionAnnotationBuilder {
 	 */
 	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		// Guard against invalid genome change.
-		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
+		if (change.ref.length() == 0 || change.alt.length() != 0)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a deletion.");
 
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.

@@ -33,8 +33,8 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			return buildNonCodingAnnotation();
 
 		// We have the base left and/or right of the insertion to determine the cases.
-		final GenomePosition pos = change.getPos();
-		final GenomePosition lPos = change.getPos().shifted(-1);
+		final GenomePosition pos = change.pos;
+		final GenomePosition lPos = change.pos.shifted(-1);
 		if (so.liesInCDSExon(lPos) && so.liesInCDSExon(pos) && so.liesInCDS(lPos) && so.liesInCDS(pos))
 			return buildCDSExonicAnnotation(); // can affect amino acids
 		else if ((so.liesInCDSIntron(lPos) || so.liesInCDSIntron(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
@@ -49,8 +49,8 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 
 	@Override
 	String ncHGVS() {
-		if (!so.liesInExon(change.getPos()))
-			return String.format("%s:%sins%s", locAnno, dnaAnno, change.getAlt());
+		if (!so.liesInExon(change.pos))
+			return String.format("%s:%sins%s", locAnno, dnaAnno, change.alt);
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -58,25 +58,25 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		// duplicated characters are left of the insertion.
 		TranscriptPosition txPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.getPos());
+			txPos = projector.genomeToTranscriptPos(change.pos);
 		} catch (ProjectionException e) {
 			throw new Error("Bug: at this point, the position must be a transcript position");
 		}
-		if (DuplicationTester.isDuplication(transcript.sequence, change.getAlt(), txPos.getPos())) {
+		if (DuplicationTester.isDuplication(transcript.sequence, change.alt, txPos.getPos())) {
 			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
-			if (change.getAlt().length() == 1) {
-				dnaAnno = String.format("%c.%sdup", prefix, posBuilder.getCDNAPosStr(change.getPos().shifted(-1)));
+			if (change.alt.length() == 1) {
+				dnaAnno = String.format("%c.%sdup", prefix, posBuilder.getCDNAPosStr(change.pos.shifted(-1)));
 			} else {
 				dnaAnno = String.format("%c.%s_%sdup", prefix,
-						posBuilder.getCDNAPosStr(change.getPos().shifted(-change.getAlt().length())),
-						posBuilder.getCDNAPosStr(change.getPos().shifted(-1)));
+						posBuilder.getCDNAPosStr(change.pos.shifted(-change.alt.length())),
+						posBuilder.getCDNAPosStr(change.pos.shifted(-1)));
 			}
 
 			return String.format("%s:%s", locAnno, dnaAnno);
 		} else {
-			return String.format("%s:%sins%s", locAnno, dnaAnno, change.getAlt());
+			return String.format("%s:%sins%s", locAnno, dnaAnno, change.alt);
 		}
 	}
 
@@ -85,13 +85,13 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		TranscriptPosition txPos;
 		CDSPosition cdsPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.getPos());
-			cdsPos = projector.genomeToCDSPos(change.getPos());
+			txPos = projector.genomeToTranscriptPos(change.pos);
+			cdsPos = projector.genomeToCDSPos(change.pos);
 		} catch (ProjectionException e) {
 			throw new Error("Bug: exonic CDS positions must be translatable to transcript and CDs positions");
 		}
 
-		return new CDSExonicAnnotationBuilder(this).build();
+		return new CDSExonicAnnotationBuilder().build();
 	}
 
 	/**
@@ -100,8 +100,6 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 	 * We use this helper class to simplify the access to the parameters such as {@link #cdsPos} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
-		final InsertionAnnotationBuilderHelper owner;
-
 		final Translator t = Translator.getTranslator();
 
 		// wild type CDS nucleotide sequence
@@ -133,14 +131,12 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		String protAnno;
 
-		public CDSExonicAnnotationBuilder(InsertionAnnotationBuilderHelper owner) {
-			this.owner = owner;
-
+		public CDSExonicAnnotationBuilder() {
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 
 			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
-			this.insertPos = projector.projectGenomeToCDSPosition(change.getPos()).withPositionType(
+			this.insertPos = projector.projectGenomeToCDSPosition(change.pos).withPositionType(
 					PositionType.ZERO_BASED);
 
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
@@ -154,7 +150,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// insertions
 			final int insertAAPos = this.insertPos.pos / 3;
 			final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
-			int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
+			int insertAALength = ((change.alt.length() + 2) / 3) + delta;
 			if (insertAAPos + insertAALength > varAASeq.length())
 				insertAALength = varAASeq.length() - insertAAPos;
 			final String delAA = wtAASeq.substring(insertAAPos, insertAAPos + delta);
@@ -174,7 +170,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 				varType = VariantType.SYNONYMOUS;
 			} else {
 				// We do not have the corner case of "">"" but can go on with frameshift/non-frameshift distinction.
-				if (change.getAlt().length() % 3 == 0)
+				if (change.alt.length() % 3 == 0)
 					handleNonFrameShiftCase();
 				else
 					handleFrameShiftCase();

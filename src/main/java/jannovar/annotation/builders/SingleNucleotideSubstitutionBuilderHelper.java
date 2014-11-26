@@ -56,8 +56,8 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 		TranscriptPosition txPos;
 		CDSPosition cdsPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.getPos()).withPositionType(PositionType.ZERO_BASED);
-			cdsPos = projector.genomeToCDSPos(change.getPos()).withPositionType(PositionType.ZERO_BASED);
+			txPos = projector.genomeToTranscriptPos(change.pos).withPositionType(PositionType.ZERO_BASED);
+			cdsPos = projector.genomeToCDSPos(change.pos).withPositionType(PositionType.ZERO_BASED);
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS exon position must be translatable to transcript position");
 		}
@@ -65,9 +65,9 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
 		String warningMsg = null;
-		if (transcript.sequence.charAt(txPos.getPos()) != change.getRef().charAt(0))
+		if (transcript.sequence.charAt(txPos.getPos()) != change.ref.charAt(0))
 			warningMsg = String.format("WARNING:_mRNA/genome_discrepancy:_%c/%s_strand=%c",
-					transcript.sequence.charAt(txPos.getPos()), change.getRef().charAt(0), transcript.getStrand());
+					transcript.sequence.charAt(txPos.getPos()), change.ref.charAt(0), transcript.getStrand());
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.pos % 3;
@@ -76,10 +76,10 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
 		// the transcript.
 		String transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
-		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift, change.getRef()
-				.charAt(0));
-		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift, change.getAlt()
-				.charAt(0));
+		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
+				change.ref.charAt(0));
+		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
+				change.alt.charAt(0));
 
 		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
 		// positions).
@@ -126,7 +126,7 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 	@Override
 	String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return String.format("%s:%s%s>%s", locAnno, dnaAnno, change.getRef(), change.getAlt());
+			return String.format("%s:%s%s>%s", locAnno, dnaAnno, change.ref, change.alt);
 		else
 			return String.format("%s:%s%s", locAnno, dnaAnno, hgvsSNVOverride);
 	}

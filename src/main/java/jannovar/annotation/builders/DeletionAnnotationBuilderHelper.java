@@ -36,7 +36,7 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		else if (so.overlapsWithTranslationalStartSite(changeInterval))
 			return buildStartLossAnnotation();
 		else if (so.overlapsWithCDSExon(changeInterval) && so.overlapsWithCDS(changeInterval))
-			return new CDSExonicAnnotationBuilder(this).build(); // can affect amino acids
+			return new CDSExonicAnnotationBuilder().build(); // can affect amino acids
 		else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
 			return buildIntronicAnnotation(); // intron but no exon => intronic variant
 		else if (so.overlapsWithFivePrimeUTR(changeInterval) || so.overlapsWithThreePrimeUTR(changeInterval))
@@ -66,7 +66,6 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
-		final DeletionAnnotationBuilderHelper owner;
 		final GenomeInterval changeInterval;
 
 		final Translator t = Translator.getTranslator();
@@ -92,13 +91,11 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		String protAnno;
 
-		public CDSExonicAnnotationBuilder(DeletionAnnotationBuilderHelper owner) {
-			this.owner = owner;
-
+		public CDSExonicAnnotationBuilder() {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
-			this.delFrameShift = owner.change.getRef().length() % 3;
+			this.delFrameShift = DeletionAnnotationBuilderHelper.this.change.ref.length() % 3;
 
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())

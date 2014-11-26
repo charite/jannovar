@@ -19,13 +19,13 @@ import jannovar.exception.InvalidCoordinateException;
  */
 public class GenomePosition {
 	/** the used position type */
-	private final PositionType positionType;
+	public final PositionType positionType;
 	/** the strand that the position is located on */
-	private final char strand;
+	public final char strand;
 	/** the chromosome number, as index in chromosome dictionary */
-	private final int chr;
+	public final int chr;
 	/** the position on the chromosome */
-	private final int pos;
+	public final int pos;
 
 	/** construct genome position with one-based coordinate system */
 	public GenomePosition(char strand, int chr, int pos) {
