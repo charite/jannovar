@@ -7,6 +7,7 @@ import jannovar.exception.JannovarException;
 import jannovar.io.SerializationManager;
 import jannovar.io.UCSCKGParser;
 import jannovar.reference.TranscriptModel;
+import jannovar.util.PathUtil;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class UCSCDownloadManager extends DownloadManager {
 		downloadTranscriptFiles(jannovar.common.Constants.UCSC, options.genomeRelease);
 
 		// parse transcript model list from UCSC and return
-		String path = options.dirPath + options.genomeRelease.getUCSCString(options.genomeRelease);
+		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
 			path += System.getProperty("file.separator");
 		UCSCKGParser parser = new UCSCKGParser(path);
@@ -53,10 +54,10 @@ public class UCSCDownloadManager extends DownloadManager {
 	public void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException {
 		SerializationManager manager = new SerializationManager();
 		System.err.println("[INFO] Serializing UCSC data as "
-				+ String.format(options.dirPath + Constants.UCSCserializationFileName,
+				+ String.format(PathUtil.join(options.downloadPath, Constants.UCSCserializationFileName),
 						options.genomeRelease.getUCSCString(options.genomeRelease)));
-		manager.serializeKnownGeneList(
-				String.format(options.dirPath + Constants.UCSCserializationFileName,
-						options.genomeRelease.getUCSCString(options.genomeRelease)), lst);
+		manager.serializeKnownGeneList(String.format(
+				PathUtil.join(options.downloadPath, Constants.UCSCserializationFileName),
+				options.genomeRelease.getUCSCString(options.genomeRelease)), lst);
 	}
 }

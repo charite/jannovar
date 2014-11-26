@@ -15,6 +15,7 @@ import jannovar.common.ChromosomeMap;
 import jannovar.common.VCFStrings;
 import jannovar.exception.AnnotationException;
 import jannovar.reference.Chromosome;
+import jannovar.util.PathUtil;
 
 import java.io.File;
 import java.util.HashMap;
@@ -70,10 +71,10 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	/** @return output file name, depending on this.options */
 	@Override
 	public String getOutFileName() {
-		File f = new File(this.options.VCFfilePath);
+		File f = new File(this.options.vcfFilePath);
 		String outname = f.getName();
-		if (options.outVCFfolder != null)
-			outname = options.outVCFfolder + outname;
+		if (options.outVCFFolder != null)
+			outname = PathUtil.join(options.outVCFFolder, outname);
 		int i = outname.lastIndexOf("vcf");
 		if (i < 0)
 			i = outname.lastIndexOf("VCF");

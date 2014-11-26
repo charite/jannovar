@@ -16,11 +16,11 @@ public class DownloadManagerFactory {
 	 * @return appropriately configured DownloadOrchestrator or null if there is nothing to download
 	 */
 	public static DownloadManager build(JannovarOptions options) {
-		if (options.createUCSC)
+		if (options.dataSource == JannovarOptions.DataSource.UCSC)
 			return new UCSCDownloadManager(options);
-		else if (options.createEnsembl)
+		else if (options.dataSource == JannovarOptions.DataSource.ENSEMBL)
 			return new EnsembleDownloadManager(options);
-		else if (options.createRefseq)
+		else if (options.dataSource == JannovarOptions.DataSource.REFSEQ)
 			return new RefseqDownloadManager(options);
 		else
 			return null;

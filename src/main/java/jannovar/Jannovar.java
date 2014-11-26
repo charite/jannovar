@@ -1,15 +1,13 @@
 package jannovar;
 
 /** Command line functions from apache */
-import jannovar.CommandLineParser.HelpRequestedException;
 import jannovar.cmd.JannovarCommand;
 import jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import jannovar.cmd.download.DownloadCommand;
-import jannovar.exception.FileDownloadException;
+import jannovar.exception.CommandLineParsingException;
+import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
-
-import org.apache.commons.cli.ParseException;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
@@ -71,101 +69,60 @@ public class Jannovar {
 	JannovarOptions options = null;
 
 	public static void main(String argv[]) {
-		// Create Jannovar object, this includes parsing the command line.
-		Jannovar anno = null;
-		try {
-			anno = new Jannovar(argv);
-		} catch (ParseException e1) {
-			System.exit(1); // something went wrong, return 1
-		} catch (HelpRequestedException e1) {
-			return;  // help requested and printed, return 0
+		if (argv.length == 0) {
+			// No arguments, print top level help and exit.
+			printTopLevelHelp();
+			System.exit(1);
 		}
 
-		// Option 1: download transcript files and serialize
+		// Create the corresponding command.
+		JannovarCommand cmd = null;
 		try {
-			if (anno.download())
-				return;  // stop after downloading
-		} catch (FileDownloadException e) {
-			System.err.println("[ERROR] Error while attempting to parse transcript definition files.");
-			System.err.println("[ERROR] " + e.toString());
-			System.err.println("[ERROR] A common error is the failure to set the network proxy (see tutorial).");
+			if (argv[0].equals("download"))
+				cmd = new DownloadCommand(argv);
+			else if (argv[0].equals("annotate"))
+				cmd = new AnnotateVCFCommand(argv);
+			else if (argv[0].equals("annotate-pos"))
+				cmd = new AnnotatePositionCommand(argv);
+			else
+				System.err.println("unrecognized command " + argv[0]);
+		} catch (CommandLineParsingException e) {
+			System.err.println("problem with parsing command line options: " + e.getMessage());
+		} catch (HelpRequestedException e) {
+			return; // no error, user wanted help
+		}
+
+		// Stop if no command could be created.
+		if (cmd == null)
 			System.exit(1);
+
+		// Execute the command.
+		try {
+			cmd.run();
 		} catch (JannovarException e) {
-			System.err.println("[ERROR] Error while attempting to parse transcript definition files.");
-			System.err.println("[ERROR] " + e.toString());
-			System.err.println("[ERROR] A common error is the failure to set the network proxy (see tutorial).");
-			System.exit(1);
-		}
-
-		// Option 2: perform VCF annotation or create annotation file
-		if (anno.options.hasVCFfile()) {
-			try {
-				anno.annotateVCF(); // annotate VCF or create Jannovar output file
-				return;
-			} catch (JannovarException je) {
-				System.err.println("[ERROR] Could not annotate VCF data: " + je.toString());
-				System.exit(1);
-			}
-		}
-
-		// Option 3, Step 2: output chromosomal change at the given position
-		if (anno.options.chromosomalChange == null) {
-			System.err.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
-			System.exit(1);
-		}
-		try {
-			anno.annotatePosition();
-		} catch (JannovarException je) {
-			System.err.println("[ERROR] Could not annotate input data: " + anno.options.chromosomalChange);
+			System.err.println("ERROR: " + e.getMessage());
 			System.exit(1);
 		}
 	}
 
 	/**
-	 * The constructor parses the command-line arguments.
-	 *
-	 * @param argv
-	 *            the arguments passed through the command
-	 * @throws HelpRequestedException
-	 *             if help was requested
-	 * @throws ParseException
-	 *             if there was a problem parsing the command line.
+	 * Print top level help (without any command).
 	 */
-	public Jannovar(String argv[]) throws ParseException, HelpRequestedException {
-		this.options = new CommandLineParser().parseCommandLine(argv);
+	private static void printTopLevelHelp() {
+		System.err.println("Program: jannovar (functional annotation of VCF files)");
+		System.err.println("Version: 0.10");
+		System.err.println("Contact: Peter N Robinson <peter.robinson@charite.de>");
+		System.err.println("");
+		System.err.println("Usage: java -jar jannovar.jar <command> [options]");
+		System.err.println("");
+		System.err.println("Command: download      download transcript database");
+		System.err.println("         annotate      functional annotation of VCF files");
+		System.err.println("         annotate-pos  functional annotation of genomic change");
+		System.err.println("");
+		System.err.println("Example: java -jar jannovar.jar download ucsc");
+		System.err.println("         java -jar jannovar.jar annotate variants.vcf");
+		System.err.println("         java -jar jannovar.jar annotate-pos chr1:12345C>A");
+		System.err.println("");
 	}
 
-	/**
-	 * Perform downloading and serialization of transcript data.
-	 *
-	 * @return true if the user instructed us to download data, the program hast to stop afterwards
-	 *
-	 * @throws JannovarException
-	 *             on problems with parsing or serialization
-	 * @throws FileDownloadException
-	 *             on problems with file download
-	 */
-	boolean download() throws FileDownloadException, JannovarException {
-		if (!options.createUCSC && !options.createEnsembl && !options.createRefseq)
-			return false;
-		JannovarCommand cmd = new DownloadCommand(options);
-		cmd.run();
-		return true;
-	}
-
-	/**
-	 * Perform annotation of a VCF file.
-	 */
-	void annotateVCF() throws JannovarException {
-		JannovarCommand cmd = new AnnotateVCFCommand(options);
-		cmd.run();
-	}
-
-	/**
-	 * Perform annotation of one position.
-	 */
-	void annotatePosition() throws JannovarException {
-		JannovarCommand cmd = new AnnotatePositionCommand(options);
-		cmd.run();
-	}
 }

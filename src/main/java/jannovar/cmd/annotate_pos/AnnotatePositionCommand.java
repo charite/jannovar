@@ -6,10 +6,14 @@ import jannovar.annotation.VariantAnnotator;
 import jannovar.cmd.JannovarAnnotationCommand;
 import jannovar.common.ChromosomeMap;
 import jannovar.exception.AnnotationException;
+import jannovar.exception.CommandLineParsingException;
+import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.cli.ParseException;
 
 /**
  * Allows the annotation of a single position.
@@ -18,8 +22,8 @@ import java.util.regex.Pattern;
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
-	public AnnotatePositionCommand(JannovarOptions options) {
-		super(options);
+	public AnnotatePositionCommand(String argv[]) throws CommandLineParsingException, HelpRequestedException {
+		super(argv);
 	}
 
 	/**
@@ -30,6 +34,8 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	 */
 	@Override
 	public void run() throws JannovarException {
+		deserializeTranscriptDefinitionFile();
+
 		System.err.println("input: " + options.chromosomalChange);
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
 		Matcher mat = pat.matcher(options.chromosomalChange);
@@ -63,4 +69,16 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
 	}
+
+	@Override
+	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
+			HelpRequestedException {
+		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
+		try {
+			return parser.parse(argv);
+		} catch (ParseException e) {
+			throw new CommandLineParsingException(e.getMessage());
+		}
+	}
+
 }

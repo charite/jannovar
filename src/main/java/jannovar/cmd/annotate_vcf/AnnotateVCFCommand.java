@@ -4,10 +4,14 @@ import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 import jannovar.JannovarOptions;
 import jannovar.cmd.JannovarAnnotationCommand;
+import jannovar.exception.CommandLineParsingException;
+import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.cli.ParseException;
 
 /**
  * Run annotation steps (read in VCF, write out VCF or Jannovar file format).
@@ -15,8 +19,9 @@ import java.io.IOException;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class AnnotateVCFCommand extends JannovarAnnotationCommand {
-	public AnnotateVCFCommand(JannovarOptions options) {
-		super(options);
+
+	public AnnotateVCFCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
+		super(argv);
 	}
 
 	/**
@@ -28,11 +33,12 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 */
 	@Override
 	public void run() throws JannovarException {
-		if (!deserialize())
-			throw new JannovarException("You have to pass in a model file for deserialization.");
+		System.err.println("Deserializing transcripts...");
+		deserializeTranscriptDefinitionFile();
 
 		// initialize the VCF reader
-		VCFFileReader parser = new VCFFileReader(new File(this.options.VCFfilePath), false);
+		System.err.println("Annotating VCF...");
+		VCFFileReader parser = new VCFFileReader(new File(this.options.vcfFilePath), false);
 
 		AnnotatedVariantWriter writer = null;
 		try {
@@ -58,4 +64,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		// TODO(holtgrem): use logger
 		System.err.println("[INFO] Wrote annotations to \"" + writer.getOutFileName() + "\"");
 	}
+
+	@Override
+	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
+			HelpRequestedException {
+		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
+		try {
+			return parser.parse(argv);
+		} catch (ParseException e) { // TODO(holtgrem): do not translate?
+			throw new CommandLineParsingException(e.getMessage());
+		}
+	}
+
 }

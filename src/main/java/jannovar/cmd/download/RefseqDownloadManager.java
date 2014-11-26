@@ -9,6 +9,7 @@ import jannovar.io.FastaParser;
 import jannovar.io.RefSeqFastaParser;
 import jannovar.io.SerializationManager;
 import jannovar.reference.TranscriptModel;
+import jannovar.util.PathUtil;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class RefseqDownloadManager extends DownloadManager {
 		ArrayList<TranscriptModel> result = null;
 		// parse GFF/GTF
 		GFFparser gff = new GFFparser();
-		String path = options.dirPath + options.genomeRelease.getUCSCString(options.genomeRelease);
+		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
 			path += System.getProperty("file.separator");
 		switch (this.options.genomeRelease) {
@@ -58,7 +59,8 @@ public class RefseqDownloadManager extends DownloadManager {
 			break;
 		}
 		try {
-			result = gff.getTranscriptModelBuilder().buildTranscriptModels(options.onlyCuratedRefSeq);
+			result = gff.getTranscriptModelBuilder().buildTranscriptModels(
+					options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED);
 		} catch (InvalidAttributException e) {
 			throw new JannovarException(e.getMessage());
 		}
@@ -69,7 +71,7 @@ public class RefseqDownloadManager extends DownloadManager {
 		int after = result.size();
 		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
 		// before-after,before, after));
-		if (options.onlyCuratedRefSeq)
+		if (options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED)
 			System.err.println(String.format(
 					"[INFO] Found %d curated transcript models from Refseq GFF resource, %d of which had sequences",
 					before, after));
@@ -91,12 +93,14 @@ public class RefseqDownloadManager extends DownloadManager {
 	@Override
 	public void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException {
 		SerializationManager manager = new SerializationManager();
-		String combiStringRelease = options.onlyCuratedRefSeq ? "cur_"
+		boolean onlyCurated = (options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED);
+		String combiStringRelease = onlyCurated ? "cur_"
 				+ options.genomeRelease.getUCSCString(options.genomeRelease) : options.genomeRelease
 				.getUCSCString(options.genomeRelease);
 		System.err.println("[INFO] Serializing RefSeq data as "
-				+ String.format(options.dirPath + Constants.RefseqSerializationFileName, combiStringRelease));
-		manager.serializeKnownGeneList(
-				String.format(options.dirPath + Constants.RefseqSerializationFileName, combiStringRelease), lst);
+				+ String.format(PathUtil.join(options.downloadPath, Constants.RefseqSerializationFileName),
+						combiStringRelease));
+		manager.serializeKnownGeneList(String.format(
+				PathUtil.join(options.downloadPath, Constants.RefseqSerializationFileName), combiStringRelease), lst);
 	}
 }

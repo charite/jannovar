@@ -42,7 +42,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	@Override
 	public String getOutFileName() {
 		// build file name for output file
-		File f = new File(this.options.VCFfilePath);
+		File f = new File(this.options.vcfFilePath);
 		return f.getName() + ".jannovar";
 	}
 

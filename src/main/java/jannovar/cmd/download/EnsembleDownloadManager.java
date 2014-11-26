@@ -8,6 +8,7 @@ import jannovar.gff.GFFparser;
 import jannovar.io.EnsemblFastaParser;
 import jannovar.io.SerializationManager;
 import jannovar.reference.TranscriptModel;
+import jannovar.util.PathUtil;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ public class EnsembleDownloadManager extends DownloadManager {
 		ArrayList<TranscriptModel> result = null;
 		GFFparser gff = new GFFparser();
 		String path;
-		path = options.dirPath + options.genomeRelease.getUCSCString(options.genomeRelease);
+		path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
 			path += System.getProperty("file.separator");
 		switch (this.options.genomeRelease) {
@@ -90,11 +91,11 @@ public class EnsembleDownloadManager extends DownloadManager {
 	public void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException {
 		SerializationManager manager = new SerializationManager();
 		System.err.println("[INFO] Serializing Ensembl data as "
-				+ String.format(options.dirPath + Constants.EnsemblSerializationFileName,
+				+ String.format(PathUtil.join(options.downloadPath, Constants.EnsemblSerializationFileName),
 						options.genomeRelease.getUCSCString(options.genomeRelease)));
-		manager.serializeKnownGeneList(
-				String.format(options.dirPath + Constants.EnsemblSerializationFileName,
-						options.genomeRelease.getUCSCString(options.genomeRelease)), lst);
+		manager.serializeKnownGeneList(String.format(
+				PathUtil.join(options.downloadPath, Constants.EnsemblSerializationFileName),
+				options.genomeRelease.getUCSCString(options.genomeRelease)), lst);
 
 	}
 }

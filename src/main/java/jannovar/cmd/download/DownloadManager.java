@@ -8,6 +8,7 @@ import jannovar.io.TranscriptDataDownloader;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
+import jannovar.util.PathUtil;
 
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public abstract class DownloadManager {
 		for (TranscriptModel tm : input) {
 			TranscriptInfo transcript = new TranscriptInfo(tm);
 			int lenSum = 0;
-			for (GenomeInterval region: transcript.exonRegions)
+			for (GenomeInterval region : transcript.exonRegions)
 				lenSum += region.length();
 			if (lenSum > transcript.sequence.length()) {
 				System.err.println("WARNING: Inconsistent transcript length for " + transcript.accession
@@ -115,12 +116,13 @@ public abstract class DownloadManager {
 	 */
 	public final void downloadTranscriptFiles(int source, Release rel) throws FileDownloadException {
 		TranscriptDataDownloader downloader;
-		if (options.proxy != null && options.proxyPort != null) {
-			downloader = new TranscriptDataDownloader(options.dirPath
-					+ options.genomeRelease.getUCSCString(options.genomeRelease), options.proxy, options.proxyPort);
+		if (options.proxy != null) {
+			downloader = new TranscriptDataDownloader(PathUtil.join(options.downloadPath,
+					options.genomeRelease.getUCSCString(options.genomeRelease)), options.proxy.getHostText(), ""
+					+ options.proxy.getPort());
 		} else {
-			downloader = new TranscriptDataDownloader(options.dirPath
-					+ options.genomeRelease.getUCSCString(options.genomeRelease));
+			downloader = new TranscriptDataDownloader(PathUtil.join(options.downloadPath,
+					options.genomeRelease.getUCSCString(options.genomeRelease)));
 		}
 		downloader.downloadTranscriptFiles(source, rel);
 	}
