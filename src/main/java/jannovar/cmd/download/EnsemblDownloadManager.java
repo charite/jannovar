@@ -13,14 +13,14 @@ import jannovar.util.PathUtil;
 import java.util.ArrayList;
 
 /**
- * Class for downloading transcript data from Ensemble.
+ * Class for downloading transcript data from Ensembl.
  *
  * @author Peter Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class EnsembleDownloadManager extends DownloadManager {
+public class EnsemblDownloadManager extends DownloadManager {
 
-	EnsembleDownloadManager(JannovarOptions options) {
+	EnsemblDownloadManager(JannovarOptions options) {
 		super(options);
 	}
 
