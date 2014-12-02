@@ -16,7 +16,6 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
 
 // TODO(holtgrem): We could collect more than one variant type.
 // TODO(holtgrem): Handle case of start gain => ext
-// TODO(holtgrem): Extension without a stop codon should be "p.*327Rext*?".
 // TODO(holtgrem): Give intron number for intronic variants?
 
 /**
@@ -112,26 +111,33 @@ abstract class AnnotationBuilderHelper {
 			return buildIntergenicAnnotation();
 
 		if (changeInterval.length() == 0) {
-			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
 			GenomePosition pos = changeInterval.getGenomeBeginPos();
 			GenomePosition lPos = pos.shifted(-1);
-			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
-					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
-					|| (so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_SPLICING);
+			VariantType varType;
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+				varType = VariantType.ncRNA_SPLICE_DONOR;
+			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+				varType = VariantType.ncRNA_SPLICE_ACCEPTOR;
+			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				varType = VariantType.ncRNA_SPLICE_REGION;
 			else if (so.liesInExon(lPos) && so.liesInExon(pos))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_EXONIC);
+				varType = VariantType.ncRNA_EXONIC;
 			else
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_INTRONIC);
+				varType = VariantType.ncRNA_INTRONIC;
+			return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
 		} else {
-			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
-			if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
-					|| so.overlapsWithSpliceRegion(changeInterval))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_SPLICING);
+			VariantType varType;
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.ncRNA_SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.ncRNA_SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.ncRNA_SPLICE_REGION;
 			else if (so.overlapsWithExon(changeInterval))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_EXONIC);
+				varType = VariantType.ncRNA_EXONIC;
 			else
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.ncRNA_INTRONIC);
+				varType = VariantType.ncRNA_INTRONIC;
+			return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
 		}
 	}
 
@@ -139,56 +145,66 @@ abstract class AnnotationBuilderHelper {
 	 * @return intronic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntronicAnnotation() {
+		VariantType varType;
 		if (change.getGenomeInterval().length() == 0) {
-			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			GenomePosition lPos = pos.shifted(-1);
-			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
-					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
-					|| (so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+				varType = VariantType.SPLICE_DONOR;
+			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				varType = VariantType.SPLICE_REGION;
 			else
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.INTRONIC);
+				varType = VariantType.INTRONIC;
 		} else {
-			// TODO(holtgrem): Differentiate case of splice donor/acceptor/region variants
 			GenomeInterval changeInterval = change.getGenomeInterval();
-			if (so.overlapsWithSpliceDonorSite(changeInterval) || so.overlapsWithSpliceAcceptorSite(changeInterval)
-					|| so.overlapsWithSpliceRegion(changeInterval))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICE_REGION;
 			else
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.INTRONIC);
+				varType = VariantType.INTRONIC;
 		}
+		return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
 	}
 
 	/**
 	 * @return 3'/5' UTR anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUTRAnnotation() {
+		VariantType varType;
 		if (change.getGenomeInterval().length() == 0) {
-			// TODO(holtgrem): differentiate splicing cases further!
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			GenomePosition lPos = pos.shifted(-1);
-			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos))
-					|| (so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos))
-					|| (so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+				varType = VariantType.SPLICE_DONOR;
+			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
+				varType = VariantType.SPLICE_REGION;
 			else if (so.liesInFivePrimeUTR(lPos))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR5);
+				varType = VariantType.UTR5;
 			else
 				// so.liesInThreePrimeUTR(pos)
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR3);
+				varType = VariantType.UTR3;
 		} else {
-			// TODO(holtgrem): differentiate splicing cases further!
 			GenomeInterval changeInterval = change.getGenomeInterval();
-			if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
-					|| so.overlapsWithSpliceRegion(changeInterval))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.SPLICING);
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICE_REGION;
 			else if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR5);
+				varType = VariantType.UTR5;
 			else
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-				return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.UTR3);
+				varType = VariantType.UTR3;
 		}
+		return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
 	}
 
 	/**
@@ -220,8 +236,7 @@ abstract class AnnotationBuilderHelper {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("dist=%d", distance()),
-				VariantType.INTERGENIC);
+		return new Annotation(transcript.transcriptModel, String.format("dist=%d", distance()), VariantType.INTERGENIC);
 	}
 
 	/**

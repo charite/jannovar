@@ -191,14 +191,14 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6642116, PositionType.ZERO_BASED), "G", "TT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001anx.3:c.691-1delinsTT", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 
 		// exonic splicing
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6642117, PositionType.ZERO_BASED), "TGG",
 				"AA");
 		Annotation annotation2 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change2);
 		Assert.assertEquals("uc001anx.3:exon3:c.691_693delinsAA:p.Trp231Lysfs*23", annotation2.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation2.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation2.getVariantType());
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001anx.3:exon7:c.1225_1234delinsCCC:p.Cys409Profs*127",
 				annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -219,7 +219,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"GTT");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001anx.3:c.691-3_693delinsGTT:p.Trp231Val", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 
 		// deletion of three codons, insertion of one
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6642126, PositionType.ZERO_BASED),

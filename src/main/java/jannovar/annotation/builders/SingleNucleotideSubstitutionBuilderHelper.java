@@ -110,9 +110,12 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
 				protAnno = String.format("%sext*%d", protAnno, stopCodonPos - cdsPos.pos / 3);
 			}
-		} else if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
-				|| so.overlapsWithSpliceRegion(changeInterval)) {
-			varType = VariantType.SPLICING; // TODO(holtgrem): Differentiate between the three cases
+		} else if (so.overlapsWithSpliceDonorSite(changeInterval)) {
+			varType = VariantType.SPLICE_DONOR;
+		} else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
+			varType = VariantType.SPLICE_ACCEPTOR;
+		} else if (so.overlapsWithSpliceRegion(changeInterval)) {
+			varType = VariantType.SPLICE_REGION;
 		}
 
 		// Build the resulting Annotation.

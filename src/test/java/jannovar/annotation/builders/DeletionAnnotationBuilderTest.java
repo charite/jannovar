@@ -193,13 +193,13 @@ public class DeletionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6642116, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001anx.3:c.691-1del", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 
 		// exonic splicing
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6642117, PositionType.ZERO_BASED), "TGG", "");
 		Annotation annotation2 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change2);
 		Assert.assertEquals("uc001anx.3:exon3:c.691_693del:p.Trp231del", annotation2.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation2.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation2.getVariantType());
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class DeletionAnnotationBuilderTest {
 				"");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001anx.3:c.691-3_693del:p.Trp231del", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 
 		// deletion of three codons
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6642126, PositionType.ZERO_BASED),
@@ -603,7 +603,7 @@ public class DeletionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 7470288, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002ghm.3:exon8:c.1310del:p.Gly437Valfs*5", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -662,7 +662,7 @@ public class DeletionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 17, 61660894, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002jbc.4:exon6:c.560del:p.Gly187Valfs*23", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -788,7 +788,7 @@ public class DeletionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 44125966, PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001cjx.3:c.315-2del", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -805,7 +805,7 @@ public class DeletionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 17718673, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = DeletionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001bak.1:exon10:c.1027del:p.Val343Trpfs*33", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test

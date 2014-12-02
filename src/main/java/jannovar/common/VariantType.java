@@ -33,8 +33,8 @@ public enum VariantType {
 	/** variant located in an intron */
 	INTRONIC,
 	/**
-	 * Variant that leads to the subsitution of one amino acid (note this was earlier "NONYSYNONYMOUS" but the term name
-	 * was changed to conform with the terminology of the <a href="http://www.sequenceontology.org/">Sequence
+	 * Variant that leads to the substitution of one amino acid (note this was earlier "NONYSYNONYMOUS" but the term
+	 * name was changed to conform with the terminology of the <a href="http://www.sequenceontology.org/">Sequence
 	 * Ontology</a>).
 	 */
 	MISSENSE,
@@ -42,14 +42,22 @@ public enum VariantType {
 	ncRNA_EXONIC,
 	/** variant located in an intron of a noncoding RNA gene */
 	ncRNA_INTRONIC,
-	/** variant located in a splice site of a noncoding RNA gene */
-	ncRNA_SPLICING,
+	/** variant located in a splice donor region of a non-coding gene */
+	ncRNA_SPLICE_DONOR,
+	/** variant located in a splice donor region of a non-coding gene */
+	ncRNA_SPLICE_ACCEPTOR,
+	/** variant located in a splice donor region of a non-coding gene */
+	ncRNA_SPLICE_REGION,
 	/** deletion that does not result in a frameshift */
 	NON_FS_DELETION,
 	/** insertion that does not result in a frameshift */
 	NON_FS_INSERTION,
-	/** variant located in a splice site */
-	SPLICING,
+	/** variant located changing the 2 base region at the 5' end of an intron */
+	SPLICE_ACCEPTOR,
+	/** variant located changing the 2 base region at the 3' end of an intron */
+	SPLICE_DONOR,
+	/** variant either located in 1-3 bases of an exon or 3-8 bases of an intron */
+	SPLICE_REGION,
 	/** variant that induces a new stop codon (i.e., nonsense) */
 	STOPGAIN,
 	/** variant that alters and removes a wildtype stop codon */
@@ -112,7 +120,9 @@ public enum VariantType {
 		case MISSENSE:
 		case NON_FS_DELETION:
 		case NON_FS_INSERTION:
-		case SPLICING:
+		case SPLICE_DONOR:
+		case SPLICE_ACCEPTOR:
+		case SPLICE_REGION:
 		case STOPGAIN:
 		case STOPLOSS:
 		case FS_DUPLICATION:
@@ -124,7 +134,9 @@ public enum VariantType {
 		case SV_INVERSION:
 			return 1;
 		case ncRNA_EXONIC:
-		case ncRNA_SPLICING:
+		case ncRNA_SPLICE_DONOR:
+		case ncRNA_SPLICE_ACCEPTOR:
+		case ncRNA_SPLICE_REGION:
 			return 2;
 		case UTR3:
 			return 3;
@@ -170,9 +182,10 @@ public enum VariantType {
 	 */
 	public static VariantType[] getPrioritySortedList() {
 		VariantType[] vta = new VariantType[] { TRANSCRIPT_ABLATION, SV_DELETION, SV_INSERTION, SV_SUBSTITUTION,
-				SV_INVERSION, MISSENSE, STOPGAIN, SPLICING, FS_DELETION, FS_INSERTION, FS_SUBSTITUTION,
-				NON_FS_DELETION, NON_FS_INSERTION, NON_FS_SUBSTITUTION, STOPLOSS, FS_DUPLICATION, NON_FS_DUPLICATION,
-				START_LOSS, ncRNA_EXONIC, ncRNA_SPLICING, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM,
+				SV_INVERSION, MISSENSE, STOPGAIN, SPLICE_DONOR, SPLICE_ACCEPTOR, SPLICE_REGION, FS_DELETION,
+				FS_INSERTION, FS_SUBSTITUTION, NON_FS_DELETION, NON_FS_INSERTION, NON_FS_SUBSTITUTION, STOPLOSS,
+				FS_DUPLICATION, NON_FS_DUPLICATION, START_LOSS, ncRNA_EXONIC, ncRNA_SPLICE_DONOR,
+				ncRNA_SPLICE_ACCEPTOR, ncRNA_SPLICE_REGION, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM,
 				DOWNSTREAM, INTERGENIC, ERROR };
 		return vta;
 	}
@@ -200,8 +213,12 @@ public enum VariantType {
 			return "inframe deletion";
 		case NON_FS_INSERTION:
 			return "inframe insertion";
-		case SPLICING:
-			return "splicing";
+		case SPLICE_DONOR:
+			return "splice donor";
+		case SPLICE_ACCEPTOR:
+			return "splice acceptor";
+		case SPLICE_REGION:
+			return "splice region";
 		case STOPGAIN:
 			return "stopgain";
 		case STOPLOSS:
@@ -216,8 +233,12 @@ public enum VariantType {
 			return "ncRNA exonic";
 		case ncRNA_INTRONIC:
 			return "ncRNA intronic";
-		case ncRNA_SPLICING:
-			return "ncRNA splicing";
+		case ncRNA_SPLICE_ACCEPTOR:
+			return "ncRNA splice acceptor";
+		case ncRNA_SPLICE_DONOR:
+			return "ncRNA splice donor";
+		case ncRNA_SPLICE_REGION:
+			return "ncRNA splice region";
 		case UTR3:
 			return "UTR3";
 		case UTR5:
@@ -270,7 +291,11 @@ public enum VariantType {
 			return "inframe_deletion";
 		case NON_FS_INSERTION:
 			return "inframe_insertion";
-		case SPLICING:
+		case SPLICE_DONOR:
+			return "splice_donor_variant";
+		case SPLICE_ACCEPTOR:
+			return "splice_acceptor_variant";
+		case SPLICE_REGION:
 			return "splice_region_variant";
 		case STOPGAIN:
 			return "stop_gained";
@@ -286,7 +311,11 @@ public enum VariantType {
 			return "non_coding_exon_variant";
 		case ncRNA_INTRONIC:
 			return "non_coding_intron_variant";
-		case ncRNA_SPLICING:
+		case ncRNA_SPLICE_DONOR:
+			return "non_coding_splice_donor_variant";
+		case ncRNA_SPLICE_ACCEPTOR:
+			return "non_coding_splice_acceptor_variant";
+		case ncRNA_SPLICE_REGION:
 			return "non_coding_splice_region_variant";
 		case UTR3:
 			return "3_prime_UTR_variant";
@@ -340,7 +369,11 @@ public enum VariantType {
 			return "SO:0001822";
 		case NON_FS_INSERTION:
 			return "SO:0001821";
-		case SPLICING:
+		case SPLICE_DONOR:
+			return "SO:0001575";
+		case SPLICE_ACCEPTOR:
+			return "SO:0001574";
+		case SPLICE_REGION:
 			return "SO:0001630";
 		case STOPGAIN:
 			return "SO:0001587";
@@ -356,8 +389,12 @@ public enum VariantType {
 			return "SO:0001792";
 		case ncRNA_INTRONIC:
 			return "noncoding RNA intronic";
-		case ncRNA_SPLICING:
-			return "noncoding RNA splicing";
+		case ncRNA_SPLICE_DONOR:
+			return "noncoding RNA splice donor";
+		case ncRNA_SPLICE_ACCEPTOR:
+			return "noncoding RNA splice acceptor";
+		case ncRNA_SPLICE_REGION:
+			return "noncoding RNA splice region";
 		case UTR3:
 			return "SO:0001624";
 		case UTR5:

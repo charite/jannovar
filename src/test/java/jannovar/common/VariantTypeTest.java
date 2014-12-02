@@ -13,7 +13,7 @@ public class VariantTypeTest {
 	@Test
 	public void testNumberOfConstants() {
 		int n = VariantType.class.getEnumConstants().length;
-		Assert.assertEquals(29, n);
+		Assert.assertEquals(33, n);
 	}
 
 	@Test
@@ -67,7 +67,11 @@ public class VariantTypeTest {
 
 	@Test
 	public void testPriorityLevel8() {
-		int n = VariantType.priorityLevel(VariantType.SPLICING);
+		int n = VariantType.priorityLevel(VariantType.SPLICE_DONOR);
+		Assert.assertEquals(1, n);
+		n = VariantType.priorityLevel(VariantType.SPLICE_DONOR);
+		Assert.assertEquals(1, n);
+		n = VariantType.priorityLevel(VariantType.SPLICE_REGION);
 		Assert.assertEquals(1, n);
 	}
 
@@ -109,7 +113,11 @@ public class VariantTypeTest {
 
 	@Test
 	public void testPriorityLevel16() {
-		int n = VariantType.priorityLevel(VariantType.ncRNA_SPLICING);
+		int n = VariantType.priorityLevel(VariantType.ncRNA_SPLICE_DONOR);
+		Assert.assertEquals(2, n);
+		n = VariantType.priorityLevel(VariantType.ncRNA_SPLICE_ACCEPTOR);
+		Assert.assertEquals(2, n);
+		n = VariantType.priorityLevel(VariantType.ncRNA_SPLICE_REGION);
 		Assert.assertEquals(2, n);
 	}
 
@@ -223,7 +231,7 @@ public class VariantTypeTest {
 
 	@Test
 	public void testSize() {
-		Assert.assertEquals(29, VariantType.size());
+		Assert.assertEquals(33, VariantType.size());
 	}
 
 	@Test
@@ -236,7 +244,9 @@ public class VariantTypeTest {
 		Assert.assertEquals("missense", VariantType.MISSENSE.toDisplayString());
 		Assert.assertEquals("inframe deletion", VariantType.NON_FS_DELETION.toDisplayString());
 		Assert.assertEquals("inframe insertion", VariantType.NON_FS_INSERTION.toDisplayString());
-		Assert.assertEquals("splicing", VariantType.SPLICING.toDisplayString());
+		Assert.assertEquals("splice donor", VariantType.SPLICE_DONOR.toDisplayString());
+		Assert.assertEquals("splice acceptor", VariantType.SPLICE_ACCEPTOR.toDisplayString());
+		Assert.assertEquals("splice region", VariantType.SPLICE_REGION.toDisplayString());
 		Assert.assertEquals("stopgain", VariantType.STOPGAIN.toDisplayString());
 		Assert.assertEquals("stoploss", VariantType.STOPLOSS.toDisplayString());
 		Assert.assertEquals("inframe duplication", VariantType.NON_FS_DUPLICATION.toDisplayString());
@@ -244,7 +254,9 @@ public class VariantTypeTest {
 		Assert.assertEquals("startloss", VariantType.START_LOSS.toDisplayString());
 		Assert.assertEquals("ncRNA exonic", VariantType.ncRNA_EXONIC.toDisplayString());
 		Assert.assertEquals("ncRNA intronic", VariantType.ncRNA_INTRONIC.toDisplayString());
-		Assert.assertEquals("ncRNA splicing", VariantType.ncRNA_SPLICING.toDisplayString());
+		Assert.assertEquals("ncRNA splice donor", VariantType.ncRNA_SPLICE_DONOR.toDisplayString());
+		Assert.assertEquals("ncRNA splice acceptor", VariantType.ncRNA_SPLICE_ACCEPTOR.toDisplayString());
+		Assert.assertEquals("ncRNA splice region", VariantType.ncRNA_SPLICE_REGION.toDisplayString());
 		Assert.assertEquals("UTR3", VariantType.UTR3.toDisplayString());
 		Assert.assertEquals("UTR5", VariantType.UTR5.toDisplayString());
 		Assert.assertEquals("synonymous", VariantType.SYNONYMOUS.toDisplayString());
@@ -269,7 +281,9 @@ public class VariantTypeTest {
 		Assert.assertEquals("missense_variant", VariantType.MISSENSE.toSequenceOntologyTerm());
 		Assert.assertEquals("inframe_deletion", VariantType.NON_FS_DELETION.toSequenceOntologyTerm());
 		Assert.assertEquals("inframe_insertion", VariantType.NON_FS_INSERTION.toSequenceOntologyTerm());
-		Assert.assertEquals("splice_region_variant", VariantType.SPLICING.toSequenceOntologyTerm());
+		Assert.assertEquals("splice_donor_variant", VariantType.SPLICE_DONOR.toSequenceOntologyTerm());
+		Assert.assertEquals("splice_acceptor_variant", VariantType.SPLICE_ACCEPTOR.toSequenceOntologyTerm());
+		Assert.assertEquals("splice_region_variant", VariantType.SPLICE_REGION.toSequenceOntologyTerm());
 		Assert.assertEquals("stop_gained", VariantType.STOPGAIN.toSequenceOntologyTerm());
 		Assert.assertEquals("stop_lost", VariantType.STOPLOSS.toSequenceOntologyTerm());
 		Assert.assertEquals("inframe_duplication", VariantType.NON_FS_DUPLICATION.toSequenceOntologyTerm());
@@ -277,7 +291,11 @@ public class VariantTypeTest {
 		Assert.assertEquals("start_lost", VariantType.START_LOSS.toSequenceOntologyTerm());
 		Assert.assertEquals("non_coding_exon_variant", VariantType.ncRNA_EXONIC.toSequenceOntologyTerm());
 		Assert.assertEquals("non_coding_intron_variant", VariantType.ncRNA_INTRONIC.toSequenceOntologyTerm());
-		Assert.assertEquals("non_coding_splice_region_variant", VariantType.ncRNA_SPLICING.toSequenceOntologyTerm());
+		Assert.assertEquals("non_coding_splice_donor_variant", VariantType.ncRNA_SPLICE_DONOR.toSequenceOntologyTerm());
+		Assert.assertEquals("non_coding_splice_acceptor_variant",
+				VariantType.ncRNA_SPLICE_ACCEPTOR.toSequenceOntologyTerm());
+		Assert.assertEquals("non_coding_splice_region_variant",
+				VariantType.ncRNA_SPLICE_REGION.toSequenceOntologyTerm());
 		Assert.assertEquals("3_prime_UTR_variant", VariantType.UTR3.toSequenceOntologyTerm());
 		Assert.assertEquals("5_prime_UTR_variant", VariantType.UTR5.toSequenceOntologyTerm());
 		Assert.assertEquals("synonymous_variant", VariantType.SYNONYMOUS.toSequenceOntologyTerm());
@@ -302,7 +320,9 @@ public class VariantTypeTest {
 		Assert.assertEquals("SO:0001583", VariantType.MISSENSE.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001822", VariantType.NON_FS_DELETION.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001821", VariantType.NON_FS_INSERTION.toSequenceOntologyID());
-		Assert.assertEquals("SO:0001630", VariantType.SPLICING.toSequenceOntologyID());
+		Assert.assertEquals("SO:0001575", VariantType.SPLICE_DONOR.toSequenceOntologyID());
+		Assert.assertEquals("SO:0001574", VariantType.SPLICE_ACCEPTOR.toSequenceOntologyID());
+		Assert.assertEquals("SO:0001630", VariantType.SPLICE_REGION.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001587", VariantType.STOPGAIN.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001578", VariantType.STOPLOSS.toSequenceOntologyID());
 		Assert.assertEquals("nonframeshift duplication", VariantType.NON_FS_DUPLICATION.toSequenceOntologyID());
@@ -310,7 +330,9 @@ public class VariantTypeTest {
 		Assert.assertEquals("start loss", VariantType.START_LOSS.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001792", VariantType.ncRNA_EXONIC.toSequenceOntologyID());
 		Assert.assertEquals("noncoding RNA intronic", VariantType.ncRNA_INTRONIC.toSequenceOntologyID());
-		Assert.assertEquals("noncoding RNA splicing", VariantType.ncRNA_SPLICING.toSequenceOntologyID());
+		Assert.assertEquals("noncoding RNA splice donor", VariantType.ncRNA_SPLICE_DONOR.toSequenceOntologyID());
+		Assert.assertEquals("noncoding RNA splice acceptor", VariantType.ncRNA_SPLICE_ACCEPTOR.toSequenceOntologyID());
+		Assert.assertEquals("noncoding RNA splice region", VariantType.ncRNA_SPLICE_REGION.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001624", VariantType.UTR3.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001623", VariantType.UTR5.toSequenceOntologyID());
 		Assert.assertEquals("SO:0001819", VariantType.SYNONYMOUS.toSequenceOntologyID());

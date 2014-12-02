@@ -148,7 +148,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640196, PositionType.ZERO_BASED), "G", "A");
 		Annotation anno = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change);
 		Assert.assertEquals("uc001anx.3:c.-70+1G>A", anno.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, anno.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, anno.getVariantType());
 	}
 
 	@Test
@@ -156,7 +156,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640599, PositionType.ZERO_BASED), "G", "A");
 		Annotation anno = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change);
 		Assert.assertEquals("uc001anx.3:c.-69-1G>A", anno.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, anno.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, anno.getVariantType());
 	}
 
 	@Test
@@ -165,12 +165,12 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6640602, PositionType.ZERO_BASED), "G", "A");
 		Annotation anno = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change);
 		Assert.assertEquals("uc001anx.3:exon2:c.-67G>A", anno.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, anno.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, anno.getVariantType());
 		// in CDS
 		GenomeChange change2 = new GenomeChange(new GenomePosition('+', 1, 6647537, PositionType.ZERO_BASED), "T", "G");
 		Annotation anno2 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change2);
 		Assert.assertEquals("uc001anx.3:exon7:c.1225T>G:p.Cys409Gly", anno2.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, anno2.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, anno2.getVariantType());
 	}
 
 	@Test
@@ -485,7 +485,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc010zdo.2:c.1134+1T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType()); // is also stoploss
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType()); // is also stoploss
 	}
 
 	@Test
@@ -542,7 +542,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc011mzv.2:exon12:c.1060A>T:p.Thr354Ser", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -560,7 +560,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc010nvg.2:exon11:c.1090A>T:p.Thr364Ser", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -578,7 +578,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc011mzw.2:exon11:c.1099A>T:p.Thr367Ser", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -596,7 +596,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc004fmp.2:exon11:c.1150A>T:p.Thr384Ser", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -854,7 +854,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 21573854, PositionType.ZERO_BASED), "G", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001bem.2:exon9:c.974C>T:p.Thr325Ile", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1012,7 +1012,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc011mzv.2:exon12:c.1060A>T:p.Thr354Ser", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1615,7 +1615,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 67242086, PositionType.ZERO_BASED), "G", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001dcv.3:c.336+1G>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1632,7 +1632,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 5935161, PositionType.ZERO_BASED), "A", "T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001alq.2:c.2818-2T>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1648,7 +1648,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 35917392, PositionType.ZERO_BASED), "C", "T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001byw.3:c.225-1G>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1666,7 +1666,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fkt.3:c.6224-1G>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1684,7 +1684,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fkt.3:c.6332+2T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1702,7 +1702,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fkt.3:c.6332+3A>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1720,7 +1720,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fkt.3:exon10:c.6332G>C:p.Arg2111Thr", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1738,7 +1738,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"AGG");
 		Annotation annotation1 = BlockSubstitutionAnnotationBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fkt.3:c.6332+2_6332+4delinsCCT", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1756,7 +1756,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"C");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fpu.3:c.1121+2T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1774,7 +1774,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"C");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001fro.4:c.1239+2T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1792,7 +1792,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001hjn.3:c.234+2T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1810,7 +1810,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"C");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc010pyu.2:c.135+1T>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1827,7 +1827,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 42871264, PositionType.ZERO_BASED), "A", "G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002rso.1:c.214-2A>G", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1844,7 +1844,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 85571471, PositionType.ZERO_BASED), "C", "G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc010ysm.2:c.1074-1G>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1861,7 +1861,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 2, 85662247, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002spq.3:c.168+2T>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -1879,7 +1879,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc002tfo.4:c.337-1G>A", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_ACCEPTOR, annotation1.getVariantType());
 	}
 
 	@Test
@@ -2296,7 +2296,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 				"T");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001rrr.3:c.136-7C>T", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	/**
@@ -2550,7 +2550,7 @@ public class SingleNucleotideSubstitutionBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition('+', 1, 6204221, PositionType.ZERO_BASED), "C", "G");
 		Annotation annotation1 = SingleNucleotideSubstitutionBuilder.buildAnnotation(infoForward, change1);
 		Assert.assertEquals("uc001amb.2:c.1803-7G>C", annotation1.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, annotation1.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, annotation1.getVariantType());
 	}
 
 	@Test

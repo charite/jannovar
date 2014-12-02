@@ -131,9 +131,12 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// The variant is a non-frameshift deletion. The deletion could span more than one exon and thus also affect
 			// a splice donor or acceptor site, delete a stop codon. Further, the variant might also be a splice region
 			// variant but that a lower priority than a non-frameshift deletion.
-			if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
-					|| so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICING; // TODO(holtgrem): refine which of both cases we have
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICE_REGION;
 			else if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varType = VariantType.STOPLOSS;
 			else
@@ -162,9 +165,12 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			// The variant is a frameshift deletion. The deletion could span more than one exon and thus also affect a
 			// splice donor or acceptor site. Further, the variant might also be stop lost or splice region variant but
 			// that has a lower priority than a frameshift deletion.
-			if (so.overlapsWithSpliceAcceptorSite(changeInterval) || so.overlapsWithSpliceDonorSite(changeInterval)
-					|| so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICING; // TODO(holtgrem): refine which of the cases we have
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICE_REGION;
 			else if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varType = VariantType.STOPLOSS;
 			else

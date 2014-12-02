@@ -110,7 +110,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition('+', 1, 6642117, PositionType.ZERO_BASED), "", "ACT");
 		Annotation anno = InsertionAnnotationBuilder.buildAnnotation(infoForward, change);
 		Assert.assertEquals("uc001anx.3:exon3:c.691-1_691insACT", anno.getVariantAnnotation());
-		Assert.assertEquals(VariantType.SPLICING, anno.getVariantType());
+		Assert.assertEquals(VariantType.SPLICE_REGION, anno.getVariantType());
 	}
 
 	@Test

@@ -4,6 +4,8 @@ import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 
+// TODO(holtgrem): Move
+
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  *
@@ -297,8 +299,11 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	 * @return true if we have a missense, PTC, splicing, indel variant, or a synonymous change.
 	 */
 	public boolean isCodingExonic() {
+		// TODO(holtgrem): Are the first three ones correct?
 		switch (this.varType) {
-		case SPLICING:
+		case SPLICE_DONOR:
+		case SPLICE_ACCEPTOR:
+		case SPLICE_REGION:
 		case STOPLOSS:
 		case STOPGAIN:
 		case SYNONYMOUS:

@@ -304,7 +304,9 @@ class AnnotationCollector implements Constants {
 		this.annotationLst.add(ann);
 		if (ann.getVariantType() == VariantType.SYNONYMOUS) {
 			this.hasSynonymous = true;
-		} else if (ann.getVariantType() == VariantType.SPLICING) {
+		} else if (ann.getVariantType() == VariantType.SPLICE_DONOR
+				|| ann.getVariantType() == VariantType.SPLICE_ACCEPTOR
+				|| ann.getVariantType() == VariantType.SPLICE_REGION) {
 			this.hasSplicing = true;
 		} else {
 			this.hasExonic = true;
