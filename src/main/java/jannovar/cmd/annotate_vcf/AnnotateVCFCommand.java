@@ -61,8 +61,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			throw new JannovarException(e.getMessage());
 		}
 
-		// TODO(holtgrem): use logger
-		System.err.println("[INFO] Wrote annotations to \"" + writer.getOutFileName() + "\"");
+		System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
 	}
 
 	@Override

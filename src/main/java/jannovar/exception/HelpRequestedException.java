@@ -1,14 +1,19 @@
 package jannovar.exception;
 
+/**
+ * Thrown when the user requests help.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ */
 public class HelpRequestedException extends JannovarException {
 
+	private static final long serialVersionUID = 1L;
+
 	public HelpRequestedException() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public HelpRequestedException(String msg) {
 		super(msg);
-		// TODO Auto-generated constructor stub
 	}
 
 }

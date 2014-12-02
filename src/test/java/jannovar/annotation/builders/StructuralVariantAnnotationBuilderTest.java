@@ -20,8 +20,6 @@ import org.junit.Test;
  */
 public class StructuralVariantAnnotationBuilderTest {
 
-	// TODO(holtgrem): The shared models/infos could go into a *Test super class.
-
 	/** transcript on forward strand */
 	TranscriptModel transcriptForward;
 	/** transcript on reverse strand */
