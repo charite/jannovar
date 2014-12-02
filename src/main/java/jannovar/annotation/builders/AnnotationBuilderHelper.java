@@ -59,6 +59,8 @@ abstract class AnnotationBuilderHelper {
 	 * @param change
 	 */
 	AnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
+		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
+		change = change.withStrand(transcript.getStrand());
 		this.transcript = transcript;
 
 		this.so = new TranscriptSequenceOntologyDecorator(transcript);

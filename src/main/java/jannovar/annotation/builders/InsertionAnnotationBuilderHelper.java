@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
+import jannovar.exception.InvalidGenomeChange;
 import jannovar.exception.ProjectionException;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
@@ -16,12 +17,37 @@ import jannovar.reference.TranscriptPosition;
 import jannovar.util.Translator;
 
 /**
- * Helper class that allows to remove various copy and paste code in {@link InsertionAnnotationBuilder}.
+ * Builds {@link Annotation} objects for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
+ *
+ * <h2>Duplications</h2>
+ *
+ * In the case of insertions that are duplications are annotated as such. These insertions must be in the coding region,
+ * such that the duplication can be recognized from the transcript sequence.
+ *
+ * <h2>Shifting of Insertions</h2>
+ *
+ * In the case of ambiguities, the HGVS specification requires the variant to be shifted towards the 3' end of the
+ * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site. The
+ * function detects this and forwards to the {@link UTRAnnotationBuilder}.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 
-	InsertionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build the annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build the annotation with
+	 * @throws InvalidGenomeChange
+	 *             if <code>change</code> did not describe an insertion
+	 */
+	InsertionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
+
+		// Guard against invalid genome change.
+		if (change.ref.length() != 0 || change.alt.length() == 0)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe an insertion.");
 	}
 
 	@Override
@@ -126,8 +152,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 
 			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
-			this.insertPos = projector.projectGenomeToCDSPosition(change.pos).withPositionType(
-					PositionType.ZERO_BASED);
+			this.insertPos = projector.projectGenomeToCDSPosition(change.pos).withPositionType(PositionType.ZERO_BASED);
 
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.

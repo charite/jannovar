@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
+import jannovar.exception.InvalidGenomeChange;
 import jannovar.exception.ProjectionException;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
@@ -13,7 +14,7 @@ import jannovar.reference.TranscriptSequenceDecorator;
 import jannovar.util.Translator;
 
 /**
- * Helper class for the {@link SingleNucleotideSubstitutionBuilder}.
+ * Builds {@link Annotation} objects for the SNV {@link GenomeChange}s in the given {@link TranscriptInfo}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -26,8 +27,22 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 	 */
 	private String hgvsSNVOverride = null;
 
-	SingleNucleotideSubstitutionBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build the annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build the annotation with
+	 * @throws InvalidGenomeChange
+	 *             if <code>change</code> did not describe a deletion
+	 */
+
+	SingleNucleotideSubstitutionBuilderHelper(TranscriptInfo transcript, GenomeChange change)
+			throws InvalidGenomeChange {
 		super(transcript, change);
+
+		// guard against invalid genome change
+		if (change.ref.length() != 1 || change.alt.length() != 1)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
 	}
 
 	@Override

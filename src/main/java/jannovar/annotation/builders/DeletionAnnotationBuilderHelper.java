@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
+import jannovar.exception.InvalidGenomeChange;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
@@ -12,14 +13,26 @@ import jannovar.reference.TranscriptInfo;
 import jannovar.util.Translator;
 
 /**
- * Helper class for the {@link DeletionAnnotationBuilder}.
+ * Builds {@link Annotation} objects for the deletion {@link GenomeChange}s in the given {@link TranscriptInfo}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 
-	DeletionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build the annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build the annotation with
+	 * @throws InvalidGenomeChange
+	 *             if <code>change</code> did not describe a deletion
+	 */
+	DeletionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
+
+		// Guard against invalid genome change.
+		if (change.ref.length() == 0 || change.alt.length() != 0)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a deletion.");
 	}
 
 	@Override

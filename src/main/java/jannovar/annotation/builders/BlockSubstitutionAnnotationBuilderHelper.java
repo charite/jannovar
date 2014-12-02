@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
+import jannovar.exception.InvalidGenomeChange;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
@@ -14,13 +15,28 @@ import jannovar.util.Translator;
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
 /**
- * Helper class for the {@link BlockSubstitutionAnnotationBuilder}.
+ * Builds {@link Annotation} objects for the block substitution {@link GenomeChange} in the given {@link TranscriptInfo}
+ * .
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderHelper {
-	public BlockSubstitutionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
+
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build the annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build the annotation with
+	 * @throws InvalidGenomeChange
+	 *             if <code>change</code> did not describe a block substitution
+	 */
+	public BlockSubstitutionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change)
+			throws InvalidGenomeChange {
 		super(transcript, change);
+
+		// Guard against invalid genome change.
+		if (change.ref.length() == 0 || change.alt.length() == 0)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a block substitution.");
 	}
 
 	@Override

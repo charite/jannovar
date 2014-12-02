@@ -34,14 +34,14 @@ public class AnnotationBuilderDispatcher {
 
 		switch (change.getType()) {
 		case SNV:
-			return SingleNucleotideSubstitutionBuilder.buildAnnotation(transcript, change);
+			return new SingleNucleotideSubstitutionBuilderHelper(transcript, change).build();
 		case DELETION:
-			return DeletionAnnotationBuilder.buildAnnotation(transcript, change);
+			return new DeletionAnnotationBuilderHelper(transcript, change).build();
 		case INSERTION:
-			return InsertionAnnotationBuilder.buildAnnotation(transcript, change);
+			return new InsertionAnnotationBuilderHelper(transcript, change).build();
 		case BLOCK_SUBSTITUTION:
 		default:
-			return BlockSubstitutionAnnotationBuilder.buildAnnotation(transcript, change);
+			return new BlockSubstitutionAnnotationBuilderHelper(transcript, change).build();
 		}
 	}
 
