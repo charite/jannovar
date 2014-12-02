@@ -1,9 +1,5 @@
-package jannovar.annotation.builders;
+package jannovar.reference;
 
-import jannovar.reference.GenomeChange;
-import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptPosition;
 
 /**
  * Helper code for the normalization of {@link GenomeChange}s.
