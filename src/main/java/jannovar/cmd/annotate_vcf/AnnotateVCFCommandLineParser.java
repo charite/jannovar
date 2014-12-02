@@ -39,7 +39,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		if (cmd.hasOption("vcf"))
 			result.vcfFilePath = cmd.getOptionValue("vcf");
 		else
-			throw new ParseException("You must specify a VCF input vial via -v/--vcf!");
+			throw new ParseException("You must specify a VCF input vial via -V /--vcf!");
 
 		result.jannovarFormat = cmd.hasOption("jannovar");
 		result.showAll = cmd.hasOption("showall");
