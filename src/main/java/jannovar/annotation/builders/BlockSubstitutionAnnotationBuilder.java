@@ -20,7 +20,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderHelper {
+public class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript
@@ -30,7 +30,7 @@ public class BlockSubstitutionAnnotationBuilderHelper extends AnnotationBuilderH
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a block substitution
 	 */
-	public BlockSubstitutionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change)
+	public BlockSubstitutionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change)
 			throws InvalidGenomeChange {
 		super(transcript, change);
 

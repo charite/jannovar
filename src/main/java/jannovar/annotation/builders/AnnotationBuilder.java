@@ -30,7 +30,7 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-abstract class AnnotationBuilderHelper {
+abstract class AnnotationBuilder {
 	/** transcript to annotate. */
 	protected final TranscriptInfo transcript;
 	/** genome change to use for annotation */
@@ -58,7 +58,7 @@ abstract class AnnotationBuilderHelper {
 	 * @param transcript
 	 * @param change
 	 */
-	AnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) {
+	AnnotationBuilder(TranscriptInfo transcript, GenomeChange change) {
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
 		change = change.withStrand(transcript.getStrand());
 		this.transcript = transcript;

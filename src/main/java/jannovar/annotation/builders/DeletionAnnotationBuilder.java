@@ -17,7 +17,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
+class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript
@@ -27,7 +27,7 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a deletion
 	 */
-	DeletionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+	DeletionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// Guard against invalid genome change.
@@ -108,7 +108,7 @@ class DeletionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
-			this.delFrameShift = DeletionAnnotationBuilderHelper.this.change.ref.length() % 3;
+			this.delFrameShift = DeletionAnnotationBuilder.this.change.ref.length() % 3;
 
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())

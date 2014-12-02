@@ -32,7 +32,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
+class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript
@@ -42,7 +42,7 @@ class InsertionAnnotationBuilderHelper extends AnnotationBuilderHelper {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe an insertion
 	 */
-	InsertionAnnotationBuilderHelper(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+	InsertionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// Guard against invalid genome change.

@@ -18,7 +18,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper {
+class SNVAnnotationBuilder extends AnnotationBuilder {
 	/**
 	 * Override substitution annotation string in the case of coding change.
 	 *
@@ -36,7 +36,7 @@ class SingleNucleotideSubstitutionBuilderHelper extends AnnotationBuilderHelper 
 	 *             if <code>change</code> did not describe a deletion
 	 */
 
-	SingleNucleotideSubstitutionBuilderHelper(TranscriptInfo transcript, GenomeChange change)
+	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change)
 			throws InvalidGenomeChange {
 		super(transcript, change);
 
