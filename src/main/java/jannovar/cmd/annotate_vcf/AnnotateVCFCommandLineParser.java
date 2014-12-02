@@ -63,9 +63,9 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 	private void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Command: annotate\n\n")
 				.append("Use this command to annotate a VCF file.\n\n")
-				.append("Usage: java -jar jannovar.jar annotate [options] -d <database> -V <IN.VCF>\n\n").toString();
+				.append("Usage: java -jar jannovar.jar annotate [options] -D <database> -V <IN.VCF>\n\n").toString();
 		final String FOOTER = new StringBuilder().append(
-				"\n\nExample: java -jar jannovar.jar annotate -d ucsc IN.vcf\n\n").toString();
+				"\n\nExample: java -jar jannovar.jar annotate -D ucsc IN.vcf\n\n").toString();
 
 		System.err.print(HEADER);
 

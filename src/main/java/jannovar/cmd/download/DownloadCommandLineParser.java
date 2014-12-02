@@ -120,7 +120,10 @@ public class DownloadCommandLineParser {
 		final String HEADER = new StringBuilder().append("Jannovar Command: download\n\n")
 				.append("Use this command to download a transcript database and build a serialization file \n")
 				.append("of it. This file can then be later loaded by the annotation commands.\n\n")
-				.append("Usage: java -jar jannovar.jar download [options] <database>\n\n").toString();
+				.append("Usage: java -jar jannovar.jar download [options] <database>\n\n")
+				.append("The following values of <download> are supported: refseq, refseq_curated, ensembl, \n")
+				.append("and ucsc.\n\n").toString();
+
 		final String FOOTER = new StringBuilder().append("\n\nExample: java -jar jannovar.jar download ucsc\n\n")
 				.toString();
 
