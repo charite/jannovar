@@ -2,7 +2,6 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
-import jannovar.exception.InvalidGenomeChange;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
@@ -15,8 +14,13 @@ import jannovar.reference.TranscriptInfo;
  */
 public class StructuralVariantAnnotationBuilder {
 
+	/** the transcript to build the annotation for */
+	private final TranscriptInfo transcript;
+	/** the genome change to build the annotation for */
+	private final GenomeChange change;
+
 	/**
-	 * Returns a {@link Annotation} for the structural variant {@link GenomeChange} in the given {@link TranscriptInfo}.
+	 * Initialize the builder for the structural variant {@link GenomeChange} in the given {@link TranscriptInfo}.
 	 *
 	 * @param transcript
 	 *            {@link TranscriptInfo} for the transcript to compute the affection for, use <code>null</code> for
@@ -24,20 +28,13 @@ public class StructuralVariantAnnotationBuilder {
 	 * @param change
 	 *            {@link GenomeChange} to compute the annotation for, must describe a structural variant affecting
 	 *            <code>transcript</code>
-	 * @return annotation for the given change to the given transcript
-	 *
-	 * @throws InvalidGenomeChange
-	 *             if there are problems with the position or variant in <code>change</code>
 	 */
-	public static Annotation buildAnnotation(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
-		// Project the change to the forward strand.
-		change = change.withStrand('+');
-
-		// Forward everything to the helper.
-		return getStructuralVariantAnnotation(transcript, change);
+	public StructuralVariantAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) {
+		this.transcript = transcript;
+		this.change = change;
 	}
 
-	private static Annotation getStructuralVariantAnnotation(TranscriptInfo transcript, GenomeChange change) {
+	public Annotation build() {
 		// Obtain shortcuts.
 		GenomePosition position = change.pos.withPositionType(PositionType.ZERO_BASED);
 		final int beginPos = position.pos;

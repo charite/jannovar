@@ -122,7 +122,7 @@ public class VariantAnnotator {
 	}
 
 	private void buildSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws AnnotationException {
-		annovarFactory.addStructuralAnnotation(StructuralVariantAnnotationBuilder.buildAnnotation(transcript, change));
+		annovarFactory.addStructuralAnnotation(new StructuralVariantAnnotationBuilder(transcript, change).build());
 	}
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
