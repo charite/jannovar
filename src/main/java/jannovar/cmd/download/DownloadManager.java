@@ -52,6 +52,8 @@ public abstract class DownloadManager {
 	 * <ul>
 	 * <li>The sum of the exon lengths is longer than the sequence length. This happens for UCSC transcript uc003lkb.4,
 	 * for example which has one exon of length 7kb but only has 3.5kb of RNA.</li>
+	 * <li>The CDS sequence starts before the transcript sequence. This happens for RefSeq in the case of 5' UTR
+	 * truncation.</li>
 	 * </ul>
 	 *
 	 * @param downloadAndBuildTranscriptModelList
@@ -63,23 +65,48 @@ public abstract class DownloadManager {
 		int numWarnings = 0;
 		for (TranscriptModel tm : input) {
 			TranscriptInfo transcript = new TranscriptInfo(tm);
-			int lenSum = 0;
-			for (GenomeInterval region : transcript.exonRegions)
-				lenSum += region.length();
-			if (lenSum > transcript.sequence.length()) {
-				System.err.println("WARNING: Inconsistent transcript length for " + transcript.accession
-						+ "! The length as indicated by transcript record is " + lenSum
-						+ " and the length of the RNA sequence is " + transcript.sequence.length()
-						+ " The record will be ignored.");
+
+			boolean exonLengthSumOK = !hasInconsistentExonLengthSum(transcript);
+			boolean cdsStartOK = !hasInconsistentCDSStart(transcript);
+
+			if (!exonLengthSumOK || !cdsStartOK)
 				numWarnings += 1;
-			} else {
+			else
 				result.add(tm);
-			}
 		}
 
 		System.err.println("Number of warnings: " + numWarnings);
 
 		return result;
+	}
+
+	/**
+	 * @return <code>true</code> if the exon length sum indicate a greater length than the underlying sequence
+	 */
+	private boolean hasInconsistentExonLengthSum(TranscriptInfo transcript) {
+		int lenSum = 0;
+		for (GenomeInterval region : transcript.exonRegions)
+			lenSum += region.length();
+		if (lenSum > transcript.sequence.length()) {
+			System.err.println("WARNING: Inconsistent transcript length for " + transcript.accession
+					+ "! The length as indicated by transcript record is " + lenSum
+					+ " and the length of the RNA sequence is " + transcript.sequence.length()
+					+ " The record will be ignored.");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @return <code>true</code> if the CDS starts before the transcript start
+	 */
+	private boolean hasInconsistentCDSStart(TranscriptInfo transcript) {
+		if (transcript.cdsRegion.getGenomeBeginPos().isLt(transcript.txRegion.getGenomeBeginPos()))	{
+			System.err.println("WARNING: CDS begins left of the transcript for " + transcript.accession
+					+ " The record will be ignored.");
+			return true;
+		}
+		return false;
 	}
 
 	/**
