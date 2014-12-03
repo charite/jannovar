@@ -126,9 +126,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				}
 			}
 
-			// add the annotations to the INFO field
-			vc.getCommonInfo().putAttribute("EFFECT", effect);
-			vc.getCommonInfo().putAttribute("HGVS", annotation);
+			// add the annotations to the INFO field (third arg allows overwriting)
+			vc.getCommonInfo().putAttribute("EFFECT", effect, true);
+			vc.getCommonInfo().putAttribute("HGVS", annotation, true);
 		}
 
 		// Write out variantContext to out.

@@ -52,7 +52,9 @@ public abstract class DownloadManager {
 	 * <ul>
 	 * <li>The sum of the exon lengths is longer than the sequence length. This happens for UCSC transcript uc003lkb.4,
 	 * for example which has one exon of length 7kb but only has 3.5kb of RNA.</li>
-	 * <li>The CDS sequence starts before the transcript sequence. This happens for RefSeq in the case of 5' UTR
+	 * <li>The CDS sequence starts before the transcript sequence. This happens for ENSEMBL in the case of 5' UTR
+	 * truncation.</li>
+	 * <li>Likewise, the CDS sequence ends after the transcript sequence. This happens for ENSEMBL in the case of 3' UTR
 	 * truncation.</li>
 	 * </ul>
 	 *
@@ -68,8 +70,9 @@ public abstract class DownloadManager {
 
 			boolean exonLengthSumOK = !hasInconsistentExonLengthSum(transcript);
 			boolean cdsStartOK = !hasInconsistentCDSStart(transcript);
+			boolean cdsEndOK = !hasInconsistentCDSEnd(transcript);
 
-			if (!exonLengthSumOK || !cdsStartOK)
+			if (!exonLengthSumOK || !cdsStartOK || !cdsEndOK)
 				numWarnings += 1;
 			else
 				result.add(tm);
@@ -101,7 +104,19 @@ public abstract class DownloadManager {
 	 * @return <code>true</code> if the CDS starts before the transcript start
 	 */
 	private boolean hasInconsistentCDSStart(TranscriptInfo transcript) {
-		if (transcript.cdsRegion.getGenomeBeginPos().isLt(transcript.txRegion.getGenomeBeginPos()))	{
+		if (transcript.cdsRegion.getGenomeEndPos().isGt(transcript.txRegion.getGenomeEndPos())) {
+			System.err.println("WARNING: CDS ends right of the transcript for " + transcript.accession
+					+ " The record will be ignored.");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @return <code>true</code> if the CDS ends after the transcript start
+	 */
+	private boolean hasInconsistentCDSEnd(TranscriptInfo transcript) {
+		if (transcript.cdsRegion.getGenomeBeginPos().isLt(transcript.txRegion.getGenomeBeginPos())) {
 			System.err.println("WARNING: CDS begins left of the transcript for " + transcript.accession
 					+ " The record will be ignored.");
 			return true;

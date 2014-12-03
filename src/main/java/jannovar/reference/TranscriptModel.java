@@ -504,7 +504,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 				}
 			}
 			if (CDSlength > 0 && cdsEnd < exonStarts[i]) {
-				System.err.println("Impossible parsing scenario for " + this.accession + " (CDSend is less than exon start)");
+				System.err.println("Impossible parsing scenario for " + this.accession
+						+ " (CDSend is smaller than exon start)");
 				System.exit(1);
 			} else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
 				CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
