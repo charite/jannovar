@@ -84,13 +84,14 @@ public abstract class DownloadManager {
 	}
 
 	/**
-	 * @return <code>true</code> if the exon length sum indicate a greater length than the underlying sequence
+	 * @return <code>true</code> if transcript is coding and the exon length sum indicate a greater length than the
+	 *         underlying sequence
 	 */
 	private boolean hasInconsistentExonLengthSum(TranscriptInfo transcript) {
 		int lenSum = 0;
 		for (GenomeInterval region : transcript.exonRegions)
 			lenSum += region.length();
-		if (lenSum > transcript.sequence.length()) {
+		if (transcript.isCoding() && lenSum > transcript.sequence.length()) {
 			System.err.println("WARNING: Inconsistent transcript length for " + transcript.accession
 					+ "! The length as indicated by transcript record is " + lenSum
 					+ " and the length of the RNA sequence is " + transcript.sequence.length()
