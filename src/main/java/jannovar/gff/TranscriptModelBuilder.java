@@ -113,8 +113,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 				int cdsEnd = rna.getCdsEnd();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsEndInExon = cdsEndInExon || (cdsEnd >= rna.getExonStarts()[i] && cdsEnd <= rna.getExonEnds()[i]);
-				if (!cdsStartInExon || !cdsEndInExon)
-				{
+				if (!cdsStartInExon || !cdsEndInExon) {
 					System.err.println("WARNING: transcript " + rna.id + " appears to be 3'/5' truncated. Ignoring.");
 					continue;
 				}
