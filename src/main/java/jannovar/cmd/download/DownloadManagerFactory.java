@@ -20,7 +20,8 @@ public class DownloadManagerFactory {
 			return new UCSCDownloadManager(options);
 		else if (options.dataSource == JannovarOptions.DataSource.ENSEMBL)
 			return new EnsemblDownloadManager(options);
-		else if (options.dataSource == JannovarOptions.DataSource.REFSEQ)
+		else if (options.dataSource == JannovarOptions.DataSource.REFSEQ
+				|| options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED)
 			return new RefseqDownloadManager(options);
 		else
 			return null;
