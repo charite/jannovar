@@ -4,6 +4,8 @@ import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 
+// TODO(holtgrem): Move
+
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  *
@@ -98,8 +100,10 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	public Annotation(TranscriptModel tmdl, String annotation, VariantType type) {
 		this.varType = type;
 		this.variantAnnotation = annotation;
-		this.geneSymbol = tmdl == null ? null : tmdl.getGeneSymbol();
-		this.entrezGeneID = tmdl == null ? null : tmdl.getGeneID();
+		if (tmdl != null) {
+			this.geneSymbol = tmdl.getGeneSymbol();
+			this.entrezGeneID = tmdl.getGeneID();
+		}
 	}
 
 	/**
@@ -295,8 +299,11 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	 * @return true if we have a missense, PTC, splicing, indel variant, or a synonymous change.
 	 */
 	public boolean isCodingExonic() {
+		// TODO(holtgrem): Are the first three ones correct?
 		switch (this.varType) {
-		case SPLICING:
+		case SPLICE_DONOR:
+		case SPLICE_ACCEPTOR:
+		case SPLICE_REGION:
 		case STOPLOSS:
 		case STOPGAIN:
 		case SYNONYMOUS:

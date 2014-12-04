@@ -1,12 +1,11 @@
 package jannovar.util;
 
-import jannovar.exception.AnnotationException;
-
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This singleton class helps to translate DNA sequences.
- * 
+ *
  * @author Peter N Robinson, Marten Jäger
  * @version 0.05 (Dec. 12, 2012)
  */
@@ -17,6 +16,10 @@ public class Translator {
 	private HashMap<String, String> codon3 = null;
 	/** Map of IUPAC ambiguity codes. */
 	private HashMap<String, String> iupac = null;
+	/** Map of short AA codes to long ones */
+	private HashMap<String, String> shortToLong = null;
+	/** Map of long AA codes to short ones */
+	private HashMap<String, String> longToShort = null;
 	// /** Sequences of known gene mRNAs. Key, a UCSC identified such as uc010nxr.1; value: A cDNA sequence in
 	// lower case letters, such as "cttgccgtcag..." */
 	// private HashMap<String,String> fasta=null;
@@ -32,7 +35,7 @@ public class Translator {
 
 	/**
 	 * Factory method to get reference to Translator.
-	 * 
+	 *
 	 * @return {@link Translator} singleton
 	 */
 	static public Translator getTranslator() {
@@ -48,13 +51,40 @@ public class Translator {
 	 * Currently, there is no need to translate more than a single codon. However, some portions of the code are trying
 	 * to translate DNA that is not a multiple of 3 nt long (from indel code). Therefore, we will translate as much as
 	 * possible here. This may need refactoring in the future. (TODO).
-	 * 
+	 *
 	 * @param dnaseq
 	 *            A DNA sequence that is to be translated
 	 * @return corresonding aminoacid sequence
-	 * @throws jannovar.exception.AnnotationException
 	 */
-	public String translateDNA(String dnaseq) throws AnnotationException {
+	public String translateDNA(String dnaseq) {
+		return translateDNA(dnaseq, this.codon1);
+	}
+
+	// same as above but returning 3-letter AA codes
+	public String translateDNA3(String dnaseq) {
+		return translateDNA(dnaseq, this.codon3);
+	}
+
+	/**
+	 * @param shortAASeq
+	 * @return String with long versions of short AA seqs.
+	 */
+	public String toLong(String shortAASeq) {
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < shortAASeq.length(); ++i)
+			result.append(shortToLong.get(shortAASeq.substring(i, i + 1)));
+		return result.toString();
+	}
+
+	/**
+	 * @param shortAASeq
+	 * @return String with long versions of short AA char.
+	 */
+	public String toLong(char c) {
+		return shortToLong.get("" + c);
+	}
+
+	private String translateDNA(String dnaseq, HashMap<String, String> codonTable) {
 		StringBuilder aminoAcidSeq = new StringBuilder();
 		int len = dnaseq.length();
 		if (!(len % 3 == 0)) {
@@ -66,13 +96,13 @@ public class Translator {
 		}
 		for (int i = 0; i < len; i += 3) {
 			String nt3 = dnaseq.substring(i, i + 3);
-			String aa = this.codon1.get(nt3);
+			String aa = codonTable.get(nt3);
 			if (aa == null) {
 				if (nt3.contains("N")) {
 					aa = "X";
 				} else {
 					/*
-					  String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"", 
+					  String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"",
 								   nt3, dnaseq);
 								   throw new AnnotationException(err);
 					*/
@@ -92,6 +122,8 @@ public class Translator {
 		codon1 = new HashMap<String, String>();
 		codon3 = new HashMap<String, String>();
 		iupac = new HashMap<String, String>();
+		shortToLong = new HashMap<String, String>();
+		longToShort = new HashMap<String, String>();
 
 		codon1.put("AAA", "K");
 		codon1.put("AAC", "N");
@@ -240,5 +272,33 @@ public class Translator {
 		iupac.put("V", "ACG");
 		iupac.put("W", "AT");
 		iupac.put("Y", "CT");
+
+		longToShort.put("Ala", "A");
+		longToShort.put("Cys", "C");
+		longToShort.put("Asp", "D");
+		longToShort.put("Glu", "E");
+		longToShort.put("Phe", "F");
+		longToShort.put("Gly", "G");
+		longToShort.put("His", "H");
+		longToShort.put("Ile", "I");
+		longToShort.put("Lys", "K");
+		longToShort.put("Leu", "L");
+		longToShort.put("Met", "M");
+		longToShort.put("Asn", "N");
+		longToShort.put("Pyl", "O");
+		longToShort.put("Pro", "P");
+		longToShort.put("Gln", "Q");
+		longToShort.put("Arg", "R");
+		longToShort.put("Ser", "S");
+		longToShort.put("Thr", "T");
+		longToShort.put("Sec", "U");
+		longToShort.put("Val", "V");
+		longToShort.put("Trp", "W");
+		longToShort.put("Tyr", "Y");
+		longToShort.put("*", "*");
+
+		for (Map.Entry<String, String> entry : longToShort.entrySet())
+			shortToLong.put(entry.getValue(), entry.getKey());
+		shortToLong.put("*", "*");
 	}
 }

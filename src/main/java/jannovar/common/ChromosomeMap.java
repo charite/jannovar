@@ -1,25 +1,55 @@
 /**
- * 
+ *
  */
 package jannovar.common;
 
 import java.util.HashMap;
 
 /**
- * This is a map for all currently known mappings used in the GTF/GFF files from
- * various databases for the chromosomes of the reference assembly.<br>
+ * This is a map for all currently known mappings used in the GTF/GFF files from various databases for the chromosomes
+ * of the reference assembly.<br>
  * Version 0.1 contains current mappings (2013-06-17) for mouse and human from
  * <UL>
  * <LI>UCSC (hg19,mm9,mm10)
  * <LI>NCBI (GRCh37.p10,GRCm38.p1)
  * <LI>Ensembl (GRCh37.71,GRCm38.71)
  * </UL>
- * 
+ *
  * @author mjaeger
  * @version 0.1
  */
 @SuppressWarnings("serial")
 public interface ChromosomeMap extends Constants {
+
+	HashMap<Byte, Integer> chromosomLength = new HashMap<Byte, Integer>() {
+		{
+			put((byte) 1, 249250621);
+			put((byte) 2, 243199373);
+			put((byte) 3, 198022430);
+			put((byte) 4, 191154276);
+			put((byte) 5, 180915260);
+			put((byte) 6, 171115067);
+			put((byte) 7, 159138663);
+			put((byte) 8, 146364022);
+			put((byte) 9, 141213431);
+			put((byte) 10, 135534747);
+			put((byte) 11, 135006516);
+			put((byte) 12, 133851895);
+			put((byte) 13, 115169878);
+			put((byte) 14, 107349540);
+			put((byte) 15, 102531392);
+			put((byte) 16, 90354753);
+			put((byte) 17, 81195210);
+			put((byte) 18, 78077248);
+			put((byte) 19, 59128983);
+			put((byte) 20, 63025520);
+			put((byte) 21, 48129895);
+			put((byte) 22, 51304566);
+			put(X_CHROMOSOME, 155270560);
+			put(Y_CHROMOSOME, 59373566);
+			put(M_CHROMOSOME, 16571);
+		}
+	};
 
 	HashMap<String, Byte> identifier2chromosom = new HashMap<String, Byte>() {
 		{

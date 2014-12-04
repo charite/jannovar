@@ -1,27 +1,13 @@
 package jannovar;
 
 /** Command line functions from apache */
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
-import jannovar.CommandLineParser.HelpRequestedException;
-import jannovar.annotation.AnnotationList;
-import jannovar.annotation.VariantAnnotator;
-import jannovar.common.ChromosomeMap;
-import jannovar.exception.AnnotationException;
-import jannovar.exception.FileDownloadException;
+import jannovar.cmd.JannovarCommand;
+import jannovar.cmd.annotate_pos.AnnotatePositionCommand;
+import jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
+import jannovar.cmd.download.DownloadCommand;
+import jannovar.exception.CommandLineParsingException;
+import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
-import jannovar.io.SerializationManager;
-import jannovar.reference.Chromosome;
-import jannovar.reference.TranscriptModel;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.cli.ParseException;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
@@ -79,220 +65,64 @@ import org.apache.commons.cli.ParseException;
  * @version 0.33 (29 December, 2013)
  */
 public class Jannovar {
-	/** Map of Chromosomes, used in the annotation. */
-	private HashMap<Byte, Chromosome> chromosomeMap = null;
-
 	/** Configuration for the Jannovar program. */
 	JannovarOptions options = null;
 
 	public static void main(String argv[]) {
-		// Create Jannovar object, this includes parsing the command line.
-		Jannovar anno = null;
-		try {
-			anno = new Jannovar(argv);
-		} catch (ParseException e1) {
-			System.exit(1); // something went wrong, return 1
-		} catch (HelpRequestedException e1) {
-			return;  // help requested and printed, return 0
-		}
-
-		// Option 1: download transcript files and serialize
-		try {
-			if (anno.download())
-				return;  // stop after downloading
-		} catch (FileDownloadException e) {
-			System.err.println("[ERROR] Error while attempting to parse transcript definition files.");
-			System.err.println("[ERROR] " + e.toString());
-			System.err.println("[ERROR] A common error is the failure to set the network proxy (see tutorial).");
-			System.exit(1);
-		} catch (JannovarException e) {
-			System.err.println("[ERROR] Error while attempting to parse transcript definition files.");
-			System.err.println("[ERROR] " + e.toString());
-			System.err.println("[ERROR] A common error is the failure to set the network proxy (see tutorial).");
+		if (argv.length == 0) {
+			// No arguments, print top level help and exit.
+			printTopLevelHelp();
 			System.exit(1);
 		}
 
-		// Option 2/3, Step 1: deserialize data, if any, required for annotation of VCF or creating annotation file
+		// Create the corresponding command.
+		JannovarCommand cmd = null;
 		try {
-			if (!anno.deserialize())
-			{
-				System.err.println("[INFO] You need to pass a file to deserialize for annotation.");
-				System.exit(1);
-			}
-		} catch (JannovarException je) {
-			System.err.println("[ERROR] Could not deserialize UCSC data: " + je.toString());
-			System.exit(1);
-		}
-
-		// Option 2, Step 2: perform VCF annotation or create annotation file
-		if (anno.options.hasVCFfile()) {
-			try {
-				anno.annotateVCF(); // annotate VCF or create Jannovar output file
-				return;
-			} catch (JannovarException je) {
-				System.err.println("[ERROR] Could not annotate VCF data: " + je.toString());
-				System.exit(1);
-			}
-		}
-
-		// Option 3, Step 2: output chromosomal change at the given position
-		if (anno.options.chromosomalChange == null) {
-			System.err.println("[ERROR] No VCF file found and no chromosomal position and variation was found");
-			System.exit(1);
-		}
-		try {
-			anno.annotatePosition();
-		} catch (JannovarException je) {
-			System.err.println("[ERROR] Could not annotate input data: " + anno.options.chromosomalChange);
-			System.exit(1);
-		}
-	}
-
-	/**
-	 * The constructor parses the command-line arguments.
-	 *
-	 * @param argv
-	 *            the arguments passed through the command
-	 * @throws HelpRequestedException
-	 *             if help was requested
-	 * @throws ParseException
-	 *             if there was a problem parsing the command line.
-	 */
-	public Jannovar(String argv[]) throws ParseException, HelpRequestedException {
-		this.options = new CommandLineParser().parseCommandLine(argv);
-	}
-
-	/**
-	 * Perform downloading and serialization of transcript data.
-	 *
-	 * @return true if the user instructed us to download data, the program hast to stop afterwards
-	 *
-	 * @throws JannovarException
-	 *             on problems with parsing or serialization
-	 * @throws FileDownloadException
-	 *             on problems with file download
-	 */
-	boolean download() throws FileDownloadException, JannovarException {
-		DownloadManager manager = DownloadManagerFactory.build(options);
-		if (manager == null)
-			return false;
-		manager.run();
-		return true;
-	}
-
-	/**
-	 * Perform deserialization of transcript data.
-	 *
-	 * @return true if the user gave a path to serialized data that was then serialized
-	 * @throws JannovarException
-	 *             on deserialization problems
-	 */
-	boolean deserialize() throws JannovarException {
-		if (!options.deserialize())
-			return false;
-		deserializeTranscriptDefinitionFile();
-		return true;
-	}
-
-	/**
-	 * THis function will simply annotate given chromosomal position with HGVS compliant output e.g. chr1:909238G>C -->
-	 * PLEKHN1:NM_032129.2:c.1460G>C,p.(Arg487Pro)
-	 *
-	 * @throws AnnotationException
-	 */
-	private void annotatePosition() throws AnnotationException {
-		System.err.println("input: " + options.chromosomalChange);
-		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
-		Matcher mat = pat.matcher(options.chromosomalChange);
-
-		if (!mat.matches() | mat.groupCount() != 4) {
-			System.err
-					.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
-			System.exit(3);
-		}
-
-		byte chr = ChromosomeMap.identifier2chromosom.get(mat.group(1));
-		int pos = Integer.parseInt(mat.group(2));
-		String ref = mat.group(3);
-		String alt = mat.group(4);
-
-		VariantAnnotator annotator = new VariantAnnotator(chromosomeMap);
-		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
-		if (anno == null) {
-			String e = String.format("No annotations found for variant %s", options.chromosomalChange);
-			throw new AnnotationException(e);
-		}
-		String annotation;
-		String effect;
-		if (options.showAll) {
-			annotation = anno.getAllTranscriptAnnotations();
-			effect = anno.getAllTranscriptVariantEffects();
-		} else {
-			annotation = anno.getSingleTranscriptAnnotation();
-			effect = anno.getVariantType().toString();
-		}
-
-		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
-	}
-
-	/**
-	 * This function inputs a VCF file, and prints the annotated version thereof to a file (name of the original file
-	 * with the suffix .jannovar).
-	 *
-	 * @throws jannovar.exception.JannovarException
-	 */
-	public void annotateVCF() throws JannovarException {
-		// initialize the VCF reader
-		VCFFileReader parser = new VCFFileReader(new File(this.options.VCFfilePath), false);
-
-		AnnotatedVariantWriter writer = null;
-		try {
-			// construct the variant writer
-			if (this.options.jannovarFormat)
-				writer = new AnnotatedJannovarWriter(chromosomeMap, options);
+			if (argv[0].equals("download"))
+				cmd = new DownloadCommand(argv);
+			else if (argv[0].equals("annotate"))
+				cmd = new AnnotateVCFCommand(argv);
+			else if (argv[0].equals("annotate-pos"))
+				cmd = new AnnotatePositionCommand(argv);
 			else
-				writer = new AnnotatedVCFWriter(parser, chromosomeMap, options);
-
-			// annotate and write out all variants
-			for (VariantContext vc : parser)
-				writer.put(vc);
-
-			// close parser writer again
-			parser.close();
-			writer.close();
-		} catch (IOException e) {
-			// convert exception to JannovarException and throw, writer can only be null here
-			parser.close();
-			throw new JannovarException(e.getMessage());
+				System.err.println("unrecognized command " + argv[0]);
+		} catch (CommandLineParsingException e) {
+			System.err.println("problem with parsing command line options: " + e.getMessage());
+		} catch (HelpRequestedException e) {
+			return; // no error, user wanted help
 		}
 
-		// TODO(holtgrem): use logger
-		System.err.println("[INFO] Wrote annotations to \"" + writer.getOutFileName() + "\"");
+		// Stop if no command could be created.
+		if (cmd == null)
+			System.exit(1);
+
+		// Execute the command.
+		try {
+			cmd.run();
+		} catch (JannovarException e) {
+			System.err.println("ERROR: " + e.getMessage());
+			System.exit(1);
+		}
 	}
 
 	/**
-	 * To run Jannovar, the user must pass a transcript definition file with the -D flag. This can be one of the files
-	 * ucsc.ser, ensembl.ser, or refseq.ser (or a comparable file) containing a serialized version of the
-	 * TranscriptModel objects created to contain info about the transcript definitions (exon positions etc.) extracted
-	 * from UCSC, Ensembl, or Refseq and necessary for annotation.
-	 *
-	 * @throws JannovarException
+	 * Print top level help (without any command).
 	 */
-	public void deserializeTranscriptDefinitionFile() throws JannovarException {
-		ArrayList<TranscriptModel> kgList;
-		SerializationManager manager = new SerializationManager();
-		kgList = manager.deserializeKnownGeneList(this.options.serializedFile);
-		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
-	}
-
-	/**
-	 * A simple printout of the chromosome map for debugging purposes.
-	 */
-	public void debugShowChromosomeMap() {
-		for (Byte c : chromosomeMap.keySet()) {
-			Chromosome chromo = chromosomeMap.get(c);
-			System.out.println("Chrom. " + c + ": " + chromo.getNumberOfGenes() + " genes");
-		}
+	private static void printTopLevelHelp() {
+		System.err.println("Program: jannovar (functional annotation of VCF files)");
+		System.err.println("Version: 0.10");
+		System.err.println("Contact: Peter N Robinson <peter.robinson@charite.de>");
+		System.err.println("");
+		System.err.println("Usage: java -jar jannovar.jar <command> [options]");
+		System.err.println("");
+		System.err.println("Command: download      download transcript database");
+		System.err.println("         annotate      functional annotation of VCF files");
+		System.err.println("         annotate-pos  functional annotation of genomic change");
+		System.err.println("");
+		System.err.println("Example: java -jar jannovar.jar download ucsc");
+		System.err.println("         java -jar jannovar.jar annotate -D ucsc_hg19.ser variants.vcf");
+		System.err.println("         java -jar jannovar.jar annotate-pos -D ucsc_hg19.ser 'chr1:12345C>A'");
+		System.err.println("");
 	}
 
 }

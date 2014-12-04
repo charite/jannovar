@@ -32,9 +32,9 @@
 			<version>1.118</version>
 		</dependency>
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.3-1102-jdbc41</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
 		</dependency>
 	</dependencies>
 
@@ -62,7 +62,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9</version>
-				<!-- Uncomment this to get the Javadoc to show all members <configuration>
+				<!-- Uncomment this to get the Javadoc to show all members <configuration> 
 					<show>private</show> </configuration> -->
 			</plugin>
 
@@ -72,7 +72,7 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.2.201409121644</version>
 				<executions>
-					<!-- Prepares the property pointing to the JaCoCo runtime agent which
+					<!-- Prepares the property pointing to the JaCoCo runtime agent which 
 						is passed as VM argument when Maven the Surefire plugin is executed. -->
 					<execution>
 						<id>pre-unit-test</id>
@@ -80,7 +80,7 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-					<!-- Ensures that the code coverage report for unit tests is created
+					<!-- Ensures that the code coverage report for unit tests is created 
 						after unit tests have been run. -->
 					<execution>
 						<id>post-unit-test</id>

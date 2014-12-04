@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package jannovar.gff;
 
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * This is the builder for the {@link TranscriptModel}s from GFF- files. It is feed with {@link Feature}s and builds up
  * Genemodels with the
- * 
+ *
  * @author mjaeger
  * @version 0.3 (08 August, 2014)
  */
@@ -60,7 +60,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	/**
 	 * Generates all possible {@link TranscriptModel}s from the given {@link Feature}s. If mapRna2Geneid is not null and
 	 * contains appropriate values a mapping to the corresponding Entrez ids is stored.
-	 * 
+	 *
 	 * @return {@link ArrayList} with generated {@link TranscriptModel}s
 	 * @throws InvalidAttributException
 	 */
@@ -71,7 +71,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	/**
 	 * Generates all possible {@link TranscriptModel}s from the given {@link Feature}s. If mapRna2Geneid is not null and
 	 * contains appropriate values a mapping to the corresponding Entrez ids is stored.
-	 * 
+	 *
 	 * @param useOnlyCurated
 	 *            should only curated transcript be processed (RefSeq only)
 	 * @return {@link ArrayList} with generated {@link TranscriptModel}s
@@ -100,6 +100,23 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 				model.setStrand(rna.strand ? '+' : '-');
 				model.setTranscriptionStart(rna.getTxStart());
 				model.setTranscriptionEnd(rna.getTxEnd());
+
+				// Check whether the corrected CDS start position returned from getCdsStart() is within an exon and do
+				// the same for the CDS end position. The correction in these methods can lead to inconsistent positions
+				// in the case of 3' and 5' UTR truncation.
+				boolean cdsStartInExon = false;
+				int cdsStart = rna.getCdsStart();
+				for (int i = 0; i < rna.getExonStarts().length; ++i)
+					cdsStartInExon = cdsStartInExon
+							|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
+				boolean cdsEndInExon = false;
+				int cdsEnd = rna.getCdsEnd();
+				for (int i = 0; i < rna.getExonStarts().length; ++i)
+					cdsEndInExon = cdsEndInExon || (cdsEnd >= rna.getExonStarts()[i] && cdsEnd <= rna.getExonEnds()[i]);
+				if (!cdsStartInExon || !cdsEndInExon) {
+					System.err.println("WARNING: transcript " + rna.id + " appears to be 3'/5' truncated. Ignoring.");
+					continue;
+				}
 				model.setCdsStart(rna.getCdsStart());
 				model.setCdsEnd(rna.getCdsEnd());
 				model.setExonCount((byte) rna.exons.size());
@@ -118,7 +135,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 	/**
 	 * Adds a new Feature to the internal {@link TranscriptModelBuilder}.
-	 * 
+	 *
 	 * @param feature
 	 * @throws InvalidAttributException
 	 * @throws FeatureFormatException
@@ -151,7 +168,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 * This method will process a {@link Feature} with the {@link FeatureType} mRNA or transcript. These are only
 	 * present in the GFF3 vers3 file format, not in version 2 or GTF files.<br>
 	 * Process the 1. get gene and
-	 * 
+	 *
 	 * @param feature
 	 * @throws InvalidAttributException
 	 */
@@ -191,7 +208,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 	/**
 	 * Processes a {@link Feature} of type CDS or EXON
-	 * 
+	 *
 	 * @param feature
 	 */
 	private void processSubregion(Feature feature) {
@@ -217,13 +234,15 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		// System.out.println(curGeneID);
 		// if the gene is not known yet --> add
 		if (!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID, curGeneName, identifier2chromosom.get(feature.sequence_id), feature.strand));
+			genes.put(curGeneID, new Gene(curGeneID, curGeneName, identifier2chromosom.get(feature.sequence_id),
+					feature.strand));
 		// get Gene
 		curGene = genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, identifier2chromosom.get(feature.sequence_id), feature.strand));
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID,
+					identifier2chromosom.get(feature.sequence_id), feature.strand));
 		}
 		// get RNA
 		curRna = curGene.rnas.get(curRnaID);
@@ -270,7 +289,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 * This method will process a {@link Feature} with the {@link FeatureType} gene. These are only present in the GFF3
 	 * vers3 file format, not in GTF files.<br>
 	 * Process the
-	 * 
+	 *
 	 * @param feature
 	 */
 	private void processGene(Feature feature) {
@@ -301,7 +320,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 * <UL>
 	 * <LI>GeneID - this is corresponding the EntrezGene/LocalLink ID
 	 * </UL>
-	 * 
+	 *
 	 * @param xrefs
 	 */
 	private void extractXreferences(String xrefs) {
@@ -323,7 +342,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 * This is the implementaion for the Subregions like Exons and CDS. The Comparator now only checks the chromosom and
 	 * start and stop. This will be fine until there occurs a subregion with the same location but on the other strand.
 	 * TODO add strand specificity to the comparator
-	 * 
+	 *
 	 * @author mjaeger
 	 * @version 0.1
 	 */
@@ -372,6 +391,11 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 					return 1;
 			}
 		}
+
+		/** @return length of the region */
+		public int length() {
+			return end - start + 1;
+		}
 	}
 
 	private class Transcript extends GFFstruct {
@@ -399,7 +423,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 		/**
 		 * Returns the accending ordered start positions of the exons.
-		 * 
+		 *
 		 * @return exons start indices (1-based, including)
 		 */
 		public int[] getExonStarts() {
@@ -414,7 +438,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 		/**
 		 * Returns the accending ordert end positions of the exons.
-		 * 
+		 *
 		 * @return exons end indices (1-based, including)
 		 */
 		public int[] getExonEnds() {
@@ -429,7 +453,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 		/**
 		 * Returns the smallest exon start.
-		 * 
+		 *
 		 * @return transcription start index (1-based, including)
 		 */
 		int getTxStart() {
@@ -442,7 +466,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 		/**
 		 * Returns the highest exon end index.
-		 * 
+		 *
 		 * @return transcription end index (1-based, including)
 		 */
 		int getTxEnd() {
@@ -456,7 +480,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		/**
 		 * Returns the highest cds start index.<br>
 		 * The index can be extended when the phase of the CDS feature contains an offset.
-		 * 
+		 *
 		 * @return translation start index (1-based, including)
 		 */
 		int getCdsStart() {
@@ -466,6 +490,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 						cdsStart = cds.start;
 						if (cds.strand) {
 							cdsStart -= (3 - cds.frame) % 3;
+						} else {
+							cdsStart -= 3 - ((cds.length() - cds.frame) % 3);
 						}
 					}
 			if (cdsStart == Integer.MAX_VALUE)
@@ -476,7 +502,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		/**
 		 * Returns the highest cds end index.<br>
 		 * The index can be extended when the phase of the CDS feature contains an offset.
-		 * 
+		 *
 		 * @return translation end index (1-based, including)
 		 */
 		int getCdsEnd() {
@@ -484,7 +510,9 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 				for (GFFstruct cds : cdss)
 					if (cdsEnd < cds.end) {
 						cdsEnd = cds.end;
-						if (!cds.strand) {
+						if (cds.strand) {
+							cdsEnd += 3 - ((cds.length() - cds.frame) % 3);
+						} else {
 							cdsEnd += (3 - cds.frame) % 3;
 						}
 					}
@@ -523,7 +551,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 		@Override
 		public String toString() {
-			return String.format("id: %s\tname: %s\tchr: %s\tstrand: %b\tnexons: %d\tnrna: %d", id, name, chromosom, strand, exons.size(), rnas.size());
+			return String.format("id: %s\tname: %s\tchr: %s\tstrand: %b\tnexons: %d\tnrna: %d", id, name, chromosom,
+					strand, exons.size(), rnas.size());
 		}
 
 	}

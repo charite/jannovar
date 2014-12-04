@@ -13,9 +13,9 @@ import java.net.URLConnection;
 
 /**
  * This class downloads the four files we need to generate TranscriptModel objects from the UCSC server.
- * 
+ *
  * @version 0.02 (10 July, 2013)
- * @author Peter Robinsin
+ * @author Peter Robinson
  */
 public class UCSCDownloader implements Constants {
 
@@ -26,7 +26,7 @@ public class UCSCDownloader implements Constants {
 
 	/**
 	 * This constructor sets the location of the directory into which the UCSC data will be downloaded.
-	 * 
+	 *
 	 * @param dirpath
 	 *            Location of download directory.
 	 */
@@ -43,7 +43,7 @@ public class UCSCDownloader implements Constants {
 
 	/**
 	 * Construct the object and also set proxy properties for http connection.
-	 * 
+	 *
 	 * @param dirpath
 	 *            Location of a directory that must contain the files that will be downloaded
 	 * @param proxyHost
@@ -66,7 +66,7 @@ public class UCSCDownloader implements Constants {
 	 * This function first checks if the download directory already exists. If not, it tries to create the directory. It
 	 * then tries to download the four required files from the UCSC genome browser (if a file already exists, it emits a
 	 * warning message and skips it).
-	 * 
+	 *
 	 * @throws jannovar.exception.KGParseException
 	 */
 	public void downloadUCSCfiles() throws KGParseException {
@@ -97,7 +97,7 @@ public class UCSCDownloader implements Constants {
 	/**
 	 * This method downloads a file to the specified local file path. If the file already exists, it emits a warning
 	 * message and does nothing.
-	 * 
+	 *
 	 * @param baseURL
 	 *            remote directory path
 	 * @param fname
@@ -121,7 +121,7 @@ public class UCSCDownloader implements Constants {
 		String err = null;
 		InputStream reader = null;
 		FileOutputStream writer = null;
-		
+
 		int threshold = 0;
 		int block = 250000;
 		try {
