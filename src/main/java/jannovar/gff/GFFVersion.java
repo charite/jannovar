@@ -4,6 +4,8 @@ import jannovar.common.Immutable;
 
 /**
  * Wraps information about the version of a GFF/GTF file and allows to query format specific values.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
 public final class GFFVersion {
