@@ -2,16 +2,22 @@ package jannovar.cmd.download;
 
 import jannovar.JannovarOptions;
 import jannovar.common.Constants;
+import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
+import jannovar.gff.Feature;
 import jannovar.gff.GFFParser;
+import jannovar.gff.TranscriptModelBuilder;
 import jannovar.io.FastaParser;
 import jannovar.io.RefSeqFastaParser;
 import jannovar.io.SerializationManager;
 import jannovar.reference.TranscriptModel;
 import jannovar.util.PathUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class for downloading transcript data from RefSeq.
@@ -20,6 +26,9 @@ import java.util.ArrayList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class RefseqDownloadManager extends DownloadManager {
+
+	/** {@link Logger} to use for logging */
+	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
 
 	RefseqDownloadManager(JannovarOptions options) {
 		super(options);
@@ -33,52 +42,64 @@ public class RefseqDownloadManager extends DownloadManager {
 		// parse transcript model list from Refseq and return it
 		ArrayList<TranscriptModel> result = null;
 		// parse GFF/GTF
-		GFFParser gff = new GFFParser();
 		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
 			path += System.getProperty("file.separator");
 		switch (this.options.genomeRelease) {
 		case MM9:
-			gff.parse(path + Constants.refseq_gff_mm9);
+			path += Constants.refseq_gff_mm9;
 			break;
 		case MM10:
-			gff.parse(path + Constants.refseq_gff_mm10);
+			path += Constants.refseq_gff_mm10;
 			break;
 		case HG18:
-			gff.parse(path + Constants.refseq_gff_hg18);
+			path += Constants.refseq_gff_hg18;
 			break;
 		case HG19:
-			gff.parse(path + Constants.refseq_gff_hg19);
+			path += Constants.refseq_gff_hg19;
 			break;
 		case HG38:
-			gff.parse(path + Constants.refseq_gff_hg38);
+			path += Constants.refseq_gff_hg38;
 			break;
 		default:
 			System.err.println("[ERROR] Unknown release: " + options.genomeRelease);
 			System.exit(20);
 			break;
 		}
+
+		// Parse GFF file, yielding a list of features.
+		GFFParser gffParser;
 		try {
-			result = gff.getTranscriptModelBuilder().buildTranscriptModels(
-					options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED);
-		} catch (InvalidAttributException e) {
+			gffParser = new GFFParser(path);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new JannovarException(e.getMessage());
 		}
-		// add sequences
+		ArrayList<Feature> features = gffParser.parse();
+
+		// Build ArrayList of TranscriptModel objects from feature list.
+		boolean onlyCurated = (options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED);
+		try {
+			result = new TranscriptModelBuilder(gffParser.gffVersion, features).make(onlyCurated);
+		} catch (InvalidAttributException e) {
+			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
+			throw new JannovarException(e.getMessage());
+		} catch (FeatureFormatException e) {
+			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
+			throw new JannovarException(e.getMessage());
+		}
+
+		// Load sequences.
 		FastaParser efp = new RefSeqFastaParser(path + Constants.refseq_rna, result);
 		int before = result.size();
 		result = efp.parse();
 		int after = result.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
-		// before-after,before, after));
-		if (options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED)
-			System.err.println(String.format(
-					"[INFO] Found %d curated transcript models from Refseq GFF resource, %d of which had sequences",
-					before, after));
-		else
-			System.err.println(String.format(
-					"[INFO] Found %d transcript models from Refseq GFF resource, %d of which had sequences", before,
-					after));
+
+		// Log success and statistics.
+		Object params[] = { before, (onlyCurated ? "curated " : ""), after };
+		LOGGER.log(Level.INFO, "Found {0} {1} transcript models from Refseq GFF resource, {2} of which had sequences.",
+				params);
+
 		return result;
 	}
 
@@ -94,9 +115,8 @@ public class RefseqDownloadManager extends DownloadManager {
 	public void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException {
 		SerializationManager manager = new SerializationManager();
 		boolean onlyCurated = (options.dataSource == JannovarOptions.DataSource.REFSEQ_CURATED);
-		String combiStringRelease = onlyCurated ? "cur_"
-				+ options.genomeRelease.getUCSCString(options.genomeRelease) : options.genomeRelease
-				.getUCSCString(options.genomeRelease);
+		String combiStringRelease = onlyCurated ? "cur_" + options.genomeRelease.getUCSCString(options.genomeRelease)
+				: options.genomeRelease.getUCSCString(options.genomeRelease);
 		System.err.println("[INFO] Serializing RefSeq data as "
 				+ String.format(PathUtil.join(options.downloadPath, Constants.RefseqSerializationFileName),
 						combiStringRelease));

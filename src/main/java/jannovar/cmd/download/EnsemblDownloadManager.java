@@ -2,15 +2,21 @@ package jannovar.cmd.download;
 
 import jannovar.JannovarOptions;
 import jannovar.common.Constants;
+import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
+import jannovar.gff.Feature;
 import jannovar.gff.GFFParser;
+import jannovar.gff.TranscriptModelBuilder;
 import jannovar.io.EnsemblFastaParser;
 import jannovar.io.SerializationManager;
 import jannovar.reference.TranscriptModel;
 import jannovar.util.PathUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class for downloading transcript data from Ensembl.
@@ -19,6 +25,9 @@ import java.util.ArrayList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class EnsemblDownloadManager extends DownloadManager {
+
+	/** {@link Logger} to use for logging */
+	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
 
 	EnsemblDownloadManager(JannovarOptions options) {
 		super(options);
@@ -31,7 +40,6 @@ public class EnsemblDownloadManager extends DownloadManager {
 
 		// parse transcript model list from Ensemble and return it
 		ArrayList<TranscriptModel> result = null;
-		GFFParser gff = new GFFParser();
 		String path;
 		path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
@@ -54,28 +62,38 @@ public class EnsemblDownloadManager extends DownloadManager {
 			System.exit(20);
 			break;
 		}
-		gff.parse(path + Constants.ensembl_gtf);
+		// Parse GFF file, yielding a list of features.
+		GFFParser gffParser;
 		try {
-			result = gff.getTranscriptModelBuilder().buildTranscriptModels();
-			// System.out.println("[INFO] Got: "+this.transcriptModelList.size()
-			// + " Ensembl transcripts");
+			gffParser = new GFFParser(path + Constants.ensembl_gtf);
+		} catch (IOException e) {
+			LOGGER.log(Level.SEVERE, "Unable to load GFF data from Ensembl files: {0}", e.getMessage());
+			throw new JannovarException(e.getMessage());
+		}
+		ArrayList<Feature> features = gffParser.parse();
+
+		// Build ArrayList of TranscriptModel objects from feature list.
+		try {
+			result = new TranscriptModelBuilder(gffParser.gffVersion, features).make();
 		} catch (InvalidAttributException e) {
-			System.err.println("[ERROR] Unable to input data from the Ensembl files");
+			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
+			throw new JannovarException(e.getMessage());
+		} catch (FeatureFormatException e) {
+			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new JannovarException(e.getMessage());
 		}
 
-		// add sequences
+		// Load sequences.
 		EnsemblFastaParser efp = new EnsemblFastaParser(path + Constants.ensembl_cdna, result);
 		int before = result.size();
 		result = efp.parse();
 		int after = result.size();
-		// System.out.println(String.format("[INFO] removed %d (%d --> %d) transcript models w/o rna sequence",
-		// before-after,before, after));
 
-		// TODO(holtgrem): change to logger
-		System.err.println(String
-				.format("[INFO] Found %d transcript models from Ensembl GFF resource, %d of which had sequences",
-						before, after));
+		// Log success and statistics.
+		Object params[] = { before, after };
+		LOGGER.log(Level.INFO, "Found %d transcript models from Ensembl GFF resource, %d of which had sequences",
+				params);
+
 		return result;
 	}
 

@@ -2,6 +2,7 @@ package jannovar.gff;
 
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
+import jannovar.reference.TranscriptModel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,171 +16,80 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 /**
- * This is the second version of the parser w/o any String-switch-case statements to be downwardly compatible with older
- * Java versions.<br>
- * version 0.2:<br>
- * removed String switch statements<br>
- * version 0.3:<br>
- * added GFF version<br>
- * switched to {@link TranscriptModelBuilder}
+ * Parsing for GFF2, GTF, and GFF3 files.
  *
- * @author mjaeger
- * @version 0.3 (2013-07-12)
+ * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GFFParser {
+public final class GFFParser {
 
-	private static final Logger logger = Logger.getLogger(GFFParser.class.getSimpleName());
+	/** {@link Logger} to use for logging */
+	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
 
-	private final static int SEQID = 0;
-	private final static int SOURCE = 1;
-	private final static int TYPE = 2;
-	private final static int START = 3;
-	private final static int END = 4;
-	private final static int SCORE = 5;
-	private final static int STRAND = 6;
-	private final static int PHASE = 7;
-	private final static int ATTRIBUTES = 8;
+	/** {@link File} to parse */
+	public final File file;
 
-	private File file;
-	// private String line;
-	private String[] fields;
-	// private String[] fields_attribute;
-	// private String[] fields_attribute_Pair;
-	private BufferedReader in;
-	private TranscriptModelBuilder transcriptBuilder;
-	private int gff_version = 2;
-
-	// Feature Processing
-	FeatureBuilder featureBuilder = new FeatureBuilder();
-
-	// Attributes processing
-	private int start;
-	private int index;
-	private int subIndex;
-	private String rawfeature;
-	private String valueSeparator = " ";
+	/** version of the underlying GFF file */
+	public final GFFVersion gffVersion;
 
 	/**
-	 * Set the value separator (e.g. ' ' for GFF2, '=' for GFF3)
+	 * Initalize with path and enforce the given GFF version.
 	 *
-	 * @param sep
+	 * @param path
+	 *            path to the GFF file to parse
+	 * @param gffVersion
+	 *            GFF version to enforce
 	 */
-	public void setValueSeparator(String sep) {
-		valueSeparator = sep;
+	public GFFParser(String path, GFFVersion gffVersion) {
+		this.file = new File(path);
+		this.gffVersion = gffVersion;
 	}
 
 	/**
-	 * default constructor
-	 */
-	public GFFParser() {
-
-	}
-
-	/**
-	 * Checks if the specified file can be accessed.
+	 * Initialize with path to the file to parse and detect GFF version.
 	 *
-	 * @return <code>true</code> if the file can be accessed
-	 */
-	public boolean checkFile() {
-		return this.file.canRead();
-	}
-
-	/**
-	 * Returns the GFF version of the parsed file.
+	 * For the version detection, the file will be opened and the header will be parsed.
 	 *
-	 * @return the GFF version
-	 */
-	public int getGFFversion() {
-		return gff_version;
-	}
-
-	/**
-	 * Sets the GFF version of the parsed file.
-	 *
-	 * @param i
-	 *            The GFF version number.
-	 */
-	public void setGFFversion(int i) {
-		gff_version = i;
-		valueSeparator = i == 3 ? "=" : " ";
-	}
-
-	/**
-	 * This will check the GFF format version. There are several version known.<br>
-	 * <UL>
-	 * <LI>Version 2 - attributes separated by '; ' and gene_id, transcript_id tags<br>
-	 * <code>GL456350.1      protein_coding  exon    993     1059    .       -       .        gene_id "ENSMUSG00000094121"; transcript_id "ENSMUST00000177695"; </code>
-	 * <LI>Version 2.5 - also known as GTF and quite similar to Version 2<br>
-	 * <code>chr1    mm9_knownGene   exon    3195985 3197398 0.000000        -       .       gene_id "uc007aet.1"; transcript_id "uc007aet.1";</code>
-	 * <LI>Version 3 - the current recommended Version.<br>
-	 * <code>NC_000067.6     RefSeq  mRNA    3214482 3671498 .       -       .       ID=rna0;Name=NM_001011874.1;Parent=gene0;</code>
-	 * </UL>
-	 *
+	 * @param path
+	 *            to the GFF file to parse
 	 * @throws IOException
-	 *             if the file could not be read
+	 *             on problems of opening/reading/parsing <code>path</code> for version detection
 	 */
-	private void determineGFFversion() throws IOException {
-
-		if (file.getName().endsWith(".gz"))
-			in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
-		else
-			in = new BufferedReader(new FileReader(file));
-		String str;
-		int version;
-		while ((str = in.readLine()) != null) {
-			if (!str.startsWith("#"))
-				break;
-			else {
-				if (str.startsWith("##gff-version")) {
-					fields = str.split(" ");
-					try {
-						version = Integer.parseInt(fields[1]);
-						gff_version = version;
-					} catch (NumberFormatException e) {
-						System.err.println("Failed to parse gff-version: " + str);
-					}
-				}
-			}
-		}
-		logger.log(Level.INFO, "gff version: {0}", gff_version);
-	}
-
-	public void parse(String filename) {
-		parse(new File(filename));
+	public GFFParser(String path) throws IOException {
+		this.file = new File(path);
+		LOGGER.log(Level.INFO, "Determining GFF version...");
+		this.gffVersion = determineGFFVersion(file);
+		LOGGER.log(Level.INFO, "  GFF version is {0}", gffVersion.version);
 	}
 
 	/**
-	 * Parses the file and feeds the {@link TranscriptModelBuilder}. First the GFF format version is verified. If there
-	 * is no header containing the <code>##gff-version</code> tag, we assume it is GFF version 2/2.5 aka. GTF.
+	 * Parses the file and returns an {@link ArrayList} of {@link Feature} objects.
 	 *
-	 * @param file
-	 *            {@link File} object of the GTF file
+	 * This can then be fed to a {@link TranscriptModelBuilder} for building {@link TranscriptModel} objects.
 	 */
-	public void parse(File file) {
-		this.file = file;
-		transcriptBuilder = new TranscriptModelBuilder();
+	public ArrayList<Feature> parse() {
+		FeatureBuilder featureBuilder = new FeatureBuilder(); // reusing this object below
+
+		ArrayList<Feature> result = new ArrayList<Feature>();
+		BufferedReader in = null;
 		try {
-			logger.info("Get GFF version");
-			determineGFFversion();
-			valueSeparator = gff_version == 3 ? "=" : " ";
-			transcriptBuilder.setGffversion(gff_version);
-			logger.info("Read features");
+			// Open GFF/GTF file.
 			if (file.getName().endsWith(".gz"))
 				in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
 			else
 				in = new BufferedReader(new FileReader(file));
+			// Read file line by line, adding read features to result.
 			String str;
 			while ((str = in.readLine()) != null) {
 				// skip info lines
 				if (str.startsWith("#"))
 					continue;
-				this.transcriptBuilder.addFeature(processFeature(str));
-				// break;
+				result.add(parseFeature(str, featureBuilder));
 			}
 		} catch (FeatureFormatException e) {
-			System.err.println("[WARNING] GFF with wrong Feature format:\n" + e.toString());
+			LOGGER.log(Level.WARNING, "GFF with wrong Feature format: {0}", e.toString());
 		} catch (IOException e) {
-			System.err.println("[WARNING] failed to read the GFF file:\n" + e.toString());
+			LOGGER.log(Level.WARNING, "failed to read the GFF file: {0}", e.toString());
 		} finally {
 			try {
 				if (in != null)
@@ -189,85 +99,117 @@ public class GFFParser {
 			}
 		}
 
+		return result;
 	}
 
-	// /**
-	// * Returns the {@link TranscriptModelFactory}.
-	// * @return the transcriptFactory
-	// */
-	// public TranscriptModelFactory getTranscriptFactory() {
-	// return transcriptFactory;
-	// }
-
 	/**
-	 * Returns the {@link TranscriptModelBuilder}.
+	 * Processes a single feature / line from a GTF or GFF file.
 	 *
-	 * @return the transcriptFactory
-	 */
-	public TranscriptModelBuilder getTranscriptModelBuilder() {
-		return transcriptBuilder;
-	}
-
-	/**
-	 * Processes a single feature / line from a GTF or GFF file.<br>
-	 * e.g.<br>
-	 * chr1 mm9_knownGene exon 3195985 3197398 0.000000 - . gene_id "uc007aet.1"; transcript_id "uc007aet.1"; <br>
+	 * For example:
+	 *
+	 * <pre>
+	 * chr1 mm9_knownGene exon 3195985 3197398 0.000000 - . gene_id "uc007aet.1"; transcript_id "uc007aet.1";
+	 * </pre>
+	 *
 	 * Returns a {@link Feature} storing the data represented by this line or <code>null</code> if the line contains
-	 * less than 8 columns separated by '\t'.
+	 * less than 8 columns separated by <code>'\t'</code>.
 	 *
 	 * @param featureLine
-	 * @return {@link Feature}
+	 *            the line of the file as a {@link String}
+	 * @return {@link Feature} with the parsed data of <code>featureLine</code>
 	 * @throws FeatureFormatException
+	 *             in the case of problems in parsing.
 	 */
-	public Feature processFeature(String featureLine) throws FeatureFormatException {
-
+	public Feature parseFeature(String featureLine, FeatureBuilder featureBuilder) throws FeatureFormatException {
 		ArrayList<String> myfields = new ArrayList<String>();
-		start = 0;
+		int index = 0;
+		int start = 0;
 		while ((index = featureLine.indexOf('\t', start)) >= 0) {
 			myfields.add(featureLine.substring(start, index));
-			// System.out.println(featureLine.substring(start, index));
 			start = index + 1;
 		}
+
 		if (start != featureLine.length()) {
 			myfields.add(featureLine.substring(start));
-			// System.out.println();
 		}
 
 		if (myfields.size() < 9) {
-			logger.warning(String.format("skipping malformed feature line (missing columns (%d)): ", myfields.size(),
-					featureLine));
+			Object params[] = { myfields.size(), featureLine };
+			LOGGER.log(Level.WARNING, "Skipping malformed feature line (missing columns ({0})): {1}", params);
 			return null;
 		}
 
+		// Build the feature using featureBuilder.
 		featureBuilder.reset();
-		featureBuilder.setSequenceID(myfields.get(SEQID));
-		featureBuilder.setType(codeType(myfields.get(TYPE)));
-		featureBuilder.setStart(Integer.parseInt(myfields.get(START)));
-		featureBuilder.setEnd(Integer.parseInt(myfields.get(END)));
-		featureBuilder.setStrand(codeStrand(myfields.get(STRAND)));
-		featureBuilder.setPhase(codePhase(myfields.get(PHASE)));
-		processAttributes(myfields.get(ATTRIBUTES));
+		featureBuilder.setSequenceID(myfields.get(Indices.SEQID));
+		featureBuilder.setType(codeType(myfields.get(Indices.TYPE)));
+		featureBuilder.setStart(Integer.parseInt(myfields.get(Indices.START)));
+		featureBuilder.setEnd(Integer.parseInt(myfields.get(Indices.END)));
+		featureBuilder.setStrand(codeStrand(myfields.get(Indices.STRAND)));
+		featureBuilder.setPhase((byte) codePhase(myfields.get(Indices.PHASE)));
+		processAttributes(myfields.get(Indices.ATTRIBUTES), featureBuilder);
 		return featureBuilder.make();
+	}
 
-		// fields = featureLine.split("\t");
-		// if(fields.length < 9){
-		// logger.warning("skipping malformed feature line (missing columns ("+myfields.size()+")): "+featureLine);
-		// return null;
-		// }
-		// Feature feature = new Feature();
-		//
-		// feature.setSequence_id(fields[SEQID]);
-		// // feature.setSource(fields[SOURCE]);
-		// feature.setType(codeType(fields[TYPE]));
-		// feature.setStart(Integer.parseInt(fields[START]));
-		// feature.setEnd(Integer.parseInt(fields[END]));
-		// // feature.setScore(Double.parseDouble(fields[SCORE]));
-		// feature.setStrand(codeStrand(fields[STRAND]));
-		// feature.setPhase(codePhase(fields[PHASE]));
-		// // if(!fields[ATTRIBUTES].endsWith(";"))
-		// // this.isGFF = true;
-		// feature.setAttributes(processAttributes(fields[ATTRIBUTES]));
-		// return feature;
+	/**
+	 * Processes the attributes in GFF3 file format, e.g.
+	 *
+	 * <pre>
+	 * ID=rna0;Name=NM_001011874.1;Parent=gene0;Dbxref=GeneID:497097
+	 * </pre>
+	 *
+	 * or GTF2.2 file format, e.g.
+	 *
+	 * <pre>
+	 * gene_id "uc007aet.1"; transcript_id "uc007aet.1";
+	 * </pre>
+	 *
+	 * Adds attributes to {@link #featureBuilder}.
+	 *
+	 * @return a HashMap with attributes
+	 * @throws FeatureFormatException
+	 */
+	private void processAttributes(String attributeString, FeatureBuilder featureBuilder) throws FeatureFormatException {
+		int start = 0;
+		int index = 0;
+		if (attributeString.startsWith(" "))
+			attributeString = attributeString.substring(1);
+		while ((index = attributeString.indexOf(";", start)) > 0) {
+			splitAndAddAttribute(attributeString.substring(start, index), featureBuilder);
+
+			if (gffVersion.version == 3)
+				start = index + 1;
+			else
+				start = index + 2;
+		}
+		// for GFF3 we need to add the last element
+		if (start < attributeString.length())
+			splitAndAddAttribute(attributeString.substring(start), featureBuilder);
+	}
+
+	/**
+	 * Split up the attribute, value pair and add this attribute pair to the {@link #featureBuilder}
+	 *
+	 * @throws FeatureFormatException
+	 *             is thrown if attribute String does not contain the {@link #valueSeparator separator} for this GFF
+	 *             file format.
+	 */
+	private void splitAndAddAttribute(String attribute, FeatureBuilder featureBuilder) throws FeatureFormatException {
+		int subIndex = 0;
+		if ((subIndex = attribute.indexOf(gffVersion.valueSeparator)) > 0) {
+			if (gffVersion.version == 3) {
+				featureBuilder.addAttribute(attribute.substring(0, subIndex), attribute.substring(subIndex + 1));
+				// System.out.println(String.format("%s\t%s",attribute.substring(0, subIndex),
+				// attribute.substring(subIndex+1)));
+			} else {
+				featureBuilder.addAttribute(attribute.substring(0, subIndex),
+						attribute.substring(subIndex + 2, attribute.length() - 1));
+				// System.out.println(String.format("%s\t%s",attribute.substring(0, subIndex),
+				// attribute.substring(subIndex+2,rawfeature.length()-1)));
+			}
+		} else
+			throw new FeatureFormatException("attribut String without valid value separator ('"
+					+ gffVersion.valueSeparator + "'): '" + attribute + "'");
 	}
 
 	/**
@@ -275,9 +217,9 @@ public class GFFParser {
 	 *
 	 * @param phase
 	 *            The phase of the CDS reading frame
-	 * @return the phase of the CDS reading frame as a byte.
+	 * @return phase of the CDS reading frame
 	 */
-	private byte codePhase(String phase) {
+	private int codePhase(String phase) {
 
 		if (phase.equals("0"))
 			return 0;
@@ -290,92 +232,32 @@ public class GFFParser {
 	}
 
 	/**
-	 * Processes the attributes in GFF3 file format - e.g.:<br>
-	 * ID=rna0;Name=NM_001011874.1;Parent=gene0;Dbxref=GeneID:497097<br>
-	 * or GTF2.2 file format - e.g.:<br>
-	 * gene_id "uc007aet.1"; transcript_id "uc007aet.1";
-	 *
-	 * Adds attributes to {@link #featureBuilder}.
-	 *
-	 * @return a HashMap with attributes
-	 * @throws FeatureFormatException
-	 */
-	private void processAttributes(String attributeString) throws FeatureFormatException {
-		start = 0;
-		if (attributeString.startsWith(" "))
-			attributeString = attributeString.substring(1);
-		while ((index = attributeString.indexOf(";", start)) > 0) {
-			rawfeature = attributeString.substring(start, index);
-			splitAndAddAttribute(rawfeature);
-
-			if (gff_version == 3)
-				start = index + 1;
-			else
-				start = index + 2;
-		}
-		// for GFF3 we need to add the last element
-		if (start < attributeString.length()) {
-			rawfeature = attributeString.substring(start);
-			splitAndAddAttribute(rawfeature);
-		}
-	}
-
-	/**
-	 * Split up the attribute, value pair and add this attribute pair to the {@link #featureBuilder}
-	 *
-	 * @throws FeatureFormatException
-	 *             is thrown if attribute String does not contain the {@link #valueSeparator separator} for this GFF
-	 *             file format.
-	 */
-	private void splitAndAddAttribute(String attribute) throws FeatureFormatException {
-		if ((subIndex = rawfeature.indexOf(valueSeparator)) > 0) {
-			if (gff_version == 3) {
-				featureBuilder.addAttribute(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex + 1));
-				// System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex),
-				// rawfeature.substring(subIndex+1)));
-			} else {
-				featureBuilder.addAttribute(rawfeature.substring(0, subIndex),
-						rawfeature.substring(subIndex + 2, rawfeature.length() - 1));
-				// System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex),
-				// rawfeature.substring(subIndex+2,rawfeature.length()-1)));
-			}
-		} else
-			throw new FeatureFormatException("attribut String without valid value separator ('" + valueSeparator
-					+ "'): '" + attribute + "'");
-	}
-
-	// /**
-	// * Processes the attributes in GTF2.2 file format.<br>
-	// * e.g.:<br>
-	// * ID=rna0;Name=NM_001011874.1;Parent=gene0;Dbxref=GeneID:497097
-	// * @return
-	// */
-	// private HashMap<String, String> processGTFattributes(String attributes) {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
-
-	/**
-	 * Returns the strand as boolean. <code>true</code> for the positive strand (+) and <code>false</code> for the minus
-	 * strand (-). If an other character or String is present in the strand field (e.g. '?') a
-	 * {@link FeatureFormatException} is thrown.
+	 * Returns the strand as boolean. <code>true</code> for the positive strand (<ocde>'+'</code>) and
+	 * <code>false</code> for the minus strand (<code>'-'</code>). If an other character or String is present in the
+	 * strand field (e.g. <code>'?'</code>) a {@link FeatureFormatException} is thrown.
 	 *
 	 * @param strand
 	 *            representation of the strand in the feature line
-	 * @return <code>true</code> for the positive strand (+) and <code>false</code> for the minus strand (-)
+	 * @return <code>true</code> for the positive strand (<code>'+'</code>) and <code>false</code> for the minus strand
+	 *         (<code>'-'</code>)
 	 * @throws FeatureFormatException
+	 *             if <code>strand</code> is not <code>'-'</code> or <code>'+'</code>.
 	 */
-	private boolean codeStrand(String strand) throws FeatureFormatException {
+	private static boolean codeStrand(String strand) throws FeatureFormatException {
 		if (strand.equals("+"))
 			return true;
 		else if (strand.equals("-"))
 			return false;
 		else
 			throw new FeatureFormatException("unknown strand: " + strand);
-
 	}
 
-	private FeatureType codeType(String type) throws FeatureFormatException {
+	/**
+	 * @param type
+	 *            text from the GFF/GTF file to convert into a {@link FeatureType}
+	 * @return {@link FeatureType} value for the given text
+	 */
+	private static FeatureType codeType(String type) {
 		if (type.equals("exon"))
 			return FeatureType.EXON;
 		if (type.equals("CDS"))
@@ -397,7 +279,83 @@ public class GFFParser {
 		if (type.equals("tRNA"))
 			return FeatureType.TRNA;
 		return FeatureType.UNKNOWN;
+	}
 
+	/**
+	 * Check and return the version of the given GFF file.
+	 *
+	 * The following versions are known here:
+	 *
+	 * <ul>
+	 * <li>Version 2 - attributes separated by '; ' and gene_id, transcript_id tags<br>
+	 * <code>GL456350.1      protein_coding  exon    993     1059    .       -       .        gene_id "ENSMUSG00000094121"; transcript_id "ENSMUST00000177695"; </code>
+	 * </li>
+	 * <li>Version 2.5 - also known as GTF and quite similar to Version 2<br>
+	 * <code>chr1    mm9_knownGene   exon    3195985 3197398 0.000000        -       .       gene_id "uc007aet.1"; transcript_id "uc007aet.1";</code>
+	 * </li>
+	 * <li>Version 3 - the current recommended Version.<br>
+	 * <code>NC_000067.6     RefSeq  mRNA    3214482 3671498 .       -       .       ID=rna0;Name=NM_001011874.1;Parent=gene0;</code>
+	 * </li>
+	 * </ul>
+	 *
+	 * If there is no header containing the <code>##gff-version</code> tag, we assume it is GFF version 2/2.5 aka. GTF.
+	 *
+	 * @throws IOException
+	 *             if the file could not be read
+	 */
+	private static GFFVersion determineGFFVersion(File file) throws IOException {
+		GFFVersion gffVersion = new GFFVersion(2); // default is version 2
+		// TODO(holtgrem): Close in?
+
+		// Open compressed or uncompressed file.
+		BufferedReader in = null;
+		if (file.getName().endsWith(".gz"))
+			in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
+		else
+			in = new BufferedReader(new FileReader(file));
+
+		// Determine the version.
+		String str;
+		while ((str = in.readLine()) != null) {
+			if (!str.startsWith("#"))
+				break;
+
+			if (str.startsWith("##gff-version")) {
+				String fields[] = str.split(" ");
+				try {
+					gffVersion = new GFFVersion(Integer.parseInt(fields[1]));
+				} catch (NumberFormatException e) {
+					LOGGER.log(Level.WARNING, "Failed to parse gff-version: {0}", str);
+				}
+			}
+		}
+
+		in.close(); // close file again
+		return gffVersion;
+	}
+
+	/**
+	 * Simple static container class for indices in GFF/GTF files.
+	 */
+	private static class Indices {
+		/** index of seq ID field */
+		private final static int SEQID = 0;
+		/** index of source field */
+		private final static int SOURCE = 1;
+		/** index of type field */
+		private final static int TYPE = 2;
+		/** index of start field */
+		private final static int START = 3;
+		/** index of end field */
+		private final static int END = 4;
+		/** index of score field */
+		private final static int SCORE = 5;
+		/** index of strand field */
+		private final static int STRAND = 6;
+		/** index of phase field */
+		private final static int PHASE = 7;
+		/** index of attributes field */
+		private final static int ATTRIBUTES = 8;
 	}
 
 }
