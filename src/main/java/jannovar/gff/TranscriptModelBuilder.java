@@ -16,11 +16,12 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
- * This is the builder for the {@link TranscriptModel}s from GFF- files. It is feed with {@link Feature}s and builds up
- * Genemodels with the
+ * This is the builder for the {@link TranscriptModel}s from GFF-files.
  *
- * @author mjaeger
- * @version 0.3 (08 August, 2014)
+ * It is fed with {@link Feature}s and builds the {@link TranscriptModels} from the GFF featuers.
+ *
+ * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class TranscriptModelBuilder implements ChromosomeMap {
 
@@ -241,8 +242,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		// if the RNA is unknown --> add to map and gene
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID,
-					identifier2chromosom.get(feature.sequenceID), feature.strand));
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, identifier2chromosom.get(feature.sequenceID),
+					feature.strand));
 		}
 		// get RNA
 		curRna = curGene.rnas.get(curRnaID);
