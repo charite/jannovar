@@ -23,7 +23,7 @@ import java.net.URLConnection;
  */
 public class TranscriptDataDownloader implements Constants {
 	/** Path of directory to which the files will be downloaded. */
-	private String directory_path;
+	private String downloadPath;
 
 	/**
 	 * This constructor sets the location of the directory into which the transcript annotation data will be downloaded.<br>
@@ -36,7 +36,7 @@ public class TranscriptDataDownloader implements Constants {
 		// add trailing slash.
 		if (!dirPath.endsWith(System.getProperty("file.separator")))
 			dirPath += System.getProperty("file.separator");
-		this.directory_path = dirPath;
+		this.downloadPath = dirPath;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class TranscriptDataDownloader implements Constants {
 	 * @return The path to the download directory.
 	 */
 	public String getDownloadDirectory() {
-		return this.directory_path;
+		return this.downloadPath;
 	}
 
 	/**
@@ -236,14 +236,14 @@ public class TranscriptDataDownloader implements Constants {
 	 * just emits a warning and does nothing.
 	 */
 	private void makeDirectoryIfNotExist() {
-		File directory = new File(this.directory_path);
+		File directory = new File(this.downloadPath);
 		/* first make data directory. This is the top directory that the subdirectories
 		   hg18, hg19, mm9, mm10 etc go into.*/
 		// File data = new File("data");
 		// if (! data.exists())
 		// data.mkdirs();
 		if (directory.exists()) {
-			System.err.println(String.format("[INFO] Cowardly refusing to create " + "directory \"%s\" since it already exists", this.directory_path));
+			System.err.println(String.format("[INFO] Cowardly refusing to create " + "directory \"%s\" since it already exists", this.downloadPath));
 		} else {
 			directory.mkdirs();
 		}
@@ -263,7 +263,7 @@ public class TranscriptDataDownloader implements Constants {
 	public boolean download_file(String baseURL, String fname) throws FileDownloadException {
 
 		String urlstring = baseURL + fname;
-		String local_file_path = this.directory_path + fname;
+		String local_file_path = this.downloadPath + fname;
 		File f = new File(local_file_path);
 		if (f.exists()) {
 			System.err.println(String.format("[INFO] Timorously refusing to download " + "file \"%s\" since it already exists locally", fname));

@@ -76,17 +76,17 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 	}
 
 	/**
-	 * This function checks whether {@link #directory_path} is a directory that contains the four UCSC transcript
+	 * This function checks whether {@link #basePath} is a directory that contains the four UCSC transcript
 	 * definitions files as gzip-files. If so, it parses them and returns true. If not, it returns false. This results
 	 * in the construction of {@link #knownGeneMap}.
 	 * 
 	 * @return false if no UCSC gzip files found, otherwise return true.
 	 */
 	private boolean parseGzipUCSCFiles() {
-		String knownGene = addPrefixAndGzipSuffix(this.directory_path, Constants.knownGene);
-		String knownGeneMrna = addPrefixAndGzipSuffix(this.directory_path, Constants.knownGeneMrna);
-		String kgXref = addPrefixAndGzipSuffix(this.directory_path, Constants.kgXref);
-		String known2locus = addPrefixAndGzipSuffix(this.directory_path, Constants.known2locus);
+		String knownGene = addPrefixAndGzipSuffix(this.basePath, Constants.knownGene);
+		String knownGeneMrna = addPrefixAndGzipSuffix(this.basePath, Constants.knownGeneMrna);
+		String kgXref = addPrefixAndGzipSuffix(this.basePath, Constants.kgXref);
+		String known2locus = addPrefixAndGzipSuffix(this.basePath, Constants.known2locus);
 		/* first check that all four files actually exist */
 		File f;
 		f = new File(knownGene);
@@ -130,10 +130,10 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 		if (success)
 			return;
 		/* If we get here, then the Gzip files were not found, we need to try unziped files. */
-		String knownGene = String.format("%s%s", this.directory_path, Constants.knownGene);
-		String knownGeneMrna = String.format("%s%s", this.directory_path, Constants.knownGeneMrna);
-		String kgXref = String.format("%s%s", this.directory_path, Constants.kgXref);
-		String known2locus = String.format("%s%s", this.directory_path, Constants.known2locus);
+		String knownGene = String.format("%s%s", this.basePath, Constants.knownGene);
+		String knownGeneMrna = String.format("%s%s", this.basePath, Constants.knownGeneMrna);
+		String kgXref = String.format("%s%s", this.basePath, Constants.kgXref);
+		String known2locus = String.format("%s%s", this.basePath, Constants.known2locus);
 		try {
 			parseKnownGeneFile(knownGene, false);
 			parseKnownGeneMrna(knownGeneMrna, false);

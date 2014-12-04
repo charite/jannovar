@@ -1,14 +1,14 @@
 package jannovar.io;
 
-import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-
 import jannovar.exception.JannovarException;
 import jannovar.reference.TranscriptModel;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 
 /**
@@ -22,11 +22,6 @@ import jannovar.reference.TranscriptModel;
  * @version 0.02 (23 May, 2013)
  */
 public class SerializationManager {
-
-    /** Default constructor */
-    public SerializationManager() {
-    }
-
 
     /**
      * Serializes the contents of an ArrayList of 

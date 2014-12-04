@@ -30,7 +30,7 @@ public class TranscriptDataParser {
 	 * Path of directory in which the transcript definition files live ( currently, either the UCSC knownGene files, the
 	 * refSeq files, or the ENSEMBL files).
 	 */
-	protected String directory_path;
+	protected String basePath;
 
 	/**
 	 * Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the value is the corresponding
@@ -50,9 +50,9 @@ public class TranscriptDataParser {
 	public TranscriptDataParser(String path) {
 		this.knownGeneMap = new HashMap<String, TranscriptModel>();
 		if (path.endsWith("/")) {
-			this.directory_path = path;
+			this.basePath = path;
 		} else {
-			this.directory_path = path + "/"; // add trailing slash.
+			this.basePath = path + "/"; // add trailing slash.
 		}
 	}
 
@@ -119,9 +119,9 @@ public class TranscriptDataParser {
 	 * emits a warning and does nothing.
 	 */
 	protected void makeDirectoryIfNotExist() {
-		File directory = new File(this.directory_path);
+		File directory = new File(this.basePath);
 		if (directory.exists()) {
-			System.err.println(String.format("Cowardly refusing to create " + "directory \"%s\" since it already exists", this.directory_path));
+			System.err.println(String.format("Cowardly refusing to create " + "directory \"%s\" since it already exists", this.basePath));
 		} else {
 			directory.mkdir();
 		}
@@ -141,7 +141,7 @@ public class TranscriptDataParser {
 	public boolean download_file(String baseURL, String fname) throws KGParseException {
 
 		String urlstring = baseURL + fname;
-		String local_file_path = this.directory_path + fname;
+		String local_file_path = this.basePath + fname;
 		File f = new File(local_file_path);
 		if (f.exists()) {
 			System.err.println(String.format("[INFO] Timorously refusing to download " + "file \"%s\" since it already exists", local_file_path));

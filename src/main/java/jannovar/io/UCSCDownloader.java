@@ -20,9 +20,9 @@ import java.net.URLConnection;
 public class UCSCDownloader implements Constants {
 
 	/** Path of directory to which the files will be downloaded. */
-	private String directory_path;
+	private String downloadDirectory;
 	/** Base URI for UCSC hg19 build annotation files */
-	private String hg19base = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
+	private String hg19URLBase = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/";
 
 	/**
 	 * This constructor sets the location of the directory into which the UCSC data will be downloaded.
@@ -34,11 +34,12 @@ public class UCSCDownloader implements Constants {
 		if (!dirpath.endsWith("/")) {
 			dirpath = dirpath + "/"; // add trailing slash.
 		}
-		this.directory_path = dirpath;
+		this.downloadDirectory = dirpath;
 	}
 
+	/** @return path to the download directory */
 	public String getDownloadDirectory() {
-		return this.directory_path;
+		return this.downloadDirectory;
 	}
 
 	/**
@@ -75,10 +76,10 @@ public class UCSCDownloader implements Constants {
 		String knownGeneMrna = String.format("%s.gz", Constants.knownGeneMrna);
 		String kgXref = String.format("%s.gz", Constants.kgXref);
 		String known2locus = String.format("%s.gz", Constants.known2locus);
-		download_file(this.hg19base, knownGene);
-		download_file(this.hg19base, knownGeneMrna);
-		download_file(this.hg19base, kgXref);
-		download_file(this.hg19base, known2locus);
+		downloadFile(this.hg19URLBase, knownGene);
+		downloadFile(this.hg19URLBase, knownGeneMrna);
+		downloadFile(this.hg19URLBase, kgXref);
+		downloadFile(this.hg19URLBase, known2locus);
 	}
 
 	/**
@@ -86,9 +87,9 @@ public class UCSCDownloader implements Constants {
 	 * just emits a warning and does nothing.
 	 */
 	private void makeDirectoryIfNotExist() {
-		File directory = new File(this.directory_path);
+		File directory = new File(this.downloadDirectory);
 		if (directory.exists()) {
-			System.err.println(String.format("Cowardly refusing to create " + "directory \"%s\" since it already exists", this.directory_path));
+			System.err.println(String.format("Cowardly refusing to create " + "directory \"%s\" since it already exists", this.downloadDirectory));
 		} else {
 			directory.mkdir();
 		}
@@ -105,10 +106,10 @@ public class UCSCDownloader implements Constants {
 	 * @return <code>true</code> if file was downloaded successfully
 	 * @throws jannovar.exception.KGParseException
 	 */
-	public boolean download_file(String baseURL, String fname) throws KGParseException {
+	public boolean downloadFile(String baseURL, String fname) throws KGParseException {
 
 		String urlstring = baseURL + fname;
-		String local_file_path = this.directory_path + fname;
+		String local_file_path = this.downloadDirectory + fname;
 		File f = new File(local_file_path);
 		if (f.exists()) {
 			System.err.println(String.format("[INFO] Timorously refusing to download " + "file \"%s\" since it already exists", local_file_path));
