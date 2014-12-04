@@ -172,4 +172,3 @@ public class UCSCDownloader implements Constants {
 		return true;
 	}
 }
-/* end of file */
