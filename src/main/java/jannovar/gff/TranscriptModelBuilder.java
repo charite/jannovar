@@ -22,6 +22,7 @@ import java.util.logging.Logger;
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @version 0.3 (08 August, 2014)
  */
 public class TranscriptModelBuilder implements ChromosomeMap {
 
@@ -40,7 +41,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 	private Gene curGene;
 	private Transcript curRna;
-	private GFFstruct curGFF;
+	private GFFStruct curGFF;
 
 	private String[] fields;
 	private String[] subfields;
@@ -252,7 +253,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 			return;
 
 		// now finally process the Subregion
-		curGFF = new GFFstruct();
+		curGFF = new GFFStruct();
 		curGFF.chromosom = identifier2chromosom.get(feature.sequenceID);
 		curGFF.start = feature.start;
 		curGFF.end = feature.end;
@@ -347,8 +348,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 * @author mjaeger
 	 * @version 0.1
 	 */
-	private class GFFstruct implements Comparable<GFFstruct> {
-		ArrayList<GFFstruct> parents;
+	private class GFFStruct implements Comparable<GFFStruct> {
+		ArrayList<GFFStruct> parents;
 		byte chromosom;
 		byte frame;
 		String name;
@@ -357,8 +358,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		int end = Integer.MIN_VALUE;
 		boolean strand;
 
-		public GFFstruct() {
-			parents = new ArrayList<TranscriptModelBuilder.GFFstruct>();
+		public GFFStruct() {
+			parents = new ArrayList<TranscriptModelBuilder.GFFStruct>();
 		}
 
 		/**
@@ -367,7 +368,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		 * chromosom differs.
 		 */
 		@Override
-		public int compareTo(GFFstruct o) {
+		public int compareTo(GFFStruct o) {
 			if (chromosom == o.chromosom) {
 
 				if (start == o.start) {
@@ -399,27 +400,27 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		}
 	}
 
-	private class Transcript extends GFFstruct {
+	private class Transcript extends GFFStruct {
 
 		int cdsStart = Integer.MAX_VALUE;
 		int cdsEnd = Integer.MIN_VALUE;
 		// HashMap<String,GFFstruct> exons;
 		// HashMap<String,GFFstruct> cdss;
-		ArrayList<GFFstruct> exons;
-		ArrayList<GFFstruct> cdss;
+		ArrayList<GFFStruct> exons;
+		ArrayList<GFFStruct> cdss;
 
 		public Transcript(String id, String name, byte chr, boolean strand) {
 			this.id = id;
 			this.name = name;
 			this.chromosom = chr;
 			this.strand = strand;
-			exons = new ArrayList<TranscriptModelBuilder.GFFstruct>();
-			cdss = new ArrayList<TranscriptModelBuilder.GFFstruct>();
+			exons = new ArrayList<TranscriptModelBuilder.GFFStruct>();
+			cdss = new ArrayList<TranscriptModelBuilder.GFFStruct>();
 		}
 
 		public Transcript() {
-			exons = new ArrayList<TranscriptModelBuilder.GFFstruct>();
-			cdss = new ArrayList<TranscriptModelBuilder.GFFstruct>();
+			exons = new ArrayList<TranscriptModelBuilder.GFFStruct>();
+			cdss = new ArrayList<TranscriptModelBuilder.GFFStruct>();
 		}
 
 		/**
@@ -431,7 +432,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 			int i = 0;
 			int[] starts = new int[exons.size()];
 			Collections.sort(exons);
-			for (GFFstruct exon : exons) {
+			for (GFFStruct exon : exons) {
 				starts[i++] = exon.start;
 			}
 			return starts;
@@ -446,7 +447,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 			int i = 0;
 			int[] ends = new int[exons.size()];
 			Collections.sort(exons);
-			for (GFFstruct exon : exons) {
+			for (GFFStruct exon : exons) {
 				ends[i++] = exon.end;
 			}
 			return ends;
@@ -459,7 +460,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		 */
 		int getTxStart() {
 			if (start == Integer.MAX_VALUE)
-				for (GFFstruct exon : exons)
+				for (GFFStruct exon : exons)
 					if (start > exon.start)
 						start = exon.start;
 			return start;
@@ -472,7 +473,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		 */
 		int getTxEnd() {
 			if (end == Integer.MIN_VALUE)
-				for (GFFstruct exon : exons)
+				for (GFFStruct exon : exons)
 					if (end < exon.end)
 						end = exon.end;
 			return end;
@@ -486,7 +487,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		 */
 		int getCdsStart() {
 			if (cdsStart == Integer.MAX_VALUE)
-				for (GFFstruct cds : cdss)
+				for (GFFStruct cds : cdss)
 					if (cdsStart > cds.start) {
 						cdsStart = cds.start;
 						if (cds.strand) {
@@ -508,7 +509,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		 */
 		int getCdsEnd() {
 			if (cdsEnd == Integer.MIN_VALUE)
-				for (GFFstruct cds : cdss)
+				for (GFFStruct cds : cdss)
 					if (cdsEnd < cds.end) {
 						cdsEnd = cds.end;
 						if (cds.strand) {
@@ -523,7 +524,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		}
 	}
 
-	private class Gene extends GFFstruct {
+	private class Gene extends GFFStruct {
 
 		// String ensemblID;
 		// String refseqID;
@@ -531,7 +532,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		boolean strand;
 		// HashMap<String,GFFstruct> exons;
 		// HashMap<String,GFFstruct> cdss;
-		ArrayList<GFFstruct> exons;
+		ArrayList<GFFStruct> exons;
 		// ArrayList<GFFstruct> cdss;
 		HashMap<String, Transcript> rnas;
 
@@ -540,13 +541,13 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 			this.name = name;
 			this.chromosom = chr;
 			this.strand = strand;
-			exons = new ArrayList<TranscriptModelBuilder.GFFstruct>();
+			exons = new ArrayList<TranscriptModelBuilder.GFFStruct>();
 			rnas = new HashMap<String, TranscriptModelBuilder.Transcript>();
 
 		}
 
 		public Gene() {
-			exons = new ArrayList<TranscriptModelBuilder.GFFstruct>();
+			exons = new ArrayList<TranscriptModelBuilder.GFFStruct>();
 			rnas = new HashMap<String, TranscriptModelBuilder.Transcript>();
 		}
 
