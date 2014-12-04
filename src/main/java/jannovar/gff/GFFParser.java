@@ -10,8 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -52,6 +50,7 @@ public class GFFParser {
 	private int gff_version = 2;
 
 	// Feature Processing
+	FeatureBuilder featureBuilder = new FeatureBuilder();
 
 	// Attributes processing
 	private int start;
@@ -240,15 +239,15 @@ public class GFFParser {
 			return null;
 		}
 
-		Feature feature = new Feature();
-		feature.setSequence_id(myfields.get(SEQID));
-		feature.setType(codeType(myfields.get(TYPE)));
-		feature.setStart(Integer.parseInt(myfields.get(START)));
-		feature.setEnd(Integer.parseInt(myfields.get(END)));
-		feature.setStrand(codeStrand(myfields.get(STRAND)));
-		feature.setPhase(codePhase(myfields.get(PHASE)));
-		feature.setAttributes(processAttributes(myfields.get(ATTRIBUTES)));
-		return feature;
+		featureBuilder.reset();
+		featureBuilder.setSequenceID(myfields.get(SEQID));
+		featureBuilder.setType(codeType(myfields.get(TYPE)));
+		featureBuilder.setStart(Integer.parseInt(myfields.get(START)));
+		featureBuilder.setEnd(Integer.parseInt(myfields.get(END)));
+		featureBuilder.setStrand(codeStrand(myfields.get(STRAND)));
+		featureBuilder.setPhase(codePhase(myfields.get(PHASE)));
+		processAttributes(myfields.get(ATTRIBUTES));
+		return featureBuilder.make();
 
 		// fields = featureLine.split("\t");
 		// if(fields.length < 9){
@@ -296,18 +295,18 @@ public class GFFParser {
 	 * or GTF2.2 file format - e.g.:<br>
 	 * gene_id "uc007aet.1"; transcript_id "uc007aet.1";
 	 *
+	 * Adds attributes to {@link #featureBuilder}.
+	 *
 	 * @return a HashMap with attributes
 	 * @throws FeatureFormatException
 	 */
-	private HashMap<String, String> processAttributes(String attributeString) throws FeatureFormatException {
-		HashMap<String, String> attributes = new HashMap<String, String>();
-
+	private void processAttributes(String attributeString) throws FeatureFormatException {
 		start = 0;
 		if (attributeString.startsWith(" "))
 			attributeString = attributeString.substring(1);
 		while ((index = attributeString.indexOf(";", start)) > 0) {
 			rawfeature = attributeString.substring(start, index);
-			splitNaddAttribute(rawfeature, attributes);
+			splitAndAddAttribute(rawfeature);
 
 			if (gff_version == 3)
 				start = index + 1;
@@ -317,30 +316,25 @@ public class GFFParser {
 		// for GFF3 we need to add the last element
 		if (start < attributeString.length()) {
 			rawfeature = attributeString.substring(start);
-			splitNaddAttribute(rawfeature, attributes);
+			splitAndAddAttribute(rawfeature);
 		}
-
-		return attributes;
 	}
 
 	/**
-	 * Split up the attribute, value pair and add this pair to the attributes Map.
+	 * Split up the attribute, value pair and add this attribute pair to the {@link #featureBuilder}
 	 *
-	 * @param attribute
-	 * @param attributes
-	 *            {@link Map} with attribute - value pairs
 	 * @throws FeatureFormatException
 	 *             is thrown if attribute String does not contain the {@link #valueSeparator separator} for this GFF
 	 *             file format.
 	 */
-	private void splitNaddAttribute(String attribute, HashMap<String, String> attributes) throws FeatureFormatException {
+	private void splitAndAddAttribute(String attribute) throws FeatureFormatException {
 		if ((subIndex = rawfeature.indexOf(valueSeparator)) > 0) {
 			if (gff_version == 3) {
-				attributes.put(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex + 1));
+				featureBuilder.addAttribute(rawfeature.substring(0, subIndex), rawfeature.substring(subIndex + 1));
 				// System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex),
 				// rawfeature.substring(subIndex+1)));
 			} else {
-				attributes.put(rawfeature.substring(0, subIndex),
+				featureBuilder.addAttribute(rawfeature.substring(0, subIndex),
 						rawfeature.substring(subIndex + 2, rawfeature.length() - 1));
 				// System.out.println(String.format("%s\t%s",rawfeature.substring(0, subIndex),
 				// rawfeature.substring(subIndex+2,rawfeature.length()-1)));

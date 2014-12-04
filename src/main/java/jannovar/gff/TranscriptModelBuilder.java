@@ -142,9 +142,9 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 */
 	public void addFeature(Feature feature) throws InvalidAttributException, FeatureFormatException {
 		// System.out.println(feature.toLine());
-		if (identifier2chromosom.get(feature.sequence_id) == null)
+		if (identifier2chromosom.get(feature.sequenceID) == null)
 			return;
-		switch (feature.getType()) {
+		switch (feature.type) {
 		case GENE:
 			processGene(feature);
 			break;
@@ -174,8 +174,8 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	 */
 	private void processRNA(Feature feature) throws InvalidAttributException {
 		// gene and transcript ids
-		curGeneID = feature.getAttribute("Parent");
-		curRnaID = feature.getAttribute("ID");
+		curGeneID = feature.attributes.get("Parent");
+		curRnaID = feature.attributes.get("ID");
 		// System.out.println("curRNAID: "+curRnaID);
 		// update mappings
 		rna2gene.put(curRnaID, curGeneID);
@@ -184,20 +184,20 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 			curGene.rnas = new HashMap<String, Transcript>();
 		// populate the new transcript
 		curRna = new Transcript();
-		curRna.start = feature.getStart();
-		curRna.end = feature.getEnd();
+		curRna.start = feature.start;
+		curRna.end = feature.end;
 		curRna.id = curRnaID;
-		curRna.name = feature.getAttribute("Name");
-		curRna.chromosom = identifier2chromosom.get(feature.getSequence_id());
+		curRna.name = feature.attributes.get("Name");
+		curRna.chromosom = identifier2chromosom.get(feature.sequenceID);
 		if (curGene.chromosom != curRna.chromosom) {
 			// throw new
 			// InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match: "+curGene.chromosom+
 			// " != "+curRna.chromosom+"\n"+feature);
 			return;
 		}
-		curRna.strand = feature.getStrand();
+		curRna.strand = feature.strand;
 		// check strand of transcript and gene
-		if (curGene.strand != feature.getStrand()) {
+		if (curGene.strand != feature.strand) {
 			// throw new InvalidAttributException("The strand of the gene and transcript do not match: "+curGene.strand+
 			// " != "+feature.getStrand()+"\n"+feature);
 			return;
@@ -214,14 +214,14 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	private void processSubregion(Feature feature) {
 		int index;
 		if (gff_version == 3) {
-			curID = feature.getAttribute("ID");
-			curRnaID = feature.getAttribute("Parent");
+			curID = feature.attributes.get("ID");
+			curRnaID = feature.attributes.get("Parent");
 			curGeneID = rna2gene.get(curRnaID);
 		} else {
 			curID = "sub" + (subregion_Index++);
-			curRnaID = feature.getAttribute("transcript_id");
-			curGeneID = feature.getAttribute("gene_id");
-			if ((curGeneName = feature.getAttribute("gene_name")) == null)
+			curRnaID = feature.attributes.get("transcript_id");
+			curGeneID = feature.attributes.get("gene_id");
+			if ((curGeneName = feature.attributes.get("gene_name")) == null)
 				curGeneName = curGeneID;
 		}
 		// System.out.println("Gene: "+curGeneID+"\tRNA: "+curRnaID);
@@ -234,7 +234,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		// System.out.println(curGeneID);
 		// if the gene is not known yet --> add
 		if (!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID, curGeneName, identifier2chromosom.get(feature.sequence_id),
+			genes.put(curGeneID, new Gene(curGeneID, curGeneName, identifier2chromosom.get(feature.sequenceID),
 					feature.strand));
 		// get Gene
 		curGene = genes.get(curGeneID);
@@ -242,7 +242,7 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
 			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID,
-					identifier2chromosom.get(feature.sequence_id), feature.strand));
+					identifier2chromosom.get(feature.sequenceID), feature.strand));
 		}
 		// get RNA
 		curRna = curGene.rnas.get(curRnaID);
@@ -252,25 +252,25 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 
 		// now finally process the Subregion
 		curGFF = new GFFstruct();
-		curGFF.chromosom = identifier2chromosom.get(feature.sequence_id);
-		curGFF.start = feature.getStart();
-		curGFF.end = feature.getEnd();
-		curGFF.strand = feature.getStrand();
+		curGFF.chromosom = identifier2chromosom.get(feature.sequenceID);
+		curGFF.start = feature.start;
+		curGFF.end = feature.end;
+		curGFF.strand = feature.strand;
 		curGFF.id = curID;
 		// for Stop_Codonss
-		if (feature.getType() == FeatureType.STOP_CODON) {
+		if (feature.type == FeatureType.STOP_CODON) {
 			curGFF.frame = feature.phase;
 			if (!(curRna.cdss.contains(curGFF)))
 				curRna.cdss.add(curGFF);
 		}
 		// for CDSs
-		if (feature.getType() == FeatureType.CDS) {
+		if (feature.type == FeatureType.CDS) {
 			curGFF.frame = feature.phase;
 			if (!(curRna.cdss.contains(curGFF)))
 				curRna.cdss.add(curGFF);
 		}
 		// for Exons
-		if (feature.getType() == FeatureType.EXON) {
+		if (feature.type == FeatureType.EXON) {
 			if ((index = curGene.exons.indexOf(curGFF)) >= 0) {
 				curGFF = curGene.exons.get(index);
 				if (!(curRna.exons.contains(curGFF)))
@@ -295,20 +295,20 @@ public class TranscriptModelBuilder implements ChromosomeMap {
 	private void processGene(Feature feature) {
 
 		// get geneID
-		curGeneID = feature.getAttribute("ID");
+		curGeneID = feature.attributes.get("ID");
 		// add to collection if not already known
 		if (!genes.containsKey(curGeneID)) {
 			genes.put(curGeneID, new Gene());
 			// System.out.println("Added gene with ID: "+curGeneID);
 		}
 		curGene = this.genes.get(curGeneID);
-		curGene.strand = feature.getStrand();
-		curGene.start = feature.getStart();
-		curGene.end = feature.getEnd();
-		curGene.chromosom = identifier2chromosom.get(feature.sequence_id);
+		curGene.strand = feature.strand;
+		curGene.start = feature.start;
+		curGene.end = feature.end;
+		curGene.chromosom = identifier2chromosom.get(feature.sequenceID);
 		// extract the Genesymbol
-		if (feature.getAttribute("Name") != null)
-			curGene.name = feature.getAttribute("Name");
+		if (feature.attributes.get("Name") != null)
+			curGene.name = feature.attributes.get("Name");
 		// extract Xreferences
 		// if(feature.getAttribute("Dbxref") != null)
 		// extractXreferences(feature.getAttribute("Dbxref"));
