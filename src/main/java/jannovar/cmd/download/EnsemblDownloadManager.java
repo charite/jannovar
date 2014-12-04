@@ -91,7 +91,7 @@ public class EnsemblDownloadManager extends DownloadManager {
 
 		// Log success and statistics.
 		Object params[] = { before, after };
-		LOGGER.log(Level.INFO, "Found %d transcript models from Ensembl GFF resource, %d of which had sequences",
+		LOGGER.log(Level.INFO, "Found {0} transcript models from Ensembl GFF resource, {1} of which had sequences",
 				params);
 
 		return result;

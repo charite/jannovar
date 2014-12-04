@@ -68,6 +68,7 @@ public final class GFFParser {
 	 * This can then be fed to a {@link TranscriptModelBuilder} for building {@link TranscriptModel} objects.
 	 */
 	public ArrayList<Feature> parse() {
+		LOGGER.log(Level.INFO, "Parsing GFF...");
 		FeatureBuilder featureBuilder = new FeatureBuilder(); // reusing this object below
 
 		ArrayList<Feature> result = new ArrayList<Feature>();

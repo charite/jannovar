@@ -43,23 +43,21 @@ public class RefseqDownloadManager extends DownloadManager {
 		ArrayList<TranscriptModel> result = null;
 		// parse GFF/GTF
 		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
-		if (!path.endsWith(System.getProperty("file.separator")))
-			path += System.getProperty("file.separator");
 		switch (this.options.genomeRelease) {
 		case MM9:
-			path += Constants.refseq_gff_mm9;
+			path = PathUtil.join(path, Constants.refseq_gff_mm9);
 			break;
 		case MM10:
-			path += Constants.refseq_gff_mm10;
+			path = PathUtil.join(path, Constants.refseq_gff_mm10);
 			break;
 		case HG18:
-			path += Constants.refseq_gff_hg18;
+			path = PathUtil.join(path, Constants.refseq_gff_hg18);
 			break;
 		case HG19:
-			path += Constants.refseq_gff_hg19;
+			path = PathUtil.join(path, Constants.refseq_gff_hg19);
 			break;
 		case HG38:
-			path += Constants.refseq_gff_hg38;
+			path = PathUtil.join(path, Constants.refseq_gff_hg38);
 			break;
 		default:
 			System.err.println("[ERROR] Unknown release: " + options.genomeRelease);
@@ -90,7 +88,10 @@ public class RefseqDownloadManager extends DownloadManager {
 		}
 
 		// Load sequences.
-		FastaParser efp = new RefSeqFastaParser(path + Constants.refseq_rna, result);
+		String refSeqPath = PathUtil.join(options.downloadPath,
+				options.genomeRelease.getUCSCString(options.genomeRelease), Constants.refseq_rna);
+		System.err.println("path " + refSeqPath);
+		FastaParser efp = new RefSeqFastaParser(refSeqPath, result);
 		int before = result.size();
 		result = efp.parse();
 		int after = result.size();

@@ -9,10 +9,11 @@ import java.io.File;
  */
 public class PathUtil {
 
-	public static String join(String path1, String path2) {
-		File file1 = new File(path1);
-		File file2 = new File(file1, path2);
-		return file2.getPath();
+	public static String join(String... args) {
+		File file = new File(args[0]);
+		for (int i = 1; i < args.length; ++i)
+			file = new File(file, args[i]);
+		return file.getPath();
 	}
 
 }
