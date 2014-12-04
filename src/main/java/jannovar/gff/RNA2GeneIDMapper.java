@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  */
-public class RNA2GeneIDMapper {
+public final class RNA2GeneIDMapper {
 
 	private static final String ENSEMBL_REGEX = "ENS[MUS]*G0+([0-9]+)";
 	private static final Pattern ENSEMBL_PATTERN = Pattern.compile(ENSEMBL_REGEX);
