@@ -1,13 +1,15 @@
 package jannovar.reference;
 
 import jannovar.common.ChromosomeMap;
+import jannovar.common.Immutable;
 
 /**
  * Representation of a genomic interval (chromsome, begin, end) with explicit coordinate system (0-/1-based)
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomeInterval {
+@Immutable
+public final class GenomeInterval {
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */

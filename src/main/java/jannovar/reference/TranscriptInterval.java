@@ -1,11 +1,14 @@
 package jannovar.reference;
 
+import jannovar.common.Immutable;
+
 /**
  * Interval on a transcript.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptInterval {
+@Immutable
+public final class TranscriptInterval {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */

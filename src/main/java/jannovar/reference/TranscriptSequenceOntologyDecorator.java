@@ -1,5 +1,6 @@
 package jannovar.reference;
 
+import jannovar.common.Immutable;
 import jannovar.exception.ProjectionException;
 
 /**
@@ -7,7 +8,8 @@ import jannovar.exception.ProjectionException;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptSequenceOntologyDecorator {
+@Immutable
+public final class TranscriptSequenceOntologyDecorator {
 	/** the transcript information to perform the projection upon. */
 	private final TranscriptInfo transcript;
 

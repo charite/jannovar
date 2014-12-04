@@ -1,5 +1,6 @@
 package jannovar.reference;
 
+import jannovar.common.Immutable;
 import jannovar.exception.ProjectionException;
 
 /**
@@ -7,7 +8,8 @@ import jannovar.exception.ProjectionException;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptProjectionDecorator {
+@Immutable
+public final class TranscriptProjectionDecorator {
 	/** constant for invalid exon index */
 	public static final int INVALID_EXON_ID = -1;
 	/** constant for invalid intron index */

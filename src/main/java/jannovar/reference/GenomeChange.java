@@ -1,9 +1,9 @@
 package jannovar.reference;
 
 import jannovar.annotation.VariantDataCorrector;
+import jannovar.common.Immutable;
 import jannovar.util.DNAUtils;
 
-// TODO(holtgrew): enforce immutability of pos
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
  *
@@ -12,7 +12,8 @@ import jannovar.util.DNAUtils;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomeChange {
+@Immutable
+public final class GenomeChange {
 	/** position of the change */
 	public final GenomePosition pos;
 	/** nucleic acid reference string */

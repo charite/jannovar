@@ -1,13 +1,14 @@
 package jannovar.reference;
 
-// TODO(holtgrem): Introduce CDSPosition for explicitely expressing this third coordinate system?
+import jannovar.common.Immutable;
 
 /**
  * Position on a transcript.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class CDSPosition {
+@Immutable
+public final class CDSPosition {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */

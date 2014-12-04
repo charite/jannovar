@@ -1,11 +1,14 @@
 package jannovar.reference;
 
+import jannovar.common.Immutable;
+
 /**
  * Representation of a change in amino acids.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class AminoAcidChange {
+@Immutable
+public final class AminoAcidChange {
 	/** 0-based position of the change */
 	public final int pos;
 	/** reference amino acid string */
@@ -56,7 +59,7 @@ public class AminoAcidChange {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -71,7 +74,7 @@ public class AminoAcidChange {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

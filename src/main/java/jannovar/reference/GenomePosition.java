@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.common.ChromosomeMap;
+import jannovar.common.Immutable;
 import jannovar.exception.InvalidCoordinateException;
 
 /**
@@ -17,7 +18,8 @@ import jannovar.exception.InvalidCoordinateException;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomePosition {
+@Immutable
+public final class GenomePosition {
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */

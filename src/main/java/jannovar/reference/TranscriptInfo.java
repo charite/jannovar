@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.common.Constants;
+import jannovar.common.Immutable;
 
 import com.google.common.collect.ImmutableList;
 
@@ -12,7 +13,8 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptInfo {
+@Immutable
+public final class TranscriptInfo {
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
 	 * included.
