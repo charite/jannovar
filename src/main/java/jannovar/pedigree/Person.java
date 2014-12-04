@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * A class representing one individual within a {@link jannovar.pedigree.Pedigree Pedigree}. In essence, this class
  * stores data representing the six fields of a PED file:
- * 
+ *
  * @author Peter Robinson
  * @version 0.06 (27 December, 2013)
  */
@@ -67,7 +67,8 @@ public class Person {
 	 */
 	private int index;
 
-	public Person(String famID, String indID, String fathID, String mothID, String sx, String dse) throws PedParseException {
+	public Person(String famID, String indID, String fathID, String mothID, String sx, String dse)
+			throws PedParseException {
 		this.familyID = famID;
 		this.individualID = indID;
 		this.fatherID = fathID;
@@ -159,7 +160,7 @@ public class Person {
 	/**
 	 * This function returns a list with six fields representing the six entries about this Person in the PED file. This
 	 * is intended to be used by client code to create HTML tables or to report the data in tabular form.
-	 * 
+	 *
 	 * @return list of representative entries
 	 */
 	public ArrayList<String> getPEDFileData() {

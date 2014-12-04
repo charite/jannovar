@@ -2,166 +2,246 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.common.VariantType;
-import jannovar.exception.AnnotationException;
-import jannovar.reference.Chromosome;
-import jannovar.reference.TranscriptModel;
+import jannovar.exception.InvalidGenomeChange;
+import jannovar.reference.AminoAcidChange;
+import jannovar.reference.AminoAcidChangeNormalizer;
+import jannovar.reference.CDSPosition;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.GenomeInterval;
+import jannovar.reference.PositionType;
+import jannovar.reference.TranscriptInfo;
 import jannovar.util.Translator;
 
-/**
- * This class is intended to provide a static method to generate annotations for block substitution mutations. This
- * method is put in its own class only for convenience and to at least have a name that is easy to find.
- *
- * Block substitutions are recognized in the calling class {@link Chromosome} by the fact that the length of the variant
- * sequence is greater than 1.
- *
- * @version 0.08 (22 April, 2014)
- * @author Peter N Robinson
- * @author Marten Jäger
- */
-public class BlockSubstitutionAnnotationBuilder {
-	/**
-	 * Creates annotation for a block substitution on the plus strand.
-	 *
-	 * @param tm
-	 *            The transcript model that corresponds to the deletion caused by the variant.
-	 * @param frame_s
-	 *            0 if deletion begins at first base of codon, 1 if it begins at second base, 2 if at third base
-	 * @param wtnt3
-	 *            Nucleotide sequence of wildtype codon
-	 * @param ref
-	 *            sequence of wildtype sequence
-	 * @param var
-	 *            alternate sequence (should be '-')
-	 * @param refVarStart
-	 *            Position of the variant in the CDS of the known gene
-	 * @param refVarEnd
-	 *            Position of the end of the variant in the CDS of the known gene
-	 * @param exonNumber
-	 *            Number of the affected exon (one-based: TODO chekc this).
-	 * @return An annotation corresponding to the deletion.
-	 */
-	public static Annotation getAnnotationPlusStrand(TranscriptModel tm, int frame_s, String wtnt3, String ref, String var, int refVarStart, int refVarEnd, int exonNumber) throws AnnotationException {
-		String cDNAAnno = null; // cDNA annotation.
-		String protAnno = null; // protein annotation
-		int refCDSStart = tm.getRefCDSStart(); // position of start codon in transcript.
-		int startPosMutationInCDS = refVarStart - refCDSStart + 1;
+// TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
-		cDNAAnno = String.format("c.%d_%ddelins%s", refVarStart - refCDSStart + 1, refVarEnd - refCDSStart + 1, var);
-		if ((refVarEnd - refVarStart + 1 - var.length()) % 3 == 0) {
-			protAnno = String.format("%s:%s:exon:%d:%s", tm.getGeneSymbol(), tm.getName(), exonNumber, cDNAAnno);
-			return new Annotation(tm, protAnno, VariantType.NON_FS_SUBSTITUTION, refVarStart);
-		} else { // i.e., frameshift
-			protAnno = String.format("%s:exon:%d:%s", tm.getName(), exonNumber, cDNAAnno);
-			return new Annotation(tm, protAnno, VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
-		}
+/**
+ * Builds {@link Annotation} objects for the block substitution {@link GenomeChange} in the given {@link TranscriptInfo}
+ * .
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ */
+public class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder {
+
+	/**
+	 * @param transcript
+	 *            {@link TranscriptInfo} to build the annotation for
+	 * @param change
+	 *            {@link GenomeChange} to build the annotation with
+	 * @throws InvalidGenomeChange
+	 *             if <code>change</code> did not describe a block substitution
+	 */
+	public BlockSubstitutionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change)
+			throws InvalidGenomeChange {
+		super(transcript, change);
+
+		// Guard against invalid genome change.
+		if (change.ref.length() == 0 || change.alt.length() == 0)
+			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a block substitution.");
+	}
+
+	@Override
+	Annotation build() {
+		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
+		// where applicable.
+
+		if (!transcript.isCoding())
+			return buildNonCodingAnnotation();
+
+		final GenomeInterval changeInterval = change.getGenomeInterval();
+		if (so.containsExon(changeInterval)) // deletion of whole exon
+			return buildFeatureAblationAnnotation();
+		else if (so.overlapsWithTranslationalStartSite(changeInterval))
+			return buildStartLossAnnotation();
+		else if (so.overlapsWithCDSExon(changeInterval) && so.overlapsWithCDS(changeInterval))
+			return new CDSExonicAnnotationBuilder().build(); // can affect amino acids
+		else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
+			return buildIntronicAnnotation(); // intron but no exon => intronic variant
+		else if (so.overlapsWithFivePrimeUTR(changeInterval) || so.overlapsWithThreePrimeUTR(changeInterval))
+			return buildUTRAnnotation();
+		else if (so.overlapsWithUpstreamRegion(changeInterval) || so.overlapsWithDownstreamRegion(changeInterval))
+			return buildUpOrDownstreamAnnotation();
+		else
+			return buildIntergenicAnnotation();
+	}
+
+	@Override
+	String ncHGVS() {
+		return String.format("%s:%sdelins%s", locAnno, dnaAnno, change.alt);
+	}
+
+	private Annotation buildFeatureAblationAnnotation() {
+		return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.TRANSCRIPT_ABLATION);
+	}
+
+	private Annotation buildStartLossAnnotation() {
+		return new Annotation(transcript.transcriptModel, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
 	}
 
 	/**
-	 * Creates annotation for a block substitution on the plus strand. Both ref and var are blocks.
+	 * Helper class for generating annotations for exonic CDS variants.
 	 *
-	 * @param tm
-	 *            The TranscriptModel that corresponds to the deletion caused by the variant.
-	 * @param frameShift
-	 *            0 if deletion begins at first base of codon, 1 if it begins at second base, 2 if at third base
-	 * @param wtnt3
-	 *            Nucleotide sequence of wildtype codon
-	 * @param ref
-	 *            sequence of wildtype sequence
-	 * @param var
-	 *            alternate sequence (should be '-')
-	 * @param refVarStart
-	 *            Position of the variant in the CDS of the known gene
-	 * @param refVarEnd
-	 *            Position of the end of the variant in the CDS of the known gene
-	 * @param exonNumber
-	 *            Number of the affected exon (one-based: TODO chekc this).
-	 * @return An annotation corresponding to the deletion.
+	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
 	 */
-	public static Annotation getAnnotationBlockPlusStrand(TranscriptModel tm, int frameShift, String wtnt3, String ref, String var, int refVarStart, int refVarEnd, int exonNumber) throws AnnotationException {
-		// shift / remove Overlapp ref/var
-		int i = 0;
-		while (ref.charAt(i) == var.charAt(i)) {
-			i++;
-			refVarStart++;
-			frameShift++;
+	private class CDSExonicAnnotationBuilder {
+		final GenomeInterval changeInterval;
+
+		final Translator t = Translator.getTranslator();
+
+		final String wtCDSSeq;
+		final String varCDSSeq;
+		final int delFrameShift;
+
+		final String wtAASeq;
+		final String varAASeq;
+		final int varAAStopPos;
+
+		final CDSPosition refChangeBeginPos;
+		final CDSPosition refChangeLastPos;
+		final CDSPosition varChangeBeginPos;
+		final CDSPosition varChangeLastPos;
+
+		// We keep the following three variables as state of the algorithm since we do not have easy-to-use triples in
+		// Java.
+
+		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		VariantType varType;
+		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		AminoAcidChange aaChange;
+		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		String protAnno;
+
+		public CDSExonicAnnotationBuilder() {
+			this.changeInterval = change.getGenomeInterval();
+			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
+			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
+			this.delFrameShift = (varCDSSeq.length() - wtCDSSeq.length()) % 3;
+
+			// TODO(holtgrem): Not translating in the cases we don't need it might save time
+			// Translate the variant CDS sequence.
+			this.wtAASeq = t.translateDNA(wtCDSSeq);
+			this.varAASeq = t.translateDNA(varCDSSeq);
+
+			// Get the reference change begin position as CDS coordinate, handling introns and positions outside of CDS.
+			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
+					.withPositionType(PositionType.ZERO_BASED);
+			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(
+					changeInterval.getGenomeEndPos().shifted(-1)).withPositionType(PositionType.ZERO_BASED);
+			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+				refChangeLastPos = refChangeLastPos.shifted(-1); // shift if projected to end position
+			this.refChangeLastPos = refChangeLastPos;
+			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
+			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
+					.withPositionType(PositionType.ZERO_BASED);
+			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
+					changeInterval.getGenomeBeginPos().shifted(change.alt.length() - 1)).withPositionType(
+					PositionType.ZERO_BASED);
+			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
+			this.varChangeLastPos = varChangeLastPos;
+			// "(...+2)/3" => round up integer division result
+			this.aaChange = new AminoAcidChange(refChangeBeginPos.pos / 3, wtAASeq.substring(refChangeBeginPos.pos / 3,
+					(refChangeLastPos.pos + 1 + 2) / 3), varAASeq.substring(varChangeBeginPos.pos / 3,
+					(varChangeLastPos.pos + 1 + 2) / 3));
+
+			// Look for stop codon, starting at change position.
+			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.pos / 3);
 		}
-		frameShift = frameShift % 3;
-		int iend = ref.length();
-		int diffnt = ref.length() - var.length();
-		while (iend > i && ref.charAt(iend - 1) == var.charAt(iend - 1 - diffnt)) {
-			iend--;
-			refVarEnd--;
+
+		public Annotation build() {
+			if (delFrameShift == 0)
+				handleNonFrameShiftCase();
+			else
+				handleFrameShiftCase();
+
+			return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno), varType);
 		}
-		ref = ref.substring(i, iend);
-		if (i == iend)
-			var = "-";
-		else
-			var = var.substring(i, iend - diffnt);
 
-		Translator translator = Translator.getTranslator(); // Singleton
-		String cDNAAnno = null; // cDNA annotation.
-		String protAnno = null; // protein annotation
-		int refCDSStart = tm.getRefCDSStart(); // position of start codon in transcript.
-		int startPosMutationInCDS = refVarStart - refCDSStart + 1;
-		int posVariantInCDS = refVarStart - tm.getRefCDSStart() + 1; // position of deletion within coding sequence
-		int varPosEnd = (int) Math.floor((refVarEnd - refCDSStart) / 3) + 1;
-		String wtaa = translator.translateDNA(wtnt3);
-		int aavarpos = ((posVariantInCDS % 3) == 0) ? posVariantInCDS / 3 : (int) Math.floor(posVariantInCDS / 3) + 1;
+		private void handleNonFrameShiftCase() {
+			// The variant is a non-frameshift block substitution. The substitution could span more than one exon and
+			// thus also affect a splice donor or acceptor site, delete a stop codon. Further, the variant might also be
+			// a splice region variant but that a lower priority than a non-frameshift deletion.
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICE_REGION;
+			else if (so.overlapsWithTranslationalStopSite(changeInterval))
+				varType = VariantType.STOPLOSS;
+			else
+				varType = VariantType.NON_FS_SUBSTITUTION;
 
-		if (ref.length() == 1 && var.length() == 1)
-			cDNAAnno = String.format("%s:exon%d:c.%d%s>%s", tm.getName(), exonNumber, refVarStart - refCDSStart + 1, ref, var);
-		else
-			cDNAAnno = String.format("%s:exon%d:c.%d_%ddelins%s", tm.getName(), exonNumber, refVarStart - refCDSStart + 1, refVarEnd - refCDSStart + 1, var);
+			if (refChangeBeginPos.getFrameshift() == 0) {
+				// TODO(holtgrem): Implement shifting for substitutions for AA string
+			}
 
-		if ((refVarEnd - refVarStart + 1 - var.length()) % 3 == 0) {
-			int endframe_s = (frameShift + (ref.length() % 3)) % 3;
+			// Normalize the amino acid change with the var AA sequence.
+			while (aaChange.ref.length() > 0 && aaChange.alt.length() > 0
+					&& aaChange.ref.charAt(0) == aaChange.alt.charAt(0))
+				aaChange = aaChange.shiftRight();
+			// Truncate change.alt after stop codon.
+			aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
+			if (aaChange.alt.equals("*"))
+				varType = VariantType.STOPGAIN;
 
-			String wtntend = tm.getCodonAt(refVarEnd + 1, endframe_s);
-			String wtntSeq = tm.getCDNASequence().substring(refVarStart - frameShift - 1, refVarEnd + (3 - endframe_s));
-			String mutntSeq = String.format("%s%s%s", wtnt3.substring(0, frameShift), var, wtntend.substring(endframe_s));
+			char wtAAFirst = wtAASeq.charAt(aaChange.pos);
+			char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
+			String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
+			String wtAAFirstLong = (wtAAFirst == '*') ? "*" : t.toLong(wtAAFirst);
+			String wtAALastLong = (wtAALast == '*') ? "*" : t.toLong(wtAALast);
 
-			String wtAAseq = translator.translateDNA(wtntSeq);
-			String mutAAseq = translator.translateDNA(mutntSeq);
-			if (wtAAseq.equals(mutAAseq)) {
-				protAnno = String.format("%s:p.(=)", cDNAAnno);
+			// We differentiate the case of replacing a single amino acid and replacing multiple ones. Note that
+			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
+			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
+			if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
+				protAnno = String.format("p.%s%d%s", wtAAFirstLong, aaChange.pos + 1, t.toLong(insertedAAs.charAt(0)));
+			else
+				protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
+						aaChange.getLastPos() + 1, t.toLong(insertedAAs));
+
+			// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
+			if (so.overlapsWithTranslationalStopSite(changeInterval)) {
+				// Differentiate between the variant AA string containing a stop codon or not.
+				if (varAAStopPos >= 0)
+					protAnno = String.format("%sext*%d", protAnno, varAAStopPos - aaChange.pos + 1);
+				else
+					protAnno = String.format("%sext*?", protAnno);
+			}
+		}
+
+		private void handleFrameShiftCase() {
+			// The variant is a frameshift deletion. The deletion could span more than one exon and thus also affect a
+			// splice donor or acceptor site. Further, the variant might also be stop lost or splice region variant but
+			// that has a lower priority than a frameshift deletion.
+			if (so.overlapsWithSpliceDonorSite(changeInterval))
+				varType = VariantType.SPLICE_DONOR;
+			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+				varType = VariantType.SPLICE_ACCEPTOR;
+			else if (so.overlapsWithSpliceRegion(changeInterval))
+				varType = VariantType.SPLICE_REGION;
+			else if (so.overlapsWithTranslationalStopSite(changeInterval))
+				varType = VariantType.STOPLOSS;
+			else
+				varType = VariantType.FS_SUBSTITUTION;
+
+			// Differentiate between the cases where we have a stop codon and those where we don't.
+			if (varAAStopPos >= 0) {
+				// We have a stop codon, yay!
+				char wtAA = wtAASeq.charAt(aaChange.pos);
+				char varAA = varAASeq.charAt(aaChange.pos);
+				int stopCodonOffset = varAAStopPos - aaChange.pos + 1;
+				String wtAALong = (wtAA == '*') ? "*" : t.toLong(wtAA);
+				String varAALong = (varAA == '*') ? "*" : t.toLong(varAA);
+				String opDesc = "fs"; // operation description
+				if (aaChange.ref.indexOf('*') >= 0)
+					opDesc = "ext"; // stop codon deleted
+				protAnno = String.format("p.%s%d%s%s*%d", wtAALong, aaChange.pos + 1, varAALong, opDesc,
+						stopCodonOffset);
 			} else {
-				int idx = 0;
-				while (idx < wtAAseq.length() && wtAAseq.charAt(idx) == mutAAseq.charAt(idx)) {
-					idx++;
-				}
-
-				int xdi = wtAAseq.length();
-				int diff = wtAAseq.length() - mutAAseq.length();
-				while (xdi > idx && wtAAseq.charAt(xdi - 1) == mutAAseq.charAt(xdi - 1 - diff)) {
-					xdi--;
-				}
-				int stopIdx = mutAAseq.indexOf("*");
-				if (stopIdx >= 0)
-					protAnno = String.format("%s:p.%s%d_%s%ddelins%s", cDNAAnno, wtAAseq.charAt(idx), aavarpos + idx,
-							wtAAseq.charAt(xdi - 1), varPosEnd, mutAAseq.substring(idx, stopIdx + 1));
-				else if (idx < wtAAseq.length())
-					protAnno = String.format("%s:p.%s%d_%s%ddelins%s", cDNAAnno, wtAAseq.charAt(idx), aavarpos + idx,
-							wtAAseq.charAt(xdi - 1), varPosEnd, mutAAseq.substring(idx, xdi - diff));
-				else {
-					String wtntSeqAfter = tm.getCDNASequence().substring(refVarEnd + (3 - endframe_s), refVarEnd + (3 - endframe_s) + 3);
-					String wtAAseqAfter = translator.translateDNA(wtntSeqAfter);
-					protAnno = String.format("%s:p.%s%d_%s%dins%s", cDNAAnno, wtAAseq.charAt(idx - 1), aavarpos + idx
-							- 1, wtAAseqAfter, varPosEnd + 1, mutAAseq.substring(idx, xdi - diff));
-				}
+				// There is no stop codon any more! Create a "probably no protein is produced".
+				protAnno = "p.0?";
+				varType = VariantType.STOPLOSS;
 			}
-			Annotation ann = new Annotation(tm, protAnno, VariantType.NON_FS_SUBSTITUTION, startPosMutationInCDS);
-			return ann;
-		} else {
-			// aaVarStartPos is now the FIRST position (one-based) of the amino-acid sequence that was duplicated.
-			int aaVarStartPos = startPosMutationInCDS % 3 == 0 ? (int) Math.floor(startPosMutationInCDS / 3) : (int) Math.floor(startPosMutationInCDS / 3) + 1;
-			// generate in-frame snippet for translation and correct for '-'-strand
-			if (tm.isMinusStrand()) {
-				// Re-adjust the wildtype nucleotides for minus strand
-				wtnt3 = tm.getWTCodonNucleotides(startPosMutationInCDS - 1 + ((3 - (var.length() % 3)) % 3), frameShift);
-			}
-			protAnno = String.format("%s:p.%s%dfs", cDNAAnno, wtaa, aaVarStartPos);
-			Annotation ann = new Annotation(tm, protAnno, VariantType.FS_SUBSTITUTION, startPosMutationInCDS);
-			return ann;
 		}
 	}
 }

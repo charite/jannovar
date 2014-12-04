@@ -233,7 +233,8 @@ public class AnnotationList {
 		if (topPriority == 1) {
 			return getExonicAnnotations(priorityList);
 		}
-		if (this.type == VariantType.ncRNA_EXONIC || this.type == VariantType.ncRNA_SPLICING) {
+		if (this.type == VariantType.ncRNA_EXONIC || this.type == VariantType.ncRNA_SPLICE_DONOR
+				|| this.type == VariantType.ncRNA_SPLICE_ACCEPTOR || this.type == VariantType.ncRNA_SPLICE_REGION) {
 			return getNoncodingRnaAnnotation(priorityList);
 		} else if (this.type == VariantType.UTR3 || this.type == VariantType.UTR5) {
 			return getUTRAnnotation(priorityList);
@@ -418,8 +419,8 @@ public class AnnotationList {
 			}
 			if (tmp.isEmpty()) {
 				continue; /*
-				 * This can happen if there are multiple genes with missense, ncRNA, synonymous etc annotations.
-				 */
+						 * This can happen if there are multiple genes with missense, ncRNA, synonymous etc annotations.
+						 */
 			}
 			sb.append(s).append("(").append(tmp.get(0));
 			for (int i = 1; i < tmp.size(); ++i) {
@@ -563,9 +564,9 @@ public class AnnotationList {
 			Annotation ann = lst.get(j);
 			if (!ann.isUTRVariant())
 				continue; /*
-				 * this skips over non UTR annotations of alternative transcripts for variants that have at
-				 * least one UTR annotation. Note this will break for variants affecting multiple genes.
-				 */
+						 * this skips over non UTR annotations of alternative transcripts for variants that have at
+						 * least one UTR annotation. Note this will break for variants affecting multiple genes.
+						 */
 			if (needGeneSymbol) {
 				sb.append(String.format("%s(%s", ann.getGeneSymbol(), ann.getVariantAnnotation()));
 				needGeneSymbol = false;

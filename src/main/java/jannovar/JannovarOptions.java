@@ -2,99 +2,87 @@ package jannovar;
 
 import jannovar.common.Constants.Release;
 
+import com.google.common.net.HostAndPort;
+
+
 /**
- * Configuration for the Jannovar annotation process.
+ * Configuration for the Jannovar program.
+ *
+ * This class contains the configuration for all Jannovar commands, even though most are not used by some commands. For
+ * example, the proxy setting is only used when downloading data.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter Robinson <peter.robinson@charite.de>
  */
 public class JannovarOptions {
-	/**
-	 * Flag to indicate that Jannovar should download known gene definitions files from the UCSC server.
-	 */
-	public boolean createUCSC = false;
+	/** the selected command */
+	public Command command = null;
 
-	/**
-	 * Flag to indicate Jannovar should download transcript definition files for RefSeq.
-	 */
-	public boolean createRefseq = false;
+	// Configuration for the download command
 
-	/**
-	 * Flag to indicate Jannovar should download transcript definition files for Ensembl.
-	 */
-	public boolean createEnsembl = false;
+	/** data source to use for downloading */
+	public DataSource dataSource = DataSource.UCSC;
 
-	/**
-	 * Flag indicating if the RefSeq serialized outputfile should only contain curated entries.
-	 */
-	public boolean onlyCuratedRefSeq = false;
+	/** genome release to downloads and serialize */
+	public Release genomeRelease = Release.HG19;
 
-	/**
-	 * Flag to indicate that Jannovar should serialize the UCSC data. This flag is set to true automatically if the user
-	 * enters --create-ucsc (then, the four files are downloaded and subsequently serialized). If the user enters the
-	 * flag {@code -U path}, then Jannovar interprets path as the location of a directory that already contains the UCSC
-	 * files (either compressed or uncompressed), and sets this flag to true to perform serialization and then to exit.
-	 * The name of the serialized file that gets created is "ucsc.ser" (this cannot be changed from the command line,
-	 * see {@link #UCSCserializationFileName}).
-	 */
-	public boolean performSerialization = false;
+	/** directory to use for the downloads and the serialized file */
+	public String downloadPath = "data";
 
-	/**
-	 * Location of a directory which will be used as download directory with subfolders (by genome release e.g.
-	 * hg19,mm9) in whichthe files defining the transcript models will be stored. (the files may or may not be
-	 * compressed with gzip). The same variable is also used to indicate the output location of the serialized file. The
-	 * default value is "data/hg19/"
-	 */
-	public String dirPath = null;
+	/** proxy host and port */
+	public HostAndPort proxy = null;
 
-	/**
-	 * Name of file with serialized UCSC data. This should be the complete path to the file, and will be used for
-	 * annotating VCF files.
-	 */
-	public String serializedFile = null;
+	// Configuration for the annotate command
 
-	/** Path to a VCF file waiting to be annotated. */
-	public String VCFfilePath = null;
+	/** path to a VCF file to be annotated */
+	public String vcfFilePath = null;
 
-	/** An FTP proxy for downloading the UCSC files from behind a firewall. */
-	public String proxy = null;
+	/** path to the file with the serialized data */
+	public String dataFile = null;
 
-	/** An FTP proxy port for downloading the UCSC files from behind a firewall. */
-	public String proxyPort = null;
-
-	/**
-	 * Flag indicating whether to output annotations in Jannovar format (default: false).
-	 */
+	/** whether to write the result in the Jannovar format */
 	public boolean jannovarFormat = false;
 
-	/**
-	 * Flag indication whether the annotations for all affected transcripts should be reported.
-	 */
+	/** whether to report the annotations for all affected transcripts */
 	public boolean showAll = false;
 
-	/** chromosomal position an NA change (e.g. chr1:12345C>A) */
+	/** path to output folder for the annotated VCF files (default is current folder) */
+	public String outVCFFolder = null;
+
+	// TODO(holtgrem): enable and use this!
+	/** path to output VCF file path (overrides generation of file name from input file name) */
+	public String outVCFFile = null;
+
+	// Configuration for the annotate-position command
+
+	/** chromosomal position and a change, e.g. "chr1:12345C>A" */
 	public String chromosomalChange = null;
 
 	/**
-	 * genome release for the download and the creation of the serialized transcript model file
+	 * The command that is to be executed.
 	 */
-	public Release genomeRelease = Release.HG19;
-
-	/** Output folder for the annotated VCF files (default: current folder) */
-	public String outVCFfolder = null;
-
-	/** @return true if we should annotate a VCF file */
-	public boolean hasVCFfile() {
-		return VCFfilePath != null;
+	public enum Command {
+		DOWNLOAD, ANNOTATE_VCF, ANNOTATE_POSITION
 	}
 
 	/**
-	 * @return true if we should deserialize a file with transcript model data to perform analysis
+	 * Enumeration of the supported data sources.
 	 */
-	public boolean deserialize() {
-		return serializedFile != null;
+	public enum DataSource {
+		ENSEMBL, REFSEQ, REFSEQ_CURATED, UCSC
 	}
 
-	public JannovarOptions() {
+	void print() {
+		if (command == Command.DOWNLOAD) {
+			System.err.println("dataSource: " + dataSource);
+			System.err.println("downloadPath" + downloadPath);
+			System.err.println("genome: " + genomeRelease);
+			System.err.println("proxy: " + proxy);
+		} else if (command == Command.ANNOTATE_VCF) {
+			System.err.println("dataFile:" + dataFile);
+			System.err.println("vcf:" + vcfFilePath);
+			System.err.println("showAll:" + showAll);
+			System.err.println("jannovarFormat:" + jannovarFormat);
+		}
 	}
 }

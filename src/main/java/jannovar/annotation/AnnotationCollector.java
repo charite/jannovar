@@ -58,6 +58,7 @@ import java.util.HashSet;
  * @version 0.24 (3 August, 2013)
  * @author Peter N Robinson
  */
+// TODO(holtgrem): ecpose the hasNcRna etc. fields?
 class AnnotationCollector implements Constants {
 
 	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
@@ -74,26 +75,37 @@ class AnnotationCollector implements Constants {
 	/** Flag to state we have at least one splicing variant */
 	private boolean hasSplicing;
 	/** Flag to state that we have at least one noncoding RNA variant. */
+	@SuppressWarnings("unused")
 	private boolean hasNcRna;
 	/** Flag to state that we have at least one UTR5 variant. */
+	@SuppressWarnings("unused")
 	private boolean hasUTR5;
 	/** Flag to state that we have at least one UTR3 variant. */
+	@SuppressWarnings("unused")
 	private boolean hasUTR3;
 	/** Flag to state that we have at least one nonsynonymous exonic variant. */
+	@SuppressWarnings("unused")
 	private boolean hasSynonymous;
 	/** Flag to state that we have at least one intronic variant. */
+	@SuppressWarnings("unused")
 	private boolean hasIntronic;
 	/** Flag to state that we have at least one noncoding RNA intronic variant. */
+	@SuppressWarnings("unused")
 	private boolean hasNcrnaIntronic;
 	/** Flag to state that we have at least one upstream variant. */
+	@SuppressWarnings("unused")
 	private boolean hasUpstream;
 	/** Flag to state that we have at least one downstream variant. */
+	@SuppressWarnings("unused")
 	private boolean hasDownstream;
 	/** Flag to state that we have at least one intergenic variant. */
+	@SuppressWarnings("unused")
 	private boolean hasIntergenic;
 	/** Flag to state that we have at least one error annotation. */
+	@SuppressWarnings("unused")
 	private boolean hasError;
 	/** Flag to state we have a structural variation */
+	@SuppressWarnings("unused")
 	private boolean hasStructural;
 	/**
 	 * True if we have at least one annotation for the classes ncRNA_EXONIC SPLICING, UTR5, UTR3, EXONIC, INTRONIC
@@ -292,7 +304,9 @@ class AnnotationCollector implements Constants {
 		this.annotationLst.add(ann);
 		if (ann.getVariantType() == VariantType.SYNONYMOUS) {
 			this.hasSynonymous = true;
-		} else if (ann.getVariantType() == VariantType.SPLICING) {
+		} else if (ann.getVariantType() == VariantType.SPLICE_DONOR
+				|| ann.getVariantType() == VariantType.SPLICE_ACCEPTOR
+				|| ann.getVariantType() == VariantType.SPLICE_REGION) {
 			this.hasSplicing = true;
 		} else {
 			this.hasExonic = true;

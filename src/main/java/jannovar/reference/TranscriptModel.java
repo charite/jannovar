@@ -65,6 +65,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	private int CDSlength;
 	/** cDNA sequence of the spliced RNA of this known gene transcript. */
 	private String sequence = null;
+
+
 	/**
 	 * The Gene id that corresponds to the transcript model. Note that this information is taken from
 	 * knownToLocusLink.txt or modified Ensembl Gene ids.
@@ -502,7 +504,8 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 				}
 			}
 			if (CDSlength > 0 && cdsEnd < exonStarts[i]) {
-				System.err.println("Impossible parsing scenario for " + this.accession + " (CDSend is less than exon start)");
+				System.err.println("Impossible parsing scenario for " + this.accession
+						+ " (CDSend is smaller than exon start)");
 				System.exit(1);
 			} else if (CDSlength > 0 && this.cdsEnd <= exonEnds[i]) {
 				CDSlength += cdsEnd - exonStarts[i] + 1; /* currently in last(+) or first(-) exon of multiexon gene */
@@ -763,6 +766,13 @@ public class TranscriptModel implements java.io.Serializable, Constants {
 	 */
 	public int getActualSequenceLength() {
 		return this.sequence.length();
+	}
+
+	/**
+	 * @return the sequence
+	 */
+	public String getSequence() {
+		return sequence;
 	}
 
 	/**
