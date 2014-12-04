@@ -4,7 +4,7 @@ import static org.junit.Assert.fail;
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
 import jannovar.gff.Feature;
-import jannovar.gff.GFFparser;
+import jannovar.gff.GFFParser;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class GFFparserTest {
 
-	private static GFFparser reader = null;
+	private static GFFParser reader = null;
 
 	@Before
 	public void setUp() throws Exception {
@@ -52,7 +52,7 @@ public class GFFparserTest {
 		ps.close();
 
 		// reader = new GFFparser(tmp.getAbsolutePath());
-		reader = new GFFparser();
+		reader = new GFFParser();
 		// reader.parse("data/interim_GRCh37.p13_top_level_2013-07-05.gff3.gz");
 	}
 

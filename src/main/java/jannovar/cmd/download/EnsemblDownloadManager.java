@@ -4,7 +4,7 @@ import jannovar.JannovarOptions;
 import jannovar.common.Constants;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.JannovarException;
-import jannovar.gff.GFFparser;
+import jannovar.gff.GFFParser;
 import jannovar.io.EnsemblFastaParser;
 import jannovar.io.SerializationManager;
 import jannovar.reference.TranscriptModel;
@@ -31,7 +31,7 @@ public class EnsemblDownloadManager extends DownloadManager {
 
 		// parse transcript model list from Ensemble and return it
 		ArrayList<TranscriptModel> result = null;
-		GFFparser gff = new GFFparser();
+		GFFParser gff = new GFFParser();
 		String path;
 		path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))

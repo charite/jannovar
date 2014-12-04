@@ -28,9 +28,9 @@ import java.util.zip.GZIPInputStream;
  * @author mjaeger
  * @version 0.3 (2013-07-12)
  */
-public class GFFparser {
+public class GFFParser {
 
-	private static final Logger logger = Logger.getLogger(GFFparser.class.getSimpleName());
+	private static final Logger logger = Logger.getLogger(GFFParser.class.getSimpleName());
 
 	private final static int SEQID = 0;
 	private final static int SOURCE = 1;
@@ -72,7 +72,7 @@ public class GFFparser {
 	/**
 	 * default constructor
 	 */
-	public GFFparser() {
+	public GFFParser() {
 
 	}
 
