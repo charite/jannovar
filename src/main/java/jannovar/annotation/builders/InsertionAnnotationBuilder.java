@@ -32,7 +32,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class InsertionAnnotationBuilder extends AnnotationBuilder {
+public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript

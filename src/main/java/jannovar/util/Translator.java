@@ -6,10 +6,11 @@ import java.util.Map;
 /**
  * This singleton class helps to translate DNA sequences.
  *
- * @author Peter N Robinson, Marten Jäger
- * @version 0.05 (Dec. 12, 2012)
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  */
-public class Translator {
+public final class Translator {
+
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
 	private HashMap<String, String> codon1 = null;
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code) */

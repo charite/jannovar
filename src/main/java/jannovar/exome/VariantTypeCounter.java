@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+//TODO(holtgrem): Remove me, after adjusting pedigree module?
+
 /**
  * This class is intended to provide a simple way of counting up all of the variants found in an exome being analyzed
  * and to provide a method to display these results as HTML or in a table.

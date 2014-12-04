@@ -19,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public abstract class DownloadManager {
+abstract class DownloadManager {
 	/** configuration to use for downloading/serializing the data */
 	protected JannovarOptions options;
 

@@ -5,7 +5,7 @@ package jannovar.reference;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DuplicationChecker {
+public final class DuplicationChecker {
 
 	/**
 	 * @param ref

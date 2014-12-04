@@ -10,6 +10,8 @@ import jannovar.genotype.GenotypeCall;
 
 import java.util.ArrayList;
 
+//TODO(holtgrem): Remove me, after adjusting pedigree module.
+
 /**
  * A class that is used to hold information about the individual variants as parsed from the VCF file.
  *

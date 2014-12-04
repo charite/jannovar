@@ -6,10 +6,13 @@ import java.util.Comparator;
  * This class is intended to be used to sort lists of {@link jannovar.interval.Interval Interval} objects by ascending
  * order of their left low-points.
  *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
  */
-public class LeftComparator implements Comparator<Interval<?>> {
+public final class LeftComparator implements Comparator<Interval<?>> {
 
 	@Override
 	public int compare(Interval<?> interval_1, Interval<?> interval_2) {

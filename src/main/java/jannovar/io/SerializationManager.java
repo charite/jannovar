@@ -21,11 +21,11 @@ import java.util.ArrayList;
  * @author Peter Robinson
  * @version 0.02 (23 May, 2013)
  */
-public class SerializationManager {
+public final class SerializationManager {
 
     /**
-     * Serializes the contents of an ArrayList of 
-     * {@link jannovar.reference.TranscriptModel TranscriptModel} objects. 
+     * Serializes the contents of an ArrayList of
+     * {@link jannovar.reference.TranscriptModel TranscriptModel} objects.
      * @param filename Name and path of the file to serialize to
      * @param kgList A list of {@link jannovar.reference.TranscriptModel TranscriptModel} objects to be serialized
      * @throws jannovar.exception.JannovarException
@@ -56,12 +56,12 @@ public class SerializationManager {
         		throw new JannovarException(error);
     	}
     }
-    
-    
+
+
     /**
-     * Deserializes an ArrayList of 
+     * Deserializes an ArrayList of
      * {@link jannovar.reference.TranscriptModel TranscriptModel}
-     * objects that were 
+     * objects that were
      * originally created by parsing the four UCSC known gene files.
      * @param filename name of serialized file
      * @return list of {@link TranscriptModel}s

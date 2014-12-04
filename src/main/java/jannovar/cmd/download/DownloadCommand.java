@@ -13,7 +13,7 @@ import org.apache.commons.cli.ParseException;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DownloadCommand extends JannovarCommand {
+public final class DownloadCommand extends JannovarCommand {
 
 	public DownloadCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		super(argv);

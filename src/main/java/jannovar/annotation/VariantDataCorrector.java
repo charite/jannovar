@@ -1,5 +1,7 @@
 package jannovar.annotation;
 
+// TODO(holtgrem): Move me
+
 /**
  * Converts a triple (ref string, alt string, position) into the internal Jannovar represetation.
  *
@@ -7,7 +9,7 @@ package jannovar.annotation;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class VariantDataCorrector {
+public final class VariantDataCorrector {
 	/** The reference characters after correction. */
 	public String ref;
 	/** The alt bases after correction. */

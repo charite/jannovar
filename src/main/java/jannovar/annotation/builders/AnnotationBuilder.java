@@ -31,7 +31,7 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-abstract class AnnotationBuilder {
+public abstract class AnnotationBuilder {
 	/** transcript to annotate. */
 	protected final TranscriptInfo transcript;
 	/** genome change to use for annotation */

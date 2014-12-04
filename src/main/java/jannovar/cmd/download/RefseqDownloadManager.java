@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  * @author Peter Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class RefseqDownloadManager extends DownloadManager {
+public final class RefseqDownloadManager extends DownloadManager {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
@@ -60,9 +60,7 @@ public class RefseqDownloadManager extends DownloadManager {
 			path = PathUtil.join(path, Constants.refseq_gff_hg38);
 			break;
 		default:
-			System.err.println("[ERROR] Unknown release: " + options.genomeRelease);
-			System.exit(20);
-			break;
+			throw new JannovarException("Unknown release: " + options.genomeRelease);
 		}
 
 		// Parse GFF file, yielding a list of features.

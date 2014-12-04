@@ -59,7 +59,7 @@ import java.util.HashSet;
  * @author Peter N Robinson
  */
 // TODO(holtgrem): ecpose the hasNcRna etc. fields?
-class AnnotationCollector implements Constants {
+public final class AnnotationCollector implements Constants {
 
 	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;

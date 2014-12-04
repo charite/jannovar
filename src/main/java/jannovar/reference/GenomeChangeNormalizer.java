@@ -6,7 +6,7 @@ package jannovar.reference;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomeChangeNormalizer {
+public final class GenomeChangeNormalizer {
 
 	/**
 	 * Transform a {@link GenomeChange} to its HGVS-normalized representation.

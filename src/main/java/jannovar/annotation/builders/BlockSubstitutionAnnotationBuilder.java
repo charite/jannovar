@@ -20,7 +20,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder {
+public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript

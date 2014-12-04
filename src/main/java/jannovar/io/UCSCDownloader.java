@@ -17,7 +17,7 @@ import java.net.URLConnection;
  * @version 0.02 (10 July, 2013)
  * @author Peter Robinson
  */
-public class UCSCDownloader implements Constants {
+public final class UCSCDownloader implements Constants {
 
 	/** Path of directory to which the files will be downloaded. */
 	private String downloadDirectory;

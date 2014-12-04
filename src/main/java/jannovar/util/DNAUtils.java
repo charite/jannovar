@@ -6,7 +6,7 @@ package jannovar.util;
  * @author Peter Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DNAUtils {
+public final class DNAUtils {
 	/**
 	 * Return the reverse complement version of a DNA string in upper case. Note that no checking is done in this code
 	 * since the parse code checks for valid DNA and upper-cases the input. This code will break if these assumptions

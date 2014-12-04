@@ -6,14 +6,17 @@ package jannovar.interval;
  * template variable T to the corresponding datatype). The intervals are intended to be used with the
  * {@link jannovar.interval.IntervalTree IntervallTree}.
  *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
  * @param <T>
  *            The value attached to each node/interval.
- * 
+ *
  * @see "jannovar.interval.IntervalTree"
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  * @version 0.03 (22 May, 2013)
  */
-public class Interval<T> implements java.io.Serializable {
+public final class Interval<T> implements java.io.Serializable {
 	/**
 	 * The object that we are putting into the interval tree (such as a {@link jannovar.reference.TranscriptModel
 	 * TranscriptModel} object).

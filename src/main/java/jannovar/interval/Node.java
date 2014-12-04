@@ -6,23 +6,22 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Implements the Node structure of the interval tree. The class is intended to
- * store {@link jannovar.interval.Interval Interval} objects. Each node stores
- * all Intervals that intersect with the {@link #median}. The {@link #leftNode}
- * stores all Intervals that are completely to the left of {@link #median}, and
- * the {@link #rightNode} stores all intervals that are completely to the right.
- * Additionally there are two lists that store orders lists of the Intevals that
- * are stored within the present node. {@link #leftorder} stores the intervals
- * sorted by increased left end points (lowpoint), and {@link #rightorder}
- * stores the same intervals sorted by their right end points (highpoint).
- * 
+ * Implements the Node structure of the interval tree. The class is intended to store {@link jannovar.interval.Interval
+ * Interval} objects. Each node stores all Intervals that intersect with the {@link #median}. The {@link #leftNode}
+ * stores all Intervals that are completely to the left of {@link #median}, and the {@link #rightNode} stores all
+ * intervals that are completely to the right. Additionally there are two lists that store orders lists of the Intevals
+ * that are stored within the present node. {@link #leftorder} stores the intervals sorted by increased left end points
+ * (lowpoint), and {@link #rightorder} stores the same intervals sorted by their right end points (highpoint).
+ *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
  * @param <T>
  * @see jannovar.interval.IntervalTree
- * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem
- *         Top, Peter Robinson
+ * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
  * @version 0.08 (9 January, 2014)
  */
-public class Node<T> {
+public final class Node<T> {
 	/** Median of all intervals in this node */
 	private int median;
 	/** node containing the intervals completely to the left of the median. */
@@ -50,7 +49,7 @@ public class Node<T> {
 
 	/**
 	 * Node constructor.
-	 * 
+	 *
 	 * @param intervals
 	 *            A list containing all intervals
 	 */
@@ -147,7 +146,7 @@ public class Node<T> {
 	 * Note that because list of Integers represent each of the endpoints of the
 	 * intervals that cross the midline, they need to be sorted before we can
 	 * calculate the median.
-	 * 
+	 *
 	 * @param list
 	 *            A list of integers
 	 * @return The median of the list
@@ -181,7 +180,7 @@ public class Node<T> {
 	 * neighbor is the interval whose low point is the most to the left. This is
 	 * the interval that is returned by this function (it is the first element
 	 * of {@link #leftorder}).
-	 * 
+	 *
 	 * @return the left most Interval
 	 */
 	public Interval<T> getLeftmostItem() {
@@ -199,7 +198,7 @@ public class Node<T> {
 	 * neighbor is the interval whose highpoint is the most to the right. This
 	 * is the interval that is returned by this function (it is the first
 	 * element of {@link #rightorder}).
-	 * 
+	 *
 	 * @return the left most Interval
 	 */
 	public Interval<T> getRightmostItem() {
@@ -208,7 +207,7 @@ public class Node<T> {
 
 	/**
 	 * Checks if this node is empty.
-	 * 
+	 *
 	 * @return True, if the node is empty, otherwise False
 	 */
 	public boolean isEmpty() {
@@ -258,7 +257,7 @@ public class Node<T> {
 	/**
 	 * This is intended to be used to print out the interval tree for debugging
 	 * purposes.
-	 * 
+	 *
 	 * @param type
 	 * @param level
 	 */

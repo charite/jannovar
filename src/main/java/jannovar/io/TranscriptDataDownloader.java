@@ -21,7 +21,7 @@ import java.net.URLConnection;
  * @author mjaeger
  *
  */
-public class TranscriptDataDownloader implements Constants {
+public final class TranscriptDataDownloader implements Constants {
 	/** Path of directory to which the files will be downloaded. */
 	private String downloadPath;
 

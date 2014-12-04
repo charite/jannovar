@@ -14,7 +14,7 @@ import com.google.common.net.HostAndPort;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter Robinson <peter.robinson@charite.de>
  */
-public class JannovarOptions {
+public final class JannovarOptions {
 	/** the selected command */
 	public Command command = null;
 

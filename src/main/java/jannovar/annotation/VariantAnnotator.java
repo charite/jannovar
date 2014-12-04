@@ -26,7 +26,7 @@ import java.util.HashMap;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class VariantAnnotator {
+public final class VariantAnnotator {
 	/** Chromosomes with their TranscriptModel objects. */
 	private HashMap<Byte, Chromosome> chromosomeMap = null;
 

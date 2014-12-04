@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptModelBuilder implements ChromosomeMap {
+public final class TranscriptModelBuilder implements ChromosomeMap {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(TranscriptModelBuilder.class.getSimpleName());

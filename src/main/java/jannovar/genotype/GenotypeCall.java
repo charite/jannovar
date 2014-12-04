@@ -5,11 +5,12 @@ import jannovar.common.Genotype;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+// TODO(holtgrem): Remove me, after adjusting pedigree module.
 
 /**
  * This class is intended to encapsulate a genotype for a single
  * variant (i.e., line in a VCF file) for a VCF file with a single or will multiple
- * samples. The individual calls for each sample are stored in 
+ * samples. The individual calls for each sample are stored in
  * {@link #callList}, and the corresponding qualities are stored in {@link #qualityList}.
  * <P>
  * The class also stores the values for DP (read depth at this position for this sample) and
@@ -21,8 +22,8 @@ import java.util.Iterator;
  */
 public class GenotypeCall  {
 
-  
-    /**  
+
+    /**
      * List of genotype calls (See {@link jannovar.common.Genotype Genotype})
      * for one variant.
      */
@@ -36,9 +37,9 @@ public class GenotypeCall  {
      * List of read depth values for the genotypes at hand (VCF DP field).
      */
     private ArrayList<Integer> depthList=null;
-    
+
     /**
-     * The constructor takes lists of calls and qualities that have been parsed from 
+     * The constructor takes lists of calls and qualities that have been parsed from
      * a single VCF line by the {@link jannovar.genotype.MultipleGenotypeFactory MultipleGenotypeFactory}.
      * By assumption, there are multiple samples, which are described elsewhere by a PED file.
      * @param calls A list of the genotype calls, one for each sample
@@ -50,7 +51,7 @@ public class GenotypeCall  {
     }
 
     /**
-     * The constructor takes lists of calls and qualities that have been parsed from 
+     * The constructor takes lists of calls and qualities that have been parsed from
      * a single VCF line by the {@link jannovar.genotype.MultipleGenotypeFactory MultipleGenotypeFactory}.
      * By assumption, there are multiple samples, which are described elsewhere by a PED file.
      * @param calls A list of the genotype calls, one for each sample
@@ -107,14 +108,14 @@ public class GenotypeCall  {
 	    case HOMOZYGOUS_REF: lst.add("0/0"); break;
 	    case HOMOZYGOUS_ALT: lst.add("1/1"); break;
 	    case HETEROZYGOUS: lst.add("0/1"); break;
-	    case NOT_OBSERVED: lst.add("./."); break;  
-	    case ERROR: lst.add("?"); break;  
+	    case NOT_OBSERVED: lst.add("./."); break;
+	    case ERROR: lst.add("?"); break;
 	    case UNINITIALIZED: lst.add("-");
 	    }
 	}
 	return lst;
     }
-   
+
     /**
      * @return A string with all genotype calls separated by ":", e.g., "0/0:0/1:1/1"
      */
@@ -129,15 +130,15 @@ public class GenotypeCall  {
 	    case HOMOZYGOUS_REF: sb.append("0/0"); break;
 	    case HOMOZYGOUS_ALT: sb.append("1/1"); break;
 	    case HETEROZYGOUS: sb.append("0/1"); break;
-	    case NOT_OBSERVED: sb.append("./."); break;  
-	    case ERROR: sb.append("?"); break;  
+	    case NOT_OBSERVED: sb.append("./."); break;
+	    case ERROR: sb.append("?"); break;
 	    case UNINITIALIZED: sb.append("-");
 	    }
-	    
+
 	}
 	return sb.toString();
     }
-    
+
     /**
      * Note that this function expects the parameter n to be zero-based.
      * If the n is invalid, return null.
@@ -161,7 +162,7 @@ public class GenotypeCall  {
 	    throw new IllegalArgumentException();
 	return this.depthList.get(n);
     }
-    
+
     /**
      * @param n The number of the sample in the VCF file.
      * @return the PHRED quality for the current variant as found in individual N
@@ -213,7 +214,7 @@ public class GenotypeCall  {
 
 
     /**
-     * @param n Number of the individual in the VCF file 
+     * @param n Number of the individual in the VCF file
      * @return true if the genotype is called as "./." in individual n
      */
     public boolean isMissingInIndividualN(int n) {
@@ -223,7 +224,7 @@ public class GenotypeCall  {
 	return gt == Genotype.NOT_OBSERVED;
     }
 
-   
+
 
     /**
      * This method gets the number of individuals included in the

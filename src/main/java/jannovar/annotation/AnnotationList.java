@@ -21,7 +21,7 @@ import java.util.HashSet;
  * @author Peter N Robinson
  * @version 0.19 (31 December, 2013)
  */
-public class AnnotationList {
+public final class AnnotationList {
 	/**
 	 * A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated with a
 	 * {@link jannovar.exome.Variant Variant} object.

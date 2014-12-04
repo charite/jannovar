@@ -5,7 +5,7 @@ package jannovar.reference;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class AminoAcidChangeNormalizer {
+public final class AminoAcidChangeNormalizer {
 
 	/**
 	 * Search for stop codon in <code>change.alt</code> and truncate afterwards.

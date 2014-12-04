@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * @author Peter Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class EnsemblDownloadManager extends DownloadManager {
+public final class EnsemblDownloadManager extends DownloadManager {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
@@ -58,9 +58,7 @@ public class EnsemblDownloadManager extends DownloadManager {
 			path += Constants.ensembl_hg19;
 			break;
 		default:
-			System.err.println("[ERROR] Unknown release: " + options.genomeRelease);
-			System.exit(20);
-			break;
+			throw new JannovarException("Unknown release: " + options.genomeRelease);
 		}
 		// Parse GFF file, yielding a list of features.
 		GFFParser gffParser;

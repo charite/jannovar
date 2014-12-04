@@ -22,7 +22,7 @@ import java.util.HashMap;
  * @author Peter N Robinson, Marten Jäger
  * @version 0.32 (15 April, 2014)
  */
-public class Chromosome {
+public final class Chromosome {
 	/**
 	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
 	 * way of dealing with scaffolds etc.

@@ -4,7 +4,7 @@ import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.reference.TranscriptModel;
 
-// TODO(holtgrem): Move
+// TODO(holtgrem): Move, cleanup
 
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
@@ -22,7 +22,7 @@ import jannovar.reference.TranscriptModel;
  * @author Peter N Robinson
  * @version 0.32 (3 February, 2014)
  */
-public class Annotation implements Constants, Comparable<Annotation> {
+public final class Annotation implements Constants, Comparable<Annotation> {
 	/**
 	 * The type of the variant being annotated, using the constants in {@link jannovar.common.VariantType VariantType},
 	 * e.g., MISSENSE, 5UTR, etc.

@@ -9,7 +9,7 @@ import jannovar.JannovarOptions;
  * @author Marten Jaeger
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DownloadManagerFactory {
+public final class DownloadManagerFactory {
 	/**
 	 * @param options
 	 *            configuration to use

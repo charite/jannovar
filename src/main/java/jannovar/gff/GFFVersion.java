@@ -6,7 +6,7 @@ import jannovar.common.Immutable;
  * Wraps information about the version of a GFF/GTF file and allows to query format specific values.
  */
 @Immutable
-public class GFFVersion {
+public final class GFFVersion {
 	/** the version */
 	public final int version;
 	/** the string to use for separating attributes */

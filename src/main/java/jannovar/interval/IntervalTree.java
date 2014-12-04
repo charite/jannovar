@@ -44,6 +44,9 @@ import java.util.List;
  * <P>
  * The construction of an Interval Tree enables a fast search of overlapping intervals.
  *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
  * @author Christopher Dommaschenz
  * @author Radostina Misirkova
  * @author Nadine Taube
@@ -55,7 +58,7 @@ import java.util.List;
  * @param <T>
  *            The contained type to attach to the intervals.
  */
-public class IntervalTree<T> implements java.io.Serializable {
+public final class IntervalTree<T> implements java.io.Serializable {
 	/**
 	 * Encapsulates the algorithm state such that the current query position is not
 	 *

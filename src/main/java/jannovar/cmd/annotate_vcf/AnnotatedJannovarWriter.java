@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
 	/** configuration to use */

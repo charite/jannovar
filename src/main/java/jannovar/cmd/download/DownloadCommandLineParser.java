@@ -21,7 +21,7 @@ import com.google.common.net.HostAndPort;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DownloadCommandLineParser {
+public final class DownloadCommandLineParser {
 
 	/** options representation for the Apache commons command line parser */
 	protected Options options;

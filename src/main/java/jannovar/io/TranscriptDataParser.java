@@ -20,7 +20,7 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * Base class for parsers of UCSC data (KnownGene and RefSeq).
- * 
+ *
  * @author Peter N Robinson
  * @version 0.01 (10 July, 2013)
  */
@@ -35,7 +35,7 @@ public class TranscriptDataParser {
 	/**
 	 * Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the value is the corresponding
 	 * TranscriptModel object
-	 * 
+	 *
 	 * @see jannovar.reference.TranscriptModel
 	 */
 	protected HashMap<String, TranscriptModel> knownGeneMap = null;
@@ -43,7 +43,7 @@ public class TranscriptDataParser {
 	/**
 	 * The constructor initializes the Map of {@link jannovar.reference.TranscriptModel TranscriptModel} objects and
 	 * sets the directory path for the downloaded files that will be parsed by one of the subclasses.
-	 * 
+	 *
 	 * @param path
 	 *            Location of a directory that must contain the files that will be downloaded
 	 */
@@ -58,7 +58,7 @@ public class TranscriptDataParser {
 
 	/**
 	 * Construct the object and also set proxy properties for http connection.
-	 * 
+	 *
 	 * @param dirpath
 	 *            Location of a directory that must contain the files that will be downloaded
 	 * @param proxyHost
@@ -94,7 +94,7 @@ public class TranscriptDataParser {
 
 	/**
 	 * Open a file handle from a compressed (gzip) or uncompressed file
-	 * 
+	 *
 	 * @param path
 	 *            Path to the file to be opened
 	 * @param isGzip
@@ -130,7 +130,7 @@ public class TranscriptDataParser {
 	/**
 	 * This method downloads a file to the specified local file path. If the file already exists, it emits a warning
 	 * message and does nothing.
-	 * 
+	 *
 	 * @param baseURL
 	 *            remote directory path
 	 * @param fname
@@ -148,12 +148,12 @@ public class TranscriptDataParser {
 			return false;
 		}
 		System.err.println("[INFO] Downloading: \"" + urlstring + "\"");
-		
+
 		// Error handling can be improved with Java 7.
 		String err = null;
 		InputStream reader = null;
 		FileOutputStream writer = null;
-		
+
 		int threshold = 0;
 		int block = 250000;
 		try {

@@ -11,6 +11,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ */
 public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineParser {
 
 	@Override

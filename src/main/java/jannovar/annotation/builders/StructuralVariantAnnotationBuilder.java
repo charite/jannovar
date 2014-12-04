@@ -12,7 +12,7 @@ import jannovar.reference.TranscriptInfo;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class StructuralVariantAnnotationBuilder {
+public final class StructuralVariantAnnotationBuilder {
 
 	/** the transcript to build the annotation for */
 	private final TranscriptInfo transcript;

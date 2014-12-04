@@ -4,10 +4,10 @@ import jannovar.reference.TranscriptModel;
 
 import java.util.ArrayList;
 
-public class EnsemblFastaParser extends FastaParser {
-	
+public final class EnsemblFastaParser extends FastaParser {
+
 	private String[] fields;
-	
+
 	public EnsemblFastaParser(String filename, ArrayList<TranscriptModel> models) {
 		super(filename, models);
 	}

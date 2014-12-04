@@ -17,7 +17,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class DeletionAnnotationBuilder extends AnnotationBuilder {
+public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript

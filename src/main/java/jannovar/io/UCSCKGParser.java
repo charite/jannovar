@@ -33,14 +33,14 @@ import java.io.IOException;
  * <P>
  * This class additionally parses the ucsc {@code KnownToLocusLink.txt} file, which contains cross references from the
  * ucsc IDs to the corresponding Entrez Gene ids (earlier known as Locus Link):
- * 
+ *
  * <PRE>
  * uc010eve.3      3805
  * uc002qug.4      3805
  * uc010evf.3      3805
  * ...
  * </PRE>
- * 
+ *
  * The class additionally parses the files {@code knownGeneMrna.txt} and {@code kgXref.txt}.
  * <P>
  * The result of parsing is the creation of a list of {@link jannovar.reference.TranscriptModel TranscriptModel}
@@ -48,18 +48,18 @@ import java.io.IOException;
  * <p>
  * It is possible to parse directly from the gzip file without decompressing them, or the start from the decompressed
  * files. The class checks of the files exist and if they have the suffix "gz".
- * 
+ *
  * @see <a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">UCSC hg19 database downloads</a>
  * @author Peter N Robinson
  * @version 0.17 (10 July, 2013)
  */
-public class UCSCKGParser extends TranscriptDataParser implements Constants {
+public final class UCSCKGParser extends TranscriptDataParser implements Constants {
 	/** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
 	public static final int NFIELDS = 12;
 
 	/**
 	 * Tries to parse all four UCSC files, which must be located in the indicated directory.
-	 * 
+	 *
 	 * @param path
 	 *            Location of a directory that must contain the files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and
 	 *            knownToLocusLink.txt. The files optionally can be gzipped.
@@ -79,7 +79,7 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 	 * This function checks whether {@link #basePath} is a directory that contains the four UCSC transcript
 	 * definitions files as gzip-files. If so, it parses them and returns true. If not, it returns false. This results
 	 * in the construction of {@link #knownGeneMap}.
-	 * 
+	 *
 	 * @return false if no UCSC gzip files found, otherwise return true.
 	 */
 	private boolean parseGzipUCSCFiles() {
@@ -169,7 +169,7 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 	 * switching the coordinates to fully-closed one based by incrementing all start positions by one. This is the way
 	 * coordinates are typically represented in VCF files and is the way coordinate calculations are done in annovar. At
 	 * a later date, it may be worthwhile to switch to the UCSC-way of half-open zero based coordinates.
-	 * 
+	 *
 	 * @param line
 	 *            A single line of the UCSC knownGene.txt file
 	 * @return {@link TranscriptModel} represented by the line
@@ -277,7 +277,7 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 
 	/**
 	 * Parses the UCSC knownGene.txt file.
-	 * 
+	 *
 	 * @param kgpath
 	 *            path to the knownGene.txt file
 	 * @param isGzip
@@ -442,7 +442,7 @@ public class UCSCKGParser extends TranscriptDataParser implements Constants {
 		// Error handling can be improved in Java 7.
 		String err = null;
 		BufferedReader br = null;
-		
+
 		try {
 			br = getBufferedReaderFromFilePath(xrefpath, isGzip);
 			String line;

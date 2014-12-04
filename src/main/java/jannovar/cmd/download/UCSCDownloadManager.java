@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 
-public class UCSCDownloadManager extends DownloadManager {
+public final class UCSCDownloadManager extends DownloadManager {
 
 	UCSCDownloadManager(JannovarOptions options) {
 		super(options);

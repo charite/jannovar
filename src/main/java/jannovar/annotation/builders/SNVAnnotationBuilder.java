@@ -18,7 +18,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class SNVAnnotationBuilder extends AnnotationBuilder {
+public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	/**
 	 * Override substitution annotation string in the case of coding change.
 	 *

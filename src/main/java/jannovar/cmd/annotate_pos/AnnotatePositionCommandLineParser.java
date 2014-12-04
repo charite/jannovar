@@ -13,6 +13,9 @@ import org.apache.commons.cli.ParseException;
 /**
  * Parse the command line for the "annotate-position" command.
  *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommandLineParser {

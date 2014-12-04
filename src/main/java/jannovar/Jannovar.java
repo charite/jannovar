@@ -64,7 +64,7 @@ import jannovar.exception.JannovarException;
  * @author mjaeger
  * @version 0.33 (29 December, 2013)
  */
-public class Jannovar {
+public final class Jannovar {
 	/** Configuration for the Jannovar program. */
 	JannovarOptions options = null;
 
