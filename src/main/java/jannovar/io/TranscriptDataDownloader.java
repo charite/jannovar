@@ -23,7 +23,7 @@ import java.net.URLConnection;
  */
 public final class TranscriptDataDownloader implements Constants {
 	/** Path of directory to which the files will be downloaded. */
-	private String downloadPath;
+	private final String downloadPath;
 
 	/**
 	 * This constructor sets the location of the directory into which the transcript annotation data will be downloaded.<br>
@@ -40,21 +40,12 @@ public final class TranscriptDataDownloader implements Constants {
 	}
 
 	/**
-	 * Returns the path to the download directory were the transcript annotation files are stored.
-	 *
-	 * @return The path to the download directory.
-	 */
-	public String getDownloadDirectory() {
-		return this.downloadPath;
-	}
-
-	/**
 	 * Construct the object and also set proxy properties for http connection.
 	 *
 	 * @param dirpath
 	 *            directory path
 	 * @param proxyHost
-	 *            proxy host (e.g. http://proxy.company.com)
+	 *            proxy host (e.g. proxy.company.com)
 	 * @param port
 	 *            proxy port (e.g. 8080)
 	 */
@@ -63,8 +54,6 @@ public final class TranscriptDataDownloader implements Constants {
 		if (proxyHost == null)
 			return; /* Do not set proxy if proxyHost is null. */
 		System.setProperty("proxySet", "true");
-		if (proxyHost.startsWith("http://"))
-			proxyHost = proxyHost.substring(7);
 		System.setProperty("http.proxyHost", proxyHost);
 		System.setProperty("http.proxyPort", port);
 	}
@@ -137,8 +126,8 @@ public final class TranscriptDataDownloader implements Constants {
 			rna_base = String.format("%s%s%s", REFSEQ_FTP_BASE, REFSEQ_HG19, REFSEQ_FASTA_BASE);
 			gff_name = refseq_gff_hg19;
 		}
-		download_file(gff_base, gff_name);
-		download_file(rna_base, rna_name);
+		downloadFile(gff_base, gff_name);
+		downloadFile(rna_base, rna_name);
 	}
 
 	/**
@@ -190,9 +179,9 @@ public final class TranscriptDataDownloader implements Constants {
 			ncrna_name = String.format("%s%s", ensembl_hg19, ensembl_ncrna);
 			break;
 		}
-		download_file(ncrna_base, ncrna_name);
-		download_file(cdna_base, cdna_name);
-		download_file(gtf_base, gtf_name);
+		downloadFile(ncrna_base, ncrna_name);
+		downloadFile(cdna_base, cdna_name);
+		downloadFile(gtf_base, gtf_name);
 	}
 
 	/**
@@ -225,10 +214,10 @@ public final class TranscriptDataDownloader implements Constants {
 			ucsc_ftp_base = UCSC_FTP_BASE_HG19;
 			break;
 		}
-		download_file(ucsc_ftp_base, knownGene);
-		download_file(ucsc_ftp_base, knownGeneMrna);
-		download_file(ucsc_ftp_base, kgXref);
-		download_file(ucsc_ftp_base, known2locus);
+		downloadFile(ucsc_ftp_base, knownGene);
+		downloadFile(ucsc_ftp_base, knownGeneMrna);
+		downloadFile(ucsc_ftp_base, kgXref);
+		downloadFile(ucsc_ftp_base, known2locus);
 	}
 
 	/**
@@ -260,7 +249,7 @@ public final class TranscriptDataDownloader implements Constants {
 	 * @return <code>true</code> if the file was downloaded successfully
 	 * @throws jannovar.exception.FileDownloadException
 	 */
-	public boolean download_file(String baseURL, String fname) throws FileDownloadException {
+	public boolean downloadFile(String baseURL, String fname) throws FileDownloadException {
 
 		String urlstring = baseURL + fname;
 		String local_file_path = this.downloadPath + fname;
