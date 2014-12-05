@@ -5,9 +5,15 @@ import jannovar.exception.KGParseException;
 import jannovar.reference.TranscriptModel;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Parses the four files from the UCSC database relating the KnownGenes. The main file, {@code knownGene.txt}, is
@@ -53,9 +59,21 @@ import java.io.IOException;
  * @author Peter N Robinson
  * @version 0.17 (10 July, 2013)
  */
-public final class UCSCKGParser extends TranscriptDataParser implements Constants {
+public final class UCSCKGParser implements Constants {
 	/** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
 	public static final int NFIELDS = 12;
+	/**
+	 * Path of directory in which the transcript definition files live ( currently, either the UCSC knownGene files, the
+	 * refSeq files, or the ENSEMBL files).
+	 */
+	protected String basePath;
+	/**
+	 * Map of all known genes. Note that the key is the UCSC id, e.g., uc0001234.3, and the value is the corresponding
+	 * TranscriptModel object
+	 *
+	 * @see jannovar.reference.TranscriptModel
+	 */
+	protected HashMap<String, TranscriptModel> knownGeneMap = null;
 
 	/**
 	 * Tries to parse all four UCSC files, which must be located in the indicated directory.
@@ -65,7 +83,12 @@ public final class UCSCKGParser extends TranscriptDataParser implements Constant
 	 *            knownToLocusLink.txt. The files optionally can be gzipped.
 	 */
 	public UCSCKGParser(String path) {
-		super(path);
+		this.knownGeneMap = new HashMap<String, TranscriptModel>();
+		if (path.endsWith("/")) {
+			this.basePath = path;
+		} else {
+			this.basePath = path + "/"; // add trailing slash.
+		}
 	}
 
 	/**
@@ -489,5 +512,55 @@ public final class UCSCKGParser extends TranscriptDataParser implements Constant
 		}
 		if (err != null)
 			throw new KGParseException(err);
+	}
+
+	/**
+	 * @return a reference to the {@link #knownGeneMap knownGeneMap}, which contains info and sequences on all genes.
+	 */
+	public HashMap<String, TranscriptModel> getKnownGeneMap() {
+		return this.knownGeneMap;
+	}
+
+	/**
+	 * @return a List of all {@link jannovar.reference.TranscriptModel TranscriptModel} objects.
+	 */
+	public ArrayList<TranscriptModel> getKnownGeneList() {
+		ArrayList<TranscriptModel> lst = new ArrayList<TranscriptModel>(this.knownGeneMap.values());
+		return lst;
+	}
+
+	/**
+	 * Open a file handle from a compressed (gzip) or uncompressed file
+	 *
+	 * @param path
+	 *            Path to the file to be opened
+	 * @param isGzip
+	 *            true if the file is compressed (gzip).
+	 * @return Corresponding BufferedReader file handle.
+	 * @throws java.io.IOException
+	 */
+	protected BufferedReader getBufferedReaderFromFilePath(String path, boolean isGzip) throws IOException {
+		FileInputStream fin = new FileInputStream(path);
+		BufferedReader br;
+		if (isGzip) {
+			br = new BufferedReader(new InputStreamReader(new GZIPInputStream(fin)));
+		} else {
+			DataInputStream in = new DataInputStream(fin);
+			br = new BufferedReader(new InputStreamReader(in));
+		}
+		return br;
+	}
+
+	/**
+	 * This function creates a new directory to store the downloaded files. If the directory already exists, it just
+	 * emits a warning and does nothing.
+	 */
+	protected void makeDirectoryIfNotExist() {
+		File directory = new File(this.basePath);
+		if (directory.exists()) {
+			System.err.println(String.format("Cowardly refusing to create " + "directory \"%s\" since it already exists", this.basePath));
+		} else {
+			directory.mkdir();
+		}
 	}
 }

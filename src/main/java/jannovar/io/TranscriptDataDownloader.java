@@ -1,6 +1,3 @@
-/**
- *
- */
 package jannovar.io;
 
 import jannovar.common.Constants;
@@ -17,9 +14,7 @@ import java.net.URLConnection;
 /**
  * This class is responsible for downloading the data files from UCSC, Ensembl, RefSeq.
  *
- * @version 0.2 (2014-01-02)
- * @author mjaeger
- *
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  */
 public final class TranscriptDataDownloader implements Constants {
 	/** Path of directory to which the files will be downloaded. */
