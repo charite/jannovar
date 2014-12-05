@@ -61,13 +61,11 @@ abstract class DownloadManager {
 	 * @param downloadAndBuildTranscriptModelList
 	 * @return filtered list of {@link TranscriptModel} objects
 	 */
-	private ArrayList<TranscriptModel> cleanTranscriptModelList(ArrayList<TranscriptModel> input) {
-		ArrayList<TranscriptModel> result = new ArrayList<TranscriptModel>();
+	private ArrayList<TranscriptInfo> cleanTranscriptModelList(ArrayList<TranscriptInfo> input) {
+		ArrayList<TranscriptInfo> result = new ArrayList<TranscriptInfo>();
 
 		int numWarnings = 0;
-		for (TranscriptModel tm : input) {
-			TranscriptInfo transcript = new TranscriptInfo(tm);
-
+		for (TranscriptInfo transcript : input) {
 			boolean exonLengthSumOK = !hasInconsistentExonLengthSum(transcript);
 			boolean cdsStartOK = !hasInconsistentCDSStart(transcript);
 			boolean cdsEndOK = !hasInconsistentCDSEnd(transcript);
@@ -75,7 +73,7 @@ abstract class DownloadManager {
 			if (!exonLengthSumOK || !cdsStartOK || !cdsEndOK)
 				numWarnings += 1;
 			else
-				result.add(tm);
+				result.add(transcript);
 		}
 
 		System.err.println("Number of warnings: " + numWarnings);
@@ -133,18 +131,19 @@ abstract class DownloadManager {
 	 * @throws JannovarException
 	 *             on problems with parsing the file.
 	 */
-	public abstract ArrayList<TranscriptModel> downloadAndBuildTranscriptModelList() throws FileDownloadException,
+	public abstract ArrayList<TranscriptInfo> downloadAndBuildTranscriptModelList()
+			throws FileDownloadException,
 			JannovarException;
 
 	/**
-	 * Serialize the given transcript model list.
+	 * Serialize the given transcript list.
 	 *
 	 * @param lst
-	 *            the transcript model list to serialize
+	 *            the transcript list to serialize
 	 * @throws JannovarException
 	 *             on problems with the serialization process
 	 */
-	public abstract void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException;
+	public abstract void serializeTranscriptModelList(ArrayList<TranscriptInfo> lst) throws JannovarException;
 
 	/**
 	 * This function creates a {@link TranscriptDataDownloader} object in order to download the required transcript data

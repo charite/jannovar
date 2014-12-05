@@ -4,9 +4,10 @@ import jannovar.JannovarOptions;
 import jannovar.common.Constants;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.JannovarException;
+import jannovar.exception.KGParseException;
 import jannovar.io.SerializationManager;
-import jannovar.io.UCSCKGParser;
-import jannovar.reference.TranscriptModel;
+import jannovar.parse.UCSCParser;
+import jannovar.reference.TranscriptInfo;
 import jannovar.util.PathUtil;
 
 import java.util.ArrayList;
@@ -28,9 +29,15 @@ public final class UCSCDownloadManager extends DownloadManager {
 	 * Download transcript model and build it.
 	 *
 	 * Uses configuration from this.options.
+	 *
+	 * @throws FileDownloadException
+	 *             on problems with the file download
+	 * @throws KGParseException
+	 *             on problems with parsing
 	 */
 	@Override
-	public ArrayList<TranscriptModel> downloadAndBuildTranscriptModelList() throws FileDownloadException {
+	public ArrayList<TranscriptInfo> downloadAndBuildTranscriptModelList() throws FileDownloadException,
+			KGParseException {
 		// download the files
 		downloadTranscriptFiles(jannovar.common.Constants.UCSC, options.genomeRelease);
 
@@ -38,9 +45,8 @@ public final class UCSCDownloadManager extends DownloadManager {
 		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
 			path += System.getProperty("file.separator");
-		UCSCKGParser parser = new UCSCKGParser(path);
-		parser.parseUCSCFiles();
-		return parser.getKnownGeneList();
+		UCSCParser parser = new UCSCParser(path);
+		return parser.run();
 	}
 
 	/**
@@ -51,7 +57,7 @@ public final class UCSCDownloadManager extends DownloadManager {
 	 * @throws jannovar.exception.JannovarException
 	 */
 	@Override
-	public void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException {
+	public void serializeTranscriptModelList(ArrayList<TranscriptInfo> lst) throws JannovarException {
 		SerializationManager manager = new SerializationManager();
 		System.err.println("[INFO] Serializing UCSC data as "
 				+ String.format(PathUtil.join(options.downloadPath, Constants.UCSCserializationFileName),

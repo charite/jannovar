@@ -1,6 +1,7 @@
 package jannovar.io;
 
 import jannovar.exception.JannovarException;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptModel;
 
 import java.io.FileInputStream;
@@ -30,7 +31,7 @@ public final class SerializationManager {
      * @param kgList A list of {@link jannovar.reference.TranscriptModel TranscriptModel} objects to be serialized
      * @throws jannovar.exception.JannovarException
      */
-    public void serializeKnownGeneList(String filename, ArrayList<TranscriptModel> kgList) throws JannovarException {
+	public void serializeKnownGeneList(String filename, ArrayList<TranscriptInfo> kgList) throws JannovarException {
     	if (kgList == null || kgList.isEmpty()) {
     		throw new JannovarException("Error: attempt to serialize empty knownGene list");
     	}

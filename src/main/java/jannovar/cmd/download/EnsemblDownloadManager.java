@@ -10,7 +10,8 @@ import jannovar.gff.GFFParser;
 import jannovar.gff.TranscriptModelBuilder;
 import jannovar.io.EnsemblFastaParser;
 import jannovar.io.SerializationManager;
-import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.util.PathUtil;
 
 import java.io.IOException;
@@ -34,12 +35,11 @@ public final class EnsemblDownloadManager extends DownloadManager {
 	}
 
 	@Override
-	public ArrayList<TranscriptModel> downloadAndBuildTranscriptModelList() throws JannovarException {
+	public ArrayList<TranscriptInfo> downloadAndBuildTranscriptModelList() throws JannovarException {
 		// download the files
 		downloadTranscriptFiles(jannovar.common.Constants.ENSEMBL, options.genomeRelease);
 
 		// parse transcript model list from Ensemble and return it
-		ArrayList<TranscriptModel> result = null;
 		String path;
 		path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
@@ -70,9 +70,10 @@ public final class EnsemblDownloadManager extends DownloadManager {
 		}
 		ArrayList<Feature> features = gffParser.parse();
 
-		// Build ArrayList of TranscriptModel objects from feature list.
+		// Build ArrayList of TranscriptModelBuilder objects from feature list.
+		ArrayList<TranscriptInfoBuilder> builders;
 		try {
-			result = new TranscriptModelBuilder(gffParser.gffVersion, features).make();
+			builders = new TranscriptModelBuilder(gffParser.gffVersion, features).make();
 		} catch (InvalidAttributException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new JannovarException(e.getMessage());
@@ -82,15 +83,20 @@ public final class EnsemblDownloadManager extends DownloadManager {
 		}
 
 		// Load sequences.
-		EnsemblFastaParser efp = new EnsemblFastaParser(path + Constants.ensembl_cdna, result);
-		int before = result.size();
-		result = efp.parse();
-		int after = result.size();
+		EnsemblFastaParser efp = new EnsemblFastaParser(path + Constants.ensembl_cdna, builders);
+		int before = builders.size();
+		builders = efp.parse();
+		int after = builders.size();
 
 		// Log success and statistics.
 		Object params[] = { before, after };
 		LOGGER.log(Level.INFO, "Found {0} transcript models from Ensembl GFF resource, {1} of which had sequences",
 				params);
+
+		// Create final list of TranscriptInfos.
+		ArrayList<TranscriptInfo> result = new ArrayList<TranscriptInfo>();
+		for (TranscriptInfoBuilder builder : builders)
+			result.add(builder.make());
 
 		return result;
 	}
@@ -104,7 +110,7 @@ public final class EnsemblDownloadManager extends DownloadManager {
 	 *             on problems with the serialization process
 	 */
 	@Override
-	public void serializeTranscriptModelList(ArrayList<TranscriptModel> lst) throws JannovarException {
+	public void serializeTranscriptModelList(ArrayList<TranscriptInfo> lst) throws JannovarException {
 		SerializationManager manager = new SerializationManager();
 		System.err.println("[INFO] Serializing Ensembl data as "
 				+ String.format(PathUtil.join(options.downloadPath, Constants.EnsemblSerializationFileName),

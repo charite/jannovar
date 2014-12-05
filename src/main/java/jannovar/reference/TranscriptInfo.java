@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableList;
  */
 @Immutable
 public final class TranscriptInfo {
+
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
 	 * included.

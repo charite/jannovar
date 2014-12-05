@@ -8,12 +8,17 @@ import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.gff.FeatureProcessor.Gene;
 import jannovar.gff.FeatureProcessor.Transcript;
+import jannovar.reference.GenomeInterval;
+import jannovar.reference.PositionType;
+import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.reference.TranscriptModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+// TODO(holtgrem): TranscriptModelBuilder => TranscriptInfoBuilder
 
 /**
  * This is the builder for the {@link TranscriptModel}s from GFF-files.
@@ -42,13 +47,13 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	 *
 	 * If mapRna2Geneid is not null and contains appropriate values a mapping to the corresponding Entrez ids is stored.
 	 *
-	 * @return {@link ArrayList} with generated {@link TranscriptModel}s
+	 * @return {@link ArrayList} with generated {@link TranscriptModelBuilder}s
 	 * @throws InvalidAttributException
 	 *             on problems with attributes
 	 * @throws FeatureFormatException
 	 *             on problems with the feature formats
 	 */
-	public ArrayList<TranscriptModel> make() throws InvalidAttributException, FeatureFormatException {
+	public ArrayList<TranscriptInfoBuilder> make() throws InvalidAttributException, FeatureFormatException {
 		return make(false);
 	}
 
@@ -59,13 +64,13 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	 *
 	 * @param useOnlyCurated
 	 *            should only curated transcript be processed (RefSeq only)
-	 * @return {@link ArrayList} with generated {@link TranscriptModel}s
+	 * @return {@link ArrayList} with generated {@link TranscriptModelBuilder}s
 	 * @throws InvalidAttributException
 	 *             on problems with attributes
 	 * @throws FeatureFormatException
 	 *             on problems with the feature formats
 	 */
-	public ArrayList<TranscriptModel> make(boolean useOnlyCurated) throws InvalidAttributException,
+	public ArrayList<TranscriptInfoBuilder> make(boolean useOnlyCurated) throws InvalidAttributException,
 			FeatureFormatException {
 		LOGGER.info("Processing features...");
 		HashMap<String, Gene> genes = new FeatureProcessor(gffVersion).run(featureList);
@@ -81,14 +86,14 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	 *            the name/Gene map to build the {@link TranscriptModel} objects for.
 	 * @param useOnlyCurated
 	 *            whether or not to only return curated transcripts
-	 * @return list of {@link TranscriptModel} objects
+	 * @return list of {@link TranscriptInfoBuilder} objects
 	 * @throws InvalidAttributException
 	 *             on problems with invalid attributes
 	 */
-	private ArrayList<TranscriptModel> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
+	private ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
 			throws InvalidAttributException {
-		ArrayList<TranscriptModel> models = new ArrayList<TranscriptModel>();
-		TranscriptModel model;
+		ArrayList<TranscriptInfoBuilder> models = new ArrayList<TranscriptInfoBuilder>();
+		TranscriptInfoBuilder tib = new TranscriptInfoBuilder();
 		int curid;
 		for (FeatureProcessor.Gene gene : genes.values()) {
 			if (gene.id == null)
@@ -96,13 +101,13 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 			for (Transcript rna : gene.rnas.values()) {
 				if (useOnlyCurated && !isCuratedName(rna.name))
 					continue;
-				model = TranscriptModel.createTranscriptModel();
-				model.setAccessionNumber(rna.name);
-				model.setChromosome(rna.chromosom);
-				model.setGeneSymbol(gene.name);
-				model.setStrand(rna.strand ? '+' : '-');
-				model.setTranscriptionStart(rna.getTxStart());
-				model.setTranscriptionEnd(rna.getTxEnd());
+
+				tib.reset();
+				tib.setAccession(rna.name);
+				tib.setGeneSymbol(gene.name);
+				tib.setStrand(rna.strand ? '+' : '-');
+				tib.setTxRegion(new GenomeInterval('+', rna.chromosom, rna.getTxStart(), rna.getTxEnd(),
+						PositionType.ONE_BASED));
 
 				// Check whether the corrected CDS start position returned from getCdsStart() is within an exon and do
 				// the same for the CDS end position. The correction in these methods can lead to inconsistent positions
@@ -120,18 +125,21 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 					LOGGER.log(Level.WARNING, "Transcript {0} appears to be 3'/5' truncated. Ignoring.", rna.id);
 					continue;
 				}
+				tib.setCdsRegion(new GenomeInterval('+', rna.chromosom, rna.getCdsStart(), rna.getCdsEnd(),
+						PositionType.ONE_BASED));
 
-				model.setCdsStart(rna.getCdsStart());
-				model.setCdsEnd(rna.getCdsEnd());
-				model.setExonCount((byte) rna.exons.size());
-				model.setExonStartsAndEnds(rna.getExonStarts(), rna.getExonEnds());
+				for (int i = 0; i < rna.exons.size(); ++i)
+					tib.addExonRegion(new GenomeInterval('+', rna.chromosom, rna.getExonStarts()[i],
+							rna.getExonEnds()[i], PositionType.ONE_BASED));
+
 				if (gffVersion.version == 3)
-					model.setGeneID(Integer.parseInt(gene.id.substring(4)));
+					tib.setGeneID(Integer.parseInt(gene.id.substring(4)));
 				else if ((curid = RNA2GeneIDMapper.getGeneID(gene.id)) > 0)
-					model.setGeneID(curid);
+					tib.setGeneID(curid);
 				else
 					throw new InvalidAttributException("Found no valid geneID mapping for accession: " + gene.id);
-				models.add(model);
+
+				models.add(tib);
 			}
 		}
 

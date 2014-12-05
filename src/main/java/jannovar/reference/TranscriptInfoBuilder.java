@@ -1,5 +1,7 @@
 package jannovar.reference;
 
+import jannovar.common.Constants;
+
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
@@ -34,7 +36,7 @@ public class TranscriptInfoBuilder {
 	private String sequence = null;
 
 	/** {@link TranscriptInfo#geneID} of next {@link TranscriptInfo} to build. */
-	private int geneID = 0;
+	private int geneID = Constants.UNINITIALIZED_INT;
 
 	/**
 	 * Reset the builder into the state after initialization.
@@ -56,16 +58,19 @@ public class TranscriptInfoBuilder {
 	public TranscriptInfo make() {
 		// Build list of immutable exons in the correct order.
 		ImmutableList.Builder<GenomeInterval> builder = new ImmutableList.Builder<GenomeInterval>();
-		if (strand == '+') {
-			for (int i = 0; i < exonRegions.size(); ++i)
-				builder.add(exonRegions.get(i));
-		} else {
-			for (int i = 0, j = exonRegions.size() - 1; i < exonRegions.size(); ++i, --j)
-				builder.add(exonRegions.get(j).withStrand(strand));
+		if (exonRegions.size() > 0) {
+			if (strand != exonRegions.get(0).strand) {
+				for (int i = 0; i < exonRegions.size(); ++i)
+					builder.add(exonRegions.get(i));
+			} else {
+				for (int i = 0, j = exonRegions.size() - 1; i < exonRegions.size(); ++i, --j)
+					builder.add(exonRegions.get(j).withStrand(strand));
+			}
 		}
 
 		// Create new TranscriptInfo object.
-		return new TranscriptInfo(accession, geneSymbol, txRegion, cdsRegion, builder.build(), sequence, geneID, null);
+		return new TranscriptInfo(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
+				builder.build(), sequence, geneID, null);
 	}
 
 	/**
@@ -152,10 +157,18 @@ public class TranscriptInfoBuilder {
 
 	/**
 	 * @param exonRegions
-	 *            the exonRegions to set
+	 *            the exonRegions to clear
 	 */
-	public void setExonRegions(ArrayList<GenomeInterval> exonRegions) {
-		this.exonRegions = exonRegions;
+	public void clearExonRegions(ArrayList<GenomeInterval> exonRegions) {
+		this.exonRegions.clear();
+	}
+
+	/**
+	 * @param exonRegion
+	 *            interval to append
+	 */
+	public void addExonRegion(GenomeInterval exonRegion) {
+		this.exonRegions.add(exonRegion);
 	}
 
 	/**
