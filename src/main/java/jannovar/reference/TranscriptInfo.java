@@ -57,6 +57,22 @@ public final class TranscriptInfo {
 	public final TranscriptModel transcriptModel;
 
 	/**
+	 * Initialize the TranscriptInfo object from the given parameters.
+	 */
+	public TranscriptInfo(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
+			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID, TranscriptModel transcriptModel) {
+		this.accession = accession;
+		this.geneSymbol = geneSymbol;
+		this.txRegion = txRegion;
+		this.cdsRegion = cdsRegion;
+		this.exonRegions = exonRegions;
+		this.sequence = sequence;
+		this.geneID = geneID;
+		this.transcriptModel = transcriptModel;
+		checkForConsistency();
+	}
+
+	/**
 	 * Initialize the TranscriptInfo object with the TranscriptModel data.
 	 *
 	 * @param tm
@@ -82,14 +98,11 @@ public final class TranscriptInfo {
 
 		int exonCount = tm.getExonEnds().length; // getExonCount() broken for some RefSeq
 		ImmutableList.Builder<GenomeInterval> exonRegionsBuilder = new ImmutableList.Builder<GenomeInterval>();
-		if (strand == '+')
-		{
+		if (strand == '+') {
 			for (int i = 0; i < exonCount; ++i)
 				exonRegionsBuilder.add(new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
 						PositionType.ONE_BASED));
-		}
-		else
-		{
+		} else {
 			for (int i = 0, j = exonCount - 1; i < exonCount; ++i, --j)
 				exonRegionsBuilder.add(new GenomeInterval('+', chr, tm.getExonStart(j), tm.getExonEnd(j),
 						PositionType.ONE_BASED).withStrand(strand));
