@@ -70,6 +70,11 @@ public final class UCSCKGParser extends TranscriptDataParser implements Constant
 
 	/**
 	 * This utility function adds the suffix .gz and the full path to the name of a file such as knownGene.txt.
+	 *
+	 * @param path
+	 *            path to directory containing file
+	 * @param base
+	 *            base name of the file without <code>.gz</code> suffix
 	 */
 	private String addPrefixAndGzipSuffix(String path, String base) {
 		return String.format("%s%s.gz", path, base);
