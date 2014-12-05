@@ -303,8 +303,7 @@ public class UCSCParser implements TranscriptParser, Constants {
 
 	/**
 	 * Parses the ucsc KnownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
-	 * ids. The function than adds an Entrez gene id to the corresponing {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects.
+	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
 	private void parseKnown2Locus(String locusPath) throws KGParseException {
 		try {
@@ -354,8 +353,7 @@ public class UCSCParser implements TranscriptParser, Constants {
 	/**
 	 * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt} Note that the UCSC sequences are all in
 	 * lower case, but we convert them here to all upper case letters to simplify processing in other places of this
-	 * program. The sequences are then added to the corresponding {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects.
+	 * program. The sequences are then added to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
 	private void parseKnownGeneMrna(String mRNAPath) throws KGParseException {
 
@@ -403,8 +401,8 @@ public class UCSCParser implements TranscriptParser, Constants {
 
 	/**
 	 * Input xref information for the known genes. This method parses the ucsc xref table to get the gene symbol that
-	 * corresponds to the ucsc kgID. The information is then added to the corresponding
-	 * {@link jannovar.reference.TranscriptModel TranscriptModel} object.
+	 * corresponds to the ucsc kgID. The information is then added to the corresponding {@link TranscriptInfoBuilder}
+	 * object.
 	 * <P>
 	 * Note that some of the fields are empty, which can cause a problem for Java's split function, which then conflates
 	 * neighboring fields. Therefore, we instead just count the number of tab signs to get to the 5th field.

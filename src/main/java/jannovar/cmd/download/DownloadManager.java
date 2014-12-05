@@ -7,7 +7,6 @@ import jannovar.exception.JannovarException;
 import jannovar.io.TranscriptDataDownloader;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptModel;
 import jannovar.util.PathUtil;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ abstract class DownloadManager {
 	}
 
 	/**
-	 * Clean list of {@link TranscriptModel} objects and return this.
+	 * Clean list of {@link TranscriptInfo} objects and return this.
 	 *
 	 * Inspect the downloaded data for inconsistencies and remove defective transcripts. Print warnings in case of
 	 * defects. Currently, the following defects are checked for:
@@ -59,7 +58,7 @@ abstract class DownloadManager {
 	 * </ul>
 	 *
 	 * @param downloadAndBuildTranscriptModelList
-	 * @return filtered list of {@link TranscriptModel} objects
+	 * @return filtered list of {@link TranscriptInfo} objects
 	 */
 	private ArrayList<TranscriptInfo> cleanTranscriptModelList(ArrayList<TranscriptInfo> input) {
 		ArrayList<TranscriptInfo> result = new ArrayList<TranscriptInfo>();

@@ -50,9 +50,8 @@ public final class UCSCDownloadManager extends DownloadManager {
 	}
 
 	/**
-	 * Inputs the KnownGenes data from UCSC files, convert the resulting {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
-	 * file.
+	 * Inputs the KnownGenes data from UCSC files, convert the resulting {@link TranscriptInfo} objects to
+	 * {@link Interval} objects, and store these in a serialized file.
 	 *
 	 * @throws jannovar.exception.JannovarException
 	 */

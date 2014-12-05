@@ -102,9 +102,8 @@ public final class EnsemblDownloadManager extends DownloadManager {
 	}
 
 	/**
-	 * Inputs the GFF data from Ensembl files, convert the resulting {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} objects to {@link jannovar.interval.Interval Interval} objects, and store these in a serialized
-	 * file.
+	 * Inputs the GFF data from Ensembl files, convert the resulting {@link TranscriptInfo} objects to
+	 * {@link jannovar.interval.Interval Interval} objects, and store these in a serialized file.
 	 *
 	 * @throws jannovar.exception.JannovarException
 	 *             on problems with the serialization process

@@ -8,18 +8,17 @@ import jannovar.cmd.download.DownloadCommand;
 import jannovar.exception.CommandLineParsingException;
 import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
+import jannovar.reference.TranscriptInfo;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
  * <OL>
  * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt, and to create
- * corresponding {@link jannovar.reference.TranscriptModel TranscriptModel} objects and to serialize them. The resulting
- * serialized file can be used both by this program itself (see next item) or by the main Exomizer program to annotated
- * VCF file.
- * <LI>Using the serialized file of {@link jannovar.reference.TranscriptModel TranscriptModel} objects (see above item)
- * annotate a VCF file using annovar-type program logic. Note that this functionality is also used by the main Exomizer
- * program and thus this program can be used as a stand-alone annotator ("Jannovar") or as a way of testing the code for
- * the Exomizer.
+ * corresponding {@link TranscriptInfo} objects and to serialize them. The resulting serialized file can be used both by
+ * this program itself (see next item) or by the main Exomizer program to annotated VCF file.
+ * <LI>Using the serialized file of {@link TranscriptInfo} objects (see above item) annotate a VCF file using
+ * annovar-type program logic. Note that this functionality is also used by the main Exomizer program and thus this
+ * program can be used as a stand-alone annotator ("Jannovar") or as a way of testing the code for the Exomizer.
  * </OL>
  * <P>
  * To run the "Jannovar" executable:

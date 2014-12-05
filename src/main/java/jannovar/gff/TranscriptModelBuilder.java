@@ -43,7 +43,7 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	}
 
 	/**
-	 * Generates all possible {@link TranscriptModel}s from the given {@link Feature}s (also uncurated ones).
+	 * Generates all possible transcript models from the given {@link Feature}s (also uncurated ones).
 	 *
 	 * If mapRna2Geneid is not null and contains appropriate values a mapping to the corresponding Entrez ids is stored.
 	 *
@@ -58,7 +58,7 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	}
 
 	/**
-	 * Generates all possible {@link TranscriptModel}s from the given {@link Feature}s.
+	 * Generates all possible transcript models from the given {@link Feature}s.
 	 *
 	 * If mapRna2Geneid is not null and contains appropriate values a mapping to the corresponding Entrez ids is stored.
 	 *
@@ -80,7 +80,7 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	}
 
 	/**
-	 * Process the <code>genes</code> and convert into an {@link ArrayList} of {@link TranscriptModel}.
+	 * Process the <code>genes</code> and convert into an {@link ArrayList} of {@link TranscriptInfoBuilder}s.
 	 *
 	 * @param genes
 	 *            the name/Gene map to build the {@link TranscriptModel} objects for.

@@ -2,7 +2,7 @@ package jannovar.gff;
 
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
-import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptInfoBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -65,7 +65,7 @@ public final class GFFParser {
 	/**
 	 * Parses the file and returns an {@link ArrayList} of {@link Feature} objects.
 	 *
-	 * This can then be fed to a {@link TranscriptModelBuilder} for building {@link TranscriptModel} objects.
+	 * This can then be fed to a {@link TranscriptModelBuilder} for building {@link TranscriptInfoBuilder} objects.
 	 */
 	public ArrayList<Feature> parse() {
 		LOGGER.log(Level.INFO, "Parsing GFF...");
