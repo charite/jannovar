@@ -88,7 +88,7 @@ public final class TranscriptDataDownloader implements Constants {
 	 *            The Release version
 	 * @throws jannovar.exception.FileDownloadException
 	 */
-	public void downloadRefseqFiles(Release r) throws FileDownloadException {
+	private void downloadRefseqFiles(Release r) throws FileDownloadException {
 
 		String gff_base;
 		String rna_base;
@@ -132,7 +132,7 @@ public final class TranscriptDataDownloader implements Constants {
 	 *            Release version
 	 * @throws jannovar.exception.FileDownloadException
 	 */
-	public void downloadEnsemblFiles(Release r) throws FileDownloadException {
+	private void downloadEnsemblFiles(Release r) throws FileDownloadException {
 		String gtf_base;
 		String cdna_base;
 		String ncrna_base;
@@ -187,7 +187,7 @@ public final class TranscriptDataDownloader implements Constants {
 	 *            The Release version
 	 * @throws jannovar.exception.FileDownloadException
 	 */
-	public void downloadUCSCfiles(Release r) throws FileDownloadException {
+	private void downloadUCSCfiles(Release r) throws FileDownloadException {
 		String knownGene = String.format("%s.gz", Constants.knownGene);
 		String knownGeneMrna = String.format("%s.gz", Constants.knownGeneMrna);
 		String kgXref = String.format("%s.gz", Constants.kgXref);
@@ -244,7 +244,7 @@ public final class TranscriptDataDownloader implements Constants {
 	 * @return <code>true</code> if the file was downloaded successfully
 	 * @throws jannovar.exception.FileDownloadException
 	 */
-	public boolean downloadFile(String baseURL, String fname) throws FileDownloadException {
+	private boolean downloadFile(String baseURL, String fname) throws FileDownloadException {
 
 		String urlstring = baseURL + fname;
 		String local_file_path = this.downloadPath + fname;
