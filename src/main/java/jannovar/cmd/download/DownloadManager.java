@@ -159,13 +159,12 @@ abstract class DownloadManager {
 	 */
 	public final void downloadTranscriptFiles(int source, Release rel) throws FileDownloadException {
 		TranscriptDataDownloader downloader;
+		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (options.proxy != null) {
-			downloader = new TranscriptDataDownloader(PathUtil.join(options.downloadPath,
-					options.genomeRelease.getUCSCString(options.genomeRelease)), options.proxy.getHostText(), ""
+			downloader = new TranscriptDataDownloader(path, options.proxy.getHostText(), ""
 					+ options.proxy.getPort());
 		} else {
-			downloader = new TranscriptDataDownloader(PathUtil.join(options.downloadPath,
-					options.genomeRelease.getUCSCString(options.genomeRelease)));
+			downloader = new TranscriptDataDownloader(path);
 		}
 		downloader.downloadTranscriptFiles(source, rel);
 	}
