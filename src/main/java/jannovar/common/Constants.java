@@ -45,11 +45,13 @@ public interface Constants {
 	public static final String ENSEMBL_MOUSE_BASE = "mus_musculus/";
 	public static final String ENSEMBL_GTF_BASE = "gtf/";
 	public static final String ENSEMBL_FASTA_BASE = "fasta/";
+	public static final String ENSEMBL_MYSQL_BASE = "mysql/";
 
 	public static final String REFSEQ_FTP_BASE = "ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/";
 	public static final String REFSEQ_FTP_BASE_MOUSE = "ftp://ftp.ncbi.nlm.nih.gov/genomes/Mus_musculus/";
 	public static final String REFSEQ_GFF_BASE = "GFF/";
 	public static final String REFSEQ_FASTA_BASE = "RNA/";
+	public static final String REFSEQ_ACCESSIONS_BASE = "Assembled_chromosomes";
 	public static final String REFSEQ_HG18 = "ARCHIVE/BUILD.36.3/";
 	public static final String REFSEQ_HG19 = "ARCHIVE/ANNOTATION_RELEASE.105/";
 	public static final String REFSEQ_HG38 = "";
@@ -63,6 +65,7 @@ public interface Constants {
 	public static final String ensembl_gtf = ".gtf.gz";
 	public static final String ensembl_cdna = ".cdna.all.fa.gz";
 	public static final String ensembl_ncrna = ".ncrna.fa.gz";
+	public static final String ensembl_seq_region = "seq_region.txt.gz";
 
 	public static final String refseq_gff_hg38 = "ref_GRCh38_top_level.gff3.gz";
 	public static final String refseq_gff_hg19 = "ref_GRCh37.p13_top_level.gff3.gz";
@@ -92,6 +95,8 @@ public interface Constants {
 	public static final String known2locus = "knownToLocusLink.txt";
 	/** Name of refFlat.txt file */
 	public static final String refFlat = "refFlat.txt";
+	/** Name of chromInfo.txt file */
+	public static final String chromInfo = "chromInfo.txt";
 
 	/**
 	 * Enum with the supported human genome releases.

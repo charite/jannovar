@@ -136,6 +136,7 @@ public final class TranscriptDataDownloader implements Constants {
 		String gtf_base;
 		String cdna_base;
 		String ncrna_base;
+		String mysql_base;
 		String gtf_name;
 		String cdna_name;
 		String ncrna_name;
@@ -144,6 +145,7 @@ public final class TranscriptDataDownloader implements Constants {
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_GTF_BASE, ENSEMBL_MOUSE_BASE);
 			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "cdna/");
 			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "mysql/");
 			gtf_name = String.format("%s%s", ensembl_mm9, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_mm9, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_mm9, ensembl_ncrna);
@@ -152,6 +154,7 @@ public final class TranscriptDataDownloader implements Constants {
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_GTF_BASE, ENSEMBL_MOUSE_BASE);
 			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "cdna/");
 			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "mysql/");
 			gtf_name = String.format("%s%s", ensembl_mm10, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_mm10, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_mm10, ensembl_ncrna);
@@ -160,6 +163,7 @@ public final class TranscriptDataDownloader implements Constants {
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_GTF_BASE, ENSEMBL_HUMAN_BASE);
 			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "cdna/");
 			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "mysql/");
 			gtf_name = String.format("%s%s", ensembl_hg18, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_hg18, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_hg18, ensembl_ncrna);
@@ -169,6 +173,7 @@ public final class TranscriptDataDownloader implements Constants {
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_GTF_BASE, ENSEMBL_HUMAN_BASE);
 			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "cdna/");
 			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "mysql/");
 			gtf_name = String.format("%s%s", ensembl_hg19, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_hg19, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_hg19, ensembl_ncrna);
@@ -177,6 +182,7 @@ public final class TranscriptDataDownloader implements Constants {
 		downloadFile(ncrna_base, ncrna_name);
 		downloadFile(cdna_base, cdna_name);
 		downloadFile(gtf_base, gtf_name);
+		downloadFile(mysql_base, ensembl_seq_region);
 	}
 
 	/**
@@ -192,6 +198,7 @@ public final class TranscriptDataDownloader implements Constants {
 		String knownGeneMrna = String.format("%s.gz", Constants.knownGeneMrna);
 		String kgXref = String.format("%s.gz", Constants.kgXref);
 		String known2locus = String.format("%s.gz", Constants.known2locus);
+		String chromInfo = String.format("%s.gz", Constants.chromInfo);
 
 		String ucsc_ftp_base;
 		switch (r) {
@@ -213,6 +220,7 @@ public final class TranscriptDataDownloader implements Constants {
 		downloadFile(ucsc_ftp_base, knownGeneMrna);
 		downloadFile(ucsc_ftp_base, kgXref);
 		downloadFile(ucsc_ftp_base, known2locus);
+		downloadFile(ucsc_ftp_base, chromInfo);
 	}
 
 	/**
