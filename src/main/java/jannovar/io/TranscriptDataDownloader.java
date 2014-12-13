@@ -143,27 +143,36 @@ public final class TranscriptDataDownloader implements Constants {
 		switch (r) {
 		case MM9:
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_GTF_BASE, ENSEMBL_MOUSE_BASE);
-			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "cdna/");
-			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "ncrna/");
-			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "mysql/");
+			cdna_base = String
+					.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "cdna/");
+			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE,
+					"ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM9, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE,
+					"mysql/");
 			gtf_name = String.format("%s%s", ensembl_mm9, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_mm9, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_mm9, ensembl_ncrna);
 			break;
 		case MM10:
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_GTF_BASE, ENSEMBL_MOUSE_BASE);
-			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "cdna/");
-			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "ncrna/");
-			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE, "mysql/");
+			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE,
+					"cdna/");
+			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE,
+					"ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_MM10, ENSEMBL_FASTA_BASE, ENSEMBL_MOUSE_BASE,
+					"mysql/");
 			gtf_name = String.format("%s%s", ensembl_mm10, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_mm10, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_mm10, ensembl_ncrna);
 			break;
 		case HG18:
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_GTF_BASE, ENSEMBL_HUMAN_BASE);
-			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "cdna/");
-			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "ncrna/");
-			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "mysql/");
+			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE,
+					"cdna/");
+			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE,
+					"ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG18, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE,
+					"mysql/");
 			gtf_name = String.format("%s%s", ensembl_hg18, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_hg18, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_hg18, ensembl_ncrna);
@@ -171,9 +180,12 @@ public final class TranscriptDataDownloader implements Constants {
 		case HG19:
 		default:
 			gtf_base = String.format("%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_GTF_BASE, ENSEMBL_HUMAN_BASE);
-			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "cdna/");
-			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "ncrna/");
-			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE, "mysql/");
+			cdna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE,
+					"cdna/");
+			ncrna_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE,
+					"ncrna/");
+			mysql_base = String.format("%s%s%s%s", ENSEMBL_FTP_BASE_HG19, ENSEMBL_FASTA_BASE, ENSEMBL_HUMAN_BASE,
+					"mysql/");
 			gtf_name = String.format("%s%s", ensembl_hg19, ensembl_gtf);
 			cdna_name = String.format("%s%s", ensembl_hg19, ensembl_cdna);
 			ncrna_name = String.format("%s%s", ensembl_hg19, ensembl_ncrna);
@@ -182,7 +194,6 @@ public final class TranscriptDataDownloader implements Constants {
 		downloadFile(ncrna_base, ncrna_name);
 		downloadFile(cdna_base, cdna_name);
 		downloadFile(gtf_base, gtf_name);
-		downloadFile(mysql_base, ensembl_seq_region);
 	}
 
 	/**
@@ -229,13 +240,16 @@ public final class TranscriptDataDownloader implements Constants {
 	 */
 	private void makeDirectoryIfNotExist() {
 		File directory = new File(this.downloadPath);
-		/* first make data directory. This is the top directory that the subdirectories
-		   hg18, hg19, mm9, mm10 etc go into.*/
+		/*
+		 * first make data directory. This is the top directory that the subdirectories hg18, hg19, mm9, mm10 etc go
+		 * into.
+		 */
 		// File data = new File("data");
 		// if (! data.exists())
 		// data.mkdirs();
 		if (directory.exists()) {
-			System.err.println(String.format("[INFO] Cowardly refusing to create " + "directory \"%s\" since it already exists", this.downloadPath));
+			System.err.println(String.format("[INFO] Cowardly refusing to create "
+					+ "directory \"%s\" since it already exists", this.downloadPath));
 		} else {
 			directory.mkdirs();
 		}
@@ -258,7 +272,8 @@ public final class TranscriptDataDownloader implements Constants {
 		String local_file_path = this.downloadPath + fname;
 		File f = new File(local_file_path);
 		if (f.exists()) {
-			System.err.println(String.format("[INFO] Timorously refusing to download " + "file \"%s\" since it already exists locally", fname));
+			System.err.println(String.format("[INFO] Timorously refusing to download "
+					+ "file \"%s\" since it already exists locally", fname));
 			return false;
 
 		}
@@ -298,7 +313,8 @@ public final class TranscriptDataDownloader implements Constants {
 				}
 			}
 			System.err.println();
-			System.err.println("[INFO] Done. " + (new Integer(totalBytesRead).toString()) + "(" + size + ") bytes read.");
+			System.err.println("[INFO] Done. " + (new Integer(totalBytesRead).toString()) + "(" + size
+					+ ") bytes read.");
 		} catch (MalformedURLException e) {
 			err = String.format("Could not interpret url: \"%s\"\n%s", urlstring, e.toString());
 		} catch (IOException e) {

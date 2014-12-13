@@ -1,5 +1,7 @@
 package jannovar.io;
 
+import java.util.HashMap;
+
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -9,11 +11,14 @@ import com.google.common.collect.ImmutableMap;
  */
 public final class ReferenceDictionaryBuilder {
 
+	/** interim map for {@link #contigID} */
+	private final HashMap<String, Integer> tmpContigID = new HashMap<String, Integer>();
+
 	/** builder for {@link ReferenceDictionary#contigID} */
-	private ImmutableMap.Builder<String, Integer> contigID = new ImmutableMap.Builder<String, Integer>();
+	private final ImmutableMap.Builder<String, Integer> contigID = new ImmutableMap.Builder<String, Integer>();
 
 	/** builder for {@link ReferenceDictionary#contigLength} */
-	private ImmutableMap.Builder<Integer, Integer> contigLength = new ImmutableMap.Builder<Integer, Integer>();
+	private final ImmutableMap.Builder<Integer, Integer> contigLength = new ImmutableMap.Builder<Integer, Integer>();
 
 	/**
 	 * Add a contig id to length mapping.
@@ -28,6 +33,15 @@ public final class ReferenceDictionaryBuilder {
 	}
 
 	/**
+	 * @param name
+	 *            name of contig to get numeric ID for
+	 * @return canonical numeric ID for the contig with given <code>name</code> or <code>null</code> if none.
+	 */
+	public Integer getContigID(String name) {
+		return tmpContigID.get(name);
+	}
+
+	/**
 	 * Add a contig name to numeric ID mapping to builder.
 	 * 
 	 * @param name
@@ -36,6 +50,7 @@ public final class ReferenceDictionaryBuilder {
 	 *            numeric contig ID
 	 */
 	public void putContigID(String name, int id) {
+		tmpContigID.put(name, id);
 		contigID.put(name, id);
 	}
 

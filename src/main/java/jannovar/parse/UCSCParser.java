@@ -2,6 +2,7 @@ package jannovar.parse;
 
 import jannovar.common.Constants;
 import jannovar.exception.KGParseException;
+import jannovar.io.ReferenceDictionaryBuilder;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
@@ -76,22 +77,30 @@ public class UCSCParser implements TranscriptParser, Constants {
 	/** Map of all genes loaded so far. The key is the UCSC id, e.g. uc0001234.3. */
 	private HashMap<String, TranscriptInfoBuilder> knownGeneMap;
 
+	/** Builder for the reference info dictionary. */
+	private ReferenceDictionaryBuilder refDictBuilder;
+
 	/**
 	 * @param basePath
 	 *            path to where the to-be-parsed files live
 	 */
 	public UCSCParser(String basePath) {
 		this.basePath = basePath;
-		knownGeneMap = new HashMap<String, TranscriptInfoBuilder>();
+		this.knownGeneMap = new HashMap<String, TranscriptInfoBuilder>();
+		this.refDictBuilder = new ReferenceDictionaryBuilder();
 	}
 
 	@Override
 	public ArrayList<TranscriptInfo> run() throws KGParseException {
+		// TODO(holtgrew): download and parse the {chr,unlocalized,unplaced}_accessions_GRCh38 and build mapping from
+		// chromosome names to ids from this.
+
 		// Build paths to known gene files.
 		String knownGenePath = PathUtil.join(basePath, Constants.knownGene);
 		String knownGeneMrnaPath = PathUtil.join(basePath, Constants.knownGeneMrna);
 		String kgXrefPath = PathUtil.join(basePath, Constants.kgXref);
 		String known2locusPath = PathUtil.join(basePath, Constants.known2locus);
+		String chromInfoPath = PathUtil.join(basePath, Constants.chromInfo);
 
 		// Check whether we have gzip'ed files and add ".gz" file extension.
 		if (haveGzipFiles()) {
@@ -99,6 +108,7 @@ public class UCSCParser implements TranscriptParser, Constants {
 			knownGeneMrnaPath += ".gz";
 			kgXrefPath += ".gz";
 			known2locusPath += ".gz";
+			chromInfoPath += ".gz";
 		}
 
 		// Parse the UCSC files.
@@ -106,6 +116,9 @@ public class UCSCParser implements TranscriptParser, Constants {
 		parseKnownGeneMrna(knownGeneMrnaPath);
 		parseKnownGeneXref(kgXrefPath);
 		parseKnown2Locus(known2locusPath);
+
+		// Parse chromInfo.txt.gz (chromosome to length mapping).
+		parseChromInfo(chromInfoPath);
 
 		// Build result list.
 		ArrayList<TranscriptInfo> result = new ArrayList<TranscriptInfo>();
@@ -115,7 +128,61 @@ public class UCSCParser implements TranscriptParser, Constants {
 	}
 
 	/**
-	 * The constructor parses a single line of the knownGene.txt file.
+	 * Parse the chromInfo.txt file.
+	 *
+	 * This file has the following structure:
+	 *
+	 * <ul>
+	 * <li>1 - chromosome name</li>
+	 * <li>2 - length</li>
+	 * <li>3 - path (ignored)</li>
+	 * </ul>
+	 *
+	 * @param chromInfoPath
+	 *            path to <code>chromInfo.txt.gz</code>
+	 */
+	private void parseChromInfo(String chromInfoPath) throws KGParseException {
+		// Error handling can be improved with Java 7.
+		String s = null;
+		BufferedReader br = null;
+		// int linecount=0;
+		// int exceptionCount=0;
+		try {
+			br = getBufferedReaderFromFilePath(chromInfoPath, chromInfoPath.endsWith(".gz"));
+
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				// linecount++;
+				final String A[] = line.split("\t");
+				final String chrName = A[0];
+				final int chrLen = Integer.parseInt(A[1]);
+				final Integer chrID = refDictBuilder.getContigID(chrName);
+				if (chrID == null)
+					throw new KGParseException(String.format("Seeing length line of unknown contig " + chrName));
+				refDictBuilder.putContigLength(chrID.intValue(), chrLen);
+			}
+			// System.out.println("[INFO] Parsed " + knownGeneMap.size() + " transcripts from UCSC knownGene resource");
+		} catch (FileNotFoundException fnfe) {
+			s = String.format("[Jannovar/USCSKGParser] Could not find chromInfoPath.txt file: %s\n%s", chromInfoPath,
+					fnfe.toString());
+		} catch (IOException e) {
+			s = String.format("[Jannovar/USCSKGParser] Exception while parsing UCSC chromInfoPath file at \"%s\"\n%s",
+					chromInfoPath, e.toString());
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				// swallow, nothing we can do about it
+			}
+		}
+		if (s != null)
+			throw new KGParseException(s);
+	}
+
+	/**
+	 * The function parses a single line of the knownGene.txt file.
 	 *
 	 * The fields of the file are tab separated and have the following structure:
 	 *
@@ -204,7 +271,7 @@ public class UCSCParser implements TranscriptParser, Constants {
 			throw new KGParseException("Could not parse cdsEnd:" + A[6]);
 		}
 		tib.setCdsRegion(new GenomeInterval('+', chromosome, cdsStart, cdsEnd, PositionType.ONE_BASED)
-				.withStrand(strand));
+		.withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;
