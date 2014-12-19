@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableMap;
 
 /**
  * Builder class for incremental building of immutable {@link ReferenceDictionary} objects.
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class ReferenceDictionaryBuilder {
@@ -17,12 +17,15 @@ public final class ReferenceDictionaryBuilder {
 	/** builder for {@link ReferenceDictionary#contigID} */
 	private final ImmutableMap.Builder<String, Integer> contigID = new ImmutableMap.Builder<String, Integer>();
 
+	/** builder for {@link ReferenceDictionary#contigName} */
+	private final ImmutableMap.Builder<Integer, String> contigName = new ImmutableMap.Builder<Integer, String>();
+
 	/** builder for {@link ReferenceDictionary#contigLength} */
 	private final ImmutableMap.Builder<Integer, Integer> contigLength = new ImmutableMap.Builder<Integer, Integer>();
 
 	/**
 	 * Add a contig id to length mapping.
-	 * 
+	 *
 	 * @param id
 	 *            numeric contig ID
 	 * @param length
@@ -30,6 +33,18 @@ public final class ReferenceDictionaryBuilder {
 	 */
 	public void putContigLength(int id, int length) {
 		contigLength.put(id, length);
+	}
+
+	/**
+	 * Set primary contig ID to name mapping.
+	 *
+	 * @param id
+	 *            numeric contig ID
+	 * @param name
+	 *            contig name
+	 */
+	public void putContigName(int id, String name) {
+		contigName.put(id, name);
 	}
 
 	/**
@@ -43,7 +58,7 @@ public final class ReferenceDictionaryBuilder {
 
 	/**
 	 * Add a contig name to numeric ID mapping to builder.
-	 * 
+	 *
 	 * @param name
 	 *            contig name
 	 * @param id
@@ -58,6 +73,6 @@ public final class ReferenceDictionaryBuilder {
 	 * @return instance of immutable ReferenceDictionary object
 	 */
 	public ReferenceDictionary build() {
-		return new ReferenceDictionary(contigID.build(), contigLength.build());
+		return new ReferenceDictionary(contigID.build(), contigName.build(), contigLength.build());
 	}
 }

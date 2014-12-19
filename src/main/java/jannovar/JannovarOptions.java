@@ -2,8 +2,8 @@ package jannovar;
 
 import jannovar.common.Constants.Release;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.net.HostAndPort;
-
 
 /**
  * Configuration for the Jannovar program.
@@ -12,7 +12,7 @@ import com.google.common.net.HostAndPort;
  * example, the proxy setting is only used when downloading data.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter Robinson <peter.robinson@charite.de>
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class JannovarOptions {
 	/** the selected command */
@@ -20,9 +20,17 @@ public final class JannovarOptions {
 
 	// Configuration for the download command
 
+	/** paths to ini files ot use for parsing */
+	public ImmutableList<String> dataSourceFiles = null;
+
+	/** data source name to use for downloading and parsing */
+	public ImmutableList<String> dataSourceNames = null;
+
+	// TODO(holtgrem): Remove tihs.
 	/** data source to use for downloading */
 	public DataSource dataSource = DataSource.UCSC;
 
+	// TODO(holtgrem): Remove tihs.
 	/** genome release to downloads and serialize */
 	public Release genomeRelease = Release.HG19;
 
@@ -74,6 +82,7 @@ public final class JannovarOptions {
 
 	void print() {
 		if (command == Command.DOWNLOAD) {
+			System.err.println("dataSourceName: " + dataSourceNames);
 			System.err.println("dataSource: " + dataSource);
 			System.err.println("downloadPath" + downloadPath);
 			System.err.println("genome: " + genomeRelease);

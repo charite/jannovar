@@ -2,6 +2,7 @@ package jannovar.cmd.download;
 
 import jannovar.JannovarOptions;
 import jannovar.cmd.JannovarCommand;
+import jannovar.datasource.DataSourceFactory;
 import jannovar.exception.CommandLineParsingException;
 import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
@@ -24,14 +25,16 @@ public final class DownloadCommand extends JannovarCommand {
 	 */
 	@Override
 	public void run() throws JannovarException {
-		DownloadManager manager = DownloadManagerFactory.build(options);
-		if (manager != null)
-			manager.run();
+		DataSourceFactory factory = new DataSourceFactory(options.dataSourceFiles);
+		for (String name : options.dataSourceNames) {
+			System.err.println("Downloading/parsing for data source " + name);
+			factory.getDataSource(name).getDataFactory().build(options.downloadPath);
+		}
 	}
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	HelpRequestedException {
 		try {
 			return new DownloadCommandLineParser().parse(argv);
 		} catch (ParseException e) {

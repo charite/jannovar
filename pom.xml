@@ -36,6 +36,11 @@
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.ini4j</groupId>
+			<artifactId>ini4j</artifactId>
+			<version>0.5.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -142,6 +147,16 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<!-- INI files for configuring dowloads -->
+		<resources>
+			<resource>
+				<directory>src/resources</directory>
+				<includes>
+					<include>default_sources.ini</include>
+				</includes>
+			</resource>
+		</resources>
 
 		<!-- Maven Code Handling -->
 		<extensions>
