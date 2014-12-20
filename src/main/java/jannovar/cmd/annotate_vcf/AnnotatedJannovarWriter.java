@@ -8,8 +8,8 @@ import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
 import jannovar.annotation.VariantDataCorrector;
-import jannovar.common.ChromosomeMap;
 import jannovar.exception.AnnotationException;
+import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 
 import java.io.BufferedWriter;
@@ -25,6 +25,9 @@ import java.util.HashMap;
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
+	/** {@link ReferenceDictionary} object to use for information about the genome. */
+	private final ReferenceDictionary refDict;
+
 	/** configuration to use */
 	private JannovarOptions options;
 
@@ -37,8 +40,10 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** current line */
 	int currentLine = 0;
 
-	public AnnotatedJannovarWriter(HashMap<Byte, Chromosome> chromosomeMap, JannovarOptions options) throws IOException {
-		this.annotator = new VariantAnnotator(chromosomeMap);
+	public AnnotatedJannovarWriter(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap,
+			JannovarOptions options) throws IOException {
+		this.refDict = refDict;
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
 		this.options = options;
 		this.openBufferedWriter();
 	}
@@ -91,12 +96,12 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		currentLine++;
 
 		String chrStr = vc.getChr();
-		// Catch the case that variantContext.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
+		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" contigs etc. In this case, we simply ignore the record.
-		Byte boxedChr = ChromosomeMap.identifier2chromosom.get(vc.getChr());
-		if (boxedChr == null)
+		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		if (boxedInt == null)
 			return;
-		byte chr = boxedChr.byteValue();
+		int chr = boxedInt.intValue();
 
 		// FIXME(mjaeger): We should care about more than just the first alternative allele.
 		// translate from VCF ref/alt/pos to internal Jannovar representation

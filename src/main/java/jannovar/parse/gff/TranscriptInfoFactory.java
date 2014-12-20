@@ -75,7 +75,7 @@ public final class TranscriptInfoFactory {
 				tib.setAccession(rna.name);
 				tib.setGeneSymbol(gene.name);
 				tib.setStrand(rna.strand ? '+' : '-');
-				tib.setTxRegion(new GenomeInterval('+', rna.chromosom, rna.getTxStart(), rna.getTxEnd(),
+				tib.setTxRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getTxStart(), rna.getTxEnd(),
 						PositionType.ONE_BASED));
 
 				// Check whether the corrected CDS start position returned from getCdsStart() is within an exon and do
@@ -94,12 +94,12 @@ public final class TranscriptInfoFactory {
 					LOGGER.log(Level.WARNING, "Transcript {0} appears to be 3'/5' truncated. Ignoring.", rna.id);
 					continue;
 				}
-				tib.setCdsRegion(new GenomeInterval('+', rna.chromosom, rna.getCdsStart(), rna.getCdsEnd(),
+				tib.setCdsRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getCdsStart(), rna.getCdsEnd(),
 						PositionType.ONE_BASED));
 
 				for (int i = 0; i < rna.exons.size(); ++i)
-					tib.addExonRegion(new GenomeInterval('+', rna.chromosom, rna.getExonStarts()[i],
-							rna.getExonEnds()[i], PositionType.ONE_BASED));
+					tib.addExonRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getExonStarts()[i], rna
+							.getExonEnds()[i], PositionType.ONE_BASED));
 
 				if (gffVersion.version == 3)
 					tib.setGeneID(Integer.parseInt(gene.id.substring(4)));

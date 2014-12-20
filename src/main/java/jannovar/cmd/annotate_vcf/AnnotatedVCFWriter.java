@@ -11,9 +11,9 @@ import jannovar.JannovarOptions;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
 import jannovar.annotation.VariantDataCorrector;
-import jannovar.common.ChromosomeMap;
 import jannovar.common.VCFStrings;
 import jannovar.exception.AnnotationException;
+import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 import jannovar.util.PathUtil;
 
@@ -26,17 +26,22 @@ import java.util.HashMap;
  */
 public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 
+	/** {@link ReferenceDictionary} object to use for information about the genome. */
+	private final ReferenceDictionary refDict;
+
 	/** configuration to use */
-	private JannovarOptions options;
+	private final JannovarOptions options;
 
 	/** the VariantAnnotator to use. */
-	private VariantAnnotator annotator;
+	private final VariantAnnotator annotator;
 
 	/** writer for annotated VariantContext objects */
 	VariantContextWriter out = null;
 
-	public AnnotatedVCFWriter(VCFFileReader reader, HashMap<Byte, Chromosome> chromosomeMap, JannovarOptions options) {
-		this.annotator = new VariantAnnotator(chromosomeMap);
+	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFFileReader reader,
+			HashMap<Integer, Chromosome> chromosomeMap, JannovarOptions options) {
+		this.refDict = refDict;
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
 		this.options = options;
 		openVariantContextWriter(reader);
 	}
@@ -46,7 +51,8 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	 *
 	 * We need <tt>reader</tt> for the sequence dictionary and the VCF header.
 	 *
-	 * @param reader the reader to use for the construction
+	 * @param reader
+	 *            the reader to use for the construction
 	 */
 	private void openVariantContextWriter(VCFFileReader reader) {
 		// construct factory object for VariantContextWriter
@@ -66,8 +72,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				VCFStrings.INFO_EFFECT);
 		header.addMetaDataLine(effectLine);
 		// add INFO line for HGVS field
-		VCFInfoHeaderLine hgvsLine = new VCFInfoHeaderLine("HGVS", 1, VCFHeaderLineType.String,
-				VCFStrings.INFO_HGVS);
+		VCFInfoHeaderLine hgvsLine = new VCFInfoHeaderLine("HGVS", 1, VCFHeaderLineType.String, VCFStrings.INFO_HGVS);
 		header.addMetaDataLine(hgvsLine);
 		return header;
 	}
@@ -90,19 +95,19 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 
 	@Override
 	public void put(VariantContext vc) throws AnnotationException {
-		// Catch the case that variantContext.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
+		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" contigs etc. In this case, we simply write the record out unmodified.
-		Byte boxedChr = ChromosomeMap.identifier2chromosom.get(vc.getChr());
-		if (boxedChr == null) {
+		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		if (boxedInt == null) {
 			out.add(vc);
 			return;
 		}
-		byte chr = boxedChr.byteValue();
+		int chr = boxedInt.intValue();
 
 		// FIXME(mjaeger): We should care about more than just the first alternative allele.
 		// translate from VCF ref/alt/pos to internal Jannovar representation
-		VariantDataCorrector corr = new VariantDataCorrector(vc.getReference().getBaseString(),
-				vc.getAlternateAllele(0).getBaseString(), vc.getStart());
+		VariantDataCorrector corr = new VariantDataCorrector(vc.getReference().getBaseString(), vc
+				.getAlternateAllele(0).getBaseString(), vc.getStart());
 		String ref = corr.ref;
 		String alt = corr.alt;
 		int pos = corr.position;
@@ -118,7 +123,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			String effect;
 			if (anno.isStructural()) {
 				annotation = anno.getCombinedAnnotationForStructuralVariant();// String.format("%s:%s",
-																				// anno.getMultipleGeneList(),anno.getCombinedAnnotationForVariantAffectingMultipleGenes());
+				// anno.getMultipleGeneList(),anno.getCombinedAnnotationForVariantAffectingMultipleGenes());
 				effect = anno.getVariantType().toString();
 			} else {
 				if (this.options.showAll) {

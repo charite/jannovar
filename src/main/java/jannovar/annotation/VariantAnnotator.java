@@ -5,13 +5,13 @@ import jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.InvalidGenomeChange;
 import jannovar.interval.IntervalTree;
+import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +27,12 @@ import java.util.HashMap;
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class VariantAnnotator {
+
+	/** {@link ReferenceDictionary} to use for genome information. */
+	final ReferenceDictionary refDict;
+
 	/** Chromosomes with their TranscriptModel objects. */
-	private HashMap<Byte, Chromosome> chromosomeMap = null;
+	private HashMap<Integer, Chromosome> chromosomeMap = null;
 
 	/**
 	 * This object will be used to prioritize the annotations and to choose the one(s) to report. For instance, if we
@@ -43,10 +47,13 @@ public final class VariantAnnotator {
 	/**
 	 * Construct new VariantAnnotator, given a chromosome map.
 	 *
+	 * @param refDict
+	 *            {@link ReferenceDictionary} with information about the genome.
 	 * @param chromosomeMap
 	 *            chromosome map to use for the annotator.
 	 */
-	public VariantAnnotator(HashMap<Byte, Chromosome> chromosomeMap) {
+	public VariantAnnotator(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap) {
+		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 		this.annovarFactory = new AnnotationCollector(20);
 	}
@@ -72,7 +79,7 @@ public final class VariantAnnotator {
 	 *         described by the object (often just one annotation, but potentially multiple ones).
 	 * @throws jannovar.exception.AnnotationException
 	 */
-	public AnnotationList getAnnotationList(byte c, int position, String ref, String alt) throws AnnotationException {
+	public AnnotationList getAnnotationList(int c, int position, String ref, String alt) throws AnnotationException {
 		// Get chromosome by id.
 		Chromosome chr = chromosomeMap.get(c);
 		if (chr == null) {
@@ -85,13 +92,14 @@ public final class VariantAnnotator {
 
 		// TODO(holtgrew): Make zero-based in the future.
 		// Build the GenomeChange to build annotation for.
-		GenomeChange change = new GenomeChange(new GenomePosition('+', c, position, PositionType.ONE_BASED), ref, alt);
+		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', c, position, PositionType.ONE_BASED),
+				ref, alt);
 		GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ONE_BASED);
 
 		// Get the TranscriptModel objects that overlap with changeInterval.
-		IntervalTree<TranscriptModel>.QueryResult qr = chr.getTMIntervalTree().search(changeInterval.beginPos,
+		IntervalTree<TranscriptInfo>.QueryResult qr = chr.getTMIntervalTree().search(changeInterval.beginPos,
 				changeInterval.endPos);
-		ArrayList<TranscriptModel> candidateTranscripts = qr.result;
+		ArrayList<TranscriptInfo> candidateTranscripts = qr.result;
 
 		// Check whether this is a SV, if true then also perform a big intervals search.
 		boolean isStructuralVariant = (ref.length() >= 1000 || alt.length() >= 1000);
@@ -111,11 +119,11 @@ public final class VariantAnnotator {
 
 		// If we reach here, then there is at least one transcript that overlaps with the query. Iterate over these
 		// transcripts and collect annotations for each (they are collected in annovarFactory).
-		for (TranscriptModel tm : candidateTranscripts) {
+		for (TranscriptInfo tm : candidateTranscripts) {
 			if (isStructuralVariant)
-				buildSVAnnotation(change, new TranscriptInfo(tm));
+				buildSVAnnotation(change, tm);
 			else
-				buildNonSVAnnotation(change, new TranscriptInfo(tm));
+				buildNonSVAnnotation(change, tm);
 		}
 
 		return annovarFactory.getAnnotationList();
@@ -125,16 +133,10 @@ public final class VariantAnnotator {
 		annovarFactory.addStructuralAnnotation(new StructuralVariantAnnotationBuilder(transcript, change).build());
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
+	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo leftNeighbor, TranscriptInfo rightNeighbor)
 			throws AnnotationException {
-		if (leftNeighbor == null)
-			buildNonSVAnnotation(change, null);
-		else
-			buildNonSVAnnotation(change, new TranscriptInfo(leftNeighbor));
-		if (rightNeighbor == null)
-			buildNonSVAnnotation(change, null);
-		else
-			buildNonSVAnnotation(change, new TranscriptInfo(rightNeighbor));
+		buildNonSVAnnotation(change, leftNeighbor);
+		buildNonSVAnnotation(change, rightNeighbor);
 	}
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws InvalidGenomeChange {

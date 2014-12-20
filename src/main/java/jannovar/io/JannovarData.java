@@ -24,7 +24,7 @@ public final class JannovarData implements Serializable {
 	public final ImmutableList<TranscriptInfo> transcriptInfos;
 
 	/** information about reference lengths and identities */
-	public final ReferenceDictionary referenceDict;
+	public final ReferenceDictionary refDict;
 
 	/**
 	 * Initialize the object with the given values.
@@ -35,7 +35,7 @@ public final class JannovarData implements Serializable {
 	 *            the list of {@link TranscriptInfo} objects to use in this object
 	 */
 	public JannovarData(ReferenceDictionary referenceDict, ImmutableList<TranscriptInfo> transcriptInfos) {
-		this.referenceDict = referenceDict;
+		this.refDict = referenceDict;
 		this.transcriptInfos = transcriptInfos;
 	}
 

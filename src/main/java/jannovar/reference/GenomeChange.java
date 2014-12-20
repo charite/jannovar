@@ -14,6 +14,7 @@ import jannovar.util.DNAUtils;
  */
 @Immutable
 public final class GenomeChange {
+
 	/** position of the change */
 	public final GenomePosition pos;
 	/** nucleic acid reference string */
@@ -35,7 +36,7 @@ public final class GenomeChange {
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		this.pos = new GenomePosition(pos.strand, pos.chr, corr.position, pos.positionType);
+		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, pos.positionType);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
@@ -72,8 +73,8 @@ public final class GenomeChange {
 		else if (strand != pos.strand /* && ref.length() != 0 */)
 			delta = ref.length() - 1;
 
-		this.pos = new GenomePosition(pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED).shifted(delta)
-				.withStrand(strand);
+		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED)
+		.shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -137,7 +138,7 @@ public final class GenomeChange {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -154,7 +155,7 @@ public final class GenomeChange {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

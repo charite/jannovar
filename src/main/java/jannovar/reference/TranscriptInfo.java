@@ -2,6 +2,7 @@ package jannovar.reference;
 
 import jannovar.common.Constants;
 import jannovar.common.Immutable;
+import jannovar.io.ReferenceDictionary;
 
 import java.io.Serializable;
 
@@ -78,39 +79,41 @@ public final class TranscriptInfo implements Serializable {
 	/**
 	 * Initialize the TranscriptInfo object with the TranscriptModel data.
 	 *
+	 * @param refDict
+	 *            {@link ReferenceDictionary} with information about the genome
 	 * @param tm
 	 *            transcript data source
 	 */
-	public TranscriptInfo(TranscriptModel tm) {
-		transcriptModel = tm;
-		accession = tm.getAccessionNumber();
-		geneSymbol = tm.getGeneSymbol();
-		sequence = tm.getSequence();
+	public TranscriptInfo(ReferenceDictionary refDict, TranscriptModel tm) {
+		this.transcriptModel = tm;
+		this.accession = tm.getAccessionNumber();
+		this.geneSymbol = tm.getGeneSymbol();
+		this.sequence = tm.getSequence();
 
 		final char strand = tm.getStrand();
 		final byte chr = tm.getChromosome();
 
 		// create temporary forward transcription interval, then assign to this.txRegion with conversion of coordinates.
-		GenomeInterval fwdTXRegion = new GenomeInterval('+', chr, tm.getTXStart(), tm.getTXEnd(),
+		GenomeInterval fwdTXRegion = new GenomeInterval(refDict, '+', chr, tm.getTXStart(), tm.getTXEnd(),
 				PositionType.ONE_BASED);
-		txRegion = fwdTXRegion.withStrand(strand);
+		this.txRegion = fwdTXRegion.withStrand(strand);
 		// do the same for the cds region
-		GenomeInterval fwdCDSRegion = new GenomeInterval('+', chr, tm.getCDSStart(), tm.getCDSEnd(),
+		GenomeInterval fwdCDSRegion = new GenomeInterval(refDict, '+', chr, tm.getCDSStart(), tm.getCDSEnd(),
 				PositionType.ONE_BASED);
-		cdsRegion = fwdCDSRegion.withStrand(strand);
+		this.cdsRegion = fwdCDSRegion.withStrand(strand);
 
 		int exonCount = tm.getExonEnds().length; // getExonCount() broken for some RefSeq
 		ImmutableList.Builder<GenomeInterval> exonRegionsBuilder = new ImmutableList.Builder<GenomeInterval>();
 		if (strand == '+') {
 			for (int i = 0; i < exonCount; ++i)
-				exonRegionsBuilder.add(new GenomeInterval('+', chr, tm.getExonStart(i), tm.getExonEnd(i),
+				exonRegionsBuilder.add(new GenomeInterval(refDict, '+', chr, tm.getExonStart(i), tm.getExonEnd(i),
 						PositionType.ONE_BASED));
 		} else {
 			for (int i = 0, j = exonCount - 1; i < exonCount; ++i, --j)
-				exonRegionsBuilder.add(new GenomeInterval('+', chr, tm.getExonStart(j), tm.getExonEnd(j),
+				exonRegionsBuilder.add(new GenomeInterval(refDict, '+', chr, tm.getExonStart(j), tm.getExonEnd(j),
 						PositionType.ONE_BASED).withStrand(strand));
 		}
-		exonRegions = exonRegionsBuilder.build();
+		this.exonRegions = exonRegionsBuilder.build();
 
 		// ensure that the strands are consistent
 		checkForConsistency();
@@ -162,8 +165,8 @@ public final class TranscriptInfo implements Serializable {
 		// TODO(holtgrem): test me!
 		GenomeInterval exonRegionL = exonRegions.get(i).withPositionType(PositionType.ZERO_BASED);
 		GenomeInterval exonRegionR = exonRegions.get(i + 1).withPositionType(PositionType.ZERO_BASED);
-		return new GenomeInterval(exonRegionL.strand, exonRegionL.chr, exonRegionL.endPos, exonRegionR.beginPos,
-				PositionType.ZERO_BASED);
+		return new GenomeInterval(exonRegionL.refDict, exonRegionL.strand, exonRegionL.chr, exonRegionL.endPos,
+				exonRegionR.beginPos, PositionType.ZERO_BASED);
 	}
 
 	/**

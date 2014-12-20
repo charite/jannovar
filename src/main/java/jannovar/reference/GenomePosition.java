@@ -1,8 +1,8 @@
 package jannovar.reference;
 
-import jannovar.common.ChromosomeMap;
 import jannovar.common.Immutable;
 import jannovar.exception.InvalidCoordinateException;
+import jannovar.io.ReferenceDictionary;
 
 import java.io.Serializable;
 
@@ -25,6 +25,9 @@ public final class GenomePosition implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/** reference dictionary to use for coordinate translation */
+	final ReferenceDictionary refDict;
+
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */
@@ -35,7 +38,8 @@ public final class GenomePosition implements Serializable {
 	public final int pos;
 
 	/** construct genome position with one-based coordinate system */
-	public GenomePosition(char strand, int chr, int pos) {
+	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
+		this.refDict = refDict;
 		this.positionType = PositionType.ONE_BASED;
 		this.strand = strand;
 		this.chr = chr;
@@ -43,7 +47,8 @@ public final class GenomePosition implements Serializable {
 	}
 
 	/** construct genome position with selected coordinate system */
-	public GenomePosition(char strand, int chr, int pos, PositionType positionType) {
+	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos, PositionType positionType) {
+		this.refDict = refDict;
 		this.positionType = positionType;
 		this.strand = strand;
 		this.chr = chr;
@@ -52,6 +57,7 @@ public final class GenomePosition implements Serializable {
 
 	/** construct genome position from other with selected coordinate system */
 	public GenomePosition(GenomePosition other, PositionType positionType) {
+		this.refDict = other.refDict;
 		this.positionType = positionType;
 		this.strand = other.strand;
 		this.chr = other.chr;
@@ -67,6 +73,7 @@ public final class GenomePosition implements Serializable {
 
 	/** construct genome position from other with the selected strand */
 	public GenomePosition(GenomePosition other, char strand) {
+		this.refDict = other.refDict;
 		this.positionType = other.positionType;
 		this.strand = strand;
 		this.chr = other.chr;
@@ -76,7 +83,7 @@ public final class GenomePosition implements Serializable {
 		if (strand == other.strand)
 			this.pos = other.pos;
 		else
-			this.pos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.pos + delta;
+			this.pos = refDict.contigLength.get(other.chr) - other.pos + delta;
 	}
 
 	/** convert into GenomePosition of the given strand */
@@ -172,7 +179,7 @@ public final class GenomePosition implements Serializable {
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public GenomePosition shifted(int delta) {
-		return new GenomePosition(strand, chr, pos + delta, positionType);
+		return new GenomePosition(refDict, strand, chr, pos + delta, positionType);
 	}
 
 	/*

@@ -3,11 +3,11 @@ package jannovar.cmd;
 import jannovar.exception.CommandLineParsingException;
 import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
-import jannovar.io.SerializationManager;
+import jannovar.io.JannovarData;
+import jannovar.io.JannovarDataSerializer;
+import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
-import jannovar.reference.TranscriptModel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -19,8 +19,12 @@ import java.util.HashMap;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public abstract class JannovarAnnotationCommand extends JannovarCommand {
+
+	/** {@link ReferenceDictionary} with genome information. */
+	protected ReferenceDictionary refDict = null;
+
 	/** Map of Chromosomes, used in the annotation. */
-	protected HashMap<Byte, Chromosome> chromosomeMap = null;
+	protected HashMap<Integer, Chromosome> chromosomeMap = null;
 
 	public JannovarAnnotationCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		super(argv);
@@ -40,9 +44,8 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	 *             when the user requested the help page
 	 */
 	protected void deserializeTranscriptDefinitionFile() throws JannovarException, HelpRequestedException {
-		ArrayList<TranscriptModel> kgList;
-		SerializationManager manager = new SerializationManager();
-		kgList = manager.deserializeKnownGeneList(this.options.dataFile);
-		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(kgList);
+		JannovarData data = new JannovarDataSerializer(this.options.dataFile).deserializeKnownGeneList();
+		this.refDict = data.refDict;
+		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(data.transcriptInfos);
 	}
 }

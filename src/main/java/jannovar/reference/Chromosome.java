@@ -6,6 +6,8 @@ import jannovar.interval.IntervalTree;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
  * {@link jannovar.reference.TranscriptModel TranscriptModel} class to make a list of gene models that will be used to
@@ -27,13 +29,13 @@ public final class Chromosome {
 	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
 	 * way of dealing with scaffolds etc.
 	 */
-	private final byte chromosome;
+	private final int chromosome;
 
 	/**
 	 * An {@link IntervalTree} that contains all of the {@link TranscriptModel} objects for transcripts located on this
 	 * chromosome.
 	 */
-	private IntervalTree<TranscriptModel> tmIntervalTree = null;
+	private IntervalTree<TranscriptInfo> tmIntervalTree = null;
 
 	/**
 	 * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or 24=Y_CHROMOSOME (see
@@ -44,7 +46,7 @@ public final class Chromosome {
 	 * @param tmIntervalTree
 	 *            An interval tree with all transcripts on this chromosome.
 	 */
-	public Chromosome(byte c, IntervalTree<TranscriptModel> tmIntervalTree) {
+	public Chromosome(int c, IntervalTree<TranscriptInfo> tmIntervalTree) {
 		this.chromosome = c;
 		this.tmIntervalTree = tmIntervalTree;
 	}
@@ -73,23 +75,25 @@ public final class Chromosome {
 	 *            A list of all TranscriptModels for the entire genome
 	 * @return a Map of Chromosome objects with all 22+2+M chromosomes.
 	 */
-	public static HashMap<Byte, Chromosome> constructChromosomeMapWithIntervalTree(ArrayList<TranscriptModel> tmist) {
-		HashMap<Byte, Chromosome> chromosomeMap = new HashMap<Byte, Chromosome>();
+	public static HashMap<Integer, Chromosome> constructChromosomeMapWithIntervalTree(
+			ImmutableList<TranscriptInfo> tmist) {
+		HashMap<Integer, Chromosome> chromosomeMap = new HashMap<Integer, Chromosome>();
 		/* 1. First sort the TranscriptModel objects by Chromosome. */
-		HashMap<Byte, ArrayList<Interval<TranscriptModel>>> chrMap = new HashMap<Byte, ArrayList<Interval<TranscriptModel>>>();
-		for (TranscriptModel tm : tmist) {
-			byte chrom = tm.getChromosome();
-			if (!chrMap.containsKey(chrom)) {
-				chrMap.put(chrom, new ArrayList<Interval<TranscriptModel>>());
-			}
-			ArrayList<Interval<TranscriptModel>> lst = chrMap.get(chrom);
-			Interval<TranscriptModel> in = new Interval<TranscriptModel>(tm.getTXStart(), tm.getTXEnd(), tm);
+		HashMap<Integer, ArrayList<Interval<TranscriptInfo>>> chrMap = new HashMap<Integer, ArrayList<Interval<TranscriptInfo>>>();
+		for (TranscriptInfo tm : tmist) {
+			if (!chrMap.containsKey(tm.getChr()))
+				chrMap.put(tm.getChr(), new ArrayList<Interval<TranscriptInfo>>());
+
+			ArrayList<Interval<TranscriptInfo>> lst = chrMap.get(tm.getChr());
+			final int txStartPos = tm.txRegion.withPositionType(PositionType.ONE_BASED).beginPos;
+			final int txEndPos = tm.txRegion.withPositionType(PositionType.ONE_BASED).endPos;
+			Interval<TranscriptInfo> in = new Interval<TranscriptInfo>(txStartPos, txEndPos, tm);
 			lst.add(in);
 		}
 		/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
-		for (Byte chrom : chrMap.keySet()) {
-			ArrayList<Interval<TranscriptModel>> transModelList = chrMap.get(chrom);
-			IntervalTree<TranscriptModel> itree = new IntervalTree<TranscriptModel>(transModelList);
+		for (Integer chrom : chrMap.keySet()) {
+			ArrayList<Interval<TranscriptInfo>> transModelList = chrMap.get(chrom);
+			IntervalTree<TranscriptInfo> itree = new IntervalTree<TranscriptInfo>(transModelList);
 			Chromosome chr = new Chromosome(chrom, itree);
 			chromosomeMap.put(chrom, chr);
 		}
@@ -99,7 +103,7 @@ public final class Chromosome {
 	/**
 	 * @return the {@link IntervalTree} of the chromosome.
 	 */
-	public IntervalTree<TranscriptModel> getTMIntervalTree() {
+	public IntervalTree<TranscriptInfo> getTMIntervalTree() {
 		return tmIntervalTree;
 	}
 }

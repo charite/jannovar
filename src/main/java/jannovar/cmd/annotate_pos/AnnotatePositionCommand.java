@@ -4,7 +4,6 @@ import jannovar.JannovarOptions;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
 import jannovar.cmd.JannovarAnnotationCommand;
-import jannovar.common.ChromosomeMap;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.CommandLineParsingException;
 import jannovar.exception.HelpRequestedException;
@@ -41,20 +40,20 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 		System.err.println("input: " + options.chromosomalChange);
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
-		Matcher mat = pat.matcher(options.chromosomalChange);
+		Matcher match = pat.matcher(options.chromosomalChange);
 
-		if (!mat.matches() | mat.groupCount() != 4) {
+		if (!match.matches() | match.groupCount() != 4) {
 			System.err
-					.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
+			.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 
-		byte chr = ChromosomeMap.identifier2chromosom.get(mat.group(1));
-		int pos = Integer.parseInt(mat.group(2));
-		String ref = mat.group(3);
-		String alt = mat.group(4);
+		int chr = refDict.contigID.get(match.group(1));
+		int pos = Integer.parseInt(match.group(2));
+		String ref = match.group(3);
+		String alt = match.group(4);
 
-		VariantAnnotator annotator = new VariantAnnotator(chromosomeMap);
+		VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
 		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", options.chromosomalChange);
@@ -75,7 +74,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);
