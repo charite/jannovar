@@ -10,15 +10,25 @@ import java.io.ObjectOutputStream;
 
 /**
  * Manager for serializing and deserializing {@link JannovarData} objects.
- * 
+ *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class JannovarDataSerializer {
 
+	/** path to file to serialize to or deserialize from */
+	final String filename;
+
+	/**
+	 * @param filename
+	 */
+	public JannovarDataSerializer(String filename) {
+		this.filename = filename;
+	}
+
 	/**
 	 * Serialize a {@link JannovarData} object to a file.
-	 * 
+	 *
 	 * @param filename
 	 *            path to the file
 	 * @param data
@@ -26,7 +36,7 @@ public final class JannovarDataSerializer {
 	 * @throws SerializationException
 	 *             on problems with the serialization
 	 */
-	public static void serializeKnownGeneList(String filename, JannovarData data) throws SerializationException {
+	public void serializeKnownGeneList(JannovarData data) throws SerializationException {
 		if (data == null || data.transcriptInfos.isEmpty() || data.referenceDict.contigID.isEmpty())
 			throw new SerializationException("Attempting to serialize empty data set");
 
@@ -54,14 +64,14 @@ public final class JannovarDataSerializer {
 
 	/**
 	 * Deserialize a {@link JannovarData} object from a file.
-	 * 
+	 *
 	 * @param filename
 	 *            path to the file
 	 * @return {@link JannovarData} object
 	 * @throws SerializationException
 	 *             on problems with the deserialization
 	 */
-	public static JannovarData deserializeKnownGeneList(String filename) throws SerializationException {
+	public JannovarData deserializeKnownGeneList() throws SerializationException {
 		JannovarData result = null;
 
 		// This is also waiting for Java 7 to be cleaned up, see above.

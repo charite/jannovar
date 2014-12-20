@@ -77,8 +77,9 @@ public final class ReferenceDictParser {
 			if (theID == null) {
 				seenUnknown = true;
 				continue; // unknown
-			} else if (seenUnknown)
+			} else if (seenUnknown) {
 				System.err.println("WARNING: Seeing known chromosome after unknonwn in chromInfo file");
+			}
 			builder.putContigLength(theID.intValue(), Integer.parseInt(line.get(CI_LENGTH)));
 		}
 

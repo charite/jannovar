@@ -4,6 +4,8 @@ import jannovar.common.ChromosomeMap;
 import jannovar.common.Immutable;
 import jannovar.exception.InvalidCoordinateException;
 
+import java.io.Serializable;
+
 /**
  * Representation of a position on a genome (chromosome, position).
  *
@@ -19,7 +21,10 @@ import jannovar.exception.InvalidCoordinateException;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class GenomePosition {
+public final class GenomePosition implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */
@@ -172,7 +177,7 @@ public final class GenomePosition {
 
 	/*
 	 * String representation with one-based positions, on forward strand.
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -187,7 +192,7 @@ public final class GenomePosition {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -205,7 +210,7 @@ public final class GenomePosition {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

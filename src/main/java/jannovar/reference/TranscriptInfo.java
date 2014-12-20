@@ -3,6 +3,8 @@ package jannovar.reference;
 import jannovar.common.Constants;
 import jannovar.common.Immutable;
 
+import java.io.Serializable;
+
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -14,7 +16,7 @@ import com.google.common.collect.ImmutableList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class TranscriptInfo {
+public final class TranscriptInfo implements Serializable {
 
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be

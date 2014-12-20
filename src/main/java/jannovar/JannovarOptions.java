@@ -26,11 +26,11 @@ public final class JannovarOptions {
 	/** data source name to use for downloading and parsing */
 	public ImmutableList<String> dataSourceNames = null;
 
-	// TODO(holtgrem): Remove tihs.
+	// TODO(holtgrem): Remove this.
 	/** data source to use for downloading */
 	public DataSource dataSource = DataSource.UCSC;
 
-	// TODO(holtgrem): Remove tihs.
+	// TODO(holtgrem): Remove this.
 	/** genome release to downloads and serialize */
 	public Release genomeRelease = Release.HG19;
 

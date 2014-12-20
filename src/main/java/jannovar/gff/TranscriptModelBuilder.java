@@ -3,11 +3,11 @@
  */
 package jannovar.gff;
 
-import jannovar.common.ChromosomeMap;
 import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.gff.FeatureProcessor.Gene;
 import jannovar.gff.FeatureProcessor.Transcript;
+import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfoBuilder;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class TranscriptModelBuilder implements ChromosomeMap {
+public final class TranscriptModelBuilder {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(TranscriptModelBuilder.class.getSimpleName());
@@ -34,11 +34,16 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	/** {@link GFFVersion} to assume for building transcripts from Feature objects */
 	private final GFFVersion gffVersion;
 
+	/** reference dictionary to use */
+	private final ReferenceDictionary refDict;
+
 	/** the features to build the transcript models from */
 	private final ArrayList<Feature> featureList;
 
-	public TranscriptModelBuilder(GFFVersion gffVersion, ArrayList<Feature> featureList) {
+	public TranscriptModelBuilder(GFFVersion gffVersion, ReferenceDictionary refDict,
+			ArrayList<Feature> featureList) {
 		this.gffVersion = gffVersion;
+		this.refDict = refDict;
 		this.featureList = featureList;
 	}
 
@@ -71,9 +76,9 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 	 *             on problems with the feature formats
 	 */
 	public ArrayList<TranscriptInfoBuilder> make(boolean useOnlyCurated) throws InvalidAttributException,
-			FeatureFormatException {
+	FeatureFormatException {
 		LOGGER.info("Processing features...");
-		HashMap<String, Gene> genes = new FeatureProcessor(gffVersion).run(featureList);
+		HashMap<String, Gene> genes = new FeatureProcessor(gffVersion, refDict).run(featureList);
 
 		LOGGER.info("Building transcript models...");
 		return buildTranscripts(genes, useOnlyCurated);
@@ -116,7 +121,7 @@ public final class TranscriptModelBuilder implements ChromosomeMap {
 				int cdsStart = rna.getCdsStart();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsStartInExon = cdsStartInExon
-							|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
+					|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
 				boolean cdsEndInExon = false;
 				int cdsEnd = rna.getCdsEnd();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)

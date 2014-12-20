@@ -6,7 +6,6 @@ import jannovar.exception.FileDownloadException;
 import jannovar.exception.JannovarException;
 import jannovar.exception.KGParseException;
 import jannovar.io.SerializationManager;
-import jannovar.parse.UCSCParser;
 import jannovar.reference.TranscriptInfo;
 import jannovar.util.PathUtil;
 
@@ -37,7 +36,7 @@ public final class UCSCDownloadManager extends DownloadManager {
 	 */
 	@Override
 	public ArrayList<TranscriptInfo> downloadAndBuildTranscriptModelList() throws FileDownloadException,
-			KGParseException {
+	KGParseException {
 		// download the files
 		downloadTranscriptFiles(jannovar.common.Constants.UCSC, options.genomeRelease);
 
@@ -45,8 +44,9 @@ public final class UCSCDownloadManager extends DownloadManager {
 		String path = PathUtil.join(options.downloadPath, options.genomeRelease.getUCSCString(options.genomeRelease));
 		if (!path.endsWith(System.getProperty("file.separator")))
 			path += System.getProperty("file.separator");
-		UCSCParser parser = new UCSCParser(path);
-		return parser.run();
+		return null;
+		// UCSCParser parser = new UCSCParser(path);
+		// return parser.run();
 	}
 
 	/**

@@ -6,6 +6,9 @@ import jannovar.datasource.DataSourceFactory;
 import jannovar.exception.CommandLineParsingException;
 import jannovar.exception.HelpRequestedException;
 import jannovar.exception.JannovarException;
+import jannovar.io.JannovarData;
+import jannovar.io.JannovarDataSerializer;
+import jannovar.util.PathUtil;
 
 import org.apache.commons.cli.ParseException;
 
@@ -28,7 +31,11 @@ public final class DownloadCommand extends JannovarCommand {
 		DataSourceFactory factory = new DataSourceFactory(options.dataSourceFiles);
 		for (String name : options.dataSourceNames) {
 			System.err.println("Downloading/parsing for data source " + name);
-			factory.getDataSource(name).getDataFactory().build(options.downloadPath);
+			JannovarData data = factory.getDataSource(name).getDataFactory().build(options.downloadPath);
+			String filename = PathUtil.join(options.downloadPath, name.replace('/', '_').replace('\\', '_') + ".ser");
+			System.err.println("Serializing to " + filename);
+			JannovarDataSerializer serializer = new JannovarDataSerializer(filename);
+			serializer.serializeKnownGeneList(data);
 		}
 	}
 

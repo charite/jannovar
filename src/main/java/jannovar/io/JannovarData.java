@@ -9,9 +9,9 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * This data type is used for serialization after downloading.
- * 
+ *
  * Making this class immutable makes it a convenient serializeable read-only database.
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
@@ -29,14 +29,14 @@ public final class JannovarData implements Serializable {
 	/**
 	 * Initialize the object with the given values.
 	 * 
-	 * @param transcriptInfos
-	 *            the list of {@link TranscriptInfo} objects to use in this object
 	 * @param referenceDict
 	 *            the {@link ReferenceDictionary} to use in this object
+	 * @param transcriptInfos
+	 *            the list of {@link TranscriptInfo} objects to use in this object
 	 */
-	public JannovarData(ImmutableList<TranscriptInfo> transcriptInfos, ReferenceDictionary referenceDict) {
-		this.transcriptInfos = transcriptInfos;
+	public JannovarData(ReferenceDictionary referenceDict, ImmutableList<TranscriptInfo> transcriptInfos) {
 		this.referenceDict = referenceDict;
+		this.transcriptInfos = transcriptInfos;
 	}
 
 }

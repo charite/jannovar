@@ -1,9 +1,9 @@
 package jannovar.parse;
 
-import jannovar.exception.JannovarException;
+import jannovar.exception.KGParseException;
 import jannovar.reference.TranscriptInfo;
 
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
 
 /**
  * General interface for transcript parsers.
@@ -14,7 +14,9 @@ public interface TranscriptParser {
 
 	/**
 	 * @return list of {@link TranscriptInfo} objects as parsed from the input.
+	 * @throws KGParseException
+	 *             on problems with parsing the transcript files
 	 */
-	public ArrayList<TranscriptInfo> run() throws JannovarException;
+	public ImmutableList<TranscriptInfo> run() throws KGParseException;
 
 }

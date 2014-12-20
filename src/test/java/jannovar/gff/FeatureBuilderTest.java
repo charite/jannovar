@@ -12,7 +12,7 @@ public class FeatureBuilderTest {
 	 */
 	@Test
 	public void testMake() {
-		FeatureBuilder builder = new FeatureBuilder();
+		Feature builder = new Feature();
 		builder.setSequenceID("seq-id");
 		builder.setEnd(100);
 		builder.setPhase((byte) 0);
@@ -24,18 +24,17 @@ public class FeatureBuilderTest {
 		builder.addAttribute("key0", "value0");
 		builder.addAttribute("key1", "value1");
 
-		Feature feature = builder.make();
-		Assert.assertEquals(feature.sequenceID, "seq-id");
-		Assert.assertEquals(feature.end, 100);
-		Assert.assertEquals(feature.phase, 0);
-		Assert.assertEquals(feature.score, 0.0);
-		Assert.assertEquals(feature.source, "foo");
-		Assert.assertEquals(feature.start, 1);
-		Assert.assertEquals(feature.strand, true);
-		Assert.assertEquals(feature.type, FeatureType.CDS);
-		Assert.assertEquals(feature.attributes.size(), 2);
-		Assert.assertEquals(feature.attributes.get("key0"), "value0");
-		Assert.assertEquals(feature.attributes.get("key1"), "value1");
+		Assert.assertEquals(builder.getSequenceID(), "seq-id");
+		Assert.assertEquals(builder.getEnd(), 100);
+		Assert.assertEquals(builder.getPhase(), 0);
+		Assert.assertEquals(builder.getScore(), 0.0);
+		Assert.assertEquals(builder.getSource(), "foo");
+		Assert.assertEquals(builder.getStart(), 1);
+		Assert.assertEquals(builder.getStrand(), true);
+		Assert.assertEquals(builder.getType(), FeatureType.CDS);
+		Assert.assertEquals(builder.getAttributes().size(), 2);
+		Assert.assertEquals(builder.getAttributes().get("key0"), "value0");
+		Assert.assertEquals(builder.getAttributes().get("key1"), "value1");
 	}
 
 }

@@ -28,7 +28,8 @@ public class TranscriptModelTest implements Constants {
 	@Before
 	public void setUp() throws KGParseException {
 		String dummy = "";
-		UCSCParser parser = new UCSCParser(dummy);
+		// TODO(holtgrew): Heal me!
+		UCSCParser parser = null;// new UCSCParser(dummy);
 
 		StringBuilder builder = new StringBuilder();
 		char[] chars = { 'A', 'C', 'G', 'T' };
@@ -37,12 +38,10 @@ public class TranscriptModelTest implements Constants {
 		LONG_STRING = builder.toString();
 
 		// Note that uc021olp. is TESK2.
-		this.uc0210lp = parser.parseTranscriptModelFromLine(
-				"uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	"
-						+ "38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,	"
- + "	uc021olp.1\n");
-		this.uc010wrv = parser.parseTranscriptModelFromLine(
-				"uc010wrv.1	chr17	+	73201596	73231854	73205928	73231774	18	"
+		this.uc0210lp = parser.parseTranscriptModelFromLine("uc021olp.1	chr1	-	38674705	38680439	38677458	38678111	4	"
+				+ "38674705,38677405,38677769,38680388,	38676494,38677494,38678123,38680439,	" + "	uc021olp.1\n");
+		this.uc010wrv = parser
+				.parseTranscriptModelFromLine("uc010wrv.1	chr17	+	73201596	73231854	73205928	73231774	18	"
 						+ "73201596,73205917,73208086,73209170,73211848,73214279,73221197,73221436,73221792,"
 						+ "73222145,73227434,73227667,73227922,73228945,73229152,73230731,73231194,73231672,	"
 						+ "73201889,73206080,73208157,73209214,73211918,73214401,73221332,73221559,73221924,73222252,"

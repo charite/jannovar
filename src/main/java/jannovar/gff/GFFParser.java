@@ -69,24 +69,34 @@ public final class GFFParser {
 	 */
 	public ArrayList<Feature> parse() {
 		LOGGER.log(Level.INFO, "Parsing GFF...");
-		FeatureBuilder featureBuilder = new FeatureBuilder(); // reusing this object below
+		// get file size
+		ProgressBar bar = new ProgressBar(0, file.length());
 
 		ArrayList<Feature> result = new ArrayList<Feature>();
 		BufferedReader in = null;
 		try {
 			// Open GFF/GTF file.
+			FileInputStream fip = new FileInputStream(file);
 			if (file.getName().endsWith(".gz"))
-				in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
+				in = new BufferedReader(new InputStreamReader(new GZIPInputStream(fip)));
 			else
-				in = new BufferedReader(new FileReader(file));
+				in = new BufferedReader(new InputStreamReader(fip));
 			// Read file line by line, adding read features to result.
 			String str;
+			final int CHUNK_SIZE = 1000;
+			int lineNo = 0;
 			while ((str = in.readLine()) != null) {
 				// skip info lines
 				if (str.startsWith("#"))
 					continue;
-				result.add(parseFeature(str, featureBuilder));
+				result.add(parseFeature(str));
+
+				if (++lineNo == CHUNK_SIZE) {
+					bar.print(fip.getChannel().position());
+					lineNo = 0;
+				}
 			}
+			bar.print(bar.max);
 		} catch (FeatureFormatException e) {
 			LOGGER.log(Level.WARNING, "GFF with wrong Feature format: {0}", e.toString());
 		} catch (IOException e) {
@@ -121,7 +131,7 @@ public final class GFFParser {
 	 * @throws FeatureFormatException
 	 *             in the case of problems in parsing.
 	 */
-	public Feature parseFeature(String featureLine, FeatureBuilder featureBuilder) throws FeatureFormatException {
+	public Feature parseFeature(String featureLine) throws FeatureFormatException {
 		ArrayList<String> myfields = new ArrayList<String>();
 		int index = 0;
 		int start = 0;
@@ -140,16 +150,16 @@ public final class GFFParser {
 			return null;
 		}
 
-		// Build the feature using featureBuilder.
-		featureBuilder.reset();
-		featureBuilder.setSequenceID(myfields.get(Indices.SEQID));
-		featureBuilder.setType(codeType(myfields.get(Indices.TYPE)));
-		featureBuilder.setStart(Integer.parseInt(myfields.get(Indices.START)));
-		featureBuilder.setEnd(Integer.parseInt(myfields.get(Indices.END)));
-		featureBuilder.setStrand(codeStrand(myfields.get(Indices.STRAND)));
-		featureBuilder.setPhase((byte) codePhase(myfields.get(Indices.PHASE)));
-		processAttributes(myfields.get(Indices.ATTRIBUTES), featureBuilder);
-		return featureBuilder.make();
+		// Build the resulting feature.
+		Feature feature = new Feature();
+		feature.setSequenceID(myfields.get(Indices.SEQID));
+		feature.setType(codeType(myfields.get(Indices.TYPE)));
+		feature.setStart(Integer.parseInt(myfields.get(Indices.START)));
+		feature.setEnd(Integer.parseInt(myfields.get(Indices.END)));
+		feature.setStrand(codeStrand(myfields.get(Indices.STRAND)));
+		feature.setPhase((byte) codePhase(myfields.get(Indices.PHASE)));
+		processAttributes(myfields.get(Indices.ATTRIBUTES), feature);
+		return feature;
 	}
 
 	/**
@@ -170,13 +180,13 @@ public final class GFFParser {
 	 * @return a HashMap with attributes
 	 * @throws FeatureFormatException
 	 */
-	private void processAttributes(String attributeString, FeatureBuilder featureBuilder) throws FeatureFormatException {
+	private void processAttributes(String attributeString, Feature feature) throws FeatureFormatException {
 		int start = 0;
 		int index = 0;
 		if (attributeString.startsWith(" "))
 			attributeString = attributeString.substring(1);
 		while ((index = attributeString.indexOf(";", start)) > 0) {
-			splitAndAddAttribute(attributeString.substring(start, index), featureBuilder);
+			splitAndAddAttribute(attributeString.substring(start, index), feature);
 
 			if (gffVersion.version == 3)
 				start = index + 1;
@@ -185,32 +195,33 @@ public final class GFFParser {
 		}
 		// for GFF3 we need to add the last element
 		if (start < attributeString.length())
-			splitAndAddAttribute(attributeString.substring(start), featureBuilder);
+			splitAndAddAttribute(attributeString.substring(start), feature);
 	}
 
 	/**
-	 * Split up the attribute, value pair and add this attribute pair to the {@link #featureBuilder}
+	 * Split up the attribute, value pair and add this attribute pair to the <code>feature</code>
 	 *
 	 * @throws FeatureFormatException
 	 *             is thrown if attribute String does not contain the {@link #valueSeparator separator} for this GFF
 	 *             file format.
 	 */
-	private void splitAndAddAttribute(String attribute, FeatureBuilder featureBuilder) throws FeatureFormatException {
+	private void splitAndAddAttribute(String attribute, Feature feature) throws FeatureFormatException {
 		int subIndex = 0;
 		if ((subIndex = attribute.indexOf(gffVersion.valueSeparator)) > 0) {
 			if (gffVersion.version == 3) {
-				featureBuilder.addAttribute(attribute.substring(0, subIndex), attribute.substring(subIndex + 1));
+				feature.addAttribute(attribute.substring(0, subIndex), attribute.substring(subIndex + 1));
 				// System.out.println(String.format("%s\t%s",attribute.substring(0, subIndex),
 				// attribute.substring(subIndex+1)));
 			} else {
-				featureBuilder.addAttribute(attribute.substring(0, subIndex),
+				feature.addAttribute(attribute.substring(0, subIndex),
 						attribute.substring(subIndex + 2, attribute.length() - 1));
 				// System.out.println(String.format("%s\t%s",attribute.substring(0, subIndex),
 				// attribute.substring(subIndex+2,rawfeature.length()-1)));
 			}
-		} else
+		} else {
 			throw new FeatureFormatException("attribut String without valid value separator ('"
 					+ gffVersion.valueSeparator + "'): '" + attribute + "'");
+		}
 	}
 
 	/**
@@ -306,7 +317,6 @@ public final class GFFParser {
 	 */
 	private static GFFVersion determineGFFVersion(File file) throws IOException {
 		GFFVersion gffVersion = new GFFVersion(2); // default is version 2
-		// TODO(holtgrem): Close in?
 
 		// Open compressed or uncompressed file.
 		BufferedReader in = null;
@@ -357,6 +367,40 @@ public final class GFFParser {
 		private final static int PHASE = 7;
 		/** index of attributes field */
 		private final static int ATTRIBUTES = 8;
+	}
+
+	/**
+	 * A simple status bar that only work on terminals where "\r" has an affect.
+	 *
+	 * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+	 */
+	private static class ProgressBar {
+		// TODO(holtgrem): allow incremental printing for text files
+		public final long min;
+		public final long max;
+
+		ProgressBar(long min, long max) {
+			this.min = min;
+			this.max = max;
+		}
+
+		void print(long pos) {
+			int percent = (int) Math.ceil(100.0 * (pos - this.min) / (this.max - this.min));
+			StringBuilder bar = new StringBuilder("[");
+
+			for (int i = 0; i < 50; i++) {
+				if (i < (percent / 2)) {
+					bar.append("=");
+				} else if (i == (percent / 2)) {
+					bar.append(">");
+				} else {
+					bar.append(" ");
+				}
+			}
+
+			bar.append("]   " + percent + "%     ");
+			System.out.print("\r" + bar.toString());
+		}
 	}
 
 }

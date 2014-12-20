@@ -1,9 +1,9 @@
 package jannovar.gff;
 
-import jannovar.common.ChromosomeMap;
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
+import jannovar.io.ReferenceDictionary;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -19,13 +19,16 @@ import java.util.logging.Logger;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-final class FeatureProcessor implements ChromosomeMap {
+final class FeatureProcessor {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
 
 	/** GFF version to assume */
 	private final GFFVersion gffVersion;
+
+	/** reference dictionary to use */
+	ReferenceDictionary refDict;
 
 	/** counter for the subregion index (used for auto-generating names) */
 	private int subregionIndex = 0;
@@ -45,8 +48,9 @@ final class FeatureProcessor implements ChromosomeMap {
 	private String[] fields;
 	private String[] subfields;
 
-	FeatureProcessor(GFFVersion gffVersion) {
+	FeatureProcessor(GFFVersion gffVersion, ReferenceDictionary refDict) {
 		this.gffVersion = gffVersion;
+		this.refDict = refDict;
 		this.genes = new HashMap<String, Gene>();
 		this.rna2gene = new HashMap<String, String>();
 	}
@@ -78,9 +82,10 @@ final class FeatureProcessor implements ChromosomeMap {
 	 */
 	private void addFeature(Feature feature) throws InvalidAttributException, FeatureFormatException {
 		// System.out.println(feature.toLine());
-		if (identifier2chromosom.get(feature.sequenceID) == null)
+		if (refDict.contigID.get(feature.getSequenceID()) == null)
 			return;
-		switch (feature.type) {
+
+		switch (feature.getType()) {
 		case GENE:
 			processGene(feature);
 			break;
@@ -110,8 +115,8 @@ final class FeatureProcessor implements ChromosomeMap {
 	 */
 	private void processRNA(Feature feature) throws InvalidAttributException {
 		// gene and transcript ids
-		curGeneID = feature.attributes.get("Parent");
-		curRnaID = feature.attributes.get("ID");
+		curGeneID = feature.getAttributes().get("Parent");
+		curRnaID = feature.getAttributes().get("ID");
 		// System.out.println("curRNAID: "+curRnaID);
 		// update mappings
 		rna2gene.put(curRnaID, curGeneID);
@@ -120,20 +125,20 @@ final class FeatureProcessor implements ChromosomeMap {
 			curGene.rnas = new HashMap<String, Transcript>();
 		// populate the new transcript
 		curRna = new Transcript();
-		curRna.start = feature.start;
-		curRna.end = feature.end;
+		curRna.start = feature.getStart();
+		curRna.end = feature.getEnd();
 		curRna.id = curRnaID;
-		curRna.name = feature.attributes.get("Name");
-		curRna.chromosom = identifier2chromosom.get(feature.sequenceID);
+		curRna.name = feature.getAttributes().get("Name");
+		curRna.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
 		if (curGene.chromosom != curRna.chromosom) {
 			// throw new
 			// InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match: "+curGene.chromosom+
 			// " != "+curRna.chromosom+"\n"+feature);
 			return;
 		}
-		curRna.strand = feature.strand;
+		curRna.strand = feature.getStrand();
 		// check strand of transcript and gene
-		if (curGene.strand != feature.strand) {
+		if (curGene.strand != feature.getStrand()) {
 			// throw new InvalidAttributException("The strand of the gene and transcript do not match: "+curGene.strand+
 			// " != "+feature.getStrand()+"\n"+feature);
 			return;
@@ -150,14 +155,14 @@ final class FeatureProcessor implements ChromosomeMap {
 	private void processSubregion(Feature feature) {
 		int index;
 		if (gffVersion.version == 3) {
-			curID = feature.attributes.get("ID");
-			curRnaID = feature.attributes.get("Parent");
+			curID = feature.getAttributes().get("ID");
+			curRnaID = feature.getAttributes().get("Parent");
 			curGeneID = rna2gene.get(curRnaID);
 		} else {
 			curID = "sub" + (subregionIndex++);
-			curRnaID = feature.attributes.get("transcript_id");
-			curGeneID = feature.attributes.get("gene_id");
-			if ((curGeneName = feature.attributes.get("gene_name")) == null)
+			curRnaID = feature.getAttributes().get("transcript_id");
+			curGeneID = feature.getAttributes().get("gene_id");
+			if ((curGeneName = feature.getAttributes().get("gene_name")) == null)
 				curGeneName = curGeneID;
 		}
 		// System.out.println("Gene: "+curGeneID+"\tRNA: "+curRnaID);
@@ -170,15 +175,15 @@ final class FeatureProcessor implements ChromosomeMap {
 		// System.out.println(curGeneID);
 		// if the gene is not known yet --> add
 		if (!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID, curGeneName, identifier2chromosom.get(feature.sequenceID),
-					feature.strand));
+			genes.put(curGeneID, new Gene(curGeneID, curGeneName, refDict.contigID.get(feature.getSequenceID())
+					.byteValue(), feature.getStrand()));
 		// get Gene
 		curGene = genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, identifier2chromosom.get(feature.sequenceID),
-					feature.strand));
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, refDict.contigID.get(feature.getSequenceID())
+					.byteValue(), feature.getStrand()));
 		}
 		// get RNA
 		curRna = curGene.rnas.get(curRnaID);
@@ -188,25 +193,25 @@ final class FeatureProcessor implements ChromosomeMap {
 
 		// now finally process the Subregion
 		curGFF = new GFFStruct();
-		curGFF.chromosom = identifier2chromosom.get(feature.sequenceID);
-		curGFF.start = feature.start;
-		curGFF.end = feature.end;
-		curGFF.strand = feature.strand;
+		curGFF.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curGFF.start = feature.getStart();
+		curGFF.end = feature.getEnd();
+		curGFF.strand = feature.getStrand();
 		curGFF.id = curID;
 		// for Stop_Codonss
-		if (feature.type == FeatureType.STOP_CODON) {
-			curGFF.frame = feature.phase;
+		if (feature.getType() == FeatureType.STOP_CODON) {
+			curGFF.frame = feature.getPhase();
 			if (!(curRna.cdss.contains(curGFF)))
 				curRna.cdss.add(curGFF);
 		}
 		// for CDSs
-		if (feature.type == FeatureType.CDS) {
-			curGFF.frame = feature.phase;
+		if (feature.getType() == FeatureType.CDS) {
+			curGFF.frame = feature.getPhase();
 			if (!(curRna.cdss.contains(curGFF)))
 				curRna.cdss.add(curGFF);
 		}
 		// for Exons
-		if (feature.type == FeatureType.EXON) {
+		if (feature.getType() == FeatureType.EXON) {
 			if ((index = curGene.exons.indexOf(curGFF)) >= 0) {
 				curGFF = curGene.exons.get(index);
 				if (!(curRna.exons.contains(curGFF)))
@@ -231,20 +236,20 @@ final class FeatureProcessor implements ChromosomeMap {
 	private void processGene(Feature feature) {
 
 		// get geneID
-		curGeneID = feature.attributes.get("ID");
+		curGeneID = feature.getAttributes().get("ID");
 		// add to collection if not already known
 		if (!genes.containsKey(curGeneID)) {
 			genes.put(curGeneID, new Gene());
 			// System.out.println("Added gene with ID: "+curGeneID);
 		}
 		curGene = this.genes.get(curGeneID);
-		curGene.strand = feature.strand;
-		curGene.start = feature.start;
-		curGene.end = feature.end;
-		curGene.chromosom = identifier2chromosom.get(feature.sequenceID);
+		curGene.strand = feature.getStrand();
+		curGene.start = feature.getStart();
+		curGene.end = feature.getEnd();
+		curGene.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
 		// extract the Genesymbol
-		if (feature.attributes.get("Name") != null)
-			curGene.name = feature.attributes.get("Name");
+		if (feature.getAttributes().get("Name") != null)
+			curGene.name = feature.getAttributes().get("Name");
 		// extract Xreferences
 		// if(feature.getAttribute("Dbxref") != null)
 		// extractXreferences(feature.getAttribute("Dbxref"));

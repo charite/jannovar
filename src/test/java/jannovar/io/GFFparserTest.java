@@ -2,7 +2,6 @@ package jannovar.io;
 
 import jannovar.common.FeatureType;
 import jannovar.gff.Feature;
-import jannovar.gff.FeatureBuilder;
 import jannovar.gff.GFFParser;
 import jannovar.gff.GFFVersion;
 
@@ -75,18 +74,17 @@ public class GFFparserTest {
 		writeGFF(line);
 
 		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(3));
-		FeatureBuilder featureBuilder = new FeatureBuilder();
-		Feature feature = reader.parseFeature(line, featureBuilder);
-		Assert.assertEquals(FeatureType.EXON, feature.type);
-		Assert.assertEquals(5000, feature.start);
-		Assert.assertEquals(5500, feature.end);
+		Feature feature = reader.parseFeature(line);
+		Assert.assertEquals(FeatureType.EXON, feature.getType());
+		Assert.assertEquals(5000, feature.getStart());
+		Assert.assertEquals(5500, feature.getEnd());
 		// Assert.assertEquals('.', feature.getPhase());
-		Assert.assertEquals(true, feature.strand);
+		Assert.assertEquals(true, feature.getStrand());
 		// Assert.assertEquals('.', feature.getScore());
-		Assert.assertEquals("ctg123", feature.sequenceID);
-		Assert.assertEquals(2, feature.attributes.size());
-		Assert.assertEquals("exon00004", feature.attributes.get("ID"));
-		Assert.assertEquals("mRNA00001,mRNA00002,mRNA00003", feature.attributes.get("Parent"));
+		Assert.assertEquals("ctg123", feature.getSequenceID());
+		Assert.assertEquals(2, feature.getAttributes().size());
+		Assert.assertEquals("exon00004", feature.getAttributes().get("ID"));
+		Assert.assertEquals("mRNA00001,mRNA00002,mRNA00003", feature.getAttributes().get("Parent"));
 	}
 
 	@Test
@@ -95,18 +93,17 @@ public class GFFparserTest {
 		writeGFF(line);
 
 		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(3));
-		FeatureBuilder featureBuilder = new FeatureBuilder();
-		Feature feature = reader.parseFeature(line, featureBuilder);
-		Assert.assertEquals(FeatureType.GENE, feature.type);
-		Assert.assertEquals(1000, feature.start);
-		Assert.assertEquals(9000, feature.end);
+		Feature feature = reader.parseFeature(line);
+		Assert.assertEquals(FeatureType.GENE, feature.getType());
+		Assert.assertEquals(1000, feature.getStart());
+		Assert.assertEquals(9000, feature.getEnd());
 		// Assert.assertEquals('.', feature.getPhase());
-		Assert.assertEquals(true, feature.strand);
+		Assert.assertEquals(true, feature.getStrand());
 		// Assert.assertEquals('.', feature.getScore());
-		Assert.assertEquals("ctg123", feature.sequenceID);
-		Assert.assertEquals(2, feature.attributes.size());
-		Assert.assertEquals("gene00001", feature.attributes.get("ID"));
-		Assert.assertEquals("EDEN", feature.attributes.get("Name"));
+		Assert.assertEquals("ctg123", feature.getSequenceID());
+		Assert.assertEquals(2, feature.getAttributes().size());
+		Assert.assertEquals("gene00001", feature.getAttributes().get("ID"));
+		Assert.assertEquals("EDEN", feature.getAttributes().get("Name"));
 	}
 
 	@Test
@@ -115,23 +112,22 @@ public class GFFparserTest {
 		writeGFF(line);
 
 		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(2));
-		FeatureBuilder featureBuilder = new FeatureBuilder();
-		Feature feature = reader.parseFeature(line, featureBuilder);
-		Assert.assertEquals(FeatureType.EXON, feature.type);
-		Assert.assertEquals(246324, feature.start);
-		Assert.assertEquals(246433, feature.end);
+		Feature feature = reader.parseFeature(line);
+		Assert.assertEquals(FeatureType.EXON, feature.getType());
+		Assert.assertEquals(246324, feature.getStart());
+		Assert.assertEquals(246433, feature.getEnd());
 		// Assert.assertEquals('.', feature.getPhase());
-		Assert.assertEquals(false, feature.strand);
+		Assert.assertEquals(false, feature.getStrand());
 		// Assert.assertEquals('.', feature.getScore());
-		Assert.assertEquals("18", feature.sequenceID);
-		Assert.assertEquals(7, feature.attributes.size());
-		Assert.assertEquals("ENSG00000079134", feature.attributes.get("gene_id"));
-		Assert.assertEquals("ENST00000579891", feature.attributes.get("transcript_id"));
-		Assert.assertEquals("1", feature.attributes.get("exon_number"));
-		Assert.assertEquals("THOC1", feature.attributes.get("gene_name"));
-		Assert.assertEquals("protein_coding", feature.attributes.get("gene_biotype"));
-		Assert.assertEquals("THOC1-020", feature.attributes.get("transcript_name"));
-		Assert.assertEquals("ENSE00002716487", feature.attributes.get("exon_id"));
+		Assert.assertEquals("18", feature.getSequenceID());
+		Assert.assertEquals(7, feature.getAttributes().size());
+		Assert.assertEquals("ENSG00000079134", feature.getAttributes().get("gene_id"));
+		Assert.assertEquals("ENST00000579891", feature.getAttributes().get("transcript_id"));
+		Assert.assertEquals("1", feature.getAttributes().get("exon_number"));
+		Assert.assertEquals("THOC1", feature.getAttributes().get("gene_name"));
+		Assert.assertEquals("protein_coding", feature.getAttributes().get("gene_biotype"));
+		Assert.assertEquals("THOC1-020", feature.getAttributes().get("transcript_name"));
+		Assert.assertEquals("ENSE00002716487", feature.getAttributes().get("exon_id"));
 	}
 
 }

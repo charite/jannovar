@@ -3,13 +3,18 @@ package jannovar.reference;
 import jannovar.common.ChromosomeMap;
 import jannovar.common.Immutable;
 
+import java.io.Serializable;
+
 /**
  * Representation of a genomic interval (chromsome, begin, end) with explicit coordinate system (0-/1-based)
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class GenomeInterval {
+public final class GenomeInterval implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */
@@ -217,7 +222,7 @@ public final class GenomeInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -232,7 +237,7 @@ public final class GenomeInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -252,7 +257,7 @@ public final class GenomeInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
