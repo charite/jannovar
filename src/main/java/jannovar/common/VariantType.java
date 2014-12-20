@@ -11,8 +11,7 @@ package jannovar.common;
  *
  *
  * @author Peter Robinson <peter.robinson@charite.de>
- * @author Marten Jäger <marten.jaeger@charite.de>
- * @version 0.18 (12. September, 2014)
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  */
 // TODO(mjaeger): the outputnames for structural variants...
 public enum VariantType {

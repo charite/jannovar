@@ -5,7 +5,7 @@ package jannovar.common;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class VCFStrings {
+public final class VCFStrings {
 	/**
 	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
 	 * section entitled EFFECT, which decribes the effects of variants (splicing,missense,stoploss, etc).
