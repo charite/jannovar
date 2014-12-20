@@ -37,11 +37,10 @@ public class TranscriptModelFactory {
 		String[] endFields = fields[9].split(",");
 		for (int i = 0; i < exonCount; ++i) {
 			GenomeInterval exonRegion = new GenomeInterval(refDict, '+', chr, Integer.parseInt(startFields[i]) + 1,
-					Integer.parseInt(endFields[i]));
+					Integer.parseInt(endFields[i]), PositionType.ONE_BASED);
 			result.addExonRegion(exonRegion);
 		}
 
 		return result;
 	}
-
 }

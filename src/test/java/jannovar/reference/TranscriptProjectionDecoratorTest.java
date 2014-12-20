@@ -38,6 +38,7 @@ public class TranscriptProjectionDecoratorTest {
 						+ "6646090,6646847,6647351,6647692,6648256,6648502,6648904,6649340,\tP10074\tuc001anx.3");
 		this.builderForward.setGeneSymbol("ZBTB48");
 		this.infoForward = builderForward.build();
+		// RefSeq: NM_005341.3
 
 		this.builderReverse = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001bgu.3\tchr1\t-\t23685940\t23696357\t23688461\t23694498\t4"
