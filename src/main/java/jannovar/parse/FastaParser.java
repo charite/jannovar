@@ -1,8 +1,8 @@
 package jannovar.parse;
 
-import jannovar.common.ProgressBar;
 import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.reference.TranscriptModel;
+import jannovar.util.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.File;
