@@ -45,9 +45,6 @@ public final class FeatureProcessor {
 	private Transcript curRna;
 	private GFFStruct curGFF;
 
-	private String[] fields;
-	private String[] subfields;
-
 	public FeatureProcessor(GFFVersion gffVersion, ReferenceDictionary refDict) {
 		this.gffVersion = gffVersion;
 		this.refDict = refDict;
@@ -239,29 +236,6 @@ public final class FeatureProcessor {
 		// if(feature.getAttribute("Dbxref") != null)
 		// extractXreferences(feature.getAttribute("Dbxref"));
 		curGene.id = curGeneID;
-	}
-
-	/**
-	 * Extracts the database cross references. The list of cross references is split up and processed. Processed fields:<br>
-	 * <UL>
-	 * <LI>GeneID - this is corresponding the EntrezGene/LocalLink ID
-	 * </UL>
-	 *
-	 * @param xrefs
-	 */
-	private void extractXreferences(String xrefs) {
-		fields = xrefs.split(",");
-		for (String xref : fields) {
-			subfields = xref.split(":");
-			if (subfields.length < 2)
-				continue;
-			// only for genes - gene_id
-			if (subfields[0].equals("GeneID"))
-				curGene.id = subfields[1];
-			// // only for mRNAs
-			// if(subfields[0].equals("Genbank"))
-			// curTrans.
-		}
 	}
 
 	/**

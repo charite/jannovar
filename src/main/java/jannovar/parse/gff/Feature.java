@@ -4,8 +4,6 @@ import jannovar.common.FeatureType;
 
 import java.util.HashMap;
 
-import com.google.common.collect.ImmutableMap;
-
 // TODO(holtgrem): Convert back to @Immutable?
 
 /**
@@ -54,24 +52,6 @@ public final class Feature {
 
 	/** A List of feature attributes. Were the key is the tag. */
 	private HashMap<String, String> attributes = new HashMap<String, String>();
-
-	/** Reset builder to initial state. */
-	public void reset() {
-		sequenceID = null;
-		source = null;
-		type = null;
-		start = -1;
-		end = -1;
-		score = 0.0;
-		strand = false;
-		phase = 0;
-		clearAttributes();
-	}
-
-	/** @return {@link ImmutableMap} version of {@link #attributes} */
-	private ImmutableMap<String, String> buildImmutableAttributes(HashMap<String, String> attributes) {
-		return new ImmutableMap.Builder<String, String>().putAll(attributes).build();
-	}
 
 	/**
 	 * @return the sequenceID

@@ -350,6 +350,7 @@ public final class GFFParser {
 		/** index of seq ID field */
 		private final static int SEQID = 0;
 		/** index of source field */
+		@SuppressWarnings("unused")
 		private final static int SOURCE = 1;
 		/** index of type field */
 		private final static int TYPE = 2;
@@ -358,6 +359,7 @@ public final class GFFParser {
 		/** index of end field */
 		private final static int END = 4;
 		/** index of score field */
+		@SuppressWarnings("unused")
 		private final static int SCORE = 5;
 		/** index of strand field */
 		private final static int STRAND = 6;
