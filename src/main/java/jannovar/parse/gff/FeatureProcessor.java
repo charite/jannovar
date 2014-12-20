@@ -1,6 +1,5 @@
 package jannovar.parse.gff;
 
-import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.io.ReferenceDictionary;

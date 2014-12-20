@@ -1,7 +1,5 @@
 package jannovar.parse.gff;
 
-import jannovar.common.FeatureType;
-
 import java.util.HashMap;
 
 // TODO(holtgrem): Convert back to @Immutable?

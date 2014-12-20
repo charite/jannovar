@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.parse.gff;
 
 /**
  * This are the currently known feature types in GFF/GFT3 files.

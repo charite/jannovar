@@ -1,7 +1,7 @@
 package jannovar.io;
 
-import jannovar.common.FeatureType;
 import jannovar.parse.gff.Feature;
+import jannovar.parse.gff.FeatureType;
 import jannovar.parse.gff.GFFParser;
 import jannovar.parse.gff.GFFVersion;
 
