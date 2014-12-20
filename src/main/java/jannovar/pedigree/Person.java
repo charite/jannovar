@@ -1,6 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.common.Disease;
 import jannovar.exception.PedParseException;
 
 import java.util.ArrayList;

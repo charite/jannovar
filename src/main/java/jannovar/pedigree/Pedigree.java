@@ -1,6 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.common.Disease;
 import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
 import jannovar.exome.Variant;

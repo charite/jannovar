@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.pedigree;
 
 /**
  * Codes used to denote affection status of a {@link jannovar.pedigree.Person Person} in a

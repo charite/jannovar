@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.pedigree;
 
 /**
  * An enumeration of the four main Mendelian modes of inheritance for prioritizing exome data.
