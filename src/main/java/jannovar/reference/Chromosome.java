@@ -10,19 +10,19 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
- * {@link jannovar.reference.TranscriptModel TranscriptModel} class to make a list of gene models that will be used to
- * annotate chromosomal variants. We use an {@link jannovar.interval.IntervalTree IntervalTree} to store all of the
- * {@link jannovar.reference.TranscriptModel TranscriptModel} objects that belong to this Chromosome and to search for
- * all transcripts that overlap with any given variant. Note that the IntervalTree class has functionality also to find
- * the neighbors (5' and 3') of the closest gene in order to find the right and left genes of intergenic variants and to
- * find the correct gene in the cases of complex regions of the chromosome with one gene located in the intron of the
- * next or with overlapping genes.
+ * {@link TranscriptInfo} class to make a list of gene models that will be used to annotate chromosomal variants. We use
+ * an {@link IntervalTree} to store all of the {@link TranscriptInfo} objects that belong to this Chromosome and to
+ * search for all transcripts that overlap with any given variant. Note that the IntervalTree class has functionality
+ * also to find the neighbors (5' and 3') of the closest gene in order to find the right and left genes of intergenic
+ * variants and to find the correct gene in the cases of complex regions of the chromosome with one gene located in the
+ * intron of the next or with overlapping genes.
  * <P>
  * Note that the {@link jannovar.interval.Interval Interval} objects in the interval tree are defined by the
  * transcription start and stop sites of the isoform.
  *
- * @author Peter N Robinson, Marten Jäger
- * @version 0.32 (15 April, 2014)
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class Chromosome {
 	/**
@@ -106,4 +106,5 @@ public final class Chromosome {
 	public IntervalTree<TranscriptInfo> getTMIntervalTree() {
 		return tmIntervalTree;
 	}
+
 }

@@ -7,6 +7,7 @@ package jannovar.util;
  */
 public final class ProgressBar {
 
+	// TODO(holtgrem): improve documentation
 	// TODO(holtgrem): allow incremental printing for text files
 	public final long min;
 	public final long max;

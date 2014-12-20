@@ -4,6 +4,14 @@ import jannovar.reference.TranscriptInfoBuilder;
 
 import java.util.ArrayList;
 
+/**
+ * Parser for the FASTA formated files from RefSeq.
+ *
+ * An {@link ArrayList} of {@link TranscriptInfoBuilder}s is passed to this class together with the path to the
+ * corresponding FASTA file, containing the sequence informations for the {@link TranscriptInfoBuilder}s.
+ *
+ * @author Marten Jaeger <marten.jaeger@charite.de>
+ */
 public final class EnsemblFastaParser extends FastaParser {
 
 	private String[] fields;

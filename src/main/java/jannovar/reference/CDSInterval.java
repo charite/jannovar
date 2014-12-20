@@ -9,6 +9,7 @@ import jannovar.common.Immutable;
  */
 @Immutable
 public final class CDSInterval {
+
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
@@ -55,7 +56,7 @@ public final class CDSInterval {
 
 	/*
 	 * Returns string with one-based positions.
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -66,7 +67,7 @@ public final class CDSInterval {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -82,7 +83,7 @@ public final class CDSInterval {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

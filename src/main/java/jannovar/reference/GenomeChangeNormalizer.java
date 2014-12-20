@@ -1,6 +1,5 @@
 package jannovar.reference;
 
-
 /**
  * Helper code for the normalization of {@link GenomeChange}s.
  *
@@ -116,4 +115,5 @@ public final class GenomeChangeNormalizer {
 		else
 			return new GenomeChange(change.pos.shifted(shift), seq.substring(pos, pos + LEN), "");
 	}
+
 }

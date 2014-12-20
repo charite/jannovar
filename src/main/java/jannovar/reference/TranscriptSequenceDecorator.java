@@ -2,7 +2,6 @@ package jannovar.reference;
 
 import jannovar.common.Immutable;
 
-
 // TODO(holtgrem): Test this class!
 
 /**
@@ -117,4 +116,5 @@ public final class TranscriptSequenceDecorator {
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos) {
 		return getCodonsStartingFrom(txPos, cdsPos, transcript.sequence.length());
 	}
+
 }

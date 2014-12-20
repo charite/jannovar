@@ -9,6 +9,7 @@ import jannovar.common.Immutable;
  */
 @Immutable
 public final class AminoAcidChange {
+
 	/** 0-based position of the change */
 	public final int pos;
 	/** reference amino acid string */
@@ -100,4 +101,5 @@ public final class AminoAcidChange {
 			return false;
 		return true;
 	}
+
 }

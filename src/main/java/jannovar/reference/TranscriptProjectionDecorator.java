@@ -294,4 +294,5 @@ public final class TranscriptProjectionDecorator {
 			throw new Error("Bug: must be able to convert exon position! " + e.getMessage());
 		}
 	}
+
 }

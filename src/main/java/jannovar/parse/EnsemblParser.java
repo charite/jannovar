@@ -23,7 +23,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Class for orchestrating the parsing of Ensembl data.
  *
- * @author Peter Robinson <peter.robinson@charite.de>
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class EnsemblParser implements TranscriptParser {

@@ -9,6 +9,7 @@ import jannovar.common.Immutable;
  */
 @Immutable
 public final class TranscriptInterval {
+
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
@@ -54,7 +55,7 @@ public final class TranscriptInterval {
 
 	/*
 	 * Returns string with one-based positions.
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -65,7 +66,7 @@ public final class TranscriptInterval {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -81,7 +82,7 @@ public final class TranscriptInterval {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

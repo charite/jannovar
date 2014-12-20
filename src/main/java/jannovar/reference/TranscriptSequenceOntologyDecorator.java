@@ -10,6 +10,7 @@ import jannovar.exception.ProjectionException;
  */
 @Immutable
 public final class TranscriptSequenceOntologyDecorator {
+
 	/** the transcript information to perform the projection upon. */
 	private final TranscriptInfo transcript;
 
@@ -551,4 +552,5 @@ public final class TranscriptSequenceOntologyDecorator {
 				return true;
 		return false;
 	}
+
 }

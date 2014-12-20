@@ -20,6 +20,13 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Class for orchestrating the parsing of RefSeq data.
+ *
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ */
 public class RefSeqParser implements TranscriptParser {
 
 	/** {@link Logger} to use for logging */
@@ -117,4 +124,5 @@ public class RefSeqParser implements TranscriptParser {
 	private String getINIFileName(String key) {
 		return new File(iniSection.get(key)).getName();
 	}
+
 }

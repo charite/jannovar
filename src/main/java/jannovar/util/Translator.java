@@ -21,14 +21,11 @@ public final class Translator {
 	private HashMap<String, String> shortToLong = null;
 	/** Map of long AA codes to short ones */
 	private HashMap<String, String> longToShort = null;
-	// /** Sequences of known gene mRNAs. Key, a UCSC identified such as uc010nxr.1; value: A cDNA sequence in
-	// lower case letters, such as "cttgccgtcag..." */
-	// private HashMap<String,String> fasta=null;
 
 	private static Translator translator = null;
 
 	/**
-	 * Private constructor, initializes singleton instance.  Use {@link getTranslator} for obtaining an object.
+	 * Private constructor, initializes singleton instance. Use {@link getTranslator} for obtaining an object.
 	 */
 	private Translator() {
 		initializeMaps();
@@ -103,10 +100,9 @@ public final class Translator {
 					aa = "X";
 				} else {
 					/*
-					  String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"",
-								   nt3, dnaseq);
-								   throw new AnnotationException(err);
-					*/
+					 * String err = String.format("Could not find translation for codon:\"%s\" in sequence:\"%s\"", nt3,
+					 * dnaseq); throw new AnnotationException(err);
+					 */
 					break; /* stop translation */
 				}
 			}

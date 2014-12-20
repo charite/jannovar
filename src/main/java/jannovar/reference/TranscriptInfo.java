@@ -7,15 +7,13 @@ import java.io.Serializable;
 import com.google.common.collect.ImmutableList;
 
 /**
- * The core information about a transcript, in an immutable object.
- *
- * Similar to TranscriptModel in the represented data but with less query functions. Further, we translate the
- * coordinates to the reverse strand for transcripts on the reverse strand.
+ * The information representing a transcript model.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
 public final class TranscriptInfo implements Serializable {
+
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
 	 * included.

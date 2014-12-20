@@ -10,10 +10,15 @@ import jannovar.exception.ProjectionException;
  */
 @Immutable
 public final class HGVSPositionBuilder {
+
+	/** transcript to use for the coordinate system */
 	final TranscriptInfo transcript;
+	/** helper for performing coordinate projection */
 	final TranscriptProjectionDecorator projector;
+	/** helper for performing Sequence Ontology feature queries */
 	final TranscriptSequenceOntologyDecorator soDecorator;
 
+	/** Construct the position builder with the given transcript */
 	public HGVSPositionBuilder(TranscriptInfo transcript) {
 		this.transcript = transcript;
 		this.projector = new TranscriptProjectionDecorator(transcript);
@@ -88,11 +93,9 @@ public final class HGVSPositionBuilder {
 			// generate offset position within exon.
 			int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
 			GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber)
-					.withPositionType(PositionType.ZERO_BASED)
-					.getGenomeEndPos();
+					.withPositionType(PositionType.ZERO_BASED).getGenomeEndPos();
 			GenomePosition nextExonBeginPos = transcript.exonRegions.get(exonNumber + 1)
-					.withPositionType(
-					PositionType.ZERO_BASED).getGenomeBeginPos();
+					.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos();
 			GenomePosition basePos = null;
 			String offsetStr = null;
 			if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
@@ -154,4 +157,5 @@ public final class HGVSPositionBuilder {
 		else
 			return transcript.txRegion;
 	}
+
 }

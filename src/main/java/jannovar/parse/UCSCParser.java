@@ -24,7 +24,7 @@ import org.ini4j.Profile.Section;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Parser for the UCCSC knownGene files.
+ * Parser for the UCCSC knownGene and related files.
  *
  * Parses the four files from the UCSC database relating the KnownGenes. The main file, <code>knownGene.txt</code>, is
  * tab-separated and has the following fields:
@@ -187,7 +187,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new KGParseException("Could not parse txEnd:" + A[4]);
 		}
 		tib.setTxRegion(new GenomeInterval(refDict, '+', chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
-		.withStrand(strand));
+				.withStrand(strand));
 
 		int cdsStart, cdsEnd;
 		try {
@@ -201,7 +201,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new KGParseException("Could not parse cdsEnd:" + A[6]);
 		}
 		tib.setCdsRegion(new GenomeInterval(refDict, '+', chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
-		.withStrand(strand));
+				.withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;

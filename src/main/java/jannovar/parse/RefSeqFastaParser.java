@@ -14,7 +14,6 @@ import java.util.ArrayList;
  * corresponding FASTA file, containing the sequence informations for the {@link TranscriptInfoBuilder}s.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class RefSeqFastaParser extends FastaParser {
 
@@ -34,7 +33,7 @@ public final class RefSeqFastaParser extends FastaParser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see jannovar.io.FastaParser#processHeader(java.lang.String)
 	 */
 	@Override

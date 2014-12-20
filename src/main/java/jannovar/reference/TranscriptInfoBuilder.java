@@ -9,6 +9,16 @@ import com.google.common.collect.ImmutableList;
  *
  * In this sense, it is similar to {@link StringBuilder} for building {@link String} objects.
  *
+ * Usage:
+ *
+ * <pre>
+ * {@link TranscriptInfoBuilder} builder = new TranscriptInfoBuilder();
+ * builder.{@link TranscriptInfoBuilder#setStrand setStrand}('-');
+ * builder.{@link TranscriptInfoBuilder#setAccession setAccession}(&quot;&lt;accession&gt;&quot;);
+ * // ...
+ * {@link TranscriptInfo} transcript = builder.{@link TranscriptInfoBuilder#build build}();
+ * </pre>
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class TranscriptInfoBuilder {

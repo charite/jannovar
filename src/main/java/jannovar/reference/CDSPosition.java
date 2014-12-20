@@ -9,6 +9,7 @@ import jannovar.common.Immutable;
  */
 @Immutable
 public final class CDSPosition {
+
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
@@ -67,7 +68,7 @@ public final class CDSPosition {
 
 	/*
 	 * Returns string with one-based position.
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -78,7 +79,7 @@ public final class CDSPosition {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -95,7 +96,7 @@ public final class CDSPosition {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

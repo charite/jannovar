@@ -17,6 +17,8 @@ public final class PathUtil {
 	 * // =&gt; path == &quot;path/to/file&quot;;
 	 * </pre>
 	 *
+	 * Note that this also works fine for joining paths in URLs.
+	 *
 	 * @param components
 	 *            file name components to join
 	 * @return joint file name components of <code>components</code>

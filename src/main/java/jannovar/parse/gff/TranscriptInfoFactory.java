@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO(holtgrem): TranscriptModelBuilder => TranscriptInfoBuilder
-
 /**
  * This is the builder for the {@link TranscriptModel}s from GFF-files.
  *
@@ -84,7 +82,7 @@ public final class TranscriptInfoFactory {
 				int cdsStart = rna.getCdsStart();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsStartInExon = cdsStartInExon
-					|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
+							|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
 				boolean cdsEndInExon = false;
 				int cdsEnd = rna.getCdsEnd();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
