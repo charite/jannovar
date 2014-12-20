@@ -1,6 +1,6 @@
-package jannovar.io;
+package jannovar.parse;
 
-import jannovar.gff.ProgressBar;
+import jannovar.common.ProgressBar;
 import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.reference.TranscriptModel;
 

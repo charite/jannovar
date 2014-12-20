@@ -1,4 +1,4 @@
-package jannovar.gff;
+package jannovar.parse.gff;
 
 import jannovar.common.Immutable;
 
@@ -9,6 +9,7 @@ import jannovar.common.Immutable;
  */
 @Immutable
 public final class GFFVersion {
+
 	/** the version */
 	public final int version;
 	/** the string to use for separating attributes */

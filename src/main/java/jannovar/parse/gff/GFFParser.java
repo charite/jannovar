@@ -1,6 +1,7 @@
-package jannovar.gff;
+package jannovar.parse.gff;
 
 import jannovar.common.FeatureType;
+import jannovar.common.ProgressBar;
 import jannovar.exception.FeatureFormatException;
 
 import java.io.BufferedReader;

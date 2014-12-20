@@ -1,10 +1,12 @@
-package jannovar.gff;
+package jannovar.parse.gff;
 
 import jannovar.common.FeatureType;
 
 import java.util.HashMap;
 
 import com.google.common.collect.ImmutableMap;
+
+// TODO(holtgrem): Convert back to @Immutable?
 
 /**
  * Class for representing one line out of a GFF file.
@@ -229,16 +231,16 @@ public final class Feature {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Feature [sequence_id=").append(sequenceID).append(", source=").append(source).append(", type=")
-		.append(type).append(", start=").append(start).append(", end=").append(end).append(", score=")
-		.append(score).append(", strand=").append(strand).append(", phase=").append(phase)
-		.append(", attributes=").append(attributes).append("]");
+				.append(type).append(", start=").append(start).append(", end=").append(end).append(", score=")
+				.append(score).append(", strand=").append(strand).append(", phase=").append(phase)
+				.append(", attributes=").append(attributes).append("]");
 		return builder.toString();
 	}
 

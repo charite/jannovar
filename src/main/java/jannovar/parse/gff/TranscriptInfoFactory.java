@@ -1,12 +1,12 @@
 /**
  *
  */
-package jannovar.gff;
+package jannovar.parse.gff;
 
 import jannovar.exception.InvalidAttributException;
-import jannovar.gff.FeatureProcessor.Gene;
-import jannovar.gff.FeatureProcessor.Transcript;
 import jannovar.io.ReferenceDictionary;
+import jannovar.parse.gff.FeatureProcessor.Gene;
+import jannovar.parse.gff.FeatureProcessor.Transcript;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfoBuilder;
@@ -85,7 +85,7 @@ public final class TranscriptInfoFactory {
 				int cdsStart = rna.getCdsStart();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsStartInExon = cdsStartInExon
-					|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
+							|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
 				boolean cdsEndInExon = false;
 				int cdsEnd = rna.getCdsEnd();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)

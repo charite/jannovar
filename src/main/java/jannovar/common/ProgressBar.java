@@ -1,4 +1,4 @@
-package jannovar.gff;
+package jannovar.common;
 
 /**
  * A simple status bar that only work on terminals where "\r" has an affect.
@@ -6,6 +6,7 @@ package jannovar.gff;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class ProgressBar {
+
 	// TODO(holtgrem): allow incremental printing for text files
 	public final long min;
 	public final long max;
@@ -34,4 +35,5 @@ public final class ProgressBar {
 		if (pos == max)
 			System.err.println();
 	}
+
 }

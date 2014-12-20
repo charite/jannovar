@@ -1,6 +1,7 @@
 package jannovar.gff;
 
 import static org.junit.Assert.assertEquals;
+import jannovar.parse.gff.RNA2GeneIDMapper;
 
 import org.junit.Test;
 

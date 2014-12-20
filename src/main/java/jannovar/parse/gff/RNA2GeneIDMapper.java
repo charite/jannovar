@@ -1,4 +1,4 @@
-package jannovar.gff;
+package jannovar.parse.gff;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

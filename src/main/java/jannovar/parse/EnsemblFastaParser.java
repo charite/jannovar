@@ -1,4 +1,4 @@
-package jannovar.io;
+package jannovar.parse;
 
 import jannovar.reference.TranscriptInfoBuilder;
 

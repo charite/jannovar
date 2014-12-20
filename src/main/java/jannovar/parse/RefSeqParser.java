@@ -2,12 +2,10 @@ package jannovar.parse;
 
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.KGParseException;
-import jannovar.gff.FeatureProcessor;
-import jannovar.gff.GFFParser;
-import jannovar.gff.TranscriptInfoFactory;
-import jannovar.io.FastaParser;
-import jannovar.io.RefSeqFastaParser;
 import jannovar.io.ReferenceDictionary;
+import jannovar.parse.gff.FeatureProcessor;
+import jannovar.parse.gff.GFFParser;
+import jannovar.parse.gff.TranscriptInfoFactory;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.util.PathUtil;

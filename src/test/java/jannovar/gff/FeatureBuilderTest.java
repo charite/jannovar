@@ -1,6 +1,7 @@
 package jannovar.gff;
 
 import jannovar.common.FeatureType;
+import jannovar.parse.gff.Feature;
 
 import org.junit.Test;
 import org.testng.Assert;
