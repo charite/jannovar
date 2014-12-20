@@ -54,7 +54,7 @@ public class ReferenceDictionary implements Serializable {
 		System.err.println("contig ID mapping");
 		for (Entry<String, Integer> entry : contigID.entrySet())
 			System.err.println("\t" + entry.getKey() + " -> " + entry.getValue());
-		System.err.println("contig ID mapping");
+		System.err.println("contigs lengths");
 		for (Entry<Integer, Integer> entry : contigLength.entrySet())
 			System.err.println("\t" + entry.getKey() + " -> " + entry.getValue());
 		System.err.println("contig name mapping");
