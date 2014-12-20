@@ -2,7 +2,6 @@ package jannovar.gff;
 
 import jannovar.common.FeatureType;
 import jannovar.exception.FeatureFormatException;
-import jannovar.reference.TranscriptInfoBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,16 +62,16 @@ public final class GFFParser {
 	}
 
 	/**
-	 * Parses the file and returns an {@link ArrayList} of {@link Feature} objects.
+	 * Parses the file and feed the {@link Feature} objects into <code>tmBuilder</code>.
 	 *
-	 * This can then be fed to a {@link TranscriptModelBuilder} for building {@link TranscriptInfoBuilder} objects.
+	 * @param tmBuilder
+	 *            builder object to feed the {@link Feature}s into
 	 */
-	public ArrayList<Feature> parse() {
+	public void parse(FeatureProcessor fp) {
 		LOGGER.log(Level.INFO, "Parsing GFF...");
-		// get file size
+		// We use ProgressBar to display our progress in GFF parsing.
 		ProgressBar bar = new ProgressBar(0, file.length());
 
-		ArrayList<Feature> result = new ArrayList<Feature>();
 		BufferedReader in = null;
 		try {
 			// Open GFF/GTF file.
@@ -89,7 +88,7 @@ public final class GFFParser {
 				// skip info lines
 				if (str.startsWith("#"))
 					continue;
-				result.add(parseFeature(str));
+				fp.addFeature(parseFeature(str));
 
 				if (++lineNo == CHUNK_SIZE) {
 					bar.print(fip.getChannel().position());
@@ -109,8 +108,6 @@ public final class GFFParser {
 				System.err.println("[WARNING] failed to close the GFF file reader:\n" + e.toString());
 			}
 		}
-
-		return result;
 	}
 
 	/**
@@ -367,40 +364,6 @@ public final class GFFParser {
 		private final static int PHASE = 7;
 		/** index of attributes field */
 		private final static int ATTRIBUTES = 8;
-	}
-
-	/**
-	 * A simple status bar that only work on terminals where "\r" has an affect.
-	 *
-	 * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
-	 */
-	private static class ProgressBar {
-		// TODO(holtgrem): allow incremental printing for text files
-		public final long min;
-		public final long max;
-
-		ProgressBar(long min, long max) {
-			this.min = min;
-			this.max = max;
-		}
-
-		void print(long pos) {
-			int percent = (int) Math.ceil(100.0 * (pos - this.min) / (this.max - this.min));
-			StringBuilder bar = new StringBuilder("[");
-
-			for (int i = 0; i < 50; i++) {
-				if (i < (percent / 2)) {
-					bar.append("=");
-				} else if (i == (percent / 2)) {
-					bar.append(">");
-				} else {
-					bar.append(" ");
-				}
-			}
-
-			bar.append("]   " + percent + "%     ");
-			System.out.print("\r" + bar.toString());
-		}
 	}
 
 }

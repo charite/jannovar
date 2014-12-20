@@ -1,11 +1,10 @@
 package jannovar.parse;
 
-import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.KGParseException;
-import jannovar.gff.Feature;
+import jannovar.gff.FeatureProcessor;
 import jannovar.gff.GFFParser;
-import jannovar.gff.TranscriptModelBuilder;
+import jannovar.gff.TranscriptInfoFactory;
 import jannovar.io.EnsemblFastaParser;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.TranscriptInfo;
@@ -67,17 +66,17 @@ public class EnsemblParser implements TranscriptParser {
 			LOGGER.log(Level.SEVERE, "Unable to load GTF data from Ensembl files: {0}", e.getMessage());
 			throw new KGParseException(e.getMessage());
 		}
-		ArrayList<Feature> features = gffParser.parse();
 
+		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
+		FeatureProcessor fp = new FeatureProcessor(gffParser.gffVersion, refDict);
+		gffParser.parse(fp);
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
-		System.err.println("Building transcript models...");
 		ArrayList<TranscriptInfoBuilder> builders;
 		try {
-			builders = new TranscriptModelBuilder(gffParser.gffVersion, refDict, features).make();
+			System.err.println("Building transcript models...");
+			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
+			builders = tif.buildTranscripts(fp.getGenes());
 		} catch (InvalidAttributException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
-			throw new KGParseException(e.getMessage());
-		} catch (FeatureFormatException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new KGParseException(e.getMessage());
 		}

@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 /**
- * Processes {@link Feature} objects for {@link TranscriptModelBuilder}.
+ * Processes {@link Feature} objects for {@link TranscriptInfoFactory}.
  *
  * Implementation class that groups the features into RNAs/Genes.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-final class FeatureProcessor {
+public final class FeatureProcessor {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
@@ -48,26 +48,11 @@ final class FeatureProcessor {
 	private String[] fields;
 	private String[] subfields;
 
-	FeatureProcessor(GFFVersion gffVersion, ReferenceDictionary refDict) {
+	public FeatureProcessor(GFFVersion gffVersion, ReferenceDictionary refDict) {
 		this.gffVersion = gffVersion;
 		this.refDict = refDict;
 		this.genes = new HashMap<String, Gene>();
 		this.rna2gene = new HashMap<String, String>();
-	}
-
-	/**
-	 * Process all features.
-	 *
-	 * @throws FeatureFormatException
-	 *             on problems with the feature format
-	 * @throws InvalidAttributException
-	 *             on problems with attributes
-	 */
-	HashMap<String, Gene> run(ArrayList<Feature> featureList) throws InvalidAttributException,
-			FeatureFormatException {
-		for (Feature f : featureList)
-			addFeature(f);
-		return genes;
 	}
 
 	/**
@@ -80,7 +65,7 @@ final class FeatureProcessor {
 	 * @throws FeatureFormatException
 	 *             on problems with the feature format
 	 */
-	private void addFeature(Feature feature) throws InvalidAttributException, FeatureFormatException {
+	public void addFeature(Feature feature) throws InvalidAttributException, FeatureFormatException {
 		// System.out.println(feature.toLine());
 		if (refDict.contigID.get(feature.getSequenceID()) == null)
 			return;
@@ -459,6 +444,13 @@ final class FeatureProcessor {
 				cdsEnd = getTxStart();
 			return cdsEnd;
 		}
+	}
+
+	/**
+	 * @return {@link HashMap} of genes built so far.
+	 */
+	public HashMap<String, Gene> getGenes() {
+		return genes;
 	}
 
 	class Gene extends GFFStruct {

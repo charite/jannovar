@@ -3,7 +3,6 @@
  */
 package jannovar.gff;
 
-import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.gff.FeatureProcessor.Gene;
 import jannovar.gff.FeatureProcessor.Transcript;
@@ -26,10 +25,10 @@ import java.util.logging.Logger;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class TranscriptModelBuilder {
+public final class TranscriptInfoFactory {
 
 	/** {@link Logger} to use for logging */
-	private static final Logger LOGGER = Logger.getLogger(TranscriptModelBuilder.class.getSimpleName());
+	private static final Logger LOGGER = Logger.getLogger(TranscriptInfoFactory.class.getSimpleName());
 
 	/** {@link GFFVersion} to assume for building transcripts from Feature objects */
 	private final GFFVersion gffVersion;
@@ -37,51 +36,17 @@ public final class TranscriptModelBuilder {
 	/** reference dictionary to use */
 	private final ReferenceDictionary refDict;
 
-	/** the features to build the transcript models from */
-	private final ArrayList<Feature> featureList;
-
-	public TranscriptModelBuilder(GFFVersion gffVersion, ReferenceDictionary refDict,
-			ArrayList<Feature> featureList) {
+	public TranscriptInfoFactory(GFFVersion gffVersion, ReferenceDictionary refDict) {
 		this.gffVersion = gffVersion;
 		this.refDict = refDict;
-		this.featureList = featureList;
 	}
 
 	/**
-	 * Generates all possible transcript models from the given {@link Feature}s (also uncurated ones).
-	 *
-	 * If mapRna2Geneid is not null and contains appropriate values a mapping to the corresponding Entrez ids is stored.
-	 *
-	 * @return {@link ArrayList} with generated {@link TranscriptModelBuilder}s
-	 * @throws InvalidAttributException
-	 *             on problems with attributes
-	 * @throws FeatureFormatException
-	 *             on problems with the feature formats
+	 * Forward to {@link #buildTranscripts(HashMap, boolean)}, setting the second parameter to <code>false</code>.
 	 */
-	public ArrayList<TranscriptInfoBuilder> make() throws InvalidAttributException, FeatureFormatException {
-		return make(false);
-	}
-
-	/**
-	 * Generates all possible transcript models from the given {@link Feature}s.
-	 *
-	 * If mapRna2Geneid is not null and contains appropriate values a mapping to the corresponding Entrez ids is stored.
-	 *
-	 * @param useOnlyCurated
-	 *            should only curated transcript be processed (RefSeq only)
-	 * @return {@link ArrayList} with generated {@link TranscriptModelBuilder}s
-	 * @throws InvalidAttributException
-	 *             on problems with attributes
-	 * @throws FeatureFormatException
-	 *             on problems with the feature formats
-	 */
-	public ArrayList<TranscriptInfoBuilder> make(boolean useOnlyCurated) throws InvalidAttributException,
-	FeatureFormatException {
-		LOGGER.info("Processing features...");
-		HashMap<String, Gene> genes = new FeatureProcessor(gffVersion, refDict).run(featureList);
-
-		LOGGER.info("Building transcript models...");
-		return buildTranscripts(genes, useOnlyCurated);
+	public ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes)
+			throws InvalidAttributException {
+		return buildTranscripts(genes, false);
 	}
 
 	/**
@@ -95,10 +60,9 @@ public final class TranscriptModelBuilder {
 	 * @throws InvalidAttributException
 	 *             on problems with invalid attributes
 	 */
-	private ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
+	public ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
 			throws InvalidAttributException {
 		ArrayList<TranscriptInfoBuilder> models = new ArrayList<TranscriptInfoBuilder>();
-		TranscriptInfoBuilder tib = new TranscriptInfoBuilder();
 		int curid;
 		for (FeatureProcessor.Gene gene : genes.values()) {
 			if (gene.id == null)
@@ -107,7 +71,7 @@ public final class TranscriptModelBuilder {
 				if (useOnlyCurated && !isCuratedName(rna.name))
 					continue;
 
-				tib.reset();
+				TranscriptInfoBuilder tib = new TranscriptInfoBuilder();
 				tib.setAccession(rna.name);
 				tib.setGeneSymbol(gene.name);
 				tib.setStrand(rna.strand ? '+' : '-');

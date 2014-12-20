@@ -1,11 +1,10 @@
 package jannovar.parse;
 
-import jannovar.exception.FeatureFormatException;
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.KGParseException;
-import jannovar.gff.Feature;
+import jannovar.gff.FeatureProcessor;
 import jannovar.gff.GFFParser;
-import jannovar.gff.TranscriptModelBuilder;
+import jannovar.gff.TranscriptInfoFactory;
 import jannovar.io.FastaParser;
 import jannovar.io.RefSeqFastaParser;
 import jannovar.io.ReferenceDictionary;
@@ -54,6 +53,7 @@ public class RefSeqParser implements TranscriptParser {
 	@Override
 	public ImmutableList<TranscriptInfo> run() throws KGParseException {
 		// Parse GFF file, yielding a list of features.
+		System.err.println("Parsing GFF...");
 		GFFParser gffParser;
 		try {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gff")));
@@ -61,16 +61,17 @@ public class RefSeqParser implements TranscriptParser {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new KGParseException(e.getMessage());
 		}
-		ArrayList<Feature> features = gffParser.parse();
 
-		// Build ArrayList of TranscriptModel objects from feature list.
+		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
+		FeatureProcessor fp = new FeatureProcessor(gffParser.gffVersion, refDict);
+		gffParser.parse(fp);
+		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptInfoBuilder> builders;
 		try {
-			builders = new TranscriptModelBuilder(gffParser.gffVersion, refDict, features).make(onlyCurated());
+			System.err.println("Building transcript models...");
+			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
+			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
 		} catch (InvalidAttributException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
-			throw new KGParseException(e.getMessage());
-		} catch (FeatureFormatException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new KGParseException(e.getMessage());
 		}
@@ -99,7 +100,10 @@ public class RefSeqParser implements TranscriptParser {
 	 * @return <code>true</code> if only curated entries are to be returned
 	 */
 	private boolean onlyCurated() {
-		String value = iniSection.fetch("onlyCurated").toLowerCase();
+		String value = iniSection.fetch("onlyCurated");
+		if (value == null)
+			return false;
+		value = value.toLowerCase();
 		ImmutableList<String> list = ImmutableList.of("true", "1", "yes");
 		for (String s : list)
 			if (s.equals(value))
