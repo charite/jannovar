@@ -1,10 +1,15 @@
 package jannovar.reference;
 
+import jannovar.io.ReferenceDictionary;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TranscriptInfoBuilderTest {
+
+	/** this test uses this static hg19 reference dictionary */
+	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	TranscriptInfoBuilder builder;
 
@@ -19,9 +24,9 @@ public class TranscriptInfoBuilderTest {
 		builder.setAccession("accession");
 		builder.setGeneID(10);
 		builder.setGeneSymbol("gene-symbol");
-		builder.setTxRegion(new GenomeInterval('+', 1, 100, 200, PositionType.ONE_BASED));
-		builder.setCdsRegion(new GenomeInterval('+', 1, 110, 190, PositionType.ONE_BASED));
-		builder.addExonRegion(new GenomeInterval('+', 1, 120, 170, PositionType.ONE_BASED));
+		builder.setTxRegion(new GenomeInterval(refDict, '+', 1, 100, 200, PositionType.ONE_BASED));
+		builder.setCdsRegion(new GenomeInterval(refDict, '+', 1, 110, 190, PositionType.ONE_BASED));
+		builder.addExonRegion(new GenomeInterval(refDict, '+', 1, 120, 170, PositionType.ONE_BASED));
 		builder.setSequence("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 				+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 

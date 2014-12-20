@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
  */
 @Immutable
 public final class TranscriptInfo implements Serializable {
-
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
 	 * included.
@@ -179,4 +178,63 @@ public final class TranscriptInfo implements Serializable {
 		for (GenomeInterval region : exonRegions)
 			assert (region.strand == strand);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((accession == null) ? 0 : accession.hashCode());
+		result = prime * result + ((cdsRegion == null) ? 0 : cdsRegion.hashCode());
+		result = prime * result + ((exonRegions == null) ? 0 : exonRegions.hashCode());
+		result = prime * result + geneID;
+		result = prime * result + ((geneSymbol == null) ? 0 : geneSymbol.hashCode());
+		result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
+		result = prime * result + ((txRegion == null) ? 0 : txRegion.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TranscriptInfo other = (TranscriptInfo) obj;
+		if (accession == null) {
+			if (other.accession != null)
+				return false;
+		} else if (!accession.equals(other.accession))
+			return false;
+		if (cdsRegion == null) {
+			if (other.cdsRegion != null)
+				return false;
+		} else if (!cdsRegion.equals(other.cdsRegion))
+			return false;
+		if (exonRegions == null) {
+			if (other.exonRegions != null)
+				return false;
+		} else if (!exonRegions.equals(other.exonRegions))
+			return false;
+		if (geneID != other.geneID)
+			return false;
+		if (geneSymbol == null) {
+			if (other.geneSymbol != null)
+				return false;
+		} else if (!geneSymbol.equals(other.geneSymbol))
+			return false;
+		if (sequence == null) {
+			if (other.sequence != null)
+				return false;
+		} else if (!sequence.equals(other.sequence))
+			return false;
+		if (txRegion == null) {
+			if (other.txRegion != null)
+				return false;
+		} else if (!txRegion.equals(other.txRegion))
+			return false;
+		return true;
+	}
+
 }

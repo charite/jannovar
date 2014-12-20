@@ -12,14 +12,14 @@ public final class CDSInterval {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	public final TranscriptInfo transcript;
 	/** the begin position within the transcript */
 	public final int beginPos;
 	/** the end position within the transcript */
 	public final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
-	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos) {
+	public CDSInterval(TranscriptInfo transcript, int beginPos, int endPos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
@@ -27,7 +27,7 @@ public final class CDSInterval {
 	}
 
 	/** construct transcript interval with selected coordinate system */
-	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
+	public CDSInterval(TranscriptInfo transcript, int beginPos, int endPos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
@@ -55,18 +55,18 @@ public final class CDSInterval {
 
 	/*
 	 * Returns string with one-based positions.
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:c.%d-%d", this.transcript.getAccessionNumber(), beginPos, endPos);
+		return String.format("%s:c.%d-%d", this.transcript.accession, beginPos, endPos);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -82,7 +82,7 @@ public final class CDSInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

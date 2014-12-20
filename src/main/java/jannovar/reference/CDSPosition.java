@@ -12,19 +12,19 @@ public final class CDSPosition {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	public final TranscriptInfo transcript;
 	/** the position within the transcript */
 	public final int pos;
 
 	/** construct transcript position with one-based coordinate system */
-	public CDSPosition(TranscriptModel transcript, int pos) {
+	public CDSPosition(TranscriptInfo transcript, int pos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.pos = pos;
 	}
 
 	/** construct transcript position with selected coordinate system */
-	public CDSPosition(TranscriptModel transcript, int pos, PositionType positionType) {
+	public CDSPosition(TranscriptInfo transcript, int pos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.pos = pos;
@@ -67,18 +67,18 @@ public final class CDSPosition {
 
 	/*
 	 * Returns string with one-based position.
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:c.%d", this.transcript.getAccessionNumber(), pos);
+		return String.format("%s:c.%d", transcript.accession, pos);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -95,7 +95,7 @@ public final class CDSPosition {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

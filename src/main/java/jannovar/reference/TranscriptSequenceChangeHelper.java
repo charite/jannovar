@@ -10,6 +10,7 @@ import jannovar.exception.ProjectionException;
  */
 @Immutable
 public final class TranscriptSequenceChangeHelper {
+
 	/** The {@link TranscriptInfo} with the sequence and position infos. */
 	final TranscriptInfo transcript;
 
@@ -119,11 +120,10 @@ public final class TranscriptSequenceChangeHelper {
 		// Get transcript begin position.
 		if (transcript.txRegion.isRightOf(pos)) {
 			// Deletion begins left of TX, project to begin of TX.
-			return new TranscriptPosition(transcript.transcriptModel, 0, PositionType.ZERO_BASED);
+			return new TranscriptPosition(transcript, 0, PositionType.ZERO_BASED);
 		} else if (transcript.txRegion.isLeftOf(pos)) {
 			// Deletion begins right of TX, project to end of TX.
-			return new TranscriptPosition(transcript.transcriptModel, transcript.transcriptLength(),
-					PositionType.ZERO_BASED);
+			return new TranscriptPosition(transcript, transcript.transcriptLength(), PositionType.ZERO_BASED);
 		} else if (soDecorator.liesInExon(pos)) {
 			return projector.genomeToTranscriptPos(pos);
 		} else { // lies in intron, project to begin position of next exon

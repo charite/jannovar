@@ -10,6 +10,7 @@ import jannovar.exception.ProjectionException;
  */
 @Immutable
 public final class TranscriptProjectionDecorator {
+
 	/** constant for invalid exon index */
 	public static final int INVALID_EXON_ID = -1;
 	/** constant for invalid intron index */
@@ -86,7 +87,7 @@ public final class TranscriptProjectionDecorator {
 				// Consequently, we have to *subtract* this difference from transcriptPos.
 				int posInExon = pos.differenceTo(region.getGenomeBeginPos());
 				int transcriptPos = tOffset + posInExon;
-				return new TranscriptPosition(transcript.transcriptModel, transcriptPos, PositionType.ZERO_BASED);
+				return new TranscriptPosition(transcript, transcriptPos, PositionType.ZERO_BASED);
 			}
 			tOffset += region.length();
 		}
@@ -278,11 +279,10 @@ public final class TranscriptProjectionDecorator {
 			// Get transcript begin position.
 			if (transcript.cdsRegion.isRightOf(pos)) {
 				// Deletion begins left of CDS, project to begin of CDS.
-				return new CDSPosition(transcript.transcriptModel, 0, PositionType.ZERO_BASED);
+				return new CDSPosition(transcript, 0, PositionType.ZERO_BASED);
 			} else if (transcript.cdsRegion.isLeftOf(pos)) {
 				// Deletion begins right of CDS, project to end of CDS.
-				return new CDSPosition(transcript.transcriptModel, transcript.cdsTranscriptLength(),
-						PositionType.ZERO_BASED);
+				return new CDSPosition(transcript, transcript.cdsTranscriptLength(), PositionType.ZERO_BASED);
 			} else if (soDecorator.liesInExon(pos)) {
 				return projector.genomeToCDSPos(pos);
 			} else { // lies in intron, project to begin position of next exon

@@ -12,14 +12,14 @@ public final class TranscriptInterval {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	public final TranscriptInfo transcript;
 	/** the begin position within the transcript */
 	public final int beginPos;
 	/** the end position within the transcript */
 	public final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
-	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos) {
+	public TranscriptInterval(TranscriptInfo transcript, int beginPos, int endPos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
@@ -27,7 +27,7 @@ public final class TranscriptInterval {
 	}
 
 	/** construct transcript interval with selected coordinate system */
-	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
+	public TranscriptInterval(TranscriptInfo transcript, int beginPos, int endPos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
@@ -54,18 +54,18 @@ public final class TranscriptInterval {
 
 	/*
 	 * Returns string with one-based positions.
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:n.%d-%d", this.transcript.getAccessionNumber(), beginPos, endPos);
+		return String.format("%s:n.%d-%d", this.transcript.accession, beginPos, endPos);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -81,7 +81,7 @@ public final class TranscriptInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

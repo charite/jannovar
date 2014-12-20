@@ -1,7 +1,5 @@
 package jannovar.reference;
 
-import jannovar.common.Constants;
-
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
@@ -14,6 +12,7 @@ import com.google.common.collect.ImmutableList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class TranscriptInfoBuilder {
+
 	/** The explicit strand of the target transcript. */
 	private char strand = '?';
 
@@ -36,7 +35,7 @@ public class TranscriptInfoBuilder {
 	private String sequence = null;
 
 	/** {@link TranscriptInfo#geneID} of next {@link TranscriptInfo} to build. */
-	private int geneID = Constants.UNINITIALIZED_INT;
+	private int geneID = 0;
 
 	/**
 	 * Reset the builder into the state after initialization.
