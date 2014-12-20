@@ -1,7 +1,6 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.InvalidGenomeChange;
 import jannovar.io.ReferenceDictionary;
@@ -615,7 +614,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 154009587,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 154009587,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011mzv.2:exon12:c.1060A>T:p.Thr354Ser", annotation1.getVariantAnnotation());
@@ -635,7 +634,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 154009587,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 154009587,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc010nvg.2:exon11:c.1090A>T:p.Thr364Ser", annotation1.getVariantAnnotation());
@@ -655,7 +654,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 154009587,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 154009587,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011mzw.2:exon11:c.1099A>T:p.Thr367Ser", annotation1.getVariantAnnotation());
@@ -675,7 +674,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_002436.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 154009587,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 154009587,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc004fmp.2:exon11:c.1150A>T:p.Thr384Ser", annotation1.getVariantAnnotation());
@@ -1156,7 +1155,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 154009587,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 154009587,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011mzv.2:exon12:c.1060A>T:p.Thr354Ser", annotation1.getVariantAnnotation());
@@ -2296,7 +2295,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 70711957,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 70711957,
 				PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc004dzz.3:exon1:n.647A>G", annotation1.getVariantAnnotation());
@@ -2316,7 +2315,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.Y_CHROMOSOME, 8657214,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("Y"), 8657214,
 				PositionType.ZERO_BASED), "C", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc004frk.2:exon3:n.250G>T", annotation1.getVariantAnnotation());

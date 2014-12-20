@@ -1,7 +1,6 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.InvalidGenomeChange;
 import jannovar.io.ReferenceDictionary;
@@ -836,7 +835,7 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.X_CHROMOSOME, 7811233,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 7811233,
 				PositionType.ZERO_BASED), "AGCTGCG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc004crz.3:exon2:c.-11_-5del", annotation1.getVariantAnnotation());
@@ -933,7 +932,7 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', Constants.Y_CHROMOSOME, 23749506,
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("Y"), 23749506,
 				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc004fus.3:exon4:n.385del", annotation1.getVariantAnnotation());

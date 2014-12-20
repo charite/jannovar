@@ -69,7 +69,7 @@ public class TranscriptInfoBuilder {
 
 		// Create new TranscriptInfo object.
 		return new TranscriptInfo(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
-				builder.build(), sequence, geneID, null);
+				builder.build(), sequence, geneID);
 	}
 
 	/**

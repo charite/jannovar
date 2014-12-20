@@ -1,8 +1,6 @@
 package jannovar.reference;
 
-import jannovar.common.Constants;
 import jannovar.common.Immutable;
-import jannovar.io.ReferenceDictionary;
 
 import java.io.Serializable;
 
@@ -48,22 +46,18 @@ public final class TranscriptInfo implements Serializable {
 
 	/**
 	 * The Gene id that corresponds to the transcript model. Note that this information is taken from
-	 * knownToLocusLink.txt or modified Ensembl Gene ids.
+	 * knownToLocusLink.txt or modified Ensembl Gene ids. Default is <code>-1</code>
 	 */
-	public int geneID = Constants.UNINITIALIZED_INT;
+	public int geneID = -1;
 
 	/** Class version (for serialization). */
 	public static final long serialVersionUID = 1L;
-
-	/** The underlying TranscriptModel */
-	// TODO(holtgrem): remove, all in favor of TranscriptInfo?
-	public final TranscriptModel transcriptModel;
 
 	/**
 	 * Initialize the TranscriptInfo object from the given parameters.
 	 */
 	public TranscriptInfo(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID, TranscriptModel transcriptModel) {
+			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -71,50 +65,6 @@ public final class TranscriptInfo implements Serializable {
 		this.exonRegions = exonRegions;
 		this.sequence = sequence;
 		this.geneID = geneID;
-		this.transcriptModel = transcriptModel;
-		checkForConsistency();
-	}
-
-	/**
-	 * Initialize the TranscriptInfo object with the TranscriptModel data.
-	 *
-	 * @param refDict
-	 *            {@link ReferenceDictionary} with information about the genome
-	 * @param tm
-	 *            transcript data source
-	 */
-	public TranscriptInfo(ReferenceDictionary refDict, TranscriptModel tm) {
-		this.transcriptModel = tm;
-		this.accession = tm.getAccessionNumber();
-		this.geneSymbol = tm.getGeneSymbol();
-		this.sequence = tm.getSequence();
-
-		final char strand = tm.getStrand();
-		final byte chr = tm.getChromosome();
-
-		// create temporary forward transcription interval, then assign to this.txRegion with conversion of coordinates.
-		GenomeInterval fwdTXRegion = new GenomeInterval(refDict, '+', chr, tm.getTXStart(), tm.getTXEnd(),
-				PositionType.ONE_BASED);
-		this.txRegion = fwdTXRegion.withStrand(strand);
-		// do the same for the cds region
-		GenomeInterval fwdCDSRegion = new GenomeInterval(refDict, '+', chr, tm.getCDSStart(), tm.getCDSEnd(),
-				PositionType.ONE_BASED);
-		this.cdsRegion = fwdCDSRegion.withStrand(strand);
-
-		int exonCount = tm.getExonEnds().length; // getExonCount() broken for some RefSeq
-		ImmutableList.Builder<GenomeInterval> exonRegionsBuilder = new ImmutableList.Builder<GenomeInterval>();
-		if (strand == '+') {
-			for (int i = 0; i < exonCount; ++i)
-				exonRegionsBuilder.add(new GenomeInterval(refDict, '+', chr, tm.getExonStart(i), tm.getExonEnd(i),
-						PositionType.ONE_BASED));
-		} else {
-			for (int i = 0, j = exonCount - 1; i < exonCount; ++i, --j)
-				exonRegionsBuilder.add(new GenomeInterval(refDict, '+', chr, tm.getExonStart(j), tm.getExonEnd(j),
-						PositionType.ONE_BASED).withStrand(strand));
-		}
-		this.exonRegions = exonRegionsBuilder.build();
-
-		// ensure that the strands are consistent
 		checkForConsistency();
 	}
 

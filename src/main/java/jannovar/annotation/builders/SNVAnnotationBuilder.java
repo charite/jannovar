@@ -36,8 +36,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 *             if <code>change</code> did not describe a deletion
 	 */
 
-	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change)
-			throws InvalidGenomeChange {
+	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// guard against invalid genome change
@@ -138,7 +137,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		String annotationStr = String.format("%s:%s", ncHGVS(), protAnno);
 		if (warningMsg != null)
 			annotationStr = String.format("%s:[%s]", annotationStr, warningMsg);
-		return new Annotation(transcript.transcriptModel, annotationStr, varType, cdsPos.pos + 1);
+		return new Annotation(transcript, annotationStr, varType, cdsPos.pos + 1);
 	}
 
 	@Override

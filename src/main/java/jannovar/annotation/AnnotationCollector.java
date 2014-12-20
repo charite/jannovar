@@ -1,6 +1,5 @@
 package jannovar.annotation;
 
-import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 
@@ -59,7 +58,7 @@ import java.util.HashSet;
  * @author Peter N Robinson
  */
 // TODO(holtgrem): ecpose the hasNcRna etc. fields?
-public final class AnnotationCollector implements Constants {
+public final class AnnotationCollector {
 
 	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;

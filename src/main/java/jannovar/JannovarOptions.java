@@ -1,7 +1,5 @@
 package jannovar;
 
-import jannovar.common.Constants.Release;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.HostAndPort;
 
@@ -25,14 +23,6 @@ public final class JannovarOptions {
 
 	/** data source name to use for downloading and parsing */
 	public ImmutableList<String> dataSourceNames = null;
-
-	// TODO(holtgrem): Remove this.
-	/** data source to use for downloading */
-	public DataSource dataSource = DataSource.UCSC;
-
-	// TODO(holtgrem): Remove this.
-	/** genome release to downloads and serialize */
-	public Release genomeRelease = Release.HG19;
 
 	/** directory to use for the downloads and the serialized file */
 	public String downloadPath = "data";
@@ -83,9 +73,7 @@ public final class JannovarOptions {
 	void print() {
 		if (command == Command.DOWNLOAD) {
 			System.err.println("dataSourceName: " + dataSourceNames);
-			System.err.println("dataSource: " + dataSource);
 			System.err.println("downloadPath" + downloadPath);
-			System.err.println("genome: " + genomeRelease);
 			System.err.println("proxy: " + proxy);
 		} else if (command == Command.ANNOTATE_VCF) {
 			System.err.println("dataFile:" + dataFile);

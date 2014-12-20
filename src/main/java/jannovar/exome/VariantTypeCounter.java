@@ -1,6 +1,5 @@
 package jannovar.exome;
 
-import jannovar.common.Constants;
 import jannovar.common.VariantType;
 import jannovar.exception.JannovarException;
 import jannovar.genotype.GenotypeCall;
@@ -19,7 +18,7 @@ import java.util.Iterator;
  * @version 0.16 (29 December,2013)
  */
 
-public class VariantTypeCounter implements Constants {
+public class VariantTypeCounter {
 	/**
 	 * key is a VariantType (e.g., MISSENSE, UTR5) and value is the corresponding index in {@link #countMatrix}.
 	 */

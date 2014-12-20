@@ -1,8 +1,7 @@
 package jannovar.annotation;
 
-import jannovar.common.Constants;
 import jannovar.common.VariantType;
-import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptInfo;
 
 // TODO(holtgrem): Move, cleanup
 
@@ -22,7 +21,7 @@ import jannovar.reference.TranscriptModel;
  * @author Peter N Robinson
  * @version 0.32 (3 February, 2014)
  */
-public final class Annotation implements Constants, Comparable<Annotation> {
+public final class Annotation implements Comparable<Annotation> {
 	/**
 	 * The type of the variant being annotated, using the constants in {@link jannovar.common.VariantType VariantType},
 	 * e.g., MISSENSE, 5UTR, etc.
@@ -61,9 +60,9 @@ public final class Annotation implements Constants, Comparable<Annotation> {
 	/**
 	 * The NCBI Entrez Gene id corresponding to the UCSC knownGene id of the transcript being annotated. Note that for a
 	 * few cases, there is no entrezGene id, and then, the parser in {@link jannovar.io.UCSCKGParser UCSCKGParser} will
-	 * enter the value {@link jannovar.common.Constants#UNINITIALIZED_INT}.
+	 * enter the value <code>-1</code>.
 	 */
-	private int entrezGeneID = UNINITIALIZED_INT;
+	private int entrezGeneID = -1;
 
 	/**
 	 * Return a byte constant that corresponds to the type of the variation. This will be one of the constants in
@@ -90,19 +89,19 @@ public final class Annotation implements Constants, Comparable<Annotation> {
 	/**
 	 * Construct a new annotation.
 	 *
-	 * @param tmdl
+	 * @param ti
 	 *            The transcript affected by the variant
 	 * @param annotation
 	 *            A complete annotation (without the gene symbol)
 	 * @param type
 	 *            The class of the variant (e.g., INTRONIC).
 	 */
-	public Annotation(TranscriptModel tmdl, String annotation, VariantType type) {
+	public Annotation(TranscriptInfo ti, String annotation, VariantType type) {
 		this.varType = type;
 		this.variantAnnotation = annotation;
-		if (tmdl != null) {
-			this.geneSymbol = tmdl.getGeneSymbol();
-			this.entrezGeneID = tmdl.getGeneID();
+		if (ti != null) {
+			this.geneSymbol = ti.geneSymbol;
+			this.entrezGeneID = ti.geneID;
 		}
 	}
 
@@ -110,7 +109,7 @@ public final class Annotation implements Constants, Comparable<Annotation> {
 	 * Construct a new annotation. This constructor is used by variants that are exonic and have a position in the CDS
 	 * of the transcript.
 	 *
-	 * @param tmdl
+	 * @param ti
 	 *            The transcript affected by the variant
 	 * @param annotation
 	 *            A complete annotation (without the gene symbol)
@@ -119,8 +118,8 @@ public final class Annotation implements Constants, Comparable<Annotation> {
 	 * @param refvarstart
 	 *            start position of variant in the CDS.
 	 */
-	public Annotation(TranscriptModel tmdl, String annotation, VariantType type, int refvarstart) {
-		this(tmdl, annotation, type);
+	public Annotation(TranscriptInfo ti, String annotation, VariantType type, int refvarstart) {
+		this(ti, annotation, type);
 		this.rvarstart = refvarstart;
 	}
 

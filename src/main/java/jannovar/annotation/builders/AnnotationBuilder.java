@@ -127,7 +127,7 @@ public abstract class AnnotationBuilder {
 				varType = VariantType.ncRNA_EXONIC;
 			else
 				varType = VariantType.ncRNA_INTRONIC;
-			return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+			return new Annotation(transcript, ncHGVS(), varType);
 		} else {
 			VariantType varType;
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
@@ -140,7 +140,7 @@ public abstract class AnnotationBuilder {
 				varType = VariantType.ncRNA_EXONIC;
 			else
 				varType = VariantType.ncRNA_INTRONIC;
-			return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+			return new Annotation(transcript, ncHGVS(), varType);
 		}
 	}
 
@@ -171,7 +171,7 @@ public abstract class AnnotationBuilder {
 			else
 				varType = VariantType.INTRONIC;
 		}
-		return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+		return new Annotation(transcript, ncHGVS(), varType);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public abstract class AnnotationBuilder {
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
 				varType = VariantType.UTR3;
 		}
-		return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+		return new Annotation(transcript, ncHGVS(), varType);
 	}
 
 	/**
@@ -220,18 +220,18 @@ public abstract class AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
+				return new Annotation(transcript, annoString, VariantType.UPSTREAM);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
+				return new Annotation(transcript, annoString, VariantType.DOWNSTREAM);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
+				return new Annotation(transcript, annoString, VariantType.UPSTREAM);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
+				return new Annotation(transcript, annoString, VariantType.DOWNSTREAM);
 		}
 	}
 
@@ -239,7 +239,7 @@ public abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("dist=%d", distance()), VariantType.INTERGENIC);
+		return new Annotation(transcript, String.format("dist=%d", distance()), VariantType.INTERGENIC);
 	}
 
 	/**

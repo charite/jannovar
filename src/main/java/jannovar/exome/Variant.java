@@ -2,11 +2,11 @@ package jannovar.exome;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
-import jannovar.common.Constants;
 import jannovar.common.Genotype;
 import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.genotype.GenotypeCall;
+import jannovar.io.ReferenceDictionary;
 
 import java.util.ArrayList;
 
@@ -18,17 +18,18 @@ import java.util.ArrayList;
  * @author Peter Robinson
  * @version 0.31 (22 January, 2014)
  */
-public class Variant implements Comparable<Variant>, Constants {
+public class Variant implements Comparable<Variant> {
+	private final ReferenceDictionary refDict;
 	/** chromosome; 23=X, 24=Y */
-	private byte chromosome;
+	private int chromosome;
 	/** position along chromosome; */
 	private int position;
 	/** Reference sequence (a single nucleotide for a SNV, more for some other types of variant) */
 	private String ref;
 	/** Variant sequence (called "ALT", alternate, in VCF files). */
 	private String alt;
-    /** The INFO column from VCF file */
-    private String info;
+	/** The INFO column from VCF file */
+	private String info;
 	/**
 	 * The genotype of this variant (note that {@link jannovar.genotype.GenotypeCall GenotypeCall} objects can hold a
 	 * single genotype for single-sample VCF files or multiple genotypes for for VCF files with multiple samples.
@@ -56,17 +57,19 @@ public class Variant implements Comparable<Variant>, Constants {
 	 *            The Genotype call (single or multiple sample)
 	 * @param qual
 	 *            The PHRED quality of the variant call.
-     * @param info
-     *            The INFO col from original VCF file
+	 * @param info
+	 *            The INFO col from original VCF file
 	 */
-	public Variant(byte c, int p, String r, String alternate, GenotypeCall gtype, float qual, String info) {
+	public Variant(ReferenceDictionary refDict, int c, int p, String r, String alternate, GenotypeCall gtype,
+			float qual, String info) {
+		this.refDict = refDict;
 		this.chromosome = c;
 		this.position = p;
 		this.ref = r;
 		this.alt = alternate;
 		this.genotype = gtype;
 		this.Phred = qual;
-        this.info = info;
+		this.info = info;
 		correctVariant();
 	}
 
@@ -102,7 +105,7 @@ public class Variant implements Comparable<Variant>, Constants {
 	 * @param chr
 	 *            A string representation of the chromosome such as chr3 or chrX
 	 */
-	public void setChromosome(byte chr) {
+	public void setChromosome(int chr) {
 		this.chromosome = chr;
 	}
 
@@ -183,12 +186,13 @@ public class Variant implements Comparable<Variant>, Constants {
 		return alt;
 	}
 
-    /**
-     * The INFO column from the original variant VCF entry.
-     */
-    public String get_info() {
-        return info;
-    }
+	/**
+	 * The INFO column from the original variant VCF entry.
+	 */
+	public String get_info() {
+		return info;
+	}
+
 	/**
 	 * Get the genesymbol of the gene associated with this variant, if possible
 	 */
@@ -288,43 +292,29 @@ public class Variant implements Comparable<Variant>, Constants {
 		return chromosome;
 	}
 
-	/**
-	 * @return an byte representation of the chromosome, e.g., 1,2,...,22 (note: X=23, Y=24, MT=25).
-	 */
-	public byte getChromosomeAsByte() {
-		return chromosome;
-	}
-
 	public String get_chromosome_as_string() {
-		if (this.chromosome == X_CHROMOSOME)
-			return "chrX";
-		else if (this.chromosome == Y_CHROMOSOME)
-			return "chrY";
-		else if (this.chromosome == M_CHROMOSOME)
-			return "chrM";
-		else
-			return String.format("chr%d", this.chromosome);
+		return refDict.contigName.get(chromosome);
 	}
 
 	/**
 	 * @return true if the variant is located on the X chromosome.
 	 */
 	public boolean is_X_chromosomal() {
-		return this.chromosome == X_CHROMOSOME;
+		return refDict.contigName.get(chromosome).equals("X");
 	}
 
 	/**
 	 * @return true if the variant is located on the Y chromosome.
 	 */
 	public boolean is_Y_chromosomal() {
-		return this.chromosome == Y_CHROMOSOME;
+		return refDict.contigName.get(chromosome).equals("Y");
 	}
 
 	/**
 	 * @return true if the variant is located on the mitochondrion.
 	 */
 	public boolean is_mitochondrial() {
-		return this.chromosome == M_CHROMOSOME;
+		return refDict.contigName.get(chromosome).equals("M");
 	}
 
 	/**
@@ -591,8 +581,10 @@ public class Variant implements Comparable<Variant>, Constants {
 	public ArrayList<String> getTranscriptAnnotations() {
 		ArrayList<String> A = new ArrayList<String>();
 		if (this.annotList == null) {
-			A.add(".|."); /* empty ID, empty annotation. This should actually never happen, but it
-							is better than returning null. */
+			A.add(".|."); /*
+						 * empty ID, empty annotation. This should actually never happen, but it is better than
+						 * returning null.
+						 */
 			return A;
 		}
 		boolean mult = this.affectsMultipleGenes();

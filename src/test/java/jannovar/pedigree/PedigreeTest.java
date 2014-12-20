@@ -1,10 +1,11 @@
 package jannovar.pedigree;
 
-import jannovar.common.Constants;
 import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
 import jannovar.exome.Variant;
 import jannovar.genotype.GenotypeCall;
+import jannovar.io.ReferenceDictionary;
+import jannovar.reference.HG19RefDictBuilder;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,9 @@ import org.junit.Test;
  */
 public class PedigreeTest {
 
+	/** this test uses this static hg19 reference dictionary */
+	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
+
 	// Simple list of persons to use in test.
 	ArrayList<Person> familyOfFour = new ArrayList<Person>();
 
@@ -31,7 +35,7 @@ public class PedigreeTest {
 		for (Genotype g : calls)
 			lst.add(g);
 		GenotypeCall gc = new GenotypeCall(lst, null);
-		Variant v = new Variant((byte) 1, 1, "A", "C", gc, dummyPhred, "");
+		Variant v = new Variant(refDict, 1, 1, "A", "C", gc, dummyPhred, "");
 
 		return v;
 	}
@@ -210,10 +214,10 @@ public class PedigreeTest {
 		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("PERSON");
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 		varList.add(constructVariant(Genotype.HETEROZYGOUS));
-		varList.get(0).setChromosome(Constants.X_CHROMOSOME);
+		varList.get(0).setChromosome(refDict.contigID.get("X"));
 		Assert.assertFalse(pedigree.isCompatibleWithXChromosomalRecessive(varList));
 		varList.add(constructVariant(Genotype.HOMOZYGOUS_ALT));
-		varList.get(1).setChromosome(Constants.X_CHROMOSOME);
+		varList.get(1).setChromosome(refDict.contigID.get("X"));
 		Assert.assertTrue(pedigree.isCompatibleWithXChromosomalRecessive(varList));
 	}
 
@@ -223,11 +227,11 @@ public class PedigreeTest {
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 		varList.add(constructVariant(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HETEROZYGOUS));
-		varList.get(0).setChromosome(Constants.X_CHROMOSOME);
+		varList.get(0).setChromosome(refDict.contigID.get("X"));
 		Assert.assertFalse(pedigree.isCompatibleWithXChromosomalRecessive(varList));
 		varList.add(constructVariant(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HOMOZYGOUS_ALT));
-		varList.get(1).setChromosome(Constants.X_CHROMOSOME);
+		varList.get(1).setChromosome(refDict.contigID.get("X"));
 		Assert.assertTrue(pedigree.isCompatibleWithXChromosomalRecessive(varList));
 	}
 }

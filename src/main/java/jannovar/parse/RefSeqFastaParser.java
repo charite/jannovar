@@ -4,7 +4,6 @@
 package jannovar.parse;
 
 import jannovar.reference.TranscriptInfoBuilder;
-import jannovar.reference.TranscriptModel;
 
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ public final class RefSeqFastaParser extends FastaParser {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see jannovar.io.FastaParser#processHeader(java.lang.String)
 	 */
 	@Override
