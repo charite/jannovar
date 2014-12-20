@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.cmd.annotate_vcf;
 
 /**
  * Constants for writing out to VCF file.
