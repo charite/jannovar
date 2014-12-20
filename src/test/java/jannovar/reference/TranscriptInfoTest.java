@@ -34,7 +34,7 @@ public class TranscriptInfoTest {
 		this.builderReverse = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc009vjr.2\tchr1\t-\t893648\t894679\t894010\t894620\t2\t"
 						+ "893648,894594,\t894461,894679,\tuc009vjr.2");
-		this.infoReverse = builderForward.make();
+		this.infoReverse = builderReverse.make();
 	}
 
 	@Test
