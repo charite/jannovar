@@ -30,7 +30,7 @@ public class TranscriptInfoBuilderTest {
 		builder.setSequence("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 				+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-		TranscriptInfo info = builder.make();
+		TranscriptInfo info = builder.build();
 
 		Assert.assertEquals('-', info.getStrand());
 		Assert.assertEquals(1, info.getChr());

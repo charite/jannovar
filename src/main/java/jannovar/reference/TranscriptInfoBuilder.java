@@ -54,7 +54,7 @@ public class TranscriptInfoBuilder {
 	/**
 	 * @return {@link TranscriptInfo} with the currently set configuration.
 	 */
-	public TranscriptInfo make() {
+	public TranscriptInfo build() {
 		// Build list of immutable exons in the correct order.
 		ImmutableList.Builder<GenomeInterval> builder = new ImmutableList.Builder<GenomeInterval>();
 		if (exonRegions.size() > 0) {

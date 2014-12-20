@@ -117,7 +117,7 @@ public class UCSCParser implements TranscriptParser {
 		// Build result list.
 		ImmutableList.Builder<TranscriptInfo> result = new ImmutableList.Builder<TranscriptInfo>();
 		for (Map.Entry<String, TranscriptInfoBuilder> entry : knownGeneMap.entrySet())
-			result.add(entry.getValue().make());
+			result.add(entry.getValue().build());
 		return result.build();
 	}
 

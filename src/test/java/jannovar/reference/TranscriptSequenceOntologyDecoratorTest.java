@@ -29,14 +29,14 @@ public class TranscriptSequenceOntologyDecoratorTest {
 						+ "6648119,6648337,6648815,6648975,\t6640196,6641359,6642359,"
 						+ "6646090,6646847,6647351,6647692,6648256,6648502,6648904,6649340,\tP10074\tuc001anx.3");
 		this.builderForward.setGeneSymbol("ZBTB48");
-		this.infoForward = builderForward.make();
+		this.infoForward = builderForward.build();
 
 		this.builderReverse = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001bgu.3\tchr1\t-\t23685940\t23696357\t23688461\t23694498\t4"
 						+ "\t23685940,23693534,23694465,23695858,\t23689714,23693661,23694558,"
 						+ "23696357,\tQ9C0F3\tuc001bgu.3");
 		this.builderReverse.setGeneSymbol("ZNF436");
-		this.infoReverse = builderReverse.make();
+		this.infoReverse = builderReverse.build();
 	}
 
 	@Test

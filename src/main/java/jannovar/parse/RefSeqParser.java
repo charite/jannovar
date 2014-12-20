@@ -90,7 +90,7 @@ public class RefSeqParser implements TranscriptParser {
 		// Create final list of TranscriptInfos.
 		ImmutableList.Builder<TranscriptInfo> result = new ImmutableList.Builder<TranscriptInfo>();
 		for (TranscriptInfoBuilder builder : builders)
-			result.add(builder.make());
+			result.add(builder.build());
 		return result.build();
 	}
 
