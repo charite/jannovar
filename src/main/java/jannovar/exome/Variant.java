@@ -2,8 +2,8 @@ package jannovar.exome;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.VariantType;
 import jannovar.common.Genotype;
-import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 import jannovar.genotype.GenotypeCall;
 import jannovar.io.ReferenceDictionary;

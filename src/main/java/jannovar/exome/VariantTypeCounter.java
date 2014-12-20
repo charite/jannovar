@@ -1,6 +1,6 @@
 package jannovar.exome;
 
-import jannovar.common.VariantType;
+import jannovar.annotation.VariantType;
 import jannovar.exception.JannovarException;
 import jannovar.genotype.GenotypeCall;
 

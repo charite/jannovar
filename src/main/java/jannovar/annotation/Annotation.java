@@ -1,6 +1,5 @@
 package jannovar.annotation;
 
-import jannovar.common.VariantType;
 import jannovar.reference.TranscriptInfo;
 
 // TODO(holtgrem): Move, cleanup
@@ -9,7 +8,7 @@ import jannovar.reference.TranscriptInfo;
  * This class encapsulates a single annotation and includes four pieces of information:
  *
  * <OL>
- * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.common.VariantType VariantType}).
+ * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.annotation.VariantType VariantType}).
  * <LI>The gene symbol
  * <LI>A string representing the actual variant
  * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
@@ -23,7 +22,7 @@ import jannovar.reference.TranscriptInfo;
  */
 public final class Annotation implements Comparable<Annotation> {
 	/**
-	 * The type of the variant being annotated, using the constants in {@link jannovar.common.VariantType VariantType},
+	 * The type of the variant being annotated, using the constants in {@link jannovar.annotation.VariantType VariantType},
 	 * e.g., MISSENSE, 5UTR, etc.
 	 */
 	private VariantType varType;

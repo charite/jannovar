@@ -1,5 +1,7 @@
 package jannovar.common;
 
+import jannovar.annotation.VariantType;
+
 import org.junit.Assert;
 import org.junit.Test;
 

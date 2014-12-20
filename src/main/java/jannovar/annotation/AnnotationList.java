@@ -1,6 +1,5 @@
 package jannovar.annotation;
 
-import jannovar.common.VariantType;
 import jannovar.exception.AnnotationException;
 
 import java.util.ArrayList;

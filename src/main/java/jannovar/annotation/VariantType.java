@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.annotation;
 
 /**
  * These codes reflect the possible types of variants that we call for an exome. Note that the codes have the obvious
