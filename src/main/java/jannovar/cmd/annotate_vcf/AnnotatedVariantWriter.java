@@ -21,6 +21,7 @@ import java.io.IOException;
  */
 // TODO(holtgrew): Update comment above once we use VariantContext everywhere.
 public abstract class AnnotatedVariantWriter {
+
 	/**
 	 * Write out the given VariantContext with additional annotation.
 	 *
@@ -36,4 +37,5 @@ public abstract class AnnotatedVariantWriter {
 
 	/** Close writer, free resources */
 	abstract void close();
+
 }

@@ -37,6 +37,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** BufferedWriter to use for writing */
 	BufferedWriter out = null;
 
+	// TODO(holtgrem): Remove me.
 	/** current line */
 	int currentLine = 0;
 

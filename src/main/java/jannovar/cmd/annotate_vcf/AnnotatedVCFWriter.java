@@ -121,8 +121,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			String annotation;
 			String effect;
 			if (anno.isStructural()) {
-				annotation = anno.getCombinedAnnotationForStructuralVariant();// String.format("%s:%s",
-				// anno.getMultipleGeneList(),anno.getCombinedAnnotationForVariantAffectingMultipleGenes());
+				annotation = anno.getCombinedAnnotationForStructuralVariant();
 				effect = anno.getVariantType().toString();
 			} else {
 				if (this.options.showAll) {

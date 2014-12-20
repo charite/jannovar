@@ -14,6 +14,7 @@ import jannovar.exception.JannovarException;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public abstract class JannovarCommand {
+
 	/** Configuration to use for the command execution. */
 	protected JannovarOptions options;
 
@@ -51,4 +52,5 @@ public abstract class JannovarCommand {
 	 *             on problems executing the command.
 	 */
 	public abstract void run() throws JannovarException;
+
 }

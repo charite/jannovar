@@ -32,6 +32,7 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public abstract class AnnotationBuilder {
+
 	/** transcript to annotate. */
 	protected final TranscriptInfo transcript;
 	/** genome change to use for annotation */
@@ -333,4 +334,5 @@ public abstract class AnnotationBuilder {
 			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
 					posBuilder.getCDNAPosStr(lastChangePos));
 	}
+
 }

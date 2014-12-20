@@ -12,6 +12,7 @@ import jannovar.reference.TranscriptInfo;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class AnnotationBuilderDispatcher {
+
 	/** transcript to build annotation for */
 	public final TranscriptInfo transcript;
 	/** genomic change to build annotation for */

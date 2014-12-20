@@ -20,6 +20,7 @@ import org.apache.commons.cli.ParseException;
  * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
  * any point.
  *
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
@@ -44,7 +45,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 		if (!match.matches() | match.groupCount() != 4) {
 			System.err
-			.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
+					.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 
@@ -74,7 +75,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+			HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);

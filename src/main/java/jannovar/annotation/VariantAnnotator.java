@@ -59,6 +59,7 @@ public final class VariantAnnotator {
 	}
 
 	// TODO(holtgrem): Rename to buildAnnotationList()?
+	// TODO(holtgrem): Use GenomeChange in the interface?
 	/**
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates. When we
 	 * get to this point, the client code has identified the right chromosome, and we are provided the coordinates on
