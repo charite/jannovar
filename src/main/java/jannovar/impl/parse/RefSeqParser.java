@@ -61,7 +61,7 @@ public class RefSeqParser implements TranscriptParser {
 		try {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gff")));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
+			LOGGER.log(Level.SEVERE, "Unable to load GFF data from RefSeq files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -75,7 +75,7 @@ public class RefSeqParser implements TranscriptParser {
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
 		} catch (InvalidAttributeException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
+			LOGGER.log(Level.SEVERE, "Unable to load data from RefSeq files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 

@@ -119,11 +119,12 @@ final class FileDownloader {
 			if (!ftp.changeWorkingDirectory(parentDir))
 				throw new FileNotFoundException("Could not change directory to " + parentDir);
 			// Try to get file size.
-			FTPFile[] files = ftp.listFiles();
+			FTPFile[] files = ftp.listFiles(fileName);
 			long fileSize = -1;
 			for (int i = 0; i < files.length; ++i)
 				if (files[i].getName().equals(fileName))
 					fileSize = files[i].getSize();
+			ftp.pwd();
 			ProgressBar pb = null;
 			if (fileSize != -1)
 				pb = new ProgressBar(0, fileSize);
@@ -147,7 +148,7 @@ final class FileDownloader {
 			}
 			in.close();
 			out.close();
-			if (pb != null)
+			if (pb != null && pos != pb.max)
 				pb.print(fileSize);
 			// if (!ftp.completePendingCommand())
 			// throw new IOException("Could not finish download!");

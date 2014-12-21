@@ -34,7 +34,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		if (cmd.hasOption("data-file"))
 			result.dataFile = cmd.getOptionValue("data-file");
 		else
-			throw new ParseException("You must specify a data file via -d/--data-file!");
+			throw new ParseException("You must specify a data file via -D/--data-file!");
 
 		result.jannovarFormat = cmd.hasOption("janno");
 

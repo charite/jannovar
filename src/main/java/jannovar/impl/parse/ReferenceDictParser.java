@@ -58,18 +58,44 @@ public final class ReferenceDictParser {
 		ReferenceDictionaryBuilder builder = new ReferenceDictionaryBuilder();
 
 		// Process accessions file.
+		//
+		// So far, I found two formats. The more recent files at NCBI start with "chr_accessions" and (for human and
+		// mouse) contain mappings from chromosomes to other contig names. The older files are called "chr_NC_gi" and
+		// contain a mapping from chromosome name to sequence accession number, gi number, potentially assembly unit and
+		// then the assembly name. For the latter case, we allow filtering to lines where the last field matches the
+		// configuration entry "chrToAccessions.filterLast".
+		// TODO(holtgrem): rename filterLast to matchLast?
+		// TODO(holtgrem): improve documentation for the chrToAccessions.* keys in the default_sources.ini file.
 		ImmutableList<ImmutableList<String>> accessionLines = loadTSVFile(chrAccessionsPath);
-		final int CA_CHROMOSOME = 0;
-		final int CA_REFSEQ_ACCESSION = 1;
-		final int CA_GENBANK_ACCESSION = 3;
+		String chrToAccessionsFormat = iniSection.fetch("chrToAccessions.format");
+		if (chrToAccessionsFormat == null)
+			chrToAccessionsFormat = "chr_accessions";
 		int chrID = 1; // always start at 1 to get natural mapping of chr1 <-> 1
-		for (ImmutableList<String> line : accessionLines) {
-			builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
-			builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
-			builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
-			builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
-			builder.putContigID(line.get(CA_GENBANK_ACCESSION), chrID); // e.g. "CM000663.1"
-			chrID += 1;
+		if (chrToAccessionsFormat.equals("chr_accessions")) {
+			final int CA_CHROMOSOME = 0;
+			final int CA_REFSEQ_ACCESSION = 1;
+			final int CA_GENBANK_ACCESSION = 3;
+			for (ImmutableList<String> line : accessionLines) {
+				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
+				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
+				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
+				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
+				builder.putContigID(line.get(CA_GENBANK_ACCESSION), chrID); // e.g. "CM000663.1"
+				chrID += 1;
+			}
+		} else { // old chr_NC_gi format
+			final String filterPattern = iniSection.fetch("chrToAccessions.filterLast");
+			final int CA_CHROMOSOME = 0;
+			final int CA_REFSEQ_ACCESSION = 1;
+			for (ImmutableList<String> line : accessionLines) {
+				if (!line.get(line.size() - 1).equals(filterPattern))
+					continue; // skip, does not match
+				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
+				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
+				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
+				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
+				chrID += 1;
+			}
 		}
 
 		// Add aliases from INI file.
@@ -77,9 +103,14 @@ public final class ReferenceDictParser {
 		if (aliases != null)
 			for (int i = 0; i < aliases.length; ++i) {
 				String[] fields = aliases[i].split(",");
-				if (fields != null)
+				if (fields != null) {
+					if (builder.getContigID(fields[0]) == null) {
+						builder.putContigName(chrID, fields[0]);
+						builder.putContigID(fields[0], chrID++);
+					}
 					for (int j = 1; j < fields.length; ++j)
 						builder.putContigID(fields[j], builder.getContigID(fields[0]));
+				}
 			}
 
 		// Process chromosome info file.
