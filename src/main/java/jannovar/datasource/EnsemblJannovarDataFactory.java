@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.TranscriptParseException;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
@@ -20,13 +21,15 @@ class EnsemblJannovarDataFactory extends JannovarDataFactory {
 	/**
 	 * Construct the factory with the given {@link EnsemblDataSource}.
 	 *
+	 * @param options
+	 *            configuration for proxy settings
 	 * @param dataSource
 	 *            the data source to use.
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public EnsemblJannovarDataFactory(EnsemblDataSource dataSource, Section iniSection) {
-		super(dataSource, iniSection);
+	public EnsemblJannovarDataFactory(JannovarOptions options, EnsemblDataSource dataSource, Section iniSection) {
+		super(options, dataSource, iniSection);
 	}
 
 	@Override

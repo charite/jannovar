@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.InvalidDataSourceException;
 
 import org.ini4j.Profile.Section;
@@ -16,15 +17,15 @@ public class RefSeqDataSource extends DataSource {
 	/** expected keys in data source configuration file */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("gff", "rna", "chromInfo", "chrToAccessions");
 
-	RefSeqDataSource(Section iniSection) throws InvalidDataSourceException {
-		super(iniSection);
+	RefSeqDataSource(JannovarOptions options, Section iniSection) throws InvalidDataSourceException {
+		super(options, iniSection);
 
 		checkURLs();
 	}
 
 	@Override
 	public JannovarDataFactory getDataFactory() {
-		return new RefSeqJannovarDataFactory(this, iniSection);
+		return new RefSeqJannovarDataFactory(options, this, iniSection);
 	}
 
 	@Override

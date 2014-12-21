@@ -30,7 +30,7 @@ public final class DownloadCommand extends JannovarCommand {
 	public void run() throws JannovarException {
 		System.err.println("Options");
 		options.print();
-		DataSourceFactory factory = new DataSourceFactory(options.dataSourceFiles);
+		DataSourceFactory factory = new DataSourceFactory(options, options.dataSourceFiles);
 		for (String name : options.dataSourceNames) {
 			System.err.println("Downloading/parsing for data source \"" + name + "\"");
 			JannovarData data = factory.getDataSource(name).getDataFactory().build(options.downloadPath);
@@ -43,7 +43,7 @@ public final class DownloadCommand extends JannovarCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	HelpRequestedException {
 		try {
 			return new DownloadCommandLineParser().parse(argv);
 		} catch (ParseException e) {

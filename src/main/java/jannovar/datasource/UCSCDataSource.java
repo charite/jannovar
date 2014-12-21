@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.InvalidDataSourceException;
 
 import org.ini4j.Profile.Section;
@@ -17,15 +18,15 @@ public final class UCSCDataSource extends DataSource {
 	private final ImmutableList<String> urlKeys = ImmutableList.of("knownGene", "knownGeneMrna", "kgXref",
 			"knownToLocusLink", "chromInfo", "chrToAccessions");
 
-	UCSCDataSource(Section iniSection) throws InvalidDataSourceException {
-		super(iniSection);
+	UCSCDataSource(JannovarOptions options, Section iniSection) throws InvalidDataSourceException {
+		super(options, iniSection);
 
 		checkURLs();
 	}
 
 	@Override
 	public JannovarDataFactory getDataFactory() {
-		return new UCSCJannovarDataFactory(this, iniSection);
+		return new UCSCJannovarDataFactory(options, this, iniSection);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.InvalidDataSourceException;
 
 import java.io.FileInputStream;
@@ -20,16 +21,22 @@ import com.google.common.collect.ImmutableList;
  */
 public class DataSourceFactory {
 
+	/** {@link JannovarOptions} object for proxy settings */
+	private final JannovarOptions options;
 	/** {@link Ini} object to use for loading data */
 	private final ImmutableList<Ini> inis;
 
 	/**
+	 * @params options for proxy configuration
 	 * @param iniFilePaths
 	 *            path to INI file to load the data source config from
 	 * @throws InvalidDataSourceException
 	 *             on problems with the data source config file
 	 */
-	public DataSourceFactory(ImmutableList<String> iniFilePaths) throws InvalidDataSourceException {
+	public DataSourceFactory(JannovarOptions options, ImmutableList<String> iniFilePaths)
+			throws InvalidDataSourceException {
+		this.options = options;
+
 		ImmutableList.Builder<Ini> inisBuilder = new ImmutableList.Builder<Ini>();
 		for (String iniFilePath : iniFilePaths) {
 			InputStream is;
@@ -78,11 +85,11 @@ public class DataSourceFactory {
 			if (type == null)
 				throw new InvalidDataSourceException("Data source config does not have \"type\" key.");
 			else if (type.equals("ucsc"))
-				return new UCSCDataSource(section);
+				return new UCSCDataSource(options, section);
 			else if (type.equals("ensembl"))
-				return new EnsemblDataSource(section);
+				return new EnsemblDataSource(options, section);
 			else if (type.equals("refseq"))
-				return new RefSeqDataSource(section);
+				return new RefSeqDataSource(options, section);
 			else
 				throw new InvalidDataSourceException("Data source config has invalid \"type\" key: " + type);
 		}

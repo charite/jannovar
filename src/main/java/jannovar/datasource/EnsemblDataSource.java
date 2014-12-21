@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.InvalidDataSourceException;
 
 import org.ini4j.Profile.Section;
@@ -16,15 +17,15 @@ public class EnsemblDataSource extends DataSource {
 	/** expected keys in data source configuration file */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("cdna", "gtf", "chromInfo", "chrToAccessions");
 
-	EnsemblDataSource(Section iniSection) throws InvalidDataSourceException {
-		super(iniSection);
+	EnsemblDataSource(JannovarOptions options, Section iniSection) throws InvalidDataSourceException {
+		super(options, iniSection);
 
 		checkURLs();
 	}
 
 	@Override
 	public JannovarDataFactory getDataFactory() {
-		return new EnsemblJannovarDataFactory(this, iniSection);
+		return new EnsemblJannovarDataFactory(options, this, iniSection);
 	}
 
 	@Override

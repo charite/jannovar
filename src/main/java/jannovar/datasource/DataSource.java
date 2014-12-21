@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.InvalidDataSourceException;
 import jannovar.io.JannovarData;
 
@@ -20,6 +21,9 @@ import com.google.common.collect.ImmutableList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public abstract class DataSource {
+
+	/** the configuration */
+	protected final JannovarOptions options;
 
 	/** the {@link Section} to create the DataSource from */
 	protected final Section iniSection;
@@ -57,10 +61,13 @@ public abstract class DataSource {
 	/**
 	 * Construct {@link DataSource} from INI {@link Section}.
 	 *
+	 * @param options
+	 *            configuration to use (for proxy settings)
 	 * @param iniSection
 	 *            data to construct the {@link DataSource} from.
 	 */
-	DataSource(Section iniSection) {
+	DataSource(JannovarOptions options, Section iniSection) {
+		this.options = options;
 		this.iniSection = iniSection;
 	}
 

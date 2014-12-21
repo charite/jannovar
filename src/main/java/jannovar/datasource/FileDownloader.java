@@ -17,8 +17,41 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPHTTPClient;
 
-public class FileDownloader {
+/**
+ * Helper class for downloading files over HTTP and FTP.
+ *
+ * The implementation of FTP downloads is more complex since we need passive FTP transfer through firewalls. This is not
+ * possible when just opening a stream through an {@link URL} object with Java's builtin features.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ */
+final class FileDownloader {
+
+	public static class ProxyOptions {
+		public String host = null;
+		public int port = -1;
+		public String user = null;
+		public String password = null;
+	}
+
+	/**
+	 * Configuration for the {@link FileDownloader}.
+	 */
+	public static class Options {
+		public ProxyOptions http = new ProxyOptions();
+		public ProxyOptions https = new ProxyOptions();
+		public ProxyOptions ftp = new ProxyOptions();
+	}
+
+	/** configuration for the downloader */
+	Options options;
+
+	/** Initializer FileDownloader with the given options string */
+	FileDownloader(Options options) {
+		this.options = options;
+	}
 
 	/**
 	 * This method downloads a file to the specified local file path. If the file already exists, it emits a warning
@@ -32,7 +65,7 @@ public class FileDownloader {
 	 * @throws FileDownloadException
 	 *             on problems with downloading
 	 */
-	public static boolean copyURLToFile(URL src, File dest) throws FileDownloadException {
+	public boolean copyURLToFile(URL src, File dest) throws FileDownloadException {
 		if (dest.exists())
 			return false;
 		if (!dest.getParentFile().exists()) {
@@ -46,10 +79,9 @@ public class FileDownloader {
 			return copyURLToFileHTTP(src, dest);
 	}
 
-	private static boolean copyURLToFileFTP(URL src, File dest) throws FileDownloadException {
-		// TODO(holtgrem): Re-enable using proxy...
-		// See: http://commons.apache.org/proper/commons-net/examples/ftp/FTPClientExample.java
-		final FTPClient ftp = new FTPClient();
+	private boolean copyURLToFileFTP(URL src, File dest) throws FileDownloadException {
+		final FTPClient ftp = buildFTPClient();
+
 		try {
 			if (src.getPort() != -1)
 				ftp.connect(src.getHost(), src.getPort());
@@ -173,7 +205,10 @@ public class FileDownloader {
 		return false;
 	}
 
-	private static boolean copyURLToFileHTTP(URL src, File dest) throws FileDownloadException {
+	private boolean copyURLToFileHTTP(URL src, File dest) throws FileDownloadException {
+		setProxyProperties();
+
+		// actually copy the file
 		try {
 			FileUtils.copyURLToFile(src, dest);
 		} catch (IOException e) {
@@ -181,4 +216,38 @@ public class FileDownloader {
 		}
 		return true;
 	}
+
+	/**
+	 * Set system properties from {@link #options}.
+	 */
+	private void setProxyProperties() {
+		if (options.http.host != null)
+			System.setProperty("http.proxyHost", options.http.host);
+		if (options.http.port != -1)
+			System.setProperty("http.proxyPort", Integer.toString(options.http.port));
+		if (options.http.host != null)
+			System.setProperty("http.proxyUser", options.http.user);
+		if (options.http.port != -1)
+			System.setProperty("http.proxyPassword", options.http.password);
+
+		if (options.https.host != null)
+			System.setProperty("https.proxyHost", options.https.host);
+		if (options.https.port != -1)
+			System.setProperty("https.proxyPort", Integer.toString(options.https.port));
+		if (options.https.host != null)
+			System.setProperty("https.proxyUser", options.https.user);
+		if (options.https.port != -1)
+			System.setProperty("https.proxyPassword", options.https.password);
+	}
+
+	/**
+	 * @return Configured {@link FTPClient} or {@link FTPHTTPClient}, depending on configuration in {@link #options}.
+	 */
+	private FTPClient buildFTPClient() {
+		if (options.ftp.host == null)
+			return new FTPClient();
+		else
+			return new FTPHTTPClient(options.ftp.host, options.ftp.port, options.ftp.user, options.ftp.password);
+	}
+
 }

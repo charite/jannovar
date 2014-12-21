@@ -1,5 +1,6 @@
 package jannovar.datasource;
 
+import jannovar.JannovarOptions;
 import jannovar.exception.TranscriptParseException;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
@@ -20,13 +21,15 @@ class RefSeqJannovarDataFactory extends JannovarDataFactory {
 	/**
 	 * Construct the factory with the given {@link RefSeqDataSource}.
 	 *
+	 * @param options
+	 *            configuration for proxy settings
 	 * @param dataSource
 	 *            the data source to use.
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public RefSeqJannovarDataFactory(RefSeqDataSource dataSource, Section iniSection) {
-		super(dataSource, iniSection);
+	public RefSeqJannovarDataFactory(JannovarOptions options, RefSeqDataSource dataSource, Section iniSection) {
+		super(options, dataSource, iniSection);
 	}
 
 	@Override
