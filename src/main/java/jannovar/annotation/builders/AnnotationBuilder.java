@@ -271,7 +271,7 @@ abstract class AnnotationBuilder {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
-		int exonNum;
+		final int exonNum;
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is change => insertion
@@ -281,11 +281,9 @@ abstract class AnnotationBuilder {
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(changePos))
 				return transcript.accession; // no exon information if change pos does not lie in exon
-			try {
-				exonNum = projector.locateExon(changePos);
-			} catch (ProjectionException e) {
+			exonNum = projector.locateExon(changePos);
+			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: position should be in exon if we reach here");
-			}
 		} else {
 			// at least one base is changed
 			GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
@@ -298,13 +296,11 @@ abstract class AnnotationBuilder {
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
 				return transcript.accession; // no exon information if either does not lie in exon
-			try {
-				exonNum = projector.locateExon(firstChangePos);
-				if (exonNum != projector.locateExon(lastChangePos))
-					return transcript.accession; // no exon information if the deletion spans more than one exon
-			} catch (ProjectionException e) {
+			exonNum = projector.locateExon(firstChangePos);
+			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: positions should be in exons if we reach here");
-			}
+			if (exonNum != projector.locateExon(lastChangePos))
+				return transcript.accession; // no exon information if the deletion spans more than one exon
 		}
 
 		return String.format("%s:exon%d", transcript.accession, exonNum + 1);

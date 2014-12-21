@@ -87,29 +87,27 @@ public final class HGVSPositionBuilder {
 	 * @return HGVS position string
 	 */
 	private String getCDNAPosStrForIntronPos(GenomePosition pos) {
-		try {
-			// Determine which exon is the closest one, ties are broken to the downstream direction as in HGVS,
-			// generate offset position within exon.
-			int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
-			GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber)
-					.withPositionType(PositionType.ZERO_BASED).getGenomeEndPos();
-			GenomePosition nextExonBeginPos = transcript.exonRegions.get(exonNumber + 1)
-					.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos();
-			GenomePosition basePos = null;
-			String offsetStr = null;
-			if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
-				basePos = exonEndPos.shifted(-1);
-				offsetStr = String.format("+%d", pos.differenceTo(exonEndPos) + 1);
-			} else {
-				basePos = nextExonBeginPos;
-				offsetStr = String.format("-%d", nextExonBeginPos.differenceTo(pos));
-			}
-
-			// Get string for the exonic position exonPos and paste together final position string.
-			return String.format("%s%s", getCDNAPosStrForExonPos(basePos), offsetStr);
-		} catch (ProjectionException e) {
+		// Determine which exon is the closest one, ties are broken to the downstream direction as in HGVS,
+		// generate offset position within exon.
+		final int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
+		if (exonNumber == TranscriptProjectionDecorator.INVALID_INTRON_ID)
 			throw new Error("Bug: position must lie in CDS at this point.");
+		GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber).withPositionType(PositionType.ZERO_BASED)
+				.getGenomeEndPos();
+		GenomePosition nextExonBeginPos = transcript.exonRegions.get(exonNumber + 1)
+				.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos();
+		GenomePosition basePos = null;
+		String offsetStr = null;
+		if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
+			basePos = exonEndPos.shifted(-1);
+			offsetStr = String.format("+%d", pos.differenceTo(exonEndPos) + 1);
+		} else {
+			basePos = nextExonBeginPos;
+			offsetStr = String.format("-%d", nextExonBeginPos.differenceTo(pos));
 		}
+
+		// Get string for the exonic position exonPos and paste together final position string.
+		return String.format("%s%s", getCDNAPosStrForExonPos(basePos), offsetStr);
 	}
 
 	/**

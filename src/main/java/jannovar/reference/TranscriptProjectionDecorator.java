@@ -165,19 +165,16 @@ public final class TranscriptProjectionDecorator {
 	 *            the {@link GenomePosition} to use for querying
 	 * @return (0-based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt> is not in exonic
 	 *         region but in transcript interval
-	 * @throws ProjectionException
-	 *             if the position does not fall within the intron regions of the transcript
 	 */
-	public int locateIntron(GenomePosition pos) throws ProjectionException {
+	public int locateIntron(GenomePosition pos) {
 		if (pos.chr != transcript.getChr()) // guard against different chromosomes
-			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
-					+ transcript.txRegion);
+			return INVALID_INTRON_ID;
 		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
 		if (transcript.txRegion.isLeftOf(pos) || transcript.txRegion.isRightOf(pos))
-			throw new ProjectionException("Position " + pos + " outside of tx region " + transcript.txRegion);
+			return INVALID_INTRON_ID;
 
 		// find exon containing pos or return null
 		int i = 0;
@@ -197,21 +194,18 @@ public final class TranscriptProjectionDecorator {
 	 *
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying
-	 * @return (0-based) index of the selected exon, or {@link INVALID_EXON_ID} if <tt>pos</tt> is not in exonic region
+	 * @return (0-based) index of the selected exon, or {@link #INVALID_EXON_ID} if <tt>pos</tt> is not in exonic region
 	 *         but in transcript interval
-	 * @throws ProjectionException
-	 *             if the position does not fall within the transcription region of the transcripts
 	 */
-	public int locateExon(GenomePosition pos) throws ProjectionException {
+	public int locateExon(GenomePosition pos) {
 		if (pos.chr != transcript.getChr()) // guard against different chromosomes
-			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
-					+ transcript.txRegion);
+			return INVALID_EXON_ID;
 		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
 		if (transcript.txRegion.isLeftOf(pos) || transcript.txRegion.isRightOf(pos))
-			throw new ProjectionException("Position " + pos + " outside of tx region " + transcript.txRegion);
+			return INVALID_EXON_ID;
 
 		// find exon containing pos or return null
 		GenomeInterval posBase = new GenomeInterval(pos, 1); // region of referenced base
