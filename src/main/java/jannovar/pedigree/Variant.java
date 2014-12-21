@@ -13,8 +13,7 @@ import java.util.ArrayList;
 /**
  * A class that is used to hold information about the individual variants as parsed from the VCF file.
  *
- * @author Peter Robinson
- * @version 0.31 (22 January, 2014)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class Variant implements Comparable<Variant> {
 	private final ReferenceDictionary refDict;
@@ -580,9 +579,9 @@ public class Variant implements Comparable<Variant> {
 		ArrayList<String> A = new ArrayList<String>();
 		if (this.annotList == null) {
 			A.add(".|."); /*
-						 * empty ID, empty annotation. This should actually never happen, but it is better than
-						 * returning null.
-						 */
+			 * empty ID, empty annotation. This should actually never happen, but it is better than
+			 * returning null.
+			 */
 			return A;
 		}
 		boolean mult = this.affectsMultipleGenes();

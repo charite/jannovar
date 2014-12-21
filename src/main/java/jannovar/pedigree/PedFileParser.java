@@ -28,8 +28,7 @@ import java.util.ArrayList;
  * <li>0 means unknown
  * </ul>
  *
- * @author Peter Robinson
- * @version 0.04 (2 June, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class PedFileParser {
 	/**

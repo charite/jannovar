@@ -1,11 +1,9 @@
 package jannovar.pedigree;
 
 /**
- * Codes used to denote affection status of a {@link jannovar.pedigree.Person Person} in a
- * {@link jannovar.pedigree.Pedigree Pedigree}
+ * Codes used to denote affection status of a {@link Person} in a {@link Pedigree}.
  *
- * @author Peter Robinson <peter.robinson@charite.de>
- * @version 0.03 (5 May, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public enum Disease {
 	/** corresponds to 2 = affected in the pedfile. */

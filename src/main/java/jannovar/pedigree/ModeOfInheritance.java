@@ -3,8 +3,7 @@ package jannovar.pedigree;
 /**
  * An enumeration of the four main Mendelian modes of inheritance for prioritizing exome data.
  *
- * @author Peter Robinson
- * @version 0.03 (28 April, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public enum ModeOfInheritance {
 	/** autosomal dominant inheritance */

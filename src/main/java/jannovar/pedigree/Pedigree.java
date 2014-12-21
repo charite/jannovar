@@ -37,8 +37,7 @@ import java.util.Iterator;
  * the PED file samples is adjusted to match the order of the VCF file samples using the function
  * {@link #adjustSampleOrderInPedFile}.
  *
- * @author Peter Robinson
- * @version 0.21 (27 December, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class Pedigree {
 	/**
@@ -460,8 +459,8 @@ public class Pedigree {
 			GenotypeCall multiGT = v.getGenotype();
 			int N = multiGT.getNumberOfIndividuals();
 			boolean variantCompatible = true; /*
-											 * Is the current variant compatible with AD?
-											 */
+			 * Is the current variant compatible with AD?
+			 */
 			int n_affected_with_het = 0;
 			for (int i = 0; i < N; ++i) {
 				Genotype gt = multiGT.getGenotypeInIndividualN(i);
@@ -793,10 +792,10 @@ public class Pedigree {
 			/*
 			 * System.out.println("# 1 not hom"); if (affectedsAreHeterozygous(multiGT))
 			 * System.out.println("# 2 affecteds are het"); else System.out.println("# 2 affecteds are not het");
-			 *
+			 * 
 			 * if (onlyOneParentIsHeterozygous(multiGT)) System.out.println("# 3 only one paret is het"); else
 			 * System.out.println("# 3 not only one parent is het het");
-			 *
+			 * 
 			 * if (unaffectedsAreNotHomozygousALT(multiGT) ) System.out.println("# 4 unaffects Not Hom"); else
 			 * System.out.println("# 4 NOT unaffects Not Hom");
 			 */

@@ -8,8 +8,7 @@ import java.util.ArrayList;
  * A class representing one individual within a {@link jannovar.pedigree.Pedigree Pedigree}. In essence, this class
  * stores data representing the six fields of a PED file:
  *
- * @author Peter Robinson
- * @version 0.06 (27 December, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class Person {
 	/**
