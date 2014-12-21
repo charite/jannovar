@@ -115,9 +115,34 @@ public class UCSCParser implements TranscriptParser {
 
 		// Build result list.
 		ImmutableList.Builder<TranscriptInfo> result = new ImmutableList.Builder<TranscriptInfo>();
-		for (Map.Entry<String, TranscriptInfoBuilder> entry : knownGeneMap.entrySet())
-			result.add(entry.getValue().build());
+		for (Map.Entry<String, TranscriptInfoBuilder> entry : knownGeneMap.entrySet()) {
+			TranscriptInfo info = entry.getValue().build();
+			if (checkTranscriptInfo(info))
+				result.add(info);
+		}
 		return result.build();
+	}
+
+	/**
+	 * Check whether the <code>info</code> has problems or not.
+	 *
+	 * Known problems that is checked for:
+	 *
+	 * <ul>
+	 * <li>mRNA sequence is shorter than the sum of the exon lengths</li>
+	 * </ul>
+	 *
+	 * @param info
+	 *            {@link TranscriptInfo} to check for consistency
+	 * @return <code>false</code> if known problems have been found
+	 */
+	private boolean checkTranscriptInfo(TranscriptInfo info) {
+		if (info.transcriptLength() > info.sequence.length()) {
+			System.err.println("WARNING: Transcript " + info.accession
+					+ " is indicated to be longer than its seuqence. Ignoring.");
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -186,7 +211,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
 		tib.setTxRegion(new GenomeInterval(refDict, '+', chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
-				.withStrand(strand));
+		.withStrand(strand));
 
 		int cdsStart, cdsEnd;
 		try {
@@ -200,7 +225,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
 		tib.setCdsRegion(new GenomeInterval(refDict, '+', chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
-				.withStrand(strand));
+		.withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;

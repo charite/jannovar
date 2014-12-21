@@ -96,7 +96,7 @@ public final class TranscriptInfo implements Serializable {
 	}
 
 	/**
-	 * @return the length of the exon sequences
+	 * @return the sum of the exon sequence lengths
 	 */
 	public int transcriptLength() {
 		int result = 0;
