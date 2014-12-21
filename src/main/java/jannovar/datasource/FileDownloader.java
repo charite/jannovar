@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.net.URL;
-import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTP;
@@ -102,11 +101,7 @@ public class FileDownloader {
 			// throw new IOException("Could not finish download!");
 
 		} catch (FileNotFoundException e) {
-			try {
-				Files.delete(dest.toPath());
-			} catch (IOException e1) {
-				// swallow, nothing can be done here
-			}
+			dest.delete();
 			try {
 				ftp.logout();
 			} catch (IOException e1) {
@@ -119,11 +114,7 @@ public class FileDownloader {
 			}
 			throw new FileDownloadException("ERROR: problem downloading file " + e.getMessage());
 		} catch (IOException e) {
-			try {
-				Files.delete(dest.toPath());
-			} catch (IOException e1) {
-				// swallow, nothing can be done here
-			}
+			dest.delete();
 			try {
 				ftp.logout();
 			} catch (IOException e1) {
