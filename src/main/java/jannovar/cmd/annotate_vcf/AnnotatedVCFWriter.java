@@ -1,6 +1,7 @@
 package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.writer.Options;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
 import htsjdk.variant.vcf.VCFFileReader;
@@ -60,6 +61,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		VariantContextWriterBuilder builder = new VariantContextWriterBuilder();
 		builder.setReferenceDictionary(reader.getFileHeader().getSequenceDictionary());
 		builder.setOutputFile(new File(getOutFileName()));
+		// Disable on-the-fly generation of Tribble index if the input file does not have a sequence dictionary.
+		if (reader.getFileHeader().getSequenceDictionary() == null)
+			builder.unsetOption(Options.INDEX_ON_THE_FLY);
 
 		// construct VariantContextWriter and write out header
 		out = builder.build();
