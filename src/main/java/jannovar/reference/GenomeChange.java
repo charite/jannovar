@@ -100,6 +100,13 @@ public final class GenomeChange {
 	}
 
 	/**
+	 * @return numeric ID of chromosome this change is on
+	 */
+	public int getChr() {
+		return pos.chr;
+	}
+
+	/**
 	 * @return interval of the genome change
 	 */
 	public GenomeInterval getGenomeInterval() {

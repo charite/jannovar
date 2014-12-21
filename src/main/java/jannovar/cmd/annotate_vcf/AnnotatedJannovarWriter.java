@@ -11,6 +11,7 @@ import jannovar.annotation.VariantDataCorrector;
 import jannovar.exception.AnnotationException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
+import jannovar.reference.PositionType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,7 +38,6 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** BufferedWriter to use for writing */
 	BufferedWriter out = null;
 
-	// TODO(holtgrem): Remove me.
 	/** current line */
 	int currentLine = 0;
 
@@ -114,7 +114,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
-		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
+		AnnotationList anno = annotator.buildAnnotationList(chr, pos, ref, alt, PositionType.ONE_BASED);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", vc.toString());
 			throw new AnnotationException(e);

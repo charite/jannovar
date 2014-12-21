@@ -31,8 +31,8 @@ public final class VariantAnnotator {
 	/** {@link ReferenceDictionary} to use for genome information. */
 	final ReferenceDictionary refDict;
 
-	/** Chromosomes with their TranscriptModel objects. */
-	private HashMap<Integer, Chromosome> chromosomeMap = null;
+	/** {@link Chromosome}s with their {@link TranscriptInfo} objects. */
+	final private HashMap<Integer, Chromosome> chromosomeMap;
 
 	/**
 	 * This object will be used to prioritize the annotations and to choose the one(s) to report. For instance, if we
@@ -42,7 +42,7 @@ public final class VariantAnnotator {
 	 * the lists of potential annotations get initialized. We will take 2*SPAN because this is the maximum number of
 	 * annotations any variant can get with this program.
 	 */
-	private AnnotationCollector annovarFactory = null;
+	final private AnnotationCollector annovarFactory = new AnnotationCollector(20);
 
 	/**
 	 * Construct new VariantAnnotator, given a chromosome map.
@@ -55,11 +55,38 @@ public final class VariantAnnotator {
 	public VariantAnnotator(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap) {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
-		this.annovarFactory = new AnnotationCollector(20);
 	}
 
-	// TODO(holtgrem): Rename to buildAnnotationList()?
-	// TODO(holtgrem): Use GenomeChange in the interface?
+	/**
+	 * Return {@link AnnotationList} for the genome change by the parameters.
+	 *
+	 * We recommend you to use {@link #buildAnnotationList(int, int, String, String, PositionType)} directly.
+	 *
+	 * @param position
+	 *            The start position of the variant on this chromosome (one-based numbering)
+	 * @param ref
+	 *            String representation of the reference sequence affected by the variant
+	 * @param alt
+	 *            String representation of the variant (alt) sequence
+	 * @param posType
+	 *            the position type to use
+	 * @return {@link AnnotationList} for the given genome change
+	 * @throws AnnotationException
+	 *             on problems building the annotation list
+	 */
+	public AnnotationList buildAnnotationList(int chr, int position, String ref, String alt, PositionType posType)
+			throws AnnotationException {
+		// Get chromosome by id.
+		if (chromosomeMap.get(chr) == null)
+			throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
+
+		// Build the GenomeChange to build annotation for.
+		GenomePosition pos = new GenomePosition(refDict, '+', chr, position, posType);
+		GenomeChange change = new GenomeChange(pos, ref, alt);
+
+		return buildAnnotationList(change);
+	}
+
 	/**
 	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates. When we
 	 * get to this point, the client code has identified the right chromosome, and we are provided the coordinates on
@@ -70,41 +97,28 @@ public final class VariantAnnotator {
 	 * accordingly. If no hit is found in the tree, we identify the left and right neighbor and annotate to intergenic,
 	 * upstream or downstream
 	 *
-	 * @param position
-	 *            The start position of the variant on this chromosome (one-based numbering)
-	 * @param ref
-	 *            String representation of the reference sequence affected by the variant
-	 * @param alt
-	 *            String representation of the variant (alt) sequence
-	 * @return a list of {@link jannovar.annotation.Annotation Annotation} objects corresponding to the mutation
-	 *         described by the object (often just one annotation, but potentially multiple ones).
-	 * @throws jannovar.exception.AnnotationException
+	 * @param change
+	 *            the {@link GenomeChange} to annotate
+	 * @return {@link AnnotationList} for the genome change
+	 * @throws AnnotationException
+	 *             on problems building the annotation list
 	 */
-	public AnnotationList getAnnotationList(int c, int position, String ref, String alt) throws AnnotationException {
-		// Get chromosome by id.
-		Chromosome chr = chromosomeMap.get(c);
-		if (chr == null) {
-			String e = String.format("Could not identify chromosome \"%d\"", c);
-			throw new AnnotationException(e);
-		}
+	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
+		// TODO(holtgrew): Make zero-based in the future?
+		final GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ONE_BASED);
 
 		/* The following command "resets" the annovarFactory object */
 		this.annovarFactory.clearAnnotationLists();
 
-		// TODO(holtgrew): Make zero-based in the future.
-		// Build the GenomeChange to build annotation for.
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', c, position, PositionType.ONE_BASED),
-				ref, alt);
-		GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ONE_BASED);
-
 		// Get the TranscriptModel objects that overlap with changeInterval.
+		final Chromosome chr = chromosomeMap.get(change.getChr());
 		IntervalTree<TranscriptInfo>.QueryResult qr = chr.getTMIntervalTree().search(changeInterval.beginPos,
 				changeInterval.endPos);
 		ArrayList<TranscriptInfo> candidateTranscripts = qr.result;
 
 		// Check whether this is a SV, if true then also perform a big intervals search.
-		boolean isStructuralVariant = (ref.length() >= 1000 || alt.length() >= 1000);
-		if (isStructuralVariant && ref.length() >= 1000)
+		boolean isStructuralVariant = (change.ref.length() >= 1000 || change.alt.length() >= 1000);
+		if (isStructuralVariant && change.ref.length() >= 1000)
 			candidateTranscripts.addAll(chr.getTMIntervalTree().searchBigInterval(changeInterval.beginPos,
 					changeInterval.endPos));
 
@@ -120,12 +134,11 @@ public final class VariantAnnotator {
 
 		// If we reach here, then there is at least one transcript that overlaps with the query. Iterate over these
 		// transcripts and collect annotations for each (they are collected in annovarFactory).
-		for (TranscriptInfo tm : candidateTranscripts) {
+		for (TranscriptInfo tm : candidateTranscripts)
 			if (isStructuralVariant)
 				buildSVAnnotation(change, tm);
 			else
 				buildNonSVAnnotation(change, tm);
-		}
 
 		return annovarFactory.getAnnotationList();
 	}

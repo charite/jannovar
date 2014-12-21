@@ -14,6 +14,7 @@ import jannovar.annotation.VariantDataCorrector;
 import jannovar.exception.AnnotationException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
+import jannovar.reference.PositionType;
 import jannovar.util.PathUtil;
 
 import java.io.File;
@@ -113,7 +114,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 
 		// TODO(holtgrem): better checking of structural variants?
 		if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
-			AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
+			AnnotationList anno = annotator.buildAnnotationList(chr, pos, ref, alt, PositionType.ONE_BASED);
 			if (anno == null) {
 				String e = String.format("No annotations found for variant %s", vc.toString());
 				throw new AnnotationException(e);
