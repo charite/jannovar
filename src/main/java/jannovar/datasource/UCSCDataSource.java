@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class UCSCDataSource extends DataSource {
+final class UCSCDataSource extends DataSource {
 
 	/** expected keys in data source configuration file */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("knownGene", "knownGeneMrna", "kgXref",

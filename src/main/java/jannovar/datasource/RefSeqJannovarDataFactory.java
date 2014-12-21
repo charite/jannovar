@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class RefSeqJannovarDataFactory extends JannovarDataFactory {
+final class RefSeqJannovarDataFactory extends JannovarDataFactory {
 
 	/**
 	 * Construct the factory with the given {@link RefSeqDataSource}.

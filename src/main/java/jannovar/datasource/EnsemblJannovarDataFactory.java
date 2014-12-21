@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class EnsemblJannovarDataFactory extends JannovarDataFactory {
+final class EnsemblJannovarDataFactory extends JannovarDataFactory {
 
 	/**
 	 * Construct the factory with the given {@link EnsemblDataSource}.

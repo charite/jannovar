@@ -16,7 +16,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class UCSCJannovarDataFactory extends JannovarDataFactory {
+final class UCSCJannovarDataFactory extends JannovarDataFactory {
 
 	/**
 	 * Construct the factory with the given {@link UCSCDataSource}.

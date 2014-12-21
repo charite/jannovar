@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class RefSeqDataSource extends DataSource {
+final class RefSeqDataSource extends DataSource {
 
 	/** expected keys in data source configuration file */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("gff", "rna", "chromInfo", "chrToAccessions");

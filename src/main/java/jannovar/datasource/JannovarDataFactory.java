@@ -88,7 +88,7 @@ public abstract class JannovarDataFactory {
 				dataSource.getFileName("chrToAccessions"));
 		ReferenceDictParser dictParser = new ReferenceDictParser(chromInfoPath, chrToAccessionsPath, iniSection);
 		ReferenceDictionary refDict = dictParser.parse();
-		refDict.print();
+		refDict.print(System.err);
 
 		// Parse transcript files.
 		System.err.println("Parsing transcripts...");

@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+// NOTE(holtgrem): Part of the public interface of the Jannovar library.
+
 /**
  * Manager for serializing and deserializing {@link JannovarData} objects.
  *
@@ -17,10 +19,13 @@ import java.io.ObjectOutputStream;
 public final class JannovarDataSerializer {
 
 	/** path to file to serialize to or deserialize from */
-	final String filename;
+	public final String filename;
 
 	/**
+	 * Initialize the (de)serializer with the path to the file to load/save.
+	 *
 	 * @param filename
+	 *            path to the file to deserialize from or serialize to
 	 */
 	public JannovarDataSerializer(String filename) {
 		this.filename = filename;
@@ -36,7 +41,7 @@ public final class JannovarDataSerializer {
 	 * @throws SerializationException
 	 *             on problems with the serialization
 	 */
-	public void serializeKnownGeneList(JannovarData data) throws SerializationException {
+	public void save(JannovarData data) throws SerializationException {
 		if (data == null || data.transcriptInfos.isEmpty() || data.refDict.contigID.isEmpty())
 			throw new SerializationException("Attempting to serialize empty data set");
 
@@ -71,7 +76,7 @@ public final class JannovarDataSerializer {
 	 * @throws SerializationException
 	 *             on problems with the deserialization
 	 */
-	public JannovarData deserializeKnownGeneList() throws SerializationException {
+	public JannovarData load() throws SerializationException {
 		JannovarData result = null;
 
 		// This is also waiting for Java 7 to be cleaned up, see above.

@@ -14,12 +14,14 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
+// TODO(holtgrem): Add a DataSourceOptions class with boiled-down configuration.
+
 /**
  * Factory class that allows the construction of {@link DataSource} objects as configured in INI files.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class DataSourceFactory {
+final public class DataSourceFactory {
 
 	/** {@link JannovarOptions} object for proxy settings */
 	private final JannovarOptions options;

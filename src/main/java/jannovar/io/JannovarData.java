@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 import com.google.common.collect.ImmutableList;
 
+// NOTE(holtgrem): Part of the public interface of the Jannovar library.
+// TODO(holtgrem): Add the interval trees here.
+
 /**
  * This data type is used for serialization after downloading.
  *
@@ -28,7 +31,7 @@ public final class JannovarData implements Serializable {
 
 	/**
 	 * Initialize the object with the given values.
-	 * 
+	 *
 	 * @param referenceDict
 	 *            the {@link ReferenceDictionary} to use in this object
 	 * @param transcriptInfos

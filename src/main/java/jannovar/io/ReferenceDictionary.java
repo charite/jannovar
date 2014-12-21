@@ -2,13 +2,38 @@ package jannovar.io;
 
 import jannovar.util.Immutable;
 
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableMap;
 
+// NOTE(holtgrem): Part of the public interface of the Jannovar library.
+
 /**
  * Stores lengths of contigs/chromosomes and a mapping from string to numeric IDs.
+ *
+ * Often, there are various circulating versions of a genome release. While they all have the same sequence for the
+ * chromosomes and contigs (and thus the same length), the names might vary slightly. For example, <a
+ * href="http://www.ncbi.nlm.nih.gov/refseq/">RefSeq</a> names the human chromosomes as "1", "2" etc. and UCSC names
+ * them "chr1", "chr2" etc. The mitochondrial chromosome is called "MT" by RefSeq and "chrM" by UCSC. Further, sometimes
+ * RefSeq identifiers such as "NC_000001.10" are used as contig files when mapping.
+ *
+ * The purpose of this class is to
+ *
+ * <ol>
+ * <li>Assign numeric identifiers to the chromosome names through {@link #contigID}. Possibly, more than one name is
+ * assigned the same numeric id. Usually, numeric ids are assigned starting with 1 (as to correspond to the chromosome
+ * names for human/mouse genomes, for example), but arbitrary numeric ids can be assigned (even non-continous sequence).
+ * </li>
+ * <li>Assign a primary name to each numeric identifier through {@link #contigName}.</li>
+ * <li>Assign a length to each contig through {@link #contigLength}. This is used for coordinate transformation from
+ * forward to reverse strand. This means that the genome position and interval types keep a reference to a central
+ * {@link ReferenceDictionary} object.</li>
+ * <ol>
+ *
+ * This class is immutable which makes it safe to share it between many other objects. You can easily construct objects
+ * of its type using {@link ReferenceDictionaryBuilder}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -20,7 +45,7 @@ public class ReferenceDictionary implements Serializable {
 
 	/**
 	 * stores a mapping from the string chromosome/contig name to its numeric id, e.g. from both <code>"chr1"</code> and
-	 * <code>"1"</code> to <code>(int)1</code>.
+	 * <code>"1"</code> to <code>(int)1</code>
 	 */
 	public final ImmutableMap<String, Integer> contigID;
 
@@ -40,7 +65,7 @@ public class ReferenceDictionary implements Serializable {
 	 * @param contigLength
 	 *            contig length map to use for the initialization
 	 */
-	public ReferenceDictionary(ImmutableMap<String, Integer> contigID, ImmutableMap<Integer, String> contigName,
+	ReferenceDictionary(ImmutableMap<String, Integer> contigID, ImmutableMap<Integer, String> contigName,
 			ImmutableMap<Integer, Integer> contigLength) {
 		this.contigID = contigID;
 		this.contigName = contigName;
@@ -50,16 +75,16 @@ public class ReferenceDictionary implements Serializable {
 	/**
 	 * Print dictionary to <code>System.err</code> for debugging purposes.
 	 */
-	public void print() {
-		System.err.println("contig ID mapping");
+	public void print(PrintStream out) {
+		out.println("contig ID mapping");
 		for (Entry<String, Integer> entry : contigID.entrySet())
-			System.err.println("\t" + entry.getKey() + " -> " + entry.getValue());
-		System.err.println("contigs lengths");
+			out.println("\t" + entry.getKey() + " -> " + entry.getValue());
+		out.println("contigs lengths");
 		for (Entry<Integer, Integer> entry : contigLength.entrySet())
-			System.err.println("\t" + entry.getKey() + " -> " + entry.getValue());
-		System.err.println("contig name mapping");
+			out.println("\t" + entry.getKey() + " -> " + entry.getValue());
+		out.println("contig name mapping");
 		for (Entry<Integer, String> entry : contigName.entrySet())
-			System.err.println("\t" + entry.getKey() + " -> " + entry.getValue());
+			out.println("\t" + entry.getKey() + " -> " + entry.getValue());
 	}
 
 }

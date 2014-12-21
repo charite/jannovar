@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import com.google.common.collect.ImmutableMap;
 
+// NOTE(holtgrem): Part of the public interface of the Jannovar library.
+
 /**
  * Builder class for incremental building of immutable {@link ReferenceDictionary} objects.
  *
@@ -17,11 +19,28 @@ public final class ReferenceDictionaryBuilder {
 	/** builder for {@link ReferenceDictionary#contigID} */
 	private final ImmutableMap.Builder<String, Integer> contigID = new ImmutableMap.Builder<String, Integer>();
 
+	/** interim map for {@link #contigName} */
+	private final HashMap<Integer, String> tmpContigName = new HashMap<Integer, String>();
+
 	/** builder for {@link ReferenceDictionary#contigName} */
 	private final ImmutableMap.Builder<Integer, String> contigName = new ImmutableMap.Builder<Integer, String>();
 
+	/** interim map for {@link #contigLength} */
+	private final HashMap<Integer, Integer> tmpContigLength = new HashMap<Integer, Integer>();
+
 	/** builder for {@link ReferenceDictionary#contigLength} */
 	private final ImmutableMap.Builder<Integer, Integer> contigLength = new ImmutableMap.Builder<Integer, Integer>();
+
+	/**
+	 * Allows contig length retrieval before final construction of the {@link ReferenceDictionary}.
+	 *
+	 * @param id
+	 *            id of the contig to get the length for
+	 * @return length of the contig or <code>null</code> if it could not be found
+	 */
+	public Integer getContigLength(int id) {
+		return tmpContigLength.get(id);
+	}
 
 	/**
 	 * Add a contig id to length mapping.
@@ -32,7 +51,19 @@ public final class ReferenceDictionaryBuilder {
 	 *            contig length
 	 */
 	public void putContigLength(int id, int length) {
+		tmpContigLength.put(id, length);
 		contigLength.put(id, length);
+	}
+
+	/**
+	 * Allows contig id to name translation before final construction of the {@link ReferenceDictionary}.
+	 *
+	 * @param id
+	 *            numeric id of contig to get the name for
+	 * @return primary contig name or <code>null</code> if none could be found
+	 */
+	public String getContigName(String name) {
+		return tmpContigName.get(name);
 	}
 
 	/**
@@ -44,10 +75,13 @@ public final class ReferenceDictionaryBuilder {
 	 *            contig name
 	 */
 	public void putContigName(int id, String name) {
+		tmpContigName.put(id, name);
 		contigName.put(id, name);
 	}
 
 	/**
+	 * Allows contig name to numeric ID translation before final construction of the {@link ReferenceDictionary}.
+	 *
 	 * @param name
 	 *            name of contig to get numeric ID for
 	 * @return canonical numeric ID for the contig with given <code>name</code> or <code>null</code> if none.
@@ -75,4 +109,5 @@ public final class ReferenceDictionaryBuilder {
 	public ReferenceDictionary build() {
 		return new ReferenceDictionary(contigID.build(), contigName.build(), contigLength.build());
 	}
+
 }

@@ -37,7 +37,7 @@ public final class DownloadCommand extends JannovarCommand {
 			String filename = PathUtil.join(options.downloadPath, name.replace('/', '_').replace('\\', '_') + ".ser");
 			System.err.println("Serializing to " + filename);
 			JannovarDataSerializer serializer = new JannovarDataSerializer(filename);
-			serializer.serializeKnownGeneList(data);
+			serializer.save(data);
 		}
 	}
 

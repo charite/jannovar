@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 import com.google.common.collect.ImmutableList;
 
+// NOTE(holtgrem): Part of the public interface of the Jannovar library.
+
 /**
  * The information representing a transcript model.
  *
