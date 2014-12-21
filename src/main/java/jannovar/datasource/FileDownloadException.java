@@ -1,7 +1,9 @@
 /**
  *
  */
-package jannovar.exception;
+package jannovar.datasource;
+
+import jannovar.JannovarException;
 
 /**
  * Exception that can be called if something went wrong while downloading the transcript files.

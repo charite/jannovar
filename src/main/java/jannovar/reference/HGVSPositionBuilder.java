@@ -1,6 +1,5 @@
 package jannovar.reference;
 
-import jannovar.exception.ProjectionException;
 import jannovar.util.Immutable;
 
 /**

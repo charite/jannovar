@@ -1,6 +1,5 @@
 package jannovar.impl.parse;
 
-import jannovar.exception.TranscriptParseException;
 import jannovar.reference.TranscriptInfo;
 
 import com.google.common.collect.ImmutableList;

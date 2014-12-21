@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.pedigree;
+
+import jannovar.JannovarException;
 
 /**
  * Exception that occurs during parsing of PEDfiles.

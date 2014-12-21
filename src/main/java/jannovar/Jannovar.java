@@ -1,13 +1,12 @@
 package jannovar;
 
 /** Command line functions from apache */
+import jannovar.cmd.CommandLineParsingException;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarCommand;
 import jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import jannovar.cmd.download.DownloadCommand;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
 import jannovar.reference.TranscriptInfo;
 
 /**

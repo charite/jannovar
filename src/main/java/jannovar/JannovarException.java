@@ -1,4 +1,4 @@
-package jannovar.exception;
+package jannovar;
 
 /**
  * A small Exception hierarchy for the Exomizer. Subclasses of this class are used to catch various problems from the

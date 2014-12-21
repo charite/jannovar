@@ -1,6 +1,5 @@
 package jannovar.reference;
 
-import jannovar.exception.InvalidCoordinateException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.util.Immutable;
 

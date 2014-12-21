@@ -1,8 +1,8 @@
 package jannovar.cmd.annotate_vcf;
 
 import jannovar.JannovarOptions;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommandLineParser;
-import jannovar.exception.HelpRequestedException;
 
 import java.io.PrintWriter;
 

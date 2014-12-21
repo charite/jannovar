@@ -1,7 +1,6 @@
 package jannovar.datasource;
 
 import jannovar.JannovarOptions;
-import jannovar.exception.InvalidDataSourceException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

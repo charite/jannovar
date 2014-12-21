@@ -1,7 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.exception.PedParseException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -99,7 +97,7 @@ public class Pedigree {
 	 *            list of {@link Person}s
 	 * @param famID
 	 *            the Family ID of this Pedigree.
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public Pedigree(ArrayList<Person> pList, String famID) throws PedParseException {
 		this.personList = new ArrayList<Person>();
@@ -201,7 +199,7 @@ public class Pedigree {
 	 *
 	 * @param sampleNames
 	 *            List of names from the VCF file.
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public void adjustSampleOrderInPedFile(ArrayList<String> sampleNames) throws PedParseException {
 		if (sampleNames == null) {
@@ -287,7 +285,7 @@ public class Pedigree {
 	 * Add an individual to the current pedigree.
 	 *
 	 * @param person
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public void addIndividual(Person person) throws PedParseException {
 		if (!this.familyID.equals(person.getFamilyID())) {

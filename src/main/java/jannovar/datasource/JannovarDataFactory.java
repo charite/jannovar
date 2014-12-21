@@ -1,10 +1,8 @@
 package jannovar.datasource;
 
 import jannovar.JannovarOptions;
-import jannovar.exception.FileDownloadException;
-import jannovar.exception.InvalidDataSourceException;
-import jannovar.exception.TranscriptParseException;
 import jannovar.impl.parse.ReferenceDictParser;
+import jannovar.impl.parse.TranscriptParseException;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.TranscriptInfo;

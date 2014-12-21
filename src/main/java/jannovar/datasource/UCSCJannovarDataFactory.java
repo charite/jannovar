@@ -1,7 +1,7 @@
 package jannovar.datasource;
 
 import jannovar.JannovarOptions;
-import jannovar.exception.TranscriptParseException;
+import jannovar.impl.parse.TranscriptParseException;
 import jannovar.impl.parse.UCSCParser;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;

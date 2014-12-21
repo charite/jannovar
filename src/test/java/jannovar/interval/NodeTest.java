@@ -1,7 +1,7 @@
 package jannovar.interval;
 
-import jannovar.exception.IntervalTreeException;
 import jannovar.impl.interval.Interval;
+import jannovar.impl.interval.IntervalTreeException;
 import jannovar.impl.interval.LeftComparator;
 import jannovar.impl.interval.Node;
 import jannovar.impl.interval.RightComparator;

@@ -1,8 +1,8 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
+import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
-import jannovar.exception.InvalidGenomeChange;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.TranscriptInfo;
 

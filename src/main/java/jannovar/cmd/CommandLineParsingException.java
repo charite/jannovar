@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.cmd;
+
+import jannovar.JannovarException;
 
 /**
  * Exception thrown on problems with the command line.

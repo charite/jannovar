@@ -1,7 +1,5 @@
 package jannovar.impl.parse;
 
-import jannovar.exception.InvalidAttributException;
-import jannovar.exception.TranscriptParseException;
 import jannovar.impl.parse.gff.FeatureProcessor;
 import jannovar.impl.parse.gff.GFFParser;
 import jannovar.impl.parse.gff.TranscriptInfoFactory;
@@ -76,7 +74,7 @@ public class EnsemblParser implements TranscriptParser {
 			System.err.println("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes());
-		} catch (InvalidAttributException e) {
+		} catch (InvalidAttributeException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}

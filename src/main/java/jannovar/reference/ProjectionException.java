@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.reference;
+
+import jannovar.JannovarException;
 
 /**
  * Thrown when a coordinate conversion failed.

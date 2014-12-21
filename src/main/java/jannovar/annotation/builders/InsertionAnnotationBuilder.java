@@ -1,9 +1,8 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
+import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
-import jannovar.exception.InvalidGenomeChange;
-import jannovar.exception.ProjectionException;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
@@ -12,6 +11,7 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.PositionType;
+import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
 import jannovar.util.Translator;

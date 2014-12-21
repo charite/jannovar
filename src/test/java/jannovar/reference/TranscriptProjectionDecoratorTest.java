@@ -2,7 +2,6 @@ package jannovar.reference;
 
 import static jannovar.reference.TranscriptProjectionDecorator.INVALID_EXON_ID;
 import static jannovar.reference.TranscriptProjectionDecorator.INVALID_INTRON_ID;
-import jannovar.exception.ProjectionException;
 import jannovar.io.ReferenceDictionary;
 
 import org.junit.Assert;

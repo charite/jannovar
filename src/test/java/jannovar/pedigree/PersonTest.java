@@ -1,7 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.exception.PedParseException;
-
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,9 +1,9 @@
 package jannovar.pedigree;
 
 import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantType;
-import jannovar.exception.AnnotationException;
 import jannovar.io.ReferenceDictionary;
 
 import java.util.ArrayList;

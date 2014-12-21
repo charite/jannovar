@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.impl.parse;
+
+import jannovar.JannovarException;
 
 /**
  * Exception that occurs during parsing of transcript database files.

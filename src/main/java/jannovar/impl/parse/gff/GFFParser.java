@@ -1,6 +1,5 @@
 package jannovar.impl.parse.gff;
 
-import jannovar.exception.FeatureFormatException;
 import jannovar.util.ProgressBar;
 
 import java.io.BufferedReader;

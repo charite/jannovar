@@ -1,6 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.exception.PedParseException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.HG19RefDictBuilder;
 

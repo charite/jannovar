@@ -3,7 +3,7 @@
  */
 package jannovar.impl.parse.gff;
 
-import jannovar.exception.InvalidAttributException;
+import jannovar.impl.parse.InvalidAttributeException;
 import jannovar.impl.parse.gff.FeatureProcessor.Gene;
 import jannovar.impl.parse.gff.FeatureProcessor.Transcript;
 import jannovar.io.ReferenceDictionary;
@@ -42,7 +42,7 @@ public final class TranscriptInfoFactory {
 	 * Forward to {@link #buildTranscripts(HashMap, boolean)}, setting the second parameter to <code>false</code>.
 	 */
 	public ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes)
-			throws InvalidAttributException {
+			throws InvalidAttributeException {
 		return buildTranscripts(genes, false);
 	}
 
@@ -54,11 +54,11 @@ public final class TranscriptInfoFactory {
 	 * @param useOnlyCurated
 	 *            whether or not to only return curated transcripts
 	 * @return list of {@link TranscriptInfoBuilder} objects
-	 * @throws InvalidAttributException
+	 * @throws InvalidAttributeException
 	 *             on problems with invalid attributes
 	 */
 	public ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
-			throws InvalidAttributException {
+			throws InvalidAttributeException {
 		ArrayList<TranscriptInfoBuilder> models = new ArrayList<TranscriptInfoBuilder>();
 		int curid;
 		for (FeatureProcessor.Gene gene : genes.values()) {
@@ -103,7 +103,7 @@ public final class TranscriptInfoFactory {
 				else if ((curid = RNA2GeneIDMapper.getGeneID(gene.id)) > 0)
 					tib.setGeneID(curid);
 				else
-					throw new InvalidAttributException("Found no valid geneID mapping for accession: " + gene.id);
+					throw new InvalidAttributeException("Found no valid geneID mapping for accession: " + gene.id);
 
 				models.add(tib);
 			}

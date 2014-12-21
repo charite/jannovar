@@ -1,7 +1,7 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.exception.InvalidGenomeChange;
+import jannovar.annotation.InvalidGenomeChange;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;

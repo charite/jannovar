@@ -1,7 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.exception.PedParseException;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -86,7 +84,7 @@ public class PedFileParser {
 	 * @param PEDfileContents
 	 *            reader object
 	 * @return {@link Pedigree} object
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public Pedigree parseStream(BufferedReader PEDfileContents) throws PedParseException {
 		try {
@@ -140,7 +138,7 @@ public class PedFileParser {
 	 * @param A
 	 *            list of fields of a single ped file line
 	 * @return {@link Person} object
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public Person parsePerson(String[] A) throws PedParseException {
 		String famID = A[0];

@@ -1,6 +1,5 @@
 package jannovar.annotation;
 
-import jannovar.exception.AnnotationException;
 import jannovar.reference.Chromosome;
 
 import java.util.ArrayList;
@@ -188,7 +187,7 @@ final class AnnotationCollector {
 	 * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
 	 *
 	 * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public AnnotationList getAnnotationList() throws AnnotationException {
 		Collections.sort(this.annotationLst);

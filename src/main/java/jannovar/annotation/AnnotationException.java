@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.annotation;
+
+import jannovar.JannovarException;
 
 /**
  * Annotation exceptions are thrown when the information provided is not well formed or not sufficient to create a

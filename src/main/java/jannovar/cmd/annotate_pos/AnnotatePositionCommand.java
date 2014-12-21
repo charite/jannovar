@@ -1,13 +1,13 @@
 package jannovar.cmd.annotate_pos;
 
+import jannovar.JannovarException;
 import jannovar.JannovarOptions;
+import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
+import jannovar.cmd.CommandLineParsingException;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommand;
-import jannovar.exception.AnnotationException;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;

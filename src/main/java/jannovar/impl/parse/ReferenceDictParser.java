@@ -1,6 +1,5 @@
 package jannovar.impl.parse;
 
-import jannovar.exception.TranscriptParseException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.io.ReferenceDictionaryBuilder;
 

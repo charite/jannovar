@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 import jannovar.impl.interval.Interval;
+import jannovar.impl.interval.IntervalTreeException;
 import jannovar.impl.interval.LeftComparator;
 import jannovar.impl.interval.RightComparator;
-import jannovar.exception.IntervalTreeException;
 
 import org.junit.Test;
 import org.junit.AfterClass;

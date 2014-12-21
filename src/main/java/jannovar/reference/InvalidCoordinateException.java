@@ -1,4 +1,4 @@
-package jannovar.exception;
+package jannovar.reference;
 
 /**
  * Thrown if two coordinates were on different chromosomes.

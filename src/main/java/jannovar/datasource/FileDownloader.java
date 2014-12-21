@@ -1,6 +1,5 @@
 package jannovar.datasource;
 
-import jannovar.exception.FileDownloadException;
 import jannovar.util.ProgressBar;
 
 import java.io.BufferedInputStream;

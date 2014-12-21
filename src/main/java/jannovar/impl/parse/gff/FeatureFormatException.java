@@ -1,7 +1,7 @@
 /**
  *
  */
-package jannovar.exception;
+package jannovar.impl.parse.gff;
 
 import java.io.IOException;
 

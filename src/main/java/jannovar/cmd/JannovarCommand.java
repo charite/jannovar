@@ -1,9 +1,7 @@
 package jannovar.cmd;
 
+import jannovar.JannovarException;
 import jannovar.JannovarOptions;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
 
 /**
  * Super class for all commands, i.e. the classes implementing one Jannovar execution step.

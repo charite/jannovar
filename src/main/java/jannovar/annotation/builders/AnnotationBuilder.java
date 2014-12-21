@@ -2,13 +2,13 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.VariantType;
-import jannovar.exception.ProjectionException;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeChangeNormalizer;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.PositionType;
+import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptProjectionDecorator;
 import jannovar.reference.TranscriptSequenceChangeHelper;

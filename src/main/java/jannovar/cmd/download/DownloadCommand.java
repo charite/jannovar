@@ -1,11 +1,11 @@
 package jannovar.cmd.download;
 
+import jannovar.JannovarException;
 import jannovar.JannovarOptions;
+import jannovar.cmd.CommandLineParsingException;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarCommand;
 import jannovar.datasource.DataSourceFactory;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
 import jannovar.io.JannovarData;
 import jannovar.io.JannovarDataSerializer;
 import jannovar.util.PathUtil;

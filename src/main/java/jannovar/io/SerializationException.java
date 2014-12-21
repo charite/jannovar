@@ -1,6 +1,6 @@
 package jannovar.io;
 
-import jannovar.exception.JannovarException;
+import jannovar.JannovarException;
 
 /**
  * Exception thrown on problems with serialization or deserialization.

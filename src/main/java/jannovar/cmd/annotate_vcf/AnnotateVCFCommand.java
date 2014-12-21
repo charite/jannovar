@@ -2,11 +2,11 @@ package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
+import jannovar.JannovarException;
 import jannovar.JannovarOptions;
+import jannovar.cmd.CommandLineParsingException;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommand;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
 
 import java.io.File;
 import java.io.IOException;

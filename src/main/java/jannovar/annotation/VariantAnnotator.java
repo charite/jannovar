@@ -2,8 +2,6 @@ package jannovar.annotation;
 
 import jannovar.annotation.builders.AnnotationBuilderDispatcher;
 import jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
-import jannovar.exception.AnnotationException;
-import jannovar.exception.InvalidGenomeChange;
 import jannovar.impl.interval.IntervalTree;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;

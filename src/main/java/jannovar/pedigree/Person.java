@@ -1,7 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.exception.PedParseException;
-
 import java.util.ArrayList;
 
 /**

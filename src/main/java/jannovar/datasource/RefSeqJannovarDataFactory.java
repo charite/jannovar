@@ -1,8 +1,8 @@
 package jannovar.datasource;
 
 import jannovar.JannovarOptions;
-import jannovar.exception.TranscriptParseException;
 import jannovar.impl.parse.RefSeqParser;
+import jannovar.impl.parse.TranscriptParseException;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.TranscriptInfo;

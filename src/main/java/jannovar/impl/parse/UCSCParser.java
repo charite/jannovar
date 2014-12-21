@@ -1,6 +1,5 @@
 package jannovar.impl.parse;
 
-import jannovar.exception.TranscriptParseException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
@@ -258,7 +257,7 @@ public class UCSCParser implements TranscriptParser {
 	 *
 	 * @param kgPath
 	 *            path to the knownGene.txt file
-	 * @throws jannovar.exception.TranscriptParseException
+	 * @throws jannovar.impl.parse.TranscriptParseException
 	 */
 	private void parseKnownGeneFile(String kgPath) throws TranscriptParseException {
 		// Error handling can be improved with Java 7.

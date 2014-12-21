@@ -1,7 +1,5 @@
 package jannovar.annotation;
 
-import jannovar.exception.AnnotationException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -100,7 +98,7 @@ public final class AnnotationList {
 	 * If there are multiple annotations, this function sorts them. This function also sets the overall variant type
 	 * (the most pathogenic single type found among all annotations).
 	 *
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public void sortAnnotations() throws AnnotationException {
 		if (this.isPrioritySorted)
@@ -142,7 +140,7 @@ public final class AnnotationList {
 	 * pathogenicity of the variation.
 	 *
 	 * @return String representation of all annotations
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getAllTranscriptAnnotations() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
@@ -168,7 +166,7 @@ public final class AnnotationList {
 	 * variant (e.g., if there are nonsense and synonymous annotation, return nonsense).
 	 *
 	 * @return annotation for a single transcript
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getSingleTranscriptAnnotation() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
@@ -200,7 +198,7 @@ public final class AnnotationList {
 	/**
 	 * @return an annotation consisting of the gene symbol and a list of all affected transcripts with the HGVS mutation
 	 *         nomenclature.
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getVariantAnnotation() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
@@ -388,7 +386,7 @@ public final class AnnotationList {
 	 * this function, that basically first gets a set of all the gene symbols and then sorts the output accordingly.
 	 *
 	 * @return String with the combined annotation.
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getCombinedAnnotationForVariantAffectingMultipleGenes() throws AnnotationException {
 		StringBuilder sb = new StringBuilder();

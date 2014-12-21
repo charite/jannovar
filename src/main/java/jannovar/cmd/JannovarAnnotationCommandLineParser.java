@@ -1,7 +1,6 @@
 package jannovar.cmd;
 
 import jannovar.JannovarOptions;
-import jannovar.exception.HelpRequestedException;
 
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;

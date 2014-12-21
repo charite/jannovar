@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.impl.interval;
+
+import jannovar.JannovarException;
 
 /**
  * IntervalTree exceptions are thrown if there is an error during the construction of the IntervalTree.

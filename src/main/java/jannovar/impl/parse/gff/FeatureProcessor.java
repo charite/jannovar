@@ -1,7 +1,6 @@
 package jannovar.impl.parse.gff;
 
-import jannovar.exception.FeatureFormatException;
-import jannovar.exception.InvalidAttributException;
+import jannovar.impl.parse.InvalidAttributeException;
 import jannovar.io.ReferenceDictionary;
 
 import java.text.Collator;
@@ -56,12 +55,12 @@ public final class FeatureProcessor {
 	 *
 	 * @param feature
 	 *            feature to add and process
-	 * @throws InvalidAttributException
+	 * @throws InvalidAttributeException
 	 *             on problems with the attributes
 	 * @throws FeatureFormatException
 	 *             on problems with the feature format
 	 */
-	public void addFeature(Feature feature) throws InvalidAttributException, FeatureFormatException {
+	public void addFeature(Feature feature) throws InvalidAttributeException, FeatureFormatException {
 		// System.out.println(feature.toLine());
 		if (refDict.contigID.get(feature.getSequenceID()) == null)
 			return;
@@ -92,9 +91,9 @@ public final class FeatureProcessor {
 	 * These are only present in the GFF3 vers3 file format, not in version 2 or GTF files. Process the 1. get gene and
 	 *
 	 * @param feature
-	 * @throws InvalidAttributException
+	 * @throws InvalidAttributeException
 	 */
-	private void processRNA(Feature feature) throws InvalidAttributException {
+	private void processRNA(Feature feature) throws InvalidAttributeException {
 		// gene and transcript ids
 		curGeneID = feature.getAttributes().get("Parent");
 		curRnaID = feature.getAttributes().get("ID");

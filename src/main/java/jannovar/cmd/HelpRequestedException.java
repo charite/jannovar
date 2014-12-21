@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.cmd;
+
+import jannovar.JannovarException;
 
 /**
  * Thrown when the user requests help.

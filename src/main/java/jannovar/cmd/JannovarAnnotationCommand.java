@@ -1,8 +1,6 @@
 package jannovar.cmd;
 
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
+import jannovar.JannovarException;
 import jannovar.io.JannovarData;
 import jannovar.io.JannovarDataSerializer;
 import jannovar.io.ReferenceDictionary;

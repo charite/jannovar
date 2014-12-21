@@ -1,4 +1,4 @@
-package jannovar.exception;
+package jannovar.annotation;
 
 import jannovar.reference.GenomeChange;
 

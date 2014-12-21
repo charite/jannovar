@@ -1,7 +1,7 @@
 package jannovar.cmd.download;
 
 import jannovar.JannovarOptions;
-import jannovar.exception.HelpRequestedException;
+import jannovar.cmd.HelpRequestedException;
 
 import java.io.PrintWriter;
 

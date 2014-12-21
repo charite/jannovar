@@ -1,4 +1,6 @@
-package jannovar.exception;
+package jannovar.datasource;
+
+import jannovar.JannovarException;
 
 /**
  * Thrown on problems with data source configuration files.
