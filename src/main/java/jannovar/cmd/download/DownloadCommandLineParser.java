@@ -112,6 +112,9 @@ public final class DownloadCommandLineParser {
 		// TODO(holtgrem): Explain data sources and refer to manual.
 
 		final String FOOTER = new StringBuilder().append("\n\nExample: java -jar jannovar.jar download hg19/ucsc\n\n")
+				.append("Note that Jannovar also interprets the environment variables\n")
+				.append("HTTP_PROXY, HTTPS_PROXY and FTP_PROXY for downloading files.\n")
+				.append("There, you can also specify a username and passsword for the\n").append("proxy.\n\n")
 				.toString();
 
 		System.err.print(HEADER);
