@@ -16,6 +16,8 @@ import jannovar.reference.TranscriptInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+// TODO(holtgrem): We should directly passin a JannovarData object after adding the interval trees to it. Then, this should be fine.
+
 /**
  * Main driver class for annotating variants.
  *
@@ -29,7 +31,7 @@ import java.util.HashMap;
 public final class VariantAnnotator {
 
 	/** {@link ReferenceDictionary} to use for genome information. */
-	final ReferenceDictionary refDict;
+	final private ReferenceDictionary refDict;
 
 	/** {@link Chromosome}s with their {@link TranscriptInfo} objects. */
 	final private HashMap<Integer, Chromosome> chromosomeMap;
@@ -57,10 +59,12 @@ public final class VariantAnnotator {
 		this.chromosomeMap = chromosomeMap;
 	}
 
+	// TODO(holtgrem): Remove this?
 	/**
-	 * Return {@link AnnotationList} for the genome change by the parameters.
+	 * Convenience function for obtaining an {@link AnnotationList} from genome change in primitive types.
 	 *
-	 * We recommend you to use {@link #buildAnnotationList(int, int, String, String, PositionType)} directly.
+	 * Forwards to {@link #buildAnnotationList(int, int, String, String, PositionType)} and we recommend to use this
+	 * function directly.
 	 *
 	 * @param position
 	 *            The start position of the variant on this chromosome (one-based numbering)

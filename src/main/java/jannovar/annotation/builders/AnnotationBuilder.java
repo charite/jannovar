@@ -29,9 +29,12 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
  * The realizing classes then override {@link #build} and implement their annotation building logic there. Override
  * {@link #ncHGVS} for defining the non-coding HGVS string.
  *
+ * At the moment, this has package visibility only since it is not clear yet whether and how client code should extend
+ * the builder hierarchy.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public abstract class AnnotationBuilder {
+abstract class AnnotationBuilder {
 
 	/** transcript to annotate. */
 	protected final TranscriptInfo transcript;
@@ -91,12 +94,12 @@ public abstract class AnnotationBuilder {
 	 *
 	 * @return {@link Annotation} for the given {@link #transcript} and {@link #change}.
 	 */
-	abstract Annotation build();
+	public abstract Annotation build();
 
 	/**
 	 * @return HGVS string for change in non-coding part of transcript.
 	 */
-	abstract String ncHGVS();
+	protected abstract String ncHGVS();
 
 	/**
 	 * Build and return annotation for non-coding RNA.

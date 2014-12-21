@@ -2,29 +2,27 @@ package jannovar.annotation;
 
 import jannovar.reference.TranscriptInfo;
 
-// TODO(holtgrem): Move, cleanup
+// TODO(holtgrem): pretty lrage interface, do we need this here or would it be better in a decorator?
+// TODO(holtgrem): Make interface leaner, will be part of the public interface.
 
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  *
- * <OL>
- * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.annotation.VariantType VariantType}).
- * <LI>The gene symbol
- * <LI>A string representing the actual variant
- * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
- * </OL>
+ * <ol>
+ * <li>the variant type: frameshift, synonymous substitution, etc. (see {@link VariantType}).</li>
+ * <li>the gene symbol</li>
+ * <li>a string representing the actual variant, and</li>
+ * <li>the NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.</li>
+ * </ol>
  *
  * Each annotation for one transcript corresponds to a single Annotation object. All of the transcripts affected by a
- * variant are collected by an {@link jannovar.annotation.AnnotationList AnnotationList} object.
+ * variant are collected by an {@link AnnotationList} object.
  *
- * @author Peter N Robinson
- * @version 0.32 (3 February, 2014)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class Annotation implements Comparable<Annotation> {
-	/**
-	 * The type of the variant being annotated, using the constants in {@link jannovar.annotation.VariantType VariantType},
-	 * e.g., MISSENSE, 5UTR, etc.
-	 */
+
+	/** functional variant type, e.g. missense, 5' UTR etc. */
 	private VariantType varType;
 
 	/**

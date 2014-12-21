@@ -1,5 +1,7 @@
 package jannovar.annotation;
 
+// TODO(holtgrem): Use higher priority resolution internvally (e.g. 1/1000th)? This way we could remove any ambiguities.
+
 /**
  * These codes reflect the possible types of variants that we call for an exome. Note that the codes have the obvious
  * meanings, but UTR53 means a variant that is in the 3' UTR of one transcript and the 5' UTR of another transcript.

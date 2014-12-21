@@ -7,8 +7,12 @@ import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 
+// TODO(holtgrem): Mae AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
+
 /**
  * Class providing static functions for creating {@link Annotation} objects for SVs.
+ *
+ * This is currently not inheriting from {@link AnnotationBuilder} since it uses non of its functionality.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -34,6 +38,11 @@ public final class StructuralVariantAnnotationBuilder {
 		this.change = change;
 	}
 
+	/**
+	 * Build annotation for {@link #transcript} and {@link #change}
+	 *
+	 * @return {@link Annotation} for the given {@link #transcript} and {@link #change}.
+	 */
 	public Annotation build() {
 		// Obtain shortcuts.
 		GenomePosition position = change.pos.withPositionType(PositionType.ZERO_BASED);

@@ -1,21 +1,24 @@
-package jannovar.annotation;
-
-// TODO(holtgrem): Move me
+package jannovar.reference;
 
 /**
  * Converts a triple (ref string, alt string, position) into the internal Jannovar represetation.
  *
  * The longest prefix of ref and alt is removed and position is incremented by the number of removed characters.
  *
+ * This is used in the constructor {@link GenomeChange} so there is no need for using this class directly when the
+ * change is converted into a {@link GenomeChange} before processing. This class has package-visibility only because its
+ * members are visible to the outside. Rather construct a {@link GenomeChange} and use this immutable class.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class VariantDataCorrector {
+final class VariantDataCorrector {
+
 	/** The reference characters after correction. */
-	public String ref;
+	String ref;
 	/** The alt bases after correction. */
-	public String alt;
+	String alt;
 	/** The position after correction. */
-	public int position;
+	int position;
 
 	/** Initialize from triple and immediately correct. */
 	public VariantDataCorrector(String ref, String alt, int position) {

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+// TODO(holtgrem): Make interface leaner, will be part of the public interface.
+
 /**
  * Encapsulates a list of {@link Annotation} objects associated with a variant and provides some access functions that
  * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more than one Gene symbol.
@@ -16,8 +18,7 @@ import java.util.HashSet;
  * priority class by noting the class of the first annotation, and not returning any annotation of a lower priority
  * level.
  *
- * @author Peter N Robinson
- * @version 0.19 (31 December, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class AnnotationList {
 	/**

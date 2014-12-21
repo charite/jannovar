@@ -7,10 +7,11 @@ import jannovar.JannovarOptions;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
-import jannovar.annotation.VariantDataCorrector;
 import jannovar.exception.AnnotationException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 
 import java.io.BufferedWriter;
@@ -105,16 +106,18 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		int chr = boxedInt.intValue();
 
 		// FIXME(mjaeger): We should care about more than just the first alternative allele.
-		// translate from VCF ref/alt/pos to internal Jannovar representation
-		VariantDataCorrector corr = new VariantDataCorrector(vc.getReference().getBaseString(), vc
-				.getAlternateAllele(0).getBaseString(), vc.getStart());
-		String ref = corr.ref;
-		String alt = corr.alt;
-		int pos = corr.position;
+		// Get shortcuts to ref, alt, and position. Note that this is "uncorrected" data, common prefixes etc. are
+		// stripped when constructing the GenomeChange.
+		final String ref = vc.getReference().getBaseString();
+		final String alt = vc.getAlternateAllele(0).getBaseString();
+		final int pos = vc.getStart();
+		// Construct GenomeChange from this and strip common prefixes.
+		final GenomeChange change = new GenomeChange(
+				new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
-		AnnotationList anno = annotator.buildAnnotationList(chr, pos, ref, alt, PositionType.ONE_BASED);
+		AnnotationList anno = annotator.buildAnnotationList(change);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", vc.toString());
 			throw new AnnotationException(e);
@@ -126,7 +129,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			String annt = a.getVariantAnnotation();
 			String sym = a.getGeneSymbol();
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
-					chrStr, pos, ref, alt, gtype, qual);
+					chrStr, change.pos, change.ref, change.alt, gtype, qual);
 			out.write(s);
 		}
 	}

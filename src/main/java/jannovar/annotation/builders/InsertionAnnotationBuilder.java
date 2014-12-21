@@ -51,7 +51,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	Annotation build() {
+	public Annotation build() {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
 
@@ -74,7 +74,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	String ncHGVS() {
+	protected String ncHGVS() {
 		if (!so.liesInExon(change.pos))
 			return String.format("%s:%sins%s", locAnno, dnaAnno, change.alt);
 

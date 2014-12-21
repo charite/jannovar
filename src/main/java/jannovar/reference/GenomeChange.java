@@ -1,6 +1,5 @@
 package jannovar.reference;
 
-import jannovar.annotation.VariantDataCorrector;
 import jannovar.util.DNAUtils;
 import jannovar.util.Immutable;
 

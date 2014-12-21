@@ -50,11 +50,10 @@ import java.util.HashSet;
  *
  * Used for the implementation of VariantAnnotator.
  *
- * @version 0.24 (3 August, 2013)
- * @author Peter N Robinson
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
-// TODO(holtgrem): ecpose the hasNcRna etc. fields?
-public final class AnnotationCollector {
+// TODO(holtgrem): expose the hasNcRna etc. fields?
+final class AnnotationCollector {
 
 	/** List of all {@link Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;

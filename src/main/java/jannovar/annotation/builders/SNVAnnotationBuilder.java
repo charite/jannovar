@@ -36,7 +36,6 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a deletion
 	 */
-
 	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
@@ -46,7 +45,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	Annotation build() {
+	public Annotation build() {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
 
@@ -142,7 +141,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	String ncHGVS() {
+	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
 			return String.format("%s:%s%s>%s", locAnno, dnaAnno, change.ref, change.alt);
 		else

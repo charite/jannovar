@@ -1,4 +1,4 @@
-package jannovar.annotation;
+package jannovar.reference;
 
 import org.junit.Test;
 import org.testng.Assert;
