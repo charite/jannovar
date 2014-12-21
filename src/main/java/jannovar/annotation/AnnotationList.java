@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 /**
  * Encapsulates a list of {@link jannovar.annotation.Annotation Annotation} objects associated with a
- * {@link jannovar.exome.Variant Variant} and provides some access functions that summarize, sort, or display the
+ * {@link jannovar.pedigree.Variant Variant} and provides some access functions that summarize, sort, or display the
  * objects. Note that rarely, a variant annotation is made to more than one Gene symbol. In this case, we represent the
  * affected gene as a comma-separated list of symbols.
  *
@@ -23,12 +23,12 @@ import java.util.HashSet;
 public final class AnnotationList {
 	/**
 	 * A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated with a
-	 * {@link jannovar.exome.Variant Variant} object.
+	 * {@link jannovar.pedigree.Variant Variant} object.
 	 */
 	private ArrayList<Annotation> annotationList;
 
 	/**
-	 * Representative type of the {@link jannovar.exome.Variant Variant}. If the Variant has multiple
+	 * Representative type of the {@link jannovar.pedigree.Variant Variant}. If the Variant has multiple
 	 * {@link jannovar.annotation.Annotation Annotation} objects, then the Annotation most likely to be pathogenic is
 	 * taken to be its type.
 	 */

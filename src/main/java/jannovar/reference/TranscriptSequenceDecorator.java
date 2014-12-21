@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.common.Immutable;
+import jannovar.util.Immutable;
 
 // TODO(holtgrem): Test this class!
 

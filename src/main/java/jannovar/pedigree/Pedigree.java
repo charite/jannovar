@@ -1,9 +1,6 @@
 package jannovar.pedigree;
 
-import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
-import jannovar.exome.Variant;
-import jannovar.genotype.GenotypeCall;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -440,10 +437,10 @@ public class Pedigree {
 
 	/**
 	 * This function checks whether the Genotypes passed are compatible with autosomal dominant inheritance. The
-	 * {@link jannovar.genotype.GenotypeCall GenotypeCall} object passed to this function is expected to represent all
+	 * {@link jannovar.pedigree.GenotypeCall GenotypeCall} object passed to this function is expected to represent all
 	 * of the variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). For
 	 * autosomal dominant inheritance, there must be at least one Variant that is shared by all affected persons but no
-	 * unaffected persons in the pedigree. The samples represented by the {@link jannovar.genotype.GenotypeCall
+	 * unaffected persons in the pedigree. The samples represented by the {@link jannovar.pedigree.GenotypeCall
 	 * GenotypeCall} must be in the same order as the list of Persons contained in this pedigree.
 	 *
 	 * @param varList

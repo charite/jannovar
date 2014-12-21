@@ -1,8 +1,8 @@
 package jannovar.reference;
 
-import jannovar.common.Immutable;
 import jannovar.exception.InvalidCoordinateException;
 import jannovar.io.ReferenceDictionary;
+import jannovar.util.Immutable;
 
 import java.io.Serializable;
 

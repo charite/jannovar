@@ -1,9 +1,6 @@
 package jannovar.pedigree;
 
-import jannovar.common.Genotype;
 import jannovar.exception.PedParseException;
-import jannovar.exome.Variant;
-import jannovar.genotype.GenotypeCall;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.HG19RefDictBuilder;
 

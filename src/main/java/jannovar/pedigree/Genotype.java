@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.pedigree;
 
 /**
  * These codes will be used to denote the genotype of a Variant identified in a line of a VCF file in an individual

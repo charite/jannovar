@@ -1,6 +1,6 @@
 package jannovar.parse.gff;
 
-import jannovar.common.Immutable;
+import jannovar.util.Immutable;
 
 /**
  * Wraps information about the version of a GFF/GTF file and allows to query format specific values.

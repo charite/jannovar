@@ -1,7 +1,7 @@
 package jannovar.reference;
 
-import jannovar.common.Immutable;
 import jannovar.exception.ProjectionException;
+import jannovar.util.Immutable;
 
 /**
  * Helper class that allows easy building of HGVS position strings.

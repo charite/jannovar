@@ -1,11 +1,9 @@
-package jannovar.exome;
+package jannovar.pedigree;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantType;
-import jannovar.common.Genotype;
 import jannovar.exception.AnnotationException;
-import jannovar.genotype.GenotypeCall;
 import jannovar.io.ReferenceDictionary;
 
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ public class Variant implements Comparable<Variant> {
 	/** The INFO column from VCF file */
 	private String info;
 	/**
-	 * The genotype of this variant (note that {@link jannovar.genotype.GenotypeCall GenotypeCall} objects can hold a
+	 * The genotype of this variant (note that {@link jannovar.pedigree.GenotypeCall GenotypeCall} objects can hold a
 	 * single genotype for single-sample VCF files or multiple genotypes for for VCF files with multiple samples.
 	 */
 	private GenotypeCall genotype = null;
@@ -387,7 +385,7 @@ public class Variant implements Comparable<Variant> {
 	}
 
 	/**
-	 * @return the {@link jannovar.genotype.GenotypeCall GenotypeCall} object corresponding to this variant.
+	 * @return the {@link jannovar.pedigree.GenotypeCall GenotypeCall} object corresponding to this variant.
 	 */
 	public GenotypeCall getGenotype() {
 		return this.genotype;
@@ -397,7 +395,7 @@ public class Variant implements Comparable<Variant> {
 	 * The Genotype coresponds to one of HOMOZYGOUS_REF (0/0), HOMOZYGOUS_ALT (1/1), HETEROZYGOUS (0/1), NOT_OBSERVED
 	 * (./.), ERROR, UNINITIALIZED.
 	 *
-	 * @return the {@link jannovar.common.Genotype Genotype} object corresponding to this variant.
+	 * @return the {@link jannovar.pedigree.Genotype Genotype} object corresponding to this variant.
 	 */
 	public Genotype getGenotypeInIndividualN(int n) {
 		return this.genotype.getGenotypeInIndividualN(n);
@@ -411,7 +409,7 @@ public class Variant implements Comparable<Variant> {
 	}
 
 	/**
-	 * This function uses the function of the same name of the the {@link jannovar.genotype.GenotypeCall GenotypeCall}
+	 * This function uses the function of the same name of the the {@link jannovar.pedigree.GenotypeCall GenotypeCall}
 	 * object corresponding to this variant.
 	 *
 	 * @return A list of genotype calls, e.g., "0/0","0/1","1/1"

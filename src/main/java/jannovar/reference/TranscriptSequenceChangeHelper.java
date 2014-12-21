@@ -1,7 +1,7 @@
 package jannovar.reference;
 
-import jannovar.common.Immutable;
 import jannovar.exception.ProjectionException;
+import jannovar.util.Immutable;
 
 /**
  * Helper class for getting updated transcript sequence for deletions and block substitutions.

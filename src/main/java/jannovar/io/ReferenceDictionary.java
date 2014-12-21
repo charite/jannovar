@@ -1,6 +1,6 @@
 package jannovar.io;
 
-import jannovar.common.Immutable;
+import jannovar.util.Immutable;
 
 import java.io.Serializable;
 import java.util.Map.Entry;

@@ -1,4 +1,4 @@
-package jannovar.common;
+package jannovar.util;
 
 /**
  * Annotation for marking a class as immutable.

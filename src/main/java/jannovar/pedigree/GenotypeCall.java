@@ -1,6 +1,4 @@
-package jannovar.genotype;
-
-import jannovar.common.Genotype;
+package jannovar.pedigree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,7 +22,7 @@ public class GenotypeCall  {
 
 
     /**
-     * List of genotype calls (See {@link jannovar.common.Genotype Genotype})
+     * List of genotype calls (See {@link jannovar.pedigree.Genotype Genotype})
      * for one variant.
      */
     private ArrayList<Genotype> callList = null;

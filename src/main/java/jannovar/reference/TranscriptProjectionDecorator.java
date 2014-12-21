@@ -1,7 +1,7 @@
 package jannovar.reference;
 
-import jannovar.common.Immutable;
 import jannovar.exception.ProjectionException;
+import jannovar.util.Immutable;
 
 /**
  * Wraps a {@link TranscriptInfo} object and allow the coordinate conversion.

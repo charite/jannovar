@@ -1,7 +1,7 @@
 package jannovar.io;
 
-import jannovar.common.Immutable;
 import jannovar.reference.TranscriptInfo;
+import jannovar.util.Immutable;
 
 import java.io.Serializable;
 

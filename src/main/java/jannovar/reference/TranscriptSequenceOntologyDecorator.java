@@ -1,7 +1,7 @@
 package jannovar.reference;
 
-import jannovar.common.Immutable;
 import jannovar.exception.ProjectionException;
+import jannovar.util.Immutable;
 
 /**
  * Functionality for finding out about certain points/regions of {@link TranscriptInfo} using <b>genomic</b> positions.

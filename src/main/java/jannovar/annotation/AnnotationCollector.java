@@ -9,8 +9,8 @@ import java.util.HashSet;
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
  * a given variant. The {@link jannovar.reference.Chromosome Chromosome} objects each use an instance of this class to
- * assemble a list of {@link jannovar.annotation.Annotation Annotation} objects for each {@link jannovar.exome.Variant
- * Variant}. Each {@link jannovar.exome.Variant Variant} should receive at least one
+ * assemble a list of {@link jannovar.annotation.Annotation Annotation} objects for each {@link jannovar.pedigree.Variant
+ * Variant}. Each {@link jannovar.pedigree.Variant Variant} should receive at least one
  * {@link jannovar.annotation.Annotation Annotation}, but variants that affect multiple transcripts will have multiple
  * annotations.
  *
@@ -158,7 +158,7 @@ public final class AnnotationCollector {
 
 	/**
 	 * Note that this function is used by {@link jannovar.reference.Chromosome Chromosome} during the construction of an
-	 * {@link jannovar.annotation.AnnotationList AnnotationList} for a given {@link jannovar.exome.Variant Variant}.
+	 * {@link jannovar.annotation.AnnotationList AnnotationList} for a given {@link jannovar.pedigree.Variant Variant}.
 	 *
 	 * @return true if there are currently no annotations.
 	 */
