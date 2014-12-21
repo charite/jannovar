@@ -1,7 +1,7 @@
 package jannovar.reference;
 
-import jannovar.interval.Interval;
-import jannovar.interval.IntervalTree;
+import jannovar.impl.interval.Interval;
+import jannovar.impl.interval.IntervalTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;

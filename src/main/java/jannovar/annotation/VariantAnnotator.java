@@ -4,7 +4,7 @@ import jannovar.annotation.builders.AnnotationBuilderDispatcher;
 import jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
 import jannovar.exception.AnnotationException;
 import jannovar.exception.InvalidGenomeChange;
-import jannovar.interval.IntervalTree;
+import jannovar.impl.interval.IntervalTree;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 import jannovar.reference.GenomeChange;
@@ -16,7 +16,7 @@ import jannovar.reference.TranscriptInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-// TODO(holtgrem): We should directly passin a JannovarData object after adding the interval trees to it. Then, this should be fine.
+// TODO(holtgrem): We should directly pass in a JannovarData object after adding the interval trees to it. Then, this should be fine.
 
 /**
  * Main driver class for annotating variants.

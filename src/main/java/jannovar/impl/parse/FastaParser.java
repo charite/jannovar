@@ -1,4 +1,4 @@
-package jannovar.parse;
+package jannovar.impl.parse;
 
 import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.util.ProgressBar;

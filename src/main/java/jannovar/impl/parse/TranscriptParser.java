@@ -1,4 +1,4 @@
-package jannovar.parse;
+package jannovar.impl.parse;
 
 import jannovar.exception.TranscriptParseException;
 import jannovar.reference.TranscriptInfo;

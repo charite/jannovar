@@ -1,4 +1,4 @@
-package jannovar.parse.gff;
+package jannovar.impl.parse.gff;
 
 import java.util.HashMap;
 

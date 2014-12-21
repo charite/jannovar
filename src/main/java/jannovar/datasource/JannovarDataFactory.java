@@ -4,9 +4,9 @@ import jannovar.JannovarOptions;
 import jannovar.exception.FileDownloadException;
 import jannovar.exception.InvalidDataSourceException;
 import jannovar.exception.TranscriptParseException;
+import jannovar.impl.parse.ReferenceDictParser;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
-import jannovar.parse.ReferenceDictParser;
 import jannovar.reference.TranscriptInfo;
 import jannovar.util.PathUtil;
 

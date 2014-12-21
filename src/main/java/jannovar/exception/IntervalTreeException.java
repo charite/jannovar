@@ -3,9 +3,9 @@ package jannovar.exception;
 /**
  * IntervalTree exceptions are thrown if there is an error during the construction of the IntervalTree.
  *
- * @see jannovar.interval.IntervalTree
- * @see jannovar.interval.Node
- * @see jannovar.interval.Interval
+ * @see jannovar.impl.interval.IntervalTree
+ * @see jannovar.impl.interval.Node
+ * @see jannovar.impl.interval.Interval
  * @author Peter Robinson
  * @version 0.02 (April 28, 2013)
  */

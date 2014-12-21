@@ -1,7 +1,5 @@
 package jannovar.io;
 
-import jannovar.exception.SerializationException;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

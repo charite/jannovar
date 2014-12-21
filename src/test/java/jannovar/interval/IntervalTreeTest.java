@@ -1,6 +1,8 @@
 package jannovar.interval;
 
 import jannovar.exception.IntervalTreeException;
+import jannovar.impl.interval.Interval;
+import jannovar.impl.interval.IntervalTree;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -2,9 +2,9 @@ package jannovar.datasource;
 
 import jannovar.JannovarOptions;
 import jannovar.exception.TranscriptParseException;
+import jannovar.impl.parse.EnsemblParser;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
-import jannovar.parse.EnsemblParser;
 import jannovar.reference.TranscriptInfo;
 
 import org.ini4j.Profile.Section;

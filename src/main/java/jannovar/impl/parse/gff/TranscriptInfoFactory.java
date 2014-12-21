@@ -1,12 +1,12 @@
 /**
  *
  */
-package jannovar.parse.gff;
+package jannovar.impl.parse.gff;
 
 import jannovar.exception.InvalidAttributException;
+import jannovar.impl.parse.gff.FeatureProcessor.Gene;
+import jannovar.impl.parse.gff.FeatureProcessor.Transcript;
 import jannovar.io.ReferenceDictionary;
-import jannovar.parse.gff.FeatureProcessor.Gene;
-import jannovar.parse.gff.FeatureProcessor.Transcript;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfoBuilder;

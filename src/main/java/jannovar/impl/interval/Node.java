@@ -1,4 +1,4 @@
-package jannovar.interval;
+package jannovar.impl.interval;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Implements the Node structure of the interval tree. The class is intended to store {@link jannovar.interval.Interval
+ * Implements the Node structure of the interval tree. The class is intended to store {@link jannovar.impl.interval.Interval
  * Interval} objects. Each node stores all Intervals that intersect with the {@link #median}. The {@link #leftNode}
  * stores all Intervals that are completely to the left of {@link #median}, and the {@link #rightNode} stores all
  * intervals that are completely to the right. Additionally there are two lists that store orders lists of the Intevals
@@ -17,7 +17,7 @@ import java.util.List;
  * any point.
  *
  * @param <T>
- * @see jannovar.interval.IntervalTree
+ * @see jannovar.impl.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
  * @version 0.08 (9 January, 2014)
  */

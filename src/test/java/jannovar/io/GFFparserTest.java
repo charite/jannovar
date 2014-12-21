@@ -1,9 +1,9 @@
 package jannovar.io;
 
-import jannovar.parse.gff.Feature;
-import jannovar.parse.gff.FeatureType;
-import jannovar.parse.gff.GFFParser;
-import jannovar.parse.gff.GFFVersion;
+import jannovar.impl.parse.gff.Feature;
+import jannovar.impl.parse.gff.FeatureType;
+import jannovar.impl.parse.gff.GFFParser;
+import jannovar.impl.parse.gff.GFFVersion;
 
 import java.io.File;
 import java.io.FileOutputStream;

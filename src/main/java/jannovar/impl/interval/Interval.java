@@ -1,10 +1,10 @@
-package jannovar.interval;
+package jannovar.impl.interval;
 
 /**
  * This class implements an interval on a numberline with a lowpoint and a highpoint (where lowpoint <= highpoint). The
  * Interval is intended to contain some other kind of data (clients of this templated class will need to initialize the
  * template variable T to the corresponding datatype). The intervals are intended to be used with the
- * {@link jannovar.interval.IntervalTree IntervallTree}.
+ * {@link jannovar.impl.interval.IntervalTree IntervallTree}.
  *
  * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
  * any point.

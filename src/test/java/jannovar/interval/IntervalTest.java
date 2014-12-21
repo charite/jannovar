@@ -5,11 +5,9 @@ package jannovar.interval;
 import java.util.Collections;
 import java.util.ArrayList;
 
-
-import jannovar.interval.Interval;
-import jannovar.interval.LeftComparator;
-import jannovar.interval.RightComparator;
-
+import jannovar.impl.interval.Interval;
+import jannovar.impl.interval.LeftComparator;
+import jannovar.impl.interval.RightComparator;
 import jannovar.exception.IntervalTreeException;
 
 import org.junit.Test;

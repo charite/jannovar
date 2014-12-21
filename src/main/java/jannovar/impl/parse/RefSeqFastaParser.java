@@ -1,4 +1,7 @@
-package jannovar.parse;
+/**
+ *
+ */
+package jannovar.impl.parse;
 
 import jannovar.reference.TranscriptInfoBuilder;
 
@@ -12,18 +15,31 @@ import java.util.ArrayList;
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  */
-public final class EnsemblFastaParser extends FastaParser {
+public final class RefSeqFastaParser extends FastaParser {
 
 	private String[] fields;
 
-	public EnsemblFastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
+	/**
+	 * Constructor for FASTA parser from RefSeq.
+	 *
+	 * @param filename
+	 *            path to the FASTA file
+	 * @param models
+	 *            the {@link TranscriptModel}s w/o sequence information
+	 */
+	public RefSeqFastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
 		super(filename, models);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see jannovar.io.FastaParser#processHeader(java.lang.String)
+	 */
 	@Override
 	protected String processHeader(String header) {
-		header = header.substring(1);
-		fields = header.split(" ");
-		return fields[0];
+		fields = header.split("\\|");
+		return fields[3];
 	}
+
 }

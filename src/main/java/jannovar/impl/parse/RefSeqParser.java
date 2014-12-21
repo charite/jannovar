@@ -1,11 +1,11 @@
-package jannovar.parse;
+package jannovar.impl.parse;
 
 import jannovar.exception.InvalidAttributException;
 import jannovar.exception.TranscriptParseException;
+import jannovar.impl.parse.gff.FeatureProcessor;
+import jannovar.impl.parse.gff.GFFParser;
+import jannovar.impl.parse.gff.TranscriptInfoFactory;
 import jannovar.io.ReferenceDictionary;
-import jannovar.parse.gff.FeatureProcessor;
-import jannovar.parse.gff.GFFParser;
-import jannovar.parse.gff.TranscriptInfoFactory;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptInfoBuilder;
 import jannovar.util.PathUtil;
@@ -21,13 +21,13 @@ import org.ini4j.Profile.Section;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Class for orchestrating the parsing of Ensembl data.
+ * Class for orchestrating the parsing of RefSeq data.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class EnsemblParser implements TranscriptParser {
+public class RefSeqParser implements TranscriptParser {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
@@ -49,7 +49,7 @@ public class EnsemblParser implements TranscriptParser {
 	 * @param iniSection
 	 *            INI {@link Section} for the configuration
 	 */
-	public EnsemblParser(ReferenceDictionary refDict, String basePath, Section iniSection) {
+	public RefSeqParser(ReferenceDictionary refDict, String basePath, Section iniSection) {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
@@ -57,13 +57,13 @@ public class EnsemblParser implements TranscriptParser {
 
 	@Override
 	public ImmutableList<TranscriptInfo> run() throws TranscriptParseException {
-		// Parse GTF file, yielding a list of features.
-		System.err.println("Parsing GTF...");
+		// Parse GFF file, yielding a list of features.
+		System.err.println("Parsing GFF...");
 		GFFParser gffParser;
 		try {
-			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gtf")));
+			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gff")));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load GTF data from Ensembl files: {0}", e.getMessage());
+			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -75,22 +75,23 @@ public class EnsemblParser implements TranscriptParser {
 		try {
 			System.err.println("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
-			builders = tif.buildTranscripts(fp.getGenes());
+			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
 		} catch (InvalidAttributException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
 		// Load sequences.
-		System.err.println("Parsing FASTA...");
-		EnsemblFastaParser efp = new EnsemblFastaParser(PathUtil.join(basePath, getINIFileName("cdna")), builders);
+		String refSeqPath = PathUtil.join(basePath, getINIFileName("rna"));
+		System.err.println("path " + refSeqPath);
+		FastaParser efp = new RefSeqFastaParser(refSeqPath, builders);
 		int before = builders.size();
 		builders = efp.parse();
 		int after = builders.size();
 
 		// Log success and statistics.
-		Object params[] = { before, after };
-		LOGGER.log(Level.INFO, "Found {0} transcript models from Ensembl GFF resource, {1} of which had sequences",
+		Object params[] = { before, (onlyCurated() ? "curated " : ""), after };
+		LOGGER.log(Level.INFO, "Found {0} {1} transcript models from Refseq GFF resource, {2} of which had sequences.",
 				params);
 
 		// Create final list of TranscriptInfos.
@@ -98,6 +99,21 @@ public class EnsemblParser implements TranscriptParser {
 		for (TranscriptInfoBuilder builder : builders)
 			result.add(builder.build());
 		return result.build();
+	}
+
+	/**
+	 * @return <code>true</code> if only curated entries are to be returned
+	 */
+	private boolean onlyCurated() {
+		String value = iniSection.fetch("onlyCurated");
+		if (value == null)
+			return false;
+		value = value.toLowerCase();
+		ImmutableList<String> list = ImmutableList.of("true", "1", "yes");
+		for (String s : list)
+			if (s.equals(value))
+				return true;
+		return false;
 	}
 
 	/**
