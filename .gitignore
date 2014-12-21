@@ -11,7 +11,7 @@ cov-int*
 # Maven stuff
 *.iml
 # download directory
-data*
+/data*
 # any inline-generated VCF/Jannovar files
 *.jannovar
 *.vcf
