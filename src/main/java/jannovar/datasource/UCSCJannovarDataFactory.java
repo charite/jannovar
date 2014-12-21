@@ -17,9 +17,6 @@ import com.google.common.collect.ImmutableList;
  */
 class UCSCJannovarDataFactory extends JannovarDataFactory {
 
-	/** configuration section from INI file */
-	private final Section iniSection;
-
 	/**
 	 * Construct the factory with the given {@link UCSCDataSource}.
 	 *
@@ -29,8 +26,7 @@ class UCSCJannovarDataFactory extends JannovarDataFactory {
 	 *            {@link Section} with configuration from INI file
 	 */
 	public UCSCJannovarDataFactory(UCSCDataSource dataSource, Section iniSection) {
-		super(dataSource);
-		this.iniSection = iniSection;
+		super(dataSource, iniSection);
 	}
 
 	@Override

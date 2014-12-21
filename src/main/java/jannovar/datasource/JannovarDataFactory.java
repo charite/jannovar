@@ -13,6 +13,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.ini4j.Profile.Section;
+
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -25,14 +27,20 @@ public abstract class JannovarDataFactory {
 	/** the {@link DataSource} to use */
 	private final DataSource dataSource;
 
+	/** configuration section from INI file */
+	protected final Section iniSection;
+
 	/**
 	 * Construct the factory with the given {@link DataSource}.
 	 *
 	 * @param dataSource
 	 *            the data source to use.
+	 * @param iniSection
+	 *            {@link Section} with configuration from INI file
 	 */
-	public JannovarDataFactory(DataSource dataSource) {
+	public JannovarDataFactory(DataSource dataSource, Section iniSection) {
 		this.dataSource = dataSource;
+		this.iniSection = iniSection;
 	}
 
 	/**
@@ -70,7 +78,7 @@ public abstract class JannovarDataFactory {
 				dataSource.getFileName("chromInfo"));
 		final String chrToAccessionsPath = PathUtil.join(downloadDir, dataSource.getName(),
 				dataSource.getFileName("chrToAccessions"));
-		ReferenceDictParser dictParser = new ReferenceDictParser(chromInfoPath, chrToAccessionsPath);
+		ReferenceDictParser dictParser = new ReferenceDictParser(chromInfoPath, chrToAccessionsPath, iniSection);
 		ReferenceDictionary refDict = dictParser.parse();
 		refDict.print();
 

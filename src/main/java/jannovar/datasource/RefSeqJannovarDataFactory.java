@@ -17,9 +17,6 @@ import com.google.common.collect.ImmutableList;
  */
 class RefSeqJannovarDataFactory extends JannovarDataFactory {
 
-	/** configuration section from INI file */
-	private final Section iniSection;
-
 	/**
 	 * Construct the factory with the given {@link RefSeqDataSource}.
 	 *
@@ -29,8 +26,7 @@ class RefSeqJannovarDataFactory extends JannovarDataFactory {
 	 *            {@link Section} with configuration from INI file
 	 */
 	public RefSeqJannovarDataFactory(RefSeqDataSource dataSource, Section iniSection) {
-		super(dataSource);
-		this.iniSection = iniSection;
+		super(dataSource, iniSection);
 	}
 
 	@Override

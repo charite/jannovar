@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
+import org.ini4j.Profile.Section;
+
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -25,9 +27,10 @@ public final class ReferenceDictParser {
 
 	/** path to the chromInfo.txt.gz file */
 	private final String chromInfoPath;
-
 	/** path to the "chr_accessions_*" file */
 	private final String chrAccessionsPath;
+	/** INI section with configuration */
+	private final Section iniSection;
 
 	/**
 	 * Initialize the parser with the paths to the file to parse.
@@ -36,10 +39,13 @@ public final class ReferenceDictParser {
 	 *            path to knownGene.txt.gz file.
 	 * @param chrAccessionsPath
 	 *            path to "chr_accessions_*" file.
+	 * @param iniSection
+	 *            {@link Section} with configuration from INI file
 	 */
-	public ReferenceDictParser(String chromInfoPath, String chrAccessionsPath) {
+	public ReferenceDictParser(String chromInfoPath, String chrAccessionsPath, Section iniSection) {
 		this.chromInfoPath = chromInfoPath;
 		this.chrAccessionsPath = chrAccessionsPath;
+		this.iniSection = iniSection;
 	}
 
 	/**
@@ -67,19 +73,24 @@ public final class ReferenceDictParser {
 			chrID += 1;
 		}
 
+		// Add aliases from INI file.
+		String[] aliases = iniSection.fetchAll("alias", String[].class);
+		if (aliases != null)
+			for (int i = 0; i < aliases.length; ++i) {
+				String[] fields = aliases[i].split(",");
+				if (fields != null)
+					for (int j = 1; j < fields.length; ++j)
+						builder.putContigID(fields[j], builder.getContigID(fields[0]));
+			}
+
 		// Process chromosome info file.
 		ImmutableList<ImmutableList<String>> chromInfoLines = loadTSVFile(chromInfoPath);
 		final int CI_CHROMOSOME = 0;
 		final int CI_LENGTH = 1;
-		boolean seenUnknown = false;
 		for (ImmutableList<String> line : chromInfoLines) {
 			Integer theID = builder.getContigID(line.get(CI_CHROMOSOME));
-			if (theID == null) {
-				seenUnknown = true;
+			if (theID == null)
 				continue; // unknown
-			} else if (seenUnknown) {
-				System.err.println("WARNING: Seeing known chromosome after unknonwn in chromInfo file");
-			}
 			builder.putContigLength(theID.intValue(), Integer.parseInt(line.get(CI_LENGTH)));
 		}
 

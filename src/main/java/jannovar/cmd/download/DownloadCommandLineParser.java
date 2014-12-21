@@ -88,8 +88,9 @@ public final class DownloadCommandLineParser {
 		// Get data source (INI) file paths.
 		ImmutableList.Builder<String> dsfBuilder = new ImmutableList.Builder<String>();
 		String[] dataSourceLists = cmd.getOptionValues("data-source-list");
-		for (int i = 0; i < dataSourceLists.length; ++i)
-			dsfBuilder.add(dataSourceLists[i]);
+		if (dataSourceLists != null)
+			for (int i = 0; i < dataSourceLists.length; ++i)
+				dsfBuilder.add(dataSourceLists[i]);
 		dsfBuilder.add("bundle:///default_sources.ini");
 		result.dataSourceFiles = dsfBuilder.build();
 
