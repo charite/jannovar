@@ -1,6 +1,7 @@
 package jannovar.annotation;
 
 import jannovar.exception.AnnotationException;
+import jannovar.reference.Chromosome;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,15 +10,12 @@ import java.util.HashSet;
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
  * a given variant. The {@link jannovar.reference.Chromosome Chromosome} objects each use an instance of this class to
- * assemble a list of {@link jannovar.annotation.Annotation Annotation} objects for each {@link jannovar.pedigree.Variant
- * Variant}. Each {@link jannovar.pedigree.Variant Variant} should receive at least one
- * {@link jannovar.annotation.Annotation Annotation}, but variants that affect multiple transcripts will have multiple
- * annotations.
+ * assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least one
+ * {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
  * This class creates one {@link jannovar.annotation.AnnotationList AnnotationList} object for each variant (with one or
- * more {@link jannovar.annotation.Annotation Annotation} objects), that can return both an ArrayList of all
- * annotations, a list of all annotations of the highest priority level for the variant, and a single representative
- * Annotation.
+ * more {@link Annotation} objects), that can return both an ArrayList of all annotations, a list of all annotations of
+ * the highest priority level for the variant, and a single representative Annotation.
  *
  * The default preference for annotations is thus
  *
@@ -40,12 +38,11 @@ import java.util.HashSet;
  * "obvious candidates" for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
  *
  * One object of this class is created for each variant we want to annotate. The {@link jannovar.reference.Chromosome
- * Chromosome} class goes through a list of genes in the vicinity of the variant and adds one
- * {@link jannovar.annotation.Annotation Annotation} object for each gene. These are essentially candidates for the
- * actual correct annotation of the variant, but we can only decide what the correct annotation is once we have seen
- * enough candidates. Therefore, once we have gone through the candidates, this class decides what the best annotation
- * is and returns the corresponding {@link jannovar.annotation.Annotation Annotation} object (in some cases, this class
- * may modify the {@link jannovar.annotation.Annotation Annotation} object before returning it).
+ * Chromosome} class goes through a list of genes in the vicinity of the variant and adds one {@link Annotation} object
+ * for each gene. These are essentially candidates for the actual correct annotation of the variant, but we can only
+ * decide what the correct annotation is once we have seen enough candidates. Therefore, once we have gone through the
+ * candidates, this class decides what the best annotation is and returns the corresponding {@link Annotation} object
+ * (in some cases, this class may modify the {@link Annotation} object before returning it).
  *
  * For each class of Variant, there is a function that returns a single {@link jannovar.annotation.Annotation
  * Annotation} object. These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the
@@ -59,7 +56,7 @@ import java.util.HashSet;
 // TODO(holtgrem): ecpose the hasNcRna etc. fields?
 public final class AnnotationCollector {
 
-	/** List of all {@link jannovar.annotation.Annotation Annotation} objects found for exonic variation. */
+	/** List of all {@link Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;
 
 	/**
@@ -114,8 +111,8 @@ public final class AnnotationCollector {
 	private int annotationCount;
 
 	/**
-	 * The constructor initializes an ArrayList of {@link jannovar.annotation.Annotation Annotation} objects as well as
-	 * a HashSet of Gene symbols (Strings).
+	 * The constructor initializes an ArrayList of {@link Annotation} objects as well as a HashSet of Gene symbols
+	 * (Strings).
 	 *
 	 * @param initialCapacity
 	 *            The initial capacity of the arraylist and hashset.
@@ -150,15 +147,15 @@ public final class AnnotationCollector {
 	}
 
 	/**
-	 * @return The number of {@link jannovar.annotation.Annotation Annotation} objects for the current variant.
+	 * @return The number of {@link Annotation} objects for the current variant.
 	 */
 	public int getAnnotationCount() {
 		return this.annotationCount;
 	}
 
 	/**
-	 * Note that this function is used by {@link jannovar.reference.Chromosome Chromosome} during the construction of an
-	 * {@link jannovar.annotation.AnnotationList AnnotationList} for a given {@link jannovar.pedigree.Variant Variant}.
+	 * Note that this function is used by {@link Chromosome} during the construction of an {@link AnnotationList} for a
+	 * given variant.
 	 *
 	 * @return true if there are currently no annotations.
 	 */
