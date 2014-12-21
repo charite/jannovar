@@ -70,9 +70,13 @@ public final class JannovarOptions {
 		ENSEMBL, REFSEQ, REFSEQ_CURATED, UCSC
 	}
 
-	void print() {
+	/**
+	 * Print option values to stderr.
+	 */
+	public void print() {
 		if (command == Command.DOWNLOAD) {
-			System.err.println("dataSourceName: " + dataSourceNames);
+			System.err.println("dataSourceFiles: " + dataSourceFiles);
+			System.err.println("dataSourceNames: " + dataSourceNames);
 			System.err.println("downloadPath" + downloadPath);
 			System.err.println("proxy: " + proxy);
 		} else if (command == Command.ANNOTATE_VCF) {

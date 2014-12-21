@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
@@ -38,12 +38,18 @@ public final class DownloadCommandLineParser {
 	/**
 	 * Initialize {@link #parser} and {@link #options}.
 	 */
+	@SuppressWarnings("static-access")
+	// OptionBuilder causes this warning.
 	private void initializeParser() {
 		options = new Options();
-		options.addOption(new Option("h", "help", false, "show this help"));
-		options.addOption(new Option("d", "data-dir", true,
-				"target folder for downloaded and serialized files, defaults to \"data\""));
-		options.addOption(new Option(null, "proxy", true, "proxy to use for download as <HOST>:<PORT>"));
+		options.addOption(OptionBuilder.withDescription("show this help").withLongOpt("help").create("h"));
+		options.addOption(OptionBuilder.withDescription("INI file with data source list").hasArgs(1)
+				.withLongOpt("data-source-list").create("s"));
+		options.addOption(OptionBuilder
+				.withDescription("target folder for downloaded and serialized files, defaults to \"data\"").hasArgs(1)
+				.withLongOpt("data-dir").create("d"));
+		options.addOption(OptionBuilder.withDescription("proxy to use for download as \"<HOST>:<PORT>\"").hasArgs(1)
+				.withLongOpt("proxy").withArgName("proxy").create());
 
 		parser = new GnuParser();
 	}
@@ -60,6 +66,7 @@ public final class DownloadCommandLineParser {
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
+		result.command = JannovarOptions.Command.DOWNLOAD;
 
 		if (cmd.hasOption("help")) {
 			printHelp();
@@ -79,8 +86,10 @@ public final class DownloadCommandLineParser {
 		result.dataSourceNames = dsBuilder.build();
 
 		// Get data source (INI) file paths.
-		// TODO(holtgrem): Allow specifying more files here.
 		ImmutableList.Builder<String> dsfBuilder = new ImmutableList.Builder<String>();
+		String[] dataSourceLists = cmd.getOptionValues("data-source-list");
+		for (int i = 0; i < dataSourceLists.length; ++i)
+			dsfBuilder.add(dataSourceLists[i]);
 		dsfBuilder.add("bundle:///default_sources.ini");
 		result.dataSourceFiles = dsfBuilder.build();
 

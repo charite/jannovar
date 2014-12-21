@@ -1,6 +1,6 @@
 package jannovar.parse;
 
-import jannovar.exception.KGParseException;
+import jannovar.exception.TranscriptParseException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.io.ReferenceDictionaryBuilder;
 
@@ -46,10 +46,10 @@ public final class ReferenceDictParser {
 	 * Load accessions and chromInfo file and return resulting ReferenceDictionary.
 	 *
 	 * @return resulting {@link ReferenceDictionary}
-	 * @throws KGParseException
+	 * @throws TranscriptParseException
 	 *             on problems loading or parsing data
 	 */
-	public ReferenceDictionary parse() throws KGParseException {
+	public ReferenceDictionary parse() throws TranscriptParseException {
 		ReferenceDictionaryBuilder builder = new ReferenceDictionaryBuilder();
 
 		// Process accessions file.
@@ -92,10 +92,10 @@ public final class ReferenceDictParser {
 	 * @param path
 	 *            path to the TSV file to load.
 	 * @return the contents of <code>path</code>, split into lists of strings.
-	 * @throws KGParseException
+	 * @throws TranscriptParseException
 	 *             on problems parsing the data
 	 */
-	private ImmutableList<ImmutableList<String>> loadTSVFile(String path) throws KGParseException {
+	private ImmutableList<ImmutableList<String>> loadTSVFile(String path) throws TranscriptParseException {
 		ImmutableList.Builder<ImmutableList<String>> result = new ImmutableList.Builder<ImmutableList<String>>();
 		String line;
 
@@ -107,7 +107,7 @@ public final class ReferenceDictParser {
 				result.add(ImmutableList.copyOf(line.split("\t")));
 			}
 		} catch (IOException e) {
-			throw new KGParseException("Problem reading TSV file: " + e.getMessage());
+			throw new TranscriptParseException("Problem reading TSV file: " + e.getMessage());
 		}
 
 		return result.build();

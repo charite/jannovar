@@ -24,6 +24,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
+		result.command = JannovarOptions.Command.ANNOTATE_VCF;
 
 		if (cmd.hasOption("help")) {
 			printHelp();

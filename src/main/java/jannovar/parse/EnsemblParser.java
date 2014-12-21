@@ -1,7 +1,7 @@
 package jannovar.parse;
 
 import jannovar.exception.InvalidAttributException;
-import jannovar.exception.KGParseException;
+import jannovar.exception.TranscriptParseException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.parse.gff.FeatureProcessor;
 import jannovar.parse.gff.GFFParser;
@@ -56,7 +56,7 @@ public class EnsemblParser implements TranscriptParser {
 	}
 
 	@Override
-	public ImmutableList<TranscriptInfo> run() throws KGParseException {
+	public ImmutableList<TranscriptInfo> run() throws TranscriptParseException {
 		// Parse GTF file, yielding a list of features.
 		System.err.println("Parsing GTF...");
 		GFFParser gffParser;
@@ -64,7 +64,7 @@ public class EnsemblParser implements TranscriptParser {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gtf")));
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load GTF data from Ensembl files: {0}", e.getMessage());
-			throw new KGParseException(e.getMessage());
+			throw new TranscriptParseException(e.getMessage());
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
@@ -78,7 +78,7 @@ public class EnsemblParser implements TranscriptParser {
 			builders = tif.buildTranscripts(fp.getGenes());
 		} catch (InvalidAttributException e) {
 			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
-			throw new KGParseException(e.getMessage());
+			throw new TranscriptParseException(e.getMessage());
 		}
 
 		// Load sequences.

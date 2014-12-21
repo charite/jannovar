@@ -1,6 +1,6 @@
 package jannovar.parse;
 
-import jannovar.exception.KGParseException;
+import jannovar.exception.TranscriptParseException;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
@@ -101,7 +101,7 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	@Override
-	public ImmutableList<TranscriptInfo> run() throws KGParseException {
+	public ImmutableList<TranscriptInfo> run() throws TranscriptParseException {
 		// Build paths to UCSC files.
 		String knownGenePath = PathUtil.join(basePath, getINIFileName("knownGene"));
 		String knownGeneMrnaPath = PathUtil.join(basePath, getINIFileName("knownGeneMrna"));
@@ -150,28 +150,28 @@ public class UCSCParser implements TranscriptParser {
 	 * @param line
 	 *            A single line of the UCSC knownGene.txt file
 	 * @return {@link TranscriptInfoBuilder} representing the line
-	 * @throws KGParseException
+	 * @throws TranscriptParseException
 	 *             on problems parsing the data
 	 */
-	public TranscriptInfoBuilder parseTranscriptModelFromLine(String line) throws KGParseException {
+	public TranscriptInfoBuilder parseTranscriptModelFromLine(String line) throws TranscriptParseException {
 		TranscriptInfoBuilder tib = new TranscriptInfoBuilder();
 		String A[] = line.split("\t");
 		if (A.length != NFIELDS) {
 			String error = String.format(
 					"Malformed line in UCSC knownGene.txt file:\n%s\nExpected %d fields but there were %d", line,
 					NFIELDS, A.length);
-			throw new KGParseException(error);
+			throw new TranscriptParseException(error);
 		}
 		/* Field 0 has the accession number, e.g., uc010nxr.1. */
 		tib.setAccession(A[0]);
 		tib.setGeneSymbol(tib.getAccession()); // will be replaced when parsing geneXref file.
 		Integer chrID = refDict.contigID.get(A[1]);
 		if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception to be thrown.
-			throw new KGParseException("Could not parse chromosome field: " + A[1]);
+			throw new TranscriptParseException("Could not parse chromosome field: " + A[1]);
 
 		char strand = A[2].charAt(0);
 		if (strand != '+' && strand != '-') {
-			throw new KGParseException("Malformed strand: " + A[2]);
+			throw new TranscriptParseException("Malformed strand: " + A[2]);
 		}
 		tib.setStrand(strand);
 
@@ -179,12 +179,12 @@ public class UCSCParser implements TranscriptParser {
 		try {
 			txStart = Integer.parseInt(A[3]) + 1; // +1 to convert to one-based fully closed numbering
 		} catch (NumberFormatException e) {
-			throw new KGParseException("Could not parse txStart:" + A[3]);
+			throw new TranscriptParseException("Could not parse txStart:" + A[3]);
 		}
 		try {
 			txEnd = Integer.parseInt(A[4]);
 		} catch (NumberFormatException e) {
-			throw new KGParseException("Could not parse txEnd:" + A[4]);
+			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
 		tib.setTxRegion(new GenomeInterval(refDict, '+', chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
 				.withStrand(strand));
@@ -193,12 +193,12 @@ public class UCSCParser implements TranscriptParser {
 		try {
 			cdsStart = Integer.parseInt(A[5]) + 1;// +1 to convert to one-based fully closed numbering
 		} catch (NumberFormatException e) {
-			throw new KGParseException("Could not parse cdsStart:" + A[5]);
+			throw new TranscriptParseException("Could not parse cdsStart:" + A[5]);
 		}
 		try {
 			cdsEnd = Integer.parseInt(A[6]);
 		} catch (NumberFormatException e) {
-			throw new KGParseException("Could not parse cdsEnd:" + A[6]);
+			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
 		tib.setCdsRegion(new GenomeInterval(refDict, '+', chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
 				.withStrand(strand));
@@ -208,7 +208,7 @@ public class UCSCParser implements TranscriptParser {
 		try {
 			exonCount = Short.parseShort(A[7]);
 		} catch (NumberFormatException e) {
-			throw new KGParseException("Could not parse exonCount:" + A[7]);
+			throw new TranscriptParseException("Could not parse exonCount:" + A[7]);
 		}
 
 		/* Now parse the exon ends and starts */
@@ -222,7 +222,7 @@ public class UCSCParser implements TranscriptParser {
 			String error = String.format("[UCSCKGParser] Malformed exonStarts list: found %d but I expected %d exons",
 					B.length, exonCount);
 			error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
-			throw new KGParseException(error);
+			throw new TranscriptParseException(error);
 		}
 		for (int i = 0; i < exonCount; ++i) {
 			try {
@@ -231,7 +231,7 @@ public class UCSCParser implements TranscriptParser {
 				String error = String
 						.format("[UCSCKGParser] Malformed exon start at position %d of line %s", i, starts);
 				error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
-				throw new KGParseException(error);
+				throw new TranscriptParseException(error);
 			}
 		}
 		// Now do the ends.
@@ -242,7 +242,7 @@ public class UCSCParser implements TranscriptParser {
 			} catch (NumberFormatException e) {
 				String error = String.format("[UCSCKGParser] Malformed exon end at position %d of line %s", i, ends);
 				error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
-				throw new KGParseException(error);
+				throw new TranscriptParseException(error);
 			}
 		}
 
@@ -258,9 +258,9 @@ public class UCSCParser implements TranscriptParser {
 	 *
 	 * @param kgPath
 	 *            path to the knownGene.txt file
-	 * @throws jannovar.exception.KGParseException
+	 * @throws jannovar.exception.TranscriptParseException
 	 */
-	private void parseKnownGeneFile(String kgPath) throws KGParseException {
+	private void parseKnownGeneFile(String kgPath) throws TranscriptParseException {
 		// Error handling can be improved with Java 7.
 		String s = null;
 		BufferedReader br = null;
@@ -276,7 +276,7 @@ public class UCSCParser implements TranscriptParser {
 				try {
 					TranscriptInfoBuilder tib = parseTranscriptModelFromLine(line);
 					this.knownGeneMap.put(tib.getAccession(), tib);
-				} catch (KGParseException e) {
+				} catch (TranscriptParseException e) {
 					// exceptionCount++;
 				}
 			}
@@ -296,14 +296,14 @@ public class UCSCParser implements TranscriptParser {
 			}
 		}
 		if (s != null)
-			throw new KGParseException(s);
+			throw new TranscriptParseException(s);
 	}
 
 	/**
 	 * Parses the ucsc KnownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
 	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
-	private void parseKnown2LocusLink(String locusPath) throws KGParseException {
+	private void parseKnown2LocusLink(String locusPath) throws TranscriptParseException {
 		try {
 
 			BufferedReader br = getBufferedReaderFromFilePath(locusPath, locusPath.endsWith(".gz"));
@@ -339,11 +339,11 @@ public class UCSCParser implements TranscriptParser {
 		} catch (FileNotFoundException fnfe) {
 			String s = String.format("Exception while parsing UCSC  knownToLocusLink file at \"%s\"\n%s", locusPath,
 					fnfe.toString());
-			throw new KGParseException(s);
+			throw new TranscriptParseException(s);
 		} catch (IOException e) {
 			String s = String.format("Exception while parsing UCSC KnownToLocusfile at \"%s\"\n%s", locusPath,
 					e.toString());
-			throw new KGParseException(s);
+			throw new TranscriptParseException(s);
 		}
 
 	}
@@ -353,7 +353,7 @@ public class UCSCParser implements TranscriptParser {
 	 * lower case, but we convert them here to all upper case letters to simplify processing in other places of this
 	 * program. The sequences are then added to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
-	private void parseKnownGeneMrna(String mRNAPath) throws KGParseException {
+	private void parseKnownGeneMrna(String mRNAPath) throws TranscriptParseException {
 
 		try {
 			BufferedReader br = getBufferedReaderFromFilePath(mRNAPath, mRNAPath.endsWith(".gz"));
@@ -389,11 +389,11 @@ public class UCSCParser implements TranscriptParser {
 					foundSequence, (foundSequence - kgWithNoSequence)));
 		} catch (FileNotFoundException fnfe) {
 			String s = String.format("Could not find file: %s\n%s", mRNAPath, fnfe.toString());
-			throw new KGParseException(s);
+			throw new TranscriptParseException(s);
 		} catch (IOException ioe) {
 			String s = String.format("Exception while parsing UCSC KnownGene FASTA file at \"%s\"\n%s", mRNAPath,
 					ioe.toString());
-			throw new KGParseException(s);
+			throw new TranscriptParseException(s);
 		}
 	}
 
@@ -420,7 +420,7 @@ public class UCSCParser implements TranscriptParser {
 	 * <LI>7: Description
 	 * </UL>
 	 */
-	private void parseKnownGeneXref(String xRefPath) throws KGParseException {
+	private void parseKnownGeneXref(String xRefPath) throws TranscriptParseException {
 		// Error handling can be improved in Java 7.
 		String err = null;
 		BufferedReader br = null;
@@ -438,7 +438,7 @@ public class UCSCParser implements TranscriptParser {
 				if (A.length < 8) {
 					err = String.format("Error, malformed ucsc xref line: %s\nExpected 8 fields but got %d", line,
 							A.length);
-					throw new KGParseException(err);
+					throw new TranscriptParseException(err);
 				}
 				String id = A[0];
 				String geneSymbol = A[4];
@@ -467,7 +467,7 @@ public class UCSCParser implements TranscriptParser {
 			}
 		}
 		if (err != null)
-			throw new KGParseException(err);
+			throw new TranscriptParseException(err);
 	}
 
 	/**
