@@ -53,6 +53,8 @@ public class PedigreeARTest {
 		Assert.assertEquals(6, n);
 	}
 
+	// TODO(holtgrem): Remove?
+	@SuppressWarnings("unused")
 	private GenotypeCall constructGenotypeCall2(Genotype... calls) {
 		ArrayList<Genotype> lst = new ArrayList<Genotype>();
 		for (Genotype g : calls)

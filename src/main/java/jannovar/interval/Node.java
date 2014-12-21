@@ -35,16 +35,16 @@ public final class Node<T> {
 	/** list sorted by decreasing right end points */
 	public List<Interval<T>> rightorder;
 	/**
-	 * A Comparator that is used to sort intervals by their left endpoint in
-	 * ascending order.
+	 * A Comparator that is used to sort intervals by their left endpoint in ascending order.
 	 */
-	@SuppressWarnings("rawtypes")
+	// TODO(holtgrem): remove this unused member?
+	@SuppressWarnings({ "rawtypes", "unused" })
 	private Comparator<? extends Interval> leftcomp = null;
 	/**
-	 * A Comparator that is used to sort intervals by their right endpoint in
-	 * descending order.
+	 * A Comparator that is used to sort intervals by their right endpoint in descending order.
 	 */
-	@SuppressWarnings("rawtypes")
+	// TODO(holtgrem): remove this unused member?
+	@SuppressWarnings({ "rawtypes", "unused" })
 	private Comparator<? extends Interval> rightcomp = null;
 
 	/**
@@ -76,20 +76,16 @@ public final class Node<T> {
 
 		for (Interval<T> interval : intervals) {
 			/*
-			 * if the highpoint is smaller than the median, insert interval into
-			 * lefts
+			 * if the highpoint is smaller than the median, insert interval into lefts
 			 */
 			if (interval.getHigh() < median) {
 				lefts.add(interval);
 				/*
-				 * if the lowpoint is bigger than the median, insert interval
-				 * into rights
+				 * if the lowpoint is bigger than the median, insert interval into rights
 				 */
-			}
-			else if (interval.getLow() > median) {
+			} else if (interval.getLow() > median) {
 				rights.add(interval);
-			}
-			else {
+			} else {
 				medianIntervals.add(interval);
 			}
 		}
@@ -138,14 +134,12 @@ public final class Node<T> {
 	// }
 
 	/**
-	 * Calculates the median value of the sorted list. For this purpose, the
-	 * method finds the center of the list by dividing the size of the list by
-	 * two and stores it in mid. If the size of the list is divisible by two,
-	 * the previous element of mid is added to the median and divided by two.
+	 * Calculates the median value of the sorted list. For this purpose, the method finds the center of the list by
+	 * dividing the size of the list by two and stores it in mid. If the size of the list is divisible by two, the
+	 * previous element of mid is added to the median and divided by two.
 	 * <P>
-	 * Note that because list of Integers represent each of the endpoints of the
-	 * intervals that cross the midline, they need to be sorted before we can
-	 * calculate the median.
+	 * Note that because list of Integers represent each of the endpoints of the intervals that cross the midline, they
+	 * need to be sorted before we can calculate the median.
 	 *
 	 * @param list
 	 *            A list of integers
@@ -162,24 +156,21 @@ public final class Node<T> {
 	}
 
 	/**
-	 * @return the median value of all endpoints of all intervals that represent
-	 *         this node and all of its children nodes.
+	 * @return the median value of all endpoints of all intervals that represent this node and all of its children
+	 *         nodes.
 	 */
 	public int getMedian() {
 		return this.median;
 	}
 
 	/**
-	 * This function is intended to be used to find Intervals that surround
-	 * queries that do not actually intersect with any of the intervals in the
-	 * tree. For any search query at a given node, either the search query
-	 * overlaps with one of the intervals, or it is the right of all of the
-	 * intervals, or it is to the left of all of the intervals.
+	 * This function is intended to be used to find Intervals that surround queries that do not actually intersect with
+	 * any of the intervals in the tree. For any search query at a given node, either the search query overlaps with one
+	 * of the intervals, or it is the right of all of the intervals, or it is to the left of all of the intervals.
 	 * <P>
-	 * If the query is to the left of all of the intervals, then its right
-	 * neighbor is the interval whose low point is the most to the left. This is
-	 * the interval that is returned by this function (it is the first element
-	 * of {@link #leftorder}).
+	 * If the query is to the left of all of the intervals, then its right neighbor is the interval whose low point is
+	 * the most to the left. This is the interval that is returned by this function (it is the first element of
+	 * {@link #leftorder}).
 	 *
 	 * @return the left most Interval
 	 */
@@ -188,16 +179,13 @@ public final class Node<T> {
 	}
 
 	/**
-	 * This function is intended to be used to find Intervals that surround
-	 * queries that do not actually intersect with any of the intervals in the
-	 * tree. For any search query at a given node, either the search query
-	 * overlaps with one of the intervals, or it is the right of all of the
-	 * intervals, or it is to the left of all of the intervals.
+	 * This function is intended to be used to find Intervals that surround queries that do not actually intersect with
+	 * any of the intervals in the tree. For any search query at a given node, either the search query overlaps with one
+	 * of the intervals, or it is the right of all of the intervals, or it is to the left of all of the intervals.
 	 * <P>
-	 * If the query is to the left of all of the intervals, then its left
-	 * neighbor is the interval whose highpoint is the most to the right. This
-	 * is the interval that is returned by this function (it is the first
-	 * element of {@link #rightorder}).
+	 * If the query is to the left of all of the intervals, then its left neighbor is the interval whose highpoint is
+	 * the most to the right. This is the interval that is returned by this function (it is the first element of
+	 * {@link #rightorder}).
 	 *
 	 * @return the left most Interval
 	 */
@@ -215,8 +203,7 @@ public final class Node<T> {
 	}
 
 	/**
-	 * @return true if this Node has at least one interval stored within this
-	 *         node.
+	 * @return true if this Node has at least one interval stored within this node.
 	 */
 	public boolean hasInterval() {
 		return rightorder.size() > 0;
@@ -255,8 +242,7 @@ public final class Node<T> {
 	}
 
 	/**
-	 * This is intended to be used to print out the interval tree for debugging
-	 * purposes.
+	 * This is intended to be used to print out the interval tree for debugging purposes.
 	 *
 	 * @param type
 	 * @param level
@@ -270,9 +256,11 @@ public final class Node<T> {
 		String indent = new String(sb);
 		System.out.print(indent);
 		if (type != null)
-			System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type, this.leftorder.size(), median));
+			System.out.println(String.format("%s,Node:  %d intervals crossing median [%d]:", type,
+					this.leftorder.size(), median));
 		else
-			System.out.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(), median));
+			System.out
+					.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(), median));
 		for (Interval<T> i : leftorder) {
 			System.out.println(indent + "##(leftorder):" + i);
 		}
@@ -284,16 +272,14 @@ public final class Node<T> {
 		if (l == null) {
 			System.out.print(indent);
 			System.out.println("-:Left=null");
-		}
-		else {
+		} else {
 			l.debugPrint("L", level + 1);
 		}
 		Node<T> r = getRight();
 		if (r == null) {
 			System.out.print(indent);
 			System.out.println("-:Right=null");
-		}
-		else {
+		} else {
 			r.debugPrint("R", level + 1);
 		}
 	}

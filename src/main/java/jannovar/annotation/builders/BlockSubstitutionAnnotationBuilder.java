@@ -97,8 +97,10 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 		// TODO(holtgrem): Fix "value not used" variable warning by removing?
 		final CDSPosition refChangeBeginPos;
+		@SuppressWarnings("unused")
 		final CDSPosition refChangeLastPos;
 		final CDSPosition varChangeBeginPos;
+		@SuppressWarnings("unused")
 		final CDSPosition varChangeLastPos;
 
 		// We keep the following three variables as state of the algorithm since we do not have easy-to-use triples in
@@ -135,14 +137,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 					.withPositionType(PositionType.ZERO_BASED);
 			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
 					changeInterval.getGenomeBeginPos().shifted(change.alt.length() - 1)).withPositionType(
-							PositionType.ZERO_BASED);
+					PositionType.ZERO_BASED);
 			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
 			this.aaChange = new AminoAcidChange(refChangeBeginPos.pos / 3, wtAASeq.substring(refChangeBeginPos.pos / 3,
 					(refChangeLastPos.pos + 1 + 2) / 3), varAASeq.substring(varChangeBeginPos.pos / 3,
-							(varChangeLastPos.pos + 1 + 2) / 3));
+					(varChangeLastPos.pos + 1 + 2) / 3));
 
 			// Look for stop codon, starting at change position.
 			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.pos / 3);

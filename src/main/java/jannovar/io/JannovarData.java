@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 
 // NOTE(holtgrem): Part of the public interface of the Jannovar library.
 // TODO(holtgrem): Add the interval trees here.
+// TODO(holtgrem): Rename package "jannovar.io" to "jannovar.data"?
 
 /**
  * This data type is used for serialization after downloading.

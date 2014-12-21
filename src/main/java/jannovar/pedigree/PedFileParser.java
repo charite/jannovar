@@ -38,6 +38,8 @@ public class PedFileParser {
 	/**
 	 * The plain (base) name of the PED file.
 	 */
+	// TODO(holtgrem): Remove?
+	@SuppressWarnings("unused")
 	private String base_filename = null;
 	/**
 	 * Pedigree object representing the family described in the PED file. This object is created and returned by
