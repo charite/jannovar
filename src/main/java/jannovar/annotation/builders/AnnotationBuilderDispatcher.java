@@ -1,8 +1,8 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.common.VariantType;
-import jannovar.exception.InvalidGenomeChange;
+import jannovar.annotation.InvalidGenomeChange;
+import jannovar.annotation.VariantType;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.TranscriptInfo;
 
@@ -11,7 +11,8 @@ import jannovar.reference.TranscriptInfo;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class AnnotationBuilderDispatcher {
+public final class AnnotationBuilderDispatcher {
+
 	/** transcript to build annotation for */
 	public final TranscriptInfo transcript;
 	/** genomic change to build annotation for */

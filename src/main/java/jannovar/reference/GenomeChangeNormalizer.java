@@ -1,12 +1,11 @@
 package jannovar.reference;
 
-
 /**
  * Helper code for the normalization of {@link GenomeChange}s.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomeChangeNormalizer {
+public final class GenomeChangeNormalizer {
 
 	/**
 	 * Transform a {@link GenomeChange} to its HGVS-normalized representation.
@@ -116,4 +115,5 @@ public class GenomeChangeNormalizer {
 		else
 			return new GenomeChange(change.pos.shifted(shift), seq.substring(pos, pos + LEN), "");
 	}
+
 }

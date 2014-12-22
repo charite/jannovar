@@ -1,37 +1,32 @@
 package jannovar.annotation;
 
-import jannovar.common.VariantType;
-import jannovar.exception.AnnotationException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+// TODO(holtgrem): Make interface leaner, will be part of the public interface.
+
 /**
- * Encapsulates a list of {@link jannovar.annotation.Annotation Annotation} objects associated with a
- * {@link jannovar.exome.Variant Variant} and provides some access functions that summarize, sort, or display the
- * objects. Note that rarely, a variant annotation is made to more than one Gene symbol. In this case, we represent the
- * affected gene as a comma-separated list of symbols.
+ * Encapsulates a list of {@link Annotation} objects associated with a variant and provides some access functions that
+ * summarize, sort, or display the objects. Note that rarely, a variant annotation is made to more than one Gene symbol.
+ * In this case, we represent the affected gene as a comma-separated list of symbols.
  *
- * The list {@link #annotationList} contains all of the {@link jannovar.annotation.Annotation Annotation} objects but
- * they are sorted according to priority. We can take advantage of this if we want to return only those annotations that
- * belong to the highest priority class by noting the class of the first annotation, and not returning any annotation of
- * a lower priority level.
+ * The list {@link #annotationList} contains all of the {@link Annotation} objects but they are sorted according to
+ * priority. We can take advantage of this if we want to return only those annotations that belong to the highest
+ * priority class by noting the class of the first annotation, and not returning any annotation of a lower priority
+ * level.
  *
- * @author Peter N Robinson
- * @version 0.19 (31 December, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class AnnotationList {
+public final class AnnotationList {
 	/**
-	 * A list of all the {@link jannovar.annotation.Annotation Annotation} objects associated with a
-	 * {@link jannovar.exome.Variant Variant} object.
+	 * A list of all the {@link Annotation} objects associated with a variant.
 	 */
 	private ArrayList<Annotation> annotationList;
 
 	/**
-	 * Representative type of the {@link jannovar.exome.Variant Variant}. If the Variant has multiple
-	 * {@link jannovar.annotation.Annotation Annotation} objects, then the Annotation most likely to be pathogenic is
-	 * taken to be its type.
+	 * Representative type of the variant. If the Variant has multiple {@link Annotation} objects, then the Annotation
+	 * most likely to be pathogenic is taken to be its type.
 	 */
 	private VariantType type = null;
 
@@ -62,8 +57,7 @@ public class AnnotationList {
 	}
 
 	/**
-	 * Get a list of all individual {@link jannovar.annotation.Annotation Annotation} objects that affect the variant
-	 * that owns this AnnotationList.
+	 * Get a list of all individual {@link Annotation} objects that affect the variant that owns this AnnotationList.
 	 *
 	 * @return {@link ArrayList} of {@link Annotation}s
 	 */
@@ -104,7 +98,7 @@ public class AnnotationList {
 	 * If there are multiple annotations, this function sorts them. This function also sets the overall variant type
 	 * (the most pathogenic single type found among all annotations).
 	 *
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public void sortAnnotations() throws AnnotationException {
 		if (this.isPrioritySorted)
@@ -146,7 +140,7 @@ public class AnnotationList {
 	 * pathogenicity of the variation.
 	 *
 	 * @return String representation of all annotations
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getAllTranscriptAnnotations() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
@@ -172,7 +166,7 @@ public class AnnotationList {
 	 * variant (e.g., if there are nonsense and synonymous annotation, return nonsense).
 	 *
 	 * @return annotation for a single transcript
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getSingleTranscriptAnnotation() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
@@ -204,7 +198,7 @@ public class AnnotationList {
 	/**
 	 * @return an annotation consisting of the gene symbol and a list of all affected transcripts with the HGVS mutation
 	 *         nomenclature.
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getVariantAnnotation() throws AnnotationException {
 		if (this.annotationList.isEmpty()) {
@@ -392,7 +386,7 @@ public class AnnotationList {
 	 * this function, that basically first gets a set of all the gene symbols and then sorts the output accordingly.
 	 *
 	 * @return String with the combined annotation.
-	 * @throws jannovar.exception.AnnotationException
+	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public String getCombinedAnnotationForVariantAffectingMultipleGenes() throws AnnotationException {
 		StringBuilder sb = new StringBuilder();

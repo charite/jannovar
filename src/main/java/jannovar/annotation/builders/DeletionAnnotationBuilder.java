@@ -1,8 +1,8 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.common.VariantType;
-import jannovar.exception.InvalidGenomeChange;
+import jannovar.annotation.InvalidGenomeChange;
+import jannovar.annotation.VariantType;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
@@ -17,7 +17,7 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class DeletionAnnotationBuilder extends AnnotationBuilder {
+public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	/**
 	 * @param transcript
@@ -36,7 +36,7 @@ class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	Annotation build() {
+	public Annotation build() {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
 
@@ -61,16 +61,16 @@ class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	String ncHGVS() {
+	protected String ncHGVS() {
 		return String.format("%s:%sdel", locAnno, dnaAnno);
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript.transcriptModel, ncHGVS(), VariantType.TRANSCRIPT_ABLATION);
+		return new Annotation(transcript, ncHGVS(), VariantType.TRANSCRIPT_ABLATION);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
+		return new Annotation(transcript, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
 	}
 
 	/**
@@ -137,7 +137,7 @@ class DeletionAnnotationBuilder extends AnnotationBuilder {
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript.transcriptModel, String.format("%s:%s", ncHGVS(), protAnno), varType);
+			return new Annotation(transcript, String.format("%s:%s", ncHGVS(), protAnno), varType);
 		}
 
 		private void handleNonFrameShiftCase() {

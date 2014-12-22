@@ -1,32 +1,28 @@
 package jannovar.annotation;
 
-import jannovar.common.Constants;
-import jannovar.common.VariantType;
-import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptInfo;
 
-// TODO(holtgrem): Move
+// TODO(holtgrem): pretty lrage interface, do we need this here or would it be better in a decorator?
+// TODO(holtgrem): Make interface leaner, will be part of the public interface.
 
 /**
  * This class encapsulates a single annotation and includes four pieces of information:
  *
- * <OL>
- * <LI>The variant type: frameshift, synonymous substitution, etc (see {@link jannovar.common.VariantType VariantType}).
- * <LI>The gene symbol
- * <LI>A string representing the actual variant
- * <LI>The NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.
- * </OL>
+ * <ol>
+ * <li>the variant type: frameshift, synonymous substitution, etc. (see {@link VariantType}).</li>
+ * <li>the gene symbol</li>
+ * <li>a string representing the actual variant, and</li>
+ * <li>the NCBI Entrez Gene id corresponding to the ucsc transcript being annotated.</li>
+ * </ol>
  *
  * Each annotation for one transcript corresponds to a single Annotation object. All of the transcripts affected by a
- * variant are collected by an {@link jannovar.annotation.AnnotationList AnnotationList} object.
+ * variant are collected by an {@link AnnotationList} object.
  *
- * @author Peter N Robinson
- * @version 0.32 (3 February, 2014)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class Annotation implements Constants, Comparable<Annotation> {
-	/**
-	 * The type of the variant being annotated, using the constants in {@link jannovar.common.VariantType VariantType},
-	 * e.g., MISSENSE, 5UTR, etc.
-	 */
+public final class Annotation implements Comparable<Annotation> {
+
+	/** functional variant type, e.g. missense, 5' UTR etc. */
 	private VariantType varType;
 
 	/**
@@ -61,9 +57,9 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	/**
 	 * The NCBI Entrez Gene id corresponding to the UCSC knownGene id of the transcript being annotated. Note that for a
 	 * few cases, there is no entrezGene id, and then, the parser in {@link jannovar.io.UCSCKGParser UCSCKGParser} will
-	 * enter the value {@link jannovar.common.Constants#UNINITIALIZED_INT}.
+	 * enter the value <code>-1</code>.
 	 */
-	private int entrezGeneID = UNINITIALIZED_INT;
+	private int entrezGeneID = -1;
 
 	/**
 	 * Return a byte constant that corresponds to the type of the variation. This will be one of the constants in
@@ -90,19 +86,19 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	/**
 	 * Construct a new annotation.
 	 *
-	 * @param tmdl
+	 * @param ti
 	 *            The transcript affected by the variant
 	 * @param annotation
 	 *            A complete annotation (without the gene symbol)
 	 * @param type
 	 *            The class of the variant (e.g., INTRONIC).
 	 */
-	public Annotation(TranscriptModel tmdl, String annotation, VariantType type) {
+	public Annotation(TranscriptInfo ti, String annotation, VariantType type) {
 		this.varType = type;
 		this.variantAnnotation = annotation;
-		if (tmdl != null) {
-			this.geneSymbol = tmdl.getGeneSymbol();
-			this.entrezGeneID = tmdl.getGeneID();
+		if (ti != null) {
+			this.geneSymbol = ti.geneSymbol;
+			this.entrezGeneID = ti.geneID;
 		}
 	}
 
@@ -110,7 +106,7 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	 * Construct a new annotation. This constructor is used by variants that are exonic and have a position in the CDS
 	 * of the transcript.
 	 *
-	 * @param tmdl
+	 * @param ti
 	 *            The transcript affected by the variant
 	 * @param annotation
 	 *            A complete annotation (without the gene symbol)
@@ -119,8 +115,8 @@ public class Annotation implements Constants, Comparable<Annotation> {
 	 * @param refvarstart
 	 *            start position of variant in the CDS.
 	 */
-	public Annotation(TranscriptModel tmdl, String annotation, VariantType type, int refvarstart) {
-		this(tmdl, annotation, type);
+	public Annotation(TranscriptInfo ti, String annotation, VariantType type, int refvarstart) {
+		this(ti, annotation, type);
 		this.rvarstart = refvarstart;
 	}
 

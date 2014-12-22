@@ -2,11 +2,11 @@ package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
+import jannovar.JannovarException;
 import jannovar.JannovarOptions;
+import jannovar.cmd.CommandLineParsingException;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommand;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,9 +44,9 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		try {
 			// construct the variant writer
 			if (this.options.jannovarFormat)
-				writer = new AnnotatedJannovarWriter(chromosomeMap, options);
+				writer = new AnnotatedJannovarWriter(refDict, chromosomeMap, options);
 			else
-				writer = new AnnotatedVCFWriter(parser, chromosomeMap, options);
+				writer = new AnnotatedVCFWriter(refDict, parser, chromosomeMap, options);
 
 			// annotate and write out all variants
 			for (VariantContext vc : parser)
@@ -66,7 +66,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	HelpRequestedException {
 		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
 		try {
 			return parser.parse(argv);

@@ -1,13 +1,15 @@
 package jannovar.reference;
 
-import jannovar.exception.ProjectionException;
+import jannovar.util.Immutable;
 
 /**
  * Wraps a {@link TranscriptInfo} object and allow the coordinate conversion.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptProjectionDecorator {
+@Immutable
+public final class TranscriptProjectionDecorator {
+
 	/** constant for invalid exon index */
 	public static final int INVALID_EXON_ID = -1;
 	/** constant for invalid intron index */
@@ -84,7 +86,7 @@ public class TranscriptProjectionDecorator {
 				// Consequently, we have to *subtract* this difference from transcriptPos.
 				int posInExon = pos.differenceTo(region.getGenomeBeginPos());
 				int transcriptPos = tOffset + posInExon;
-				return new TranscriptPosition(transcript.transcriptModel, transcriptPos, PositionType.ZERO_BASED);
+				return new TranscriptPosition(transcript, transcriptPos, PositionType.ZERO_BASED);
 			}
 			tOffset += region.length();
 		}
@@ -163,19 +165,16 @@ public class TranscriptProjectionDecorator {
 	 *            the {@link GenomePosition} to use for querying
 	 * @return (0-based) index of the selected intron, or {@link #INVALID_INTRON_ID} if <tt>pos</tt> is not in exonic
 	 *         region but in transcript interval
-	 * @throws ProjectionException
-	 *             if the position does not fall within the intron regions of the transcript
 	 */
-	public int locateIntron(GenomePosition pos) throws ProjectionException {
+	public int locateIntron(GenomePosition pos) {
 		if (pos.chr != transcript.getChr()) // guard against different chromosomes
-			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
-					+ transcript.txRegion);
+			return INVALID_INTRON_ID;
 		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
 		if (transcript.txRegion.isLeftOf(pos) || transcript.txRegion.isRightOf(pos))
-			throw new ProjectionException("Position " + pos + " outside of tx region " + transcript.txRegion);
+			return INVALID_INTRON_ID;
 
 		// find exon containing pos or return null
 		int i = 0;
@@ -195,21 +194,18 @@ public class TranscriptProjectionDecorator {
 	 *
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying
-	 * @return (0-based) index of the selected exon, or {@link INVALID_EXON_ID} if <tt>pos</tt> is not in exonic region
+	 * @return (0-based) index of the selected exon, or {@link #INVALID_EXON_ID} if <tt>pos</tt> is not in exonic region
 	 *         but in transcript interval
-	 * @throws ProjectionException
-	 *             if the position does not fall within the transcription region of the transcripts
 	 */
-	public int locateExon(GenomePosition pos) throws ProjectionException {
+	public int locateExon(GenomePosition pos) {
 		if (pos.chr != transcript.getChr()) // guard against different chromosomes
-			throw new ProjectionException("Different chromosome in position " + pos + " than on transcript region "
-					+ transcript.txRegion);
+			return INVALID_EXON_ID;
 		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
 		if (transcript.txRegion.isLeftOf(pos) || transcript.txRegion.isRightOf(pos))
-			throw new ProjectionException("Position " + pos + " outside of tx region " + transcript.txRegion);
+			return INVALID_EXON_ID;
 
 		// find exon containing pos or return null
 		GenomeInterval posBase = new GenomeInterval(pos, 1); // region of referenced base
@@ -276,11 +272,10 @@ public class TranscriptProjectionDecorator {
 			// Get transcript begin position.
 			if (transcript.cdsRegion.isRightOf(pos)) {
 				// Deletion begins left of CDS, project to begin of CDS.
-				return new CDSPosition(transcript.transcriptModel, 0, PositionType.ZERO_BASED);
+				return new CDSPosition(transcript, 0, PositionType.ZERO_BASED);
 			} else if (transcript.cdsRegion.isLeftOf(pos)) {
 				// Deletion begins right of CDS, project to end of CDS.
-				return new CDSPosition(transcript.transcriptModel, transcript.cdsTranscriptLength(),
-						PositionType.ZERO_BASED);
+				return new CDSPosition(transcript, transcript.cdsTranscriptLength(), PositionType.ZERO_BASED);
 			} else if (soDecorator.liesInExon(pos)) {
 				return projector.genomeToCDSPos(pos);
 			} else { // lies in intron, project to begin position of next exon
@@ -292,4 +287,5 @@ public class TranscriptProjectionDecorator {
 			throw new Error("Bug: must be able to convert exon position! " + e.getMessage());
 		}
 	}
+
 }

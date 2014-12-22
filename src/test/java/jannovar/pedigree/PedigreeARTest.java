@@ -1,9 +1,7 @@
 package jannovar.pedigree;
 
-import jannovar.common.Genotype;
-import jannovar.exception.PedParseException;
-import jannovar.exome.Variant;
-import jannovar.genotype.GenotypeCall;
+import jannovar.io.ReferenceDictionary;
+import jannovar.reference.HG19RefDictBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +26,9 @@ import org.junit.Test;
  * @author Peter Robinson <peter.robinson@charite.de>
  */
 public class PedigreeARTest {
+	/** this test uses this static hg19 reference dictionary */
+	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
+
 	static private Pedigree pedigree = null;
 
 	@BeforeClass
@@ -51,6 +52,8 @@ public class PedigreeARTest {
 		Assert.assertEquals(6, n);
 	}
 
+	// TODO(holtgrem): Remove?
+	@SuppressWarnings("unused")
 	private GenotypeCall constructGenotypeCall2(Genotype... calls) {
 		ArrayList<Genotype> lst = new ArrayList<Genotype>();
 		for (Genotype g : calls)
@@ -65,14 +68,13 @@ public class PedigreeARTest {
 			lst.add(g);
 		}
 		GenotypeCall gc = new GenotypeCall(lst, null);
-		Variant v = new Variant((byte) 1, 1, "A", "C", gc, dummyPhred, "");
+		Variant v = new Variant(refDict, 1, 1, "A", "C", gc, dummyPhred, "");
 
 		return v;
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants.
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
 	 */
 	@Test
 	public void testARinheritance1() {
@@ -94,8 +96,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants.
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
 	 */
 	@Test
 	public void testARinheritance1homozygousOnly() {
@@ -117,8 +118,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants. Does not have a compound het
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants. Does not have a compound het
 	 */
 	@Test
 	public void testARinheritance1CompoundHEt() {
@@ -140,8 +140,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants.
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
 	 */
 	@Test
 	public void testARinheritance3() {
@@ -162,8 +161,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants.
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
 	 */
 	@Test
 	public void testARinheritance3HomozygousOnly() {
@@ -184,8 +182,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants. Does not have compound het
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants. Does not have compound het
 	 */
 	@Test
 	public void testARinheritance3CompoundHet() {
@@ -206,8 +203,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants.
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
 	 */
 	@Test
 	public void testARinheritance4() {
@@ -217,8 +213,7 @@ public class PedigreeARTest {
 		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/*
-		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
-		 * ALT, the other is HET
+		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET
 		 */
 		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
 				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
@@ -231,8 +226,7 @@ public class PedigreeARTest {
 	}
 
 	/**
-	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second
-	 * variants.
+	 * Test one compatible HOMOZYGOUS_ALT variant plus two irrelevant second variants.
 	 */
 	@Test
 	public void testARinheritance4HomozygousOnly() {
@@ -242,8 +236,7 @@ public class PedigreeARTest {
 		Variant mg2 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT);
 		/*
-		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
-		 * ALT, the other is HET
+		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET
 		 */
 		Variant mg3 = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_ALT,
 				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
@@ -277,8 +270,7 @@ public class PedigreeARTest {
 		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		/*
-		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
-		 * ALT, the other is HET
+		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET
 		 */
 		lst.add(mg1);
 		lst.add(mg2);
@@ -310,8 +302,7 @@ public class PedigreeARTest {
 		Variant mg2 = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		/*
-		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS
-		 * ALT, the other is HET
+		 * mg3 is not compatible with linkage, only one affected is HOMOZYGOUS ALT, the other is HET
 		 */
 		lst.add(mg1);
 		lst.add(mg2);
@@ -333,8 +324,8 @@ public class PedigreeARTest {
 	 * ped1 dau2 father mother 2 1
 	 * </pre>
 	 *
-	 * Here, mg1 is paternal het, mg2 is maternal het, but one of the
-	 * unaffecteds is compound het (dau2) Thus, the variant is not compatible!
+	 * Here, mg1 is paternal het, mg2 is maternal het, but one of the unaffecteds is compound het (dau2) Thus, the
+	 * variant is not compatible!
 	 */
 	@Test
 	public void testARinheritanceCompoundHet2() {
@@ -361,8 +352,8 @@ public class PedigreeARTest {
 	 * ped1 dau2 father mother 2 1
 	 * </pre>
 	 *
-	 * Here, mg1 is paternal het, mg2 is maternal het, but one of the
-	 * unaffecteds is compound het (dau2) Thus, the variant is not compatible!
+	 * Here, mg1 is paternal het, mg2 is maternal het, but one of the unaffecteds is compound het (dau2) Thus, the
+	 * variant is not compatible!
 	 */
 	@Test
 	public void testARinheritanceCompoundHet2special() {

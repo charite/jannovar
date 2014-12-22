@@ -1,9 +1,7 @@
 package jannovar;
 
-import jannovar.common.Constants.Release;
-
+import com.google.common.collect.ImmutableList;
 import com.google.common.net.HostAndPort;
-
 
 /**
  * Configuration for the Jannovar program.
@@ -12,19 +10,19 @@ import com.google.common.net.HostAndPort;
  * example, the proxy setting is only used when downloading data.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter Robinson <peter.robinson@charite.de>
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class JannovarOptions {
+public final class JannovarOptions {
 	/** the selected command */
 	public Command command = null;
 
 	// Configuration for the download command
 
-	/** data source to use for downloading */
-	public DataSource dataSource = DataSource.UCSC;
+	/** paths to ini files ot use for parsing */
+	public ImmutableList<String> dataSourceFiles = null;
 
-	/** genome release to downloads and serialize */
-	public Release genomeRelease = Release.HG19;
+	/** data source name to use for downloading and parsing */
+	public ImmutableList<String> dataSourceNames = null;
 
 	/** directory to use for the downloads and the serialized file */
 	public String downloadPath = "data";
@@ -72,11 +70,14 @@ public class JannovarOptions {
 		ENSEMBL, REFSEQ, REFSEQ_CURATED, UCSC
 	}
 
-	void print() {
+	/**
+	 * Print option values to stderr.
+	 */
+	public void print() {
 		if (command == Command.DOWNLOAD) {
-			System.err.println("dataSource: " + dataSource);
+			System.err.println("dataSourceFiles: " + dataSourceFiles);
+			System.err.println("dataSourceNames: " + dataSourceNames);
 			System.err.println("downloadPath" + downloadPath);
-			System.err.println("genome: " + genomeRelease);
 			System.err.println("proxy: " + proxy);
 		} else if (command == Command.ANNOTATE_VCF) {
 			System.err.println("dataFile:" + dataFile);

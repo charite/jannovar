@@ -1,9 +1,8 @@
 package jannovar.reference;
 
-import jannovar.annotation.VariantDataCorrector;
 import jannovar.util.DNAUtils;
+import jannovar.util.Immutable;
 
-// TODO(holtgrew): enforce immutability of pos
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
  *
@@ -12,7 +11,9 @@ import jannovar.util.DNAUtils;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomeChange {
+@Immutable
+public final class GenomeChange {
+
 	/** position of the change */
 	public final GenomePosition pos;
 	/** nucleic acid reference string */
@@ -34,7 +35,7 @@ public class GenomeChange {
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		this.pos = new GenomePosition(pos.strand, pos.chr, corr.position, pos.positionType);
+		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, pos.positionType);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
@@ -71,8 +72,8 @@ public class GenomeChange {
 		else if (strand != pos.strand /* && ref.length() != 0 */)
 			delta = ref.length() - 1;
 
-		this.pos = new GenomePosition(pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED).shifted(delta)
-				.withStrand(strand);
+		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED)
+		.shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -95,6 +96,13 @@ public class GenomeChange {
 			GenomePosition pos = other.pos.withPositionType(PositionType.ZERO_BASED);
 			this.pos = pos.shifted(this.ref.length() - 1).withStrand(strand).withPositionType(other.pos.positionType);
 		}
+	}
+
+	/**
+	 * @return numeric ID of chromosome this change is on
+	 */
+	public int getChr() {
+		return pos.chr;
 	}
 
 	/**

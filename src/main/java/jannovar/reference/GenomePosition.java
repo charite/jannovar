@@ -1,7 +1,9 @@
 package jannovar.reference;
 
-import jannovar.common.ChromosomeMap;
-import jannovar.exception.InvalidCoordinateException;
+import jannovar.io.ReferenceDictionary;
+import jannovar.util.Immutable;
+
+import java.io.Serializable;
 
 /**
  * Representation of a position on a genome (chromosome, position).
@@ -17,7 +19,14 @@ import jannovar.exception.InvalidCoordinateException;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomePosition {
+@Immutable
+public final class GenomePosition implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	/** reference dictionary to use for coordinate translation */
+	final ReferenceDictionary refDict;
+
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */
@@ -28,7 +37,8 @@ public class GenomePosition {
 	public final int pos;
 
 	/** construct genome position with one-based coordinate system */
-	public GenomePosition(char strand, int chr, int pos) {
+	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
+		this.refDict = refDict;
 		this.positionType = PositionType.ONE_BASED;
 		this.strand = strand;
 		this.chr = chr;
@@ -36,7 +46,8 @@ public class GenomePosition {
 	}
 
 	/** construct genome position with selected coordinate system */
-	public GenomePosition(char strand, int chr, int pos, PositionType positionType) {
+	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos, PositionType positionType) {
+		this.refDict = refDict;
 		this.positionType = positionType;
 		this.strand = strand;
 		this.chr = chr;
@@ -45,6 +56,7 @@ public class GenomePosition {
 
 	/** construct genome position from other with selected coordinate system */
 	public GenomePosition(GenomePosition other, PositionType positionType) {
+		this.refDict = other.refDict;
 		this.positionType = positionType;
 		this.strand = other.strand;
 		this.chr = other.chr;
@@ -60,6 +72,7 @@ public class GenomePosition {
 
 	/** construct genome position from other with the selected strand */
 	public GenomePosition(GenomePosition other, char strand) {
+		this.refDict = other.refDict;
 		this.positionType = other.positionType;
 		this.strand = strand;
 		this.chr = other.chr;
@@ -69,7 +82,7 @@ public class GenomePosition {
 		if (strand == other.strand)
 			this.pos = other.pos;
 		else
-			this.pos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.pos + delta;
+			this.pos = refDict.contigLength.get(other.chr) - other.pos + delta;
 	}
 
 	/** convert into GenomePosition of the given strand */
@@ -165,12 +178,12 @@ public class GenomePosition {
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public GenomePosition shifted(int delta) {
-		return new GenomePosition(strand, chr, pos + delta, positionType);
+		return new GenomePosition(refDict, strand, chr, pos + delta, positionType);
 	}
 
 	/*
 	 * String representation with one-based positions, on forward strand.
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -185,7 +198,7 @@ public class GenomePosition {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -203,7 +216,7 @@ public class GenomePosition {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

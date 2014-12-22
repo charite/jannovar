@@ -1,11 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.common.Disease;
-import jannovar.common.Genotype;
-import jannovar.exception.PedParseException;
-import jannovar.exome.Variant;
-import jannovar.genotype.GenotypeCall;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,8 +35,7 @@ import java.util.Iterator;
  * the PED file samples is adjusted to match the order of the VCF file samples using the function
  * {@link #adjustSampleOrderInPedFile}.
  *
- * @author Peter Robinson
- * @version 0.21 (27 December, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class Pedigree {
 	/**
@@ -104,7 +97,7 @@ public class Pedigree {
 	 *            list of {@link Person}s
 	 * @param famID
 	 *            the Family ID of this Pedigree.
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public Pedigree(ArrayList<Person> pList, String famID) throws PedParseException {
 		this.personList = new ArrayList<Person>();
@@ -206,7 +199,7 @@ public class Pedigree {
 	 *
 	 * @param sampleNames
 	 *            List of names from the VCF file.
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public void adjustSampleOrderInPedFile(ArrayList<String> sampleNames) throws PedParseException {
 		if (sampleNames == null) {
@@ -292,7 +285,7 @@ public class Pedigree {
 	 * Add an individual to the current pedigree.
 	 *
 	 * @param person
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public void addIndividual(Person person) throws PedParseException {
 		if (!this.familyID.equals(person.getFamilyID())) {
@@ -441,10 +434,10 @@ public class Pedigree {
 
 	/**
 	 * This function checks whether the Genotypes passed are compatible with autosomal dominant inheritance. The
-	 * {@link jannovar.genotype.GenotypeCall GenotypeCall} object passed to this function is expected to represent all
+	 * {@link jannovar.pedigree.GenotypeCall GenotypeCall} object passed to this function is expected to represent all
 	 * of the variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). For
 	 * autosomal dominant inheritance, there must be at least one Variant that is shared by all affected persons but no
-	 * unaffected persons in the pedigree. The samples represented by the {@link jannovar.genotype.GenotypeCall
+	 * unaffected persons in the pedigree. The samples represented by the {@link jannovar.pedigree.GenotypeCall
 	 * GenotypeCall} must be in the same order as the list of Persons contained in this pedigree.
 	 *
 	 * @param varList
@@ -464,8 +457,8 @@ public class Pedigree {
 			GenotypeCall multiGT = v.getGenotype();
 			int N = multiGT.getNumberOfIndividuals();
 			boolean variantCompatible = true; /*
-											 * Is the current variant compatible with AD?
-											 */
+			 * Is the current variant compatible with AD?
+			 */
 			int n_affected_with_het = 0;
 			for (int i = 0; i < N; ++i) {
 				Genotype gt = multiGT.getGenotypeInIndividualN(i);
@@ -797,10 +790,10 @@ public class Pedigree {
 			/*
 			 * System.out.println("# 1 not hom"); if (affectedsAreHeterozygous(multiGT))
 			 * System.out.println("# 2 affecteds are het"); else System.out.println("# 2 affecteds are not het");
-			 *
+			 * 
 			 * if (onlyOneParentIsHeterozygous(multiGT)) System.out.println("# 3 only one paret is het"); else
 			 * System.out.println("# 3 not only one parent is het het");
-			 *
+			 * 
 			 * if (unaffectedsAreNotHomozygousALT(multiGT) ) System.out.println("# 4 unaffects Not Hom"); else
 			 * System.out.println("# 4 NOT unaffects Not Hom");
 			 */

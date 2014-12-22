@@ -1,8 +1,8 @@
 package jannovar.cmd.annotate_vcf;
 
 import jannovar.JannovarOptions;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommandLineParser;
-import jannovar.exception.HelpRequestedException;
 
 import java.io.PrintWriter;
 
@@ -11,6 +11,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ */
 public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineParser {
 
 	@Override
@@ -20,6 +24,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
+		result.command = JannovarOptions.Command.ANNOTATE_VCF;
 
 		if (cmd.hasOption("help")) {
 			printHelp();
@@ -29,7 +34,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		if (cmd.hasOption("data-file"))
 			result.dataFile = cmd.getOptionValue("data-file");
 		else
-			throw new ParseException("You must specify a data file via -d/--data-file!");
+			throw new ParseException("You must specify a data file via -D/--data-file!");
 
 		result.jannovarFormat = cmd.hasOption("janno");
 

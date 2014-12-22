@@ -1,7 +1,7 @@
 package jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
-import jannovar.exception.AnnotationException;
+import jannovar.annotation.AnnotationException;
 
 import java.io.IOException;
 
@@ -14,10 +14,14 @@ import java.io.IOException;
  * Currently, we have to convert HTSJDK VariantContext objects into Jannovar Variant objects but that should be
  * simplified later on.
  *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 // TODO(holtgrew): Update comment above once we use VariantContext everywhere.
 public abstract class AnnotatedVariantWriter {
+
 	/**
 	 * Write out the given VariantContext with additional annotation.
 	 *
@@ -33,4 +37,5 @@ public abstract class AnnotatedVariantWriter {
 
 	/** Close writer, free resources */
 	abstract void close();
+
 }

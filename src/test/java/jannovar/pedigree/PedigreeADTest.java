@@ -1,9 +1,7 @@
 package jannovar.pedigree;
 
-import jannovar.common.Genotype;
-import jannovar.exception.PedParseException;
-import jannovar.exome.Variant;
-import jannovar.genotype.GenotypeCall;
+import jannovar.io.ReferenceDictionary;
+import jannovar.reference.HG19RefDictBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,14 +24,16 @@ import org.junit.Test;
  * </pre>
  */
 public class PedigreeADTest {
+	/** this test uses this static hg19 reference dictionary */
+	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
+
 	static private Pedigree pedigree = null;
 
 	@BeforeClass
 	public static void setUp() throws IOException, PedParseException {
 		PedFileParser parser = null;
 		parser = new PedFileParser();
-		java.net.URL url = PedigreeADTest.class
-				.getResource("/TestPedigreeAD.ped");
+		java.net.URL url = PedigreeADTest.class.getResource("/TestPedigreeAD.ped");
 		String path = url.getPath();
 		pedigree = parser.parseFile(path);
 
@@ -66,17 +66,15 @@ public class PedigreeADTest {
 		}
 		GenotypeCall gc = new GenotypeCall(lst, null);
 		float dummyPhred = 100f;
-		Variant v = new Variant((byte) 1, 1, "A", "C", gc, dummyPhred, "");
+		Variant v = new Variant(refDict, 1, 1, "A", "C", gc, dummyPhred, "");
 		varList.add(v);
 		return varList;
 	}
 
 	@Test
 	public void testADinheritance1() {
-		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
+		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
+				Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
 		boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
 		Assert.assertEquals(false, b);
 	}
@@ -84,10 +82,8 @@ public class PedigreeADTest {
 	/** Correct inheritance pattern! */
 	@Test
 	public void testADinheritance2() {
-		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF);
+		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
 		Assert.assertEquals(true, b);
 	}
@@ -95,10 +91,8 @@ public class PedigreeADTest {
 	/** An affected is homozygous alt => cannot be right variant! */
 	@Test
 	public void testADinheritance3() {
-		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HOMOZYGOUS_ALT,
-				Genotype.HOMOZYGOUS_REF);
+		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HOMOZYGOUS_ALT, Genotype.HOMOZYGOUS_REF);
 		boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
 		Assert.assertEquals(false, b);
 	}
@@ -106,10 +100,8 @@ public class PedigreeADTest {
 	/** An affected is homozygous ref => cannot be right variant! */
 	@Test
 	public void testADinheritance4() {
-		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HOMOZYGOUS_REF,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF);
+		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HOMOZYGOUS_REF, Genotype.HOMOZYGOUS_REF,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF);
 		boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
 		Assert.assertEquals(false, b);
 	}
@@ -117,10 +109,8 @@ public class PedigreeADTest {
 	/** An unaffected person is heterozyous -> FALSE */
 	@Test
 	public void testADinheritance5() {
-		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS,
-				Genotype.HETEROZYGOUS);
+		ArrayList<Variant> lst = constructGenotypeCall(Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF,
+				Genotype.HETEROZYGOUS, Genotype.HOMOZYGOUS_REF, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS);
 		boolean b = pedigree.isCompatibleWithAutosomalDominant(lst);
 		Assert.assertEquals(false, b);
 	}

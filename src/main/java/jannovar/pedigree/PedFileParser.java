@@ -1,7 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.exception.PedParseException;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -28,8 +26,7 @@ import java.util.ArrayList;
  * <li>0 means unknown
  * </ul>
  *
- * @author Peter Robinson
- * @version 0.04 (2 June, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class PedFileParser {
 	/**
@@ -39,6 +36,8 @@ public class PedFileParser {
 	/**
 	 * The plain (base) name of the PED file.
 	 */
+	// TODO(holtgrem): Remove?
+	@SuppressWarnings("unused")
 	private String base_filename = null;
 	/**
 	 * Pedigree object representing the family described in the PED file. This object is created and returned by
@@ -85,7 +84,7 @@ public class PedFileParser {
 	 * @param PEDfileContents
 	 *            reader object
 	 * @return {@link Pedigree} object
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public Pedigree parseStream(BufferedReader PEDfileContents) throws PedParseException {
 		try {
@@ -139,7 +138,7 @@ public class PedFileParser {
 	 * @param A
 	 *            list of fields of a single ped file line
 	 * @return {@link Person} object
-	 * @throws jannovar.exception.PedParseException
+	 * @throws jannovar.pedigree.PedParseException
 	 */
 	public Person parsePerson(String[] A) throws PedParseException {
 		String famID = A[0];

@@ -1,14 +1,14 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.common.VariantType;
-import jannovar.exception.ProjectionException;
+import jannovar.annotation.VariantType;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeChangeNormalizer;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.PositionType;
+import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptProjectionDecorator;
 import jannovar.reference.TranscriptSequenceChangeHelper;
@@ -29,9 +29,13 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
  * The realizing classes then override {@link #build} and implement their annotation building logic there. Override
  * {@link #ncHGVS} for defining the non-coding HGVS string.
  *
+ * At the moment, this has package visibility only since it is not clear yet whether and how client code should extend
+ * the builder hierarchy.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 abstract class AnnotationBuilder {
+
 	/** transcript to annotate. */
 	protected final TranscriptInfo transcript;
 	/** genome change to use for annotation */
@@ -90,12 +94,12 @@ abstract class AnnotationBuilder {
 	 *
 	 * @return {@link Annotation} for the given {@link #transcript} and {@link #change}.
 	 */
-	abstract Annotation build();
+	public abstract Annotation build();
 
 	/**
 	 * @return HGVS string for change in non-coding part of transcript.
 	 */
-	abstract String ncHGVS();
+	protected abstract String ncHGVS();
 
 	/**
 	 * Build and return annotation for non-coding RNA.
@@ -127,7 +131,7 @@ abstract class AnnotationBuilder {
 				varType = VariantType.ncRNA_EXONIC;
 			else
 				varType = VariantType.ncRNA_INTRONIC;
-			return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+			return new Annotation(transcript, ncHGVS(), varType);
 		} else {
 			VariantType varType;
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
@@ -140,7 +144,7 @@ abstract class AnnotationBuilder {
 				varType = VariantType.ncRNA_EXONIC;
 			else
 				varType = VariantType.ncRNA_INTRONIC;
-			return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+			return new Annotation(transcript, ncHGVS(), varType);
 		}
 	}
 
@@ -171,7 +175,7 @@ abstract class AnnotationBuilder {
 			else
 				varType = VariantType.INTRONIC;
 		}
-		return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+		return new Annotation(transcript, ncHGVS(), varType);
 	}
 
 	/**
@@ -207,7 +211,7 @@ abstract class AnnotationBuilder {
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
 				varType = VariantType.UTR3;
 		}
-		return new Annotation(transcript.transcriptModel, ncHGVS(), varType);
+		return new Annotation(transcript, ncHGVS(), varType);
 	}
 
 	/**
@@ -220,18 +224,18 @@ abstract class AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
+				return new Annotation(transcript, annoString, VariantType.UPSTREAM);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
+				return new Annotation(transcript, annoString, VariantType.DOWNSTREAM);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.UPSTREAM);
+				return new Annotation(transcript, annoString, VariantType.UPSTREAM);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript.transcriptModel, annoString, VariantType.DOWNSTREAM);
+				return new Annotation(transcript, annoString, VariantType.DOWNSTREAM);
 		}
 	}
 
@@ -239,7 +243,7 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript.transcriptModel, String.format("dist=%d", distance()), VariantType.INTERGENIC);
+		return new Annotation(transcript, String.format("dist=%d", distance()), VariantType.INTERGENIC);
 	}
 
 	/**
@@ -267,7 +271,7 @@ abstract class AnnotationBuilder {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
-		int exonNum;
+		final int exonNum;
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is change => insertion
@@ -277,11 +281,9 @@ abstract class AnnotationBuilder {
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(changePos))
 				return transcript.accession; // no exon information if change pos does not lie in exon
-			try {
-				exonNum = projector.locateExon(changePos);
-			} catch (ProjectionException e) {
+			exonNum = projector.locateExon(changePos);
+			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: position should be in exon if we reach here");
-			}
 		} else {
 			// at least one base is changed
 			GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
@@ -294,13 +296,11 @@ abstract class AnnotationBuilder {
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
 				return transcript.accession; // no exon information if either does not lie in exon
-			try {
-				exonNum = projector.locateExon(firstChangePos);
-				if (exonNum != projector.locateExon(lastChangePos))
-					return transcript.accession; // no exon information if the deletion spans more than one exon
-			} catch (ProjectionException e) {
+			exonNum = projector.locateExon(firstChangePos);
+			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: positions should be in exons if we reach here");
-			}
+			if (exonNum != projector.locateExon(lastChangePos))
+				return transcript.accession; // no exon information if the deletion spans more than one exon
 		}
 
 		return String.format("%s:exon%d", transcript.accession, exonNum + 1);
@@ -333,4 +333,5 @@ abstract class AnnotationBuilder {
 			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
 					posBuilder.getCDNAPosStr(lastChangePos));
 	}
+
 }

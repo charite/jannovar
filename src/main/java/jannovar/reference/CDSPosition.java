@@ -1,29 +1,31 @@
 package jannovar.reference;
 
-// TODO(holtgrem): Introduce CDSPosition for explicitely expressing this third coordinate system?
+import jannovar.util.Immutable;
 
 /**
  * Position on a transcript.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class CDSPosition {
+@Immutable
+public final class CDSPosition {
+
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	public final TranscriptInfo transcript;
 	/** the position within the transcript */
 	public final int pos;
 
 	/** construct transcript position with one-based coordinate system */
-	public CDSPosition(TranscriptModel transcript, int pos) {
+	public CDSPosition(TranscriptInfo transcript, int pos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.pos = pos;
 	}
 
 	/** construct transcript position with selected coordinate system */
-	public CDSPosition(TranscriptModel transcript, int pos, PositionType positionType) {
+	public CDSPosition(TranscriptInfo transcript, int pos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.pos = pos;
@@ -72,7 +74,7 @@ public class CDSPosition {
 	@Override
 	public String toString() {
 		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:c.%d", this.transcript.getAccessionNumber(), pos);
+		return String.format("%s:c.%d", transcript.accession, pos);
 	}
 
 	/*

@@ -1,13 +1,13 @@
 package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
-import jannovar.common.VariantType;
-import jannovar.exception.InvalidGenomeChange;
-import jannovar.exception.ProjectionException;
+import jannovar.annotation.InvalidGenomeChange;
+import jannovar.annotation.VariantType;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
+import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptSequenceDecorator;
@@ -18,7 +18,8 @@ import jannovar.util.Translator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class SNVAnnotationBuilder extends AnnotationBuilder {
+public final class SNVAnnotationBuilder extends AnnotationBuilder {
+
 	/**
 	 * Override substitution annotation string in the case of coding change.
 	 *
@@ -35,9 +36,7 @@ class SNVAnnotationBuilder extends AnnotationBuilder {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a deletion
 	 */
-
-	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change)
-			throws InvalidGenomeChange {
+	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// guard against invalid genome change
@@ -46,7 +45,7 @@ class SNVAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	Annotation build() {
+	public Annotation build() {
 		// Go through top-level cases (clustered by how they are handled here) and build annotations for each of them
 		// where applicable.
 
@@ -138,11 +137,11 @@ class SNVAnnotationBuilder extends AnnotationBuilder {
 		String annotationStr = String.format("%s:%s", ncHGVS(), protAnno);
 		if (warningMsg != null)
 			annotationStr = String.format("%s:[%s]", annotationStr, warningMsg);
-		return new Annotation(transcript.transcriptModel, annotationStr, varType, cdsPos.pos + 1);
+		return new Annotation(transcript, annotationStr, varType, cdsPos.pos + 1);
 	}
 
 	@Override
-	String ncHGVS() {
+	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
 			return String.format("%s:%s%s>%s", locAnno, dnaAnno, change.ref, change.alt);
 		else

@@ -1,13 +1,15 @@
 package jannovar.reference;
 
-import jannovar.exception.ProjectionException;
+import jannovar.util.Immutable;
 
 /**
  * Functionality for finding out about certain points/regions of {@link TranscriptInfo} using <b>genomic</b> positions.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptSequenceOntologyDecorator {
+@Immutable
+public final class TranscriptSequenceOntologyDecorator {
+
 	/** the transcript information to perform the projection upon. */
 	private final TranscriptInfo transcript;
 
@@ -483,13 +485,8 @@ public class TranscriptSequenceOntologyDecorator {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
 		// locate intron, return false on any errors
-		int intronNo = -1;
-		try {
-			intronNo = projector.locateIntron(interval.getGenomeBeginPos());
-		} catch (ProjectionException e) {
-			return false;
-		}
-		if (intronNo == -1)
+		final int intronNo = projector.locateIntron(interval.getGenomeBeginPos());
+		if (intronNo == TranscriptProjectionDecorator.INVALID_INTRON_ID)
 			return false;
 
 		return !transcript.exonRegions.get(intronNo + 1).contains(interval.getGenomeEndPos().shifted(-1));
@@ -504,13 +501,8 @@ public class TranscriptSequenceOntologyDecorator {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
 		// locate exon, return false on any errors
-		int exonNo = -1;
-		try {
-			exonNo = projector.locateExon(interval.getGenomeBeginPos());
-		} catch (ProjectionException e) {
-			return false;
-		}
-		if (exonNo == -1)
+		final int exonNo = projector.locateExon(interval.getGenomeBeginPos());
+		if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID)
 			return false;
 
 		return transcript.exonRegions.get(exonNo).contains(interval);
@@ -526,13 +518,8 @@ public class TranscriptSequenceOntologyDecorator {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
 		// locate exon, return false on any errors
-		int exonNo = -1;
-		try {
-			exonNo = projector.locateExon(pos);
-		} catch (ProjectionException e) {
-			return false;
-		}
-		if (exonNo == -1)
+		final int exonNo = projector.locateExon(pos);
+		if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID)
 			return false;
 
 		return transcript.exonRegions.get(exonNo).contains(pos);
@@ -549,4 +536,5 @@ public class TranscriptSequenceOntologyDecorator {
 				return true;
 		return false;
 	}
+
 }

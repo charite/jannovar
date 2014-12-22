@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.exception.AnnotationException;
+import jannovar.annotation.AnnotationException;
 import jannovar.util.Translator;
 
 import org.junit.Assert;

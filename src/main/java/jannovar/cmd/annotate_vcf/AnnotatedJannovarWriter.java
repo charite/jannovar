@@ -5,12 +5,14 @@ import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
 import jannovar.JannovarOptions;
 import jannovar.annotation.Annotation;
+import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
-import jannovar.annotation.VariantDataCorrector;
-import jannovar.common.ChromosomeMap;
-import jannovar.exception.AnnotationException;
+import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.GenomePosition;
+import jannovar.reference.PositionType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,7 +21,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
+
+	/** {@link ReferenceDictionary} object to use for information about the genome. */
+	private final ReferenceDictionary refDict;
 
 	/** configuration to use */
 	private JannovarOptions options;
@@ -33,8 +42,10 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** current line */
 	int currentLine = 0;
 
-	public AnnotatedJannovarWriter(HashMap<Byte, Chromosome> chromosomeMap, JannovarOptions options) throws IOException {
-		this.annotator = new VariantAnnotator(chromosomeMap);
+	public AnnotatedJannovarWriter(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap,
+			JannovarOptions options) throws IOException {
+		this.refDict = refDict;
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
 		this.options = options;
 		this.openBufferedWriter();
 	}
@@ -87,24 +98,26 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		currentLine++;
 
 		String chrStr = vc.getChr();
-		// Catch the case that variantContext.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
+		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" contigs etc. In this case, we simply ignore the record.
-		Byte boxedChr = ChromosomeMap.identifier2chromosom.get(vc.getChr());
-		if (boxedChr == null)
+		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		if (boxedInt == null)
 			return;
-		byte chr = boxedChr.byteValue();
+		int chr = boxedInt.intValue();
 
 		// FIXME(mjaeger): We should care about more than just the first alternative allele.
-		// translate from VCF ref/alt/pos to internal Jannovar representation
-		VariantDataCorrector corr = new VariantDataCorrector(vc.getReference().getBaseString(), vc
-				.getAlternateAllele(0).getBaseString(), vc.getStart());
-		String ref = corr.ref;
-		String alt = corr.alt;
-		int pos = corr.position;
+		// Get shortcuts to ref, alt, and position. Note that this is "uncorrected" data, common prefixes etc. are
+		// stripped when constructing the GenomeChange.
+		final String ref = vc.getReference().getBaseString();
+		final String alt = vc.getAlternateAllele(0).getBaseString();
+		final int pos = vc.getStart();
+		// Construct GenomeChange from this and strip common prefixes.
+		final GenomeChange change = new GenomeChange(
+				new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
-		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
+		AnnotationList anno = annotator.buildAnnotationList(change);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", vc.toString());
 			throw new AnnotationException(e);
@@ -116,7 +129,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			String annt = a.getVariantAnnotation();
 			String sym = a.getGeneSymbol();
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
-					chrStr, pos, ref, alt, gtype, qual);
+					chrStr, change.pos, change.ref, change.alt, gtype, qual);
 			out.write(s);
 		}
 	}

@@ -1,14 +1,16 @@
 package jannovar.cmd.annotate_pos;
 
+import jannovar.JannovarException;
 import jannovar.JannovarOptions;
+import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
+import jannovar.cmd.CommandLineParsingException;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommand;
-import jannovar.common.ChromosomeMap;
-import jannovar.exception.AnnotationException;
-import jannovar.exception.CommandLineParsingException;
-import jannovar.exception.HelpRequestedException;
-import jannovar.exception.JannovarException;
+import jannovar.reference.GenomeChange;
+import jannovar.reference.GenomePosition;
+import jannovar.reference.PositionType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +20,10 @@ import org.apache.commons.cli.ParseException;
 /**
  * Allows the annotation of a single position.
  *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
+ *
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
@@ -27,47 +33,60 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	}
 
 	/**
-	 * THis function will simply annotate given chromosomal position with HGVS compliant output e.g. chr1:909238G>C -->
-	 * PLEKHN1:NM_032129.2:c.1460G>C,p.(Arg487Pro)
+	 * This function will simply annotate given chromosomal position with HGVS compliant output.
+	 *
+	 * For example, the change <tt>chr1:909238G&gt;C</tt> could be converted to
+	 * <tt>PLEKHN1:NM_032129.2:c.1460G&gt;C,p.(Arg487Pro)</tt>.
 	 *
 	 * @throws AnnotationException
+	 *             on problems in the annotation process
 	 */
 	@Override
 	public void run() throws JannovarException {
 		deserializeTranscriptDefinitionFile();
 
-		System.err.println("input: " + options.chromosomalChange);
-		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
-		Matcher mat = pat.matcher(options.chromosomalChange);
+		// Parse the chromosomal change string into a GenomeChange object.
+		System.out.println("input: " + options.chromosomalChange);
+		final GenomeChange genomeChange = parseGenomeChange(options.chromosomalChange);
 
-		if (!mat.matches() | mat.groupCount() != 4) {
+		// Construct VariantAnnotator for building the variant annotations.
+		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
+		final AnnotationList annoList = annotator.buildAnnotationList(genomeChange);
+		if (annoList == null) {
+			String e = String.format("No annotations found for variant %s", options.chromosomalChange);
+			throw new AnnotationException(e);
+		}
+
+		// Obtain first or all functional annotation(s) and effect(s).
+		final String annotation;
+		final String effect;
+		if (options.showAll) {
+			annotation = annoList.getAllTranscriptAnnotations();
+			effect = annoList.getAllTranscriptVariantEffects();
+		} else {
+			annotation = annoList.getSingleTranscriptAnnotation();
+			effect = annoList.getVariantType().toString();
+		}
+
+		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
+	}
+
+	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
+		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
+		Matcher match = pat.matcher(options.chromosomalChange);
+
+		if (!match.matches() | match.groupCount() != 4) {
 			System.err
 					.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 
-		byte chr = ChromosomeMap.identifier2chromosom.get(mat.group(1));
-		int pos = Integer.parseInt(mat.group(2));
-		String ref = mat.group(3);
-		String alt = mat.group(4);
+		int chr = refDict.contigID.get(match.group(1));
+		int pos = Integer.parseInt(match.group(2));
+		String ref = match.group(3);
+		String alt = match.group(4);
 
-		VariantAnnotator annotator = new VariantAnnotator(chromosomeMap);
-		AnnotationList anno = annotator.getAnnotationList(chr, pos, ref, alt);
-		if (anno == null) {
-			String e = String.format("No annotations found for variant %s", options.chromosomalChange);
-			throw new AnnotationException(e);
-		}
-		String annotation;
-		String effect;
-		if (options.showAll) {
-			annotation = anno.getAllTranscriptAnnotations();
-			effect = anno.getAllTranscriptVariantEffects();
-		} else {
-			annotation = anno.getSingleTranscriptAnnotation();
-			effect = anno.getVariantType().toString();
-		}
-
-		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
+		return new GenomeChange(new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 	@Override

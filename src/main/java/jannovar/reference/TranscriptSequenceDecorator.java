@@ -1,5 +1,6 @@
 package jannovar.reference;
 
+import jannovar.util.Immutable;
 
 // TODO(holtgrem): Test this class!
 
@@ -8,7 +9,8 @@ package jannovar.reference;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptSequenceDecorator {
+@Immutable
+public final class TranscriptSequenceDecorator {
 
 	/** The wrapped {@link TranscriptInfo}. */
 	public final TranscriptInfo transcript;
@@ -114,4 +116,5 @@ public class TranscriptSequenceDecorator {
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos) {
 		return getCodonsStartingFrom(txPos, cdsPos, transcript.sequence.length());
 	}
+
 }

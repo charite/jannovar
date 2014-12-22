@@ -1,13 +1,23 @@
 package jannovar.reference;
 
-import jannovar.common.ChromosomeMap;
+import jannovar.io.ReferenceDictionary;
+import jannovar.util.Immutable;
+
+import java.io.Serializable;
 
 /**
  * Representation of a genomic interval (chromsome, begin, end) with explicit coordinate system (0-/1-based)
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class GenomeInterval {
+@Immutable
+public final class GenomeInterval implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	/** reference dictionary to use for coordinate translation */
+	final ReferenceDictionary refDict;
+
 	/** the used position type */
 	public final PositionType positionType;
 	/** the strand that the position is located on */
@@ -20,7 +30,8 @@ public class GenomeInterval {
 	public int endPos;
 
 	/** construct genome interval with one-based coordinate system */
-	public GenomeInterval(char strand, int chr, int beginPos, int endPos) {
+	public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos) {
+		this.refDict = refDict;
 		this.strand = strand;
 		this.positionType = PositionType.ONE_BASED;
 		this.chr = chr;
@@ -29,7 +40,9 @@ public class GenomeInterval {
 	}
 
 	/** construct genome interval with selected coordinate system */
-	public GenomeInterval(char strand, int chr, int beginPos, int endPos, PositionType positionType) {
+	public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos,
+			PositionType positionType) {
+		this.refDict = refDict;
 		this.strand = strand;
 		this.positionType = positionType;
 		this.chr = chr;
@@ -39,6 +52,7 @@ public class GenomeInterval {
 
 	/** construct genome interval from other with selected coordinate system */
 	public GenomeInterval(GenomeInterval other, PositionType positionType) {
+		this.refDict = other.refDict;
 		this.strand = other.strand;
 		this.positionType = positionType;
 		this.chr = other.chr;
@@ -54,6 +68,7 @@ public class GenomeInterval {
 
 	/** construct genome interval from other with selected strand */
 	public GenomeInterval(GenomeInterval other, char strand) {
+		this.refDict = other.refDict;
 		this.positionType = other.positionType;
 		this.strand = strand;
 		this.chr = other.chr;
@@ -64,8 +79,8 @@ public class GenomeInterval {
 			this.beginPos = other.beginPos;
 			this.endPos = other.endPos;
 		} else {
-			int beginPos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.beginPos + delta;
-			int endPos = ChromosomeMap.chromosomLength.get((byte) other.chr) - other.endPos + delta;
+			int beginPos = refDict.contigLength.get(other.chr) - other.beginPos + delta;
+			int endPos = refDict.contigLength.get(other.chr) - other.endPos + delta;
 			this.endPos = beginPos;
 			this.beginPos = endPos;
 		}
@@ -73,6 +88,7 @@ public class GenomeInterval {
 
 	/** construct genome interval from {@link GenomePosition} with a length towards 3' of pos' coordinate system */
 	public GenomeInterval(GenomePosition pos, int length) {
+		this.refDict = pos.refDict;
 		this.positionType = pos.positionType;
 		this.strand = pos.strand;
 		this.chr = pos.chr;
@@ -94,12 +110,12 @@ public class GenomeInterval {
 
 	/** return the genome begin position */
 	public GenomePosition getGenomeBeginPos() {
-		return new GenomePosition(strand, chr, beginPos, positionType);
+		return new GenomePosition(refDict, strand, chr, beginPos, positionType);
 	}
 
 	/** return the genome end position */
 	public GenomePosition getGenomeEndPos() {
-		return new GenomePosition(strand, chr, endPos, positionType);
+		return new GenomePosition(refDict, strand, chr, endPos, positionType);
 	}
 
 	/** returns length of the interval */
@@ -112,7 +128,7 @@ public class GenomeInterval {
 	 */
 	public GenomeInterval intersection(GenomeInterval other) {
 		if (chr != other.chr)
-			return new GenomeInterval(strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
+			return new GenomeInterval(refDict, strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
 		other = other.withStrand(strand).withPositionType(PositionType.ZERO_BASED);
 		GenomeInterval me = withPositionType(PositionType.ZERO_BASED);
 
@@ -121,7 +137,7 @@ public class GenomeInterval {
 		if (endPos < beginPos)
 			beginPos = endPos;
 
-		return new GenomeInterval(me.strand, me.chr, beginPos, endPos, PositionType.ZERO_BASED);
+		return new GenomeInterval(refDict, me.strand, me.chr, beginPos, endPos, PositionType.ZERO_BASED);
 	}
 
 	/**
@@ -196,7 +212,7 @@ public class GenomeInterval {
 	 */
 	public GenomeInterval withMorePadding(int padding) {
 		// TODO(holtgrem): throw when going outside of chromosome?
-		return new GenomeInterval(strand, chr, beginPos - padding, endPos + padding, positionType);
+		return new GenomeInterval(refDict, strand, chr, beginPos - padding, endPos + padding, positionType);
 	}
 
 	/**
@@ -215,7 +231,7 @@ public class GenomeInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -230,7 +246,7 @@ public class GenomeInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -250,7 +266,7 @@ public class GenomeInterval {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

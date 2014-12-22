@@ -7,12 +7,27 @@ import java.io.File;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class PathUtil {
+public final class PathUtil {
 
-	public static String join(String path1, String path2) {
-		File file1 = new File(path1);
-		File file2 = new File(file1, path2);
-		return file2.getPath();
+	/**
+	 * Join file name components.
+	 *
+	 * <pre>
+	 * String path = Path.join(&quot;path&quot;, &quot;to&quot;, &quot;file&quot;);
+	 * // =&gt; path == &quot;path/to/file&quot;;
+	 * </pre>
+	 *
+	 * Note that this also works fine for joining paths in URLs.
+	 *
+	 * @param components
+	 *            file name components to join
+	 * @return joint file name components of <code>components</code>
+	 */
+	public static String join(String... components) {
+		File file = new File(components[0]);
+		for (int i = 1; i < components.length; ++i)
+			file = new File(file, components[i]);
+		return file.getPath();
 	}
 
 }

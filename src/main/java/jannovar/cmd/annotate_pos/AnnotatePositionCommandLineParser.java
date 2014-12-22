@@ -1,8 +1,8 @@
 package jannovar.cmd.annotate_pos;
 
 import jannovar.JannovarOptions;
+import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarAnnotationCommandLineParser;
-import jannovar.exception.HelpRequestedException;
 
 import java.io.PrintWriter;
 
@@ -12,6 +12,9 @@ import org.apache.commons.cli.ParseException;
 
 /**
  * Parse the command line for the "annotate-position" command.
+ *
+ * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
+ * any point.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -24,6 +27,7 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
+		result.command = JannovarOptions.Command.ANNOTATE_POSITION;
 
 		if (cmd.hasOption("help")) {
 			printHelp();
