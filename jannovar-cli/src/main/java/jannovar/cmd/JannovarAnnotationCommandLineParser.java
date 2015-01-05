@@ -11,9 +11,6 @@ import org.apache.commons.cli.Parser;
 /**
  * Base class for the command line parser for the annotation commands.
  *
- * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
- * any point.
- *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public abstract class JannovarAnnotationCommandLineParser {

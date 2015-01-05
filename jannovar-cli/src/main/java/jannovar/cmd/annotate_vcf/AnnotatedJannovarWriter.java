@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
- * any point.
+ * Annotate variant in {@link VariantContext} and write out in Jannovar format.
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 

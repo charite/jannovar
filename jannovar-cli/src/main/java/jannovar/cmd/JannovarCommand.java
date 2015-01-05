@@ -6,9 +6,6 @@ import jannovar.JannovarOptions;
 /**
  * Super class for all commands, i.e. the classes implementing one Jannovar execution step.
  *
- * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
- * any point.
- *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public abstract class JannovarCommand {
@@ -41,7 +38,7 @@ public abstract class JannovarCommand {
 	 *             when the user requested the help page
 	 */
 	protected abstract JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException;
+	HelpRequestedException;
 
 	/**
 	 * Function for the execution of the command.

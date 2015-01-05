@@ -7,6 +7,7 @@ package jannovar.cmd.annotate_vcf;
  */
 public final class VCFStrings {
 
+	// TODO(holtgrem): do not use constant here but join the list of variants from {@link VariantType}
 	/**
 	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
 	 * section entitled EFFECT, which decribes the effects of variants (splicing,missense,stoploss, etc).
