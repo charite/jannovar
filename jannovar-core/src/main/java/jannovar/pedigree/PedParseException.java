@@ -5,8 +5,7 @@ import jannovar.JannovarException;
 /**
  * Exception that occurs during parsing of PEDfiles.
  *
- * @author Peter Robinson
- * @version 0.03 (April 28,2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class PedParseException extends JannovarException {
 

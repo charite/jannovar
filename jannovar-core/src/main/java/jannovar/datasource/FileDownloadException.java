@@ -8,8 +8,7 @@ import jannovar.JannovarException;
 /**
  * Exception that can be called if something went wrong while downloading the transcript files.
  *
- * @author mjaeger
- * @version 0.1 (2013-07-11)
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  */
 public class FileDownloadException extends JannovarException {
 	private static final long serialVersionUID = 1L;

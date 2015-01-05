@@ -6,12 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Implements the Node structure of the interval tree. The class is intended to store {@link jannovar.impl.interval.Interval
- * Interval} objects. Each node stores all Intervals that intersect with the {@link #median}. The {@link #leftNode}
- * stores all Intervals that are completely to the left of {@link #median}, and the {@link #rightNode} stores all
- * intervals that are completely to the right. Additionally there are two lists that store orders lists of the Intevals
- * that are stored within the present node. {@link #leftorder} stores the intervals sorted by increased left end points
- * (lowpoint), and {@link #rightorder} stores the same intervals sorted by their right end points (highpoint).
+ * Implements the Node structure of the interval tree. The class is intended to store
+ * {@link jannovar.impl.interval.Interval Interval} objects. Each node stores all Intervals that intersect with the
+ * {@link #median}. The {@link #leftNode} stores all Intervals that are completely to the left of {@link #median}, and
+ * the {@link #rightNode} stores all intervals that are completely to the right. Additionally there are two lists that
+ * store orders lists of the Intevals that are stored within the present node. {@link #leftorder} stores the intervals
+ * sorted by increased left end points (lowpoint), and {@link #rightorder} stores the same intervals sorted by their
+ * right end points (highpoint).
  *
  * Although public, this class is not meant to be part of the public Jannovar intervace. It can be changed or removed at
  * any point.
@@ -19,7 +20,6 @@ import java.util.List;
  * @param <T>
  * @see jannovar.impl.interval.IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
- * @version 0.08 (9 January, 2014)
  */
 public final class Node<T> {
 	/** Median of all intervals in this node */
@@ -260,7 +260,7 @@ public final class Node<T> {
 					this.leftorder.size(), median));
 		else
 			System.out
-					.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(), median));
+			.println(String.format("Node:  %d intervals crossing median [%d]:", this.leftorder.size(), median));
 		for (Interval<T> i : leftorder) {
 			System.out.println(indent + "##(leftorder):" + i);
 		}

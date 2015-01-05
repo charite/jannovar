@@ -51,9 +51,8 @@ import java.util.List;
  * @author Radostina Misirkova
  * @author Nadine Taube
  * @author Gizem Top
- * @author Peter Robinson
- * @author Manuel Holtgrewe
- * @version 0.12 (13 June, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  *
  * @param <T>
  *            The contained type to attach to the intervals.

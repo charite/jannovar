@@ -58,9 +58,8 @@ import jannovar.reference.TranscriptInfo;
  * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
  * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  *
- * @author Peter N Robinson
- * @author mjaeger
- * @version 0.33 (29 December, 2013)
+ * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Marten Jaeger <marten.jaeger@charite.de>
  */
 public final class Jannovar {
 	/** Configuration for the Jannovar program. */

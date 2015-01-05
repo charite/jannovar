@@ -5,7 +5,6 @@ package jannovar.impl.parse.gff;
  *
  * @see <a href="http://www.sequenceontology.org/gff3.shtml">http://www.sequenceontology.org/gff3.shtml</a>
  * @author Marten Jaeger <marten.jaeger@charite.de>
- * @version 0.1
  */
 public enum FeatureType {
 

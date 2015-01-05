@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public class Variant implements Comparable<Variant> {
+
 	private final ReferenceDictionary refDict;
 	/** chromosome; 23=X, 24=Y */
 	private int chromosome;
@@ -579,9 +580,9 @@ public class Variant implements Comparable<Variant> {
 		ArrayList<String> A = new ArrayList<String>();
 		if (this.annotList == null) {
 			A.add(".|."); /*
-			 * empty ID, empty annotation. This should actually never happen, but it is better than
-			 * returning null.
-			 */
+						 * empty ID, empty annotation. This should actually never happen, but it is better than
+						 * returning null.
+						 */
 			return A;
 		}
 		boolean mult = this.affectsMultipleGenes();

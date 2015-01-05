@@ -12,9 +12,8 @@ package jannovar.impl.interval;
  * @param <T>
  *            The value attached to each node/interval.
  *
- * @see "jannovar.interval.IntervalTree"
+ * @see IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
- * @version 0.03 (22 May, 2013)
  */
 public final class Interval<T> implements java.io.Serializable {
 	/**
