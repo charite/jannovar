@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.Translator;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
@@ -14,7 +15,6 @@ import jannovar.reference.PositionType;
 import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
-import jannovar.util.Translator;
 
 /**
  * Builds {@link Annotation} objects for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.

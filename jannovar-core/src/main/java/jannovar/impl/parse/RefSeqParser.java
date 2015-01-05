@@ -3,10 +3,10 @@ package jannovar.impl.parse;
 import jannovar.impl.parse.gff.FeatureProcessor;
 import jannovar.impl.parse.gff.GFFParser;
 import jannovar.impl.parse.gff.TranscriptInfoFactory;
+import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptInfoBuilder;
-import jannovar.util.PathUtil;
 
 import java.io.File;
 import java.io.IOException;

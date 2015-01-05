@@ -1,6 +1,6 @@
 package jannovar.impl.parse.gff;
 
-import jannovar.util.ProgressBar;
+import jannovar.impl.util.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.File;

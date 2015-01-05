@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.Translator;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
@@ -11,7 +12,6 @@ import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptSequenceDecorator;
-import jannovar.util.Translator;
 
 /**
  * Builds {@link Annotation} objects for the SNV {@link GenomeChange}s in the given {@link TranscriptInfo}.

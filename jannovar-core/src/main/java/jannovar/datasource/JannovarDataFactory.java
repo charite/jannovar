@@ -3,10 +3,10 @@ package jannovar.datasource;
 import jannovar.JannovarOptions;
 import jannovar.impl.parse.ReferenceDictParser;
 import jannovar.impl.parse.TranscriptParseException;
+import jannovar.impl.util.PathUtil;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.TranscriptInfo;
-import jannovar.util.PathUtil;
 
 import java.io.File;
 import java.net.MalformedURLException;

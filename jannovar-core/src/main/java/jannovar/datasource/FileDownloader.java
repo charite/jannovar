@@ -1,6 +1,6 @@
 package jannovar.datasource;
 
-import jannovar.util.ProgressBar;
+import jannovar.impl.util.ProgressBar;
 
 import java.io.BufferedInputStream;
 import java.io.File;

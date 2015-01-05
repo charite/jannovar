@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.Translator;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
@@ -10,7 +11,6 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
-import jannovar.util.Translator;
 
 /**
  * Builds {@link Annotation} objects for the deletion {@link GenomeChange}s in the given {@link TranscriptInfo}.

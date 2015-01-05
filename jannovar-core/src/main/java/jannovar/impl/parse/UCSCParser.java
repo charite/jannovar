@@ -1,11 +1,11 @@
 package jannovar.impl.parse;
 
+import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptInfoBuilder;
-import jannovar.util.PathUtil;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

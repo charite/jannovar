@@ -12,12 +12,12 @@ import jannovar.JannovarOptions;
 import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantAnnotator;
+import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
-import jannovar.util.PathUtil;
 
 import java.io.File;
 import java.util.HashMap;

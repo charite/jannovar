@@ -1,4 +1,4 @@
-package jannovar.util;
+package jannovar.impl.util;
 
 /**
  * A simple status bar that only work on terminals where "\r" has an affect.

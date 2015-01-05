@@ -1,4 +1,4 @@
-package jannovar.util;
+package jannovar.impl.util;
 
 import java.io.File;
 
