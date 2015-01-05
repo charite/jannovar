@@ -2,6 +2,8 @@ target
 dependency-reduced-pom.xml
 # Vim swap files
 *.sw?
+# gedit swap files
+*~
 # Eclipse stuff
 .classpath
 .project
