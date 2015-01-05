@@ -18,3 +18,4 @@ cov-int*
 *.jannovar
 *.vcf
 *.vcf.idx
+data

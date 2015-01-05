@@ -225,18 +225,18 @@ final class FileDownloader {
 			System.setProperty("http.proxyHost", options.http.host);
 		if (options.http.port != -1)
 			System.setProperty("http.proxyPort", Integer.toString(options.http.port));
-		if (options.http.host != null)
+		if (options.http.user != null)
 			System.setProperty("http.proxyUser", options.http.user);
-		if (options.http.port != -1)
+		if (options.http.password != null)
 			System.setProperty("http.proxyPassword", options.http.password);
 
 		if (options.https.host != null)
 			System.setProperty("https.proxyHost", options.https.host);
 		if (options.https.port != -1)
 			System.setProperty("https.proxyPort", Integer.toString(options.https.port));
-		if (options.https.host != null)
+		if (options.https.user != null)
 			System.setProperty("https.proxyUser", options.https.user);
-		if (options.https.port != -1)
+		if (options.https.password != null)
 			System.setProperty("https.proxyPassword", options.https.password);
 	}
 
