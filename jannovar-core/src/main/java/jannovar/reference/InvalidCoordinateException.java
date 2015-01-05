@@ -7,7 +7,7 @@ package jannovar.reference;
  */
 public class InvalidCoordinateException extends RuntimeException {
 
-	private static final long serialVersionUID = -6489422237619473832L;
+	private static final long serialVersionUID = 1L;
 
 	public InvalidCoordinateException() {
 	}
