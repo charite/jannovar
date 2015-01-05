@@ -1,7 +1,7 @@
 package jannovar.reference;
 
+import jannovar.Immutable;
 import jannovar.util.DNAUtils;
-import jannovar.util.Immutable;
 
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.

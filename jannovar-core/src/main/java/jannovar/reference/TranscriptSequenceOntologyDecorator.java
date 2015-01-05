@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.util.Immutable;
+import jannovar.Immutable;
 
 /**
  * Functionality for finding out about certain points/regions of {@link TranscriptInfo} using <b>genomic</b> positions.

@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.util.Immutable;
+import jannovar.Immutable;
 
 /**
  * Representation of a change in amino acids.

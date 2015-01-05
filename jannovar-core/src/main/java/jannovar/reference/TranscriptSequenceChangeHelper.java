@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.util.Immutable;
+import jannovar.Immutable;
 
 /**
  * Helper class for getting updated transcript sequence for deletions and block substitutions.

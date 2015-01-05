@@ -1,6 +1,6 @@
 package jannovar.io;
 
-import jannovar.util.Immutable;
+import jannovar.Immutable;
 
 import java.io.PrintStream;
 import java.io.Serializable;

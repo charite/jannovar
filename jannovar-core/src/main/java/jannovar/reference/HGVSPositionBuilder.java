@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.util.Immutable;
+import jannovar.Immutable;
 
 /**
  * Helper class that allows easy building of HGVS position strings.
