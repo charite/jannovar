@@ -13,19 +13,19 @@ public class PersonTest {
 	/** Test with an entry with invalid sex. */
 	@Test(expected = PedParseException.class)
 	public void testInValidPersonSex() throws PedParseException {
-		new Person("FAM", "PERSON", "0", "0", "3", "0");
+		new LegacyPerson("FAM", "PERSON", "0", "0", "3", "0");
 	}
 
 	/** Test with an entry with invalid disease */
 	@Test(expected = PedParseException.class)
 	public void testInvalidPersonDisease() throws PedParseException {
-		new Person("FAM", "PERSON", "0", "0", "1", "3");
+		new LegacyPerson("FAM", "PERSON", "0", "0", "1", "3");
 	}
 
 	/** Tests a few valid cases. */
 	@Test
 	public void testValidPerson_Mother() throws PedParseException {
-		Person mother = new Person("FAM", "MOTHER", null, null, "2", "2");
+		LegacyPerson mother = new LegacyPerson("FAM", "MOTHER", null, null, "2", "2");
 		Assert.assertEquals("FAM", mother.getFamilyID());
 		Assert.assertEquals(null, mother.getFatherID());
 		Assert.assertEquals(null, mother.getMotherID());
@@ -38,7 +38,7 @@ public class PersonTest {
 
 	@Test
 	public void testValidPerson_Father() throws PedParseException {
-		Person father = new Person("FAM", "FATHER", null, null, "1", "2");
+		LegacyPerson father = new LegacyPerson("FAM", "FATHER", null, null, "1", "2");
 		Assert.assertEquals("FAM", father.getFamilyID());
 		Assert.assertEquals(null, father.getFatherID());
 		Assert.assertEquals(null, father.getMotherID());
@@ -51,7 +51,7 @@ public class PersonTest {
 
 	@Test
 	public void testValidPerson_Daughter() throws PedParseException {
-		Person daughter = new Person("FAM", "DAUGHTER", "FATHER", "MOTHER",
+		LegacyPerson daughter = new LegacyPerson("FAM", "DAUGHTER", "FATHER", "MOTHER",
 				"2", "1");
 		Assert.assertEquals("FAM", daughter.getFamilyID());
 		Assert.assertEquals("FATHER", daughter.getFatherID());
@@ -65,7 +65,7 @@ public class PersonTest {
 
 	@Test
 	public void testValidPerson_Son() throws PedParseException {
-		Person son = new Person("FAM", "SON", "FATHER", "MOTHER", "1", "0");
+		LegacyPerson son = new LegacyPerson("FAM", "SON", "FATHER", "MOTHER", "1", "0");
 		Assert.assertEquals("FAM", son.getFamilyID());
 		Assert.assertEquals("FATHER", son.getFatherID());
 		Assert.assertEquals("MOTHER", son.getMotherID());

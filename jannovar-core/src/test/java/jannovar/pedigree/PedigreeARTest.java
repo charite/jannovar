@@ -29,7 +29,7 @@ public class PedigreeARTest {
 	/** this test uses this static hg19 reference dictionary */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
-	static private Pedigree pedigree = null;
+	static private LegacyPedigree pedigree = null;
 
 	@BeforeClass
 	public static void setUp() throws IOException, PedParseException {
@@ -54,11 +54,11 @@ public class PedigreeARTest {
 
 	// TODO(holtgrem): Remove?
 	@SuppressWarnings("unused")
-	private GenotypeCall constructGenotypeCall2(Genotype... calls) {
+	private GenotypeList constructGenotypeCall2(Genotype... calls) {
 		ArrayList<Genotype> lst = new ArrayList<Genotype>();
 		for (Genotype g : calls)
 			lst.add(g);
-		return new GenotypeCall(lst, null);
+		return new GenotypeList(lst, null);
 	}
 
 	private Variant constructGenotypeCall(Genotype... calls) {
@@ -67,7 +67,7 @@ public class PedigreeARTest {
 		for (Genotype g : calls) {
 			lst.add(g);
 		}
-		GenotypeCall gc = new GenotypeCall(lst, null);
+		GenotypeList gc = new GenotypeList(lst, null);
 		Variant v = new Variant(refDict, 1, 1, "A", "C", gc, dummyPhred, "");
 
 		return v;

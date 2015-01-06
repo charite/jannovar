@@ -27,7 +27,7 @@ public class PedigreeADTest {
 	/** this test uses this static hg19 reference dictionary */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
-	static private Pedigree pedigree = null;
+	static private LegacyPedigree pedigree = null;
 
 	@BeforeClass
 	public static void setUp() throws IOException, PedParseException {
@@ -53,7 +53,7 @@ public class PedigreeADTest {
 
 	@Test
 	public void testFather1() {
-		Person son1 = pedigree.getPerson("son1");
+		LegacyPerson son1 = pedigree.getPerson("son1");
 		String fatherID = son1.getFatherID();
 		Assert.assertEquals("father", fatherID);
 	}
@@ -64,7 +64,7 @@ public class PedigreeADTest {
 		for (Genotype g : calls) {
 			lst.add(g);
 		}
-		GenotypeCall gc = new GenotypeCall(lst, null);
+		GenotypeList gc = new GenotypeList(lst, null);
 		float dummyPhred = 100f;
 		Variant v = new Variant(refDict, 1, 1, "A", "C", gc, dummyPhred, "");
 		varList.add(v);

@@ -1,5 +1,7 @@
 package jannovar.pedigree;
 
+// TODO(holtgrew): Move the extensive description below to the tutorial?
+
 /**
  * Enumeration of genotype kinds in a {@link Variant}.
  *

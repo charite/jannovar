@@ -22,7 +22,7 @@ public class PedigreeTest {
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	// Simple list of persons to use in test.
-	ArrayList<Person> familyOfFour = new ArrayList<Person>();
+	ArrayList<LegacyPerson> familyOfFour = new ArrayList<LegacyPerson>();
 
 	// Helper function for constructing Variants from Genotypes for testing.
 	private Variant constructVariant(Genotype... calls) {
@@ -30,7 +30,7 @@ public class PedigreeTest {
 		ArrayList<Genotype> lst = new ArrayList<Genotype>();
 		for (Genotype g : calls)
 			lst.add(g);
-		GenotypeCall gc = new GenotypeCall(lst, null);
+		GenotypeList gc = new GenotypeList(lst, null);
 		Variant v = new Variant(refDict, 1, 1, "A", "C", gc, dummyPhred, "");
 
 		return v;
@@ -38,17 +38,17 @@ public class PedigreeTest {
 
 	@Before
 	public void setUp() throws PedParseException {
-		familyOfFour.add(new Person("FAMILY", "FATHER", null, null, "1", "0"));
-		familyOfFour.add(new Person("FAMILY", "MOTHER", null, null, "2", "1"));
-		familyOfFour.add(new Person("FAMILY", "SON", "FATHER", "MOTHER", "1", "1"));
-		familyOfFour.add(new Person("FAMILY", "DAUGHTER", "FATHER", "MOTHER", "2", "2"));
+		familyOfFour.add(new LegacyPerson("FAMILY", "FATHER", null, null, "1", "0"));
+		familyOfFour.add(new LegacyPerson("FAMILY", "MOTHER", null, null, "2", "1"));
+		familyOfFour.add(new LegacyPerson("FAMILY", "SON", "FATHER", "MOTHER", "1", "1"));
+		familyOfFour.add(new LegacyPerson("FAMILY", "DAUGHTER", "FATHER", "MOTHER", "2", "2"));
 	}
 
 	// Simple tests on a single-sample pedigree as constructed with
 	// Pedigree.constructSingleSamplePedigree().
 	@Test
 	public void testConstructSingleSamplePedigree() {
-		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("INDIVIDUAL");
+		LegacyPedigree pedigree = LegacyPedigree.constructSingleSamplePedigree("INDIVIDUAL");
 
 		Assert.assertEquals("INDIVIDUAL", pedigree.getSingleSampleName());
 		Assert.assertEquals(1, pedigree.getPedigreeSize());
@@ -58,7 +58,7 @@ public class PedigreeTest {
 		Assert.assertEquals(0, pedigree.getNumberOfUnaffectedsInPedigree());
 		Assert.assertEquals("FAMILY:INDIVIDUAL[affected;male]", pedigree.getPedigreeSummary());
 
-		Person p = pedigree.getPerson("INDIVIDUAL");
+		LegacyPerson p = pedigree.getPerson("INDIVIDUAL");
 		Assert.assertEquals("FAMILY", p.getFamilyID());
 		Assert.assertEquals(null, p.getFatherID());
 		Assert.assertEquals(null, p.getMotherID());
@@ -71,9 +71,9 @@ public class PedigreeTest {
 
 	@Test
 	public void testPedigreeOnePerson() throws PedParseException {
-		ArrayList<Person> pList = new ArrayList<Person>();
-		pList.add(new Person("FAMILY", "PERSON", null, null, "2", "1"));
-		Pedigree pedigree = new Pedigree(pList, "FAMILY");
+		ArrayList<LegacyPerson> pList = new ArrayList<LegacyPerson>();
+		pList.add(new LegacyPerson("FAMILY", "PERSON", null, null, "2", "1"));
+		LegacyPedigree pedigree = new LegacyPedigree(pList, "FAMILY");
 
 		Assert.assertEquals("PERSON", pedigree.getSingleSampleName());
 		Assert.assertEquals(1, pedigree.getPedigreeSize());
@@ -83,7 +83,7 @@ public class PedigreeTest {
 		Assert.assertEquals(0, pedigree.getNumberOfUnaffectedsInPedigree());
 		Assert.assertEquals("FAMILY:PERSON[unaffected;female]", pedigree.getPedigreeSummary());
 
-		Person p = pedigree.getPerson("PERSON");
+		LegacyPerson p = pedigree.getPerson("PERSON");
 		Assert.assertEquals("FAMILY", p.getFamilyID());
 		Assert.assertEquals(null, p.getFatherID());
 		Assert.assertEquals(null, p.getMotherID());
@@ -97,7 +97,7 @@ public class PedigreeTest {
 	// Construct family of four and check the query functions.
 	@Test
 	public void testFamilyOfFourQueryFunctions() throws PedParseException {
-		Pedigree pedigree = new Pedigree(this.familyOfFour, "FAMILY");
+		LegacyPedigree pedigree = new LegacyPedigree(this.familyOfFour, "FAMILY");
 
 		Assert.assertFalse(pedigree.isNthPersonAffected(0));
 		Assert.assertFalse(pedigree.isNthPersonAffected(1));
@@ -121,7 +121,7 @@ public class PedigreeTest {
 	// Construct family of four and check getPerson function.
 	@Test
 	public void testFamilyOfFour_isFunctions2() throws PedParseException {
-		Pedigree pedigree = new Pedigree(this.familyOfFour, "FAMILY");
+		LegacyPedigree pedigree = new LegacyPedigree(this.familyOfFour, "FAMILY");
 		Assert.assertEquals(familyOfFour.get(0), pedigree.getPerson("FATHER"));
 		Assert.assertEquals(familyOfFour.get(1), pedigree.getPerson("MOTHER"));
 		Assert.assertEquals(familyOfFour.get(2), pedigree.getPerson("SON"));
@@ -130,7 +130,7 @@ public class PedigreeTest {
 
 	@Test
 	public void testFamilyOfFour_adjustSampleOrderInPedFile() throws PedParseException {
-		Pedigree pedigree = new Pedigree(this.familyOfFour, "FAMILY");
+		LegacyPedigree pedigree = new LegacyPedigree(this.familyOfFour, "FAMILY");
 
 		ArrayList<String> sampleNames = new ArrayList<String>();
 		sampleNames.add("DAUGHTER");
@@ -151,7 +151,7 @@ public class PedigreeTest {
 		// TODO(holtgrem): private function initializeAffectedsParentsSibs is
 		// not called on addPerson
 		// TODO(holtgrem): also, used nowhere, could be removed
-		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("Person");
+		LegacyPedigree pedigree = LegacyPedigree.constructSingleSamplePedigree("Person");
 
 		pedigree.addIndividual(this.familyOfFour.get(0));
 
@@ -172,7 +172,7 @@ public class PedigreeTest {
 
 	@Test
 	public void testSingleSampleHasHeterozygousVariant() {
-		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("PERSON");
+		LegacyPedigree pedigree = LegacyPedigree.constructSingleSamplePedigree("PERSON");
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 
 		// homozygous alt -- no heterozygous variant
@@ -189,7 +189,7 @@ public class PedigreeTest {
 
 	@Test
 	public void testSingleSampleCompatibleWithAutosomalRecessive_homozygous() {
-		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("PERSON");
+		LegacyPedigree pedigree = LegacyPedigree.constructSingleSamplePedigree("PERSON");
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 		varList.add(constructVariant(Genotype.HOMOZYGOUS_ALT));
 		Assert.assertTrue(pedigree.singleSampleCompatibleWithAutosomalRecessive(varList));
@@ -197,7 +197,7 @@ public class PedigreeTest {
 
 	@Test
 	public void testSingleSampleCompatibleWithAutosomalRecessive_heterozygous() {
-		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("PERSON");
+		LegacyPedigree pedigree = LegacyPedigree.constructSingleSamplePedigree("PERSON");
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 		varList.add(constructVariant(Genotype.HETEROZYGOUS));
 		Assert.assertFalse(pedigree.singleSampleCompatibleWithAutosomalRecessive(varList));
@@ -207,7 +207,7 @@ public class PedigreeTest {
 
 	@Test
 	public void testIsCompatibleWithXChromosomalRecessive_singleSample() {
-		Pedigree pedigree = Pedigree.constructSingleSamplePedigree("PERSON");
+		LegacyPedigree pedigree = LegacyPedigree.constructSingleSamplePedigree("PERSON");
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 		varList.add(constructVariant(Genotype.HETEROZYGOUS));
 		varList.get(0).setChromosome(refDict.contigID.get("X"));
@@ -219,7 +219,7 @@ public class PedigreeTest {
 
 	@Test
 	public void testIsCompatibleWithXChromosomalRecessive_multiSample() throws PedParseException {
-		Pedigree pedigree = new Pedigree(this.familyOfFour, "FAMILY");
+		LegacyPedigree pedigree = new LegacyPedigree(this.familyOfFour, "FAMILY");
 		ArrayList<Variant> varList = new ArrayList<Variant>();
 		varList.add(constructVariant(Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS, Genotype.HETEROZYGOUS,
 				Genotype.HETEROZYGOUS));

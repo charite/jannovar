@@ -25,7 +25,7 @@ public final class GenomePosition implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** reference dictionary to use for coordinate translation */
-	final ReferenceDictionary refDict;
+	public final ReferenceDictionary refDict;
 
 	/** the used position type */
 	public final PositionType positionType;
@@ -183,7 +183,7 @@ public final class GenomePosition implements Serializable {
 
 	/*
 	 * String representation with one-based positions, on forward strand.
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -198,7 +198,7 @@ public final class GenomePosition implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -216,7 +216,7 @@ public final class GenomePosition implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
