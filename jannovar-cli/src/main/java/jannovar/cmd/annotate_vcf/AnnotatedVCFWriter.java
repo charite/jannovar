@@ -9,8 +9,11 @@ import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
 import jannovar.JannovarOptions;
+import jannovar.annotation.AllAnnotationListTextGenerator;
 import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.AnnotationListTextGenerator;
+import jannovar.annotation.BestAnnotationListTextGenerator;
 import jannovar.annotation.VariantAnnotator;
 import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
@@ -121,29 +124,20 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 
 		// TODO(holtgrem): better checking of structural variants?
 		if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
-			AnnotationList anno = annotator.buildAnnotationList(change);
-			if (anno == null) {
+			AnnotationList annoList = annotator.buildAnnotationList(change);
+			if (annoList == null) {
 				String e = String.format("No annotations found for variant %s", vc.toString());
 				throw new AnnotationException(e);
 			}
-			String annotation;
-			String effect;
-			if (anno.isStructural()) {
-				annotation = anno.getCombinedAnnotationForStructuralVariant();
-				effect = anno.getVariantType().toString();
-			} else {
-				if (this.options.showAll) {
-					annotation = anno.getAllTranscriptAnnotations();
-					effect = anno.getAllTranscriptVariantEffects();
-				} else {
-					annotation = anno.getSingleTranscriptAnnotation();
-					effect = anno.getVariantType().toString();
-				}
-			}
+			AnnotationListTextGenerator textGenerator;
+			if (this.options.showAll)
+				textGenerator = new AllAnnotationListTextGenerator(annoList);
+			else
+				textGenerator = new BestAnnotationListTextGenerator(annoList);
 
 			// add the annotations to the INFO field (third arg allows overwriting)
-			vc.getCommonInfo().putAttribute("EFFECT", effect, true);
-			vc.getCommonInfo().putAttribute("HGVS", annotation, true);
+			vc.getCommonInfo().putAttribute("EFFECT", textGenerator.buildEffectText(), true);
+			vc.getCommonInfo().putAttribute("HGVS", textGenerator.buildHGVSText(), true);
 		}
 
 		// Write out variantContext to out.

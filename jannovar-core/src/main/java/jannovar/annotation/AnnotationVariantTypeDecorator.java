@@ -3,16 +3,16 @@ package jannovar.annotation;
 // TODO(holtgrem): Test me!
 
 /**
- * Decorator for {@link ImmutableAnnotation} that allows querying for variant types.
+ * Decorator for {@link Annotation} that allows querying for variant types.
  *
  * @author holtgrem
  */
 final public class AnnotationVariantTypeDecorator {
 
-	/** the decorated {@link ImmutableAnnotation} */
-	final public ImmutableAnnotation annotation;
+	/** the decorated {@link Annotation} */
+	final public Annotation annotation;
 
-	AnnotationVariantTypeDecorator(ImmutableAnnotation annotation) {
+	AnnotationVariantTypeDecorator(Annotation annotation) {
 		this.annotation = annotation;
 	}
 

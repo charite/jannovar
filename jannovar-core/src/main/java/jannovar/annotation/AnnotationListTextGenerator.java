@@ -3,22 +3,22 @@ package jannovar.annotation;
 // TODO(holtgrem): Test me!
 
 /**
- * Generate annotation text (effect and HGVS description) from {@link ImmutableAnnotationList} object.
+ * Generate annotation text (effect and HGVS description) from {@link AnnotationList} object.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-abstract class AnnotationListTextGenerator {
+public abstract class AnnotationListTextGenerator {
 
-	/** the decorated {@link ImmutableAnnotationList} */
-	public final ImmutableAnnotationList annotations;
+	/** the decorated {@link AnnotationList} */
+	public final AnnotationList annotations;
 
 	/**
 	 * Initialize the decorator.
 	 *
 	 * @param annotations
-	 *            {@link ImmutableAnnotationList} of {@link ImmutableAnnotation} objects
+	 *            {@link AnnotationList} of {@link Annotation} objects
 	 */
-	public AnnotationListTextGenerator(ImmutableAnnotationList annotations) {
+	public AnnotationListTextGenerator(AnnotationList annotations) {
 		this.annotations = annotations;
 	}
 
@@ -27,7 +27,7 @@ abstract class AnnotationListTextGenerator {
 	 */
 	public String buildEffectText() {
 		StringBuilder builder = new StringBuilder();
-		for (ImmutableAnnotation anno : getAnnotations().entries) {
+		for (Annotation anno : getAnnotations().entries) {
 			if (builder.length() != 0)
 				builder.append(',');
 			builder.append(anno.varType);
@@ -40,7 +40,7 @@ abstract class AnnotationListTextGenerator {
 	 */
 	public String buildHGVSText() {
 		StringBuilder builder = new StringBuilder();
-		for (ImmutableAnnotation anno : getAnnotations().entries) {
+		for (Annotation anno : getAnnotations().entries) {
 			if (builder.length() != 0)
 				builder.append(',');
 			builder.append(anno.getSymbolAndAnnotation());
@@ -49,8 +49,8 @@ abstract class AnnotationListTextGenerator {
 	}
 
 	/**
-	 * @return {@link ImmutableAnnotationList} of annotations to generate the annotation text for
+	 * @return {@link AnnotationList} of annotations to generate the annotation text for
 	 */
-	protected abstract ImmutableAnnotationList getAnnotations();
+	protected abstract AnnotationList getAnnotations();
 
 }

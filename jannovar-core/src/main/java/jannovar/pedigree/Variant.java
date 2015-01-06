@@ -1,7 +1,6 @@
 package jannovar.pedigree;
 
-import jannovar.annotation.Annotation;
-import jannovar.annotation.AnnotationException;
+import jannovar.annotation.AnnotationListContentDecorator;
 import jannovar.annotation.AnnotationList;
 import jannovar.annotation.VariantType;
 import jannovar.io.ReferenceDictionary;
@@ -37,8 +36,7 @@ public class Variant implements Comparable<Variant> {
 	private float Phred;
 
 	/**
-	 * {@link jannovar.annotation.AnnotationList AnnotationList} object resulting from Jannovar-type annotation of this
-	 * variant.
+	 * {@link AnnotationList} object resulting from Jannovar-type annotation of this variant.
 	 */
 	private AnnotationList annotList = null;
 
@@ -159,7 +157,7 @@ public class Variant implements Comparable<Variant> {
 	 * @return true if the variant is located within more than one gene
 	 */
 	public boolean affectsMultipleGenes() {
-		return this.annotList.hasMultipleGeneSymbols();
+		return new AnnotationListContentDecorator(annotList).hasMultipleGeneSymbols();
 	}
 
 	// ########### GETTERS ######################### //
@@ -196,7 +194,7 @@ public class Variant implements Comparable<Variant> {
 	 */
 	public String getGeneSymbol() {
 		if (this.annotList != null) {
-			return annotList.getGeneSymbol();
+			return new AnnotationListContentDecorator(annotList).getGeneSymbol();
 		} else {
 			return ".";
 		}
@@ -206,30 +204,24 @@ public class Variant implements Comparable<Variant> {
 	 * @return the NCBI Entrez Gene ID
 	 */
 	public int getEntrezGeneID() {
-		return annotList.getEntrezGeneID();
+		return new AnnotationListContentDecorator(annotList).getGeneID();
 	}
 
 	/**
 	 * @return true if this variant is a nonsynonymous substitution (missense).
 	 */
-	public boolean is_missense_variant() {
-		if (annotList == null)
-			return false;
-		else
-			return (annotList.getVariantType() == VariantType.MISSENSE);
+	public boolean isMissenseVariant() {
+		return (new AnnotationListContentDecorator(annotList).getVariantType() == VariantType.MISSENSE);
 	}
 
 	/**
 	 * Synonymous variant defined as a single nucleotide variant within a coding sequence that does not change the
 	 * encoded amino acid.
 	 *
-	 * @return true if this variant is a SYNONYMOUS variant
+	 * @return true if this variant is a {@link VariantType#SYNONYMOUS} variant
 	 */
 	public boolean isSynonymousVariant() {
-		if (annotList == null)
-			return false;
-		else
-			return (annotList.getVariantType() == VariantType.SYNONYMOUS);
+		return (new AnnotationListContentDecorator(annotList).getVariantType() == VariantType.SYNONYMOUS);
 	}
 
 	/**
@@ -238,7 +230,7 @@ public class Variant implements Comparable<Variant> {
 	 * @return true if the variant is a SNV and a transition.
 	 */
 	public boolean isTransition() {
-		if (!is_single_nucleotide_variant())
+		if (!isSingleNucleotideVariant())
 			return false;
 		/* purine to purine change */
 		if (this.ref.equals("A") && this.alt.equals("G"))
@@ -260,7 +252,7 @@ public class Variant implements Comparable<Variant> {
 	 * @return true if the variant is a SNV and a transversion.
 	 */
 	public boolean isTransversion() {
-		if (!is_single_nucleotide_variant())
+		if (!isSingleNucleotideVariant())
 			return false;
 		/* purine to purine change */
 		if (this.ref.equals("A") && this.alt.equals("G"))
@@ -279,7 +271,7 @@ public class Variant implements Comparable<Variant> {
 	/**
 	 * @return true if both the reference and the alternate sequence have a length of one nucleotide.
 	 */
-	public boolean is_single_nucleotide_variant() {
+	public boolean isSingleNucleotideVariant() {
 		return (this.ref.length() == 1 && this.alt.length() == 1);
 	}
 
@@ -434,119 +426,6 @@ public class Variant implements Comparable<Variant> {
 	}
 
 	/**
-	 * Get representation of current variant as a string. This method retrieves the annotation of the variant stored in
-	 * the {@link jannovar.annotation.Annotation Annotation} object. If this is not initialized (which should never
-	 * happen), it returns ".".
-	 * <p>
-	 * Note: This function returns a String with one representative annotation for the current variant
-	 * <p>
-	 * If client code wants to get a list of each individual annotation, it should instead call the function
-	 * {@link #getAnnotationList}.
-	 *
-	 * @return The annotation of the current variant.
-	 */
-	public String getAnnotation() {
-		try {
-			if (this.annotList != null)
-				return this.annotList.getVariantAnnotation();
-			else
-				return ".";
-		} catch (AnnotationException e) {
-			return "error retrieving annotation";
-		}
-	}
-
-	/**
-	 * This function returns an annotation for a single transcript affected by the variant, returning the variant
-	 * annotation being ranked with the highest priority. In contrast, the function {@link #getAnnotation} returns a
-	 * summarized version of annotations of all transcripts.
-	 *
-	 * @return a representative annotation of one transcript.
-	 */
-	public String getRepresentativeAnnotation() {
-		try {
-			return this.annotList.getSingleTranscriptAnnotation();
-		} catch (AnnotationException e) {
-			return "error retrieving annotation";
-		}
-	}
-
-	/**
-	 * This function returns a list of all of the {@link jannovar.annotation.Annotation Annotation} objects that have
-	 * been associated with the current variant. This function can be called if client code wants to display one line
-	 * for each affected transcript, e.g.,
-	 * <ul>
-	 * <li>LTF(uc003cpr.3:exon5:c.30_31insAAG:p.R10delinsRR)
-	 * <li>LTF(uc003cpq.3:exon2:c.69_70insAAG:p.R23delinsRR)
-	 * <li>LTF(uc010hjh.3:exon2:c.69_70insAAG:p.R23delinsRR)
-	 * </ul>
-	 * <P>
-	 * If client code wants instead to display just a single string that summarizes all of the annotations, it should
-	 * call the function {@link #getAnnotation}.
-	 */
-	public ArrayList<String> getAnnotationList() {
-		ArrayList<String> A = new ArrayList<String>();
-		if (this.annotList == null) {
-			A.add(".");
-			return A;
-		}
-		ArrayList<Annotation> alist = this.annotList.getAnnotationList();
-
-		for (Annotation ann : alist) {
-			String s = ann.getVariantAnnotation();
-			A.add(s);
-		}
-		return A;
-	}
-
-	/**
-	 * @return List of {@link jannovar.annotation.Annotation Annotation} objects.
-	 */
-	public ArrayList<Annotation> getAnnotationObjectList() {
-		return this.annotList.getAnnotationList();
-	}
-
-	/**
-	 * @return A list of all annotations for this variant, in the form GeneSymbol(annotation)
-	 */
-	public ArrayList<String> getAnnotationListWithGeneSymbol() {
-		if (this.annotList == null) {
-			ArrayList<String> A = new ArrayList<String>();
-			A.add(".");
-			return A;
-		}
-		ArrayList<Annotation> alist = this.annotList.getAnnotationList();
-		ArrayList<String> A = new ArrayList<String>();
-		for (Annotation ann : alist) {
-			String s = ann.getVariantAnnotation();
-			String sym = ann.getGeneSymbol();
-			A.add(String.format("%s (%s)", s, sym));
-		}
-		return A;
-	}
-
-	/**
-	 * Returns a list of annotations for this variant together with their type.
-	 *
-	 * @return A list of all annotations for this variant, in the form type|annotation
-	 */
-	public ArrayList<String> getAnnotationListWithAnnotationClass() {
-		if (this.annotList == null) {
-			ArrayList<String> A = new ArrayList<String>();
-			A.add(".");
-			return A;
-		}
-		ArrayList<Annotation> alist = this.annotList.getAnnotationList();
-		ArrayList<String> A = new ArrayList<String>();
-		for (Annotation ann : alist) {
-			String s = ann.getVariantAnnotation();
-			String typ = ann.getVariantTypeAsString();
-			A.add(String.format("%s|%s", typ, s));
-		}
-		return A;
-	}
-
-	/**
 	 * This method combines the fields of the String array s using a colon (":") as a separator, similar to the way that
 	 * the Perl function join works. However, this function removes the first element of the array because it contains
 	 * the transcript id in our application (e.g., uc003szt.3). For certain types of annotation, however, there is only
@@ -565,61 +444,9 @@ public class Variant implements Comparable<Variant> {
 		return out.toString();
 	}
 
-	/**
-	 * This method is intended to be used by programs such as Exomiser that add URLs or other additional information to
-	 * the annotations. The method works under the assumption that the Annotation object will return a string that may
-	 * be separated by ":" into fields. The first field should then represent a database identifier such as an UCSC gene
-	 * ID. This field is then split into a separate string, and separated from the remaining part of the annotation by a
-	 * "pipe" ("|") symbol. This should make it easy to create HTML links from the accession number and to display the
-	 * rest of the annotation as text or part of the link using program-specific logic.
-	 * <P>
-	 * note that some variants affect multiple genes because they overlap. Application software generally wants to
-	 * display this in a special way. We signal this here by adding a third field whose last field in the gene symbol.
-	 */
-	public ArrayList<String> getTranscriptAnnotations() {
-		ArrayList<String> A = new ArrayList<String>();
-		if (this.annotList == null) {
-			A.add(".|."); /*
-						 * empty ID, empty annotation. This should actually never happen, but it is better than
-						 * returning null.
-						 */
-			return A;
-		}
-		boolean mult = this.affectsMultipleGenes();
-		ArrayList<Annotation> alist = this.annotList.getAnnotationList();
-		for (Annotation ann : alist) {
-			String s = ann.getVariantAnnotation();
-			String F[] = s.split(":");
-			String id = F[0]; /* this will be something like "uc003szt.3" */
-			s = combineWithoutID(F);
-			if (ann.getVariantType() == VariantType.INTRONIC) {
-				s = String.format("%s:intronic", s);
-			}
-
-			s = String.format("%s|%s", id, s);
-			if (mult) {
-				s = String.format("%s|%s", s, ann.getGeneSymbol());
-			}
-			A.add(s);
-		}
-		return A;
-	}
-
-	/**
-	 * @return the most pathogenic {@link Annotation}.
-	 * @throws AnnotationException
-	 */
-	public Annotation getMostPathogenicAnnotation() throws AnnotationException {
-		if (this.annotList.isEmpty()) {
-			String e = String.format("[AnnotationList] Error: No Annotations found");
-			throw new AnnotationException(e);
-		}
-		return this.annotList.getAnnotationList().get(0);
-	}
-
 	public String getVariantType() {
 		if (this.annotList != null)
-			return this.annotList.getVariantType().toString();
+			return new AnnotationListContentDecorator(annotList).getVariantType().toString();
 		else
 			return "?";
 	}
@@ -630,7 +457,7 @@ public class Variant implements Comparable<Variant> {
 	 */
 	public VariantType getVariantTypeConstant() {
 		if (this.annotList != null)
-			return this.annotList.getVariantType();
+			return new AnnotationListContentDecorator(annotList).getVariantType();
 		else
 			return VariantType.ERROR;
 	}
@@ -643,24 +470,6 @@ public class Variant implements Comparable<Variant> {
 	}
 
 	/**
-	 * Represent the Variant and its genotype as a string. This method is intended primarily for debugging, use other
-	 * access methods to output information about the variant.
-	 */
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		String chr = getChromosomalVariant();
-		sb.append("\t" + chr);
-		if (annotList != null)
-			sb.append("\t: " + getAnnotation() + "\n");
-		else
-			sb.append("\tcds mutation not initialized\n");
-		sb.append("\tGenotype: " + this.genotype.get_genotype_as_string() + "\n");
-		sb.append("\tType: " + get_variant_type_as_string());
-		return sb.toString();
-	}
-
-	/**
 	 * The variant types (e.e., MISSENSE, NONSENSE) are stored internally as byte values. This function converts these
 	 * byte values into strings.
 	 *
@@ -670,11 +479,7 @@ public class Variant implements Comparable<Variant> {
 		if (this.annotList == null)
 			return "uninitialized";
 		else
-			return this.annotList.getVariantType().toString();
-	}
-
-	public int getDistanceFromExon() {
-		return this.annotList.getDistanceFromExon();
+			return new AnnotationListContentDecorator(annotList).getVariantType().toString();
 	}
 
 	/**

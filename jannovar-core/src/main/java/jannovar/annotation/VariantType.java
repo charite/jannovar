@@ -426,6 +426,13 @@ public enum VariantType {
 	}
 
 	/**
+	 * @return <code>true</code> if this variant type encodes a structural variant
+	 */
+	boolean isSV() {
+		return (this == SV_DELETION) || (this == SV_INSERTION) || (this == SV_SUBSTITUTION) || (this == SV_INVERSION);
+	}
+
+	/**
 	 * A static constant that returns the number of different values in this enumeration.
 	 */
 	private static final int size = VariantType.values().length;

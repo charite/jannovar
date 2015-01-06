@@ -2,8 +2,11 @@ package jannovar.cmd.annotate_pos;
 
 import jannovar.JannovarException;
 import jannovar.JannovarOptions;
+import jannovar.annotation.AllAnnotationListTextGenerator;
 import jannovar.annotation.AnnotationException;
 import jannovar.annotation.AnnotationList;
+import jannovar.annotation.AnnotationListTextGenerator;
+import jannovar.annotation.BestAnnotationListTextGenerator;
 import jannovar.annotation.VariantAnnotator;
 import jannovar.cmd.CommandLineParsingException;
 import jannovar.cmd.HelpRequestedException;
@@ -57,13 +60,13 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		// Obtain first or all functional annotation(s) and effect(s).
 		final String annotation;
 		final String effect;
-		if (options.showAll) {
-			annotation = annoList.getAllTranscriptAnnotations();
-			effect = annoList.getAllTranscriptVariantEffects();
-		} else {
-			annotation = annoList.getSingleTranscriptAnnotation();
-			effect = annoList.getVariantType().toString();
-		}
+		AnnotationListTextGenerator textGenerator;
+		if (options.showAll)
+			textGenerator = new AllAnnotationListTextGenerator(annoList);
+		else
+			textGenerator = new BestAnnotationListTextGenerator(annoList);
+		annotation = textGenerator.buildHGVSText();
+		effect = textGenerator.buildEffectText();
 
 		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
 	}

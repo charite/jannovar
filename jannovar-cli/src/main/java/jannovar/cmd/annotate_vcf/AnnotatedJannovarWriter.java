@@ -18,7 +18,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -122,11 +121,10 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			throw new AnnotationException(e);
 		}
 
-		ArrayList<Annotation> lst = anno.getAnnotationList();
-		for (Annotation a : lst) {
-			String effect = a.getVariantTypeAsString();
-			String annt = a.getVariantAnnotation();
-			String sym = a.getGeneSymbol();
+		for (Annotation a : anno.entries) {
+			String effect = a.varType.toString();
+			String annt = a.hgvsDescription;
+			String sym = a.transcript.geneSymbol;
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
 					chrStr, change.pos, change.ref, change.alt, gtype, qual);
 			out.write(s);

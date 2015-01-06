@@ -116,7 +116,7 @@ final class AnnotationCollector {
 	 *            The initial capacity of the arraylist and hashset.
 	 */
 	public AnnotationCollector(int initialCapacity) {
-		this.annotationLst = new ArrayList<Annotation>(initialCapacity);
+		this.annotationLst = new ArrayList<Annotation>();
 		this.geneSymbolSet = new HashSet<String>();
 	}
 
@@ -190,24 +190,7 @@ final class AnnotationCollector {
 	 * @throws jannovar.annotation.AnnotationException
 	 */
 	public AnnotationList getAnnotationList() throws AnnotationException {
-		Collections.sort(this.annotationLst);
-		AnnotationList annL = new AnnotationList(this.annotationLst);
-		if (this.geneSymbolSet.size() > 1) {
-			annL.setHasMultipleGeneSymbols();
-		}
-		annL.sortAnnotations();
-		VariantType vt = getMostPathogenicVariantType();
-		annL.setMostPathogenicVariantType(vt);
-		switch (vt) {
-		case SV_DELETION:
-		case SV_INSERTION:
-		case SV_INVERSION:
-		case SV_SUBSTITUTION:
-			annL.setIsStructural();
-		default:
-			break; // suppress warning, only do stuff for SVs
-		}
-		return annL;
+		return new AnnotationList(this.annotationLst);
 	}
 
 	/**
@@ -223,13 +206,12 @@ final class AnnotationCollector {
 	 *
 	 * @return most pathogenic variant type for current variant.
 	 */
+	@SuppressWarnings("unused")
 	private VariantType getMostPathogenicVariantType() {
 		VariantType vt;
 		Collections.sort(this.annotationLst);
 		Annotation a = this.annotationLst.get(0);
-		// debugPrint();
-		vt = a.getVariantType();
-		return vt;
+		return a.varType;
 	}
 
 	/**
@@ -295,16 +277,15 @@ final class AnnotationCollector {
 	 */
 	public void addExonicAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		if (ann.getVariantType() == VariantType.SYNONYMOUS) {
+		if (ann.varType == VariantType.SYNONYMOUS) {
 			this.hasSynonymous = true;
-		} else if (ann.getVariantType() == VariantType.SPLICE_DONOR
-				|| ann.getVariantType() == VariantType.SPLICE_ACCEPTOR
-				|| ann.getVariantType() == VariantType.SPLICE_REGION) {
+		} else if (ann.varType == VariantType.SPLICE_DONOR || ann.varType == VariantType.SPLICE_ACCEPTOR
+				|| ann.varType == VariantType.SPLICE_REGION) {
 			this.hasSplicing = true;
 		} else {
 			this.hasExonic = true;
 		}
-		this.geneSymbolSet.add(ann.getGeneSymbol());
+		this.geneSymbolSet.add(ann.transcript.geneSymbol);
 		this.hasGenicMutation = true;
 		this.annotationCount++;
 	}
@@ -317,9 +298,9 @@ final class AnnotationCollector {
 	 *            {@link Annotation} to be registered
 	 */
 	public void addNcRNASplicing(Annotation ann) {
-		String s = String.format("%s", ann.getVariantAnnotation());
+		// String s = String.format("%s", ann.hgvsDescription);
 		this.hasNcRna = true;
-		ann.setVariantAnnotation(s);
+		// ann.setVariantAnnotation(s); // TODO(holtgrew): necessary?
 		this.annotationLst.add(ann);
 	}
 
@@ -332,17 +313,17 @@ final class AnnotationCollector {
 	 *            the Intronic annotation to be added.
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
-		this.geneSymbolSet.add(ann.getGeneSymbol());
-		if (ann.getVariantType() == VariantType.INTRONIC || ann.getVariantType() == VariantType.ncRNA_INTRONIC) {
+		this.geneSymbolSet.add(ann.transcript.geneSymbol);
+		if (ann.varType == VariantType.INTRONIC || ann.varType == VariantType.ncRNA_INTRONIC) {
 			for (Annotation a : this.annotationLst) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
 			}
 			this.annotationLst.add(ann);
 		}
-		if (ann.getVariantType() == VariantType.INTRONIC) {
+		if (ann.varType == VariantType.INTRONIC) {
 			this.hasIntronic = true;
-		} else if (ann.getVariantType() == VariantType.ncRNA_INTRONIC) {
+		} else if (ann.varType == VariantType.ncRNA_INTRONIC) {
 			this.hasNcrnaIntronic = true;
 		}
 		this.hasGenicMutation = true;
@@ -358,7 +339,7 @@ final class AnnotationCollector {
 	 */
 	public void addStructuralAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		this.geneSymbolSet.add(ann.getGeneSymbol());
+		this.geneSymbolSet.add(ann.transcript.geneSymbol);
 		this.hasStructural = true;
 		this.annotationCount++;
 	}
@@ -389,7 +370,7 @@ final class AnnotationCollector {
 				return;
 		}
 		this.annotationLst.add(ann);
-		VariantType type = ann.getVariantType();
+		VariantType type = ann.varType;
 		if (type == VariantType.DOWNSTREAM) {
 			this.hasDownstream = true;
 		} else if (type == VariantType.UPSTREAM) {
@@ -410,8 +391,7 @@ final class AnnotationCollector {
 		System.out.println("[AnnotatedVariantFactory]:debugPrint");
 		System.out.println("Total annotations: " + annotationCount);
 		for (Annotation a : this.annotationLst) {
-			System.out.println("\t[" + a.getVariantTypeAsString() + "] \"" + a.getGeneSymbol() + "\" -> "
-					+ a.getVariantAnnotation());
+			System.out.println("\t[" + a.varType + "] \"" + a.transcript.geneSymbol + "\" -> " + a.hgvsDescription);
 		}
 	}
 

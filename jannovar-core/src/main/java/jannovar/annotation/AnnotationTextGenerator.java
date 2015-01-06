@@ -3,17 +3,17 @@ package jannovar.annotation;
 // TODO(holtgrew): Test me!
 
 /**
- * Decorator for {@link ImmutableAnnotation} for generating annotation text.
+ * Decorator for {@link Annotation} for generating annotation text.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 final public class AnnotationTextGenerator {
 
-	/** the decorated {@link ImmutableAnnotation} */
-	final public ImmutableAnnotation annotation;
+	/** the decorated {@link Annotation} */
+	final public Annotation annotation;
 
-	AnnotationTextGenerator(ImmutableAnnotation annotation) {
+	AnnotationTextGenerator(Annotation annotation) {
 		this.annotation = annotation;
 	}
 
@@ -34,10 +34,10 @@ final public class AnnotationTextGenerator {
 		if (i > 0)
 			return this.annotation.hgvsDescription.substring(0, i);
 
-		if (this.annotation.geneSymbol == null)
+		if (this.annotation.transcript.geneSymbol == null)
 			return ".";
 		else
-			return this.annotation.geneSymbol;
+			return this.annotation.transcript.geneSymbol;
 	}
 
 }

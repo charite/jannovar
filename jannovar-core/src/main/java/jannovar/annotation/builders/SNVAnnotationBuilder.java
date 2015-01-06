@@ -137,7 +137,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		String annotationStr = String.format("%s:%s", ncHGVS(), protAnno);
 		if (warningMsg != null)
 			annotationStr = String.format("%s:[%s]", annotationStr, warningMsg);
-		return new Annotation(transcript, annotationStr, varType, cdsPos.pos + 1);
+
+		return new Annotation(varType, cdsPos.pos, annotationStr, transcript);
 	}
 
 	@Override
