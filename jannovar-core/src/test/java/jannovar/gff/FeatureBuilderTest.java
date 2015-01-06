@@ -3,8 +3,8 @@ package jannovar.gff;
 import jannovar.impl.parse.gff.Feature;
 import jannovar.impl.parse.gff.FeatureType;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.testng.Assert;
 
 public class FeatureBuilderTest {
 
@@ -28,7 +28,7 @@ public class FeatureBuilderTest {
 		Assert.assertEquals(builder.getSequenceID(), "seq-id");
 		Assert.assertEquals(builder.getEnd(), 100);
 		Assert.assertEquals(builder.getPhase(), 0);
-		Assert.assertEquals(builder.getScore(), 0.0);
+		Assert.assertEquals(builder.getScore(), 0.0, 0.0);
 		Assert.assertEquals(builder.getSource(), "foo");
 		Assert.assertEquals(builder.getStart(), 1);
 		Assert.assertEquals(builder.getStrand(), true);

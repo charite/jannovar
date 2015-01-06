@@ -1,7 +1,7 @@
 package jannovar.reference;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.testng.Assert;
 
 /**
  * Test for the VariantCorrectorData class.

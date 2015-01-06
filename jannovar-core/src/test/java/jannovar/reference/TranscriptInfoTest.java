@@ -2,9 +2,9 @@ package jannovar.reference;
 
 import jannovar.io.ReferenceDictionary;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.testng.Assert;
 
 /**
  * Tests for the TranscriptInfo class.
