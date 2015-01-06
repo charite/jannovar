@@ -21,6 +21,9 @@ class CompatibilityCheckerXRecessive {
 	/** the genotype call list to use for the checking */
 	public final GenotypeList list;
 
+	/** decorator for getting unaffected individuals and such from the pedigree */
+	public final PedigreeQueryDecorator queryDecorator;
+
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
@@ -41,6 +44,7 @@ class CompatibilityCheckerXRecessive {
 
 		this.pedigree = pedigree;
 		this.list = list;
+		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
 	}
 
 	public boolean run() {
@@ -58,85 +62,82 @@ class CompatibilityCheckerXRecessive {
 			return runMultiSampleCase();
 	}
 
-	public boolean runSingleSampleCase() {
+	private boolean runSingleSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
 				return true;
 		return false;
 	}
 
-	// TODO(holtgrem): split into multiple functions
-	public boolean runMultiSampleCase() {
+	private boolean runMultiSampleCase() {
 		// TODO(holtgrem): There are pedigrees where compound heterozygous is possible.
 		for (ImmutableList<Genotype> gtList : list.calls) {
-			boolean currentVariantCompatible = true; // current variant compatible with XR?
-
-			// Query the affected persons.
-			int i = 0;
-			for (Person person : pedigree.members) {
-				if (person.disease == Disease.AFFECTED) {
-					if (gtList.get(i) != Genotype.HOMOZYGOUS_ALT) {
-						// TODO(holtgrew): assumption of male individual implicit only?
-						// cannot be disease-causing mutation, an affected male does not have it
-						currentVariantCompatible = false;
-						break;
-					}
-					if (!currentVariantCompatible)
-						break;
-				}
-				++i;
-			}
-
-			// Query the parents.
-			final PedigreeQueryDecorator queryDecorator = new PedigreeQueryDecorator(pedigree);
-			final HashSet<String> parentNames = queryDecorator.getParentNames();
-			i = 0;
-			for (Person person : pedigree.members) {
-				if (parentNames.contains(person.name)) {
-					final Genotype gt = gtList.get(i);
-					if (person.sex == Sex.MALE && person.disease != Disease.AFFECTED && gt == Genotype.HOMOZYGOUS_ALT) {
-						// cannot be disease-causing mutation, an unaffected father has it
-						currentVariantCompatible = false;
-						break;
-					}
-					if (person.sex == Sex.FEMALE && gt != Genotype.HETEROZYGOUS) {
-						// cannot be disease-causing mutation, mother of patient is not heterozygous
-						currentVariantCompatible = false;
-						break;
-					}
-				}
-				if (!currentVariantCompatible)
-					break;
-				++i;
-			}
-
-			// Query the unaffected persons.
-			final HashSet<String> unaffectedNames = queryDecorator.getUnaffectedNames();
-			i = 0;
-			for (Person person : pedigree.members) {
-				if (unaffectedNames.contains(person.name)) {
-					final Genotype gt = gtList.get(i);
-					if (person.sex == Sex.MALE && gt == Genotype.HOMOZYGOUS_ALT) {
-						// TODO(holtgrew): why the assumption about brother relation?
-						// cannot be disease-causing mutation, an unaffected brother has it
-						currentVariantCompatible = false;
-						break;
-					}
-					if (person.sex == Sex.FEMALE && gt != Genotype.HETEROZYGOUS) {
-						// TODO(holtgrew): why the assumption about sister relation?
-						// cannot be disease-causing mutation, unaffected sister is not heterozygous
-						currentVariantCompatible = false;
-						break;
-					}
-				}
-				++i;
-			}
-
-			if (currentVariantCompatible)
+			// Check whether this list of genotype calls is compatible when with the set of affected individuals, the
+			// parents, and the unaffected individuals.
+			if (checkCompatibilityAffected(gtList) && checkCompatibilityParents(gtList) && checkUnaffected(gtList))
 				return true;
 		}
 
 		return false;
+	}
+
+	private boolean checkCompatibilityAffected(ImmutableList<Genotype> gtList) {
+		int i = 0;
+		for (Person person : pedigree.members) {
+			if (person.disease == Disease.AFFECTED) {
+				if (gtList.get(i) != Genotype.HOMOZYGOUS_ALT) {
+					// TODO(holtgrew): assumption of male individual implicit only?
+					// cannot be disease-causing mutation, an affected male does not have it
+					return false;
+				}
+			}
+			++i;
+		}
+		return true;
+	}
+
+	private boolean checkCompatibilityParents(ImmutableList<Genotype> gtList) {
+		final HashSet<String> parentNames = queryDecorator.getParentNames();
+		int i = 0;
+		for (Person person : pedigree.members) {
+			if (parentNames.contains(person.name)) {
+				final Genotype gt = gtList.get(i);
+				if (person.sex == Sex.MALE && person.disease != Disease.AFFECTED && gt == Genotype.HOMOZYGOUS_ALT) {
+					// cannot be disease-causing mutation, an unaffected father has it
+					return false;
+				}
+				if (person.sex == Sex.FEMALE && gt != Genotype.HETEROZYGOUS) {
+					// cannot be disease-causing mutation, mother of patient is not heterozygous
+					return false;
+				}
+			}
+			++i;
+		}
+
+		return true;
+	}
+
+	private boolean checkUnaffected(ImmutableList<Genotype> gtList) {
+		final HashSet<String> unaffectedNames = queryDecorator.getUnaffectedNames();
+		int i = 0;
+		for (Person person : pedigree.members) {
+			if (unaffectedNames.contains(person.name)) {
+				final Genotype gt = gtList.get(i);
+				if (person.sex == Sex.MALE && gt == Genotype.HOMOZYGOUS_ALT) {
+					// TODO(holtgrew): why the assumption about brother relation?
+					// cannot be disease-causing mutation, an unaffected brother has it
+					return false;
+				}
+				if (person.sex == Sex.FEMALE && gt != Genotype.HETEROZYGOUS) {
+					// TODO(holtgrew): why the assumption about sister relation?
+					// cannot be disease-causing mutation, unaffected sister is not heterozygous
+					return false;
+				}
+			}
+			++i;
+		}
+
+		return true;
 	}
 
 }
