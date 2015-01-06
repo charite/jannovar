@@ -1,0 +1,6 @@
+ped1 father 0 0 1 1
+ped1 mother 0 0 2 1
+ped1 son1 father mother 1 2
+ped1 son2 father mother 1 1
+ped1 dau1 father mother 2 2
+ped1 dau2 father mother 2 1
