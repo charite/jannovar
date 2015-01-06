@@ -24,8 +24,10 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	/**
 	 * @return <code>true</code> if the <code>list</code> of {@link Genotype} calls is compatible with the autosomal
 	 *         dominant mode of inheritance
+	 * @throws CompatibilityCheckerException
+	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
-	public boolean isCompatibleWithAutosomalDominant(GenotypeList list) {
+	public boolean isCompatibleWithAutosomalDominant(GenotypeList list) throws CompatibilityCheckerException {
 		return new CompatibilityCheckerAutosomalDominant(pedigree, list).run();
 	}
 
@@ -33,7 +35,7 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	 * @return <code>true</code> if the <code>list</code> of {@link Genotype} calls is compatible with the autosomal
 	 *         recessive mode of inheritance
 	 */
-	public boolean isCompatibleWithAutosomalRecessive(GenotypeList list) {
+	public boolean isCompatibleWithAutosomalRecessive(GenotypeList list) throws CompatibilityCheckerException {
 		return new CompatibilityCheckerAutosomalRecessive(pedigree, list).run();
 	}
 
@@ -41,15 +43,17 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	 * @return <code>true</code> if the <code>list</code> of {@link Genotype} calls is compatible with the X dominant
 	 *         mode of inheritance
 	 */
-	public boolean isCompatibleWithXDominant(GenotypeList list) {
+	public boolean isCompatibleWithXDominant(GenotypeList list) throws CompatibilityCheckerException {
 		return new CompatibilityCheckerXDominant(pedigree, list).run();
 	}
 
 	/**
 	 * @return <code>true</code> if the <code>list</code> of {@link Genotype} calls is compatible with the X recessive
 	 *         mode of inheritance
+	 * @throws CompatibilityCheckerException
+	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
-	public boolean isCompatibleWithXRecessive(GenotypeList list) {
+	public boolean isCompatibleWithXRecessive(GenotypeList list) throws CompatibilityCheckerException {
 		return new CompatibilityCheckerXRecessive(pedigree, list).run();
 	}
 
@@ -63,8 +67,10 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	 *            mode of inheritance to use for the checking
 	 * @return <code>true</code> if <code>call</code> is compatible with the given <code>mode</code> of inheritance,
 	 *         also <code>true</code> if <code>mode</code> is {@link VariantType#UNINITIALIZED}
+	 * @throws CompatibilityCheckerException
+	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
-	public boolean isCompatibleWith(GenotypeList list, ModeOfInheritance mode) {
+	public boolean isCompatibleWith(GenotypeList list, ModeOfInheritance mode) throws CompatibilityCheckerException {
 		switch (mode) {
 		case AUTOSOMAL_DOMINANT:
 			return isCompatibleWithAutosomalDominant(list);
