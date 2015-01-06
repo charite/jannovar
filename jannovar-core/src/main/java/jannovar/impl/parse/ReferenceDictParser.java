@@ -7,7 +7,9 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PushbackInputStream;
 import java.util.zip.GZIPInputStream;
 
 import org.ini4j.Profile.Section;
@@ -141,13 +143,14 @@ public final class ReferenceDictParser {
 		String line;
 
 		try {
-			BufferedReader reader = getBufferedReaderFromFilePath(path, path.endsWith(".gz"));
+			BufferedReader reader = getBufferedReaderFromFilePath(path);
 			while ((line = reader.readLine()) != null) {
 				if (line.startsWith("#"))
 					continue; // skip comments
 				result.add(ImmutableList.copyOf(line.split("\t")));
 			}
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new TranscriptParseException("Problem reading TSV file: " + e.getMessage());
 		}
 
@@ -165,13 +168,21 @@ public final class ReferenceDictParser {
 	 * @throws IOException
 	 *             on I/O errors
 	 */
-	private static BufferedReader getBufferedReaderFromFilePath(String path, boolean isGzip) throws IOException {
+	private static BufferedReader getBufferedReaderFromFilePath(String path) throws IOException {
+		
 		FileInputStream fin = new FileInputStream(path);
-		BufferedReader br;
-		if (isGzip)
-			br = new BufferedReader(new InputStreamReader(new GZIPInputStream(fin)));
-		else
-			br = new BufferedReader(new InputStreamReader(new DataInputStream(fin)));
+		
+		PushbackInputStream pb = new PushbackInputStream( fin, 2 );
+		byte [] signature = new byte[2];
+		pb.read( signature );
+		pb.unread( signature );
+		InputStream stream;
+		if( signature[ 0 ] == (byte) 0x1f && signature[ 1 ] == (byte) 0x8b )
+			stream = new GZIPInputStream(pb);
+	 	else
+	 		stream = new DataInputStream(pb);
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 		return br;
 	}
 
