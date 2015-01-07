@@ -3,6 +3,7 @@ package jannovar.pedigree;
 import jannovar.Immutable;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 // TODO(holtgrem): Test me!
 // TODO(holtgrem): Reordering of the pedigree members according to a list of individual names
@@ -22,6 +23,9 @@ public final class Pedigree {
 	/** the pedigree's members */
 	public final ImmutableList<Person> members;
 
+	/** mapping from member name to member */
+	public final ImmutableMap<String, IndexedPerson> nameToMember;
+
 	/**
 	 * Initialize the object with the given values
 	 *
@@ -33,6 +37,12 @@ public final class Pedigree {
 	public Pedigree(String name, ImmutableList<Person> members) {
 		this.name = name;
 		this.members = members;
+
+		ImmutableMap.Builder<String, IndexedPerson> mapBuilder = new ImmutableMap.Builder<String, IndexedPerson>();
+		int i = 0;
+		for (Person person : members)
+			mapBuilder.put(person.name, new IndexedPerson(i++, person));
+		this.nameToMember = mapBuilder.build();
 	}
 
 	/**
@@ -47,8 +57,17 @@ public final class Pedigree {
 	 *             in the case of problems with references to individuals for mother and father
 	 */
 	public Pedigree(PedFileContents contents, String pedigreeName) throws PedParseException {
-		this.name = pedigreeName;
-		this.members = new PedigreeExtractor(pedigreeName, contents).invoke();
+		this(pedigreeName, new PedigreeExtractor(pedigreeName, contents).run());
+	}
+
+	public static class IndexedPerson {
+		public final int idx;
+		public final Person person;
+
+		public IndexedPerson(int idx, Person person) {
+			this.idx = idx;
+			this.person = person;
+		}
 	}
 
 }

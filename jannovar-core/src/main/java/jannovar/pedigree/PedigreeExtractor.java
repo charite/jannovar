@@ -33,7 +33,7 @@ class PedigreeExtractor {
 	 * @throws PedParseException
 	 *             on problems with resolving names of individuals
 	 */
-	public ImmutableList<Person> invoke() throws PedParseException {
+	public ImmutableList<Person> run() throws PedParseException {
 		ImmutableList.Builder<Person> builder = new ImmutableList.Builder<Person>();
 
 		// build map from person name to person in PED file and in result

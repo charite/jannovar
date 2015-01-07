@@ -6,6 +6,11 @@ import com.google.common.collect.ImmutableList;
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal dominant
  * mode of inheritance.
  *
+ * <h2>Compatibility Check</h2>
+ *
+ * For autosomal dominant inheritance, there must be at least one Variant that is shared by all affected persons but no
+ * unaffected persons in the pedigree.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
@@ -19,6 +24,10 @@ class CompatibilityCheckerAutosomalDominant {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
+	 *
+	 * The {@link GenotypeList} object passed to the constructor is expected to represent all of the variants found in a
+	 * certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented by the
+	 * {@link GenotypeList} must be in the same order as the list of individuals contained in this pedigree.
 	 *
 	 * @param pedigree
 	 *            the {@link Pedigree} to use for the initialize

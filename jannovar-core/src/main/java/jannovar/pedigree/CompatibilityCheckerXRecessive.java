@@ -21,11 +21,15 @@ class CompatibilityCheckerXRecessive {
 	/** the genotype call list to use for the checking */
 	public final GenotypeList list;
 
-	/** decorator for getting unaffected individuals and such from the pedigree */
-	public final PedigreeQueryDecorator queryDecorator;
+	/** decorator for getting unaffected individuals and such from the {@link Pedigree} */
+	private final PedigreeQueryDecorator queryDecorator;
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
+	 *
+	 * The {@link GenotypeList} object passed to the constructor is expected to represent all of the variants found in a
+	 * certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented by the
+	 * {@link GenotypeList} must be in the same order as the list of individuals contained in this pedigree.
 	 *
 	 * @param pedigree
 	 *            the {@link Pedigree} to use for the initialize

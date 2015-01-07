@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableList;
 @Immutable
 public final class GenotypeList {
 
+	// TODO(holtgrew): Add gene information instead of transcript information.
 	/** the transcript that this genotype call list is for */
 	public final TranscriptInfo transcript;
 	/** the list of individual names */
