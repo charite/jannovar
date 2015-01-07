@@ -1,7 +1,8 @@
 package jannovar;
 
+import java.net.URL;
+
 import com.google.common.collect.ImmutableList;
-import com.google.common.net.HostAndPort;
 
 /**
  * Configuration for the Jannovar program.
@@ -27,8 +28,14 @@ public final class JannovarOptions {
 	/** directory to use for the downloads and the serialized file */
 	public String downloadPath = "data";
 
-	/** proxy host and port */
-	public HostAndPort proxy = null;
+	/** proxy for HTTP */
+	public URL httpProxy = null;
+
+	/** proxy for HTTPS */
+	public URL httpsProxy = null;
+
+	/** proxy for FTP */
+	public URL ftpProxy = null;
 
 	// Configuration for the annotate command
 
@@ -78,7 +85,9 @@ public final class JannovarOptions {
 			System.err.println("dataSourceFiles: " + dataSourceFiles);
 			System.err.println("dataSourceNames: " + dataSourceNames);
 			System.err.println("downloadPath" + downloadPath);
-			System.err.println("proxy: " + proxy);
+			System.err.println("HTTP proxy: " + httpProxy);
+			System.err.println("HTTPS proxy: " + httpsProxy);
+			System.err.println("FTP proxy: " + ftpProxy);
 		} else if (command == Command.ANNOTATE_VCF) {
 			System.err.println("dataFile:" + dataFile);
 			System.err.println("vcf:" + vcfFilePath);
