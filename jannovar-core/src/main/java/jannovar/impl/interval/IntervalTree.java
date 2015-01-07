@@ -63,7 +63,7 @@ public final class IntervalTree<T> implements java.io.Serializable {
 	 *
 	 * In cases where we do not find an intersection, i.e., when a call to {@link #search} reveals an empty list because
 	 * none of the items overlaps with the search coordinates, then the search function automatically calls
-	 * {@link #searchInbetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}.
+	 * {@link #searchInBetween}, which sets the variables {@link #rightNeighbor} and {@link #leftNeighbor}.
 	 */
 	private class AlgorithmState {
 		/** A buffer for collecting intervals during the query. */
@@ -90,7 +90,7 @@ public final class IntervalTree<T> implements java.io.Serializable {
 		 * item is closer to x than the value of {@link #leftNeighbor}. If this is the case, then item is a better left
 		 * neighbor, and we assign it to the class variable {@link #leftNeighbor}.
 		 *
-		 * Note that this function is intended to be used by the function {@link #searchInbetween} if there is no
+		 * Note that this function is intended to be used by the function {@link #searchInBetween} if there is no
 		 * interval that overlaps the original search query.
 		 *
 		 * @param item
@@ -254,10 +254,6 @@ public final class IntervalTree<T> implements java.io.Serializable {
 
 	/**
 	 * Search function which calls the method searchInterval to find intervals.
-	 *
-	 * As a side-effect of the search, the variables {@link #rightNeighbor} and {@link #leftNeighbor} are set. If this
-	 * method returns an empty list, then these variables contain the intervals that are the closest neighbors to the
-	 * left and the right to the query position.
 	 *
 	 * @param low
 	 *            The lower element of the interval

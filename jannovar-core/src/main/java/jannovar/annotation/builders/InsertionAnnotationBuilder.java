@@ -28,8 +28,7 @@ import jannovar.reference.TranscriptProjectionDecorator;
  * <h2>Shifting of Insertions</h2>
  *
  * In the case of ambiguities, the HGVS specification requires the variant to be shifted towards the 3' end of the
- * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site. The
- * function detects this and forwards to the {@link UTRAnnotationBuilder}.
+ * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -114,7 +113,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	/**
 	 * Helper class for generating annotations for exonic CDS variants.
 	 *
-	 * We use this helper class to simplify the access to the parameters such as {@link #cdsPos} etc.
+	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
 		final Translator t = Translator.getTranslator();

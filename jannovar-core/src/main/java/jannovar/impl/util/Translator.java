@@ -25,7 +25,7 @@ public final class Translator {
 	private static Translator translator = null;
 
 	/**
-	 * Private constructor, initializes singleton instance. Use {@link getTranslator} for obtaining an object.
+	 * Private constructor, initializes singleton instance. Use {@link #getTranslator} for obtaining an object.
 	 */
 	private Translator() {
 		initializeMaps();
@@ -65,6 +65,7 @@ public final class Translator {
 
 	/**
 	 * @param shortAASeq
+	 *            amino acid sequence with one-character representation of amino acids
 	 * @return String with long versions of short AA seqs.
 	 */
 	public String toLong(String shortAASeq) {
@@ -75,7 +76,8 @@ public final class Translator {
 	}
 
 	/**
-	 * @param shortAASeq
+	 * @param c
+	 *            short amino acid representation to conver to long representation
 	 * @return String with long versions of short AA char.
 	 */
 	public String toLong(char c) {

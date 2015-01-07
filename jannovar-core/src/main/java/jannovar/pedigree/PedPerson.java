@@ -31,8 +31,8 @@ import com.google.common.collect.ImmutableList;
  * The remaining columns are stored in {@link #extraFields}.
  *
  * The <code>PedPerson</code> class describes a record from a pedigree file. This introduces some limitations. For
- * example, the record stores the id of the parents but not references to the parent objects. The class
- * {@link LegacyPerson} provides a more Java-programmer oriented version of this information.
+ * example, the record stores the id of the parents but not references to the parent objects. The class {@link Person}
+ * provides a more Java-programmer oriented version of this information.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */

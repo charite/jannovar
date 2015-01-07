@@ -32,8 +32,6 @@ public final class JannovarDataSerializer {
 	/**
 	 * Serialize a {@link JannovarData} object to a file.
 	 *
-	 * @param filename
-	 *            path to the file
 	 * @param data
 	 *            the {@link JannovarData} object to serialize
 	 * @throws SerializationException
@@ -68,9 +66,7 @@ public final class JannovarDataSerializer {
 	/**
 	 * Deserialize a {@link JannovarData} object from a file.
 	 *
-	 * @param filename
-	 *            path to the file
-	 * @return {@link JannovarData} object
+	 * @return {@link JannovarData} object yielded by deserialization
 	 * @throws SerializationException
 	 *             on problems with the deserialization
 	 */

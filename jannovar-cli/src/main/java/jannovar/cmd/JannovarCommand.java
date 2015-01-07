@@ -16,11 +16,12 @@ public abstract class JannovarCommand {
 	/**
 	 * Initialize the JannovarCommand.
 	 *
-	 * @param options
-	 *            configuration to use
+	 * @param argv
+	 *            command line arguments to use
 	 * @throws CommandLineParsingException
 	 *             on problems with the command line
 	 * @throws HelpRequestedException
+	 *             if the user requested help through the command line parameters
 	 */
 	public JannovarCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		this.options = parseCommandLine(argv);
@@ -29,7 +30,7 @@ public abstract class JannovarCommand {
 	/**
 	 * Function for parsing the command line.
 	 *
-	 * @param args
+	 * @param argv
 	 *            command line to parse, as in the program's main function
 	 * @return {@link JannovarOptions} with the programs' configuration
 	 * @throws CommandLineParsingException

@@ -1,6 +1,5 @@
 package jannovar.pedigree;
 
-import jannovar.annotation.VariantType;
 
 /**
  * Decorator for {@link Pedigree} that allows checking whether a Genotype call is compatible with a selected mode of
@@ -58,7 +57,7 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	}
 
 	/**
-	 * Convenience method for checking whether a {@link GenotypeCall} is compatible with a given
+	 * Convenience method for checking whether a {@link GenotypeList} is compatible with a given
 	 * {@link ModeOfInheritance} and pedigree.
 	 *
 	 * @param list
@@ -66,7 +65,7 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	 * @param mode
 	 *            mode of inheritance to use for the checking
 	 * @return <code>true</code> if <code>call</code> is compatible with the given <code>mode</code> of inheritance,
-	 *         also <code>true</code> if <code>mode</code> is {@link VariantType#UNINITIALIZED}
+	 *         also <code>true</code> if <code>mode</code> is {@link ModeOfInheritance#UNINITIALIZED}
 	 * @throws CompatibilityCheckerException
 	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */

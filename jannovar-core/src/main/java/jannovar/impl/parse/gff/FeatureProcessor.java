@@ -91,7 +91,9 @@ public final class FeatureProcessor {
 	 * These are only present in the GFF3 vers3 file format, not in version 2 or GTF files. Process the 1. get gene and
 	 *
 	 * @param feature
+	 *            the {@link Feature} to process
 	 * @throws InvalidAttributeException
+	 *             on problems with processing the feature
 	 */
 	private void processRNA(Feature feature) throws InvalidAttributeException {
 		// gene and transcript ids
@@ -131,6 +133,7 @@ public final class FeatureProcessor {
 	 * Processes a {@link Feature} of type CDS or EXON
 	 *
 	 * @param feature
+	 *            the {@link Feature} to process
 	 */
 	private void processSubregion(Feature feature) {
 		int index;
@@ -207,14 +210,14 @@ public final class FeatureProcessor {
 	}
 
 	/**
-	 * This method will process a {@link Feature} with the {@link FeatureType} gene. These are only present in the GFF3
-	 * vers3 file format, not in GTF files.<br>
-	 * Process the
+	 * This method will process a {@link Feature} with the {@link FeatureType} gene.
+	 *
+	 * These are only present in the GFF3 file format, not in GTF files. Process the
 	 *
 	 * @param feature
+	 *            the {@link Feature} to process
 	 */
 	private void processGene(Feature feature) {
-
 		// get geneID
 		curGeneID = feature.getAttributes().get("ID");
 		// add to collection if not already known

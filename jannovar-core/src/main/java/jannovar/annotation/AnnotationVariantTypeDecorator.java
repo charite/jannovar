@@ -5,7 +5,7 @@ package jannovar.annotation;
 /**
  * Decorator for {@link Annotation} that allows querying for variant types.
  *
- * @author holtgrem
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 final public class AnnotationVariantTypeDecorator {
 

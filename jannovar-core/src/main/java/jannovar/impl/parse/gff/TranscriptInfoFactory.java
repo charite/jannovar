@@ -9,6 +9,7 @@ import jannovar.impl.parse.gff.FeatureProcessor.Transcript;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptInfoBuilder;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This is the builder for the {@link TranscriptModel}s from GFF-files.
+ * This is the builder for the {@link TranscriptInfo}s from GFF files.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
@@ -50,7 +51,7 @@ public final class TranscriptInfoFactory {
 	 * Process the <code>genes</code> and convert into an {@link ArrayList} of {@link TranscriptInfoBuilder}s.
 	 *
 	 * @param genes
-	 *            the name/Gene map to build the {@link TranscriptModel} objects for.
+	 *            the name/Gene map to build the {@link TranscriptInfo} objects for.
 	 * @param useOnlyCurated
 	 *            whether or not to only return curated transcripts
 	 * @return list of {@link TranscriptInfoBuilder} objects
@@ -82,7 +83,7 @@ public final class TranscriptInfoFactory {
 				int cdsStart = rna.getCdsStart();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsStartInExon = cdsStartInExon
-							|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
+					|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
 				boolean cdsEndInExon = false;
 				int cdsEnd = rna.getCdsEnd();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)

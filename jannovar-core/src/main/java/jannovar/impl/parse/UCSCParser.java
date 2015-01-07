@@ -211,7 +211,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
 		tib.setTxRegion(new GenomeInterval(refDict, '+', chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
-		.withStrand(strand));
+				.withStrand(strand));
 
 		int cdsStart, cdsEnd;
 		try {
@@ -225,7 +225,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
 		tib.setCdsRegion(new GenomeInterval(refDict, '+', chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
-		.withStrand(strand));
+				.withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;
@@ -282,7 +282,8 @@ public class UCSCParser implements TranscriptParser {
 	 *
 	 * @param kgPath
 	 *            path to the knownGene.txt file
-	 * @throws jannovar.impl.parse.TranscriptParseException
+	 * @throws TranscriptParseException
+	 *             on problems parsing the file
 	 */
 	private void parseKnownGeneFile(String kgPath) throws TranscriptParseException {
 		// Error handling can be improved with Java 7.

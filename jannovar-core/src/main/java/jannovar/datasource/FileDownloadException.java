@@ -17,9 +17,6 @@ public class FileDownloadException extends JannovarException {
 		super("Exception while downloading transcript annotation files");
 	}
 
-	/**
-	 * @param msg
-	 */
 	public FileDownloadException(String msg) {
 		super(msg);
 	}

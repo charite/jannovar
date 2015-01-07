@@ -17,6 +17,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * Initialize the object with the given {@link TranscriptInfo}.
 	 *
 	 * @param transcript
+	 *            the {@link TranscriptInfo} to decorate
 	 */
 	public TranscriptSequenceOntologyDecorator(TranscriptInfo transcript) {
 		this.transcript = transcript;
@@ -30,8 +31,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param interval
-	 *            the {@link GenomeInterval} to use for querying
 	 * @return the {@link GenomeInterval} with the start codon
 	 */
 	public GenomeInterval getStartCodonInterval() {
@@ -39,8 +38,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param interval
-	 *            the {@link GenomeInterval} to use for querying
 	 * @return the {@link GenomeInterval} with the start codon
 	 */
 	public GenomeInterval getStopCodonInterval() {
@@ -52,8 +49,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns the <b>genomic</b> 5' UTR interval.
 	 *
-	 * @param interval
-	 *            the {@link GenomeInterval} to use for querying
 	 * @return the {@link GenomeInterval} with the 5' UTR
 	 */
 	public GenomeInterval getFivePrimeUTRInterval() {
@@ -66,8 +61,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns the <b>genomic</b> 3' UTR interval.
 	 *
-	 * @param interval
-	 *            the {@link GenomeInterval} to use for querying
 	 * @return the {@link GenomeInterval} with the 3' UTR
 	 */
 	public GenomeInterval getThreePrimeUTRInterval() {
@@ -114,7 +107,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying
-	 * @param
 	 * @return <code>true</code> if the {@link GenomePosition} points to a base in the coding part of an exon
 	 */
 	public boolean liesInCDSExon(GenomePosition pos) {
@@ -131,8 +123,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param changeInterval
-	 *            the {@link GenomeInterval} to use for the query
 	 * @return <code>true</code> if <code>pos</code> lies within the CDS of {@link #transcript}
 	 */
 	public boolean liesInCDS(GenomePosition pos) {
@@ -155,8 +145,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param changeInterval
-	 *            the {@link GenomeInterval} to use for the query
 	 * @return <code>true</code> if <code>pos</code> lies within an intron of {@link #transcript}
 	 */
 	public boolean liesInIntron(GenomePosition pos) {
@@ -186,8 +174,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param interval
-	 *            the {@link GenomePosition} to use for querying
 	 * @return <code>true</code> if the {@link GenomePosition} lies within an intron of {@link #transcript} that
 	 *         overlaps with the CDS
 	 */
@@ -211,8 +197,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param interval
-	 *            the {@link GenomePosition} to use for querying
 	 * @return <code>true</code> if the {@link GenomePosition} lies within the translational start site
 	 */
 	public boolean liesInTranslationalStartSite(GenomePosition pos) {
@@ -229,8 +213,6 @@ public final class TranscriptSequenceOntologyDecorator {
 	}
 
 	/**
-	 * @param interval
-	 *            the {@link GenomePosition} to use for querying
 	 * @return <code>true</code> if the {@link GenomePosition} lies within the translational stop site
 	 */
 	public boolean liesInTranslationalStopSite(GenomePosition pos) {

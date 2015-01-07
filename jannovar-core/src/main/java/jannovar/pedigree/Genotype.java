@@ -3,7 +3,7 @@ package jannovar.pedigree;
 // TODO(holtgrew): Move the extensive description below to the tutorial?
 
 /**
- * Enumeration of genotype kinds in a {@link Variant}.
+ * Enumeration of genotype kinds.
  *
  * Note that this enumeration denotes the call (e.g., <tt>0/1</tt>) of a genotype, and is used together with data in the
  * PED file to decide whether the set of genotypes in a VCF file is compatible with the indicated mode of inheritance

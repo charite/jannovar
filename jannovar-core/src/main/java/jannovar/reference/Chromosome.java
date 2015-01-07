@@ -35,14 +35,13 @@ public final class Chromosome {
 	private final int chromosome;
 
 	/**
-	 * An {@link IntervalTree} that contains all of the {@link TranscriptModel} objects for transcripts located on this
+	 * An {@link IntervalTree} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
 	 * chromosome.
 	 */
 	private IntervalTree<TranscriptInfo> tmIntervalTree = null;
 
 	/**
-	 * The constructor expects to get a byte representing 1..22 or 23=X_CHROMSOME, or 24=Y_CHROMOSOME (see
-	 * {@link jannovar.common.Constants Constants}).
+	 * Initialize object.
 	 *
 	 * @param c
 	 *            the chromosome

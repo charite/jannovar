@@ -18,7 +18,8 @@ import java.util.List;
  * any point.
  *
  * @param <T>
- * @see jannovar.impl.interval.IntervalTree
+ *            content type
+ * @see IntervalTree
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top, Peter Robinson
  */
 public final class Node<T> {
@@ -243,9 +244,6 @@ public final class Node<T> {
 
 	/**
 	 * This is intended to be used to print out the interval tree for debugging purposes.
-	 *
-	 * @param type
-	 * @param level
 	 */
 	public void debugPrint(String type, int level) {
 
