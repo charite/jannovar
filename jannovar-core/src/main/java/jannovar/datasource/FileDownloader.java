@@ -80,6 +80,7 @@ final class FileDownloader {
 
 	private boolean copyURLToFileFTP(URL src, File dest) throws FileDownloadException {
 		final FTPClient ftp = buildFTPClient();
+		ftp.enterLocalPassiveMode(); // passive mode for firewalls
 
 		try {
 			if (src.getPort() != -1)
@@ -91,11 +92,11 @@ final class FileDownloader {
 			if (!ftp.isConnected())
 				System.err.println("Weird, not connected!");
 		} catch (SocketException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage());
 		} catch (IOException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage() + ": "
+					+ e.getCause());
 		}
-		ftp.enterLocalPassiveMode(); // passive mode for firewalls
 		try {
 			ftp.setFileType(FTP.BINARY_FILE_TYPE); // binary file transfer
 		} catch (IOException e) {
@@ -279,6 +280,8 @@ final class FileDownloader {
 	private FTPClient buildFTPClient() {
 		if (options.ftp.host == null)
 			return new FTPClient();
+		else if (options.ftp.user == null)
+			return new FTPHTTPClient(options.ftp.host, options.ftp.port);
 		else
 			return new FTPHTTPClient(options.ftp.host, options.ftp.port, options.ftp.user, options.ftp.password);
 	}
