@@ -2,8 +2,6 @@ package jannovar.pedigree;
 
 import jannovar.pedigree.Pedigree.IndexedPerson;
 
-import java.util.HashSet;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -55,7 +53,7 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 		this.list = list;
 
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
-		HashSet<String> parentNames = queryDecorator.getParentNames();
+		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
 		if (parentNames.size() > 2)
 			throw new CompatibilityCheckerException("Only two parents are allowed when checking for autosomal "
 					+ "recessive homozygous mode of inheritance.");

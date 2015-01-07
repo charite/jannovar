@@ -1,8 +1,7 @@
 package jannovar.pedigree;
 
-import java.util.HashSet;
-
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 // TODO(holtgrew): The explanation of the compatibility check appears to the be same as for autosomal recessive compound het.
 
@@ -65,7 +64,7 @@ class CompatibilityCheckerAutosomalRecessive {
 		this.list = list;
 
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
-		HashSet<String> parentNames = queryDecorator.getParentNames();
+		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
 		if (parentNames.size() > 2)
 			throw new CompatibilityCheckerException("Only two parents are allowed when checking for autosomal "
 					+ "recessive compound heterozygous mode of inheritance.");

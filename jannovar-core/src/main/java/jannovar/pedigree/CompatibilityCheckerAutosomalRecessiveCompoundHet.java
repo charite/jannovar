@@ -1,9 +1,9 @@
 package jannovar.pedigree;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 // TODO(holtgrew): Besides the check for heterozygous, the code also checks for unaffectedsAreNotHomozygousALT which is not documents.
 
@@ -71,7 +71,7 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 		this.list = list;
 
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
-		HashSet<String> parentNames = queryDecorator.getParentNames();
+		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
 		if (parentNames.size() > 2)
 			throw new CompatibilityCheckerException("Only two parents are allowed when checking for autosomal "
 					+ "recessive compound heterozygous mode of inheritance.");

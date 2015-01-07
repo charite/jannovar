@@ -5,6 +5,7 @@ import jannovar.Immutable;
 import java.util.HashSet;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 // TODO(holtgrem): Test me!
 
@@ -42,33 +43,33 @@ public class PedigreeQueryDecorator {
 	/**
 	 * @return set with the name of the unaffected persons
 	 */
-	public HashSet<String> getUnaffectedNames() {
-		HashSet<String> resultNames = new HashSet<String>();
+	public ImmutableSet<String> getUnaffectedNames() {
+		ImmutableSet.Builder<String> resultNames = new ImmutableSet.Builder<String>();
 		for (Person member : pedigree.members)
 			if (member.disease == Disease.UNAFFECTED)
 				resultNames.add(member.name);
-		return resultNames;
+		return resultNames.build();
 	}
 
 	/**
 	 * @return set with the name of the parents
 	 */
-	public HashSet<String> getParentNames() {
-		HashSet<String> parentNames = new HashSet<String>();
+	public ImmutableSet<String> getParentNames() {
+		ImmutableSet.Builder<String> parentNames = new ImmutableSet.Builder<String>();
 		for (Person member : pedigree.members) {
 			if (member.father != null)
 				parentNames.add(member.father.name);
 			if (member.mother != null)
 				parentNames.add(member.mother.name);
 		}
-		return parentNames;
+		return parentNames.build();
 	}
 
 	/**
-	 * @return list of parents
+	 * @return list of parents in the same order as in {@link Pedigree#members pedigree.members}
 	 */
 	public ImmutableList<Person> getParents() {
-		HashSet<String> parentNames = getParentNames();
+		ImmutableSet<String> parentNames = getParentNames();
 
 		ImmutableList.Builder<Person> builder = new ImmutableList.Builder<Person>();
 		for (Person member : pedigree.members)
@@ -80,7 +81,7 @@ public class PedigreeQueryDecorator {
 	/**
 	 * @return number of parents in pedigree
 	 */
-	public int getNumberOfParentsInPedigree() {
+	public int getNumberOfParents() {
 		HashSet<String> parentNames = new HashSet<String>();
 		for (Person member : pedigree.members) {
 			if (member.father != null)
@@ -94,7 +95,7 @@ public class PedigreeQueryDecorator {
 	/**
 	 * @return number of affected individuals in the pedigree
 	 */
-	public int getNumbeOfAffectedsInPedigree() {
+	public int getNumberOfAffecteds() {
 		int result = 0;
 		for (Person member : pedigree.members)
 			if (member.disease == Disease.AFFECTED)
@@ -105,7 +106,7 @@ public class PedigreeQueryDecorator {
 	/**
 	 * @return number of unaffected individuals in the pedigree
 	 */
-	public int getNumberOfUnaffectedsInPedigree() {
+	public int getNumberOfUnaffecteds() {
 		int result = 0;
 		for (Person member : pedigree.members)
 			if (member.disease == Disease.UNAFFECTED)

@@ -2,9 +2,8 @@ package jannovar.pedigree;
 
 import jannovar.reference.GenomePosition;
 
-import java.util.HashSet;
-
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and X recessive mode of
@@ -101,7 +100,7 @@ class CompatibilityCheckerXRecessive {
 	}
 
 	private boolean checkCompatibilityParents(ImmutableList<Genotype> gtList) {
-		final HashSet<String> parentNames = queryDecorator.getParentNames();
+		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
 		int i = 0;
 		for (Person person : pedigree.members) {
 			if (parentNames.contains(person.name)) {
@@ -122,7 +121,7 @@ class CompatibilityCheckerXRecessive {
 	}
 
 	private boolean checkUnaffected(ImmutableList<Genotype> gtList) {
-		final HashSet<String> unaffectedNames = queryDecorator.getUnaffectedNames();
+		final ImmutableSet<String> unaffectedNames = queryDecorator.getUnaffectedNames();
 		int i = 0;
 		for (Person person : pedigree.members) {
 			if (unaffectedNames.contains(person.name)) {
