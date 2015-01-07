@@ -19,9 +19,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Allows loading of {@link ReferenceDictParser} from UCSC and RefSeq data.
  *
- * The mapping between chromosome names and RefSeq/GeneBank IDs is done using a
- * RefSeq "chr_accessions_*" file and the chromosome information is retrieved
- * from the UCSC chromInfo.txt.gz file.
+ * The mapping between chromosome names and RefSeq/GeneBank IDs is done using a RefSeq "chr_accessions_*" file and the
+ * chromosome information is retrieved from the UCSC chromInfo.txt.gz file.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -51,8 +50,7 @@ public final class ReferenceDictParser {
 	}
 
 	/**
-	 * Load accessions and chromInfo file and return resulting
-	 * ReferenceDictionary.
+	 * Load accessions and chromInfo file and return resulting ReferenceDictionary.
 	 *
 	 * @return resulting {@link ReferenceDictionary}
 	 * @throws TranscriptParseException
@@ -63,18 +61,13 @@ public final class ReferenceDictParser {
 
 		// Process accessions file.
 		//
-		// So far, I found two formats. The more recent files at NCBI start with
-		// "chr_accessions" and (for human and
-		// mouse) contain mappings from chromosomes to other contig names. The
-		// older files are called "chr_NC_gi" and
-		// contain a mapping from chromosome name to sequence accession number,
-		// gi number, potentially assembly unit and
-		// then the assembly name. For the latter case, we allow filtering to
-		// lines where the last field matches the
+		// So far, I found two formats. The more recent files at NCBI start with "chr_accessions" and (for human and
+		// mouse) contain mappings from chromosomes to other contig names. The older files are called "chr_NC_gi" and
+		// contain a mapping from chromosome name to sequence accession number, gi number, potentially assembly unit and
+		// then the assembly name. For the latter case, we allow filtering to lines where the last field matches the
 		// configuration entry "chrToAccessions.filterLast".
 		// TODO(holtgrem): rename filterLast to matchLast?
-		// TODO(holtgrem): improve documentation for the chrToAccessions.* keys
-		// in the default_sources.ini file.
+		// TODO(holtgrem): improve documentation for the chrToAccessions.* keys in the default_sources.ini file.
 		ImmutableList<ImmutableList<String>> accessionLines = loadTSVFile(chrAccessionsPath);
 		String chrToAccessionsFormat = iniSection.fetch("chrToAccessions.format");
 		if (chrToAccessionsFormat == null)
@@ -85,23 +78,11 @@ public final class ReferenceDictParser {
 			final int CA_REFSEQ_ACCESSION = 1;
 			final int CA_GENBANK_ACCESSION = 3;
 			for (ImmutableList<String> line : accessionLines) {
-				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g.
-																		// "1",
-																		// "X"
-				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1
-																		// ->
-																		// "1",
-																		// 23 ->
-																		// "X"
-				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g.
-																				// "chr1",
-																				// "chrX",
-																				// for
-																				// UCSC
-				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g.
-																			// "NC_000001.10"
-				builder.putContigID(line.get(CA_GENBANK_ACCESSION), chrID); // e.g.
-																			// "CM000663.1"
+				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
+				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
+				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
+				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
+				builder.putContigID(line.get(CA_GENBANK_ACCESSION), chrID); // e.g. "CM000663.1"
 				chrID += 1;
 			}
 		} else { // old chr_NC_gi format
@@ -111,21 +92,10 @@ public final class ReferenceDictParser {
 			for (ImmutableList<String> line : accessionLines) {
 				if (!line.get(line.size() - 1).equals(filterPattern))
 					continue; // skip, does not match
-				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g.
-																		// "1",
-																		// "X"
-				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1
-																		// ->
-																		// "1",
-																		// 23 ->
-																		// "X"
-				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g.
-																				// "chr1",
-																				// "chrX",
-																				// for
-																				// UCSC
-				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g.
-																			// "NC_000001.10"
+				builder.putContigID(line.get(CA_CHROMOSOME), chrID); // e.g. "1", "X"
+				builder.putContigName(chrID, line.get(CA_CHROMOSOME)); // e.g. 1 -> "1", 23 -> "X"
+				builder.putContigID("chr" + line.get(CA_CHROMOSOME), chrID); // e.g. "chr1", "chrX", for UCSC
+				builder.putContigID(line.get(CA_REFSEQ_ACCESSION), chrID); // e.g. "NC_000001.10"
 				chrID += 1;
 			}
 		}
