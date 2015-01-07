@@ -10,69 +10,16 @@ import org.junit.Test;
  */
 public class PersonTest {
 
-	/** Test with an entry with invalid sex. */
-	@Test(expected = PedParseException.class)
-	public void testInValidPersonSex() throws PedParseException {
-		new LegacyPerson("FAM", "PERSON", "0", "0", "3", "0");
-	}
-
-	/** Test with an entry with invalid disease */
-	@Test(expected = PedParseException.class)
-	public void testInvalidPersonDisease() throws PedParseException {
-		new LegacyPerson("FAM", "PERSON", "0", "0", "1", "3");
-	}
-
-	/** Tests a few valid cases. */
 	@Test
-	public void testValidPerson_Mother() throws PedParseException {
-		LegacyPerson mother = new LegacyPerson("FAM", "MOTHER", null, null, "2", "2");
-		Assert.assertEquals("FAM", mother.getFamilyID());
-		Assert.assertEquals(null, mother.getFatherID());
-		Assert.assertEquals(null, mother.getMotherID());
-		Assert.assertFalse(mother.isMale());
-		Assert.assertTrue(mother.isFemale());
-		Assert.assertTrue(mother.isAffected()); // AFFECTED
-		Assert.assertFalse(mother.isUnaffected()); // AFFECTED
-		Assert.assertTrue(mother.isFounder());
+	public void testIsFounderTrue() {
+		Person index = new Person("name", null, null, Sex.MALE, Disease.AFFECTED);
+		Assert.assertTrue(index.isFounder());
 	}
 
 	@Test
-	public void testValidPerson_Father() throws PedParseException {
-		LegacyPerson father = new LegacyPerson("FAM", "FATHER", null, null, "1", "2");
-		Assert.assertEquals("FAM", father.getFamilyID());
-		Assert.assertEquals(null, father.getFatherID());
-		Assert.assertEquals(null, father.getMotherID());
-		Assert.assertTrue(father.isMale());
-		Assert.assertFalse(father.isFemale());
-		Assert.assertTrue(father.isAffected()); // AFFECTED
-		Assert.assertFalse(father.isUnaffected()); // AFFECTED
-		Assert.assertTrue(father.isFounder());
-	}
-
-	@Test
-	public void testValidPerson_Daughter() throws PedParseException {
-		LegacyPerson daughter = new LegacyPerson("FAM", "DAUGHTER", "FATHER", "MOTHER",
-				"2", "1");
-		Assert.assertEquals("FAM", daughter.getFamilyID());
-		Assert.assertEquals("FATHER", daughter.getFatherID());
-		Assert.assertEquals("MOTHER", daughter.getMotherID());
-		Assert.assertFalse(daughter.isMale());
-		Assert.assertTrue(daughter.isFemale());
-		Assert.assertFalse(daughter.isAffected()); // UNAFFECTED
-		Assert.assertTrue(daughter.isUnaffected()); // UNAFFECTED
-		Assert.assertFalse(daughter.isFounder());
-	}
-
-	@Test
-	public void testValidPerson_Son() throws PedParseException {
-		LegacyPerson son = new LegacyPerson("FAM", "SON", "FATHER", "MOTHER", "1", "0");
-		Assert.assertEquals("FAM", son.getFamilyID());
-		Assert.assertEquals("FATHER", son.getFatherID());
-		Assert.assertEquals("MOTHER", son.getMotherID());
-		Assert.assertTrue(son.isMale());
-		Assert.assertFalse(son.isFemale());
-		Assert.assertFalse(son.isAffected()); // UNKNOWN
-		Assert.assertFalse(son.isUnaffected()); // UNKNOWN
-		Assert.assertFalse(son.isFounder());
+	public void testIsFounderFalse() {
+		Person father = new Person("father", null, null, Sex.MALE, Disease.AFFECTED);
+		Person index = new Person("name", father, null, Sex.MALE, Disease.AFFECTED);
+		Assert.assertFalse(index.isFounder());
 	}
 }

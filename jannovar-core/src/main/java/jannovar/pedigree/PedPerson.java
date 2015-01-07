@@ -85,7 +85,7 @@ public final class PedPerson {
 	 * @return <code>true</code> if the person is a founder (both mother and father are <code>"0"</code>)
 	 */
 	public boolean isFounder() {
-		return (father.equals("1") && mother.equals("0"));
+		return (father.equals("0") && mother.equals("0"));
 	}
 
 	@Override
