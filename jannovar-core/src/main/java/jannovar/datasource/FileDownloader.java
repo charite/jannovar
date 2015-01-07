@@ -11,8 +11,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.net.URL;
+import java.net.URLConnection;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -75,7 +75,7 @@ final class FileDownloader {
 		if (src.getProtocol().equals("ftp"))
 			return copyURLToFileFTP(src, dest);
 		else
-			return copyURLToFileHTTP(src, dest);
+			return copyURLToFileFileOrHTTP(src, dest);
 	}
 
 	private boolean copyURLToFileFTP(URL src, File dest) throws FileDownloadException {
@@ -139,6 +139,8 @@ final class FileDownloader {
 			byte buffer[] = new byte[128 * 1024];
 			int readCount;
 			long pos = 0;
+			if (pb != null)
+				pb.print(pos);
 
 			while ((readCount = inBf.read(buffer)) > 0) {
 				out.write(buffer, 0, readCount);
@@ -205,12 +207,41 @@ final class FileDownloader {
 		return false;
 	}
 
-	private boolean copyURLToFileHTTP(URL src, File dest) throws FileDownloadException {
+	private boolean copyURLToFileFileOrHTTP(URL src, File dest) throws FileDownloadException {
 		setProxyProperties();
 
 		// actually copy the file
+		BufferedInputStream in = null;
+		FileOutputStream out = null;
 		try {
-			FileUtils.copyURLToFile(src, dest);
+			URLConnection connection = src.openConnection();
+			final int fileSize = connection.getContentLength();
+			in = new BufferedInputStream(connection.getInputStream());
+			out = new FileOutputStream(dest);
+
+			ProgressBar pb = null;
+			if (fileSize != -1)
+				pb = new ProgressBar(0, fileSize);
+			else
+				System.err.println("(server did not tell us the file size, no progress bar)");
+
+			// Download file.
+			byte buffer[] = new byte[128 * 1024];
+			int readCount;
+			long pos = 0;
+			if (pb != null)
+				pb.print(pos);
+
+			while ((readCount = in.read(buffer)) > 0) {
+				out.write(buffer, 0, readCount);
+				pos += readCount;
+				if (pb != null)
+					pb.print(pos);
+			}
+			in.close();
+			out.close();
+			if (pb != null && pos != pb.max)
+				pb.print(fileSize);
 		} catch (IOException e) {
 			throw new FileDownloadException("ERROR: Problem downloading file: " + e.getMessage());
 		}
@@ -219,6 +250,8 @@ final class FileDownloader {
 
 	/**
 	 * Set system properties from {@link #options}.
+	 *
+	 * Sets properties for HTTP and HTTPS only since FTP downloads go through the FTPClient anyway.
 	 */
 	private void setProxyProperties() {
 		if (options.http.host != null)
