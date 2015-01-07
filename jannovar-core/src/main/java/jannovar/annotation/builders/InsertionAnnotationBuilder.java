@@ -15,6 +15,7 @@ import jannovar.reference.PositionType;
 import jannovar.reference.ProjectionException;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptPosition;
+import jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Builds {@link Annotation} objects for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
@@ -191,7 +192,11 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					handleFrameShiftCase();
 			}
 
-			return new Annotation(transcript, String.format("%s:%s", ncHGVS(), protAnno), varType);
+			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+			return new Annotation(varType, txBeginPos, String.format("%s:%s", ncHGVS(), protAnno), transcript);
 		}
 
 		private void handleFrameShiftCase() {

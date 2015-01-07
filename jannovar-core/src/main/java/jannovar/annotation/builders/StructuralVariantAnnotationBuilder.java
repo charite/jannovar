@@ -66,45 +66,44 @@ public final class StructuralVariantAnnotationBuilder {
 
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
-				return new Annotation(null, String.format("%s:g.%d_%dinv", VariantType.INTERGENIC, beginPos + 1,
-						beginPos + ref.length()), VariantType.INTERGENIC);
+				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%dinv", VariantType.INTERGENIC,
+						beginPos + 1, beginPos + ref.length()), null);
 			} else {
-				return new Annotation(transcript, String.format("%s:g.%d_%dinv", VariantType.SV_INVERSION,
-						beginPos + 1, beginPos + ref.length()), VariantType.SV_INVERSION);
+				return new Annotation(VariantType.SV_INVERSION, beginPos, String.format("%s:g.%d_%dinv",
+						VariantType.SV_INVERSION, beginPos + 1, beginPos + ref.length()), transcript);
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(null, String.format("%s:g.%d_%dins%s..%s", VariantType.INTERGENIC, beginPos,
-						beginPos + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length())),
-						VariantType.INTERGENIC);
+				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%dins%s..%s",
+						VariantType.INTERGENIC, beginPos, beginPos + 1, alt.substring(0, 2),
+						alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(transcript, String.format("%s:g.%d_%dins%s..%s", VariantType.SV_INSERTION,
-						beginPos, beginPos + 1, alt.substring(0, 2), alt.substring(alt.length() - 2, alt.length())),
-						VariantType.SV_INSERTION);
+				return new Annotation(VariantType.SV_INSERTION, beginPos, String.format("%s:g.%d_%dins%s..%s",
+						VariantType.SV_INSERTION, beginPos, beginPos + 1, alt.substring(0, 2),
+						alt.substring(alt.length() - 2, alt.length())), transcript);
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(null, String.format("%s:g.%d_%ddel", VariantType.INTERGENIC, beginPos + 1,
-						beginPos + ref.length()), VariantType.INTERGENIC);
+				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%ddel", VariantType.INTERGENIC,
+						beginPos + 1, beginPos + ref.length()), null);
 			} else {
-				return new Annotation(transcript, String.format("%s:g.%d_%ddel", VariantType.SV_DELETION, beginPos + 1,
-						beginPos + ref.length()), VariantType.SV_DELETION);
+				return new Annotation(VariantType.SV_DELETION, beginPos, String.format("%s:g.%d_%ddel",
+						VariantType.SV_DELETION, beginPos + 1, beginPos + ref.length()), null);
 			}
 		} else { // SV substitution
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(null, String.format("%s:g.%d_%ddelins%s..%s", VariantType.INTERGENIC,
-						beginPos + 1, beginPos + ref.length(), alt.substring(0, 2),
-						alt.substring(alt.length() - 2, alt.length())), VariantType.INTERGENIC);
+				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%ddelins%s..%s",
+						VariantType.INTERGENIC, beginPos + 1, beginPos + ref.length(), alt.substring(0, 2),
+						alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(transcript, String.format("%s:g.%d_%ddelins%s..%s", VariantType.SV_SUBSTITUTION,
-						beginPos + 1, beginPos + ref.length(), alt.substring(0, 2),
-						alt.substring(alt.length() - 2, alt.length())), VariantType.SV_SUBSTITUTION);
+				return new Annotation(VariantType.SV_SUBSTITUTION, beginPos, String.format("%s:g.%d_%ddelins%s..%s",
+						VariantType.SV_SUBSTITUTION, beginPos + 1, beginPos + ref.length(), alt.substring(0, 2),
+						alt.substring(alt.length() - 2, alt.length())), transcript);
 			}
 		}
 	}
-
 }

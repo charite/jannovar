@@ -9,8 +9,10 @@ import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
+import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptProjectionDecorator;
 
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
@@ -70,11 +72,19 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, ncHGVS(), VariantType.TRANSCRIPT_ABLATION);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+		return new Annotation(VariantType.TRANSCRIPT_ABLATION, txBeginPos, ncHGVS(), transcript);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+		return new Annotation(VariantType.START_LOSS, txBeginPos, String.format("%s:p.0?", ncHGVS()), transcript);
 	}
 
 	/**
@@ -137,14 +147,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 					.withPositionType(PositionType.ZERO_BASED);
 			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
 					changeInterval.getGenomeBeginPos().shifted(change.alt.length() - 1)).withPositionType(
-					PositionType.ZERO_BASED);
+							PositionType.ZERO_BASED);
 			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
 			this.aaChange = new AminoAcidChange(refChangeBeginPos.pos / 3, wtAASeq.substring(refChangeBeginPos.pos / 3,
 					(refChangeLastPos.pos + 1 + 2) / 3), varAASeq.substring(varChangeBeginPos.pos / 3,
-					(varChangeLastPos.pos + 1 + 2) / 3));
+							(varChangeLastPos.pos + 1 + 2) / 3));
 
 			// Look for stop codon, starting at change position.
 			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.pos / 3);
@@ -156,7 +166,11 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript, String.format("%s:%s", ncHGVS(), protAnno), varType);
+			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+			return new Annotation(varType, txBeginPos, String.format("%s:%s", ncHGVS(), protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {

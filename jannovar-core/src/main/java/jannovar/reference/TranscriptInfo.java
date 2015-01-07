@@ -48,7 +48,7 @@ public final class TranscriptInfo implements Serializable {
 	 * The Gene id that corresponds to the transcript model. Note that this information is taken from
 	 * knownToLocusLink.txt or modified Ensembl Gene ids. Default is <code>-1</code>
 	 */
-	public int geneID = -1;
+	public final int geneID;
 
 	/** Class version (for serialization). */
 	public static final long serialVersionUID = 1L;

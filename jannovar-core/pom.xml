@@ -18,6 +18,35 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ini4j</groupId>
+			<artifactId>ini4j</artifactId>
+			<version>0.5.1</version>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<resources>
 			<resource>
@@ -28,24 +57,6 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!-- Make an executable jar and specify the main class and classpath -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<!-- set useUniqueVersions=false in order that the classpath has the 
-								SNAPSHOT instead of the build number prefixed to the dependency -->
-							<useUniqueVersions>false</useUniqueVersions>
-							<mainClass>de.charite.compbio.exomiser.cli.Main</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
 			<!-- Specify the dependencies to copy -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -10,6 +10,7 @@ import jannovar.impl.util.DNAUtils;
  * ALT.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Peter N Robinson <peter.robinson@charite.de>
  */
 @Immutable
 public final class GenomeChange {
@@ -73,7 +74,7 @@ public final class GenomeChange {
 			delta = ref.length() - 1;
 
 		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED)
-		.shifted(delta).withStrand(strand);
+				.shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -142,9 +143,53 @@ public final class GenomeChange {
 			return GenomeChangeType.BLOCK_SUBSTITUTION;
 	}
 
+	/**
+	 * A transition is purine <-> purine or pyrimidine <-> pyrimidine. Only applies to single nucleotide subsitutions.
+	 *
+	 * @return true if the variant is a SNV and a transition.
+	 */
+	public boolean isTransition() {
+		if (getType() != GenomeChangeType.SNV)
+			return false;
+		// purine to purine change
+		if (this.ref.equals("A") && this.alt.equals("G"))
+			return true;
+		else if (this.ref.equals("G") && this.alt.equals("A"))
+			return true;
+		// pyrimidine to pyrimidine change
+		if (this.ref.equals("C") && this.alt.equals("T"))
+			return true;
+		else if (this.ref.equals("T") && this.alt.equals("C"))
+			return true;
+		// If we get here, the variant must be a transversion.
+		return false;
+	}
+
+	/**
+	 * A transversion is purine <-> pyrimidine. Only applies to single nucleotide subsitutions.
+	 *
+	 * @return true if the variant is a SNV and a transversion.
+	 */
+	public boolean isTransversion() {
+		if (getType() != GenomeChangeType.SNV)
+			return false;
+		// purine to purine change
+		if (this.ref.equals("A") && this.alt.equals("G"))
+			return false;
+		else if (this.ref.equals("G") && this.alt.equals("A"))
+			return false;
+		// pyrimidine to pyrimidine change
+		if (this.ref.equals("C") && this.alt.equals("T"))
+			return false;
+		else if (this.ref.equals("T") && this.alt.equals("C"))
+			return false;
+		// If we get here, the variant must be a SNV and a transversion.
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -161,7 +206,7 @@ public final class GenomeChange {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

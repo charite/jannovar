@@ -9,8 +9,10 @@ import jannovar.reference.AminoAcidChangeNormalizer;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
+import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Builds {@link Annotation} objects for the deletion {@link GenomeChange}s in the given {@link TranscriptInfo}.
@@ -66,11 +68,19 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, ncHGVS(), VariantType.TRANSCRIPT_ABLATION);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+		return new Annotation(VariantType.TRANSCRIPT_ABLATION, txBeginPos, ncHGVS(), transcript);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, String.format("%s:p.0?", ncHGVS()), VariantType.START_LOSS);
+		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+		return new Annotation(VariantType.START_LOSS, txBeginPos, String.format("%s:p.0?", ncHGVS()), transcript);
 	}
 
 	/**
@@ -137,7 +147,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript, String.format("%s:%s", ncHGVS(), protAnno), varType);
+			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
+			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
+
+			return new Annotation(varType, txBeginPos, String.format("%s:%s", ncHGVS(), protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {

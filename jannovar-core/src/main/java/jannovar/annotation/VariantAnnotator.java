@@ -76,8 +76,8 @@ public final class VariantAnnotator {
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(int chr, int position, String ref, String alt, PositionType posType)
-			throws AnnotationException {
+	public AnnotationList buildAnnotationList(int chr, int position, String ref, String alt,
+			PositionType posType) throws AnnotationException {
 		// Get chromosome by id.
 		if (chromosomeMap.get(chr) == null)
 			throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
