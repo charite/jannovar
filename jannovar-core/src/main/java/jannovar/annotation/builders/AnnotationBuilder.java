@@ -61,7 +61,9 @@ abstract class AnnotationBuilder {
 	 * Note that {@link #change} will be initialized with normalized positions (shifted to the left) if possible.
 	 *
 	 * @param transcript
+	 *            the {@link TranscriptInfo} to build the annotation for
 	 * @param change
+	 *            the {@link GenomeChange} to use for building the annotation
 	 */
 	AnnotationBuilder(TranscriptInfo transcript, GenomeChange change) {
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.

@@ -1,5 +1,7 @@
 package jannovar.impl.interval;
 
+import jannovar.reference.TranscriptInfo;
+
 /**
  * This class implements an interval on a numberline with a lowpoint and a highpoint (where lowpoint <= highpoint). The
  * Interval is intended to contain some other kind of data (clients of this templated class will need to initialize the
@@ -16,10 +18,7 @@ package jannovar.impl.interval;
  * @author Christopher Dommaschenz, Radostina Misirkova, Nadine Taube, Gizem Top
  */
 public final class Interval<T> implements java.io.Serializable {
-	/**
-	 * The object that we are putting into the interval tree (such as a {@link jannovar.reference.TranscriptModel
-	 * TranscriptModel} object).
-	 */
+	/** The object that we are putting into the interval tree (such as a {@link TranscriptInfo} object). */
 	private T value;
 	/** The smaller end point of the interval */
 	private int lowpoint;

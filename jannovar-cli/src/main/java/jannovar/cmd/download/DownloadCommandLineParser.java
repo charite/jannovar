@@ -4,6 +4,9 @@ import jannovar.JannovarOptions;
 import jannovar.cmd.HelpRequestedException;
 
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -14,7 +17,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.Parser;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.net.HostAndPort;
 
 /**
  * Helper class for parsing the commandline of the download command.
@@ -48,8 +50,15 @@ public final class DownloadCommandLineParser {
 		options.addOption(OptionBuilder
 				.withDescription("target folder for downloaded and serialized files, defaults to \"data\"").hasArgs(1)
 				.withLongOpt("data-dir").create("d"));
-		options.addOption(OptionBuilder.withDescription("proxy to use for download as \"<HOST>:<PORT>\"").hasArgs(1)
-				.withLongOpt("proxy").withArgName("proxy").create());
+		options.addOption(OptionBuilder
+				.withDescription("proxy to use for HTTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
+				.withLongOpt("http-proxy").withArgName("http-proxy").create());
+		options.addOption(OptionBuilder
+				.withDescription("proxy to use for HTTPS downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
+				.withLongOpt("https-proxy").withArgName("https-proxy").create());
+		options.addOption(OptionBuilder
+				.withDescription("proxy to use for FTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
+				.withLongOpt("ftp-proxy").withArgName("ftp-proxy").create());
 
 		parser = new GnuParser();
 	}
@@ -59,6 +68,8 @@ public final class DownloadCommandLineParser {
 	 *
 	 * @throws ParseException
 	 *             on problems with the command line
+	 * @throws HelpRequestedException
+	 *             if the user requested help on the command line
 	 */
 	public JannovarOptions parse(String argv[]) throws ParseException, HelpRequestedException {
 		// Parse the command line.
@@ -94,14 +105,50 @@ public final class DownloadCommandLineParser {
 		dsfBuilder.add("bundle:///default_sources.ini");
 		result.dataSourceFiles = dsfBuilder.build();
 
-		try {
-			if (cmd.hasOption("proxy"))
-				result.proxy = HostAndPort.fromString(cmd.getOptionValue("proxy")).withDefaultPort(8080);
-		} catch (IllegalArgumentException e) {
-			throw new ParseException("could not parse proxy from " + cmd.getOptionValue("proxy"));
-		}
+		// get proxy settings from system environment if possible
+		Map<String, String> env = System.getenv();
+		if (getProxyURL(env.get("HTTP_PROXY")) != null)
+			result.httpProxy = getProxyURL(env.get("HTTP_PROXY"));
+		if (getProxyURL(env.get("http_proxy")) != null)
+			result.httpProxy = getProxyURL(env.get("http_proxy"));
+		if (getProxyURL(env.get("HTTPS_PROXY")) != null)
+			result.httpsProxy = getProxyURL(env.get("HTTPS_PROXY"));
+		if (getProxyURL(env.get("https_proxy")) != null)
+			result.httpsProxy = getProxyURL(env.get("https_proxy"));
+		if (getProxyURL(env.get("FTP_PROXY")) != null)
+			result.ftpProxy = getProxyURL(env.get("FTP_PROXY"));
+		if (getProxyURL(env.get("ftp_proxy")) != null)
+			result.ftpProxy = getProxyURL(env.get("ftp_proxy"));
+
+		// get proxy settings from the command line, overriding the environment settings
+		if (cmd.hasOption("http-proxy"))
+			result.httpProxy = getProxyURL(cmd.getOptionValue("http-proxy"));
+		if (cmd.hasOption("https-proxy"))
+			result.httpsProxy = getProxyURL(cmd.getOptionValue("https-proxy"));
+		if (cmd.hasOption("ftp-proxy"))
+			result.ftpProxy = getProxyURL(cmd.getOptionValue("ftp-proxy"));
 
 		return result;
+	}
+
+	/**
+	 * Build {@link URL} from an environment proxy configuration
+	 *
+	 * @param envValue
+	 *            environment value with proxy host and port as URL
+	 * @return {@link URL} with configuration from <code>envValue</code> or <code>null</code> if not set or not
+	 *         successful
+	 */
+	private URL getProxyURL(String envValue) {
+		if (envValue == null)
+			return null;
+
+		try {
+			return new URL(envValue);
+		} catch (MalformedURLException e) {
+			System.err.println("WARNING: Could not parse proxy value " + envValue + " as URL.");
+			return null;
+		}
 	}
 
 	private void printHelp() {
@@ -113,9 +160,7 @@ public final class DownloadCommandLineParser {
 
 		final String FOOTER = new StringBuilder().append("\n\nExample: java -jar jannovar.jar download hg19/ucsc\n\n")
 				.append("Note that Jannovar also interprets the environment variables\n")
-				.append("HTTP_PROXY, HTTPS_PROXY and FTP_PROXY for downloading files.\n")
-				.append("There, you can also specify a username and passsword for the\n").append("proxy.\n\n")
-				.toString();
+				.append("HTTP_PROXY, HTTPS_PROXY and FTP_PROXY for downloading files.\n").toString();
 
 		System.err.print(HEADER);
 

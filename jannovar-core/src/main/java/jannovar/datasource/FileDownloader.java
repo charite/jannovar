@@ -11,12 +11,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
 import java.net.URL;
+import java.net.URLConnection;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPHTTPClient;
 
 /**
  * Helper class for downloading files over HTTP and FTP.
@@ -72,14 +71,15 @@ final class FileDownloader {
 			dest.getParentFile().mkdirs();
 		}
 
-		if (src.getProtocol().equals("ftp"))
-			return copyURLToFileFTP(src, dest);
+		if (src.getProtocol().equals("ftp") && options.ftp.host == null)
+			return copyURLToFileWithFTP(src, dest);
 		else
-			return copyURLToFileHTTP(src, dest);
+			return copyURLToFileThroughURL(src, dest);
 	}
 
-	private boolean copyURLToFileFTP(URL src, File dest) throws FileDownloadException {
-		final FTPClient ftp = buildFTPClient();
+	private boolean copyURLToFileWithFTP(URL src, File dest) throws FileDownloadException {
+		final FTPClient ftp = new FTPClient();
+		ftp.enterLocalPassiveMode(); // passive mode for firewalls
 
 		try {
 			if (src.getPort() != -1)
@@ -91,11 +91,11 @@ final class FileDownloader {
 			if (!ftp.isConnected())
 				System.err.println("Weird, not connected!");
 		} catch (SocketException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage());
 		} catch (IOException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage() + ": "
+					+ e.getCause());
 		}
-		ftp.enterLocalPassiveMode(); // passive mode for firewalls
 		try {
 			ftp.setFileType(FTP.BINARY_FILE_TYPE); // binary file transfer
 		} catch (IOException e) {
@@ -139,6 +139,8 @@ final class FileDownloader {
 			byte buffer[] = new byte[128 * 1024];
 			int readCount;
 			long pos = 0;
+			if (pb != null)
+				pb.print(pos);
 
 			while ((readCount = inBf.read(buffer)) > 0) {
 				out.write(buffer, 0, readCount);
@@ -205,12 +207,47 @@ final class FileDownloader {
 		return false;
 	}
 
-	private boolean copyURLToFileHTTP(URL src, File dest) throws FileDownloadException {
+	/**
+	 * Copy contents of a URL to a file using the {@link URL} class.
+	 *
+	 * This works for the HTTP and the HTTPS protocol and for FTP through a proxy. For plain FTP, we need to use the
+	 * passive mode.
+	 */
+	private boolean copyURLToFileThroughURL(URL src, File dest) throws FileDownloadException {
 		setProxyProperties();
 
 		// actually copy the file
+		BufferedInputStream in = null;
+		FileOutputStream out = null;
 		try {
-			FileUtils.copyURLToFile(src, dest);
+			URLConnection connection = src.openConnection();
+			final int fileSize = connection.getContentLength();
+			in = new BufferedInputStream(connection.getInputStream());
+			out = new FileOutputStream(dest);
+
+			ProgressBar pb = null;
+			if (fileSize != -1)
+				pb = new ProgressBar(0, fileSize);
+			else
+				System.err.println("(server did not tell us the file size, no progress bar)");
+
+			// Download file.
+			byte buffer[] = new byte[128 * 1024];
+			int readCount;
+			long pos = 0;
+			if (pb != null)
+				pb.print(pos);
+
+			while ((readCount = in.read(buffer)) > 0) {
+				out.write(buffer, 0, readCount);
+				pos += readCount;
+				if (pb != null)
+					pb.print(pos);
+			}
+			in.close();
+			out.close();
+			if (pb != null && pos != pb.max)
+				pb.print(fileSize);
 		} catch (IOException e) {
 			throw new FileDownloadException("ERROR: Problem downloading file: " + e.getMessage());
 		}
@@ -221,6 +258,15 @@ final class FileDownloader {
 	 * Set system properties from {@link #options}.
 	 */
 	private void setProxyProperties() {
+		if (options.ftp.host != null)
+			System.setProperty("ftp.proxyHost", options.ftp.host);
+		if (options.ftp.port != -1)
+			System.setProperty("ftp.proxyPort", Integer.toString(options.ftp.port));
+		if (options.ftp.user != null)
+			System.setProperty("ftp.proxyUser", options.ftp.user);
+		if (options.ftp.password != null)
+			System.setProperty("ftp.proxyPassword", options.ftp.password);
+
 		if (options.http.host != null)
 			System.setProperty("http.proxyHost", options.http.host);
 		if (options.http.port != -1)
@@ -238,16 +284,6 @@ final class FileDownloader {
 			System.setProperty("https.proxyUser", options.https.user);
 		if (options.https.password != null)
 			System.setProperty("https.proxyPassword", options.https.password);
-	}
-
-	/**
-	 * @return Configured {@link FTPClient} or {@link FTPHTTPClient}, depending on configuration in {@link #options}.
-	 */
-	private FTPClient buildFTPClient() {
-		if (options.ftp.host == null)
-			return new FTPClient();
-		else
-			return new FTPHTTPClient(options.ftp.host, options.ftp.port, options.ftp.user, options.ftp.password);
 	}
 
 }

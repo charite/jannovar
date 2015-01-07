@@ -187,9 +187,8 @@ final class AnnotationCollector {
 	 * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
 	 *
 	 * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
-	 * @throws jannovar.annotation.AnnotationException
 	 */
-	public AnnotationList getAnnotationList() throws AnnotationException {
+	public AnnotationList getAnnotationList() {
 		return new AnnotationList(this.annotationLst);
 	}
 

@@ -1,6 +1,7 @@
 package jannovar.datasource;
 
 import jannovar.JannovarOptions;
+import jannovar.datasource.FileDownloader.ProxyOptions;
 import jannovar.impl.parse.ReferenceDictParser;
 import jannovar.impl.parse.TranscriptParseException;
 import jannovar.impl.util.PathUtil;
@@ -11,7 +12,6 @@ import jannovar.reference.TranscriptInfo;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 
 import org.ini4j.Profile.Section;
 
@@ -134,25 +134,27 @@ public abstract class JannovarDataFactory {
 	private FileDownloader.Options buildOptions() {
 		FileDownloader.Options result = new FileDownloader.Options();
 
-		// Get proxy settings from environment variables.
-		Map<String, String> env = System.getenv();
-		result.http = buildProxyOptions(env.get("HTTP_PROXY"));
-		result.https = buildProxyOptions(env.get("HTTPS_PROXY"));
-		result.ftp = buildProxyOptions(env.get("FTP_PROXY"));
-
 		// Get proxy settings from options.
-		if (options.proxy != null && options.proxy.getHostText() != null && !options.proxy.getHostText().equals("")) {
-			result.http.host = options.proxy.getHostText();
-			result.https.host = options.proxy.getHostText();
-			result.ftp.host = options.proxy.getHostText();
-		}
-		if (options.proxy != null && options.proxy.hasPort()) {
-			result.http.port = options.proxy.getPort();
-			result.https.port = options.proxy.getPort();
-			result.ftp.port = options.proxy.getPort();
-		}
+		updateProxyOptions(result.http, options.httpProxy);
+		updateProxyOptions(result.https, options.httpsProxy);
+		updateProxyOptions(result.ftp, options.ftpProxy);
 
 		return result;
+	}
+
+	private void updateProxyOptions(ProxyOptions proxyOptions, URL url) {
+		if (url != null && url.getHost() != null && !url.getHost().equals("")) {
+			proxyOptions.host = url.getHost();
+			proxyOptions.port = url.getPort();
+			if (proxyOptions.port == -1)
+				proxyOptions.port = 80;
+			String userInfo = url.getUserInfo();
+			if (userInfo != null && userInfo.indexOf(':') != -1) {
+				String[] userPass = userInfo.split(":", 2);
+				proxyOptions.user = userPass[0];
+				proxyOptions.password = userPass[1];
+			}
+		}
 	}
 
 	/**

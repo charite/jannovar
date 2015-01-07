@@ -96,6 +96,7 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the recessive compound
 	 *         hererozygous mode of inheritances.
 	 * @throws CompatibilityCheckerException
+	 *             if the pedigree or variant list is invalid
 	 */
 	public boolean run() throws CompatibilityCheckerException {
 		// First check whether the pedigree and genotype calls are compatible with autosomal recessive mode of

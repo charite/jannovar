@@ -69,7 +69,7 @@ public final class TranscriptSequenceDecorator {
 	 *
 	 * @param txPos
 	 *            transcript position of the change
-	 * @param cdsPosition
+	 * @param cdsPos
 	 *            CDS position of the change
 	 * @return the codon affected by a change at the given position
 	 */
@@ -88,7 +88,7 @@ public final class TranscriptSequenceDecorator {
 	 *
 	 * @param txPos
 	 *            transcript position of the change
-	 * @param cdsPosition
+	 * @param cdsPos
 	 *            CDS position of the change
 	 * @param count
 	 *            number of codons to return
@@ -109,7 +109,7 @@ public final class TranscriptSequenceDecorator {
 	 *
 	 * @param txPos
 	 *            transcript position of the change
-	 * @param cdsPosition
+	 * @param cdsPos
 	 *            CDS position of the change
 	 * @return the codon affected by a change at the given position
 	 */

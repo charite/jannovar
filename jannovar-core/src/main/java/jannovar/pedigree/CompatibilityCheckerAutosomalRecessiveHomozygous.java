@@ -66,7 +66,6 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 	/**
 	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the recessive homozygous mode
 	 *         of inheritances.
-	 * @throws CompatibilityCheckerException
 	 */
 	public boolean run() {
 		if (pedigree.members.size() == 1)

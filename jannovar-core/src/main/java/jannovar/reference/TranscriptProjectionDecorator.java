@@ -22,6 +22,7 @@ public final class TranscriptProjectionDecorator {
 	 * Initialize the object with the given {@link TranscriptInfo}.
 	 *
 	 * @param transcript
+	 *            the {@link TranscriptInfo} to decorate
 	 */
 	public TranscriptProjectionDecorator(TranscriptInfo transcript) {
 		this.transcript = transcript;
@@ -259,8 +260,6 @@ public final class TranscriptProjectionDecorator {
 	 * @param pos
 	 *            the position to translate
 	 * @return the corresponding position in the transcript sequence
-	 * @throws ProjectionException
-	 *             in case of problems with the position conversion
 	 */
 	public CDSPosition projectGenomeToCDSPosition(GenomePosition pos) {
 		// TODO(holtgrem): Test me!

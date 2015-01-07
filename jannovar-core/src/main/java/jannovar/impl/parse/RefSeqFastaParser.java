@@ -25,7 +25,7 @@ public final class RefSeqFastaParser extends FastaParser {
 	 * @param filename
 	 *            path to the FASTA file
 	 * @param models
-	 *            the {@link TranscriptModel}s w/o sequence information
+	 *            the {@link TranscriptInfoBuilder transcript info builders}s without sequence information
 	 */
 	public RefSeqFastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
 		super(filename, models);
@@ -33,7 +33,7 @@ public final class RefSeqFastaParser extends FastaParser {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see jannovar.io.FastaParser#processHeader(java.lang.String)
 	 */
 	@Override

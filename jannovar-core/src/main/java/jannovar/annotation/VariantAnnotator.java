@@ -76,8 +76,8 @@ public final class VariantAnnotator {
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(int chr, int position, String ref, String alt,
-			PositionType posType) throws AnnotationException {
+	public AnnotationList buildAnnotationList(int chr, int position, String ref, String alt, PositionType posType)
+			throws AnnotationException {
 		// Get chromosome by id.
 		if (chromosomeMap.get(chr) == null)
 			throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
@@ -90,14 +90,10 @@ public final class VariantAnnotator {
 	}
 
 	/**
-	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates. When we
-	 * get to this point, the client code has identified the right chromosome, and we are provided the coordinates on
-	 * that chromosome.
+	 * Main entry point to getting Annovar-type annotations for a variant identified by chromosomal coordinates.
 	 *
-	 * The strategy for finding annotations is based on the perl code in Annovar. Roughly speaking, we identify a list
-	 * of genes affected by the variant using the interval tree ({@link #itree}) and then annotated the variants
-	 * accordingly. If no hit is found in the tree, we identify the left and right neighbor and annotate to intergenic,
-	 * upstream or downstream
+	 * When we get to this point, the client code has identified the right chromosome, and we are provided the
+	 * coordinates on that chromosome.
 	 *
 	 * @param change
 	 *            the {@link GenomeChange} to annotate

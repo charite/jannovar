@@ -1,6 +1,7 @@
 package jannovar.impl.parse;
 
 import jannovar.impl.util.ProgressBar;
+import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptInfoBuilder;
 
 import java.io.BufferedReader;
@@ -22,32 +23,32 @@ public abstract class FastaParser {
 	protected String filename;
 	protected String accession;
 	protected StringBuilder sequence;
-	protected ArrayList<TranscriptInfoBuilder> transcriptModels;
-	protected ArrayList<TranscriptInfoBuilder> transcriptModelsProcessed;
+	protected ArrayList<TranscriptInfoBuilder> TranscriptInfos;
+	protected ArrayList<TranscriptInfoBuilder> TranscriptInfosProcessed;
 	protected HashMap<String, Integer> transcript2index;
 
 	/**
-	 * Constructs a new {@link FastaParser} and initiates the path to the FASTA file and the {@link TranscriptModel}s
+	 * Constructs a new {@link FastaParser} and initiates the path to the FASTA file and the {@link TranscriptInfo}s
 	 *
 	 * @param filename
 	 *            path to the FASTA file
 	 * @param models
-	 *            list of {@link TranscriptModel}s w/o mRNA sequence data
+	 *            list of {@link TranscriptInfo}s w/o mRNA sequence data
 	 */
 	public FastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
 		this.filename = filename;
-		this.transcriptModels = models;
-		this.transcriptModelsProcessed = new ArrayList<TranscriptInfoBuilder>();
-		transcript2index = new HashMap<String, Integer>(transcriptModels.size());
+		this.TranscriptInfos = models;
+		this.TranscriptInfosProcessed = new ArrayList<TranscriptInfoBuilder>();
+		transcript2index = new HashMap<String, Integer>(TranscriptInfos.size());
 		int i = 0;
-		for (TranscriptInfoBuilder model : transcriptModels)
+		for (TranscriptInfoBuilder model : TranscriptInfos)
 			transcript2index.put(model.getAccession(), i++);
 	}
 
 	/**
-	 * Parse the mRNA sequences and thereby add these to the {@link TranscriptModel}s.
+	 * Parse the mRNA sequences and thereby add these to the {@link TranscriptInfo}s.
 	 *
-	 * @return list of sequence annotated {@link TranscriptModel}s
+	 * @return list of sequence annotated {@link TranscriptInfo}s
 	 */
 	public ArrayList<TranscriptInfoBuilder> parse() {
 		BufferedReader in = null;
@@ -95,25 +96,25 @@ public abstract class FastaParser {
 				System.err.println("[WARNING] failed to close the FASTA file reader:\n" + e.toString());
 			}
 		}
-		return transcriptModelsProcessed;
+		return TranscriptInfosProcessed;
 	}
 
 	/**
-	 * Adds the sequence to the corresponding {@link TranscriptModel}.
+	 * Adds the sequence to the corresponding {@link TranscriptInfo}.
 	 */
 	private void addSequenceToModel() {
 		Integer idx;
 
 		if ((idx = transcript2index.get(accession)) != null) {
-			transcriptModels.get(idx).setSequence(sequence.toString());
-			transcriptModelsProcessed.add(transcriptModels.get(idx));
+			TranscriptInfos.get(idx).setSequence(sequence.toString());
+			TranscriptInfosProcessed.add(TranscriptInfos.get(idx));
 		}
 		sequence = null;
 		// System.out.println(accession+"\t"+sequence);
 	}
 
 	/**
-	 * Selects the unique identifier from the header line to match the sequence to the {@link TranscriptModel}
+	 * Selects the unique identifier from the header line to match the sequence to the {@link TranscriptInfo}
 	 * definition.
 	 *
 	 * @param header

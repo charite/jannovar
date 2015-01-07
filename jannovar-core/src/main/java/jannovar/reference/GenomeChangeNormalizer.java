@@ -18,12 +18,12 @@ public final class GenomeChangeNormalizer {
 	 *            the corresponding position on the transcript
 	 * @return normalized {@link GenomeChange}
 	 */
-	public static GenomeChange normalizeGenomeChange(TranscriptInfo info, GenomeChange change, TranscriptPosition txPos) {
+	public static GenomeChange normalizeGenomeChange(TranscriptInfo transcript, GenomeChange change, TranscriptPosition txPos) {
 		switch (change.getType()) {
 		case DELETION:
-			return normalizeDeletion(info, change, txPos);
+			return normalizeDeletion(transcript, change, txPos);
 		case INSERTION:
-			return normalizeInsertion(info, change, txPos);
+			return normalizeInsertion(transcript, change, txPos);
 		default:
 			// TODO(holtgrem): Handle block substitution cse.
 			return change;

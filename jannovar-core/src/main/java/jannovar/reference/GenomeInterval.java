@@ -192,8 +192,8 @@ public final class GenomeInterval implements Serializable {
 	}
 
 	/**
-	 * @param pos
-	 *            query position
+	 * @param other
+	 *            other {@link GenomeInterval} to use for querying
 	 * @return <tt>true</tt> if the interval contains <code>other</code>
 	 */
 	public boolean contains(GenomeInterval other) {
@@ -231,7 +231,7 @@ public final class GenomeInterval implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -246,7 +246,7 @@ public final class GenomeInterval implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -266,7 +266,7 @@ public final class GenomeInterval implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

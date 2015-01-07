@@ -1,7 +1,7 @@
 package jannovar.pedigree;
 
 /**
- * Codes used to denote affection status of a {@link LegacyPerson} in a {@link LegacyPedigree}.
+ * Codes used to denote affection status of a person in a pedigree.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>

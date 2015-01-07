@@ -63,8 +63,8 @@ public final class GFFParser {
 	/**
 	 * Parses the file and feed the {@link Feature} objects into <code>tmBuilder</code>.
 	 *
-	 * @param tmBuilder
-	 *            builder object to feed the {@link Feature}s into
+	 * @param fp
+	 *            {@link FeatureProcessor} to use during parsing
 	 */
 	public void parse(FeatureProcessor fp) {
 		LOGGER.log(Level.INFO, "Parsing GFF...");
@@ -172,10 +172,10 @@ public final class GFFParser {
 	 * gene_id "uc007aet.1"; transcript_id "uc007aet.1";
 	 * </pre>
 	 *
-	 * Adds attributes to {@link #featureBuilder}.
+	 * Adds attributes to <code>feature</code>.
 	 *
-	 * @return a HashMap with attributes
 	 * @throws FeatureFormatException
+	 *             on problems with the given <code>feature</code>
 	 */
 	private void processAttributes(String attributeString, Feature feature) throws FeatureFormatException {
 		int start = 0;
@@ -199,8 +199,8 @@ public final class GFFParser {
 	 * Split up the attribute, value pair and add this attribute pair to the <code>feature</code>
 	 *
 	 * @throws FeatureFormatException
-	 *             is thrown if attribute String does not contain the {@link #valueSeparator separator} for this GFF
-	 *             file format.
+	 *             is thrown if attribute String does not contain the {@link GFFVersion#valueSeparator separator} for
+	 *             this GFF file format.
 	 */
 	private void splitAndAddAttribute(String attribute, Feature feature) throws FeatureFormatException {
 		int subIndex = 0;

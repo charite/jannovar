@@ -29,8 +29,6 @@ public final class HGVSPositionBuilder {
 	 *            {@link GenomePosition} with to translate into HGSV position
 	 * @return the HGVS <code>String</code> with the positions's representation, given the transcript in
 	 *         {@link #transcript}.
-	 * @throws ProjectionException
-	 *             in case there are problems with coordinate translations
 	 */
 	public String getCDNAPosStr(GenomePosition pos) {
 		pos = pos.withPositionType(PositionType.ZERO_BASED); // assuming zero-based positions below
