@@ -47,4 +47,5 @@ public enum Disease {
 		else
 			throw new PedParseException("Invalid PED disease status value: " + s);
 	}
+
 }

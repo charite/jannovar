@@ -39,11 +39,13 @@ class PedigreeExtractor {
 		// build map from person name to person in PED file and in result
 		HashMap<String, PedPerson> pedPersonMap = new HashMap<String, PedPerson>();
 		HashMap<String, Person> personMap = new HashMap<String, Person>();
-		for (PedPerson person : contents.individuals)
-			if (person.pedigree.equals(name)) {
-				pedPersonMap.put(person.name, person);
-				personMap.put(person.name, new Person(person.name, null, null, person.sex, person.disease,
-						person.extraFields));
+		for (PedPerson pedPerson : contents.individuals)
+			if (pedPerson.pedigree.equals(name)) {
+				pedPersonMap.put(pedPerson.name, pedPerson);
+				final Person person = new Person(pedPerson.name, null, null, pedPerson.sex, pedPerson.disease,
+						pedPerson.extraFields);
+				personMap.put(pedPerson.name, person);
+				builder.add(person);
 			}
 
 		for (Map.Entry<String, PedPerson> pedEntry : pedPersonMap.entrySet()) {

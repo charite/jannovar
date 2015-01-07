@@ -88,4 +88,65 @@ public final class PedPerson {
 		return (father.equals("1") && mother.equals("0"));
 	}
 
+	@Override
+	public String toString() {
+		return "PedPerson [pedigree=" + pedigree + ", name=" + name + ", father=" + father + ", mother=" + mother
+				+ ", sex=" + sex + ", disease=" + disease + ", extraFields=" + extraFields + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((disease == null) ? 0 : disease.hashCode());
+		result = prime * result + ((extraFields == null) ? 0 : extraFields.hashCode());
+		result = prime * result + ((father == null) ? 0 : father.hashCode());
+		result = prime * result + ((mother == null) ? 0 : mother.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((pedigree == null) ? 0 : pedigree.hashCode());
+		result = prime * result + ((sex == null) ? 0 : sex.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PedPerson other = (PedPerson) obj;
+		if (disease != other.disease)
+			return false;
+		if (extraFields == null) {
+			if (other.extraFields != null)
+				return false;
+		} else if (!extraFields.equals(other.extraFields))
+			return false;
+		if (father == null) {
+			if (other.father != null)
+				return false;
+		} else if (!father.equals(other.father))
+			return false;
+		if (mother == null) {
+			if (other.mother != null)
+				return false;
+		} else if (!mother.equals(other.mother))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (pedigree == null) {
+			if (other.pedigree != null)
+				return false;
+		} else if (!pedigree.equals(other.pedigree))
+			return false;
+		if (sex != other.sex)
+			return false;
+		return true;
+	}
+
 }

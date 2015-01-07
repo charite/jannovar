@@ -60,16 +60,20 @@ public final class PedFileReader {
 		// Parse header.
 		ImmutableList<String> extraHeaders = ImmutableList.of(); // default to empty
 		String line = in.readLine();
-		if (line.startsWith("#"))
+		if (line.startsWith("#")) {
 			extraHeaders = parseHeader(line);
+			line = in.readLine();
+		}
 
 		// Parse individuals.
 		ImmutableList.Builder<PedPerson> individualBuilder = new ImmutableList.Builder<PedPerson>();
-		while ((line = in.readLine()) != null) {
+		while (line != null) {
 			line = line.trim(); // trim leading and trailing whitespace
 			if (line.length() == 0)
 				continue; // skip empty lines
 			individualBuilder.add(readIndividual(line));
+
+			line = in.readLine(); // read next
 		}
 
 		return new PedFileContents(extraHeaders, individualBuilder.build());
@@ -97,7 +101,7 @@ public final class PedFileReader {
 	 */
 	private static PedPerson readIndividual(String line) throws PedParseException {
 		try {
-			Iterator<String> it = Splitter.on('\t').split(line.trim().substring(1)).iterator();
+			Iterator<String> it = Splitter.on('\t').split(line.trim()).iterator();
 
 			/*
 			 * public PedPerson(String pedigree, String name, String father, String mother, Sex sex, Disease disease,

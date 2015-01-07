@@ -3,6 +3,7 @@ package jannovar.pedigree;
 /**
  * Representation of an individual's sex.
  *
+ * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public enum Sex {

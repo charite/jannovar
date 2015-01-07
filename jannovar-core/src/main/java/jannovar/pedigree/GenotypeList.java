@@ -20,8 +20,10 @@ public final class GenotypeList {
 	// TODO(holtgrew): Add gene information instead of transcript information.
 	/** the transcript that this genotype call list is for */
 	public final TranscriptInfo transcript;
+
 	/** the list of individual names */
 	public final ImmutableList<String> names;
+
 	/** the lists of genotype calls, each contains one entry for each individual */
 	public final ImmutableList<ImmutableList<Genotype>> calls;
 
@@ -45,6 +47,9 @@ public final class GenotypeList {
 	 *         <code>pedigree</code>
 	 */
 	public boolean isNamesEqual(Pedigree pedigree) {
+		if (pedigree.members.size() != names.size())
+			return false;
+
 		int i = 0;
 		for (Person person : pedigree.members)
 			if (!person.name.equals(names.get(i++)))

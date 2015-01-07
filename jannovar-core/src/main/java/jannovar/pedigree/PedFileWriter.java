@@ -1,11 +1,11 @@
 package jannovar.pedigree;
 
 import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 // TODO(holtgrem): Test me!
 
@@ -32,7 +32,11 @@ public final class PedFileWriter {
 	 *             on failures during writing
 	 */
 	public void write(PedFileContents contents) throws IOException {
-		write(contents, new BufferedOutputStream(new FileOutputStream(file)));
+		FileOutputStream fos = new FileOutputStream(file);
+		BufferedOutputStream stream = new BufferedOutputStream(fos);
+		write(contents, stream);
+		stream.close();
+		fos.close();
 	}
 
 	/**
@@ -46,36 +50,39 @@ public final class PedFileWriter {
 	 *             on failures during writing
 	 */
 	public static void write(PedFileContents contents, OutputStream stream) throws IOException {
-		DataOutputStream out = new DataOutputStream(stream);
+		PrintWriter out = new PrintWriter(stream);
 
 		// write header
-		out.writeBytes("#PEDIGREE\tNAME\tFATHER\tMOTHER\tSEX\tDISEASE");
+		out.append("#PEDIGREE\tNAME\tFATHER\tMOTHER\tSEX\tDISEASE");
 		for (String header : contents.extraColumnHeaders) {
-			out.writeChar('\t');
-			out.writeBytes(header);
+			out.append('\t');
+			out.append(header);
 		}
+		out.append('\n');
 
 		// write payload
 		for (PedPerson individual : contents.individuals)
 			writeIndividual(individual, out);
+		out.close();
 	}
 
-	private static void writeIndividual(PedPerson individual, DataOutputStream out) throws IOException {
-		out.writeBytes(individual.pedigree);
-		out.writeChar('\t');
-		out.writeBytes(individual.name);
-		out.writeChar('\t');
-		out.writeBytes(individual.father);
-		out.writeChar('\t');
-		out.writeBytes(individual.mother);
-		out.writeChar('\t');
-		out.writeBytes("" + individual.sex.toInt());
-		out.writeChar('\t');
-		out.writeBytes("" + individual.disease.toInt());
+	private static void writeIndividual(PedPerson individual, PrintWriter out) throws IOException {
+		out.append(individual.pedigree);
+		out.append('\t');
+		out.append(individual.name);
+		out.append('\t');
+		out.append(individual.father);
+		out.append('\t');
+		out.append(individual.mother);
+		out.append('\t');
+		out.append("" + individual.sex.toInt());
+		out.append('\t');
+		out.append("" + individual.disease.toInt());
 
 		for (String field : individual.extraFields) {
-			out.writeChar('\t');
-			out.writeBytes(field);
+			out.append('\t');
+			out.append(field);
 		}
+		out.append('\n');
 	}
 }
