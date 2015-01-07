@@ -1,6 +1,7 @@
 package jannovar.pedigree;
 
 import jannovar.Immutable;
+import jannovar.reference.GenomeInterval;
 import jannovar.reference.TranscriptInfo;
 
 import com.google.common.collect.ImmutableList;
@@ -17,8 +18,14 @@ import com.google.common.collect.ImmutableList;
 @Immutable
 public final class GenotypeList {
 
-	/** the transcript that this genotype call list is for */
-	public final TranscriptInfo transcript;
+	/** the name of the gene for this genotype call list */
+	public final String geneName;
+
+	/**
+	 * The approximate genomic interval of this gene, e.g. the region of one transcript. This information is only used
+	 * for getting the chromosome of the gene.
+	 */
+	public final GenomeInterval genomeRegion;
 
 	/** the list of individual names */
 	public final ImmutableList<String> names;
@@ -26,10 +33,10 @@ public final class GenotypeList {
 	/** the lists of genotype calls, each contains one entry for each individual */
 	public final ImmutableList<ImmutableList<Genotype>> calls;
 
-	public GenotypeList(TranscriptInfo transcript, ImmutableList<String> names,
+	public GenotypeList(String geneID, GenomeInterval genomeRegion, ImmutableList<String> names,
 			ImmutableList<ImmutableList<Genotype>> calls) {
-		// TODO(holtgrew): Check calls for consistency?
-		this.transcript = transcript;
+		this.geneName = geneID;
+		this.genomeRegion = genomeRegion;
 		this.names = names;
 		this.calls = calls;
 	}

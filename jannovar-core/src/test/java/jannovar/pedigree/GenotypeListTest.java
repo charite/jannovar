@@ -1,6 +1,6 @@
 package jannovar.pedigree;
 
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.GenomeInterval;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +10,8 @@ import com.google.common.collect.ImmutableList;
 
 public class GenotypeListTest {
 
-	TranscriptInfo transcript;
+	String geneName;
+	GenomeInterval genomeRegion;
 	ImmutableList<String> names;
 	ImmutableList<ImmutableList<Genotype>> calls;
 	Pedigree pedigree1, pedigree2;
@@ -33,10 +34,11 @@ public class GenotypeListTest {
 				personList.build()), "FAM");
 
 		// create GenotypeList
-		this.transcript = null;
+		this.geneName = null;
+		this.genomeRegion = null;
 		this.names = ImmutableList.of("father", "mother", "son", "daughter");
 		this.calls = null;
-		this.list = new GenotypeList(transcript, names, calls);
+		this.list = new GenotypeList(geneName, genomeRegion, names, calls);
 	}
 
 	@Test

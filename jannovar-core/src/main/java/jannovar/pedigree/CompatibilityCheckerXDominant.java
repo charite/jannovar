@@ -45,7 +45,7 @@ class CompatibilityCheckerXDominant {
 	public CompatibilityCheckerXDominant(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
 		if (pedigree.members.size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (list.namesEqual(pedigree))
+		if (!list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
 		if (list.calls.get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
@@ -63,7 +63,7 @@ class CompatibilityCheckerXDominant {
 	 */
 	public boolean run() throws CompatibilityCheckerException {
 		// perform basic sanity check, regarding X chromsome
-		final GenomePosition txBegin = list.transcript.txRegion.getGenomeBeginPos();
+		final GenomePosition txBegin = list.genomeRegion.getGenomeBeginPos();
 		Integer chrXID = txBegin.refDict.contigID.get("X");
 		if (chrXID == null)
 			return false; // this organism type does not have X chromosome
