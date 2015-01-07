@@ -17,7 +17,6 @@ import com.google.common.collect.ImmutableList;
 @Immutable
 public final class GenotypeList {
 
-	// TODO(holtgrew): Add gene information instead of transcript information.
 	/** the transcript that this genotype call list is for */
 	public final TranscriptInfo transcript;
 
@@ -46,7 +45,7 @@ public final class GenotypeList {
 	 * @return <code>true</code> if the list of {@link #names} is the same as the names of the members of
 	 *         <code>pedigree</code>
 	 */
-	public boolean isNamesEqual(Pedigree pedigree) {
+	public boolean namesEqual(Pedigree pedigree) {
 		if (pedigree.members.size() != names.size())
 			return false;
 

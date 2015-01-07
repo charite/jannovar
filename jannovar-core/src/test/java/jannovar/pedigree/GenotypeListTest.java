@@ -41,8 +41,8 @@ public class GenotypeListTest {
 
 	@Test
 	public void testIsNamesEqual() {
-		Assert.assertTrue(list.isNamesEqual(pedigree1));
-		Assert.assertFalse(list.isNamesEqual(pedigree2));
+		Assert.assertTrue(list.namesEqual(pedigree1));
+		Assert.assertFalse(list.namesEqual(pedigree2));
 	}
 
 }

@@ -5,11 +5,14 @@ import jannovar.pedigree.Pedigree.IndexedPerson;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+// TODO(holtgrew): Look over this with Nick and Max
+
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
  * compound mode of inheritance.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 class CompatibilityCheckerAutosomalRecessiveHomozygous {
@@ -44,7 +47,7 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 			throws CompatibilityCheckerException {
 		if (pedigree.members.size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (list.isNamesEqual(pedigree))
+		if (list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
 		if (list.calls.get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");

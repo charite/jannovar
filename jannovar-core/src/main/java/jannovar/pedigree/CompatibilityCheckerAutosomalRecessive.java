@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableSet;
  * compatible with the paternal het mutations, and it returns all variants for which there are compatible pairs.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 class CompatibilityCheckerAutosomalRecessive {
@@ -55,7 +56,7 @@ class CompatibilityCheckerAutosomalRecessive {
 			throws CompatibilityCheckerException {
 		if (pedigree.members.size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (list.isNamesEqual(pedigree))
+		if (list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
 		if (list.calls.get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");

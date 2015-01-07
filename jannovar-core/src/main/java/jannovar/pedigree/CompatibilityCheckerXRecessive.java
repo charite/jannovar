@@ -9,7 +9,19 @@ import com.google.common.collect.ImmutableSet;
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and X recessive mode of
  * inheritance.
  *
+ * <h2>Compatibility Check</h2>
+ *
+ * If the pedigree has only one sample then the check is as follows. If the index is female, the checker returns true if
+ * the genotype call list is compatible with autosomal recessive compound heterozygous inheritance or if the list
+ * contains a homozygous alt call. If the index is male then return true if the list contains a homozygous alt call.
+ *
+ * If the pedigree has more samples, the checks are more involved.
+ *
+ * <b>Note</b> that the case of X-chromosomal compound heterozygous mutations is not handled. We assume that female
+ * individuals are not affected.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 class CompatibilityCheckerXRecessive {
@@ -40,7 +52,7 @@ class CompatibilityCheckerXRecessive {
 	public CompatibilityCheckerXRecessive(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
 		if (pedigree.members.size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (list.isNamesEqual(pedigree))
+		if (list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
 		if (list.calls.get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
@@ -50,7 +62,7 @@ class CompatibilityCheckerXRecessive {
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
 	}
 
-	public boolean run() {
+	public boolean run() throws CompatibilityCheckerException {
 		// perform basic sanity check, regarding X chromsome
 		final GenomePosition txBegin = list.transcript.txRegion.getGenomeBeginPos();
 		Integer chrXID = txBegin.refDict.contigID.get("X");
@@ -65,19 +77,26 @@ class CompatibilityCheckerXRecessive {
 			return runMultiSampleCase();
 	}
 
-	private boolean runSingleSampleCase() {
+	private boolean runSingleSampleCase() throws CompatibilityCheckerException {
+		// for female single case samples, allow autosomal recessive compound heterozygous
+		if (pedigree.members.get(0).sex == Sex.FEMALE)
+			if (new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run())
+				return true;
+
+		// for both male and female subjects, return true if homozygous alt
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
 				return true;
+
 		return false;
 	}
 
 	private boolean runMultiSampleCase() {
-		// TODO(holtgrem): There are pedigrees where compound heterozygous is possible.
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			// Check whether this list of genotype calls is compatible when with the set of affected individuals, the
 			// parents, and the unaffected individuals.
-			if (checkCompatibilityAffected(gtList) && checkCompatibilityParents(gtList) && checkUnaffected(gtList))
+			if (checkCompatibilityAffected(gtList) && checkCompatibilityParents(gtList)
+					&& checkCompatibilityUnaffected(gtList))
 				return true;
 		}
 
@@ -87,15 +106,12 @@ class CompatibilityCheckerXRecessive {
 	private boolean checkCompatibilityAffected(ImmutableList<Genotype> gtList) {
 		int i = 0;
 		for (Person person : pedigree.members) {
-			if (person.disease == Disease.AFFECTED) {
-				if (gtList.get(i) != Genotype.HOMOZYGOUS_ALT) {
-					// TODO(holtgrew): assumption of male individual implicit only?
-					// cannot be disease-causing mutation, an affected male does not have it
-					return false;
-				}
-			}
+			if (person.sex == Sex.MALE && person.disease == Disease.AFFECTED
+					&& gtList.get(i) == Genotype.HOMOZYGOUS_REF)
+				return false; // cannot be disease-causing mutation, an affected male does not have it
 			++i;
 		}
+
 		return true;
 	}
 
@@ -105,14 +121,10 @@ class CompatibilityCheckerXRecessive {
 		for (Person person : pedigree.members) {
 			if (parentNames.contains(person.name)) {
 				final Genotype gt = gtList.get(i);
-				if (person.sex == Sex.MALE && person.disease != Disease.AFFECTED && gt == Genotype.HOMOZYGOUS_ALT) {
-					// cannot be disease-causing mutation, an unaffected father has it
-					return false;
-				}
-				if (person.sex == Sex.FEMALE && gt != Genotype.HETEROZYGOUS) {
-					// cannot be disease-causing mutation, mother of patient is not heterozygous
-					return false;
-				}
+				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED && gt != Genotype.HOMOZYGOUS_REF)
+					return false; // cannot be disease-causing mutation if an unaffected father has it
+				if (person.sex == Sex.FEMALE && gt == Genotype.HOMOZYGOUS_ALT)
+					return false; // cannot be disease-causing mutation if mother of patient is homozygous
 			}
 			++i;
 		}
@@ -120,22 +132,16 @@ class CompatibilityCheckerXRecessive {
 		return true;
 	}
 
-	private boolean checkUnaffected(ImmutableList<Genotype> gtList) {
+	private boolean checkCompatibilityUnaffected(ImmutableList<Genotype> gtList) {
 		final ImmutableSet<String> unaffectedNames = queryDecorator.getUnaffectedNames();
 		int i = 0;
 		for (Person person : pedigree.members) {
 			if (unaffectedNames.contains(person.name)) {
 				final Genotype gt = gtList.get(i);
-				if (person.sex == Sex.MALE && gt == Genotype.HOMOZYGOUS_ALT) {
-					// TODO(holtgrew): why the assumption about brother relation?
-					// cannot be disease-causing mutation, an unaffected brother has it
-					return false;
-				}
-				if (person.sex == Sex.FEMALE && gt != Genotype.HETEROZYGOUS) {
-					// TODO(holtgrew): why the assumption about sister relation?
-					// cannot be disease-causing mutation, unaffected sister is not heterozygous
-					return false;
-				}
+				// Males with a hemizygous mutation have to be encoded as HOMOZYGOUS_ALT in the VCF. Thus, the handling
+				// of Kleinefelder here is not comprehensive for simplicity's sake.
+				if (gt == Genotype.HOMOZYGOUS_ALT)
+					return false; // cannot be disease-causing mutation, an unaffected individual has it
 			}
 			++i;
 		}

@@ -2,16 +2,19 @@ package jannovar.pedigree;
 
 import com.google.common.collect.ImmutableList;
 
+//TODO(holtgrew): Look over this with Nick and Max
+
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal dominant
  * mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
  *
- * For autosomal dominant inheritance, there must be at least one Variant that is shared by all affected persons but no
- * unaffected persons in the pedigree.
+ * For autosomal dominant inheritance, there must be at least one {@link Genotype} that is shared by all affected
+ * individuals but no unaffected individuals in the pedigree.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 class CompatibilityCheckerAutosomalDominant {
@@ -40,7 +43,7 @@ class CompatibilityCheckerAutosomalDominant {
 			throws CompatibilityCheckerException {
 		if (pedigree.members.size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (list.isNamesEqual(pedigree))
+		if (list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
 		if (list.calls.get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
@@ -61,6 +64,7 @@ class CompatibilityCheckerAutosomalDominant {
 	}
 
 	private boolean runSingleSampleCase() {
+		// TODO(holtgrew): We could also allow "|| gtList.get(0) == Genotype.HOMOZYGOUS_ALT" but is this intended here?
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
 				return true;
@@ -75,12 +79,12 @@ class CompatibilityCheckerAutosomalDominant {
 			for (int i = 0; i < pedigree.members.size(); ++i) {
 				final Genotype gt = gtList.get(i);
 				final Disease d = pedigree.members.get(i).disease;
+
 				if (d == Disease.AFFECTED) {
 					if (gt == Genotype.HOMOZYGOUS_REF || gt == Genotype.HOMOZYGOUS_ALT) {
 						currentVariantCompatible = false; // current variant not compatible with AD
 						break;
 					} else if (gt == Genotype.HETEROZYGOUS) {
-						currentVariantCompatible = true;
 						numAffectedWithHet++;
 					}
 				} else if (d == Disease.UNAFFECTED) {
@@ -97,6 +101,7 @@ class CompatibilityCheckerAutosomalDominant {
 			if (currentVariantCompatible && numAffectedWithHet > 0)
 				return true;
 		}
+
 		return false;
 	}
 
