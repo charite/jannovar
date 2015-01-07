@@ -16,7 +16,6 @@ import java.net.URLConnection;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPHTTPClient;
 
 /**
  * Helper class for downloading files over HTTP and FTP.
@@ -72,14 +71,14 @@ final class FileDownloader {
 			dest.getParentFile().mkdirs();
 		}
 
-		if (src.getProtocol().equals("ftp"))
-			return copyURLToFileFTP(src, dest);
+		if (src.getProtocol().equals("ftp") && options.ftp.host == null)
+			return copyURLToFileWithFTP(src, dest);
 		else
-			return copyURLToFileFileOrHTTP(src, dest);
+			return copyURLToFileThroughURL(src, dest);
 	}
 
-	private boolean copyURLToFileFTP(URL src, File dest) throws FileDownloadException {
-		final FTPClient ftp = buildFTPClient();
+	private boolean copyURLToFileWithFTP(URL src, File dest) throws FileDownloadException {
+		final FTPClient ftp = new FTPClient();
 		ftp.enterLocalPassiveMode(); // passive mode for firewalls
 
 		try {
@@ -208,7 +207,13 @@ final class FileDownloader {
 		return false;
 	}
 
-	private boolean copyURLToFileFileOrHTTP(URL src, File dest) throws FileDownloadException {
+	/**
+	 * Copy contents of a URL to a file using the {@link URL} class.
+	 *
+	 * This works for the HTTP and the HTTPS protocol and for FTP through a proxy. For plain FTP, we need to use the
+	 * passive mode.
+	 */
+	private boolean copyURLToFileThroughURL(URL src, File dest) throws FileDownloadException {
 		setProxyProperties();
 
 		// actually copy the file
@@ -251,10 +256,17 @@ final class FileDownloader {
 
 	/**
 	 * Set system properties from {@link #options}.
-	 *
-	 * Sets properties for HTTP and HTTPS only since FTP downloads go through the FTPClient anyway.
 	 */
 	private void setProxyProperties() {
+		if (options.ftp.host != null)
+			System.setProperty("ftp.proxyHost", options.ftp.host);
+		if (options.ftp.port != -1)
+			System.setProperty("ftp.proxyPort", Integer.toString(options.ftp.port));
+		if (options.ftp.user != null)
+			System.setProperty("ftp.proxyUser", options.ftp.user);
+		if (options.ftp.password != null)
+			System.setProperty("ftp.proxyPassword", options.ftp.password);
+
 		if (options.http.host != null)
 			System.setProperty("http.proxyHost", options.http.host);
 		if (options.http.port != -1)
@@ -272,18 +284,6 @@ final class FileDownloader {
 			System.setProperty("https.proxyUser", options.https.user);
 		if (options.https.password != null)
 			System.setProperty("https.proxyPassword", options.https.password);
-	}
-
-	/**
-	 * @return Configured {@link FTPClient} or {@link FTPHTTPClient}, depending on configuration in {@link #options}.
-	 */
-	private FTPClient buildFTPClient() {
-		if (options.ftp.host == null)
-			return new FTPClient();
-		else if (options.ftp.user == null)
-			return new FTPHTTPClient(options.ftp.host, options.ftp.port);
-		else
-			return new FTPHTTPClient(options.ftp.host, options.ftp.port, options.ftp.user, options.ftp.password);
 	}
 
 }
