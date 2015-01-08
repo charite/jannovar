@@ -1,4 +1,4 @@
-package jannovar.interval;
+package jannovar.impl.interval;
 
 import jannovar.impl.interval.Interval;
 import jannovar.impl.interval.IntervalTreeException;
