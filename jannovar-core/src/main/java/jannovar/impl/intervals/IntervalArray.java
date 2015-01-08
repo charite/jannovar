@@ -168,7 +168,7 @@ public final class IntervalArray<T> implements Serializable {
 			return;
 
 		if (begin < center) // recurse left
-			findOverlappingWithPoint(begin, center, (center - begin) / 2, point, result);
+			findOverlappingWithPoint(begin, center, begin + (center - begin) / 2, point, result);
 
 		if (node.contains(point)) // check this node
 			result.values.add(node.value);

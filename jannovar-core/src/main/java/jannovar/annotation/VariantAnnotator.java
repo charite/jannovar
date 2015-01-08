@@ -102,16 +102,18 @@ public final class VariantAnnotator {
 	 *             on problems building the annotation list
 	 */
 	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
-		// TODO(holtgrew): Make zero-based in the future?
-		final GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ONE_BASED);
+		final GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED);
 
 		/* The following command "resets" the annovarFactory object */
 		this.annovarFactory.clearAnnotationLists();
 
 		// Get the TranscriptModel objects that overlap with changeInterval.
 		final Chromosome chr = chromosomeMap.get(change.getChr());
-		IntervalArray<TranscriptInfo>.QueryResult qr = chr.getTMIntervalTree().findOverlappingWithInterval(
-				changeInterval.beginPos, changeInterval.endPos);
+		IntervalArray<TranscriptInfo>.QueryResult qr;
+		if (changeInterval.length() == 0)
+			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
+		else
+			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
 		ArrayList<TranscriptInfo> candidateTranscripts = new ArrayList<TranscriptInfo>(qr.entries);
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
@@ -147,7 +149,8 @@ public final class VariantAnnotator {
 	}
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws InvalidGenomeChange {
-		annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
+		if (transcript != null)
+			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
 	}
 
 }

@@ -261,7 +261,7 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(VariantType.INTERGENIC, 0, String.format("dist=%d", distance()), null);
+		return new Annotation(VariantType.INTERGENIC, 0, String.format("dist=%d", distance()), transcript);
 	}
 
 	/**
