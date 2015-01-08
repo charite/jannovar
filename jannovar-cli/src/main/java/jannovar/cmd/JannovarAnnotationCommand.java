@@ -41,6 +41,6 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	protected void deserializeTranscriptDefinitionFile() throws JannovarException, HelpRequestedException {
 		JannovarData data = new JannovarDataSerializer(this.options.dataFile).load();
 		this.refDict = data.refDict;
-		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(data.transcriptInfos);
+		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(data);
 	}
 }

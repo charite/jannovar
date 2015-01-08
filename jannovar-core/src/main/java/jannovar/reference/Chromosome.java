@@ -2,11 +2,10 @@ package jannovar.reference;
 
 import jannovar.impl.interval.Interval;
 import jannovar.impl.intervals.IntervalArray;
+import jannovar.io.JannovarData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
@@ -72,16 +71,19 @@ public final class Chromosome {
 	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link TranscriptInfo}
 	 * objects are entered into an {@link IntervalArray} for the appropriate Chromosome.
 	 *
-	 * @param tmist
-	 *            A list of all TranscriptModels for the entire genome
+	 * @param data
+	 *            the deserialize data object
 	 * @return a Map of Chromosome objects with all 22+2+M chromosomes.
 	 */
-	public static HashMap<Integer, Chromosome> constructChromosomeMapWithIntervalTree(
-			ImmutableList<TranscriptInfo> tmist) {
+	public static HashMap<Integer, Chromosome> constructChromosomeMapWithIntervalTree(JannovarData data) {
 		HashMap<Integer, Chromosome> chromosomeMap = new HashMap<Integer, Chromosome>();
-		/* 1. First sort the TranscriptModel objects by Chromosome. */
+		/* 0. create chromosome map entries */
 		HashMap<Integer, ArrayList<TranscriptInfo>> chrMap = new HashMap<Integer, ArrayList<TranscriptInfo>>();
-		for (TranscriptInfo tm : tmist) {
+		for (Integer i : data.refDict.contigName.keySet())
+			chrMap.put(i, new ArrayList<TranscriptInfo>());
+
+		/* 1. First sort the TranscriptModel objects by Chromosome. */
+		for (TranscriptInfo tm : data.transcriptInfos) {
 			if (!chrMap.containsKey(tm.getChr()))
 				chrMap.put(tm.getChr(), new ArrayList<TranscriptInfo>());
 

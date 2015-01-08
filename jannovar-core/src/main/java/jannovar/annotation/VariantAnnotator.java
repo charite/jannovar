@@ -149,7 +149,7 @@ public final class VariantAnnotator {
 	}
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws InvalidGenomeChange {
-		if (transcript != null)
+		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
 			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
 	}
 
