@@ -139,7 +139,7 @@ public class UCSCParser implements TranscriptParser {
 	private boolean checkTranscriptInfo(TranscriptInfo info) {
 		if (info.transcriptLength() > info.sequence.length()) {
 			System.err.println("WARNING: Transcript " + info.accession
-					+ " is indicated to be longer than its seuqence. Ignoring.");
+					+ " is indicated to be longer than its sequence. Ignoring.");
 			return false;
 		}
 		return true;
