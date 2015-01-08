@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class IntervalArray<T extends Comparable<T>> implements Serializable {
+public final class IntervalArray<T> implements Serializable {
 
 	/** version number to use when serializing */
 	private static final long serialVersionUID = 1L;
@@ -26,14 +26,14 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 	 */
 	public class QueryResult {
 		/** the values that overlapped with the given point or interval */
-		public final ImmutableList<T> values;
+		public final ImmutableList<T> entries;
 		/** the value to the left of the given point */
 		public final T left;
 		/** the value to the right of the given point */
 		public final T right;
 
 		QueryResult(ImmutableList<T> values, T left, T right) {
-			this.values = values;
+			this.entries = values;
 			this.left = left;
 			this.right = right;
 		}
@@ -71,6 +71,13 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 	}
 
 	/**
+	 * @return the number of elements in the tree
+	 */
+	public int size() {
+		return intervals.size();
+	}
+
+	/**
 	 * Query the encoded interval tree for all values with intervals overlapping with a given <code>point</code>.
 	 *
 	 * @param point
@@ -83,7 +90,7 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 
 		// if overlapping interval was found then return this set
 		QueryResult result = resultBuilder.build();
-		if (result.values.size() > 0)
+		if (result.entries.size() > 0)
 			return result;
 
 		// otherwise, find left and right neighbour
@@ -188,7 +195,7 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 
 		// if overlapping interval was found then return this set
 		QueryResult result = resultBuilder.build();
-		if (result.values.size() > 0)
+		if (result.entries.size() > 0)
 			return result;
 
 		// otherwise, find left and right neighbour
