@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 
 import com.google.common.collect.ImmutableList;
 
@@ -15,6 +16,9 @@ import com.google.common.collect.ImmutableList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class IntervalArray<T extends Comparable<T>> implements Serializable {
+
+	/** version number to use when serializing */
+	private static final long serialVersionUID = 1L;
 
 	// TODO(holtgrew): store lists for left and right as well?
 	/**
@@ -51,11 +55,19 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 		}
 	}
 
-	/** sorted list of {@link Interval} objects */
+	/** list of {@link Interval} objects, sorted by begin position */
 	public final ImmutableList<Interval<T>> intervals;
 
+	/** list of {@link Interval} objects, sorted by end position */
+	public final ImmutableList<Interval<T>> intervalsEnd;
+
+	/**
+	 * Construct object with the given values.
+	 */
 	public IntervalArray(Collection<T> elements, IntervalEndExtractor<T> extractor) {
-		this.intervals = buildIntervals(elements, extractor);
+		IntervalListBuilder.TwoIntervalList pair = new IntervalListBuilder(elements, extractor).build();
+		this.intervals = pair.intervals;
+		this.intervalsEnd = pair.intervalsEnd;
 	}
 
 	/**
@@ -66,9 +78,63 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 	 * @return the elements from the intervals overlapping with the point <code>point</code>
 	 */
 	public QueryResult findOverlappingWithPoint(int point) {
-		QueryResultBuilder result = new QueryResultBuilder();
-		findOverlappingWithPoint(0, intervals.size(), intervals.size() / 2, point, result);
-		return result.build();
+		QueryResultBuilder resultBuilder = new QueryResultBuilder();
+		findOverlappingWithPoint(0, intervals.size(), intervals.size() / 2, point, resultBuilder);
+
+		// if overlapping interval was found then return this set
+		QueryResult result = resultBuilder.build();
+		if (result.values.size() > 0)
+			return result;
+
+		// otherwise, find left and right neighbour
+		resultBuilder.left = findLeftNeighbor(point);
+		resultBuilder.right = findRightNeighbor(point);
+		return resultBuilder.build();
+	}
+
+	/**
+	 * @return right neighbor of the given point if any, or <code>null</code>
+	 */
+	private T findRightNeighbor(int point) {
+		final Interval<T> query = new Interval<T>(point, point, null, point);
+		int idx = Collections.binarySearch(intervals, query, new Comparator<Interval<T>>() {
+			@Override
+			public int compare(Interval<T> o1, Interval<T> o2) {
+				return (o1.begin - o2.begin);
+			}
+		});
+
+		if (idx >= 0)
+			throw new RuntimeException("Found element although in right neighbor search!");
+		idx = -(idx + 1); // convert to insertion point
+
+		if (idx == intervals.size())
+			return null;
+		else
+			return intervals.get(idx).value;
+	}
+
+	/**
+	 * @return left neighbor of the given point if any, or <code>null</code>
+	 */
+	private T findLeftNeighbor(int point) {
+		final Interval<T> query = new Interval<T>(point, point, null, point);
+		int idx = Collections.binarySearch(intervalsEnd, query, new Comparator<Interval<T>>() {
+			@Override
+			public int compare(Interval<T> o1, Interval<T> o2) {
+				return (o1.end - o2.end);
+			}
+		});
+
+		if (idx >= 0)
+			idx += 1;
+		else
+			idx = -(idx + 1); // convert to insertion point
+
+		if (idx == 0)
+			return null;
+		else
+			return intervalsEnd.get(idx - 1).value;
 	}
 
 	/**
@@ -117,9 +183,18 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 	 * @return the elements from the intervals overlapping with the interval <code>[begin, end)</code>
 	 */
 	public QueryResult findOverlappingWithInterval(int begin, int end) {
-		QueryResultBuilder result = new QueryResultBuilder();
-		findOverlappingWithInterval(0, intervals.size(), intervals.size() / 2, begin, end, result);
-		return result.build();
+		QueryResultBuilder resultBuilder = new QueryResultBuilder();
+		findOverlappingWithInterval(0, intervals.size(), intervals.size() / 2, begin, end, resultBuilder);
+
+		// if overlapping interval was found then return this set
+		QueryResult result = resultBuilder.build();
+		if (result.values.size() > 0)
+			return result;
+
+		// otherwise, find left and right neighbour
+		resultBuilder.left = findLeftNeighbor(begin);
+		resultBuilder.right = findRightNeighbor(begin);
+		return resultBuilder.build();
 	}
 
 	/**
@@ -161,44 +236,101 @@ public final class IntervalArray<T extends Comparable<T>> implements Serializabl
 			findOverlappingWithInterval(center + 1, end, (center + 1) + (end - (center + 1)) / 2, iBegin, iEnd, result);
 	}
 
-	// TODO(holtgrew): Put construction into nested class?
-	private ImmutableList<Interval<T>> buildIntervals(Collection<T> elements, IntervalEndExtractor<T> extractor) {
-		// obtain list of elements sorted by begin positions
-		ArrayList<MutableInterval<T>> lst = new ArrayList<MutableInterval<T>>();
-		for (T element : elements)
-			lst.add(new MutableInterval<T>(extractor.getBegin(element), extractor.getEnd(element), element, extractor
-					.getEnd(element)));
-		Collections.sort(lst);
+	/**
+	 * Helper class for building the interval lists.
+	 */
+	private class IntervalListBuilder {
 
-		// compute the maxEnd members of the lst entries
-		computeMaxEndProperties(lst, 0, lst.size());
+		class TwoIntervalList {
+			public final ImmutableList<Interval<T>> intervals;
+			public final ImmutableList<Interval<T>> intervalsEnd;
 
-		// convert the mutable intervals into immutable ones
-		ImmutableList.Builder<Interval<T>> builder = new ImmutableList.Builder<Interval<T>>();
-		for (MutableInterval<T> i : lst)
-			builder.add(new Interval<T>(i));
-		return builder.build();
-	}
+			public TwoIntervalList(ImmutableList<Interval<T>> intervals, ImmutableList<Interval<T>> intervalsEnd) {
+				this.intervals = intervals;
+				this.intervalsEnd = intervalsEnd;
+			}
+		}
 
-	// TODO(holtgrew): change from recursive to using a stack, might use less stack memory and be faster?
-	private int computeMaxEndProperties(ArrayList<MutableInterval<T>> lst, int beginIdx, int endIdx) {
-		if (beginIdx == endIdx)
-			return -1;
+		private final Collection<T> elements;
+		private final IntervalEndExtractor<T> extractor;
 
-		int centerIdx = (endIdx + beginIdx) / 2;
-		MutableInterval<T> mi = lst.get(centerIdx);
+		private ArrayList<MutableInterval<T>> tmpList = null;
+		private ImmutableList<Interval<T>> intervals = null;
+		private ImmutableList<Interval<T>> intervalsEnd = null;
 
-		if (beginIdx + 1 == endIdx)
+		public IntervalListBuilder(Collection<T> elements, IntervalEndExtractor<T> extractor) {
+			this.elements = elements;
+			this.extractor = extractor;
+		}
+
+		public TwoIntervalList build() {
+			buildIntervals();
+			buildIntervalsEnd();
+
+			return new TwoIntervalList(intervals, intervalsEnd);
+		}
+
+		/**
+		 * Fill {@link #tmpList} and {@link #intervals}.
+		 */
+		private void buildIntervals() {
+			// obtain list of elements sorted by begin positions
+			tmpList = new ArrayList<MutableInterval<T>>();
+			for (T element : elements)
+				tmpList.add(new MutableInterval<T>(extractor.getBegin(element), extractor.getEnd(element), element,
+						extractor.getEnd(element)));
+			Collections.sort(tmpList);
+
+			// compute the maxEnd members of the lst entries
+			computeMaxEndProperties(tmpList, 0, tmpList.size());
+
+			// convert the mutable intervals into immutable ones
+			ImmutableList.Builder<Interval<T>> builder = new ImmutableList.Builder<Interval<T>>();
+			for (MutableInterval<T> i : tmpList)
+				builder.add(new Interval<T>(i));
+			intervals = builder.build();
+		}
+
+		private int computeMaxEndProperties(ArrayList<MutableInterval<T>> lst, int beginIdx, int endIdx) {
+			if (beginIdx == endIdx)
+				return -1;
+
+			int centerIdx = (endIdx + beginIdx) / 2;
+			MutableInterval<T> mi = lst.get(centerIdx);
+
+			if (beginIdx + 1 == endIdx)
+				return mi.maxEnd;
+
+			mi.maxEnd = Math.max(
+					mi.maxEnd,
+					Math.max(computeMaxEndProperties(lst, beginIdx, centerIdx),
+							computeMaxEndProperties(lst, centerIdx + 1, endIdx)));
 			return mi.maxEnd;
+		}
 
-		mi.maxEnd = Math.max(
-				mi.maxEnd,
-				Math.max(computeMaxEndProperties(lst, beginIdx, centerIdx),
-						computeMaxEndProperties(lst, centerIdx + 1, endIdx)));
-		return mi.maxEnd;
+		/**
+		 * Fill {@link #intervalsEnd}.
+		 */
+		void buildIntervalsEnd() {
+			// sort by (end, begin)
+			Collections.sort(tmpList, new Comparator<MutableInterval<T>>() {
+				@Override
+				public int compare(MutableInterval<T> o1, MutableInterval<T> o2) {
+					final int result = (o1.end - o2.end);
+					if (result == 0)
+						return (o1.begin - o2.begin);
+					else
+						return result;
+				}
+			});
+
+			// build list of intervals
+			ImmutableList.Builder<Interval<T>> builder = new ImmutableList.Builder<Interval<T>>();
+			for (MutableInterval<T> i : tmpList)
+				builder.add(new Interval<T>(i));
+			intervalsEnd = builder.build();
+		}
+
 	}
-
-	/** version number to use when serializing */
-	private static final long serialVersionUID = 1L;
 
 }

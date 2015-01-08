@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-// TODO(holtgrew): Test the left and right neighbours as well.
-
 public class IntervalArrayTest {
 
 	class Triple implements Comparable<Triple> {
@@ -219,8 +217,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(20, 21);
 
 		Assert.assertEquals(0, res.values.size());
-		Assert.assertTrue(res.left != null); // should be "e"
-		Assert.assertTrue(res.right != null); // should be "g"
+		Assert.assertEquals(new Triple(16, 20, "e"), res.left);
+		Assert.assertEquals(new Triple(30, 67, "g"), res.right);
 	}
 
 	// Tests not finding an interval but getting the right neighbor
@@ -230,8 +228,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(512, 513);
 
 		Assert.assertEquals(0, res.values.size());
-		Assert.assertTrue(res.left != null); // should be "e"
-		Assert.assertTrue(res.right == null);
+		Assert.assertEquals(new Triple(30, 67, "g"), res.left);
+		Assert.assertEquals(null, res.right);
 	}
 
 	// Tests not finding an interval but getting the right neighbor
@@ -241,8 +239,8 @@ public class IntervalArrayTest {
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(69, 70);
 
 		Assert.assertEquals(0, res.values.size());
-		Assert.assertTrue(res.left != null); // should be "g"
-		Assert.assertTrue(res.right == null);
+		Assert.assertEquals(new Triple(30, 67, "g"), res.left);
+		Assert.assertEquals(null, res.right);
 	}
 
 	// Tests median
