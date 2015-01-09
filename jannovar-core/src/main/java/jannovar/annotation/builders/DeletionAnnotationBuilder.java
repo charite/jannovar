@@ -132,10 +132,14 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			this.varAASeq = t.translateDNA(varCDSSeq);
 			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.pos / 3);
 
+			// protect against going behind transcript
 			// "(...+2)/3" => round up integer division result
-			final String delAA = wtAASeq.substring(changeBeginPos.pos / 3, (changeLastPos.pos + 1 + 2) / 3);
+			final int wtAAEndPos = Math.min((changeLastPos.pos + 1 + 2) / 3, wtAASeq.length());
+			final String delAA = wtAASeq.substring(changeBeginPos.pos / 3, wtAAEndPos);
 			final int delta = (changeBeginPos.getFrameshift() == 0 ? 0 : 1);
-			final String insAA = varAASeq.substring(changeBeginPos.pos / 3, changeBeginPos.pos / 3 + delta);
+			// protect against going behind transcript
+			final int varAAEndPos = Math.min(changeBeginPos.pos / 3 + delta, varAASeq.length());
+			final String insAA = varAASeq.substring(changeBeginPos.pos / 3, varAAEndPos);
 			this.aaChange = new AminoAcidChange(changeBeginPos.pos / 3, delAA, insAA);
 			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(this.aaChange);
 			this.aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, this.aaChange);
