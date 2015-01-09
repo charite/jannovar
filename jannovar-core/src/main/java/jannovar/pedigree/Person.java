@@ -4,6 +4,7 @@ import jannovar.Immutable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import com.google.common.collect.ImmutableList;
 
@@ -24,10 +25,10 @@ public final class Person {
 	public final String name;
 
 	/** the individual's father, or <code>null</code> if father is not in pedigree */
-	public Person father;
+	public final Person father;
 
 	/** the individual's mother, or <code>null</code> if mother is not in pedigree */
-	public Person mother;
+	public final Person mother;
 
 	/** the individual's sex */
 	public final Sex sex;
@@ -57,12 +58,25 @@ public final class Person {
 		this(name, father, mother, sex, disease, new ArrayList<String>());
 	}
 
-	public Person getFather() {
-		return father;
-	}
+	/**
+	 * Constructor used by {@link PedigreeExtractor} for construction of pedigrees with potential cycles.
+	 */
+	Person(PedPerson pedPerson, PedFileContents pedFileContents, HashMap<String, Person> existing) {
+		existing.put(pedPerson.name, this);
 
-	public Person getMother() {
-		return mother;
+		this.name = pedPerson.name;
+		this.sex = pedPerson.sex;
+		this.disease = pedPerson.disease;
+		this.extraFields = pedPerson.extraFields;
+
+		// construct father and mother if necessary, construction will put them into existing
+		if (!"0".equals(pedPerson.father) && !existing.containsKey(pedPerson.father))
+			new Person(pedFileContents.nameToPerson.get(pedPerson.father), pedFileContents, existing);
+		if (!"0".equals(pedPerson.mother) && !existing.containsKey(pedPerson.mother))
+			new Person(pedFileContents.nameToPerson.get(pedPerson.mother), pedFileContents, existing);
+
+		this.father = existing.get(pedPerson.father);
+		this.mother = existing.get(pedPerson.mother);
 	}
 
 	/**
