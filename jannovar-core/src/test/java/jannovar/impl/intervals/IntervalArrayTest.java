@@ -1,7 +1,5 @@
 package jannovar.impl.intervals;
 
-import jannovar.impl.interval.IntervalTreeException;
-
 import java.util.ArrayList;
 
 import org.junit.Assert;
@@ -163,7 +161,7 @@ public class IntervalArrayTest {
 	}
 
 	@Test
-	public void testSearchPub2() throws IntervalTreeException {
+	public void testSearchPub2() {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList2(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(13, 16);
 
@@ -172,7 +170,7 @@ public class IntervalArrayTest {
 	}
 
 	@Test
-	public void testSearchPub3() throws IntervalTreeException {
+	public void testSearchPub3() {
 		IntervalArray<Triple> tree = new IntervalArray<Triple>(getList3(), new TripleEndExtractor());
 		IntervalArray<Triple>.QueryResult res = tree.findOverlappingWithInterval(30, 31);
 

@@ -1,6 +1,6 @@
 package jannovar.reference;
 
-import jannovar.impl.interval.Interval;
+import jannovar.impl.intervals.Interval;
 import jannovar.impl.intervals.IntervalArray;
 import jannovar.io.JannovarData;
 
