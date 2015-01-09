@@ -38,6 +38,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 		// initialize the VCF reader
 		System.err.println("Annotating VCF...");
+		final long startTime = System.nanoTime();
 		VCFFileReader parser = new VCFFileReader(new File(this.options.vcfFilePath), false);
 
 		AnnotatedVariantWriter writer = null;
@@ -60,13 +61,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			parser.close();
 			throw new JannovarException(e.getMessage());
 		}
-
 		System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
+
+		final long endTime = System.nanoTime();
+		System.err.println(String.format("Annotation and writing took %.2f sec.",
+				(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 	}
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+			HelpRequestedException {
 		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
 		try {
 			return parser.parse(argv);
