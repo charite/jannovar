@@ -1,7 +1,6 @@
 package jannovar.pedigree;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
@@ -34,38 +33,25 @@ class PedigreeExtractor {
 	 *             on problems with resolving names of individuals
 	 */
 	public ImmutableList<Person> run() throws PedParseException {
-		ImmutableList.Builder<Person> builder = new ImmutableList.Builder<Person>();
+		// check that all linked-to mothers and fathers exist
+		for (PedPerson pedPerson : contents.individuals) {
+			if (!"0".equals(pedPerson.father) && !contents.nameToPerson.containsKey(pedPerson.father))
+				throw new PedParseException("Unknown individual identifier for father: " + pedPerson.father);
+			if (!"0".equals(pedPerson.mother) && !contents.nameToPerson.containsKey(pedPerson.mother))
+				throw new PedParseException("Unknown individual identifier for mother: " + pedPerson.mother);
+		}
 
-		// build map from person name to person in PED file and in result
-		HashMap<String, PedPerson> pedPersonMap = new HashMap<String, PedPerson>();
-		HashMap<String, Person> personMap = new HashMap<String, Person>();
+		// construct all Person objects, we use a trick for the construction of immutable Person objects while still
+		// allowing potential cycles
+		ImmutableList.Builder<Person> builder = new ImmutableList.Builder<Person>();
+		HashMap<String, Person> existing = new HashMap<String, Person>();
 		for (PedPerson pedPerson : contents.individuals)
 			if (pedPerson.pedigree.equals(name)) {
-				pedPersonMap.put(pedPerson.name, pedPerson);
-				final Person person = new Person(pedPerson.name, null, null, pedPerson.sex, pedPerson.disease,
-						pedPerson.extraFields);
-				personMap.put(pedPerson.name, person);
-				builder.add(person);
+				if (existing.containsKey(pedPerson.name))
+					builder.add(existing.get(pedPerson.name));
+				else
+					builder.add(new Person(pedPerson, contents, existing));
 			}
-
-		for (Map.Entry<String, PedPerson> pedEntry : pedPersonMap.entrySet()) {
-			Person person = personMap.get(pedEntry.getKey());
-			PedPerson pedPerson = pedEntry.getValue();
-
-			if (pedPerson.father.equals("0"))
-				person.father = null;
-			else if (!pedPersonMap.containsKey(pedPerson.father))
-				throw new PedParseException("Unknown individual identifier for father: " + pedPerson.father);
-			else
-				person.father = personMap.get(pedPerson.father);
-
-			if (pedPerson.mother.equals("0"))
-				person.mother = null;
-			else if (!pedPersonMap.containsKey(pedPerson.mother))
-				throw new PedParseException("Unknown individual identifier for mother: " + pedPerson.mother);
-			else
-				person.mother = personMap.get(pedPerson.mother);
-		}
 
 		return builder.build();
 	}
