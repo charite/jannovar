@@ -261,15 +261,16 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(VariantType.INTERGENIC, 0, String.format("dist=%d", distance()), null);
+		return new Annotation(VariantType.INTERGENIC, 0, String.format("dist=%d", distance()), transcript);
 	}
 
 	/**
 	 * @return base pair distance of transcript and variant
 	 */
 	private int distance() {
-		GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval txInterval = transcript.txRegion.withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval changeInterval = change.withStrand('+').getGenomeInterval()
+				.withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval txInterval = transcript.txRegion.withStrand('+').withPositionType(PositionType.ZERO_BASED);
 		if (changeInterval.overlapsWith(txInterval))
 			return 0;
 		else if (changeInterval.isLeftOf(txInterval.getGenomeBeginPos()))

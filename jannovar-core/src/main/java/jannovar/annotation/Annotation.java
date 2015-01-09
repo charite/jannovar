@@ -65,18 +65,15 @@ public final class Annotation implements Comparable<Annotation> {
 
 	@Override
 	public int compareTo(Annotation other) {
-		int myPriority = VariantType.priorityLevel(this.varType);
-		int otherPriority = VariantType.priorityLevel(other.varType);
-		if (myPriority < otherPriority)
-			return -1;
-		else if (myPriority > otherPriority)
-			return 1;
-		if (txVarPos < other.txVarPos)
-			return -1;
-		else if (txVarPos > other.txVarPos)
-			return 1;
-		else
-			return 0;
+		int result = VariantType.priorityLevel(this.varType) - VariantType.priorityLevel(other.varType);
+		if (result != 0)
+			return result;
+
+		result = txVarPos - other.txVarPos;
+		if (result != 0)
+			return result;
+
+		return transcript.compareTo(other.transcript);
 	}
 
 	@Override

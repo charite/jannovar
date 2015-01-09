@@ -1,17 +1,16 @@
 package jannovar.reference;
 
-import jannovar.impl.interval.Interval;
-import jannovar.impl.interval.IntervalTree;
+import jannovar.impl.intervals.Interval;
+import jannovar.impl.intervals.IntervalArray;
+import jannovar.io.JannovarData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
  * {@link TranscriptInfo} class to make a list of gene models that will be used to annotate chromosomal variants. We use
- * an {@link IntervalTree} to store all of the {@link TranscriptInfo} objects that belong to this Chromosome and to
+ * an {@link IntervalArray} to store all of the {@link TranscriptInfo} objects that belong to this Chromosome and to
  * search for all transcripts that overlap with any given variant. Note that the IntervalTree class has functionality
  * also to find the neighbors (5' and 3') of the closest gene in order to find the right and left genes of intergenic
  * variants and to find the correct gene in the cases of complex regions of the chromosome with one gene located in the
@@ -35,10 +34,10 @@ public final class Chromosome {
 	private final int chromosome;
 
 	/**
-	 * An {@link IntervalTree} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
+	 * An {@link IntervalArray} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
 	 * chromosome.
 	 */
-	private IntervalTree<TranscriptInfo> tmIntervalTree = null;
+	private IntervalArray<TranscriptInfo> tmIntervalTree = null;
 
 	/**
 	 * Initialize object.
@@ -48,7 +47,7 @@ public final class Chromosome {
 	 * @param tmIntervalTree
 	 *            An interval tree with all transcripts on this chromosome.
 	 */
-	public Chromosome(int c, IntervalTree<TranscriptInfo> tmIntervalTree) {
+	public Chromosome(int c, IntervalArray<TranscriptInfo> tmIntervalTree) {
 		this.chromosome = c;
 		this.tmIntervalTree = tmIntervalTree;
 	}
@@ -70,31 +69,31 @@ public final class Chromosome {
 
 	/**
 	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link TranscriptInfo}
-	 * objects are entered into an {@link IntervalTree} for the appropriate Chromosome.
+	 * objects are entered into an {@link IntervalArray} for the appropriate Chromosome.
 	 *
-	 * @param tmist
-	 *            A list of all TranscriptModels for the entire genome
+	 * @param data
+	 *            the deserialize data object
 	 * @return a Map of Chromosome objects with all 22+2+M chromosomes.
 	 */
-	public static HashMap<Integer, Chromosome> constructChromosomeMapWithIntervalTree(
-			ImmutableList<TranscriptInfo> tmist) {
+	public static HashMap<Integer, Chromosome> constructChromosomeMapWithIntervalTree(JannovarData data) {
 		HashMap<Integer, Chromosome> chromosomeMap = new HashMap<Integer, Chromosome>();
-		/* 1. First sort the TranscriptModel objects by Chromosome. */
-		HashMap<Integer, ArrayList<Interval<TranscriptInfo>>> chrMap = new HashMap<Integer, ArrayList<Interval<TranscriptInfo>>>();
-		for (TranscriptInfo tm : tmist) {
-			if (!chrMap.containsKey(tm.getChr()))
-				chrMap.put(tm.getChr(), new ArrayList<Interval<TranscriptInfo>>());
+		/* 0. create chromosome map entries */
+		HashMap<Integer, ArrayList<TranscriptInfo>> chrMap = new HashMap<Integer, ArrayList<TranscriptInfo>>();
+		for (Integer i : data.refDict.contigName.keySet())
+			chrMap.put(i, new ArrayList<TranscriptInfo>());
 
-			ArrayList<Interval<TranscriptInfo>> lst = chrMap.get(tm.getChr());
-			final int txStartPos = tm.txRegion.withPositionType(PositionType.ONE_BASED).beginPos;
-			final int txEndPos = tm.txRegion.withPositionType(PositionType.ONE_BASED).endPos;
-			Interval<TranscriptInfo> in = new Interval<TranscriptInfo>(txStartPos, txEndPos, tm);
-			lst.add(in);
+		/* 1. First sort the TranscriptModel objects by Chromosome. */
+		for (TranscriptInfo tm : data.transcriptInfos) {
+			if (!chrMap.containsKey(tm.getChr()))
+				chrMap.put(tm.getChr(), new ArrayList<TranscriptInfo>());
+
+			ArrayList<TranscriptInfo> lst = chrMap.get(tm.getChr());
+			lst.add(tm);
 		}
 		/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
 		for (Integer chrom : chrMap.keySet()) {
-			ArrayList<Interval<TranscriptInfo>> transModelList = chrMap.get(chrom);
-			IntervalTree<TranscriptInfo> itree = new IntervalTree<TranscriptInfo>(transModelList);
+			IntervalArray<TranscriptInfo> itree = new IntervalArray<TranscriptInfo>(chrMap.get(chrom),
+					new TranscriptIntervalEndExtractor());
 			Chromosome chr = new Chromosome(chrom, itree);
 			chromosomeMap.put(chrom, chr);
 		}
@@ -102,9 +101,9 @@ public final class Chromosome {
 	}
 
 	/**
-	 * @return the {@link IntervalTree} of the chromosome.
+	 * @return the {@link IntervalArray} of the chromosome.
 	 */
-	public IntervalTree<TranscriptInfo> getTMIntervalTree() {
+	public IntervalArray<TranscriptInfo> getTMIntervalTree() {
 		return tmIntervalTree;
 	}
 

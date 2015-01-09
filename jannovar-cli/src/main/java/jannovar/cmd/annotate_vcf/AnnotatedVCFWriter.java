@@ -136,8 +136,12 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				textGenerator = new BestAnnotationListTextGenerator(annoList);
 
 			// add the annotations to the INFO field (third arg allows overwriting)
-			vc.getCommonInfo().putAttribute("EFFECT", textGenerator.buildEffectText(), true);
-			vc.getCommonInfo().putAttribute("HGVS", textGenerator.buildHGVSText(), true);
+			String effectText = textGenerator.buildEffectText();
+			if (effectText != null)
+				vc.getCommonInfo().putAttribute("EFFECT", effectText, true);
+			final String hgvsText = textGenerator.buildHGVSText();
+			if (hgvsText != null)
+				vc.getCommonInfo().putAttribute("HGVS", hgvsText, true);
 		}
 
 		// Write out variantContext to out.

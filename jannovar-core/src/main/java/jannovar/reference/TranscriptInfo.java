@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class TranscriptInfo implements Serializable {
+public final class TranscriptInfo implements Serializable, Comparable<TranscriptInfo> {
 
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
@@ -183,6 +183,17 @@ public final class TranscriptInfo implements Serializable {
 		} else if (!txRegion.equals(other.txRegion))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(TranscriptInfo o) {
+		int result = geneID - o.geneID;
+
+		result = geneSymbol.compareTo(o.geneSymbol);
+		if (result != 0)
+			return result;
+
+		return accession.compareTo(o.accession);
 	}
 
 }

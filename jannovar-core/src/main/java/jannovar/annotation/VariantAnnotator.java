@@ -2,7 +2,7 @@ package jannovar.annotation;
 
 import jannovar.annotation.builders.AnnotationBuilderDispatcher;
 import jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
-import jannovar.impl.interval.IntervalTree;
+import jannovar.impl.intervals.IntervalArray;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 import jannovar.reference.GenomeChange;
@@ -102,31 +102,28 @@ public final class VariantAnnotator {
 	 *             on problems building the annotation list
 	 */
 	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
-		// TODO(holtgrew): Make zero-based in the future?
-		final GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ONE_BASED);
+		final GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED);
 
 		/* The following command "resets" the annovarFactory object */
 		this.annovarFactory.clearAnnotationLists();
 
 		// Get the TranscriptModel objects that overlap with changeInterval.
 		final Chromosome chr = chromosomeMap.get(change.getChr());
-		IntervalTree<TranscriptInfo>.QueryResult qr = chr.getTMIntervalTree().search(changeInterval.beginPos,
-				changeInterval.endPos);
-		ArrayList<TranscriptInfo> candidateTranscripts = qr.result;
-
-		// Check whether this is a SV, if true then also perform a big intervals search.
-		boolean isStructuralVariant = (change.ref.length() >= 1000 || change.alt.length() >= 1000);
-		if (isStructuralVariant && change.ref.length() >= 1000)
-			candidateTranscripts.addAll(chr.getTMIntervalTree().searchBigInterval(changeInterval.beginPos,
-					changeInterval.endPos));
+		IntervalArray<TranscriptInfo>.QueryResult qr;
+		if (changeInterval.length() == 0)
+			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
+		else
+			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
+		ArrayList<TranscriptInfo> candidateTranscripts = new ArrayList<TranscriptInfo>(qr.entries);
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.
+		boolean isStructuralVariant = (change.ref.length() >= 1000 || change.alt.length() >= 1000);
 		if (candidateTranscripts.isEmpty()) {
 			if (isStructuralVariant)
 				buildSVAnnotation(change, null);
 			else
-				buildNonSVAnnotation(change, qr.getLeftNeighbor(), qr.getRightNeighbor());
+				buildNonSVAnnotation(change, qr.left, qr.right);
 			return annovarFactory.getAnnotationList();
 		}
 
@@ -152,7 +149,8 @@ public final class VariantAnnotator {
 	}
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws InvalidGenomeChange {
-		annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
+		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
+			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
 	}
 
 }
