@@ -72,12 +72,12 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	}
 
 	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
-		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN])>([ACGTN])");
+		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
 		Matcher match = pat.matcher(options.chromosomalChange);
 
 		if (!match.matches() | match.groupCount() != 4) {
 			System.err
-			.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
+					.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 
@@ -91,7 +91,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+			HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);
