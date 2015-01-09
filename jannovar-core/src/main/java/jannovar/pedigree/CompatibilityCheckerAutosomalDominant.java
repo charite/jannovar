@@ -2,8 +2,6 @@ package jannovar.pedigree;
 
 import com.google.common.collect.ImmutableList;
 
-//TODO(holtgrew): Look over this with Nick and Max
-
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal dominant
  * mode of inheritance.
@@ -12,6 +10,9 @@ import com.google.common.collect.ImmutableList;
  *
  * For autosomal dominant inheritance, there must be at least one {@link Genotype} that is shared by all affected
  * individuals but no unaffected individuals in the pedigree.
+ *
+ * We do not allow {@link Genotype#HOMOZYGOUS_ALT} for any affected (and also for the one person in the case of
+ * single-person pedigrees) since this is not the interesting case for users of this class.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -64,7 +65,7 @@ class CompatibilityCheckerAutosomalDominant {
 	}
 
 	private boolean runSingleSampleCase() {
-		// TODO(holtgrew): We could also allow "|| gtList.get(0) == Genotype.HOMOZYGOUS_ALT" but is this intended here?
+		// We could also allow Genotye.HOMOZYGOUS_ALT here but that is not the interesting case.
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
 				return true;

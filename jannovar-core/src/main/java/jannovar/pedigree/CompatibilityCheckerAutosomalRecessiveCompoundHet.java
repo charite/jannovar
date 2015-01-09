@@ -13,13 +13,6 @@ import com.google.common.collect.ImmutableSet;
  *
  * <h2>Compatibility Check</h2>
  *
- * It first checks whether there is a homozygous variant that is compatible with autosomal recessive. If there is none,
- * it checks for compound heterozygous variants. This is a little complicated.
- *
- * The code first checks whether there is a variant that is heterozygous in the affected and heterozygous in one, but
- * not both, of the parents. All such variants are stored. If there are such variants, then it checks whether the
- * maternal heterozygous mutations are compatible with the paternal heterozygous mutations, and it returns all variants
- * for which there are compatible pairs.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -99,12 +92,6 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public boolean run() throws CompatibilityCheckerException {
-		// First check whether the pedigree and genotype calls are compatible with autosomal recessive mode of
-		// inheritance.
-		// TODO(holtgrew): Really desired here? Was not in Nick's original code but in the documentation.
-		if (new CompatibilityCheckerAutosomalRecessive(pedigree, list).run())
-			return true;
-
 		// Then check the compound case.
 		if (pedigree.members.size() == 1)
 			return runSingleSampleCase();

@@ -25,9 +25,6 @@ class CompatibilityCheckerXDominant {
 	/** the genotype call list to use for the checking */
 	public final GenotypeList list;
 
-	/** decorator for getting unaffected individuals and such from the pedigree */
-	private final PedigreeQueryDecorator queryDecorator;
-
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
@@ -52,7 +49,7 @@ class CompatibilityCheckerXDominant {
 
 		this.pedigree = pedigree;
 		this.list = list;
-		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
+		new PedigreeQueryDecorator(pedigree);
 	}
 
 	/**

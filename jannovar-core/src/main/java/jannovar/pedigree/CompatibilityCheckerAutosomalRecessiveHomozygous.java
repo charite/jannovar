@@ -5,11 +5,19 @@ import jannovar.pedigree.Pedigree.IndexedPerson;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-// TODO(holtgrew): Look over this with Nick and Max
-
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
  * compound mode of inheritance.
+ *
+ * <h2>Compatibility Check</h2>
+ *
+ * In the case of a single individual, we require {@link Genotype#HOMOZYGOUS_ALT}.
+ *
+ * In the case of multiple individuals, we require that the affects are compatible, that the unaffected parents of
+ * affected individuals are not {@link Genotype#HOMOZYGOUS_REF} or {@link Genotype#HOMOZYGOUS_ALT} and that the
+ * unaffected individuals are not {@link Genotype#HOMOZYGOUS_ALT}. The affected individuals are compatible if no
+ * affected individual is {@link Genotype#HOMOZYGOUS_REF} or {@link Genotype#HETEROZYGOUS} and there is at least one
+ * affected individual that is {@link Genotype#HOMOZYGOUS_ALT}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -22,12 +30,6 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 
 	/** the genotype call list to use for the checking */
 	public final GenotypeList list;
-
-	/** decorator for getting unaffected individuals and such from the pedigree */
-	private final PedigreeQueryDecorator queryDecorator;
-
-	/** set of parent names */
-	private final ImmutableSet<String> parentNames;
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -54,13 +56,6 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 
 		this.pedigree = pedigree;
 		this.list = list;
-
-		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
-		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
-		if (parentNames.size() > 2)
-			throw new CompatibilityCheckerException("Only two parents are allowed when checking for autosomal "
-					+ "recessive homozygous mode of inheritance.");
-		this.parentNames = ImmutableSet.copyOf(parentNames);
 	}
 
 	/**
@@ -83,37 +78,62 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 
 	private boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls)
-			if (containsCompatibleHomozygousVariant(gtList))
+			if (containsCompatibleHomozygousVariants(gtList))
 				return true;
 		return false;
 	}
 
-	private boolean containsCompatibleHomozygousVariant(ImmutableList<Genotype> gtList) {
-		return (affectedsAreHomozygousALT(gtList) && parentsAreHeterozygous(gtList) && unaffectedsAreNotHomozygousALT(gtList));
+	private boolean containsCompatibleHomozygousVariants(ImmutableList<Genotype> gtList) {
+		return (affectedsAreCompatible(gtList) && unaffectedParentsOfAffectedAreNotHomozygous(gtList) && unaffectedsAreNotHomozygousAlt(gtList));
 	}
 
-	private boolean unaffectedsAreNotHomozygousALT(ImmutableList<Genotype> gtList) {
+	private boolean unaffectedsAreNotHomozygousAlt(ImmutableList<Genotype> gtList) {
 		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
 			if (entry.person.disease == Disease.UNAFFECTED && gtList.get(entry.idx) == Genotype.HOMOZYGOUS_ALT)
 				return false;
 		return true;
 	}
 
-	private boolean affectedsAreHomozygousALT(ImmutableList<Genotype> gtList) {
-		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
-			if (entry.person.disease == Disease.AFFECTED && gtList.get(entry.idx) != Genotype.HOMOZYGOUS_ALT)
-				return false;
-		return true;
-	}
-
-	private boolean parentsAreHeterozygous(ImmutableList<Genotype> gtList) {
-		for (String name : parentNames) {
+	private boolean unaffectedParentsOfAffectedAreNotHomozygous(ImmutableList<Genotype> gtList) {
+		for (String name : getUnaffectedParentNamesOfAffecteds()) {
 			IndexedPerson iPerson = pedigree.nameToMember.get(name);
-			if (iPerson == null)
-				throw new RuntimeException("Could not find person with name " + name + " and this is a bug here.");
-			if (gtList.get(iPerson.idx) != Genotype.HETEROZYGOUS)
+			// INVARIANT: iPerson cannot be null due to construction of Pedigree class
+			if (gtList.get(iPerson.idx) == Genotype.HOMOZYGOUS_ALT
+					|| gtList.get(iPerson.idx) == Genotype.HOMOZYGOUS_REF)
 				return false;
 		}
 		return true;
 	}
+
+	/**
+	 * @return names of unaffected parents of unaffecteds
+	 */
+	private ImmutableSet<String> getUnaffectedParentNamesOfAffecteds() {
+		ImmutableSet.Builder<String> builder = new ImmutableSet.Builder<String>();
+
+		for (Person person : pedigree.members)
+			if (person.disease == Disease.AFFECTED) {
+				if (person.father != null && person.father.disease == Disease.UNAFFECTED)
+					builder.add(person.father.name);
+				if (person.mother != null && person.mother.disease == Disease.UNAFFECTED)
+					builder.add(person.mother.name);
+			}
+
+		return builder.build();
+	}
+
+	private boolean affectedsAreCompatible(ImmutableList<Genotype> gtList) {
+		int numHomozygousAlt = 0;
+
+		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
+			if (entry.person.disease == Disease.AFFECTED) {
+				if (gtList.get(entry.idx) != Genotype.HOMOZYGOUS_REF || gtList.get(entry.idx) != Genotype.HETEROZYGOUS)
+					return false;
+				else if (gtList.get(entry.idx) != Genotype.HOMOZYGOUS_ALT)
+					numHomozygousAlt += 1;
+			}
+
+		return (numHomozygousAlt > 0);
+	}
+
 }
