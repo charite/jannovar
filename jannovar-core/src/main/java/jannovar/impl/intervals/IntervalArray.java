@@ -198,7 +198,7 @@ public final class IntervalArray<T> implements Serializable {
 		if (result.entries.size() > 0)
 			return result;
 
-		// otherwise, find left and right neighbour
+		// otherwise, find left and right neighbour, can use begin for all queries, have no overlap
 		resultBuilder.left = findLeftNeighbor(begin);
 		resultBuilder.right = findRightNeighbor(begin);
 		return resultBuilder.build();
