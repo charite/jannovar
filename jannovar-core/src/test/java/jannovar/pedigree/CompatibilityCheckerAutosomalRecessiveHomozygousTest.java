@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+//TODO(holtgrew): Review this with Nick and Max.
+
 public class CompatibilityCheckerAutosomalRecessiveHomozygousTest {
 
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
