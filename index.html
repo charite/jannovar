@@ -37,14 +37,19 @@
 <p>Transcript-based annotation and pedigree analysis are two basic steps in the computational analysis of whole-exome sequencing experiments in disease-gene discovery projects or diagnostics. Jannovar is a stand-alone Java application as well as a Java library designed to be used in larger software frameworks for exome analysis. Jannovar uses an interval tree to identify all transcripts affected by a given variant, and provides HGVS-compliant annotations for both for variants affecting coding sequences and splice junctions as well as UTR sequences and non-coding RNA transcripts. Jannovar can also perform family-based pedigree analysis with VCF files with data from members of a family segregating a Mendelian disorder. Using a desktop computer, Jannovar requires a few seconds to annotate a typical VCF file with exome data.</p>
 
 <h2>
-<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads</h2>
+<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Jannovar</h2>
 
-<p>The following files comprise the main Jannovar application/library (Jannovar.jar) as well as a tutorial and a compressed archive with various files intended to be used for the tutorial (jped.tgz). The Jannovar.jar file is the 0.5 version of January 4, 2013.</p>
+<p>Jannovar can be used from the command line to annotate VCF files, but it is also a complete Java programming library that can be used within larger applications.
+For instance, the <a href="http://www.sanger.ac.uk/resources/databases/exomiser/">Exomiser</a> is a Web server that can be used to prioritise candidate genes in exome sequencing studies. 
+<a href="http://compbio.charite.de/PhenIX">PhenIX</a> is a Web server that provides a ranked list of
+candidate genes in diagnostic exome or gene panel sequencing. <a href="https://phenomecentral.org/">Phenome Central</a> is used for genomic matchmaking. </p>
 
+    
 <h2>
-<a id="downloading-the-source-code" class="anchor" href="#downloading-the-source-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloading the source code</h2>
+<a id="downloading-the-source-code" class="anchor" href="#downloading-the-source-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h2>
 
-<p>Developers can download the entire source code for the Jannovar project in the form of a maven repository from <a href="https://github.com/charite/jannovar">https://github.com/charite/jannovar</a>.</p>
+<p>A complete  <a href="tutorial/doc/JannovarTutorial.pdf">tutorial</a> is available that explains how to use Jannovar both as a command-line application and as a programming library.
+A compressed  <a href="tutorial/tutorial.tgz">archive</a> of source code examples and other files is provided for the tutorial.</p>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
