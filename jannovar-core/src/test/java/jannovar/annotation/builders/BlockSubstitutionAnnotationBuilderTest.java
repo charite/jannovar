@@ -383,7 +383,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"TGAGG", "C");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011ayb.2:c.1263_1266+1delinsC:p.Glu422_Val423del", annotation1.hgvsDescription);
-		Assert.assertEquals(VariantType.NON_FS_SUBSTITUTION, annotation1.varType);
+		Assert.assertEquals(VariantType.SPLICE_DONOR, annotation1.varType);
 	}
 
 }
