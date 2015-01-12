@@ -936,6 +936,27 @@ public class DeletionAnnotationBuilderTest {
 
 	// This variant was called on the Platinum genomes and caused a problem with string access.
 	@Test
+	public void testRealWorldCase_uc011mcs_() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc011mcs.1	chr9	-	135782117	135820020	135782118	135798879	13	135782117,135782687,135785957,135786388,135786839,135787668,135796749,135797205,135798734,135800973,135804153,135810419,135819929,	135782222,135782757,135786079,135786500,135786955,135787844,135796823,135797360,135798879,135801126,135804339,135810482,135820020,	Q59IT9	uc011mcs.1");
+		this.builderForward
+		.setSequence("acgacgggggaggtgctgtacgtccaagatggcggcgccctgtaggctggagggactgtgaggtaaacagctgagggggaggagacggtggtgaccatgaaagacaccaggttgacagcactggaaactgaagtaccagttgtcgctagaacagtttggtagtggccccaatgaagaaccttcagaacctgtagcacacgtcctggagccagcacagcgccttcgagcgagagaatggcccaacaagcaaatgtcggggagcttcttgccatgctggactcccccatgctgggtgtgcgggacgacgtgacagctgtctttaaagagaacctcaattctgcacctcttggacaggattaacgaatatgtgggcaaagccgccactcgtttatccatcctctcgttactgggtcatgtcataagactgcagccatcttggaagcataagctctctcaagcacctcttttgccttctttactaaaatgtctcaagatggacactgacgtcgttgtcctcacaacaggcgtcttggtgttgataaccatgctaccaatgattccacagtctgggaaacagcatcttcttgatttctttgacatttttggccgtctgtcatcatggtgcctgaagaaaccaggccacgtggcggaagtctatctcgtccatctccatgccagtgtgtacgcactctttcatcgcctttatggaatgtacccttgcaacttcgtctcctttttgcgttctcattacagtatgaaagaaaacctggagacttttgaagaagtggtcaagccaatgatggagcatgtgcgaattcatccggaattagtgactggatccaaggaccatgaactggaccctcgaaggtggaagagattagaaactcatgatgttgtgatcgagtgtgccaaaatctctctggatcccacagaagcctcatatgaagatggctattctgtgtctcaccaaatctcagcccgctttcctcatcgttcagccgatgtcaccaccagcccttatgctgacacacagaatagctatgggtgtgctacttctaccccttactccacgtctcggctgatgttgttaaatatgccagggcagctacctcagactctgagttccccatcgacacggctgataactgaaccaccacaagctactctttggagcccatctatggtttgtggtatgaccactcctccaacttctcctggaaatgtcccacctgatctgtcacacccttacagtaaagtctttggtacaactgcaggtggaaaaggaactcctctgggaaccccagcaacctctcctcctccagccccactctgtcattcggatgactacgtgcacatttcactcccccaggccacagtcacaccccccaggaaggaagagagaatggattctgcaagaccatgtctacacagacaacaccatcttctgaatgacagaggatcagaagagccacctggcagcaaaggttctgtcactctaagtgatcttccagggtttttaggtgatctggcctctgaagaagatagtattgaaaaagataaagaagaag"
+				.toUpperCase());
+		this.builderForward.setGeneSymbol("Q59IT9");
+		this.infoForward = builderForward.build();
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(
+				new GenomePosition(refDict, '+', 9, 135782122, PositionType.ZERO_BASED), "TTCT", "");
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Assert.assertEquals("uc011mcs.1:exon13:c.1068_1071del:p.Glu358del", annotation1.hgvsDescription);
+		Assert.assertEquals(VariantType.FS_DELETION, annotation1.varType);
+	}
+
+	// This variant was called on the Platinum genomes and caused a problem with string access.
+	@Test
 	public void testRealWorldCase_uc011dba_3() throws InvalidGenomeChange {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,

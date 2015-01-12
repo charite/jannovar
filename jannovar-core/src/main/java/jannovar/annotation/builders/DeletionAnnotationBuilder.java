@@ -218,6 +218,16 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				protAnno = String.format("p.*%ddel?", aaChange.pos + 1);
 				return;
 			}
+			// Handle the case of deleting up to the end of the sequence.
+			if (aaChange.pos >= varAASeq.length()) {
+				if (aaChange.ref.length() == 1)
+					protAnno = String.format("p.%s%ddel", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1);
+				else
+					protAnno = String.format("p.%s%d_%s%ddel", t.toLong(wtAASeq.charAt(aaChange.pos)),
+							aaChange.pos + 1,
+							t.toLong(wtAASeq.charAt(aaChange.getLastPos())), aaChange.getLastPos() + 1);
+				return;
+			}
 
 			char wtAA = wtAASeq.charAt(aaChange.pos);
 			char varAA = varAASeq.charAt(aaChange.pos);

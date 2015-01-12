@@ -74,7 +74,7 @@ public final class GenomeChange {
 			delta = ref.length() - 1;
 
 		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED)
-				.shifted(delta).withStrand(strand);
+		.shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -119,6 +119,13 @@ public final class GenomeChange {
 	 */
 	public GenomeChange withStrand(char strand) {
 		return new GenomeChange(this, strand);
+	}
+
+	/**
+	 * @return the GenomeChange with the given position type
+	 */
+	public GenomeChange withPositionType(PositionType positionType) {
+		return new GenomeChange(pos.withPositionType(positionType), ref, alt);
 	}
 
 	/**
@@ -189,7 +196,7 @@ public final class GenomeChange {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -206,7 +213,7 @@ public final class GenomeChange {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

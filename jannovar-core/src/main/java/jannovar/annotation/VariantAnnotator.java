@@ -102,7 +102,8 @@ public final class VariantAnnotator {
 	 *             on problems building the annotation list
 	 */
 	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
-		final GenomeInterval changeInterval = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED);
+		change = change.withPositionType(PositionType.ZERO_BASED);
+		final GenomeInterval changeInterval = change.getGenomeInterval();
 
 		/* The following command "resets" the annovarFactory object */
 		this.annovarFactory.clearAnnotationLists();

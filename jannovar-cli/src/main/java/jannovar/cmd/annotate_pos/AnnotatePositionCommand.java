@@ -46,9 +46,9 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
+		System.out.println("#change\teffect\thgvs_annotation");
 		for (String chromosomalChange : options.chromosomalChanges) {
 			// Parse the chromosomal change string into a GenomeChange object.
-			System.out.println("input: " + chromosomalChange);
 			final GenomeChange genomeChange = parseGenomeChange(chromosomalChange);
 
 			// Construct VariantAnnotator for building the variant annotations.
@@ -70,7 +70,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			annotation = textGenerator.buildHGVSText();
 			effect = textGenerator.buildEffectText();
 
-			System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
+			System.out.println(String.format("%s\t%s\t%s", chromosomalChange.toString(), effect, annotation));
 		}
 	}
 

@@ -35,7 +35,7 @@ public final class StructuralVariantAnnotationBuilder {
 	 */
 	public StructuralVariantAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) {
 		this.transcript = transcript;
-		this.change = change;
+		this.change = change.withPositionType(PositionType.ZERO_BASED);
 	}
 
 	/**

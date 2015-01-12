@@ -4,6 +4,7 @@ import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
 import jannovar.reference.GenomeChange;
+import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 
 /**
@@ -20,7 +21,7 @@ public final class AnnotationBuilderDispatcher {
 
 	public AnnotationBuilderDispatcher(TranscriptInfo transcript, GenomeChange change) {
 		this.transcript = transcript;
-		this.change = change;
+		this.change = change.withPositionType(PositionType.ZERO_BASED);
 	}
 
 	/**
