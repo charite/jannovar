@@ -1390,8 +1390,8 @@ public class InsertionAnnotationBuilderTest {
 						refDict,
 						"uc011aho.1	chr22	-	20640677	20656858	20640677	20656715	8	20640677,20643224,20643723,20645785,20650757,20653788,20654281,20656687,	20641015,20643258,20643785,20645851,20650844,20653813,20654340,20656858,	E7EP86	uc011aho.1");
 		this.builderForward
-				.setSequence("aatgtttatgccctatcgccatggtgatgggattagggatctcctgcccttggtcgtaagtgccactacctgtgctgagtttttcaaaggtcagagcagattgaaccattgtggtttcattttccctgattttgatttttcttatggggaacctgtgtggctgcattcaaggtgactcgaagaagccttccaaaaagcgtgtgaaaaggaagccctactctactaccaaggtgacttcagggagcacattcaatgagaatacaagaagatatgctgtgcacaccaaccagtgtaggagacctcatggctcccgggtaaagaagaagaggtacccacaagaagatgacttccatcatacagtcttcagcaaccttgaaagattggacaagcttcagcccactcttgaagcctctgaggagtctctagttcacaaggacagaggagatggagagaggccagtcaacgtgaaggtggtgcaggtggcccctctgaggcgtgaatctactccccatgaggacaccgtacacaacatcactaacgaggatgcctcacacgatatcactaacgaggacgctgtccacggcatcgctaacgaggccgccgacaagggcatcgccaacgaggacgccgcccagggcatcgccaacgaggacgccgcccacggaatcgccagcgaggacgccgcccagggcatcgccaacgaggtcgccgcccagggcatcgccaacgaggacgccgcccagggcatcgccaaggaggacgccgcccacggcatcgccaacgaggatgctgcccacggcattgctaacgaggatgccgtgcacggcatcgctaatgaggac"
-						.toUpperCase());
+		.setSequence("aatgtttatgccctatcgccatggtgatgggattagggatctcctgcccttggtcgtaagtgccactacctgtgctgagtttttcaaaggtcagagcagattgaaccattgtggtttcattttccctgattttgatttttcttatggggaacctgtgtggctgcattcaaggtgactcgaagaagccttccaaaaagcgtgtgaaaaggaagccctactctactaccaaggtgacttcagggagcacattcaatgagaatacaagaagatatgctgtgcacaccaaccagtgtaggagacctcatggctcccgggtaaagaagaagaggtacccacaagaagatgacttccatcatacagtcttcagcaaccttgaaagattggacaagcttcagcccactcttgaagcctctgaggagtctctagttcacaaggacagaggagatggagagaggccagtcaacgtgaaggtggtgcaggtggcccctctgaggcgtgaatctactccccatgaggacaccgtacacaacatcactaacgaggatgcctcacacgatatcactaacgaggacgctgtccacggcatcgctaacgaggccgccgacaagggcatcgccaacgaggacgccgcccagggcatcgccaacgaggacgccgcccacggaatcgccagcgaggacgccgcccagggcatcgccaacgaggtcgccgcccagggcatcgccaacgaggacgccgcccagggcatcgccaaggaggacgccgcccacggcatcgccaacgaggatgctgcccacggcattgctaacgaggatgccgtgcacggcatcgctaatgaggac"
+				.toUpperCase());
 		this.builderForward.setGeneSymbol("E7EP86");
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
@@ -1399,8 +1399,9 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("22"), 20640690,
 				PositionType.ZERO_BASED), "", "ATGCCGTGCACGGCATCCTCGTTAGCA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
-		Assert.assertEquals("uc004fus.3:exon4:n.385del", annotation1.hgvsDescription);
-		Assert.assertEquals(VariantType.ncRNA_EXONIC, annotation1.varType);
+		// The following result is equal to the one of Mutalyzer.
+		Assert.assertEquals("uc011aho.1:exon8:c.660_686dup:p.Ala225_Asp233dup", annotation1.hgvsDescription);
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.varType);
 	}
 
 }
