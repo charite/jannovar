@@ -199,8 +199,10 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 
 		private void handleFrameShiftCase() {
-			// Differentiate the cases where the WT has a stop codon at the change position.
-			if (wtAASeq.charAt(varAAInsertPos) == '*')
+			// Differentiate the cases where the WT has a stop codon at the change position. We also need to guard
+			// against the insertion being at the end of the encode amino acid string.
+			final boolean isInsertionAtEnd = (varAAInsertPos == wtAASeq.length());
+			if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*')
 				handleFrameShiftCaseWTStartWithStopCodon();
 			else
 				handleFrameShiftCaseWTStartsWithNoStopCodon();
@@ -257,7 +259,10 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 
 		private void handleNonFrameShiftCase() {
-			if (wtAASeq.charAt(varAAInsertPos) == '*')
+			// Differentiate the cases where the WT has a stop codon at the change position. We also need to guard
+			// against the insertion being at the end of the encode amino acid string.
+			final boolean isInsertionAtEnd = (varAAInsertPos == wtAASeq.length());
+			if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*')
 				handleNonFrameShiftCaseStartsWithStopCodon();
 			else
 				handleNonFrameShiftCaseStartsWithNoStopCodon();
