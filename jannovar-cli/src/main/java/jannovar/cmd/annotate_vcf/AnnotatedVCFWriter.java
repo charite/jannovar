@@ -33,6 +33,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	/** {@link ReferenceDictionary} object to use for information about the genome. */
 	private final ReferenceDictionary refDict;
 
+	/** path to VCF file to process */
+	private final String vcfPath;
+
 	/** configuration to use */
 	private final JannovarOptions options;
 
@@ -43,9 +46,10 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	VariantContextWriter out = null;
 
 	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFFileReader reader,
-			HashMap<Integer, Chromosome> chromosomeMap, JannovarOptions options) {
+			HashMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options) {
 		this.refDict = refDict;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
+		this.vcfPath = vcfPath;
 		this.options = options;
 		openVariantContextWriter(reader);
 	}
@@ -87,7 +91,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	/** @return output file name, depending on this.options */
 	@Override
 	public String getOutFileName() {
-		File f = new File(this.options.vcfFilePath);
+		File f = new File(vcfPath);
 		String outname = f.getName();
 		if (options.outVCFFolder != null)
 			outname = PathUtil.join(options.outVCFFolder, outname);

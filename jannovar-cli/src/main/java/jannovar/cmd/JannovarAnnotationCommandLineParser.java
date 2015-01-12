@@ -34,7 +34,6 @@ public abstract class JannovarAnnotationCommandLineParser {
 	protected void initializeParser() {
 		options = new Options();
 		options.addOption(new Option("h", "help", false, "show this help"));
-		options.addOption(new Option("D", "data-file", true, "path to serialized data file"));
 
 		parser = new GnuParser();
 	}

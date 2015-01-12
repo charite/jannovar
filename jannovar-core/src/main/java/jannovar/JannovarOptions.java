@@ -41,7 +41,7 @@ public final class JannovarOptions {
 	// Configuration for the annotate command
 
 	/** path to a VCF file to be annotated */
-	public String vcfFilePath = null;
+	public ArrayList<String> vcfFilePaths = new ArrayList<String>();
 
 	/** path to the file with the serialized data */
 	public String dataFile = null;
@@ -89,11 +89,11 @@ public final class JannovarOptions {
 			System.err.println("HTTP proxy: " + httpProxy);
 			System.err.println("HTTPS proxy: " + httpsProxy);
 			System.err.println("FTP proxy: " + ftpProxy);
-		} else if (command == Command.ANNOTATE_VCF) {
-			System.err.println("dataFile:" + dataFile);
-			System.err.println("vcf:" + vcfFilePath);
-			System.err.println("showAll:" + showAll);
-			System.err.println("jannovarFormat:" + jannovarFormat);
+		} else if (command == Command.ANNOTATE_VCF || command == Command.ANNOTATE_POSITION) {
+			System.err.println("dataFile: " + dataFile);
+			System.err.println("changes: " + chromosomalChanges);
+			System.err.println("showAll: " + showAll);
+			System.err.println("jannovarFormat: " + jannovarFormat);
 		}
 	}
 }

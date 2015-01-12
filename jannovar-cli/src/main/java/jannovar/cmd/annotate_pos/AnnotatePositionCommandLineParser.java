@@ -34,7 +34,9 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 		String args[] = cmd.getArgs(); // get remaining arguments
 		if (args.length < 3)
 			throw new ParseException("must have at least two none-option argument, had: " + (args.length - 1));
+
 		result.dataFile = args[1];
+
 		for (int i = 2; i < args.length; ++i)
 			result.chromosomalChanges.add(args[i]);
 
