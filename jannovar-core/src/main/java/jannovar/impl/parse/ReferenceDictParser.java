@@ -162,8 +162,6 @@ public final class ReferenceDictParser {
 	 *
 	 * @param path
 	 *            Path to the file to be opened
-	 * @param isGzip
-	 *            whether or not the file is gzip-compressed
 	 * @return Corresponding BufferedReader file handle.
 	 * @throws IOException
 	 *             on I/O errors
