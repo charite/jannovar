@@ -31,15 +31,12 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 			throw new HelpRequestedException();
 		}
 
-		if (cmd.hasOption("data-file"))
-			result.dataFile = cmd.getOptionValue("data-file");
-		else
-			throw new ParseException("You must specify a data file via -d/--data-file!");
-
 		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length != 2)
-			throw new ParseException("must have one none-option argument, had: " + (args.length - 1));
-		result.chromosomalChange = args[1];
+		if (args.length < 3)
+			throw new ParseException("must have at least two none-option argument, had: " + (args.length - 1));
+		result.dataFile = args[1];
+		for (int i = 2; i < args.length; ++i)
+			result.chromosomalChanges.add(args[i]);
 
 		return result;
 	}
@@ -47,9 +44,9 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 	public void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Command: annotate-pos\n\n")
 				.append("Use this command to annotate a chromosomal change.\n\n")
-				.append("Usage: java -jar jannovar.jar annotate-pos [options] -D <database> <CHANGE>\n\n").toString();
+				.append("Usage: java -jar jannovar.jar annotate-pos [options] <database.ser> <CHANGE>\n\n").toString();
 		final String FOOTER = new StringBuilder().append(
-				"\n\nExample: java -jar jannovar.jar annotate -D ucsc_hg19.ser 'chr1:12345C>A'\n\n").toString();
+				"\n\nExample: java -jar jannovar.jar annotate data/hg19_ucsc.ser 'chr1:12345C>A'\n\n").toString();
 
 		System.err.print(HEADER);
 

@@ -212,6 +212,9 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
 			if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
 				protAnno = String.format("p.%s%d%s", wtAAFirstLong, aaChange.pos + 1, t.toLong(insertedAAs.charAt(0)));
+			else if (insertedAAs.isEmpty())
+				protAnno = String.format("p.%s%d_%s%ddel", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
+						aaChange.getLastPos() + 1);
 			else
 				protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
 						aaChange.getLastPos() + 1, t.toLong(insertedAAs));

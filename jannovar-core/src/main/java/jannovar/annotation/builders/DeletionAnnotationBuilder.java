@@ -208,8 +208,26 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				varType = VariantType.FS_DELETION;
 
 			// Normalize the amino acid change, shifting to the right as long as change ref char equals var ref char.
-			while (aaChange.ref.length() > 0 && aaChange.ref.charAt(0) == varAASeq.charAt(aaChange.pos))
+			while (aaChange.ref.length() > 0 && aaChange.pos < varAASeq.length()
+					&& aaChange.ref.charAt(0) == varAASeq.charAt(aaChange.pos))
 				aaChange = aaChange.shiftRight();
+
+			// Handle the case of deleting a stop codon at the very last entry of the translated amino acid string and
+			// short-circuit.
+			if (varType == VariantType.STOPLOSS && aaChange.pos == varAASeq.length()) {
+				protAnno = String.format("p.*%ddel?", aaChange.pos + 1);
+				return;
+			}
+			// Handle the case of deleting up to the end of the sequence.
+			if (aaChange.pos >= varAASeq.length()) {
+				if (aaChange.ref.length() == 1)
+					protAnno = String.format("p.%s%ddel", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1);
+				else
+					protAnno = String.format("p.%s%d_%s%ddel", t.toLong(wtAASeq.charAt(aaChange.pos)),
+							aaChange.pos + 1,
+							t.toLong(wtAASeq.charAt(aaChange.getLastPos())), aaChange.getLastPos() + 1);
+				return;
+			}
 
 			char wtAA = wtAASeq.charAt(aaChange.pos);
 			char varAA = varAASeq.charAt(aaChange.pos);

@@ -199,11 +199,35 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 
 		private void handleFrameShiftCase() {
-			// Differentiate the cases where the WT has a stop codon at the change position.
-			if (wtAASeq.charAt(varAAInsertPos) == '*')
+			// Differentiate the cases where the WT has a stop codon at the change position. We also need to guard
+			// against an insertion at the end of the amino acid and the case that introduces a non-existing stop codon
+			// at the end.
+			if (handleInsertionAtEndInCaseOfNoStopCodon())
+				return;
+			final boolean isInsertionAtEnd = (varAAInsertPos == wtAASeq.length());
+			if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*')
 				handleFrameShiftCaseWTStartWithStopCodon();
 			else
 				handleFrameShiftCaseWTStartsWithNoStopCodon();
+		}
+
+		/**
+		 * Deal with an insertion to an amino acid string that does not have a stop codon yet.
+		 */
+		private boolean handleInsertionAtEndInCaseOfNoStopCodon() {
+			// TODO(holtgrew): At some point, try to merge these corner cases that are caused by bogus transcript
+			// entries into the main cases or decide to ignore these bad cases.
+
+			// Return false if this is not the case this function deals with.
+			if (varAAInsertPos != wtAASeq.length() || wtAAStopPos != -1)
+				return false;
+
+			// TODO(holtgrew): Check for duplication? This is a very rare corner case with bogus transcript.
+			protAnno = String.format("p.%s%d%s", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
+					t.toLong(varAASeq.substring(varAAInsertPos - 1, varAASeq.length())));
+			varType = (varAAStopPos != -1) ? VariantType.STOPGAIN : VariantType.NON_FS_INSERTION;
+
+			return true;
 		}
 
 		private void handleFrameShiftCaseWTStartWithStopCodon() {
@@ -257,7 +281,10 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 
 		private void handleNonFrameShiftCase() {
-			if (wtAASeq.charAt(varAAInsertPos) == '*')
+			// Differentiate the cases where the WT has a stop codon at the change position. We also need to guard
+			// against the insertion being at the end of the encode amino acid string.
+			final boolean isInsertionAtEnd = (varAAInsertPos == wtAASeq.length());
+			if (!isInsertionAtEnd && wtAASeq.charAt(varAAInsertPos) == '*')
 				handleNonFrameShiftCaseStartsWithStopCodon();
 			else
 				handleNonFrameShiftCaseStartsWithNoStopCodon();

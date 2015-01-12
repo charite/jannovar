@@ -1381,4 +1381,51 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(VariantType.UTR3, annotation1.varType);
 	}
 
+	// The following variant from the Platinum Genome project caused problems against hg19/ucsc:
+	// chr22:20640691:>ATGCCGTGCACGGCATCCTCGTTAGCA
+	@Test
+	public void testRealWorldCase_uc011aho_1() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc011aho.1	chr22	-	20640677	20656858	20640677	20656715	8	20640677,20643224,20643723,20645785,20650757,20653788,20654281,20656687,	20641015,20643258,20643785,20645851,20650844,20653813,20654340,20656858,	E7EP86	uc011aho.1");
+		this.builderForward
+		.setSequence("aatgtttatgccctatcgccatggtgatgggattagggatctcctgcccttggtcgtaagtgccactacctgtgctgagtttttcaaaggtcagagcagattgaaccattgtggtttcattttccctgattttgatttttcttatggggaacctgtgtggctgcattcaaggtgactcgaagaagccttccaaaaagcgtgtgaaaaggaagccctactctactaccaaggtgacttcagggagcacattcaatgagaatacaagaagatatgctgtgcacaccaaccagtgtaggagacctcatggctcccgggtaaagaagaagaggtacccacaagaagatgacttccatcatacagtcttcagcaaccttgaaagattggacaagcttcagcccactcttgaagcctctgaggagtctctagttcacaaggacagaggagatggagagaggccagtcaacgtgaaggtggtgcaggtggcccctctgaggcgtgaatctactccccatgaggacaccgtacacaacatcactaacgaggatgcctcacacgatatcactaacgaggacgctgtccacggcatcgctaacgaggccgccgacaagggcatcgccaacgaggacgccgcccagggcatcgccaacgaggacgccgcccacggaatcgccagcgaggacgccgcccagggcatcgccaacgaggtcgccgcccagggcatcgccaacgaggacgccgcccagggcatcgccaaggaggacgccgcccacggcatcgccaacgaggatgctgcccacggcattgctaacgaggatgccgtgcacggcatcgctaatgaggac"
+				.toUpperCase());
+		this.builderForward.setGeneSymbol("E7EP86");
+		this.infoForward = builderForward.build();
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("22"), 20640690,
+				PositionType.ZERO_BASED), "", "ATGCCGTGCACGGCATCCTCGTTAGCA");
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		// The following result is equal to the one of Mutalyzer.
+		Assert.assertEquals("uc011aho.1:exon8:c.660_686dup:p.Ala225_Asp233dup", annotation1.hgvsDescription);
+		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.varType);
+	}
+
+	// The following variant from the clinvar project caused problems against hg19/ucsc: chr3:37081782:>TAAG
+	@Test
+	public void testRealWorldCase_uc010hgj_1() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc010hgj.1	chr3	+	37053501	37081785	37067163	37081783	4	37053501,37067127,37070274,37081676,	37053590,37067498,37070423,37081785,	Q0ZAJ5	uc010hgj.1");
+		this.builderForward
+		.setSequence("caaggagagacagtagctgatgttaggacactacccaatgcctcaaccgtggacaatattcgctccatctttggaaatgctgttagtcgactttgctaccaggacttgctggcccctctggggagatggttaaatccacaacaagtctgacctcgtcttctacttctggaagtagtgataaggtctatgcccaccagatggttcgtacagattcccgggaacagaagcttgatgcatttctgcagcctctgagcaaacccctgtccagtcagccccaggccattgtcacagaggataagacagatatttctagtggcagggctaggcagcaagatgaggagatgcttgaactcccagcccctgctgaagtggctgccaaaaatcagagcttggagggggatacaacaaaggggacttcagaaatgtcagagaagagaggacctacttccagcaaccccagaaagagacatcgggaagattctgatgtggaaatggtggaagatgattcccgaaaggaaatgactgcagcttgtaccccccggagaaggatcattaacctcactagtgttttgagtctccaggaagaaattaatgagcagggacatgaggttctccgggagatgttgcataaccactccttcgtgggctgtgtgaatcctcagtgggccttggcacagcatcaaaccaagttataccttctcaacaccaccaagcttag"
+				.toUpperCase());
+		this.builderForward.setGeneSymbol("Q0ZAJ5");
+		this.infoForward = builderForward.build();
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 37081781, PositionType.ZERO_BASED),
+				"", "TAAG");
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		// Mutalyzer: NM_001258274.1(MLH1_v001):c.940_941insTAAG NM_001258274.1(MLH1_i001):p.(Glu316*)
+		//
+		// The UCSC transcript DNA sequence is bogus here.
+		Assert.assertEquals("uc010hgj.1:exon4:c.590_591insAAGT:p.Leu197LeuSer*", annotation1.hgvsDescription);
+		Assert.assertEquals(VariantType.STOPGAIN, annotation1.varType);
+	}
+
 }
