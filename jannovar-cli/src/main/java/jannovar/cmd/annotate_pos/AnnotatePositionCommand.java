@@ -43,6 +43,9 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	 */
 	@Override
 	public void run() throws JannovarException {
+		System.err.println("Options");
+		options.print();
+
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
@@ -79,8 +82,8 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		Matcher match = pat.matcher(changeStr);
 
 		if (!match.matches() | match.groupCount() != 4) {
-			System.err
-			.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
+			System.err.println("[ERROR] Input string for the chromosomal change " + changeStr
+					+ " does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 

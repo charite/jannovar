@@ -28,8 +28,8 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** {@link ReferenceDictionary} object to use for information about the genome. */
 	private final ReferenceDictionary refDict;
 
-	/** configuration to use */
-	private JannovarOptions options;
+	/** the VCF file to process */
+	private String vcfPath;
 
 	/** the VariantAnnotator to use. */
 	private VariantAnnotator annotator;
@@ -41,17 +41,17 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	int currentLine = 0;
 
 	public AnnotatedJannovarWriter(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap,
-			JannovarOptions options) throws IOException {
+			String vcfPath, JannovarOptions options) throws IOException {
 		this.refDict = refDict;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
-		this.options = options;
+		this.vcfPath = vcfPath;
 		this.openBufferedWriter();
 	}
 
 	@Override
 	public String getOutFileName() {
 		// build file name for output file
-		File f = new File(this.options.vcfFilePath);
+		File f = new File(this.vcfPath);
 		return f.getName() + ".jannovar";
 	}
 

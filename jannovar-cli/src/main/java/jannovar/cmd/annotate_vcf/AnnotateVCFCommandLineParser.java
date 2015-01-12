@@ -30,27 +30,22 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 			throw new HelpRequestedException();
 		}
 
-		if (cmd.hasOption("data-file"))
-			result.dataFile = cmd.getOptionValue("data-file");
-		else
-			throw new ParseException("You must specify a data file via -D/--data-file!");
-
 		result.jannovarFormat = cmd.hasOption("janno");
 
 		if (cmd.hasOption("output"))
 			result.outVCFFolder = cmd.getOptionValue("output");
 
-		if (cmd.hasOption("vcf"))
-			result.vcfFilePath = cmd.getOptionValue("vcf");
-		else
-			throw new ParseException("You must specify a VCF input vial via -V /--vcf!");
-
 		result.jannovarFormat = cmd.hasOption("jannovar");
 		result.showAll = cmd.hasOption("showall");
 
 		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length != 1)
-			throw new ParseException("must have no none-option argument, had: " + (args.length - 1));
+		if (args.length < 3)
+			throw new ParseException("must have at least two none-option argument, had: " + (args.length - 1));
+
+		result.dataFile = args[1];
+
+		for (int i = 2; i < args.length; ++i)
+			result.vcfFilePaths.add(args[i]);
 
 		return result;
 	}
@@ -59,7 +54,6 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 	protected void initializeParser() {
 		super.initializeParser();
 
-		options.addOption(new Option("V", "vcf", true, "path to VCF input file"));
 		options.addOption(new Option("J", "jannovar", false, "write result in Jannovar output"));
 		options.addOption(new Option("a", "showall", false, "report annotations for all affected transcripts"));
 	}
@@ -67,9 +61,9 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 	private void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Command: annotate\n\n")
 				.append("Use this command to annotate a VCF file.\n\n")
-				.append("Usage: java -jar jannovar.jar annotate [options] -D <database> -V <IN.VCF>\n\n").toString();
+				.append("Usage: java -jar jannovar.jar annotate [options] <database> [<IN.VCF>]+\n\n").toString();
 		final String FOOTER = new StringBuilder().append(
-				"\n\nExample: java -jar jannovar.jar annotate -D ucsc IN.vcf\n\n").toString();
+				"\n\nExample: java -jar jannovar.jar annotate data/hg19_ucsc.ser IN.vcf\n\n").toString();
 
 		System.err.print(HEADER);
 
