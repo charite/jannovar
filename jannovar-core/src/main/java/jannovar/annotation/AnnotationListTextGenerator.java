@@ -12,14 +12,26 @@ public abstract class AnnotationListTextGenerator {
 	/** the decorated {@link AnnotationList} */
 	public final AnnotationList annotations;
 
+	/** alternative allele ID (1 from VCF is 0 here) */
+	public final int alleleID;
+
+	/** total number of alternative alleles */
+	public final int altCount;
+
 	/**
 	 * Initialize the decorator.
 	 *
 	 * @param annotations
 	 *            {@link AnnotationList} of {@link Annotation} objects
+	 * @param alleleID
+	 *            the 0-based id of the allele
+	 * @param altCount
+	 *            total number of alternative alleles
 	 */
-	public AnnotationListTextGenerator(AnnotationList annotations) {
+	public AnnotationListTextGenerator(AnnotationList annotations, int alleleID, int altCount) {
 		this.annotations = annotations;
+		this.alleleID = alleleID;
+		this.altCount = altCount;
 	}
 
 	/**
@@ -30,6 +42,8 @@ public abstract class AnnotationListTextGenerator {
 		for (Annotation anno : getAnnotations().entries) {
 			if (builder.length() != 0)
 				builder.append(',');
+			if (altCount > 1)
+				builder.append(String.format("alt%d:", alleleID + 1));
 			builder.append(anno.varType);
 		}
 		return builder.toString();
@@ -43,6 +57,8 @@ public abstract class AnnotationListTextGenerator {
 		for (Annotation anno : getAnnotations().entries) {
 			if (builder.length() != 0)
 				builder.append(',');
+			if (altCount > 1)
+				builder.append(String.format("alt%d:", alleleID + 1));
 			builder.append(anno.getSymbolAndAnnotation());
 		}
 		return builder.toString();

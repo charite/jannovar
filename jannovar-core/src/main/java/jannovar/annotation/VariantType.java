@@ -88,6 +88,7 @@ public enum VariantType {
 	/** variant is a structural inversion variant &gt;=1000bp */
 	SV_INVERSION;
 
+	// TODO(holtgrew): make this non-static
 	/**
 	 * The preference level for annotations is
 	 * <OL>
