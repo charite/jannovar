@@ -1,6 +1,7 @@
 package jannovar;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
 
@@ -61,7 +62,7 @@ public final class JannovarOptions {
 	// Configuration for the annotate-position command
 
 	/** chromosomal position and a change, e.g. "chr1:12345C>A" */
-	public String chromosomalChange = null;
+	public ArrayList<String> chromosomalChanges = new ArrayList<String>();
 
 	/**
 	 * The command that is to be executed.

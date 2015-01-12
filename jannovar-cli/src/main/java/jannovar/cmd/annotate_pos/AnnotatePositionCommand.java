@@ -43,41 +43,44 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	 */
 	@Override
 	public void run() throws JannovarException {
+		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
-		// Parse the chromosomal change string into a GenomeChange object.
-		System.out.println("input: " + options.chromosomalChange);
-		final GenomeChange genomeChange = parseGenomeChange(options.chromosomalChange);
+		for (String chromosomalChange : options.chromosomalChanges) {
+			// Parse the chromosomal change string into a GenomeChange object.
+			System.out.println("input: " + chromosomalChange);
+			final GenomeChange genomeChange = parseGenomeChange(chromosomalChange);
 
-		// Construct VariantAnnotator for building the variant annotations.
-		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
-		final AnnotationList annoList = annotator.buildAnnotationList(genomeChange);
-		if (annoList == null) {
-			String e = String.format("No annotations found for variant %s", options.chromosomalChange);
-			throw new AnnotationException(e);
+			// Construct VariantAnnotator for building the variant annotations.
+			final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
+			final AnnotationList annoList = annotator.buildAnnotationList(genomeChange);
+			if (annoList == null) {
+				String e = String.format("No annotations found for variant %s", chromosomalChange);
+				throw new AnnotationException(e);
+			}
+
+			// Obtain first or all functional annotation(s) and effect(s).
+			final String annotation;
+			final String effect;
+			AnnotationListTextGenerator textGenerator;
+			if (options.showAll)
+				textGenerator = new AllAnnotationListTextGenerator(annoList);
+			else
+				textGenerator = new BestAnnotationListTextGenerator(annoList);
+			annotation = textGenerator.buildHGVSText();
+			effect = textGenerator.buildEffectText();
+
+			System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
 		}
-
-		// Obtain first or all functional annotation(s) and effect(s).
-		final String annotation;
-		final String effect;
-		AnnotationListTextGenerator textGenerator;
-		if (options.showAll)
-			textGenerator = new AllAnnotationListTextGenerator(annoList);
-		else
-			textGenerator = new BestAnnotationListTextGenerator(annoList);
-		annotation = textGenerator.buildHGVSText();
-		effect = textGenerator.buildEffectText();
-
-		System.out.println(String.format("EFFECT=%s;HGVS=%s", effect, annotation));
 	}
 
 	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
-		Matcher match = pat.matcher(options.chromosomalChange);
+		Matcher match = pat.matcher(changeStr);
 
 		if (!match.matches() | match.groupCount() != 4) {
 			System.err
-					.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
+			.println("[ERROR] Input string for the chromosomal change does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 
@@ -91,7 +94,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);

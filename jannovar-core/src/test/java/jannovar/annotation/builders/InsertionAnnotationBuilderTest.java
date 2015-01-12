@@ -1404,4 +1404,28 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(VariantType.NON_FS_DUPLICATION, annotation1.varType);
 	}
 
+	// The following variant from the clinvar project caused problems against hg19/ucsc: chr3:37081782:>TAAG
+	@Test
+	public void testRealWorldCase_uc010hgj_1() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc010hgj.1	chr3	+	37053501	37081785	37067163	37081783	4	37053501,37067127,37070274,37081676,	37053590,37067498,37070423,37081785,	Q0ZAJ5	uc010hgj.1");
+		this.builderForward
+		.setSequence("caaggagagacagtagctgatgttaggacactacccaatgcctcaaccgtggacaatattcgctccatctttggaaatgctgttagtcgactttgctaccaggacttgctggcccctctggggagatggttaaatccacaacaagtctgacctcgtcttctacttctggaagtagtgataaggtctatgcccaccagatggttcgtacagattcccgggaacagaagcttgatgcatttctgcagcctctgagcaaacccctgtccagtcagccccaggccattgtcacagaggataagacagatatttctagtggcagggctaggcagcaagatgaggagatgcttgaactcccagcccctgctgaagtggctgccaaaaatcagagcttggagggggatacaacaaaggggacttcagaaatgtcagagaagagaggacctacttccagcaaccccagaaagagacatcgggaagattctgatgtggaaatggtggaagatgattcccgaaaggaaatgactgcagcttgtaccccccggagaaggatcattaacctcactagtgttttgagtctccaggaagaaattaatgagcagggacatgaggttctccgggagatgttgcataaccactccttcgtgggctgtgtgaatcctcagtgggccttggcacagcatcaaaccaagttataccttctcaacaccaccaagcttag"
+				.toUpperCase());
+		this.builderForward.setGeneSymbol("Q0ZAJ5");
+		this.infoForward = builderForward.build();
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 37081781, PositionType.ZERO_BASED),
+				"", "TAAG");
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		// Mutalyzer: NM_001258274.1(MLH1_v001):c.940_941insTAAG NM_001258274.1(MLH1_i001):p.(Glu316*)
+		//
+		// The UCSC transcript DNA sequence is bogus here.
+		Assert.assertEquals("uc010hgj.1:exon4:c.590_591insAAGT:p.Leu197LeuSer*", annotation1.hgvsDescription);
+		Assert.assertEquals(VariantType.STOPGAIN, annotation1.varType);
+	}
+
 }
