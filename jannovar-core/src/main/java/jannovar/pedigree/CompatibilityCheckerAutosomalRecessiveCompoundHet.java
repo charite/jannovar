@@ -3,9 +3,8 @@ package jannovar.pedigree;
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
-// TODO(holtgrew): Besides the check for heterozygous, the code also checks for unaffectedsAreNotHomozygousALT which is not documents.
+// TODO(holtgrew): Review this with Nick and Max.
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
@@ -13,13 +12,7 @@ import com.google.common.collect.ImmutableSet;
  *
  * <h2>Compatibility Check</h2>
  *
- * It first checks whether there is a homozygous variant that is compatible with autosomal recessive. If there is none,
- * it checks for compound heterozygous variants. This is a little complicated.
- *
- * The code first checks whether there is a variant that is heterozygous in the affected and heterozygous in one, but
- * not both, of the parents. All such variants are stored. If there are such variants, then it checks whether the
- * maternal heterozygous mutations are compatible with the paternal heterozygous mutations, and it returns all variants
- * for which there are compatible pairs.
+ * In the case of a single individual, we require at least two heterozygous genotype calls.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -33,24 +26,12 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 	/** the genotype call list to use for the checking */
 	public final GenotypeList list;
 
-	/** decorator for getting unaffected individuals and such from the pedigree */
-	private final PedigreeQueryDecorator queryDecorator;
-
-	/** index of the father in the pedigree, -1 if none */
-	private final int fatherIdx;
-
-	/** index of the one mother in the pedigree, -1 if none */
-	private final int motherIdx;
-
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
 	 * The {@link GenotypeList} object passed to the constructor is expected to represent all of the variants found in a
 	 * certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented by the
 	 * {@link GenotypeList} must be in the same order as the list of individuals contained in this pedigree.
-	 *
-	 * Also, at most two parents are allowed when checking for compatibility for autosomal recessive compound
-	 * hererozygous mode of inheritance.
 	 *
 	 * @param pedigree
 	 *            the {@link Pedigree} to use for the initialize
@@ -70,26 +51,6 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 
 		this.pedigree = pedigree;
 		this.list = list;
-
-		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
-		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
-		if (parentNames.size() > 2)
-			throw new CompatibilityCheckerException("Only two parents are allowed when checking for autosomal "
-					+ "recessive compound heterozygous mode of inheritance.");
-
-		// get father and mother idx in pedigree
-		int fatherIdx = -1, motherIdx = -1; // indexes of the parents
-		for (String name : parentNames) {
-			Pedigree.IndexedPerson indexedPerson = pedigree.nameToMember.get(name);
-			if (indexedPerson == null)
-				throw new RuntimeException("Unknown member, should never occur here!");
-			else if (indexedPerson.person.sex == Sex.MALE)
-				fatherIdx = indexedPerson.idx;
-			else if (indexedPerson.person.sex == Sex.FEMALE)
-				motherIdx = indexedPerson.idx;
-		}
-		this.fatherIdx = fatherIdx;
-		this.motherIdx = motherIdx;
 	}
 
 	/**
@@ -99,13 +60,6 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public boolean run() throws CompatibilityCheckerException {
-		// First check whether the pedigree and genotype calls are compatible with autosomal recessive mode of
-		// inheritance.
-		// TODO(holtgrew): Really desired here? Was not in Nick's original code but in the documentation.
-		if (new CompatibilityCheckerAutosomalRecessive(pedigree, list).run())
-			return true;
-
-		// Then check the compound case.
 		if (pedigree.members.size() == 1)
 			return runSingleSampleCase();
 		else
@@ -120,65 +74,105 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 		return (numHet > 1);
 	}
 
-	private boolean runMultiSampleCase() {
-		ArrayList<ImmutableList<Genotype>> paternal = new ArrayList<ImmutableList<Genotype>>();
-		ArrayList<ImmutableList<Genotype>> maternal = new ArrayList<ImmutableList<Genotype>>();
+	private class Candidate {
+		public final ImmutableList<Genotype> paternal;
+		public final ImmutableList<Genotype> maternal;
 
-		// Collect genotype call lists that are heterozygous in in the affected and heterozygous in exactly one parent.
-		for (ImmutableList<Genotype> gtList : list.calls) {
-			if (affectedsAreHeterozygous(gtList) && onlyOneParentIsHeterozygous(gtList)
-					&& unaffectedsAreNotHomozygousALT(gtList)) {
-				if (isHeterozygous(gtList, fatherIdx))
-					paternal.add(gtList);
-				else if (isHeterozygous(gtList, motherIdx))
-					maternal.add(gtList);
-				else
-					throw new RuntimeException("Neither mother nor father are heterozygous with at least one "
-							+ "parent being heterozygous.");
-			}
+		public Candidate(ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
+			this.paternal = paternal;
+			this.maternal = maternal;
 		}
+	}
 
-		// If we reach here, we have a pontentially empty list of {@link Genotype} calls that are heterozygous in the
-		// father or the mother. If there is a combination of maternal and paternal genotypes that could be a valid
-		// compount heterozygous mutation, then return true.
-		for (ImmutableList<Genotype> patGTList : paternal)
-			for (ImmutableList<Genotype> matGTList : maternal)
-				if (isValidCompoundHet(patGTList, matGTList))
-					return true;
+	private boolean runMultiSampleCase() {
+		// First, collect candidate genotype call lists from trios around affected individuals.
+		ArrayList<Candidate> candidates = collectTrioCandidates();
 
+		// Then, check the candidates for all trios around affected individuals.
+		for (Candidate c : candidates)
+			if (isCompatibleWithTriosAroundAffected(c))
+				return true;
 		return false;
 	}
 
-	private boolean isValidCompoundHet(ImmutableList<Genotype> patGTList, ImmutableList<Genotype> matGTList) {
-		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
-			if ((entry.person.disease == Disease.UNAFFECTED) && (patGTList.get(entry.idx) == Genotype.HETEROZYGOUS)
-					&& (matGTList.get(entry.idx) == Genotype.HETEROZYGOUS))
-				return false;
-		return true;
+	private ArrayList<Candidate> collectTrioCandidates() {
+		ArrayList<Candidate> result = new ArrayList<Candidate>();
+
+		int childIdx = 0;
+		for (Person p : pedigree.members) {
+			if (p.disease == Disease.AFFECTED && (p.father != null || p.mother != null)) {
+				ArrayList<ImmutableList<Genotype>> paternal = new ArrayList<ImmutableList<Genotype>>();
+				ArrayList<ImmutableList<Genotype>> maternal = new ArrayList<ImmutableList<Genotype>>();
+
+				// collect candidates towards the paternal side (heterozygous or not observed in child and father)
+				final int fatherIdx = (p.father == null) ? -1 : pedigree.nameToMember.get(p.father.name).idx;
+				for (ImmutableList<Genotype> lst : list.calls)
+					if ((lst.get(childIdx) == Genotype.HETEROZYGOUS || lst.get(childIdx) == Genotype.NOT_OBSERVED)
+							&& (fatherIdx == -1 || lst.get(fatherIdx) == Genotype.HETEROZYGOUS || lst.get(fatherIdx) == Genotype.NOT_OBSERVED))
+						paternal.add(lst);
+				// collect candidates towards the paternal side (heterozygous or not observed in child and mother)
+				final int motherIdx = (p.mother == null) ? -1 : pedigree.nameToMember.get(p.mother.name).idx;
+				for (ImmutableList<Genotype> lst : list.calls)
+					if ((lst.get(childIdx) == Genotype.HETEROZYGOUS || lst.get(childIdx) == Genotype.NOT_OBSERVED)
+							&& (motherIdx == -1 || lst.get(motherIdx) == Genotype.HETEROZYGOUS || lst.get(motherIdx) == Genotype.NOT_OBSERVED))
+						maternal.add(lst);
+
+				// combine compatible paternal and maternal heterozygous variants
+				for (ImmutableList<Genotype> pat : paternal)
+					for (ImmutableList<Genotype> mat : maternal) {
+						if (pat != mat)
+							continue; // exclude if variants are identical
+						if (pat.get(childIdx) == Genotype.NOT_OBSERVED
+								&& (fatherIdx == -1 || pat.get(fatherIdx) == Genotype.NOT_OBSERVED)
+								&& (motherIdx == -1 || pat.get(motherIdx) == Genotype.NOT_OBSERVED))
+							continue; // exclude if not observed in all from paternal
+						if (mat.get(childIdx) == Genotype.NOT_OBSERVED
+								&& (fatherIdx == -1 || mat.get(fatherIdx) == Genotype.NOT_OBSERVED)
+								&& (motherIdx == -1 || mat.get(motherIdx) == Genotype.NOT_OBSERVED))
+							continue; // exclude if not observed in all from maternal
+						result.add(new Candidate(pat, mat));
+					}
+
+			}
+			childIdx++;
+		}
+
+		return result;
 	}
 
-	private boolean isHeterozygous(ImmutableList<Genotype> gtList, int parentIdx) {
-		if (parentIdx == -1)
-			return false;
-		else
-			return (gtList.get(parentIdx) == Genotype.HETEROZYGOUS);
-	}
+	private boolean isCompatibleWithTriosAroundAffected(Candidate c) {
+		int childIdx = 0;
+		for (Person p : pedigree.members) {
+			if (p.disease == Disease.AFFECTED) {
+				// none of the candidate variant call lists may be homozygous in the index
+				if (c.paternal != null) {
+					final Genotype pGT = c.paternal.get(childIdx);
+					if (pGT != Genotype.HOMOZYGOUS_ALT && pGT != Genotype.HOMOZYGOUS_REF)
+						return false;
+				}
+				if (c.maternal != null) {
+					final Genotype mGT = c.maternal.get(childIdx);
+					if (mGT != Genotype.HOMOZYGOUS_ALT && mGT != Genotype.HOMOZYGOUS_REF)
+						return false;
+				}
 
-	private boolean unaffectedsAreNotHomozygousALT(ImmutableList<Genotype> gtList) {
-		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
-			if (entry.person.disease == Disease.UNAFFECTED && gtList.get(entry.idx) == Genotype.HOMOZYGOUS_ALT)
-				return false;
-		return true;
-	}
+				// the paternal variant may not be homozygous in the father of p, if any
+				if (c.paternal != null && p.father != null) {
+					final Genotype mGT = c.paternal.get(pedigree.nameToMember.get(p.father.name).idx);
+					if (mGT != Genotype.HOMOZYGOUS_ALT && mGT != Genotype.HOMOZYGOUS_REF)
+						return false;
+				}
 
-	private boolean onlyOneParentIsHeterozygous(ImmutableList<Genotype> gtList) {
-		return (isHeterozygous(gtList, motherIdx) ^ isHeterozygous(gtList, fatherIdx));
-	}
+				// the maternal variant may not be homozygous in the mother of p, if any
+				if (c.maternal != null && p.mother != null) {
+					final Genotype mGT = c.maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
+					if (mGT != Genotype.HOMOZYGOUS_ALT && mGT != Genotype.HOMOZYGOUS_REF)
+						return false;
+				}
+			}
+			childIdx++;
+		}
 
-	private boolean affectedsAreHeterozygous(ImmutableList<Genotype> gtList) {
-		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
-			if (entry.person.disease == Disease.AFFECTED && gtList.get(entry.idx) != Genotype.HETEROZYGOUS)
-				return false;
 		return true;
 	}
 

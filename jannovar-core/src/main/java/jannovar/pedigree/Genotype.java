@@ -10,13 +10,7 @@ package jannovar.pedigree;
  * and pedigree structure.
  *
  * Note that the constant {@link #NOT_OBSERVED} refers to <tt>./.</tt> in a VCF file with multiple samples means a call
- * cannot be made for the sample at this given locus (e.g., because there were nor reads). The constant {@link #ERROR}
- * is used here to refer to some error condition and actually should never be used at all if the Java code performs
- * correctly.
- *
- * The constant {@link #UNINITIALIZED} is used to indicate that a software object has been constructed but not been
- * initialized by parsing. Again, this should actually never happen since various Exceptions will be thrown if there is
- * a parse error. But the constants are kept for now for debugging's sake.
+ * cannot be made for the sample at this given locus (e.g., because there were nor reads).
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
@@ -28,9 +22,5 @@ public enum Genotype {
 	/** <tt>0/1</tt> in the VCF genotype field, heterozygous sequence. */
 	HETEROZYGOUS,
 	/** <tt>./.</tt> in the VCF genotype field (not observed, this is usually encoutered in multisample VCF files). */
-	NOT_OBSERVED,
-	/** Indicates some error in parsing */
-	ERROR,
-	/** Not yet initialized field */
-	UNINITIALIZED;
+	NOT_OBSERVED;
 }
