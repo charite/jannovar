@@ -38,7 +38,7 @@ public final class JannovarDataSerializer {
 	 *             on problems with the serialization
 	 */
 	public void save(JannovarData data) throws SerializationException {
-		if (data == null || data.transcriptInfos.isEmpty() || data.refDict.contigID.isEmpty())
+		if (data == null || data.refDict.contigID.isEmpty())
 			throw new SerializationException("Attempting to serialize empty data set");
 
 		// This is waiting for Java 7 to be improved. Also see: http://stackoverflow.com/questions/4092914

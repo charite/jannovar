@@ -6,7 +6,7 @@ import jannovar.io.JannovarDataSerializer;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
 
-import java.util.HashMap;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Base class for commands needing annotation data.
@@ -19,7 +19,7 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	protected ReferenceDictionary refDict = null;
 
 	/** Map of Chromosomes, used in the annotation. */
-	protected HashMap<Integer, Chromosome> chromosomeMap = null;
+	protected ImmutableMap<Integer, Chromosome> chromosomeMap = null;
 
 	public JannovarAnnotationCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		super(argv);
@@ -42,7 +42,7 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 		final long startTime = System.nanoTime();
 		JannovarData data = new JannovarDataSerializer(this.options.dataFile).load();
 		this.refDict = data.refDict;
-		this.chromosomeMap = Chromosome.constructChromosomeMapWithIntervalTree(data);
+		this.chromosomeMap = data.chromosomes;
 		final long endTime = System.nanoTime();
 		System.err.println(String.format("Deserialization took %.2f sec.",
 				(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));

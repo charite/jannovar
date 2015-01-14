@@ -117,8 +117,8 @@ public final class Jannovar {
 		System.err.println("         annotate-pos  functional annotation of genomic change");
 		System.err.println("");
 		System.err.println("Example: java -jar jannovar.jar download hg19/ucsc");
-		System.err.println("         java -jar jannovar.jar annotate -D data/hg19_ucsc.ser variants.vcf");
-		System.err.println("         java -jar jannovar.jar annotate-pos -D data/hg19_ucsc.ser 'chr1:12345C>A'");
+		System.err.println("         java -jar jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
+		System.err.println("         java -jar jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
 		System.err.println("");
 	}
 

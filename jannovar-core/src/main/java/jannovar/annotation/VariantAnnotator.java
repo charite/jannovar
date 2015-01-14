@@ -12,7 +12,8 @@ import jannovar.reference.PositionType;
 import jannovar.reference.TranscriptInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import com.google.common.collect.ImmutableMap;
 
 // TODO(holtgrem): We should directly pass in a JannovarData object after adding the interval trees to it. Then, this should be fine.
 
@@ -32,7 +33,7 @@ public final class VariantAnnotator {
 	final private ReferenceDictionary refDict;
 
 	/** {@link Chromosome}s with their {@link TranscriptInfo} objects. */
-	final private HashMap<Integer, Chromosome> chromosomeMap;
+	final private ImmutableMap<Integer, Chromosome> chromosomeMap;
 
 	/**
 	 * This object will be used to prioritize the annotations and to choose the one(s) to report. For instance, if we
@@ -52,7 +53,7 @@ public final class VariantAnnotator {
 	 * @param chromosomeMap
 	 *            chromosome map to use for the annotator.
 	 */
-	public VariantAnnotator(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap) {
+	public VariantAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap) {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 	}

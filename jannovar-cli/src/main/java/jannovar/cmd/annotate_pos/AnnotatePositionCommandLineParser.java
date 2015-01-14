@@ -48,7 +48,7 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 				.append("Use this command to annotate a chromosomal change.\n\n")
 				.append("Usage: java -jar jannovar.jar annotate-pos [options] <database.ser> <CHANGE>\n\n").toString();
 		final String FOOTER = new StringBuilder().append(
-				"\n\nExample: java -jar jannovar.jar annotate data/hg19_ucsc.ser 'chr1:12345C>A'\n\n").toString();
+				"\n\nExample: java -jar jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'\n\n").toString();
 
 		System.err.print(HEADER);
 
