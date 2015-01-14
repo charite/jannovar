@@ -1,22 +1,20 @@
-.. Jannovar documentation master file, created by
-   sphinx-quickstart on Wed Jan 14 15:41:05 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Jannovar Manual
+===============
 
-Welcome to Jannovar's documentation!
-====================================
+Jannovar is a Java-based program and library for the functional annotation of VCF files.
 
-Contents:
+.. note:: TODO: describe writing your own INI file
+.. note:: TODO: port over stuff from old Tutorial
+.. note:: TODO: describe proxy settings
+.. note:: TODO: describe java memory settings
 
 .. toctree::
    :maxdepth: 2
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   quickstart
+   install
+   download
+   annotate_vcf
+   annotate_pos
+   license
 
