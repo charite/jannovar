@@ -1,8 +1,8 @@
-package jannovar.reference;
+package jannovar.io;
 
 import jannovar.impl.intervals.Interval;
 import jannovar.impl.intervals.IntervalArray;
-import jannovar.io.ReferenceDictionary;
+import jannovar.reference.TranscriptInfo;
 
 import java.io.Serializable;
 

@@ -7,7 +7,7 @@ package jannovar.annotation;
  * meanings, but UTR53 means a variant that is in the 3' UTR of one transcript and the 5' UTR of another transcript.
  *
  * Note that the an intergenic variant is considered UPSTREAM or DOWNSTREAM if it is within 1000 nucleotides of a gene,
- * otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in {@link jannovar.reference.Chromosome
+ * otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in {@link jannovar.io.Chromosome
  * Chromosome}. Note that this class implements the assignment of a priority level to the variant classes. See the
  * document for the class {@link jannovar.annotation.AnnotationCollector AnnotatedVariantFactory} for details.
  *

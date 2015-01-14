@@ -1,10 +1,10 @@
 package jannovar.cmd;
 
 import jannovar.JannovarException;
+import jannovar.io.Chromosome;
 import jannovar.io.JannovarData;
 import jannovar.io.JannovarDataSerializer;
 import jannovar.io.ReferenceDictionary;
-import jannovar.reference.Chromosome;
 
 import com.google.common.collect.ImmutableMap;
 

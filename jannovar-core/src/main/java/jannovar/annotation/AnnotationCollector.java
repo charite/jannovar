@@ -1,6 +1,6 @@
 package jannovar.annotation;
 
-import jannovar.reference.Chromosome;
+import jannovar.io.Chromosome;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
- * a given variant. The {@link jannovar.reference.Chromosome Chromosome} objects each use an instance of this class to
+ * a given variant. The {@link jannovar.io.Chromosome Chromosome} objects each use an instance of this class to
  * assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least one
  * {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
@@ -36,7 +36,7 @@ import java.util.HashSet;
  * Note that the class of <B>exonic</B> and <B>splicing</B> mutations as defined here comprises the class of
  * "obvious candidates" for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
  *
- * One object of this class is created for each variant we want to annotate. The {@link jannovar.reference.Chromosome
+ * One object of this class is created for each variant we want to annotate. The {@link jannovar.io.Chromosome
  * Chromosome} class goes through a list of genes in the vicinity of the variant and adds one {@link Annotation} object
  * for each gene. These are essentially candidates for the actual correct annotation of the variant, but we can only
  * decide what the correct annotation is once we have seen enough candidates. Therefore, once we have gone through the
@@ -177,7 +177,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * After the {@link jannovar.reference.Chromosome Chromosome} object has added annotations for all of the
+	 * After the {@link jannovar.io.Chromosome Chromosome} object has added annotations for all of the
 	 * transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if the
 	 * variant does not intersect with any transcript), it calls this function to return the list of annotations in form
 	 * of an {@link jannovar.annotation.AnnotationList AnnotationList} object.
@@ -214,7 +214,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add a non-coding RNA exon
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to add a non-coding RNA exon
 	 * variant. From the program logic, only one such Annotation should be added per variant.
 	 *
 	 * @param ann
@@ -227,7 +227,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add a 5' UTR variant.
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to add a 5' UTR variant.
 	 *
 	 * @param ann
 	 *            A 5' UTR annotation object.
@@ -240,7 +240,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add a 3' UTR variant.
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to add a 3' UTR variant.
 	 *
 	 * @param ann
 	 *            A 3' UTR annotation object.
@@ -253,7 +253,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an Annotation for a
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to register an Annotation for a
 	 * variant that is located between two genes. From the program logic, only one such Annotation should be added per
 	 * variant.
 	 *
@@ -267,7 +267,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an Annotation for a
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to register an Annotation for a
 	 * variant that affects the coding sequence of an exon. Many different variant types are summarized (NONSYNONYMOUS,
 	 * DELETION etc.).
 	 *
@@ -290,7 +290,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an annotation for a
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to register an annotation for a
 	 * noncoding RNA transcript that is affected by a splice mutation.
 	 *
 	 * @param ann
@@ -304,7 +304,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to add an annotation for an
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to add an annotation for an
 	 * intronic variant. Note that if the same intronic annotation already exists, nothing is done, i.e., this method
 	 * avoids duplicate annotations.
 	 *
@@ -330,7 +330,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link jannovar.reference.Chromosome Chromosome} class calls this function to register an annotation for a
+	 * The {@link jannovar.io.Chromosome Chromosome} class calls this function to register an annotation for a
 	 * transcript inside a structural variant.
 	 *
 	 * @param ann

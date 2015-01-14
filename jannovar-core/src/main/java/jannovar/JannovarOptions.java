@@ -68,7 +68,7 @@ public final class JannovarOptions {
 	 * The command that is to be executed.
 	 */
 	public enum Command {
-		DOWNLOAD, ANNOTATE_VCF, ANNOTATE_POSITION
+		DOWNLOAD, ANNOTATE_VCF, ANNOTATE_POSITION, DB_LIST
 	}
 
 	/**
@@ -94,6 +94,9 @@ public final class JannovarOptions {
 			System.err.println("changes: " + chromosomalChanges);
 			System.err.println("showAll: " + showAll);
 			System.err.println("jannovarFormat: " + jannovarFormat);
+		} else if (command == Command.DB_LIST) {
+			System.err.println("dataSourceFiles: " + dataSourceFiles);
 		}
 	}
+
 }

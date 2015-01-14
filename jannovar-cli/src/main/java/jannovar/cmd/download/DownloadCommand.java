@@ -51,4 +51,5 @@ public final class DownloadCommand extends JannovarCommand {
 			throw new CommandLineParsingException(e.getMessage());
 		}
 	}
+
 }

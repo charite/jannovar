@@ -2,7 +2,6 @@ package jannovar.io;
 
 import jannovar.Immutable;
 import jannovar.impl.intervals.IntervalArray;
-import jannovar.reference.Chromosome;
 import jannovar.reference.TranscriptInfo;
 import jannovar.reference.TranscriptIntervalEndExtractor;
 
