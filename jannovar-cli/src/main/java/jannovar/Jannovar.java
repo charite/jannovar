@@ -6,6 +6,7 @@ import jannovar.cmd.HelpRequestedException;
 import jannovar.cmd.JannovarCommand;
 import jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
+import jannovar.cmd.db_list.DatabaseListCommand;
 import jannovar.cmd.download.DownloadCommand;
 import jannovar.reference.TranscriptInfo;
 
@@ -77,6 +78,8 @@ public final class Jannovar {
 		try {
 			if (argv[0].equals("download"))
 				cmd = new DownloadCommand(argv);
+			else if (argv[0].equals("db-list"))
+				cmd = new DatabaseListCommand(argv);
 			else if (argv[0].equals("annotate"))
 				cmd = new AnnotateVCFCommand(argv);
 			else if (argv[0].equals("annotate-pos"))
@@ -113,10 +116,12 @@ public final class Jannovar {
 		System.err.println("Usage: java -jar jannovar.jar <command> [options]");
 		System.err.println("");
 		System.err.println("Command: download      download transcript database");
+		System.err.println("         db-list       list downloadable databases");
 		System.err.println("         annotate      functional annotation of VCF files");
 		System.err.println("         annotate-pos  functional annotation of genomic change");
 		System.err.println("");
 		System.err.println("Example: java -jar jannovar.jar download hg19/ucsc");
+		System.err.println("         java -jar jannovar.jar db-list");
 		System.err.println("         java -jar jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
 		System.err.println("         java -jar jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
 		System.err.println("");

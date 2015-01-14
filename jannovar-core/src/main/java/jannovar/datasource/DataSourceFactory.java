@@ -69,6 +69,18 @@ final public class DataSourceFactory {
 	}
 
 	/**
+	 * @return list of data source names
+	 */
+	public ImmutableList<String> getNames() {
+		ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
+		for (Ini ini : inis)
+			for (String name : ini.keySet())
+				if (ini.get(name).get("type") != null)
+					builder.add(name);
+		return builder.build();
+	}
+
+	/**
 	 * Construct {@link DataSource}
 	 *
 	 * @param name

@@ -170,4 +170,5 @@ public final class DownloadCommandLineParser {
 
 		System.err.print(FOOTER);
 	}
+
 }
