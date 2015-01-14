@@ -65,8 +65,7 @@ public final class ReferenceDictParser {
 		// mouse) contain mappings from chromosomes to other contig names. The older files are called "chr_NC_gi" and
 		// contain a mapping from chromosome name to sequence accession number, gi number, potentially assembly unit and
 		// then the assembly name. For the latter case, we allow filtering to lines where the last field matches the
-		// configuration entry "chrToAccessions.filterLast".
-		// TODO(holtgrem): rename filterLast to matchLast?
+		// configuration entry "chrToAccessions.matchLast".
 		// TODO(holtgrem): improve documentation for the chrToAccessions.* keys in the default_sources.ini file.
 		ImmutableList<ImmutableList<String>> accessionLines = loadTSVFile(chrAccessionsPath);
 		String chrToAccessionsFormat = iniSection.fetch("chrToAccessions.format");
@@ -86,7 +85,7 @@ public final class ReferenceDictParser {
 				chrID += 1;
 			}
 		} else { // old chr_NC_gi format
-			final String filterPattern = iniSection.fetch("chrToAccessions.filterLast");
+			final String filterPattern = iniSection.fetch("chrToAccessions.matchLast");
 			final int CA_CHROMOSOME = 0;
 			final int CA_REFSEQ_ACCESSION = 1;
 			for (ImmutableList<String> line : accessionLines) {
