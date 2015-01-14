@@ -19,3 +19,5 @@ cov-int*
 *.vcf
 *.vcf.idx
 data
+# built manual
+manual/_build
