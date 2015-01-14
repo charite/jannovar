@@ -25,7 +25,8 @@ import jannovar.reference.PositionType;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Annotate variant in {@link VariantContext} and write out through HTSJDK (i.e. in VCF/BCF format).
@@ -48,7 +49,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	VariantContextWriter out = null;
 
 	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFFileReader reader,
-			HashMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options) {
+			ImmutableMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options) {
 		this.refDict = refDict;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
 		this.vcfPath = vcfPath;

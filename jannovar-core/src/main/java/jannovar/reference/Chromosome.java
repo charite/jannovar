@@ -2,10 +2,9 @@ package jannovar.reference;
 
 import jannovar.impl.intervals.Interval;
 import jannovar.impl.intervals.IntervalArray;
-import jannovar.io.JannovarData;
+import jannovar.io.ReferenceDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.Serializable;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
@@ -23,41 +22,47 @@ import java.util.HashMap;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class Chromosome {
+public final class Chromosome implements Serializable {
 
-	// TODO(holtgrem): Add ReferenceDictionary
+	/** serial version ID */
+	private static final long serialVersionUID = 1L;
+
+	/** reference dictionary to use */
+	public final ReferenceDictionary refDict;
 
 	/**
 	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
 	 * way of dealing with scaffolds etc.
 	 */
-	private final int chromosome;
+	public final int chrID;
 
 	/**
 	 * An {@link IntervalArray} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
 	 * chromosome.
 	 */
-	private IntervalArray<TranscriptInfo> tmIntervalTree = null;
+	public final IntervalArray<TranscriptInfo> tmIntervalTree;
 
 	/**
 	 * Initialize object.
 	 *
-	 * @param c
+	 * @param refDict
+	 *            the {@link ReferenceDictionary} to use
+	 * @param chrID
 	 *            the chromosome
 	 * @param tmIntervalTree
 	 *            An interval tree with all transcripts on this chromosome.
 	 */
-	public Chromosome(int c, IntervalArray<TranscriptInfo> tmIntervalTree) {
-		this.chromosome = c;
+	public Chromosome(ReferenceDictionary refDict, int chrID, IntervalArray<TranscriptInfo> tmIntervalTree) {
+		this.refDict = refDict;
+		this.chrID = chrID;
 		this.tmIntervalTree = tmIntervalTree;
 	}
 
 	/**
-	 * @return String representation of name of chromosome, e.g., chr2
+	 * @return String representation of name of chromosome, e.g., <code>"chr2"</code>
 	 */
 	public String getChromosomeName() {
-		// TODO(holtgrem): Wrong for chrM, chrX etc, use ReferenceDictionary here
-		return String.format("chr%d", chromosome);
+		return refDict.contigName.get(chrID);
 	}
 
 	/**
@@ -65,39 +70,6 @@ public final class Chromosome {
 	 */
 	public int getNumberOfGenes() {
 		return this.tmIntervalTree.size();
-	}
-
-	/**
-	 * This function constructs a HashMap<Byte,Chromosome> map of Chromosome objects in which the {@link TranscriptInfo}
-	 * objects are entered into an {@link IntervalArray} for the appropriate Chromosome.
-	 *
-	 * @param data
-	 *            the deserialize data object
-	 * @return a Map of Chromosome objects with all 22+2+M chromosomes.
-	 */
-	public static HashMap<Integer, Chromosome> constructChromosomeMapWithIntervalTree(JannovarData data) {
-		HashMap<Integer, Chromosome> chromosomeMap = new HashMap<Integer, Chromosome>();
-		/* 0. create chromosome map entries */
-		HashMap<Integer, ArrayList<TranscriptInfo>> chrMap = new HashMap<Integer, ArrayList<TranscriptInfo>>();
-		for (Integer i : data.refDict.contigName.keySet())
-			chrMap.put(i, new ArrayList<TranscriptInfo>());
-
-		/* 1. First sort the TranscriptModel objects by Chromosome. */
-		for (TranscriptInfo tm : data.transcriptInfos) {
-			if (!chrMap.containsKey(tm.getChr()))
-				chrMap.put(tm.getChr(), new ArrayList<TranscriptInfo>());
-
-			ArrayList<TranscriptInfo> lst = chrMap.get(tm.getChr());
-			lst.add(tm);
-		}
-		/* 2. Now construct an Interval Tree for each chromosome and add the lists of Intervals */
-		for (Integer chrom : chrMap.keySet()) {
-			IntervalArray<TranscriptInfo> itree = new IntervalArray<TranscriptInfo>(chrMap.get(chrom),
-					new TranscriptIntervalEndExtractor());
-			Chromosome chr = new Chromosome(chrom, itree);
-			chromosomeMap.put(chrom, chr);
-		}
-		return chromosomeMap;
 	}
 
 	/**

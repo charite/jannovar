@@ -18,7 +18,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Annotate variant in {@link VariantContext} and write out in Jannovar format.
@@ -40,7 +41,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** current line */
 	int currentLine = 0;
 
-	public AnnotatedJannovarWriter(ReferenceDictionary refDict, HashMap<Integer, Chromosome> chromosomeMap,
+	public AnnotatedJannovarWriter(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap,
 			String vcfPath, JannovarOptions options) throws IOException {
 		this.refDict = refDict;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
