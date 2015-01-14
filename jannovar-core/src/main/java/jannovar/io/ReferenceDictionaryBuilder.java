@@ -99,7 +99,7 @@ public final class ReferenceDictionaryBuilder {
 	 *            numeric contig ID
 	 */
 	public void putContigID(String name, int id) {
-		if (getContigID("M") != null)
+		if (getContigID(name) != null)
 			return;
 		tmpContigID.put(name, id);
 		contigID.put(name, id);

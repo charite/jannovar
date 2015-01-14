@@ -108,10 +108,15 @@ public final class ReferenceDictParser {
 				if (fields != null) {
 					if (builder.getContigID(fields[0]) == null) {
 						builder.putContigName(chrID, fields[0]);
-						builder.putContigID(fields[0], chrID++);
+						builder.putContigID(fields[0], chrID);
+						if (!fields[0].startsWith("chr"))
+							builder.putContigID("chr" + fields[0], chrID++);
 					}
-					for (int j = 1; j < fields.length; ++j)
+					for (int j = 1; j < fields.length; ++j) {
 						builder.putContigID(fields[j], builder.getContigID(fields[0]));
+						if (!fields[j].startsWith("chr"))
+							builder.putContigID("chr" + fields[j], builder.getContigID(fields[0]));
+					}
 				}
 			}
 
