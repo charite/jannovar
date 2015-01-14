@@ -15,6 +15,7 @@ import jannovar.annotation.AnnotationList;
 import jannovar.annotation.AnnotationListTextGenerator;
 import jannovar.annotation.BestAnnotationListTextGenerator;
 import jannovar.annotation.VariantAnnotator;
+import jannovar.annotation.VariantType;
 import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.Chromosome;
@@ -23,6 +24,7 @@ import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -115,38 +117,71 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		}
 		int chr = boxedInt.intValue();
 
-		// FIXME(mjaeger): We should care about more than just the first alternative allele.
-
 		// Get shortcuts to ref, alt, and position. Note that this is "uncorrected" data, common prefixes etc. are
 		// stripped when constructing the GenomeChange.
-		final String ref = vc.getReference().getBaseString();
-		final String alt = vc.getAlternateAllele(0).getBaseString();
-		final int pos = vc.getStart();
-		// Construct GenomeChange from this and strip common prefixes.
-		final GenomeChange change = new GenomeChange(
-				new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
+		ArrayList<AnnotationList> annoLists = new ArrayList<AnnotationList>();
+		final int altCount = vc.getAlternateAlleles().size();
+		for (int alleleID = 0; alleleID < altCount; ++alleleID) {
+			final String ref = vc.getReference().getBaseString();
+			final String alt = vc.getAlternateAllele(alleleID).getBaseString();
+			final int pos = vc.getStart();
+			// Construct GenomeChange from this and strip common prefixes.
+			final GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', chr, pos,
+					PositionType.ONE_BASED), ref, alt);
 
-		// TODO(holtgrem): better checking of structural variants?
-		if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
-			AnnotationList annoList = annotator.buildAnnotationList(change);
-			if (annoList == null) {
-				String e = String.format("No annotations found for variant %s", vc.toString());
-				throw new AnnotationException(e);
+			// Collect annotation lists for all variants.
+			// TODO(holtgrem): better checking of structural variants?
+			if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
+				AnnotationList annoList = annotator.buildAnnotationList(change);
+				if (annoList == null) {
+					String e = String.format("No annotations found for variant %s", vc.toString());
+					throw new AnnotationException(e);
+				}
+				annoLists.add(annoList);
 			}
-			AnnotationListTextGenerator textGenerator;
-			if (this.options.showAll)
-				textGenerator = new AllAnnotationListTextGenerator(annoList);
-			else
-				textGenerator = new BestAnnotationListTextGenerator(annoList);
+
+			if (this.options.showAll) {
+			}
+
+			// TODO(holtgrem): Find better solution for collecting annotations from more than one variant.
+			StringBuilder effectText = new StringBuilder();
+			StringBuilder hgvsText = new StringBuilder();
+			if (this.options.showAll) {
+				for (AnnotationList annoList : annoLists) {
+					AnnotationListTextGenerator gen = new AllAnnotationListTextGenerator(annoList, alleleID, altCount);
+
+					if (effectText.length() > 0)
+						effectText.append(",");
+					effectText.append(gen.buildEffectText());
+
+					if (hgvsText.length() > 0)
+						hgvsText.append(",");
+					hgvsText.append(gen.buildHGVSText());
+				}
+			} else {
+				AnnotationList bestList = null;  // by pathogenicity
+				for (AnnotationList annoList : annoLists) {
+					if (annoList.entries.isEmpty())
+						continue;
+					if (bestList == null)
+						bestList = annoList;
+					else if (VariantType.priorityLevel(annoList.entries.get(0).varType) < VariantType.priorityLevel(bestList.entries.get(0).varType))
+						bestList = annoList;
+				}
+				if (bestList != null) {
+					AnnotationListTextGenerator gen = new BestAnnotationListTextGenerator(bestList, alleleID, altCount);
+					effectText.append(gen.buildEffectText());
+					hgvsText.append(gen.buildHGVSText());
+				}
+			}
 
 			// add the annotations to the INFO field (third arg allows overwriting)
-			String effectText = textGenerator.buildEffectText();
 			if (effectText != null)
-				vc.getCommonInfo().putAttribute("EFFECT", effectText, true);
-			final String hgvsText = textGenerator.buildHGVSText();
-			if (hgvsText != null)
-				vc.getCommonInfo().putAttribute("HGVS", hgvsText, true);
+				vc.getCommonInfo().putAttribute("EFFECT", effectText.toString(), true);
+			if (hgvsText.length() > 0)
+				vc.getCommonInfo().putAttribute("HGVS", hgvsText.toString(), true);
 		}
+
 
 		// Write out variantContext to out.
 		out.add(vc);

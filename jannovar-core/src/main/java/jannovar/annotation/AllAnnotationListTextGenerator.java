@@ -12,8 +12,8 @@ import jannovar.Immutable;
 @Immutable
 public final class AllAnnotationListTextGenerator extends AnnotationListTextGenerator {
 
-	public AllAnnotationListTextGenerator(AnnotationList annotations) {
-		super(annotations);
+	public AllAnnotationListTextGenerator(AnnotationList annotations, int alleleID, int altCount) {
+		super(annotations, alleleID, altCount);
 	}
 
 	@Override

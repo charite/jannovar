@@ -67,9 +67,9 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			final String effect;
 			AnnotationListTextGenerator textGenerator;
 			if (options.showAll)
-				textGenerator = new AllAnnotationListTextGenerator(annoList);
+				textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
 			else
-				textGenerator = new BestAnnotationListTextGenerator(annoList);
+				textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
 			annotation = textGenerator.buildHGVSText();
 			effect = textGenerator.buildEffectText();
 
