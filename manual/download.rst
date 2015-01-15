@@ -22,7 +22,7 @@ You can view the built-in database names using the ``db-list`` Jannovar command:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli/target/jannovar-cli-0.10.jar db-list
+    # java -jar jannovar-cli-|version|.jar db-list
     [...]
         hg18/refseq_curated
         hg19/ucsc
@@ -37,14 +37,22 @@ For each, Jannovar will download the database files over the network to the dire
 This directory is created if necessary.
 When a to be downloaded file already exists, Jannovar will not attempt to overwrite this file.
 
-.. note:: If you have problems with downloading files and later on building the database fails then you should delete the directory ``data/${source}`` and retry downloading the file.
+.. note::
+
+    If you have problems with downloading files (e.g., because of proxy settings) and later on building the database fails then you should delete the directory ``data/${source}`` and retry downloading the file.
 
 Finally, Jannovar will build a file with the extension ``.ser`` in the directory ``data``, e.g. ``data/hg19_ucsc.ser``.
+
+.. note::
+
+   If you are behind a proxy then you have to pass the appropriate argument to Jannovar download.
+   For most users, adding ``--proxy http://proxy.example.com:8080/`` should suffice.
+   Advanced proxy settings and details are explained in the section :ref:`proxy_settings`
 
 Let us now download the RefSeq and UCSC annotations for human release *hg19*:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli/target/jannovar-cli-0.10.jar download hg19/refseq hg19/ucsc
+    # java -jar jannovar-cli-|version|.jar download hg19/refseq hg19/ucsc
 
 

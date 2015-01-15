@@ -15,11 +15,35 @@ For example, for annotating the ``pfeiffer.vcf`` file in the ``examples`` direct
 
 .. code-block:: console
 
-    # java -jar jannovar-cli/target/jannovar-cli-0.10.jar annotate data/hg19_ucsc.ser examples/pfeiffer.vcf
+    # java -jar jannovar-cli-|version|.jar annotate data/hg19_ucsc.ser examples/pfeiffer.vcf
     [...]
     # ls
     [...]
     pfeiffer.jv.vcf
 
-.. note:: TODO: describe Jannovar format
-.. note:: TODO: describe show-all option
+The first three variant lines of ``pfeiffer.jv.vcf`` will look as follows.:w
+
+.. code-block:: text
+
+      1	866511	rs60722469	C	CCCCT	258.62	PASS	EFFECT=INTRONIC;HGVS=SAMD11:NM_152486.2:c.305+42_305+43insCCCT	GT:AD:DP:GQ:PL	1/1:6,5:11:14.79:300,15,0
+      1	879317	rs7523549	C	T	150.77	PASS	EFFECT=MISSENSE;HGVS=SAMD11:XM_005244727.1:exon9:c.799C>T:p.Arg267Cys	GT:AD:DP:GQ:PL	0/1:14,7:21:99:181,0,367
+      1	879482	.	G	C	484.52	PASS	EFFECT=MISSENSE;HGVS=SAMD11:XM_005244727.1:exon9:c.964G>C:p.Asp322His	GT:AD:DP:GQ:PL	0/1:28,20:48:99:515,0,794
+
+The Show-All Option
+-------------------
+
+By default, Jannovar will only write out one most pathogenic variant as predicted.
+You can use the ``--show-all``/``-a`` option to write out all functional annotations:
+
+.. code-block:: console
+
+    # java -jar jannovar-cli-|version|.jar annotate --show-all data/hg19_refseq.ser examples/pfeiffer.vcf
+
+For example, the first line of ``pfeiffer.jv.vcf`` will look as follows and contain multiple effects and HGVS annotations.
+
+.. code-block:: text
+
+    1	866511	rs60722469	C	CCCCT	258.62	PASS	EFFECT=INTRONIC,INTRONIC,INTRONIC,INTRONIC,INTRONIC,INTRONIC,ncRNA_INTRONIC,ncRNA_INTRONIC;HGVS=SAMD11:NM_152486.2:c.305+42_305+43insCCCT,SAMD11:XM_005244723.1:c.305+42_305+43insCCCT,SAMD11:XM_005244724.1:c.305+42_305+43insCCCT,SAMD11:XM_005244725.1:c.305+42_305+43insCCCT,SAMD11:XM_005244726.1:c.305+42_305+43insCCCT,SAMD11:XM_005244727.1:c.305+42_305+43insCCCT,SAMD11:XR_241028.1:n.661+42_661+43insCCCT,SAMD11:XR_241029.1:n.661+42_661+43insCCCT	GT:AD:DP:GQ:PL	1/1:6,5:11:14.79:300,15,0
+
+
+.. TODO: describe Jannovar format

@@ -3,10 +3,8 @@ Jannovar Manual
 
 Jannovar is a Java-based program and library for the functional annotation of VCF files.
 
-.. note:: TODO: describe writing your own INI file
-.. note:: TODO: port over stuff from old Tutorial
-.. note:: TODO: describe proxy settings
-.. note:: TODO: describe java memory settings
+.. TODO: describe writing your own INI file
+.. TODO: port over stuff from old Tutorial
 
 .. toctree::
    :maxdepth: 2
@@ -14,7 +12,11 @@ Jannovar is a Java-based program and library for the functional annotation of VC
    quickstart
    install
    download
+   proxy
    annotate_vcf
    annotate_pos
+   datasource
+   memory
    license
 
+If you have any problems running Jannovar or find any bugs then please report them on `our GitHub bug tracker <https://github.com/charite/jannovar/issues>`_ or by sending an email to Peter N Robinson <peter.robinson@charite.de>.
