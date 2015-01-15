@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 /**
  * Helper class that allows easy building of HGVS position strings.
@@ -64,13 +65,13 @@ public final class HGVSPositionBuilder {
 
 			if (getCDSRegion().contains(pos)) {
 				// pos lies within the CDS, the easiest case
-				return String.format("%d", tPos.pos - tCDSStartPos.pos + 1);
+				return Integer.toString(tPos.pos - tCDSStartPos.pos + 1);
 			} else if (getCDSRegion().isRightOf(pos)) {
 				// pos lies upstream of the CDS
-				return String.format("-%d", tCDSStartPos.pos - tPos.pos);
+				return StringUtil.concatenate("-", tCDSStartPos.pos - tPos.pos);
 			} else {
 				// pos lies downstream of the CDS
-				return String.format("*%d", tPos.pos - tCDSEndPos.pos);
+				return StringUtil.concatenate("*", tPos.pos - tCDSEndPos.pos);
 			}
 		} catch (ProjectionException e) {
 			throw new Error("Bug: position must lie in CDS at this point. " + e.getMessage());
@@ -98,14 +99,14 @@ public final class HGVSPositionBuilder {
 		String offsetStr = null;
 		if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
 			basePos = exonEndPos.shifted(-1);
-			offsetStr = String.format("+%d", pos.differenceTo(exonEndPos) + 1);
+			offsetStr = StringUtil.concatenate("+", pos.differenceTo(exonEndPos) + 1);
 		} else {
 			basePos = nextExonBeginPos;
-			offsetStr = String.format("-%d", nextExonBeginPos.differenceTo(pos));
+			offsetStr = StringUtil.concatenate("-", nextExonBeginPos.differenceTo(pos));
 		}
 
 		// Get string for the exonic position exonPos and paste together final position string.
-		return String.format("%s%s", getCDNAPosStrForExonPos(basePos), offsetStr);
+		return StringUtil.concatenate(getCDNAPosStrForExonPos(basePos), offsetStr);
 	}
 
 	/**
@@ -123,7 +124,7 @@ public final class HGVSPositionBuilder {
 					PositionType.ZERO_BASED).getGenomeBeginPos());
 			int numBases = transcript.txRegion.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos()
 					.differenceTo(pos);
-			return String.format("-%d", tPos.pos + numBases);
+			return StringUtil.concatenate("-", tPos.pos + numBases);
 		} catch (ProjectionException e) {
 			throw new Error("CDS end position must be translatable to transcript position.");
 		}
@@ -140,7 +141,7 @@ public final class HGVSPositionBuilder {
 		// The downstream position is simply given as "*$count" where $count is the genomic base offset after the CDS
 		// region.
 		int numBases = -getCDSRegion().withPositionType(PositionType.ZERO_BASED).getGenomeEndPos().differenceTo(pos);
-		return String.format("*%d", numBases + 1);
+		return StringUtil.concatenate("*", numBases + 1);
 	}
 
 	/**

@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeChangeNormalizer;
 import jannovar.reference.GenomeInterval;
@@ -237,7 +238,7 @@ abstract class AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		String annoString = String.format("dist=%d", distance());
+		String annoString = StringUtil.concatenate("dist=", distance());
 		if (change.getGenomeInterval().length() == 0) {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
@@ -261,7 +262,7 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(VariantType.INTERGENIC, 0, String.format("dist=%d", distance()), transcript);
+		return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate("dist=", distance()), transcript);
 	}
 
 	/**
@@ -322,7 +323,7 @@ abstract class AnnotationBuilder {
 				return transcript.accession; // no exon information if the deletion spans more than one exon
 		}
 
-		return String.format("%s:exon%d", transcript.accession, exonNum + 1);
+		return StringUtil.concatenate(transcript.accession, ":exon", exonNum + 1);
 	}
 
 	/**
@@ -342,14 +343,14 @@ abstract class AnnotationBuilder {
 		char prefix = transcript.isCoding() ? 'c' : 'n';
 		if (change.getGenomeInterval().length() == 0)
 			// case of zero-base change (insertion)
-			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(lastChangePos),
+			return StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(lastChangePos), "_",
 					posBuilder.getCDNAPosStr(firstChangePos));
 		else if (firstChangePos.equals(lastChangePos))
 			// case of single-base change (SNV)
-			return String.format("%c.%s", prefix, posBuilder.getCDNAPosStr(firstChangePos));
+			return StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(firstChangePos));
 		else
 			// case of multi-base change (deletion, block substitution)
-			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
+			return StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(firstChangePos), "_",
 					posBuilder.getCDNAPosStr(lastChangePos));
 	}
 
