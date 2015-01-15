@@ -51,6 +51,11 @@ public final class DownloadCommandLineParser {
 				.withDescription("target folder for downloaded and serialized files, defaults to \"data\"").hasArgs(1)
 				.withLongOpt("data-dir").create("d"));
 		options.addOption(OptionBuilder
+				.withDescription(
+						"proxy to use for HTTP/HTTPS/FTP downloads (lower precedence than "
+								+ "the other proxy options)").hasArgs(1).withLongOpt("proxy").withArgName("proxy")
+								.create());
+		options.addOption(OptionBuilder
 				.withDescription("proxy to use for HTTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
 				.withLongOpt("http-proxy").withArgName("http-proxy").create());
 		options.addOption(OptionBuilder
@@ -119,6 +124,13 @@ public final class DownloadCommandLineParser {
 			result.ftpProxy = getProxyURL(env.get("FTP_PROXY"));
 		if (getProxyURL(env.get("ftp_proxy")) != null)
 			result.ftpProxy = getProxyURL(env.get("ftp_proxy"));
+
+		// get proxy settings from the command line (--proxy), can be overwritten below
+		if (cmd.hasOption("proxy")) {
+			result.httpProxy = getProxyURL(cmd.getOptionValue("proxy"));
+			result.httpsProxy = getProxyURL(cmd.getOptionValue("proxy"));
+			result.ftpProxy = getProxyURL(cmd.getOptionValue("proxy"));
+		}
 
 		// get proxy settings from the command line, overriding the environment settings
 		if (cmd.hasOption("http-proxy"))
