@@ -140,7 +140,7 @@
 				<version>2.4</version>
 				<configuration>
 					<descriptors>
-						<descriptor>src/assemble/distribution.xml</descriptor>
+						<descriptor>src/assembly/dep.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>
