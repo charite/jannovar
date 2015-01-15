@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
-[![Documentation](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://readthedocs.org/projects/pip/badge/?version=master)
-
 Jannovar
 ========
 
@@ -10,16 +7,14 @@ library API.
 
 Jannovar is licenced under the BSD2 license.
 
-More information is available in the [Jannovar
-manual](http://jannovar.readthedocs.org/).
+Resources:
+
+* [Homepage](http://charite.github.io/jannovar/)
+* [Manual](http://jannovar.readthedocs.org/)
+* [GitHub Page](https://github.com/charite/jannovar)
 
 Quickstart
 ----------
-
-Download binary files of the current release from our [GitHub release
-page](https://github.com/charite/jannovar/releases).
-
-After extracting the ZIP file, you can call Jannovar as follows.
 
 Download the UCSC transcripts for hg19:
 

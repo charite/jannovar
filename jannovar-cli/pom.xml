@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.10</version>
+		<version>0.11</version>
 	</parent>
 
 	<properties>
@@ -140,7 +140,7 @@
 				<version>2.4</version>
 				<configuration>
 					<descriptors>
-						<descriptor>src/assemble/distribution.xml</descriptor>
+						<descriptor>src/assembly/dep.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>

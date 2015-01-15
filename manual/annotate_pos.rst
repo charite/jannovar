@@ -11,7 +11,7 @@ Jannovar will then return the effect and the HGVS annotation for each chromosoma
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-|version|.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'
+    # java -jar jannovar-cli-0.11.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'
     [...]
     #change	effect	hgvs_annotation
     chr1:12345C>A	INTRONIC	DDX11L1:uc010nxq.1:c.38+118C>A
