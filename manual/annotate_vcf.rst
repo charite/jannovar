@@ -11,17 +11,17 @@ This is done using the ``annotate`` command.
 You pass the path to an annotation database and one or more paths to VCF files that are to be annotated.
 For each file, the resulting annotated file is to the current directory, the file name is derived by replacing the file name suffix ``.vcf`` to ``.jv.vcf``.
 
-For example, for annotating the ``pfeiffer.vcf`` file in the ``examples`` directory:
+For example, for annotating the ``small.vcf`` file in the ``examples`` directory:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-|version|.jar annotate data/hg19_ucsc.ser examples/pfeiffer.vcf
+    # java -jar jannovar-cli-|version|.jar annotate data/hg19_ucsc.ser examples/small.vcf
     [...]
     # ls
     [...]
-    pfeiffer.jv.vcf
+    small.jv.vcf
 
-The first three variant lines of ``pfeiffer.jv.vcf`` will look as follows.:w
+The first three variant lines of ``small.jv.vcf`` will look as follows.:w
 
 .. code-block:: text
 
@@ -37,9 +37,9 @@ You can use the ``--show-all``/``-a`` option to write out all functional annotat
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-|version|.jar annotate --show-all data/hg19_refseq.ser examples/pfeiffer.vcf
+    # java -jar jannovar-cli-|version|.jar annotate --show-all data/hg19_refseq.ser examples/small.vcf
 
-For example, the first line of ``pfeiffer.jv.vcf`` will look as follows and contain multiple effects and HGVS annotations.
+For example, the first line of ``small.jv.vcf`` will look as follows and contain multiple effects and HGVS annotations.
 
 .. code-block:: text
 
