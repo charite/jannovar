@@ -5,24 +5,29 @@ Quickstart
 
 This short How-To guides you from downloading the Jannovar program to annotating a VCF file in 5 steps.
 
-#. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking `here <https://github.com/charite/jannovar/releases/download/v0.11.0/jannovar-0.11.0.zip>`_.
+#. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking `here <https://github.com/charite/jannovar/releases/download/v|version|.0/jannovar-0.11.0.zip>`_.
 #. Extract the ZIP archive.
 
-   * you should find file called ``jannovar-cli-0.11.jar`` in the ZIP
+   * you should find file called ``jannovar-cli-|version|.jar`` in the ZIP
    * you should also find a file ``pfeiffer.vcf`` file in the folder ``examples``
 
 #. Download the `RefSeq <http://www.ncbi.nlm.nih.gov/refseq/>`_ transcript database for the release *hg19/GRCh37*.
 
+   .. note::
+
+      If you are behind a proxy then you have to pass its path to the ``--proxy`` option, e.g., ``--proxy http://proxy.example.com:8080``.
+      See the section :ref:`proxy_settings` for more information.
+
    .. code-block:: console
 
-      # java -jar jannovar-cli-0.11.jar download hg19/refseq
+      # java -jar jannovar-cli-|version|.jar download hg19/refseq
 
    This will create the file ``data/hg19_refseq.ser`` which is a self-contained transcript database and can be used for functional annotation.
 #. Annotate the file ``pfeiffer.vcf`` from the ``examples`` directory.
 
    .. code-block:: console
 
-      # java -jar jannovar-cli-0.11.jar annotate data/hg19_refseq.ser examples/pfeiffer.vcf
+      # java -jar jannovar-cli-|version|.jar annotate data/hg19_refseq.ser examples/pfeiffer.vcf
 
    Jannovar will now load the transcript database from ``data/hg19_refseq.ser`` and then read ``examples/pfeiffer.vcf`` file.
    Each contained variant in this file will be annotated with an ``EFFECT`` and an ``HGVS`` field in the ``VCF`` info column.
@@ -44,6 +49,6 @@ Of course, you can follow the other manual chapters and get more extensive infor
 In addition, here are some external links that can help you in your understanding:
 
 Current VCF Specification
-  can be found in the **hts-specs** project on GitHub `here <https://github.com/samtools/hts-specs>`_
+  can be found in the **hts-specs** project on GitHub `here <https://github.com/samtools/hts-specs>`_.
 HGVS Mutation Nomenclature.
   is mainainted by the `Human Genome Variation Society <http://www.hgvs.org/>`_ and the nomenclature can be found `here <http://www.hgvs.org/mutnomen/>`_.

@@ -20,7 +20,7 @@ public final class JannovarOptions {
 
 	// Configuration for the download command
 
-	/** paths to ini files ot use for parsing */
+	/** paths to INI files ot use for parsing */
 	public ImmutableList<String> dataSourceFiles = null;
 
 	/** data source name to use for downloading and parsing */
