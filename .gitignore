@@ -1,3 +1,23 @@
 target
 dependency-reduced-pom.xml
-
+# Vim swap files
+*.sw?
+# gedit swap files
+*~
+# Eclipse stuff
+.classpath
+.project
+.settings
+# Coverity stuff
+cov-int*
+# Maven stuff
+*.iml
+# download directory
+/data*
+# any inline-generated VCF/Jannovar files
+*.jannovar
+*.vcf
+*.vcf.idx
+data
+# built manual
+manual/_build
