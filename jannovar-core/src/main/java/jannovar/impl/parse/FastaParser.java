@@ -1,8 +1,8 @@
 package jannovar.impl.parse;
 
 import jannovar.impl.util.ProgressBar;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptModelBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,8 +23,8 @@ public abstract class FastaParser {
 	protected String filename;
 	protected String accession;
 	protected StringBuilder sequence;
-	protected ArrayList<TranscriptInfoBuilder> TranscriptInfos;
-	protected ArrayList<TranscriptInfoBuilder> TranscriptInfosProcessed;
+	protected ArrayList<TranscriptModelBuilder> TranscriptInfos;
+	protected ArrayList<TranscriptModelBuilder> TranscriptInfosProcessed;
 	protected HashMap<String, Integer> transcript2index;
 
 	/**
@@ -35,13 +35,13 @@ public abstract class FastaParser {
 	 * @param models
 	 *            list of {@link TranscriptInfo}s w/o mRNA sequence data
 	 */
-	public FastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
+	public FastaParser(String filename, ArrayList<TranscriptModelBuilder> models) {
 		this.filename = filename;
 		this.TranscriptInfos = models;
-		this.TranscriptInfosProcessed = new ArrayList<TranscriptInfoBuilder>();
+		this.TranscriptInfosProcessed = new ArrayList<TranscriptModelBuilder>();
 		transcript2index = new HashMap<String, Integer>(TranscriptInfos.size());
 		int i = 0;
-		for (TranscriptInfoBuilder model : TranscriptInfos)
+		for (TranscriptModelBuilder model : TranscriptInfos)
 			transcript2index.put(model.getAccession(), i++);
 	}
 
@@ -50,7 +50,7 @@ public abstract class FastaParser {
 	 *
 	 * @return list of sequence annotated {@link TranscriptInfo}s
 	 */
-	public ArrayList<TranscriptInfoBuilder> parse() {
+	public ArrayList<TranscriptModelBuilder> parse() {
 		BufferedReader in = null;
 		String str;
 

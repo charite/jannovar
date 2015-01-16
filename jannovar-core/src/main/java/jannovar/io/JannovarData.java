@@ -2,7 +2,7 @@ package jannovar.io;
 
 import jannovar.Immutable;
 import jannovar.impl.intervals.IntervalArray;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptIntervalEndExtractor;
 
 import java.io.Serializable;
@@ -43,7 +43,7 @@ public final class JannovarData implements Serializable {
 	 * @param transcriptInfos
 	 *            the list of {@link TranscriptInfo} objects to use in this object
 	 */
-	public JannovarData(ReferenceDictionary refDict, ImmutableList<TranscriptInfo> transcriptInfos) {
+	public JannovarData(ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptInfos) {
 		this.refDict = refDict;
 		this.chromosomes = makeChromsomes(refDict, transcriptInfos);
 	}
@@ -59,22 +59,22 @@ public final class JannovarData implements Serializable {
 	 * @return a mapping from numeric chromsome ID to {@link Chromosome} object
 	 */
 	private static ImmutableMap<Integer, Chromosome> makeChromsomes(
-			ReferenceDictionary refDict, ImmutableList<TranscriptInfo> transcriptInfos) {
+			ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptInfos) {
 		ImmutableMap.Builder<Integer, Chromosome> builder = new ImmutableMap.Builder<Integer, Chromosome>();
 
 		// First, factorize the TranscriptInfo objects by chromosome ID.
 
 		// create hash map for this
-		HashMap<Integer, ArrayList<TranscriptInfo>> transcripts = new HashMap<Integer, ArrayList<TranscriptInfo>>();
+		HashMap<Integer, ArrayList<TranscriptModel>> transcripts = new HashMap<Integer, ArrayList<TranscriptModel>>();
 		for (Integer chrID : refDict.contigName.keySet())
-			transcripts.put(chrID, new ArrayList<TranscriptInfo>());
+			transcripts.put(chrID, new ArrayList<TranscriptModel>());
 		// distribute TranscriptInfo lists
-		for (TranscriptInfo transcript : transcriptInfos)
+		for (TranscriptModel transcript : transcriptInfos)
 			transcripts.get(transcript.getChr()).add(transcript);
 
 		// Then, construct an interval tree for each chromosome and add the lists of intervals.
 		for (Integer chrID : transcripts.keySet()) {
-			IntervalArray<TranscriptInfo> iTree = new IntervalArray<TranscriptInfo>(transcripts.get(chrID),
+			IntervalArray<TranscriptModel> iTree = new IntervalArray<TranscriptModel>(transcripts.get(chrID),
 					new TranscriptIntervalEndExtractor());
 			builder.put(chrID, new Chromosome(refDict, chrID, iTree));
 		}

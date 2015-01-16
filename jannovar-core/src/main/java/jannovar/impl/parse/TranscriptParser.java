@@ -1,6 +1,6 @@
 package jannovar.impl.parse;
 
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 import com.google.common.collect.ImmutableList;
 
@@ -16,6 +16,6 @@ public interface TranscriptParser {
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the transcript files
 	 */
-	public ImmutableList<TranscriptInfo> run() throws TranscriptParseException;
+	public ImmutableList<TranscriptModel> run() throws TranscriptParseException;
 
 }

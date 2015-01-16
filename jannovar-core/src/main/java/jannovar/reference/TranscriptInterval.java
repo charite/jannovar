@@ -14,14 +14,14 @@ public final class TranscriptInterval {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptInfo transcript;
+	public final TranscriptModel transcript;
 	/** the begin position within the transcript */
 	public final int beginPos;
 	/** the end position within the transcript */
 	public final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
-	public TranscriptInterval(TranscriptInfo transcript, int beginPos, int endPos) {
+	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
@@ -29,7 +29,7 @@ public final class TranscriptInterval {
 	}
 
 	/** construct transcript interval with selected coordinate system */
-	public TranscriptInterval(TranscriptInfo transcript, int beginPos, int endPos, PositionType positionType) {
+	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.beginPos = beginPos;

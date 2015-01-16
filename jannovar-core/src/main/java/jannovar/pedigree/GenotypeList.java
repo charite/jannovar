@@ -2,7 +2,7 @@ package jannovar.pedigree;
 
 import jannovar.Immutable;
 import jannovar.reference.GenomeInterval;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 import com.google.common.collect.ImmutableList;
 

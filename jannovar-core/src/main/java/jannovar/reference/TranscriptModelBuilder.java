@@ -12,16 +12,16 @@ import com.google.common.collect.ImmutableList;
  * Usage:
  *
  * <pre>
- * {@link TranscriptInfoBuilder} builder = new TranscriptInfoBuilder();
- * builder.{@link TranscriptInfoBuilder#setStrand setStrand}('-');
- * builder.{@link TranscriptInfoBuilder#setAccession setAccession}(&quot;&lt;accession&gt;&quot;);
+ * {@link TranscriptModelBuilder} builder = new TranscriptInfoBuilder();
+ * builder.{@link TranscriptModelBuilder#setStrand setStrand}('-');
+ * builder.{@link TranscriptModelBuilder#setAccession setAccession}(&quot;&lt;accession&gt;&quot;);
  * // ...
- * {@link TranscriptInfo} transcript = builder.{@link TranscriptInfoBuilder#build build}();
+ * {@link TranscriptModel} transcript = builder.{@link TranscriptModelBuilder#build build}();
  * </pre>
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptInfoBuilder {
+public class TranscriptModelBuilder {
 
 	/** The explicit strand of the target transcript. */
 	private char strand = '?';
@@ -64,7 +64,7 @@ public class TranscriptInfoBuilder {
 	/**
 	 * @return {@link TranscriptInfo} with the currently set configuration.
 	 */
-	public TranscriptInfo build() {
+	public TranscriptModel build() {
 		// Build list of immutable exons in the correct order.
 		ImmutableList.Builder<GenomeInterval> builder = new ImmutableList.Builder<GenomeInterval>();
 		if (exonRegions.size() > 0) {
@@ -78,7 +78,7 @@ public class TranscriptInfoBuilder {
 		}
 
 		// Create new TranscriptInfo object.
-		return new TranscriptInfo(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
+		return new TranscriptModel(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
 				builder.build(), sequence, geneID);
 	}
 

@@ -11,7 +11,7 @@ import jannovar.Immutable;
 public final class TranscriptSequenceOntologyDecorator {
 
 	/** the transcript information to perform the projection upon. */
-	private final TranscriptInfo transcript;
+	private final TranscriptModel transcript;
 
 	/**
 	 * Initialize the object with the given {@link TranscriptInfo}.
@@ -19,14 +19,14 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @param transcript
 	 *            the {@link TranscriptInfo} to decorate
 	 */
-	public TranscriptSequenceOntologyDecorator(TranscriptInfo transcript) {
+	public TranscriptSequenceOntologyDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
 	}
 
 	/**
 	 * @return the transcript
 	 */
-	public TranscriptInfo getTranscript() {
+	public TranscriptModel getTranscript() {
 		return transcript;
 	}
 

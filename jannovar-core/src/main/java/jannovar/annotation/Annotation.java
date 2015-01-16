@@ -2,7 +2,7 @@ package jannovar.annotation;
 
 import jannovar.Immutable;
 import jannovar.impl.util.StringUtil;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 //TODO(holtgrem): Test me!
 
@@ -28,7 +28,7 @@ public final class Annotation implements Comparable<Annotation> {
 	public final String hgvsDescription;
 
 	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
-	public final TranscriptInfo transcript;
+	public final TranscriptModel transcript;
 
 	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
@@ -43,7 +43,7 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param transcript
 	 *            transcript for this annotation
 	 */
-	public Annotation(VariantType varType, int txVarPos, String hgvsDescription, TranscriptInfo transcript) {
+	public Annotation(VariantType varType, int txVarPos, String hgvsDescription, TranscriptModel transcript) {
 		this.varType = varType;
 		this.txVarPos = txVarPos;
 		this.hgvsDescription = hgvsDescription;

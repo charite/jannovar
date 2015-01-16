@@ -1,6 +1,6 @@
 package jannovar.impl.parse;
 
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModelBuilder;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public final class EnsemblFastaParser extends FastaParser {
 
 	private String[] fields;
 
-	public EnsemblFastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
+	public EnsemblFastaParser(String filename, ArrayList<TranscriptModelBuilder> models) {
 		super(filename, models);
 	}
 

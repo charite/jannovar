@@ -18,7 +18,7 @@ public final class GenomeChangeNormalizer {
 	 *            the corresponding position on the transcript
 	 * @return normalized {@link GenomeChange}
 	 */
-	public static GenomeChange normalizeGenomeChange(TranscriptInfo transcript, GenomeChange change, TranscriptPosition txPos) {
+	public static GenomeChange normalizeGenomeChange(TranscriptModel transcript, GenomeChange change, TranscriptPosition txPos) {
 		switch (change.getType()) {
 		case DELETION:
 			return normalizeDeletion(transcript, change, txPos);
@@ -49,7 +49,7 @@ public final class GenomeChangeNormalizer {
 	 *            the corresponding position on the transcript
 	 * @return normalized {@link GenomeChange}
 	 */
-	public static GenomeChange normalizeInsertion(TranscriptInfo transcript, GenomeChange change,
+	public static GenomeChange normalizeInsertion(TranscriptModel transcript, GenomeChange change,
 			TranscriptPosition txPos) {
 		assert (change.ref.length() == 0);
 		if (change.pos.strand != transcript.getStrand()) // ensure that we have the correct strand
@@ -92,7 +92,7 @@ public final class GenomeChangeNormalizer {
 	 *            the corresponding position on the transcript
 	 * @return normalized {@link GenomeChange}
 	 */
-	public static GenomeChange normalizeDeletion(TranscriptInfo transcript, GenomeChange change,
+	public static GenomeChange normalizeDeletion(TranscriptModel transcript, GenomeChange change,
 			TranscriptPosition txPos) {
 		// TODO(holtgrem): check the splice site invariant?
 		assert (change.ref.length() != 0 && change.alt.length() == 0);

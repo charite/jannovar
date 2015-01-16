@@ -5,8 +5,8 @@ import jannovar.impl.parse.gff.GFFParser;
 import jannovar.impl.parse.gff.TranscriptInfoFactory;
 import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptModelBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class EnsemblParser implements TranscriptParser {
 	}
 
 	@Override
-	public ImmutableList<TranscriptInfo> run() throws TranscriptParseException {
+	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Parse GTF file, yielding a list of features.
 		System.err.println("Parsing GTF...");
 		GFFParser gffParser;
@@ -69,7 +69,7 @@ public class EnsemblParser implements TranscriptParser {
 		FeatureProcessor fp = new FeatureProcessor(gffParser.gffVersion, refDict);
 		gffParser.parse(fp);
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
-		ArrayList<TranscriptInfoBuilder> builders;
+		ArrayList<TranscriptModelBuilder> builders;
 		try {
 			System.err.println("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
@@ -92,8 +92,8 @@ public class EnsemblParser implements TranscriptParser {
 				params);
 
 		// Create final list of TranscriptInfos.
-		ImmutableList.Builder<TranscriptInfo> result = new ImmutableList.Builder<TranscriptInfo>();
-		for (TranscriptInfoBuilder builder : builders)
+		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
+		for (TranscriptModelBuilder builder : builders)
 			result.add(builder.build());
 		return result.build();
 	}

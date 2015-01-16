@@ -10,7 +10,7 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
 import jannovar.reference.ProjectionException;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptSequenceDecorator;
 
@@ -37,7 +37,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a deletion
 	 */
-	SNVAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+	SNVAnnotationBuilder(TranscriptModel transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// guard against invalid genome change

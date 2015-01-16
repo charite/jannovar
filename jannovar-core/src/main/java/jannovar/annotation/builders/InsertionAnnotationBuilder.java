@@ -14,7 +14,7 @@ import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.PositionType;
 import jannovar.reference.ProjectionException;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptPosition;
 import jannovar.reference.TranscriptProjectionDecorator;
 
@@ -43,7 +43,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe an insertion
 	 */
-	InsertionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+	InsertionAnnotationBuilder(TranscriptModel transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// Guard against invalid genome change.

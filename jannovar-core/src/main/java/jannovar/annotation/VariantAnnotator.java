@@ -9,7 +9,7 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 import java.util.ArrayList;
 
@@ -111,12 +111,12 @@ public final class VariantAnnotator {
 
 		// Get the TranscriptModel objects that overlap with changeInterval.
 		final Chromosome chr = chromosomeMap.get(change.getChr());
-		IntervalArray<TranscriptInfo>.QueryResult qr;
+		IntervalArray<TranscriptModel>.QueryResult qr;
 		if (changeInterval.length() == 0)
 			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
 		else
 			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
-		ArrayList<TranscriptInfo> candidateTranscripts = new ArrayList<TranscriptInfo>(qr.entries);
+		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.entries);
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.
@@ -131,7 +131,7 @@ public final class VariantAnnotator {
 
 		// If we reach here, then there is at least one transcript that overlaps with the query. Iterate over these
 		// transcripts and collect annotations for each (they are collected in annovarFactory).
-		for (TranscriptInfo tm : candidateTranscripts)
+		for (TranscriptModel tm : candidateTranscripts)
 			if (isStructuralVariant)
 				buildSVAnnotation(change, tm);
 			else
@@ -140,17 +140,17 @@ public final class VariantAnnotator {
 		return annovarFactory.getAnnotationList();
 	}
 
-	private void buildSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws AnnotationException {
+	private void buildSVAnnotation(GenomeChange change, TranscriptModel transcript) throws AnnotationException {
 		annovarFactory.addStructuralAnnotation(new StructuralVariantAnnotationBuilder(transcript, change).build());
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo leftNeighbor, TranscriptInfo rightNeighbor)
+	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
 			throws AnnotationException {
 		buildNonSVAnnotation(change, leftNeighbor);
 		buildNonSVAnnotation(change, rightNeighbor);
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptInfo transcript) throws InvalidGenomeChange {
+	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel transcript) throws InvalidGenomeChange {
 		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
 			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
 	}

@@ -6,7 +6,7 @@ import jannovar.impl.util.StringUtil;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): Mae AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
 
@@ -20,7 +20,7 @@ import jannovar.reference.TranscriptInfo;
 public final class StructuralVariantAnnotationBuilder {
 
 	/** the transcript to build the annotation for */
-	private final TranscriptInfo transcript;
+	private final TranscriptModel transcript;
 	/** the genome change to build the annotation for */
 	private final GenomeChange change;
 
@@ -34,7 +34,7 @@ public final class StructuralVariantAnnotationBuilder {
 	 *            {@link GenomeChange} to compute the annotation for, must describe a structural variant affecting
 	 *            <code>transcript</code>
 	 */
-	public StructuralVariantAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) {
+	public StructuralVariantAnnotationBuilder(TranscriptModel transcript, GenomeChange change) {
 		this.transcript = transcript;
 		this.change = change.withPositionType(PositionType.ZERO_BASED);
 	}

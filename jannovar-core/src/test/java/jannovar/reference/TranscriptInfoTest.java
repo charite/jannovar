@@ -17,13 +17,13 @@ public class TranscriptInfoTest {
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	/** transcript builder for the forward strand */
-	TranscriptInfoBuilder builderForward;
+	TranscriptModelBuilder builderForward;
 	/** transcript builder for the reverse strand */
-	TranscriptInfoBuilder builderReverse;
+	TranscriptModelBuilder builderReverse;
 	/** transcript info for the forward strand */
-	TranscriptInfo infoForward;
+	TranscriptModel infoForward;
 	/** transcript info for the reverse strand */
-	TranscriptInfo infoReverse;
+	TranscriptModel infoReverse;
 
 	@Before
 	public void setUp() {
@@ -39,13 +39,13 @@ public class TranscriptInfoTest {
 
 	@Test
 	public void testForwardTranscript() {
-		TranscriptInfo info = builderForward.build();
+		TranscriptModel info = builderForward.build();
 		Assert.assertEquals(info, infoForward);
 	}
 
 	@Test
 	public void testReverseTranscript() {
-		TranscriptInfo info = builderReverse.build();
+		TranscriptModel info = builderReverse.build();
 		Assert.assertEquals(info, infoReverse);
 	}
 

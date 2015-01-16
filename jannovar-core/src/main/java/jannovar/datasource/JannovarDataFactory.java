@@ -7,7 +7,7 @@ import jannovar.impl.parse.TranscriptParseException;
 import jannovar.impl.util.PathUtil;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -90,7 +90,7 @@ public abstract class JannovarDataFactory {
 
 		// Parse transcript files.
 		System.err.println("Parsing transcripts...");
-		ImmutableList<TranscriptInfo> transcripts = parseTranscripts(refDict, targetDir);
+		ImmutableList<TranscriptModel> transcripts = parseTranscripts(refDict, targetDir);
 
 		return new JannovarData(refDict, transcripts);
 	}
@@ -166,7 +166,7 @@ public abstract class JannovarDataFactory {
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the transcript database
 	 */
-	protected abstract ImmutableList<TranscriptInfo> parseTranscripts(ReferenceDictionary refDict, String targetDir)
+	protected abstract ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
 			throws TranscriptParseException;
 
 }

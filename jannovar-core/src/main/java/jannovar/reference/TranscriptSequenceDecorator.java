@@ -14,9 +14,9 @@ import jannovar.impl.util.StringUtil;
 public final class TranscriptSequenceDecorator {
 
 	/** The wrapped {@link TranscriptInfo}. */
-	public final TranscriptInfo transcript;
+	public final TranscriptModel transcript;
 
-	public TranscriptSequenceDecorator(TranscriptInfo transcript) {
+	public TranscriptSequenceDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
 	}
 
