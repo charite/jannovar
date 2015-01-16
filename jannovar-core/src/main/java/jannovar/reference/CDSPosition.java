@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 /**
  * Position on a transcript.
@@ -74,7 +75,7 @@ public final class CDSPosition {
 	@Override
 	public String toString() {
 		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:c.%d", transcript.accession, pos);
+		return StringUtil.concatenate(transcript.accession, ":c.", pos);
 	}
 
 	/*

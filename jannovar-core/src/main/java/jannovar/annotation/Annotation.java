@@ -1,6 +1,7 @@
 package jannovar.annotation;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 import jannovar.reference.TranscriptInfo;
 
 //TODO(holtgrem): Test me!
@@ -60,7 +61,7 @@ public final class Annotation implements Comparable<Annotation> {
 	public String getSymbolAndAnnotation() {
 		if (transcript.geneSymbol == null && hgvsDescription != null)
 			return hgvsDescription;
-		return String.format("%s:%s", transcript.geneSymbol, hgvsDescription);
+		return StringUtil.concatenate(transcript.geneSymbol, ":", hgvsDescription);
 	}
 
 	@Override

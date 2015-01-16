@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 /**
  * Interval on a transcript.
@@ -62,7 +63,7 @@ public final class CDSInterval {
 	@Override
 	public String toString() {
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:c.%d-%d", this.transcript.accession, beginPos, endPos);
+		return StringUtil.concatenate(this.transcript.accession, ":c.", beginPos, "-", endPos);
 	}
 
 	/*

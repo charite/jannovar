@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 import jannovar.io.ReferenceDictionary;
 
 import java.io.Serializable;
@@ -239,9 +240,8 @@ public final class GenomeInterval implements Serializable {
 		if (strand == '-')
 			return withStrand('+').toString();
 
-		// TODO(holtgrem): Update once we have better chromosome id to reference name mapping.
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("chr%d:%d-%d", chr, beginPos, this.endPos);
+		return StringUtil.concatenate(refDict.contigName.get(chr), ":", beginPos, "-", this.endPos);
 	}
 
 	/*

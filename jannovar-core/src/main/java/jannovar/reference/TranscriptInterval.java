@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 /**
  * Interval on a transcript.
@@ -61,7 +62,7 @@ public final class TranscriptInterval {
 	@Override
 	public String toString() {
 		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:n.%d-%d", this.transcript.accession, beginPos, endPos);
+		return StringUtil.concatenate(transcript.accession, ":n.", beginPos, "-", endPos);
 	}
 
 	/*

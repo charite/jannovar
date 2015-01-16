@@ -1,5 +1,7 @@
 package jannovar.annotation;
 
+import jannovar.impl.util.StringUtil;
+
 // TODO(holtgrem): Test me!
 
 /**
@@ -43,7 +45,7 @@ public abstract class AnnotationListTextGenerator {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
-				builder.append(String.format("alt%d:", alleleID + 1));
+				builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
 			builder.append(anno.varType);
 		}
 		return builder.toString();
@@ -58,7 +60,7 @@ public abstract class AnnotationListTextGenerator {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
-				builder.append(String.format("alt%d:", alleleID + 1));
+				builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
 			builder.append(anno.getSymbolAndAnnotation());
 		}
 		return builder.toString();

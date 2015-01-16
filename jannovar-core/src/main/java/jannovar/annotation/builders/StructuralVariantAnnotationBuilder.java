@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
@@ -66,43 +67,43 @@ public final class StructuralVariantAnnotationBuilder {
 
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%dinv", VariantType.INTERGENIC,
-						beginPos + 1, beginPos + ref.length()), null);
+				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
+						beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
 			} else {
-				return new Annotation(VariantType.SV_INVERSION, beginPos, String.format("%s:g.%d_%dinv",
-						VariantType.SV_INVERSION, beginPos + 1, beginPos + ref.length()), transcript);
+				return new Annotation(VariantType.SV_INVERSION, beginPos, StringUtil.concatenate(
+						VariantType.SV_INVERSION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), transcript);
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%dins%s..%s",
-						VariantType.INTERGENIC, beginPos, beginPos + 1, alt.substring(0, 2),
+				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
+						beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
 						alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(VariantType.SV_INSERTION, beginPos, String.format("%s:g.%d_%dins%s..%s",
-						VariantType.SV_INSERTION, beginPos, beginPos + 1, alt.substring(0, 2),
+				return new Annotation(VariantType.SV_INSERTION, beginPos, StringUtil.concatenate(
+						VariantType.SV_INSERTION, ":g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
 						alt.substring(alt.length() - 2, alt.length())), transcript);
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%ddel", VariantType.INTERGENIC,
-						beginPos + 1, beginPos + ref.length()), null);
+				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
+						beginPos + 1, "_", beginPos + ref.length(), "del"), null);
 			} else {
-				return new Annotation(VariantType.SV_DELETION, beginPos, String.format("%s:g.%d_%ddel",
-						VariantType.SV_DELETION, beginPos + 1, beginPos + ref.length()), null);
+				return new Annotation(VariantType.SV_DELETION, beginPos, StringUtil.concatenate(
+						VariantType.SV_DELETION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
 			}
 		} else { // SV substitution
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, String.format("%s:g.%d_%ddelins%s..%s",
-						VariantType.INTERGENIC, beginPos + 1, beginPos + ref.length(), alt.substring(0, 2),
+				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
+						beginPos + 1, "_", beginPos + ref.length(), "delins", alt.substring(0, 2), "..",
 						alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(VariantType.SV_SUBSTITUTION, beginPos, String.format("%s:g.%d_%ddelins%s..%s",
-						VariantType.SV_SUBSTITUTION, beginPos + 1, beginPos + ref.length(), alt.substring(0, 2),
-						alt.substring(alt.length() - 2, alt.length())), transcript);
+				return new Annotation(VariantType.SV_SUBSTITUTION, beginPos, StringUtil.concatenate(
+						VariantType.SV_SUBSTITUTION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
+						alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), transcript);
 			}
 		}
 	}

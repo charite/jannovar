@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.impl.util.Translator;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
@@ -64,7 +65,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	@Override
 	protected String ncHGVS() {
-		return String.format("%s:%sdel", locAnno, dnaAnno);
+		return StringUtil.concatenate(locAnno, ":", dnaAnno, "del");
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
@@ -80,7 +81,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		return new Annotation(VariantType.START_LOSS, txBeginPos, String.format("%s:p.0?", ncHGVS()), transcript);
+		return new Annotation(VariantType.START_LOSS, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
 	}
 
 	/**
@@ -155,7 +156,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varType, txBeginPos, String.format("%s:%s", ncHGVS(), protAnno), transcript);
+			return new Annotation(varType, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -177,15 +178,15 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			if (varAAStopPos >= 0) {
 				String suffix = ""; // for "ins${aminoAcidCode}" in case of "delins" on AA level
 				if (aaChange.alt.length() > 0)
-					suffix = String.format("ins%s", t.toLong(aaChange.alt));
+					suffix = StringUtil.concatenate("ins", t.toLong(aaChange.alt));
 
 				char wtAAFirst = wtAASeq.charAt(aaChange.pos);
 				char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
 				if (aaChange.pos == aaChange.getLastPos())
-					protAnno = String.format("p.%s%ddel%s", t.toLong(wtAAFirst), aaChange.pos + 1, suffix);
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAAFirst), aaChange.pos + 1, "del", suffix);
 				else
-					protAnno = String.format("p.%s%d_%s%ddel%s", t.toLong(wtAAFirst), aaChange.pos + 1,
-							t.toLong(wtAALast), aaChange.getLastPos() + 1, suffix);
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAAFirst), aaChange.pos + 1, "_",
+							t.toLong(wtAALast), aaChange.getLastPos() + 1, "del", suffix);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
 				protAnno = "p.0?";
@@ -215,17 +216,17 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			// Handle the case of deleting a stop codon at the very last entry of the translated amino acid string and
 			// short-circuit.
 			if (varType == VariantType.STOPLOSS && aaChange.pos == varAASeq.length()) {
-				protAnno = String.format("p.*%ddel?", aaChange.pos + 1);
+				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, "del?");
 				return;
 			}
 			// Handle the case of deleting up to the end of the sequence.
 			if (aaChange.pos >= varAASeq.length()) {
 				if (aaChange.ref.length() == 1)
-					protAnno = String.format("p.%s%ddel", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1);
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
+							"del");
 				else
-					protAnno = String.format("p.%s%d_%s%ddel", t.toLong(wtAASeq.charAt(aaChange.pos)),
-							aaChange.pos + 1,
-							t.toLong(wtAASeq.charAt(aaChange.getLastPos())), aaChange.getLastPos() + 1);
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
+							"_", t.toLong(wtAASeq.charAt(aaChange.getLastPos())), aaChange.getLastPos() + 1, "del");
 				return;
 			}
 
@@ -237,12 +238,13 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			String suffix = "*?"; // "?" or "*${distance}" in case of extension/frameshift
 			if (varAAStopPos >= 0) {
 				int stopCodonOffset = varAAStopPos - aaChange.pos + delta;
-				suffix = String.format("*%d", stopCodonOffset);
+				suffix = StringUtil.concatenate("*", stopCodonOffset);
 			}
 			if (varType == VariantType.STOPLOSS)
-				protAnno = String.format("p.*%d%sext%s", aaChange.pos + 1, t.toLong(varAA), suffix);
+				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAA), "ext", suffix);
 			else
-				protAnno = String.format("p.%s%d%sfs%s", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), suffix);
+				protAnno = StringUtil
+						.concatenate("p.", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), "fs", suffix);
 		}
 	}
 

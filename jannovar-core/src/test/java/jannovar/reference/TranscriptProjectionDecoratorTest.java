@@ -53,13 +53,13 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
 		// test with first base of transcript
-		Assert.assertEquals("chr1:6640063", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 1))
+		Assert.assertEquals("1:6640063", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 1))
 				.toString());
 		// test with last base of transcript
-		Assert.assertEquals("chr1:6649340", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2338))
+		Assert.assertEquals("1:6649340", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2338))
 				.toString());
 		// test with first base of first exon
-		Assert.assertEquals("chr1:6640602", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 136))
+		Assert.assertEquals("1:6640602", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 136))
 				.toString());
 	}
 
@@ -68,13 +68,13 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
 		// test with first base of transcript
-		Assert.assertEquals("chr1:23696357", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 1))
+		Assert.assertEquals("1:23696357", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 1))
 				.toString());
 		// test with last base of transcript
-		Assert.assertEquals("chr1:23685941", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 4493))
+		Assert.assertEquals("1:23685941", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 4493))
 				.toString());
 		// test with first base of first exon
-		Assert.assertEquals("chr1:23694557", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 501))
+		Assert.assertEquals("1:23694557", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 501))
 				.toString());
 	}
 
