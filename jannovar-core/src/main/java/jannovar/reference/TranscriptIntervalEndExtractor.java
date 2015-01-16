@@ -7,15 +7,15 @@ import jannovar.impl.intervals.IntervalEndExtractor;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class TranscriptIntervalEndExtractor implements IntervalEndExtractor<TranscriptInfo> {
+public class TranscriptIntervalEndExtractor implements IntervalEndExtractor<TranscriptModel> {
 
 	@Override
-	public int getBegin(TranscriptInfo transcript) {
+	public int getBegin(TranscriptModel transcript) {
 		return transcript.txRegion.withStrand('+').beginPos;
 	}
 
 	@Override
-	public int getEnd(TranscriptInfo transcript) {
+	public int getEnd(TranscriptModel transcript) {
 		return transcript.txRegion.withStrand('+').endPos;
 	}
 

@@ -12,7 +12,7 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptProjectionDecorator;
 
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
@@ -33,7 +33,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a block substitution
 	 */
-	public BlockSubstitutionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change)
+	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeChange change)
 			throws InvalidGenomeChange {
 		super(transcript, change);
 

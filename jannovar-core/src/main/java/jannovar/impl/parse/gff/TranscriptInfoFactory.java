@@ -9,8 +9,8 @@ import jannovar.impl.parse.gff.FeatureProcessor.Transcript;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptModelBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public final class TranscriptInfoFactory {
 	/**
 	 * Forward to {@link #buildTranscripts(HashMap, boolean)}, setting the second parameter to <code>false</code>.
 	 */
-	public ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes)
+	public ArrayList<TranscriptModelBuilder> buildTranscripts(HashMap<String, Gene> genes)
 			throws InvalidAttributeException {
 		return buildTranscripts(genes, false);
 	}
@@ -58,9 +58,9 @@ public final class TranscriptInfoFactory {
 	 * @throws InvalidAttributeException
 	 *             on problems with invalid attributes
 	 */
-	public ArrayList<TranscriptInfoBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
+	public ArrayList<TranscriptModelBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
 			throws InvalidAttributeException {
-		ArrayList<TranscriptInfoBuilder> models = new ArrayList<TranscriptInfoBuilder>();
+		ArrayList<TranscriptModelBuilder> models = new ArrayList<TranscriptModelBuilder>();
 		int curid;
 		for (FeatureProcessor.Gene gene : genes.values()) {
 			if (gene.id == null)
@@ -69,7 +69,7 @@ public final class TranscriptInfoFactory {
 				if (useOnlyCurated && !isCuratedName(rna.name))
 					continue;
 
-				TranscriptInfoBuilder tib = new TranscriptInfoBuilder();
+				TranscriptModelBuilder tib = new TranscriptModelBuilder();
 				tib.setAccession(rna.name);
 				tib.setGeneSymbol(gene.name);
 				tib.setStrand(rna.strand ? '+' : '-');

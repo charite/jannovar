@@ -16,7 +16,7 @@ public final class TranscriptProjectionDecorator {
 	public static final int INVALID_INTRON_ID = -1;
 
 	/** the transcript information to perform the projection upon. */
-	private final TranscriptInfo transcript;
+	private final TranscriptModel transcript;
 
 	/**
 	 * Initialize the object with the given {@link TranscriptInfo}.
@@ -24,14 +24,14 @@ public final class TranscriptProjectionDecorator {
 	 * @param transcript
 	 *            the {@link TranscriptInfo} to decorate
 	 */
-	public TranscriptProjectionDecorator(TranscriptInfo transcript) {
+	public TranscriptProjectionDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
 	}
 
 	/**
 	 * @return the transcript
 	 */
-	public TranscriptInfo getTranscript() {
+	public TranscriptModel getTranscript() {
 		return transcript;
 	}
 

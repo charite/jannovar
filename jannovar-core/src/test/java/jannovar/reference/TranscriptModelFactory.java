@@ -17,9 +17,9 @@ public class TranscriptModelFactory {
 	 * @param s
 	 *            The knownGeneList line to parse.
 	 */
-	public static TranscriptInfoBuilder parseKnownGenesLine(ReferenceDictionary refDict, String s) {
+	public static TranscriptModelBuilder parseKnownGenesLine(ReferenceDictionary refDict, String s) {
 		String[] fields = s.split("\t");
-		TranscriptInfoBuilder result = new TranscriptInfoBuilder();
+		TranscriptModelBuilder result = new TranscriptModelBuilder();
 		result.setAccession(fields[0]);
 
 		int chr = refDict.contigID.get(fields[1].substring(3));

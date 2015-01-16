@@ -8,7 +8,7 @@ import jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import jannovar.cmd.db_list.DatabaseListCommand;
 import jannovar.cmd.download.DownloadCommand;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes

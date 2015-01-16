@@ -12,13 +12,13 @@ public class GenomeChangeNormalizerTest {
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	/** transcript on forward strand */
-	TranscriptInfoBuilder builderForward;
+	TranscriptModelBuilder builderForward;
 	/** transcript on reverse strand */
-	TranscriptInfoBuilder builderReverse;
+	TranscriptModelBuilder builderReverse;
 	/** transcript info on forward strand */
-	TranscriptInfo infoForward;
+	TranscriptModel infoForward;
 	/** transcript info on reverse strand */
-	TranscriptInfo infoReverse;
+	TranscriptModel infoReverse;
 
 	@Before
 	public void setUp() {

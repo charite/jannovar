@@ -3,7 +3,7 @@
  */
 package jannovar.impl.parse;
 
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModelBuilder;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public final class RefSeqFastaParser extends FastaParser {
 	 * @param models
 	 *            the {@link TranscriptInfoBuilder transcript info builders}s without sequence information
 	 */
-	public RefSeqFastaParser(String filename, ArrayList<TranscriptInfoBuilder> models) {
+	public RefSeqFastaParser(String filename, ArrayList<TranscriptModelBuilder> models) {
 		super(filename, models);
 	}
 

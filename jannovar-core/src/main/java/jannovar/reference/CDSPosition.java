@@ -14,19 +14,19 @@ public final class CDSPosition {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptInfo transcript;
+	public final TranscriptModel transcript;
 	/** the position within the transcript */
 	public final int pos;
 
 	/** construct transcript position with one-based coordinate system */
-	public CDSPosition(TranscriptInfo transcript, int pos) {
+	public CDSPosition(TranscriptModel transcript, int pos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.pos = pos;
 	}
 
 	/** construct transcript position with selected coordinate system */
-	public CDSPosition(TranscriptInfo transcript, int pos, PositionType positionType) {
+	public CDSPosition(TranscriptModel transcript, int pos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.pos = pos;

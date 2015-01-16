@@ -12,7 +12,7 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptProjectionDecorator;
 
 /**
@@ -30,7 +30,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a deletion
 	 */
-	DeletionAnnotationBuilder(TranscriptInfo transcript, GenomeChange change) throws InvalidGenomeChange {
+	DeletionAnnotationBuilder(TranscriptModel transcript, GenomeChange change) throws InvalidGenomeChange {
 		super(transcript, change);
 
 		// Guard against invalid genome change.

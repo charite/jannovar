@@ -11,11 +11,11 @@ public class TranscriptInfoBuilderTest {
 	/** this test uses this static hg19 reference dictionary */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
-	TranscriptInfoBuilder builder;
+	TranscriptModelBuilder builder;
 
 	@Before
 	public void setUp() throws Exception {
-		builder = new TranscriptInfoBuilder();
+		builder = new TranscriptModelBuilder();
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class TranscriptInfoBuilderTest {
 		builder.setSequence("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 				+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-		TranscriptInfo info = builder.build();
+		TranscriptModel info = builder.build();
 
 		Assert.assertEquals('-', info.getStrand());
 		Assert.assertEquals(1, info.getChr());

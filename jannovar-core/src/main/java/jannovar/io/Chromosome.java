@@ -2,7 +2,7 @@ package jannovar.io;
 
 import jannovar.impl.intervals.Interval;
 import jannovar.impl.intervals.IntervalArray;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 import java.io.Serializable;
 
@@ -40,7 +40,7 @@ public final class Chromosome implements Serializable {
 	 * An {@link IntervalArray} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
 	 * chromosome.
 	 */
-	public final IntervalArray<TranscriptInfo> tmIntervalTree;
+	public final IntervalArray<TranscriptModel> tmIntervalTree;
 
 	/**
 	 * Initialize object.
@@ -52,7 +52,7 @@ public final class Chromosome implements Serializable {
 	 * @param tmIntervalTree
 	 *            An interval tree with all transcripts on this chromosome.
 	 */
-	public Chromosome(ReferenceDictionary refDict, int chrID, IntervalArray<TranscriptInfo> tmIntervalTree) {
+	public Chromosome(ReferenceDictionary refDict, int chrID, IntervalArray<TranscriptModel> tmIntervalTree) {
 		this.refDict = refDict;
 		this.chrID = chrID;
 		this.tmIntervalTree = tmIntervalTree;
@@ -75,7 +75,7 @@ public final class Chromosome implements Serializable {
 	/**
 	 * @return the {@link IntervalArray} of the chromosome.
 	 */
-	public IntervalArray<TranscriptInfo> getTMIntervalTree() {
+	public IntervalArray<TranscriptModel> getTMIntervalTree() {
 		return tmIntervalTree;
 	}
 

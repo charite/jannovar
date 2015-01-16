@@ -12,13 +12,13 @@ public class TranscriptSequenceOntologyDecoratorTest {
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	/** transcript builder for the forward strand */
-	TranscriptInfoBuilder builderForward;
+	TranscriptModelBuilder builderForward;
 	/** transcript builder for the reverse strand */
-	TranscriptInfoBuilder builderReverse;
+	TranscriptModelBuilder builderReverse;
 	/** transcript info for the forward strand */
-	TranscriptInfo infoForward;
+	TranscriptModel infoForward;
 	/** transcript info for the reverse strand */
-	TranscriptInfo infoReverse;
+	TranscriptModel infoReverse;
 
 	@Before
 	public void setUp() {

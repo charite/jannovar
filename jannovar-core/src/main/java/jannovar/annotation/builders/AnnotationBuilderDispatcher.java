@@ -5,7 +5,7 @@ import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 /**
  * Dispatches annotation building to the specific classes, depending on their {@link GenomeChange#getType}.
@@ -15,11 +15,11 @@ import jannovar.reference.TranscriptInfo;
 public final class AnnotationBuilderDispatcher {
 
 	/** transcript to build annotation for */
-	public final TranscriptInfo transcript;
+	public final TranscriptModel transcript;
 	/** genomic change to build annotation for */
 	public final GenomeChange change;
 
-	public AnnotationBuilderDispatcher(TranscriptInfo transcript, GenomeChange change) {
+	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeChange change) {
 		this.transcript = transcript;
 		this.change = change.withPositionType(PositionType.ZERO_BASED);
 	}

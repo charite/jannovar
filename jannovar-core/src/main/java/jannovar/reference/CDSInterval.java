@@ -14,14 +14,14 @@ public final class CDSInterval {
 	/** the selected coordinate system (0-based, 1-based) */
 	public final PositionType positionType;
 	/** the transcript that this position is relative to */
-	public final TranscriptInfo transcript;
+	public final TranscriptModel transcript;
 	/** the begin position within the transcript */
 	public final int beginPos;
 	/** the end position within the transcript */
 	public final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
-	public CDSInterval(TranscriptInfo transcript, int beginPos, int endPos) {
+	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos) {
 		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
@@ -29,7 +29,7 @@ public final class CDSInterval {
 	}
 
 	/** construct transcript interval with selected coordinate system */
-	public CDSInterval(TranscriptInfo transcript, int beginPos, int endPos, PositionType positionType) {
+	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
 		this.positionType = positionType;
 		this.transcript = transcript;
 		this.beginPos = beginPos;

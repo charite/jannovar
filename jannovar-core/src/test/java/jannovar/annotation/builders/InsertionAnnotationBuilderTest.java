@@ -8,8 +8,8 @@ import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomePosition;
 import jannovar.reference.HG19RefDictBuilder;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptModelBuilder;
 import jannovar.reference.TranscriptModelFactory;
 
 import org.junit.Assert;
@@ -25,13 +25,13 @@ public class InsertionAnnotationBuilderTest {
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 
 	/** transcript on forward strand */
-	TranscriptInfoBuilder builderForward;
+	TranscriptModelBuilder builderForward;
 	/** transcript on reverse strand */
-	TranscriptInfoBuilder builderReverse;
+	TranscriptModelBuilder builderReverse;
 	/** transcript info on forward strand */
-	TranscriptInfo infoForward;
+	TranscriptModel infoForward;
 	/** transcript info on reverse strand */
-	TranscriptInfo infoReverse;
+	TranscriptModel infoReverse;
 
 	@Before
 	public void setUp() {

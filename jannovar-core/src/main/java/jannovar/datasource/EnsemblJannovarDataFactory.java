@@ -5,7 +5,7 @@ import jannovar.impl.parse.EnsemblParser;
 import jannovar.impl.parse.TranscriptParseException;
 import jannovar.io.JannovarData;
 import jannovar.io.ReferenceDictionary;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 
 import org.ini4j.Profile.Section;
 
@@ -33,7 +33,7 @@ final class EnsemblJannovarDataFactory extends JannovarDataFactory {
 	}
 
 	@Override
-	protected ImmutableList<TranscriptInfo> parseTranscripts(ReferenceDictionary refDict, String targetDir)
+	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
 			throws TranscriptParseException {
 		return new EnsemblParser(refDict, targetDir, iniSection).run();
 	}

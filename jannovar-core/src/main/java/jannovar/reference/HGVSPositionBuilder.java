@@ -12,14 +12,14 @@ import jannovar.impl.util.StringUtil;
 public final class HGVSPositionBuilder {
 
 	/** transcript to use for the coordinate system */
-	final TranscriptInfo transcript;
+	final TranscriptModel transcript;
 	/** helper for performing coordinate projection */
 	final TranscriptProjectionDecorator projector;
 	/** helper for performing Sequence Ontology feature queries */
 	final TranscriptSequenceOntologyDecorator soDecorator;
 
 	/** Construct the position builder with the given transcript */
-	public HGVSPositionBuilder(TranscriptInfo transcript) {
+	public HGVSPositionBuilder(TranscriptModel transcript) {
 		this.transcript = transcript;
 		this.projector = new TranscriptProjectionDecorator(transcript);
 		this.soDecorator = new TranscriptSequenceOntologyDecorator(transcript);

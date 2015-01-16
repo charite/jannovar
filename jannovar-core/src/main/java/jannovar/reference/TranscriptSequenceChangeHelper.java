@@ -11,7 +11,7 @@ import jannovar.Immutable;
 public final class TranscriptSequenceChangeHelper {
 
 	/** The {@link TranscriptInfo} with the sequence and position infos. */
-	final TranscriptInfo transcript;
+	final TranscriptModel transcript;
 
 	/**
 	 * Construct helper with the given {@link TranscriptInfo}.
@@ -19,7 +19,7 @@ public final class TranscriptSequenceChangeHelper {
 	 * @param transcript
 	 *            with position and sequence information
 	 */
-	public TranscriptSequenceChangeHelper(TranscriptInfo transcript) {
+	public TranscriptSequenceChangeHelper(TranscriptModel transcript) {
 		this.transcript = transcript;
 	}
 

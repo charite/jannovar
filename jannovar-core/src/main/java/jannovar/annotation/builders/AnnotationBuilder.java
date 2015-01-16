@@ -10,7 +10,7 @@ import jannovar.reference.GenomePosition;
 import jannovar.reference.HGVSPositionBuilder;
 import jannovar.reference.PositionType;
 import jannovar.reference.ProjectionException;
-import jannovar.reference.TranscriptInfo;
+import jannovar.reference.TranscriptModel;
 import jannovar.reference.TranscriptProjectionDecorator;
 import jannovar.reference.TranscriptSequenceChangeHelper;
 import jannovar.reference.TranscriptSequenceDecorator;
@@ -38,7 +38,7 @@ import jannovar.reference.TranscriptSequenceOntologyDecorator;
 abstract class AnnotationBuilder {
 
 	/** transcript to annotate. */
-	protected final TranscriptInfo transcript;
+	protected final TranscriptModel transcript;
 	/** genome change to use for annotation */
 	protected final GenomeChange change;
 
@@ -66,7 +66,7 @@ abstract class AnnotationBuilder {
 	 * @param change
 	 *            the {@link GenomeChange} to use for building the annotation
 	 */
-	AnnotationBuilder(TranscriptInfo transcript, GenomeChange change) {
+	AnnotationBuilder(TranscriptModel transcript, GenomeChange change) {
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
 		change = change.withPositionType(PositionType.ZERO_BASED).withStrand(transcript.getStrand());
 		this.transcript = transcript;
@@ -286,7 +286,7 @@ abstract class AnnotationBuilder {
 	 *            {@link GenomeChange} to build annotation for
 	 * @return String with the HGVS location string
 	 */
-	private String buildLocAnno(TranscriptInfo transcript, GenomeChange change) {
+	private String buildLocAnno(TranscriptModel transcript, GenomeChange change) {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
@@ -329,7 +329,7 @@ abstract class AnnotationBuilder {
 	 *            {@link GenomeChange} to build annotation for
 	 * @return String with the HGVS DNA Annotation string (with coordinates for this transcript).
 	 */
-	private String buildDNAAnno(TranscriptInfo transcript, GenomeChange change) {
+	private String buildDNAAnno(TranscriptModel transcript, GenomeChange change) {
 		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 
 		GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();

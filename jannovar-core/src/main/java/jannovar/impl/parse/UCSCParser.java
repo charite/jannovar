@@ -4,8 +4,8 @@ import jannovar.impl.util.PathUtil;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.PositionType;
-import jannovar.reference.TranscriptInfo;
-import jannovar.reference.TranscriptInfoBuilder;
+import jannovar.reference.TranscriptModel;
+import jannovar.reference.TranscriptModelBuilder;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -82,7 +82,7 @@ public class UCSCParser implements TranscriptParser {
 	private final Section iniSection;
 
 	/** Map of all genes loaded so far. The key is the UCSC id, e.g. uc0001234.3. */
-	private HashMap<String, TranscriptInfoBuilder> knownGeneMap;
+	private HashMap<String, TranscriptModelBuilder> knownGeneMap;
 
 	/**
 	 * @param refDict
@@ -96,11 +96,11 @@ public class UCSCParser implements TranscriptParser {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
-		this.knownGeneMap = new HashMap<String, TranscriptInfoBuilder>();
+		this.knownGeneMap = new HashMap<String, TranscriptModelBuilder>();
 	}
 
 	@Override
-	public ImmutableList<TranscriptInfo> run() throws TranscriptParseException {
+	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Build paths to UCSC files.
 		String knownGenePath = PathUtil.join(basePath, getINIFileName("knownGene"));
 		String knownGeneMrnaPath = PathUtil.join(basePath, getINIFileName("knownGeneMrna"));
@@ -114,9 +114,9 @@ public class UCSCParser implements TranscriptParser {
 		parseKnown2LocusLink(knownToLocusLinkPath);
 
 		// Build result list.
-		ImmutableList.Builder<TranscriptInfo> result = new ImmutableList.Builder<TranscriptInfo>();
-		for (Map.Entry<String, TranscriptInfoBuilder> entry : knownGeneMap.entrySet()) {
-			TranscriptInfo info = entry.getValue().build();
+		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
+		for (Map.Entry<String, TranscriptModelBuilder> entry : knownGeneMap.entrySet()) {
+			TranscriptModel info = entry.getValue().build();
 			if (checkTranscriptInfo(info))
 				result.add(info);
 		}
@@ -136,7 +136,7 @@ public class UCSCParser implements TranscriptParser {
 	 *            {@link TranscriptInfo} to check for consistency
 	 * @return <code>false</code> if known problems have been found
 	 */
-	private boolean checkTranscriptInfo(TranscriptInfo info) {
+	private boolean checkTranscriptInfo(TranscriptModel info) {
 		if (info.transcriptLength() > info.sequence.length()) {
 			System.err.println("WARNING: Transcript " + info.accession
 					+ " is indicated to be longer than its sequence. Ignoring.");
@@ -177,8 +177,8 @@ public class UCSCParser implements TranscriptParser {
 	 * @throws TranscriptParseException
 	 *             on problems parsing the data
 	 */
-	public TranscriptInfoBuilder parseTranscriptModelFromLine(String line) throws TranscriptParseException {
-		TranscriptInfoBuilder tib = new TranscriptInfoBuilder();
+	public TranscriptModelBuilder parseTranscriptModelFromLine(String line) throws TranscriptParseException {
+		TranscriptModelBuilder tib = new TranscriptModelBuilder();
 		String A[] = line.split("\t");
 		if (A.length != NFIELDS) {
 			String error = String.format(
@@ -299,7 +299,7 @@ public class UCSCParser implements TranscriptParser {
 			while ((line = br.readLine()) != null) {
 				// linecount++;
 				try {
-					TranscriptInfoBuilder tib = parseTranscriptModelFromLine(line);
+					TranscriptModelBuilder tib = parseTranscriptModelFromLine(line);
 					this.knownGeneMap.put(tib.getAccession(), tib);
 				} catch (TranscriptParseException e) {
 					// exceptionCount++;
@@ -347,7 +347,7 @@ public class UCSCParser implements TranscriptParser {
 				}
 				String id = A[0];
 				Integer geneID = Integer.parseInt(A[1]);
-				TranscriptInfoBuilder tbi = this.knownGeneMap.get(id);
+				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
 				if (tbi == null) {
 					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 					notFoundID++;
@@ -397,7 +397,7 @@ public class UCSCParser implements TranscriptParser {
 
 				String id = A[0];
 				String seq = A[1].toUpperCase();
-				TranscriptInfoBuilder tbi = this.knownGeneMap.get(id);
+				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
 				if (tbi == null) {
 					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 					// System.err.println("Error, could not find FASTA sequence for known gene \"" + id + "\"");
@@ -467,7 +467,7 @@ public class UCSCParser implements TranscriptParser {
 				}
 				String id = A[0];
 				String geneSymbol = A[4];
-				TranscriptInfoBuilder tbi = this.knownGeneMap.get(id);
+				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
 				if (tbi == null) {
 					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 					// System.err.println("Error, could not find xref sequence for known gene \"" + id + "\"");

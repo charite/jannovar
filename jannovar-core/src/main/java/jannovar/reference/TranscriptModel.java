@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class TranscriptInfo implements Serializable, Comparable<TranscriptInfo> {
+public final class TranscriptModel implements Serializable, Comparable<TranscriptModel> {
 
 	/**
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
@@ -54,7 +54,7 @@ public final class TranscriptInfo implements Serializable, Comparable<Transcript
 	/**
 	 * Initialize the TranscriptInfo object from the given parameters.
 	 */
-	public TranscriptInfo(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
+	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
 			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
@@ -149,7 +149,7 @@ public final class TranscriptInfo implements Serializable, Comparable<Transcript
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TranscriptInfo other = (TranscriptInfo) obj;
+		TranscriptModel other = (TranscriptModel) obj;
 		if (accession == null) {
 			if (other.accession != null)
 				return false;
@@ -186,7 +186,7 @@ public final class TranscriptInfo implements Serializable, Comparable<Transcript
 	}
 
 	@Override
-	public int compareTo(TranscriptInfo o) {
+	public int compareTo(TranscriptModel o) {
 		int result = geneID - o.geneID;
 
 		result = geneSymbol.compareTo(o.geneSymbol);
