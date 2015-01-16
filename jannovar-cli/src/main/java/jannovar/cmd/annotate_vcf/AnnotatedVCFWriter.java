@@ -15,7 +15,6 @@ import jannovar.annotation.AnnotationList;
 import jannovar.annotation.AnnotationListTextGenerator;
 import jannovar.annotation.BestAnnotationListTextGenerator;
 import jannovar.annotation.VariantAnnotator;
-import jannovar.annotation.VariantType;
 import jannovar.impl.util.PathUtil;
 import jannovar.io.Chromosome;
 import jannovar.io.ReferenceDictionary;
@@ -168,7 +167,8 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 						continue;
 					if (bestList == null)
 						bestList = annoList;
-					else if (VariantType.priorityLevel(annoList.entries.get(0).varType) < VariantType.priorityLevel(bestList.entries.get(0).varType))
+					else if (annoList.entries.get(0).varType.priorityLevel() < bestList.entries.get(0).varType
+							.priorityLevel())
 						bestList = annoList;
 				}
 				if (bestList != null) {

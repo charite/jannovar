@@ -88,7 +88,6 @@ public enum VariantType {
 	/** variant is a structural inversion variant &gt;=1000bp */
 	SV_INVERSION;
 
-	// TODO(holtgrew): make this non-static
 	/**
 	 * The preference level for annotations is
 	 * <OL>
@@ -112,8 +111,8 @@ public enum VariantType {
 	 *            Type of the variant
 	 * @return priority level for sorting lists of variants.
 	 */
-	public static int priorityLevel(VariantType vt) {
-		switch (vt) {
+	public int priorityLevel() {
+		switch (this) {
 		case TRANSCRIPT_ABLATION:
 		case FS_DELETION:
 		case FS_INSERTION:
@@ -173,7 +172,7 @@ public enum VariantType {
 	 * @return <code>true</code> if a variantType has pathogenicity level one, otherwise <code>false</code>
 	 */
 	public boolean isTopPriorityVariant() {
-		return VariantType.priorityLevel(this) == 1;
+		return this.priorityLevel() == 1;
 	}
 
 	/**
