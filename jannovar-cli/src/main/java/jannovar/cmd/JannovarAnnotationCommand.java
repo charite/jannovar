@@ -47,4 +47,5 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 		System.err.println(String.format("Deserialization took %.2f sec.",
 				(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 	}
+
 }
