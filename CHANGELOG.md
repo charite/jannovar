@@ -1,5 +1,6 @@
 **develop**
 
+* Changing namespace to `de.charite.compbio.jannovar`.
 * Making `VariantType#priorityLevel` a non-static member.
 * Renaming `TranscriptInfo` to `TranscriptModel`.
 * Moving `HG19RefDictbuilder` from tests to main.
