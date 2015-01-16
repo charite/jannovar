@@ -27,13 +27,11 @@ import java.io.Serializable;
 @Immutable
 public final class GenomePosition implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	/** reference dictionary to use for coordinate translation */
 	public final ReferenceDictionary refDict;
 
-	/** the used position type */
-	public final PositionType positionType;
 	/** the strand that the position is located on */
 	public final char strand;
 	/** the chromosome number, as index in chromosome dictionary */
@@ -54,41 +52,33 @@ public final class GenomePosition implements Serializable {
 	/** construct genome position with selected coordinate system */
 	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos, PositionType positionType) {
 		this.refDict = refDict;
-		this.positionType = positionType;
 		this.strand = strand;
 		this.chr = chr;
-		this.pos = pos;
+		if (positionType == PositionType.ONE_BASED)
+			this.pos = pos - 1;
+		else
+			this.pos = pos;
 	}
 
 	/** construct genome position from other with selected coordinate system */
-	public GenomePosition(GenomePosition other, PositionType positionType) {
+	public GenomePosition(GenomePosition other) {
 		this.refDict = other.refDict;
-		this.positionType = positionType;
 		this.strand = other.strand;
 		this.chr = other.chr;
-
-		// transform coordinate system
-		int delta = 0;
-		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
-			delta = 1;
-		else if (other.positionType == PositionType.ONE_BASED && this.positionType == PositionType.ZERO_BASED)
-			delta = -1;
-		this.pos = other.pos + delta;
+		this.pos = other.pos;
 	}
 
 	/** construct genome position from other with the selected strand */
 	public GenomePosition(GenomePosition other, char strand) {
 		this.refDict = other.refDict;
-		this.positionType = other.positionType;
 		this.strand = strand;
 		this.chr = other.chr;
 
 		// transform coordinate system
-		int delta = (positionType == PositionType.ONE_BASED) ? 1 : -1;
 		if (strand == other.strand)
 			this.pos = other.pos;
 		else
-			this.pos = refDict.contigLength.get(other.chr) - other.pos + delta;
+			this.pos = refDict.contigLength.get(other.chr) - other.pos - 1;
 	}
 
 	/** convert into GenomePosition of the given strand */
@@ -96,17 +86,10 @@ public final class GenomePosition implements Serializable {
 		return new GenomePosition(this, strand);
 	}
 
-	/** convert into GenomePosition of the given position type */
-	public GenomePosition withPositionType(PositionType positionType) {
-		return new GenomePosition(this, positionType);
-	}
-
 	/** @return <tt>true</tt> if this position is left of the other (on this strand). */
 	public boolean isLt(GenomePosition other) {
 		if (other.strand != strand)
 			other = other.withStrand(strand);
-		if (other.positionType != positionType)
-			other = other.withPositionType(positionType);
 		return (pos < other.pos);
 	}
 
@@ -116,8 +99,6 @@ public final class GenomePosition implements Serializable {
 			return false;
 		if (other.strand != strand)
 			other = other.withStrand(strand);
-		if (other.positionType != positionType)
-			other = other.withPositionType(positionType);
 		return (pos <= other.pos);
 	}
 
@@ -127,8 +108,6 @@ public final class GenomePosition implements Serializable {
 			return false;
 		if (other.strand != strand)
 			other = other.withStrand(strand);
-		if (other.positionType != positionType)
-			other = other.withPositionType(positionType);
 		return (pos > other.pos);
 	}
 
@@ -138,8 +117,6 @@ public final class GenomePosition implements Serializable {
 			return false;
 		if (other.strand != strand)
 			other = other.withStrand(strand);
-		if (other.positionType != positionType)
-			other = other.withPositionType(positionType);
 		return (pos >= other.pos);
 	}
 
@@ -149,8 +126,6 @@ public final class GenomePosition implements Serializable {
 			return false;
 		if (other.strand != strand)
 			other = other.withStrand(strand);
-		if (other.positionType != positionType)
-			other = other.withPositionType(positionType);
 		return (pos == other.pos);
 	}
 
@@ -168,8 +143,6 @@ public final class GenomePosition implements Serializable {
 			throw new InvalidCoordinateException("Coordinates are on different chromosomes " + this + " vs. " + pos);
 		if (pos.strand != strand)
 			pos = pos.withStrand(strand);
-		if (pos.positionType != positionType)
-			pos = pos.withPositionType(positionType);
 		return (this.pos - pos.pos);
 	}
 
@@ -184,7 +157,7 @@ public final class GenomePosition implements Serializable {
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public GenomePosition shifted(int delta) {
-		return new GenomePosition(refDict, strand, chr, pos + delta, positionType);
+		return new GenomePosition(refDict, strand, chr, pos + delta, PositionType.ZERO_BASED);
 	}
 
 	/*
@@ -197,8 +170,7 @@ public final class GenomePosition implements Serializable {
 		if (strand == '-')
 			return withStrand('+').toString();
 
-		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":", pos);
+		return StringUtil.concatenate(refDict.contigName.get(chr), ":", pos + 1);
 	}
 
 	/*
@@ -208,14 +180,13 @@ public final class GenomePosition implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		if (this.positionType == PositionType.ONE_BASED || strand != '+')
-			return withPositionType(PositionType.ZERO_BASED).withStrand('+').hashCode();
+		if (strand != '+')
+			return withStrand('+').hashCode();
 
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + chr;
 		result = prime * result + pos;
-		result = prime * result + ((positionType == null) ? 0 : positionType.hashCode());
 		return result;
 	}
 
@@ -233,10 +204,10 @@ public final class GenomePosition implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 
-		if (positionType == PositionType.ONE_BASED || strand == '-')
-			return this.withPositionType(PositionType.ZERO_BASED).withStrand('+').equals(obj);
+		if (strand == '-')
+			return withStrand('+').equals(obj);
 		GenomePosition other = (GenomePosition) obj;
-		other = other.withPositionType(PositionType.ZERO_BASED).withStrand('+');
+		other = other.withStrand('+');
 
 		if (strand != other.strand)
 			return false;
@@ -244,8 +215,7 @@ public final class GenomePosition implements Serializable {
 			return false;
 		if (pos != other.pos)
 			return false;
-		if (positionType != other.positionType)
-			return false;
 		return true;
 	}
+
 }

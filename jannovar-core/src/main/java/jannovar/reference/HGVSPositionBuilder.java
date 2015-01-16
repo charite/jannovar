@@ -32,8 +32,6 @@ public final class HGVSPositionBuilder {
 	 *         {@link #transcript}.
 	 */
 	public String getCDNAPosStr(GenomePosition pos) {
-		pos = pos.withPositionType(PositionType.ZERO_BASED); // assuming zero-based positions below
-
 		// Guard against cases upstream/downstream of transcription region.
 		if (transcript.txRegion.isRightOf(pos)) // upstream of transcription region
 			return getCDNAPosStrForUpstreamPos(pos);
@@ -56,10 +54,10 @@ public final class HGVSPositionBuilder {
 	 */
 	private String getCDNAPosStrForExonPos(GenomePosition pos) {
 		try {
-			GenomePosition zeroCDSStartPos = getCDSRegion().withPositionType(PositionType.ZERO_BASED)
+			GenomePosition zeroCDSStartPos = getCDSRegion()
 					.getGenomeBeginPos();
 			TranscriptPosition tCDSStartPos = projector.genomeToTranscriptPos(zeroCDSStartPos);
-			GenomePosition zeroCDSEndPos = getCDSRegion().withPositionType(PositionType.ZERO_BASED).getGenomeEndPos();
+			GenomePosition zeroCDSEndPos = getCDSRegion().getGenomeEndPos();
 			TranscriptPosition tCDSEndPos = projector.genomeToTranscriptPos(zeroCDSEndPos.shifted(-1));
 			TranscriptPosition tPos = projector.genomeToTranscriptPos(pos);
 
@@ -91,10 +89,10 @@ public final class HGVSPositionBuilder {
 		final int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
 		if (exonNumber == TranscriptProjectionDecorator.INVALID_INTRON_ID)
 			throw new Error("Bug: position must lie in CDS at this point.");
-		GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber).withPositionType(PositionType.ZERO_BASED)
+		GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber)
 				.getGenomeEndPos();
 		GenomePosition nextExonBeginPos = transcript.exonRegions.get(exonNumber + 1)
-				.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos();
+.getGenomeBeginPos();
 		GenomePosition basePos = null;
 		String offsetStr = null;
 		if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
@@ -120,9 +118,8 @@ public final class HGVSPositionBuilder {
 		// The upstream position is simply given as "-$count" where $count is the transcript position of the CDS
 		// start plus the genomic base distance of pos to the CDS start.
 		try {
-			TranscriptPosition tPos = projector.genomeToTranscriptPos(getCDSRegion().withPositionType(
-					PositionType.ZERO_BASED).getGenomeBeginPos());
-			int numBases = transcript.txRegion.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos()
+			TranscriptPosition tPos = projector.genomeToTranscriptPos(getCDSRegion().getGenomeBeginPos());
+			int numBases = transcript.txRegion.getGenomeBeginPos()
 					.differenceTo(pos);
 			return StringUtil.concatenate("-", tPos.pos + numBases);
 		} catch (ProjectionException e) {
@@ -140,7 +137,7 @@ public final class HGVSPositionBuilder {
 	private String getCDNAPosStrForDownstreamPos(GenomePosition pos) {
 		// The downstream position is simply given as "*$count" where $count is the genomic base offset after the CDS
 		// region.
-		int numBases = -getCDSRegion().withPositionType(PositionType.ZERO_BASED).getGenomeEndPos().differenceTo(pos);
+		int numBases = -getCDSRegion().getGenomeEndPos().differenceTo(pos);
 		return StringUtil.concatenate("*", numBases + 1);
 	}
 

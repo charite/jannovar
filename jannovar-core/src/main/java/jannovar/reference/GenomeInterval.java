@@ -17,13 +17,11 @@ import java.io.Serializable;
 @Immutable
 public final class GenomeInterval implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	/** reference dictionary to use for coordinate translation */
 	final ReferenceDictionary refDict;
 
-	/** the used position type */
-	public final PositionType positionType;
 	/** the strand that the position is located on */
 	public char strand;
 	/** the chromosome number, as index in chromosome dictionary */
@@ -49,43 +47,36 @@ public final class GenomeInterval implements Serializable {
 			PositionType positionType) {
 		this.refDict = refDict;
 		this.strand = strand;
-		this.positionType = positionType;
 		this.chr = chr;
-		this.beginPos = beginPos;
+		if (positionType == PositionType.ONE_BASED)
+			this.beginPos = beginPos - 1;
+		else
+			this.beginPos = beginPos;
 		this.endPos = endPos;
 	}
 
 	/** construct genome interval from other with selected coordinate system */
-	public GenomeInterval(GenomeInterval other, PositionType positionType) {
+	public GenomeInterval(GenomeInterval other) {
 		this.refDict = other.refDict;
 		this.strand = other.strand;
-		this.positionType = positionType;
 		this.chr = other.chr;
 		this.beginPos = other.beginPos;
 		this.endPos = other.endPos;
-
-		// transform coordinate system
-		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
-			this.beginPos += 1;
-		else if (other.positionType == PositionType.ONE_BASED && this.positionType == PositionType.ZERO_BASED)
-			this.beginPos -= 1;
 	}
 
 	/** construct genome interval from other with selected strand */
 	public GenomeInterval(GenomeInterval other, char strand) {
 		this.refDict = other.refDict;
-		this.positionType = other.positionType;
 		this.strand = strand;
 		this.chr = other.chr;
 
 		// transform coordinate system
-		int delta = (positionType == PositionType.ONE_BASED) ? 1 : 0;
 		if (strand == other.strand) {
 			this.beginPos = other.beginPos;
 			this.endPos = other.endPos;
 		} else {
-			int beginPos = refDict.contigLength.get(other.chr) - other.beginPos + delta;
-			int endPos = refDict.contigLength.get(other.chr) - other.endPos + delta;
+			int beginPos = refDict.contigLength.get(other.chr) - other.beginPos;
+			int endPos = refDict.contigLength.get(other.chr) - other.endPos;
 			this.endPos = beginPos;
 			this.beginPos = endPos;
 		}
@@ -94,13 +85,11 @@ public final class GenomeInterval implements Serializable {
 	/** construct genome interval from {@link GenomePosition} with a length towards 3' of pos' coordinate system */
 	public GenomeInterval(GenomePosition pos, int length) {
 		this.refDict = pos.refDict;
-		this.positionType = pos.positionType;
 		this.strand = pos.strand;
 		this.chr = pos.chr;
 		this.beginPos = pos.pos;
 
-		int delta = (positionType == PositionType.ZERO_BASED) ? 0 : -1;
-		this.endPos = pos.pos + length + delta;
+		this.endPos = pos.pos + length;
 	}
 
 	/** convert into GenomeInterval of the given strand */
@@ -108,24 +97,19 @@ public final class GenomeInterval implements Serializable {
 		return new GenomeInterval(this, strand);
 	}
 
-	/** convert into GenomeInterval with the given position type */
-	public GenomeInterval withPositionType(PositionType positionType) {
-		return new GenomeInterval(this, positionType);
-	}
-
 	/** return the genome begin position */
 	public GenomePosition getGenomeBeginPos() {
-		return new GenomePosition(refDict, strand, chr, beginPos, positionType);
+		return new GenomePosition(refDict, strand, chr, beginPos, PositionType.ZERO_BASED);
 	}
 
 	/** return the genome end position */
 	public GenomePosition getGenomeEndPos() {
-		return new GenomePosition(refDict, strand, chr, endPos, positionType);
+		return new GenomePosition(refDict, strand, chr, endPos, PositionType.ZERO_BASED);
 	}
 
 	/** returns length of the interval */
 	public int length() {
-		return this.endPos - this.beginPos + (positionType == PositionType.ONE_BASED ? 1 : 0);
+		return this.endPos - this.beginPos;
 	}
 
 	/**
@@ -134,15 +118,14 @@ public final class GenomeInterval implements Serializable {
 	public GenomeInterval intersection(GenomeInterval other) {
 		if (chr != other.chr)
 			return new GenomeInterval(refDict, strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
-		other = other.withStrand(strand).withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval me = withPositionType(PositionType.ZERO_BASED);
+		other = other.withStrand(strand);
 
-		int beginPos = Math.max(me.beginPos, other.beginPos);
-		int endPos = Math.min(me.endPos, other.endPos);
+		int beginPos = Math.max(this.beginPos, other.beginPos);
+		int endPos = Math.min(this.endPos, other.endPos);
 		if (endPos < beginPos)
 			beginPos = endPos;
 
-		return new GenomeInterval(refDict, me.strand, me.chr, beginPos, endPos, PositionType.ZERO_BASED);
+		return new GenomeInterval(refDict, strand, chr, beginPos, endPos, PositionType.ZERO_BASED);
 	}
 
 	/**
@@ -155,12 +138,7 @@ public final class GenomeInterval implements Serializable {
 			return false; // wrong chromosome
 		if (pos.strand != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		if (pos.positionType != positionType)
-			pos = pos.withPositionType(positionType);
-		if (positionType == PositionType.ONE_BASED)
-			return (pos.pos > endPos);
-		else
-			return (pos.pos >= endPos);
+		return (pos.pos >= endPos);
 	}
 
 	/**
@@ -173,8 +151,6 @@ public final class GenomeInterval implements Serializable {
 			return false; // wrong chromosome
 		if (pos.strand != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		if (pos.positionType != positionType)
-			pos = pos.withPositionType(positionType);
 		return (pos.pos < beginPos);
 	}
 
@@ -188,12 +164,7 @@ public final class GenomeInterval implements Serializable {
 			return false; // wrong chromosome
 		if (pos.strand != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		if (pos.positionType != positionType)
-			pos = pos.withPositionType(positionType);
-		if (positionType == PositionType.ONE_BASED)
-			return (pos.pos >= beginPos && pos.pos <= endPos);
-		else
-			return (pos.pos >= beginPos && pos.pos < endPos);
+		return (pos.pos >= beginPos && pos.pos < endPos);
 	}
 
 	/**
@@ -207,8 +178,6 @@ public final class GenomeInterval implements Serializable {
 			return false; // wrong chromosome
 		if (other.strand != strand)
 			other = other.withStrand(strand); // ensure that we are on the correct strand
-		if (other.positionType != positionType)
-			other = other.withPositionType(positionType);
 		return (other.beginPos >= beginPos && other.endPos <= endPos);
 	}
 
@@ -217,7 +186,7 @@ public final class GenomeInterval implements Serializable {
 	 */
 	public GenomeInterval withMorePadding(int padding) {
 		// TODO(holtgrem): throw when going outside of chromosome?
-		return new GenomeInterval(refDict, strand, chr, beginPos - padding, endPos + padding, positionType);
+		return new GenomeInterval(refDict, strand, chr, beginPos - padding, endPos + padding, PositionType.ZERO_BASED);
 	}
 
 	/**
@@ -229,9 +198,7 @@ public final class GenomeInterval implements Serializable {
 		// TODO(holtgrem): add test for this
 		if (chr != other.chr)
 			return false;
-		GenomeInterval thisZero = withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval otherZero = other.withStrand(strand).withPositionType(PositionType.ZERO_BASED);
-		return (otherZero.beginPos < thisZero.endPos && this.beginPos < other.endPos);
+		return (other.beginPos < endPos && beginPos < other.endPos);
 	}
 
 	/*
@@ -244,8 +211,7 @@ public final class GenomeInterval implements Serializable {
 		if (strand == '-')
 			return withStrand('+').toString();
 
-		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":", beginPos, "-", this.endPos);
+		return StringUtil.concatenate(refDict.contigName.get(chr), ":", beginPos + 1, "-", endPos);
 	}
 
 	/*
@@ -255,15 +221,14 @@ public final class GenomeInterval implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		if (this.positionType == PositionType.ONE_BASED || strand != '+')
-			return withPositionType(PositionType.ZERO_BASED).withStrand('+').hashCode();
+		if (strand != '+')
+			return withStrand('+').hashCode();
 
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + beginPos;
 		result = prime * result + chr;
 		result = prime * result + endPos;
-		result = prime * result + ((positionType == null) ? 0 : positionType.hashCode());
 		result = prime * result + strand;
 		return result;
 	}
@@ -281,17 +246,13 @@ public final class GenomeInterval implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		if (positionType == PositionType.ONE_BASED)
-			return this.withPositionType(PositionType.ZERO_BASED).equals(obj);
 		GenomeInterval other = (GenomeInterval) obj;
-		other = other.withPositionType(PositionType.ZERO_BASED).withStrand(strand);
+		other = other.withStrand(strand);
 		if (beginPos != other.beginPos)
 			return false;
 		if (chr != other.chr)
 			return false;
 		if (endPos != other.endPos)
-			return false;
-		if (positionType != other.positionType)
 			return false;
 		if (strand != other.strand)
 			return false;

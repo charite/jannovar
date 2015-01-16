@@ -74,8 +74,7 @@ public final class TranscriptSequenceChangeHelper {
 			return transcript.sequence;
 
 		// Get transcript begin and end position.
-		GenomePosition changeBeginPos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeBeginPos();
+		GenomePosition changeBeginPos = change.getGenomeInterval().getGenomeBeginPos();
 		TranscriptPosition tBeginPos;
 		try {
 			tBeginPos = translateGenomeToTranscriptPosition(changeBeginPos);
@@ -84,8 +83,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 
 		// Get transcript end position.
-		GenomePosition changeEndPos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeEndPos();
+		GenomePosition changeEndPos = change.getGenomeInterval().getGenomeEndPos();
 		TranscriptPosition tEndPos;
 		try {
 			tEndPos = translateGenomeToTranscriptPosition(changeEndPos);
@@ -127,8 +125,7 @@ public final class TranscriptSequenceChangeHelper {
 			return projector.genomeToTranscriptPos(pos);
 		} else { // lies in intron, project to begin position of next exon
 			int intronNum = projector.locateIntron(pos);
-			return projector.genomeToTranscriptPos(transcript.exonRegions.get(intronNum)
-					.withPositionType(PositionType.ZERO_BASED).getGenomeBeginPos());
+			return projector.genomeToTranscriptPos(transcript.exonRegions.get(intronNum).getGenomeBeginPos());
 		}
 	}
 
@@ -169,10 +166,9 @@ public final class TranscriptSequenceChangeHelper {
 				return cdsSeq;
 		} else { // insertion
 			// Get change position and the one left of it.
-			GenomePosition pos = change.pos.withPositionType(PositionType.ZERO_BASED);
 			GenomePosition lPos = change.pos.shifted(-1);
-			if (!transcript.cdsRegion.contains(pos) || !transcript.cdsRegion.contains(lPos)
-					|| !soDecorator.liesInExon(pos) || !soDecorator.liesInExon(lPos))
+			if (!transcript.cdsRegion.contains(change.pos) || !transcript.cdsRegion.contains(lPos)
+					|| !soDecorator.liesInExon(change.pos) || !soDecorator.liesInExon(lPos))
 				return cdsSeq;
 		}
 
@@ -206,13 +202,11 @@ public final class TranscriptSequenceChangeHelper {
 			return cdsSeq;
 
 		// Get transcript begin and end position.
-		GenomePosition changeBeginPos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeBeginPos();
+		GenomePosition changeBeginPos = change.getGenomeInterval().getGenomeBeginPos();
 		CDSPosition cdsChangeBeginPos = projector.projectGenomeToCDSPosition(changeBeginPos);
 
 		// Get transcript end position.
-		GenomePosition changeEndPos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeEndPos();
+		GenomePosition changeEndPos = change.getGenomeInterval().getGenomeEndPos();
 		CDSPosition cdsChangeEndPos = projector.projectGenomeToCDSPosition(changeEndPos);
 
 		// Build resulting transcript string.
