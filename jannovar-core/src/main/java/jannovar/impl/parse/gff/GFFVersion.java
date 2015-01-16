@@ -22,6 +22,7 @@ public final class GFFVersion {
 
 	@Override
 	public String toString() {
-		return String.format("%d", version);
+		return Integer.toString(version);
 	}
+
 }

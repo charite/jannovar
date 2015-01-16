@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 // TODO(holtgrem): Test this class!
 
@@ -34,11 +35,11 @@ public final class TranscriptSequenceDecorator {
 	public static String codonWithUpdatedBase(String transcriptCodon, int frameShift, char targetNC) {
 		assert (0 <= frameShift && frameShift <= 2);
 		if (frameShift == 0)
-			return String.format("%c%c%c", targetNC, transcriptCodon.charAt(1), transcriptCodon.charAt(2));
+			return StringUtil.concatenate(targetNC, transcriptCodon.charAt(1), transcriptCodon.charAt(2));
 		else if (frameShift == 1)
-			return String.format("%c%c%c", transcriptCodon.charAt(0), targetNC, transcriptCodon.charAt(2));
+			return StringUtil.concatenate(transcriptCodon.charAt(0), targetNC, transcriptCodon.charAt(2));
 		else
-			return String.format("%c%c%c", transcriptCodon.charAt(0), transcriptCodon.charAt(1), targetNC);
+			return StringUtil.concatenate(transcriptCodon.charAt(0), transcriptCodon.charAt(1), targetNC);
 	}
 
 	/**
@@ -56,11 +57,11 @@ public final class TranscriptSequenceDecorator {
 	public static String nucleotidesWithInsertion(String transcriptNTs, int frameShift, String insertion) {
 		assert (0 <= frameShift && frameShift <= 2);
 		if (frameShift == 0)
-			return String.format("%s%s", insertion, transcriptNTs);
+			return StringUtil.concatenate(insertion, transcriptNTs);
 		else if (frameShift == 1)
-			return String.format("%c%s%s", transcriptNTs.charAt(0), insertion, transcriptNTs.substring(1));
+			return StringUtil.concatenate(transcriptNTs.charAt(0), insertion, transcriptNTs.substring(1));
 		else
-			return String.format("%c%c%s%s", transcriptNTs.charAt(0), transcriptNTs.charAt(1), insertion,
+			return StringUtil.concatenate(transcriptNTs.charAt(0), transcriptNTs.charAt(1), insertion,
 					transcriptNTs.substring(2));
 	}
 

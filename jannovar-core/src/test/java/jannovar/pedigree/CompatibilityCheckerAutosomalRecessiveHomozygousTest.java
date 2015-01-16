@@ -3,6 +3,7 @@ package jannovar.pedigree;
 import jannovar.io.ReferenceDictionary;
 import jannovar.reference.GenomeInterval;
 import jannovar.reference.HG19RefDictBuilder;
+import jannovar.reference.PositionType;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +19,7 @@ public class CompatibilityCheckerAutosomalRecessiveHomozygousTest {
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 	static final String geneName = "<fakeName>";
 	static final GenomeInterval genomeRegion = new GenomeInterval(refDict, '+', refDict.contigID.get("1").intValue(),
-			10, 20);
+			10, 20, PositionType.ONE_BASED);
 
 	Pedigree pedigree;
 	ImmutableList<String> names;

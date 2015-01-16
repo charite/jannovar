@@ -110,8 +110,8 @@ public final class TranscriptInfo implements Serializable, Comparable<Transcript
 	 */
 	public GenomeInterval intronRegion(int i) {
 		// TODO(holtgrem): test me!
-		GenomeInterval exonRegionL = exonRegions.get(i).withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval exonRegionR = exonRegions.get(i + 1).withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval exonRegionL = exonRegions.get(i);
+		GenomeInterval exonRegionR = exonRegions.get(i + 1);
 		return new GenomeInterval(exonRegionL.refDict, exonRegionL.strand, exonRegionL.chr, exonRegionL.endPos,
 				exonRegionR.beginPos, PositionType.ZERO_BASED);
 	}

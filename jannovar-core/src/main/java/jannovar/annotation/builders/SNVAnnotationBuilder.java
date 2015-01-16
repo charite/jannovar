@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.impl.util.Translator;
 import jannovar.reference.CDSPosition;
 import jannovar.reference.GenomeChange;
@@ -80,8 +81,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// if this is not the case.
 		String warningMsg = null;
 		if (transcript.sequence.charAt(txPos.pos) != change.ref.charAt(0))
-			warningMsg = String.format("WARNING:_mRNA/genome_discrepancy:_%c/%s_strand=%c",
-					transcript.sequence.charAt(txPos.pos), change.ref.charAt(0), transcript.getStrand());
+			warningMsg = StringUtil.concatenate("WARNING:_mRNA/genome_discrepancy:_",
+					transcript.sequence.charAt(txPos.pos), "/", change.ref.charAt(0), "_strand=",
+					transcript.getStrand());
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.pos % 3;
@@ -99,14 +101,14 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// positions).
 		char wtNT = wtCodon.charAt(frameShift); // wild type nucleotide
 		char varNT = varCodon.charAt(frameShift); // wild type amino acid
-		hgvsSNVOverride = String.format("%c>%c", wtNT, varNT);
+		hgvsSNVOverride = StringUtil.concatenate(wtNT, ">", varNT);
 
 		// Construct annotation part for the protein.
 		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
 		String varAA = Translator.getTranslator().translateDNA3(varCodon);
-		String protAnno = String.format("p.%s%d%s", wtAA, cdsPos.pos / 3 + 1, varAA);
+		String protAnno = StringUtil.concatenate("p.", wtAA, cdsPos.pos / 3 + 1, varAA);
 		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
-			protAnno = String.format("p.=", cdsPos.pos / 3 + 1);
+			protAnno = StringUtil.concatenate("p.=");
 
 		// Compute variant type.
 		VariantType varType = computeVariantType(wtAA, varAA);
@@ -122,7 +124,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
-				protAnno = String.format("%sext*%d", protAnno, stopCodonPos - cdsPos.pos / 3);
+				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.pos / 3);
 			}
 		} else if (so.overlapsWithSpliceDonorSite(changeInterval)) {
 			varType = VariantType.SPLICE_DONOR;
@@ -134,9 +136,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Build the resulting Annotation.
 		// Glue together the annotations and warning message in annotation if any, return Annotation.
-		String annotationStr = String.format("%s:%s", ncHGVS(), protAnno);
+		String annotationStr = StringUtil.concatenate(ncHGVS(), ":", protAnno);
 		if (warningMsg != null)
-			annotationStr = String.format("%s:[%s]", annotationStr, warningMsg);
+			annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
 
 		return new Annotation(varType, cdsPos.pos, annotationStr, transcript);
 	}
@@ -144,9 +146,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return String.format("%s:%s%s>%s", locAnno, dnaAnno, change.ref, change.alt);
+			return StringUtil.concatenate(locAnno, ":", dnaAnno, change.ref, ">", change.alt);
 		else
-			return String.format("%s:%s%s", locAnno, dnaAnno, hgvsSNVOverride);
+			return StringUtil.concatenate(locAnno, ":", dnaAnno, hgvsSNVOverride);
 	}
 
 	/**

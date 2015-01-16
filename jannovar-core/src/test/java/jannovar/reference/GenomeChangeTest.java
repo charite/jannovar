@@ -82,7 +82,7 @@ public class GenomeChangeTest {
 	public void testConstructorStripLeading() {
 		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "AAA", "AAC");
 		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.strand,
-				this.genomePosOneBasedForward.chr, this.genomePosOneBasedForward.pos + 2);
+				this.genomePosOneBasedForward.chr, this.genomePosOneBasedForward.pos + 2, PositionType.ZERO_BASED);
 		Assert.assertEquals(expectedPos, change.pos);
 		Assert.assertEquals("A", change.ref);
 		Assert.assertEquals("C", change.alt);
@@ -100,7 +100,7 @@ public class GenomeChangeTest {
 	public void testConstructorStripBoth() {
 		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "GGACC", "GGCCC");
 		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.strand,
-				this.genomePosOneBasedForward.chr, this.genomePosOneBasedForward.pos + 2);
+				this.genomePosOneBasedForward.chr, this.genomePosOneBasedForward.pos + 2, PositionType.ZERO_BASED);
 		Assert.assertEquals(expectedPos, change.pos);
 		Assert.assertEquals("A", change.ref);
 		Assert.assertEquals("C", change.alt);

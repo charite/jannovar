@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 /**
  * Position on a transcript.
@@ -61,18 +62,18 @@ public final class TranscriptPosition {
 
 	/*
 	 * Returns string with one-based position.
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return String.format("%s:n.%d", this.transcript.accession, pos);
+		return StringUtil.concatenate(transcript.accession, ":n.", pos);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -89,7 +90,7 @@ public final class TranscriptPosition {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

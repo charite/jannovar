@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.impl.util.Translator;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
@@ -76,7 +77,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (!so.liesInExon(change.pos))
-			return String.format("%s:%sins%s", locAnno, dnaAnno, change.alt);
+			return StringUtil.concatenate(locAnno, ":", dnaAnno, "ins", change.alt);
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -93,16 +94,16 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
 			if (change.alt.length() == 1) {
-				dnaAnno = String.format("%c.%sdup", prefix, posBuilder.getCDNAPosStr(change.pos.shifted(-1)));
+				dnaAnno = StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
 			} else {
-				dnaAnno = String.format("%c.%s_%sdup", prefix,
-						posBuilder.getCDNAPosStr(change.pos.shifted(-change.alt.length())),
-						posBuilder.getCDNAPosStr(change.pos.shifted(-1)));
+				dnaAnno = StringUtil.concatenate(prefix, ".",
+						posBuilder.getCDNAPosStr(change.pos.shifted(-change.alt.length())), "_",
+						posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
 			}
 
-			return String.format("%s:%s", locAnno, dnaAnno);
+			return StringUtil.concatenate(locAnno, ":", dnaAnno);
 		} else {
-			return String.format("%s:%sins%s", locAnno, dnaAnno, change.alt);
+			return StringUtil.concatenate(locAnno, ":", dnaAnno, "ins", change.alt);
 		}
 	}
 
@@ -195,7 +196,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varType, txBeginPos, String.format("%s:%s", ncHGVS(), protAnno), transcript);
+			return new Annotation(varType, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleFrameShiftCase() {
@@ -223,7 +224,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				return false;
 
 			// TODO(holtgrew): Check for duplication? This is a very rare corner case with bogus transcript.
-			protAnno = String.format("p.%s%d%s", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
+			protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
 					t.toLong(varAASeq.substring(varAAInsertPos - 1, varAASeq.length())));
 			varType = (varAAStopPos != -1) ? VariantType.STOPGAIN : VariantType.NON_FS_INSERTION;
 
@@ -241,13 +242,13 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				// this case we cannot really differentiate this from a non-frameshift insertion but we still call
 				// it
 				// so.
-				protAnno = String.format("p.*%d%sext*%d", varAAInsertPos + 1,
-						t.toLong(varAASeq.charAt(varAAInsertPos)), (varAAStopPos - varAAInsertPos));
+				protAnno = StringUtil.concatenate("p.*", varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)),
+						"ext*", (varAAStopPos - varAAInsertPos));
 				varType = VariantType.FS_INSERTION;
 			} else {
 				// The variant AA does not contain a stop codon, is stop loss.
-				protAnno = String.format("p.%s%d%sfs*?", t.toLong(varAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1,
-						t.toLong(varAASeq.charAt(varAAInsertPos)));
+				protAnno = StringUtil.concatenate("p.", t.toLong(varAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1,
+						t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*?");
 				varType = VariantType.STOPLOSS;
 			}
 		}
@@ -262,19 +263,20 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				// The start codon is not affected.
 				if (varAAStopPos == varAAInsertPos) {
 					// The insertion directly creates a stop codon, is stop gain.
-					protAnno = String.format("p.%s%d*", t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1);
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+							varAAInsertPos + 1, "*");
 					varType = VariantType.STOPGAIN;
 				} else if (varAAStopPos > varAAInsertPos) {
 					// The insertion is a frameshift variant that leads to a transcript still having a stop codon,
 					// simple frameshift insertion.
-					protAnno = String.format("p.%s%d%sfs*%d", t.toLong(wtAASeq.charAt(varAAInsertPos)),
-							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)),
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*",
 							(varAAStopPos + 1 - varAAInsertPos));
 					varType = VariantType.FS_INSERTION;
 				} else {
 					// The insertion is a frameshift variant that leads to the loss of the stop codon, is stop loss.
-					protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAASeq.charAt(varAAInsertPos)),
-							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)));
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*?");
 					varType = VariantType.STOPLOSS;
 				}
 			}
@@ -298,13 +300,13 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				varType = VariantType.SYNONYMOUS;
 			} else if (varAAStopPos > 0) {
 				// varAA contains a stop codon
-				protAnno = String.format("p.*%d%sext*%d", aaChange.pos + 1, t.toLong(varAASeq.charAt(aaChange.pos)),
-						(varAAStopPos - aaChange.pos)); // last is stop codon AA pos
+				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAASeq.charAt(aaChange.pos)),
+						"ext*", (varAAStopPos - aaChange.pos)); // last is stop codon AA pos
 				varType = VariantType.STOPLOSS;
 			} else {
 				// varAA contains no stop codon
-				protAnno = String.format("p.%s%d%sfs*?", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
-						t.toLong(varAASeq.charAt(aaChange.pos)));
+				protAnno = StringUtil.concatenate("p.*", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
+						t.toLong(varAASeq.charAt(aaChange.pos)), "fs*?");
 				varType = VariantType.STOPLOSS;
 			}
 		}
@@ -321,15 +323,17 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				// affected.
 				if (varAAStopPos == varAAInsertPos) {
 					// The insertion directly starts with a stop codon, is stop gain.
-					protAnno = String.format("p.%s%d*", t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1);
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+							varAAInsertPos + 1, "*");
 					varType = VariantType.STOPGAIN;
 				} else {
 					if (varAAStopPos != -1 && wtAAStopPos != -1
 							&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
 						// The insertion does not directly start with a stop codon but the insertion leads to a stop
 						// codon in the affected amino acids. This leads to an "delins" protein annotation.
-						protAnno = String.format("p.%s%d_%s%ddelins%s", t.toLong(wtAASeq.charAt(varAAInsertPos)),
-								varAAInsertPos + 1, t.toLong(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 2,
+						protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+								varAAInsertPos + 1, "_", t.toLong(wtAASeq.charAt(varAAInsertPos + 1)),
+								varAAInsertPos + 2, "delins",
 								t.toLong(varAASeq.substring(varAAInsertPos, varAAStopPos)));
 						varType = VariantType.STOPGAIN;
 					} else {
@@ -342,27 +346,26 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 								// We have a duplication, can only be duplication of AAs to the left because of
 								// normalization in CDSExonicAnnotationBuilder constructor.
 								if (aaChange.alt.length() == 1) {
-									protAnno = String.format("p.%s%ddup", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)),
-											varAAInsertPos);
+									protAnno = StringUtil.concatenate("p.",
+											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos, "dup");
 								} else {
-									protAnno = String.format("p.%s%d_%s%ddup",
+									protAnno = StringUtil.concatenate("p.",
 											t.toLong(wtAASeq.charAt(varAAInsertPos - aaChange.alt.length())),
-											varAAInsertPos - aaChange.alt.length() + 1,
-											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos);
+											varAAInsertPos - aaChange.alt.length() + 1, "_",
+											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos, "dup");
 								}
 								varType = VariantType.NON_FS_DUPLICATION;
 							} else {
 								// We have a simple insertion.
-								protAnno = String.format("p.%s%d_%s%dins%s",
-										t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
-										t.toLong(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1,
-										t.toLong(aaChange.alt));
+								protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)),
+										varAAInsertPos, "_", t.toLong(wtAASeq.charAt(varAAInsertPos)),
+										varAAInsertPos + 1, "ins", t.toLong(aaChange.alt));
 								varType = VariantType.NON_FS_INSERTION;
 							}
 						} else {
 							// The delins/substitution case.
-							protAnno = String.format("p.%s%ddelins%s", t.toLong(aaChange.ref), varAAInsertPos + 1,
-									t.toLong(aaChange.alt));
+							protAnno = StringUtil.concatenate("p.", t.toLong(aaChange.ref), varAAInsertPos + 1,
+									"delins", t.toLong(aaChange.alt));
 							varType = VariantType.NON_FS_SUBSTITUTION;
 						}
 					}

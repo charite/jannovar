@@ -3,6 +3,7 @@ package jannovar.annotation.builders;
 import jannovar.annotation.Annotation;
 import jannovar.annotation.InvalidGenomeChange;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.impl.util.Translator;
 import jannovar.reference.AminoAcidChange;
 import jannovar.reference.AminoAcidChangeNormalizer;
@@ -68,7 +69,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 	@Override
 	protected String ncHGVS() {
-		return String.format("%s:%sdelins%s", locAnno, dnaAnno, change.alt);
+		return StringUtil.concatenate(locAnno, ":", dnaAnno, "delins", change.alt);
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
@@ -84,7 +85,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		return new Annotation(VariantType.START_LOSS, txBeginPos, String.format("%s:p.0?", ncHGVS()), transcript);
+		return new Annotation(VariantType.START_LOSS, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
 	}
 
 	/**
@@ -170,7 +171,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varType, txBeginPos, String.format("%s:%s", ncHGVS(), protAnno), transcript);
+			return new Annotation(varType, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -211,21 +212,22 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
 			if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
-				protAnno = String.format("p.%s%d%s", wtAAFirstLong, aaChange.pos + 1, t.toLong(insertedAAs.charAt(0)));
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1,
+						t.toLong(insertedAAs.charAt(0)));
 			else if (insertedAAs.isEmpty())
-				protAnno = String.format("p.%s%d_%s%ddel", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
-						aaChange.getLastPos() + 1);
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "_", wtAALastLong,
+						aaChange.getLastPos() + 1, "del");
 			else
-				protAnno = String.format("p.%s%d_%s%ddelins%s", wtAAFirstLong, aaChange.pos + 1, wtAALastLong,
-						aaChange.getLastPos() + 1, t.toLong(insertedAAs));
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "_", wtAALastLong,
+						aaChange.getLastPos() + 1, "delins", t.toLong(insertedAAs));
 
 			// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
 			if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 				// Differentiate between the variant AA string containing a stop codon or not.
 				if (varAAStopPos >= 0)
-					protAnno = String.format("%sext*%d", protAnno, varAAStopPos - aaChange.pos + 1);
+					protAnno = StringUtil.concatenate(protAnno, "ext*", varAAStopPos - aaChange.pos + 1);
 				else
-					protAnno = String.format("%sext*?", protAnno);
+					protAnno = StringUtil.concatenate(protAnno, "ext*?");
 			}
 		}
 
@@ -255,7 +257,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				String opDesc = "fs"; // operation description
 				if (aaChange.ref.indexOf('*') >= 0)
 					opDesc = "ext"; // stop codon deleted
-				protAnno = String.format("p.%s%d%s%s*%d", wtAALong, aaChange.pos + 1, varAALong, opDesc,
+				protAnno = StringUtil.concatenate("p.", wtAALong, aaChange.pos + 1, varAALong, opDesc, "*",
 						stopCodonOffset);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".

@@ -1,6 +1,7 @@
 package jannovar.reference;
 
 import jannovar.Immutable;
+import jannovar.impl.util.StringUtil;
 
 /**
  * Representation of a change in amino acids.
@@ -35,7 +36,7 @@ public final class AminoAcidChange {
 
 	@Override
 	public String toString() {
-		return String.format("%d:%s>%s", pos + 1, ref, alt);
+		return StringUtil.concatenate(pos + 1, ":", ref, ">", alt);
 	}
 
 	/**

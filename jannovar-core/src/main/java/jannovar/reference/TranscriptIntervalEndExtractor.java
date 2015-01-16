@@ -11,12 +11,12 @@ public class TranscriptIntervalEndExtractor implements IntervalEndExtractor<Tran
 
 	@Override
 	public int getBegin(TranscriptInfo transcript) {
-		return transcript.txRegion.withStrand('+').withPositionType(PositionType.ZERO_BASED).beginPos;
+		return transcript.txRegion.withStrand('+').beginPos;
 	}
 
 	@Override
 	public int getEnd(TranscriptInfo transcript) {
-		return transcript.txRegion.withStrand('+').withPositionType(PositionType.ZERO_BASED).endPos;
+		return transcript.txRegion.withStrand('+').endPos;
 	}
 
 }

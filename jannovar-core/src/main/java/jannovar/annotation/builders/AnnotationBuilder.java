@@ -2,6 +2,7 @@ package jannovar.annotation.builders;
 
 import jannovar.annotation.Annotation;
 import jannovar.annotation.VariantType;
+import jannovar.impl.util.StringUtil;
 import jannovar.reference.GenomeChange;
 import jannovar.reference.GenomeChangeNormalizer;
 import jannovar.reference.GenomeInterval;
@@ -237,7 +238,7 @@ abstract class AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		String annoString = String.format("dist=%d", distance());
+		String annoString = StringUtil.concatenate("dist=", distance());
 		if (change.getGenomeInterval().length() == 0) {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
@@ -261,16 +262,15 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(VariantType.INTERGENIC, 0, String.format("dist=%d", distance()), transcript);
+		return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate("dist=", distance()), transcript);
 	}
 
 	/**
 	 * @return base pair distance of transcript and variant
 	 */
 	private int distance() {
-		GenomeInterval changeInterval = change.withStrand('+').getGenomeInterval()
-				.withPositionType(PositionType.ZERO_BASED);
-		GenomeInterval txInterval = transcript.txRegion.withStrand('+').withPositionType(PositionType.ZERO_BASED);
+		GenomeInterval changeInterval = change.withStrand('+').getGenomeInterval();
+		GenomeInterval txInterval = transcript.txRegion.withStrand('+');
 		if (changeInterval.overlapsWith(txInterval))
 			return 0;
 		else if (changeInterval.isLeftOf(txInterval.getGenomeBeginPos()))
@@ -294,8 +294,7 @@ abstract class AnnotationBuilder {
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is change => insertion
-			GenomePosition changePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-					.getGenomeBeginPos();
+			GenomePosition changePos = change.getGenomeInterval().getGenomeBeginPos();
 
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(changePos))
@@ -305,11 +304,9 @@ abstract class AnnotationBuilder {
 				throw new Error("Bug: position should be in exon if we reach here");
 		} else {
 			// at least one base is changed
-			GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-					.getGenomeBeginPos();
+			GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
 			GenomeInterval firstChangeBase = new GenomeInterval(firstChangePos, 1);
-			GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-					.getGenomeEndPos().shifted(-1);
+			GenomePosition lastChangePos = change.getGenomeInterval().getGenomeEndPos().shifted(-1);
 			GenomeInterval lastChangeBase = new GenomeInterval(lastChangePos, 1);
 
 			// Handle the cases for which no exon number is available.
@@ -322,7 +319,7 @@ abstract class AnnotationBuilder {
 				return transcript.accession; // no exon information if the deletion spans more than one exon
 		}
 
-		return String.format("%s:exon%d", transcript.accession, exonNum + 1);
+		return StringUtil.concatenate(transcript.accession, ":exon", exonNum + 1);
 	}
 
 	/**
@@ -335,21 +332,19 @@ abstract class AnnotationBuilder {
 	private String buildDNAAnno(TranscriptInfo transcript, GenomeChange change) {
 		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 
-		GenomePosition firstChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeBeginPos();
-		GenomePosition lastChangePos = change.getGenomeInterval().withPositionType(PositionType.ZERO_BASED)
-				.getGenomeEndPos().shifted(-1);
+		GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
+		GenomePosition lastChangePos = change.getGenomeInterval().getGenomeEndPos().shifted(-1);
 		char prefix = transcript.isCoding() ? 'c' : 'n';
 		if (change.getGenomeInterval().length() == 0)
 			// case of zero-base change (insertion)
-			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(lastChangePos),
+			return StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(lastChangePos), "_",
 					posBuilder.getCDNAPosStr(firstChangePos));
 		else if (firstChangePos.equals(lastChangePos))
 			// case of single-base change (SNV)
-			return String.format("%c.%s", prefix, posBuilder.getCDNAPosStr(firstChangePos));
+			return StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(firstChangePos));
 		else
 			// case of multi-base change (deletion, block substitution)
-			return String.format("%c.%s_%s", prefix, posBuilder.getCDNAPosStr(firstChangePos),
+			return StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(firstChangePos), "_",
 					posBuilder.getCDNAPosStr(lastChangePos));
 	}
 

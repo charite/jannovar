@@ -1,26 +1,28 @@
 package jannovar.impl.util;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * This singleton class helps to translate DNA sequences.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class Translator {
 
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
-	private HashMap<String, String> codon1 = null;
+	private ImmutableMap<String, String> codon1 = null;
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code) */
-	private HashMap<String, String> codon3 = null;
+	private ImmutableMap<String, String> codon3 = null;
 	/** Map of IUPAC ambiguity codes. */
-	private HashMap<String, String> iupac = null;
+	private ImmutableMap<String, String> iupac = null;
 	/** Map of short AA codes to long ones */
-	private HashMap<String, String> shortToLong = null;
+	private ImmutableMap<String, String> shortToLong = null;
 	/** Map of long AA codes to short ones */
-	private HashMap<String, String> longToShort = null;
+	private ImmutableMap<String, String> longToShort = null;
 
 	private static Translator translator = null;
 
@@ -84,7 +86,7 @@ public final class Translator {
 		return shortToLong.get("" + c);
 	}
 
-	private String translateDNA(String dnaseq, HashMap<String, String> codonTable) {
+	private String translateDNA(String dnaseq, ImmutableMap<String, String> codonTable) {
 		StringBuilder aminoAcidSeq = new StringBuilder();
 		int len = dnaseq.length();
 		if (!(len % 3 == 0)) {
@@ -118,11 +120,11 @@ public final class Translator {
 	 * IUPAC codes.
 	 */
 	private void initializeMaps() {
-		codon1 = new HashMap<String, String>();
-		codon3 = new HashMap<String, String>();
-		iupac = new HashMap<String, String>();
-		shortToLong = new HashMap<String, String>();
-		longToShort = new HashMap<String, String>();
+		ImmutableMap.Builder<String, String> codon1 = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> codon3 = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> iupac = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> shortToLong = new ImmutableMap.Builder<String, String>();
+		ImmutableMap.Builder<String, String> longToShort = new ImmutableMap.Builder<String, String>();
 
 		codon1.put("AAA", "K");
 		codon1.put("AAC", "N");
@@ -296,8 +298,13 @@ public final class Translator {
 		longToShort.put("Tyr", "Y");
 		longToShort.put("*", "*");
 
-		for (Map.Entry<String, String> entry : longToShort.entrySet())
+		this.longToShort = longToShort.build();
+		for (Map.Entry<String, String> entry : this.longToShort.entrySet())
 			shortToLong.put(entry.getValue(), entry.getKey());
-		shortToLong.put("*", "*");
+
+		this.codon1 = codon1.build();
+		this.codon3 = codon3.build();
+		this.iupac = iupac.build();
+		this.shortToLong = shortToLong.build();
 	}
 }

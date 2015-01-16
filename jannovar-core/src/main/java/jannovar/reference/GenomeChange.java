@@ -36,7 +36,7 @@ public final class GenomeChange {
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, pos.positionType);
+		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
@@ -48,9 +48,6 @@ public final class GenomeChange {
 	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
 	 */
 	public GenomeChange(GenomePosition pos, String ref, String alt, char strand) {
-		// Normalize position type to zero-based.
-		pos = pos.withPositionType(PositionType.ZERO_BASED);
-
 		// Correct variant data.
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
@@ -94,8 +91,7 @@ public final class GenomeChange {
 		if (strand == other.pos.strand) {
 			this.pos = other.pos;
 		} else {
-			GenomePosition pos = other.pos.withPositionType(PositionType.ZERO_BASED);
-			this.pos = pos.shifted(this.ref.length() - 1).withStrand(strand).withPositionType(other.pos.positionType);
+			this.pos = other.pos.shifted(this.ref.length() - 1).withStrand(strand);
 		}
 	}
 
@@ -110,8 +106,7 @@ public final class GenomeChange {
 	 * @return interval of the genome change
 	 */
 	public GenomeInterval getGenomeInterval() {
-		GenomePosition pos = this.pos.withPositionType(PositionType.ZERO_BASED);
-		return new GenomeInterval(pos, this.ref.length()).withPositionType(this.pos.positionType);
+		return new GenomeInterval(pos, ref.length());
 	}
 
 	/**
@@ -125,7 +120,7 @@ public final class GenomeChange {
 	 * @return the GenomeChange with the given position type
 	 */
 	public GenomeChange withPositionType(PositionType positionType) {
-		return new GenomeChange(pos.withPositionType(positionType), ref, alt);
+		return new GenomeChange(pos, ref, alt);
 	}
 
 	/**
