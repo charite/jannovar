@@ -1,0 +1,5 @@
+##fileformat=VCFv4.1
+##reference=GRCh37
+##comment="REF and ALT sequences are both on forward strand of reference assembly"
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	949696	.	C	CG	.	.	.
