@@ -27,171 +27,171 @@ public class VariantTypeTest {
 
 	@Test
 	public void testPriorityLevel1() {
-		int n = VariantType.priorityLevel(VariantType.FS_DELETION);
+		int n = VariantType.FS_DELETION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel2() {
-		int n = VariantType.priorityLevel(VariantType.FS_INSERTION);
+		int n = VariantType.FS_INSERTION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel3() {
-		int n = VariantType.priorityLevel(VariantType.NON_FS_SUBSTITUTION);
+		int n = VariantType.NON_FS_SUBSTITUTION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel4() {
-		int n = VariantType.priorityLevel(VariantType.FS_SUBSTITUTION);
+		int n = VariantType.FS_SUBSTITUTION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel5() {
-		int n = VariantType.priorityLevel(VariantType.MISSENSE);
+		int n = VariantType.MISSENSE.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel6() {
-		int n = VariantType.priorityLevel(VariantType.NON_FS_DELETION);
+		int n = VariantType.NON_FS_DELETION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel7() {
-		int n = VariantType.priorityLevel(VariantType.NON_FS_INSERTION);
+		int n = VariantType.NON_FS_INSERTION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel8() {
-		int n = VariantType.priorityLevel(VariantType.SPLICE_DONOR);
+		int n = VariantType.SPLICE_DONOR.priorityLevel();
 		Assert.assertEquals(1, n);
-		n = VariantType.priorityLevel(VariantType.SPLICE_DONOR);
+		n = VariantType.SPLICE_DONOR.priorityLevel();
 		Assert.assertEquals(1, n);
-		n = VariantType.priorityLevel(VariantType.SPLICE_REGION);
+		n = VariantType.SPLICE_REGION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel9() {
-		int n = VariantType.priorityLevel(VariantType.STOPGAIN);
+		int n = VariantType.STOPGAIN.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel10() {
-		int n = VariantType.priorityLevel(VariantType.STOPLOSS);
+		int n = VariantType.STOPLOSS.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel11() {
-		int n = VariantType.priorityLevel(VariantType.FS_DUPLICATION);
+		int n = VariantType.FS_DUPLICATION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel12() {
-		int n = VariantType.priorityLevel(VariantType.NON_FS_DUPLICATION);
+		int n = VariantType.NON_FS_DUPLICATION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel13() {
-		int n = VariantType.priorityLevel(VariantType.START_LOSS);
+		int n = VariantType.START_LOSS.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel15() {
-		int n = VariantType.priorityLevel(VariantType.ncRNA_EXONIC);
+		int n = VariantType.ncRNA_EXONIC.priorityLevel();
 		Assert.assertEquals(2, n);
 	}
 
 	@Test
 	public void testPriorityLevel16() {
-		int n = VariantType.priorityLevel(VariantType.ncRNA_SPLICE_DONOR);
+		int n = VariantType.ncRNA_SPLICE_DONOR.priorityLevel();
 		Assert.assertEquals(2, n);
-		n = VariantType.priorityLevel(VariantType.ncRNA_SPLICE_ACCEPTOR);
+		n = VariantType.ncRNA_SPLICE_ACCEPTOR.priorityLevel();
 		Assert.assertEquals(2, n);
-		n = VariantType.priorityLevel(VariantType.ncRNA_SPLICE_REGION);
+		n = VariantType.ncRNA_SPLICE_REGION.priorityLevel();
 		Assert.assertEquals(2, n);
 	}
 
 	@Test
 	public void testPriorityLevel17() {
-		int n = VariantType.priorityLevel(VariantType.UTR3);
+		int n = VariantType.UTR3.priorityLevel();
 		Assert.assertEquals(3, n);
 	}
 
 	@Test
 	public void testPriorityLevel18() {
-		int n = VariantType.priorityLevel(VariantType.UTR5);
+		int n = VariantType.UTR5.priorityLevel();
 		Assert.assertEquals(4, n);
 	}
 
 	@Test
 	public void testPriorityLevel19() {
-		int n = VariantType.priorityLevel(VariantType.SYNONYMOUS);
+		int n = VariantType.SYNONYMOUS.priorityLevel();
 		Assert.assertEquals(5, n);
 	}
 
 	@Test
 	public void testPriorityLevel20() {
-		int n = VariantType.priorityLevel(VariantType.INTRONIC);
+		int n = VariantType.INTRONIC.priorityLevel();
 		Assert.assertEquals(6, n);
 	}
 
 	@Test
 	public void testPriorityLevel21() {
-		int n = VariantType.priorityLevel(VariantType.ncRNA_INTRONIC);
+		int n = VariantType.ncRNA_INTRONIC.priorityLevel();
 		Assert.assertEquals(7, n);
 	}
 
 	@Test
 	public void testPriorityLevel22() {
-		int n = VariantType.priorityLevel(VariantType.UPSTREAM);
+		int n = VariantType.UPSTREAM.priorityLevel();
 		Assert.assertEquals(8, n);
 	}
 
 	@Test
 	public void testPriorityLevel23() {
-		int n = VariantType.priorityLevel(VariantType.DOWNSTREAM);
+		int n = VariantType.DOWNSTREAM.priorityLevel();
 		Assert.assertEquals(8, n);
 	}
 
 	@Test
 	public void testPriorityLevel24() {
-		int n = VariantType.priorityLevel(VariantType.INTERGENIC);
+		int n = VariantType.INTERGENIC.priorityLevel();
 		Assert.assertEquals(9, n);
 	}
 
 	@Test
 	public void testPriorityLevel25() {
-		int n = VariantType.priorityLevel(VariantType.ERROR);
+		int n = VariantType.ERROR.priorityLevel();
 		Assert.assertEquals(10, n);
 	}
 
 	@Test
 	public void testPriorityLevel26() {
-		int n = VariantType.priorityLevel(VariantType.SV_DELETION);
+		int n = VariantType.SV_DELETION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel27() {
-		int n = VariantType.priorityLevel(VariantType.SV_INSERTION);
+		int n = VariantType.SV_INSERTION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
 	@Test
 	public void testPriorityLevel28() {
-		int n = VariantType.priorityLevel(VariantType.SV_SUBSTITUTION);
+		int n = VariantType.SV_SUBSTITUTION.priorityLevel();
 		Assert.assertEquals(1, n);
 	}
 
@@ -203,7 +203,7 @@ public class VariantTypeTest {
 	public void testOrderingOfPriorityLevel() {
 		VariantType n[] = VariantType.getPrioritySortedList();
 		for (int i = 1; i < n.length; ++i) {
-			Assert.assertTrue(VariantType.priorityLevel(n[i - 1]) <= VariantType.priorityLevel(n[i]));
+			Assert.assertTrue(n[i - 1].priorityLevel() <= n[i].priorityLevel());
 		}
 	}
 
