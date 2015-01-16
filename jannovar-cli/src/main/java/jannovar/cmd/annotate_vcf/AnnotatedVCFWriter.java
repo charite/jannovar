@@ -70,6 +70,8 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		VariantContextWriterBuilder builder = new VariantContextWriterBuilder();
 		builder.setReferenceDictionary(reader.getFileHeader().getSequenceDictionary());
 		builder.setOutputFile(new File(getOutFileName()));
+		// Be more lenient in missing header fields.
+		builder.setOption(Options.ALLOW_MISSING_FIELDS_IN_HEADER);
 		// Disable on-the-fly generation of Tribble index if the input file does not have a sequence dictionary.
 		if (reader.getFileHeader().getSequenceDictionary() == null)
 			builder.unsetOption(Options.INDEX_ON_THE_FLY);
