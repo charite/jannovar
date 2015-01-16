@@ -14,7 +14,7 @@ public class GenomeIntervalTest {
 
 	@Test
 	public void testConstructorDefaultPositionType() {
-		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 23, 45);
+		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 23, 45, PositionType.ONE_BASED);
 		Assert.assertEquals(interval.chr, 1);
 		Assert.assertEquals(interval.beginPos, 23);
 		Assert.assertEquals(interval.endPos, 45);
@@ -86,10 +86,10 @@ public class GenomeIntervalTest {
 		Assert.assertEquals(revInterval.length(), 101);
 
 		// check contains() after flip
-		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '+', 1, 999)));
-		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '+', 1, 1100)));
-		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '+', 1, 1000)));
-		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '+', 1, 1101)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '+', 1, 999, PositionType.ONE_BASED)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '+', 1, 1100, PositionType.ONE_BASED)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '+', 1, 1000, PositionType.ONE_BASED)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '+', 1, 1101, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -118,10 +118,10 @@ public class GenomeIntervalTest {
 		Assert.assertEquals(fwdInterval.length(), 101);
 
 		// check contains() after flip
-		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '-', 1, 999)));
-		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '-', 1, 1100)));
-		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '-', 1, 1000)));
-		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '-', 1, 1101)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '-', 1, 999, PositionType.ONE_BASED)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '-', 1, 1100, PositionType.ONE_BASED)));
+		Assert.assertTrue(revInterval.contains(new GenomePosition(refDict, '-', 1, 1000, PositionType.ONE_BASED)));
+		Assert.assertFalse(revInterval.contains(new GenomePosition(refDict, '-', 1, 1101, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -177,43 +177,43 @@ public class GenomeIntervalTest {
 
 	@Test
 	public void testIsLeftOf() {
-		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200);
-		Assert.assertTrue(interval.isRightOf(new GenomePosition(refDict, '+', 1, 999)));
-		Assert.assertFalse(interval.isRightOf(new GenomePosition(refDict, '+', 1, 1000)));
+		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200, PositionType.ONE_BASED);
+		Assert.assertTrue(interval.isRightOf(new GenomePosition(refDict, '+', 1, 999, PositionType.ONE_BASED)));
+		Assert.assertFalse(interval.isRightOf(new GenomePosition(refDict, '+', 1, 1000, PositionType.ONE_BASED)));
 	}
 
 	@Test
 	public void testIsRightOf() {
-		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200);
-		Assert.assertFalse(interval.isLeftOf(new GenomePosition(refDict, '+', 1, 1200)));
-		Assert.assertTrue(interval.isLeftOf(new GenomePosition(refDict, '+', 1, 1201)));
+		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200, PositionType.ONE_BASED);
+		Assert.assertFalse(interval.isLeftOf(new GenomePosition(refDict, '+', 1, 1200, PositionType.ONE_BASED)));
+		Assert.assertTrue(interval.isLeftOf(new GenomePosition(refDict, '+', 1, 1201, PositionType.ONE_BASED)));
 	}
 
 	@Test
 	public void testContainsSameChrYes() {
-		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200);
-		Assert.assertTrue(interval.contains(new GenomePosition(refDict, '+', 1, 1000)));
-		Assert.assertTrue(interval.contains(new GenomePosition(refDict, '+', 1, 1200)));
+		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200, PositionType.ONE_BASED);
+		Assert.assertTrue(interval.contains(new GenomePosition(refDict, '+', 1, 1000, PositionType.ONE_BASED)));
+		Assert.assertTrue(interval.contains(new GenomePosition(refDict, '+', 1, 1200, PositionType.ONE_BASED)));
 	}
 
 	@Test
 	public void testContainsSameChrNo() {
-		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200);
-		Assert.assertFalse(interval.contains(new GenomePosition(refDict, '+', 1, 999)));
-		Assert.assertFalse(interval.contains(new GenomePosition(refDict, '+', 1, 1201)));
+		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200, PositionType.ONE_BASED);
+		Assert.assertFalse(interval.contains(new GenomePosition(refDict, '+', 1, 999, PositionType.ONE_BASED)));
+		Assert.assertFalse(interval.contains(new GenomePosition(refDict, '+', 1, 1201, PositionType.ONE_BASED)));
 	}
 
 	@Test
 	public void testContainsDifferentChr() {
-		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200);
-		Assert.assertFalse(interval.contains(new GenomePosition(refDict, '+', 2, 1100)));
+		GenomeInterval interval = new GenomeInterval(refDict, '+', 1, 1000, 1200, PositionType.ONE_BASED);
+		Assert.assertFalse(interval.contains(new GenomePosition(refDict, '+', 2, 1100, PositionType.ONE_BASED)));
 	}
 
 	@Test
 	public void testIntersection() {
-		GenomeInterval intervalL = new GenomeInterval(refDict, '+', 1, 1000, 1200);
-		GenomeInterval intervalR = new GenomeInterval(refDict, '+', 1, 1100, 1300);
-		GenomeInterval intervalE = new GenomeInterval(refDict, '+', 1, 1100, 1200);
+		GenomeInterval intervalL = new GenomeInterval(refDict, '+', 1, 1000, 1200, PositionType.ONE_BASED);
+		GenomeInterval intervalR = new GenomeInterval(refDict, '+', 1, 1100, 1300, PositionType.ONE_BASED);
+		GenomeInterval intervalE = new GenomeInterval(refDict, '+', 1, 1100, 1200, PositionType.ONE_BASED);
 		Assert.assertEquals(intervalE, intervalL.intersection(intervalR));
 		Assert.assertEquals(intervalE, intervalR.intersection(intervalL));
 	}

@@ -9,14 +9,18 @@ import java.io.Serializable;
 /**
  * Representation of a position on a genome (chromosome, position).
  *
+ * Internally, positions are always stored zero-based, but the position type can be explicitely given to the constructor
+ * of {@link GenomePosition}.
+ *
  * In the case of one-based position, {@link #pos} points to the {@link #pos}-th base in string from the left when
  * starting to count at 1. In the case of zero-based positions, {@link #pos} points to the gap left of the character in
  * the case of positions on the forward strand and to the gap right of the character in the case of positions on the
  * reverse strand. When interpreting this for the reverse strand (i.e. counting from the right), the position right of a
  * character is interpreted as the gap <b>before</b> the character.
  *
- * Reverse-complementing a zero-based GenomePosition must be equivalent to reverse-complementing one-based positions.
- * Thus, they are shifted towards teh right gap besides the character they point at when changing the strand.
+ * Reverse-complementing a zero-based GenomePosition must be equivalent to reverse-complementing its one-based position
+ * representation. Thus, they are shifted towards the right gap besides the character they point at when changing the
+ * strand.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -37,14 +41,15 @@ public final class GenomePosition implements Serializable {
 	/** the position on the chromosome */
 	public final int pos;
 
-	/** construct genome position with one-based coordinate system */
-	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
-		this.refDict = refDict;
-		this.positionType = PositionType.ONE_BASED;
-		this.strand = strand;
-		this.chr = chr;
-		this.pos = pos;
-	}
+	// TODO(holtgrew): Add back with zero-based coordinate system
+	/** construct genome position with zero-based coordinate system */
+	// public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
+	// this.refDict = refDict;
+	// this.positionType = PositionType.ONE_BASED;
+	// this.strand = strand;
+	// this.chr = chr;
+	// this.pos = pos;
+	// }
 
 	/** construct genome position with selected coordinate system */
 	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos, PositionType positionType) {

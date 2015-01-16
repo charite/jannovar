@@ -21,3 +21,5 @@ cov-int*
 data
 # built manual
 manual/_build
+# Java Mission Control flight recorder files
+*.jfr

@@ -166,7 +166,7 @@ public class GenomePositionTest {
 
 	@Test
 	public void testShiftRight() {
-		GenomePosition pos = new GenomePosition(refDict, '+', 1, 100);
+		GenomePosition pos = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
 		GenomePosition shifted = pos.shifted(10);
 
 		Assert.assertEquals(shifted.pos, 110);
@@ -174,7 +174,7 @@ public class GenomePositionTest {
 
 	@Test
 	public void testShiftLeft() {
-		GenomePosition pos = new GenomePosition(refDict, '+', 1, 100);
+		GenomePosition pos = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
 		GenomePosition shifted = pos.shifted(-10);
 
 		Assert.assertEquals(shifted.pos, 90);
@@ -182,8 +182,8 @@ public class GenomePositionTest {
 
 	@Test
 	public void testLt() {
-		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100);
-		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101);
+		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101, PositionType.ONE_BASED);
 
 		Assert.assertTrue(posL.isLt(posR));
 		Assert.assertFalse(posL.isLt(posL));
@@ -192,8 +192,8 @@ public class GenomePositionTest {
 
 	@Test
 	public void testLeq() {
-		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100);
-		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101);
+		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101, PositionType.ONE_BASED);
 
 		Assert.assertTrue(posL.isLeq(posR));
 		Assert.assertTrue(posL.isLeq(posL));
@@ -202,8 +202,8 @@ public class GenomePositionTest {
 
 	@Test
 	public void testGt() {
-		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100);
-		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101);
+		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101, PositionType.ONE_BASED);
 
 		Assert.assertFalse(posL.isGt(posR));
 		Assert.assertFalse(posL.isGt(posL));
@@ -212,8 +212,8 @@ public class GenomePositionTest {
 
 	@Test
 	public void testGeq() {
-		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100);
-		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101);
+		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101, PositionType.ONE_BASED);
 
 		Assert.assertFalse(posL.isGeq(posR));
 		Assert.assertTrue(posL.isGeq(posL));
@@ -222,8 +222,8 @@ public class GenomePositionTest {
 
 	@Test
 	public void testEq() {
-		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100);
-		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101);
+		GenomePosition posL = new GenomePosition(refDict, '+', 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, '+', 1, 101, PositionType.ONE_BASED);
 
 		Assert.assertFalse(posL.isEq(posR));
 		Assert.assertTrue(posL.isEq(posL));
