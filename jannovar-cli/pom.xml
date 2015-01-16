@@ -76,7 +76,7 @@
 							<!-- set useUniqueVersions=false in order that the classpath has the 
 								SNAPSHOT instead of the build number prefixed to the dependency -->
 							<useUniqueVersions>false</useUniqueVersions>
-							<mainClass>jannovar.Jannovar</mainClass>
+							<mainClass>de.charite.compbio.jannovar.Jannovar</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
