@@ -39,15 +39,13 @@ public final class GenomePosition implements Serializable {
 	/** the position on the chromosome */
 	public final int pos;
 
-	// TODO(holtgrew): Add back with zero-based coordinate system
 	/** construct genome position with zero-based coordinate system */
-	// public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
-	// this.refDict = refDict;
-	// this.positionType = PositionType.ONE_BASED;
-	// this.strand = strand;
-	// this.chr = chr;
-	// this.pos = pos;
-	// }
+	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
+		this.refDict = refDict;
+		this.strand = strand;
+		this.chr = chr;
+		this.pos = pos;
+	}
 
 	/** construct genome position with selected coordinate system */
 	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos, PositionType positionType) {

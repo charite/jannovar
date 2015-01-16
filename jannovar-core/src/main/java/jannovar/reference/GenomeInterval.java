@@ -31,16 +31,14 @@ public final class GenomeInterval implements Serializable {
 	/** the end position on the chromosome */
 	public int endPos;
 
-	// TODO(holtgrew): Add back with zero-based coordinate system
 	/** construct genome interval with zero-based coordinate system */
-	// public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos) {
-	// this.refDict = refDict;
-	// this.strand = strand;
-	// this.positionType = PositionType.ONE_BASED;
-	// this.chr = chr;
-	// this.beginPos = beginPos;
-	// this.endPos = endPos;
-	// }
+	public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos) {
+		this.refDict = refDict;
+		this.strand = strand;
+		this.chr = chr;
+		this.beginPos = beginPos;
+		this.endPos = endPos;
+	}
 
 	/** construct genome interval with selected coordinate system */
 	public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos,
