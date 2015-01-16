@@ -6,6 +6,9 @@ import jannovar.io.ReferenceDictionaryBuilder;
 /**
  * Builds a {@link ReferenceDictionary} for the hg19 release.
  *
+ * This is a utility class that can be used in tests of Java code that uses the Jannovar library for the easy
+ * construction of a {@link ReferenceDictionary}.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Marten Jaeger <marten.jaeger@charite.de>
  */
