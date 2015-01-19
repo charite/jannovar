@@ -82,6 +82,7 @@ public final class DownloadCommandLineParser {
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
+		result.printProgressBars = true;
 		result.command = JannovarOptions.Command.DOWNLOAD;
 
 		if (cmd.hasOption("help")) {

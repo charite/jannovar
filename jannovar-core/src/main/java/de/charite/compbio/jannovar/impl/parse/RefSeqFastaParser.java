@@ -26,14 +26,16 @@ public final class RefSeqFastaParser extends FastaParser {
 	 *            path to the FASTA file
 	 * @param models
 	 *            the {@link TranscriptInfoBuilder transcript info builders}s without sequence information
+	 * @param printProgressBars
+	 *            whether or not to print progress bars
 	 */
-	public RefSeqFastaParser(String filename, ArrayList<TranscriptModelBuilder> models) {
-		super(filename, models);
+	public RefSeqFastaParser(String filename, ArrayList<TranscriptModelBuilder> models, boolean printProgressBars) {
+		super(filename, models, printProgressBars);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.charite.compbio.jannovar.io.FastaParser#processHeader(java.lang.String)
 	 */
 	@Override

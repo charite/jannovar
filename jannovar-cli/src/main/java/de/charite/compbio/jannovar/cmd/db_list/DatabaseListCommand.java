@@ -21,7 +21,7 @@ public class DatabaseListCommand extends JannovarCommand {
 	@Override
 	public void run() throws JannovarException {
 		System.err.println("Options");
-		options.print();
+		options.print(System.err);
 
 		DataSourceFactory factory = new DataSourceFactory(options, options.dataSourceFiles);
 		System.err.println("Available data sources:\n");

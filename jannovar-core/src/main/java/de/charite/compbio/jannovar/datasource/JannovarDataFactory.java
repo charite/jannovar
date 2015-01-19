@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
@@ -24,10 +26,13 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  */
 public abstract class JannovarDataFactory {
 
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarDataFactory.class);
+
 	/** the {@link JannovarOptions} to use for proxy settings */
-	private final JannovarOptions options;
+	protected final JannovarOptions options;
 	/** the {@link DataSource} to use */
-	private final DataSource dataSource;
+	protected final DataSource dataSource;
 	/** configuration section from INI file */
 	protected final Section iniSection;
 
@@ -50,6 +55,8 @@ public abstract class JannovarDataFactory {
 	/**
 	 * @param downloadDir
 	 *            path of directory to download files to
+	 * @param printProgressBars
+	 *            whether or not to print progress bars
 	 * @return {@link JannovarData} object for the factory's state.
 	 * @throws InvalidDataSourceException
 	 *             on problems with the data source or data source file
@@ -58,17 +65,18 @@ public abstract class JannovarDataFactory {
 	 * @throws FileDownloadException
 	 *             on problems while downloading files.
 	 */
-	public final JannovarData build(String downloadDir) throws InvalidDataSourceException, TranscriptParseException,
-			FileDownloadException {
+	public final JannovarData build(String downloadDir, boolean printProgressBars) throws InvalidDataSourceException,
+	TranscriptParseException,
+	FileDownloadException {
 		String targetDir = PathUtil.join(downloadDir, dataSource.getName());
 
-		FileDownloader downloader = new FileDownloader(buildOptions());
+		FileDownloader downloader = new FileDownloader(buildOptions(printProgressBars));
 
 		// Download files.
-		System.err.println("Downloading data...");
+		LOGGER.info("Downloading data...");
 		try {
 			for (String url : dataSource.getDownloadURLs()) {
-				System.err.println("Downloading " + url);
+				LOGGER.info("Downloading {0}", url);
 				URL src = new URL(url);
 				String fileName = new File(src.getPath()).getName();
 				File dest = new File(PathUtil.join(targetDir, fileName));
@@ -79,17 +87,17 @@ public abstract class JannovarDataFactory {
 		}
 
 		// Parse files for building ReferenceDictionary objects.
-		System.err.println("Building ReferenceDictionary...");
+		LOGGER.info("Building ReferenceDictionary...");
 		final String chromInfoPath = PathUtil.join(downloadDir, dataSource.getName(),
 				dataSource.getFileName("chromInfo"));
 		final String chrToAccessionsPath = PathUtil.join(downloadDir, dataSource.getName(),
 				dataSource.getFileName("chrToAccessions"));
 		ReferenceDictParser dictParser = new ReferenceDictParser(chromInfoPath, chrToAccessionsPath, iniSection);
 		ReferenceDictionary refDict = dictParser.parse();
-		refDict.print(System.err);
+		// refDict.print(System.err);
 
 		// Parse transcript files.
-		System.err.println("Parsing transcripts...");
+		LOGGER.info("Parsing transcripts...");
 		ImmutableList<TranscriptModel> transcripts = parseTranscripts(refDict, targetDir);
 
 		return new JannovarData(refDict, transcripts);
@@ -123,7 +131,7 @@ public abstract class JannovarDataFactory {
 				}
 			}
 		} catch (MalformedURLException e) {
-			System.err.println("WARNING: Could not parse HTTP_PROXY value " + envValue + " as URL.");
+			LOGGER.warn("Could not parse HTTP_PROXY value {0} as URL.", envValue);
 		}
 		return result;
 	}
@@ -131,10 +139,11 @@ public abstract class JannovarDataFactory {
 	/**
 	 * @return {@link FileDownloader.Options} with proxy settings from {@link #options} and environment.
 	 */
-	private FileDownloader.Options buildOptions() {
+	private FileDownloader.Options buildOptions(boolean printProgressBars) {
 		FileDownloader.Options result = new FileDownloader.Options();
 
 		// Get proxy settings from options.
+		result.printProgressBar = printProgressBars;
 		updateProxyOptions(result.http, options.httpProxy);
 		updateProxyOptions(result.https, options.httpsProxy);
 		updateProxyOptions(result.ftp, options.ftpProxy);

@@ -3,10 +3,10 @@ package de.charite.compbio.jannovar.impl.parse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
@@ -28,7 +28,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 public class RefSeqParser implements TranscriptParser {
 
 	/** {@link Logger} to use for logging */
-	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(RefSeqParser.class);
 
 	/** Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping */
 	private final ReferenceDictionary refDict;
@@ -39,6 +39,9 @@ public class RefSeqParser implements TranscriptParser {
 	/** INI {@link Section} from the configuration */
 	private final Section iniSection;
 
+	/** whether or not to print progress bars */
+	private final boolean printProgressBars;
+
 	/**
 	 * @param refDict
 	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
@@ -46,22 +49,25 @@ public class RefSeqParser implements TranscriptParser {
 	 *            path to where the to-be-parsed files live
 	 * @param iniSection
 	 *            INI {@link Section} for the configuration
+	 * @param printProgressBars
+	 *            whether or not to print progress bars
 	 */
-	public RefSeqParser(ReferenceDictionary refDict, String basePath, Section iniSection) {
+	public RefSeqParser(ReferenceDictionary refDict, String basePath, Section iniSection, boolean printProgressBars) {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
+		this.printProgressBars = printProgressBars;
 	}
 
 	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Parse GFF file, yielding a list of features.
-		System.err.println("Parsing GFF...");
+		LOGGER.info("Parsing GFF...");
 		GFFParser gffParser;
 		try {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gff")));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load GFF data from RefSeq files: {0}", e.getMessage());
+			LOGGER.error("Unable to load GFF data from RefSeq files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -71,26 +77,24 @@ public class RefSeqParser implements TranscriptParser {
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
-			System.err.println("Building transcript models...");
+			LOGGER.info("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
 		} catch (InvalidAttributeException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load data from RefSeq files: {0}", e.getMessage());
+			LOGGER.error("Unable to load data from RefSeq files: {0}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
 		// Load sequences.
 		String refSeqPath = PathUtil.join(basePath, getINIFileName("rna"));
-		System.err.println("path " + refSeqPath);
-		FastaParser efp = new RefSeqFastaParser(refSeqPath, builders);
+		FastaParser efp = new RefSeqFastaParser(refSeqPath, builders, printProgressBars);
 		int before = builders.size();
 		builders = efp.parse();
 		int after = builders.size();
 
 		// Log success and statistics.
 		Object params[] = { before, (onlyCurated() ? "curated " : ""), after };
-		LOGGER.log(Level.INFO, "Found {0} {1} transcript models from Refseq GFF resource, {2} of which had sequences.",
-				params);
+		LOGGER.info("Found {0} {1} transcript models from Refseq GFF resource, {2} of which had sequences.", params);
 
 		// Create final list of TranscriptInfos.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();

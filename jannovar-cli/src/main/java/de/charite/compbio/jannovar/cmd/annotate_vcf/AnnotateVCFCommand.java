@@ -35,7 +35,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	@Override
 	public void run() throws JannovarException {
 		System.err.println("Options");
-		options.print();
+		options.print(System.err);
 
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();

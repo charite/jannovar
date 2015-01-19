@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.impl.parse.RefSeqParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.io.JannovarData;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
@@ -35,7 +34,7 @@ final class RefSeqJannovarDataFactory extends JannovarDataFactory {
 	@Override
 	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
 			throws TranscriptParseException {
-		return new RefSeqParser(refDict, targetDir, iniSection).run();
+		return new RefSeqParser(refDict, targetDir, iniSection, options.printProgressBars).run();
 	}
 
 }

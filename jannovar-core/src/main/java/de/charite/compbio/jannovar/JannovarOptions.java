@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar;
 
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -17,6 +18,9 @@ import com.google.common.collect.ImmutableList;
 public final class JannovarOptions {
 	/** the selected command */
 	public Command command = null;
+
+	// Whether to print progress bars to stderr or not.
+	public boolean printProgressBars = false;
 
 	// Configuration for the download command
 
@@ -81,21 +85,22 @@ public final class JannovarOptions {
 	/**
 	 * Print option values to stderr.
 	 */
-	public void print() {
+	public void print(PrintStream out) {
 		if (command == Command.DOWNLOAD) {
-			System.err.println("dataSourceFiles: " + dataSourceFiles);
-			System.err.println("dataSourceNames: " + dataSourceNames);
-			System.err.println("downloadPath" + downloadPath);
-			System.err.println("HTTP proxy: " + httpProxy);
-			System.err.println("HTTPS proxy: " + httpsProxy);
-			System.err.println("FTP proxy: " + ftpProxy);
+			out.println("dataSourceFiles: " + dataSourceFiles);
+			out.println("dataSourceNames: " + dataSourceNames);
+			out.println("downloadPath" + downloadPath);
+			out.println("HTTP proxy: " + httpProxy);
+			out.println("HTTPS proxy: " + httpsProxy);
+			out.println("FTP proxy: " + ftpProxy);
 		} else if (command == Command.ANNOTATE_VCF || command == Command.ANNOTATE_POSITION) {
-			System.err.println("dataFile: " + dataFile);
-			System.err.println("changes: " + chromosomalChanges);
-			System.err.println("showAll: " + showAll);
-			System.err.println("jannovarFormat: " + jannovarFormat);
+			out.println("dataFile: " + dataFile);
+			out.println("vcfFilePaths: " + vcfFilePaths);
+			out.println("chromosomalChanges: " + chromosomalChanges);
+			out.println("showAll: " + showAll);
+			out.println("jannovarFormat: " + jannovarFormat);
 		} else if (command == Command.DB_LIST) {
-			System.err.println("dataSourceFiles: " + dataSourceFiles);
+			out.println("dataSourceFiles: " + dataSourceFiles);
 		}
 	}
 

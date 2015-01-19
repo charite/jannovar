@@ -8,6 +8,11 @@ import java.io.ObjectOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.charite.compbio.jannovar.impl.util.StringUtil;
+
 // NOTE(holtgrem): Part of the public interface of the Jannovar library.
 
 /**
@@ -17,6 +22,9 @@ import java.util.zip.GZIPOutputStream;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class JannovarDataSerializer {
+
+	/** the logger object to use */
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** path to file to serialize to or deserialize from */
 	public final String filename;
@@ -40,6 +48,9 @@ public final class JannovarDataSerializer {
 	 *             on problems with the serialization
 	 */
 	public void save(JannovarData data) throws SerializationException {
+		logger.info(StringUtil.concatenate("Serializing JannovarData to ", filename));
+		final long startTime = System.nanoTime();
+
 		if (data == null || data.refDict.contigID.isEmpty())
 			throw new SerializationException("Attempting to serialize empty data set");
 
@@ -65,6 +76,9 @@ public final class JannovarDataSerializer {
 			if (error != null)
 				throw new SerializationException(error);
 		}
+
+		logger.info(String.format("Serialization took %.2f sec.",
+				(System.nanoTime() - startTime) / 1000.0 / 1000.0 / 1000.0));
 	}
 
 	/**
@@ -75,6 +89,9 @@ public final class JannovarDataSerializer {
 	 *             on problems with the deserialization
 	 */
 	public JannovarData load() throws SerializationException {
+		logger.info(StringUtil.concatenate("Deserializing JannovarData from ", filename));
+		final long startTime = System.nanoTime();
+
 		JannovarData result = null;
 
 		// This is also waiting for Java 7 to be cleaned up, see above.
@@ -106,6 +123,8 @@ public final class JannovarDataSerializer {
 				throw new SerializationException(error);
 		}
 
+		logger.info(String.format("Deserialization took %.2f sec.",
+				(System.nanoTime() - startTime) / 1000.0 / 1000.0 / 1000.0));
 		return result;
 	}
 }

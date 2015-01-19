@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-import de.charite.compbio.jannovar.io.Chromosome;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
@@ -53,6 +54,9 @@ import de.charite.compbio.jannovar.io.Chromosome;
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
 final class AnnotationCollector {
+
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationCollector.class);
 
 	/** List of all {@link Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;
@@ -375,23 +379,9 @@ final class AnnotationCollector {
 		} else if (type == VariantType.UPSTREAM) {
 			this.hasUpstream = true;
 		} else {
-			System.err.println("Warning [AnnotatedVar.java]: Was expecting UPSTREAM or DOWNSTREAM"
-					+ " type of variant but got " + type);
-			/* TODO -- Add Exception! */
-			System.exit(1);
+			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got " + type);
 		}
 		this.annotationCount++;
-	}
-
-	/**
-	 * Print out all annotations we have for debugging purposes (before summarization)
-	 */
-	public void debugPrint() {
-		System.out.println("[AnnotatedVariantFactory]:debugPrint");
-		System.out.println("Total annotations: " + annotationCount);
-		for (Annotation a : this.annotationLst) {
-			System.out.println("\t[" + a.varType + "] \"" + a.transcript.geneSymbol + "\" -> " + a.hgvsDescription);
-		}
 	}
 
 }

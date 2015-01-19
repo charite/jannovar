@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.impl.parse.EnsemblParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.io.JannovarData;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
@@ -28,14 +27,15 @@ final class EnsemblJannovarDataFactory extends JannovarDataFactory {
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public EnsemblJannovarDataFactory(JannovarOptions options, EnsemblDataSource dataSource, Section iniSection) {
+	public EnsemblJannovarDataFactory(JannovarOptions options, EnsemblDataSource dataSource, Section iniSection,
+			boolean printProgressBars) {
 		super(options, dataSource, iniSection);
 	}
 
 	@Override
 	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
 			throws TranscriptParseException {
-		return new EnsemblParser(refDict, targetDir, iniSection).run();
+		return new EnsemblParser(refDict, targetDir, iniSection, options.printProgressBars).run();
 	}
 
 }
