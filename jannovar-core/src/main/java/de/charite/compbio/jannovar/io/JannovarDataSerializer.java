@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 // NOTE(holtgrem): Part of the public interface of the Jannovar library.
 
@@ -44,10 +46,12 @@ public final class JannovarDataSerializer {
 		// This is waiting for Java 7 to be improved. Also see: http://stackoverflow.com/questions/4092914
 		String error = null;
 		FileOutputStream fos = null;
+		GZIPOutputStream gzos = null;
 		ObjectOutputStream oos = null;
 		try {
 			fos = new FileOutputStream(filename);
-			oos = new ObjectOutputStream(fos);
+			gzos = new GZIPOutputStream(fos);
+			oos = new ObjectOutputStream(gzos);
 			oos.writeObject(data);
 		} catch (IOException i) {
 			error = String.format("Could not serialize data file list: %s", i.toString());
@@ -76,10 +80,12 @@ public final class JannovarDataSerializer {
 		// This is also waiting for Java 7 to be cleaned up, see above.
 		String error = null;
 		FileInputStream fileIn = null;
+		GZIPInputStream gzIn = null;
 		ObjectInputStream in = null;
 		try {
 			fileIn = new FileInputStream(filename);
-			in = new ObjectInputStream(fileIn);
+			gzIn = new GZIPInputStream(fileIn);
+			in = new ObjectInputStream(gzIn);
 			result = (JannovarData) in.readObject();
 		} catch (IOException i) {
 			error = String.format("Could not deserialize data list: %s", i.toString());
