@@ -175,7 +175,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2067_*2delinsCGTT:p.*689Tyrext*25", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_SUBSTITUTION, VariantType.STOPLOSS),
+				annotation1.varTypes);
 
 		// Replace stop codon by 6 nucleotides, non-frameshift case.
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
@@ -183,7 +184,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2).build();
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
 		Assert.assertEquals("uc001anx.3:exon11:c.2066_*1delinsCGGTCG:p.*689Serext*17", annotation2.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation2.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_SUBSTITUTION, VariantType.STOPLOSS),
+				annotation2.varTypes);
 
 		// Delete first base of stop codon, leads to complete loss.
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
@@ -191,7 +193,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Annotation annotation3 = new BlockSubstitutionAnnotationBuilder(infoForward, change3).build();
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
 		Assert.assertEquals("uc001anx.3:exon11:c.2065_2067delinsCGGT:p.*689Argext*16", annotation3.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation3.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_SUBSTITUTION, VariantType.STOPLOSS),
+				annotation3.varTypes);
 	}
 
 	@Test
@@ -209,7 +212,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"TGG", "AA");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2).build();
 		Assert.assertEquals("uc001anx.3:exon3:c.691_693delinsAA:p.Trp231Lysfs*23", annotation2.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation2.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_SUBSTITUTION, VariantType.SPLICE_REGION),
+				annotation2.varTypes);
 	}
 
 	@Test
@@ -219,7 +223,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"TGCCCCACCT", "CCC");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:exon7:c.1225_1234delinsCCC:p.Cys409Profs*127", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_SUBSTITUTION, VariantType.SPLICE_REGION),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -229,7 +234,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"TAAACA", "GTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:c.691-3_693delinsGTT:p.Trp231Val", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_SUBSTITUTION, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 
 		// deletion of three codons, insertion of one
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642126, PositionType.ZERO_BASED),
@@ -345,7 +351,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 5, 156479564, PositionType.ZERO_BASED), "AGTCGT", "GAGCTA");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011ddm.2:exon4:c.475_480delinsTAGCTC:p.Thr159*", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPGAIN), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_SUBSTITUTION, VariantType.STOPGAIN),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -386,7 +393,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"TGAGG", "C");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011ayb.2:c.1263_1266+1delinsC:p.Glu422del", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_SUBSTITUTION, VariantType.SPLICE_DONOR),
+				annotation1.varTypes);
 	}
 
 	// Bug found #87 on GitHub
@@ -407,7 +415,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				PositionType.ONE_BASED), "GGTGATC", "A");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc010nov.3:c.453_453+6delinsA:p.=", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_SUBSTITUTION, VariantType.SPLICE_DONOR),
+				annotation1.varTypes);
 	}
 
 }
