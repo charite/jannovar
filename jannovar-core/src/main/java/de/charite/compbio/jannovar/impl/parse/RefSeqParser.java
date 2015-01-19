@@ -67,7 +67,7 @@ public class RefSeqParser implements TranscriptParser {
 		try {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gff")));
 		} catch (IOException e) {
-			LOGGER.error("Unable to load GFF data from RefSeq files: {0}", e.getMessage());
+			LOGGER.error("Unable to load GFF data from RefSeq files: {}", e);
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -81,7 +81,7 @@ public class RefSeqParser implements TranscriptParser {
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
 		} catch (InvalidAttributeException e) {
-			LOGGER.error("Unable to load data from RefSeq files: {0}", e.getMessage());
+			LOGGER.error("Unable to load data from RefSeq files: {}", e);
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -94,7 +94,7 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Log success and statistics.
 		Object params[] = { before, (onlyCurated() ? "curated " : ""), after };
-		LOGGER.info("Found {0} {1} transcript models from Refseq GFF resource, {2} of which had sequences.", params);
+		LOGGER.info("Found {} {}transcript models from Refseq GFF resource, {} of which had sequences.", params);
 
 		// Create final list of TranscriptInfos.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();

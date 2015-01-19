@@ -64,7 +64,7 @@ public final class GFFParser {
 		this.file = new File(path);
 		LOGGER.info("Determining GFF version...");
 		this.gffVersion = determineGFFVersion(file);
-		LOGGER.info("  GFF version is {0}", gffVersion.version);
+		LOGGER.info("  GFF version is {}", gffVersion.version);
 	}
 
 	/**
@@ -104,15 +104,15 @@ public final class GFFParser {
 			if (fip.getChannel().position() != bar.max)
 				bar.print(bar.max);
 		} catch (FeatureFormatException e) {
-			LOGGER.warn("GFF with wrong Feature format: {0}", e.toString());
+			LOGGER.warn("GFF with wrong Feature format: {}", e);
 		} catch (IOException e) {
-			LOGGER.warn("failed to read the GFF file: {0}", e.toString());
+			LOGGER.warn("failed to read the GFF file: {}", e);
 		} finally {
 			try {
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				LOGGER.warn("Failed to close the GFF file reader: {0}", e);
+				LOGGER.warn("Failed to close the GFF file reader: {}", e);
 			}
 		}
 	}
@@ -150,7 +150,7 @@ public final class GFFParser {
 
 		if (myfields.size() < 9) {
 			Object params[] = { myfields.size(), featureLine };
-			LOGGER.warn("Skipping malformed feature line (missing columns ({0})): {1}", params);
+			LOGGER.warn("Skipping malformed feature line (missing columns ({})): {}", params);
 			return null;
 		}
 
@@ -340,7 +340,7 @@ public final class GFFParser {
 				try {
 					gffVersion = new GFFVersion(Integer.parseInt(fields[1]));
 				} catch (NumberFormatException e) {
-					LOGGER.warn("Failed to parse gff-version: {0}", str);
+					LOGGER.warn("Failed to parse gff-version: {}", str);
 				}
 			}
 		}

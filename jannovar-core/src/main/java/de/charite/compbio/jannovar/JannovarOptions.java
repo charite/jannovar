@@ -19,10 +19,12 @@ public final class JannovarOptions {
 	/** the selected command */
 	public Command command = null;
 
-	// Whether to print progress bars to stderr or not.
+	/** whether to print progress bars to stderr or not. */
 	public boolean printProgressBars = false;
 
-	// Configuration for the download command
+	// TODO(holtgrew): Verbosity level should go to jannovar-cli/
+	/** verbosity level */
+	public int verbosity = 1;
 
 	/** paths to INI files ot use for parsing */
 	public ImmutableList<String> dataSourceFiles = null;

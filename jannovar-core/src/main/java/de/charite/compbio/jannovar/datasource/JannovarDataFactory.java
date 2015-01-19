@@ -76,7 +76,7 @@ public abstract class JannovarDataFactory {
 		LOGGER.info("Downloading data...");
 		try {
 			for (String url : dataSource.getDownloadURLs()) {
-				LOGGER.info("Downloading {0}", url);
+				LOGGER.info("Downloading {}", url);
 				URL src = new URL(url);
 				String fileName = new File(src.getPath()).getName();
 				File dest = new File(PathUtil.join(targetDir, fileName));
@@ -131,7 +131,7 @@ public abstract class JannovarDataFactory {
 				}
 			}
 		} catch (MalformedURLException e) {
-			LOGGER.warn("Could not parse HTTP_PROXY value {0} as URL.", envValue);
+			LOGGER.warn("Could not parse HTTP_PROXY value {} as URL.", envValue);
 		}
 		return result;
 	}

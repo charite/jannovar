@@ -37,7 +37,6 @@ public final class DownloadCommand extends JannovarCommand {
 			JannovarData data = factory.getDataSource(name).getDataFactory()
 					.build(options.downloadPath, options.printProgressBars);
 			String filename = PathUtil.join(options.downloadPath, name.replace('/', '_').replace('\\', '_') + ".ser");
-			System.err.println("Serializing to " + filename);
 			JannovarDataSerializer serializer = new JannovarDataSerializer(filename);
 			serializer.save(data);
 		}

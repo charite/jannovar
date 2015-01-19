@@ -12,6 +12,8 @@ public abstract class JannovarCommand {
 
 	/** Configuration to use for the command execution. */
 	protected JannovarOptions options;
+	/** Verbosity level: (0) quiet, (1) normal, (2) verbose, (3) very verbose */
+	protected int verbosity = 1;
 
 	/**
 	 * Initialize the JannovarCommand.
@@ -25,6 +27,23 @@ public abstract class JannovarCommand {
 	 */
 	public JannovarCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		this.options = parseCommandLine(argv);
+		this.verbosity = options.verbosity;
+		setLogLevel();
+	}
+
+	/**
+	 * Set log level, depending on this.verbosity.
+	 */
+	private void setLogLevel() {
+		switch (verbosity) {
+		case 0:
+		case 1:
+			System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "INFO");
+			break;
+		case 2:
+		default:
+			System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "DEBUG");
+		}
 	}
 
 	/**

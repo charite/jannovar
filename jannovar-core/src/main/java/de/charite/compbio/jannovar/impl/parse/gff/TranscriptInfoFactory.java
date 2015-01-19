@@ -14,7 +14,6 @@ import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor.Transcript;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
@@ -89,7 +88,7 @@ public final class TranscriptInfoFactory {
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsEndInExon = cdsEndInExon || (cdsEnd >= rna.getExonStarts()[i] && cdsEnd <= rna.getExonEnds()[i]);
 				if (!cdsStartInExon || !cdsEndInExon) {
-					LOGGER.log(Level.WARNING, "Transcript {0} appears to be 3'/5' truncated. Ignoring.", rna.id);
+					LOGGER.log(Level.WARNING, "Transcript {} appears to be 3'/5' truncated. Ignoring.", rna.id);
 					continue;
 				}
 				tib.setCdsRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getCdsStart(), rna.getCdsEnd(),

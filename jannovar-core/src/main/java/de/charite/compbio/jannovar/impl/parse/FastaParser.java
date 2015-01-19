@@ -96,13 +96,13 @@ public abstract class FastaParser {
 			bar.print(bar.max);
 
 		} catch (IOException e) {
-			LOGGER.warn("failed to read the FASTA file: {0}", e);
+			LOGGER.warn("failed to read the FASTA file: {}", e);
 		} finally {
 			try {
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				LOGGER.warn("failed to close the FASTA file reader {0}" + e);
+				LOGGER.warn("failed to close the FASTA file reader {}", e);
 			}
 		}
 		return TranscriptInfosProcessed;

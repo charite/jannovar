@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
- * a given variant. The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} objects each use an instance of this class to
- * assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least one
- * {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
+ * a given variant. The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} objects each use an instance of
+ * this class to assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least
+ * one {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
- * This class creates one {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object for each variant (with one or
- * more {@link Annotation} objects), that can return both an ArrayList of all annotations, a list of all annotations of
- * the highest priority level for the variant, and a single representative Annotation.
+ * This class creates one {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object for each
+ * variant (with one or more {@link Annotation} objects), that can return both an ArrayList of all annotations, a list
+ * of all annotations of the highest priority level for the variant, and a single representative Annotation.
  *
  * The default preference for annotations is thus
  *
@@ -37,16 +37,17 @@ import org.slf4j.LoggerFactory;
  * Note that the class of <B>exonic</B> and <B>splicing</B> mutations as defined here comprises the class of
  * "obvious candidates" for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
  *
- * One object of this class is created for each variant we want to annotate. The {@link de.charite.compbio.jannovar.io.Chromosome
- * Chromosome} class goes through a list of genes in the vicinity of the variant and adds one {@link Annotation} object
- * for each gene. These are essentially candidates for the actual correct annotation of the variant, but we can only
- * decide what the correct annotation is once we have seen enough candidates. Therefore, once we have gone through the
- * candidates, this class decides what the best annotation is and returns the corresponding {@link Annotation} object
- * (in some cases, this class may modify the {@link Annotation} object before returning it).
+ * One object of this class is created for each variant we want to annotate. The
+ * {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class goes through a list of genes in the vicinity of
+ * the variant and adds one {@link Annotation} object for each gene. These are essentially candidates for the actual
+ * correct annotation of the variant, but we can only decide what the correct annotation is once we have seen enough
+ * candidates. Therefore, once we have gone through the candidates, this class decides what the best annotation is and
+ * returns the corresponding {@link Annotation} object (in some cases, this class may modify the {@link Annotation}
+ * object before returning it).
  *
- * For each class of Variant, there is a function that returns a single {@link de.charite.compbio.jannovar.annotation.Annotation
- * Annotation} object. These functions are called summarizeABC(), where ABC is Intronic, Exonic, etc., representing the
- * precedence classes.
+ * For each class of Variant, there is a function that returns a single
+ * {@link de.charite.compbio.jannovar.annotation.Annotation Annotation} object. These functions are called
+ * summarizeABC(), where ABC is Intronic, Exonic, etc., representing the precedence classes.
  *
  * Used for the implementation of VariantAnnotator.
  *
@@ -181,10 +182,10 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * After the {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} object has added annotations for all of the
-	 * transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if the
-	 * variant does not intersect with any transcript), it calls this function to return the list of annotations in form
-	 * of an {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object.
+	 * After the {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} object has added annotations for all of
+	 * the transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if
+	 * the variant does not intersect with any transcript), it calls this function to return the list of annotations in
+	 * form of an {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object.
 	 * <P>
 	 * The strategy is to return all variants that affect coding exons (and only these) if such variants exist, as they
 	 * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
@@ -218,8 +219,8 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a non-coding RNA exon
-	 * variant. From the program logic, only one such Annotation should be added per variant.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a non-coding
+	 * RNA exon variant. From the program logic, only one such Annotation should be added per variant.
 	 *
 	 * @param ann
 	 *            A noncoding RNA exonic annotation object.
@@ -231,7 +232,8 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a 5' UTR variant.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a 5' UTR
+	 * variant.
 	 *
 	 * @param ann
 	 *            A 5' UTR annotation object.
@@ -244,7 +246,8 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a 3' UTR variant.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a 3' UTR
+	 * variant.
 	 *
 	 * @param ann
 	 *            A 3' UTR annotation object.
@@ -257,9 +260,9 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an Annotation for a
-	 * variant that is located between two genes. From the program logic, only one such Annotation should be added per
-	 * variant.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * Annotation for a variant that is located between two genes. From the program logic, only one such Annotation
+	 * should be added per variant.
 	 *
 	 * @param ann
 	 *            An Annotation with type INTERGENIC
@@ -271,9 +274,9 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an Annotation for a
-	 * variant that affects the coding sequence of an exon. Many different variant types are summarized (NONSYNONYMOUS,
-	 * DELETION etc.).
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * Annotation for a variant that affects the coding sequence of an exon. Many different variant types are summarized
+	 * (NONSYNONYMOUS, DELETION etc.).
 	 *
 	 * @param ann
 	 *            An Annotation to be added.
@@ -294,8 +297,8 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an annotation for a
-	 * noncoding RNA transcript that is affected by a splice mutation.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * annotation for a noncoding RNA transcript that is affected by a splice mutation.
 	 *
 	 * @param ann
 	 *            {@link Annotation} to be registered
@@ -308,9 +311,9 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add an annotation for an
-	 * intronic variant. Note that if the same intronic annotation already exists, nothing is done, i.e., this method
-	 * avoids duplicate annotations.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add an annotation
+	 * for an intronic variant. Note that if the same intronic annotation already exists, nothing is done, i.e., this
+	 * method avoids duplicate annotations.
 	 *
 	 * @param ann
 	 *            the Intronic annotation to be added.
@@ -334,8 +337,8 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an annotation for a
-	 * transcript inside a structural variant.
+	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * annotation for a transcript inside a structural variant.
 	 *
 	 * @param ann
 	 *            the Structual annotation to be added
@@ -379,7 +382,7 @@ final class AnnotationCollector {
 		} else if (type == VariantType.UPSTREAM) {
 			this.hasUpstream = true;
 		} else {
-			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got " + type);
+			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got {}", type);
 		}
 		this.annotationCount++;
 	}

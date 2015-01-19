@@ -73,7 +73,7 @@ final class FileDownloader {
 		if (dest.exists())
 			return false;
 		if (!dest.getParentFile().exists()) {
-			LOGGER.info("Creating directory {0}", dest.getParentFile());
+			LOGGER.info("Creating directory {}", dest.getParentFile());
 			dest.getParentFile().mkdirs();
 		}
 

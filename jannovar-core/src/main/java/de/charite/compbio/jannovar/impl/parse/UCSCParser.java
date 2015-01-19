@@ -143,7 +143,7 @@ public class UCSCParser implements TranscriptParser {
 	 */
 	private boolean checkTranscriptInfo(TranscriptModel info) {
 		if (info.transcriptLength() > info.sequence.length()) {
-			LOGGER.debug("Transcript {0} is indicated to be longer than its sequence. Ignoring.", info.accession);
+			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.accession);
 			return false;
 		}
 		return true;
@@ -360,7 +360,7 @@ public class UCSCParser implements TranscriptParser {
 				tbi.setGeneID(geneID);
 			}
 			br.close();
-			LOGGER.info("knownToLocusLink contained ids for {0} knownGenes (no ids available for {1})", foundID,
+			LOGGER.info("knownToLocusLink contained ids for {} knownGenes (no ids available for {})", foundID,
 					notFoundID);
 		} catch (FileNotFoundException fnfe) {
 			String s = String.format("Exception while parsing UCSC  knownToLocusLink file at \"%s\"\n%s", locusPath,
@@ -409,7 +409,7 @@ public class UCSCParser implements TranscriptParser {
 				tbi.setSequence(seq);
 			}
 			br.close();
-			LOGGER.info("Found {0} transcript models from UCSC KnownGenes resource, {1} of which had sequences",
+			LOGGER.info("Found {} transcript models from UCSC KnownGenes resource, {} of which had sequences",
 					foundSequence, (foundSequence - kgWithNoSequence));
 		} catch (FileNotFoundException fnfe) {
 			String s = String.format("Could not find file: %s\n%s", mRNAPath, fnfe.toString());

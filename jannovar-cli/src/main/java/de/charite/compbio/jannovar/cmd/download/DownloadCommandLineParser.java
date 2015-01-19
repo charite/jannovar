@@ -45,6 +45,9 @@ public final class DownloadCommandLineParser {
 	private void initializeParser() {
 		options = new Options();
 		options.addOption(OptionBuilder.withDescription("show this help").withLongOpt("help").create("h"));
+		options.addOption(OptionBuilder.withDescription("create verbose output").withLongOpt("verbose").create("v"));
+		options.addOption(OptionBuilder.withDescription("create very verbose output").withLongOpt("very-verbose")
+				.create("vv"));
 		options.addOption(OptionBuilder.withDescription("INI file with data source list").hasArgs(1)
 				.withLongOpt("data-source-list").create("s"));
 		options.addOption(OptionBuilder
@@ -89,6 +92,11 @@ public final class DownloadCommandLineParser {
 			printHelp();
 			throw new HelpRequestedException();
 		}
+
+		if (cmd.hasOption("verbose"))
+			result.verbosity = 1;
+		if (cmd.hasOption("very-verbose"))
+			result.verbosity = 2;
 
 		if (cmd.hasOption("data-dir"))
 			result.downloadPath = cmd.getOptionValue("data-dir");

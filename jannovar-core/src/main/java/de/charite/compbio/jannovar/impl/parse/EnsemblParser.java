@@ -67,7 +67,7 @@ public class EnsemblParser implements TranscriptParser {
 		try {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gtf")));
 		} catch (IOException e) {
-			LOGGER.error("Unable to load GTF data from Ensembl files: {0}", e.getMessage());
+			LOGGER.error("Unable to load GTF data from Ensembl files: {}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -81,7 +81,7 @@ public class EnsemblParser implements TranscriptParser {
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes());
 		} catch (InvalidAttributeException e) {
-			LOGGER.error("Unable to load data from Ensembl files: {0}", e.getMessage());
+			LOGGER.error("Unable to load data from Ensembl files: {}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -95,7 +95,7 @@ public class EnsemblParser implements TranscriptParser {
 
 		// Log success and statistics.
 		Object params[] = { before, after };
-		LOGGER.info("Found {0} transcript models from Ensembl GFF resource, {1} of which had sequences", params);
+		LOGGER.info("Found {} transcript models from Ensembl GFF resource, {} of which had sequences", params);
 
 		// Create final list of TranscriptInfos.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
