@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import java.util.ArrayList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
@@ -110,28 +112,29 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			protAnno = StringUtil.concatenate("p.=");
 
 		// Compute variant type.
-		VariantType varType = computeVariantType(wtAA, varAA);
+		ArrayList<VariantType> varTypes = computeVariantTypes(wtAA, varAA);
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithTranslationalStartSite(changeInterval)) {
-			varType = VariantType.START_LOSS;
+			varTypes.add(VariantType.START_LOSS);
 			protAnno = "p.0?";
 		} else if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 			if (wtAA.equals(varAA)) { // change in stop codon, but no AA change
-				varType = VariantType.SYNONYMOUS; // TODO(holtgrem): should be STOP_RETAINED
+				varTypes.add(VariantType.SYNONYMOUS); // TODO(holtgrem): should be STOP_RETAINED
 			} else { // change in stop codon, AA change
-				varType = VariantType.STOPLOSS;
+				varTypes.add(VariantType.STOPLOSS);
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
 				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.pos / 3);
 			}
-		} else if (so.overlapsWithSpliceDonorSite(changeInterval)) {
-			varType = VariantType.SPLICE_DONOR;
-		} else if (so.overlapsWithSpliceAcceptorSite(changeInterval)) {
-			varType = VariantType.SPLICE_ACCEPTOR;
-		} else if (so.overlapsWithSpliceRegion(changeInterval)) {
-			varType = VariantType.SPLICE_REGION;
 		}
+		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
+		if (so.overlapsWithSpliceDonorSite(changeInterval))
+			varTypes.add(VariantType.SPLICE_DONOR);
+		else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
+			varTypes.add(VariantType.SPLICE_ACCEPTOR);
+		else if (so.overlapsWithSpliceRegion(changeInterval))
+			varTypes.add(VariantType.SPLICE_REGION);
 
 		// Build the resulting Annotation.
 		// Glue together the annotations and warning message in annotation if any, return Annotation.
@@ -139,7 +142,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		if (warningMsg != null)
 			annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
 
-		return new Annotation(varType, cdsPos.pos, annotationStr, transcript);
+		return new Annotation(varTypes, cdsPos.pos, annotationStr, transcript);
 	}
 
 	@Override
@@ -155,17 +158,19 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 *            wild type amino acid
 	 * @param varAA
 	 *            variant amino acid
-	 * @return variant type described by single amino acid change
+	 * @return variant types described by single nucleotide change
 	 */
-	private VariantType computeVariantType(String wtAA, String varAA) {
+	private ArrayList<VariantType> computeVariantTypes(String wtAA, String varAA) {
+		ArrayList<VariantType> result = new ArrayList<VariantType>();
 		if (wtAA.equals(varAA))
-			return VariantType.SYNONYMOUS;
+			result.add(VariantType.SYNONYMOUS);
 		else if (wtAA.equals("*"))
-			return VariantType.STOPLOSS;
+			result.add(VariantType.STOPLOSS);
 		else if (varAA.equals("*"))
-			return VariantType.STOPGAIN;
+			result.add(VariantType.STOPGAIN);
 		else
-			return VariantType.MISSENSE;
+			result.add(VariantType.MISSENSE);
+		return result;
 	}
 
 }
