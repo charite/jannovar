@@ -11,7 +11,6 @@ import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
@@ -122,10 +121,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			this.delFrameShift = DeletionAnnotationBuilder.this.change.ref.length() % 3;
 
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
-			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
-					.withPositionType(PositionType.ZERO_BASED);
-			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1))
-					.withPositionType(PositionType.ZERO_BASED);
+			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
+			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1));
 
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
@@ -244,7 +241,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAA), "ext", suffix);
 			else
 				protAnno = StringUtil
-						.concatenate("p.", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), "fs", suffix);
+				.concatenate("p.", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), "fs", suffix);
 		}
 	}
 

@@ -8,7 +8,6 @@ import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -71,8 +70,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		TranscriptPosition txPos;
 		CDSPosition cdsPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.pos).withPositionType(PositionType.ZERO_BASED);
-			cdsPos = projector.genomeToCDSPos(change.pos).withPositionType(PositionType.ZERO_BASED);
+			txPos = projector.genomeToTranscriptPos(change.pos);
+			cdsPos = projector.genomeToCDSPos(change.pos);
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS exon position must be translatable to transcript position");
 		}

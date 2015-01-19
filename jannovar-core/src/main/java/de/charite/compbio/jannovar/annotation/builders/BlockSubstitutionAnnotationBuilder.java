@@ -11,7 +11,6 @@ import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
@@ -136,22 +135,18 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			this.varAASeq = t.translateDNA(varCDSSeq);
 
 			// Get the reference change begin position as CDS coordinate, handling introns and positions outside of CDS.
-			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
-					.withPositionType(PositionType.ZERO_BASED);
+			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
 			GenomePosition refChangeLastGenomePos = changeInterval.getGenomeEndPos().shifted(-1);
-			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(refChangeLastGenomePos)
-					.withPositionType(PositionType.ZERO_BASED);
+			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(refChangeLastGenomePos);
 			// shift if end lies in intro or was project to end position
 			if (so.liesInCDSIntron(refChangeLastGenomePos)
 					|| !transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				refChangeLastPos = refChangeLastPos.shifted(-1);
 			this.refChangeLastPos = refChangeLastPos;
 			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
-			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
-					.withPositionType(PositionType.ZERO_BASED);
-			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
-					changeInterval.getGenomeBeginPos().shifted(change.alt.length() - 1)).withPositionType(
-							PositionType.ZERO_BASED);
+			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
+			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos()
+					.shifted(change.alt.length() - 1));
 			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;

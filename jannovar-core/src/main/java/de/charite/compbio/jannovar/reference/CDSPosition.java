@@ -11,8 +11,6 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class CDSPosition {
 
-	/** the selected coordinate system (0-based, 1-based) */
-	public final PositionType positionType;
 	/** the transcript that this position is relative to */
 	public final TranscriptModel transcript;
 	/** the position within the transcript */
@@ -20,33 +18,16 @@ public final class CDSPosition {
 
 	/** construct transcript position with one-based coordinate system */
 	public CDSPosition(TranscriptModel transcript, int pos) {
-		this.positionType = PositionType.ONE_BASED;
-		this.transcript = transcript;
-		this.pos = pos;
+		this(transcript, pos, PositionType.ZERO_BASED);
 	}
 
 	/** construct transcript position with selected coordinate system */
 	public CDSPosition(TranscriptModel transcript, int pos, PositionType positionType) {
-		this.positionType = positionType;
 		this.transcript = transcript;
-		this.pos = pos;
-	}
-
-	/** construct transcript position from other with selected coordinate system */
-	public CDSPosition(CDSPosition other, PositionType positionType) {
-		this.positionType = positionType;
-		this.transcript = other.transcript;
-		int delta = 0;
-		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
-			delta += 1;
-		else if (other.positionType == PositionType.ONE_BASED && this.positionType == PositionType.ZERO_BASED)
-			delta -= 1;
-		this.pos = other.pos + delta;
-	}
-
-	/** create a copy with the given position type. */
-	public CDSPosition withPositionType(PositionType positionType) {
-		return new CDSPosition(this, positionType);
+		if (positionType == PositionType.ONE_BASED)
+			this.pos = pos - 1;
+		else
+			this.pos = pos;
 	}
 
 	/**
@@ -57,7 +38,7 @@ public final class CDSPosition {
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public CDSPosition shifted(int delta) {
-		return new CDSPosition(transcript, pos + delta, positionType);
+		return new CDSPosition(transcript, pos + delta, PositionType.ZERO_BASED);
 	}
 
 	/**
@@ -74,8 +55,7 @@ public final class CDSPosition {
 	 */
 	@Override
 	public String toString() {
-		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return StringUtil.concatenate(transcript.accession, ":c.", pos);
+		return StringUtil.concatenate(transcript.accession, ":c.", pos + 1);
 	}
 
 	/*
@@ -85,12 +65,9 @@ public final class CDSPosition {
 	 */
 	@Override
 	public int hashCode() {
-		if (positionType != PositionType.ZERO_BASED)
-			return withPositionType(PositionType.ZERO_BASED).hashCode();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + pos;
-		result = prime * result + ((positionType == null) ? 0 : positionType.hashCode());
 		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
 		return result;
 	}
@@ -109,12 +86,7 @@ public final class CDSPosition {
 		if (getClass() != obj.getClass())
 			return false;
 		CDSPosition other = (CDSPosition) obj;
-		other = other.withPositionType(PositionType.ZERO_BASED);
-		if (positionType != PositionType.ZERO_BASED)
-			return withPositionType(PositionType.ZERO_BASED).equals(other);
 		if (pos != other.pos)
-			return false;
-		if (positionType != other.positionType)
 			return false;
 		if (transcript == null) {
 			if (other.transcript != null)
