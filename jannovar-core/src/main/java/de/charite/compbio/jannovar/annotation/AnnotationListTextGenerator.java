@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
+import com.google.common.base.Joiner;
+
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 
 // TODO(holtgrem): Test me!
@@ -46,7 +48,7 @@ public abstract class AnnotationListTextGenerator {
 				builder.append(',');
 			if (altCount > 1)
 				builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
-			builder.append(anno.varType);
+			builder.append(Joiner.on("+").join(anno.varTypes));
 		}
 		return builder.toString();
 	}

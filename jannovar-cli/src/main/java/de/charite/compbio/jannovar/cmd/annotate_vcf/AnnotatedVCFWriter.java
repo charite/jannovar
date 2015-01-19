@@ -164,14 +164,14 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 					hgvsText.append(gen.buildHGVSText());
 				}
 			} else {
-				AnnotationList bestList = null;  // by pathogenicity
+				AnnotationList bestList = null; // by pathogenicity
 				for (AnnotationList annoList : annoLists) {
 					if (annoList.entries.isEmpty())
 						continue;
 					if (bestList == null)
 						bestList = annoList;
-					else if (annoList.entries.get(0).varType.priorityLevel() < bestList.entries.get(0).varType
-							.priorityLevel())
+					else if (annoList.entries.get(0).getMostPathogenicVarType().priorityLevel() < bestList.entries
+							.get(0).getMostPathogenicVarType().priorityLevel())
 						bestList = annoList;
 				}
 				if (bestList != null) {
@@ -187,7 +187,6 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			if (hgvsText.length() > 0)
 				vc.getCommonInfo().putAttribute("HGVS", hgvsText.toString(), true);
 		}
-
 
 		// Write out variantContext to out.
 		out.add(vc);

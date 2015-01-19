@@ -39,13 +39,9 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	 *             when the user requested the help page
 	 */
 	protected void deserializeTranscriptDefinitionFile() throws JannovarException, HelpRequestedException {
-		final long startTime = System.nanoTime();
 		JannovarData data = new JannovarDataSerializer(this.options.dataFile).load();
 		this.refDict = data.refDict;
 		this.chromosomeMap = data.chromosomes;
-		final long endTime = System.nanoTime();
-		System.err.println(String.format("Deserialization took %.2f sec.",
-				(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 	}
 
 }

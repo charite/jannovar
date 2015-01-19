@@ -37,7 +37,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		System.err.println("Options");
 		options.print(System.err);
 
-		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
 		for (String vcfPath : options.vcfFilePaths) {
