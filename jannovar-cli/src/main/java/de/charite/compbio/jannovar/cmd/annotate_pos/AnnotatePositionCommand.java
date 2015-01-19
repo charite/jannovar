@@ -8,7 +8,6 @@ import org.apache.commons.cli.ParseException;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.annotation.AllAnnotationListTextGenerator;
-import de.charite.compbio.jannovar.annotation.AnnotationException;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
@@ -49,17 +48,19 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
+		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
 		System.out.println("#change\teffect\thgvs_annotation");
 		for (String chromosomalChange : options.chromosomalChanges) {
 			// Parse the chromosomal change string into a GenomeChange object.
 			final GenomeChange genomeChange = parseGenomeChange(chromosomalChange);
 
 			// Construct VariantAnnotator for building the variant annotations.
-			final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
-			final AnnotationList annoList = annotator.buildAnnotationList(genomeChange);
-			if (annoList == null) {
-				String e = String.format("No annotations found for variant %s", chromosomalChange);
-				throw new AnnotationException(e);
+			AnnotationList annoList = null;
+			try {
+				annotator.buildAnnotationList(genomeChange);
+			} catch (Exception e) {
+				System.err.println(String.format("[ERROR] Could not annotate variant %s!", chromosomalChange));
+				continue;
 			}
 
 			// Obtain first or all functional annotation(s) and effect(s).

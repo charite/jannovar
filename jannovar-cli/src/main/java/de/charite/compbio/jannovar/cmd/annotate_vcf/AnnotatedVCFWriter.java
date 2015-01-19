@@ -135,15 +135,17 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			// Collect annotation lists for all variants.
 			// TODO(holtgrem): better checking of structural variants?
 			if (!(alt.contains("[") || alt.contains("]") || alt.equals("."))) { // is not break-end
-				AnnotationList annoList = annotator.buildAnnotationList(change);
+				AnnotationList annoList = null;
+				try {
+					annoList = annotator.buildAnnotationList(change);
+				} catch (Exception e) {
+					// swallow
+				}
 				if (annoList == null) {
-					String e = String.format("No annotations found for variant %s", vc.toString());
-					throw new AnnotationException(e);
+					System.err.println(String.format("[ERROR]: Problem generating annotation for variant %s", change));
+					continue; // ignore variant
 				}
 				annoLists.add(annoList);
-			}
-
-			if (this.options.showAll) {
 			}
 
 			// TODO(holtgrem): Find better solution for collecting annotations from more than one variant.

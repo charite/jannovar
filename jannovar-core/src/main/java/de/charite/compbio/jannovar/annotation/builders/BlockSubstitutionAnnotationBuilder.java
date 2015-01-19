@@ -138,10 +138,13 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Get the reference change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.refChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
 					.withPositionType(PositionType.ZERO_BASED);
-			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(
-					changeInterval.getGenomeEndPos().shifted(-1)).withPositionType(PositionType.ZERO_BASED);
-			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
-				refChangeLastPos = refChangeLastPos.shifted(-1); // shift if projected to end position
+			GenomePosition refChangeLastGenomePos = changeInterval.getGenomeEndPos().shifted(-1);
+			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(refChangeLastGenomePos)
+					.withPositionType(PositionType.ZERO_BASED);
+			// shift if end lies in intro or was project to end position
+			if (so.liesInCDSIntron(refChangeLastGenomePos)
+					|| !transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+				refChangeLastPos = refChangeLastPos.shifted(-1);
 			this.refChangeLastPos = refChangeLastPos;
 			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos())
@@ -202,6 +205,12 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			if (aaChange.alt.equals("*"))
 				varType = VariantType.STOPGAIN;
 
+			// Handle the case of no change.
+			if (aaChange.isNop()) {
+				protAnno = "p.=";
+				return;
+			}
+
 			char wtAAFirst = wtAASeq.charAt(aaChange.pos);
 			char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
 			String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
@@ -211,12 +220,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// We differentiate the case of replacing a single amino acid and replacing multiple ones. Note that
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
-			if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1,
-						t.toLong(insertedAAs.charAt(0)));
-			else if (insertedAAs.isEmpty())
+			if (insertedAAs.isEmpty() && aaChange.ref.length() > 1)
 				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "_", wtAALastLong,
 						aaChange.getLastPos() + 1, "del");
+			if (insertedAAs.isEmpty() && aaChange.ref.length() == 1)
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "del");
+			else if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1,
+						t.toLong(insertedAAs.charAt(0)));
 			else
 				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "_", wtAALastLong,
 						aaChange.getLastPos() + 1, "delins", t.toLong(insertedAAs));

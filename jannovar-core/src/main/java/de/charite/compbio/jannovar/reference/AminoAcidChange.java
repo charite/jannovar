@@ -59,6 +59,13 @@ public final class AminoAcidChange {
 			return new AminoAcidChange(pos, ref.substring(0, ref.length() - 1), "");
 	}
 
+	/**
+	 * @return <code>true</code> if the {@link AminoAcidChange} is a non-op
+	 */
+	public boolean isNop() {
+		return (ref.equals("") && alt.equals(""));
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
