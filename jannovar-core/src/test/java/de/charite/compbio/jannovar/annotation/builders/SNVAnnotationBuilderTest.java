@@ -171,7 +171,7 @@ public class SNVAnnotationBuilderTest {
 				"G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals("uc001anx.3:c.-70+1G>A", anno.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), anno.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5, VariantType.SPLICE_DONOR), anno.varTypes);
 	}
 
 	@Test
@@ -180,7 +180,7 @@ public class SNVAnnotationBuilderTest {
 				"G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals("uc001anx.3:c.-69-1G>A", anno.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), anno.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5, VariantType.SPLICE_ACCEPTOR), anno.varTypes);
 	}
 
 	@Test
@@ -190,7 +190,7 @@ public class SNVAnnotationBuilderTest {
 				"G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals("uc001anx.3:exon2:c.-67G>A", anno.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), anno.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5, VariantType.SPLICE_REGION), anno.varTypes);
 		// in CDS
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6647537, PositionType.ZERO_BASED),
 				"T", "G");
@@ -556,7 +556,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 2, 172180770, PositionType.ZERO_BASED), "A", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc010zdo.2:c.1134+1T>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes); // is also stoploss
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -1843,7 +1843,7 @@ public class SNVAnnotationBuilderTest {
 				"G", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001dcv.3:c.336+1G>A", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -1863,7 +1863,8 @@ public class SNVAnnotationBuilderTest {
 				"A", "T");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001alq.2:c.2818-2T>A", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -1882,7 +1883,8 @@ public class SNVAnnotationBuilderTest {
 				"C", "T");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001byw.3:c.225-1G>A", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -1902,7 +1904,8 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 155348180, PositionType.ZERO_BASED), "C", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001fkt.3:c.6224-1G>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -1922,7 +1925,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 155348069, PositionType.ZERO_BASED), "A", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001fkt.3:c.6332+2T>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -1942,7 +1945,8 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 155348068, PositionType.ZERO_BASED), "T", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001fkt.3:c.6332+3A>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_REGION),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -1982,7 +1986,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 155348067, PositionType.ZERO_BASED), "GTA", "AGG");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001fkt.3:c.6332+2_6332+4delinsCCT", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -2002,7 +2006,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 156704286, PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001fpu.3:c.1121+2T>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -2022,7 +2026,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 158064181, PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001fro.4:c.1239+2T>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -2042,7 +2046,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 212964869, PositionType.ZERO_BASED), "A", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001hjn.3:c.234+2T>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -2062,7 +2066,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 247419508, PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc010pyu.2:c.135+1T>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -2082,7 +2086,8 @@ public class SNVAnnotationBuilderTest {
 				"A", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc002rso.1:c.214-2A>G", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -2102,7 +2107,8 @@ public class SNVAnnotationBuilderTest {
 				"C", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc010ysm.2:c.1074-1G>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -2122,7 +2128,7 @@ public class SNVAnnotationBuilderTest {
 				"T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc002spq.3:c.168+2T>A", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_DONOR), annotation1.varTypes);
 	}
 
 	@Test
@@ -2142,7 +2148,8 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 2, 110926130, PositionType.ZERO_BASED), "C", "T");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc002tfo.4:c.337-1G>A", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -2596,7 +2603,8 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 12, 48882699, PositionType.ZERO_BASED), "C", "T");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001rrr.3:c.136-7C>T", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_REGION),
+				annotation1.varTypes);
 	}
 
 	/**
@@ -2873,7 +2881,8 @@ public class SNVAnnotationBuilderTest {
 				"C", "G");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001amb.2:c.1803-7G>C", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_REGION),
+				annotation1.varTypes);
 	}
 
 	@Test

@@ -216,7 +216,8 @@ public class DeletionAnnotationBuilderTest {
 				"G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:c.691-1del", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 
 		// exonic splicing
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642117, PositionType.ZERO_BASED),
@@ -856,7 +857,8 @@ public class DeletionAnnotationBuilderTest {
 				"A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001cjx.3:c.315-2del", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 	}
 
 	@Test

@@ -201,7 +201,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"G", "TT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:c.691-1delinsTT", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 
 		// exonic splicing
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642117, PositionType.ZERO_BASED),

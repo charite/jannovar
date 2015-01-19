@@ -129,7 +129,7 @@ public class InsertionAnnotationBuilderTest {
 				"", "ACT");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals("uc001anx.3:exon3:c.691-1_691insACT", anno.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), anno.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_REGION), anno.varTypes);
 	}
 
 	@Test
