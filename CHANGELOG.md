@@ -1,5 +1,7 @@
 **develop**
 
+* Compressing serialized file.
+* Fixing problems with block substitution (delins) case (#87).
 * Changing namespace to `de.charite.compbio.jannovar`.
 * Making `VariantType#priorityLevel` a non-static member.
 * Renaming `TranscriptInfo` to `TranscriptModel`.
