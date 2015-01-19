@@ -7,9 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.impl.util.ProgressBar;
 
@@ -22,7 +23,10 @@ import de.charite.compbio.jannovar.impl.util.ProgressBar;
 public final class GFFParser {
 
 	/** {@link Logger} to use for logging */
-	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(GFFParser.class);
+
+	/** whether or not to print progress bars */
+	private boolean printProgressBars = false;
 
 	/** {@link File} to parse */
 	public final File file;
@@ -37,10 +41,13 @@ public final class GFFParser {
 	 *            path to the GFF file to parse
 	 * @param gffVersion
 	 *            GFF version to enforce
+	 * @param printProgressBars
+	 *            whether or not to print progress bars
 	 */
-	public GFFParser(String path, GFFVersion gffVersion) {
+	public GFFParser(String path, GFFVersion gffVersion, boolean printProgressBars) {
 		this.file = new File(path);
 		this.gffVersion = gffVersion;
+		this.printProgressBars = printProgressBars;
 	}
 
 	/**
@@ -55,9 +62,9 @@ public final class GFFParser {
 	 */
 	public GFFParser(String path) throws IOException {
 		this.file = new File(path);
-		LOGGER.log(Level.INFO, "Determining GFF version...");
+		LOGGER.info("Determining GFF version...");
 		this.gffVersion = determineGFFVersion(file);
-		LOGGER.log(Level.INFO, "  GFF version is {0}", gffVersion.version);
+		LOGGER.info("  GFF version is {}", gffVersion.version);
 	}
 
 	/**
@@ -67,9 +74,9 @@ public final class GFFParser {
 	 *            {@link FeatureProcessor} to use during parsing
 	 */
 	public void parse(FeatureProcessor fp) {
-		LOGGER.log(Level.INFO, "Parsing GFF...");
+		LOGGER.info("Parsing GFF...");
 		// We use ProgressBar to display our progress in GFF parsing.
-		ProgressBar bar = new ProgressBar(0, file.length());
+		ProgressBar bar = new ProgressBar(0, file.length(), printProgressBars);
 
 		BufferedReader in = null;
 		try {
@@ -97,15 +104,15 @@ public final class GFFParser {
 			if (fip.getChannel().position() != bar.max)
 				bar.print(bar.max);
 		} catch (FeatureFormatException e) {
-			LOGGER.log(Level.WARNING, "GFF with wrong Feature format: {0}", e.toString());
+			LOGGER.warn("GFF with wrong Feature format: {}", e);
 		} catch (IOException e) {
-			LOGGER.log(Level.WARNING, "failed to read the GFF file: {0}", e.toString());
+			LOGGER.warn("failed to read the GFF file: {}", e);
 		} finally {
 			try {
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				System.err.println("[WARNING] failed to close the GFF file reader:\n" + e.toString());
+				LOGGER.warn("Failed to close the GFF file reader: {}", e);
 			}
 		}
 	}
@@ -143,7 +150,7 @@ public final class GFFParser {
 
 		if (myfields.size() < 9) {
 			Object params[] = { myfields.size(), featureLine };
-			LOGGER.log(Level.WARNING, "Skipping malformed feature line (missing columns ({0})): {1}", params);
+			LOGGER.warn("Skipping malformed feature line (missing columns ({})): {}", params);
 			return null;
 		}
 
@@ -333,7 +340,7 @@ public final class GFFParser {
 				try {
 					gffVersion = new GFFVersion(Integer.parseInt(fields[1]));
 				} catch (NumberFormatException e) {
-					LOGGER.log(Level.WARNING, "Failed to parse gff-version: {0}", str);
+					LOGGER.warn("Failed to parse gff-version: {}", str);
 				}
 			}
 		}

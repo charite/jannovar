@@ -16,7 +16,8 @@ final class EnsemblDataSource extends DataSource {
 	/** expected keys in data source configuration file */
 	private final ImmutableList<String> urlKeys = ImmutableList.of("cdna", "gtf", "chromInfo", "chrToAccessions");
 
-	EnsemblDataSource(JannovarOptions options, Section iniSection) throws InvalidDataSourceException {
+	EnsemblDataSource(JannovarOptions options, Section iniSection)
+			throws InvalidDataSourceException {
 		super(options, iniSection);
 
 		checkURLs();
@@ -24,7 +25,7 @@ final class EnsemblDataSource extends DataSource {
 
 	@Override
 	public JannovarDataFactory getDataFactory() {
-		return new EnsemblJannovarDataFactory(options, this, iniSection);
+		return new EnsemblJannovarDataFactory(options, this, iniSection, options.printProgressBars);
 	}
 
 	@Override

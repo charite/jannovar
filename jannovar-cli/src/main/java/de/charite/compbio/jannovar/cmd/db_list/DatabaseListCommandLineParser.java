@@ -57,7 +57,13 @@ public class DatabaseListCommandLineParser {
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
+		result.printProgressBars = true;
 		result.command = JannovarOptions.Command.DB_LIST;
+
+		if (cmd.hasOption("verbose"))
+			result.verbosity = 2;
+		if (cmd.hasOption("very-verbose"))
+			result.verbosity = 3;
 
 		if (cmd.hasOption("help")) {
 			printHelp();

@@ -1,5 +1,10 @@
 package de.charite.compbio.jannovar.cmd;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
 
@@ -12,6 +17,8 @@ public abstract class JannovarCommand {
 
 	/** Configuration to use for the command execution. */
 	protected JannovarOptions options;
+	/** Verbosity level: (0) quiet, (1) normal, (2) verbose, (3) very verbose */
+	protected int verbosity = 1;
 
 	/**
 	 * Initialize the JannovarCommand.
@@ -25,6 +32,25 @@ public abstract class JannovarCommand {
 	 */
 	public JannovarCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		this.options = parseCommandLine(argv);
+		this.verbosity = options.verbosity;
+		setLogLevel();
+	}
+
+	/**
+	 * Set log level, depending on this.verbosity.
+	 */
+	private void setLogLevel() {
+		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		Configuration conf = ctx.getConfiguration();
+
+		if (verbosity <= 1)
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.INFO);
+		else if (verbosity <= 2)
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.DEBUG);
+		else
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.TRACE);
+
+		ctx.updateLoggers(conf);
 	}
 
 	/**

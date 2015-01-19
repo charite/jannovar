@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
@@ -68,6 +70,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class UCSCParser implements TranscriptParser {
+
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(UCSCParser.class);
 
 	/** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
 	private static final int NFIELDS = 12;
@@ -138,8 +143,7 @@ public class UCSCParser implements TranscriptParser {
 	 */
 	private boolean checkTranscriptInfo(TranscriptModel info) {
 		if (info.transcriptLength() > info.sequence.length()) {
-			System.err.println("WARNING: Transcript " + info.accession
-					+ " is indicated to be longer than its sequence. Ignoring.");
+			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.accession);
 			return false;
 		}
 		return true;
@@ -211,7 +215,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
 		tib.setTxRegion(new GenomeInterval(refDict, '+', chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
-				.withStrand(strand));
+		.withStrand(strand));
 
 		int cdsStart, cdsEnd;
 		try {
@@ -225,7 +229,7 @@ public class UCSCParser implements TranscriptParser {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
 		tib.setCdsRegion(new GenomeInterval(refDict, '+', chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
-				.withStrand(strand));
+		.withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;
@@ -340,10 +344,9 @@ public class UCSCParser implements TranscriptParser {
 			while ((line = br.readLine()) != null) {
 				String A[] = line.split("\t");
 				if (A.length != 2) {
-					System.err.println("[ERROR] Bad format for UCSC KnownToLocusLink.txt file:\n" + line);
-					System.err.println("[ERROR] Got " + A.length + " fields instead of the expected 2");
-					System.err.println("[ERROR] Fix problem in UCSC file before continuing");
-					System.exit(1);
+					String msg = String.format("Bad format for UCSC KnownToLocusLink.txt file: %s. "
+							+ "Got %d fields instead of the expected 2.", line, A.length);
+					throw new TranscriptParseException(msg);
 				}
 				String id = A[0];
 				Integer geneID = Integer.parseInt(A[1]);
@@ -357,10 +360,8 @@ public class UCSCParser implements TranscriptParser {
 				tbi.setGeneID(geneID);
 			}
 			br.close();
-			String msg = String.format(
-					"[INFO] knownToLocusLink contained ids for %d knownGenes (no ids available for %d)", foundID,
+			LOGGER.info("knownToLocusLink contained ids for {} knownGenes (no ids available for {})", foundID,
 					notFoundID);
-			System.err.println(msg);
 		} catch (FileNotFoundException fnfe) {
 			String s = String.format("Exception while parsing UCSC  knownToLocusLink file at \"%s\"\n%s", locusPath,
 					fnfe.toString());
@@ -389,10 +390,9 @@ public class UCSCParser implements TranscriptParser {
 			while ((line = br.readLine()) != null) {
 				String A[] = line.split("\t");
 				if (A.length != 2) {
-					System.err.println("[ERROR] Bad format for UCSC KnownGeneMrna.txt file:\n" + line);
-					System.err.println("[ERROR] Got " + A.length + " fields instead of the expected 2");
-					System.err.println("[ERROR] Fix problem in UCSC file before continueing");
-					System.exit(1);
+					String msg = String.format("Bad format for UCSC KnownToLocusLink.txt file: %s. "
+							+ "Got %d fields instead of the expected 2.", line, A.length);
+					throw new TranscriptParseException(msg);
 				}
 
 				String id = A[0];
@@ -409,9 +409,8 @@ public class UCSCParser implements TranscriptParser {
 				tbi.setSequence(seq);
 			}
 			br.close();
-			System.err.println(String.format(
-					"[INFO] Found %d transcript models from UCSC KnownGenes resource, %d of which had sequences",
-					foundSequence, (foundSequence - kgWithNoSequence)));
+			LOGGER.info("Found {} transcript models from UCSC KnownGenes resource, {} of which had sequences",
+					foundSequence, (foundSequence - kgWithNoSequence));
 		} catch (FileNotFoundException fnfe) {
 			String s = String.format("Could not find file: %s\n%s", mRNAPath, fnfe.toString());
 			throw new TranscriptParseException(s);

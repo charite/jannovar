@@ -11,13 +11,21 @@ public final class ProgressBar {
 	// TODO(holtgrem): allow incremental printing for text files
 	public final long min;
 	public final long max;
+	public final boolean doPrint;
 
 	public ProgressBar(long min, long max) {
+		this(min, max, true);
+	}
+
+	public ProgressBar(long min, long max, boolean doPrint) {
 		this.min = min;
 		this.max = max;
+		this.doPrint = true;
 	}
 
 	public void print(long pos) {
+		if (!doPrint)
+			return;
 		int percent = (int) Math.ceil(100.0 * (pos - this.min) / (this.max - this.min));
 		StringBuilder bar = new StringBuilder("[");
 

@@ -14,6 +14,8 @@ import java.net.URLConnection;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.impl.util.ProgressBar;
 
@@ -27,6 +29,9 @@ import de.charite.compbio.jannovar.impl.util.ProgressBar;
  */
 final class FileDownloader {
 
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileDownloader.class);
+
 	public static class ProxyOptions {
 		public String host = null;
 		public int port = -1;
@@ -38,6 +43,7 @@ final class FileDownloader {
 	 * Configuration for the {@link FileDownloader}.
 	 */
 	public static class Options {
+		public boolean printProgressBar = false;
 		public ProxyOptions http = new ProxyOptions();
 		public ProxyOptions https = new ProxyOptions();
 		public ProxyOptions ftp = new ProxyOptions();
@@ -67,7 +73,7 @@ final class FileDownloader {
 		if (dest.exists())
 			return false;
 		if (!dest.getParentFile().exists()) {
-			System.err.println("Creating directory " + dest.getParentFile());
+			LOGGER.info("Creating directory {}", dest.getParentFile());
 			dest.getParentFile().mkdirs();
 		}
 
@@ -89,7 +95,7 @@ final class FileDownloader {
 			if (!ftp.login("anonymous", "anonymous@example.com"))
 				throw new IOException("Could not login with anonymous:anonymous@example.com");
 			if (!ftp.isConnected())
-				System.err.println("Weird, not connected!");
+				LOGGER.error("Weird, not connected!");
 		} catch (SocketException e) {
 			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage());
 		} catch (IOException e) {
@@ -127,9 +133,9 @@ final class FileDownloader {
 			ftp.pwd();
 			ProgressBar pb = null;
 			if (fileSize != -1)
-				pb = new ProgressBar(0, fileSize);
+				pb = new ProgressBar(0, fileSize, options.printProgressBar);
 			else
-				System.err.println("(server did not tell us the file size, no progress bar)");
+				LOGGER.info("(server did not tell us the file size, no progress bar)");
 			// Download file.
 			in = ftp.retrieveFileStream(fileName);
 			if (in == null)
@@ -227,9 +233,9 @@ final class FileDownloader {
 
 			ProgressBar pb = null;
 			if (fileSize != -1)
-				pb = new ProgressBar(0, fileSize);
+				pb = new ProgressBar(0, fileSize, options.printProgressBar);
 			else
-				System.err.println("(server did not tell us the file size, no progress bar)");
+				LOGGER.info("(server did not tell us the file size, no progress bar)");
 
 			// Download file.
 			byte buffer[] = new byte[128 * 1024];

@@ -3,10 +3,10 @@ package de.charite.compbio.jannovar.impl.parse;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.ini4j.Profile.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
@@ -27,8 +27,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
  */
 public class EnsemblParser implements TranscriptParser {
 
-	/** {@link Logger} to use for logging */
-	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(EnsemblParser.class);
 
 	/** Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping */
 	private final ReferenceDictionary refDict;
@@ -39,6 +39,9 @@ public class EnsemblParser implements TranscriptParser {
 	/** INI {@link Section} from the configuration */
 	private final Section iniSection;
 
+	/** whether or not to print the progress bars */
+	private final boolean printProgressBars;
+
 	/**
 	 * @param refDict
 	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
@@ -46,22 +49,25 @@ public class EnsemblParser implements TranscriptParser {
 	 *            path to where the to-be-parsed files live
 	 * @param iniSection
 	 *            INI {@link Section} for the configuration
+	 * @param printProgressBars
+	 *            whether or not to print progress bars
 	 */
-	public EnsemblParser(ReferenceDictionary refDict, String basePath, Section iniSection) {
+	public EnsemblParser(ReferenceDictionary refDict, String basePath, Section iniSection, boolean printProgressBars) {
 		this.refDict = refDict;
 		this.basePath = basePath;
 		this.iniSection = iniSection;
+		this.printProgressBars = printProgressBars;
 	}
 
 	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Parse GTF file, yielding a list of features.
-		System.err.println("Parsing GTF...");
+		LOGGER.info("Parsing GTF...");
 		GFFParser gffParser;
 		try {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gtf")));
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load GTF data from Ensembl files: {0}", e.getMessage());
+			LOGGER.error("Unable to load GTF data from Ensembl files: {}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
@@ -71,25 +77,25 @@ public class EnsemblParser implements TranscriptParser {
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
-			System.err.println("Building transcript models...");
+			LOGGER.info("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes());
 		} catch (InvalidAttributeException e) {
-			LOGGER.log(Level.SEVERE, "Unable to load data from Ensembl files: {0}", e.getMessage());
+			LOGGER.error("Unable to load data from Ensembl files: {}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());
 		}
 
 		// Load sequences.
-		System.err.println("Parsing FASTA...");
-		EnsemblFastaParser efp = new EnsemblFastaParser(PathUtil.join(basePath, getINIFileName("cdna")), builders);
+		LOGGER.error("Parsing FASTA...");
+		EnsemblFastaParser efp = new EnsemblFastaParser(PathUtil.join(basePath, getINIFileName("cdna")), builders,
+				printProgressBars);
 		int before = builders.size();
 		builders = efp.parse();
 		int after = builders.size();
 
 		// Log success and statistics.
 		Object params[] = { before, after };
-		LOGGER.log(Level.INFO, "Found {0} transcript models from Ensembl GFF resource, {1} of which had sequences",
-				params);
+		LOGGER.info("Found {} transcript models from Ensembl GFF resource, {} of which had sequences", params);
 
 		// Create final list of TranscriptInfos.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();

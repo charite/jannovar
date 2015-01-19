@@ -16,8 +16,8 @@ public final class EnsemblFastaParser extends FastaParser {
 
 	private String[] fields;
 
-	public EnsemblFastaParser(String filename, ArrayList<TranscriptModelBuilder> models) {
-		super(filename, models);
+	public EnsemblFastaParser(String filename, ArrayList<TranscriptModelBuilder> models, boolean printProgressBars) {
+		super(filename, models, printProgressBars);
 	}
 
 	@Override

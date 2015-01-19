@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.charite.compbio.jannovar.impl.util.ProgressBar;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
@@ -20,11 +22,15 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
  */
 public abstract class FastaParser {
 
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(FastaParser.class);
+
 	protected String filename;
 	protected String accession;
 	protected StringBuilder sequence;
 	protected ArrayList<TranscriptModelBuilder> TranscriptInfos;
 	protected ArrayList<TranscriptModelBuilder> TranscriptInfosProcessed;
+	private boolean printProgressBars = false;
 	protected HashMap<String, Integer> transcript2index;
 
 	/**
@@ -34,11 +40,14 @@ public abstract class FastaParser {
 	 *            path to the FASTA file
 	 * @param models
 	 *            list of {@link TranscriptInfo}s w/o mRNA sequence data
+	 * @param printProgressBars
+	 *            whether or not to print progress bars
 	 */
-	public FastaParser(String filename, ArrayList<TranscriptModelBuilder> models) {
+	public FastaParser(String filename, ArrayList<TranscriptModelBuilder> models, boolean printProgressBars) {
 		this.filename = filename;
 		this.TranscriptInfos = models;
 		this.TranscriptInfosProcessed = new ArrayList<TranscriptModelBuilder>();
+		this.printProgressBars = printProgressBars;
 		transcript2index = new HashMap<String, Integer>(TranscriptInfos.size());
 		int i = 0;
 		for (TranscriptModelBuilder model : TranscriptInfos)
@@ -87,13 +96,13 @@ public abstract class FastaParser {
 			bar.print(bar.max);
 
 		} catch (IOException e) {
-			System.err.println("[WARNING] failed to read the FASTA file:\n" + e.toString());
+			LOGGER.warn("failed to read the FASTA file: {}", e);
 		} finally {
 			try {
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				System.err.println("[WARNING] failed to close the FASTA file reader:\n" + e.toString());
+				LOGGER.warn("failed to close the FASTA file reader {}", e);
 			}
 		}
 		return TranscriptInfosProcessed;

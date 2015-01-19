@@ -1,5 +1,8 @@
 **develop**
 
+* Adding `-v` and `-vv` command line options.
+* Using log4j/slf4j for I/O in jannovar-core.
+* Adding `PrintStream` as parameter to `JannovarOptions#print`.
 * Compressing serialized file.
 * Fixing problems with block substitution (delins) case (#87).
 * Changing namespace to `de.charite.compbio.jannovar`.

@@ -73,7 +73,7 @@ public class GFFparserTest {
 		String line = "ctg123\t.\texon\t5000\t5500\t.\t+\t.\tID=exon00004;Parent=mRNA00001,mRNA00002,mRNA00003";
 		writeGFF(line);
 
-		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(3));
+		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(3), false);
 		Feature feature = reader.parseFeature(line);
 		Assert.assertEquals(FeatureType.EXON, feature.getType());
 		Assert.assertEquals(5000, feature.getStart());
@@ -92,7 +92,7 @@ public class GFFparserTest {
 		String line = "ctg123\t.\tgene\t1000\t9000\t.\t+\t.\tID=gene00001;Name=EDEN";
 		writeGFF(line);
 
-		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(3));
+		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(3), false);
 		Feature feature = reader.parseFeature(line);
 		Assert.assertEquals(FeatureType.GENE, feature.getType());
 		Assert.assertEquals(1000, feature.getStart());
@@ -111,7 +111,7 @@ public class GFFparserTest {
 		String line = "18	protein_coding	exon	246324	246433	.	-	.	gene_id \"ENSG00000079134\"; transcript_id \"ENST00000579891\"; exon_number \"1\"; gene_name \"THOC1\"; gene_biotype \"protein_coding\"; transcript_name \"THOC1-020\"; exon_id \"ENSE00002716487\";";
 		writeGFF(line);
 
-		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(2));
+		GFFParser reader = new GFFParser(tmpFile.getAbsolutePath(), new GFFVersion(2), false);
 		Feature feature = reader.parseFeature(line);
 		Assert.assertEquals(FeatureType.EXON, feature.getType());
 		Assert.assertEquals(246324, feature.getStart());
