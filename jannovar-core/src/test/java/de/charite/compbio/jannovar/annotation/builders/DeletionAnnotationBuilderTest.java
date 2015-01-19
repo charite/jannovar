@@ -178,35 +178,36 @@ public class DeletionAnnotationBuilderTest {
 				"A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2067del:p.*689Tyrext*?", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation1.varTypes);
 
 		// Delete middle base of stop codon, leads to complete loss.
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
 				"A", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2066del:p.*689Cysext*?", annotation2.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation2.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS),
+				annotation2.varTypes);
 
 		// Delete first base of stop codon, leads to extension
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
 				"A", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2065del:p.*689Serext*?", annotation3.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation3.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation3.varTypes);
 
 		// Delete two bases of stop codon.
 		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
 				"AT", "");
 		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2065_2066del:p.*689Alaext*14", annotation4.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation4.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation4.varTypes);
 
 		// Delete from before into the stop codon.
 		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649267, PositionType.ZERO_BASED),
 				"CATAGCCC", "");
 		Annotation annotation5 = new DeletionAnnotationBuilder(infoForward, change5).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2063_*3del:p.*689Hisext*13", annotation5.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation5.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation5.varTypes);
 	}
 
 	@Test
@@ -224,7 +225,8 @@ public class DeletionAnnotationBuilderTest {
 				"TGG", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
 		Assert.assertEquals("uc001anx.3:exon3:c.691_693del:p.Trp231del", annotation2.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation2.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION, VariantType.SPLICE_REGION),
+				annotation2.varTypes);
 	}
 
 	@Test
@@ -245,7 +247,8 @@ public class DeletionAnnotationBuilderTest {
 				"GAAACA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001anx.3:c.691-3_693del:p.Trp231del", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION, VariantType.SPLICE_ACCEPTOR),
+				annotation1.varTypes);
 
 		// deletion of three codons
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642126, PositionType.ZERO_BASED),
@@ -655,7 +658,8 @@ public class DeletionAnnotationBuilderTest {
 				"G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc002ghm.3:exon8:c.1310del:p.Gly437Valfs*5", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.SPLICE_REGION),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -719,7 +723,8 @@ public class DeletionAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 17, 61660894, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc002jbc.4:exon6:c.560del:p.Gly187Valfs*23", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_REGION), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.SPLICE_REGION),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -878,7 +883,8 @@ public class DeletionAnnotationBuilderTest {
 				"G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc001bak.1:exon10:c.1027del:p.Val343Trpfs*33", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_DONOR), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.SPLICE_DONOR),
+				annotation1.varTypes);
 	}
 
 	@Test
@@ -976,7 +982,7 @@ public class DeletionAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 5, 140812775, PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals("uc011dba.2:exon1:c.2461del:p.*821del?", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPLOSS), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation1.varTypes);
 	}
 
 }
