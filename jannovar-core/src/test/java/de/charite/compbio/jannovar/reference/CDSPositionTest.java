@@ -5,11 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 public class CDSPositionTest {
 
@@ -42,7 +37,6 @@ public class CDSPositionTest {
 		CDSPosition pos = new CDSPosition(this.infoForward, 10);
 		Assert.assertEquals(pos.transcript, this.infoForward);
 		Assert.assertEquals(pos.pos, 10);
-		Assert.assertEquals(pos.positionType, PositionType.ONE_BASED);
 	}
 
 	@Test
@@ -50,27 +44,6 @@ public class CDSPositionTest {
 		CDSPosition pos = new CDSPosition(this.infoForward, 10, PositionType.ZERO_BASED);
 		Assert.assertEquals(pos.transcript, this.infoForward);
 		Assert.assertEquals(pos.pos, 10);
-		Assert.assertEquals(pos.positionType, PositionType.ZERO_BASED);
-	}
-
-	@Test
-	public void testConstructorOneToZeroPositionType() {
-		CDSPosition onePos = new CDSPosition(this.infoForward, 23, PositionType.ONE_BASED);
-		CDSPosition zeroPos = new CDSPosition(onePos, PositionType.ZERO_BASED);
-
-		Assert.assertEquals(zeroPos.transcript, this.infoForward);
-		Assert.assertEquals(zeroPos.pos, 22);
-		Assert.assertEquals(zeroPos.positionType, PositionType.ZERO_BASED);
-	}
-
-	@Test
-	public void testConstructorZeroToOnePositionType() {
-		CDSPosition onePos = new CDSPosition(this.infoForward, 23, PositionType.ZERO_BASED);
-		CDSPosition zeroPos = new CDSPosition(onePos, PositionType.ONE_BASED);
-
-		Assert.assertEquals(zeroPos.transcript, this.infoForward);
-		Assert.assertEquals(zeroPos.pos, 24);
-		Assert.assertEquals(zeroPos.positionType, PositionType.ONE_BASED);
 	}
 
 }
