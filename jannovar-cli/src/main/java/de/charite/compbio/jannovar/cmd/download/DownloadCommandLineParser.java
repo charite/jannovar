@@ -94,9 +94,9 @@ public final class DownloadCommandLineParser {
 		}
 
 		if (cmd.hasOption("verbose"))
-			result.verbosity = 1;
-		if (cmd.hasOption("very-verbose"))
 			result.verbosity = 2;
+		if (cmd.hasOption("very-verbose"))
+			result.verbosity = 3;
 
 		if (cmd.hasOption("data-dir"))
 			result.downloadPath = cmd.getOptionValue("data-dir");

@@ -31,6 +31,11 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 			throw new HelpRequestedException();
 		}
 
+		if (cmd.hasOption("verbose"))
+			result.verbosity = 2;
+		if (cmd.hasOption("very-verbose"))
+			result.verbosity = 3;
+
 		result.jannovarFormat = cmd.hasOption("janno");
 
 		if (cmd.hasOption("output"))

@@ -4,12 +4,9 @@
 		<Console name="CONSOLE" target="SYSTEM_OUT">
 			<PatternLayout pattern="%m%n" />
 		</Console>
-		<!-- <File name="FILE" fileName="logs/exomiser.log" append="true" bufferedIO="true"> 
-			<PatternLayout pattern="%d %-5p %c{8} [%t] - %m%n" /> </File> -->
 		<!-- Async Appender should be configured after the appenders it references. 
 			This will allow it to shutdown properly. -->
 		<Async name="ASYNC">
-			<AppenderRef ref="FILE" />
 			<AppenderRef ref="CONSOLE" />
 		</Async>
 	</Appenders>

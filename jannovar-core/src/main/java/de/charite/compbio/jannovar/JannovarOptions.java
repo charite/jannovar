@@ -88,6 +88,7 @@ public final class JannovarOptions {
 	 * Print option values to stderr.
 	 */
 	public void print(PrintStream out) {
+		out.println("verbosity: " + verbosity);
 		if (command == Command.DOWNLOAD) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 			out.println("dataSourceNames: " + dataSourceNames);

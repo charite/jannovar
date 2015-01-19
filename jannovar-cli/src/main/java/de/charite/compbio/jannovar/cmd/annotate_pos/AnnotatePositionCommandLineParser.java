@@ -32,6 +32,11 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 			throw new HelpRequestedException();
 		}
 
+		if (cmd.hasOption("verbose"))
+			result.verbosity = 2;
+		if (cmd.hasOption("very-verbose"))
+			result.verbosity = 3;
+
 		String args[] = cmd.getArgs(); // get remaining arguments
 		if (args.length < 3)
 			throw new ParseException("must have at least two none-option argument, had: " + (args.length - 1));

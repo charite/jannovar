@@ -1,5 +1,10 @@
 package de.charite.compbio.jannovar.cmd;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
 
@@ -35,15 +40,17 @@ public abstract class JannovarCommand {
 	 * Set log level, depending on this.verbosity.
 	 */
 	private void setLogLevel() {
-		switch (verbosity) {
-		case 0:
-		case 1:
-			System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "INFO");
-			break;
-		case 2:
-		default:
-			System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "DEBUG");
-		}
+		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		Configuration conf = ctx.getConfiguration();
+
+		if (verbosity <= 1)
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.INFO);
+		else if (verbosity <= 2)
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.DEBUG);
+		else
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.TRACE);
+
+		ctx.updateLoggers(conf);
 	}
 
 	/**
