@@ -158,7 +158,8 @@ public class InsertionAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED), "", "AGC");
 		Annotation annotation2agc = new InsertionAnnotationBuilder(infoForward, change2agc).build();
 		Assert.assertEquals("uc001anx.3:exon2:c.1_2insAGC:p.0?", annotation2agc.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.START_LOSS), annotation2agc.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_INSERTION, VariantType.START_LOSS),
+				annotation2agc.varTypes);
 
 		// Test cases where the start codon is not subjected to an insertion.
 
@@ -167,14 +168,16 @@ public class InsertionAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED), "", "TAA");
 		Annotation annotation3taa = new InsertionAnnotationBuilder(infoForward, change3taa).build();
 		Assert.assertEquals("uc001anx.3:exon2:c.3_4insTAA:p.Asp2*", annotation3taa.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPGAIN), annotation3taa.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_INSERTION, VariantType.STOPGAIN),
+				annotation3taa.varTypes);
 
 		// Directly insert some base and then a stop codon.
 		GenomeChange change3tcctaa = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672,
 				PositionType.ZERO_BASED), "", "TCCTAA");
 		Annotation annotation3tcctaa = new InsertionAnnotationBuilder(infoForward, change3tcctaa).build();
 		Assert.assertEquals("uc001anx.3:exon2:c.3_4insTCCTAA:p.Asp2_Gly3delinsSer", annotation3tcctaa.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPGAIN), annotation3tcctaa.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_INSERTION, VariantType.STOPGAIN),
+				annotation3tcctaa.varTypes);
 
 		// Insertion without a new stop codon that is no duplication.
 		GenomeChange change4tcctcctcc = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672,
@@ -182,7 +185,8 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation4tcctcctcc = new InsertionAnnotationBuilder(infoForward, change4tcctcctcc).build();
 		Assert.assertEquals("uc001anx.3:exon2:c.3_4insTCCTCCTCC:p.Met1_Asp2insSerSerSer",
 				annotation4tcctcctcc.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_INSERTION), annotation4tcctcctcc.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_INSERTION, VariantType.NON_FS_INSERTION),
+				annotation4tcctcctcc.varTypes);
 
 		// Insertion without a new stop codon that is a duplication.
 		GenomeChange change5gatggc = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672,
@@ -1077,8 +1081,8 @@ public class InsertionAnnotationBuilderTest {
 	/**
 	 * annovar: SCAMP1:uc003kfl.3:exon8:c.730_731insT:p.C244fs, chr5:77745856->T
 	 *
-	 * -- According to mutalyzer, p.(Asn244Ilefs*52), thus should be p.N244fs (this is what de.charite.compbio.jannovar says, annovar finds
-	 * a "C")
+	 * -- According to mutalyzer, p.(Asn244Ilefs*52), thus should be p.N244fs (this is what de.charite.compbio.jannovar
+	 * says, annovar finds a "C")
 	 */
 	@Test
 	public void testRealWorldCase_uc003kfl_3() throws InvalidGenomeChange {
@@ -1427,7 +1431,8 @@ public class InsertionAnnotationBuilderTest {
 		//
 		// The UCSC transcript DNA sequence is bogus here.
 		Assert.assertEquals("uc010hgj.1:exon4:c.590_591insAAGT:p.Leu197LeuSer*", annotation1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOPGAIN), annotation1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_INSERTION, VariantType.STOPGAIN),
+				annotation1.varTypes);
 	}
 
 }
