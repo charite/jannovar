@@ -162,7 +162,7 @@ public class SNVAnnotationBuilderTest {
 				"G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals("uc001anx.3:exon11:c.2067G>A:p.=", anno.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS), anno.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_RETAINED, VariantType.SYNONYMOUS), anno.varTypes);
 	}
 
 	@Test
@@ -402,7 +402,7 @@ public class SNVAnnotationBuilderTest {
 				"T", "C");
 		Annotation anno1 = new SNVAnnotationBuilder(infoReverse, change1).build();
 		Assert.assertEquals("uc001bgu.3:exon4:c.1413A>G:p.=", anno1.hgvsDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS), anno1.varTypes);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_RETAINED, VariantType.SYNONYMOUS), anno1.varTypes);
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688462, PositionType.ZERO_BASED),
 				"T", "G");

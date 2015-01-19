@@ -119,7 +119,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			protAnno = "p.0?";
 		} else if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 			if (wtAA.equals(varAA)) { // change in stop codon, but no AA change
-				varTypes.add(VariantType.SYNONYMOUS); // TODO(holtgrem): should be STOP_RETAINED
+				varTypes.add(VariantType.STOP_RETAINED);
 			} else { // change in stop codon, AA change
 				varTypes.add(VariantType.STOPLOSS);
 				String varNTString = seqChangeHelper.getCDSWithChange(change);

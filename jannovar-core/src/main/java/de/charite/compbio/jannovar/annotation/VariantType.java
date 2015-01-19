@@ -1,92 +1,142 @@
 package de.charite.compbio.jannovar.annotation;
 
-// TODO(holtgrem): Use higher priority resolution internvally (e.g. 1/1000th)? This way we could remove any ambiguities.
-
 /**
- * These codes reflect the possible types of variants that we call for an exome. Note that the codes have the obvious
- * meanings, but UTR53 means a variant that is in the 3' UTR of one transcript and the 5' UTR of another transcript.
+ * These codes reflect the possible types of variants that we call for an exome.
  *
- * Note that the an intergenic variant is considered UPSTREAM or DOWNSTREAM if it is within 1000 nucleotides of a gene,
- * otherwise INTERGENIC. This behavior is controlled by the constant NEARGENE in {@link de.charite.compbio.jannovar.io.Chromosome
- * Chromosome}. Note that this class implements the assignment of a priority level to the variant classes. See the
- * document for the class {@link de.charite.compbio.jannovar.annotation.AnnotationCollector AnnotatedVariantFactory} for details.
+ * Note that the codes have the obvious meanings, but UTR53 means a variant that is in the 3' UTR of one transcript and
+ * the 5' UTR of another transcript.
  *
+ * The values in this enum are given in the putative order of severity (more severe to less severe).
  *
  * @author Peter Robinson <peter.robinson@charite.de>
  * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 // TODO(mjaeger): the outputnames for structural variants...
 public enum VariantType {
-	/** whole exon los, SO:"A feature ablation whereby the deleted region includes a transcript feature */
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 1
+	// ----------------------------------------------------------------------
+
+	/** whole exon loss, SO:"A feature ablation whereby the deleted region includes a transcript feature */
 	TRANSCRIPT_ABLATION,
-	/** variant is downstream of a gene */
-	DOWNSTREAM,
-	/** deletion resulting in a frameshift */
-	FS_DELETION,
+	/** variant is a structural deletion variant &gt;=1000bp */
+	SV_DELETION,
+	/** variant is a structural insertion variant &gt;=1000bp */
+	SV_INSERTION,
+	/** variant is a structural substitution variant &gt;=1000bp */
+	SV_SUBSTITUTION,
+	/** variant is a structural inversion variant &gt;=1000bp */
+	SV_INVERSION,
+
+	/** variant located changing the 2 base region at the 3' end of an intron */
+	SPLICE_DONOR,
+	/** variant located changing the 2 base region at the 5' end of an intron */
+	SPLICE_ACCEPTOR,
+	/** variant that induces a new stop codon (i.e., nonsense) */
+	STOPGAIN,
+	/** nucleotide duplication that results in a frameshift */
+	FS_DUPLICATION,
 	/** insertion resulting in a frameshift */
 	FS_INSERTION,
-	/** nucleotide substitution that does not result in a frameshift */
-	NON_FS_SUBSTITUTION,
+	/** deletion resulting in a frameshift */
+	FS_DELETION,
 	/** nucleotide substitution that results in a frameshift */
 	FS_SUBSTITUTION,
-	/** variant located between two genes (far enough away not to qualify as upstream/downstream) */
-	INTERGENIC,
-	/** variant located in an intron */
-	INTRONIC,
+	/** variant that alters and removes a wildtype stop codon */
+	STOPLOSS,
+	/** variation leads to the loss of the start codon */
+	START_LOSS,
+	/** nucleotide duplication that does not result in a frameshift */
+	NON_FS_DUPLICATION,
+	/** insertion that does not result in a frameshift */
+	NON_FS_INSERTION,
+	/** deletion that does not result in a frameshift */
+	NON_FS_DELETION,
+	/** nucleotide substitution that does not result in a frameshift */
+	NON_FS_SUBSTITUTION,
 	/**
 	 * Variant that leads to the substitution of one amino acid (note this was earlier "NONYSYNONYMOUS" but the term
 	 * name was changed to conform with the terminology of the <a href="http://www.sequenceontology.org/">Sequence
 	 * Ontology</a>).
 	 */
 	MISSENSE,
+	/** variant either located in 1-3 bases of an exon or 3-8 bases of an intron */
+	SPLICE_REGION,
+	/** A sequence variant where at least one base in the terminator codon is changed, but the terminator remains */
+	STOP_RETAINED,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 2
+	// ----------------------------------------------------------------------
+
 	/** variant located in an exon of a noncoding RNA gene */
 	ncRNA_EXONIC,
-	/** variant located in an intron of a noncoding RNA gene */
-	ncRNA_INTRONIC,
 	/** variant located in a splice donor region of a non-coding gene */
 	ncRNA_SPLICE_DONOR,
 	/** variant located in a splice donor region of a non-coding gene */
 	ncRNA_SPLICE_ACCEPTOR,
 	/** variant located in a splice donor region of a non-coding gene */
 	ncRNA_SPLICE_REGION,
-	/** deletion that does not result in a frameshift */
-	NON_FS_DELETION,
-	/** insertion that does not result in a frameshift */
-	NON_FS_INSERTION,
-	/** variant located changing the 2 base region at the 5' end of an intron */
-	SPLICE_ACCEPTOR,
-	/** variant located changing the 2 base region at the 3' end of an intron */
-	SPLICE_DONOR,
-	/** variant either located in 1-3 bases of an exon or 3-8 bases of an intron */
-	SPLICE_REGION,
-	/** variant that induces a new stop codon (i.e., nonsense) */
-	STOPGAIN,
-	/** variant that alters and removes a wildtype stop codon */
-	STOPLOSS,
-	/** nucleotide substitution that does not alter the encoded amino acid of the affected codon */
-	SYNONYMOUS,
-	/** variant is upstream of a gene */
-	UPSTREAM,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 3
+	// ----------------------------------------------------------------------
+
 	/** variant is located in the 3' untranslated region */
 	UTR3,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 4
+	// ----------------------------------------------------------------------
+
 	/** variant is located in the 5' untranslated region */
 	UTR5,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 5
+	// ----------------------------------------------------------------------
+
+	/** nucleotide substitution that does not alter the encoded amino acid of the affected codon */
+	SYNONYMOUS,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 6
+	// ----------------------------------------------------------------------
+
+	/** variant located in an intron */
+	INTRONIC,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 7
+	// ----------------------------------------------------------------------
+
+	/** variant located in an intron of a noncoding RNA gene */
+	ncRNA_INTRONIC,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 8
+	// ----------------------------------------------------------------------
+
+	/** variant is downstream of a gene */
+	DOWNSTREAM,
+	/** variant is upstream of a gene */
+	UPSTREAM,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 9
+	// ----------------------------------------------------------------------
+
+	/** variant located between two genes (far enough away not to qualify as upstream/downstream) */
+	INTERGENIC,
+
+	// ----------------------------------------------------------------------
+	// PRIORITY LEVEL = 10
+	// ----------------------------------------------------------------------
+
 	/** variant assessed as probably erroneous (may indicate an error in the VCF file) */
-	ERROR,
-	/** nucleotide duplication that does not result in a frameshift */
-	NON_FS_DUPLICATION,
-	/** nucleotide duplication that results in a frameshift */
-	FS_DUPLICATION,
-	/** variation leads to the loss of the start codon */
-	START_LOSS,
-	/** variant is a structural insertion variant &gt;=1000bp */
-	SV_INSERTION,
-	/** variant is a structural deletion variant &gt;=1000bp */
-	SV_DELETION,
-	/** variant is a structural substitution variant &gt;=1000bp */
-	SV_SUBSTITUTION,
-	/** variant is a structural inversion variant &gt;=1000bp */
-	SV_INVERSION;
+	ERROR;
 
 	/**
 	 * The preference level for annotations is
@@ -124,6 +174,7 @@ public enum VariantType {
 		case SPLICE_DONOR:
 		case SPLICE_ACCEPTOR:
 		case SPLICE_REGION:
+		case STOP_RETAINED:
 		case STOPGAIN:
 		case STOPLOSS:
 		case FS_DUPLICATION:
@@ -176,22 +227,6 @@ public enum VariantType {
 	}
 
 	/**
-	 * This returns an array with the VariantTypes arranged according to their priority. It can used to arrange output
-	 * of Variants ranked according to presumed pathogenicity.
-	 *
-	 * @return an array with the VariantTypes priority sorted
-	 */
-	public static VariantType[] getPrioritySortedList() {
-		VariantType[] vta = new VariantType[] { TRANSCRIPT_ABLATION, SV_DELETION, SV_INSERTION, SV_SUBSTITUTION,
-				SV_INVERSION, MISSENSE, STOPGAIN, SPLICE_DONOR, SPLICE_ACCEPTOR, SPLICE_REGION, FS_DELETION,
-				FS_INSERTION, FS_SUBSTITUTION, NON_FS_DELETION, NON_FS_INSERTION, NON_FS_SUBSTITUTION, STOPLOSS,
-				FS_DUPLICATION, NON_FS_DUPLICATION, START_LOSS, ncRNA_EXONIC, ncRNA_SPLICE_DONOR,
-				ncRNA_SPLICE_ACCEPTOR, ncRNA_SPLICE_REGION, UTR3, UTR5, SYNONYMOUS, INTRONIC, ncRNA_INTRONIC, UPSTREAM,
-				DOWNSTREAM, INTERGENIC, ERROR };
-		return vta;
-	}
-
-	/**
 	 * A string representing the variant type (e.g., missense_variant, stop_gained,...)
 	 *
 	 * @return Name of this {@link VariantType}
@@ -220,6 +255,8 @@ public enum VariantType {
 			return "splice acceptor";
 		case SPLICE_REGION:
 			return "splice region";
+		case STOP_RETAINED:
+			return "stop retained";
 		case STOPGAIN:
 			return "stopgain";
 		case STOPLOSS:
@@ -298,6 +335,8 @@ public enum VariantType {
 			return "splice_acceptor_variant";
 		case SPLICE_REGION:
 			return "splice_region_variant";
+		case STOP_RETAINED:
+			return "stop_retained";
 		case STOPGAIN:
 			return "stop_gained";
 		case STOPLOSS:
@@ -376,6 +415,8 @@ public enum VariantType {
 			return "SO:0001574";
 		case SPLICE_REGION:
 			return "SO:0001630";
+		case STOP_RETAINED:
+			return "SO:0001567";
 		case STOPGAIN:
 			return "SO:0001587";
 		case STOPLOSS:
@@ -435,11 +476,6 @@ public enum VariantType {
 	/**
 	 * A static constant that returns the number of different values in this enumeration.
 	 */
-	private static final int size = VariantType.values().length;
-
-	/** @return the number of different values in this enumeration. */
-	public static int size() {
-		return VariantType.size;
-	}
+	public static final int size = VariantType.values().length;
 
 }
