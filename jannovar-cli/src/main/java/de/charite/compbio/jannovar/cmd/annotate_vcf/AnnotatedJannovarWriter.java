@@ -17,6 +17,7 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationException;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -34,6 +35,9 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	/** the VCF file to process */
 	private String vcfPath;
 
+	/** options object */
+	private JannovarOptions options;
+
 	/** the VariantAnnotator to use. */
 	private VariantAnnotator annotator;
 
@@ -48,14 +52,24 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		this.refDict = refDict;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
 		this.vcfPath = vcfPath;
+		this.options = options;
 		this.openBufferedWriter();
 	}
 
 	@Override
 	public String getOutFileName() {
 		// build file name for output file
-		File f = new File(this.vcfPath);
-		return f.getName() + ".de.charite.compbio.jannovar";
+		File f = new File(vcfPath);
+		String outname = f.getName();
+		if (options.outVCFFolder != null)
+			outname = PathUtil.join(options.outVCFFolder, outname);
+		int i = outname.lastIndexOf("vcf");
+		if (i < 0)
+			i = outname.lastIndexOf("VCF");
+		if (i < 0)
+			return f.getParent() + File.separator + outname + ".jv";
+		else
+			return f.getParent() + File.separator + outname.substring(0, i) + "jv";
 	}
 
 	/**

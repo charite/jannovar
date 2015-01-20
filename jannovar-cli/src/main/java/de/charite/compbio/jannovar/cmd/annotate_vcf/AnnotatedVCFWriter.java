@@ -100,9 +100,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		String outname = f.getName();
 		if (options.outVCFFolder != null)
 			outname = PathUtil.join(options.outVCFFolder, outname);
-		int i = outname.lastIndexOf("vcf");
-		if (i < 0)
-			i = outname.lastIndexOf("VCF");
+		else
+			outname = PathUtil.join(f.getParent(), outname);
+		int i = outname.toLowerCase().lastIndexOf("vcf");
 		if (i < 0)
 			return outname + ".jv.vcf";
 		else
@@ -186,6 +186,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				vc.getCommonInfo().putAttribute("EFFECT", effectText.toString(), true);
 			if (hgvsText.length() > 0)
 				vc.getCommonInfo().putAttribute("HGVS", hgvsText.toString(), true);
+
+			// remove empty fields, yielding leading semicolons in INFO field
+			vc.getCommonInfo().removeAttribute("");
 		}
 
 		// Write out variantContext to out.

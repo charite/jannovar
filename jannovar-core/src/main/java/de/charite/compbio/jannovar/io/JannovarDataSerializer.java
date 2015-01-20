@@ -110,12 +110,14 @@ public final class JannovarDataSerializer {
 			error = String.format("Could not deserialized class definition: %s", c.toString());
 		} finally {
 			try {
-				in.close();
+				if (in != null)
+					in.close();
 			} catch (IOException e) {
 				// swallow, nothing we can do
 			}
 			try {
-				fileIn.close();
+				if (fileIn != null)
+					fileIn.close();
 			} catch (IOException e) {
 				// swallow, nothing we can do
 			}
