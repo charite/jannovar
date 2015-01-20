@@ -58,7 +58,7 @@ public final class JannovarOptions {
 	/** whether to report the annotations for all affected transcripts */
 	public boolean showAll = false;
 
-	/** path to output folder for the annotated VCF files (default is current folder) */
+	/** path to output folder for the annotated VCF files (default is parallel to input file) */
 	public String outVCFFolder = null;
 
 	// TODO(holtgrem): enable and use this!

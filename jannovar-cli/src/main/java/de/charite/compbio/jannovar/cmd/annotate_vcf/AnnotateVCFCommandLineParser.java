@@ -38,8 +38,8 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		result.jannovarFormat = cmd.hasOption("janno");
 
-		if (cmd.hasOption("output"))
-			result.outVCFFolder = cmd.getOptionValue("output");
+		if (cmd.hasOption("output-dir"))
+			result.outVCFFolder = cmd.getOptionValue("output-dir");
 
 		result.jannovarFormat = cmd.hasOption("de.charite.compbio.jannovar");
 		result.showAll = cmd.hasOption("showall");
@@ -62,6 +62,8 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		options.addOption(new Option("J", "de.charite.compbio.jannovar", false, "write result in Jannovar output"));
 		options.addOption(new Option("a", "showall", false, "report annotations for all affected transcripts"));
+		options.addOption(new Option("o", "output-dir", true,
+				"output directory (default is to write parallel to input file)"));
 	}
 
 	private void printHelp() {

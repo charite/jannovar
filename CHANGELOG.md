@@ -2,6 +2,10 @@
 
 *jannovar-cli*
 
+* Adding unit tests for jannovar-cli.
+* Fixing problem with empty `INFO` fields in output.
+* Adding back `--output-dir` to jannovar-cli.
+* Writing output parallel to input file by default.
 * Adding `-v` and `-vv` command line options.
 * Fixing problems with block substitution (delins) case (#87).
 
