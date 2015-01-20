@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import java.util.ArrayList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
@@ -125,34 +127,36 @@ abstract class AnnotationBuilder {
 		GenomePosition pos = changeInterval.getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
+		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		if (changeInterval.length() == 0) {
 			GenomePosition lPos = pos.shifted(-1);
-			VariantType varType;
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varType = VariantType.ncRNA_SPLICE_DONOR;
+				varTypes.add(VariantType.ncRNA_SPLICE_DONOR);
 			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varType = VariantType.ncRNA_SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.ncRNA_SPLICE_ACCEPTOR);
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varType = VariantType.ncRNA_SPLICE_REGION;
-			else if (so.liesInExon(lPos) && so.liesInExon(pos))
-				varType = VariantType.ncRNA_EXONIC;
+				varTypes.add(VariantType.ncRNA_SPLICE_REGION);
+			// Check for being in intron/exon.
+			if (so.liesInExon(lPos) && so.liesInExon(pos))
+				varTypes.add(VariantType.ncRNA_EXONIC);
 			else
-				varType = VariantType.ncRNA_INTRONIC;
-			return new Annotation(varType, txBeginPos, ncHGVS(), transcript);
+				varTypes.add(VariantType.ncRNA_INTRONIC);
 		} else {
-			VariantType varType;
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.ncRNA_SPLICE_DONOR;
+				varTypes.add(VariantType.ncRNA_SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.ncRNA_SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.ncRNA_SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.ncRNA_SPLICE_REGION;
-			else if (so.overlapsWithExon(changeInterval))
-				varType = VariantType.ncRNA_EXONIC;
+				varTypes.add(VariantType.ncRNA_SPLICE_REGION);
+			// Check for being in intron/exon.
+			if (so.overlapsWithExon(changeInterval))
+				varTypes.add(VariantType.ncRNA_EXONIC);
 			else
-				varType = VariantType.ncRNA_INTRONIC;
-			return new Annotation(varType, txBeginPos, ncHGVS(), transcript);
+				varTypes.add(VariantType.ncRNA_INTRONIC);
 		}
+		return new Annotation(varTypes, txBeginPos, ncHGVS(), transcript);
 	}
 
 	/**
@@ -164,29 +168,28 @@ abstract class AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		VariantType varType;
+		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
+		varTypes.add(VariantType.INTRONIC); // always include intronic as variant type
 		if (change.getGenomeInterval().length() == 0) {
 			GenomePosition lPos = pos.shifted(-1);
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varType = VariantType.SPLICE_REGION;
-			else
-				varType = VariantType.INTRONIC;
+				varTypes.add(VariantType.SPLICE_REGION);
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICE_REGION;
-			else
-				varType = VariantType.INTRONIC;
+				varTypes.add(VariantType.SPLICE_REGION);
 		}
-		return new Annotation(varType, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(varTypes, txBeginPos, ncHGVS(), transcript);
 	}
 
 	/**
@@ -198,35 +201,39 @@ abstract class AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		VariantType varType;
+		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		if (change.getGenomeInterval().length() == 0) {
 			GenomePosition lPos = pos.shifted(-1);
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varType = VariantType.SPLICE_REGION;
-			else if (so.liesInFivePrimeUTR(lPos))
-				varType = VariantType.UTR5;
+				varTypes.add(VariantType.SPLICE_REGION);
+			// Check for being in 5' or 3' UTR.
+			if (so.liesInFivePrimeUTR(lPos))
+				varTypes.add(VariantType.UTR5);
 			else
 				// so.liesInThreePrimeUTR(pos)
-				varType = VariantType.UTR3;
+				varTypes.add(VariantType.UTR3);
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICE_REGION;
-			else if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-				varType = VariantType.UTR5;
+				varTypes.add(VariantType.SPLICE_REGION);
+			// Check for being in 5' or 3' UTR.
+			if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
+				varTypes.add(VariantType.UTR5);
 			else
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-				varType = VariantType.UTR3;
+				varTypes.add(VariantType.UTR3);
 		}
-		return new Annotation(varType, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(varTypes, txBeginPos, ncHGVS(), transcript);
 	}
 
 	/**

@@ -215,7 +215,7 @@ final class AnnotationCollector {
 		VariantType vt;
 		Collections.sort(this.annotationLst);
 		Annotation a = this.annotationLst.get(0);
-		return a.varType;
+		return a.getMostPathogenicVarType();
 	}
 
 	/**
@@ -283,10 +283,11 @@ final class AnnotationCollector {
 	 */
 	public void addExonicAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		if (ann.varType == VariantType.SYNONYMOUS) {
+		if (ann.getMostPathogenicVarType() == VariantType.SYNONYMOUS) {
 			this.hasSynonymous = true;
-		} else if (ann.varType == VariantType.SPLICE_DONOR || ann.varType == VariantType.SPLICE_ACCEPTOR
-				|| ann.varType == VariantType.SPLICE_REGION) {
+		} else if (ann.getMostPathogenicVarType() == VariantType.SPLICE_DONOR
+				|| ann.getMostPathogenicVarType() == VariantType.SPLICE_ACCEPTOR
+				|| ann.getMostPathogenicVarType() == VariantType.SPLICE_REGION) {
 			this.hasSplicing = true;
 		} else {
 			this.hasExonic = true;
@@ -320,16 +321,17 @@ final class AnnotationCollector {
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
 		this.geneSymbolSet.add(ann.transcript.geneSymbol);
-		if (ann.varType == VariantType.INTRONIC || ann.varType == VariantType.ncRNA_INTRONIC) {
+		if (ann.getMostPathogenicVarType() == VariantType.INTRONIC
+				|| ann.getMostPathogenicVarType() == VariantType.ncRNA_INTRONIC) {
 			for (Annotation a : this.annotationLst) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
 			}
 			this.annotationLst.add(ann);
 		}
-		if (ann.varType == VariantType.INTRONIC) {
+		if (ann.getMostPathogenicVarType() == VariantType.INTRONIC) {
 			this.hasIntronic = true;
-		} else if (ann.varType == VariantType.ncRNA_INTRONIC) {
+		} else if (ann.getMostPathogenicVarType() == VariantType.ncRNA_INTRONIC) {
 			this.hasNcrnaIntronic = true;
 		}
 		this.hasGenicMutation = true;
@@ -376,7 +378,7 @@ final class AnnotationCollector {
 				return;
 		}
 		this.annotationLst.add(ann);
-		VariantType type = ann.varType;
+		VariantType type = ann.getMostPathogenicVarType();
 		if (type == VariantType.DOWNSTREAM) {
 			this.hasDownstream = true;
 		} else if (type == VariantType.UPSTREAM) {

@@ -1,5 +1,9 @@
 package de.charite.compbio.jannovar.annotation;
 
+import java.util.Collection;
+
+import com.google.common.collect.ImmutableSortedSet;
+
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -18,8 +22,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 @Immutable
 public final class Annotation implements Comparable<Annotation> {
 
-	/** type of the variant */
-	public final VariantType varType;
+	/** variant types, sorted by internal pathogenicity score */
+	public final ImmutableSortedSet<VariantType> varTypes;
 
 	/** position of the variant on the transcript, used for sorting only */
 	public final int txVarPos;
@@ -35,7 +39,7 @@ public final class Annotation implements Comparable<Annotation> {
 	 * Initialize the {@link Annotation} with the given values.
 	 *
 	 * @param varType
-	 *            type of the variant
+	 *            one type of the variant
 	 * @param txVarPos
 	 *            transcript start position of the variant
 	 * @param hgvsDescription
@@ -43,8 +47,31 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param transcript
 	 *            transcript for this annotation
 	 */
-	public Annotation(VariantType varType, int txVarPos, String hgvsDescription, TranscriptModel transcript) {
-		this.varType = varType;
+	public Annotation(VariantType varType, int txVarPos, String hgvsDescription,
+			TranscriptModel transcript) {
+		this.varTypes = ImmutableSortedSet.of(varType);
+		this.txVarPos = txVarPos;
+		this.hgvsDescription = hgvsDescription;
+		this.transcript = transcript;
+	}
+
+	// TODO(holtgrem): Change parameter order, transcript should be first
+	/**
+	 * Initialize the {@link Annotation} with the given values.
+	 *
+	 * The constructor will sort <code>varTypes</code> by pathogenicity before storing.
+	 *
+	 * @param varTypes
+	 *            type of the variants
+	 * @param txVarPos
+	 *            transcript start position of the variant
+	 * @param hgvsDescription
+	 *            variant description following the HGVS nomenclauture
+	 * @param transcript
+	 *            transcript for this annotation
+	 */
+	public Annotation(Collection<VariantType> varTypes, int txVarPos, String hgvsDescription, TranscriptModel transcript) {
+		this.varTypes = ImmutableSortedSet.copyOf(varTypes);
 		this.txVarPos = txVarPos;
 		this.hgvsDescription = hgvsDescription;
 		this.transcript = transcript;
@@ -64,9 +91,16 @@ public final class Annotation implements Comparable<Annotation> {
 		return StringUtil.concatenate(transcript.geneSymbol, ":", hgvsDescription);
 	}
 
+	/**
+	 * @return most pathogenic {@link VariantType} link {@link #varTypes}.
+	 */
+	public VariantType getMostPathogenicVarType() {
+		return varTypes.first();
+	}
+
 	@Override
 	public int compareTo(Annotation other) {
-		int result = this.varType.priorityLevel() - other.varType.priorityLevel();
+		int result = getMostPathogenicVarType().priorityLevel() - other.getMostPathogenicVarType().priorityLevel();
 		if (result != 0)
 			return result;
 
@@ -84,7 +118,7 @@ public final class Annotation implements Comparable<Annotation> {
 		result = prime * result + ((hgvsDescription == null) ? 0 : hgvsDescription.hashCode());
 		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
 		result = prime * result + txVarPos;
-		result = prime * result + ((varType == null) ? 0 : varType.hashCode());
+		result = prime * result + ((varTypes == null) ? 0 : varTypes.hashCode());
 		return result;
 	}
 
@@ -109,7 +143,7 @@ public final class Annotation implements Comparable<Annotation> {
 			return false;
 		if (txVarPos != other.txVarPos)
 			return false;
-		if (varType != other.varType)
+		if (varTypes != other.varTypes)
 			return false;
 		return true;
 	}

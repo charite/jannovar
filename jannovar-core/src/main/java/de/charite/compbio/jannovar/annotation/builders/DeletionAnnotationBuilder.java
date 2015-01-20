@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import java.util.ArrayList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
@@ -108,7 +110,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		// Java.
 
 		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		VariantType varType;
+		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
@@ -153,23 +155,25 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varType, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(varTypes, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {
 			// The variant is a non-frameshift deletion. The deletion could span more than one exon and thus also affect
 			// a splice donor or acceptor site, delete a stop codon. Further, the variant might also be a splice region
 			// variant but that a lower priority than a non-frameshift deletion.
+			//
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICE_REGION;
-			else if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varType = VariantType.STOPLOSS;
-			else
-				varType = VariantType.NON_FS_DELETION;
+				varTypes.add(VariantType.SPLICE_REGION);
+			// Check whether the variant overlaps with the stop site.
+			if (so.overlapsWithTranslationalStopSite(changeInterval))
+				varTypes.add(VariantType.STOPLOSS);
+			varTypes.add(VariantType.NON_FS_DELETION);
 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
@@ -194,16 +198,18 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			// The variant is a frameshift deletion. The deletion could span more than one exon and thus also affect a
 			// splice donor or acceptor site. Further, the variant might also be stop lost or splice region variant but
 			// that has a lower priority than a frameshift deletion.
+			//
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICE_REGION;
-			else if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varType = VariantType.STOPLOSS;
-			else
-				varType = VariantType.FS_DELETION;
+				varTypes.add(VariantType.SPLICE_REGION);
+			// Check whether the variant overlaps with the stop site.
+			if (so.overlapsWithTranslationalStopSite(changeInterval))
+				varTypes.add(VariantType.STOPLOSS);
+			varTypes.add(VariantType.FS_DELETION);
 
 			// Normalize the amino acid change, shifting to the right as long as change ref char equals var ref char.
 			while (aaChange.ref.length() > 0 && aaChange.pos < varAASeq.length()
@@ -212,7 +218,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 			// Handle the case of deleting a stop codon at the very last entry of the translated amino acid string and
 			// short-circuit.
-			if (varType == VariantType.STOPLOSS && aaChange.pos == varAASeq.length()) {
+			if (varTypes.contains(VariantType.STOPLOSS) && aaChange.pos == varAASeq.length()) {
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, "del?");
 				return;
 			}
@@ -237,7 +243,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				int stopCodonOffset = varAAStopPos - aaChange.pos + delta;
 				suffix = StringUtil.concatenate("*", stopCodonOffset);
 			}
-			if (varType == VariantType.STOPLOSS)
+			if (varTypes.contains(VariantType.STOPLOSS))
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAA), "ext", suffix);
 			else
 				protAnno = StringUtil

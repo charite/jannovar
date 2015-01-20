@@ -15,14 +15,7 @@ public class VariantTypeTest {
 	@Test
 	public void testNumberOfConstants() {
 		int n = VariantType.class.getEnumConstants().length;
-		Assert.assertEquals(33, n);
-	}
-
-	@Test
-	public void testAllConstantsAreInPriorityList() {
-		int n = VariantType.getPrioritySortedList().length;
-		int m = VariantType.class.getEnumConstants().length;
-		Assert.assertEquals(n, m);
+		Assert.assertEquals(34, n);
 	}
 
 	@Test
@@ -195,18 +188,6 @@ public class VariantTypeTest {
 		Assert.assertEquals(1, n);
 	}
 
-	/*
-	 * This tests that the constants returned by the function getPrioritySortedList() are arranged in monotonically
-	 * non-decreasing order.
-	 */
-	@Test
-	public void testOrderingOfPriorityLevel() {
-		VariantType n[] = VariantType.getPrioritySortedList();
-		for (int i = 1; i < n.length; ++i) {
-			Assert.assertTrue(n[i - 1].priorityLevel() <= n[i].priorityLevel());
-		}
-	}
-
 	@Test
 	public void testFSDeletionString() {
 		String s = VariantType.FS_DELETION.toDisplayString();
@@ -233,7 +214,7 @@ public class VariantTypeTest {
 
 	@Test
 	public void testSize() {
-		Assert.assertEquals(33, VariantType.size());
+		Assert.assertEquals(34, VariantType.size);
 	}
 
 	@Test

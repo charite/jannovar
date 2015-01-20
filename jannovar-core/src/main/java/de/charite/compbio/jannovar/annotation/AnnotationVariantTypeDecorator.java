@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
+import com.google.common.collect.ImmutableList;
+
 // TODO(holtgrem): Test me!
 
 /**
@@ -23,52 +25,33 @@ final public class AnnotationVariantTypeDecorator {
 	 */
 	public boolean isCodingExonic() {
 		// TODO(holtgrem): Are the first three ones correct?
-		switch (this.annotation.varType) {
-		case SPLICE_DONOR:
-		case SPLICE_ACCEPTOR:
-		case SPLICE_REGION:
-		case STOPLOSS:
-		case STOPGAIN:
-		case SYNONYMOUS:
-		case MISSENSE:
-		case NON_FS_SUBSTITUTION:
-		case NON_FS_INSERTION:
-		case FS_SUBSTITUTION:
-		case FS_DELETION:
-		case FS_INSERTION:
-		case NON_FS_DELETION:
-			return true;
-		default:
-			return false;
-		}
+		ImmutableList<VariantType> tryMatch = ImmutableList.of(VariantType.STOPLOSS, VariantType.STOPGAIN,
+				VariantType.SYNONYMOUS, VariantType.MISSENSE, VariantType.NON_FS_SUBSTITUTION,
+				VariantType.NON_FS_INSERTION, VariantType.FS_SUBSTITUTION, VariantType.FS_DELETION,
+				VariantType.FS_INSERTION, VariantType.NON_FS_DELETION);
+		for (VariantType v : tryMatch)
+			if (annotation.varTypes.contains(v))
+				return true;
+		return false;
 	}
 
 	/**
 	 * @return <code>true</code> if this annotation is for a 3' or 5' UTR
 	 */
 	public boolean isUTRVariant() {
-		switch (this.annotation.varType) {
-		case UTR3:
-		case UTR5:
-			return true;
-		default:
-			return false;
-		}
+		return (annotation.varTypes.contains(VariantType.UTR3) || annotation.varTypes.contains(VariantType.UTR5));
 	}
 
 	/**
 	 * @return <code>true</code> if the variant affects an exon of an ncRNA
 	 */
 	public boolean isNonCodingRNA() {
-		switch (this.annotation.varType) {
-		case ncRNA_EXONIC:
-		case ncRNA_INTRONIC:
-		case ncRNA_SPLICE_DONOR:
-		case ncRNA_SPLICE_ACCEPTOR:
-		case ncRNA_SPLICE_REGION:
-			return true;
-		default:
-			return false;
-		}
+		ImmutableList<VariantType> tryMatch = ImmutableList.of(VariantType.ncRNA_EXONIC, VariantType.ncRNA_INTRONIC,
+				VariantType.ncRNA_SPLICE_DONOR, VariantType.ncRNA_SPLICE_ACCEPTOR, VariantType.ncRNA_SPLICE_REGION);
+		for (VariantType v : tryMatch)
+			if (annotation.varTypes.contains(v))
+				return true;
+		return false;
 	}
+
 }

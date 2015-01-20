@@ -41,7 +41,7 @@ public class AnnotationListContentDecorator {
 	 */
 	public boolean hasStructuralVariant() {
 		for (Annotation entry : annotations.entries)
-			if (entry.varType.isSV())
+			if (entry.getMostPathogenicVarType().isSV())
 				return true;
 		return false;
 	}
@@ -75,7 +75,7 @@ public class AnnotationListContentDecorator {
 		if (annotations.entries.size() == 0)
 			return null;
 		else
-			return annotations.entries.get(0).varType;
+			return annotations.entries.get(0).getMostPathogenicVarType();
 	}
 
 }

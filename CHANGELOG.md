@@ -1,10 +1,19 @@
 **develop**
 
+*jannovar-cli*
+
 * Adding `-v` and `-vv` command line options.
+* Fixing problems with block substitution (delins) case (#87).
+
+*jannovar-core*
+
+* Reordering values of `VariantType`.
+* Somewhat renaming `VariantType` method names. 
+* Removing the `VariantType#size` function in favor of a `static public`
+  `final` member.
 * Using log4j/slf4j for I/O in jannovar-core.
 * Adding `PrintStream` as parameter to `JannovarOptions#print`.
 * Compressing serialized file.
-* Fixing problems with block substitution (delins) case (#87).
 * Changing namespace to `de.charite.compbio.jannovar`.
 * Making `VariantType#priorityLevel` a non-static member.
 * Renaming `TranscriptInfo` to `TranscriptModel`.

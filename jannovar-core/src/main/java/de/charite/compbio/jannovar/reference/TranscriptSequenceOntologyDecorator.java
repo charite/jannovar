@@ -218,8 +218,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>interval</code> overlaps with a splice region.
 	 *
-	 * We define the splice region to be the first/last 3 bases of an exon (towards an intron) and the first/last 8
-	 * bases of an intron. Note that this <b>includes</b> the splice donor and acceptor sites.
+	 * A splice_region_variant is a sequence variant in which a change has occurred within the region of the splice
+	 * site, either within 1-3 bases of the exon or 3-8 bases of the intron.
 	 *
 	 * @param interval
 	 *            the {@link GenomeInterval} to use for querying
@@ -249,7 +249,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>pos</code> lies within a splice region.
 	 *
-	 * See {@link #overlapsWithSpliceRegion(GenomeInterval)} for the definition of <b>splice region</b>.
+	 * A splice_region_variant is a sequence variant in which a change has occurred within the region of the splice
+	 * site, either within 1-3 bases of the exon or 3-8 bases of the intron.
 	 *
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying
@@ -279,7 +280,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>interval</code> overlaps with a splice donor site.
 	 *
-	 * The splice donor site is the first two bases of an intron.
+	 * A splice variant that changes the 2 base pair region at the 5' end of an intron.
 	 *
 	 * @param interval
 	 *            the {@link GenomeInterval} to use for querying
@@ -299,7 +300,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>pos</code> lies within a splice donor site.
 	 *
-	 * The splice acceptor site is the last two bases of an intron.
+	 * A splice variant that changes the 2 base pair region at the 5' end of an intron.
 	 *
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying
@@ -319,7 +320,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>interval</code> overlaps with a splice acceptor site.
 	 *
-	 * The splice acceptor site is the last two bases of an intron.
+	 * A splice variant that changes the 2 base pair region at the 3' end of an intron.
 	 *
 	 * @param interval
 	 *            the {@link GenomeInterval} to use for querying
@@ -339,7 +340,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	/**
 	 * Returns whether the given <code>pos</code> lies within a splice acceptor site.
 	 *
-	 * The splice acceptor site is the last two bases of an intron.
+	 * A splice variant that changes the 2 base pair region at the 3' end of an intron.
 	 *
 	 * @param pos
 	 *            the {@link GenomePosition} to use for querying

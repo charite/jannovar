@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.JannovarOptions;
@@ -124,7 +125,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		}
 
 		for (Annotation a : anno.entries) {
-			String effect = a.varType.toString();
+			String effect = Joiner.on("+").join(a.varTypes);
 			String annt = a.hgvsDescription;
 			String sym = a.transcript.geneSymbol;
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,

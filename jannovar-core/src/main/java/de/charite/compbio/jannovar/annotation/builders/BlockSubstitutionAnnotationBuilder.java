@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import java.util.ArrayList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
@@ -116,8 +118,8 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		// We keep the following three variables as state of the algorithm since we do not have easy-to-use triples in
 		// Java.
 
-		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		VariantType varType;
+		// the variant types, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
@@ -169,23 +171,24 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varType, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(varTypes, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {
 			// The variant is a non-frameshift block substitution. The substitution could span more than one exon and
 			// thus also affect a splice donor or acceptor site, delete a stop codon. Further, the variant might also be
 			// a splice region variant but that a lower priority than a non-frameshift deletion.
+			//
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICE_REGION;
-			else if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varType = VariantType.STOPLOSS;
-			else
-				varType = VariantType.NON_FS_SUBSTITUTION;
+				varTypes.add(VariantType.SPLICE_REGION);
+			if (so.overlapsWithTranslationalStopSite(changeInterval))
+				varTypes.add(VariantType.STOPLOSS);
+			varTypes.add(VariantType.NON_FS_SUBSTITUTION);
 
 			if (refChangeBeginPos.getFrameshift() == 0) {
 				// TODO(holtgrem): Implement shifting for substitutions for AA string
@@ -198,7 +201,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Truncate change.alt after stop codon.
 			aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
 			if (aaChange.alt.equals("*"))
-				varType = VariantType.STOPGAIN;
+				varTypes.add(VariantType.STOPGAIN);
 
 			// Handle the case of no change.
 			if (aaChange.isNop()) {
@@ -241,16 +244,18 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// The variant is a frameshift deletion. The deletion could span more than one exon and thus also affect a
 			// splice donor or acceptor site. Further, the variant might also be stop lost or splice region variant but
 			// that has a lower priority than a frameshift deletion.
+			//
+			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varType = VariantType.SPLICE_DONOR;
+				varTypes.add(VariantType.SPLICE_DONOR);
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varType = VariantType.SPLICE_ACCEPTOR;
+				varTypes.add(VariantType.SPLICE_ACCEPTOR);
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varType = VariantType.SPLICE_REGION;
-			else if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varType = VariantType.STOPLOSS;
-			else
-				varType = VariantType.FS_SUBSTITUTION;
+				varTypes.add(VariantType.SPLICE_REGION);
+			// Check whether it overlaps with the stop site.
+			if (so.overlapsWithTranslationalStopSite(changeInterval))
+				varTypes.add(VariantType.STOPLOSS);
+			varTypes.add(VariantType.FS_SUBSTITUTION);
 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
@@ -268,7 +273,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
 				protAnno = "p.0?";
-				varType = VariantType.STOPLOSS;
+				varTypes.add(VariantType.STOPLOSS);
 			}
 		}
 	}
