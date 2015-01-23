@@ -11,6 +11,7 @@
 	<modules>
 		<module>jannovar-core</module>
 		<module>jannovar-cli</module>
+		<module>jannovar-filter</module>
 	</modules>
 
 	<licenses>
