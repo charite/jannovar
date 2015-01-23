@@ -1,0 +1,54 @@
+package de.charite.compbio.jannovar.pedigree;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.google.common.collect.ImmutableList;
+
+public class CompatibilityCheckerAutosomalDominantSingletonTest extends CompatibilityCheckerTestBase {
+
+	@Before
+	public void setUp() throws PedParseException {
+		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
+		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.AFFECTED));
+		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
+				individuals.build());
+		this.pedigree = new Pedigree(pedFileContents, "ped");
+
+		this.names = ImmutableList.of("I.1");
+	}
+
+	@Test
+	public void testSizeOfPedigree() {
+		Assert.assertEquals(1, pedigree.members.size());
+	}
+
+	@Test
+	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
+		Assert.assertFalse(buildChecker(ALT).run());
+		Assert.assertFalse(buildChecker(REF).run());
+		Assert.assertFalse(buildChecker(UKN).run());
+	}
+
+	@Test
+	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
+		Assert.assertFalse(buildChecker(ALT, REF).run());
+		Assert.assertFalse(buildChecker(REF, UKN).run());
+		Assert.assertFalse(buildChecker(UKN, ALT).run());
+	}
+
+	@Test
+	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+		Assert.assertTrue(buildChecker(HET).run());
+	}
+
+	@Test
+	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
+		Assert.assertTrue(buildChecker(HET, REF).run());
+		Assert.assertTrue(buildChecker(HET, HET).run());
+		Assert.assertTrue(buildChecker(HET, ALT).run());
+		Assert.assertTrue(buildChecker(HET, UKN).run());
+	}
+
+}

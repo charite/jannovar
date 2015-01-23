@@ -7,19 +7,12 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerAutosomalDominant;
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.Genotype;
-import de.charite.compbio.jannovar.pedigree.GenotypeList;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedParseException;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.PositionType;
+
+//TODO(holtgrem): Test complex pedigree.
+//TODO(holtgrem): Test one individual.
 
 /**
  * Test the following pedigree
