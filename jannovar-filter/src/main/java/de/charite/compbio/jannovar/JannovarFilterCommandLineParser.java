@@ -46,14 +46,16 @@ public class JannovarFilterCommandLineParser {
 			result.verbosity = 3;
 
 		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length != 2)
-			throw new ParseException("must exactly two none-option arguments, had: " + args.length);
+		if (args.length != 4)
+			throw new ParseException("must exactly four none-option arguments, had: " + args.length);
 
 		if (cmd.getOptionValue("inheritance-mode") != null)
-			result.inheritanceMode = ModeOfInheritance.valueOf(ModeOfInheritance.class,
+			result.modeOfInheritance = ModeOfInheritance.valueOf(ModeOfInheritance.class,
 					cmd.getOptionValue("inheritance-mode"));
-		result.inputPath = args[0];
-		result.outputPath = args[1];
+		result.jannovarDB = args[0];
+		result.pedPath = args[1];
+		result.inputPath = args[2];
+		result.outputPath = args[3];
 
 		return result;
 	}
@@ -70,9 +72,9 @@ public class JannovarFilterCommandLineParser {
 	private void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Filter Tool")
 				.append("Use this command to filter VCF files.\n\n")
-				.append("Usage: java -jar jannovar-filter.jar <IN.vcf> <OUT.vcf>\n\n").toString();
+				.append("Usage: java -jar jannovar-filter.jar <DB.ser> <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
 		final String FOOTER = new StringBuilder()
-		.append("\n\nExample: java -jar jannovar-filter.jar 123.vcf 123.filtered.vcf\n\n")
+		.append("\n\nExample: java -jar jannovar-filter.jar data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n\n")
 		.append("Diseases\n\n")
 		.append("The --inheritance-mode parameter can take one of the following values. When given")
 		.append("then the variants will be filtered to those being compatible with the given mode")

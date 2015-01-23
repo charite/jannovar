@@ -14,6 +14,12 @@ public class JannovarFilterOptions {
 	/** verbosity level */
 	int verbosity = 1;
 
+	/** path to the Jannovar DB */
+	String jannovarDB = null;
+
+	/** path to pedigree file */
+	String pedPath = null;
+
 	/** path to input file */
 	String inputPath = null;
 
@@ -21,16 +27,18 @@ public class JannovarFilterOptions {
 	String outputPath = null;
 
 	/** selected mode of inheritance */
-	ModeOfInheritance inheritanceMode = ModeOfInheritance.UNINITIALIZED;
+	ModeOfInheritance modeOfInheritance = ModeOfInheritance.UNINITIALIZED;
 
 	/**
 	 * Print option values to stderr.
 	 */
 	public void print(PrintStream out) {
 		out.println("verbosity: " + verbosity);
+		out.println("db path: " + jannovarDB);
+		out.println("ped path: " + pedPath);
 		out.println("input path: " + inputPath);
 		out.println("output path: " + outputPath);
-		out.println("inheritanceMode: " + inheritanceMode);
+		out.println("modeOfInheritance: " + modeOfInheritance);
 	}
 
 }

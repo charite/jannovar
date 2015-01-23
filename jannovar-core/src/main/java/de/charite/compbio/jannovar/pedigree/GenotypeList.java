@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * Wrapper for a immutable lists of {@link Genotype} calls for one {@link TranscriptInfo}, one list of calls for each
@@ -21,6 +20,7 @@ public final class GenotypeList {
 	/** the name of the gene for this genotype call list */
 	public final String geneName;
 
+	// TODO(holtgrem): Remove genomeRegion?
 	/**
 	 * The approximate genomic interval of this gene, e.g. the region of one transcript. This information is only used
 	 * for getting the chromosome of the gene.
