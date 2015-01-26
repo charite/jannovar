@@ -29,60 +29,60 @@ public class CompatibilityCheckerAutosomalDominantSmallTest extends Compatibilit
 
 	@Test
 	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
-		Assert.assertFalse(buildChecker(lst(HET, HET, HET, HET)).run());
-		Assert.assertFalse(buildChecker(lst(REF, REF, REF, REF)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, ALT, ALT, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(UKN, UKN, UKN, UKN)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, HET, HET, HET)).run());
+		Assert.assertFalse(buildCheckerAD(lst(REF, REF, REF, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, ALT, ALT, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(UKN, UKN, UKN, UKN)).run());
 
-		Assert.assertFalse(buildChecker(lst(HET, REF, HET, HET)).run());
-		Assert.assertFalse(buildChecker(lst(HET, HET, HET, REF)).run());
-		Assert.assertFalse(buildChecker(lst(HET, REF, REF, REF)).run());
-		Assert.assertFalse(buildChecker(lst(REF, REF, HET, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, REF, HET, HET)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, HET, HET, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, REF, REF, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(REF, REF, HET, REF)).run());
 
-		Assert.assertFalse(buildChecker(lst(HET, ALT, HET, HET)).run());
-		Assert.assertFalse(buildChecker(lst(HET, HET, HET, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(HET, REF, ALT, REF)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, REF, HET, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, ALT, HET, HET)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, HET, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, REF, ALT, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, REF, HET, REF)).run());
 
-		Assert.assertFalse(buildChecker(lst(ALT, HET, HET, REF)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, ALT, HET, REF)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, REF, HET, HET)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, REF, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, HET, HET, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, ALT, HET, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, REF, HET, HET)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, REF, HET, ALT)).run());
 
-		Assert.assertFalse(buildChecker(lst(HET, ALT, HET, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(HET, UKN, HET, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(HET, ALT, HET, UKN)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, ALT, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, UKN, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, ALT, HET, UKN)).run());
 
 		// Note that the following case are NOT considered as AD since we require the mutation to be heterozygous for
 		// AD.
-		Assert.assertFalse(buildChecker(lst(ALT, REF, HET, REF)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, REF, ALT, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, REF, HET, REF)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, REF, ALT, REF)).run());
 	}
 
 	@Test
 	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
-		Assert.assertFalse(buildChecker(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(HET, REF, ALT, REF), lst(HET, UKN, HET, ALT)).run());
-		Assert.assertFalse(buildChecker(lst(ALT, REF, HET, REF), lst(HET, UKN, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(HET, REF, ALT, REF), lst(HET, UKN, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerAD(lst(ALT, REF, HET, REF), lst(HET, UKN, HET, ALT)).run());
 	}
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
-		Assert.assertTrue(buildChecker(lst(HET, REF, HET, REF)).run());
+		Assert.assertTrue(buildCheckerAD(lst(HET, REF, HET, REF)).run());
 
-		Assert.assertTrue(buildChecker(lst(HET, UKN, HET, UKN)).run());
-		Assert.assertTrue(buildChecker(lst(HET, UKN, UKN, UKN)).run());
-		Assert.assertTrue(buildChecker(lst(UKN, UKN, HET, UKN)).run());
+		Assert.assertTrue(buildCheckerAD(lst(HET, UKN, HET, UKN)).run());
+		Assert.assertTrue(buildCheckerAD(lst(HET, UKN, UKN, UKN)).run());
+		Assert.assertTrue(buildCheckerAD(lst(UKN, UKN, HET, UKN)).run());
 	}
 
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
-		Assert.assertTrue(buildChecker(lst(HET, REF, HET, REF), lst(HET, REF, HET, REF)).run());
+		Assert.assertTrue(buildCheckerAD(lst(HET, REF, HET, REF), lst(HET, REF, HET, REF)).run());
 
-		Assert.assertTrue(buildChecker(lst(HET, UKN, HET, UKN), lst(ALT, ALT, ALT, ALT)).run());
-		Assert.assertTrue(buildChecker(lst(HET, UKN, UKN, UKN), lst(HET, UKN, UKN, UKN)).run());
-		Assert.assertTrue(buildChecker(lst(UKN, UKN, HET, UKN), lst(ALT, ALT, ALT, ALT)).run());
+		Assert.assertTrue(buildCheckerAD(lst(HET, UKN, HET, UKN), lst(ALT, ALT, ALT, ALT)).run());
+		Assert.assertTrue(buildCheckerAD(lst(HET, UKN, UKN, UKN), lst(HET, UKN, UKN, UKN)).run());
+		Assert.assertTrue(buildCheckerAD(lst(UKN, UKN, HET, UKN), lst(ALT, ALT, ALT, ALT)).run());
 	}
 
 }

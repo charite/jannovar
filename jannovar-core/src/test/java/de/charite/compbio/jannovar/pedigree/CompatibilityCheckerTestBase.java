@@ -12,8 +12,7 @@ public class CompatibilityCheckerTestBase {
 
 	static protected final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 	static protected final String geneName = "<fakeName>";
-	static protected final GenomeInterval genomeRegion = new GenomeInterval(refDict, '+', refDict.contigID.get("1")
-			.intValue(), 10, 20, PositionType.ONE_BASED);
+	static protected final GenomeInterval genomeRegion = new GenomeInterval(refDict, '+', refDict.contigID.get("1").intValue(), 10, 20, PositionType.ONE_BASED);
 
 	protected final Genotype HET = Genotype.HETEROZYGOUS;
 	protected final Genotype REF = Genotype.HOMOZYGOUS_REF;
@@ -23,28 +22,44 @@ public class CompatibilityCheckerTestBase {
 	protected Pedigree pedigree;
 	protected ImmutableList<String> names;
 
-	protected CompatibilityCheckerAutosomalDominant buildChecker(Genotype gt) throws CompatibilityCheckerException {
+	protected CompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt) throws CompatibilityCheckerException {
 		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(ImmutableList.of(gt)));
 		return new CompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerAutosomalDominant buildChecker(Genotype gt1, Genotype gt2)
-			throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(ImmutableList.of(gt1),
-				ImmutableList.of(gt2)));
+	protected CompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt1, Genotype gt2) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(ImmutableList.of(gt1), ImmutableList.of(gt2)));
 		return new CompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerAutosomalDominant buildChecker(ImmutableList<Genotype> list)
-			throws CompatibilityCheckerException {
+	protected CompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list) throws CompatibilityCheckerException {
 		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(list));
 		return new CompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerAutosomalDominant buildChecker(ImmutableList<Genotype> list1,
-			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
+	protected CompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list1, ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
 		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(list1, list2));
 		return new CompatibilityCheckerAutosomalDominant(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(ImmutableList.of(gt)));
+		return new CompatibilityCheckerAutosomalRecessive(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt1, Genotype gt2) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(ImmutableList.of(gt1), ImmutableList.of(gt2)));
+		return new CompatibilityCheckerAutosomalRecessive(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(list));
+		return new CompatibilityCheckerAutosomalRecessive(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list1, ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(list1, list2));
+		return new CompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
 	protected ImmutableList<Genotype> lst(Genotype... gts) {
