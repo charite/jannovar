@@ -93,6 +93,7 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 					builder.add(Genotype.HETEROZYGOUS);
 			}
 			genotypeListBuilder.addGenotypes(builder.build());
+			LOGGER.trace("genotype list={}", new Object[] { genotypeListBuilder.build() });
 		}
 	}
 
