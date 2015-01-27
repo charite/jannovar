@@ -2,8 +2,12 @@ package de.charite.compbio.jannovar.filter;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.JannovarFilterCommandLineParser;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -12,6 +16,10 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * Builder for {@link Gene}.
  */
 class GeneBuilder {
+
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarFilterCommandLineParser.class);
+
 	private final ReferenceDictionary refDict;
 	private String name = null;
 	private final ImmutableList.Builder<TranscriptModel> builder = new ImmutableList.Builder<TranscriptModel>();
@@ -24,7 +32,7 @@ class GeneBuilder {
 
 	public void addTranscriptModel(TranscriptModel tm) {
 		if (tmpModels.isEmpty()) { // always add first
-			System.err.println("Adding first transcript " + tm.accession + " " + tm.txRegion + " to gene " + name);
+			LOGGER.trace("Adding first transcript {} to gene {}.", new Object[] { tm, name });
 			builder.add(tm);
 			tmpModels.add(tm);
 			return;
@@ -36,18 +44,17 @@ class GeneBuilder {
 		final GenomeInterval tmRegion = tm.txRegion.withMorePadding(MORE_PADDING);
 		for (TranscriptModel model : tmpModels)
 			if (model.txRegion.overlapsWith(tmRegion)) {
-				System.err.println("Adding transcript " + tm.accession + " " + tm.txRegion + " to gene " + name);
+				LOGGER.trace("Adding next transcript {} to gene {}.", new Object[] { tm, name });
 				builder.add(tm);
 				tmpModels.add(tm);
 				return;
 			}
-		System.err.println("Transcript " + tm.accession + " " + tm.txRegion
-				+ " does not fit to previous transcripts of " + name);
+		LOGGER.trace("Transcript {} does not fit to previous transcripts of {}.", new Object[] { tm, name });
 	}
 
 	public Gene build() {
 		final Gene gene = new Gene(refDict, name, builder.build());
-		System.err.println("CREATING GENE\t" + gene.toString() + "\tLENGTH\t" + gene.region.length());
+		LOGGER.trace("Creating gene {} (lengt={})", new Object[] { gene, name });
 		return gene;
 	}
 

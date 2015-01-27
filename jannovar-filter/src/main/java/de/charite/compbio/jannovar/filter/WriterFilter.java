@@ -2,12 +2,20 @@ package de.charite.compbio.jannovar.filter;
 
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.charite.compbio.jannovar.JannovarFilterCommandLineParser;
+
 /**
  * Write results to a {@link VariantContextWriter}
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class WriterFilter implements VariantContextFilter {
+
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarFilterCommandLineParser.class);
 
 	/** the {@link VariantContextWriter} to use for writing out */
 	private final VariantContextWriter writer;
@@ -19,7 +27,7 @@ public class WriterFilter implements VariantContextFilter {
 
 	@Override
 	public void put(FlaggedVariant fv) throws FilterException {
-		System.err.println("WRITING\t" + fv.vc.getChr() + ":" + fv.vc.getStart() + "\tINCLUDED?\t" + fv.isIncluded());
+		LOGGER.trace("Variant added to writer {} => included? {}", new Object[] { fv.vc, fv.isIncluded() });
 		if (fv.isIncluded())
 			writer.add(fv.vc);
 	}

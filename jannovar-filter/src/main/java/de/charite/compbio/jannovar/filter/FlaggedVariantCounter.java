@@ -1,18 +1,15 @@
 package de.charite.compbio.jannovar.filter;
 
-import de.charite.compbio.jannovar.reference.GenomeChange;
 
 /**
  * Store {@link FlaggedVariant} and a counter.
  */
 class FlaggedVariantCounter {
 	public final FlaggedVariant var;
-	public final GenomeChange change;
 	public int count;
 
-	FlaggedVariantCounter(FlaggedVariant var, GenomeChange change, int count) {
+	FlaggedVariantCounter(FlaggedVariant var, int count) {
 		this.var = var;
-		this.change = change;
 		this.count = count;
 	}
 

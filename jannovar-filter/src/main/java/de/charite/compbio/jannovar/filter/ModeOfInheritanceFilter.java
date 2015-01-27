@@ -9,6 +9,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.impl.intervals.Interval;
@@ -38,6 +41,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public class ModeOfInheritanceFilter implements VariantContextFilter {
+
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModeOfInheritanceFilter.class);
 
 	/** Deserialized Jannovar data */
 	private final JannovarData jannovarDB;
@@ -102,7 +108,7 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	 */
 	@Override
 	public void put(FlaggedVariant vc) throws FilterException {
-		System.err.println("INTO INHERITANCE FILTER\t" + vc.vc.getChr() + ":" + vc.vc.getStart() + "\tINCLUDED?");
+		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc.vc });
 
 		final ReferenceDictionary refDict = jannovarDB.refDict;
 		// TODO(holtgrew): for now, we simply ignore variants on contigs unknown to us, this has to be fixed
@@ -125,7 +131,7 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 
 			for (Gene gene : qr.entries)
 				if (isGeneAffectedByChange(gene, change))
-					putVariantForGene(vc, change, gene);
+					putVariantForGene(vc, gene);
 		}
 
 		// write out all variants left of variant
@@ -135,11 +141,11 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	/**
 	 * Register {@link FlaggedVariant} as active for the given gene.
 	 */
-	private void putVariantForGene(FlaggedVariant vc, GenomeChange change, Gene gene) {
-		System.err.println("VARIANT FOR GENE\t" + vc.vc.getChr() + ":" + vc.vc.getStart() + "\t" + gene);
+	private void putVariantForGene(FlaggedVariant vc, Gene gene) {
+		LOGGER.trace("Assigning variant {} to gene {}", new Object[] { vc.vc, gene });
 		// register variant as active
 		if (!activeVariants.containsKey(vc))
-			activeVariants.put(vc, new FlaggedVariantCounter(vc, change, 1));
+			activeVariants.put(vc, new FlaggedVariantCounter(vc, 1));
 		else
 			activeVariants.get(vc).count += 1;
 
@@ -154,8 +160,7 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	/**
 	 * Construct {@link GenomeChange} from one allele in a {@link VariantContext}.
 	 */
-	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc,
-			int alleleID) {
+	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
 		final int contigID = jannovarDB.refDict.contigID.get(vc.getChr());
 		final String ref = vc.getReference().getBaseString();
 		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
@@ -228,14 +233,16 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	public void finish() throws FilterException {
 		// perform a final round of tests on all currently active genes
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
-		for (Map.Entry<Gene, GenotypeListBuilder> entry : activeGenes.entrySet())
+		for (Map.Entry<Gene, GenotypeListBuilder> entry : activeGenes.entrySet()) {
 			checkVariantsForGene(entry.getKey());
+			doneGenes.add(entry.getKey());
+		}
 		// mark gene as done
 		for (Gene gene : doneGenes)
 			processedGene(gene);
 
 		for (FlaggedVariantCounter fvc : activeVariants.values())
-			System.err.println("REMAINING VARIANT\t" + fvc.var.vc.getChr() + ":" + fvc.var.vc.getStart());
+			LOGGER.trace("Variant remains {} with count {}", new Object[] { fvc.var.vc, fvc.count });
 
 		// there should be no more active variants or genes
 		if (!activeVariants.isEmpty())
@@ -253,11 +260,13 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	 *            the {@link Gene} to mark the variants for
 	 */
 	private void markVariantsInGeneAsCompatible(Gene gene) {
-		System.err.println("Marking variants in " + gene + " as compatible");
+		LOGGER.trace("Marking variants in {} as compatible", new Object[] { gene });
 		for (FlaggedVariantCounter var : activeVariants.values()) {
-			if (isGeneAffectedByChange(gene, var.change)) {
-				System.err.println("Including variant\t" + var.var.vc.getChr() + ":" + var.var.vc.getStart());
-				var.var.setIncluded(true);
+			for (int alleleID = 0; alleleID < var.var.vc.getAlternateAlleles().size(); ++alleleID) {
+				if (isGeneAffectedByChange(gene, getGenomeChangeFromAltAllele(var.var.vc, alleleID))) {
+					LOGGER.trace("Including variant {}", new Object[] { var.var.vc });
+					var.var.setIncluded(true);
+				}
 			}
 		}
 	}
@@ -305,15 +314,20 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	private void processedGene(Gene gene) throws FilterException {
 		checkVariantsForGene(gene);
 
+		LOGGER.trace("Gene done {}", new Object[] { gene });
+
 		// decrease count of variants that lie in gene (that is now ignored)
 		ArrayList<FlaggedVariantCounter> done = new ArrayList<FlaggedVariantCounter>();
 		for (FlaggedVariantCounter var : activeVariants.values()) {
-			if (isGeneAffectedByChange(gene, var.change)) { // lies in gene
-				System.err.println("GENE DONE FOR VARIANT\t" + var.var.vc.getChr() + ":" + var.var.vc.getStart() + "\t"
-						+ gene);
-				var.count -= var.var.vc.getAlternateAlleles().size();
-				if (var.count < 0)
-					throw new RuntimeException("Bug!");
+			int sum = 0;
+			for (int alleleID = 0; alleleID < var.var.vc.getAlternateAlleles().size(); ++alleleID) {
+				if (isGeneAffectedByChange(gene, getGenomeChangeFromAltAllele(var.var.vc, alleleID))) {
+					LOGGER.trace("Gene {} done for variant {}", new Object[] { var.var.vc, gene });
+					sum += 1;
+				}
+			}
+			if (sum > 0) {
+				var.count -= sum;
 				if (var.count == 0)
 					done.add(var);
 			}
@@ -331,14 +345,14 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		for (FlaggedVariantCounter var : done) {
 			activeVariants.remove(var.var);
 			if (var.var.isIncluded()) {
-				System.err.println("KEEPING VARIANT\t" + var.var.vc.getChr() + ":" + var.var.vc.getStart());
+				LOGGER.trace("Keeping variant {}", new Object[] { var.var.vc });
 				next.put(var.var);
 			} else {
-				System.err.println("REMOVING VARIANT\t" + var.var.vc.getChr() + ":" + var.var.vc.getStart());
+				LOGGER.trace("Removing variant {}", new Object[] { var.var.vc });
 			}
 		}
 
-		System.err.println("GENE IS INACTIVE NOW\t" + gene.toString());
+		LOGGER.trace("Gene {} is inactive now", new Object[] { gene });
 
 		// mark gene as done
 		activeGenes.remove(gene);

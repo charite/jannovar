@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
 
 import de.charite.compbio.jannovar.io.JannovarData;
 import de.charite.compbio.jannovar.io.JannovarDataSerializer;
@@ -32,6 +36,7 @@ public class JannovarFilterApp {
 
 	void run() throws JannovarException, HelpRequestedException {
 		options.print(System.err);
+		setLogLevel();
 
 		final long startTime = System.nanoTime();
 		VCFFileReader reader = new VCFFileReader(new File(options.inputPath), false);
@@ -72,9 +77,7 @@ public class JannovarFilterApp {
 	}
 
 	protected void deserializeJannovarDB() throws JannovarException, HelpRequestedException {
-		final long startTime = System.nanoTime();
 		this.jannovarDB = new JannovarDataSerializer(options.jannovarDB).load();
-		final long endTime = System.nanoTime();
 	}
 
 	public static void main(String[] args) {
@@ -91,6 +94,23 @@ public class JannovarFilterApp {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	/**
+	 * Set log level, depending on this.verbosity.
+	 */
+	private void setLogLevel() {
+		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		Configuration conf = ctx.getConfiguration();
+
+		if (options.verbosity <= 1)
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.INFO);
+		else if (options.verbosity <= 2)
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.DEBUG);
+		else
+			conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.TRACE);
+
+		ctx.updateLoggers(conf);
 	}
 
 }

@@ -16,6 +16,7 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
  * Command line parser for the jannovar-filter app.
  */
 public class JannovarFilterCommandLineParser {
+
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
 	/** the Apache commons command line parser */

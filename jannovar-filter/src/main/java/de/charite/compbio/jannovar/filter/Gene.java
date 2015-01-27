@@ -50,7 +50,7 @@ class Gene {
 
 	@Override
 	public String toString() {
-		return this.name + ":" + this.region.toString();
+		return this.name + "(" + this.region + ")";
 	}
 
 	@Override
