@@ -62,7 +62,7 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 			VariantContextFilter next) {
 		this.jannovarDB = jannovarDB;
 		this.modeOfInheritance = modeOfInheritance;
-		this.geneList = buildGeneList();
+		this.geneList = buildGeneList(jannovarDB);
 		this.next = next;
 		this.checker = new PedigreeDiseaseCompatibilityDecorator(pedigree);
 
@@ -75,9 +75,11 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	/**
 	 * Build {@link GeneList} to be used in the filter.
 	 *
-	 * @return list of genes, built from {@link #jannovarDB}.
+	 * @param jannovarDB
+	 *            data base to use for building gene list
+	 * @return list of genes, built from <code>jannovarDB</code>.
 	 */
-	private GeneList buildGeneList() {
+	private static GeneList buildGeneList(JannovarData jannovarDB) {
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
 		for (Chromosome chrom : jannovarDB.chromosomes.values())
