@@ -12,7 +12,8 @@ public class CompatibilityCheckerAutosomalDominantSingletonTest extends Compatib
 	public void setUp() throws PedParseException {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.AFFECTED));
-		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(), individuals.build());
+		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
+				individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
 		this.names = ImmutableList.of("I.1");
 	}
