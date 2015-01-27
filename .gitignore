@@ -18,6 +18,7 @@ cov-int*
 *.jannovar
 *.vcf
 *.vcf.idx
+*.ped
 data
 # built manual
 manual/_build
