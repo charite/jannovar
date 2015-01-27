@@ -111,18 +111,11 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		final int contigID = refDict.contigID.get(vc.vc.getChr());
 		IntervalArray<Gene> iTree = geneList.gIntervalTree.get(contigID);
 
-		// Get shortcuts to ref, alt, and position. Note that this is "uncorrected" data, common prefixes etc. are
-		// stripped when constructing the GenomeChange.
-		final int altCount = vc.vc.getAlternateAlleles().size();
-		for (int alleleID = 0; alleleID < altCount; ++alleleID) {
-			final String ref = vc.vc.getReference().getBaseString();
-			final String alt = vc.vc.getAlternateAllele(alleleID).getBaseString();
-			final int pos = vc.vc.getStart();
-			// Construct GenomeChange from this and strip common prefixes.
-			final GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', contigID, pos,
-					PositionType.ONE_BASED), ref, alt);
+		// consider each alternative allele of the variant
+		for (int alleleID = 0; alleleID < vc.vc.getAlternateAlleles().size(); ++alleleID) {
+			final GenomeChange change = getGenomeChangeFromAltAllele(vc.vc, alleleID);
 
-			// Query the gene interval tree for overlapping genes.
+			// query the gene interval tree for overlapping genes
 			final GenomeInterval changeInterval = change.getGenomeInterval();
 			IntervalArray<Gene>.QueryResult qr;
 			if (changeInterval.length() == 0)
@@ -137,6 +130,38 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 
 		// write out all variants left of variant
 		markDoneGenes(contigID, vc.vc.getStart() - 1);
+	}
+
+	/**
+	 * Register {@link FlaggedVariant} as active for the given gene.
+	 */
+	private void putVariantForGene(FlaggedVariant vc, GenomeChange change, Gene gene) {
+		System.err.println("VARIANT FOR GENE\t" + vc.vc.getChr() + ":" + vc.vc.getStart() + "\t" + gene);
+		// register variant as active
+		if (!activeVariants.containsKey(vc))
+			activeVariants.put(vc, new FlaggedVariantCounter(vc, change, 1));
+		else
+			activeVariants.get(vc).count += 1;
+
+		// create new GenotypeListBuilder for the gene if necessary
+		if (!activeGenes.containsKey(gene))
+			activeGenes.put(gene, new GenotypeListBuilder(gene.name, gene.region, personNames));
+
+		// register Genotypes for vc
+		putGenotypes(vc, gene);
+	}
+
+	/**
+	 * Construct {@link GenomeChange} from one allele in a {@link VariantContext}.
+	 */
+	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc,
+			int alleleID) {
+		final int contigID = jannovarDB.refDict.contigID.get(vc.getChr());
+		final String ref = vc.getReference().getBaseString();
+		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
+		final int pos = vc.getStart();
+		return new GenomeChange(new GenomePosition(jannovarDB.refDict, '+', contigID, pos, PositionType.ONE_BASED),
+				ref, alt);
 	}
 
 	/**
@@ -163,25 +188,6 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 			processedGene(gene);
 			activeGenes.remove(gene);
 		}
-	}
-
-	/**
-	 * Register {@link FlaggedVariant} as active for the given gene.
-	 */
-	private void putVariantForGene(FlaggedVariant vc, GenomeChange change, Gene gene) {
-		System.err.println("VARIANT FOR GENE\t" + vc.vc.getChr() + ":" + vc.vc.getStart() + "\t" + gene);
-		// register variant as active
-		if (!activeVariants.containsKey(vc))
-			activeVariants.put(vc, new FlaggedVariantCounter(vc, change, 1));
-		else
-			activeVariants.get(vc).count += 1;
-
-		// create new GenotypeListBuilder for the gene if necessary
-		if (!activeGenes.containsKey(gene))
-			activeGenes.put(gene, new GenotypeListBuilder(gene.name, gene.region, personNames));
-
-		// register Genotypes for vc
-		putGenotypes(vc, gene);
 	}
 
 	private void putGenotypes(FlaggedVariant fv, Gene gene) {
