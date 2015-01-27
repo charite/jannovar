@@ -24,6 +24,8 @@ import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
+// TODO(holtgrem): Interpret knownCanonical!
+
 /**
  * Parser for the UCCSC knownGene and related files.
  *

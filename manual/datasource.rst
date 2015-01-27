@@ -25,6 +25,7 @@ For example, consider the following definition of human release ``hg19`` from UC
     chromInfo=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromInfo.txt.gz
     chrToAccessions=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/Assembled_chromosomes/chr_accessions_GRCh37.p13
     chrToAccessions.format=chr_accessions
+    knownCanonical=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownCanonical.txt.gz
     knownGene=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGene.txt.gz
     knownGeneMrna=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGeneMrna.txt.gz
     kgXref=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/kgXref.txt.gz
@@ -171,7 +172,7 @@ You can do this by setting ``onlyCurated`` to ``true``:
 UCSC Data Sources
 -----------------
 
-For UCSC data sources, you have specify the settings ``knownGene``, ``knownGeneMrna``, ``kgXref``, and ``knownToLocusLink``.
+For UCSC data sources, you have specify the settings ``knownCanonical``, ``knownGene``, ``knownGeneMrna``, ``kgXref``, and ``knownToLocusLink``.
 These can usually be derived from the example below by exchanging ``hg19`` by the release id (e.g., ``mm10`` for mouse release 10).
 
 .. code-block:: ini
@@ -183,6 +184,7 @@ These can usually be derived from the example below by exchanging ``hg19`` by th
     chromInfo=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromInfo.txt.gz
     chrToAccessions=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/Assembled_chromosomes/chr_accessions_GRCh37.p13
     chrToAccessions.format=chr_accessions
+    knownCanonical=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownCanonical.txt.gz
     knownGene=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGene.txt.gz
     knownGeneMrna=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGeneMrna.txt.gz
     kgXref=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/kgXref.txt.gz
