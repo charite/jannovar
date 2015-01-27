@@ -16,6 +16,8 @@ import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 
+// TODO(holtgrew): Add support for DE NOVO
+
 public class JannovarFilterApp {
 
 	/** Configuration */

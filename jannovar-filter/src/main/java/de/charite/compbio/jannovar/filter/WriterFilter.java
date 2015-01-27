@@ -19,6 +19,7 @@ public class WriterFilter implements VariantContextFilter {
 
 	@Override
 	public void put(FlaggedVariant fv) throws FilterException {
+		System.err.println("WRITING\t" + fv.vc.getChr() + ":" + fv.vc.getStart() + "\tINCLUDED?\t" + fv.isIncluded());
 		if (fv.isIncluded())
 			writer.add(fv.vc);
 	}
