@@ -77,6 +77,11 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		this.personNames = namesBuilder.build();
 	}
 
+	/**
+	 * Build {@link GeneList} to be used in the filter.
+	 *
+	 * @return list of genes, built from {@link #jannovarDB}.
+	 */
 	private GeneList buildGeneList() {
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
@@ -95,6 +100,9 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		return new GeneList(builder.build());
 	}
 
+	/**
+	 * Main entry function for filter, see {@link VariantContextFilter#put} for more information.
+	 */
 	@Override
 	public void put(FlaggedVariant vc) throws FilterException {
 		System.err.println("INTO INHERITANCE FILTER\t" + vc.vc.getChr() + ":" + vc.vc.getStart() + "\tINCLUDED?");
@@ -134,6 +142,16 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		markDoneGenes(contigID, vc.vc.getStart() - 1);
 	}
 
+	/**
+	 * Mark genes left of <code>(contigID, pos)</code> as done.
+	 *
+	 * @param contigID
+	 *            numeric contig ID, as taken from {@link JannovarDB#refDict} from {@link #jannovarDB}.
+	 * @param pos
+	 *            zero-based position on the given contig
+	 * @throws FilterException
+	 *             on problems with filtration
+	 */
 	private void markDoneGenes(int contigID, int pos) throws FilterException {
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
 		for (Map.Entry<Gene, GenotypeListBuilder> entry : activeGenes.entrySet()) {
@@ -184,7 +202,7 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 				final boolean isRef0 = !gt.getAllele(0).getBaseString().equals(currAlt.getBaseString());
 				final boolean isRef1 = !gt.getAllele(0).getBaseString().equals(currAlt.getBaseString());
 
-				// TODO(holtgrem): Handle case of symbolic alleles
+				// TODO(holtgrem): Handle case of symbolic alleles and write through?
 				if (gt.getAllele(0).isNoCall() || gt.getAllele(1).isNoCall())
 					builder.add(Genotype.NOT_OBSERVED);
 				else if (isRef0 && isRef1)
@@ -198,6 +216,11 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		}
 	}
 
+	/**
+	 * Called when done with processing.
+	 *
+	 * See {@link VariantContextFilter#finish} for more details.
+	 */
 	@Override
 	public void finish() throws FilterException {
 		// perform a final round of tests on all currently active genes
@@ -236,8 +259,16 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		}
 	}
 
-	// TODO(holtgrem): document me!
-	private boolean isGeneAffectedByChange(Gene gene, GenomeChange change) {
+	/**
+	 * Utility function to test whether a {@link Gene} is affected by a {@link GenomeChage}.
+	 *
+	 * @param gene
+	 *            to use for the check
+	 * @param change
+	 *            to use for the check
+	 * @return <code>true</code> if <code>gene</code> is affected by <code>change</code>
+	 */
+	private static boolean isGeneAffectedByChange(Gene gene, GenomeChange change) {
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (changeInterval.length() == 0 && gene.region.contains(changeInterval.getGenomeBeginPos())
 				&& gene.region.contains(changeInterval.getGenomeBeginPos().shifted(-1)))
@@ -247,6 +278,10 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 		return false;
 	}
 
+	/**
+	 * Builds genotype call lists for variants in currently active genes, checks for compatibility, and in case of
+	 * compatibility, marks variants in <code>gene</code> as compatible.
+	 */
 	private void checkVariantsForGene(Gene gene) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 		GenotypeList lst = activeGenes.get(gene).build();
