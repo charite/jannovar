@@ -29,6 +29,9 @@ public class JannovarFilterOptions {
 	/** selected mode of inheritance */
 	ModeOfInheritance modeOfInheritance = ModeOfInheritance.UNINITIALIZED;
 
+	/** gene-wise instead of variant-wise processing (required for composite heterozygous) */
+	boolean geneWise = false;
+
 	/**
 	 * Print option values to stderr.
 	 */
@@ -39,6 +42,7 @@ public class JannovarFilterOptions {
 		out.println("input path: " + inputPath);
 		out.println("output path: " + outputPath);
 		out.println("modeOfInheritance: " + modeOfInheritance);
+		out.println("geneWise: " + geneWise);
 	}
 
 }

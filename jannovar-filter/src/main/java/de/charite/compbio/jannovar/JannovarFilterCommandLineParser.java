@@ -47,16 +47,23 @@ public class JannovarFilterCommandLineParser {
 			result.verbosity = 3;
 
 		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length != 4)
-			throw new ParseException("must exactly four none-option arguments, had: " + args.length);
+		if (args.length != 3)
+			throw new ParseException("must exactly three none-option arguments, had: " + args.length);
 
 		if (cmd.getOptionValue("inheritance-mode") != null)
 			result.modeOfInheritance = ModeOfInheritance.valueOf(ModeOfInheritance.class,
 					cmd.getOptionValue("inheritance-mode"));
-		result.jannovarDB = args[0];
-		result.pedPath = args[1];
-		result.inputPath = args[2];
-		result.outputPath = args[3];
+
+		result.geneWise = cmd.hasOption("gene-wise");
+		if (cmd.getOptionValue("database") != null)
+			result.jannovarDB = cmd.getOptionValue("database");
+
+		if (result.geneWise && result.jannovarDB == null)
+			throw new ParseException("Enabled -g/--gene-wise mode but provided no -d/--database option!");
+
+		result.pedPath = args[0];
+		result.inputPath = args[1];
+		result.outputPath = args[2];
 
 		return result;
 	}
@@ -67,20 +74,27 @@ public class JannovarFilterCommandLineParser {
 		options.addOption(new Option("v", "verbose", false, "enable verbose output"));
 		options.addOption(new Option("vv", "very-verbose", false, "enable very verbose output"));
 
+		options.addOption(new Option("m", "inheritance-mode", true, "enable very verbose output"));
+		options.addOption(new Option("g", "gene-wise", false,
+				"gene-wise instead of variant-wise processing (required for compound heterozygous filtration)"));
+		options.addOption(new Option("d", "database", true, "path to Jannovar DB .ser file"));
+
 		parser = new GnuParser();
 	}
 
 	private void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Filter Tool")
 				.append("Use this command to filter VCF files.\n\n")
-				.append("Usage: java -jar jannovar-filter.jar <DB.ser> <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
+				.append("Usage: java -jar jannovar-filter.jar [OPTIONS] <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
 		final String FOOTER = new StringBuilder()
-		.append("\n\nExample: java -jar jannovar-filter.jar data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n\n")
+		.append("\n\nExample: java -jar jannovar-filter.jar -m AUTOSOMAL_DOMINANT data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n")
+		.append("             java -jar jannovar-filter.jar -g -d data/hg19_ucsc.ser -m AUTOSOMAL_RECESSIVE <PED.ped> <IN.vcf> <OUT.vcf>\n\n")
 		.append("Diseases\n\n")
 		.append("The --inheritance-mode parameter can take one of the following values. When given")
 		.append("then the variants will be filtered to those being compatible with the given mode")
-		.append("of inheritance.\n\n").toString();
-
+		.append("of inheritance.\n\n").append("  AUTOSOMAL_DOMINANT\n").append("  AUTOSOMAL_RECESSIVE\n")
+		.append("  X_RECESSIVE\n").append("  X_DOMINANT\n").append("  UNINITIALIZED (no filtration)\n")
+		.toString();
 		System.err.print(HEADER);
 
 		HelpFormatter hf = new HelpFormatter();

@@ -63,4 +63,9 @@ public final class GenotypeList {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "[" + calls + "]";
+	}
+
 }

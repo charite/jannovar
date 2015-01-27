@@ -34,16 +34,14 @@ import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * A {@link VariantContext} filter that only includes variants that are compatible to a given {@link ModeOfInheritance}.
- *
- * TODO(holtgrem): This is only necessary for compound het!
+ * A {@link VariantContext} filter that collects variants for each genes and then checks for compatibility.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class ModeOfInheritanceFilter implements VariantContextFilter {
+public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
 	/** the logger object to use */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ModeOfInheritanceFilter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeneWiseInheritanceFilter.class);
 
 	/** Deserialized Jannovar data */
 	private final JannovarData jannovarDB;
@@ -64,7 +62,7 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	HashMap<FlaggedVariant, FlaggedVariantCounter> activeVariants = new HashMap<FlaggedVariant, FlaggedVariantCounter>();
 
 	/** Initialize */
-	public ModeOfInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB, ModeOfInheritance modeOfInheritance,
+	public GeneWiseInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB, ModeOfInheritance modeOfInheritance,
 			VariantContextFilter next) {
 		this.jannovarDB = jannovarDB;
 		this.modeOfInheritance = modeOfInheritance;

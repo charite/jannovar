@@ -77,7 +77,8 @@ public class JannovarFilterApp {
 	}
 
 	protected void deserializeJannovarDB() throws JannovarException, HelpRequestedException {
-		this.jannovarDB = new JannovarDataSerializer(options.jannovarDB).load();
+		if (options.geneWise)
+			this.jannovarDB = new JannovarDataSerializer(options.jannovarDB).load();
 	}
 
 	public static void main(String[] args) {

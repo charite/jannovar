@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 
+// TODO(holtgrew): Renomve genomeRegion member?
+
 /**
  * Builder for {@link GenotypeList}.
  *
