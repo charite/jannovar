@@ -201,15 +201,17 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			ImmutableList.Builder<Genotype> builder = new ImmutableList.Builder<Genotype>();
 			for (int pID = 0; pID < personNames.size(); ++pID) {
 				htsjdk.variant.variantcontext.Genotype gt = vc.getGenotype(personNames.get(pID));
-				if (gt.getAlleles().size() != 2)
+				if (gt.getAlleles().size() > 2)
 					throw new RuntimeException("Unexpected allele count: " + gt.getAlleles().size());
 
 				// we consider everything non-ALT (for current alternative allele) to be REF
-				final boolean isRef0 = !gt.getAllele(0).getBaseString().equals(currAlt.getBaseString());
-				final boolean isRef1 = !gt.getAllele(0).getBaseString().equals(currAlt.getBaseString());
+				final int idx0 = 0;
+				final boolean isRef0 = !gt.getAllele(idx0).getBaseString().equals(currAlt.getBaseString());
+				final int idx1 = (gt.getAlleles().size() == 2) ? 1 : 0;
+				final boolean isRef1 = !gt.getAllele(idx1).getBaseString().equals(currAlt.getBaseString());
 
 				// TODO(holtgrem): Handle case of symbolic alleles and write through?
-				if (gt.getAllele(0).isNoCall() || gt.getAllele(1).isNoCall())
+				if (gt.getAllele(idx0).isNoCall() || gt.getAllele(idx1).isNoCall())
 					builder.add(Genotype.NOT_OBSERVED);
 				else if (isRef0 && isRef1)
 					builder.add(Genotype.HOMOZYGOUS_REF);

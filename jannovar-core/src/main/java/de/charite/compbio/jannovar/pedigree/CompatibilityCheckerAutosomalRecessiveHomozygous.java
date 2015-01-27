@@ -127,9 +127,9 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 
 		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
 			if (entry.person.disease == Disease.AFFECTED) {
-				if (gtList.get(entry.idx) != Genotype.HOMOZYGOUS_REF || gtList.get(entry.idx) != Genotype.HETEROZYGOUS)
+				if (gtList.get(entry.idx) == Genotype.HOMOZYGOUS_REF || gtList.get(entry.idx) == Genotype.HETEROZYGOUS)
 					return false;
-				else if (gtList.get(entry.idx) != Genotype.HOMOZYGOUS_ALT)
+				else if (gtList.get(entry.idx) == Genotype.HOMOZYGOUS_ALT)
 					numHomozygousAlt += 1;
 			}
 

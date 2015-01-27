@@ -43,7 +43,7 @@ class CompatibilityCheckerAutosomalDominant {
 	public CompatibilityCheckerAutosomalDominant(Pedigree pedigree, GenotypeList list)
 			throws CompatibilityCheckerException {
 		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
+			throw new CompatibilityCheckerException("Invalid pedigree of size 0.");
 		if (!list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
 		if (list.calls.get(0).size() == 0)
