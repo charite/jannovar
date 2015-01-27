@@ -104,23 +104,25 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 				ArrayList<ImmutableList<Genotype>> paternal = new ArrayList<ImmutableList<Genotype>>();
 				ArrayList<ImmutableList<Genotype>> maternal = new ArrayList<ImmutableList<Genotype>>();
 
-				// collect candidates towards the paternal side (heterozygous or not observed in child and father)
+				// collect candidates towards the paternal side (heterozygous or not observed in child and father. Not hom_alt or het in mother)
+				final int motherIdx = (p.mother == null) ? -1 : pedigree.nameToMember.get(p.mother.name).idx;
 				final int fatherIdx = (p.father == null) ? -1 : pedigree.nameToMember.get(p.father.name).idx;
 				for (ImmutableList<Genotype> lst : list.calls)
 					if ((lst.get(childIdx) == Genotype.HETEROZYGOUS || lst.get(childIdx) == Genotype.NOT_OBSERVED)
-							&& (fatherIdx == -1 || lst.get(fatherIdx) == Genotype.HETEROZYGOUS || lst.get(fatherIdx) == Genotype.NOT_OBSERVED))
+							&& (fatherIdx == -1 || lst.get(fatherIdx) == Genotype.HETEROZYGOUS || lst.get(fatherIdx) == Genotype.NOT_OBSERVED)
+							&& (motherIdx == -1 || lst.get(motherIdx) == Genotype.NOT_OBSERVED || lst.get(motherIdx) == Genotype.HOMOZYGOUS_REF))
 						paternal.add(lst);
-				// collect candidates towards the paternal side (heterozygous or not observed in child and mother)
-				final int motherIdx = (p.mother == null) ? -1 : pedigree.nameToMember.get(p.mother.name).idx;
+				// collect candidates towards the paternal side (heterozygous or not observed in child and mother. Not hom_alt or het in father)
 				for (ImmutableList<Genotype> lst : list.calls)
 					if ((lst.get(childIdx) == Genotype.HETEROZYGOUS || lst.get(childIdx) == Genotype.NOT_OBSERVED)
-							&& (motherIdx == -1 || lst.get(motherIdx) == Genotype.HETEROZYGOUS || lst.get(motherIdx) == Genotype.NOT_OBSERVED))
+							&& (motherIdx == -1 || lst.get(motherIdx) == Genotype.HETEROZYGOUS || lst.get(motherIdx) == Genotype.NOT_OBSERVED)
+							&& (fatherIdx == -1 || lst.get(fatherIdx) == Genotype.NOT_OBSERVED || lst.get(fatherIdx) == Genotype.HOMOZYGOUS_REF))
 						maternal.add(lst);
 
 				// combine compatible paternal and maternal heterozygous variants
 				for (ImmutableList<Genotype> pat : paternal)
 					for (ImmutableList<Genotype> mat : maternal) {
-						if (pat != mat)
+						if (pat == mat)
 							continue; // exclude if variants are identical
 						if (pat.get(childIdx) == Genotype.NOT_OBSERVED
 								&& (fatherIdx == -1 || pat.get(fatherIdx) == Genotype.NOT_OBSERVED)
@@ -147,26 +149,26 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 				// none of the candidate variant call lists may be homozygous in the index
 				if (c.paternal != null) {
 					final Genotype pGT = c.paternal.get(childIdx);
-					if (pGT != Genotype.HOMOZYGOUS_ALT && pGT != Genotype.HOMOZYGOUS_REF)
+					if (pGT == Genotype.HOMOZYGOUS_ALT && pGT == Genotype.HOMOZYGOUS_REF)
 						return false;
 				}
 				if (c.maternal != null) {
 					final Genotype mGT = c.maternal.get(childIdx);
-					if (mGT != Genotype.HOMOZYGOUS_ALT && mGT != Genotype.HOMOZYGOUS_REF)
+					if (mGT == Genotype.HOMOZYGOUS_ALT && mGT == Genotype.HOMOZYGOUS_REF)
 						return false;
 				}
 
 				// the paternal variant may not be homozygous in the father of p, if any
 				if (c.paternal != null && p.father != null) {
 					final Genotype mGT = c.paternal.get(pedigree.nameToMember.get(p.father.name).idx);
-					if (mGT != Genotype.HOMOZYGOUS_ALT && mGT != Genotype.HOMOZYGOUS_REF)
+					if (mGT == Genotype.HOMOZYGOUS_ALT && mGT == Genotype.HOMOZYGOUS_REF)
 						return false;
 				}
 
 				// the maternal variant may not be homozygous in the mother of p, if any
 				if (c.maternal != null && p.mother != null) {
 					final Genotype mGT = c.maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
-					if (mGT != Genotype.HOMOZYGOUS_ALT && mGT != Genotype.HOMOZYGOUS_REF)
+					if (mGT == Genotype.HOMOZYGOUS_ALT && mGT == Genotype.HOMOZYGOUS_REF)
 						return false;
 				}
 			}

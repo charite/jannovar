@@ -27,7 +27,7 @@ import de.charite.compbio.jannovar.reference.PositionType;
  * ped1    dau2   father mother 2   1
  * </pre>
  */
-public class CompatibilityCheckerAutosomalDominantTest {
+public class CopyOfCompatibilityCheckerAutosomalRecessiveTest {
 
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
 	static final String geneName = "<fakeName>";
