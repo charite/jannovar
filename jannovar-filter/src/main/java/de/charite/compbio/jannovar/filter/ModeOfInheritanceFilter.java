@@ -43,8 +43,6 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 
 	/** Deserialized Jannovar data */
 	private final JannovarData jannovarDB;
-	/** Pedigree to use for the compatibility check. */
-	private final Pedigree pedigree;
 	/** The mode of inheritance to filter for */
 	private final ModeOfInheritance modeOfInheritance;
 	/** List of genes, indexed by interval tree */
@@ -64,7 +62,6 @@ public class ModeOfInheritanceFilter implements VariantContextFilter {
 	/** Initialize */
 	public ModeOfInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB, ModeOfInheritance modeOfInheritance,
 			VariantContextFilter next) {
-		this.pedigree = pedigree;
 		this.jannovarDB = jannovarDB;
 		this.modeOfInheritance = modeOfInheritance;
 		this.geneList = buildGeneList();
