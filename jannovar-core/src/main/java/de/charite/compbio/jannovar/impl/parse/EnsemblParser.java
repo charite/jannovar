@@ -80,6 +80,7 @@ public class EnsemblParser implements TranscriptParser {
 			LOGGER.info("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes());
+			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from Ensembl files: {}", e.getMessage());
 			throw new TranscriptParseException(e.getMessage());

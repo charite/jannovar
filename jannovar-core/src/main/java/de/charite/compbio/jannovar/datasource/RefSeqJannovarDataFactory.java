@@ -10,6 +10,8 @@ import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
+// TODO(holtgrem): Report longest transcript as primary one for RefSeq.
+
 /**
  * Creation of {@link JannovarData} objects from a {@link RefSeqDataSource}.
  *

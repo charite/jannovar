@@ -48,14 +48,22 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	public final int geneID;
 
+	/**
+	 * The transcript support level of the this transcript (the lower the better).
+	 *
+	 * @see TranscriptSupportLevels
+	 * @see {@link http://www.ensembl.org/Help/Glossary?id=492}
+	 */
+	public final int transcriptSupportLevel;
+
 	/** Class version (for serialization). */
-	public static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 2L;
 
 	/**
 	 * Initialize the TranscriptInfo object from the given parameters.
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID) {
+			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID, int transcriptSupportLevel) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -63,6 +71,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		this.exonRegions = exonRegions;
 		this.sequence = sequence;
 		this.geneID = geneID;
+		this.transcriptSupportLevel = transcriptSupportLevel;
 		checkForConsistency();
 	}
 
