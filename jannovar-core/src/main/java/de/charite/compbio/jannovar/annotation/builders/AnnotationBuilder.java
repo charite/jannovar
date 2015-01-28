@@ -3,6 +3,8 @@ package de.charite.compbio.jannovar.annotation.builders;
 import java.util.ArrayList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.AnnotationLocation;
+import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -297,7 +299,9 @@ abstract class AnnotationBuilder {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
-		final int exonNum;
+		AnnotationLocationBuilder locBuilder = new AnnotationLocationBuilder();
+		locBuilder.setTranscript(transcript);
+		locBuilder.setTxLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is change => insertion
@@ -305,10 +309,13 @@ abstract class AnnotationBuilder {
 
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(changePos))
-				return transcript.accession; // no exon information if change pos does not lie in exon
-			exonNum = projector.locateExon(changePos);
+				return locBuilder.build().toHGVSString(); // no exon information if change pos does not lie in exon
+			final int exonNum = projector.locateExon(changePos);
 			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: position should be in exon if we reach here");
+
+			locBuilder.setRankType(AnnotationLocation.RankType.EXON);
+			locBuilder.setRank(exonNum);
 		} else {
 			// at least one base is changed
 			GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
@@ -318,15 +325,20 @@ abstract class AnnotationBuilder {
 
 			// Handle the cases for which no exon number is available.
 			if (!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
-				return transcript.accession; // no exon information if either does not lie in exon
-			exonNum = projector.locateExon(firstChangePos);
+				return locBuilder.build().toHGVSString(); // no exon information if change pos does not lie in exon
+			final int exonNum = projector.locateExon(firstChangePos);
 			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: positions should be in exons if we reach here");
 			if (exonNum != projector.locateExon(lastChangePos))
-				return transcript.accession; // no exon information if the deletion spans more than one exon
+				return locBuilder.build().toHGVSString(); // no exon information if the deletion spans more than one
+
+			locBuilder.setRankType(AnnotationLocation.RankType.EXON);
+			locBuilder.setRank(exonNum);
 		}
 
-		return StringUtil.concatenate(transcript.accession, ":exon", exonNum + 1);
+		// TODO(holtgrew): In the future, we would like to store the AnnotationLocation.
+		// Build location annotation string using the AnnotationLocationBuilder.
+		return locBuilder.build().toHGVSString();
 	}
 
 	/**
