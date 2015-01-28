@@ -15,5 +15,5 @@ public enum ModeOfInheritance {
 	/** dominant inheritance on X chromosome */
 	X_DOMINANT,
 	/** value for encoding uninitialized values */
-	UNINITIALIZED;
+	UNINITIALIZED; // TODO(holtgrew): Rename to UNKNOWN or UNDEFINED
 }

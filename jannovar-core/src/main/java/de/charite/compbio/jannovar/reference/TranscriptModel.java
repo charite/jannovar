@@ -128,6 +128,11 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	@Override
+	public String toString() {
+		return accession + "(" + txRegion + ")";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jannovar-cli</artifactId>
+	<artifactId>jannovar-filter</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-cli</name>
+	<name>jannovar-filter</name>
 	<url>http://maven.apache.org</url>
 
 	<parent>
@@ -98,7 +98,7 @@
 							<!-- set useUniqueVersions=false in order that the classpath has the 
 								SNAPSHOT instead of the build number prefixed to the dependency -->
 							<useUniqueVersions>false</useUniqueVersions>
-							<mainClass>de.charite.compbio.jannovar.Jannovar</mainClass>
+							<mainClass>de.charite.compbio.jannovar.JannovarFilterApp</mainClass>
 						</manifest>
 					</archive>
 					<compilerArgument>-Xlint:all</compilerArgument>
@@ -121,7 +121,7 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.charite.compbio.jannovar.Jannovar</mainClass>
+									<mainClass>de.charite.compbio.jannovar.JannovarFilterApp</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
