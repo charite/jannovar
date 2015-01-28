@@ -34,7 +34,7 @@ public class AnnotationLocation {
 	/** Total number of exons/introns in transcript */
 	public final int totalRank;
 
-	/** Location of the change on the transcript. */
+	/** Location of the change on the transcript, null if outside of transcript */
 	public final TranscriptInterval txLocation;
 
 	public AnnotationLocation(TranscriptModel transcript, RankType rankType, int rank, int totalRank,

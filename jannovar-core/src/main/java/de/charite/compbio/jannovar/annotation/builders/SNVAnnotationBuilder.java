@@ -142,15 +142,15 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		if (warningMsg != null)
 			annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
 
-		return new Annotation(varTypes, cdsPos.pos, annotationStr, transcript);
+		return new Annotation(varTypes, locAnno, cdsPos.pos, annotationStr, transcript);
 	}
 
 	@Override
 	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, change.ref, ">", change.alt);
+			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, change.ref, ">", change.alt);
 		else
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, hgvsSNVOverride);
+			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, hgvsSNVOverride);
 	}
 
 	/**

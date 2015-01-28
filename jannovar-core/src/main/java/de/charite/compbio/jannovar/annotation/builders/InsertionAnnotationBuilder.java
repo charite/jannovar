@@ -78,7 +78,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (!so.liesInExon(change.pos))
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, "ins", change.alt);
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -102,9 +102,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 						posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
 			}
 
-			return StringUtil.concatenate(locAnno, ":", dnaAnno);
+			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno);
 		} else {
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, "ins", change.alt);
 		}
 	}
 
@@ -197,7 +197,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varTypes, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(varTypes, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno),
+					transcript);
 		}
 
 		private void handleFrameShiftCase() {

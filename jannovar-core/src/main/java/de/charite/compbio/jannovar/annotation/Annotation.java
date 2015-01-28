@@ -25,6 +25,9 @@ public final class Annotation implements Comparable<Annotation> {
 	/** variant types, sorted by internal pathogenicity score */
 	public final ImmutableSortedSet<VariantType> varTypes;
 
+	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
+	public final AnnotationLocation annoLoc;
+
 	/** position of the variant on the transcript, used for sorting only */
 	public final int txVarPos;
 
@@ -40,6 +43,8 @@ public final class Annotation implements Comparable<Annotation> {
 	 *
 	 * @param varType
 	 *            one type of the variant
+	 * @param annoLoc
+	 *            location of the variant
 	 * @param txVarPos
 	 *            transcript start position of the variant
 	 * @param hgvsDescription
@@ -47,12 +52,9 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param transcript
 	 *            transcript for this annotation
 	 */
-	public Annotation(VariantType varType, int txVarPos, String hgvsDescription,
+	public Annotation(VariantType varType, AnnotationLocation annoLoc, int txVarPos, String hgvsDescription,
 			TranscriptModel transcript) {
-		this.varTypes = ImmutableSortedSet.of(varType);
-		this.txVarPos = txVarPos;
-		this.hgvsDescription = hgvsDescription;
-		this.transcript = transcript;
+		this(ImmutableSortedSet.of(varType), annoLoc, txVarPos, hgvsDescription, transcript);
 	}
 
 	// TODO(holtgrem): Change parameter order, transcript should be first
@@ -63,6 +65,8 @@ public final class Annotation implements Comparable<Annotation> {
 	 *
 	 * @param varTypes
 	 *            type of the variants
+	 * @param annoLoc
+	 *            location of the variant
 	 * @param txVarPos
 	 *            transcript start position of the variant
 	 * @param hgvsDescription
@@ -70,8 +74,9 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param transcript
 	 *            transcript for this annotation
 	 */
-	public Annotation(Collection<VariantType> varTypes, int txVarPos, String hgvsDescription, TranscriptModel transcript) {
+	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, int txVarPos, String hgvsDescription, TranscriptModel transcript) {
 		this.varTypes = ImmutableSortedSet.copyOf(varTypes);
+		this.annoLoc = annoLoc;
 		this.txVarPos = txVarPos;
 		this.hgvsDescription = hgvsDescription;
 		this.transcript = transcript;

@@ -32,15 +32,19 @@ public final class VCFVariantAnnotation {
 	/** putative impact of the variant */
 	public final PutativeImpact putativeImpact;
 
+	// TODO(holtgrem): replace by AnnotationLocation
 	/** identifier of affected gene, or closest gene if intergenic */
 	public final String geneID;
 
+	// TODO(holtgrem): replace by AnnotationLocation
 	/** type of the affected feature */
 	public final String featureType;
 
+	// TODO(holtgrem): replace by AnnotationLocation
 	/** affected feature, can include cell type / tissue information */
 	public final String featureID;
 
+	// TODO(holtgrem): replace by AnnotationLocation
 	/** transcript biotype, e.g. <code>"Coding"</code>, <code>"Noncoding"</code> */
 	public final String featureBiotype;
 
@@ -50,6 +54,7 @@ public final class VCFVariantAnnotation {
 	/** HGVS amino acid notation, null if non-coding sequence */
 	public final String hgvsAA;
 
+	// TODO(holtgrem): replace by AnnotationLocation
 	/** Position on the transcript, from this exon/intron rank, CDS and protein position can be obtained. */
 	public final TranscriptPosition transcriptPos;
 

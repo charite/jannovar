@@ -66,7 +66,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	@Override
 	protected String ncHGVS() {
-		return StringUtil.concatenate(locAnno, ":", dnaAnno, "del");
+		return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, "del");
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
@@ -74,7 +74,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		return new Annotation(VariantType.TRANSCRIPT_ABLATION, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(VariantType.TRANSCRIPT_ABLATION, locAnno, txBeginPos, ncHGVS(), transcript);
 	}
 
 	private Annotation buildStartLossAnnotation() {
@@ -82,7 +82,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-		return new Annotation(VariantType.START_LOSS, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
+		return new Annotation(VariantType.START_LOSS, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"),
+				transcript);
 	}
 
 	/**
@@ -155,7 +156,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
-			return new Annotation(varTypes, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(varTypes, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno),
+					transcript);
 		}
 
 		private void handleNonFrameShiftCase() {
