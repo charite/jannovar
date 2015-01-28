@@ -412,7 +412,8 @@ public class UCSCParser implements TranscriptParser {
 				}
 				final String primaryTranscriptID = A[5];
 				TranscriptModelBuilder tbi = this.knownGeneMap.get(primaryTranscriptID);
-				tbi.setTranscriptSupportLevel(TranscriptSupportLevels.UCSC_CANONICAL);
+				if (tbi != null)
+					tbi.setTranscriptSupportLevel(TranscriptSupportLevels.UCSC_CANONICAL);
 			}
 			br.close();
 			LOGGER.info("knownCanonicalPath contained ids for {} knownGenes (no ids available for {})", foundID,
