@@ -82,13 +82,13 @@ public class JannovarFilterCommandLineParser {
 		parser = new GnuParser();
 	}
 
-	private void printHelp() {
+	public void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Filter Tool")
 				.append("Use this command to filter VCF files.\n\n")
 				.append("Usage: java -jar jannovar-filter.jar [OPTIONS] <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
 		final String FOOTER = new StringBuilder()
 		.append("\n\nExample: java -jar jannovar-filter.jar -m AUTOSOMAL_DOMINANT data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n")
-		.append("             java -jar jannovar-filter.jar -g -d data/hg19_ucsc.ser -m AUTOSOMAL_RECESSIVE <PED.ped> <IN.vcf> <OUT.vcf>\n\n")
+				.append("         java -jar jannovar-filter.jar -g -d data/hg19_ucsc.ser -m AUTOSOMAL_RECESSIVE <PED.ped> <IN.vcf> <OUT.vcf>\n\n")
 		.append("Diseases\n\n")
 		.append("The --inheritance-mode parameter can take one of the following values. When given")
 		.append("then the variants will be filtered to those being compatible with the given mode")

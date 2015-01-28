@@ -19,6 +19,7 @@ import de.charite.compbio.jannovar.io.JannovarDataSerializer;
 import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Person;
 
 // TODO(holtgrew): Add support for DE NOVO
 
@@ -50,6 +51,9 @@ public class JannovarFilterApp {
 			throw new JannovarException("Could not parse Pedigree from " + options.pedPath);
 		}
 		Pedigree pedigree = new Pedigree(pedContents, pedContents.individuals.get(0).pedigree);
+		System.err.println("Family used from PED file: " + pedigree.name);
+		for (Person p : pedigree.members)
+			System.err.println("    " + p.name);
 		new FilteredWriter(pedigree, options.modeOfInheritance, jannovarDB, reader, writer).run(options);
 		final long endTime = System.nanoTime();
 		System.err.println(String.format("Filtering and writing took %.2f sec.",
@@ -82,17 +86,21 @@ public class JannovarFilterApp {
 	}
 
 	public static void main(String[] args) {
+		JannovarFilterCommandLineParser parser = new JannovarFilterCommandLineParser();
 		try {
-			JannovarFilterOptions options = new JannovarFilterCommandLineParser().parse(args);
+			JannovarFilterOptions options = parser.parse(args);
 			new JannovarFilterApp(options).run();
 		} catch (ParseException e) {
-			e.printStackTrace();
+			System.err.println("ERROR: " + e.getMessage());
+			parser.printHelp();
 			System.exit(1);
 		} catch (HelpRequestedException e) {
-			e.printStackTrace();
+			System.err.println("ERROR: " + e.getMessage());
+			parser.printHelp();
 			System.exit(1);
 		} catch (JannovarException e) {
-			e.printStackTrace();
+			System.err.println("ERROR: " + e.getMessage());
+			parser.printHelp();
 			System.exit(1);
 		}
 	}
