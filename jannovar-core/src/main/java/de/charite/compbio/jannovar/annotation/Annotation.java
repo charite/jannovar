@@ -48,9 +48,9 @@ public final class Annotation implements Comparable<Annotation> {
 			return null;
 		VariantType worst = effects.first();
 		for (VariantType vt : effects)
-			if (worst.getPutatativeImpact().compareTo(vt.getPutatativeImpact()) > 0)
+			if (worst.getPutativeImpact().compareTo(vt.getPutativeImpact()) > 0)
 				worst = vt;
-		return worst.getPutatativeImpact();
+		return worst.getPutativeImpact();
 	}
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
@@ -61,8 +61,6 @@ public final class Annotation implements Comparable<Annotation> {
 
 	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
 	public final TranscriptModel transcript;
-
-	// TODO(holtgrem): Remove variant with single value varType!
 
 	/**
 	 * Initialize the {@link Annotation} with the given values.

@@ -143,7 +143,7 @@ public enum VariantType {
 	/**
 	 * @return the {@link PutativeImpact} of this variant type
 	 */
-	public PutativeImpact getPutatativeImpact() {
+	public PutativeImpact getPutativeImpact() {
 		switch (this) {
 		case TRANSCRIPT_ABLATION:
 		case FS_DELETION:
