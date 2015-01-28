@@ -69,9 +69,8 @@ public final class PedFileReader {
 		ImmutableList.Builder<PedPerson> individualBuilder = new ImmutableList.Builder<PedPerson>();
 		while (line != null) {
 			line = line.trim(); // trim leading and trailing whitespace
-			if (line.length() == 0)
-				continue; // skip empty lines
-			individualBuilder.add(readIndividual(line));
+			if (line.length() != 0) // ignore empty lines
+				individualBuilder.add(readIndividual(line));
 
 			line = in.readLine(); // read next
 		}
