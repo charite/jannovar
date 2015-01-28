@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.annotation.builders;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
@@ -241,18 +243,18 @@ abstract class AnnotationBuilder {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript, VariantType.UPSTREAM, locAnno, annoString);
+				return new Annotation(transcript, ImmutableList.of(VariantType.UPSTREAM), locAnno, annoString);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, VariantType.DOWNSTREAM, locAnno, annoString);
+				return new Annotation(transcript, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, annoString);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript, VariantType.UPSTREAM, locAnno, annoString);
+				return new Annotation(transcript, ImmutableList.of(VariantType.UPSTREAM), locAnno, annoString);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, VariantType.DOWNSTREAM, locAnno, annoString);
+				return new Annotation(transcript, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, annoString);
 		}
 	}
 
@@ -260,7 +262,8 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript, VariantType.INTERGENIC, locAnno, StringUtil.concatenate("dist=", distance()));
+		return new Annotation(transcript, ImmutableList.of(VariantType.INTERGENIC), locAnno, StringUtil.concatenate(
+				"dist=", distance()));
 	}
 
 	/**

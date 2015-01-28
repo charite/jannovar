@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.annotation.builders;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
@@ -68,11 +70,12 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, VariantType.TRANSCRIPT_ABLATION, locAnno, ncHGVS());
+		return new Annotation(transcript, ImmutableList.of(VariantType.TRANSCRIPT_ABLATION), locAnno, ncHGVS());
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, VariantType.START_LOSS, locAnno, StringUtil.concatenate(ncHGVS(), ":p.0?"));
+		return new Annotation(transcript, ImmutableList.of(VariantType.START_LOSS), locAnno, StringUtil.concatenate(
+				ncHGVS(), ":p.0?"));
 	}
 
 	/**

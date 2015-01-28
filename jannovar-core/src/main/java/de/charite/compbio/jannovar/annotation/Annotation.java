@@ -13,8 +13,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
-//TODO(holtgrem): Test me!
-//TODO(holtgrem): Sorting of annotations
+// TODO(holtgrem): Test me!
+// TODO(holtgrem): Sorting of annotations
+// TODO(holtgrem): collection of warnings
 
 /**
  * Collect the information for one variant's annotation
@@ -66,23 +67,6 @@ public final class Annotation implements Comparable<Annotation> {
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
-	 * @param transcript
-	 *            transcript for this annotation
-	 * @param varType
-	 *            one type of the variant
-	 * @param annoLoc
-	 *            location of the variant
-	 * @param hgvsDescription
-	 *            variant description following the HGVS nomenclauture
-	 */
-	public Annotation(TranscriptModel transcript, VariantType varType, AnnotationLocation annoLoc,
-			String hgvsDescription) {
-		this(transcript, ImmutableSortedSet.of(varType), annoLoc, hgvsDescription);
-	}
-
-	/**
-	 * Initialize the {@link Annotation} with the given values.
-	 *
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
 	 * @param transcript
@@ -97,25 +81,6 @@ public final class Annotation implements Comparable<Annotation> {
 	public Annotation(TranscriptModel transcript, Collection<VariantType> varTypes, AnnotationLocation annoLoc,
 			String hgvsDescription) {
 		this(transcript, varTypes, annoLoc, hgvsDescription, ImmutableSortedSet.<AnnotationMessage> of());
-	}
-
-	/**
-	 * Initialize the {@link Annotation} with the given values.
-	 *
-	 * @param transcript
-	 *            transcript for this annotation
-	 * @param varType
-	 *            one type of the variant
-	 * @param annoLoc
-	 *            location of the variant
-	 * @param hgvsDescription
-	 *            variant description following the HGVS nomenclauture
-	 * @param messages
-	 *            {@link Collection} of {@link AnnotatioMessage} objects
-	 */
-	public Annotation(TranscriptModel transcript, VariantType varType, AnnotationLocation annoLoc,
-			String hgvsDescription, Collection<AnnotationMessage> messages) {
-		this(transcript, ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, messages);
 	}
 
 	/**
