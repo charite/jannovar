@@ -142,7 +142,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		if (warningMsg != null)
 			annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
 
-		return new Annotation(varTypes, locAnno, annotationStr, transcript);
+		return new Annotation(transcript, varTypes, locAnno, annotationStr);
 	}
 
 	@Override

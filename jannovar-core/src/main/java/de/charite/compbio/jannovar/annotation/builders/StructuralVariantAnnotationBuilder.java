@@ -72,43 +72,43 @@ public final class StructuralVariantAnnotationBuilder {
 
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
-						":g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
+				return new Annotation(null, VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
+								":g.", beginPos + 1, "_", beginPos + ref.length(), "inv"));
 			} else {
-				return new Annotation(VariantType.SV_INVERSION, annoLoc, StringUtil.concatenate(
-						VariantType.SV_INVERSION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), transcript);
+				return new Annotation(transcript, VariantType.SV_INVERSION, annoLoc, StringUtil.concatenate(
+								VariantType.SV_INVERSION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "inv"));
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
-						":g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
-						alt.substring(alt.length() - 2, alt.length())), null);
+				return new Annotation(null, VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
+								":g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
+								alt.substring(alt.length() - 2, alt.length())));
 			} else {
-				return new Annotation(VariantType.SV_INSERTION, annoLoc, StringUtil.concatenate(
-						VariantType.SV_INSERTION, ":g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
-						alt.substring(alt.length() - 2, alt.length())), transcript);
+				return new Annotation(transcript, VariantType.SV_INSERTION, annoLoc, StringUtil.concatenate(
+								VariantType.SV_INSERTION, ":g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
+								alt.substring(alt.length() - 2, alt.length())));
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
-						":g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
+				return new Annotation(null, VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
+								":g.", beginPos + 1, "_", beginPos + ref.length(), "del"));
 			} else {
-				return new Annotation(VariantType.SV_DELETION, annoLoc, StringUtil.concatenate(
-						VariantType.SV_DELETION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
+				return new Annotation(null, VariantType.SV_DELETION, annoLoc, StringUtil.concatenate(
+								VariantType.SV_DELETION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "del"));
 			}
 		} else { // SV substitution
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
-						":g.", beginPos + 1, "_", beginPos + ref.length(), "delins", alt.substring(0, 2), "..",
-						alt.substring(alt.length() - 2, alt.length())), null);
+				return new Annotation(null, VariantType.INTERGENIC, null, StringUtil.concatenate(VariantType.INTERGENIC,
+								":g.", beginPos + 1, "_", beginPos + ref.length(), "delins", alt.substring(0, 2), "..",
+								alt.substring(alt.length() - 2, alt.length())));
 			} else {
-				return new Annotation(VariantType.SV_SUBSTITUTION, annoLoc, StringUtil.concatenate(
-						VariantType.SV_SUBSTITUTION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
-						alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), transcript);
+				return new Annotation(transcript, VariantType.SV_SUBSTITUTION, annoLoc, StringUtil.concatenate(
+								VariantType.SV_SUBSTITUTION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
+								alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())));
 			}
 		}
 	}

@@ -61,83 +61,81 @@ public final class Annotation implements Comparable<Annotation> {
 	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
 	public final TranscriptModel transcript;
 
-	// TODO(holtgrem): Change parameter order, transcript should be first
+	// TODO(holtgrem): Remove variant with single value varType!
+
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
+	 * @param transcript
+	 *            transcript for this annotation
 	 * @param varType
 	 *            one type of the variant
 	 * @param annoLoc
 	 *            location of the variant
 	 * @param hgvsDescription
 	 *            variant description following the HGVS nomenclauture
-	 * @param transcript
-	 *            transcript for this annotation
 	 */
-	public Annotation(VariantType varType, AnnotationLocation annoLoc, String hgvsDescription,
-			TranscriptModel transcript) {
-		this(ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, transcript);
+	public Annotation(TranscriptModel transcript, VariantType varType, AnnotationLocation annoLoc,
+			String hgvsDescription) {
+		this(transcript, ImmutableSortedSet.of(varType), annoLoc, hgvsDescription);
 	}
 
-	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
+	 * @param transcript
+	 *            transcript for this annotation
 	 * @param effects
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
 	 * @param hgvsDescription
 	 *            variant description following the HGVS nomenclauture
-	 * @param transcript
-	 *            transcript for this annotation
 	 */
-	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, String hgvsDescription,
-			TranscriptModel transcript) {
-		this(varTypes, annoLoc, hgvsDescription, transcript, ImmutableSortedSet.<AnnotationMessage> of());
+	public Annotation(TranscriptModel transcript, Collection<VariantType> varTypes, AnnotationLocation annoLoc,
+			String hgvsDescription) {
+		this(transcript, varTypes, annoLoc, hgvsDescription, ImmutableSortedSet.<AnnotationMessage> of());
 	}
 
-	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
+	 * @param transcript
+	 *            transcript for this annotation
 	 * @param varType
 	 *            one type of the variant
 	 * @param annoLoc
 	 *            location of the variant
 	 * @param hgvsDescription
 	 *            variant description following the HGVS nomenclauture
-	 * @param transcript
-	 *            transcript for this annotation
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
-	public Annotation(VariantType varType, AnnotationLocation annoLoc, String hgvsDescription,
-			TranscriptModel transcript, Collection<AnnotationMessage> messages) {
-		this(ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, transcript, messages);
+	public Annotation(TranscriptModel transcript, VariantType varType, AnnotationLocation annoLoc,
+			String hgvsDescription, Collection<AnnotationMessage> messages) {
+		this(transcript, ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, messages);
 	}
 
-	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
+	 * @param transcript
+	 *            transcript for this annotation
 	 * @param effects
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
 	 * @param hgvsDescription
 	 *            variant description following the HGVS nomenclauture
-	 * @param transcript
-	 *            transcript for this annotation
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
-	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, String hgvsDescription,
-			TranscriptModel transcript, Collection<AnnotationMessage> messages) {
+	public Annotation(TranscriptModel transcript, Collection<VariantType> varTypes, AnnotationLocation annoLoc,
+			String hgvsDescription, Collection<AnnotationMessage> messages) {
 		this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
 		this.hgvsDescription = hgvsDescription;

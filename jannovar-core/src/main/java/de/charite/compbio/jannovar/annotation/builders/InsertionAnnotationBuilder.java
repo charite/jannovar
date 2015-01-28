@@ -192,7 +192,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					handleFrameShiftCase();
 			}
 
-			return new Annotation(varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(transcript, varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno));
 		}
 
 		private void handleFrameShiftCase() {

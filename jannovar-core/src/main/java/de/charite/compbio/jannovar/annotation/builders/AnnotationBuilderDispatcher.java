@@ -32,7 +32,7 @@ public final class AnnotationBuilderDispatcher {
 	 */
 	public Annotation build() throws InvalidGenomeChange {
 		if (transcript == null)
-			return new Annotation(VariantType.INTERGENIC, null, "INTERGENIC", null);
+			return new Annotation(null, VariantType.INTERGENIC, null, "INTERGENIC");
 
 		switch (change.getType()) {
 		case SNV:

@@ -73,11 +73,11 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(VariantType.TRANSCRIPT_ABLATION, locAnno, ncHGVS(), transcript);
+		return new Annotation(transcript, VariantType.TRANSCRIPT_ABLATION, locAnno, ncHGVS());
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(VariantType.START_LOSS, locAnno, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
+		return new Annotation(transcript, VariantType.START_LOSS, locAnno, StringUtil.concatenate(ncHGVS(), ":p.0?"));
 	}
 
 	/**
@@ -158,7 +158,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(transcript, varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno));
 		}
 
 		private void handleNonFrameShiftCase() {
