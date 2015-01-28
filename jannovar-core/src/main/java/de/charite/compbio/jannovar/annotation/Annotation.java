@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
+import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -32,7 +32,10 @@ public final class Annotation implements Comparable<Annotation> {
 	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
 	public final static String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
 			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
-			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|ERRORS / WARNINGS / INFO'";
+			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'";
+
+	/** the annotated {@link GenomeChange} */
+	public final GenomeChange change;
 
 	/** variant types, sorted by internal pathogenicity score */
 	public final ImmutableSortedSet<VariantType> effects;
@@ -56,8 +59,11 @@ public final class Annotation implements Comparable<Annotation> {
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
 	public final AnnotationLocation annoLoc;
 
-	/** HGVS variant annotation */
-	public final String hgvsDescription;
+	/** HGVS nucleotide variant annotation */
+	public final String ntHGVSDescription;
+
+	/** amino acid variant annotation */
+	public final String aaHGVSDescription;
 
 	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
 	public final TranscriptModel transcript;
@@ -67,18 +73,23 @@ public final class Annotation implements Comparable<Annotation> {
 	 *
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
+	 * @param change
+	 *            the annotated {@link GenomeChange}
 	 * @param transcript
 	 *            transcript for this annotation
 	 * @param effects
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
-	 * @param hgvsDescription
-	 *            variant description following the HGVS nomenclauture
+	 * @param ntHGVSDescription
+	 *            nucleotide variant description following the HGVS nomenclauture
+	 * @param aaHGVSDescription
+	 *            amino acid variant description following the HGVS nomenclauture
 	 */
-	public Annotation(TranscriptModel transcript, Collection<VariantType> varTypes, AnnotationLocation annoLoc,
-			String hgvsDescription) {
-		this(transcript, varTypes, annoLoc, hgvsDescription, ImmutableSortedSet.<AnnotationMessage> of());
+	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantType> varTypes,
+			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription) {
+		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, aaHGVSDescription, ImmutableSortedSet
+				.<AnnotationMessage> of());
 	}
 
 	/**
@@ -86,22 +97,29 @@ public final class Annotation implements Comparable<Annotation> {
 	 *
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
+	 * @param change
+	 *            the annotated {@link GenomeChange}
 	 * @param transcript
 	 *            transcript for this annotation
 	 * @param effects
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
-	 * @param hgvsDescription
-	 *            variant description following the HGVS nomenclauture
+	 * @param ntHGVSDescription
+	 *            nucleotide variant description following the HGVS nomenclauture
+	 * @param aaHGVSDescription
+	 *            amino acid variant description following the HGVS nomenclauture
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
-	public Annotation(TranscriptModel transcript, Collection<VariantType> varTypes, AnnotationLocation annoLoc,
-			String hgvsDescription, Collection<AnnotationMessage> messages) {
+	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantType> varTypes,
+			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
+			Collection<AnnotationMessage> messages) {
+		this.change = change;
 		this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
-		this.hgvsDescription = hgvsDescription;
+		this.ntHGVSDescription = ntHGVSDescription;
+		this.aaHGVSDescription = aaHGVSDescription;
 		this.transcript = transcript;
 		this.messages = ImmutableSortedSet.copyOf(messages);
 	}
@@ -121,7 +139,7 @@ public final class Annotation implements Comparable<Annotation> {
 		// Annotation_impact
 		builder.append('|').append(getPutativeImpact());
 		// Gene_Name
-		builder.append('|').append(annoLoc.transcript.accession);
+		builder.append('|').append(transcript.accession);
 		// Gene_ID
 		builder.append('|'); // TODO(holtgrem): gene ID
 		// Feature_Type
@@ -141,11 +159,11 @@ public final class Annotation implements Comparable<Annotation> {
 		else
 			builder.append('|');
 		// HGVS.c
-		builder.append('|').append(hgvsDescription); // TODO(holtgrem): HGVS.c
+		builder.append('|').append(ntHGVSDescription);
 
 		// HGVS.p
 		if (transcript.isCoding())
-			builder.append('|').append(hgvsDescription); // TODO(holtgrem): HGVS.p
+			builder.append('|').append(aaHGVSDescription);
 		else
 			builder.append('|');
 		if (annoLoc.txLocation != null)
@@ -178,6 +196,18 @@ public final class Annotation implements Comparable<Annotation> {
 			builder.append("||");
 		}
 
+		// Distance
+		if (transcript != null
+				&& (effects.contains(VariantType.INTERGENIC) || effects.contains(VariantType.UPSTREAM) || effects
+						.contains(VariantType.DOWNSTREAM))) {
+			if (change.getGenomeInterval().isLeftOf(transcript.txRegion.getGenomeBeginPos()))
+				builder.append(transcript.txRegion.getGenomeBeginPos().differenceTo(change.getGenomeInterval().getGenomeEndPos()));
+			else
+				builder.append(transcript.txRegion.getGenomeEndPos().differenceTo(change.getGenomeInterval().getGenomeBeginPos()));
+		} else {
+			builder.append('|');
+		}
+
 		// ERRORS / WARNING / INFOS
 		builder.append('|').append(Joiner.on("&").join(messages));
 		return builder.toString();
@@ -192,9 +222,7 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @return full annotation string
 	 */
 	public String getSymbolAndAnnotation() {
-		if (transcript.geneSymbol == null && hgvsDescription != null)
-			return hgvsDescription;
-		return StringUtil.concatenate(transcript.geneSymbol, ":", hgvsDescription);
+		return Joiner.on(":").skipNulls().join(transcript.geneSymbol, ntHGVSDescription, aaHGVSDescription);
 	}
 
 	/**
@@ -220,9 +248,12 @@ public final class Annotation implements Comparable<Annotation> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((hgvsDescription == null) ? 0 : hgvsDescription.hashCode());
-		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
+		result = prime * result + ((aaHGVSDescription == null) ? 0 : aaHGVSDescription.hashCode());
+		result = prime * result + ((annoLoc == null) ? 0 : annoLoc.hashCode());
 		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
+		result = prime * result + ((messages == null) ? 0 : messages.hashCode());
+		result = prime * result + ((ntHGVSDescription == null) ? 0 : ntHGVSDescription.hashCode());
+		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
 		return result;
 	}
 
@@ -235,17 +266,35 @@ public final class Annotation implements Comparable<Annotation> {
 		if (getClass() != obj.getClass())
 			return false;
 		Annotation other = (Annotation) obj;
-		if (hgvsDescription == null) {
-			if (other.hgvsDescription != null)
+		if (aaHGVSDescription == null) {
+			if (other.aaHGVSDescription != null)
 				return false;
-		} else if (!hgvsDescription.equals(other.hgvsDescription))
+		} else if (!aaHGVSDescription.equals(other.aaHGVSDescription))
+			return false;
+		if (annoLoc == null) {
+			if (other.annoLoc != null)
+				return false;
+		} else if (!annoLoc.equals(other.annoLoc))
+			return false;
+		if (effects == null) {
+			if (other.effects != null)
+				return false;
+		} else if (!effects.equals(other.effects))
+			return false;
+		if (messages == null) {
+			if (other.messages != null)
+				return false;
+		} else if (!messages.equals(other.messages))
+			return false;
+		if (ntHGVSDescription == null) {
+			if (other.ntHGVSDescription != null)
+				return false;
+		} else if (!ntHGVSDescription.equals(other.ntHGVSDescription))
 			return false;
 		if (transcript == null) {
 			if (other.transcript != null)
 				return false;
 		} else if (!transcript.equals(other.transcript))
-			return false;
-		if (effects != other.effects)
 			return false;
 		return true;
 	}

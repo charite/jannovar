@@ -105,8 +105,9 @@ abstract class AnnotationBuilder {
 	 */
 	public abstract Annotation build();
 
+	// TODO(holtgrew): rename to ntHGVS
 	/**
-	 * @return HGVS string for change in non-coding part of transcript.
+	 * @return HGVS string for change on the nucleotide level
 	 */
 	protected abstract String ncHGVS();
 
@@ -158,7 +159,7 @@ abstract class AnnotationBuilder {
 			else
 				varTypes.add(VariantType.ncRNA_INTRONIC);
 		}
-		return new Annotation(transcript, varTypes, locAnno, ncHGVS());
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), null);
 	}
 
 	/**
@@ -188,7 +189,7 @@ abstract class AnnotationBuilder {
 			else if (so.overlapsWithSpliceRegion(changeInterval))
 				varTypes.add(VariantType.SPLICE_REGION);
 		}
-		return new Annotation(transcript, varTypes, locAnno, ncHGVS());
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), null);
 	}
 
 	/**
@@ -229,7 +230,7 @@ abstract class AnnotationBuilder {
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
 				varTypes.add(VariantType.UTR3);
 		}
-		return new Annotation(transcript, varTypes, locAnno, ncHGVS());
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), null);
 	}
 
 	/**
@@ -238,23 +239,22 @@ abstract class AnnotationBuilder {
 	protected Annotation buildUpOrDownstreamAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
-		String annoString = StringUtil.concatenate("dist=", distance());
 		if (change.getGenomeInterval().length() == 0) {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript, ImmutableList.of(VariantType.UPSTREAM), locAnno, annoString);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), locAnno, null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, annoString);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript, ImmutableList.of(VariantType.UPSTREAM), locAnno, annoString);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), locAnno, null, null);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, annoString);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null, null);
 		}
 	}
 
@@ -262,8 +262,7 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript, ImmutableList.of(VariantType.INTERGENIC), locAnno, StringUtil.concatenate(
-				"dist=", distance()));
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.INTERGENIC), locAnno, null, null);
 	}
 
 	/**

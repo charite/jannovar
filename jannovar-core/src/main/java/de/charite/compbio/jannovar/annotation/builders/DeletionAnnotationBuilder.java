@@ -70,12 +70,12 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, ImmutableList.of(VariantType.TRANSCRIPT_ABLATION), locAnno, ncHGVS());
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
+				null);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, ImmutableList.of(VariantType.START_LOSS), locAnno, StringUtil.concatenate(
-				ncHGVS(), ":p.0?"));
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOSS), locAnno, ncHGVS(), "p.0?");
 	}
 
 	/**
@@ -144,7 +144,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript, varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno));
+			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
 		}
 
 		private void handleNonFrameShiftCase() {

@@ -136,13 +136,12 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		else if (so.overlapsWithSpliceRegion(changeInterval))
 			varTypes.add(VariantType.SPLICE_REGION);
 
-		// Build the resulting Annotation.
-		// Glue together the annotations and warning message in annotation if any, return Annotation.
-		String annotationStr = StringUtil.concatenate(ncHGVS(), ":", protAnno);
-		if (warningMsg != null)
-			annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
+		// if (warningMsg != null)
+		// annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
+		// TODO(holtgrew): hand through warning!
 
-		return new Annotation(transcript, varTypes, locAnno, annotationStr);
+		// Build the resulting Annotation.
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
 	}
 
 	@Override

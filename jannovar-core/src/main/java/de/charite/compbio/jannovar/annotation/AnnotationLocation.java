@@ -58,4 +58,44 @@ public class AnnotationLocation {
 		return builder.toString();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + rank;
+		result = prime * result + ((rankType == null) ? 0 : rankType.hashCode());
+		result = prime * result + totalRank;
+		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
+		result = prime * result + ((txLocation == null) ? 0 : txLocation.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AnnotationLocation other = (AnnotationLocation) obj;
+		if (rank != other.rank)
+			return false;
+		if (rankType != other.rankType)
+			return false;
+		if (totalRank != other.totalRank)
+			return false;
+		if (transcript == null) {
+			if (other.transcript != null)
+				return false;
+		} else if (!transcript.equals(other.transcript))
+			return false;
+		if (txLocation == null) {
+			if (other.txLocation != null)
+				return false;
+		} else if (!txLocation.equals(other.txLocation))
+			return false;
+		return true;
+	}
+
 }
