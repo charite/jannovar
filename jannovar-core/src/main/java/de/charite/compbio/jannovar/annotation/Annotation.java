@@ -14,6 +14,7 @@ import de.charite.compbio.jannovar.reference.TranscriptPosition;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 //TODO(holtgrem): Test me!
+//TODO(holtgrem): Sorting of annotations
 
 /**
  * Collect the information for one variant's annotation
@@ -78,7 +79,6 @@ public final class Annotation implements Comparable<Annotation> {
 		this(ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, transcript);
 	}
 
-	// TODO(holtgrem): Allow passing in the messages.
 	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
 	 * Initialize the {@link Annotation} with the given values.
@@ -96,11 +96,53 @@ public final class Annotation implements Comparable<Annotation> {
 	 */
 	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, String hgvsDescription,
 			TranscriptModel transcript) {
+		this(varTypes, annoLoc, hgvsDescription, transcript, ImmutableSortedSet.<AnnotationMessage> of());
+	}
+
+	// TODO(holtgrem): Change parameter order, transcript should be first
+	/**
+	 * Initialize the {@link Annotation} with the given values.
+	 *
+	 * @param varType
+	 *            one type of the variant
+	 * @param annoLoc
+	 *            location of the variant
+	 * @param hgvsDescription
+	 *            variant description following the HGVS nomenclauture
+	 * @param transcript
+	 *            transcript for this annotation
+	 * @param messages
+	 *            {@link Collection} of {@link AnnotatioMessage} objects
+	 */
+	public Annotation(VariantType varType, AnnotationLocation annoLoc, String hgvsDescription,
+			TranscriptModel transcript, Collection<AnnotationMessage> messages) {
+		this(ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, transcript, messages);
+	}
+
+	// TODO(holtgrem): Change parameter order, transcript should be first
+	/**
+	 * Initialize the {@link Annotation} with the given values.
+	 *
+	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
+	 *
+	 * @param effects
+	 *            type of the variants
+	 * @param annoLoc
+	 *            location of the variant
+	 * @param hgvsDescription
+	 *            variant description following the HGVS nomenclauture
+	 * @param transcript
+	 *            transcript for this annotation
+	 * @param messages
+	 *            {@link Collection} of {@link AnnotatioMessage} objects
+	 */
+	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, String hgvsDescription,
+			TranscriptModel transcript, Collection<AnnotationMessage> messages) {
 		this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
 		this.hgvsDescription = hgvsDescription;
 		this.transcript = transcript;
-		this.messages = ImmutableSortedSet.<AnnotationMessage> of();
+		this.messages = ImmutableSortedSet.copyOf(messages);
 	}
 
 	/**
@@ -171,9 +213,7 @@ public final class Annotation implements Comparable<Annotation> {
 			builder.append('|').append(cdsPos + 1).append(" / ").append(transcript.cdsTranscriptLength());
 			// AA position / length (excluding stop codon)
 			builder.append('|').append(cdsPos / 3 + 1).append(" / ").append(transcript.cdsTranscriptLength() / 3 - 1);
-		}
-		else
-		{
+		} else {
 			builder.append("||");
 		}
 
