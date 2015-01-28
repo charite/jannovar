@@ -14,7 +14,6 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
@@ -74,20 +73,11 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-		return new Annotation(VariantType.TRANSCRIPT_ABLATION, locAnno, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(VariantType.TRANSCRIPT_ABLATION, locAnno, ncHGVS(), transcript);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-		return new Annotation(VariantType.START_LOSS, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"),
-				transcript);
+		return new Annotation(VariantType.START_LOSS, locAnno, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
 	}
 
 	/**
@@ -168,12 +158,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			else
 				handleFrameShiftCase();
 
-			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-			return new Annotation(varTypes, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno),
-					transcript);
+			return new Annotation(varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {

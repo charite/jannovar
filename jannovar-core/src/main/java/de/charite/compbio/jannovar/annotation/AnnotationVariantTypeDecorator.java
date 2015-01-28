@@ -30,7 +30,7 @@ final public class AnnotationVariantTypeDecorator {
 				VariantType.NON_FS_INSERTION, VariantType.FS_SUBSTITUTION, VariantType.FS_DELETION,
 				VariantType.FS_INSERTION, VariantType.NON_FS_DELETION);
 		for (VariantType v : tryMatch)
-			if (annotation.varTypes.contains(v))
+			if (annotation.effects.contains(v))
 				return true;
 		return false;
 	}
@@ -39,7 +39,7 @@ final public class AnnotationVariantTypeDecorator {
 	 * @return <code>true</code> if this annotation is for a 3' or 5' UTR
 	 */
 	public boolean isUTRVariant() {
-		return (annotation.varTypes.contains(VariantType.UTR3) || annotation.varTypes.contains(VariantType.UTR5));
+		return (annotation.effects.contains(VariantType.UTR3) || annotation.effects.contains(VariantType.UTR5));
 	}
 
 	/**
@@ -49,7 +49,7 @@ final public class AnnotationVariantTypeDecorator {
 		ImmutableList<VariantType> tryMatch = ImmutableList.of(VariantType.ncRNA_EXONIC, VariantType.ncRNA_INTRONIC,
 				VariantType.ncRNA_SPLICE_DONOR, VariantType.ncRNA_SPLICE_ACCEPTOR, VariantType.ncRNA_SPLICE_REGION);
 		for (VariantType v : tryMatch)
-			if (annotation.varTypes.contains(v))
+			if (annotation.effects.contains(v))
 				return true;
 		return false;
 	}

@@ -22,14 +22,16 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 @Immutable
 public final class Annotation implements Comparable<Annotation> {
 
+	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
+	public final static String VCF_HEADER_DESCRIPTION_STRING = "Functional annotations:'Allele |Annotation|"
+			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
+			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|ERRORS / WARNINGS / INFO'";
+
 	/** variant types, sorted by internal pathogenicity score */
-	public final ImmutableSortedSet<VariantType> varTypes;
+	public final ImmutableSortedSet<VariantType> effects;
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
 	public final AnnotationLocation annoLoc;
-
-	/** position of the variant on the transcript, used for sorting only */
-	public final int txVarPos;
 
 	/** HGVS variant annotation */
 	public final String hgvsDescription;
@@ -45,39 +47,35 @@ public final class Annotation implements Comparable<Annotation> {
 	 *            one type of the variant
 	 * @param annoLoc
 	 *            location of the variant
-	 * @param txVarPos
-	 *            transcript start position of the variant
 	 * @param hgvsDescription
 	 *            variant description following the HGVS nomenclauture
 	 * @param transcript
 	 *            transcript for this annotation
 	 */
-	public Annotation(VariantType varType, AnnotationLocation annoLoc, int txVarPos, String hgvsDescription,
+	public Annotation(VariantType varType, AnnotationLocation annoLoc, String hgvsDescription,
 			TranscriptModel transcript) {
-		this(ImmutableSortedSet.of(varType), annoLoc, txVarPos, hgvsDescription, transcript);
+		this(ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, transcript);
 	}
 
 	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
-	 * The constructor will sort <code>varTypes</code> by pathogenicity before storing.
+	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
-	 * @param varTypes
+	 * @param effects
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
-	 * @param txVarPos
-	 *            transcript start position of the variant
 	 * @param hgvsDescription
 	 *            variant description following the HGVS nomenclauture
 	 * @param transcript
 	 *            transcript for this annotation
 	 */
-	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, int txVarPos, String hgvsDescription, TranscriptModel transcript) {
-		this.varTypes = ImmutableSortedSet.copyOf(varTypes);
+	public Annotation(Collection<VariantType> varTypes, AnnotationLocation annoLoc, String hgvsDescription,
+			TranscriptModel transcript) {
+		this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
-		this.txVarPos = txVarPos;
 		this.hgvsDescription = hgvsDescription;
 		this.transcript = transcript;
 	}
@@ -97,10 +95,10 @@ public final class Annotation implements Comparable<Annotation> {
 	}
 
 	/**
-	 * @return most pathogenic {@link VariantType} link {@link #varTypes}.
+	 * @return most pathogenic {@link VariantType} link {@link #effects}.
 	 */
 	public VariantType getMostPathogenicVarType() {
-		return varTypes.first();
+		return effects.first();
 	}
 
 	@Override
@@ -109,7 +107,6 @@ public final class Annotation implements Comparable<Annotation> {
 		if (result != 0)
 			return result;
 
-		result = txVarPos - other.txVarPos;
 		if (result != 0)
 			return result;
 
@@ -122,8 +119,7 @@ public final class Annotation implements Comparable<Annotation> {
 		int result = 1;
 		result = prime * result + ((hgvsDescription == null) ? 0 : hgvsDescription.hashCode());
 		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
-		result = prime * result + txVarPos;
-		result = prime * result + ((varTypes == null) ? 0 : varTypes.hashCode());
+		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
 		return result;
 	}
 
@@ -146,9 +142,7 @@ public final class Annotation implements Comparable<Annotation> {
 				return false;
 		} else if (!transcript.equals(other.transcript))
 			return false;
-		if (txVarPos != other.txVarPos)
-			return false;
-		if (varTypes != other.varTypes)
+		if (effects != other.effects)
 			return false;
 		return true;
 	}

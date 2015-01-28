@@ -12,9 +12,7 @@ import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
 import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Builds {@link Annotation} objects for the deletion {@link GenomeChange}s in the given {@link TranscriptInfo}.
@@ -70,20 +68,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-		return new Annotation(VariantType.TRANSCRIPT_ABLATION, locAnno, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(VariantType.TRANSCRIPT_ABLATION, locAnno, ncHGVS(), transcript);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-		return new Annotation(VariantType.START_LOSS, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"),
-				transcript);
+		return new Annotation(VariantType.START_LOSS, locAnno, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
 	}
 
 	/**
@@ -152,12 +141,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			else
 				handleFrameShiftCase();
 
-			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-			return new Annotation(varTypes, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno),
-					transcript);
+			return new Annotation(varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleNonFrameShiftCase() {

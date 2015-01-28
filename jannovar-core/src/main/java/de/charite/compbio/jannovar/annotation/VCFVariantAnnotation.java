@@ -1,7 +1,10 @@
 package de.charite.compbio.jannovar.annotation;
 
+import java.util.Collection;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -15,11 +18,6 @@ import de.charite.compbio.jannovar.reference.TranscriptPosition;
 @Immutable
 public final class VCFVariantAnnotation {
 
-	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
-	public final static String VCF_HEADER_DESCRIPTION_STRING = "Functional annotations:'Allele |Annotation|"
-			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
-			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|ERRORS / WARNINGS / INFO'";
-
 	/** The annotated GenomeChange */
 	public final GenomeChange change;
 
@@ -27,7 +25,7 @@ public final class VCFVariantAnnotation {
 	public final String alt;
 
 	/** List of {@link VariantType}s of this annotation. */
-	public final ImmutableList<VariantType> effects;
+	public final ImmutableSortedSet<VariantType> effects;
 
 	/** putative impact of the variant */
 	public final PutativeImpact putativeImpact;
@@ -61,12 +59,12 @@ public final class VCFVariantAnnotation {
 	/** List of error messages */
 	public final ImmutableList<AnnotationMessage> messages;
 
-	public VCFVariantAnnotation(GenomeChange change, String alt, ImmutableList<VariantType> effects,
+	public VCFVariantAnnotation(GenomeChange change, String alt, Collection<VariantType> effects,
 			PutativeImpact putativeImpact, String geneID, String featureType, String featureID, String featureBiotype,
 			String hgvsNT, String hgvsAA, TranscriptPosition transcriptPos, ImmutableList<AnnotationMessage> messages) {
 		this.change = change;
 		this.alt = alt;
-		this.effects = effects;
+		this.effects = ImmutableSortedSet.copyOf(effects);
 		this.putativeImpact = putativeImpact;
 		this.geneID = geneID;
 		this.featureType = featureType;
@@ -78,7 +76,7 @@ public final class VCFVariantAnnotation {
 		this.messages = messages;
 	}
 
-	public VCFVariantAnnotation(GenomeChange change, String alt, ImmutableList<VariantType> effects,
+	public VCFVariantAnnotation(GenomeChange change, String alt, Collection<VariantType> effects,
 			PutativeImpact putativeImpact, String geneID, String featureType, String featureID, String featureBiotype,
 			String hgvsNT, String hgvsAA, TranscriptPosition transcriptPos) {
 		this(change, alt, effects, putativeImpact, geneID, featureType, featureID, featureBiotype, hgvsNT, hgvsAA,

@@ -125,9 +125,7 @@ abstract class AnnotationBuilder {
 			return buildIntergenicAnnotation();
 
 		// Project genome to CDS position.
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		GenomePosition pos = changeInterval.getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
 		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		if (changeInterval.length() == 0) {
@@ -158,17 +156,14 @@ abstract class AnnotationBuilder {
 			else
 				varTypes.add(VariantType.ncRNA_INTRONIC);
 		}
-		return new Annotation(varTypes, locAnno, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(varTypes, locAnno, ncHGVS(), transcript);
 	}
 
 	/**
 	 * @return intronic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntronicAnnotation() {
-		// Project genome to CDS position.
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
 		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		varTypes.add(VariantType.INTRONIC); // always include intronic as variant type
@@ -191,17 +186,14 @@ abstract class AnnotationBuilder {
 			else if (so.overlapsWithSpliceRegion(changeInterval))
 				varTypes.add(VariantType.SPLICE_REGION);
 		}
-		return new Annotation(varTypes, locAnno, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(varTypes, locAnno, ncHGVS(), transcript);
 	}
 
 	/**
 	 * @return 3'/5' UTR anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUTRAnnotation() {
-		// Project genome to CDS position.
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
 		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
 		if (change.getGenomeInterval().length() == 0) {
@@ -235,35 +227,32 @@ abstract class AnnotationBuilder {
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
 				varTypes.add(VariantType.UTR3);
 		}
-		return new Annotation(varTypes, locAnno, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(varTypes, locAnno, ncHGVS(), transcript);
 	}
 
 	/**
 	 * @return upstream/downstream annotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildUpOrDownstreamAnnotation() {
-		// Project genome to CDS position.
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
 
 		String annoString = StringUtil.concatenate("dist=", distance());
 		if (change.getGenomeInterval().length() == 0) {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(VariantType.UPSTREAM, locAnno, txBeginPos, annoString, transcript);
+				return new Annotation(VariantType.UPSTREAM, locAnno, annoString, transcript);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(VariantType.DOWNSTREAM, locAnno, txBeginPos, annoString, transcript);
+				return new Annotation(VariantType.DOWNSTREAM, locAnno, annoString, transcript);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(VariantType.UPSTREAM, locAnno, txBeginPos, annoString, transcript);
+				return new Annotation(VariantType.UPSTREAM, locAnno, annoString, transcript);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(VariantType.DOWNSTREAM, locAnno, txBeginPos, annoString, transcript);
+				return new Annotation(VariantType.DOWNSTREAM, locAnno, annoString, transcript);
 		}
 	}
 
@@ -271,8 +260,7 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(VariantType.INTERGENIC, locAnno, 0, StringUtil.concatenate("dist=", distance()),
-				transcript);
+		return new Annotation(VariantType.INTERGENIC, locAnno, StringUtil.concatenate("dist=", distance()), transcript);
 	}
 
 	/**

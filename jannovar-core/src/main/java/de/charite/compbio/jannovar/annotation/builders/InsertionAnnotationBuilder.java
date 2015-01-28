@@ -17,7 +17,6 @@ import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Builds {@link Annotation} objects for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
@@ -193,12 +192,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					handleFrameShiftCase();
 			}
 
-			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-			return new Annotation(varTypes, locAnno, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno),
-					transcript);
+			return new Annotation(varTypes, locAnno, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
 		}
 
 		private void handleFrameShiftCase() {
