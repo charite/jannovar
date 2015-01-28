@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.annotation.AllAnnotationListTextGenerator;
+import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationException;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationListTextGenerator;
@@ -90,6 +91,10 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		// add INFO line for HGVS field
 		VCFInfoHeaderLine hgvsLine = new VCFInfoHeaderLine("HGVS", 1, VCFHeaderLineType.String, VCFStrings.INFO_HGVS);
 		header.addMetaDataLine(hgvsLine);
+		// add INFO line for ANNfield
+		VCFInfoHeaderLine annLine = new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String,
+				Annotation.VCF_ANN_DESCRIPTION_STRING);
+		header.addMetaDataLine(annLine);
 		return header;
 	}
 
@@ -120,6 +125,8 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		}
 		int chr = boxedInt.intValue();
 
+		StringBuilder annBuilder = new StringBuilder();
+
 		// Get shortcuts to ref, alt, and position. Note that this is "uncorrected" data, common prefixes etc. are
 		// stripped when constructing the GenomeChange.
 		ArrayList<AnnotationList> annoLists = new ArrayList<AnnotationList>();
@@ -145,6 +152,13 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 					System.err.println(String.format("[ERROR]: Problem generating annotation for variant %s", change));
 					continue; // ignore variant
 				}
+
+				for (Annotation ann : annoList.entries) {
+					if (annBuilder.length() != 0)
+						annBuilder.append(",");
+					annBuilder.append(ann.toVCFAnnoString(alt));
+				}
+
 				annoLists.add(annoList);
 			}
 
@@ -186,6 +200,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				vc.getCommonInfo().putAttribute("EFFECT", effectText.toString(), true);
 			if (hgvsText.length() > 0)
 				vc.getCommonInfo().putAttribute("HGVS", hgvsText.toString(), true);
+			vc.getCommonInfo().putAttribute("ANN", annBuilder.toString(), true);
 
 			// remove empty fields, yielding leading semicolons in INFO field
 			vc.getCommonInfo().removeAttribute("");

@@ -2,11 +2,16 @@ package de.charite.compbio.jannovar.annotation;
 
 import java.util.Collection;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
+import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import de.charite.compbio.jannovar.reference.TranscriptPosition;
+import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 //TODO(holtgrem): Test me!
 
@@ -23,12 +28,28 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 public final class Annotation implements Comparable<Annotation> {
 
 	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
-	public final static String VCF_HEADER_DESCRIPTION_STRING = "Functional annotations:'Allele |Annotation|"
+	public final static String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
 			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
 			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|ERRORS / WARNINGS / INFO'";
 
 	/** variant types, sorted by internal pathogenicity score */
 	public final ImmutableSortedSet<VariantType> effects;
+
+	/** errors and warnings */
+	public final ImmutableSortedSet<AnnotationMessage> messages;
+
+	/**
+	 * @return highest {@link PutativeImpact} of all {@link #effects}.
+	 */
+	public final PutativeImpact getPutativeImpact() {
+		if (effects.isEmpty())
+			return null;
+		VariantType worst = effects.first();
+		for (VariantType vt : effects)
+			if (worst.getPutatativeImpact().compareTo(vt.getPutatativeImpact()) > 0)
+				worst = vt;
+		return worst.getPutatativeImpact();
+	}
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
 	public final AnnotationLocation annoLoc;
@@ -57,6 +78,7 @@ public final class Annotation implements Comparable<Annotation> {
 		this(ImmutableSortedSet.of(varType), annoLoc, hgvsDescription, transcript);
 	}
 
+	// TODO(holtgrem): Allow passing in the messages.
 	// TODO(holtgrem): Change parameter order, transcript should be first
 	/**
 	 * Initialize the {@link Annotation} with the given values.
@@ -78,6 +100,86 @@ public final class Annotation implements Comparable<Annotation> {
 		this.annoLoc = annoLoc;
 		this.hgvsDescription = hgvsDescription;
 		this.transcript = transcript;
+		this.messages = ImmutableSortedSet.<AnnotationMessage> of();
+	}
+
+	/**
+	 * Return the standardized VCF variant string for the given <code>ALT</code> allele.
+	 *
+	 * The <code>ALT</code> allele has to be given to this function since we trim away at least the first base of
+	 * <code>REF</code>/<code>ALT</code>.
+	 */
+	public String toVCFAnnoString(String alt) {
+		StringBuilder builder = new StringBuilder();
+		// Allele
+		builder.append(alt);
+		// Annotation
+		builder.append('|').append(Joiner.on('&').join(effects));
+		// Annotation_impact
+		builder.append('|').append(getPutativeImpact());
+		// Gene_Name
+		builder.append('|').append(annoLoc.transcript.accession);
+		// Gene_ID
+		builder.append('|'); // TODO(holtgrem): gene ID
+		// Feature_Type
+		builder.append('|'); // TODO(holtgrem): feature type
+		// Feature_ID
+		builder.append('|'); // TODO(holtgrem): feature ID
+
+		// Transcript_BioType
+		if (annoLoc.transcript != null)
+			builder.append('|').append(annoLoc.transcript.isCoding() ? "Coding" : "Noncoding");
+		else
+			builder.append('|');
+
+		// Rank / Total Rank
+		if (annoLoc.rankType != RankType.UNDEFINED)
+			builder.append('|').append(annoLoc.rank).append("/").append(annoLoc.totalRank);
+		else
+			builder.append('|');
+		// HGVS.c
+		builder.append('|').append(hgvsDescription); // TODO(holtgrem): HGVS.c
+
+		// HGVS.p
+		if (transcript.isCoding())
+			builder.append('|').append(hgvsDescription); // TODO(holtgrem): HGVS.p
+		else
+			builder.append('|');
+		if (annoLoc.txLocation != null)
+			builder.append('|').append(annoLoc.txLocation.beginPos + 1);
+		else
+			builder.append('|');
+
+		// cDNS.pos / cDNA.length
+		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		final TranscriptPosition txPos;
+		if (annoLoc.txLocation.length() == 0)
+			txPos = annoLoc.txLocation.getBeginPos().shifted(-1);
+		else
+			txPos = annoLoc.txLocation.getBeginPos();
+		int cdsPos = -1;
+		try {
+			cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).pos;
+		} catch (ProjectionException e) {
+			throw new Error("Bug: problem with projection!");
+		}
+
+		// CDS.pos / CDS.length
+		// AA.pos / AA.length
+		if (annoLoc.txLocation != null && transcript.isCoding()) {
+			// CDS position / length
+			builder.append('|').append(cdsPos + 1).append(" / ").append(transcript.cdsTranscriptLength());
+			// AA position / length (excluding stop codon)
+			builder.append('|').append(cdsPos / 3 + 1).append(" / ").append(transcript.cdsTranscriptLength() / 3 - 1);
+		}
+		else
+		{
+			builder.append("||");
+		}
+
+		// ERRORS / WARNING / INFOS
+		builder.append('|').append(Joiner.on("&").join(messages));
+		return builder.toString();
 	}
 
 	/**

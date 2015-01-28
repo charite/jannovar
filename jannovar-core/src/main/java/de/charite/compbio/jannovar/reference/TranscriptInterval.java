@@ -54,6 +54,18 @@ public final class TranscriptInterval {
 		return this.endPos - this.beginPos + (positionType == PositionType.ONE_BASED ? 1 : 0);
 	}
 
+	/** @return begin position of the interval */
+	public TranscriptPosition getBeginPos() {
+		// TODO(holtgrem): test me!
+		return new TranscriptPosition(transcript, beginPos);
+	}
+
+	/** @return end position of the interval */
+	public TranscriptPosition getEndPos() {
+		// TODO(holtgrem): test me!
+		return new TranscriptPosition(transcript, endPos);
+	}
+
 	/*
 	 * Returns string with one-based positions.
 	 *
