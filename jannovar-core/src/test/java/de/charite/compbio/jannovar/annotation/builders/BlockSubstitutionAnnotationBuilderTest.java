@@ -244,9 +244,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				"G", "TT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.691-1delinsTT", annotation1.ntHGVSDescription);
-		Assert.assertEquals(null, annotation1.aaHGVSDescription);
+		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
 				annotation1.effects);
 

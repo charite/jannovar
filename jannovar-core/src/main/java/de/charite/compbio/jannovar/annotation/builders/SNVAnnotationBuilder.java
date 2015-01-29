@@ -15,6 +15,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
 import de.charite.compbio.jannovar.reference.TranscriptSequenceDecorator;
 
+// TODO(holtgrew): Mutations near splice sites should be annotated as "p.?" as Mutalyzer does.
+
 /**
  * Builds {@link Annotation} objects for the SNV {@link GenomeChange}s in the given {@link TranscriptInfo}.
  *
@@ -147,9 +149,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, change.ref, ">", change.alt);
+			return StringUtil.concatenate(dnaAnno, change.ref, ">", change.alt);
 		else
-			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, hgvsSNVOverride);
+			return StringUtil.concatenate(dnaAnno, hgvsSNVOverride);
 	}
 
 	/**

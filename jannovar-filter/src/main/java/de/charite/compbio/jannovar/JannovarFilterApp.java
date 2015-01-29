@@ -55,6 +55,7 @@ public class JannovarFilterApp {
 		for (Person p : pedigree.members)
 			System.err.println("    " + p.name);
 		new FilteredWriter(pedigree, options.modeOfInheritance, jannovarDB, reader, writer).run(options);
+		writer.close();
 		final long endTime = System.nanoTime();
 		System.err.println(String.format("Filtering and writing took %.2f sec.",
 				(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));

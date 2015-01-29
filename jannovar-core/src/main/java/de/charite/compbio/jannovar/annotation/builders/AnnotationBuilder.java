@@ -189,7 +189,13 @@ abstract class AnnotationBuilder {
 			else if (so.overlapsWithSpliceRegion(changeInterval))
 				varTypes.add(VariantType.SPLICE_REGION);
 		}
-		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), null);
+		// intronic variants have no effect on the protein but splice variants lead to "probably no protein produced"
+		// annotation, as in Mutalyzer.
+		String aaAnno = "p.=";
+		if (varTypes.contains(VariantType.SPLICE_DONOR) || varTypes.contains(VariantType.SPLICE_ACCEPTOR)
+				|| varTypes.contains(VariantType.SPLICE_REGION))
+			aaAnno = "p.?";
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), aaAnno);
 	}
 
 	/**
@@ -230,7 +236,7 @@ abstract class AnnotationBuilder {
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
 				varTypes.add(VariantType.UTR3);
 		}
-		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), null);
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), "p.=");
 	}
 
 	/**
@@ -246,7 +252,8 @@ abstract class AnnotationBuilder {
 				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), locAnno, null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null,
+						"p.=");
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
@@ -298,15 +305,22 @@ abstract class AnnotationBuilder {
 			// no base is change => insertion
 			GenomePosition changePos = change.getGenomeInterval().getGenomeBeginPos();
 
-			// Handle the cases for which no exon number is available.
-			if (!soDecorator.liesInExon(changePos))
+			// Handle the cases for which no exon and no intron number is available.
+			if (!soDecorator.liesInExon(changePos) && !soDecorator.liesInIntron(changePos))
 				return locBuilder.build(); // no exon information if change pos does not lie in exon
+			final int intronNum = projector.locateIntron(changePos);
+			if (intronNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
+				locBuilder.setRankType(AnnotationLocation.RankType.INTRON);
+				locBuilder.setRank(intronNum);
+				return locBuilder.build();
+			}
 			final int exonNum = projector.locateExon(changePos);
 			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: position should be in exon if we reach here");
 
 			locBuilder.setRankType(AnnotationLocation.RankType.EXON);
 			locBuilder.setRank(exonNum);
+			return locBuilder.build();
 		} else {
 			// at least one base is changed
 			GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
@@ -314,9 +328,16 @@ abstract class AnnotationBuilder {
 			GenomePosition lastChangePos = change.getGenomeInterval().getGenomeEndPos().shifted(-1);
 			GenomeInterval lastChangeBase = new GenomeInterval(lastChangePos, 1);
 
-			// Handle the cases for which no exon number is available.
-			if (!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
-				return locBuilder.build(); // no exon information if change pos does not lie in exon
+			// Handle the cases for which no exon and no intron number is available.
+			if ((!soDecorator.liesInExon(firstChangeBase) || !soDecorator.liesInExon(lastChangeBase))
+					&& (!soDecorator.liesInIntron(firstChangeBase) || !soDecorator.liesInIntron(lastChangeBase)))
+				return locBuilder.build(); // no exon/intron information if change pos does not lie in exon
+			final int intronNum = projector.locateIntron(firstChangePos);
+			if (intronNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
+				locBuilder.setRankType(AnnotationLocation.RankType.INTRON);
+				locBuilder.setRank(intronNum);
+				return locBuilder.build();
+			}
 			final int exonNum = projector.locateExon(firstChangePos);
 			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
 				throw new Error("Bug: positions should be in exons if we reach here");
@@ -325,9 +346,8 @@ abstract class AnnotationBuilder {
 
 			locBuilder.setRankType(AnnotationLocation.RankType.EXON);
 			locBuilder.setRank(exonNum);
+			return locBuilder.build();
 		}
-
-		return locBuilder.build();
 	}
 
 	/**
