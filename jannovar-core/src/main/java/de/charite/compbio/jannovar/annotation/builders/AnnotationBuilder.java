@@ -252,8 +252,7 @@ abstract class AnnotationBuilder {
 				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), locAnno, null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null,
-						"p.=");
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();

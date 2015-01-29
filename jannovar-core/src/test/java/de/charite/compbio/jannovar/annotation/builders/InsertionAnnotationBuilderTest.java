@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -20,6 +21,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
 
 // TODO(holtgrem): What exactly should be counted as stop gain?
 // TODO(holtgrem): Convert more from UTR3AnnotationTest from the old tests, also for other variant types
+// TODO(holtgrem): check distance computation in annotation, for upstream/downstream etc. also in on other tests
 
 public class InsertionAnnotationBuilderTest {
 
@@ -62,10 +64,13 @@ public class InsertionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardUpstream() throws InvalidGenomeChange {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640062, PositionType.ZERO_BASED),
+		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals("dist=0", anno.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.ntHGVSDescription);
+		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UPSTREAM), anno.effects);
 	}
 
@@ -74,7 +79,10 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals("dist=0", anno.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.ntHGVSDescription);
+		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.DOWNSTREAM), anno.effects);
 	}
 
@@ -84,14 +92,20 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6639062, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals("dist=1000", anno.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.ntHGVSDescription);
+		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), anno.effects);
 
 		// downstream intergenic
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6650340, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno2 = new InsertionAnnotationBuilder(infoForward, change2).build();
-		Assert.assertEquals("dist=1000", anno2.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.ntHGVSDescription);
+		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), anno2.effects);
 	}
 
@@ -100,7 +114,10 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6646098, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals("uc001anx.3:c.1044+8_1044+9insA", anno.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(3, anno.annoLoc.rank);
+		Assert.assertEquals("c.1044+8_1044+9insA", anno.ntHGVSDescription);
+		Assert.assertEquals("p.=", anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC), anno.effects);
 	}
 
@@ -109,7 +126,10 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640669, PositionType.ZERO_BASED),
 				"", "C");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals("uc001anx.3:exon2:c.-1dup", anno.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(1, anno.annoLoc.rank);
+		Assert.assertEquals("c.-1dup", anno.ntHGVSDescription);
+		Assert.assertEquals("p.=", anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5), anno.effects);
 	}
 
@@ -118,7 +138,10 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649272, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals("uc001anx.3:exon11:c.2067_*1insA", anno.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
+		Assert.assertEquals(10, anno.annoLoc.rank);
+		Assert.assertEquals("c.2067_*1insA", anno.ntHGVSDescription);
+		Assert.assertEquals("p.=", anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR3), anno.effects);
 	}
 
@@ -1051,7 +1074,10 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 4, 190881973, PositionType.ZERO_BASED), "", "GACT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
-		Assert.assertEquals("uc003izs.3:exon7:c.608_609insGACT:p.Gln204Thrfs*4", annotation1.hgvsDescription);
+		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
+		Assert.assertEquals(6, annotation1.annoLoc.rank);
+		Assert.assertEquals("c.608_609insGACT", annotation1.ntHGVSDescription);
+		Assert.assertEquals("p.Gln204Thrfs*4", annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_INSERTION), annotation1.effects);
 	}
 

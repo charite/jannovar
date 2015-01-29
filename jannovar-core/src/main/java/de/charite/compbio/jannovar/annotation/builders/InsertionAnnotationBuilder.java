@@ -77,7 +77,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (!so.liesInExon(change.pos))
-			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -101,9 +101,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 						posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
 			}
 
-			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno);
+			return dnaAnno;
 		} else {
-			return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
 		}
 	}
 
