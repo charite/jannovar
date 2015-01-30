@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -65,7 +64,7 @@ public class SNVAnnotationBuilderTest {
 				"T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UPSTREAM), anno.effects);
@@ -77,7 +76,7 @@ public class SNVAnnotationBuilderTest {
 				"T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.DOWNSTREAM), anno.effects);
@@ -90,7 +89,7 @@ public class SNVAnnotationBuilderTest {
 				"T", "A");
 		Annotation anno1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, anno1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno1.annoLoc.rank);
+		Assert.assertEquals(null, anno1.annoLoc);
 		Assert.assertEquals(null, anno1.ntHGVSDescription);
 		Assert.assertEquals(null, anno1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), anno1.effects);
@@ -100,9 +99,9 @@ public class SNVAnnotationBuilderTest {
 				"T", "A");
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2).build();
 		Assert.assertEquals(infoForward.accession, anno2.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno1.annoLoc.rank);
+		Assert.assertEquals(null, anno2.annoLoc);
 		Assert.assertEquals(null, anno2.ntHGVSDescription);
-		Assert.assertEquals(null, anno1.aaHGVSDescription);
+		Assert.assertEquals(null, anno2.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), anno2.effects);
 	}
 
@@ -2827,7 +2826,7 @@ public class SNVAnnotationBuilderTest {
 				"C", "T");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation1.effects);
@@ -2850,7 +2849,7 @@ public class SNVAnnotationBuilderTest {
 				new GenomePosition(refDict, '+', 2, 132349413, PositionType.ZERO_BASED), "G", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation1.effects);
@@ -2876,7 +2875,7 @@ public class SNVAnnotationBuilderTest {
 				"T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation1.effects);

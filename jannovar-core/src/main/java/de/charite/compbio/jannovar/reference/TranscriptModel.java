@@ -43,10 +43,12 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	public final String sequence;
 
 	/**
-	 * The Gene id that corresponds to the transcript model. Note that this information is taken from
-	 * knownToLocusLink.txt or modified Ensembl Gene ids. Default is <code>-1</code>
+	 * The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>ENTREZ([0-9]+)</code>
+	 * "), RefSeq ("<code>gene([0-9]+)</code>").
+	 *
+	 * <code>null</code> for no available gene ID.
 	 */
-	public final int geneID;
+	public final String geneID;
 
 	/**
 	 * The transcript support level of the this transcript (the lower the better).
@@ -57,13 +59,13 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	public final int transcriptSupportLevel;
 
 	/** Class version (for serialization). */
-	public static final long serialVersionUID = 2L;
+	public static final long serialVersionUID = 3L;
 
 	/**
 	 * Initialize the TranscriptInfo object from the given parameters.
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
-			ImmutableList<GenomeInterval> exonRegions, String sequence, int geneID, int transcriptSupportLevel) {
+			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -148,9 +150,10 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		result = prime * result + ((accession == null) ? 0 : accession.hashCode());
 		result = prime * result + ((cdsRegion == null) ? 0 : cdsRegion.hashCode());
 		result = prime * result + ((exonRegions == null) ? 0 : exonRegions.hashCode());
-		result = prime * result + geneID;
+		result = prime * result + ((geneID == null) ? 0 : geneID.hashCode());
 		result = prime * result + ((geneSymbol == null) ? 0 : geneSymbol.hashCode());
 		result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
+		result = prime * result + transcriptSupportLevel;
 		result = prime * result + ((txRegion == null) ? 0 : txRegion.hashCode());
 		return result;
 	}
@@ -179,7 +182,10 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 				return false;
 		} else if (!exonRegions.equals(other.exonRegions))
 			return false;
-		if (geneID != other.geneID)
+		if (geneID == null) {
+			if (other.geneID != null)
+				return false;
+		} else if (!geneID.equals(other.geneID))
 			return false;
 		if (geneSymbol == null) {
 			if (other.geneSymbol != null)
@@ -191,6 +197,8 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 				return false;
 		} else if (!sequence.equals(other.sequence))
 			return false;
+		if (transcriptSupportLevel != other.transcriptSupportLevel)
+			return false;
 		if (txRegion == null) {
 			if (other.txRegion != null)
 				return false;
@@ -201,7 +209,12 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
 	@Override
 	public int compareTo(TranscriptModel o) {
-		int result = geneID - o.geneID;
+		int result = -1;
+		if (geneID != null && o.geneID != null) {
+			result = geneID.compareTo(o.geneID);
+			if (result != 0)
+				return result;
+		}
 
 		result = geneSymbol.compareTo(o.geneSymbol);
 		if (result != 0)

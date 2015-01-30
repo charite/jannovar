@@ -339,7 +339,7 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	/**
-	 * Parses the ucsc KnownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
+	 * Parses the ucsc knownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
 	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
 	private void parseKnown2LocusLink(String locusPath) throws TranscriptParseException {
@@ -366,7 +366,7 @@ public class UCSCParser implements TranscriptParser {
 					continue;
 				}
 				foundID++;
-				tbi.setGeneID(geneID);
+				tbi.setGeneID("ENTREZ" + geneID);
 			}
 			br.close();
 			LOGGER.info("knownToLocusLink contained ids for {} knownGenes (no ids available for {})", foundID,
@@ -518,9 +518,9 @@ public class UCSCParser implements TranscriptParser {
 							A.length);
 					throw new TranscriptParseException(err);
 				}
-				String id = A[0];
+				String transcriptID = A[0];
 				String geneSymbol = A[4];
-				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
+				TranscriptModelBuilder tbi = this.knownGeneMap.get(transcriptID);
 				if (tbi == null) {
 					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 					// System.err.println("Error, could not find xref sequence for known gene \"" + id + "\"");

@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -68,7 +67,7 @@ public class InsertionAnnotationBuilderTest {
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UPSTREAM), anno.effects);
@@ -80,7 +79,7 @@ public class InsertionAnnotationBuilderTest {
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.DOWNSTREAM), anno.effects);
@@ -93,7 +92,7 @@ public class InsertionAnnotationBuilderTest {
 				"", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
+		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), anno.effects);
@@ -102,10 +101,10 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6650340, PositionType.ZERO_BASED),
 				"", "A");
 		Annotation anno2 = new InsertionAnnotationBuilder(infoForward, change2).build();
-		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
-		Assert.assertEquals(null, anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(infoForward.accession, anno2.transcript.accession);
+		Assert.assertEquals(null, anno2.annoLoc);
+		Assert.assertEquals(null, anno2.ntHGVSDescription);
+		Assert.assertEquals(null, anno2.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), anno2.effects);
 	}
 

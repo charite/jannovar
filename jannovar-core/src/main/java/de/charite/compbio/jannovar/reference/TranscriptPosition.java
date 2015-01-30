@@ -11,8 +11,6 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class TranscriptPosition {
 
-	/** the selected coordinate system (0-based, 1-based) */
-	public final PositionType positionType;
 	/** the transcript that this position is relative to */
 	public final TranscriptModel transcript;
 	/** the position within the transcript */
@@ -20,33 +18,13 @@ public final class TranscriptPosition {
 
 	/** construct transcript position with one-based coordinate system */
 	public TranscriptPosition(TranscriptModel transcript, int pos) {
-		this.positionType = PositionType.ONE_BASED;
-		this.transcript = transcript;
-		this.pos = pos;
+		this(transcript, pos, PositionType.ZERO_BASED);
 	}
 
 	/** construct transcript position with selected coordinate system */
 	public TranscriptPosition(TranscriptModel transcript, int pos, PositionType positionType) {
-		this.positionType = positionType;
 		this.transcript = transcript;
-		this.pos = pos;
-	}
-
-	/** construct transcript position from other with selected coordinate system */
-	public TranscriptPosition(TranscriptPosition other, PositionType positionType) {
-		this.positionType = positionType;
-		this.transcript = other.transcript;
-		int delta = 0;
-		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
-			delta += 1;
-		else if (other.positionType == PositionType.ONE_BASED && this.positionType == PositionType.ZERO_BASED)
-			delta -= 1;
-		this.pos = other.pos + delta;
-	}
-
-	/** create a copy with the given position type. */
-	public TranscriptPosition withPositionType(PositionType positionType) {
-		return new TranscriptPosition(this, positionType);
+		this.pos = pos + ((positionType == PositionType.ONE_BASED) ? -1 : 0);
 	}
 
 	/**
@@ -57,7 +35,7 @@ public final class TranscriptPosition {
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public TranscriptPosition shifted(int delta) {
-		return new TranscriptPosition(transcript, pos + delta, positionType);
+		return new TranscriptPosition(transcript, pos + delta, PositionType.ZERO_BASED);
 	}
 
 	/*
@@ -67,8 +45,7 @@ public final class TranscriptPosition {
 	 */
 	@Override
 	public String toString() {
-		int pos = this.pos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return StringUtil.concatenate(transcript.accession, ":n.", pos);
+		return StringUtil.concatenate(transcript.accession, ":n.", pos + 1);
 	}
 
 	/*
@@ -78,12 +55,9 @@ public final class TranscriptPosition {
 	 */
 	@Override
 	public int hashCode() {
-		if (positionType != PositionType.ZERO_BASED)
-			return withPositionType(PositionType.ZERO_BASED).hashCode();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + pos;
-		result = prime * result + ((positionType == null) ? 0 : positionType.hashCode());
 		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
 		return result;
 	}
@@ -102,12 +76,7 @@ public final class TranscriptPosition {
 		if (getClass() != obj.getClass())
 			return false;
 		TranscriptPosition other = (TranscriptPosition) obj;
-		other = other.withPositionType(PositionType.ZERO_BASED);
-		if (positionType != PositionType.ZERO_BASED)
-			return withPositionType(PositionType.ZERO_BASED).equals(other);
 		if (pos != other.pos)
-			return false;
-		if (positionType != other.positionType)
 			return false;
 		if (transcript == null) {
 			if (other.transcript != null)

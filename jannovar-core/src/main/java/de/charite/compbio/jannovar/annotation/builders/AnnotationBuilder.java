@@ -249,18 +249,18 @@ abstract class AnnotationBuilder {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), locAnno, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), null, null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), null, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), locAnno, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), null, null, null);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), locAnno, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), null, null, null);
 		}
 	}
 
@@ -268,7 +268,7 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantType.INTERGENIC), locAnno, null, null);
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.INTERGENIC), null, null, null);
 	}
 
 	/**
@@ -293,15 +293,19 @@ abstract class AnnotationBuilder {
 	 * @return AnnotationLocation with location annotation
 	 */
 	private AnnotationLocation buildLocAnno(TranscriptModel transcript, GenomeChange change) {
+		// System.err.println("ACCESSION\t" + transcript.accession);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 
 		AnnotationLocationBuilder locBuilder = new AnnotationLocationBuilder();
 		locBuilder.setTranscript(transcript);
+		// System.err.println("CHANGE\t" + change.getGenomeInterval());
+		// System.err.println("TX REGION\t" + transcript.txRegion);
+		// System.err.println("PROJECTED CHANGE\t" + projector.projectGenomeToTXInterval(change.getGenomeInterval()));
 		locBuilder.setTxLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
 
 		if (change.getGenomeInterval().length() == 0) {
-			// no base is change => insertion
+			// no base is changed => insertion
 			GenomePosition changePos = change.getGenomeInterval().getGenomeBeginPos();
 
 			// Handle the cases for which no exon and no intron number is available.

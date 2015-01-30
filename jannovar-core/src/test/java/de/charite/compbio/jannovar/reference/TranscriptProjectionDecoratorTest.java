@@ -8,15 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.ProjectionException;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
-import de.charite.compbio.jannovar.reference.TranscriptPosition;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Tests for the coordinate conversion decorator.
@@ -63,13 +54,16 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
 		// test with first base of transcript
-		Assert.assertEquals("1:6640063", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 1))
+		Assert.assertEquals("1:6640063",
+				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 1, PositionType.ONE_BASED))
 				.toString());
 		// test with last base of transcript
-		Assert.assertEquals("1:6649340", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2338))
+		Assert.assertEquals("1:6649340",
+				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2338, PositionType.ONE_BASED))
 				.toString());
 		// test with first base of first exon
-		Assert.assertEquals("1:6640602", projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 136))
+		Assert.assertEquals("1:6640602",
+				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 136, PositionType.ONE_BASED))
 				.toString());
 	}
 
@@ -78,26 +72,29 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
 		// test with first base of transcript
-		Assert.assertEquals("1:23696357", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 1))
+		Assert.assertEquals("1:23696357",
+				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 1, PositionType.ONE_BASED))
 				.toString());
 		// test with last base of transcript
-		Assert.assertEquals("1:23685941", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 4493))
+		Assert.assertEquals("1:23685941",
+				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 4493, PositionType.ONE_BASED))
 				.toString());
 		// test with first base of first exon
-		Assert.assertEquals("1:23694557", projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 501))
+		Assert.assertEquals("1:23694557",
+				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 501, PositionType.ONE_BASED))
 				.toString());
 	}
 
 	@Test(expected = ProjectionException.class)
 	public void testProjectionTranscriptToGenomeThrowsLeft() throws ProjectionException {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
-		projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 0));
+		projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 0, PositionType.ONE_BASED));
 	}
 
 	@Test(expected = ProjectionException.class)
 	public void testProjectionTranscriptToGenomeThrowsRight() throws ProjectionException {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
-		projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2350));
+		projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2350, PositionType.ONE_BASED));
 	}
 
 	@Test
@@ -194,17 +191,17 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
 		// first base of first exon
-		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoForward, 1)));
+		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoForward, 1, PositionType.ONE_BASED)));
 		// last base of first exon
-		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoForward, 134)));
+		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoForward, 134, PositionType.ONE_BASED)));
 		// just after last base of first exon
 		Assert.assertEquals(INVALID_EXON_ID,
 				projector.locateExon(new GenomePosition(refDict, '+', 1, 6640197, PositionType.ONE_BASED)));
 
 		// first base of last exon
-		Assert.assertEquals(10, projector.locateExon(new TranscriptPosition(infoForward, 1984)));
+		Assert.assertEquals(10, projector.locateExon(new TranscriptPosition(infoForward, 1984, PositionType.ONE_BASED)));
 		// last base of last exon
-		Assert.assertEquals(10, projector.locateExon(new TranscriptPosition(infoForward, 2338)));
+		Assert.assertEquals(10, projector.locateExon(new TranscriptPosition(infoForward, 2338, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -212,14 +209,14 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
 		// first base of first exon
-		Assert.assertEquals(3, projector.locateExon(new TranscriptPosition(infoReverse, 723)));
+		Assert.assertEquals(3, projector.locateExon(new TranscriptPosition(infoReverse, 723, PositionType.ONE_BASED)));
 		// last base of first exon
-		Assert.assertEquals(3, projector.locateExon(new TranscriptPosition(infoReverse, 4493)));
+		Assert.assertEquals(3, projector.locateExon(new TranscriptPosition(infoReverse, 4493, PositionType.ONE_BASED)));
 
 		// first base of last exon
-		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoReverse, 1)));
+		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoReverse, 1, PositionType.ONE_BASED)));
 		// last base of last exon
-		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoReverse, 499)));
+		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoReverse, 499, PositionType.ONE_BASED)));
 	}
 
 	@Test

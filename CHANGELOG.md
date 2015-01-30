@@ -2,6 +2,7 @@
 
 *jannovar-cli*
 
+* Adding implementation of variant annotation standard 1.0.
 * Adding unit tests for jannovar-cli.
 * Fixing problem with empty `INFO` fields in output.
 * Adding back `--output-dir` to jannovar-cli.
@@ -11,6 +12,8 @@
 
 *jannovar-core*
 
+* Updating `Annotation` for the variant annotation standard.
+* `TranscriptPosition` and `TranscriptInterval` use zero-based positions now.
 * Reordering values of `VariantType`.
 * Somewhat renaming `VariantType` method names. 
 * Removing the `VariantType#size` function in favor of a `static public`

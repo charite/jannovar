@@ -5,11 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptInterval;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 public class TranscriptIntervalTest {
 
@@ -39,12 +34,11 @@ public class TranscriptIntervalTest {
 
 	@Test
 	public void testConstructorDefaultPositionType() {
-		TranscriptInterval interval = new TranscriptInterval(this.infoForward, 23, 45);
+		TranscriptInterval interval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ZERO_BASED);
 		Assert.assertEquals(interval.transcript, this.infoForward);
 		Assert.assertEquals(interval.beginPos, 23);
 		Assert.assertEquals(interval.endPos, 45);
-		Assert.assertEquals(interval.positionType, PositionType.ONE_BASED);
-		Assert.assertEquals(interval.length(), 23);
+		Assert.assertEquals(interval.length(), 22);
 	}
 
 	@Test
@@ -53,31 +47,7 @@ public class TranscriptIntervalTest {
 		Assert.assertEquals(interval.transcript, this.infoForward);
 		Assert.assertEquals(interval.beginPos, 23);
 		Assert.assertEquals(interval.endPos, 45);
-		Assert.assertEquals(interval.positionType, PositionType.ZERO_BASED);
 		Assert.assertEquals(interval.length(), 22);
 	}
 
-	@Test
-	public void testConstructorOneToZeroPositionType() {
-		TranscriptInterval oneInterval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ONE_BASED);
-		TranscriptInterval zeroInterval = new TranscriptInterval(oneInterval, PositionType.ZERO_BASED);
-
-		Assert.assertEquals(zeroInterval.transcript, this.infoForward);
-		Assert.assertEquals(zeroInterval.beginPos, 22);
-		Assert.assertEquals(zeroInterval.endPos, 45);
-		Assert.assertEquals(zeroInterval.positionType, PositionType.ZERO_BASED);
-		Assert.assertEquals(zeroInterval.length(), 23);
-	}
-
-	@Test
-	public void testConstructorZeroToOnePositionType() {
-		TranscriptInterval zeroInterval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ZERO_BASED);
-		TranscriptInterval oneInterval = new TranscriptInterval(zeroInterval, PositionType.ONE_BASED);
-
-		Assert.assertEquals(oneInterval.transcript, this.infoForward);
-		Assert.assertEquals(oneInterval.beginPos, 24);
-		Assert.assertEquals(oneInterval.endPos, 45);
-		Assert.assertEquals(oneInterval.positionType, PositionType.ONE_BASED);
-		Assert.assertEquals(oneInterval.length(), 22);
-	}
 }

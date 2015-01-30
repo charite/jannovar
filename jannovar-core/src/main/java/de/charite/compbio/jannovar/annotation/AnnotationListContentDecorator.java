@@ -58,11 +58,11 @@ public class AnnotationListContentDecorator {
 	}
 
 	/**
-	 * @return the NCBI entrez gene ID of the variant with highest priority, or <code>-1</code> if no such variant
+	 * @return the gene ID of the variant with highest priority, or <code>null</code> if no such variant
 	 */
-	public int getGeneID() {
+	public String getGeneID() {
 		if (annotations.entries.size() == 0)
-			return -1;
+			return null;
 		else
 			return annotations.entries.get(0).transcript.geneID;
 	}

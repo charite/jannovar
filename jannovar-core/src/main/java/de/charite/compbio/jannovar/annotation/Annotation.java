@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.annotation;
 
 import java.util.Collection;
 
+import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -139,22 +140,24 @@ public final class Annotation implements Comparable<Annotation> {
 		// Annotation_impact
 		builder.append('|').append(getPutativeImpact());
 		// Gene_Name
-		builder.append('|').append(transcript.accession);
+		builder.append('|').append(transcript.geneSymbol);
 		// Gene_ID
 		builder.append('|'); // TODO(holtgrem): gene ID
 		// Feature_Type
-		builder.append('|'); // TODO(holtgrem): feature type
 		// Feature_ID
-		builder.append('|'); // TODO(holtgrem): feature ID
+		if (transcript != null)
+			builder.append("|transcript|").append(transcript.accession);
+		else
+			builder.append("||");
 
 		// Transcript_BioType
-		if (annoLoc.transcript != null)
+		if (annoLoc != null && annoLoc.transcript != null)
 			builder.append('|').append(annoLoc.transcript.isCoding() ? "Coding" : "Noncoding");
 		else
 			builder.append('|');
 
 		// Rank / Total Rank
-		if (annoLoc.rankType != RankType.UNDEFINED)
+		if (annoLoc != null && annoLoc.rankType != RankType.UNDEFINED)
 			builder.append('|').append(annoLoc.rank).append("/").append(annoLoc.totalRank);
 		else
 			builder.append('|');
@@ -166,32 +169,41 @@ public final class Annotation implements Comparable<Annotation> {
 			builder.append('|').append(aaHGVSDescription);
 		else
 			builder.append('|');
-		if (annoLoc.txLocation != null)
+		if (annoLoc != null && annoLoc.txLocation != null)
 			builder.append('|').append(annoLoc.txLocation.beginPos + 1);
 		else
 			builder.append('|');
 
 		// cDNS.pos / cDNA.length
-		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		final TranscriptPosition txPos;
-		if (annoLoc.txLocation.length() == 0)
-			txPos = annoLoc.txLocation.getBeginPos().shifted(-1);
-		else
-			txPos = annoLoc.txLocation.getBeginPos();
-		int cdsPos = -1;
-		try {
-			cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).pos;
-		} catch (ProjectionException e) {
-			throw new Error("Bug: problem with projection!");
-		}
+		if (annoLoc != null) {
+			final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+			final TranscriptPosition txPos;
+			if (annoLoc != null && annoLoc.txLocation.length() == 0)
+				txPos = annoLoc.txLocation.getBeginPos().shifted(-1); // change length == 0, insertion
+			else
+				txPos = annoLoc.txLocation.getBeginPos(); // all other variants
+			// System.err.println("TX REGION\t" + transcript.txRegion + "\tLEN=" + transcript.transcriptLength());
+			// System.err.println("CHANGE TX REGION\t" + annoLoc.txLocation);
+			// System.err.println("CHANGE TX POS\t" + txPos);
+			int cdsPos = -1;
+			try {
+				cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).pos;
+			} catch (ProjectionException e) {
+				// e.printStackTrace();
+				throw new Error("Bug: problem with projection!: " + e.getMessage());
+			}
 
-		// CDS.pos / CDS.length
-		// AA.pos / AA.length
-		if (annoLoc.txLocation != null && transcript.isCoding()) {
-			// CDS position / length
-			builder.append('|').append(cdsPos + 1).append(" / ").append(transcript.cdsTranscriptLength());
-			// AA position / length (excluding stop codon)
-			builder.append('|').append(cdsPos / 3 + 1).append(" / ").append(transcript.cdsTranscriptLength() / 3 - 1);
+			// CDS.pos / CDS.length
+			// AA.pos / AA.length
+			if (annoLoc != null && annoLoc.txLocation != null && transcript.isCoding()) {
+				// CDS position / length
+				builder.append('|').append(cdsPos + 1).append('/').append(transcript.cdsTranscriptLength());
+				// AA position / length (excluding stop codon)
+				builder.append('|').append(cdsPos / 3 + 1).append('/')
+				.append(transcript.cdsTranscriptLength() / 3 - 1);
+			} else {
+				builder.append("||");
+			}
 		} else {
 			builder.append("||");
 		}
@@ -201,16 +213,24 @@ public final class Annotation implements Comparable<Annotation> {
 				&& (effects.contains(VariantType.INTERGENIC) || effects.contains(VariantType.UPSTREAM) || effects
 						.contains(VariantType.DOWNSTREAM))) {
 			if (change.getGenomeInterval().isLeftOf(transcript.txRegion.getGenomeBeginPos()))
-				builder.append(transcript.txRegion.getGenomeBeginPos().differenceTo(change.getGenomeInterval().getGenomeEndPos()));
+				builder.append(transcript.txRegion.getGenomeBeginPos().differenceTo(
+						change.getGenomeInterval().getGenomeEndPos()));
 			else
-				builder.append(transcript.txRegion.getGenomeEndPos().differenceTo(change.getGenomeInterval().getGenomeBeginPos()));
+				builder.append(transcript.txRegion.getGenomeEndPos().differenceTo(
+						change.getGenomeInterval().getGenomeBeginPos()));
 		} else {
 			builder.append('|');
 		}
 
 		// ERRORS / WARNING / INFOS
 		builder.append('|').append(Joiner.on("&").join(messages));
-		return builder.toString();
+
+		// Build value of the ANN string and escape invalid characters. Commas, semicolons and whitespaces are replace by underscores. We then escape stuff occuring in HGVS strings by URL encoding.
+		String result = CharMatcher.anyOf(",;").or(CharMatcher.WHITESPACE).replaceFrom(builder.toString(), "_");
+		result = CharMatcher.is('=').replaceFrom(result, "%3D");
+		result = CharMatcher.is('(').replaceFrom(result, "%28");
+		result = CharMatcher.is(')').replaceFrom(result, "%29");
+		return result;
 	}
 
 	/**
@@ -222,7 +242,8 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @return full annotation string
 	 */
 	public String getSymbolAndAnnotation() {
-		return Joiner.on(":").skipNulls().join(transcript.geneSymbol, ntHGVSDescription, aaHGVSDescription);
+		return Joiner.on(":").skipNulls()
+				.join(transcript.geneSymbol, transcript.accession, ntHGVSDescription, aaHGVSDescription);
 	}
 
 	/**

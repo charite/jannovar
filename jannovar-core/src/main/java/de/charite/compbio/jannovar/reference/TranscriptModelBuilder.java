@@ -45,7 +45,7 @@ public class TranscriptModelBuilder {
 	private String sequence = null;
 
 	/** {@link TranscriptInfo#geneID} of next {@link TranscriptInfo} to build. */
-	private int geneID = 0;
+	private String geneID = null;
 
 	/**
 	 * {@link TranscriptInfo#transcriptSupportLevel} of next {@link TranscriptInfo} to build.
@@ -65,7 +65,7 @@ public class TranscriptModelBuilder {
 		cdsRegion = null;
 		exonRegions.clear();
 		sequence = null;
-		geneID = 0;
+		geneID = null;
 		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 	}
 
@@ -206,7 +206,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return the geneID
 	 */
-	public int getGeneID() {
+	public String getGeneID() {
 		return geneID;
 	}
 
@@ -214,7 +214,7 @@ public class TranscriptModelBuilder {
 	 * @param geneID
 	 *            the geneID to set
 	 */
-	public void setGeneID(int geneID) {
+	public void setGeneID(String geneID) {
 		this.geneID = geneID;
 	}
 

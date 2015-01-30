@@ -108,10 +108,9 @@ public final class TranscriptProjectionDecorator {
 		pos = pos.withStrand(transcript.getStrand());
 
 		// first convert from genome to transcript position
-		TranscriptPosition txPos = genomeToTranscriptPos(pos).withPositionType(PositionType.ZERO_BASED);
+		TranscriptPosition txPos = genomeToTranscriptPos(pos);
 		// now, compute offset of CDS start in transcript and shift txPos by this to obtain CDS position
-		TranscriptPosition cdsStartPos = genomeToTranscriptPos(transcript.cdsRegion.getGenomeBeginPos())
-				.withPositionType(PositionType.ZERO_BASED);
+		TranscriptPosition cdsStartPos = genomeToTranscriptPos(transcript.cdsRegion.getGenomeBeginPos());
 		return new CDSPosition(txPos.transcript, txPos.pos - cdsStartPos.pos, PositionType.ZERO_BASED);
 	}
 
@@ -126,7 +125,7 @@ public final class TranscriptProjectionDecorator {
 	 *             on problems with the coordinate transformation (outside of the transcript)
 	 */
 	public GenomePosition transcriptToGenomePos(TranscriptPosition pos) throws ProjectionException {
-		final int targetPos = pos.withPositionType(PositionType.ZERO_BASED).pos; // 0-based target pos
+		final int targetPos = pos.pos; // 0-based target pos
 		if (targetPos < 0)
 			throw new ProjectionException("Invalid transcript position " + targetPos);
 
@@ -227,8 +226,6 @@ public final class TranscriptProjectionDecorator {
 	 *             or right of transcript end)
 	 */
 	public int locateExon(TranscriptPosition pos) throws ProjectionException {
-		// ensure that we have a zero-based position
-		pos = pos.withPositionType(PositionType.ZERO_BASED);
 		// handle the case of transcript position being negative
 		if (pos.pos < 0)
 			throw new ProjectionException("Problem with transcript position " + pos + " (< 0)");
@@ -298,12 +295,12 @@ public final class TranscriptProjectionDecorator {
 
 		try {
 			// Get transcript begin position.
-			if (transcript.cdsRegion.isRightOf(pos)) {
+			if (transcript.txRegion.isRightOf(pos)) {
 				// Deletion begins left of CDS, project to begin of CDS.
-				return new TranscriptPosition(transcript, 0);
-			} else if (transcript.cdsRegion.isLeftOf(pos)) {
+				return new TranscriptPosition(transcript, 0, PositionType.ZERO_BASED);
+			} else if (transcript.txRegion.isLeftOf(pos)) {
 				// Deletion begins right of CDS, project to end of CDS.
-				return new TranscriptPosition(transcript, transcript.transcriptLength());
+				return new TranscriptPosition(transcript, transcript.transcriptLength(), PositionType.ZERO_BASED);
 			} else if (soDecorator.liesInExon(pos)) {
 				return projector.genomeToTranscriptPos(pos);
 			} else { // lies in intron, project to begin position of next exon
@@ -327,8 +324,9 @@ public final class TranscriptProjectionDecorator {
 	 */
 	public TranscriptInterval projectGenomeToTXInterval(GenomeInterval interval) {
 		final TranscriptPosition txBeginPos = projectGenomeToTXPosition(interval.getGenomeBeginPos());
-		final TranscriptPosition txEndPos = projectGenomeToTXPosition(interval.getGenomeEndPos());
-		return new TranscriptInterval(transcript, txBeginPos.pos, txEndPos.pos);
+		final TranscriptPosition txEndPos = projectGenomeToTXPosition(interval.getGenomeEndPos().shifted(-1))
+				.shifted(1);
+		return new TranscriptInterval(transcript, txBeginPos.pos, txEndPos.pos, PositionType.ZERO_BASED);
 	}
 
 }

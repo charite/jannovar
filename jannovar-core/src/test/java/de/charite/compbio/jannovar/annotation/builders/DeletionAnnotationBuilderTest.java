@@ -67,7 +67,7 @@ public class DeletionAnnotationBuilderTest {
 				"A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UPSTREAM), annotation1.effects);
@@ -79,7 +79,7 @@ public class DeletionAnnotationBuilderTest {
 				"A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.DOWNSTREAM), annotation1.effects);
@@ -92,7 +92,7 @@ public class DeletionAnnotationBuilderTest {
 				"A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation1.effects);
@@ -101,7 +101,7 @@ public class DeletionAnnotationBuilderTest {
 				"A", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
+		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation2.effects);
