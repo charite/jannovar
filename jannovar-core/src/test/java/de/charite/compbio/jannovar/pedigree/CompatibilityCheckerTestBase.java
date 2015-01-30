@@ -14,6 +14,8 @@ public class CompatibilityCheckerTestBase {
 	static protected final String geneName = "<fakeName>";
 	static protected final GenomeInterval genomeRegion = new GenomeInterval(refDict, '+', refDict.contigID.get("1")
 			.intValue(), 10, 20, PositionType.ONE_BASED);
+	static protected final GenomeInterval genomeRegionX = new GenomeInterval(refDict, '+', refDict.contigID.get("X")
+			.intValue(), 10, 20, PositionType.ONE_BASED);
 
 	protected final Genotype HET = Genotype.HETEROZYGOUS;
 	protected final Genotype REF = Genotype.HOMOZYGOUS_REF;
@@ -69,6 +71,30 @@ public class CompatibilityCheckerTestBase {
 			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
 		GenotypeList lst = new GenotypeList(geneName, genomeRegion, names, ImmutableList.of(list1, list2));
 		return new CompatibilityCheckerAutosomalRecessive(pedigree, lst);
+	}
+	
+	protected CompatibilityCheckerXRecessive buildCheckerXR(Genotype gt) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegionX, names, ImmutableList.of(ImmutableList.of(gt)));
+		return new CompatibilityCheckerXRecessive(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerXRecessive buildCheckerXR(Genotype gt1, Genotype gt2)
+			throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegionX, names, ImmutableList.of(ImmutableList.of(gt1),
+				ImmutableList.of(gt2)));
+		return new CompatibilityCheckerXRecessive(pedigree, lst);
+	}
+	
+	protected CompatibilityCheckerXDominant buildCheckerXD(Genotype gt) throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegionX, names, ImmutableList.of(ImmutableList.of(gt)));
+		return new CompatibilityCheckerXDominant(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerXDominant buildCheckerXD(Genotype gt1, Genotype gt2)
+			throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, genomeRegionX, names, ImmutableList.of(ImmutableList.of(gt1),
+				ImmutableList.of(gt2)));
+		return new CompatibilityCheckerXDominant(pedigree, lst);
 	}
 
 	protected ImmutableList<Genotype> lst(Genotype... gts) {
