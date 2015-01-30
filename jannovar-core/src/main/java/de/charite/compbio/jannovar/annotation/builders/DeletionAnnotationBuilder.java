@@ -66,12 +66,12 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	@Override
 	protected String ncHGVS() {
-		return StringUtil.concatenate(locAnno.toHGVSString(), ":", dnaAnno, "del");
+		return StringUtil.concatenate(dnaAnno, "del");
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantType.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
-				null);
+				"p.0?");
 	}
 
 	private Annotation buildStartLossAnnotation() {
