@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.annotation.builders;
 import java.util.ArrayList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
@@ -82,11 +83,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
-		String warningMsg = null;
-		if (transcript.sequence.charAt(txPos.pos) != change.ref.charAt(0))
-			warningMsg = StringUtil.concatenate("WARNING:_mRNA/genome_discrepancy:_",
-					transcript.sequence.charAt(txPos.pos), "/", change.ref.charAt(0), "_strand=",
-					transcript.getStrand());
+		messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.pos % 3;
@@ -137,10 +134,6 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			varTypes.add(VariantType.SPLICE_ACCEPTOR);
 		else if (so.overlapsWithSpliceRegion(changeInterval))
 			varTypes.add(VariantType.SPLICE_REGION);
-
-		// if (warningMsg != null)
-		// annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
-		// TODO(holtgrew): hand through warning!
 
 		// Build the resulting Annotation.
 		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);

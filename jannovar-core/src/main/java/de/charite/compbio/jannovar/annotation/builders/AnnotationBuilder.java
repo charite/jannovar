@@ -1,12 +1,15 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
 import java.util.ArrayList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
+import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -61,6 +64,8 @@ abstract class AnnotationBuilder {
 	protected final AnnotationLocation locAnno;
 	/** cDNA/ncDNA annotation string */
 	protected String dnaAnno;
+	/** warnings and messages occuring during annotation process */
+	protected SortedSet<AnnotationMessage> messages = new TreeSet<AnnotationMessage>();
 
 	/**
 	 * Initialize the helper object with the given <code>transcript</code> and <code>change</code>.
@@ -85,8 +90,11 @@ abstract class AnnotationBuilder {
 		// Shift the GenomeChange if lies within precisely one exon.
 		if (so.liesInExon(change.getGenomeInterval())) {
 			try {
+				// normalize amino acid change and add information about this into {@link messages}
 				this.change = GenomeChangeNormalizer.normalizeGenomeChange(transcript, change,
 						projector.genomeToTranscriptPos(change.pos));
+				if (!change.equals(this.change))
+					messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
 			} catch (ProjectionException e) {
 				throw new Error("Bug: change begin position must be on transcript.");
 			}
