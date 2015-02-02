@@ -61,6 +61,12 @@ public final class JannovarOptions {
 	/** path to output folder for the annotated VCF files (default is parallel to input file) */
 	public String outVCFFolder = null;
 
+	/** whether or not to write out the old Jannovar annotation VCF tags */
+	public boolean writeJannovarInfoFields = false;
+
+	/** whether or not to write out the VCF annotation standard fields */
+	public boolean writeVCFAnnotationStandardInfoFields = true;
+
 	// TODO(holtgrem): enable and use this!
 	/** path to output VCF file path (overrides generation of file name from input file name) */
 	public String outVCFFile = null;
@@ -102,6 +108,8 @@ public final class JannovarOptions {
 			out.println("chromosomalChanges: " + chromosomalChanges);
 			out.println("showAll: " + showAll);
 			out.println("jannovarFormat: " + jannovarFormat);
+			out.println("writeJannovarInfoFields: " + writeJannovarInfoFields);
+			out.println("writeVCFAnnotationStandardInfoFields: " + writeVCFAnnotationStandardInfoFields);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}

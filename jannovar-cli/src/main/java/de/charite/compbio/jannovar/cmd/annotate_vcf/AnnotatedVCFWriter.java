@@ -196,11 +196,14 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			}
 
 			// add the annotations to the INFO field (third arg allows overwriting)
-			if (effectText != null)
-				vc.getCommonInfo().putAttribute("EFFECT", effectText.toString(), true);
-			if (hgvsText.length() > 0)
-				vc.getCommonInfo().putAttribute("HGVS", hgvsText.toString(), true);
-			vc.getCommonInfo().putAttribute("ANN", annBuilder.toString(), true);
+			if (options.writeJannovarInfoFields) {
+				if (effectText != null)
+					vc.getCommonInfo().putAttribute("EFFECT", effectText.toString(), true);
+				if (hgvsText.length() > 0)
+					vc.getCommonInfo().putAttribute("HGVS", hgvsText.toString(), true);
+			}
+			if (options.writeVCFAnnotationStandardInfoFields)
+				vc.getCommonInfo().putAttribute("ANN", annBuilder.toString(), true);
 
 			// remove empty fields, yielding leading semicolons in INFO field
 			vc.getCommonInfo().removeAttribute("");
