@@ -28,7 +28,6 @@ public class CompatibilityCheckerXDominantSingletonFemaleTest extends Compatibil
 	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXD(REF).run());
 		Assert.assertFalse(buildCheckerXD(UKN).run());
-		//FIXME Het is always pathogenic for XD in female
 		Assert.assertFalse(buildCheckerXD(ALT).run());
 	}
 
