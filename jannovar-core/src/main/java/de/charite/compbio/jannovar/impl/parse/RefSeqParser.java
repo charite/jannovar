@@ -80,6 +80,7 @@ public class RefSeqParser implements TranscriptParser {
 			LOGGER.info("Building transcript models...");
 			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
 			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
+			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from RefSeq files: {}", e);
 			throw new TranscriptParseException(e.getMessage());

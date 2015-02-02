@@ -5,8 +5,9 @@ package de.charite.compbio.jannovar.impl.parse.gff;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor.Gene;
@@ -25,7 +26,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 public final class TranscriptInfoFactory {
 
 	/** {@link Logger} to use for logging */
-	private static final Logger LOGGER = Logger.getLogger(TranscriptInfoFactory.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptInfoFactory.class);
 
 	/** {@link GFFVersion} to assume for building transcripts from Feature objects */
 	private final GFFVersion gffVersion;
@@ -60,7 +61,6 @@ public final class TranscriptInfoFactory {
 	public ArrayList<TranscriptModelBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
 			throws InvalidAttributeException {
 		ArrayList<TranscriptModelBuilder> models = new ArrayList<TranscriptModelBuilder>();
-		int curid;
 		for (FeatureProcessor.Gene gene : genes.values()) {
 			if (gene.id == null)
 				continue;
@@ -88,7 +88,7 @@ public final class TranscriptInfoFactory {
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsEndInExon = cdsEndInExon || (cdsEnd >= rna.getExonStarts()[i] && cdsEnd <= rna.getExonEnds()[i]);
 				if (!cdsStartInExon || !cdsEndInExon) {
-					LOGGER.log(Level.WARNING, "Transcript {} appears to be 3'/5' truncated. Ignoring.", rna.id);
+					LOGGER.info("Transcript {} appears to be 3'/5' truncated. Ignoring.", new Object[] { rna.id });
 					continue;
 				}
 				tib.setCdsRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getCdsStart(), rna.getCdsEnd(),
@@ -98,12 +98,7 @@ public final class TranscriptInfoFactory {
 					tib.addExonRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getExonStarts()[i], rna
 							.getExonEnds()[i], PositionType.ONE_BASED));
 
-				if (gffVersion.version == 3)
-					tib.setGeneID(Integer.parseInt(gene.id.substring(4)));
-				else if ((curid = RNA2GeneIDMapper.getGeneID(gene.id)) > 0)
-					tib.setGeneID(curid);
-				else
-					throw new InvalidAttributeException("Found no valid geneID mapping for accession: " + gene.id);
+				tib.setGeneID(gene.id);
 
 				models.add(tib);
 			}

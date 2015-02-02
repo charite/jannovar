@@ -1,6 +1,10 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.AnnotationLocation;
+import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -8,7 +12,7 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
-// TODO(holtgrem): Mae AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
+// TODO(holtgrem): Make AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
 
 /**
  * Class providing static functions for creating {@link Annotation} objects for SVs.
@@ -65,45 +69,48 @@ public final class StructuralVariantAnnotationBuilder {
 
 		// TODO(holtgrem): we should care about breakpoints within genes
 
+		final AnnotationLocation annoLoc = new AnnotationLocation(null, RankType.UNDEFINED,
+				AnnotationLocation.INVALID_RANK, AnnotationLocation.INVALID_RANK, null);
+
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
-						beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
+				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
+						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
 			} else {
-				return new Annotation(VariantType.SV_INVERSION, beginPos, StringUtil.concatenate(
-						VariantType.SV_INVERSION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), transcript);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.SV_INVERSION), annoLoc,
+						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
-						beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
-						alt.substring(alt.length() - 2, alt.length())), null);
+				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
+						StringUtil.concatenate("g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
+								alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(VariantType.SV_INSERTION, beginPos, StringUtil.concatenate(
-						VariantType.SV_INSERTION, ":g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
-						alt.substring(alt.length() - 2, alt.length())), transcript);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.SV_INSERTION), annoLoc,
+						StringUtil.concatenate("g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
+								alt.substring(alt.length() - 2, alt.length())), null);
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
-						beginPos + 1, "_", beginPos + ref.length(), "del"), null);
+				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
+						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
 			} else {
-				return new Annotation(VariantType.SV_DELETION, beginPos, StringUtil.concatenate(
-						VariantType.SV_DELETION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
+				return new Annotation(null, change, ImmutableList.of(VariantType.SV_DELETION), annoLoc,
+						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
 			}
 		} else { // SV substitution
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(VariantType.INTERGENIC, 0, StringUtil.concatenate(VariantType.INTERGENIC, ":g.",
-						beginPos + 1, "_", beginPos + ref.length(), "delins", alt.substring(0, 2), "..",
-						alt.substring(alt.length() - 2, alt.length())), null);
+				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
+						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
+								alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(VariantType.SV_SUBSTITUTION, beginPos, StringUtil.concatenate(
-						VariantType.SV_SUBSTITUTION, ":g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
-						alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), transcript);
+				return new Annotation(transcript, change, ImmutableList.of(VariantType.SV_SUBSTITUTION), annoLoc,
+						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
+								alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), null);
 			}
 		}
 	}

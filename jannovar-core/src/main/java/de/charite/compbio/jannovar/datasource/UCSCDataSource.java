@@ -14,8 +14,8 @@ import de.charite.compbio.jannovar.JannovarOptions;
 final class UCSCDataSource extends DataSource {
 
 	/** expected keys in data source configuration file */
-	private final ImmutableList<String> urlKeys = ImmutableList.of("knownGene", "knownGeneMrna", "kgXref",
-			"knownToLocusLink", "chromInfo", "chrToAccessions");
+	private final ImmutableList<String> urlKeys = ImmutableList.of("knownCanonical", "knownGene", "knownGeneMrna",
+			"kgXref", "knownToLocusLink", "chromInfo", "chrToAccessions");
 
 	UCSCDataSource(JannovarOptions options, Section iniSection) throws InvalidDataSourceException {
 		super(options, iniSection);

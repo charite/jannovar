@@ -23,6 +23,9 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
+import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
+
+// TODO(holtgrem): Interpret knownCanonical!
 
 /**
  * Parser for the UCCSC knownGene and related files.
@@ -107,16 +110,23 @@ public class UCSCParser implements TranscriptParser {
 	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Build paths to UCSC files.
-		String knownGenePath = PathUtil.join(basePath, getINIFileName("knownGene"));
-		String knownGeneMrnaPath = PathUtil.join(basePath, getINIFileName("knownGeneMrna"));
-		String kgXrefPath = PathUtil.join(basePath, getINIFileName("kgXref"));
-		String knownToLocusLinkPath = PathUtil.join(basePath, getINIFileName("knownToLocusLink"));
+		final String knownGenePath = PathUtil.join(basePath, getINIFileName("knownGene"));
+		final String knownGeneMrnaPath = PathUtil.join(basePath, getINIFileName("knownGeneMrna"));
+		final String kgXrefPath = PathUtil.join(basePath, getINIFileName("kgXref"));
+		final String knownToLocusLinkPath = PathUtil.join(basePath, getINIFileName("knownToLocusLink"));
+		String knownCanonicalPath = null;
+		if (getINIFileName("knownCanonical") != null && !"".equals(getINIFileName("knownCanonical")))
+			knownCanonicalPath = PathUtil.join(basePath, getINIFileName("knownCanonical"));
 
 		// Parse the UCSC files.
 		parseKnownGeneFile(knownGenePath);
 		parseKnownGeneMrna(knownGeneMrnaPath);
 		parseKnownGeneXref(kgXrefPath);
 		parseKnown2LocusLink(knownToLocusLinkPath);
+		if (knownCanonicalPath != null)
+			parseKnownCanonical(knownCanonicalPath);
+		else
+			TranscriptSupportLevelsSetterFromLengths.run(this.knownGeneMap.values());
 
 		// Build result list.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
@@ -329,12 +339,11 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	/**
-	 * Parses the ucsc KnownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
+	 * Parses the ucsc knownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
 	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
 	private void parseKnown2LocusLink(String locusPath) throws TranscriptParseException {
 		try {
-
 			BufferedReader br = getBufferedReaderFromFilePath(locusPath, locusPath.endsWith(".gz"));
 			String line;
 
@@ -357,7 +366,7 @@ public class UCSCParser implements TranscriptParser {
 					continue;
 				}
 				foundID++;
-				tbi.setGeneID(geneID);
+				tbi.setGeneID("ENTREZ" + geneID);
 			}
 			br.close();
 			LOGGER.info("knownToLocusLink contained ids for {} knownGenes (no ids available for {})", foundID,
@@ -371,7 +380,53 @@ public class UCSCParser implements TranscriptParser {
 					e.toString());
 			throw new TranscriptParseException(s);
 		}
+	}
 
+	/**
+	 * Parse the knownCanonical.txt file and set the transcript support level of {@link #tmb}.
+	 *
+	 * @param knownCanonicalPath
+	 *            path to the knownCanonical.txt file
+	 * @throws TranscriptParseException
+	 *             in case of problems
+	 */
+	private void parseKnownCanonical(String knownCanonicalPath) throws TranscriptParseException {
+		// assign LOW_PRIORITY to all transcripts
+		for (TranscriptModelBuilder tmb : knownGeneMap.values())
+			tmb.setTranscriptSupportLevel(TranscriptSupportLevels.LOW_PRIORITY);
+
+		// actually parse the file
+		try {
+			BufferedReader br = getBufferedReaderFromFilePath(knownCanonicalPath, knownCanonicalPath.endsWith(".gz"));
+			String line;
+
+			int foundID = 0;
+			int notFoundID = 0;
+
+			while ((line = br.readLine()) != null) {
+				String A[] = line.split("\t");
+				if (A.length != 6) {
+					String msg = String.format("Bad format for UCSC knownCanonicalPath.txt file: %s. "
+							+ "Got %d fields instead of the expected 6.", line, A.length);
+					throw new TranscriptParseException(msg);
+				}
+				final String primaryTranscriptID = A[5];
+				TranscriptModelBuilder tbi = this.knownGeneMap.get(primaryTranscriptID);
+				if (tbi != null)
+					tbi.setTranscriptSupportLevel(TranscriptSupportLevels.UCSC_CANONICAL);
+			}
+			br.close();
+			LOGGER.info("knownCanonicalPath contained ids for {} knownGenes (no ids available for {})", foundID,
+					notFoundID);
+		} catch (FileNotFoundException fnfe) {
+			String s = String.format("Exception while parsing UCSC knownCanonicalPath file at \"%s\"\n%s",
+					knownCanonicalPath, fnfe.toString());
+			throw new TranscriptParseException(s);
+		} catch (IOException e) {
+			String s = String.format("Exception while parsing UCSC knownCanonicalPath at \"%s\"\n%s",
+					knownCanonicalPath, e.toString());
+			throw new TranscriptParseException(s);
+		}
 	}
 
 	/**
@@ -380,7 +435,6 @@ public class UCSCParser implements TranscriptParser {
 	 * program. The sequences are then added to the corresponding {@link TranscriptInfoBuilder} objects.
 	 */
 	private void parseKnownGeneMrna(String mRNAPath) throws TranscriptParseException {
-
 		try {
 			BufferedReader br = getBufferedReaderFromFilePath(mRNAPath, mRNAPath.endsWith(".gz"));
 			String line;
@@ -464,9 +518,9 @@ public class UCSCParser implements TranscriptParser {
 							A.length);
 					throw new TranscriptParseException(err);
 				}
-				String id = A[0];
+				String transcriptID = A[0];
 				String geneSymbol = A[4];
-				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
+				TranscriptModelBuilder tbi = this.knownGeneMap.get(transcriptID);
 				if (tbi == null) {
 					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
 					// System.err.println("Error, could not find xref sequence for known gene \"" + id + "\"");

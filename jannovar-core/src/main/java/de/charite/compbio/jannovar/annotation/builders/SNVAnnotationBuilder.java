@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.annotation.builders;
 import java.util.ArrayList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
@@ -14,6 +15,8 @@ import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
 import de.charite.compbio.jannovar.reference.TranscriptSequenceDecorator;
+
+// TODO(holtgrew): Mutations near splice sites should be annotated as "p.?" as Mutalyzer does.
 
 /**
  * Builds {@link Annotation} objects for the SNV {@link GenomeChange}s in the given {@link TranscriptInfo}.
@@ -80,11 +83,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
-		String warningMsg = null;
-		if (transcript.sequence.charAt(txPos.pos) != change.ref.charAt(0))
-			warningMsg = StringUtil.concatenate("WARNING:_mRNA/genome_discrepancy:_",
-					transcript.sequence.charAt(txPos.pos), "/", change.ref.charAt(0), "_strand=",
-					transcript.getStrand());
+		messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.pos % 3;
@@ -137,20 +136,15 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			varTypes.add(VariantType.SPLICE_REGION);
 
 		// Build the resulting Annotation.
-		// Glue together the annotations and warning message in annotation if any, return Annotation.
-		String annotationStr = StringUtil.concatenate(ncHGVS(), ":", protAnno);
-		if (warningMsg != null)
-			annotationStr = StringUtil.concatenate(annotationStr, ":[", warningMsg, "]");
-
-		return new Annotation(varTypes, cdsPos.pos, annotationStr, transcript);
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
 	}
 
 	@Override
 	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, change.ref, ">", change.alt);
+			return StringUtil.concatenate(dnaAnno, change.ref, ">", change.alt);
 		else
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, hgvsSNVOverride);
+			return StringUtil.concatenate(dnaAnno, hgvsSNVOverride);
 	}
 
 	/**

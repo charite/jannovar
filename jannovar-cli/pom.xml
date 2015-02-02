@@ -51,6 +51,11 @@
 			<artifactId>jannovar-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>de.charite.compbio</groupId>
+			<artifactId>jannovar-htsjdk</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!--Logging framework -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

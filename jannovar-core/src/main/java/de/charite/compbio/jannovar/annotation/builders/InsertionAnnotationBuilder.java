@@ -17,7 +17,6 @@ import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Builds {@link Annotation} objects for the insertion {@link GenomeChange} in the given {@link TranscriptInfo}.
@@ -78,7 +77,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (!so.liesInExon(change.pos))
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -102,9 +101,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 						posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
 			}
 
-			return StringUtil.concatenate(locAnno, ":", dnaAnno);
+			return dnaAnno;
 		} else {
-			return StringUtil.concatenate(locAnno, ":", dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
 		}
 	}
 
@@ -193,11 +192,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					handleFrameShiftCase();
 			}
 
-			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-			return new Annotation(varTypes, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
 		}
 
 		private void handleFrameShiftCase() {

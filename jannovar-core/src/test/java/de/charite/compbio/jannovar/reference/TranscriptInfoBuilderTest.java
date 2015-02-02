@@ -5,11 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 public class TranscriptInfoBuilderTest {
 
@@ -27,7 +22,7 @@ public class TranscriptInfoBuilderTest {
 	public void testReverse() {
 		builder.setStrand('-');
 		builder.setAccession("accession");
-		builder.setGeneID(10);
+		builder.setGeneID("ENTREZ10");
 		builder.setGeneSymbol("gene-symbol");
 		builder.setTxRegion(new GenomeInterval(refDict, '+', 1, 100, 200, PositionType.ONE_BASED));
 		builder.setCdsRegion(new GenomeInterval(refDict, '+', 1, 110, 190, PositionType.ONE_BASED));
@@ -40,7 +35,7 @@ public class TranscriptInfoBuilderTest {
 		Assert.assertEquals('-', info.getStrand());
 		Assert.assertEquals(1, info.getChr());
 		Assert.assertEquals("accession", info.accession);
-		Assert.assertEquals(10, info.geneID);
+		Assert.assertEquals("ENTREZ10", info.geneID);
 		Assert.assertEquals("gene-symbol", info.geneSymbol);
 		Assert.assertEquals(builder.getTxRegion(), info.txRegion);
 		Assert.assertEquals(builder.getCdsRegion(), info.cdsRegion);

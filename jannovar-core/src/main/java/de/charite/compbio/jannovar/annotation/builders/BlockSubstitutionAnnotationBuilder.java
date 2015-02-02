@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.annotation.builders;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantType;
@@ -14,7 +16,6 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
@@ -70,23 +71,16 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 	@Override
 	protected String ncHGVS() {
-		return StringUtil.concatenate(locAnno, ":", dnaAnno, "delins", change.alt);
+		return StringUtil.concatenate(dnaAnno, "delins", change.alt);
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-		return new Annotation(VariantType.TRANSCRIPT_ABLATION, txBeginPos, ncHGVS(), transcript);
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
+				null);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-		int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-		return new Annotation(VariantType.START_LOSS, txBeginPos, StringUtil.concatenate(ncHGVS(), ":p.0?"), transcript);
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOSS), locAnno, ncHGVS(), "p.0?");
 	}
 
 	/**
@@ -167,11 +161,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			else
 				handleFrameShiftCase();
 
-			TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
-			GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
-			int txBeginPos = projector.projectGenomeToCDSPosition(pos).pos;
-
-			return new Annotation(varTypes, txBeginPos, StringUtil.concatenate(ncHGVS(), ":", protAnno), transcript);
+			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
 		}
 
 		private void handleNonFrameShiftCase() {

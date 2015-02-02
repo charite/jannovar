@@ -65,7 +65,9 @@ public abstract class FastaParser {
 
 		// We use ProgressBar to display our progress in GFF parsing.
 		File file = new File(filename);
-		ProgressBar bar = new ProgressBar(0, file.length());
+		ProgressBar bar = null;
+		if (printProgressBars)
+			bar = new ProgressBar(0, file.length());
 
 		try {
 			FileInputStream fip = new FileInputStream(file);
@@ -86,15 +88,16 @@ public abstract class FastaParser {
 				}
 
 				if (++lineNo == CHUNK_SIZE) {
-					bar.print(fip.getChannel().position());
+					if (bar != null)
+						bar.print(fip.getChannel().position());
 					lineNo = 0;
 				}
 			}
 
 			if (sequence != null)
 				addSequenceToModel();
-			bar.print(bar.max);
-
+			if (bar != null)
+				bar.print(bar.max);
 		} catch (IOException e) {
 			LOGGER.warn("failed to read the FASTA file: {}", e);
 		} finally {

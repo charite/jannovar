@@ -45,7 +45,14 @@ public class TranscriptModelBuilder {
 	private String sequence = null;
 
 	/** {@link TranscriptInfo#geneID} of next {@link TranscriptInfo} to build. */
-	private int geneID = 0;
+	private String geneID = null;
+
+	/**
+	 * {@link TranscriptInfo#transcriptSupportLevel} of next {@link TranscriptInfo} to build.
+	 *
+	 * @see TranscriptSupportLevels
+	 */
+	private int transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 
 	/**
 	 * Reset the builder into the state after initialization.
@@ -58,7 +65,8 @@ public class TranscriptModelBuilder {
 		cdsRegion = null;
 		exonRegions.clear();
 		sequence = null;
-		geneID = 0;
+		geneID = null;
+		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 	}
 
 	/**
@@ -79,7 +87,7 @@ public class TranscriptModelBuilder {
 
 		// Create new TranscriptInfo object.
 		return new TranscriptModel(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
-				builder.build(), sequence, geneID);
+				builder.build(), sequence, geneID, transcriptSupportLevel);
 	}
 
 	/**
@@ -198,7 +206,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return the geneID
 	 */
-	public int getGeneID() {
+	public String getGeneID() {
 		return geneID;
 	}
 
@@ -206,8 +214,25 @@ public class TranscriptModelBuilder {
 	 * @param geneID
 	 *            the geneID to set
 	 */
-	public void setGeneID(int geneID) {
+	public void setGeneID(String geneID) {
 		this.geneID = geneID;
+	}
+
+	/**
+	 * @return current transcript report level
+	 * @see TranscriptSupportLevels
+	 */
+	public int getTranscriptSupportLevel() {
+		return transcriptSupportLevel;
+	}
+
+	/**
+	 * @param transcriptSupportLevel
+	 *            set transcript resource level
+	 * @see TranscriptSupportLevels
+	 */
+	public void setTranscriptSupportLevel(int transcriptSupportLevel) {
+		this.transcriptSupportLevel = transcriptSupportLevel;
 	}
 
 }

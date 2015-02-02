@@ -135,8 +135,59 @@ public enum VariantType {
 	// PRIORITY LEVEL = 10
 	// ----------------------------------------------------------------------
 
+	// TODO(holtgrew): remove this.
 	/** variant assessed as probably erroneous (may indicate an error in the VCF file) */
 	ERROR;
+
+	// TODO(holtgrem): changing impact
+	/**
+	 * @return the {@link PutativeImpact} of this variant type
+	 */
+	public PutativeImpact getPutativeImpact() {
+		switch (this) {
+		case TRANSCRIPT_ABLATION:
+		case FS_DELETION:
+		case FS_INSERTION:
+		case NON_FS_SUBSTITUTION:
+		case FS_SUBSTITUTION:
+		case MISSENSE:
+		case NON_FS_DELETION:
+		case NON_FS_INSERTION:
+		case SPLICE_DONOR:
+		case SPLICE_ACCEPTOR:
+		case SPLICE_REGION:
+		case STOP_RETAINED:
+		case STOPGAIN:
+		case STOPLOSS:
+		case FS_DUPLICATION:
+		case NON_FS_DUPLICATION:
+		case START_LOSS:
+		case SV_DELETION:
+		case SV_INSERTION:
+		case SV_SUBSTITUTION:
+		case SV_INVERSION:
+			return PutativeImpact.HIGH;
+		case ncRNA_EXONIC:
+		case ncRNA_SPLICE_DONOR:
+		case ncRNA_SPLICE_ACCEPTOR:
+		case ncRNA_SPLICE_REGION:
+			return PutativeImpact.HIGH;
+		case SYNONYMOUS:
+		case INTRONIC:
+		case ncRNA_INTRONIC:
+			return PutativeImpact.LOW;
+		case UPSTREAM:
+		case DOWNSTREAM:
+			return PutativeImpact.MODIFIER;
+		case UTR3:
+		case UTR5:
+		case INTERGENIC:
+			return PutativeImpact.MODIFIER;
+		case ERROR:
+		default:
+			return PutativeImpact.MODIFIER;
+		}
+	}
 
 	/**
 	 * The preference level for annotations is

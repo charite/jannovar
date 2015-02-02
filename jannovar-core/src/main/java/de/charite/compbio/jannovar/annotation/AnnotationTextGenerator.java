@@ -27,17 +27,10 @@ final public class AnnotationTextGenerator {
 	 * @return the accession number
 	 */
 	public String getAccessionNumber() {
-		if (this.annotation.hgvsDescription == null)
-			return "."; // TODO(holtgrew): Can this happen?
-
-		int i = this.annotation.hgvsDescription.indexOf(":");
-		if (i > 0)
-			return this.annotation.hgvsDescription.substring(0, i);
-
-		if (this.annotation.transcript.geneSymbol == null)
+		if (this.annotation.transcript == null)
 			return ".";
 		else
-			return this.annotation.transcript.geneSymbol;
+			return this.annotation.transcript.accession;
 	}
 
 }

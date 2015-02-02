@@ -5,11 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
-import de.charite.compbio.jannovar.reference.TranscriptPosition;
 
 public class TranscriptPositionTest {
 
@@ -39,10 +34,9 @@ public class TranscriptPositionTest {
 
 	@Test
 	public void testConstructorDefaultPositionType() {
-		TranscriptPosition pos = new TranscriptPosition(this.infoForward, 10);
+		TranscriptPosition pos = new TranscriptPosition(this.infoForward, 10, PositionType.ONE_BASED);
 		Assert.assertEquals(pos.transcript, this.infoForward);
-		Assert.assertEquals(pos.pos, 10);
-		Assert.assertEquals(pos.positionType, PositionType.ONE_BASED);
+		Assert.assertEquals(pos.pos, 9);
 	}
 
 	@Test
@@ -50,27 +44,6 @@ public class TranscriptPositionTest {
 		TranscriptPosition pos = new TranscriptPosition(this.infoForward, 10, PositionType.ZERO_BASED);
 		Assert.assertEquals(pos.transcript, this.infoForward);
 		Assert.assertEquals(pos.pos, 10);
-		Assert.assertEquals(pos.positionType, PositionType.ZERO_BASED);
-	}
-
-	@Test
-	public void testConstructorOneToZeroPositionType() {
-		TranscriptPosition onePos = new TranscriptPosition(this.infoForward, 23, PositionType.ONE_BASED);
-		TranscriptPosition zeroPos = new TranscriptPosition(onePos, PositionType.ZERO_BASED);
-
-		Assert.assertEquals(zeroPos.transcript, this.infoForward);
-		Assert.assertEquals(zeroPos.pos, 22);
-		Assert.assertEquals(zeroPos.positionType, PositionType.ZERO_BASED);
-	}
-
-	@Test
-	public void testConstructorZeroToOnePositionType() {
-		TranscriptPosition onePos = new TranscriptPosition(this.infoForward, 23, PositionType.ZERO_BASED);
-		TranscriptPosition zeroPos = new TranscriptPosition(onePos, PositionType.ONE_BASED);
-
-		Assert.assertEquals(zeroPos.transcript, this.infoForward);
-		Assert.assertEquals(zeroPos.pos, 24);
-		Assert.assertEquals(zeroPos.positionType, PositionType.ONE_BASED);
 	}
 
 }
