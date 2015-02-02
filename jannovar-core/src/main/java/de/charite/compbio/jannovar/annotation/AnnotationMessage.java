@@ -51,6 +51,11 @@ public enum AnnotationMessage {
 	 * somatic vs. germline).
 	 */
 	INFO_NON_REFERENCE_ANNOTATION,
+	/**
+	 * (non-standard) There was a problem with the annotation problem, if you see this in the output of the program then
+	 * this indicates a bug.
+	 */
+	ERROR_PROBLEM_DURING_ANNOTATION,
 	/** AnnotationMessage not encoded in enum. */
 	OTHER_MESSAGE
 }

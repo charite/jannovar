@@ -25,6 +25,22 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 @Immutable
 public final class Annotation implements Comparable<Annotation> {
 
+	/**
+	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
+	 * section entitled EFFECT, which decribes the effects of variants (splicing,missense,stoploss, etc).
+	 */
+	public static final String INFO_EFFECT = ""
+			+ "variant effect (UTR5,UTR3,intronic,splicing,missense,stoploss,stopgain,"
+			+ "startloss,duplication,frameshift-insertion,frameshift-deletion,non-frameshift-deletion,"
+			+ "non-frameshift-insertion,synonymous)";
+
+	/**
+	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
+	 * section entitled HGVS, which provides the HGVS encoded variant corresponding to the chromosomal variant in the
+	 * original VCF file.
+	 */
+	public static final String INFO_HGVS = "HGVS Nomenclature";
+
 	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
 	public final static String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
 			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
@@ -63,6 +79,16 @@ public final class Annotation implements Comparable<Annotation> {
 
 	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
 	public final TranscriptModel transcript;
+
+	/**
+	 * Initialize object with messages only.
+	 *
+	 * @param messages
+	 *            {@link AnnotationMessage}s to use in this annotation
+	 */
+	public Annotation(Collection<AnnotationMessage> messages) {
+		this(null, null, null, null, null, null, messages);
+	}
 
 	/**
 	 * Initialize the {@link Annotation} with the given values.

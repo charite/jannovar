@@ -64,7 +64,9 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		super.initializeParser();
 
 		options.addOption(new Option("J", "jannovar", false, "write result in Jannovar output"));
-		options.addOption(new Option("a", "showall", false, "report annotations for all affected transcripts"));
+		options.addOption(new Option("a", "showall", false,
+				"report annotations for all affected transcripts (by default only one "
+						+ "with the highest impact is shown for each alternative allele)"));
 		options.addOption(new Option("o", "output-dir", true,
 				"output directory (default is to write parallel to input file)"));
 

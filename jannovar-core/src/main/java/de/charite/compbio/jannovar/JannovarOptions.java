@@ -55,7 +55,7 @@ public final class JannovarOptions {
 	/** whether to write the result in the Jannovar format */
 	public boolean jannovarFormat = false;
 
-	/** whether to report the annotations for all affected transcripts */
+	/** whether to report the annotations for all affected transcripts for each alternative allele */
 	public boolean showAll = false;
 
 	/** path to output folder for the annotated VCF files (default is parallel to input file) */

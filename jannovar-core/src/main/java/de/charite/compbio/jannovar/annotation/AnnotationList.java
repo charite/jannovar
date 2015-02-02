@@ -18,6 +18,9 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class AnnotationList {
 
+	/** empty annotation list */
+	public static final AnnotationList EMPTY = new AnnotationList(ImmutableList.<Annotation> of());
+
 	/** the list of the annotations */
 	public final ImmutableList<Annotation> entries;
 
