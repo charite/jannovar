@@ -24,14 +24,14 @@ After extracting the ZIP file, you can call Jannovar as follows.
 Download the UCSC transcripts for hg19:
 
 ```
-# java -jar jannovar-cli-0.11.jar download hg19/ucsc
+# java -jar jannovar-cli-0.13.jar download hg19/ucsc
 [...]
 ```
 
 Annotate the example file `small.vcf`:
 
 ```
-# java -jar jannovar-cli-0.11.jar annotate data/hg19_ucsc.ser examples/small.vcf
+# java -jar jannovar-cli-0.13.jar annotate data/hg19_ucsc.ser examples/small.vcf
 [...]
 ```
 
