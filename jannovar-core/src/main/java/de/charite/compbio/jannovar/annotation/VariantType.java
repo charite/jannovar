@@ -12,132 +12,146 @@ package de.charite.compbio.jannovar.annotation;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-// TODO(mjaeger): the outputnames for structural variants...
 public enum VariantType {
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 1
-	// ----------------------------------------------------------------------
-
-	/** whole exon loss, SO:"A feature ablation whereby the deleted region includes a transcript feature */
-	TRANSCRIPT_ABLATION,
-	/** variant is a structural deletion variant &gt;=1000bp */
-	SV_DELETION,
-	/** variant is a structural insertion variant &gt;=1000bp */
-	SV_INSERTION,
-	/** variant is a structural substitution variant &gt;=1000bp */
-	SV_SUBSTITUTION,
-	/** variant is a structural inversion variant &gt;=1000bp */
-	SV_INVERSION,
-
-	/** variant located changing the 2 base region at the 3' end of an intron */
-	SPLICE_DONOR,
-	/** variant located changing the 2 base region at the 5' end of an intron */
-	SPLICE_ACCEPTOR,
-	/** variant that induces a new stop codon (i.e., nonsense) */
-	STOPGAIN,
-	/** nucleotide duplication that results in a frameshift */
-	FS_DUPLICATION,
-	/** insertion resulting in a frameshift */
-	FS_INSERTION,
-	/** deletion resulting in a frameshift */
-	FS_DELETION,
-	/** nucleotide substitution that results in a frameshift */
-	FS_SUBSTITUTION,
-	/** variant that alters and removes a wildtype stop codon */
-	STOPLOSS,
-	/** variation leads to the loss of the start codon */
-	START_LOSS,
-	/** nucleotide duplication that does not result in a frameshift */
-	NON_FS_DUPLICATION,
-	/** insertion that does not result in a frameshift */
-	NON_FS_INSERTION,
-	/** deletion that does not result in a frameshift */
-	NON_FS_DELETION,
-	/** nucleotide substitution that does not result in a frameshift */
-	NON_FS_SUBSTITUTION,
 	/**
-	 * Variant that leads to the substitution of one amino acid (note this was earlier "NONYSYNONYMOUS" but the term
-	 * name was changed to conform with the terminology of the <a href="http://www.sequenceontology.org/">Sequence
-	 * Ontology</a>).
+         * <code>(SO:1000182)</code> A kind of chromosome variation where the chromosome complement is not an exact multiple
+         * of the haploid number (is a chromosome_variation).
 	 */
-	MISSENSE,
-	/** variant either located in 1-3 bases of an exon or 3-8 bases of an intron */
-	SPLICE_REGION,
-	/** A sequence variant where at least one base in the terminator codon is changed, but the terminator remains */
-	STOP_RETAINED,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 2
-	// ----------------------------------------------------------------------
-
-	/** variant located in an exon of a noncoding RNA gene */
-	ncRNA_EXONIC,
-	/** variant located in a splice donor region of a non-coding gene */
-	ncRNA_SPLICE_DONOR,
-	/** variant located in a splice donor region of a non-coding gene */
-	ncRNA_SPLICE_ACCEPTOR,
-	/** variant located in a splice donor region of a non-coding gene */
-	ncRNA_SPLICE_REGION,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 3
-	// ----------------------------------------------------------------------
-
-	/** variant is located in the 3' untranslated region */
-	UTR3,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 4
-	// ----------------------------------------------------------------------
-
-	/** variant is located in the 5' untranslated region */
-	UTR5,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 5
-	// ----------------------------------------------------------------------
-
-	/** nucleotide substitution that does not alter the encoded amino acid of the affected codon */
-	SYNONYMOUS,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 6
-	// ----------------------------------------------------------------------
-
-	/** variant located in an intron */
-	INTRONIC,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 7
-	// ----------------------------------------------------------------------
-
-	/** variant located in an intron of a noncoding RNA gene */
-	ncRNA_INTRONIC,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 8
-	// ----------------------------------------------------------------------
-
-	/** variant is downstream of a gene */
-	DOWNSTREAM,
-	/** variant is upstream of a gene */
-	UPSTREAM,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 9
-	// ----------------------------------------------------------------------
-
-	/** variant located between two genes (far enough away not to qualify as upstream/downstream) */
-	INTERGENIC,
-
-	// ----------------------------------------------------------------------
-	// PRIORITY LEVEL = 10
-	// ----------------------------------------------------------------------
-
-	// TODO(holtgrew): remove this.
-	/** variant assessed as probably erroneous (may indicate an error in the VCF file) */
-	ERROR;
+        CHROMOSOME_NUMBER_VARIATION,
+        /**
+         * <code>(SO:0001572)</code> A sequence variant whereby an exon is lost from the transcript (is a splicing_variant,
+         * transcript_variant). EXON_LOSS_VARIANT, /** <code>(SO:0001589)</code> A sequence variant which causes a
+         * disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a
+         * multiple of three (is a protein_altering_variant).
+         */
+        FRAMESHIFT_VARIANT,
+        /**
+         * <code>(SO:0001587)</code> A sequence variant whereby at least one base of a codon is changed, resulting in a
+         * premature stop codon, leading to a shortened transcript (is a: nonsynonymous_variant, feature_truncation).
+         * STOP_GAINED, /** <code>SO:0001578</code> A sequence variant where at least one base of the terminator codon
+         * (stop) is changed, resulting in an elongated transcript (is a: nonsynonymous variant, terminator_codon_variant,
+         * feature_elongation) STOP_LOST, /** <code>SO:0002012</code> A codon variant that changes at least one base of the
+         * canonical start codon (is a: initiator_codon_variant).
+         */
+        START_LOST,
+        /**
+         * <code>SO:0001574</code> A splice variant that changes the 2 base region at the 3' end of an intron (is a:
+         * {@link #SPLICE_SITE_VARIANT})
+         */
+        SPLICE_ACCEPTOR_VARIANT,
+        /**
+         * <code>SO:0001575</code> A splice variant that changes the 2 base pair region at the 5' end of an intron (is a:
+         * {@link #SPLICE_SITE_VARIANT}).
+         */
+        SPLICE_DONOR_VARIANT,
+        /**
+         * <code>SO:0002008</code> A sequence variant whereby at least one base of a codon encoding a rare amino acid is
+         * changed, resulting in a different encoded amino acid (children: selenocysteine_loss, pyrrolysine_loss).
+         */
+        RARE_AMINO_ACID_VARIANT,
+        /**
+         * <code>SO:0001583</code> A sequence variant, that changes one or more bases, resulting in a different amino acid
+         * sequence but where the length is preserved.</code>
+         */
+        MISSENSE_VARIANT,
+        /**
+         * <code>SO:0001821</code> An inframe non synonymous variant that inserts bases into in the coding sequence (is a:
+         * inframe_indel, internal_feature_elongation).
+         */
+        INFRAME_INSERTION,
+        /**
+         * <code>SO:0001824</code> An inframe increase in cds length that inserts one or more codons into the coding
+         * sequence within an existing codon (is a: {@link #INFRAME_INSERTION}).
+         */
+        DISRUPTIVE_INFRAME_INSERTION,
+        /**
+         * <code>SO:0001822</code> An inframe non synonymous variant that deletes bases from the coding sequence (is a:
+         * inframe_indel, feature_truncation).
+         */
+        INFRAME_DELETION,
+        /**
+         * <code>SO:0001826</code> An inframe decrease in cds length that deletes bases from the coding sequence starting
+         * within an existing codon (is a: {@link #INFRAME_DELETION}).
+         */
+        DISRUPTIVE_INFRAME_DELETION,
+        /**
+         * <code>SO:0002013</code> A sequence variant that causes the reduction of a the 5'UTR with regard to the reference
+         * sequence (is a: {@link #FIVE_PRIME_UTR_VARIANT})
+         */
+        FIVE_PRIME_UTR_TRUNCATION,
+        /**
+         * <code>SO:0001572</code> A sequence variant whereby an exon is lost from the transcript (is a: splicing_variant).
+         */
+        EXON_LOSS_VARIANT,
+        /**
+         * <code>SO:0002015</code> A sequence variant that causes the reduction of a the 3' UTR with regard to the reference
+         * sequence (is a: {@link #THREE_PRIME_UTR_VARIANT}).
+         */
+        THREE_PRIME_UTR_TRUNCATION,
+        /**
+         * <code>SO:0001630</code> A sequence variant in which a change has occurred within the region of the splice site,
+         * either within 1-3 bases of the exon or 3-8 bases of the intron (is a: splicing_variant).
+         */
+        SPLICE_REGION_VARIANT,
+        /** <code>SO:0001567</code> (is a: {@link #SYNONYMOUS_VARIANT}, terminator_codon_variant). */
+        STOP_RETAINED_VARIANT,
+        /**
+         * <code>SO:0001582</code> A codon variant that changes at least one base of the first codon of a transcript (is a:
+         * coding_sequence_variant, children: start_retained_variant, start_lost).
+         */
+        INITIATOR_CODON_VARIANT,
+        /**
+         * <code>SO:0001819</code> A sequence variant where there is no resulting change to the encoded amino acid (is a:
+         * coding_sequence_variant, children: start_retained_variant, stop_retained_variant).
+         */
+        SYNONYMOUS_VARIANT,
+        /** <code>SO:0001623</code> A UTR variant of the 5' UTR (is a: UTR_variant). */
+        FIVE_PRIME_UTR_VARIANT,
+        /** <code>SO:0001624</code> A UTR variant of the 3' UTR (is a: UTR_variant). */
+        THREE_PRIME_UTR_VARIANT,
+        /**
+         * <code>SO:0001983</code> A 5' UTR variant where a premature start codon is introduced, moved or lost (is a:
+         * {@link #FIVE_PRIME_UTR_VARIANT}).
+         */
+        FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT,
+        // TODO(holtgrem): add the 5KB and 2KB upstream/downstream variants.
+        /** <code>SO:0001631</code> A sequence variant located 5' of a gene (is a: {@link #INTERGENIC_VARIANT}). */
+        UPSTREAM_GENE_VARIANT,
+        /** <code>SO:0001632</code> A sequence variant located 3' of a gene (is a: {@link #INTERGENIC_VARIANT}). */
+        DOWNSTREAM_GENE_VARIANT,
+        /**
+         * <code>SO:0001782</code> A sequence variant located within a transcription factor binding site (is a:
+         * {@link #REGULATORY_REGION_VARIANT}).
+         */
+        TF_BINDING_SITE_VARIANT,
+        /** <code>SO:0001566</code> A sequence variant located within a regulatory region (is a: feature_variant). */
+        REGULATORY_REGION_VARIANT,
+        /**
+         * <code>SO:0000276</code> Variant affects a miRNA (is a: miRNA_primary_transcript, small_regulatory_ncRNA).
+         */
+        MIRNA,
+        /** Variant in a user-specified custom region. */
+        CUSTOM,
+        /** <code>SO:</code> (is a: ). */
+        CONSERVED_INTRON_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        INTRON_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        INTRAGENIC_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        CONSERVED_INTERGENIC_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        INTERGENIC_REGION,
+        /** <code>SO:</code> (is a: ). */
+        CODING_SEQUENCE_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        NON_CODING_TRANSCRIPT_EXON_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        NON_CODING_TRANSCRIPT_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        GENE_VARIANT,
+        /** <code>SO:</code> (is a: ). */
+        CHROMOSOME;
 
 	// TODO(holtgrem): changing impact
 	/**
