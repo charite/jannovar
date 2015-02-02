@@ -86,4 +86,53 @@ public final class Person {
 		return (father == null && mother == null);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((disease == null) ? 0 : disease.hashCode());
+		result = prime * result + ((extraFields == null) ? 0 : extraFields.hashCode());
+		result = prime * result + ((father == null) ? 0 : father.hashCode());
+		result = prime * result + ((mother == null) ? 0 : mother.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((sex == null) ? 0 : sex.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (disease != other.disease)
+			return false;
+		if (extraFields == null) {
+			if (other.extraFields != null)
+				return false;
+		} else if (!extraFields.equals(other.extraFields))
+			return false;
+		if (father == null) {
+			if (other.father != null)
+				return false;
+		} else if (!father.equals(other.father))
+			return false;
+		if (mother == null) {
+			if (other.mother != null)
+				return false;
+		} else if (!mother.equals(other.mother))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (sex != other.sex)
+			return false;
+		return true;
+	}
+
 }
