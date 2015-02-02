@@ -1,7 +1,17 @@
 **develop**
 
+*jannovar-htsjdk*
+
+* Started bridge module between Jannovar and HTSJDK.
+
+*jannovar-filter*
+
+* Started tool for mode of inheritance--based filters.
+
 *jannovar-cli*
 
+* Splitting out bridge module between jannovar-core and HTSJDK to
+  jannovar-htsjdk.
 * Adding implementation of variant annotation standard 1.0.
 * Adding unit tests for jannovar-cli.
 * Fixing problem with empty `INFO` fields in output.
@@ -12,6 +22,12 @@
 
 *jannovar-core*
 
+* Adding initial support for the transcript support level feature of the new VCF
+  annotation standard (only in very recent ENSEMBL releases, apparently).
+* `TranscriptModel#geneID` is now a `String`
+* Update in various classes, e.g. Annotation.
+* Fixing bug in PED parsing (empty lines are properly skipped now).
+* More tests and fixes for the inheritance compatibility checkers.
 * Updating `Annotation` for the variant annotation standard.
 * `TranscriptPosition` and `TranscriptInterval` use zero-based positions now.
 * Reordering values of `VariantType`.
