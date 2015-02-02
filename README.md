@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
-[![Documentation](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://readthedocs.org/projects/pip/badge/?version=master)
+[![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
 
 Jannovar
 ========

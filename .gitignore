@@ -18,6 +18,11 @@ cov-int*
 *.jannovar
 *.vcf
 *.vcf.idx
+*.ped
+log.txt
 data
 # built manual
 manual/_build
+# Java Mission Control flight recorder files
+*.jfr
+.attach_pid*

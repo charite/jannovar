@@ -25,6 +25,7 @@ For example, consider the following definition of human release ``hg19`` from UC
     chromInfo=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromInfo.txt.gz
     chrToAccessions=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/Assembled_chromosomes/chr_accessions_GRCh37.p13
     chrToAccessions.format=chr_accessions
+    knownCanonical=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownCanonical.txt.gz
     knownGene=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGene.txt.gz
     knownGeneMrna=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGeneMrna.txt.gz
     kgXref=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/kgXref.txt.gz
@@ -35,7 +36,7 @@ When saving the above file contents as ``my_ucsc.ini``, you can pass it to the J
 
 .. code-block:: bash
 
-    java -Xms2G -Xmx2G -jar jannovar-cli-0.11.jar download -s my_ucsc.ini hg19/ucsc
+    java -Xms2G -Xmx2G -jar jannovar-cli-0.12.jar download -s my_ucsc.ini hg19/ucsc
 
 Your INI file can either add new definitions or override the built-in ones.
 In fact, the definition from above is part of the INI file that is contained in the Jannovar JAR file and used by default.
@@ -171,7 +172,7 @@ You can do this by setting ``onlyCurated`` to ``true``:
 UCSC Data Sources
 -----------------
 
-For UCSC data sources, you have specify the settings ``knownGene``, ``knownGeneMrna``, ``kgXref``, and ``knownToLocusLink``.
+For UCSC data sources, you have specify the settings ``knownCanonical``, ``knownGene``, ``knownGeneMrna``, ``kgXref``, and ``knownToLocusLink``.
 These can usually be derived from the example below by exchanging ``hg19`` by the release id (e.g., ``mm10`` for mouse release 10).
 
 .. code-block:: ini
@@ -183,6 +184,7 @@ These can usually be derived from the example below by exchanging ``hg19`` by th
     chromInfo=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/chromInfo.txt.gz
     chrToAccessions=ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens/ARCHIVE/ANNOTATION_RELEASE.105/Assembled_chromosomes/chr_accessions_GRCh37.p13
     chrToAccessions.format=chr_accessions
+    knownCanonical=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownCanonical.txt.gz
     knownGene=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGene.txt.gz
     knownGeneMrna=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/knownGeneMrna.txt.gz
     kgXref=http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/kgXref.txt.gz

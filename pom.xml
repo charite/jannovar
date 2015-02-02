@@ -4,13 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.charite.compbio</groupId>
 	<artifactId>Jannovar</artifactId>
-	<version>0.11</version>
+	<version>0.12</version>
 	<packaging>pom</packaging>
 	<name>Jannovar</name>
 
 	<modules>
 		<module>jannovar-core</module>
+		<module>jannovar-htsjdk</module>
 		<module>jannovar-cli</module>
+		<module>jannovar-filter</module>
 	</modules>
 
 	<licenses>
@@ -23,7 +25,28 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j.version>2.1</log4j.version>
 	</properties>
+
+	<dependencies>
+		<!--Logging framework -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+		</dependency>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -90,56 +113,7 @@
 					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
-
-			<!-- JAR building -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>jannovar.Jannovar</mainClass>
-						</manifest>
-					</archive>
-					<compilerArgument>-Xlint:all</compilerArgument>
-					<showWarnings>true</showWarnings>
-					<showDeprecation>true</showDeprecation>
-				</configuration>
-			</plugin>
-
-			<!-- More JAR building -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>jannovar.Jannovar</mainClass>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
-
-		<!-- Maven Code Handling -->
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh-external</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-		</extensions>
 	</build>
 
 	<!-- Sphinx Manual -->
