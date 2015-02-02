@@ -1,5 +1,7 @@
 **develop**
 
+**v0.12**
+
 *jannovar-htsjdk*
 
 * Started bridge module between Jannovar and HTSJDK.
