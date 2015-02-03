@@ -5,6 +5,9 @@ import htsjdk.variant.variantcontext.VariantContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
@@ -27,6 +30,9 @@ import de.charite.compbio.jannovar.reference.PositionType;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class VariantContextAnnotator {
+
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(VariantContextAnnotator.class);
 
 	public static class Options {
 		/** selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN}) */
@@ -100,6 +106,8 @@ public final class VariantContextAnnotator {
 			return buildUnknownRefAnnotationLists(vc);
 		int chr = boxedInt.intValue();
 
+		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
+
 		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
 			// Get shortcuts to REF, ALT, and POS and build a GenomeChange with stripped common prefixes.
@@ -112,11 +120,16 @@ public final class VariantContextAnnotator {
 			// Build AnnotationList object for this allele.
 			if (alt.contains("[") || alt.contains("]") || alt.equals(".")) {
 				builder.add(AnnotationList.EMPTY);
+				LOGGER.trace("symbolic allele, adding annotation list {}", new Object[] { AnnotationList.EMPTY });
 			} else {
 				try {
-					builder.add(annotator.buildAnnotationList(change));
+					final AnnotationList lst = annotator.buildAnnotationList(change);
+					builder.add(lst);
+					LOGGER.trace("adding annotation list {}", new Object[] { lst });
 				} catch (Exception e) {
-					builder.add(buildErrorAnnotationList(vc));
+					final AnnotationList lst = buildErrorAnnotationList(vc);
+					builder.add(lst);
+					LOGGER.trace("adding error annotation list {}", new Object[] { lst });
 				}
 			}
 		}
@@ -188,8 +201,11 @@ public final class VariantContextAnnotator {
 	}
 
 	public ImmutableList<AnnotationList> buildUnknownRefAnnotationLists(VariantContext vc) {
-		return ImmutableList.of(new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
-				.of(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND)))));
+		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
+		for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+			builder.add(new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
+					.of(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND)))));
+		return builder.build();
 	}
 
 }

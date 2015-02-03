@@ -138,7 +138,10 @@ public final class Annotation implements Comparable<Annotation> {
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
 			Collection<AnnotationMessage> messages) {
 		this.change = change;
-		this.effects = ImmutableSortedSet.copyOf(varTypes);
+		if (varTypes == null)
+			this.effects = ImmutableSortedSet.<VariantEffect> of();
+		else
+			this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
 		this.ntHGVSDescription = ntHGVSDescription;
 		this.aaHGVSDescription = aaHGVSDescription;
@@ -178,14 +181,23 @@ public final class Annotation implements Comparable<Annotation> {
 	}
 
 	/**
-	 * @return most pathogenic {@link VariantEffect} link {@link #effects}.
+	 * @return most pathogenic {@link VariantEffect} link {@link #effects}, <code>null</code> if none.
 	 */
 	public VariantEffect getMostPathogenicVarType() {
+		if (effects.isEmpty())
+			return null;
 		return effects.first();
 	}
 
 	@Override
 	public int compareTo(Annotation other) {
+		if (getMostPathogenicVarType() == null && getMostPathogenicVarType() == other.getMostPathogenicVarType())
+			return 0;
+		else if (other.getMostPathogenicVarType() == null)
+			return -1;
+		else if (getMostPathogenicVarType() == null)
+			return 1;
+
 		int result = getMostPathogenicVarType().ordinal() - other.getMostPathogenicVarType().ordinal();
 		if (result != 0)
 			return result;
@@ -194,6 +206,12 @@ public final class Annotation implements Comparable<Annotation> {
 			return result;
 
 		return transcript.compareTo(other.transcript);
+	}
+
+	@Override
+	public String toString() {
+		return "Annotation [change=" + change + ", effects=" + effects + ", ntHGVSDescription=" + ntHGVSDescription
+				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.accession=" + transcript.accession + "]";
 	}
 
 	@Override
