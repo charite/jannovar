@@ -1,5 +1,16 @@
 **develop**
 
+*jannovar-cli*
+
+* Variants in `ANN` field are now annotated with proper Sequence Ontology
+  terms.
+
+*jannovar-core*
+
+* Renaming `VariantType` to `VariantEffect`
+* Changing `VariantType` to use proper Sequence Ontology terms. Legacy
+  names can be obtained through `VariantType#getLegacyName`.
+
 **v0.12**
 
 *jannovar-htsjdk*

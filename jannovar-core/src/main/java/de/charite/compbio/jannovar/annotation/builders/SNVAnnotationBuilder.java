@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.annotation.builders;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
@@ -114,13 +116,13 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		ArrayList<VariantType> varTypes = computeVariantTypes(wtAA, varAA);
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithTranslationalStartSite(changeInterval)) {
-			varTypes.add(VariantType.START_LOSS);
+			varTypes.add(VariantType.START_LOST);
 			protAnno = "p.0?";
 		} else if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 			if (wtAA.equals(varAA)) { // change in stop codon, but no AA change
-				varTypes.add(VariantType.STOP_RETAINED);
+				varTypes.add(VariantType.STOP_RETAINED_VARIANT);
 			} else { // change in stop codon, AA change
-				varTypes.add(VariantType.STOPLOSS);
+				varTypes.add(VariantType.STOP_LOST);
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
@@ -129,11 +131,11 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		}
 		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 		if (so.overlapsWithSpliceDonorSite(changeInterval))
-			varTypes.add(VariantType.SPLICE_DONOR);
+			varTypes.addAll(ImmutableList.of(VariantType.SPLICE_DONOR_VARIANT));
 		else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-			varTypes.add(VariantType.SPLICE_ACCEPTOR);
+			varTypes.addAll(ImmutableList.of(VariantType.SPLICE_ACCEPTOR_VARIANT));
 		else if (so.overlapsWithSpliceRegion(changeInterval))
-			varTypes.add(VariantType.SPLICE_REGION);
+			varTypes.addAll(ImmutableList.of(VariantType.SPLICE_REGION_VARIANT));
 
 		// Build the resulting Annotation.
 		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
@@ -157,13 +159,13 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	private ArrayList<VariantType> computeVariantTypes(String wtAA, String varAA) {
 		ArrayList<VariantType> result = new ArrayList<VariantType>();
 		if (wtAA.equals(varAA))
-			result.add(VariantType.SYNONYMOUS);
+			result.add(VariantType.SYNONYMOUS_VARIANT);
 		else if (wtAA.equals("*"))
-			result.add(VariantType.STOPLOSS);
+			result.add(VariantType.STOP_LOST);
 		else if (varAA.equals("*"))
-			result.add(VariantType.STOPGAIN);
+			result.add(VariantType.STOP_GAINED);
 		else
-			result.add(VariantType.MISSENSE);
+			result.add(VariantType.MISSENSE_VARIANT);
 		return result;
 	}
 

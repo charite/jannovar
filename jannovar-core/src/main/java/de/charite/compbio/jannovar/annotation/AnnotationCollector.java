@@ -7,6 +7,9 @@ import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
  * a given variant. The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} objects each use an instance of
@@ -283,15 +286,13 @@ final class AnnotationCollector {
 	 */
 	public void addExonicAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		if (ann.getMostPathogenicVarType() == VariantType.SYNONYMOUS) {
+		if (FluentIterable.from(ann.effects).anyMatch(Predicates.equalTo(VariantType.SYNONYMOUS_VARIANT)))
 			this.hasSynonymous = true;
-		} else if (ann.getMostPathogenicVarType() == VariantType.SPLICE_DONOR
-				|| ann.getMostPathogenicVarType() == VariantType.SPLICE_ACCEPTOR
-				|| ann.getMostPathogenicVarType() == VariantType.SPLICE_REGION) {
+		else if (FluentIterable.from(ann.effects).anyMatch(VariantType.IS_SPLICING))
 			this.hasSplicing = true;
-		} else {
+		else
 			this.hasExonic = true;
-		}
+
 		this.geneSymbolSet.add(ann.transcript.geneSymbol);
 		this.hasGenicMutation = true;
 		this.annotationCount++;
@@ -321,17 +322,16 @@ final class AnnotationCollector {
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
 		this.geneSymbolSet.add(ann.transcript.geneSymbol);
-		if (ann.getMostPathogenicVarType() == VariantType.INTRONIC
-				|| ann.getMostPathogenicVarType() == VariantType.ncRNA_INTRONIC) {
+		if (FluentIterable.from(ann.effects).anyMatch(VariantType.IS_INTRONIC)) {
 			for (Annotation a : this.annotationLst) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
 			}
 			this.annotationLst.add(ann);
 		}
-		if (ann.getMostPathogenicVarType() == VariantType.INTRONIC) {
+		if (ann.getMostPathogenicVarType() == VariantType.CODING_TRANSCRIPT_INTRON_VARIANT) {
 			this.hasIntronic = true;
-		} else if (ann.getMostPathogenicVarType() == VariantType.ncRNA_INTRONIC) {
+		} else if (ann.getMostPathogenicVarType() == VariantType.NON_CODING_TRANSCRIPT_INTRON_VARIANT) {
 			this.hasNcrnaIntronic = true;
 		}
 		this.hasGenicMutation = true;
@@ -379,9 +379,9 @@ final class AnnotationCollector {
 		}
 		this.annotationLst.add(ann);
 		VariantType type = ann.getMostPathogenicVarType();
-		if (type == VariantType.DOWNSTREAM) {
+		if (type == VariantType.DOWNSTREAM_GENE_VARIANT) {
 			this.hasDownstream = true;
-		} else if (type == VariantType.UPSTREAM) {
+		} else if (type == VariantType.UPSTREAM_GENE_VARIANT) {
 			this.hasUpstream = true;
 		} else {
 			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got {}", type);

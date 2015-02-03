@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -176,7 +177,8 @@ public final class VariantContextAnnotator {
 			}
 		}
 
-		vc.getCommonInfo().putAttribute("EFFECT", Joiner.on(',').join(effectList), true); // true allows overwriting
+		FluentIterable<String> effects = FluentIterable.from(effectList).transform(VariantType.TO_LEGACY_NAME);
+		vc.getCommonInfo().putAttribute("EFFECT", Joiner.on(',').join(effects), true); // true allows overwriting
 		vc.getCommonInfo().putAttribute("HGVS", Joiner.on(',').join(hgvsList), true); // true allows overwriting
 	}
 

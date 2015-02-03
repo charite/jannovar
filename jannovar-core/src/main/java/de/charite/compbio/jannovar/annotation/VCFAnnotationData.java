@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
@@ -89,8 +90,8 @@ class VCFAnnotationData {
 		geneID = tm.geneID;
 		featureBioType = tm.isCoding() ? "Coding" : "Noncoding";
 
-		if (effects.contains(VariantType.INTERGENIC) || effects.contains(VariantType.UPSTREAM)
-				|| effects.contains(VariantType.DOWNSTREAM)) {
+		if (effects.contains(VariantType.INTERGENIC_VARIANT) || effects.contains(VariantType.UPSTREAM_GENE_VARIANT)
+				|| effects.contains(VariantType.DOWNSTREAM_GENE_VARIANT)) {
 			if (change.getGenomeInterval().isLeftOf(tm.txRegion.getGenomeBeginPos()))
 				this.distance = tm.txRegion.getGenomeBeginPos().differenceTo(
 						change.getGenomeInterval().getGenomeEndPos());
@@ -107,7 +108,8 @@ class VCFAnnotationData {
 	 */
 	public Object[] toArray(String allele) {
 		final Joiner joiner = Joiner.on('&').useForNull("");
-		return new Object[] { allele, joiner.join(effects), impact, geneSymbol, geneID, featureType, featureID,
+		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantType.TO_SO_TERM));
+		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
 				featureBioType, getRankString(), ntHGVSDescription, aaHGVSDescription, getTXPosString(),
 				getCdsPosString(), getAAPosString(), getDistanceString(), joiner.join(messages) };
 	}

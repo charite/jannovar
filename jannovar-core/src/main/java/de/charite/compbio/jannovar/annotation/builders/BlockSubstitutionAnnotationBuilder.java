@@ -80,7 +80,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOSS), locAnno, ncHGVS(), "p.0?");
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOST), locAnno, ncHGVS(), "p.0?");
 	}
 
 	/**
@@ -171,14 +171,19 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_REGION_VARIANT));
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varTypes.add(VariantType.STOPLOSS);
-			varTypes.add(VariantType.NON_FS_SUBSTITUTION);
+				varTypes.add(VariantType.STOP_LOST);
+			else if (change.alt.length() > change.ref.length())
+				varTypes.addAll(ImmutableList.of(VariantType.INTERNAL_FEATURE_ELONGATION));
+			else if (change.alt.length() < change.ref.length())
+				varTypes.addAll(ImmutableList.of(VariantType.FEATURE_TRUNCATION, VariantType.COMPLEX_SUBSTITUTION));
+			else
+				varTypes.add(VariantType.MNV);
 
 			if (refChangeBeginPos.getFrameshift() == 0) {
 				// TODO(holtgrem): Implement shifting for substitutions for AA string
@@ -191,7 +196,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Truncate change.alt after stop codon.
 			aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
 			if (aaChange.alt.equals("*"))
-				varTypes.add(VariantType.STOPGAIN);
+				varTypes.add(VariantType.STOP_GAINED);
 
 			// Handle the case of no change.
 			if (aaChange.isNop()) {
@@ -228,6 +233,9 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				else
 					protAnno = StringUtil.concatenate(protAnno, "ext*?");
 			}
+
+			if (!varTypes.contains(VariantType.MNV))
+				varTypes.add(VariantType.COMPLEX_SUBSTITUTION);
 		}
 
 		private void handleFrameShiftCase() {
@@ -237,15 +245,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_REGION_VARIANT));
 			// Check whether it overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varTypes.add(VariantType.STOPLOSS);
-			varTypes.add(VariantType.FS_SUBSTITUTION);
+				varTypes.add(VariantType.STOP_LOST);
 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
@@ -260,11 +267,20 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 					opDesc = "ext"; // stop codon deleted
 				protAnno = StringUtil.concatenate("p.", wtAALong, aaChange.pos + 1, varAALong, opDesc, "*",
 						stopCodonOffset);
+				if (varAALong.length() > varAALong.length())
+					varTypes.add(VariantType.FRAMESHIFT_ELONGATION);
+				else if (varAALong.length() < varAALong.length())
+					varTypes.add(VariantType.FRAMESHIFT_TRUNCATION);
+				else if (varAALong.length() > varAALong.length())
+					varTypes.add(VariantType.FRAMESHIFT_VARIANT);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
 				protAnno = "p.0?";
-				varTypes.add(VariantType.STOPLOSS);
+
+				varTypes.addAll(ImmutableList.of(VariantType.FRAMESHIFT_VARIANT, VariantType.STOP_LOST));
 			}
+
+			varTypes.add(VariantType.COMPLEX_SUBSTITUTION);
 		}
 	}
 

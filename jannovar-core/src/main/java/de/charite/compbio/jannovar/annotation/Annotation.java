@@ -63,9 +63,9 @@ public final class Annotation implements Comparable<Annotation> {
 			return null;
 		VariantType worst = effects.first();
 		for (VariantType vt : effects)
-			if (worst.getPutativeImpact().compareTo(vt.getPutativeImpact()) > 0)
+			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
 				worst = vt;
-		return worst.getPutativeImpact();
+		return worst.getImpact();
 	}
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
@@ -186,7 +186,7 @@ public final class Annotation implements Comparable<Annotation> {
 
 	@Override
 	public int compareTo(Annotation other) {
-		int result = getMostPathogenicVarType().priorityLevel() - other.getMostPathogenicVarType().priorityLevel();
+		int result = getMostPathogenicVarType().ordinal() - other.getMostPathogenicVarType().ordinal();
 		if (result != 0)
 			return result;
 

@@ -75,7 +75,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOSS), locAnno, ncHGVS(), "p.0?");
+		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOST), locAnno, ncHGVS(), "p.0?");
 	}
 
 	/**
@@ -154,15 +154,20 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_REGION_VARIANT));
 			// Check whether the variant overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varTypes.add(VariantType.STOPLOSS);
-			varTypes.add(VariantType.NON_FS_DELETION);
+				varTypes.add(VariantType.STOP_LOST);
+
+			// Differentiate the cases disruptive and a non-disruptive deletions.
+			if (changeBeginPos.pos % 3 == 0)
+				varTypes.add(VariantType.INFRAME_DELETION);
+			else
+				varTypes.add(VariantType.DISRUPTIVE_INFRAME_DELETION);
 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
@@ -190,15 +195,22 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantType.SPLICE_REGION_VARIANT));
 			// Check whether the variant overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varTypes.add(VariantType.STOPLOSS);
-			varTypes.add(VariantType.FS_DELETION);
+				varTypes.add(VariantType.STOP_LOST);
+
+			// A nucleotide deletion can lead to an elongation of the transcript, annotate the specific case.
+			if (varAASeq.length() > wtAASeq.length())
+				varTypes.add(VariantType.FRAMESHIFT_ELONGATION);
+			else if (varAASeq.length() < wtAASeq.length())
+				varTypes.add(VariantType.FRAMESHIFT_TRUNCATION);
+			else
+				varTypes.add(VariantType.FRAMESHIFT_VARIANT);
 
 			// Normalize the amino acid change, shifting to the right as long as change ref char equals var ref char.
 			while (aaChange.ref.length() > 0 && aaChange.pos < varAASeq.length()
@@ -207,7 +219,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 			// Handle the case of deleting a stop codon at the very last entry of the translated amino acid string and
 			// short-circuit.
-			if (varTypes.contains(VariantType.STOPLOSS) && aaChange.pos == varAASeq.length()) {
+			if (varTypes.contains(VariantType.STOP_LOST) && aaChange.pos == varAASeq.length()) {
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, "del?");
 				return;
 			}
@@ -232,7 +244,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				int stopCodonOffset = varAAStopPos - aaChange.pos + delta;
 				suffix = StringUtil.concatenate("*", stopCodonOffset);
 			}
-			if (varTypes.contains(VariantType.STOPLOSS))
+			if (varTypes.contains(VariantType.STOP_LOST))
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAA), "ext", suffix);
 			else
 				protAnno = StringUtil
