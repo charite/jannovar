@@ -65,7 +65,7 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardUpstream() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
@@ -77,7 +77,7 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardDownstream() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
@@ -90,7 +90,7 @@ public class InsertionAnnotationBuilderTest {
 		// upstream intergenic
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6639062, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
@@ -100,7 +100,7 @@ public class InsertionAnnotationBuilderTest {
 		// downstream intergenic
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6650340, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation anno2 = new InsertionAnnotationBuilder(infoForward, change2).build();
+		Annotation anno2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno2.transcript.accession);
 		Assert.assertEquals(null, anno2.annoLoc);
 		Assert.assertEquals(null, anno2.ntHGVSDescription);
@@ -112,7 +112,7 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardIntronic() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6646098, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(3, anno.annoLoc.rank);
 		Assert.assertEquals("c.1044+8_1044+9insA", anno.ntHGVSDescription);
@@ -124,7 +124,7 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640669, PositionType.ZERO_BASED),
 				"", "C");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(1, anno.annoLoc.rank);
 		Assert.assertEquals("c.-1dup", anno.ntHGVSDescription);
@@ -136,7 +136,7 @@ public class InsertionAnnotationBuilderTest {
 	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649272, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(10, anno.annoLoc.rank);
 		Assert.assertEquals("c.2067_*1insA", anno.ntHGVSDescription);
@@ -149,14 +149,13 @@ public class InsertionAnnotationBuilderTest {
 		// TODO(holtgrem): test more cases
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642117, PositionType.ZERO_BASED),
 				"", "ACT");
-		Annotation anno = new InsertionAnnotationBuilder(infoForward, change).build();
+		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
 		Assert.assertEquals(2, anno.annoLoc.rank);
 		Assert.assertEquals("c.691-1_691insACT", anno.ntHGVSDescription);
 		Assert.assertEquals("p.?", anno.aaHGVSDescription);
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
-				anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_REGION_VARIANT), anno.effects);
 	}
 
 	@Test
@@ -169,7 +168,8 @@ public class InsertionAnnotationBuilderTest {
 		// The WT stop codon is replaced by another one.
 		GenomeChange change1agc = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6649271, PositionType.ZERO_BASED), "", "AGC");
-		Annotation annotation1agc = new InsertionAnnotationBuilder(infoForward, change1agc).build();
+		Annotation annotation1agc = new InsertionAnnotationBuilder(infoForward, change1agc,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1agc.transcript.accession);
 		Assert.assertEquals(10, annotation1agc.annoLoc.rank);
 		Assert.assertEquals("c.2066_2067insAGC", annotation1agc.ntHGVSDescription);
@@ -179,7 +179,8 @@ public class InsertionAnnotationBuilderTest {
 		// The WT stop codon is destroyed but there is a new one downstream
 		GenomeChange change1tgc = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6649271, PositionType.ZERO_BASED), "", "TGC");
-		Annotation annotation1tgc = new InsertionAnnotationBuilder(infoForward, change1tgc).build();
+		Annotation annotation1tgc = new InsertionAnnotationBuilder(infoForward, change1tgc,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1tgc.transcript.accession);
 		Assert.assertEquals(10, annotation1tgc.annoLoc.rank);
 		Assert.assertEquals("c.2066_2067insTGC", annotation1tgc.ntHGVSDescription);
@@ -189,7 +190,8 @@ public class InsertionAnnotationBuilderTest {
 		// Test case where the start codon is destroyed.
 		GenomeChange change2agc = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED), "", "AGC");
-		Annotation annotation2agc = new InsertionAnnotationBuilder(infoForward, change2agc).build();
+		Annotation annotation2agc = new InsertionAnnotationBuilder(infoForward, change2agc,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation2agc.transcript.accession);
 		Assert.assertEquals(1, annotation2agc.annoLoc.rank);
 		Assert.assertEquals("c.1_2insAGC", annotation2agc.ntHGVSDescription);
@@ -202,7 +204,8 @@ public class InsertionAnnotationBuilderTest {
 		// Directly insert stop codon.
 		GenomeChange change3taa = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED), "", "TAA");
-		Annotation annotation3taa = new InsertionAnnotationBuilder(infoForward, change3taa).build();
+		Annotation annotation3taa = new InsertionAnnotationBuilder(infoForward, change3taa,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation3taa.transcript.accession);
 		Assert.assertEquals(1, annotation3taa.annoLoc.rank);
 		Assert.assertEquals("c.3_4insTAA", annotation3taa.ntHGVSDescription);
@@ -213,7 +216,8 @@ public class InsertionAnnotationBuilderTest {
 		// Directly insert some base and then a stop codon.
 		GenomeChange change3tcctaa = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672,
 				PositionType.ZERO_BASED), "", "TCCTAA");
-		Annotation annotation3tcctaa = new InsertionAnnotationBuilder(infoForward, change3tcctaa).build();
+		Annotation annotation3tcctaa = new InsertionAnnotationBuilder(infoForward, change3tcctaa,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation3tcctaa.transcript.accession);
 		Assert.assertEquals(1, annotation3tcctaa.annoLoc.rank);
 		Assert.assertEquals("c.3_4insTCCTAA", annotation3tcctaa.ntHGVSDescription);
@@ -224,7 +228,8 @@ public class InsertionAnnotationBuilderTest {
 		// Insertion without a new stop codon that is no duplication.
 		GenomeChange change4tcctcctcc = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672,
 				PositionType.ZERO_BASED), "", "TCCTCCTCC");
-		Annotation annotation4tcctcctcc = new InsertionAnnotationBuilder(infoForward, change4tcctcctcc).build();
+		Annotation annotation4tcctcctcc = new InsertionAnnotationBuilder(infoForward, change4tcctcctcc,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation4tcctcctcc.transcript.accession);
 		Assert.assertEquals(1, annotation4tcctcctcc.annoLoc.rank);
 		Assert.assertEquals("c.3_4insTCCTCCTCC", annotation4tcctcctcc.ntHGVSDescription);
@@ -234,14 +239,14 @@ public class InsertionAnnotationBuilderTest {
 		// Insertion without a new stop codon that is a duplication.
 		GenomeChange change5gatggc = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672,
 				PositionType.ZERO_BASED), "", "GATGGC");
-		Annotation annotation5gatggc = new InsertionAnnotationBuilder(infoForward, change5gatggc).build();
+		Annotation annotation5gatggc = new InsertionAnnotationBuilder(infoForward, change5gatggc,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation5gatggc.transcript.accession);
 		Assert.assertEquals(1, annotation5gatggc.annoLoc.rank);
 		Assert.assertEquals("c.5_6insTGGCGA", annotation5gatggc.ntHGVSDescription);
 		Assert.assertEquals("p.Asp2_Gly3dup", annotation5gatggc.aaHGVSDescription);
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
-				annotation5gatggc.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+				VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation5gatggc.effects);
 	}
 
 	@Test
@@ -251,7 +256,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED),
 				"", "G");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1_2insG", annotation1.ntHGVSDescription);
@@ -260,7 +266,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640671, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
 		Assert.assertEquals(1, annotation2.annoLoc.rank);
 		Assert.assertEquals("c.2_3insA", annotation2.ntHGVSDescription);
@@ -271,7 +278,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3a = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED),
 				"", "A");
-		Annotation annotation3a = new InsertionAnnotationBuilder(infoForward, change3a).build();
+		Annotation annotation3a = new InsertionAnnotationBuilder(infoForward, change3a, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation3a.transcript.accession);
 		Assert.assertEquals(1, annotation3a.annoLoc.rank);
 		Assert.assertEquals("c.3_4insA", annotation3a.ntHGVSDescription);
@@ -280,7 +288,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3c = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED),
 				"", "C");
-		Annotation annotation3c = new InsertionAnnotationBuilder(infoForward, change3c).build();
+		Annotation annotation3c = new InsertionAnnotationBuilder(infoForward, change3c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation3c.transcript.accession);
 		Assert.assertEquals(1, annotation3c.annoLoc.rank);
 		Assert.assertEquals("c.3_4insC", annotation3c.ntHGVSDescription);
@@ -289,7 +298,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3t = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED),
 				"", "T");
-		Annotation annotation3t = new InsertionAnnotationBuilder(infoForward, change3t).build();
+		Annotation annotation3t = new InsertionAnnotationBuilder(infoForward, change3t, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation3t.transcript.accession);
 		Assert.assertEquals(1, annotation3t.annoLoc.rank);
 		Assert.assertEquals("c.3_4insT", annotation3t.ntHGVSDescription);
@@ -300,7 +310,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4c = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640673, PositionType.ZERO_BASED),
 				"", "C");
-		Annotation annotation4c = new InsertionAnnotationBuilder(infoForward, change4c).build();
+		Annotation annotation4c = new InsertionAnnotationBuilder(infoForward, change4c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation4c.transcript.accession);
 		Assert.assertEquals(1, annotation4c.annoLoc.rank);
 		Assert.assertEquals("c.4_5insC", annotation4c.ntHGVSDescription);
@@ -309,7 +320,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4t = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640673, PositionType.ZERO_BASED),
 				"", "T");
-		Annotation annotation4t = new InsertionAnnotationBuilder(infoForward, change4t).build();
+		Annotation annotation4t = new InsertionAnnotationBuilder(infoForward, change4t, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation4t.transcript.accession);
 		Assert.assertEquals(1, annotation4t.annoLoc.rank);
 		Assert.assertEquals("c.4_5insT", annotation4t.ntHGVSDescription);
@@ -320,7 +332,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change5g = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640674, PositionType.ZERO_BASED),
 				"", "G");
-		Annotation annotation5g = new InsertionAnnotationBuilder(infoForward, change5g).build();
+		Annotation annotation5g = new InsertionAnnotationBuilder(infoForward, change5g, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation5g.transcript.accession);
 		Assert.assertEquals(1, annotation5g.annoLoc.rank);
 		Assert.assertEquals("c.5_6insG", annotation5g.ntHGVSDescription);
@@ -329,7 +342,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change5t = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640674, PositionType.ZERO_BASED),
 				"", "T");
-		Annotation annotation5t = new InsertionAnnotationBuilder(infoForward, change5t).build();
+		Annotation annotation5t = new InsertionAnnotationBuilder(infoForward, change5t, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation5t.transcript.accession);
 		Assert.assertEquals(1, annotation5t.annoLoc.rank);
 		Assert.assertEquals("c.5_6insT", annotation5t.ntHGVSDescription);
@@ -341,7 +355,8 @@ public class InsertionAnnotationBuilderTest {
 		// Tests for stop shift.
 		GenomeChange change6t = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649271, PositionType.ZERO_BASED),
 				"", "T");
-		Annotation annotation6t = new InsertionAnnotationBuilder(infoForward, change6t).build();
+		Annotation annotation6t = new InsertionAnnotationBuilder(infoForward, change6t, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation6t.transcript.accession);
 		Assert.assertEquals(10, annotation6t.annoLoc.rank);
 		Assert.assertEquals("c.2066_2067insT", annotation6t.ntHGVSDescription);
@@ -350,7 +365,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change6c = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
 				"", "C");
-		Annotation annotation6c = new InsertionAnnotationBuilder(infoForward, change6c).build();
+		Annotation annotation6c = new InsertionAnnotationBuilder(infoForward, change6c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation6c.transcript.accession);
 		Assert.assertEquals(10, annotation6c.annoLoc.rank);
 		Assert.assertEquals("c.2065_2066insC", annotation6c.ntHGVSDescription);
@@ -360,7 +376,8 @@ public class InsertionAnnotationBuilderTest {
 		// Test for no change when inserting into stop codon.
 		GenomeChange change7g = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
 				"", "G");
-		Annotation annotation7g = new InsertionAnnotationBuilder(infoForward, change7g).build();
+		Annotation annotation7g = new InsertionAnnotationBuilder(infoForward, change7g, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation7g.transcript.accession);
 		Assert.assertEquals(10, annotation7g.annoLoc.rank);
 		Assert.assertEquals("c.2065_2066insG", annotation7g.ntHGVSDescription);
@@ -375,7 +392,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED),
 				"", "GA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1_2insGA", annotation1.ntHGVSDescription);
@@ -384,7 +402,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640671, PositionType.ZERO_BASED),
 				"", "AG");
-		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
 		Assert.assertEquals(1, annotation2.annoLoc.rank);
 		Assert.assertEquals("c.2_3insAG", annotation2.ntHGVSDescription);
@@ -395,7 +414,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3ac = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED), "", "AC");
-		Annotation annotation3ac = new InsertionAnnotationBuilder(infoForward, change3ac).build();
+		Annotation annotation3ac = new InsertionAnnotationBuilder(infoForward, change3ac,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation3ac.transcript.accession);
 		Assert.assertEquals(1, annotation3ac.annoLoc.rank);
 		Assert.assertEquals("c.3_4insAC", annotation3ac.ntHGVSDescription);
@@ -404,7 +424,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3cg = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED), "", "CG");
-		Annotation annotation3cg = new InsertionAnnotationBuilder(infoForward, change3cg).build();
+		Annotation annotation3cg = new InsertionAnnotationBuilder(infoForward, change3cg,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation3cg.transcript.accession);
 		Assert.assertEquals(1, annotation3cg.annoLoc.rank);
 		Assert.assertEquals("c.3_4insCG", annotation3cg.ntHGVSDescription);
@@ -413,7 +434,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3ta = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED), "", "TA");
-		Annotation annotation3ta = new InsertionAnnotationBuilder(infoForward, change3ta).build();
+		Annotation annotation3ta = new InsertionAnnotationBuilder(infoForward, change3ta,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation3ta.transcript.accession);
 		Assert.assertEquals(1, annotation3ta.annoLoc.rank);
 		Assert.assertEquals("c.3_4insTA", annotation3ta.ntHGVSDescription);
@@ -424,7 +446,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4ct = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640673, PositionType.ZERO_BASED), "", "CT");
-		Annotation annotation4ct = new InsertionAnnotationBuilder(infoForward, change4ct).build();
+		Annotation annotation4ct = new InsertionAnnotationBuilder(infoForward, change4ct,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation4ct.transcript.accession);
 		Assert.assertEquals(1, annotation4ct.annoLoc.rank);
 		Assert.assertEquals("c.4_5insCT", annotation4ct.ntHGVSDescription);
@@ -433,7 +456,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4tg = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640673, PositionType.ZERO_BASED), "", "TG");
-		Annotation annotation4tg = new InsertionAnnotationBuilder(infoForward, change4tg).build();
+		Annotation annotation4tg = new InsertionAnnotationBuilder(infoForward, change4tg,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation4tg.transcript.accession);
 		Assert.assertEquals(1, annotation4tg.annoLoc.rank);
 		Assert.assertEquals("c.4_5insTG", annotation4tg.ntHGVSDescription);
@@ -444,7 +468,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change5gc = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640674, PositionType.ZERO_BASED), "", "GC");
-		Annotation annotation5gc = new InsertionAnnotationBuilder(infoForward, change5gc).build();
+		Annotation annotation5gc = new InsertionAnnotationBuilder(infoForward, change5gc,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation5gc.transcript.accession);
 		Assert.assertEquals(1, annotation5gc.annoLoc.rank);
 		Assert.assertEquals("c.5_6insGC", annotation5gc.ntHGVSDescription);
@@ -453,7 +478,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change5ta = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640674, PositionType.ZERO_BASED), "", "TA");
-		Annotation annotation5ta = new InsertionAnnotationBuilder(infoForward, change5ta).build();
+		Annotation annotation5ta = new InsertionAnnotationBuilder(infoForward, change5ta,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation5ta.transcript.accession);
 		Assert.assertEquals(1, annotation5ta.annoLoc.rank);
 		Assert.assertEquals("c.5_6insTA", annotation5ta.ntHGVSDescription);
@@ -470,7 +496,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4actagact = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640673,
 				PositionType.ZERO_BASED), "", "ACTAGACT");
-		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoForward, change4actagact).build();
+		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoForward, change4actagact,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation4actagact.transcript.accession);
 		Assert.assertEquals(1, annotation4actagact.annoLoc.rank);
 		Assert.assertEquals("c.6_7insTAGACTAC", annotation4actagact.ntHGVSDescription);
@@ -479,7 +506,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4cgtg = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640673,
 				PositionType.ZERO_BASED), "", "CGTG");
-		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoForward, change4cgtg).build();
+		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoForward, change4cgtg,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation4cgtg.transcript.accession);
 		Assert.assertEquals(1, annotation4cgtg.annoLoc.rank);
 		Assert.assertEquals("c.4_5insCGTG", annotation4cgtg.ntHGVSDescription);
@@ -497,7 +525,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1c = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694497, PositionType.ZERO_BASED), "", "C");
-		Annotation annotation1c = new InsertionAnnotationBuilder(infoReverse, change1c).build();
+		Annotation annotation1c = new InsertionAnnotationBuilder(infoReverse, change1c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation1c.transcript.accession);
 		Assert.assertEquals(1, annotation1c.annoLoc.rank);
 		Assert.assertEquals("c.1_2insG", annotation1c.ntHGVSDescription);
@@ -506,7 +535,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1g = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694497, PositionType.ZERO_BASED), "", "G");
-		Annotation annotation1g = new InsertionAnnotationBuilder(infoReverse, change1g).build();
+		Annotation annotation1g = new InsertionAnnotationBuilder(infoReverse, change1g, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation1g.transcript.accession);
 		Assert.assertEquals(1, annotation1g.annoLoc.rank);
 		Assert.assertEquals("c.1_2insC", annotation1g.ntHGVSDescription);
@@ -517,7 +547,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change2a = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694496, PositionType.ZERO_BASED), "", "T");
-		Annotation annotation2a = new InsertionAnnotationBuilder(infoReverse, change2a).build();
+		Annotation annotation2a = new InsertionAnnotationBuilder(infoReverse, change2a, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation2a.transcript.accession);
 		Assert.assertEquals(1, annotation2a.annoLoc.rank);
 		Assert.assertEquals("c.2_3insA", annotation2a.ntHGVSDescription);
@@ -526,7 +557,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change2c = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694496, PositionType.ZERO_BASED), "", "G");
-		Annotation annotation2c = new InsertionAnnotationBuilder(infoReverse, change2c).build();
+		Annotation annotation2c = new InsertionAnnotationBuilder(infoReverse, change2c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation2c.transcript.accession);
 		Assert.assertEquals(1, annotation2c.annoLoc.rank);
 		Assert.assertEquals("c.2_3insC", annotation2c.ntHGVSDescription);
@@ -537,7 +569,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3a = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694495, PositionType.ZERO_BASED), "", "T");
-		Annotation annotation3a = new InsertionAnnotationBuilder(infoReverse, change3a).build();
+		Annotation annotation3a = new InsertionAnnotationBuilder(infoReverse, change3a, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation3a.transcript.accession);
 		Assert.assertEquals(1, annotation3a.annoLoc.rank);
 		Assert.assertEquals("c.3_4insA", annotation3a.ntHGVSDescription);
@@ -546,7 +579,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change3c = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694495, PositionType.ZERO_BASED), "", "G");
-		Annotation annotation3c = new InsertionAnnotationBuilder(infoReverse, change3c).build();
+		Annotation annotation3c = new InsertionAnnotationBuilder(infoReverse, change3c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation3c.transcript.accession);
 		Assert.assertEquals(1, annotation3c.annoLoc.rank);
 		Assert.assertEquals("c.3_4insC", annotation3c.ntHGVSDescription);
@@ -557,7 +591,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4g = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23688463, PositionType.ZERO_BASED), "", "G");
-		Annotation annotation4g = new InsertionAnnotationBuilder(infoReverse, change4g).build();
+		Annotation annotation4g = new InsertionAnnotationBuilder(infoReverse, change4g, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation4g.transcript.accession);
 		Assert.assertEquals(3, annotation4g.annoLoc.rank);
 		Assert.assertEquals("c.1411_1412insC", annotation4g.ntHGVSDescription);
@@ -566,7 +601,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4c = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23688463, PositionType.ZERO_BASED), "", "C");
-		Annotation annotation4c = new InsertionAnnotationBuilder(infoReverse, change4c).build();
+		Annotation annotation4c = new InsertionAnnotationBuilder(infoReverse, change4c, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoReverse.accession, annotation4c.transcript.accession);
 		Assert.assertEquals(3, annotation4c.annoLoc.rank);
 		Assert.assertEquals("c.1411_1412insG", annotation4c.ntHGVSDescription);
@@ -583,7 +619,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change4actagact = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694494,
 				PositionType.ZERO_BASED), "", "ACTAGACT");
-		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoReverse, change4actagact).build();
+		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoReverse, change4actagact,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.accession, annotation4actagact.transcript.accession);
 		Assert.assertEquals(1, annotation4actagact.annoLoc.rank);
 		Assert.assertEquals("c.4_5insAGTCTAGT", annotation4actagact.ntHGVSDescription);
@@ -593,7 +630,8 @@ public class InsertionAnnotationBuilderTest {
 		// This insertion will be shifted.
 		GenomeChange change4cgtg = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694494,
 				PositionType.ZERO_BASED), "", "CGTG");
-		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoReverse, change4cgtg).build();
+		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoReverse, change4cgtg,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.accession, annotation4cgtg.transcript.accession);
 		Assert.assertEquals(1, annotation4cgtg.annoLoc.rank);
 		Assert.assertEquals("c.6_7insCGCA", annotation4cgtg.ntHGVSDescription);
@@ -603,7 +641,8 @@ public class InsertionAnnotationBuilderTest {
 		// Insert whole stop codon.
 		GenomeChange change5cgtg = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694492,
 				PositionType.ZERO_BASED), "", "ATTA");
-		Annotation annotation5cgtg = new InsertionAnnotationBuilder(infoReverse, change5cgtg).build();
+		Annotation annotation5cgtg = new InsertionAnnotationBuilder(infoReverse, change5cgtg,
+				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.accession, annotation5cgtg.transcript.accession);
 		Assert.assertEquals(1, annotation5cgtg.annoLoc.rank);
 		Assert.assertEquals("c.6_7insTAAT", annotation5cgtg.ntHGVSDescription);
@@ -626,7 +665,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 12, 49218811, PositionType.ZERO_BASED), "", "T");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*255dup", annotation1.ntHGVSDescription);
@@ -649,7 +689,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 17, 4544982, PositionType.ZERO_BASED),
 				"", "AAG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-37_-36insCTT", annotation1.ntHGVSDescription);
@@ -672,12 +713,14 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 9, 97329737, PositionType.ZERO_BASED),
 				"", "GA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.492_493insGA", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+				annotation1.effects);
 	}
 
 	@Test
@@ -693,12 +736,14 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 14, 73079293, PositionType.ZERO_BASED), "", "AA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.511_512dup", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
+				annotation1.effects);
 	}
 
 	//
@@ -723,7 +768,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 248637422, PositionType.ZERO_BASED), "", "TTC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.769_771dup", annotation1.ntHGVSDescription);
@@ -764,7 +810,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 4, 190878559, PositionType.ZERO_BASED), "", "A");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.439dup", annotation1.ntHGVSDescription);
@@ -791,7 +838,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 9, 137968918, PositionType.ZERO_BASED), "", "AGA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.325_327dup", annotation1.ntHGVSDescription);
@@ -814,7 +862,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 248637607, PositionType.ZERO_BASED), "", "A");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.956dup", annotation1.ntHGVSDescription);
@@ -843,7 +892,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 248637422, PositionType.ZERO_BASED), "", "CTCTTC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.766_771dup", annotation1.ntHGVSDescription);
@@ -869,7 +919,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 248637422, PositionType.ZERO_BASED), "", "CTGCTGCTCTTC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.760_771dup", annotation1.ntHGVSDescription);
@@ -897,7 +948,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 3, 184429186, PositionType.ZERO_BASED), "", "AGT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.424_426dup", annotation1.ntHGVSDescription);
@@ -926,7 +978,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 3, 184429171, PositionType.ZERO_BASED), "", "TTTGTT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.439_444dup", annotation1.ntHGVSDescription);
@@ -952,7 +1005,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 3, 184429171, PositionType.ZERO_BASED), "", "TTTTAGTTTGTT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.439_450dup", annotation1.ntHGVSDescription);
@@ -983,7 +1037,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 248637605, PositionType.ZERO_BASED), "", "GAAAAG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.949_954dup", annotation1.ntHGVSDescription);
@@ -1015,14 +1070,14 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 3, 184429154, PositionType.ZERO_BASED), "", "TCC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.474_476dup", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu158dup", annotation1.aaHGVSDescription);
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
-				annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+				VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.effects);
 	}
 
 	/**
@@ -1045,7 +1100,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 2, 97568427, PositionType.ZERO_BASED),
 				"", "ATCG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.628_629insCGAT", annotation1.ntHGVSDescription);
@@ -1071,7 +1127,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 2, 109371423, PositionType.ZERO_BASED), "", "CC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(15, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2265_2266insCC", annotation1.ntHGVSDescription);
@@ -1099,7 +1156,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 5, 135272376, PositionType.ZERO_BASED), "", "A");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.93_94insA", annotation1.ntHGVSDescription);
@@ -1125,7 +1183,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 2, 109383313, PositionType.ZERO_BASED), "", "AGCG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(19, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.6318_6319insAGCG", annotation1.ntHGVSDescription);
@@ -1153,7 +1212,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 2, 109383877, PositionType.ZERO_BASED), "", "CAT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(19, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.6882_6883insCAT", annotation1.ntHGVSDescription);
@@ -1179,7 +1239,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 2, 179519684, PositionType.ZERO_BASED), "", "AAGT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(111, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.21594_21595insACTT", annotation1.ntHGVSDescription);
@@ -1208,7 +1269,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 2, 211421454, PositionType.ZERO_BASED), "", "TTC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.15_16insTTC", annotation1.ntHGVSDescription);
@@ -1236,7 +1298,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 3, 195510342, PositionType.ZERO_BASED), "", "CA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.8108_8109insTG", annotation1.ntHGVSDescription);
@@ -1262,7 +1325,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 3, 195511592, PositionType.ZERO_BASED), "", "CTG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.6858_6859insCAG", annotation1.ntHGVSDescription);
@@ -1288,7 +1352,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 4, 190881973, PositionType.ZERO_BASED), "", "GACT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.608_609insGACT", annotation1.ntHGVSDescription);
@@ -1314,7 +1379,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 5, 23526344, PositionType.ZERO_BASED),
 				"", "TGA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1147_1148insTGA", annotation1.ntHGVSDescription);
@@ -1343,7 +1409,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 5, 77745856, PositionType.ZERO_BASED),
 				"", "T");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.730_731insT", annotation1.ntHGVSDescription);
@@ -1367,7 +1434,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 5, 140573931, PositionType.ZERO_BASED), "", "ATGC");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1806_1807insATGC", annotation1.ntHGVSDescription);
@@ -1392,7 +1460,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 30782220, PositionType.ZERO_BASED),
 				"", "TTTG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.255_256insAACA", annotation1.ntHGVSDescription);
@@ -1418,14 +1487,14 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 41754575, PositionType.ZERO_BASED),
 				"", "TCT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.863_864insTCT", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Leu288dup", annotation1.aaHGVSDescription);
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
-				annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+				VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.effects);
 	}
 
 	/**
@@ -1446,7 +1515,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 7, 44144382, PositionType.ZERO_BASED),
 				"", "AAAA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.118_119insAAAA", annotation1.ntHGVSDescription);
@@ -1472,14 +1542,14 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 7, 100637286, PositionType.ZERO_BASED), "", "GTA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.3442_3443insGTA", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ser1147dup", annotation1.aaHGVSDescription);
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
-				annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+				VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.effects);
 	}
 
 	/**
@@ -1500,7 +1570,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 9, 137968919, PositionType.ZERO_BASED), "", "AA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.328_329insAA", annotation1.ntHGVSDescription);
@@ -1526,7 +1597,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 17, 37830926, PositionType.ZERO_BASED), "", "G");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.286dup", annotation1.ntHGVSDescription);
@@ -1556,7 +1628,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 4, 190862165, PositionType.ZERO_BASED), "", "C");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1_2insC", annotation1.ntHGVSDescription);
@@ -1582,7 +1655,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 4, 190862166, PositionType.ZERO_BASED), "", "A");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2_3insA", annotation1.ntHGVSDescription);
@@ -1612,7 +1686,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6693165, PositionType.ZERO_BASED),
 				"", "TA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*28_*29insTA", annotation1.ntHGVSDescription);
@@ -1638,7 +1713,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 192335275, PositionType.ZERO_BASED), "", "TAAT");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*18_*21dup", annotation1.ntHGVSDescription);
@@ -1666,7 +1742,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 4, 190884289, PositionType.ZERO_BASED), "", "GACA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(8, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*5_*6insGACA", annotation1.ntHGVSDescription);
@@ -1691,15 +1768,15 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("22"), 20640690,
 				PositionType.ZERO_BASED), "", "ATGCCGTGCACGGCATCCTCGTTAGCA");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		// The following result is equal to the one of Mutalyzer.
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.660_686dup", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ala225_Asp233dup", annotation1.aaHGVSDescription);
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION, VariantEffect.DIRECT_TANDEM_DUPLICATION),
-				annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_INSERTION,
+				VariantEffect.DIRECT_TANDEM_DUPLICATION), annotation1.effects);
 	}
 
 	// The following variant from the clinvar project caused problems against hg19/ucsc: chr3:37081782:>TAAG
@@ -1718,7 +1795,8 @@ public class InsertionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 37081781, PositionType.ZERO_BASED),
 				"", "TAAG");
-		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
 		// Mutalyzer: NM_001258274.1(MLH1_v001):c.940_941insTAAG NM_001258274.1(MLH1_i001):p.(Glu316*)
 		//
 		// The UCSC transcript DNA sequence is bogus here.

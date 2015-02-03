@@ -48,6 +48,9 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  */
 abstract class AnnotationBuilder {
 
+	/** configuration */
+	protected final AnnotationBuilderOptions options;
+
 	/** transcript to annotate. */
 	protected final TranscriptModel transcript;
 	/** genome change to use for annotation */
@@ -78,8 +81,12 @@ abstract class AnnotationBuilder {
 	 *            the {@link TranscriptInfo} to build the annotation for
 	 * @param change
 	 *            the {@link GenomeChange} to use for building the annotation
+	 * @param options
+	 *            the configuration to use for the {@link AnnotationBuilder}
 	 */
-	AnnotationBuilder(TranscriptModel transcript, GenomeChange change) {
+	AnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options) {
+		this.options = options;
+
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
 		change = change.withPositionType(PositionType.ZERO_BASED).withStrand(transcript.getStrand());
 		this.transcript = transcript;
@@ -268,8 +275,8 @@ abstract class AnnotationBuilder {
 						null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
-						null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
+						null, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
@@ -278,8 +285,8 @@ abstract class AnnotationBuilder {
 						null, null);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
-						null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
+						null, null, null);
 		}
 	}
 

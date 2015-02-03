@@ -20,10 +20,14 @@ public final class AnnotationBuilderDispatcher {
 	public final TranscriptModel transcript;
 	/** genomic change to build annotation for */
 	public final GenomeChange change;
+	/** configuration to use */
+	public final AnnotationBuilderOptions options;
 
-	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeChange change) {
+	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeChange change,
+			AnnotationBuilderOptions options) {
 		this.transcript = transcript;
 		this.change = change.withPositionType(PositionType.ZERO_BASED);
+		this.options = options;
 	}
 
 	/**
@@ -38,14 +42,14 @@ public final class AnnotationBuilderDispatcher {
 
 		switch (change.getType()) {
 		case SNV:
-			return new SNVAnnotationBuilder(transcript, change).build();
+			return new SNVAnnotationBuilder(transcript, change, options).build();
 		case DELETION:
-			return new DeletionAnnotationBuilder(transcript, change).build();
+			return new DeletionAnnotationBuilder(transcript, change, options).build();
 		case INSERTION:
-			return new InsertionAnnotationBuilder(transcript, change).build();
+			return new InsertionAnnotationBuilder(transcript, change, options).build();
 		case BLOCK_SUBSTITUTION:
 		default:
-			return new BlockSubstitutionAnnotationBuilder(transcript, change).build();
+			return new BlockSubstitutionAnnotationBuilder(transcript, change, options).build();
 		}
 	}
 

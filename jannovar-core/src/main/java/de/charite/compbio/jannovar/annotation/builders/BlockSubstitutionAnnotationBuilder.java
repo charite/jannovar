@@ -32,12 +32,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	 *            {@link TranscriptInfo} to build the annotation for
 	 * @param change
 	 *            {@link GenomeChange} to build the annotation with
+	 * @param options
+	 *            the configuration to use for the {@link AnnotationBuilder}
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a block substitution
 	 */
-	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeChange change)
+	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options)
 			throws InvalidGenomeChange {
-		super(transcript, change);
+		super(transcript, change, options);
 
 		// Guard against invalid genome change.
 		if (change.ref.length() == 0 || change.alt.length() == 0)

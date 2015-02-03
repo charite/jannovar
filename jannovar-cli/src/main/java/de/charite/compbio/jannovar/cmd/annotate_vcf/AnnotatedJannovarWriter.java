@@ -19,6 +19,7 @@ import de.charite.compbio.jannovar.annotation.AnnotationException;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -52,7 +53,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	public AnnotatedJannovarWriter(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap,
 			String vcfPath, JannovarOptions options) throws IOException {
 		this.refDict = refDict;
-		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
 		this.vcfPath = vcfPath;
 		this.options = options;
 		this.openBufferedWriter();

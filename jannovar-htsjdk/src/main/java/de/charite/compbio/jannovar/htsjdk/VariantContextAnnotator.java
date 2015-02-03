@@ -18,6 +18,7 @@ import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -38,25 +39,31 @@ public final class VariantContextAnnotator {
 		/** selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN}) */
 		public final InfoFields infoFields;
 
-		/** whether or not to escape values in the ANN field (defaults to <code>true</code>) */
-		public final boolean escapeAnnField;
-
 		/**
 		 * Whether or not to trim each annotation list to the first (one with highest putative impact), defaults to
 		 * <code>true</code>
 		 */
 		public final boolean oneAnnotationOnly;
 
+		/** whether or not to escape values in the ANN field (defaults to <code>true</code>) */
+		public final boolean escapeAnnField;
+
+		/** whether or not to perform shifting towards the 3' end of the transcript (defaults to <code>true</code>) */
+		public final boolean nt3PrimeShifting;
+
 		public Options() {
 			infoFields = InfoFields.VCF_ANN;
 			oneAnnotationOnly = true;
 			escapeAnnField = true;
+			nt3PrimeShifting = true;
 		}
 
-		public Options(InfoFields infoFields, boolean oneAnnotationOnly, boolean escapeAnnField) {
+		public Options(InfoFields infoFields, boolean oneAnnotationOnly, boolean escapeAnnField,
+				boolean nt3PrimeShifting) {
 			this.infoFields = infoFields;
 			this.oneAnnotationOnly = oneAnnotationOnly;
 			this.escapeAnnField = escapeAnnField;
+			this.nt3PrimeShifting = nt3PrimeShifting;
 		}
 	}
 
@@ -92,7 +99,8 @@ public final class VariantContextAnnotator {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 		this.options = options;
-		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions(
+				options.nt3PrimeShifting));
 	}
 
 	/**
