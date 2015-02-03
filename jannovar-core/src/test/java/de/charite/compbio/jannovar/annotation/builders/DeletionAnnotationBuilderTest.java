@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -65,24 +65,26 @@ public class DeletionAnnotationBuilderTest {
 	public void testForwardUstream() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UPSTREAM), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), annotation1.effects);
 	}
 
 	@Test
 	public void testForwardDownstream() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.DOWNSTREAM), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -90,21 +92,23 @@ public class DeletionAnnotationBuilderTest {
 		// intergenic upstream
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6639061, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.effects);
 		// intergenic downstream
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6650340, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC), annotation2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation2.effects);
 	}
 
 	@Test
@@ -114,95 +118,103 @@ public class DeletionAnnotationBuilderTest {
 			chars200.append(".");
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED),
 				chars200.toString(), "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-204_-70+65del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.0?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.TRANSCRIPT_ABLATION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.TRANSCRIPT_ABLATION), annotation1.effects);
 	}
 
 	@Test
 	public void testForwardIntronic() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642106, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.691-11del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	@Test
 	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640072, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-192del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
 	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649329, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*59del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR3), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
 	public void testForwardStartLoss() throws InvalidGenomeChange {
-		// Testing with some START_LOSS scenarios.
+		// Testing with some START_LOST scenarios.
 
 		// Delete one base of start codon.
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640669, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.0?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.START_LOSS), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.effects);
 
 		// Delete chunk out of first exon, spanning start codon from the left.
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640660, PositionType.ZERO_BASED),
 				"CCCTCCAGACC", "");
-		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
 		Assert.assertEquals(1, annotation2.annoLoc.rank);
 		Assert.assertEquals("c.-9_2del", annotation2.ntHGVSDescription);
 		Assert.assertEquals("p.0?", annotation2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.START_LOSS), annotation2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.effects);
 
 		// Delete chunk out of first exon, spanning start codon from the right.
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640671, PositionType.ZERO_BASED),
 				"GGACGGCTCCT", "");
-		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3).build();
+		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation3.transcript.accession);
 		Assert.assertEquals(1, annotation3.annoLoc.rank);
 		Assert.assertEquals("c.3_13del", annotation3.ntHGVSDescription);
 		Assert.assertEquals("p.0?", annotation3.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.START_LOSS), annotation3.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation3.effects);
 
 		// Deletion from before transcript, reaching into the start codon.
 		GenomeChange change4 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 6640399, PositionType.ZERO_BASED),
 				"TCTCACCAGGCCCTTCTTCACGACCCTGGCCCCCCATCCAGCATCCCCCCTGGCCAATCCAATATGGCCCCCGGCCCCCGGGAGGCTGTCAGTGTGTTCCAGCCCTCCGCGTGCACCCCTCACCCTGACCCAAGCCCTCGTGCTGATAAATATGATTATTTGAGTAGAGGCCAACTTCCCGTTTCTCTCTCTTGACTCCAGGAGCTTTCTCTTGCATACCCTCGCTTAGGCTGGCCGGGGTGTCACTTCTGCCTCCCTGCCCTCCAGACCA",
 				"");
-		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4).build();
+		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation4.transcript.accession);
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation4.annoLoc.rank);
 		Assert.assertEquals("c.-69-201_1del", annotation4.ntHGVSDescription);
 		Assert.assertEquals("p.0?", annotation4.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.START_LOSS), annotation4.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation4.effects);
 	}
 
 	@Test
@@ -213,52 +225,62 @@ public class DeletionAnnotationBuilderTest {
 		// Delete last base of stop codon, leads to complete loss of stop codon (different from Mutalyzer).
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649271, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2067del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.*689Tyrext*?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+				annotation1.effects);
 
 		// Delete middle base of stop codon, leads to complete loss.
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
 		Assert.assertEquals(10, annotation2.annoLoc.rank);
 		Assert.assertEquals("c.2066del", annotation2.ntHGVSDescription);
 		Assert.assertEquals("p.*689Cysext*?", annotation2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+				annotation2.effects);
 
 		// Delete first base of stop codon, leads to extension
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3).build();
+		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation3.transcript.accession);
 		Assert.assertEquals(10, annotation3.annoLoc.rank);
 		Assert.assertEquals("c.2065del", annotation3.ntHGVSDescription);
 		Assert.assertEquals("p.*689Serext*?", annotation3.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation3.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+				annotation3.effects);
 
 		// Delete two bases of stop codon.
 		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
 				"AT", "");
-		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4).build();
+		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation4.transcript.accession);
 		Assert.assertEquals(10, annotation4.annoLoc.rank);
 		Assert.assertEquals("c.2065_2066del", annotation4.ntHGVSDescription);
 		Assert.assertEquals("p.*689Alaext*14", annotation4.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation4.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+				annotation4.effects);
 
 		// Delete from before into the stop codon.
 		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649267, PositionType.ZERO_BASED),
 				"CATAGCCC", "");
-		Annotation annotation5 = new DeletionAnnotationBuilder(infoForward, change5).build();
+		Annotation annotation5 = new DeletionAnnotationBuilder(infoForward, change5, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation5.transcript.accession);
 		Assert.assertEquals(10, annotation5.annoLoc.rank);
 		Assert.assertEquals("c.2063_*3del", annotation5.ntHGVSDescription);
 		Assert.assertEquals("p.*689Hisext*13", annotation5.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation5.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+				annotation5.effects);
 	}
 
 	@Test
@@ -266,23 +288,25 @@ public class DeletionAnnotationBuilderTest {
 		// intronic splicing
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642116, PositionType.ZERO_BASED),
 				"G", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.691-1del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
-				annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 
 		// exonic splicing
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642117, PositionType.ZERO_BASED),
 				"TGG", "");
-		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
 		Assert.assertEquals(2, annotation2.annoLoc.rank);
 		Assert.assertEquals("c.691_693del", annotation2.ntHGVSDescription);
 		Assert.assertEquals("p.Trp231del", annotation2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION, VariantType.SPLICE_REGION),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation2.effects);
 	}
 
@@ -291,12 +315,13 @@ public class DeletionAnnotationBuilderTest {
 		// The following case contains a shift in the nucleotide sequence.
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6645988, PositionType.ZERO_BASED),
 				"TGGGGAGAAA", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.943_952del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gly315Profs*26", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -305,33 +330,36 @@ public class DeletionAnnotationBuilderTest {
 		// generated).
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642114, PositionType.ZERO_BASED),
 				"GAAACA", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.691-3_693del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Trp231del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION, VariantType.SPLICE_ACCEPTOR),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_ACCEPTOR_VARIANT),
 				annotation1.effects);
 
 		// deletion of three codons
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642126, PositionType.ZERO_BASED),
 				"GTGGTTCAA", "");
-		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2).build();
+		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
 		Assert.assertEquals(2, annotation2.annoLoc.rank);
 		Assert.assertEquals("c.704_712del", annotation2.ntHGVSDescription);
 		Assert.assertEquals("p.Val235_Val237del", annotation2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation2.effects);
 
 		// deletion of three codons, resulting in delins case
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642134, PositionType.ZERO_BASED),
 				"AGTGGAGGA", "");
-		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3).build();
+		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation3.transcript.accession);
 		Assert.assertEquals(2, annotation3.annoLoc.rank);
 		Assert.assertEquals("c.708_716del", annotation3.ntHGVSDescription);
 		Assert.assertEquals("p.Gln236_Asp239delinsHis", annotation3.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation3.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation3.effects);
 	}
 
 	@Test
@@ -349,12 +377,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 17087543, PositionType.ZERO_BASED),
 				"GCTGT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.119_123del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gln40Profs*18", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -370,12 +399,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 247978543, PositionType.ZERO_BASED), "GAG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.488_490del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ser163del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -393,12 +423,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 44540795, PositionType.ZERO_BASED),
 				"TC", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1476_1477del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Asn494Profs*38", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -414,12 +445,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 97983496, PositionType.ZERO_BASED),
 				"TGTAACCAC", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.369_377del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Val124_Thr126del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -435,12 +467,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 98216798, PositionType.ZERO_BASED),
 				"TTTCCCTCTAT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.275_285del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ile92Argfs*26", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -458,12 +491,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 5, 140215470, PositionType.ZERO_BASED), "GCGCG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1503_1507del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu501Aspfs*96", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -479,12 +513,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 5, 140615503, PositionType.ZERO_BASED), "GTC", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1219_1221del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Val407del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -500,12 +535,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 27879112, PositionType.ZERO_BASED),
 				"T", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.985del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr329Leufs*17", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -530,12 +566,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 39278700, PositionType.ZERO_BASED),
 				"AAG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.324_326del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Phe109del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -553,12 +590,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 39278700, PositionType.ZERO_BASED),
 				"AAG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.324_326del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Phe109del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -576,12 +614,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 9, 5921979, PositionType.ZERO_BASED),
 				"GTT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1542_1544del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr517del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -599,12 +638,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 10, 51768675, PositionType.ZERO_BASED), "AA", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.791_792del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Lys264Argfs*10", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -622,12 +662,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 10, 51768774, PositionType.ZERO_BASED), "TGA", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.890_892del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Leu297_Lys298delinsGln", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -643,12 +684,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 11, 56380553, PositionType.ZERO_BASED), "GACA", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.422_425del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Cys141Serfs*21", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -666,12 +708,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 12, 8376100, PositionType.ZERO_BASED),
 				"G", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.377del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Pro126Glnfs*18", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -689,12 +732,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 12, 123880923, PositionType.ZERO_BASED), "TT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.542_543del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Leu181Hisfs*20", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -712,12 +756,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 13, 46170725, PositionType.ZERO_BASED), "ACTCTTCCTCCTCCAGAT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.404_421del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu135_Leu140del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -735,12 +780,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 15, 74536403, PositionType.ZERO_BASED), "AAG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.100_102del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Lys34del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -758,12 +804,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 15, 78208898, PositionType.ZERO_BASED), "CTC", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(13, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.842_844del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu281del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -782,12 +829,14 @@ public class DeletionAnnotationBuilderTest {
 		// This deletion leads to position shifting downstream.
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 17, 7470288, PositionType.ZERO_BASED),
 				"G", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1310del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gly437Valfs*5", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.SPLICE_REGION),
+		Assert.assertEquals(
+				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -806,12 +855,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 17, 29161650, PositionType.ZERO_BASED), "GTCAAT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.243_248del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Leu82_Gln83del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -829,12 +879,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 17, 29161650, PositionType.ZERO_BASED), "GTCAAT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.552_557del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ser185_Leu186del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	/**
@@ -856,12 +907,14 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 17, 61660894, PositionType.ZERO_BASED), "G", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.560del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gly187Valfs*23", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.SPLICE_REGION),
+		Assert.assertEquals(
+				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -880,12 +933,13 @@ public class DeletionAnnotationBuilderTest {
 		// the deletion.
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 20, 126313, PositionType.ZERO_BASED),
 				"CC", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.317_318del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Pro106Argfs*?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -901,12 +955,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 21, 42551467, PositionType.ZERO_BASED), "GTGTCAGGGTGAGTGAGGG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.72_90del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ser25Hisfs*78", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	@Test
@@ -924,12 +979,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 19, 58579807, PositionType.ZERO_BASED), "CCAGAG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1152_1157del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.His384_Arg386delinsGln", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.effects);
 	}
 
 	@Test
@@ -947,12 +1003,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 11, 65793877, PositionType.ZERO_BASED), "A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-25del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -970,12 +1027,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 12, 49525088, PositionType.ZERO_BASED), "CT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-7_-6del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -993,12 +1051,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 7811233,
 				PositionType.ZERO_BASED), "AGCTGCG", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-11_-5del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UTR5), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1016,13 +1075,14 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 44125966, PositionType.ZERO_BASED),
 				"A", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.315-2del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTRONIC, VariantType.SPLICE_ACCEPTOR),
-				annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1040,12 +1100,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 17718673, PositionType.ZERO_BASED),
 				"G", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(9, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1027del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Val343Trpfs*33", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.SPLICE_DONOR),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -1064,12 +1125,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 2, 90458647, PositionType.ZERO_BASED),
 				"T", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(42, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.5842del", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.ncRNA_EXONIC), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1084,12 +1146,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 31803064, PositionType.ZERO_BASED),
 				"T", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.26del", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.ncRNA_EXONIC), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1107,12 +1170,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("Y"), 23749506,
 				PositionType.ZERO_BASED), "G", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.385del", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.ncRNA_EXONIC), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	// This variant was called on the Platinum genomes and caused a problem with string access.
@@ -1131,12 +1195,13 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 9, 135782122, PositionType.ZERO_BASED), "TTCT", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(12, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1068_1071del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu358del", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.effects);
 	}
 
 	// This variant was called on the Platinum genomes and caused a problem with string access.
@@ -1154,12 +1219,14 @@ public class DeletionAnnotationBuilderTest {
 
 		GenomeChange change1 = new GenomeChange(
 				new GenomePosition(refDict, '+', 5, 140812775, PositionType.ZERO_BASED), "T", "");
-		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1).build();
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2461del", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.*821del?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FS_DELETION, VariantType.STOPLOSS), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
+				annotation1.effects);
 	}
 
 }

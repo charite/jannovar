@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderDispatcher;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.io.Chromosome;
@@ -29,6 +30,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  */
 public final class VariantAnnotator {
 
+	/** configuration for annotation builders */
+	final private AnnotationBuilderOptions options;
+
 	/** {@link ReferenceDictionary} to use for genome information. */
 	final private ReferenceDictionary refDict;
 
@@ -52,10 +56,14 @@ public final class VariantAnnotator {
 	 *            {@link ReferenceDictionary} with information about the genome.
 	 * @param chromosomeMap
 	 *            chromosome map to use for the annotator.
+	 * @param options
+	 *            configuration to use for building the annotations
 	 */
-	public VariantAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap) {
+	public VariantAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap,
+			AnnotationBuilderOptions options) {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
+		this.options = options;
 	}
 
 	// TODO(holtgrem): Remove this?
@@ -152,7 +160,7 @@ public final class VariantAnnotator {
 
 	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel transcript) throws InvalidGenomeChange {
 		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
-			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
+			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change, options).build());
 	}
 
 }

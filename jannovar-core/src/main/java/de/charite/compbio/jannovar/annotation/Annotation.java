@@ -50,7 +50,7 @@ public final class Annotation implements Comparable<Annotation> {
 	public final GenomeChange change;
 
 	/** variant types, sorted by internal pathogenicity score */
-	public final ImmutableSortedSet<VariantType> effects;
+	public final ImmutableSortedSet<VariantEffect> effects;
 
 	/** errors and warnings */
 	public final ImmutableSortedSet<AnnotationMessage> messages;
@@ -61,11 +61,11 @@ public final class Annotation implements Comparable<Annotation> {
 	public final PutativeImpact getPutativeImpact() {
 		if (effects.isEmpty())
 			return null;
-		VariantType worst = effects.first();
-		for (VariantType vt : effects)
-			if (worst.getPutativeImpact().compareTo(vt.getPutativeImpact()) > 0)
+		VariantEffect worst = effects.first();
+		for (VariantEffect vt : effects)
+			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
 				worst = vt;
-		return worst.getPutativeImpact();
+		return worst.getImpact();
 	}
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
@@ -77,7 +77,7 @@ public final class Annotation implements Comparable<Annotation> {
 	/** amino acid variant annotation */
 	public final String aaHGVSDescription;
 
-	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
+	/** the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
 	public final TranscriptModel transcript;
 
 	/**
@@ -108,7 +108,7 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param aaHGVSDescription
 	 *            amino acid variant description following the HGVS nomenclauture
 	 */
-	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantType> varTypes,
+	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription) {
 		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, aaHGVSDescription, ImmutableSortedSet
 				.<AnnotationMessage> of());
@@ -134,11 +134,14 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
-	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantType> varTypes,
+	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
 			Collection<AnnotationMessage> messages) {
 		this.change = change;
-		this.effects = ImmutableSortedSet.copyOf(varTypes);
+		if (varTypes == null)
+			this.effects = ImmutableSortedSet.<VariantEffect> of();
+		else
+			this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
 		this.ntHGVSDescription = ntHGVSDescription;
 		this.aaHGVSDescription = aaHGVSDescription;
@@ -151,8 +154,11 @@ public final class Annotation implements Comparable<Annotation> {
 	 *
 	 * The <code>ALT</code> allele has to be given to this function since we trim away at least the first base of
 	 * <code>REF</code>/<code>ALT</code>.
+	 *
+	 * @param escape
+	 *            whether or not to escape the invalid VCF characters, e.g. <code>'='</code>.
 	 */
-	public String toVCFAnnoString(String alt) {
+	public String toVCFAnnoString(String alt, boolean escape) {
 		VCFAnnotationData data = new VCFAnnotationData();
 		data.effects = effects;
 		data.impact = getPutativeImpact();
@@ -161,7 +167,17 @@ public final class Annotation implements Comparable<Annotation> {
 		data.ntHGVSDescription = ntHGVSDescription;
 		data.aaHGVSDescription = aaHGVSDescription;
 		data.messages = messages;
-		return data.toString(alt);
+		if (escape)
+			return data.toString(alt);
+		else
+			return data.toUnescapedString(alt);
+	}
+
+	/**
+	 * Forward to {@link toVCFAnnoString}<code>(alt, true)</code>.
+	 */
+	public String toVCFAnnoString(String alt) {
+		return toVCFAnnoString(alt, true);
 	}
 
 	/**
@@ -178,15 +194,24 @@ public final class Annotation implements Comparable<Annotation> {
 	}
 
 	/**
-	 * @return most pathogenic {@link VariantType} link {@link #effects}.
+	 * @return most pathogenic {@link VariantEffect} link {@link #effects}, <code>null</code> if none.
 	 */
-	public VariantType getMostPathogenicVarType() {
+	public VariantEffect getMostPathogenicVarType() {
+		if (effects.isEmpty())
+			return null;
 		return effects.first();
 	}
 
 	@Override
 	public int compareTo(Annotation other) {
-		int result = getMostPathogenicVarType().priorityLevel() - other.getMostPathogenicVarType().priorityLevel();
+		if (getMostPathogenicVarType() == null && getMostPathogenicVarType() == other.getMostPathogenicVarType())
+			return 0;
+		else if (other.getMostPathogenicVarType() == null)
+			return -1;
+		else if (getMostPathogenicVarType() == null)
+			return 1;
+
+		int result = getMostPathogenicVarType().ordinal() - other.getMostPathogenicVarType().ordinal();
 		if (result != 0)
 			return result;
 
@@ -194,6 +219,12 @@ public final class Annotation implements Comparable<Annotation> {
 			return result;
 
 		return transcript.compareTo(other.transcript);
+	}
+
+	@Override
+	public String toString() {
+		return "Annotation [change=" + change + ", effects=" + effects + ", ntHGVSDescription=" + ntHGVSDescription
+				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.accession=" + transcript.accession + "]";
 	}
 
 	@Override

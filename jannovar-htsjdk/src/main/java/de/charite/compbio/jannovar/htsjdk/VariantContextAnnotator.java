@@ -5,7 +5,11 @@ import htsjdk.variant.variantcontext.VariantContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -13,7 +17,8 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -27,6 +32,9 @@ import de.charite.compbio.jannovar.reference.PositionType;
  */
 public final class VariantContextAnnotator {
 
+	/** the logger object to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(VariantContextAnnotator.class);
+
 	public static class Options {
 		/** selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN}) */
 		public final InfoFields infoFields;
@@ -37,14 +45,25 @@ public final class VariantContextAnnotator {
 		 */
 		public final boolean oneAnnotationOnly;
 
+		/** whether or not to escape values in the ANN field (defaults to <code>true</code>) */
+		public final boolean escapeAnnField;
+
+		/** whether or not to perform shifting towards the 3' end of the transcript (defaults to <code>true</code>) */
+		public final boolean nt3PrimeShifting;
+
 		public Options() {
 			infoFields = InfoFields.VCF_ANN;
 			oneAnnotationOnly = true;
+			escapeAnnField = true;
+			nt3PrimeShifting = true;
 		}
 
-		public Options(InfoFields infoFields, boolean oneAnnotationOnly) {
+		public Options(InfoFields infoFields, boolean oneAnnotationOnly, boolean escapeAnnField,
+				boolean nt3PrimeShifting) {
 			this.infoFields = infoFields;
 			this.oneAnnotationOnly = oneAnnotationOnly;
+			this.escapeAnnField = escapeAnnField;
+			this.nt3PrimeShifting = nt3PrimeShifting;
 		}
 	}
 
@@ -80,7 +99,8 @@ public final class VariantContextAnnotator {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 		this.options = options;
-		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions(
+				options.nt3PrimeShifting));
 	}
 
 	/**
@@ -99,6 +119,8 @@ public final class VariantContextAnnotator {
 			return buildUnknownRefAnnotationLists(vc);
 		int chr = boxedInt.intValue();
 
+		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
+
 		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
 			// Get shortcuts to REF, ALT, and POS and build a GenomeChange with stripped common prefixes.
@@ -111,11 +133,16 @@ public final class VariantContextAnnotator {
 			// Build AnnotationList object for this allele.
 			if (alt.contains("[") || alt.contains("]") || alt.equals(".")) {
 				builder.add(AnnotationList.EMPTY);
+				LOGGER.trace("symbolic allele, adding annotation list {}", new Object[] { AnnotationList.EMPTY });
 			} else {
 				try {
-					builder.add(annotator.buildAnnotationList(change));
+					final AnnotationList lst = annotator.buildAnnotationList(change);
+					builder.add(lst);
+					LOGGER.trace("adding annotation list {}", new Object[] { lst });
 				} catch (Exception e) {
-					builder.add(buildErrorAnnotationList(vc));
+					final AnnotationList lst = buildErrorAnnotationList(vc);
+					builder.add(lst);
+					LOGGER.trace("adding error annotation list {}", new Object[] { lst });
 				}
 			}
 		}
@@ -156,7 +183,7 @@ public final class VariantContextAnnotator {
 	}
 
 	private void applyOldJannovarAnnotations(VariantContext vc, List<AnnotationList> annos) {
-		ArrayList<VariantType> effectList = new ArrayList<VariantType>();
+		ArrayList<VariantEffect> effectList = new ArrayList<VariantEffect>();
 		ArrayList<String> hgvsList = new ArrayList<String>();
 
 		final int altAlleleCount = vc.getAlternateAlleles().size();
@@ -176,7 +203,8 @@ public final class VariantContextAnnotator {
 			}
 		}
 
-		vc.getCommonInfo().putAttribute("EFFECT", Joiner.on(',').join(effectList), true); // true allows overwriting
+		FluentIterable<String> effects = FluentIterable.from(effectList).transform(VariantEffect.TO_LEGACY_NAME);
+		vc.getCommonInfo().putAttribute("EFFECT", Joiner.on(',').join(effects), true); // true allows overwriting
 		vc.getCommonInfo().putAttribute("HGVS", Joiner.on(',').join(hgvsList), true); // true allows overwriting
 	}
 
@@ -186,8 +214,11 @@ public final class VariantContextAnnotator {
 	}
 
 	public ImmutableList<AnnotationList> buildUnknownRefAnnotationLists(VariantContext vc) {
-		return ImmutableList.of(new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
-				.of(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND)))));
+		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
+		for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
+			builder.add(new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
+					.of(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND)))));
+		return builder.build();
 	}
 
 }

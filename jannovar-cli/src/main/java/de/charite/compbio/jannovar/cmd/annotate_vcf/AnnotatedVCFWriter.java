@@ -41,8 +41,8 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			ImmutableMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options) {
 		this.refDict = refDict;
 		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap, new VariantContextAnnotator.Options(
-				InfoFields.build(options.writeJannovarInfoFields, options.writeVCFAnnotationStandardInfoFields),
-				!options.showAll));
+				InfoFields.build(options.writeVCFAnnotationStandardInfoFields, options.writeJannovarInfoFields),
+				!options.showAll, options.escapeAnnField, options.nt3PrimeShifting));
 		this.vcfPath = vcfPath;
 		this.options = options;
 

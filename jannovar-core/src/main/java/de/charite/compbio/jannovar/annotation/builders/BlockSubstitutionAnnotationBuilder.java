@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
@@ -32,12 +32,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	 *            {@link TranscriptInfo} to build the annotation for
 	 * @param change
 	 *            {@link GenomeChange} to build the annotation with
+	 * @param options
+	 *            the configuration to use for the {@link AnnotationBuilder}
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a block substitution
 	 */
-	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeChange change)
+	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options)
 			throws InvalidGenomeChange {
-		super(transcript, change);
+		super(transcript, change, options);
 
 		// Guard against invalid genome change.
 		if (change.ref.length() == 0 || change.alt.length() == 0)
@@ -75,12 +77,12 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantType.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
 				null);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantType.START_LOSS), locAnno, ncHGVS(), "p.0?");
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno, ncHGVS(), "p.0?");
 	}
 
 	/**
@@ -113,7 +115,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		// Java.
 
 		// the variant types, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
+		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
@@ -171,14 +173,19 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varTypes.add(VariantType.STOPLOSS);
-			varTypes.add(VariantType.NON_FS_SUBSTITUTION);
+				varTypes.add(VariantEffect.STOP_LOST);
+			else if (change.alt.length() > change.ref.length())
+				varTypes.addAll(ImmutableList.of(VariantEffect.INTERNAL_FEATURE_ELONGATION));
+			else if (change.alt.length() < change.ref.length())
+				varTypes.addAll(ImmutableList.of(VariantEffect.FEATURE_TRUNCATION, VariantEffect.COMPLEX_SUBSTITUTION));
+			else
+				varTypes.add(VariantEffect.MNV);
 
 			if (refChangeBeginPos.getFrameshift() == 0) {
 				// TODO(holtgrem): Implement shifting for substitutions for AA string
@@ -191,7 +198,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Truncate change.alt after stop codon.
 			aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
 			if (aaChange.alt.equals("*"))
-				varTypes.add(VariantType.STOPGAIN);
+				varTypes.add(VariantEffect.STOP_GAINED);
 
 			// Handle the case of no change.
 			if (aaChange.isNop()) {
@@ -228,6 +235,9 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				else
 					protAnno = StringUtil.concatenate(protAnno, "ext*?");
 			}
+
+			if (!varTypes.contains(VariantEffect.MNV))
+				varTypes.add(VariantEffect.COMPLEX_SUBSTITUTION);
 		}
 
 		private void handleFrameShiftCase() {
@@ -237,15 +247,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			//
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check whether it overlaps with the stop site.
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
-				varTypes.add(VariantType.STOPLOSS);
-			varTypes.add(VariantType.FS_SUBSTITUTION);
+				varTypes.add(VariantEffect.STOP_LOST);
 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
@@ -260,11 +269,20 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 					opDesc = "ext"; // stop codon deleted
 				protAnno = StringUtil.concatenate("p.", wtAALong, aaChange.pos + 1, varAALong, opDesc, "*",
 						stopCodonOffset);
+				if (varAALong.length() > varAALong.length())
+					varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
+				else if (varAALong.length() < varAALong.length())
+					varTypes.add(VariantEffect.FRAMESHIFT_TRUNCATION);
+				else if (varAALong.length() > varAALong.length())
+					varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
 				protAnno = "p.0?";
-				varTypes.add(VariantType.STOPLOSS);
+
+				varTypes.addAll(ImmutableList.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST));
 			}
+
+			varTypes.add(VariantEffect.COMPLEX_SUBSTITUTION);
 		}
 	}
 

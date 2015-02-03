@@ -1,14 +1,43 @@
-**develop**
+# Jannovar Changelog
 
-*jannovar-htsjdk*
+## develop
+
+### jannovar-cli
+
+* Added option `--no-3-prime-shifting` to disable shifting towards the
+  3' end of the transcripts.
+* Added option `--no-escape-ann-field` to disable escaping of the `ANN`
+  `INFO` field.
+* Variants in `ANN` field are now annotated with proper Sequence Ontology
+  terms.
+
+### jannovar-htsjdk
+
+* Added option to `VariantContextAnnotator#Options` for disabling
+  3' shifting.
+* Modified `VariantContextAnnotator` allowing to disable escaping of the
+  `ANN` `INFO` field.
+
+### jannovar-core
+
+* Adding `AnnotationBuilderOption` object that allows disabling of 3'
+  shifting towards the transcript.
+* Adding `JannovarOptions#escapeAnnField`.
+* Renaming `VariantType` to `VariantEffect`
+* Changing `VariantType` to use proper Sequence Ontology terms. Legacy
+  names can be obtained through `VariantType#getLegacyName`.
+
+## v0.12
+
+### jannovar-htsjdk
 
 * Started bridge module between Jannovar and HTSJDK.
 
-*jannovar-filter*
+### jannovar-filter
 
 * Started tool for mode of inheritance--based filters.
 
-*jannovar-cli*
+### jannovar-cli
 
 * Splitting out bridge module between jannovar-core and HTSJDK to
   jannovar-htsjdk.
@@ -20,7 +49,7 @@
 * Adding `-v` and `-vv` command line options.
 * Fixing problems with block substitution (delins) case (#87).
 
-*jannovar-core*
+### jannovar-core
 
 * Adding initial support for the transcript support level feature of the new VCF
   annotation standard (only in very recent ENSEMBL releases, apparently).
@@ -47,4 +76,4 @@
 * `GenomePosition` and `GenomeInterval` use zero-based coordinates internally
   now.
 
-**v0.11**
+## v0.11

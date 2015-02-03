@@ -35,6 +35,11 @@ public final class AnnotationList {
 	}
 
 	@Override
+	public String toString() {
+		return "[" + entries + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

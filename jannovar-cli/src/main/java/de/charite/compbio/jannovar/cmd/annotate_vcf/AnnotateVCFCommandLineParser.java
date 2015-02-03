@@ -46,6 +46,8 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		result.writeJannovarInfoFields = cmd.hasOption("old-info-fields");
 		result.writeVCFAnnotationStandardInfoFields = !cmd.hasOption("no-new-info-field");
+		result.escapeAnnField = !cmd.hasOption("no-escape-ann-field");
+		result.nt3PrimeShifting = !cmd.hasOption("no-3-prime-shifting");
 
 		String args[] = cmd.getArgs(); // get remaining arguments
 		if (args.length < 3)
@@ -74,6 +76,10 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 				"write out old Jannovar VCF INFO fields \"EFFECT\" and \"HGVS\" (default is off)"));
 		options.addOption(new Option("", "no-new-info-field", false,
 				"do not write out the new VCF annotation standard INFO field \"ANN\" (default is on)"));
+		options.addOption(new Option("", "no-escape-ann-field", false,
+				"do not escape characters in INFO field \"ANN\" (default is on)"));
+		options.addOption(new Option("", "no-3-prime-shifting", false,
+				"disable shifting of variants towards the 3' end of the transcript (default is on)"));
 	}
 
 	private void printHelp() {

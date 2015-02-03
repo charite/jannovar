@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
@@ -40,11 +40,14 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	 *            {@link TranscriptInfo} to build the annotation for
 	 * @param change
 	 *            {@link GenomeChange} to build the annotation with
+	 * @param options
+	 *            the configuration to use for the {@link AnnotationBuilder}
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe an insertion
 	 */
-	InsertionAnnotationBuilder(TranscriptModel transcript, GenomeChange change) throws InvalidGenomeChange {
-		super(transcript, change);
+	InsertionAnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options)
+			throws InvalidGenomeChange {
+		super(transcript, change, options);
 
 		// Guard against invalid genome change.
 		if (change.ref.length() != 0 || change.alt.length() == 0)
@@ -142,7 +145,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		// Java.
 
 		// the variant type, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
+		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
 		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
@@ -183,7 +186,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			// Guard against the case that aaChange describes a "" -> "" change (synonymous change in stop codon).
 			if (aaChange.ref.length() == 0 && aaChange.alt.length() == 0) {
 				protAnno = "p.=";
-				varTypes.add(VariantType.SYNONYMOUS);
+				varTypes.add(VariantEffect.SYNONYMOUS_VARIANT);
 			} else {
 				// We do not have the corner case of "">"" but can go on with frameshift/non-frameshift distinction.
 				if (change.alt.length() % 3 == 0)
@@ -223,8 +226,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
 					t.toLong(varAASeq.substring(varAAInsertPos - 1, varAASeq.length())));
 			if (varAAStopPos != -1)
-				varTypes.add(VariantType.STOPGAIN);
-			varTypes.add(VariantType.NON_FS_INSERTION);
+				varTypes.add(VariantEffect.STOP_GAINED);
+			varTypes.add(VariantEffect.INFRAME_INSERTION);
 
 			return true;
 		}
@@ -234,7 +237,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			if (varAAStopPos == varAAInsertPos) {
 				// The variant peptide also starts with a stop codon, is synonymous frameshift insertion.
 				protAnno = "p.=";
-				varTypes.add(VariantType.SYNONYMOUS);
+				varTypes.add(VariantEffect.SYNONYMOUS_VARIANT);
 			} else if (varAAStopPos > varAAInsertPos) {
 				// The variant peptide contains a stop codon but does not start with it, is frameshift insertion. In
 				// this case we cannot really differentiate this from a non-frameshift insertion but we still call
@@ -242,12 +245,12 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				// so.
 				protAnno = StringUtil.concatenate("p.*", varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)),
 						"ext*", (varAAStopPos - varAAInsertPos));
-				varTypes.add(VariantType.FS_INSERTION);
+				varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
 			} else {
 				// The variant AA does not contain a stop codon, is stop loss.
 				protAnno = StringUtil.concatenate("p.", t.toLong(varAASeq.charAt(varAAInsertPos)), varAAInsertPos + 1,
 						t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*?");
-				varTypes.add(VariantType.STOPLOSS);
+				varTypes.add(VariantEffect.STOP_LOST);
 			}
 		}
 
@@ -256,26 +259,32 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			if (varAAInsertPos == 0) {
 				// The mutation affects the start codon, is start loss.
 				protAnno = "p.0?";
-				varTypes.add(VariantType.START_LOSS);
+				varTypes.add(VariantEffect.START_LOST);
 			} else {
 				// The start codon is not affected.
 				if (varAAStopPos == varAAInsertPos) {
 					// The insertion directly creates a stop codon, is stop gain.
 					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
 							varAAInsertPos + 1, "*");
-					varTypes.add(VariantType.STOPGAIN);
+					varTypes.add(VariantEffect.STOP_GAINED);
 				} else if (varAAStopPos > varAAInsertPos) {
 					// The insertion is a frameshift variant that leads to a transcript still having a stop codon,
 					// simple frameshift insertion.
 					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
 							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*",
 							(varAAStopPos + 1 - varAAInsertPos));
-					varTypes.add(VariantType.FS_INSERTION);
+
+					if (varAASeq.length() > wtAASeq.length())
+						varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
+					else if (varAASeq.length() < wtAASeq.length())
+						varTypes.add(VariantEffect.FRAMESHIFT_TRUNCATION);
+					else
+						varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
 				} else {
 					// The insertion is a frameshift variant that leads to the loss of the stop codon, is stop loss.
 					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
 							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*?");
-					varTypes.add(VariantType.STOPLOSS);
+					varTypes.add(VariantEffect.STOP_LOST);
 				}
 			}
 		}
@@ -295,17 +304,17 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			if (varAAStopPos == 0) {
 				// varAA starts with a stop codon
 				protAnno = "p.=";
-				varTypes.add(VariantType.SYNONYMOUS);
+				varTypes.add(VariantEffect.SYNONYMOUS_VARIANT);
 			} else if (varAAStopPos > 0) {
 				// varAA contains a stop codon
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAASeq.charAt(aaChange.pos)),
 						"ext*", (varAAStopPos - aaChange.pos)); // last is stop codon AA pos
-				varTypes.add(VariantType.STOPLOSS);
+				varTypes.add(VariantEffect.STOP_LOST);
 			} else {
 				// varAA contains no stop codon
 				protAnno = StringUtil.concatenate("p.*", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
 						t.toLong(varAASeq.charAt(aaChange.pos)), "fs*?");
-				varTypes.add(VariantType.STOPLOSS);
+				varTypes.add(VariantEffect.STOP_LOST);
 			}
 		}
 
@@ -315,8 +324,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				// The mutation affects the start codon, is start loss (in the case of keeping the start codon
 				// intact, we would have jumped into a shifted duplication case earlier.
 				protAnno = "p.0?";
-				varTypes.add(VariantType.START_LOSS);
-				varTypes.add(VariantType.NON_FS_INSERTION);
+				varTypes.add(VariantEffect.START_LOST);
+				varTypes.add(VariantEffect.INFRAME_INSERTION);
 			} else {
 				// The start codon is not affected. Since it is a non-FS insertion, the stop codon cannot be
 				// affected.
@@ -324,8 +333,13 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					// The insertion directly starts with a stop codon, is stop gain.
 					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
 							varAAInsertPos + 1, "*");
-					varTypes.add(VariantType.STOPGAIN);
-					varTypes.add(VariantType.NON_FS_INSERTION);
+					varTypes.add(VariantEffect.STOP_GAINED);
+
+					// Differentiate the case of disruptive and non-disruptive insertions.
+					if (insertPos.pos % 3 == 0)
+						varTypes.add(VariantEffect.INFRAME_INSERTION);
+					else
+						varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
 				} else {
 					if (varAAStopPos != -1 && wtAAStopPos != -1
 							&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
@@ -335,8 +349,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 								varAAInsertPos + 1, "_", t.toLong(wtAASeq.charAt(varAAInsertPos + 1)),
 								varAAInsertPos + 2, "delins",
 								t.toLong(varAASeq.substring(varAAInsertPos, varAAStopPos)));
-						varTypes.add(VariantType.STOPGAIN);
-						varTypes.add(VariantType.NON_FS_INSERTION);
+						varTypes.add(VariantEffect.STOP_GAINED);
+
+						addNonFrameshiftInsertionEffect();
 					} else {
 						// The changes on the amino acid level do not lead to a new stop codon, is non-FS insertion.
 
@@ -355,23 +370,37 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 											varAAInsertPos - aaChange.alt.length() + 1, "_",
 											t.toLong(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos, "dup");
 								}
-								varTypes.add(VariantType.NON_FS_DUPLICATION);
+
+								addNonFrameshiftInsertionEffect();
+								varTypes.add(VariantEffect.DIRECT_TANDEM_DUPLICATION);
 							} else {
 								// We have a simple insertion.
 								protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos - 1)),
 										varAAInsertPos, "_", t.toLong(wtAASeq.charAt(varAAInsertPos)),
 										varAAInsertPos + 1, "ins", t.toLong(aaChange.alt));
-								varTypes.add(VariantType.NON_FS_INSERTION);
+
+								addNonFrameshiftInsertionEffect();
 							}
 						} else {
 							// The delins/substitution case.
 							protAnno = StringUtil.concatenate("p.", t.toLong(aaChange.ref), varAAInsertPos + 1,
 									"delins", t.toLong(aaChange.alt));
-							varTypes.add(VariantType.NON_FS_SUBSTITUTION);
+							addNonFrameshiftInsertionEffect();
 						}
 					}
 				}
 			}
+		}
+
+		/**
+		 * Add insertion effect to {@link #varTypes}, depending on whether the insertion is disruptive or not.
+		 */
+		private void addNonFrameshiftInsertionEffect() {
+			// Differentiate the case of disruptive and non-disruptive insertions.
+			if (insertPos.pos % 3 == 0)
+				varTypes.add(VariantEffect.INFRAME_INSERTION);
+			else
+				varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
 		}
 	}
 

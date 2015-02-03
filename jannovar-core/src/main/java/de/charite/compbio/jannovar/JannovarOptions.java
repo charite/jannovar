@@ -67,6 +67,12 @@ public final class JannovarOptions {
 	/** whether or not to write out the VCF annotation standard fields */
 	public boolean writeVCFAnnotationStandardInfoFields = true;
 
+	/** whether or not to escape characters like <code>'='</code> in the <code>ANN</code> VCF field. */
+	public boolean escapeAnnField = true;
+
+	/** whether or not to shift variants towards the 3' end of the transcript */
+	public boolean nt3PrimeShifting = true;
+
 	// TODO(holtgrem): enable and use this!
 	/** path to output VCF file path (overrides generation of file name from input file name) */
 	public String outVCFFile = null;

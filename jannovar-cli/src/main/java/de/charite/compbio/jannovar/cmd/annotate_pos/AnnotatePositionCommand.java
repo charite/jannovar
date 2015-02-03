@@ -12,6 +12,7 @@ import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
@@ -48,7 +49,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
-		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
+		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
 		System.out.println("#change\teffect\thgvs_annotation");
 		for (String chromosomalChange : options.chromosomalChanges) {
 			// Parse the chromosomal change string into a GenomeChange object.

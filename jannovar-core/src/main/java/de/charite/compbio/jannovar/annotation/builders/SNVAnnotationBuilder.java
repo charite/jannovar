@@ -2,10 +2,12 @@ package de.charite.compbio.jannovar.annotation.builders;
 
 import java.util.ArrayList;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.CDSPosition;
@@ -38,11 +40,13 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 *            {@link TranscriptInfo} to build the annotation for
 	 * @param change
 	 *            {@link GenomeChange} to build the annotation with
+	 * @param options
+	 *            the configuration to use for the {@link AnnotationBuilder}
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a deletion
 	 */
-	SNVAnnotationBuilder(TranscriptModel transcript, GenomeChange change) throws InvalidGenomeChange {
-		super(transcript, change);
+	SNVAnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options) throws InvalidGenomeChange {
+		super(transcript, change, options);
 
 		// guard against invalid genome change
 		if (change.ref.length() != 1 || change.alt.length() != 1)
@@ -111,16 +115,16 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			protAnno = StringUtil.concatenate("p.=");
 
 		// Compute variant type.
-		ArrayList<VariantType> varTypes = computeVariantTypes(wtAA, varAA);
+		ArrayList<VariantEffect> varTypes = computeVariantTypes(wtAA, varAA);
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithTranslationalStartSite(changeInterval)) {
-			varTypes.add(VariantType.START_LOSS);
+			varTypes.add(VariantEffect.START_LOST);
 			protAnno = "p.0?";
 		} else if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 			if (wtAA.equals(varAA)) { // change in stop codon, but no AA change
-				varTypes.add(VariantType.STOP_RETAINED);
+				varTypes.add(VariantEffect.STOP_RETAINED_VARIANT);
 			} else { // change in stop codon, AA change
-				varTypes.add(VariantType.STOPLOSS);
+				varTypes.add(VariantEffect.STOP_LOST);
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
@@ -129,11 +133,11 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		}
 		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 		if (so.overlapsWithSpliceDonorSite(changeInterval))
-			varTypes.add(VariantType.SPLICE_DONOR);
+			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 		else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-			varTypes.add(VariantType.SPLICE_ACCEPTOR);
+			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 		else if (so.overlapsWithSpliceRegion(changeInterval))
-			varTypes.add(VariantType.SPLICE_REGION);
+			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 
 		// Build the resulting Annotation.
 		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
@@ -154,16 +158,16 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 *            variant amino acid
 	 * @return variant types described by single nucleotide change
 	 */
-	private ArrayList<VariantType> computeVariantTypes(String wtAA, String varAA) {
-		ArrayList<VariantType> result = new ArrayList<VariantType>();
+	private ArrayList<VariantEffect> computeVariantTypes(String wtAA, String varAA) {
+		ArrayList<VariantEffect> result = new ArrayList<VariantEffect>();
 		if (wtAA.equals(varAA))
-			result.add(VariantType.SYNONYMOUS);
+			result.add(VariantEffect.SYNONYMOUS_VARIANT);
 		else if (wtAA.equals("*"))
-			result.add(VariantType.STOPLOSS);
+			result.add(VariantEffect.STOP_LOST);
 		else if (varAA.equals("*"))
-			result.add(VariantType.STOPGAIN);
+			result.add(VariantEffect.STOP_GAINED);
 		else
-			result.add(VariantType.MISSENSE);
+			result.add(VariantEffect.MISSENSE_VARIANT);
 		return result;
 	}
 
