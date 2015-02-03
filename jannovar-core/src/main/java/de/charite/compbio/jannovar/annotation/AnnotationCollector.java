@@ -214,8 +214,8 @@ final class AnnotationCollector {
 	 * @return most pathogenic variant type for current variant.
 	 */
 	@SuppressWarnings("unused")
-	private VariantType getMostPathogenicVariantType() {
-		VariantType vt;
+	private VariantEffect getMostPathogenicVariantType() {
+		VariantEffect vt;
 		Collections.sort(this.annotationLst);
 		Annotation a = this.annotationLst.get(0);
 		return a.getMostPathogenicVarType();
@@ -286,9 +286,9 @@ final class AnnotationCollector {
 	 */
 	public void addExonicAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		if (FluentIterable.from(ann.effects).anyMatch(Predicates.equalTo(VariantType.SYNONYMOUS_VARIANT)))
+		if (FluentIterable.from(ann.effects).anyMatch(Predicates.equalTo(VariantEffect.SYNONYMOUS_VARIANT)))
 			this.hasSynonymous = true;
-		else if (FluentIterable.from(ann.effects).anyMatch(VariantType.IS_SPLICING))
+		else if (FluentIterable.from(ann.effects).anyMatch(VariantEffect.IS_SPLICING))
 			this.hasSplicing = true;
 		else
 			this.hasExonic = true;
@@ -322,16 +322,16 @@ final class AnnotationCollector {
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
 		this.geneSymbolSet.add(ann.transcript.geneSymbol);
-		if (FluentIterable.from(ann.effects).anyMatch(VariantType.IS_INTRONIC)) {
+		if (FluentIterable.from(ann.effects).anyMatch(VariantEffect.IS_INTRONIC)) {
 			for (Annotation a : this.annotationLst) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
 			}
 			this.annotationLst.add(ann);
 		}
-		if (ann.getMostPathogenicVarType() == VariantType.CODING_TRANSCRIPT_INTRON_VARIANT) {
+		if (ann.getMostPathogenicVarType() == VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT) {
 			this.hasIntronic = true;
-		} else if (ann.getMostPathogenicVarType() == VariantType.NON_CODING_TRANSCRIPT_INTRON_VARIANT) {
+		} else if (ann.getMostPathogenicVarType() == VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT) {
 			this.hasNcrnaIntronic = true;
 		}
 		this.hasGenicMutation = true;
@@ -378,10 +378,10 @@ final class AnnotationCollector {
 				return;
 		}
 		this.annotationLst.add(ann);
-		VariantType type = ann.getMostPathogenicVarType();
-		if (type == VariantType.DOWNSTREAM_GENE_VARIANT) {
+		VariantEffect type = ann.getMostPathogenicVarType();
+		if (type == VariantEffect.DOWNSTREAM_GENE_VARIANT) {
 			this.hasDownstream = true;
-		} else if (type == VariantType.UPSTREAM_GENE_VARIANT) {
+		} else if (type == VariantEffect.UPSTREAM_GENE_VARIANT) {
 			this.hasUpstream = true;
 		} else {
 			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got {}", type);

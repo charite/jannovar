@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -67,7 +67,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.UPSTREAM_GENE_VARIANT), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), anno.effects);
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, anno.annoLoc);
 		Assert.assertEquals(null, anno.ntHGVSDescription);
 		Assert.assertEquals(null, anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.DOWNSTREAM_GENE_VARIANT), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), anno.effects);
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, anno1.annoLoc);
 		Assert.assertEquals(null, anno1.ntHGVSDescription);
 		Assert.assertEquals(null, anno1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC_VARIANT), anno1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno1.effects);
 
 		// downstream intergenic
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6650340, PositionType.ZERO_BASED),
@@ -102,7 +102,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, anno2.annoLoc);
 		Assert.assertEquals(null, anno2.ntHGVSDescription);
 		Assert.assertEquals(null, anno2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC_VARIANT), anno2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno2.effects);
 	}
 
 	@Test
@@ -115,7 +115,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno.annoLoc.rank);
 		Assert.assertEquals("c.691-11T>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno.effects);
 
 		// position towards left side of intron
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6646100, PositionType.ZERO_BASED),
@@ -125,7 +125,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno2.annoLoc.rank);
 		Assert.assertEquals("c.1044+11T>A", anno2.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), anno2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno2.effects);
 	}
 
 	@Test
@@ -137,7 +137,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno.annoLoc.rank);
 		Assert.assertEquals("c.*1T>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), anno.effects);
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno.annoLoc.rank);
 		Assert.assertEquals("c.-1T>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), anno.effects);
 	}
 
 	@Test
@@ -161,7 +161,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno.annoLoc.rank);
 		Assert.assertEquals("c.1A>T", anno.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno.effects);
 	}
 
 	@Test
@@ -173,7 +173,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno.annoLoc.rank);
 		Assert.assertEquals("c.2067G>C", anno.ntHGVSDescription);
 		Assert.assertEquals("p.*689Tyrext*23", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_LOST), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), anno.effects);
 	}
 
 	@Test
@@ -185,7 +185,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno.annoLoc.rank);
 		Assert.assertEquals("c.2058T>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.Cys686*", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_GAINED), anno.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), anno.effects);
 	}
 
 	@Test
@@ -197,7 +197,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno.annoLoc.rank);
 		Assert.assertEquals("c.2067G>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_RETAINED_VARIANT, VariantType.SYNONYMOUS_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_RETAINED_VARIANT, VariantEffect.SYNONYMOUS_VARIANT),
 				anno.effects);
 	}
 
@@ -211,7 +211,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.-70+1G>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				anno.effects);
 	}
 
@@ -225,7 +225,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.-69-1G>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT, VariantType.SPLICE_ACCEPTOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT, VariantEffect.SPLICE_ACCEPTOR_VARIANT),
 				anno.effects);
 	}
 
@@ -240,7 +240,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.-67G>A", anno.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				anno.effects);
 		// in CDS
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6647537, PositionType.ZERO_BASED),
@@ -250,7 +250,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(6, anno2.annoLoc.rank);
 		Assert.assertEquals("c.1225T>G", anno2.ntHGVSDescription);
 		Assert.assertEquals("p.Cys409Gly", anno2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				anno2.effects);
 	}
 
@@ -265,7 +265,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno1.annoLoc.rank);
 		Assert.assertEquals("c.1A>T", anno1.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno1.effects);
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED),
 				"T", "C");
@@ -274,7 +274,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno2.annoLoc.rank);
 		Assert.assertEquals("c.2T>C", anno2.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno2.effects);
 
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640671, PositionType.ZERO_BASED),
 				"G", "A");
@@ -283,7 +283,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno3.annoLoc.rank);
 		Assert.assertEquals("c.3G>A", anno3.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno3.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno3.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno3.effects);
 
 		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640672, PositionType.ZERO_BASED),
 				"G", "T");
@@ -292,7 +292,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno4.annoLoc.rank);
 		Assert.assertEquals("c.4G>T", anno4.ntHGVSDescription);
 		Assert.assertEquals("p.Asp2Tyr", anno4.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno4.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno4.effects);
 
 		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640673, PositionType.ZERO_BASED),
 				"A", "T");
@@ -301,7 +301,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno5.annoLoc.rank);
 		Assert.assertEquals("c.5A>T", anno5.ntHGVSDescription);
 		Assert.assertEquals("p.Asp2Val", anno5.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno5.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno5.effects);
 
 		GenomeChange change6 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640674, PositionType.ZERO_BASED),
 				"C", "T");
@@ -310,7 +310,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno6.annoLoc.rank);
 		Assert.assertEquals("c.6C>T", anno6.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno6.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), anno6.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno6.effects);
 
 		GenomeChange change7 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640675, PositionType.ZERO_BASED),
 				"G", "T");
@@ -319,7 +319,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno7.annoLoc.rank);
 		Assert.assertEquals("c.7G>T", anno7.ntHGVSDescription);
 		Assert.assertEquals("p.Gly3Cys", anno7.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno7.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno7.effects);
 
 		GenomeChange change8 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640676, PositionType.ZERO_BASED),
 				"G", "T");
@@ -328,7 +328,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno8.annoLoc.rank);
 		Assert.assertEquals("c.8G>T", anno8.ntHGVSDescription);
 		Assert.assertEquals("p.Gly3Val", anno8.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno8.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno8.effects);
 
 		GenomeChange change9 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640677, PositionType.ZERO_BASED),
 				"C", "G");
@@ -337,7 +337,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno9.annoLoc.rank);
 		Assert.assertEquals("c.9C>G", anno9.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno9.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), anno9.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno9.effects);
 
 		GenomeChange change10 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640678, PositionType.ZERO_BASED),
 				"T", "A");
@@ -346,7 +346,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno10.annoLoc.rank);
 		Assert.assertEquals("c.10T>A", anno10.ntHGVSDescription);
 		Assert.assertEquals("p.Ser4Thr", anno10.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno10.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno10.effects);
 	}
 
 	@Test
@@ -360,7 +360,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno1.annoLoc.rank);
 		Assert.assertEquals("c.2066A>G", anno1.ntHGVSDescription);
 		Assert.assertEquals("p.*689Trpext*23", anno1.aaHGVSDescription);
-		Assert.assertEquals(anno1.effects, ImmutableSortedSet.of(VariantType.STOP_LOST));
+		Assert.assertEquals(anno1.effects, ImmutableSortedSet.of(VariantEffect.STOP_LOST));
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
 				"T", "C");
@@ -369,7 +369,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno2.annoLoc.rank);
 		Assert.assertEquals("c.2065T>C", anno2.ntHGVSDescription);
 		Assert.assertEquals("p.*689Glnext*23", anno2.aaHGVSDescription);
-		Assert.assertEquals(anno2.effects, ImmutableSortedSet.of(VariantType.STOP_LOST));
+		Assert.assertEquals(anno2.effects, ImmutableSortedSet.of(VariantEffect.STOP_LOST));
 
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649268, PositionType.ZERO_BASED),
 				"A", "T");
@@ -378,7 +378,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno3.annoLoc.rank);
 		Assert.assertEquals("c.2064A>T", anno3.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno3.aaHGVSDescription);
-		Assert.assertEquals(anno3.effects, ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT));
+		Assert.assertEquals(anno3.effects, ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT));
 
 		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649267, PositionType.ZERO_BASED),
 				"C", "G");
@@ -387,7 +387,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno4.annoLoc.rank);
 		Assert.assertEquals("c.2063C>G", anno4.ntHGVSDescription);
 		Assert.assertEquals("p.Thr688Arg", anno4.aaHGVSDescription);
-		Assert.assertEquals(anno4.effects, ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT));
+		Assert.assertEquals(anno4.effects, ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649266, PositionType.ZERO_BASED),
 				"A", "G");
@@ -396,7 +396,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno5.annoLoc.rank);
 		Assert.assertEquals("c.2062A>G", anno5.ntHGVSDescription);
 		Assert.assertEquals("p.Thr688Ala", anno5.aaHGVSDescription);
-		Assert.assertEquals(anno5.effects, ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT));
+		Assert.assertEquals(anno5.effects, ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeChange change6 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649265, PositionType.ZERO_BASED),
 				"C", "T");
@@ -405,7 +405,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno6.annoLoc.rank);
 		Assert.assertEquals("c.2061C>T", anno6.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno6.aaHGVSDescription);
-		Assert.assertEquals(anno6.effects, ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT));
+		Assert.assertEquals(anno6.effects, ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT));
 
 		GenomeChange change7 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649264, PositionType.ZERO_BASED),
 				"A", "G");
@@ -414,7 +414,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno7.annoLoc.rank);
 		Assert.assertEquals("c.2060A>G", anno7.ntHGVSDescription);
 		Assert.assertEquals("p.Asp687Gly", anno7.aaHGVSDescription);
-		Assert.assertEquals(anno7.effects, ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT));
+		Assert.assertEquals(anno7.effects, ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeChange change8 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649263, PositionType.ZERO_BASED),
 				"G", "A");
@@ -423,7 +423,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno8.annoLoc.rank);
 		Assert.assertEquals("c.2059G>A", anno8.ntHGVSDescription);
 		Assert.assertEquals("p.Asp687Asn", anno8.aaHGVSDescription);
-		Assert.assertEquals(anno8.effects, ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT));
+		Assert.assertEquals(anno8.effects, ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeChange change9 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649262, PositionType.ZERO_BASED),
 				"T", "G");
@@ -432,7 +432,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno9.annoLoc.rank);
 		Assert.assertEquals("c.2058T>G", anno9.ntHGVSDescription);
 		Assert.assertEquals("p.Cys686Trp", anno9.aaHGVSDescription);
-		Assert.assertEquals(anno9.effects, ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT));
+		Assert.assertEquals(anno9.effects, ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeChange change10 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649261, PositionType.ZERO_BASED),
 				"G", "C");
@@ -441,7 +441,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, anno10.annoLoc.rank);
 		Assert.assertEquals("c.2057G>C", anno10.ntHGVSDescription);
 		Assert.assertEquals("p.Cys686Ser", anno10.aaHGVSDescription);
-		Assert.assertEquals(anno10.effects, ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT));
+		Assert.assertEquals(anno10.effects, ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 	}
 
 	@Test
@@ -455,7 +455,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno1.annoLoc.rank);
 		Assert.assertEquals("c.1A>T", anno1.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno1.effects);
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694496, PositionType.ZERO_BASED),
 				"A", "G");
@@ -464,7 +464,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno2.annoLoc.rank);
 		Assert.assertEquals("c.2T>C", anno2.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno2.effects);
 
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694495, PositionType.ZERO_BASED),
 				"C", "T");
@@ -473,7 +473,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno3.annoLoc.rank);
 		Assert.assertEquals("c.3G>A", anno3.ntHGVSDescription);
 		Assert.assertEquals("p.0?", anno3.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.START_LOST), anno3.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST), anno3.effects);
 
 		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694494, PositionType.ZERO_BASED),
 				"C", "A");
@@ -482,7 +482,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno4.annoLoc.rank);
 		Assert.assertEquals("c.4G>T", anno4.ntHGVSDescription);
 		Assert.assertEquals("p.Ala2Ser", anno4.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno4.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno4.effects);
 
 		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694493, PositionType.ZERO_BASED),
 				"G", "A");
@@ -491,7 +491,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno5.annoLoc.rank);
 		Assert.assertEquals("c.5C>T", anno5.ntHGVSDescription);
 		Assert.assertEquals("p.Ala2Val", anno5.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno5.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno5.effects);
 
 		GenomeChange change6 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694492, PositionType.ZERO_BASED),
 				"T", "G");
@@ -500,7 +500,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno6.annoLoc.rank);
 		Assert.assertEquals("c.6A>C", anno6.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno6.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), anno6.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno6.effects);
 
 		GenomeChange change7 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694491, PositionType.ZERO_BASED),
 				"C", "T");
@@ -509,7 +509,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno7.annoLoc.rank);
 		Assert.assertEquals("c.7G>A", anno7.ntHGVSDescription);
 		Assert.assertEquals("p.Ala3Thr", anno7.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno7.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno7.effects);
 
 		GenomeChange change8 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694490, PositionType.ZERO_BASED),
 				"G", "A");
@@ -518,7 +518,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno8.annoLoc.rank);
 		Assert.assertEquals("c.8C>T", anno8.ntHGVSDescription);
 		Assert.assertEquals("p.Ala3Val", anno8.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno8.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno8.effects);
 
 		GenomeChange change9 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23694489, PositionType.ZERO_BASED),
 				"G", "C");
@@ -527,7 +527,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno9.annoLoc.rank);
 		Assert.assertEquals("c.9C>G", anno9.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno9.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), anno9.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno9.effects);
 
 		GenomeChange change10 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23694488, PositionType.ZERO_BASED), "T", "C");
@@ -536,7 +536,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, anno10.annoLoc.rank);
 		Assert.assertEquals("c.10A>G", anno10.ntHGVSDescription);
 		Assert.assertEquals("p.Thr4Ala", anno10.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno10.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno10.effects);
 	}
 
 	@Test
@@ -550,7 +550,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno1.annoLoc.rank);
 		Assert.assertEquals("c.1413A>G", anno1.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_RETAINED_VARIANT, VariantType.SYNONYMOUS_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_RETAINED_VARIANT, VariantEffect.SYNONYMOUS_VARIANT),
 				anno1.effects);
 
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688462, PositionType.ZERO_BASED),
@@ -560,7 +560,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno2.annoLoc.rank);
 		Assert.assertEquals("c.1412A>C", anno2.ntHGVSDescription);
 		Assert.assertEquals("p.*471Serext*9", anno2.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_LOST), anno2.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), anno2.effects);
 
 		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688463, PositionType.ZERO_BASED),
 				"A", "T");
@@ -569,7 +569,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno3.annoLoc.rank);
 		Assert.assertEquals("c.1411T>A", anno3.ntHGVSDescription);
 		Assert.assertEquals("p.*471Lysext*9", anno3.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_LOST), anno3.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), anno3.effects);
 
 		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688464, PositionType.ZERO_BASED),
 				"G", "C");
@@ -578,7 +578,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno4.annoLoc.rank);
 		Assert.assertEquals("c.1410C>G", anno4.ntHGVSDescription);
 		Assert.assertEquals("p.Asp470Glu", anno4.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno4.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno4.effects);
 
 		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688465, PositionType.ZERO_BASED),
 				"T", "C");
@@ -587,7 +587,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno5.annoLoc.rank);
 		Assert.assertEquals("c.1409A>G", anno5.ntHGVSDescription);
 		Assert.assertEquals("p.Asp470Gly", anno5.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno5.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno5.effects);
 
 		GenomeChange change6 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688466, PositionType.ZERO_BASED),
 				"C", "A");
@@ -596,7 +596,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno6.annoLoc.rank);
 		Assert.assertEquals("c.1408G>T", anno6.ntHGVSDescription);
 		Assert.assertEquals("p.Asp470Tyr", anno6.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno6.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno6.effects);
 
 		GenomeChange change7 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688467, PositionType.ZERO_BASED),
 				"C", "G");
@@ -605,7 +605,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno7.annoLoc.rank);
 		Assert.assertEquals("c.1407G>C", anno7.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno7.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), anno7.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno7.effects);
 
 		GenomeChange change8 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688468, PositionType.ZERO_BASED),
 				"G", "T");
@@ -614,7 +614,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno8.annoLoc.rank);
 		Assert.assertEquals("c.1406C>A", anno8.ntHGVSDescription);
 		Assert.assertEquals("p.Thr469Lys", anno8.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno8.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno8.effects);
 
 		GenomeChange change9 = new GenomeChange(new GenomePosition(refDict, '+', 1, 23688469, PositionType.ZERO_BASED),
 				"T", "C");
@@ -623,7 +623,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno9.annoLoc.rank);
 		Assert.assertEquals("c.1405A>G", anno9.ntHGVSDescription);
 		Assert.assertEquals("p.Thr469Ala", anno9.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), anno9.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno9.effects);
 
 		GenomeChange change10 = new GenomeChange(
 				new GenomePosition(refDict, '+', 1, 23688470, PositionType.ZERO_BASED), "A", "G");
@@ -632,7 +632,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, anno10.annoLoc.rank);
 		Assert.assertEquals("c.1404T>C", anno10.ntHGVSDescription);
 		Assert.assertEquals("p.=", anno10.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), anno10.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno10.effects);
 	}
 
 	//
@@ -657,7 +657,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1663A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Lys555*", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_GAINED), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation1.effects);
 	}
 
 	@Test
@@ -680,7 +680,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.431G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Trp144*", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_GAINED), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation1.effects);
 	}
 
 	@Test
@@ -701,7 +701,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.819T>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Tyr273*", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_GAINED), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation1.effects);
 	}
 
 	@Test
@@ -724,7 +724,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(8, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1000T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.*334Argext*29", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_LOST), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.effects);
 	}
 
 	@Test
@@ -748,7 +748,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.1134+1T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -772,7 +772,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1135T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.*379Argext*29", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_LOST), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.effects);
 	}
 
 	@Test
@@ -795,7 +795,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(9, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1171T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.*391Argext*3", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.STOP_LOST), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.effects);
 	}
 
 	//
@@ -822,7 +822,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(11, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1060A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr354Ser", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -846,7 +846,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1090A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr364Ser", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -870,7 +870,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1099A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr367Ser", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -894,7 +894,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(10, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1150A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr384Ser", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -918,7 +918,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.166A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr56Ala", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -941,7 +941,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.166A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr56Ala", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -962,7 +962,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.70A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr24Ala", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -985,7 +985,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(16, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1718A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Asn573Ser", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1008,7 +1008,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.308A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu103Gly", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1030,7 +1030,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.434A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.His145Arg", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1053,7 +1053,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.197A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu66Gly", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1076,7 +1076,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.320A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu107Gly", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1099,7 +1099,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.515A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu172Gly", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1122,7 +1122,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.515A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu172Gly", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1145,7 +1145,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(20, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2756A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Glu919Gly", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1168,7 +1168,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.194A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gln65Arg", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1191,7 +1191,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.229G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ala77Thr", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1214,7 +1214,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.47G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Cys16Tyr", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1237,7 +1237,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(8, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.974C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr325Ile", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -1261,7 +1261,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.7G>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Val3Leu", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1284,7 +1284,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(11, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2653G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Val885Met", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1307,7 +1307,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.857A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gln286Arg", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1330,7 +1330,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.230A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gln77Arg", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1353,7 +1353,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.17A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.His6Arg", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1376,7 +1376,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(8, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.727A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Ile243Val", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1399,7 +1399,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(9, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.542G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gly181Asp", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1422,7 +1422,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.446A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Gln149Arg", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 	//
@@ -1449,7 +1449,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(11, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1060A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Thr354Ser", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -1473,7 +1473,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.573G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1496,7 +1496,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(20, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2922G>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1519,7 +1519,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-118T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1542,7 +1542,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.207C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1565,7 +1565,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.708C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1588,7 +1588,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1551T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1611,7 +1611,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.750G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1634,7 +1634,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.814C>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1657,7 +1657,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.886C>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1680,7 +1680,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.96C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1703,7 +1703,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.291A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1726,7 +1726,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(24, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.4128T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1749,7 +1749,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.246G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1772,7 +1772,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.99G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1795,7 +1795,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.441T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1818,7 +1818,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(22, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.3030C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1841,7 +1841,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1569T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1864,7 +1864,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.936G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1887,7 +1887,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(27, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1785A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1910,7 +1910,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.171T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1933,7 +1933,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(25, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.3429T>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SYNONYMOUS_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.effects);
 	}
 
 	//
@@ -1960,7 +1960,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(36, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*51G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -1983,7 +1983,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-74A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2006,7 +2006,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*148C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2029,7 +2029,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-39C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2052,7 +2052,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-10A>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2075,7 +2075,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-37T>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2097,7 +2097,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-3T>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2120,7 +2120,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-49G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2143,7 +2143,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-393T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2166,7 +2166,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-62T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2189,7 +2189,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-33G>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2212,7 +2212,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-725G>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2236,7 +2236,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.336+1G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.SPLICE_DONOR_VARIANT, VariantType.CODING_TRANSCRIPT_INTRON_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2260,8 +2260,8 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(19, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.2818-2T>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR_VARIANT,
-				VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2283,8 +2283,8 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.225-1G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.SPLICE_ACCEPTOR_VARIANT,
-				VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2307,8 +2307,8 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(8, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.6224-1G>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT,
-				VariantType.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2332,7 +2332,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.6332+2T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2357,7 +2357,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.6332+3A>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2381,7 +2381,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(9, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.6332G>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Arg2111Thr", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2406,7 +2406,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.6332+2_6332+4delinsCCT", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2431,7 +2431,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.1121+2T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2456,7 +2456,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.1239+2T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2481,7 +2481,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.234+2T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2506,7 +2506,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.135+1T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2530,8 +2530,8 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.214-2A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT,
-				VariantType.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2554,8 +2554,8 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(5, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1074-1G>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT,
-				VariantType.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2579,7 +2579,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.168+2T>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_DONOR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				annotation1.effects);
 	}
 
@@ -2603,8 +2603,8 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.337-1G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT,
-				VariantType.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2627,7 +2627,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(36, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*51G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	//
@@ -2654,7 +2654,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.359T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2676,7 +2676,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.507C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2697,7 +2697,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.60C>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2720,7 +2720,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(8, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.876G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2743,7 +2743,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.724G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2766,7 +2766,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.375A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2787,7 +2787,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.647A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2810,7 +2810,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.250G>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -2838,7 +2838,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*66C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	//
@@ -2865,7 +2865,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.effects);
 	}
 
 	@Test
@@ -2888,7 +2888,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -2914,7 +2914,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(null, annotation1.annoLoc);
 		Assert.assertEquals(null, annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.INTERGENIC_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.effects);
 	}
 
 	// Various Intronic Variants
@@ -2943,7 +2943,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(13, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.1597+24A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -2972,7 +2972,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-58+141C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3001,7 +3001,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-57-23C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3031,7 +3031,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*40+38C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3060,7 +3060,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(7, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*41-164T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3089,7 +3089,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.135+91T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3119,7 +3119,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.136-7C>T", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -3147,7 +3147,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-174-93T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3174,7 +3174,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.-175+69A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3203,7 +3203,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*38-90T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3232,7 +3232,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.*37+65A>G", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.THREE_PRIME_UTR_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3259,7 +3259,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.620-62T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3286,7 +3286,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(6, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.619+201T>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.=", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
 	}
 
 	/**
@@ -3315,7 +3315,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.313+168C>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.effects);
 	}
 
@@ -3345,7 +3345,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(2, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.314-639C>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.effects);
 	}
 
@@ -3375,7 +3375,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.424+697T>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.effects);
 	}
 
@@ -3405,7 +3405,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(3, annotation1.annoLoc.rank);
 		Assert.assertEquals("n.425-558C>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.effects);
 	}
 
@@ -3435,7 +3435,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals("c.1803-7G>C", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantType.CODING_TRANSCRIPT_INTRON_VARIANT, VariantType.SPLICE_REGION_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.effects);
 	}
 
@@ -3459,7 +3459,7 @@ public class SNVAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.annoLoc.rank);
 		Assert.assertEquals("c.602G>A", annotation1.ntHGVSDescription);
 		Assert.assertEquals("p.Arg201His", annotation1.aaHGVSDescription);
-		Assert.assertEquals(ImmutableSortedSet.of(VariantType.MISSENSE_VARIANT), annotation1.effects);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.effects);
 	}
 
 }

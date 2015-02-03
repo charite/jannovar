@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
@@ -157,7 +157,7 @@ public final class VariantContextAnnotator {
 	}
 
 	private void applyOldJannovarAnnotations(VariantContext vc, List<AnnotationList> annos) {
-		ArrayList<VariantType> effectList = new ArrayList<VariantType>();
+		ArrayList<VariantEffect> effectList = new ArrayList<VariantEffect>();
 		ArrayList<String> hgvsList = new ArrayList<String>();
 
 		final int altAlleleCount = vc.getAlternateAlleles().size();
@@ -177,7 +177,7 @@ public final class VariantContextAnnotator {
 			}
 		}
 
-		FluentIterable<String> effects = FluentIterable.from(effectList).transform(VariantType.TO_LEGACY_NAME);
+		FluentIterable<String> effects = FluentIterable.from(effectList).transform(VariantEffect.TO_LEGACY_NAME);
 		vc.getCommonInfo().putAttribute("EFFECT", Joiner.on(',').join(effects), true); // true allows overwriting
 		vc.getCommonInfo().putAttribute("HGVS", Joiner.on(',').join(hgvsList), true); // true allows overwriting
 	}

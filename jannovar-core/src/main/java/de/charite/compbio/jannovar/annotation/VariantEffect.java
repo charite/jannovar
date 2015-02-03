@@ -17,7 +17,7 @@ import com.google.common.base.Predicate;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public enum VariantType {
+public enum VariantEffect {
 
 	//
 	// HIGH Putative Impact
@@ -143,7 +143,7 @@ public enum VariantType {
 	 */
 	RARE_AMINO_ACID_VARIANT,
 	/**
-	 * Marker for smallest {@link VariantType} with {@link PutativeImpact#HIGH} impact.
+	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#HIGH} impact.
 	 */
 	_SMALLEST_HIGH_IMPACT,
 
@@ -204,7 +204,7 @@ public enum VariantType {
 	 */
 	SPLICE_REGION_VARIANT,
 	/**
-	 * Marker for smallest {@link VariantType} with {@link PutativeImpact#MODERATE} impact.
+	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#MODERATE} impact.
 	 */
 	_SMALLEST_MODERATE_IMPACT,
 
@@ -271,7 +271,7 @@ public enum VariantType {
 	 */
 	NON_CODING_TRANSCRIPT_INTRON_VARIANT,
 	/**
-	 * Marker for smallest {@link VariantType} with {@link PutativeImpact#LOW} impact.
+	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#LOW} impact.
 	 */
 	_SMALLEST_LOW_IMPACT,
 
@@ -444,41 +444,41 @@ public enum VariantType {
 	CHROMOSOME;
 
 	/**
-	 * {@link Predicate} for testing whether a {@link VariantType} is related to splicing.
+	 * {@link Predicate} for testing whether a {@link VariantEffect} is related to splicing.
 	 */
-	public static final Predicate<VariantType> IS_SPLICING = new Predicate<VariantType>() {
+	public static final Predicate<VariantEffect> IS_SPLICING = new Predicate<VariantEffect>() {
 		@Override
-		public boolean apply(VariantType arg) {
+		public boolean apply(VariantEffect arg) {
 			return arg.isSplicing();
 		}
 	};
 
 	/**
-	 * {@link Predicate} for testing whether a {@link VariantType} is intronic.
+	 * {@link Predicate} for testing whether a {@link VariantEffect} is intronic.
 	 */
-	public static final Predicate<VariantType> IS_INTRONIC = new Predicate<VariantType>() {
+	public static final Predicate<VariantEffect> IS_INTRONIC = new Predicate<VariantEffect>() {
 		@Override
-		public boolean apply(VariantType arg) {
+		public boolean apply(VariantEffect arg) {
 			return arg.isIntronic();
 		}
 	};
 
 	/**
-	 * {@link Function} for converting from {@link VariantType} to SO term String.
+	 * {@link Function} for converting from {@link VariantEffect} to SO term String.
 	 */
-	public static final Function<VariantType, String> TO_SO_TERM = new Function<VariantType, String>() {
+	public static final Function<VariantEffect, String> TO_SO_TERM = new Function<VariantEffect, String>() {
 		@Override
-		public String apply(VariantType arg) {
+		public String apply(VariantEffect arg) {
 			return arg.getSequenceOntologyTerm();
 		}
 	};
 
 	/**
-	 * {@link Function} for converting from {@link VariantType} to legacy term.
+	 * {@link Function} for converting from {@link VariantEffect} to legacy term.
 	 */
-	public static final Function<VariantType, String> TO_LEGACY_NAME = new Function<VariantType, String>() {
+	public static final Function<VariantEffect, String> TO_LEGACY_NAME = new Function<VariantEffect, String>() {
 		@Override
-		public String apply(VariantType arg) {
+		public String apply(VariantEffect arg) {
 			return arg.getLegacyTerm();
 		}
 	};
@@ -843,21 +843,21 @@ public enum VariantType {
 	/**
 	 * Forward to <code>ordinal()</code> member function.
 	 *
-	 * @return <code>int</int> with the number used for sorting values of type {@link VariantType}.
+	 * @return <code>int</int> with the number used for sorting values of type {@link VariantEffect}.
 	 */
 	public int getNumber() {
 		return ordinal();
 	}
 
 	/**
-	 * @return <code>true</code> if this {@link VariantType} annotates structural variants.
+	 * @return <code>true</code> if this {@link VariantEffect} annotates structural variants.
 	 */
 	public boolean isStructural() {
 		return (this == STRUCTURAL_VARIANT);
 	}
 
 	/**
-	 * @return <code>true</code> if this {@link VariantType} could affect splicing.
+	 * @return <code>true</code> if this {@link VariantEffect} could affect splicing.
 	 */
 	public boolean isSplicing() {
 		switch (this) {

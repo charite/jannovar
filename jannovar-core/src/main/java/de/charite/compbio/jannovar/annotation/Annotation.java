@@ -50,7 +50,7 @@ public final class Annotation implements Comparable<Annotation> {
 	public final GenomeChange change;
 
 	/** variant types, sorted by internal pathogenicity score */
-	public final ImmutableSortedSet<VariantType> effects;
+	public final ImmutableSortedSet<VariantEffect> effects;
 
 	/** errors and warnings */
 	public final ImmutableSortedSet<AnnotationMessage> messages;
@@ -61,8 +61,8 @@ public final class Annotation implements Comparable<Annotation> {
 	public final PutativeImpact getPutativeImpact() {
 		if (effects.isEmpty())
 			return null;
-		VariantType worst = effects.first();
-		for (VariantType vt : effects)
+		VariantEffect worst = effects.first();
+		for (VariantEffect vt : effects)
 			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
 				worst = vt;
 		return worst.getImpact();
@@ -77,7 +77,7 @@ public final class Annotation implements Comparable<Annotation> {
 	/** amino acid variant annotation */
 	public final String aaHGVSDescription;
 
-	/** the transcript, <code>null</code> for {@link VariantType#INTERGENIC} annotations */
+	/** the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
 	public final TranscriptModel transcript;
 
 	/**
@@ -108,7 +108,7 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param aaHGVSDescription
 	 *            amino acid variant description following the HGVS nomenclauture
 	 */
-	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantType> varTypes,
+	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription) {
 		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, aaHGVSDescription, ImmutableSortedSet
 				.<AnnotationMessage> of());
@@ -134,7 +134,7 @@ public final class Annotation implements Comparable<Annotation> {
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
-	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantType> varTypes,
+	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
 			Collection<AnnotationMessage> messages) {
 		this.change = change;
@@ -178,9 +178,9 @@ public final class Annotation implements Comparable<Annotation> {
 	}
 
 	/**
-	 * @return most pathogenic {@link VariantType} link {@link #effects}.
+	 * @return most pathogenic {@link VariantEffect} link {@link #effects}.
 	 */
-	public VariantType getMostPathogenicVarType() {
+	public VariantEffect getMostPathogenicVarType() {
 		return effects.first();
 	}
 

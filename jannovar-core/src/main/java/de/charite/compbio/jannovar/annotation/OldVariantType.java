@@ -166,7 +166,7 @@ public enum OldVariantType {
         /**
          * A string representing the variant type (e.g., missense_variant, stop_gained,...)
          *
-         * @return Name of this {@link VariantType}
+         * @return Name of this {@link VariantEffect}
          */
         public String toDisplayString() {
                 switch (this) {
@@ -234,7 +234,7 @@ public enum OldVariantType {
         /**
          * A Sequence Ontology (SO) term string representing the variant type (e.g., missense_variant, stop_gained,...)
          *
-         * @return SO-term representation of this {@link VariantType}
+         * @return SO-term representation of this {@link VariantEffect}
          */
         public String toSequenceOntologyTerm() {
                 switch (this) {

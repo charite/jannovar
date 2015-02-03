@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -34,7 +34,7 @@ public final class AnnotationBuilderDispatcher {
 	 */
 	public Annotation build() throws InvalidGenomeChange {
 		if (transcript == null)
-			return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC_VARIANT), null, null, null);
+			return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null, null, null);
 
 		switch (change.getType()) {
 		case SNV:

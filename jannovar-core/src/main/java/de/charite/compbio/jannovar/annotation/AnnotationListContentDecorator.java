@@ -36,7 +36,7 @@ public class AnnotationListContentDecorator {
 	}
 
 	/**
-	 * @return <code>true</code> if the list contains a variant where {@link VariantType#isSV()} returns
+	 * @return <code>true</code> if the list contains a variant where {@link VariantEffect#isSV()} returns
 	 *         <code>true</code>.
 	 */
 	public boolean hasStructuralVariant() {
@@ -68,10 +68,10 @@ public class AnnotationListContentDecorator {
 	}
 
 	/**
-	 * @return the {@link VariantType} of the variant with highest priority or <code>null</code> if no such variant
+	 * @return the {@link VariantEffect} of the variant with highest priority or <code>null</code> if no such variant
 	 *         exists
 	 */
-	public VariantType getVariantType() {
+	public VariantEffect getVariantType() {
 		if (annotations.entries.size() == 0)
 			return null;
 		else

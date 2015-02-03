@@ -20,7 +20,7 @@ import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 class VCFAnnotationData {
 
 	/** predicted effects */
-	public ImmutableSortedSet<VariantType> effects = ImmutableSortedSet.<VariantType> of();
+	public ImmutableSortedSet<VariantEffect> effects = ImmutableSortedSet.<VariantEffect> of();
 	/** predicted impact */
 	public PutativeImpact impact = null;
 	/** symbol of affected gene */
@@ -90,8 +90,8 @@ class VCFAnnotationData {
 		geneID = tm.geneID;
 		featureBioType = tm.isCoding() ? "Coding" : "Noncoding";
 
-		if (effects.contains(VariantType.INTERGENIC_VARIANT) || effects.contains(VariantType.UPSTREAM_GENE_VARIANT)
-				|| effects.contains(VariantType.DOWNSTREAM_GENE_VARIANT)) {
+		if (effects.contains(VariantEffect.INTERGENIC_VARIANT) || effects.contains(VariantEffect.UPSTREAM_GENE_VARIANT)
+				|| effects.contains(VariantEffect.DOWNSTREAM_GENE_VARIANT)) {
 			if (change.getGenomeInterval().isLeftOf(tm.txRegion.getGenomeBeginPos()))
 				this.distance = tm.txRegion.getGenomeBeginPos().differenceTo(
 						change.getGenomeInterval().getGenomeEndPos());
@@ -108,7 +108,7 @@ class VCFAnnotationData {
 	 */
 	public Object[] toArray(String allele) {
 		final Joiner joiner = Joiner.on('&').useForNull("");
-		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantType.TO_SO_TERM));
+		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantEffect.TO_SO_TERM));
 		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
 				featureBioType, getRankString(), ntHGVSDescription, aaHGVSDescription, getTXPosString(),
 				getCdsPosString(), getAAPosString(), getDistanceString(), joiner.join(messages) };
