@@ -2,11 +2,19 @@
 
 *jannovar-cli*
 
+* Added option `--no-escape-ann-field` to disable escaping of the `ANN`
+  `INFO` field.
 * Variants in `ANN` field are now annotated with proper Sequence Ontology
   terms.
 
+*jannovar-htsjdk*
+
+* modified `VariantContextAnnotator` allowing to disable escaping of the
+  `ANN` `INFO` field.
+
 *jannovar-core*
 
+* Adding `JannovarOptions#escapeAnnField`.
 * Renaming `VariantType` to `VariantEffect`
 * Changing `VariantType` to use proper Sequence Ontology terms. Legacy
   names can be obtained through `VariantType#getLegacyName`.

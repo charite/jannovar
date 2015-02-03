@@ -154,8 +154,11 @@ public final class Annotation implements Comparable<Annotation> {
 	 *
 	 * The <code>ALT</code> allele has to be given to this function since we trim away at least the first base of
 	 * <code>REF</code>/<code>ALT</code>.
+	 *
+	 * @param escape
+	 *            whether or not to escape the invalid VCF characters, e.g. <code>'='</code>.
 	 */
-	public String toVCFAnnoString(String alt) {
+	public String toVCFAnnoString(String alt, boolean escape) {
 		VCFAnnotationData data = new VCFAnnotationData();
 		data.effects = effects;
 		data.impact = getPutativeImpact();
@@ -164,7 +167,17 @@ public final class Annotation implements Comparable<Annotation> {
 		data.ntHGVSDescription = ntHGVSDescription;
 		data.aaHGVSDescription = aaHGVSDescription;
 		data.messages = messages;
-		return data.toString(alt);
+		if (escape)
+			return data.toString(alt);
+		else
+			return data.toUnescapedString(alt);
+	}
+
+	/**
+	 * Forward to {@link toVCFAnnoString}<code>(alt, true)</code>.
+	 */
+	public String toVCFAnnoString(String alt) {
+		return toVCFAnnoString(alt, true);
 	}
 
 	/**

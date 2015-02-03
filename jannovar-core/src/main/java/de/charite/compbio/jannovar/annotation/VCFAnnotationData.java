@@ -114,7 +114,7 @@ class VCFAnnotationData {
 				getCdsPosString(), getAAPosString(), getDistanceString(), joiner.join(messages) };
 	}
 
-	private String toUnescapedString(String allele) {
+	public String toUnescapedString(String allele) {
 		return Joiner.on('|').useForNull("").join(toArray(allele));
 	}
 

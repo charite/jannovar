@@ -38,7 +38,7 @@ Annotate the example file `small.vcf`:
 Inspect the resulting annotated file:
 
 ```
-# less small.jv.vcf
+# less examples/small.jv.vcf
 ```
 
 Also see the
