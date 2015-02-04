@@ -3,10 +3,14 @@ package de.charite.compbio.jannovar.cmd.annotate_vcf;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.vcf.VCFFileReader;
+import htsjdk.variant.vcf.VCFHeaderLine;
 
 import java.io.File;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.annotation.AnnotationException;
@@ -37,18 +41,26 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	/** writer for annotated VariantContext objects */
 	private final VariantContextWriter out;
 
+	/** command line arguments to Jannovar */
+	private final ImmutableList<String> args;
+
 	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFFileReader reader,
-			ImmutableMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options) {
+			ImmutableMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options,
+			ImmutableList<String> args) {
 		this.refDict = refDict;
 		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap, new VariantContextAnnotator.Options(
 				InfoFields.build(options.writeVCFAnnotationStandardInfoFields, options.writeJannovarInfoFields),
 				!options.showAll, options.escapeAnnField, options.nt3PrimeShifting));
 		this.vcfPath = vcfPath;
 		this.options = options;
+		this.args = args;
 
 		final InfoFields fields = InfoFields.build(options.writeVCFAnnotationStandardInfoFields,
 				options.writeJannovarInfoFields);
-		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(reader, getOutFileName(), fields);
+		ImmutableSet<VCFHeaderLine> additionalLines = ImmutableSet.of(new VCFHeaderLine("jannovarVersion",
+				JannovarOptions.JANNOVAR_VERSION), new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
+		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(reader, getOutFileName(), fields,
+				additionalLines);
 	}
 
 	/** @return output file name, depending on this.options */

@@ -45,7 +45,7 @@ public class JannovarAnnotateVCFTest {
 
 		final File expectedFile = new File(this.getClass().getResource("/small.jv.vcf").toURI().getPath());
 		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8);
+		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -63,7 +63,7 @@ public class JannovarAnnotateVCFTest {
 
 		final File expectedFile = new File(this.getClass().getResource("/small.bothinfo.jv.vcf").toURI().getPath());
 		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8);
+		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -81,7 +81,7 @@ public class JannovarAnnotateVCFTest {
 
 		final File expectedFile = new File(this.getClass().getResource("/small.oldinfo.jv.vcf").toURI().getPath());
 		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8);
+		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -100,7 +100,7 @@ public class JannovarAnnotateVCFTest {
 
 		final File expectedFile = new File(this.getClass().getResource("/semicolons.jv.vcf").toURI().getPath());
 		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8);
+		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
 		Assert.assertEquals(expected, actual);
 	}
 

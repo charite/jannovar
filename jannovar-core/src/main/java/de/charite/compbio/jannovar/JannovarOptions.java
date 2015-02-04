@@ -16,6 +16,9 @@ import com.google.common.collect.ImmutableList;
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class JannovarOptions {
+	/** the version of the program */
+	public static final String JANNOVAR_VERSION = "0.13";
+
 	/** the selected command */
 	public Command command = null;
 
