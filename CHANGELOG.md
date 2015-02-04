@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Writing out annotation about Jannovar call and version into the VCF file.
 * Added option `--no-3-prime-shifting` to disable shifting towards the
   3' end of the transcripts.
 * Added option `--no-escape-ann-field` to disable escaping of the `ANN`
@@ -13,6 +14,8 @@
 
 ### jannovar-htsjdk
 
+* Changing `VariantContextWriterConstructionHelper` to allow writing out
+  of additional header lines.
 * Added option to `VariantContextAnnotator#Options` for disabling
   3' shifting.
 * Modified `VariantContextAnnotator` allowing to disable escaping of the

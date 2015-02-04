@@ -5,6 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
 
@@ -19,6 +21,8 @@ public abstract class JannovarCommand {
 	protected JannovarOptions options;
 	/** Verbosity level: (0) quiet, (1) normal, (2) verbose, (3) very verbose */
 	protected int verbosity = 1;
+	/** command line arguments */
+	protected final ImmutableList<String> args;
 
 	/**
 	 * Initialize the JannovarCommand.
@@ -33,6 +37,7 @@ public abstract class JannovarCommand {
 	public JannovarCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		this.options = parseCommandLine(argv);
 		this.verbosity = options.verbosity;
+		this.args = ImmutableList.copyOf(argv);
 		setLogLevel();
 	}
 
