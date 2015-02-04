@@ -592,11 +592,11 @@ public enum VariantEffect {
 	 * @return {@link PutativeImpact} of this effect annotation.
 	 */
 	public PutativeImpact getImpact() {
-		if (this.ordinal() >= _SMALLEST_HIGH_IMPACT.ordinal())
+		if (this.ordinal() <= _SMALLEST_HIGH_IMPACT.ordinal())
 			return PutativeImpact.HIGH;
-		else if (this.ordinal() >= _SMALLEST_MODERATE_IMPACT.ordinal())
+		else if (this.ordinal() <= _SMALLEST_MODERATE_IMPACT.ordinal())
 			return PutativeImpact.MODERATE;
-		else if (this.ordinal() >= _SMALLEST_LOW_IMPACT.ordinal())
+		else if (this.ordinal() <= _SMALLEST_LOW_IMPACT.ordinal())
 			return PutativeImpact.LOW;
 		else
 			return PutativeImpact.MODIFIER;
