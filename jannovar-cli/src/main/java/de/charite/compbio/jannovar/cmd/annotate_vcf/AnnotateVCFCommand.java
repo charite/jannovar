@@ -51,7 +51,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				if (this.options.jannovarFormat)
 					writer = new AnnotatedJannovarWriter(refDict, chromosomeMap, vcfPath, options);
 				else
-					writer = new AnnotatedVCFWriter(refDict, parser, chromosomeMap, vcfPath, options);
+					writer = new AnnotatedVCFWriter(refDict, parser, chromosomeMap, vcfPath, options, args);
 
 				// annotate and write out all variants
 				for (VariantContext vc : parser)

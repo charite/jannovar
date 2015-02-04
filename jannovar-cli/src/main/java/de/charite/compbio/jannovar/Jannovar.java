@@ -1,8 +1,6 @@
 package de.charite.compbio.jannovar;
 
 /** Command line functions from apache */
-import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
@@ -10,7 +8,6 @@ import de.charite.compbio.jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import de.charite.compbio.jannovar.cmd.db_list.DatabaseListCommand;
 import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
@@ -112,7 +109,7 @@ public final class Jannovar {
 	 */
 	private static void printTopLevelHelp() {
 		System.err.println("Program: de.charite.compbio.jannovar (functional annotation of VCF files)");
-		System.err.println("Version: 0.10");
+		System.err.println("Version: " + JannovarOptions.JANNOVAR_VERSION);
 		System.err.println("Contact: Peter N Robinson <peter.robinson@charite.de>");
 		System.err.println("");
 		System.err.println("Usage: java -jar de.charite.compbio.jannovar.jar <command> [options]");

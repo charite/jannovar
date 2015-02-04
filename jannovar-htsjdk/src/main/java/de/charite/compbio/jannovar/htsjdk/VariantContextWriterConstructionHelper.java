@@ -5,10 +5,14 @@ import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
+import htsjdk.variant.vcf.VCFHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLineType;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 import java.io.File;
+import java.util.Collection;
+
+import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 
@@ -31,8 +35,11 @@ public final class VariantContextWriterConstructionHelper {
 	 *            path to output file
 	 * @param fields
 	 *            selection of header fields to write out
+	 * @param additionalHeaderLines
+	 *            additional {@link VCFHeaderLine}s to add
 	 */
-	public static VariantContextWriter openVariantContextWriter(VCFFileReader reader, String fileName, InfoFields fields) {
+	public static VariantContextWriter openVariantContextWriter(VCFFileReader reader, String fileName,
+			InfoFields fields, Collection<VCFHeaderLine> additionalHeaderLines) {
 		// construct factory object for VariantContextWriter
 		VariantContextWriterBuilder builder = new VariantContextWriterBuilder();
 		builder.setReferenceDictionary(reader.getFileHeader().getSequenceDictionary());
@@ -45,8 +52,19 @@ public final class VariantContextWriterConstructionHelper {
 
 		// construct VariantContextWriter and write out header
 		VariantContextWriter out = builder.build();
-		out.writeHeader(extendHeaderFields(reader.getFileHeader(), fields));
+		final VCFHeader header = extendHeaderFields(new VCFHeader(reader.getFileHeader()), fields);
+		for (VCFHeaderLine headerLine : additionalHeaderLines)
+			header.addMetaDataLine(headerLine);
+		out.writeHeader(header);
 		return out;
+	}
+
+	/**
+	 * Forward to {@link #openVariantContextWriter(VCFFileReader, String, InfoFields, Collection)}.
+	 */
+	public static VariantContextWriter openVariantContextWriter(VCFFileReader reader, String fileName,
+			InfoFields fields) {
+		return openVariantContextWriter(reader, fileName, fields, ImmutableList.<VCFHeaderLine> of());
 	}
 
 	/**
