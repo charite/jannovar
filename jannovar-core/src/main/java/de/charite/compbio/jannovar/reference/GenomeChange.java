@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.reference;
 
+import com.google.common.base.Joiner;
+
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.util.DNAUtils;
 
@@ -128,7 +130,7 @@ public final class GenomeChange {
 	 */
 	@Override
 	public String toString() {
-		return pos.toString() + ":" + ref + ">" + alt;
+		return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
 	}
 
 	/**

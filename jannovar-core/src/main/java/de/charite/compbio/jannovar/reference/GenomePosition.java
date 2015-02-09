@@ -168,7 +168,7 @@ public final class GenomePosition implements Serializable {
 		if (strand == '-')
 			return withStrand('+').toString();
 
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":", pos + 1);
+		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", pos + 1);
 	}
 
 	/*

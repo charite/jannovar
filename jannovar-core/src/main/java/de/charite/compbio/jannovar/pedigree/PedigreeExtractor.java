@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-class PedigreeExtractor {
+public class PedigreeExtractor {
 
 	/** name of the pedigree to extract */
 	private final String name;

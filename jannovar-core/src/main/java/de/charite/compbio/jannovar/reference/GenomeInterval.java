@@ -209,7 +209,7 @@ public final class GenomeInterval implements Serializable {
 		if (strand == '-')
 			return withStrand('+').toString();
 
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", beginPos + 1, "-", endPos);
 	}
 
 	/*

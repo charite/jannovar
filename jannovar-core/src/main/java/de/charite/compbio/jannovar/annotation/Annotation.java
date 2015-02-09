@@ -181,6 +181,18 @@ public final class Annotation implements Comparable<Annotation> {
 	}
 
 	/**
+	 * Return the gene annotation or <code>"."</code> if it has no transcript.
+	 *
+	 * @return gene symbol or <code>"."</code>
+	 */
+	public String getGeneSymbol() {
+		if (transcript == null || transcript.geneSymbol == null)
+			return ".";
+		else
+			return transcript.geneSymbol;
+	}
+
+	/**
 	 * Return the full annotation with the gene symbol.
 	 *
 	 * If this annotation does not have a symbol (e.g., for an intergenic annotation) then just return the annotation
