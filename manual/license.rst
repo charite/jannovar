@@ -7,7 +7,7 @@ Jannovar is licensed under the BSD License:
 
 .. code-block:: text
 
-    Copyright (c) 2013, Charite Universitaetsmedizin Berlin
+    Copyright (c) 2013-2015, Charite Universitaetsmedizin Berlin
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
