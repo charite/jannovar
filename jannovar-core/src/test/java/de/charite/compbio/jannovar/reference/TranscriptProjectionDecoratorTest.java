@@ -54,15 +54,15 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
 		// test with first base of transcript
-		Assert.assertEquals("1:6640063",
+		Assert.assertEquals("1:g.6640063",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 1, PositionType.ONE_BASED))
 				.toString());
 		// test with last base of transcript
-		Assert.assertEquals("1:6649340",
+		Assert.assertEquals("1:g.6649340",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2338, PositionType.ONE_BASED))
 				.toString());
 		// test with first base of first exon
-		Assert.assertEquals("1:6640602",
+		Assert.assertEquals("1:g.6640602",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 136, PositionType.ONE_BASED))
 				.toString());
 	}
@@ -72,15 +72,15 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
 		// test with first base of transcript
-		Assert.assertEquals("1:23696357",
+		Assert.assertEquals("1:g.23696357",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 1, PositionType.ONE_BASED))
 				.toString());
 		// test with last base of transcript
-		Assert.assertEquals("1:23685941",
+		Assert.assertEquals("1:g.23685941",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 4493, PositionType.ONE_BASED))
 				.toString());
 		// test with first base of first exon
-		Assert.assertEquals("1:23694557",
+		Assert.assertEquals("1:g.23694557",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 501, PositionType.ONE_BASED))
 				.toString());
 	}

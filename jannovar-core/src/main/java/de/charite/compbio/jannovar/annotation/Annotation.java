@@ -181,14 +181,28 @@ public final class Annotation implements Comparable<Annotation> {
 	}
 
 	/**
+	 * Return the gene annotation or <code>"."</code> if it has no transcript.
+	 *
+	 * @return gene symbol or <code>"."</code>
+	 */
+	public String getGeneSymbol() {
+		if (transcript == null || transcript.geneSymbol == null)
+			return ".";
+		else
+			return transcript.geneSymbol;
+	}
+
+	/**
 	 * Return the full annotation with the gene symbol.
 	 *
 	 * If this annotation does not have a symbol (e.g., for an intergenic annotation) then just return the annotation
 	 * string, e.g., <code>"KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q"</code>.
 	 *
-	 * @return full annotation string
+	 * @return full annotation string or <code>null</code> if {@link #transcript} is <code>null</code>
 	 */
 	public String getSymbolAndAnnotation() {
+		if (transcript == null)
+			return null;
 		return Joiner.on(":").skipNulls()
 				.join(transcript.geneSymbol, transcript.accession, ntHGVSDescription, aaHGVSDescription);
 	}
@@ -217,6 +231,13 @@ public final class Annotation implements Comparable<Annotation> {
 
 		if (result != 0)
 			return result;
+
+		if (transcript == null && other.transcript == null)
+			return 0;
+		else if (other.transcript == null)
+			return -1;
+		else if (transcript == null)
+			return 1;
 
 		return transcript.compareTo(other.transcript);
 	}

@@ -86,6 +86,40 @@ public final class Person {
 		return (father == null && mother == null);
 	}
 
+	/**
+	 * @return <code>true</code> if the given person is male
+	 */
+	public boolean isMale() {
+		return sex == Sex.MALE;
+	}
+
+	/**
+	 * @return <code>true</code> if the given person is female
+	 */
+	public boolean isFemale() {
+		return sex == Sex.FEMALE;
+	}
+
+	/**
+	 * @return <code>true</code> if the given person is affected
+	 */
+	public boolean isAffected() {
+		return disease == Disease.AFFECTED;
+	}
+
+	/**
+	 * @return <code>true</code> if the given person is unaffected
+	 */
+	public boolean isUnaffected() {
+		return disease == Disease.UNAFFECTED;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", father=" + father + ", mother=" + mother + ", sex=" + sex + ", disease="
+				+ disease + ", extraFields=" + extraFields + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

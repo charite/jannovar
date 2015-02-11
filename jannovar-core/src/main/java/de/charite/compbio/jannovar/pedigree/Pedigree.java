@@ -60,6 +60,26 @@ public final class Pedigree {
 		this(pedigreeName, new PedigreeExtractor(pedigreeName, contents).run());
 	}
 
+	/**
+	 * @return a pedigree with one affected sample
+	 */
+	public static Pedigree constructSingleSamplePedigree(String sampleName) {
+		final Person person = new Person(sampleName, null, null, Sex.UNKNOWN, Disease.AFFECTED);
+		return new Pedigree("pedigree", ImmutableList.of(person));
+	}
+
+	/**
+	 * @return <code>true</code> if the pedigree contains a sample with the given <code>name</code>.
+	 */
+	public boolean hasPerson(String name) {
+		return nameToMember.containsKey(name);
+	}
+
+	@Override
+	public String toString() {
+		return "Pedigree [name=" + name + ", members=" + members + ", nameToMember=" + nameToMember + "]";
+	}
+
 	public static class IndexedPerson {
 		public final int idx;
 		public final Person person;

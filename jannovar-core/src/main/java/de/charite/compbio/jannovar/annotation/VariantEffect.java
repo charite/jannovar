@@ -35,12 +35,16 @@ public enum VariantEffect {
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001893">SO:0001893</a> A feature ablation
 	 * whereby the deleted region includes a transcript feature (is a: feature_ablation)
+	 *
+	 * <b>Not</not> used in Jannovar annotations.
 	 */
 	TRANSCRIPT_ABLATION,
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001572">SO:0001572</a> A sequence variant
 	 * whereby an exon is lost from the transcript (is a (is a: {@link #SPLICING_VARIANT}), {@link #TRANSCRIPT_VARIANT}
 	 * ).
+	 *
+	 * <b>Not</not> used in Jannovar annotations.
 	 */
 	EXON_LOSS_VARIANT,
 
@@ -187,12 +191,16 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002013">SO:0002013</a> A sequence variant
 	 * that causes the reduction of a the 5'UTR with regard to the reference sequence (is a:
 	 * {@link #FIVE_PRIME_UTR_VARIANT})
+	 *
+	 * Jannovar does <b>not</b> yield use this at the moment.
 	 */
 	FIVE_PRIME_UTR_TRUNCATION,
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002015">SO:0002015</a> A sequence variant
 	 * that causes the reduction of a the 3' UTR with regard to the reference sequence (is a:
 	 * {@link #THREE_PRIME_UTR_VARIANT}).
+	 *
+	 * Jannovar does <b>not</b> yield use this at the moment.
 	 */
 	THREE_PRIME_UTR_TRUNCATION,
 

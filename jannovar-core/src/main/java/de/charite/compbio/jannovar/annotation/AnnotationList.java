@@ -34,6 +34,30 @@ public final class AnnotationList {
 		this.entries = ImmutableList.copyOf(ImmutableSortedMultiset.copyOf(entries));
 	}
 
+	/**
+	 * @return {@link Annotation} with highest predicted impact, or <code>null</code> if there is none.
+	 */
+	public Annotation getHighestImpactAnnotation() {
+		if (entries.isEmpty())
+			return null;
+		else
+			return entries.get(0);
+	}
+
+	/**
+	 * Convenience method.
+	 *
+	 * @return {@link VariantEffect} with the highest impact of all in {@link #entries} or null if {@link #entries} is
+	 *         empty or has no annotated effects.
+	 */
+	public VariantEffect getHighestImpactEffect() {
+		final Annotation anno = getHighestImpactAnnotation();
+		if (anno.effects.isEmpty())
+			return null;
+		else
+			return anno.effects.first();
+	}
+
 	@Override
 	public String toString() {
 		return "[" + entries + "]";

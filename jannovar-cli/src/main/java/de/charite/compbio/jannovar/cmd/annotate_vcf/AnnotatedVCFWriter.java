@@ -59,8 +59,8 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				options.writeJannovarInfoFields);
 		ImmutableSet<VCFHeaderLine> additionalLines = ImmutableSet.of(new VCFHeaderLine("jannovarVersion",
 				JannovarOptions.JANNOVAR_VERSION), new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
-		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(reader, getOutFileName(), fields,
-				additionalLines);
+		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(reader.getFileHeader(),
+				getOutFileName(), fields, additionalLines);
 	}
 
 	/** @return output file name, depending on this.options */
