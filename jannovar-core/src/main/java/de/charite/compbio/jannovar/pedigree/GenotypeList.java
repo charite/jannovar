@@ -65,7 +65,7 @@ public final class GenotypeList {
 
 	@Override
 	public String toString() {
-		return "[" + calls + "]";
+		return "GenotypeList(" + calls + ")";
 	}
 
 }
