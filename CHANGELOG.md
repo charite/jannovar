@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Switching to official HTSJDK release and version 0.128.
 * Writing out annotation about Jannovar call and version into the VCF file.
 * Added option `--no-3-prime-shifting` to disable shifting towards the
   3' end of the transcripts.
@@ -14,6 +15,8 @@
 
 ### jannovar-htsjdk
 
+* Modified `VariantContextAnnotator` for adjustment to the new Exomiser.
+* Switching to official HTSJDK release and version 0.128.
 * Changing `VariantContextWriterConstructionHelper` to allow writing out
   of additional header lines.
 * Added option to `VariantContextAnnotator#Options` for disabling
@@ -23,6 +26,11 @@
 
 ### jannovar-core
 
+* Updates to the manual.
+* `JannovarData` now also stores a mapping from transcript accession to
+  `TranscriptModel` and from gene symbol to `TranscriptModel`.
+* Adding functionality for conversion from CDS to transcript and genome
+  position and tests.
 * Adding `AnnotationBuilderOption` object that allows disabling of 3'
   shifting towards the transcript.
 * Adding `JannovarOptions#escapeAnnField`.
