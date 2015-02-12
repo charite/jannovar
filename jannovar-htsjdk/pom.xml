@@ -41,9 +41,9 @@
 			<version>18.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.seqdoop</groupId>
+			<groupId>com.github.samtools</groupId>
 			<artifactId>htsjdk</artifactId>
-			<version>1.118</version>
+			<version>1.128</version>
 		</dependency>
 		<dependency>
 			<groupId>de.charite.compbio</groupId>
