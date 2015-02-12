@@ -26,7 +26,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 public final class JannovarData implements Serializable {
 
 	/** Serial version ID. */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
 	/** map from chromosome ID to {@link Chromosome} */
 	public final ImmutableMap<Integer, Chromosome> chromosomes;
