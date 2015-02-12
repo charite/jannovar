@@ -13,7 +13,7 @@ Jannovar is licenced under the BSD2 license.
 More information is available in the [Jannovar
 manual](http://jannovar.readthedocs.org/).
 
-Jannovar is compatible with Java 6 and higher.
+Jannovar is compatible with Java 7 and higher.
 
 Quickstart
 ----------
