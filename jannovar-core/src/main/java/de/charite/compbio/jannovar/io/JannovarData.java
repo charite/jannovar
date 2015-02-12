@@ -6,14 +6,13 @@ import java.util.HashMap;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.reference.TranscriptIntervalEndExtractor;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
-// NOTE(holtgrem): Part of the public interface of the Jannovar library.
-// TODO(holtgrem): Add the interval trees here.
 // TODO(holtgrem): Rename package "de.charite.compbio.jannovar.io" to "de.charite.compbio.jannovar.data"?
 
 /**
@@ -27,10 +26,16 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 public final class JannovarData implements Serializable {
 
 	/** Serial version ID. */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
 	/** map from chromosome ID to {@link Chromosome} */
 	public final ImmutableMap<Integer, Chromosome> chromosomes;
+
+	/** map from transcript accession to {@link TranscriptModel} instance. */
+	public final ImmutableMap<String, TranscriptModel> tmByAccession;
+
+	/** map from transcript accession to {@link TranscriptModel} instance. */
+	public final ImmutableMultimap<String, TranscriptModel> tmByGeneSymbol;
 
 	/** information about reference lengths and identities */
 	public final ReferenceDictionary refDict;
@@ -46,6 +51,34 @@ public final class JannovarData implements Serializable {
 	public JannovarData(ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptInfos) {
 		this.refDict = refDict;
 		this.chromosomes = makeChromsomes(refDict, transcriptInfos);
+		this.tmByAccession = makeTMByAccession(transcriptInfos);
+		this.tmByGeneSymbol = makeTMByGeneSymbol(transcriptInfos);
+	}
+
+	/**
+	 * @param transcriptInfos
+	 *            set of {@link TranscriptModel}s to build multi-mapping for
+	 * @return multi-mapping from gene symbol to {@link TranscriptModel}
+	 */
+	private static ImmutableMultimap<String, TranscriptModel> makeTMByGeneSymbol(
+			ImmutableList<TranscriptModel> transcriptInfos) {
+		ImmutableMultimap.Builder<String, TranscriptModel> builder = new ImmutableMultimap.Builder<String, TranscriptModel>();
+		for (TranscriptModel tm : transcriptInfos)
+			builder.put(tm.geneSymbol, tm);
+		return builder.build();
+	}
+
+	/**
+	 * @param transcriptInfos
+	 *            set of {@link TranscriptModel}s to build mapping for
+	 * @return mapping from gene symbol to {@link TranscriptModel}
+	 */
+	private static ImmutableMap<String, TranscriptModel> makeTMByAccession(
+			ImmutableList<TranscriptModel> transcriptInfos) {
+		ImmutableMap.Builder<String, TranscriptModel> builder = new ImmutableMap.Builder<String, TranscriptModel>();
+		for (TranscriptModel tm : transcriptInfos)
+			builder.put(tm.accession, tm);
+		return builder.build();
 	}
 
 	/**

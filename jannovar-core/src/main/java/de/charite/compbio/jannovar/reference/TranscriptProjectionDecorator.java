@@ -115,6 +115,43 @@ public final class TranscriptProjectionDecorator {
 	}
 
 	/**
+	 * Coordinate conversion from CDS to transcript position.
+	 *
+	 * @param pos
+	 *            the position in the CDS transcript
+	 * @return the corresponding genome position for pos, will be on the same strand as the transcript
+	 */
+	public TranscriptPosition cdsToTranscriptPos(CDSPosition pos) {
+		final GenomePosition cdsBeginPos = transcript.cdsRegion.getGenomeBeginPos();
+
+		int currPos = 0; // current transcript position
+		for (GenomeInterval region : transcript.exonRegions) {
+			if (region.getGenomeEndPos().isLeq(cdsBeginPos)) {
+				currPos += region.length();
+			} else {
+				currPos += cdsBeginPos.differenceTo(region.getGenomeBeginPos());
+				break;
+			}
+		}
+
+		return new TranscriptPosition(transcript, currPos + pos.pos);
+	}
+
+	/**
+	 * Coordinate conversion from CDS to genome position.
+	 *
+	 * @param pos
+	 *            the position in the CDS transcript
+	 * @return the corresponding genome position for pos, will be on the same strand as the transcript
+	 *
+	 * @throws ProjectionException
+	 *             on problems with the coordinate transformation (outside of the transcript)
+	 */
+	public GenomePosition cdsToGenomePos(CDSPosition pos) throws ProjectionException {
+		return transcriptToGenomePos(cdsToTranscriptPos(pos));
+	}
+
+	/**
 	 * Coordinate conversion from transcript to genome position.
 	 *
 	 * @param pos
