@@ -50,7 +50,8 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous {
 		if (pedigree.members.size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
 		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
+			throw new CompatibilityCheckerException("Incompatible names in pedigree (" + pedigree.nameToMember.keySet()
+					+ ") and genotype list (" + list.names + ")");
 		if (list.calls.get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
 
