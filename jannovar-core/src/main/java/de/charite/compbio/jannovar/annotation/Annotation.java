@@ -137,7 +137,9 @@ public final class Annotation implements Comparable<Annotation> {
 	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
 			Collection<AnnotationMessage> messages) {
-		this.change = change.withStrand('+'); // enforce forward strand
+		if (change != null)
+			change = change.withStrand('+'); // enforce forward strand
+		this.change = change;
 		if (varTypes == null)
 			this.effects = ImmutableSortedSet.<VariantEffect> of();
 		else
