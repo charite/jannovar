@@ -63,7 +63,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			} catch (IOException e) {
 				// convert exception to JannovarException and throw, writer can only be null here
 				parser.close();
-				throw new JannovarException(e.getMessage());
+				throw new JannovarException("Problem with VCF annotation.", e);
 			}
 
 			System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
@@ -80,7 +80,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		try {
 			return parser.parse(argv);
 		} catch (ParseException e) { // TODO(holtgrem): do not translate?
-			throw new CommandLineParsingException(e.getMessage());
+			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
 	}
 

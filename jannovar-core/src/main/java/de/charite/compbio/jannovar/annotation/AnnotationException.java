@@ -20,4 +20,8 @@ public class AnnotationException extends JannovarException {
 		super(msg);
 	}
 
+	public AnnotationException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
 }

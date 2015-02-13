@@ -59,9 +59,9 @@ final public class DataSourceFactory {
 			try {
 				ini.load(is);
 			} catch (InvalidFileFormatException e) {
-				throw new InvalidDataSourceException("Problem loading data source file: " + e.getMessage());
+				throw new InvalidDataSourceException("Problem loading data source file.", e);
 			} catch (IOException e) {
-				throw new InvalidDataSourceException("Problem loading data source file: " + e.getMessage());
+				throw new InvalidDataSourceException("Problem loading data source file.", e);
 			}
 			inisBuilder.add(ini);
 		}

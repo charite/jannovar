@@ -155,7 +155,7 @@ public final class ReferenceDictParser {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new TranscriptParseException("Problem reading TSV file: " + e.getMessage());
+			throw new TranscriptParseException("Problem reading TSV file.", e);
 		}
 
 		return result.build();

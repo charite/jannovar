@@ -48,7 +48,7 @@ public class JannovarFilterApp {
 		try {
 			pedContents = new PedFileReader(new File(options.pedPath)).read();
 		} catch (IOException e) {
-			throw new JannovarException("Could not parse Pedigree from " + options.pedPath);
+			throw new JannovarException("Could not parse Pedigree from " + options.pedPath, e);
 		}
 		Pedigree pedigree = new Pedigree(pedContents, pedContents.individuals.get(0).pedigree);
 		System.err.println("Family used from PED file: " + pedigree.name);

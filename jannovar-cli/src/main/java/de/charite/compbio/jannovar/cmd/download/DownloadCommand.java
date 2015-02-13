@@ -48,7 +48,7 @@ public final class DownloadCommand extends JannovarCommand {
 		try {
 			return new DownloadCommandLineParser().parse(argv);
 		} catch (ParseException e) {
-			throw new CommandLineParsingException(e.getMessage());
+			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
 	}
 

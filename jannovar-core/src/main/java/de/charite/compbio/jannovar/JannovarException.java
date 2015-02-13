@@ -18,4 +18,8 @@ public class JannovarException extends Exception {
 		super(msg);
 	}
 
+	public JannovarException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
 }

@@ -68,7 +68,7 @@ public class RefSeqParser implements TranscriptParser {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gff")));
 		} catch (IOException e) {
 			LOGGER.error("Unable to load GFF data from RefSeq files: {}", e);
-			throw new TranscriptParseException(e.getMessage());
+			throw new TranscriptParseException("Problem parsing transcripts.", e);
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
@@ -83,7 +83,7 @@ public class RefSeqParser implements TranscriptParser {
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from RefSeq files: {}", e);
-			throw new TranscriptParseException(e.getMessage());
+			throw new TranscriptParseException("Problem parsing transcripts.", e);
 		}
 
 		// Load sequences.

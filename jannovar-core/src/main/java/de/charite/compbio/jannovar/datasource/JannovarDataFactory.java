@@ -83,7 +83,7 @@ public abstract class JannovarDataFactory {
 				downloader.copyURLToFile(src, dest);
 			}
 		} catch (MalformedURLException e) {
-			throw new FileDownloadException("Invalid URL: " + e.getMessage());
+			throw new FileDownloadException("Invalid URL.", e);
 		}
 
 		// Parse files for building ReferenceDictionary objects.

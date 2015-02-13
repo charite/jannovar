@@ -12,10 +12,15 @@ public class HelpRequestedException extends JannovarException {
 	private static final long serialVersionUID = 1L;
 
 	public HelpRequestedException() {
+		super();
 	}
 
 	public HelpRequestedException(String msg) {
 		super(msg);
+	}
+
+	public HelpRequestedException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

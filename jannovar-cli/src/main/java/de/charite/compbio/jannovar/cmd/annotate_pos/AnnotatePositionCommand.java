@@ -104,7 +104,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		try {
 			return parser.parse(argv);
 		} catch (ParseException e) {
-			throw new CommandLineParsingException(e.getMessage());
+			throw new CommandLineParsingException("Problem with command line parsing.", e);
 		}
 	}
 

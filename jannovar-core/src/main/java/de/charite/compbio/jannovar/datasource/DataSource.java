@@ -9,7 +9,6 @@ import org.ini4j.Profile.Section;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.JannovarOptions;
-import de.charite.compbio.jannovar.io.JannovarData;
 
 /**
  * Base class for all data sources.
@@ -46,7 +45,7 @@ public abstract class DataSource {
 		try {
 			url = new URL(urlString);
 		} catch (MalformedURLException e) {
-			throw new InvalidDataSourceException("Invalid download URL: " + e.getMessage());
+			throw new InvalidDataSourceException("Invalid download URL.", e);
 		}
 		return new File(url.getPath()).getName();
 	}

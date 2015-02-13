@@ -97,10 +97,9 @@ final class FileDownloader {
 			if (!ftp.isConnected())
 				LOGGER.error("Weird, not connected!");
 		} catch (SocketException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file.", e);
 		} catch (IOException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage() + ": "
-					+ e.getCause());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file.", e);
 		}
 		try {
 			ftp.setFileType(FTP.BINARY_FILE_TYPE); // binary file transfer
@@ -115,7 +114,7 @@ final class FileDownloader {
 			} catch (IOException e1) {
 				// swallow, nothing we can do about it
 			}
-			throw new FileDownloadException("ERROR: could not use binary transfer " + e.getMessage());
+			throw new FileDownloadException("ERROR: could not use binary transfer.", e);
 		}
 		InputStream in = null;
 		OutputStream out = null;
@@ -173,7 +172,7 @@ final class FileDownloader {
 			} catch (IOException e1) {
 				// swallow, nothing we can do about it
 			}
-			throw new FileDownloadException("ERROR: problem downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem downloading file.", e);
 		} catch (IOException e) {
 			dest.delete();
 			try {
@@ -186,7 +185,7 @@ final class FileDownloader {
 			} catch (IOException e1) {
 				// swallow, nothing we can do about it
 			}
-			throw new FileDownloadException("ERROR: problem downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem downloading file.", e);
 		} finally {
 			if (in != null) {
 				try {

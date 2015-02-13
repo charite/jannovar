@@ -61,7 +61,7 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 			LOGGER.trace("Variant {}compatible with {} (gt={}, var={})", new Object[] { fv.isIncluded() ? "" : "in",
 					modeOfInheritance, builder.build(), fv.vc });
 		} catch (CompatibilityCheckerException e) {
-			throw new FilterException("Problem in mode of inheritance filter: " + e.getMessage());
+			throw new FilterException("Problem in mode of inheritance filter.", e);
 		}
 	}
 

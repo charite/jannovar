@@ -68,7 +68,7 @@ public class EnsemblParser implements TranscriptParser {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gtf")));
 		} catch (IOException e) {
 			LOGGER.error("Unable to load GTF data from Ensembl files: {}", e.getMessage());
-			throw new TranscriptParseException(e.getMessage());
+			throw new TranscriptParseException("Problem loading GTF data.", e);
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
@@ -83,7 +83,7 @@ public class EnsemblParser implements TranscriptParser {
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from Ensembl files: {}", e.getMessage());
-			throw new TranscriptParseException(e.getMessage());
+			throw new TranscriptParseException("Problem loading GTF data.", e);
 		}
 
 		// Load sequences.

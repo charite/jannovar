@@ -12,11 +12,15 @@ public class TranscriptParseException extends JannovarException {
 	public static final long serialVersionUID = 2L;
 
 	public TranscriptParseException() {
-		super("Unknown exception during parsing of transcript database files");
+		super();
 	}
 
 	public TranscriptParseException(String msg) {
 		super(msg);
+	}
+
+	public TranscriptParseException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

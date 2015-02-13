@@ -53,7 +53,7 @@ public class FilteredWriter {
 				topFilter.put(new FlaggedVariant(vc));
 			topFilter.finish();
 		} catch (FilterException e) {
-			throw new JannovarException("Problem with the filtration: " + e.getMessage());
+			throw new JannovarException("Problem in the filtration.", e);
 		}
 	}
 

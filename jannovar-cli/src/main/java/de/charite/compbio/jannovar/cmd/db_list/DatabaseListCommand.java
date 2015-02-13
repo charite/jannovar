@@ -35,7 +35,7 @@ public class DatabaseListCommand extends JannovarCommand {
 		try {
 			return new DatabaseListCommandLineParser().parse(argv);
 		} catch (ParseException e) {
-			throw new CommandLineParsingException(e.getMessage());
+			throw new CommandLineParsingException("Could not parse command line", e);
 		}
 	}
 

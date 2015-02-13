@@ -77,7 +77,7 @@ class VCFAnnotationData {
 			this.cdsLength = transcript.cdsTranscriptLength();
 		} catch (ProjectionException e) {
 			// e.printStackTrace();
-			throw new Error("Bug: problem with projection!: " + e.getMessage());
+			throw new Error("Bug: problem with projection!", e);
 		}
 	}
 
