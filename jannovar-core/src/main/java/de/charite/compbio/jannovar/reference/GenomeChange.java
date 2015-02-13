@@ -130,7 +130,10 @@ public final class GenomeChange {
 	 */
 	@Override
 	public String toString() {
-		return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
+		if (pos.strand != '+')
+			return withStrand('+').toString();
+		else
+			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
 	}
 
 	/**

@@ -26,6 +26,9 @@
 
 ### jannovar-core
 
+* `GenomeChange.toString()` now always converts to forward strand.
+* Fixing bug in `Annotation` and enforcing forward strand `GenomeChange`
+  instances.
 * Updates to the manual.
 * `JannovarData` now also stores a mapping from transcript accession to
   `TranscriptModel` and from gene symbol to `TranscriptModel`.
