@@ -66,10 +66,32 @@ public final class VariantContextWriterConstructionHelper {
 	 * @param additionalHeaderLines
 	 *            additional {@link VCFHeaderLine}s to add
 	 */
-	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName,
-			InfoFields fields, Collection<VCFHeaderLine> additionalHeaderLines) {
+	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields,
+			Collection<VCFHeaderLine> additionalHeaderLines) {
+		return openVariantContextWriter(header, fileName, fields, additionalHeaderLines, false);
+	}
+
+	/**
+	 * Return a new {@link ContextWriter} that uses the header from <code>reader</code> but has the header extended
+	 * header through {@link extendHeaderFields}.
+	 *
+	 * @param VCFHeader
+	 *            the VCF header to use for the construction
+	 * @param fileName
+	 *            path to output file
+	 * @param fields
+	 *            selection of header fields to write out
+	 * @param additionalHeaderLines
+	 *            additional {@link VCFHeaderLine}s to add
+	 * @param generateIndex
+	 *            whether or not to generate an index
+	 */
+	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields,
+			Collection<VCFHeaderLine> additionalHeaderLines, boolean generateIndex) {
 		VariantContextWriterBuilder builder = makeBuilder(header);
 		builder.setOutputFile(new File(fileName));
+		if (!generateIndex)
+			builder.unsetOption(Options.INDEX_ON_THE_FLY);
 
 		// construct VariantContextWriter and write out header
 		VariantContextWriter out = builder.build();

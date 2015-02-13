@@ -15,6 +15,8 @@
 
 ### jannovar-htsjdk
 
+* Modified `VariantContextWriterConstructionHelper` to allow explicit
+  disabling of index creation.
 * Modified `VariantContextAnnotator` for adjustment to the new Exomiser.
 * Switching to official HTSJDK release and version 0.128.
 * Changing `VariantContextWriterConstructionHelper` to allow writing out
