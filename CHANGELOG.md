@@ -26,6 +26,8 @@
 
 ### jannovar-core
 
+* Adding `VariantEffect#SEQUENCE_VARIANT` for variants with unknown
+  effects.
 * `GenomeChange.toString()` now always converts to forward strand.
 * Fixing bug in `Annotation` and enforcing forward strand `GenomeChange`
   instances.

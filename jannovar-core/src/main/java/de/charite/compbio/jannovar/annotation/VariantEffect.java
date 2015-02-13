@@ -449,7 +449,15 @@ public enum VariantEffect {
 	 *
 	 * <b>Not</not> used in Jannovar annotations.
 	 */
-	CHROMOSOME;
+	CHROMOSOME,
+
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001060">SO:0001060</a> Top level term for
+	 * variants, can be used for marking "uknown effect".
+	 *
+	 * <b>Not</not> used in Jannovar annotations.
+	 */
+	SEQUENCE_VARIANT;
 
 	/**
 	 * {@link Predicate} for testing whether a {@link VariantEffect} is related to splicing.
@@ -572,6 +580,8 @@ public enum VariantEffect {
 			return "TRANSCRIPT_ABLATION";
 		case UPSTREAM_GENE_VARIANT:
 			return "UPSTREAM";
+		case SEQUENCE_VARIANT:
+			return "UNKNOWN";
 		case GENE_VARIANT:
 		case CHROMOSOME:
 		case CHROMOSOME_NUMBER_VARIATION:
@@ -692,6 +702,8 @@ public enum VariantEffect {
 			return "rare_amino_acid_variant";
 		case REGULATORY_REGION_VARIANT:
 			return "regulatory_region_variant";
+		case SEQUENCE_VARIANT:
+			return "sequence_variant";
 		case SPLICE_ACCEPTOR_VARIANT:
 			return "splice_acceptor_variant";
 		case SPLICE_DONOR_VARIANT:
@@ -811,6 +823,8 @@ public enum VariantEffect {
 			return "SO:0001619";
 		case REGULATORY_REGION_VARIANT:
 			return "SO:0001619";
+		case SEQUENCE_VARIANT:
+			return "SO:0001060";
 		case SPLICE_ACCEPTOR_VARIANT:
 			return "SO:0001619";
 		case SPLICE_DONOR_VARIANT:
