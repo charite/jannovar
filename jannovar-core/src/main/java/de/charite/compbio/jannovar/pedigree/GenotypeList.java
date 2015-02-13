@@ -53,14 +53,7 @@ public final class GenotypeList {
 	 *         <code>pedigree</code>
 	 */
 	public boolean namesEqual(Pedigree pedigree) {
-		if (pedigree.members.size() != names.size())
-			return false;
-
-		int i = 0;
-		for (Person person : pedigree.members)
-			if (!person.name.equals(names.get(i++)))
-				return false;
-		return true;
+		return (pedigree.getNames().equals(names));
 	}
 
 	@Override

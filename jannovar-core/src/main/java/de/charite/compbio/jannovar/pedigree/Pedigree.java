@@ -75,6 +75,16 @@ public final class Pedigree {
 		return nameToMember.containsKey(name);
 	}
 
+	/**
+	 * @return list of members, in the same order as in {@link #members}.
+	 */
+	public ImmutableList<String> getNames() {
+		ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
+		for (Person p : members)
+			builder.add(p.name);
+		return builder.build();
+	}
+
 	@Override
 	public String toString() {
 		return "Pedigree [name=" + name + ", members=" + members + ", nameToMember=" + nameToMember + "]";
