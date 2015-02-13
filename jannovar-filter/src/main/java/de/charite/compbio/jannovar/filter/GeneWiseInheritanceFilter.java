@@ -301,7 +301,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			if (checker.isCompatibleWith(lst, modeOfInheritance))
 				markVariantsInGeneAsCompatible(gene);
 		} catch (CompatibilityCheckerException e) {
-			throw new FilterException("Problem in mode of inheritance filter: " + e.getMessage());
+			throw new FilterException("Problem in mode of inheritance filter.", e);
 		}
 	}
 
