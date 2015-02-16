@@ -540,7 +540,7 @@ public enum VariantEffect {
 			return "STARTLOSS";
 		case CONSERVED_INTERGENIC_VARIANT:
 		case INTERGENIC_VARIANT:
-			return "INTEGERNIC";
+			return "INTERGENIC";
 		case DISRUPTIVE_INFRAME_INSERTION:
 		case INTERNAL_FEATURE_ELONGATION:
 			return "NON_FS_INSERTION";
