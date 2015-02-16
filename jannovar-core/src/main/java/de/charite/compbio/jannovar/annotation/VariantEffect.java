@@ -238,24 +238,6 @@ public enum VariantEffect {
 	 * start_retained_variant, stop_retained_variant).
 	 */
 	SYNONYMOUS_VARIANT,
-	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001983">SO:0001983</a> A 5' UTR variant
-	 * where a premature start codon is introduced, moved or lost (is a: {@link #FIVE_PRIME_UTR_VARIANT}).
-	 *
-	 * <b>Not</not> used in Jannovar annotations.
-	 */
-	// TODO(holtgrem): use
-	FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT,
-	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001623">SO:0001623</a> A UTR variant of the
-	 * 5' UTR (is a: UTR_variant).
-	 */
-	FIVE_PRIME_UTR_VARIANT,
-	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001624">SO:0001624</a> A UTR variant of the
-	 * 3' UTR (is a: UTR_variant).
-	 */
-	THREE_PRIME_UTR_VARIANT,
 
 	// changes in coding transcripts, exons/introns
 	/**
@@ -278,6 +260,26 @@ public enum VariantEffect {
 	 * {@link #INTRON_VARIANT}).
 	 */
 	NON_CODING_TRANSCRIPT_INTRON_VARIANT,
+
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001983">SO:0001983</a> A 5' UTR variant
+	 * where a premature start codon is introduced, moved or lost (is a: {@link #FIVE_PRIME_UTR_VARIANT}).
+	 *
+	 * <b>Not</not> used in Jannovar annotations.
+	 */
+	// TODO(holtgrem): use
+	FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001623">SO:0001623</a> A UTR variant of the
+	 * 5' UTR (is a: UTR_variant).
+	 */
+	FIVE_PRIME_UTR_VARIANT,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001624">SO:0001624</a> A UTR variant of the
+	 * 3' UTR (is a: UTR_variant).
+	 */
+	THREE_PRIME_UTR_VARIANT,
+
 	/**
 	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#LOW} impact.
 	 */
