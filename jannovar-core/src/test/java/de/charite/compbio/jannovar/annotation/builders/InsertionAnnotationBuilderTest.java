@@ -155,7 +155,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals("c.691-1_691insACT", anno.ntHGVSDescription);
 		Assert.assertEquals("p.?", anno.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
-				VariantEffect.SPLICE_REGION_VARIANT), anno.effects);
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT), anno.effects);
 	}
 
 	@Test

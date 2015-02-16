@@ -193,9 +193,10 @@ abstract class AnnotationBuilder {
 		if (change.getGenomeInterval().length() == 0) {
 			GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
-			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
+			// FIXME: Test insertion left of donor, right of donor, left of acceptor, right of acceptor
+			if (so.liesInSpliceDonorSite(pos))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
-			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
+			else if (so.liesInSpliceAcceptorSite(lPos))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
