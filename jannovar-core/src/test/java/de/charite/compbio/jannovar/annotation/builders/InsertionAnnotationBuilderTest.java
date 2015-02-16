@@ -1808,4 +1808,42 @@ public class InsertionAnnotationBuilderTest {
 				annotation1.effects);
 	}
 
+	@Test
+	public void testRealWorld_uc002udr_1() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc002udr.1	chr2	-	167138188	167163109	167138189	167163099	10	167138188,167140962,167142845,167144946,167149740,167151108,167159599,167160747,167162301,167163019,	167138318,167141334,167143133,167145153,167149882,167151172,167159812,167160839,167162430,167163109,	H7C064	uc002udr.1");
+		this.builderForward
+		.setSequence("cttattcagcatgctcatcatgtgcactattctgacaaactgcatatttatgaccatgaataacccaccggactggaccaaaaatgtcgagtacacttttactggaatatatacttttgaatcacttgtaaaaatccttgcaagaggcttctgtgtaggagaattcacttttcttcgtgacccgtggaactggctggattttgtcgtcattgtttttgcgtatttaacagaatttgtaaacctaggcaatgtttcagctcttcgaactttcagagtattgagagctttgaaaactatttctgtaatcccaggcctgaagacaattgtaggggctttgatccagtcagtgaagaagctttctgatgtcatgatcctgactgtgttctgtctgagtgtgtttgcactaattggactacagctgttcatgggaaacctgaagcataaatgttttcgaaattcacttgaaaataatgaaacattagaaagcataatgaataccctagagagtgaagaagactttagaaaatatttttattacttggaaggatccaaagatgctctcctttgtggtttcagcacagattcaggtcagtgtccagaggggtacacctgtgtgaaaattggcagaaaccctgattatggctacacgagctttgacactttcagctgggccttcttagccttgtttaggctaatgacccaagattactgggaaaacctttaccaacagacgctgcgtgctgctggcaaaacctacatgatcttctttgtcgtagtgattttcctgggctccttttatctaataaacttgatcctggctgtggttgccatggcatatgaagaacagaaccaggcaaacattgaagaagctaaacagaaagaattagaatttcaacagatgttagaccgtcttaaaaaagagcaagaagaagctgaggcaattgcagcggcagcggctgaatatacaagtattaggagaagcagaattatgggcctctcagagagttcttctgaaacatccaaactgagctctaaaagtgctaaagaaagaagaaacagaagaaagaaaaagaatcaaaagaagctctccagtggagaggaaaagggagatgctgagaaattgtcgaaatcagaatcagaggacagcatcagaagaaaaagtttccaccttggtgtcgaagggcataggcgagcacatgaaaagaggttgtctacccccaatcagtcaccactcagcattcgtggctccttgttttctgcaaggcgaagcagcagaacaagtctttttagtttcaaaggcagaggaagagatataggatctgagactgaatttgccgatgatgagcacagcatttttggagacaatgagagcagaaggggctcactgtttgtgccccacagaccccaggagcgacgcagcagtaacatcagccaagccagtaggtccccaccaatgctgccggtgaacgggaaaatgcacagtgctgtggactgcaacggtgtggtctccctggttgatggacgctcagccctcatgctccccaatggacagcttctgccagaggtgataatagataaggcaacttctgatgacagcggcacgaccaatcaaatacacaagaaaaggcgttgtagttcctatctcctttcagaggatatgctgaatgatcccaacctcagacagagagcaatgagtagagcaagcatattaacaaacactgtggaag"
+				.toUpperCase());
+		this.builderForward.setGeneSymbol("Q0ZAJ5");
+		this.infoForward = builderForward.build();
+		// RefSeq REFSEQ_ID
+
+		GenomeChange change1 = new GenomeChange(
+				new GenomePosition(refDict, '+', 2, 167138319, PositionType.ZERO_BASED), "", "A");
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+		.build();
+
+		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
+		Assert.assertEquals(8, annotation1.annoLoc.rank);
+		Assert.assertEquals("c.1588-2_1588-1insT", annotation1.ntHGVSDescription);
+		Assert.assertEquals("p.?", annotation1.aaHGVSDescription);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.effects);
+
+		GenomeChange change2 = new GenomeChange(
+				new GenomePosition(refDict, '+', 2, 167140961, PositionType.ZERO_BASED), "", "A");
+		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
+		.build();
+
+		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
+		Assert.assertEquals(8, annotation2.annoLoc.rank);
+		Assert.assertEquals("c.1587+1_1587+2insT", annotation2.ntHGVSDescription);
+		Assert.assertEquals("p.?", annotation2.aaHGVSDescription);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation2.effects);
+	}
+
 }
