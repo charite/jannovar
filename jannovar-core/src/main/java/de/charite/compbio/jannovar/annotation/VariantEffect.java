@@ -903,4 +903,25 @@ public enum VariantEffect {
 		return (this == CODING_TRANSCRIPT_INTRON_VARIANT || this == NON_CODING_TRANSCRIPT_INTRON_VARIANT);
 	}
 
+	/**
+	 * @return <code>true</code> if the variant effect does not indicate a position inside a transcript
+	 */
+	public boolean isOffTranscript() {
+		switch (this) {
+		case CODING_TRANSCRIPT_INTRON_VARIANT:
+		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
+		case UPSTREAM_GENE_VARIANT:
+		case DOWNSTREAM_GENE_VARIANT:
+		case INTERGENIC_VARIANT:
+		case CONSERVED_INTERGENIC_VARIANT:
+		case TF_BINDING_SITE_VARIANT:
+		case REGULATORY_REGION_VARIANT:
+		case CONSERVED_INTRON_VARIANT:
+		case INTRON_VARIANT:
+			return true;
+		default:
+			return false;
+		}
+	}
+
 }
