@@ -173,12 +173,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 
 		// Get transcript position for the change position.
-		CDSPosition cdsChangePos;
-		try {
-			cdsChangePos = projector.genomeToCDSPos(change.pos);
-		} catch (ProjectionException e) {
-			throw new Error("Bug: should be able to get transcript pos for CDS exon position");
-		}
+		CDSPosition cdsChangePos = projector.projectGenomeToCDSPosition(change.pos);
 
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(cdsSeq);

@@ -333,23 +333,32 @@ abstract class AnnotationBuilder {
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is changed => insertion
 			GenomePosition changePos = change.getGenomeInterval().getGenomeBeginPos();
+			GenomePosition lPos = changePos.shifted(-1);
 
 			// Handle the cases for which no exon and no intron number is available.
 			if (!soDecorator.liesInExon(changePos) && !soDecorator.liesInIntron(changePos))
 				return locBuilder.build(); // no exon information if change pos does not lie in exon
+
+			final int exonNum = projector.locateExon(changePos);
+			final int lExonNum = projector.locateExon(lPos);
+			if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID
+					|| lExonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
+				locBuilder.setRankType(AnnotationLocation.RankType.EXON);
+				if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID)
+					locBuilder.setRank(exonNum);
+				else
+					locBuilder.setRank(lExonNum);
+				return locBuilder.build();
+			}
+
 			final int intronNum = projector.locateIntron(changePos);
 			if (intronNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
 				locBuilder.setRankType(AnnotationLocation.RankType.INTRON);
 				locBuilder.setRank(intronNum);
 				return locBuilder.build();
 			}
-			final int exonNum = projector.locateExon(changePos);
-			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
-				throw new Error("Bug: position should be in exon if we reach here");
 
-			locBuilder.setRankType(AnnotationLocation.RankType.EXON);
-			locBuilder.setRank(exonNum);
-			return locBuilder.build();
+			throw new Error("Bug: position should be in exon if we reach here");
 		} else {
 			// at least one base is changed
 			GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();

@@ -1872,4 +1872,30 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION), annotation1.effects);
 	}
 
+	@Test
+	public void testRealWorld_uc002shg_3() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc002shg.3	chr2	-	71057342	71062953	71058180	71062906	6	71057342,71058831,71060030,71060776,71062621,71062833,	71058331,71058950,71060182,71061151,71062738,71062953,	NP_056532	uc002shg.3");
+		this.builderForward
+				.setSequence("ggcagccagaagcacctgtgctcccaggataagggtgagcactcaggatgactgtggagaaggaggcccctgatgcgcacttcactgtggacaaacagaacatctccctctggccccgagagcctcctcccaagtccggtccatctctggtcccggggaaaacacccacagtccgtgctgcattaatctgcctgacgctggtcctggtcgcctccgtcctgctgcaggccgtcctttatccccggtttatgggcaccatatcagatgtaaagaccaatgtccagttgctgaaaggtcgtgtggacaacatcagcaccctggattctgaaattaaaaagaatagtgacggcatggaggcagctggcgttcagatccagatggtgaatgagagcctgggttatgtgcgttctcagttcctgaagttaaaaaccagtgtggagaaggccaacgcacagatccagatcttaacaagaagttgggaagaagtcagtaccttaaatgcccaaatcccagagttaaaaagtgatttggagaaagccagtgctttaaatacaaagatccgggcactccagggcagcttggagaatatgagcaagttgctcaaacgacaaaatgatattctacaggtggtttctcaaggctggaagtacttcaaggggaacttctattacttttctctcattccaaagacctggtatagtgccgagcagttctgtgtgtccaggaattcacacctgacctcggtgacctcagagagtgagcaggagtttctgtataaaacagcggggggactcatctactggattggcctgactaaagcagggatggaaggggactggtcctgggtggatgacacgccattcaacaaggtccaaagtgcgaggttctggattccaggtgagcccaacaatgctgggaacaatgaacactgtggcaatataaaggctccctcacttcaggcctggaatgatgccccatgtgacaaaacgtttcttttcatttgtaagcgaccctatgtcccatcagaaccgtgacaggacaggctcccaagctcactctttgagctccaacgcttgttaaacatgaggaaatgcctctttcttccccagactccaggatgactttgcacgttaatttttcttgcttcaaaattgtcccacagtggcattctggagtccgtctgtcttggctggaaattctctgacgtcttggaggcagctggaatggaaaggagaattcaggttaaagtgggaggggtgggtagagaggatttagaagttccaattgccctgctaaggaggatcaagacccgtaatccggcataacaccctggggttttccactctttcagagaaacctcagcttcatcacatcaaagttactccagagcaaccaagcaattctcctgatattgtcatccagggcttttcttggccaaaccccctagaatttccatgtctctgcttagctgtgctggcagctagcagctggctgtgtttgcagtgcaaatagctctgttcttggaaatcctgctcatggtatgtccccagtggtttcttcatccacatcatctaaagcctgaacccgttcttctctggttcaagtcagtggctgacacggacttgtatctccttcagagctcggctggcacccagcctcccttctccttccactcccttagtacactggagtgccgagccctgccttccacccagcgtccatccagcccctgtcctcacctctccggcacctcctcctccttctgcatttcctatcttcctgtgtcttgtgcatgggaagcagccttcagtgccttcatgaattcaccttccagcttcctcagaataaaatgctgcctgggtcaaggactca"
+						.toUpperCase());
+		this.builderForward.setGeneSymbol("Q0ZAJ5");
+		this.infoForward = builderForward.build();
+		// RefSeq NM_015717
+
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 2, 71062833, PositionType.ZERO_BASED),
+				"", "C");
+		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
+
+		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
+		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.annoLoc.rankType);
+		Assert.assertEquals(0, annotation1.annoLoc.rank);
+		Assert.assertEquals("c.73_73+1insG", annotation1.ntHGVSDescription);
+		Assert.assertEquals("p.Glu25Glyfs*70", annotation1.aaHGVSDescription);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.effects);
+	}
+
 }
