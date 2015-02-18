@@ -97,8 +97,6 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
 			if (change.alt.length() == 1) {
-				// dnaAnno = StringUtil.concatenate(prefix, ".", txPos.shifted(-1).pos + 1, "dup");
-
 				try {
 					dnaAnno = StringUtil.concatenate(prefix, ".",
 							posBuilder.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
@@ -113,10 +111,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				} catch (ProjectionException e) {
 					throw new RuntimeException("Bug: positions should be valid here", e);
 				}
-				// dnaAnno = StringUtil.concatenate(prefix, ".", txPos.shifted(-change.alt.length()).pos + 1, "_",
-				// txPos.shifted(-1).pos + 1, "dup");
 			}
 
+			// TODO(holtgrew): We should somehow tell the caller that this is a direct tandem duplication.
 			return dnaAnno;
 		} else {
 			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
@@ -294,10 +291,11 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					else
 						varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
 				} else {
-					// The insertion is a frameshift variant that leads to the loss of the stop codon, is stop loss.
+					// The insertion is a frameshift variant that leads to the loss of the stop codon, we mark this as
+					// frameshift elongation and the "fs*?" indicates that the stop codon is lost.
 					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(varAAInsertPos)),
 							varAAInsertPos + 1, t.toLong(varAASeq.charAt(varAAInsertPos)), "fs*?");
-					varTypes.add(VariantEffect.STOP_LOST);
+					varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
 				}
 			}
 		}
