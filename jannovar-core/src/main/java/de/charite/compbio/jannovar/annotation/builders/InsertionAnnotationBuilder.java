@@ -65,7 +65,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		// We have the base left and/or right of the insertion to determine the cases.
 		final GenomePosition pos = change.pos;
 		final GenomePosition lPos = change.pos.shifted(-1);
-		if (so.liesInCDSExon(lPos) && so.liesInCDSExon(pos) && so.liesInCDS(lPos) && so.liesInCDS(pos))
+		if ((so.liesInCDSExon(lPos) || so.liesInCDSExon(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
 			return buildCDSExonicAnnotation(); // can affect amino acids
 		else if ((so.liesInCDSIntron(lPos) || so.liesInCDSIntron(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
 			return buildIntronicAnnotation(); // intron but no exon => intronic variant
@@ -97,11 +97,24 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
 			if (change.alt.length() == 1) {
-				dnaAnno = StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
+				// dnaAnno = StringUtil.concatenate(prefix, ".", txPos.shifted(-1).pos + 1, "dup");
+
+				try {
+					dnaAnno = StringUtil.concatenate(prefix, ".",
+							posBuilder.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
+				} catch (ProjectionException e) {
+					throw new RuntimeException("Bug: positions should be valid here", e);
+				}
 			} else {
-				dnaAnno = StringUtil.concatenate(prefix, ".",
-						posBuilder.getCDNAPosStr(change.pos.shifted(-change.alt.length())), "_",
-						posBuilder.getCDNAPosStr(change.pos.shifted(-1)), "dup");
+				try {
+					dnaAnno = StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(projector
+							.transcriptToGenomePos(txPos.shifted(-change.alt.length()))), "_", posBuilder
+							.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
+				} catch (ProjectionException e) {
+					throw new RuntimeException("Bug: positions should be valid here", e);
+				}
+				// dnaAnno = StringUtil.concatenate(prefix, ".", txPos.shifted(-change.alt.length()).pos + 1, "_",
+				// txPos.shifted(-1).pos + 1, "dup");
 			}
 
 			return dnaAnno;

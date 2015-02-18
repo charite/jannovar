@@ -168,7 +168,7 @@ public final class TranscriptSequenceChangeHelper {
 			// Get change position and the one left of it.
 			GenomePosition lPos = change.pos.shifted(-1);
 			if (!transcript.cdsRegion.contains(change.pos) || !transcript.cdsRegion.contains(lPos)
-					|| !soDecorator.liesInExon(change.pos) || !soDecorator.liesInExon(lPos))
+					|| (!soDecorator.liesInExon(change.pos) && !soDecorator.liesInExon(lPos)))
 				return cdsSeq;
 		}
 

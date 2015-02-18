@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.reference;
 
+
 /**
  * Helper code for the normalization of {@link GenomeChange}s.
  *
@@ -18,7 +19,8 @@ public final class GenomeChangeNormalizer {
 	 *            the corresponding position on the transcript
 	 * @return normalized {@link GenomeChange}
 	 */
-	public static GenomeChange normalizeGenomeChange(TranscriptModel transcript, GenomeChange change, TranscriptPosition txPos) {
+	public static GenomeChange normalizeGenomeChange(TranscriptModel transcript, GenomeChange change,
+			TranscriptPosition txPos) {
 		switch (change.getType()) {
 		case DELETION:
 			return normalizeDeletion(transcript, change, txPos);
@@ -69,10 +71,20 @@ public final class GenomeChangeNormalizer {
 			++pos;
 		}
 
+		// Compute shifted transcript position and transform back to the genome position (we allow shifting over introns
+		// since Mutalyzer does this).
+		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
+		final GenomePosition shiftedPos;
+		try {
+			shiftedPos = projector.transcriptToGenomePos(txPos.shifted(shift));
+		} catch (ProjectionException e) {
+			throw new RuntimeException("Bug: transcript position must be valid here!", e);
+		}
+
 		if (shift == 0) // only rebuild if shift > 0
 			return change;
 		else
-			return new GenomeChange(change.pos.shifted(shift), "", seq.substring(pos, pos + LEN));
+			return new GenomeChange(shiftedPos, "", seq.substring(pos, pos + LEN));
 	}
 
 	/**
@@ -99,7 +111,7 @@ public final class GenomeChangeNormalizer {
 		if (change.pos.strand != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
-		// Shift the deletion to the right.
+		// Shift the deletion to the 3' (right) end of the transcript.
 		int pos = txPos.pos;
 		final int LEN = change.ref.length(); // length of the deletion
 		final String seq = transcript.sequence;
