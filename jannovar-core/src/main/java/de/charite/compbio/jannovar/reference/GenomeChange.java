@@ -73,7 +73,7 @@ public final class GenomeChange {
 			delta = ref.length() - 1;
 
 		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED)
-		.shifted(delta).withStrand(strand);
+				.shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -132,6 +132,12 @@ public final class GenomeChange {
 	public String toString() {
 		if (pos.strand != '+')
 			return withStrand('+').toString();
+		else if (ref.equals("")) // handle insertion as special case
+			return Joiner.on("")
+					.join(pos.refDict.contigName.get(pos.chr), ":g.", pos.pos, "_", pos.pos + 1, "ins", alt);
+		else if (alt.equals(""))
+			return Joiner.on("").join(pos.refDict.contigName.get(pos.chr), ":g.", pos.pos, "_", pos.pos + ref.length(),
+					"del", ref);
 		else
 			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
 	}
