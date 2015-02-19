@@ -73,8 +73,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
-				"p.0?");
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
+				ncHGVS(), "p.0?");
 	}
 
 	private Annotation buildStartLossAnnotation() {
@@ -251,7 +251,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAA), "ext", suffix);
 			else
 				protAnno = StringUtil
-				.concatenate("p.", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), "fs", suffix);
+						.concatenate("p.", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), "fs", suffix);
 		}
 	}
 

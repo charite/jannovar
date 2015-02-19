@@ -1262,4 +1262,30 @@ public class DeletionAnnotationBuilderTest {
 				annotation1.effects);
 	}
 
+	@Test
+	public void testRealWorldCase_uc001sbo_3() throws InvalidGenomeChange {
+		this.builderForward = TranscriptModelFactory
+				.parseKnownGenesLine(
+						refDict,
+						"uc001sbo.1	chr12	+	53443834	53452266	53443969	53452264	15	53443834,53445638,53446238,53447194,53447557,53447748,53448053,53448969,53449351,53449564,53450796,53451350,53451556,53451810,53452099,	53444044,53445747,53446276,53447233,53447596,53447798,53448225,53449020,53449474,53449629,53450880,53451463,53451617,53451886,53452266,	F8W661	uc001sbo.1");
+		this.builderForward
+				.setSequence("tcctcacaccagccagacagcctaccctccgcccaggggaagcggctgcctccgccaggccgcttccaggaagccccgggccaggccccagcattgttcaggccctggggccagcaccccagccagccgaacaccatgaagtccagcggccctgtggagaggctgctcagagccctggggaggagggacagcagccgggccgcaagcaggcctaggaaagctgagcctcatagcttccgggagaaggttttccggaagaaacctccagtctgtgcagtatgtaaggtgaccatcgatgggacaggcgtttcgtgcagagtctgcaaggtggcgacgcacagaaaatgtgaagcaaaggtgacttcagcctgtcaggccttgcctcccgtggagttgcggcgaaacacggccccagtcaggcgcatagagcacctgggatccaccaaatctctgaaccactcaaagcagcgcagcactctgcccaggagcttcagcctggacccgctcatggagcggcgctgggacttagacctcacctacgtgacggagcgcatcttggccgccgccttccccgcgcggcccgatgaacagcggcaccggggccacctgcgcgagctggcccatgtgctgcaatccaagcaccgggacaagtacctgctcttcaacctttcagagaaaaggcatgacctgacccgcttaaaccccaaggttcaagacttcggctggcctgagctgcatgctccacccctggacaagctgtgctccatctgcaaagccatggagacatggctcagtgctgacccacagcacgtggtcgtactatactgcaagggaaacaagggcaagcttggggtcatcgtttctgcctacatgcactacagcaagatctctgcaggggcggaccaggcactggccactcttaccatgcggaaattctgcgaggacaaggtggccacagaactgcagccctcccagcgtcgatatatcagctacttcagtgggctgctatctggctccatcagaatgaacagcagccctctcttcctgcactatgtgctcatccccatgctgccagcctttgaacctggcacaggcttccagcccttccttaaaatctaccagtccatgcagcttgtctacacatctggagtctatcacattgcaggccctggtccccagcagctttgcatcagcctggagccagccctcctcctcaaaggcgatgtcatggtaacatgttatcacaagggtggccggggcacagaccggaccctcgtgttccgagtccagttccacacctgcaccatccacggaccacagctcactttccccaaggaccagcttgacgaggcctggactggtgagtctgagacaagtggcctggggctggagtccag"
+						.toUpperCase());
+		this.builderForward.setGeneSymbol("RECQL4");
+		this.infoForward = builderForward.build();
+
+		// TODO(holtgrew): The end position in the prediction could be more exact since it is in the intron.
+
+		GenomeChange change1 = new GenomeChange(
+				new GenomePosition(refDict, '+', 12, 53452263, PositionType.ZERO_BASED), "CAGGTGGCAGG", "");
+		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
+				.build();
+		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
+		Assert.assertEquals(-1, annotation1.annoLoc.rank);
+		Assert.assertEquals("c.1260_*10del", annotation1.ntHGVSDescription);
+		Assert.assertEquals("p.*420Serext*?", annotation1.aaHGVSDescription);
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
+				annotation1.effects);
+	}
+
 }
