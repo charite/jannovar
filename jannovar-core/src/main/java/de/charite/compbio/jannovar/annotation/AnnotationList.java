@@ -50,13 +50,13 @@ public final class AnnotationList implements List<Annotation> {
 	/**
 	 * Convenience method.
 	 *
-	 * @return {@link VariantEffect} with the highest impact of all in {@link #entries} or null if {@link #entries} is
-	 *         empty or has no annotated effects.
+	 * @return {@link VariantEffect} with the highest impact of all in {@link #entries} or
+	 *         {@link VariantEffect.SEQUENCE_VARIANT} if {@link #entries} is empty or has no annotated effects.
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();
 		if (anno.effects.isEmpty())
-			return null;
+			return VariantEffect.SEQUENCE_VARIANT;
 		else
 			return anno.effects.first();
 	}
