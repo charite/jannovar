@@ -297,11 +297,11 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 */
 	private void checkVariantsForGene(Gene gene) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
-		GenotypeList lst = activeGenes.get(gene).build();
+		boolean isXChromosomal = (gene.refDict.contigID.get("chrX") != null && gene.refDict.contigID.get("chrX")
+				.intValue() == gene.region.chr);
+		GenotypeList lst = activeGenes.get(gene).setIsXChromosomal(isXChromosomal).build();
 		try {
-			boolean isXChromosomal = (gene.refDict.contigID.get("chrX") != null && gene.refDict.contigID.get("chrX")
-					.intValue() == gene.region.chr);
-			if (checker.isCompatibleWith(lst, modeOfInheritance, isXChromosomal))
+			if (checker.isCompatibleWith(lst, modeOfInheritance))
 				markVariantsInGeneAsCompatible(gene);
 		} catch (CompatibilityCheckerException e) {
 			throw new FilterException("Problem in mode of inheritance filter.", e);
