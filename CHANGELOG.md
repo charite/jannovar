@@ -28,6 +28,8 @@
 
 ### jannovar-core
 
+* Using type `Strand` instead of `'+'` and `'-'`, requires database rebuild.
+* Adding enum `Strand` with `PLUS` and `MINUS` values.
 * Adding `VariantEffect.isOffExome` and updating
   `VariantEffect.isOffTranscript`.
 * Removing `genomeRegion` member from `GenotypeList`. Also, adjusting the

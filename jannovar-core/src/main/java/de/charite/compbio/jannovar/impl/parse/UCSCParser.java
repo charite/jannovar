@@ -21,6 +21,7 @@ import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
@@ -207,10 +208,11 @@ public class UCSCParser implements TranscriptParser {
 		if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception to be thrown.
 			throw new TranscriptParseException("Could not parse chromosome field: " + A[1]);
 
-		char strand = A[2].charAt(0);
-		if (strand != '+' && strand != '-') {
+		char strandC = A[2].charAt(0);
+		if (strandC != '+' && strandC != '-') {
 			throw new TranscriptParseException("Malformed strand: " + A[2]);
 		}
+		Strand strand = (strandC == '+') ? Strand.FWD : Strand.REV;
 		tib.setStrand(strand);
 
 		int txStart, txEnd;
@@ -224,8 +226,8 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
-		tib.setTxRegion(new GenomeInterval(refDict, '+', chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
-		.withStrand(strand));
+		tib.setTxRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd,
+				PositionType.ONE_BASED).withStrand(strand));
 
 		int cdsStart, cdsEnd;
 		try {
@@ -238,8 +240,8 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
-		tib.setCdsRegion(new GenomeInterval(refDict, '+', chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
-		.withStrand(strand));
+		tib.setCdsRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd,
+				PositionType.ONE_BASED).withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;
@@ -285,7 +287,7 @@ public class UCSCParser implements TranscriptParser {
 		}
 
 		for (int i = 0; i < exonStarts.length; ++i)
-			tib.addExonRegion(new GenomeInterval(refDict, '+', chrID.intValue(), exonStarts[i], exonEnds[i],
+			tib.addExonRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), exonStarts[i], exonEnds[i],
 					PositionType.ONE_BASED));
 
 		return tib;

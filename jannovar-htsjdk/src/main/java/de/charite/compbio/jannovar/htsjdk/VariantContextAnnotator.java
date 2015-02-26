@@ -24,6 +24,7 @@ import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Helper class for generating {@link AnnotationList} objects from {@link VariantContext}s.
@@ -111,7 +112,6 @@ public final class VariantContextAnnotator {
 	 * @return {@link ImmutableList} of {@link AnnotationList}s, one for each alternative allele, in the order of the
 	 *         alternative alleles in <code>vc</code>
 	 */
-	// TODO(holtgrewe): rename to buildAnnotationList().
 	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
@@ -128,7 +128,7 @@ public final class VariantContextAnnotator {
 			final String ref = vc.getReference().getBaseString();
 			final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 			final int pos = vc.getStart();
-			final GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', chr, pos,
+			final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos,
 					PositionType.ONE_BASED), ref, alt);
 
 			// Build AnnotationList object for this allele.

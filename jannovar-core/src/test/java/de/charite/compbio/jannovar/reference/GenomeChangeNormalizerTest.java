@@ -55,7 +55,7 @@ public class GenomeChangeNormalizerTest {
 	public void testForwardInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 0, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
-		GenomeChange change = new GenomeChange(gPos, "", "G", '+');
+		GenomeChange change = new GenomeChange(gPos, "", "G", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
@@ -65,7 +65,7 @@ public class GenomeChangeNormalizerTest {
 		// one base at second CDS position
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
-		GenomeChange change = new GenomeChange(gPos, "", "A", '+');
+		GenomeChange change = new GenomeChange(gPos, "", "A", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
@@ -74,7 +74,7 @@ public class GenomeChangeNormalizerTest {
 	public void testForwardInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
-		GenomeChange change = new GenomeChange(gPos, "", "AAA", '+');
+		GenomeChange change = new GenomeChange(gPos, "", "AAA", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
@@ -83,9 +83,9 @@ public class GenomeChangeNormalizerTest {
 	public void testForwardInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 0, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
-		GenomeChange change = new GenomeChange(gPos, "", "C", '+');
+		GenomeChange change = new GenomeChange(gPos, "", "C", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "", "C", '+');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "", "C", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
@@ -93,9 +93,9 @@ public class GenomeChangeNormalizerTest {
 	public void testForwardInsertNormalizationNecessaryOneBaseSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
-		GenomeChange change = new GenomeChange(gPos, "", "G", '+');
+		GenomeChange change = new GenomeChange(gPos, "", "G", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "", "G", '+');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "", "G", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
@@ -103,17 +103,17 @@ public class GenomeChangeNormalizerTest {
 	public void testForwardInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
 		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
-		GenomeChange change = new GenomeChange(gPos, "", "GTGC", '+');
+		GenomeChange change = new GenomeChange(gPos, "", "GTGC", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(2), "", "GCGT", '+');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(2), "", "GCGT", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
 	public void testReverseInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "", "G", '-');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "", "G", Strand.REV);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
@@ -121,8 +121,8 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 2, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "", "A", '-');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "", "A", Strand.REV);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
@@ -130,8 +130,8 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 2, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "", "AAA", '-');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "", "AAA", Strand.REV);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
@@ -139,10 +139,10 @@ public class GenomeChangeNormalizerTest {
 	@Test
 	public void testReverseInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "", "T", '+');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "", "T", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "", "T", '-');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "", "T", Strand.REV);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
@@ -150,40 +150,40 @@ public class GenomeChangeNormalizerTest {
 	public void testReverseInsertNormalizationNecessaryOneBaseThird() throws ProjectionException {
 		// one base at second CDS position
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 3, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "", "T", '+');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "", "T", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "", "T", '-');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "", "T", Strand.REV);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
 	public void testReverseInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 17, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "", "AA", '+');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "", "AA", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-4), "", "AA", '-');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-4), "", "AA", Strand.REV);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
 	public void testForwardDeletionNormalization() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "GTCACGTCCGGCGCG", "", '+');
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "GTCACGTCCGGCGCG", "", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeDeletion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "TCACGTCCGGCGCGG", "", '+');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "TCACGTCCGGCGCGG", "", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
 	public void testReverseDeletionNormalization() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 17, PositionType.ZERO_BASED);
-		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand('+');
-		GenomeChange change = new GenomeChange(gPos, "AA", "", '+');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeChange change = new GenomeChange(gPos, "AA", "", Strand.FWD);
 		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeDeletion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-3), "AA", "", '+');
+		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-3), "AA", "", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 

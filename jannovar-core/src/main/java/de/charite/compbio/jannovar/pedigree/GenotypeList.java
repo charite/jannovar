@@ -27,7 +27,22 @@ public final class GenotypeList {
 	/** the lists of genotype calls, each contains one entry for each individual */
 	public final ImmutableList<ImmutableList<Genotype>> calls;
 
-	public GenotypeList(String geneID, List<String> names, ImmutableList<ImmutableList<Genotype>> calls) {
+	/**
+	 * Construct and initialize object.
+	 *
+	 * @param geneID
+	 *            name of gene that this genotype list is for
+	 * @param names
+	 *            individual names, gives sorting of individuals in the call lists
+	 * @param isXChromosomal
+	 *            <code>true</code> if the gene list is on the X chromosome, only affects X-linked compatibility checks
+	 *            (setting this to <code>true</code> can lead to too false positives and but neither <code>true</code>
+	 *            nor <code>false</code> can lead to false negatives, given the filter's properties)
+	 * @param calls
+	 *            the genotype calls for this list
+	 */
+	public GenotypeList(String geneID, List<String> names, boolean isXChromosomal,
+			ImmutableList<ImmutableList<Genotype>> calls) {
 		this.geneName = geneID;
 		this.names = ImmutableList.copyOf(names);
 		this.calls = calls;

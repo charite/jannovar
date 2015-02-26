@@ -26,6 +26,7 @@ import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Annotate variant in {@link VariantContext} and write out in Jannovar format.
@@ -130,8 +131,8 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		final String alt = vc.getAlternateAllele(0).getBaseString();
 		final int pos = vc.getStart();
 		// Construct GenomeChange from this and strip common prefixes.
-		final GenomeChange change = new GenomeChange(
-				new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
+		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos,
+				PositionType.ONE_BASED), ref, alt);
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();

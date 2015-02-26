@@ -34,7 +34,7 @@ public class GenotypeListTest {
 		this.geneName = null;
 		this.names = ImmutableList.of("father", "mother", "son", "daughter");
 		this.calls = null;
-		this.list = new GenotypeList(geneName, names, calls);
+		this.list = new GenotypeList(geneName, names, false, calls);
 	}
 
 	@Test

@@ -49,7 +49,7 @@ public final class GenomeChange {
 	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
 	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
 	 */
-	public GenomeChange(GenomePosition pos, String ref, String alt, char strand) {
+	public GenomeChange(GenomePosition pos, String ref, String alt, Strand strand) {
 		// Correct variant data.
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
@@ -79,7 +79,7 @@ public final class GenomeChange {
 	/**
 	 * Construct object and enforce strand.
 	 */
-	public GenomeChange(GenomeChange other, char strand) {
+	public GenomeChange(GenomeChange other, Strand strand) {
 		if (strand == other.pos.strand) {
 			this.ref = other.ref;
 			this.alt = other.alt;
@@ -114,7 +114,7 @@ public final class GenomeChange {
 	/**
 	 * @return the GenomeChange on the given strand
 	 */
-	public GenomeChange withStrand(char strand) {
+	public GenomeChange withStrand(Strand strand) {
 		return new GenomeChange(this, strand);
 	}
 
@@ -130,8 +130,8 @@ public final class GenomeChange {
 	 */
 	@Override
 	public String toString() {
-		if (pos.strand != '+')
-			return withStrand('+').toString();
+		if (pos.strand != Strand.FWD)
+			return withStrand(Strand.FWD).toString();
 		else if (ref.equals("")) // handle insertion as special case
 			return Joiner.on("")
 					.join(pos.refDict.contigName.get(pos.chr), ":g.", pos.pos, "_", pos.pos + 1, "ins", alt);
@@ -207,8 +207,8 @@ public final class GenomeChange {
 	 */
 	@Override
 	public int hashCode() {
-		if (pos.strand != '+')
-			return withStrand('+').hashCode();
+		if (pos.strand.isReverse())
+			return withStrand(Strand.FWD).hashCode();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
@@ -232,9 +232,9 @@ public final class GenomeChange {
 			return false;
 
 		GenomeChange other = (GenomeChange) obj;
-		if (pos.strand != '+')
-			return withStrand('+').equals(obj);
-		other = other.withStrand('+');
+		if (pos.strand != Strand.FWD)
+			return withStrand(Strand.FWD).equals(obj);
+		other = other.withStrand(Strand.FWD);
 
 		if (alt == null) {
 			if (other.alt != null)

@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 public class TranscriptModelBuilder {
 
 	/** The explicit strand of the target transcript. */
-	private char strand = '?';
+	private Strand strand = Strand.FWD;
 
 	/** {@link TranscriptInfo#accession} of next {@link TranscriptInfo} to build. */
 	private String accession = null;
@@ -58,7 +58,7 @@ public class TranscriptModelBuilder {
 	 * Reset the builder into the state after initialization.
 	 */
 	public void reset() {
-		strand = '?';
+		strand = Strand.FWD;
 		accession = null;
 		geneSymbol = null;
 		txRegion = null;
@@ -93,7 +93,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return the strand
 	 */
-	public char getStrand() {
+	public Strand getStrand() {
 		return strand;
 	}
 
@@ -101,7 +101,7 @@ public class TranscriptModelBuilder {
 	 * @param strand
 	 *            the strand to set
 	 */
-	public void setStrand(char strand) {
+	public void setStrand(Strand strand) {
 		this.strand = strand;
 	}
 

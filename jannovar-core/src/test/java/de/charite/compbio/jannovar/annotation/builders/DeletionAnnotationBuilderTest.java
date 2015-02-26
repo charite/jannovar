@@ -16,6 +16,7 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
@@ -63,8 +64,8 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardUstream() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -76,8 +77,8 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardDownstream() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -90,8 +91,8 @@ public class DeletionAnnotationBuilderTest {
 	@Test
 	public void testForwardIntergenic() throws InvalidGenomeChange {
 		// intergenic upstream
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6639061, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6639061,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -100,8 +101,8 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(null, annotation1.aaHGVSDescription);
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.effects);
 		// intergenic downstream
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6650340, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -116,8 +117,8 @@ public class DeletionAnnotationBuilderTest {
 		StringBuilder chars200 = new StringBuilder();
 		for (int i = 0; i < 200; ++i)
 			chars200.append(".");
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED),
-				chars200.toString(), "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
+				PositionType.ZERO_BASED), chars200.toString(), "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -129,8 +130,8 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardIntronic() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642106, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642106,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -142,8 +143,8 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640072, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640072,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -155,8 +156,8 @@ public class DeletionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649329, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649329,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -171,8 +172,8 @@ public class DeletionAnnotationBuilderTest {
 		// Testing with some START_LOST scenarios.
 
 		// Delete one base of start codon.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640669, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -182,8 +183,8 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.effects);
 
 		// Delete chunk out of first exon, spanning start codon from the left.
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640660, PositionType.ZERO_BASED),
-				"CCCTCCAGACC", "");
+		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640660,
+				PositionType.ZERO_BASED), "CCCTCCAGACC", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
@@ -193,8 +194,8 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.effects);
 
 		// Delete chunk out of first exon, spanning start codon from the right.
-		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640671, PositionType.ZERO_BASED),
-				"GGACGGCTCCT", "");
+		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640671,
+				PositionType.ZERO_BASED), "GGACGGCTCCT", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation3.transcript.accession);
@@ -205,7 +206,7 @@ public class DeletionAnnotationBuilderTest {
 
 		// Deletion from before transcript, reaching into the start codon.
 		GenomeChange change4 = new GenomeChange(
-				new GenomePosition(refDict, '+', 1, 6640399, PositionType.ZERO_BASED),
+				new GenomePosition(refDict, Strand.FWD, 1, 6640399, PositionType.ZERO_BASED),
 				"TCTCACCAGGCCCTTCTTCACGACCCTGGCCCCCCATCCAGCATCCCCCCTGGCCAATCCAATATGGCCCCCGGCCCCCGGGAGGCTGTCAGTGTGTTCCAGCCCTCCGCGTGCACCCCTCACCCTGACCCAAGCCCTCGTGCTGATAAATATGATTATTTGAGTAGAGGCCAACTTCCCGTTTCTCTCTCTTGACTCCAGGAGCTTTCTCTTGCATACCCTCGCTTAGGCTGGCCGGGGTGTCACTTCTGCCTCCCTGCCCTCCAGACCA",
 				"");
 		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions())
@@ -223,8 +224,8 @@ public class DeletionAnnotationBuilderTest {
 		// below.
 
 		// Delete last base of stop codon, leads to complete loss of stop codon (different from Mutalyzer).
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649271, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -235,8 +236,8 @@ public class DeletionAnnotationBuilderTest {
 				annotation1.effects);
 
 		// Delete middle base of stop codon, leads to complete loss.
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
@@ -247,8 +248,8 @@ public class DeletionAnnotationBuilderTest {
 				annotation2.effects);
 
 		// Delete first base of stop codon, leads to extension
-		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649269,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation3.transcript.accession);
@@ -259,8 +260,8 @@ public class DeletionAnnotationBuilderTest {
 				annotation3.effects);
 
 		// Delete two bases of stop codon.
-		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649269, PositionType.ZERO_BASED),
-				"AT", "");
+		GenomeChange change4 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649269,
+				PositionType.ZERO_BASED), "AT", "");
 		Annotation annotation4 = new DeletionAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation4.transcript.accession);
@@ -271,8 +272,8 @@ public class DeletionAnnotationBuilderTest {
 				annotation4.effects);
 
 		// Delete from before into the stop codon.
-		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649267, PositionType.ZERO_BASED),
-				"CATAGCCC", "");
+		GenomeChange change5 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649267,
+				PositionType.ZERO_BASED), "CATAGCCC", "");
 		Annotation annotation5 = new DeletionAnnotationBuilder(infoForward, change5, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation5.transcript.accession);
@@ -286,8 +287,8 @@ public class DeletionAnnotationBuilderTest {
 	@Test
 	public void testForwardSplicing() throws InvalidGenomeChange {
 		// intronic splicing
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642116, PositionType.ZERO_BASED),
-				"G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642116,
+				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -298,8 +299,8 @@ public class DeletionAnnotationBuilderTest {
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.effects);
 
 		// exonic splicing
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642117, PositionType.ZERO_BASED),
-				"TGG", "");
+		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
+				PositionType.ZERO_BASED), "TGG", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
@@ -313,8 +314,8 @@ public class DeletionAnnotationBuilderTest {
 	@Test
 	public void testForwardFrameShiftDeletion() throws InvalidGenomeChange {
 		// The following case contains a shift in the nucleotide sequence.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6645988, PositionType.ZERO_BASED),
-				"TGGGGAGAAA", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6645988,
+				PositionType.ZERO_BASED), "TGGGGAGAAA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -328,8 +329,8 @@ public class DeletionAnnotationBuilderTest {
 	public void testForwardNonFrameShiftDeletion() throws InvalidGenomeChange {
 		// clean (FS of begin position is 0) deletion of one codon, starting in intron (thus no "exon3" annotation is
 		// generated).
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642114, PositionType.ZERO_BASED),
-				"GAAACA", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642114,
+				PositionType.ZERO_BASED), "GAAACA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -341,8 +342,8 @@ public class DeletionAnnotationBuilderTest {
 				annotation1.effects);
 
 		// deletion of three codons
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642126, PositionType.ZERO_BASED),
-				"GTGGTTCAA", "");
+		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642126,
+				PositionType.ZERO_BASED), "GTGGTTCAA", "");
 		Annotation annotation2 = new DeletionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation2.transcript.accession);
@@ -352,8 +353,8 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation2.effects);
 
 		// deletion of three codons, resulting in delins case
-		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642134, PositionType.ZERO_BASED),
-				"AGTGGAGGA", "");
+		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642134,
+				PositionType.ZERO_BASED), "AGTGGAGGA", "");
 		Annotation annotation3 = new DeletionAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation3.transcript.accession);
@@ -376,8 +377,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001271733.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 17087543, PositionType.ZERO_BASED),
-				"GCTGT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 17087543,
+				PositionType.ZERO_BASED), "GCTGT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -398,8 +399,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001001966.1
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 1, 247978543, PositionType.ZERO_BASED), "GAG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 247978543,
+				PositionType.ZERO_BASED), "GAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -422,8 +423,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// no RefSeq
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 44540795, PositionType.ZERO_BASED),
-				"TC", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 3, 44540795,
+				PositionType.ZERO_BASED), "TC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -444,8 +445,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001005479.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 97983496, PositionType.ZERO_BASED),
-				"TGTAACCAC", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 3, 97983496,
+				PositionType.ZERO_BASED), "TGTAACCAC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -466,8 +467,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001004737.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 3, 98216798, PositionType.ZERO_BASED),
-				"TTTCCCTCTAT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 3, 98216798,
+				PositionType.ZERO_BASED), "TTTCCCTCTAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -490,8 +491,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_018910.2
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 5, 140215470, PositionType.ZERO_BASED), "GCGCG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 5, 140215470,
+				PositionType.ZERO_BASED), "GCGCG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -512,8 +513,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_018910.2
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 5, 140615503, PositionType.ZERO_BASED), "GTC", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 5, 140615503,
+				PositionType.ZERO_BASED), "GTC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -534,8 +535,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NR_001281.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 27879112, PositionType.ZERO_BASED),
-				"T", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 6, 27879112,
+				PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -565,8 +566,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_031460.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 39278700, PositionType.ZERO_BASED),
-				"AAG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 6, 39278700,
+				PositionType.ZERO_BASED), "AAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -589,8 +590,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_031460.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 39278700, PositionType.ZERO_BASED),
-				"AAG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 6, 39278700,
+				PositionType.ZERO_BASED), "AAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -613,8 +614,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001017969.2
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 9, 5921979, PositionType.ZERO_BASED),
-				"GTT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 9, 5921979,
+				PositionType.ZERO_BASED), "GTT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -637,8 +638,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001077665.2
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 10, 51768675, PositionType.ZERO_BASED), "AA", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 10, 51768675,
+				PositionType.ZERO_BASED), "AA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -661,8 +662,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001077665.2
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 10, 51768774, PositionType.ZERO_BASED), "TGA", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 10, 51768774,
+				PositionType.ZERO_BASED), "TGA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -683,8 +684,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001004740.1
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 11, 56380553, PositionType.ZERO_BASED), "GACA", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 11, 56380553,
+				PositionType.ZERO_BASED), "GACA", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -707,8 +708,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_018088.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 12, 8376100, PositionType.ZERO_BASED),
-				"G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 12, 8376100,
+				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -731,8 +732,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_020382.3
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 12, 123880923, PositionType.ZERO_BASED), "TT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 12, 123880923,
+				PositionType.ZERO_BASED), "TT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -755,8 +756,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_182542.2
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 13, 46170725, PositionType.ZERO_BASED), "ACTCTTCCTCCTCCAGAT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 13, 46170725,
+				PositionType.ZERO_BASED), "ACTCTTCCTCCTCCAGAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -779,8 +780,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_025055.4
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 15, 74536403, PositionType.ZERO_BASED), "AAG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 15, 74536403,
+				PositionType.ZERO_BASED), "AAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -803,8 +804,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NR_027024.1
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 15, 78208898, PositionType.ZERO_BASED), "CTC", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 15, 78208898,
+				PositionType.ZERO_BASED), "CTC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -828,8 +829,8 @@ public class DeletionAnnotationBuilderTest {
 		// RefSeq NM_015670.5
 
 		// This deletion leads to position shifting downstream.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 17, 7470288, PositionType.ZERO_BASED),
-				"G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 17, 7470288,
+				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -854,8 +855,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_024857.3
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 17, 29161650, PositionType.ZERO_BASED), "GTCAAT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 17, 29161650,
+				PositionType.ZERO_BASED), "GTCAAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -878,8 +879,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_024857.3
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 17, 29161650, PositionType.ZERO_BASED), "GTCAAT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 17, 29161650,
+				PositionType.ZERO_BASED), "GTCAAT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -906,8 +907,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_005828.4
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 17, 61660894, PositionType.ZERO_BASED), "G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 17, 61660894,
+				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -932,8 +933,8 @@ public class DeletionAnnotationBuilderTest {
 
 		// Note that we here have a deviation from Mutalyzer, in that the UCSC sequence does not have a stop codon after
 		// the deletion.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 20, 126313, PositionType.ZERO_BASED),
-				"CC", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 20, 126313,
+				PositionType.ZERO_BASED), "CC", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -954,8 +955,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_182832.2
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 21, 42551467, PositionType.ZERO_BASED), "GTGTCAGGGTGAGTGAGGG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 21, 42551467,
+				PositionType.ZERO_BASED), "GTGTCAGGGTGAGTGAGGG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -978,8 +979,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001164530.1
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 19, 58579807, PositionType.ZERO_BASED), "CCAGAG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 19, 58579807,
+				PositionType.ZERO_BASED), "CCAGAG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1002,8 +1003,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_053054.3
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 11, 65793877, PositionType.ZERO_BASED), "A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 11, 65793877,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1026,8 +1027,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 12, 49525088, PositionType.ZERO_BASED), "CT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 12, 49525088,
+				PositionType.ZERO_BASED), "CT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1050,8 +1051,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("X"), 7811233,
-				PositionType.ZERO_BASED), "AGCTGCG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+				7811233, PositionType.ZERO_BASED), "AGCTGCG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1074,8 +1075,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 44125966, PositionType.ZERO_BASED),
-				"A", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 44125966,
+				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1099,8 +1100,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_207421.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 1, 17718673, PositionType.ZERO_BASED),
-				"G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 17718673,
+				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1125,8 +1126,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 2, 90458647, PositionType.ZERO_BASED),
-				"T", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 2, 90458647,
+				PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1147,8 +1148,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', 6, 31803064, PositionType.ZERO_BASED),
-				"T", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 6, 31803064,
+				PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1172,8 +1173,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, '+', refDict.contigID.get("Y"), 23749506,
-				PositionType.ZERO_BASED), "G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("Y"),
+				23749506, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1198,8 +1199,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 9, 135782122, PositionType.ZERO_BASED), "TTCT", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 9, 135782122,
+				PositionType.ZERO_BASED), "TTCT", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1222,8 +1223,8 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 5, 140812775, PositionType.ZERO_BASED), "T", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 5, 140812775,
+				PositionType.ZERO_BASED), "T", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1249,8 +1250,8 @@ public class DeletionAnnotationBuilderTest {
 
 		// The prediction differs from the one by Mutalyzer since the UCSC and RefSeq transcripts for RECQL4 differ.
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 8, 145738767, PositionType.ZERO_BASED), "G", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 8, 145738767,
+				PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1276,8 +1277,8 @@ public class DeletionAnnotationBuilderTest {
 
 		// TODO(holtgrew): The end position in the prediction could be more exact since it is in the intron.
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 12, 53452263, PositionType.ZERO_BASED), "CAGGTGGCAGG", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 12, 53452263,
+				PositionType.ZERO_BASED), "CAGGTGGCAGG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);
@@ -1303,8 +1304,8 @@ public class DeletionAnnotationBuilderTest {
 
 		// This transcript is different in UCSC hg19 and RefSeq hg19.
 
-		GenomeChange change1 = new GenomeChange(
-				new GenomePosition(refDict, '+', 19, 53952885, PositionType.ZERO_BASED), "C", "");
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 19, 53952885,
+				PositionType.ZERO_BASED), "C", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		Assert.assertEquals(infoForward.accession, annotation1.transcript.accession);

@@ -11,9 +11,6 @@ import com.google.common.collect.ImmutableList;
  * For X-chromosomal dominant inheritance, there must be at least one {@link Genotype} that is shared by all affected
  * individuals but no unaffected individuals in the pedigree.
  *
- * The checker itself does <b>not</b> have the information whether any variant was on the X chromosome, so this check
- * has to be performed outside the checker.
- *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>

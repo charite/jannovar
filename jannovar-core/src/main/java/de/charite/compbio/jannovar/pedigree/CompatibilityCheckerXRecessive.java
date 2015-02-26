@@ -13,9 +13,6 @@ import com.google.common.collect.ImmutableSet;
  * the genotype call list is compatible with autosomal recessive compound heterozygous inheritance or if the list
  * contains a homozygous alt call. If the index is male then return true if the list contains a homozygous alt call.
  *
- * The checker itself does <b>not</b> have the information whether any variant was on the X chromosome, so this check
- * has to be performed outside the checker.
- *
  * If the pedigree has more samples, the checks are more involved.
  *
  * <b>Note</b> that the case of X-chromosomal compound heterozygous mutations is not handled. We assume that female
