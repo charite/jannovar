@@ -19,6 +19,7 @@ import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Allows the annotation of a single position.
@@ -94,12 +95,12 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		String ref = match.group(3);
 		String alt = match.group(4);
 
-		return new GenomeChange(new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
+		return new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+			HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);

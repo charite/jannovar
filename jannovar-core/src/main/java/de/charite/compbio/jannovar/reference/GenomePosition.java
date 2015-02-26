@@ -33,14 +33,14 @@ public final class GenomePosition implements Serializable {
 	public final ReferenceDictionary refDict;
 
 	/** the strand that the position is located on */
-	public final char strand;
+	public final Strand strand;
 	/** the chromosome number, as index in chromosome dictionary */
 	public final int chr;
 	/** the position on the chromosome */
 	public final int pos;
 
 	/** construct genome position with zero-based coordinate system */
-	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos) {
+	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr, int pos) {
 		this.refDict = refDict;
 		this.strand = strand;
 		this.chr = chr;
@@ -48,7 +48,7 @@ public final class GenomePosition implements Serializable {
 	}
 
 	/** construct genome position with selected coordinate system */
-	public GenomePosition(ReferenceDictionary refDict, char strand, int chr, int pos, PositionType positionType) {
+	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr, int pos, PositionType positionType) {
 		this.refDict = refDict;
 		this.strand = strand;
 		this.chr = chr;
@@ -67,7 +67,7 @@ public final class GenomePosition implements Serializable {
 	}
 
 	/** construct genome position from other with the selected strand */
-	public GenomePosition(GenomePosition other, char strand) {
+	public GenomePosition(GenomePosition other, Strand strand) {
 		this.refDict = other.refDict;
 		this.strand = strand;
 		this.chr = other.chr;
@@ -80,7 +80,7 @@ public final class GenomePosition implements Serializable {
 	}
 
 	/** convert into GenomePosition of the given strand */
-	public GenomePosition withStrand(char strand) {
+	public GenomePosition withStrand(Strand strand) {
 		return new GenomePosition(this, strand);
 	}
 
@@ -165,8 +165,8 @@ public final class GenomePosition implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		if (strand == '-')
-			return withStrand('+').toString();
+		if (strand.isReverse())
+			return withStrand(Strand.FWD).toString();
 
 		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", pos + 1);
 	}
@@ -178,13 +178,14 @@ public final class GenomePosition implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		if (strand != '+')
-			return withStrand('+').hashCode();
+		if (strand.isReverse())
+			return withStrand(Strand.FWD).hashCode();
 
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + chr;
 		result = prime * result + pos;
+		result = prime * result + strand.hashCode();
 		return result;
 	}
 
@@ -202,10 +203,10 @@ public final class GenomePosition implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 
-		if (strand == '-')
-			return withStrand('+').equals(obj);
+		if (strand.isReverse())
+			return withStrand(Strand.FWD).equals(obj);
 		GenomePosition other = (GenomePosition) obj;
-		other = other.withStrand('+');
+		other = other.withStrand(Strand.FWD);
 
 		if (strand != other.strand)
 			return false;

@@ -78,7 +78,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	}
 
 	/** @return the strand of the transcript */
-	public char getStrand() {
+	public Strand getStrand() {
 		return txRegion.strand;
 	}
 
@@ -131,7 +131,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 * Ensures that the strands are consistent.
 	 */
 	private void checkForConsistency() {
-		char strand = txRegion.strand;
+		Strand strand = txRegion.strand;
 		assert (txRegion.strand == strand);
 		assert (cdsRegion.strand == strand);
 		for (GenomeInterval region : exonRegions)

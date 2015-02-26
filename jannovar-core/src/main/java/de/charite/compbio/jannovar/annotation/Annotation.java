@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): Test me!
@@ -138,7 +139,7 @@ public final class Annotation implements Comparable<Annotation> {
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
 			Collection<AnnotationMessage> messages) {
 		if (change != null)
-			change = change.withStrand('+'); // enforce forward strand
+			change = change.withStrand(Strand.FWD); // enforce forward strand
 		this.change = change;
 		if (varTypes == null)
 			this.effects = ImmutableSortedSet.<VariantEffect> of();

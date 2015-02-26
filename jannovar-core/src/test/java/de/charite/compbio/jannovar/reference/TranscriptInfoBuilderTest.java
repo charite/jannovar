@@ -20,19 +20,19 @@ public class TranscriptInfoBuilderTest {
 
 	@Test
 	public void testReverse() {
-		builder.setStrand('-');
+		builder.setStrand(Strand.REV);
 		builder.setAccession("accession");
 		builder.setGeneID("ENTREZ10");
 		builder.setGeneSymbol("gene-symbol");
-		builder.setTxRegion(new GenomeInterval(refDict, '+', 1, 100, 200, PositionType.ONE_BASED));
-		builder.setCdsRegion(new GenomeInterval(refDict, '+', 1, 110, 190, PositionType.ONE_BASED));
-		builder.addExonRegion(new GenomeInterval(refDict, '+', 1, 120, 170, PositionType.ONE_BASED));
+		builder.setTxRegion(new GenomeInterval(refDict, Strand.FWD, 1, 100, 200, PositionType.ONE_BASED));
+		builder.setCdsRegion(new GenomeInterval(refDict, Strand.FWD, 1, 110, 190, PositionType.ONE_BASED));
+		builder.addExonRegion(new GenomeInterval(refDict, Strand.FWD, 1, 120, 170, PositionType.ONE_BASED));
 		builder.setSequence("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 				+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
 		TranscriptModel info = builder.build();
 
-		Assert.assertEquals('-', info.getStrand());
+		Assert.assertEquals(Strand.REV, info.getStrand());
 		Assert.assertEquals(1, info.getChr());
 		Assert.assertEquals("accession", info.accession);
 		Assert.assertEquals("ENTREZ10", info.geneID);

@@ -14,6 +14,7 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): We should directly pass in a JannovarData object after adding the interval trees to it. Then, this should be fine.
@@ -92,7 +93,7 @@ public final class VariantAnnotator {
 			throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
 
 		// Build the GenomeChange to build annotation for.
-		GenomePosition pos = new GenomePosition(refDict, '+', chr, position, posType);
+		GenomePosition pos = new GenomePosition(refDict, Strand.FWD, chr, position, posType);
 		GenomeChange change = new GenomeChange(pos, ref, alt);
 
 		return buildAnnotationList(change);

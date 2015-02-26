@@ -1,9 +1,6 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
  * Allows the easy creation of transcript models from knownGenes.txt.gz lines.
@@ -27,11 +24,11 @@ public class TranscriptModelFactory {
 
 		int chr = refDict.contigID.get(fields[1].substring(3));
 
-		result.setStrand(fields[2].charAt(0));
-		GenomeInterval txRegion = new GenomeInterval(refDict, '+', chr, Integer.parseInt(fields[3]) + 1,
+		result.setStrand(fields[2].charAt(0) == '+' ? Strand.FWD : Strand.REV);
+		GenomeInterval txRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[3]) + 1,
 				Integer.parseInt(fields[4]), PositionType.ONE_BASED);
 		result.setTxRegion(txRegion);
-		GenomeInterval cdsRegion = new GenomeInterval(refDict, '+', chr, Integer.parseInt(fields[5]) + 1,
+		GenomeInterval cdsRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[5]) + 1,
 				Integer.parseInt(fields[6]), PositionType.ONE_BASED);
 		result.setCdsRegion(cdsRegion);
 
@@ -39,8 +36,8 @@ public class TranscriptModelFactory {
 		String[] startFields = fields[8].split(",");
 		String[] endFields = fields[9].split(",");
 		for (int i = 0; i < exonCount; ++i) {
-			GenomeInterval exonRegion = new GenomeInterval(refDict, '+', chr, Integer.parseInt(startFields[i]) + 1,
-					Integer.parseInt(endFields[i]), PositionType.ONE_BASED);
+			GenomeInterval exonRegion = new GenomeInterval(refDict, Strand.FWD, chr,
+					Integer.parseInt(startFields[i]) + 1, Integer.parseInt(endFields[i]), PositionType.ONE_BASED);
 			result.addExonRegion(exonRegion);
 		}
 

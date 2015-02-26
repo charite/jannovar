@@ -185,7 +185,7 @@ public final class TranscriptProjectionDecorator {
 	 * @return the exon ID in reference (forward order)
 	 */
 	public int exonIDInReferenceOrder(int exonID) {
-		if (transcript.getStrand() == '+')
+		if (transcript.getStrand().isForward())
 			return exonID;
 		else
 			return transcript.exonRegions.size() - exonID - 1;

@@ -31,6 +31,7 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
@@ -163,8 +164,8 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		final String ref = vc.getReference().getBaseString();
 		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeChange(new GenomePosition(jannovarDB.refDict, '+', contigID, pos, PositionType.ONE_BASED),
-				ref, alt);
+		return new GenomeChange(new GenomePosition(jannovarDB.refDict, Strand.FWD, contigID, pos,
+				PositionType.ONE_BASED), ref, alt);
 	}
 
 	/**

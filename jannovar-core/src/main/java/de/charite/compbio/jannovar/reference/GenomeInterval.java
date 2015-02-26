@@ -23,7 +23,7 @@ public final class GenomeInterval implements Serializable {
 	final ReferenceDictionary refDict;
 
 	/** the strand that the position is located on */
-	public char strand;
+	public Strand strand;
 	/** the chromosome number, as index in chromosome dictionary */
 	public int chr;
 	/** the begin position on the chromosome */
@@ -32,7 +32,7 @@ public final class GenomeInterval implements Serializable {
 	public int endPos;
 
 	/** construct genome interval with zero-based coordinate system */
-	public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos) {
+	public GenomeInterval(ReferenceDictionary refDict, Strand strand, int chr, int beginPos, int endPos) {
 		this.refDict = refDict;
 		this.strand = strand;
 		this.chr = chr;
@@ -41,7 +41,7 @@ public final class GenomeInterval implements Serializable {
 	}
 
 	/** construct genome interval with selected coordinate system */
-	public GenomeInterval(ReferenceDictionary refDict, char strand, int chr, int beginPos, int endPos,
+	public GenomeInterval(ReferenceDictionary refDict, Strand strand, int chr, int beginPos, int endPos,
 			PositionType positionType) {
 		this.refDict = refDict;
 		this.strand = strand;
@@ -63,7 +63,7 @@ public final class GenomeInterval implements Serializable {
 	}
 
 	/** construct genome interval from other with selected strand */
-	public GenomeInterval(GenomeInterval other, char strand) {
+	public GenomeInterval(GenomeInterval other, Strand strand) {
 		this.refDict = other.refDict;
 		this.strand = strand;
 		this.chr = other.chr;
@@ -91,7 +91,7 @@ public final class GenomeInterval implements Serializable {
 	}
 
 	/** convert into GenomeInterval of the given strand */
-	public GenomeInterval withStrand(char strand) {
+	public GenomeInterval withStrand(Strand strand) {
 		return new GenomeInterval(this, strand);
 	}
 
@@ -206,8 +206,8 @@ public final class GenomeInterval implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		if (strand == '-')
-			return withStrand('+').toString();
+		if (strand.isReverse())
+			return withStrand(Strand.FWD).toString();
 
 		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", beginPos + 1, "-", endPos);
 	}
@@ -219,15 +219,15 @@ public final class GenomeInterval implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		if (strand != '+')
-			return withStrand('+').hashCode();
+		if (strand.isReverse())
+			return withStrand(Strand.FWD).hashCode();
 
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + beginPos;
 		result = prime * result + chr;
 		result = prime * result + endPos;
-		result = prime * result + strand;
+		result = prime * result + strand.hashCode();
 		return result;
 	}
 

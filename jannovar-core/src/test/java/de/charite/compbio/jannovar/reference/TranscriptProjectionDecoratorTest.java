@@ -56,15 +56,15 @@ public class TranscriptProjectionDecoratorTest {
 		// test with first base of transcript
 		Assert.assertEquals("1:g.6640063",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 1, PositionType.ONE_BASED))
-				.toString());
+						.toString());
 		// test with last base of transcript
 		Assert.assertEquals("1:g.6649340",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 2338, PositionType.ONE_BASED))
-				.toString());
+						.toString());
 		// test with first base of first exon
 		Assert.assertEquals("1:g.6640602",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoForward, 136, PositionType.ONE_BASED))
-				.toString());
+						.toString());
 	}
 
 	@Test
@@ -74,15 +74,15 @@ public class TranscriptProjectionDecoratorTest {
 		// test with first base of transcript
 		Assert.assertEquals("1:g.23696357",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 1, PositionType.ONE_BASED))
-				.toString());
+						.toString());
 		// test with last base of transcript
 		Assert.assertEquals("1:g.23685941",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 4493, PositionType.ONE_BASED))
-				.toString());
+						.toString());
 		// test with first base of first exon
 		Assert.assertEquals("1:g.23694557",
 				projector.transcriptToGenomePos(new TranscriptPosition(infoReverse, 501, PositionType.ONE_BASED))
-				.toString());
+						.toString());
 	}
 
 	@Test(expected = ProjectionException.class)
@@ -111,29 +111,29 @@ public class TranscriptProjectionDecoratorTest {
 
 		// last base of first exon
 		Assert.assertEquals(INVALID_INTRON_ID,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6640196, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6640196, PositionType.ONE_BASED)));
 		// first base of first intron
 		Assert.assertEquals(0,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6640197, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6640197, PositionType.ONE_BASED)));
 		// last base of first intron
 		Assert.assertEquals(0,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6640600, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6640600, PositionType.ONE_BASED)));
 		// first base of second exon
 		Assert.assertEquals(INVALID_INTRON_ID,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6640601, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6640601, PositionType.ONE_BASED)));
 
 		// last base of second-last exon
 		Assert.assertEquals(INVALID_INTRON_ID,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6648904, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6648904, PositionType.ONE_BASED)));
 		// first base of last intron
 		Assert.assertEquals(9,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6648905, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6648905, PositionType.ONE_BASED)));
 		// last base of last intron
 		Assert.assertEquals(9,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6648975, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6648975, PositionType.ONE_BASED)));
 		// first base of last exon
 		Assert.assertEquals(INVALID_INTRON_ID,
-				projector.locateIntron(new GenomePosition(refDict, '+', 1, 6648976, PositionType.ONE_BASED)));
+				projector.locateIntron(new GenomePosition(refDict, Strand.FWD, 1, 6648976, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -142,23 +142,23 @@ public class TranscriptProjectionDecoratorTest {
 
 		// first base of first exon
 		Assert.assertEquals(0,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6640063, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6640063, PositionType.ONE_BASED)));
 		// last base of first exon
 		Assert.assertEquals(0,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6640196, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6640196, PositionType.ONE_BASED)));
 		// just after last base of first exon
 		Assert.assertEquals(INVALID_EXON_ID,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6640197, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6640197, PositionType.ONE_BASED)));
 
 		// just before first base of last exon
 		Assert.assertEquals(INVALID_EXON_ID,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6648974, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6648974, PositionType.ONE_BASED)));
 		// first base of last exon
 		Assert.assertEquals(10,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6648976, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6648976, PositionType.ONE_BASED)));
 		// last base of last exon
 		Assert.assertEquals(10,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6649340, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -167,23 +167,23 @@ public class TranscriptProjectionDecoratorTest {
 
 		// first base of first exon
 		Assert.assertEquals(3,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 23685941, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 23685941, PositionType.ONE_BASED)));
 		// last base of first exon
 		Assert.assertEquals(3,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 23689714, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 23689714, PositionType.ONE_BASED)));
 		// just after last base of first exon
 		Assert.assertEquals(INVALID_EXON_ID,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 23689715, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 23689715, PositionType.ONE_BASED)));
 
 		// just before first base of last exon
 		Assert.assertEquals(INVALID_EXON_ID,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 23695857, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 23695857, PositionType.ONE_BASED)));
 		// first base of last exon
 		Assert.assertEquals(0,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 23695859, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 23695859, PositionType.ONE_BASED)));
 		// last base of last exon
 		Assert.assertEquals(0,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 23696357, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 23696357, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -196,7 +196,7 @@ public class TranscriptProjectionDecoratorTest {
 		Assert.assertEquals(0, projector.locateExon(new TranscriptPosition(infoForward, 134, PositionType.ONE_BASED)));
 		// just after last base of first exon
 		Assert.assertEquals(INVALID_EXON_ID,
-				projector.locateExon(new GenomePosition(refDict, '+', 1, 6640197, PositionType.ONE_BASED)));
+				projector.locateExon(new GenomePosition(refDict, Strand.FWD, 1, 6640197, PositionType.ONE_BASED)));
 
 		// first base of last exon
 		Assert.assertEquals(10, projector.locateExon(new TranscriptPosition(infoForward, 1984, PositionType.ONE_BASED)));
@@ -240,18 +240,18 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
 		// first base of first exon
-		Assert.assertEquals(new TranscriptPosition(infoForward, 1, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 6640063, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoForward, 1, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 6640063, PositionType.ONE_BASED)));
 		// last base of first exon
-		Assert.assertEquals(new TranscriptPosition(infoForward, 134, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 6640196, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoForward, 134, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 6640196, PositionType.ONE_BASED)));
 
 		// first base of last exon
-		Assert.assertEquals(new TranscriptPosition(infoForward, 1974, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 6648976, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoForward, 1974, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 6648976, PositionType.ONE_BASED)));
 		// last base of last exon
-		Assert.assertEquals(new TranscriptPosition(infoForward, 2338, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoForward, 2338, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 6649340, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -259,18 +259,18 @@ public class TranscriptProjectionDecoratorTest {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
 		// first base of first exon
-		Assert.assertEquals(new TranscriptPosition(infoReverse, 1, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 23696357, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoReverse, 1, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 23696357, PositionType.ONE_BASED)));
 		// last base of first exon
-		Assert.assertEquals(new TranscriptPosition(infoReverse, 499, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 23695859, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoReverse, 499, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 23695859, PositionType.ONE_BASED)));
 
 		// first base of last exon
-		Assert.assertEquals(new TranscriptPosition(infoReverse, 720, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 23689714, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoReverse, 720, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 23689714, PositionType.ONE_BASED)));
 		// last base of last exon
-		Assert.assertEquals(new TranscriptPosition(infoReverse, 4493, PositionType.ONE_BASED),
-				projector.genomeToTranscriptPos(new GenomePosition(refDict, '+', 1, 23685941, PositionType.ONE_BASED)));
+		Assert.assertEquals(new TranscriptPosition(infoReverse, 4493, PositionType.ONE_BASED), projector
+				.genomeToTranscriptPos(new GenomePosition(refDict, Strand.FWD, 1, 23685941, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -279,17 +279,17 @@ public class TranscriptProjectionDecoratorTest {
 
 		// first base in CDS (on second exon)
 		Assert.assertEquals(new CDSPosition(infoForward, 1, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 6640670, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 6640670, PositionType.ONE_BASED)));
 		// last base of second exon (first exon in CDS)
 		Assert.assertEquals(new CDSPosition(infoForward, 690, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 6641359, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 6641359, PositionType.ONE_BASED)));
 
 		// first base of last exon
 		Assert.assertEquals(new CDSPosition(infoForward, 1771, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 6648976, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 6648976, PositionType.ONE_BASED)));
 		// last base of CDS
 		Assert.assertEquals(new CDSPosition(infoForward, 2067, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 6649272, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 6649272, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -300,17 +300,17 @@ public class TranscriptProjectionDecoratorTest {
 
 		// first base of CDS (second exon)
 		Assert.assertEquals(new CDSPosition(infoReverse, 1, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 23694498, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 23694498, PositionType.ONE_BASED)));
 		// last base of second exon (first exon in CDS)
 		Assert.assertEquals(new CDSPosition(infoReverse, 33, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 23694466, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 23694466, PositionType.ONE_BASED)));
 
 		// first base of last exon
 		Assert.assertEquals(new CDSPosition(infoReverse, 161, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 23689714, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 23689714, PositionType.ONE_BASED)));
 		// last base of last exon
 		Assert.assertEquals(new CDSPosition(infoReverse, 1413, PositionType.ONE_BASED),
-				projector.genomeToCDSPos(new GenomePosition(refDict, '+', 1, 23688462, PositionType.ONE_BASED)));
+				projector.genomeToCDSPos(new GenomePosition(refDict, Strand.FWD, 1, 23688462, PositionType.ONE_BASED)));
 	}
 
 	@Test
@@ -347,14 +347,14 @@ public class TranscriptProjectionDecoratorTest {
 	public void testCDSPosToGenomePosForward() throws ProjectionException {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 6640669),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 6640669),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 0)));
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 6640699),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 6640699),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 30)));
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 6640869),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 6640869),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 200)));
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 6640969),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 6640969),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 300)));
 	}
 
@@ -362,14 +362,14 @@ public class TranscriptProjectionDecoratorTest {
 	public void testCDSPosToGenomePosReverse() throws ProjectionException {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoReverse);
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 23694497),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 23694497),
 				projector.cdsToGenomePos(new CDSPosition(infoReverse, 0)));
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 23694467),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 23694467),
 				projector.cdsToGenomePos(new CDSPosition(infoReverse, 30)));
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 23689673),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 23689673),
 				projector.cdsToGenomePos(new CDSPosition(infoReverse, 200)));
-		Assert.assertEquals(new GenomePosition(refDict, '+', 1, 23689573),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 1, 23689573),
 				projector.cdsToGenomePos(new CDSPosition(infoReverse, 300)));
 	}
 
@@ -384,19 +384,19 @@ public class TranscriptProjectionDecoratorTest {
 
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(infoForward);
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 15, 48936965),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 15, 48936965),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 0)));
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 15, 48936940),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 15, 48936940),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 25)));
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 15, 48905214),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 15, 48905214),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 238)));
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 15, 48888490),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 15, 48888490),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 526)));
 
-		Assert.assertEquals(new GenomePosition(refDict, '+', 15, 48800856),
+		Assert.assertEquals(new GenomePosition(refDict, Strand.FWD, 15, 48800856),
 				projector.cdsToGenomePos(new CDSPosition(infoForward, 1758)));
 	}
 

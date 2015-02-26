@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
@@ -31,7 +32,7 @@ class Gene {
 		if (transcripts.isEmpty())
 			return null;
 
-		GenomeInterval region = transcripts.get(0).txRegion.withStrand('+');
+		GenomeInterval region = transcripts.get(0).txRegion.withStrand(Strand.FWD);
 		for (TranscriptModel tm : transcripts)
 			region = mergeRegions(region, tm.txRegion);
 		return region;
@@ -42,9 +43,9 @@ class Gene {
 	 *         <code>rhs</code>.
 	 */
 	private GenomeInterval mergeRegions(GenomeInterval lhs, GenomeInterval rhs) {
-		lhs = lhs.withStrand('+');
-		rhs = rhs.withStrand('+');
-		return new GenomeInterval(lhs.getGenomeBeginPos().refDict, '+', lhs.getGenomeBeginPos().chr, Math.min(
+		lhs = lhs.withStrand(Strand.FWD);
+		rhs = rhs.withStrand(Strand.FWD);
+		return new GenomeInterval(lhs.getGenomeBeginPos().refDict, Strand.FWD, lhs.getGenomeBeginPos().chr, Math.min(
 				lhs.beginPos, rhs.beginPos), Math.max(lhs.endPos, rhs.endPos));
 	}
 

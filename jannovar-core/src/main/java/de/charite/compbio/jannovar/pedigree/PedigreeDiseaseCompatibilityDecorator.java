@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.pedigree;
 
+// TODO(holtgrewe): Add functionality to compute marker for non-compa
+
 /**
  * Decorator for {@link Pedigree} that allows checking whether a Genotype call is compatible with a selected mode of
  * inheritance.
