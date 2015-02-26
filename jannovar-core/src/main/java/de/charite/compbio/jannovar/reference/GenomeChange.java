@@ -5,17 +5,19 @@ import com.google.common.base.Joiner;
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.util.DNAUtils;
 
+// TODO(holtgrewe): We only want genome changes on the forward strand, make sure this does not lead to problems downstream.
+
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
  *
- * GenomeChange objects are immutable, the members are automatically adjusted for the longest common prefix in REF and
- * ALT.
+ * GenomeChange objects are immutable, the members are automatically adjusted for the longest common suffix and prefix
+ * in REF and ALT.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 @Immutable
-public final class GenomeChange {
+public final class GenomeChange implements VariantDescription {
 
 	/** position of the change */
 	public final GenomePosition pos;
@@ -76,6 +78,26 @@ public final class GenomeChange {
 				.shifted(delta).withStrand(strand);
 	}
 
+	@Override
+	public String getChrName() {
+		return this.pos.refDict.contigName.get(this.pos.chr);
+	}
+
+	@Override
+	public int getPos() {
+		return this.pos.pos;
+	}
+
+	@Override
+	public String getRef() {
+		return this.ref;
+	}
+
+	@Override
+	public String getAlt() {
+		return this.alt;
+	}
+
 	/**
 	 * Construct object and enforce strand.
 	 */
@@ -100,6 +122,7 @@ public final class GenomeChange {
 	/**
 	 * @return numeric ID of chromosome this change is on
 	 */
+	@Override
 	public int getChr() {
 		return pos.chr;
 	}

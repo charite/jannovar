@@ -9,13 +9,16 @@ import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import de.charite.compbio.jannovar.reference.VariantDescription;
 
 // TODO(holtgrem): Test me!
 // TODO(holtgrem): Sorting of annotations
 // TODO(holtgrem): collection of warnings
 
 /**
- * Collect the information for one variant's annotation
+ * Collect the information for one variant's annotation.
+ *
+ * Implements the {@link VariantDescription} interface for quicker access to the variant description information.
  *
  * @see AnnotationVariantTypeDecorator
  * @see AnnotationTextGenerator
@@ -24,7 +27,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class Annotation implements Comparable<Annotation> {
+public final class Annotation implements VariantDescription, Comparable<Annotation> {
 
 	/**
 	 * This line is added to the output of a VCF file annotated by Jannovar and describes the new field for the INFO
@@ -217,6 +220,31 @@ public final class Annotation implements Comparable<Annotation> {
 		if (effects.isEmpty())
 			return null;
 		return effects.first();
+	}
+
+	@Override
+	public String getChrName() {
+		return change.getChrName();
+	}
+
+	@Override
+	public int getChr() {
+		return change.getChr();
+	}
+
+	@Override
+	public int getPos() {
+		return change.getPos();
+	}
+
+	@Override
+	public String getRef() {
+		return change.getRef();
+	}
+
+	@Override
+	public String getAlt() {
+		return change.getAlt();
 	}
 
 	@Override
