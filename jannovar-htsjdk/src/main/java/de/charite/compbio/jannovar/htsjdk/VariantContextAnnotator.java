@@ -112,7 +112,6 @@ public final class VariantContextAnnotator {
 	 * @return {@link ImmutableList} of {@link AnnotationList}s, one for each alternative allele, in the order of the
 	 *         alternative alleles in <code>vc</code>
 	 */
-	// TODO(holtgrewe): rename to buildAnnotationList().
 	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
