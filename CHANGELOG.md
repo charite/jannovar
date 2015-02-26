@@ -30,6 +30,9 @@
 
 * Adding `VariantEffect.isOffExome` and updating
   `VariantEffect.isOffTranscript`.
+* Removing `genomeRegion` member from `GenotypeList`. Also, adjusting the
+  pedigree compatibility checkers for this, the check for being on the X
+  chromosome has to be performed outside the checker now.
 * `VariantList.getHighestImpactEffect` now returns
   `VariantEffect#SEQUENCE_VARIANT` if no annotation can be found.
 * `VariantList` implements the `List<Annotation>` interface now and the
@@ -50,6 +53,10 @@
 * Renaming `VariantType` to `VariantEffect`
 * Changing `VariantType` to use proper Sequence Ontology terms. Legacy
   names can be obtained through `VariantType#getLegacyName`.
+
+### jannovar-filter
+
+* `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
 
 ## v0.12
 

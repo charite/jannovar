@@ -149,7 +149,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
 		// create new GenotypeListBuilder for the gene if necessary
 		if (!activeGenes.containsKey(gene))
-			activeGenes.put(gene, new GenotypeListBuilder(gene.name, gene.region, personNames));
+			activeGenes.put(gene, new GenotypeListBuilder(gene.name, personNames));
 
 		// register Genotypes for vc
 		putGenotypes(vc, gene);
@@ -298,7 +298,9 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		// check gene for compatibility and mark variants as compatible if so
 		GenotypeList lst = activeGenes.get(gene).build();
 		try {
-			if (checker.isCompatibleWith(lst, modeOfInheritance))
+			boolean isXChromosomal = (gene.refDict.contigID.get("chrX") != null && gene.refDict.contigID.get("chrX")
+					.intValue() == gene.region.chr);
+			if (checker.isCompatibleWith(lst, modeOfInheritance, isXChromosomal))
 				markVariantsInGeneAsCompatible(gene);
 		} catch (CompatibilityCheckerException e) {
 			throw new FilterException("Problem in mode of inheritance filter.", e);

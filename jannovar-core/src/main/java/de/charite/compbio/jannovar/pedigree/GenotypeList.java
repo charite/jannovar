@@ -1,9 +1,10 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
 
 /**
  * Wrapper for a immutable lists of {@link Genotype} calls for one {@link TranscriptInfo}, one list of calls for each
@@ -20,24 +21,15 @@ public final class GenotypeList {
 	/** the name of the gene for this genotype call list */
 	public final String geneName;
 
-	// TODO(holtgrem): Remove genomeRegion?
-	/**
-	 * The approximate genomic interval of this gene, e.g. the region of one transcript. This information is only used
-	 * for getting the chromosome of the gene.
-	 */
-	public final GenomeInterval genomeRegion;
-
 	/** the list of individual names */
 	public final ImmutableList<String> names;
 
 	/** the lists of genotype calls, each contains one entry for each individual */
 	public final ImmutableList<ImmutableList<Genotype>> calls;
 
-	public GenotypeList(String geneID, GenomeInterval genomeRegion, ImmutableList<String> names,
-			ImmutableList<ImmutableList<Genotype>> calls) {
+	public GenotypeList(String geneID, List<String> names, ImmutableList<ImmutableList<Genotype>> calls) {
 		this.geneName = geneID;
-		this.genomeRegion = genomeRegion;
-		this.names = names;
+		this.names = ImmutableList.copyOf(names);
 		this.calls = calls;
 	}
 

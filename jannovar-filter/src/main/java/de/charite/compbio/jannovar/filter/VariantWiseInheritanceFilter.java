@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.io.JannovarData;
 import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeListBuilder;
@@ -26,6 +27,8 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(VariantWiseInheritanceFilter.class);
 
+	/** Deserialized Jannovar data */
+	private final JannovarData jannovarDB;
 	/** The mode of inheritance to filter for */
 	private final ModeOfInheritance modeOfInheritance;
 	/** Names of {@link pedigree#members}. */
@@ -36,8 +39,9 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	private final PedigreeDiseaseCompatibilityDecorator checker;
 
 	/** Initialize */
-	public VariantWiseInheritanceFilter(Pedigree pedigree, ModeOfInheritance modeOfInheritance,
-			VariantContextFilter next) {
+	public VariantWiseInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB,
+			ModeOfInheritance modeOfInheritance, VariantContextFilter next) {
+		this.jannovarDB = jannovarDB;
 		this.modeOfInheritance = modeOfInheritance;
 		this.next = next;
 		this.checker = new PedigreeDiseaseCompatibilityDecorator(pedigree);
@@ -52,10 +56,13 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	public void put(FlaggedVariant fv) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 
-		GenotypeListBuilder builder = new GenotypeListBuilder(null, null, personNames);
+		GenotypeListBuilder builder = new GenotypeListBuilder(null, personNames);
 		putGenotypes(fv, builder);
 		try {
-			fv.setIncluded(checker.isCompatibleWith(builder.build(), modeOfInheritance));
+			final int contigID = jannovarDB.refDict.contigID.get(fv.vc.getChr());
+			boolean isXChromosomal = (jannovarDB.refDict.contigID.get("chrX") != null && jannovarDB.refDict.contigID
+					.get("chrX").intValue() == contigID);
+			fv.setIncluded(checker.isCompatibleWith(builder.build(), modeOfInheritance, isXChromosomal));
 			if (fv.isIncluded())
 				next.put(fv);
 			LOGGER.trace("Variant {}compatible with {} (gt={}, var={})", new Object[] { fv.isIncluded() ? "" : "in",

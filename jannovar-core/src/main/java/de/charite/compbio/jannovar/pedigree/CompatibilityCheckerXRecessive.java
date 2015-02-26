@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.pedigree;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import de.charite.compbio.jannovar.reference.GenomePosition;
-
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and X recessive mode of
  * inheritance.
@@ -14,6 +12,9 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
  * If the pedigree has only one sample then the check is as follows. If the index is female, the checker returns true if
  * the genotype call list is compatible with autosomal recessive compound heterozygous inheritance or if the list
  * contains a homozygous alt call. If the index is male then return true if the list contains a homozygous alt call.
+ *
+ * The checker itself does <b>not</b> have the information whether any variant was on the X chromosome, so this check
+ * has to be performed outside the checker.
  *
  * If the pedigree has more samples, the checks are more involved.
  *
@@ -63,14 +64,6 @@ class CompatibilityCheckerXRecessive {
 	}
 
 	public boolean run() throws CompatibilityCheckerException {
-		// perform basic sanity check, regarding X chromsome
-		final GenomePosition txBegin = list.genomeRegion.getGenomeBeginPos();
-		Integer chrXID = txBegin.refDict.contigID.get("X");
-		if (chrXID == null)
-			return false; // this organism type does not have X chromosome
-		if (chrXID.intValue() != txBegin.chr)
-			return false; // transcript of genotype list is not on X chromosome
-
 		if (pedigree.members.size() == 1)
 			return runSingleSampleCase();
 		else

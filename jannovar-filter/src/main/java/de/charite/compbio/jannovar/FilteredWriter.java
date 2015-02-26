@@ -45,7 +45,7 @@ public class FilteredWriter {
 		if (options.geneWise)
 			topFilter = new GeneWiseInheritanceFilter(pedigree, jannovarDB, modeOfInheritance, topFilter);
 		else
-			topFilter = new VariantWiseInheritanceFilter(pedigree, modeOfInheritance, topFilter);
+			topFilter = new VariantWiseInheritanceFilter(pedigree, jannovarDB, modeOfInheritance, topFilter);
 		topFilter = new CoordinateSortChecker(topFilter);
 
 		try {
