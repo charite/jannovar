@@ -27,4 +27,10 @@ public enum Strand {
 		return (this == FWD) ? "+" : "-";
 	}
 
+	/**
+	 * @return {@link #REV} if the char is <code>'-'</code>, otherwise returns {@link #FWD}.
+	 */
+	public Strand valueOf(char strand) {
+		return (strand == '-') ? REV : FWD;
+	}
 }
