@@ -4,6 +4,8 @@
 
 ### jannovar-cli
 
+* Displaying online help on unknown Jannovar command.
+* Fixing `NullPointerException` bug for local paths.
 * Switching to official HTSJDK release and version 0.128.
 * Writing out annotation about Jannovar call and version into the VCF file.
 * Added option `--no-3-prime-shifting` to disable shifting towards the

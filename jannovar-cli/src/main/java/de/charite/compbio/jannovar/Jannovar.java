@@ -75,16 +75,18 @@ public final class Jannovar {
 		// Create the corresponding command.
 		JannovarCommand cmd = null;
 		try {
-			if (argv[0].equals("download"))
+			if (argv[0].equals("download")) {
 				cmd = new DownloadCommand(argv);
-			else if (argv[0].equals("db-list"))
+			} else if (argv[0].equals("db-list")) {
 				cmd = new DatabaseListCommand(argv);
-			else if (argv[0].equals("annotate"))
+			} else if (argv[0].equals("annotate")) {
 				cmd = new AnnotateVCFCommand(argv);
-			else if (argv[0].equals("annotate-pos"))
+			} else if (argv[0].equals("annotate-pos")) {
 				cmd = new AnnotatePositionCommand(argv);
-			else
+			} else {
 				System.err.println("unrecognized command " + argv[0]);
+				printTopLevelHelp();
+			}
 		} catch (CommandLineParsingException e) {
 			System.err.println("problem with parsing command line options: " + e.getMessage());
 		} catch (HelpRequestedException e) {
@@ -121,8 +123,10 @@ public final class Jannovar {
 		System.err.println("");
 		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download hg19/ucsc");
 		System.err.println("         java -jar de.charite.compbio.jannovar.jar db-list");
-		System.err.println("         java -jar de.charite.compbio.jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
-		System.err.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
+		System.err
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
+		System.err
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
 		System.err.println("");
 	}
 
