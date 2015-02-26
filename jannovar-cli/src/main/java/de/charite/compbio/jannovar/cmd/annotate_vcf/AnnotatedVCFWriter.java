@@ -72,7 +72,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 		String outname = f.getName();
 		if (options.outVCFFolder != null)
 			outname = PathUtil.join(options.outVCFFolder, outname);
-		else
+		else if (f.getParent() != null)
 			outname = PathUtil.join(f.getParent(), outname);
 		int i = outname.toLowerCase().lastIndexOf("vcf");
 		if (i < 0)
