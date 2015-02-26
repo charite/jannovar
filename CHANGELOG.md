@@ -28,6 +28,8 @@
 
 ### jannovar-core
 
+* Adding `VariantEffect.isOffExome` and updating
+  `VariantEffect.isOffTranscript`.
 * `VariantList.getHighestImpactEffect` now returns
   `VariantEffect#SEQUENCE_VARIANT` if no annotation can be found.
 * `VariantList` implements the `List<Annotation>` interface now and the

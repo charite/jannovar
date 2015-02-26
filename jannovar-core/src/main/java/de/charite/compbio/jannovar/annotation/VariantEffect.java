@@ -904,23 +904,69 @@ public enum VariantEffect {
 	}
 
 	/**
-	 * @return <code>true</code> if the variant effect does not indicate a position inside a transcript
+	 * @return <code>true</code> if the variant effect does not indicate a change affecting the exome, {@link #CUSTOM}
+	 *         is considered on-exome
+	 * @see {@link #isOffTranscript}
+	 */
+	public boolean isOffExome() {
+		// Note that this function is called by isOffTranscript() which allows intronic and UTR changes.
+		switch (this) {
+		case CUSTOM:
+		case DISRUPTIVE_INFRAME_DELETION:
+		case DISRUPTIVE_INFRAME_INSERTION:
+		case EXON_LOSS_VARIANT:
+		case EXON_VARIANT:
+		case FEATURE_TRUNCATION:
+		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
+		case FRAMESHIFT_ELONGATION:
+		case FRAMESHIFT_TRUNCATION:
+		case INFRAME_DELETION:
+		case INFRAME_INSERTION:
+		case INITIATOR_CODON_VARIANT:
+		case INTERNAL_FEATURE_ELONGATION:
+		case INTRON_VARIANT:
+		case MISSENSE_VARIANT:
+		case MNV:
+		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
+		case RARE_AMINO_ACID_VARIANT:
+		case SPLICE_ACCEPTOR_VARIANT:
+		case SPLICE_DONOR_VARIANT:
+		case SPLICE_REGION_VARIANT:
+		case SPLICING_VARIANT:
+		case START_LOST:
+		case STOP_GAINED:
+		case STOP_LOST:
+		case STOP_RETAINED_VARIANT:
+		case SYNONYMOUS_VARIANT:
+		case TRANSCRIPT_ABLATION:
+			return false;
+		default:
+			return true;
+		}
+	}
+
+	/**
+	 * @return <code>true</code> if the variant effect does not indicate a change affecting a transcript,
+	 *         {@link #CUSTOM} is considered on-transcript
+	 * @see {@link #isOffExome}
 	 */
 	public boolean isOffTranscript() {
+		// This function first calls isOffExome() to check whether the variant effect is off-exome. Then, this function
+		// also allows intronic and 5'/3' variants.
+		if (!isOffExome())
+			return false;
+
 		switch (this) {
 		case CODING_TRANSCRIPT_INTRON_VARIANT:
+		case FIVE_PRIME_UTR_TRUNCATION:
+		case FIVE_PRIME_UTR_VARIANT:
+		case THREE_PRIME_UTR_TRUNCATION:
+		case THREE_PRIME_UTR_VARIANT:
 		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
-		case UPSTREAM_GENE_VARIANT:
-		case DOWNSTREAM_GENE_VARIANT:
-		case INTERGENIC_VARIANT:
-		case CONSERVED_INTERGENIC_VARIANT:
-		case TF_BINDING_SITE_VARIANT:
-		case REGULATORY_REGION_VARIANT:
-		case CONSERVED_INTRON_VARIANT:
-		case INTRON_VARIANT:
-			return true;
-		default:
+		case NON_CODING_TRANSCRIPT_VARIANT:
 			return false;
+		default:
+			return true;
 		}
 	}
 
