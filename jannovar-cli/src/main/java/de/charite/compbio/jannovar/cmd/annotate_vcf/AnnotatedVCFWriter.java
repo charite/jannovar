@@ -27,6 +27,7 @@ import de.charite.compbio.jannovar.io.ReferenceDictionary;
 public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 
 	/** {@link ReferenceDictionary} object to use for information about the genome. */
+	@SuppressWarnings("unused")
 	private final ReferenceDictionary refDict;
 
 	/** path to VCF file to process */
@@ -42,6 +43,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	private final VariantContextWriter out;
 
 	/** command line arguments to Jannovar */
+	@SuppressWarnings("unused")
 	private final ImmutableList<String> args;
 
 	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFFileReader reader,

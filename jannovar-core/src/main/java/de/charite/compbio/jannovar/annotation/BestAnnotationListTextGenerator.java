@@ -17,9 +17,9 @@ public final class BestAnnotationListTextGenerator extends AnnotationListTextGen
 
 	@Override
 	protected AnnotationList getAnnotations() {
-		if (annotations.entries.isEmpty())
-			return new AnnotationList(annotations.entries.subList(0, 0));
+		if (annotations.isEmpty())
+			return new AnnotationList(annotations.subList(0, 0));
 		else
-			return new AnnotationList(annotations.entries.subList(0, 1));
+			return new AnnotationList(annotations.subList(0, 1));
 	}
 }

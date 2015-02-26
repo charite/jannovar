@@ -298,20 +298,6 @@ abstract class AnnotationBuilder {
 	}
 
 	/**
-	 * @return base pair distance of transcript and variant
-	 */
-	private int distance() {
-		GenomeInterval changeInterval = change.withStrand('+').getGenomeInterval();
-		GenomeInterval txInterval = transcript.txRegion.withStrand('+');
-		if (changeInterval.overlapsWith(txInterval))
-			return 0;
-		else if (changeInterval.isLeftOf(txInterval.getGenomeBeginPos()))
-			return txInterval.getGenomeBeginPos().differenceTo(changeInterval.getGenomeEndPos());
-		else
-			return changeInterval.getGenomeBeginPos().differenceTo(txInterval.getGenomeEndPos());
-	}
-
-	/**
 	 * @param transcript
 	 *            {@link TranscriptInfo} to build annotation for
 	 * @param change

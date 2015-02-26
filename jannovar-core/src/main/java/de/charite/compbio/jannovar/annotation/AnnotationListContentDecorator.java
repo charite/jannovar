@@ -30,7 +30,7 @@ public class AnnotationListContentDecorator {
 	 */
 	public boolean hasMultipleGeneSymbols() {
 		HashSet<String> geneSymbols = new HashSet<String>();
-		for (Annotation entry : annotations.entries)
+		for (Annotation entry : annotations)
 			geneSymbols.add(entry.transcript.geneSymbol);
 		return (geneSymbols.size() > 0);
 	}
@@ -40,7 +40,7 @@ public class AnnotationListContentDecorator {
 	 *         <code>true</code>.
 	 */
 	public boolean hasStructuralVariant() {
-		for (Annotation entry : annotations.entries)
+		for (Annotation entry : annotations)
 			if (entry.getMostPathogenicVarType().isStructural())
 				return true;
 		return false;
@@ -51,20 +51,20 @@ public class AnnotationListContentDecorator {
 	 *         empty.
 	 */
 	public String getGeneSymbol() {
-		if (annotations.entries.size() == 0)
+		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.entries.get(0).transcript.geneSymbol;
+			return annotations.get(0).transcript.geneSymbol;
 	}
 
 	/**
 	 * @return the gene ID of the variant with highest priority, or <code>null</code> if no such variant
 	 */
 	public String getGeneID() {
-		if (annotations.entries.size() == 0)
+		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.entries.get(0).transcript.geneID;
+			return annotations.get(0).transcript.geneID;
 	}
 
 	/**
@@ -72,10 +72,10 @@ public class AnnotationListContentDecorator {
 	 *         exists
 	 */
 	public VariantEffect getVariantType() {
-		if (annotations.entries.size() == 0)
+		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.entries.get(0).getMostPathogenicVarType();
+			return annotations.get(0).getMostPathogenicVarType();
 	}
 
 }

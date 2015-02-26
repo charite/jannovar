@@ -1,6 +1,9 @@
 package de.charite.compbio.jannovar.annotation;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMultiset;
@@ -16,13 +19,13 @@ import de.charite.compbio.jannovar.Immutable;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class AnnotationList {
+public final class AnnotationList implements List<Annotation> {
 
 	/** empty annotation list */
 	public static final AnnotationList EMPTY = new AnnotationList(ImmutableList.<Annotation> of());
 
 	/** the list of the annotations */
-	public final ImmutableList<Annotation> entries;
+	private final ImmutableList<Annotation> entries;
 
 	/**
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
@@ -47,13 +50,13 @@ public final class AnnotationList {
 	/**
 	 * Convenience method.
 	 *
-	 * @return {@link VariantEffect} with the highest impact of all in {@link #entries} or null if {@link #entries} is
-	 *         empty or has no annotated effects.
+	 * @return {@link VariantEffect} with the highest impact of all in {@link #entries} or
+	 *         {@link VariantEffect.SEQUENCE_VARIANT} if {@link #entries} is empty or has no annotated effects.
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();
 		if (anno.effects.isEmpty())
-			return null;
+			return VariantEffect.SEQUENCE_VARIANT;
 		else
 			return anno.effects.first();
 	}
@@ -86,6 +89,131 @@ public final class AnnotationList {
 		} else if (!entries.equals(other.entries))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int size() {
+		return entries.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return entries.isEmpty();
+	}
+
+	@Override
+	public boolean contains(Object o) {
+		return entries.contains(o);
+	}
+
+	@Override
+	public Iterator<Annotation> iterator() {
+		return entries.iterator();
+	}
+
+	@Override
+	public Object[] toArray() {
+		return entries.toArray();
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		return entries.toArray(a);
+	}
+
+	@Deprecated
+	@Override
+	public boolean add(Annotation e) {
+		return entries.add(e);
+	}
+
+	@Deprecated
+	@Override
+	public boolean remove(Object o) {
+		return entries.remove(o);
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return entries.containsAll(c);
+	}
+
+	@Deprecated
+	@Override
+	public boolean addAll(Collection<? extends Annotation> c) {
+		return entries.addAll(c);
+	}
+
+	@Deprecated
+	@Override
+	public boolean addAll(int index, Collection<? extends Annotation> c) {
+		return entries.addAll(index, c);
+	}
+
+	@Deprecated
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		return entries.removeAll(c);
+	}
+
+	@Deprecated
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		return entries.retainAll(c);
+	}
+
+	@Deprecated
+	@Override
+	public void clear() {
+		entries.clear();
+	}
+
+	@Override
+	public Annotation get(int index) {
+		return entries.get(index);
+	}
+
+	@Deprecated
+	@Override
+	public Annotation set(int index, Annotation element) {
+		return entries.set(index, element);
+	}
+
+	@Deprecated
+	@Override
+	public void add(int index, Annotation element) {
+		entries.add(index, element);
+	}
+
+	@Deprecated
+	@Override
+	public Annotation remove(int index) {
+		return entries.remove(index);
+	}
+
+	@Override
+	public int indexOf(Object o) {
+		return entries.indexOf(o);
+	}
+
+	@Override
+	public int lastIndexOf(Object o) {
+		return entries.lastIndexOf(o);
+	}
+
+	@Override
+	public ListIterator<Annotation> listIterator() {
+		return entries.listIterator();
+	}
+
+	@Override
+	public ListIterator<Annotation> listIterator(int index) {
+		return entries.listIterator(index);
+	}
+
+	@Override
+	public AnnotationList subList(int fromIndex, int toIndex) {
+		return new AnnotationList(entries.subList(fromIndex, toIndex));
 	}
 
 }

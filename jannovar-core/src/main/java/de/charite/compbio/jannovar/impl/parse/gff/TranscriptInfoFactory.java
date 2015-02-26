@@ -29,6 +29,7 @@ public final class TranscriptInfoFactory {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptInfoFactory.class);
 
 	/** {@link GFFVersion} to assume for building transcripts from Feature objects */
+	@SuppressWarnings("unused")
 	private final GFFVersion gffVersion;
 
 	/** reference dictionary to use */

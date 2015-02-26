@@ -111,6 +111,7 @@ public final class VariantContextAnnotator {
 	 * @return {@link ImmutableList} of {@link AnnotationList}s, one for each alternative allele, in the order of the
 	 *         alternative alleles in <code>vc</code>
 	 */
+	// TODO(holtgrewe): rename to buildAnnotationList().
 	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
@@ -170,8 +171,8 @@ public final class VariantContextAnnotator {
 	private void applyStandardAnnotations(VariantContext vc, List<AnnotationList> annos) {
 		ArrayList<String> annotations = new ArrayList<String>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
-			if (!annos.get(alleleID).entries.isEmpty()) {
-				for (Annotation ann : annos.get(alleleID).entries) {
+			if (!annos.get(alleleID).isEmpty()) {
+				for (Annotation ann : annos.get(alleleID)) {
 					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 					annotations.add(ann.toVCFAnnoString(alt));
 					if (options.oneAnnotationOnly)
@@ -188,8 +189,8 @@ public final class VariantContextAnnotator {
 
 		final int altAlleleCount = vc.getAlternateAlleles().size();
 		for (int alleleID = 0; alleleID < altAlleleCount; ++alleleID) {
-			if (!annos.get(alleleID).entries.isEmpty()) {
-				for (Annotation ann : annos.get(alleleID).entries) {
+			if (!annos.get(alleleID).isEmpty()) {
+				for (Annotation ann : annos.get(alleleID)) {
 					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 					effectList.add(ann.getMostPathogenicVarType());
 					if (altAlleleCount == 1)

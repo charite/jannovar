@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.io;
 
 import java.io.Serializable;
 
-import de.charite.compbio.jannovar.impl.intervals.Interval;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 

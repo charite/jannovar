@@ -28,6 +28,10 @@
 
 ### jannovar-core
 
+* `VariantList.getHighestImpactEffect` now returns
+  `VariantEffect#SEQUENCE_VARIANT` if no annotation can be found.
+* `VariantList` implements the `List<Annotation>` interface now and the
+  `entries` member has become private.
 * Adding `VariantEffect#SEQUENCE_VARIANT` for variants with unknown
   effects.
 * `GenomeChange.toString()` now always converts to forward strand.
