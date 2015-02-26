@@ -104,39 +104,6 @@ public abstract class JannovarDataFactory {
 	}
 
 	/**
-	 * Build {@link FileDownloader.ProxyOptions} from an environment proxy configuration
-	 *
-	 * @param envValue
-	 *            environment value with proxy host and port as URL
-	 * @return {@link FileDownloader.ProxyOptions} with configuration from <code>envValue</code.
-	 */
-	private FileDownloader.ProxyOptions buildProxyOptions(String envValue) {
-		FileDownloader.ProxyOptions result = new FileDownloader.ProxyOptions();
-		if (envValue == null)
-			return result;
-
-		try {
-			URL url = new URL(envValue);
-			result.host = url.getHost();
-			if (url.getPort() != -1)
-				result.port = url.getPort();
-			String userInfo = url.getUserInfo();
-			if (userInfo != null) {
-				if (userInfo.contains(":")) {
-					String[] tokens = userInfo.split(":");
-					result.user = tokens[0];
-					result.password = tokens[1];
-				} else {
-					result.user = userInfo;
-				}
-			}
-		} catch (MalformedURLException e) {
-			LOGGER.warn("Could not parse HTTP_PROXY value {} as URL.", envValue);
-		}
-		return result;
-	}
-
-	/**
 	 * @return {@link FileDownloader.Options} with proxy settings from {@link #options} and environment.
 	 */
 	private FileDownloader.Options buildOptions(boolean printProgressBars) {

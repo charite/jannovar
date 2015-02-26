@@ -43,7 +43,7 @@ public abstract class AnnotationListTextGenerator {
 	 */
 	public String buildEffectText() {
 		StringBuilder builder = new StringBuilder();
-		for (Annotation anno : getAnnotations().entries) {
+		for (Annotation anno : getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
@@ -58,7 +58,7 @@ public abstract class AnnotationListTextGenerator {
 	 */
 	public String buildHGVSText() {
 		StringBuilder builder = new StringBuilder();
-		for (Annotation anno : getAnnotations().entries) {
+		for (Annotation anno : getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)

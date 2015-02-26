@@ -1,6 +1,5 @@
 package de.charite.compbio.jannovar.impl.parse.gff;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

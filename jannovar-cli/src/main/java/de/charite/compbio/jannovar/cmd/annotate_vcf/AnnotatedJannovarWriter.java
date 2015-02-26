@@ -141,7 +141,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			throw new AnnotationException(e);
 		}
 
-		for (Annotation a : anno.entries) {
+		for (Annotation a : anno) {
 			String effect = Joiner.on("+").join(FluentIterable.from(a.effects).transform(VariantEffect.TO_LEGACY_NAME));
 			String annt = Joiner.on(":").skipNulls().join(a.ntHGVSDescription, a.aaHGVSDescription);
 			String sym = a.transcript.geneSymbol;

@@ -25,7 +25,7 @@ public final class AnnotationList implements List<Annotation> {
 	public static final AnnotationList EMPTY = new AnnotationList(ImmutableList.<Annotation> of());
 
 	/** the list of the annotations */
-	public final ImmutableList<Annotation> entries;
+	private final ImmutableList<Annotation> entries;
 
 	/**
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
