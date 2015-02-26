@@ -2,8 +2,6 @@ package de.charite.compbio.jannovar.pedigree;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.reference.GenomePosition;
-
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and X dominant mode of
  * inheritance.
@@ -11,7 +9,10 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
  * <h2>Compatibility Check</h2>
  *
  * For X-chromosomal dominant inheritance, there must be at least one {@link Genotype} that is shared by all affected
- * individuals but no unaffected individuals in the pedigree and is on the X chromosome.
+ * individuals but no unaffected individuals in the pedigree.
+ *
+ * The checker itself does <b>not</b> have the information whether any variant was on the X chromosome, so this check
+ * has to be performed outside the checker.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -59,14 +60,6 @@ class CompatibilityCheckerXDominant {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public boolean run() throws CompatibilityCheckerException {
-		// perform basic sanity check, regarding X chromsome
-		final GenomePosition txBegin = list.genomeRegion.getGenomeBeginPos();
-		Integer chrXID = txBegin.refDict.contigID.get("X");
-		if (chrXID == null)
-			return false; // this organism type does not have X chromosome
-		if (chrXID.intValue() != txBegin.chr)
-			return false; // transcript of genotype list is not on X chromosome
-
 		if (pedigree.members.size() == 1)
 			return runSingleSampleCase();
 		else

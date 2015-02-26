@@ -6,20 +6,9 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.Genotype;
-import de.charite.compbio.jannovar.pedigree.GenotypeList;
-import de.charite.compbio.jannovar.pedigree.PedFileContents;
-import de.charite.compbio.jannovar.pedigree.PedParseException;
-import de.charite.compbio.jannovar.pedigree.PedPerson;
-import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Sex;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-
 public class GenotypeListTest {
 
 	String geneName;
-	GenomeInterval genomeRegion;
 	ImmutableList<String> names;
 	ImmutableList<ImmutableList<Genotype>> calls;
 	Pedigree pedigree1, pedigree2;
@@ -43,10 +32,9 @@ public class GenotypeListTest {
 
 		// create GenotypeList
 		this.geneName = null;
-		this.genomeRegion = null;
 		this.names = ImmutableList.of("father", "mother", "son", "daughter");
 		this.calls = null;
-		this.list = new GenotypeList(geneName, genomeRegion, names, calls);
+		this.list = new GenotypeList(geneName, names, calls);
 	}
 
 	@Test
