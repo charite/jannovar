@@ -9,7 +9,6 @@ import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): Make AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
@@ -40,7 +39,7 @@ public final class StructuralVariantAnnotationBuilder {
 	 */
 	public StructuralVariantAnnotationBuilder(TranscriptModel transcript, GenomeChange change) {
 		this.transcript = transcript;
-		this.change = change.withPositionType(PositionType.ZERO_BASED);
+		this.change = change;
 	}
 
 	/**

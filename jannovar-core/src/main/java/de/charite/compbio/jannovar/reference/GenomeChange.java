@@ -6,12 +6,16 @@ import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.util.DNAUtils;
 
 // TODO(holtgrewe): We only want genome changes on the forward strand, make sure this does not lead to problems downstream.
+// TODO(holtgrewe): Add support for symbolic alleles in all the members.
 
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
  *
  * GenomeChange objects are immutable, the members are automatically adjusted for the longest common suffix and prefix
  * in REF and ALT.
+ *
+ * Symbolic alleles, as in the VCF standard, are also possible, but methods like {@link #getType} etc. do not return
+ * sensible results.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
@@ -33,6 +37,13 @@ public final class GenomeChange implements VariantDescription {
 	 * longest common prefix and suffix of ref and alt.
 	 */
 	public GenomeChange(GenomePosition pos, String ref, String alt) {
+		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
+			this.pos = pos;
+			this.ref = ref;
+			this.alt = alt;
+			return;
+		}
+
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
 		if (corr.ref.equals("-"))
@@ -52,6 +63,18 @@ public final class GenomeChange implements VariantDescription {
 	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
 	 */
 	public GenomeChange(GenomePosition pos, String ref, String alt, Strand strand) {
+		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
+			this.pos = pos.withStrand(strand);
+			if (strand == pos.strand) {
+				this.ref = ref;
+				this.alt = alt;
+			} else {
+				this.ref = DNAUtils.reverseComplement(ref);
+				this.alt = DNAUtils.reverseComplement(alt);
+			}
+			return;
+		}
+
 		// Correct variant data.
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
@@ -76,6 +99,25 @@ public final class GenomeChange implements VariantDescription {
 
 		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr, corr.position, PositionType.ZERO_BASED)
 				.shifted(delta).withStrand(strand);
+	}
+
+	/**
+	 * @return <code>true</code> if this is a symbolic allele, as described
+	 */
+	public boolean isSymbolic() {
+		return (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt));
+	}
+
+	/**
+	 * @return <code>true</code> if the given <code>allele</code> string describes a symbolic allele (events not
+	 *         described by replacement of bases, e.g. break-ends or duplications that are described in one line).
+	 */
+	private static boolean wouldBeSymbolicAllele(String allele) {
+		if (allele.length() <= 1)
+			return false;
+		return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>') || // symbolic or large insertion
+				(allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.') || // single breakend
+				(allele.contains("[") || allele.contains("]")); // mated breakend
 	}
 
 	@Override
@@ -131,6 +173,9 @@ public final class GenomeChange implements VariantDescription {
 	 * @return interval of the genome change
 	 */
 	public GenomeInterval getGenomeInterval() {
+		if (isSymbolic())
+			return new GenomeInterval(pos, 1);
+
 		return new GenomeInterval(pos, ref.length());
 	}
 
@@ -139,13 +184,6 @@ public final class GenomeChange implements VariantDescription {
 	 */
 	public GenomeChange withStrand(Strand strand) {
 		return new GenomeChange(this, strand);
-	}
-
-	/**
-	 * @return the GenomeChange with the given position type
-	 */
-	public GenomeChange withPositionType(PositionType positionType) {
-		return new GenomeChange(pos, ref, alt);
 	}
 
 	/**

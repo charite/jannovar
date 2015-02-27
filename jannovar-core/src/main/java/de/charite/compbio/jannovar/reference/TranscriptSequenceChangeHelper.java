@@ -38,9 +38,9 @@ public final class TranscriptSequenceChangeHelper {
 		case DELETION:
 		case BLOCK_SUBSTITUTION:
 			return getTranscriptWithRangeInRefAffected(change);
+		default:
+			throw new Error("Unhandled change type " + change.getType());
 		}
-
-		throw new Error("Unknown change type " + change.getType());
 	}
 
 	private String getTranscriptWithPointInRefAffected(GenomeChange change) {
@@ -147,9 +147,9 @@ public final class TranscriptSequenceChangeHelper {
 		case DELETION:
 		case BLOCK_SUBSTITUTION:
 			return getCDSWithRangeInRefAffected(change);
+		default:
+			throw new Error("Unhandled change type " + change.getType());
 		}
-
-		throw new Error("Unknown change type " + change.getType());
 	}
 
 	private String getCDSWithPointInRefAffected(GenomeChange change) {

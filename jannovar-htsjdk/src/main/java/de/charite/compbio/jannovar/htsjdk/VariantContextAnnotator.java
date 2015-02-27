@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.htsjdk;
 
+import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
 import java.util.ArrayList;
@@ -105,6 +106,36 @@ public final class VariantContextAnnotator {
 	}
 
 	/**
+	 * Build a {@link GenomeChange} from a {@link VariantContext} object.
+	 *
+	 * In the case of exceptions, you can use {@link #buildbuildUnknownRefAnnotationLists} to build an
+	 * {@link AnnotationList} with an error message.
+	 *
+	 * @param vc
+	 *            {@link VariantContext} describing the variatn
+	 * @param alleleID
+	 *            numeric identifier of the allele
+	 * @return {@link GenomeChange} corresponding to <ocde>vc</code>, guaranteed to be on {@link Strand#FWD}.
+	 * @throws InvalidCoordinatesException
+	 *             in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
+	 */
+	public GenomeChange buildGenomeChange(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
+		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
+		// for the "random" and "alternative locus" contigs etc.
+		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		if (boxedInt == null)
+			throw new InvalidCoordinatesException("Unknown reference " + vc.getChr());
+		int chr = boxedInt.intValue();
+
+		// Build the GenomeChange object.
+		final String ref = vc.getReference().getBaseString();
+		final Allele altAllele = vc.getAlternateAllele(alleleID);
+		final String alt = altAllele.getBaseString();
+		final int pos = vc.getStart();
+		return new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
+	}
+
+	/**
 	 * Given a {@link VariantContext}, generate one {@link AnnotationList} for each alternative allele.
 	 *
 	 * @param vc
@@ -113,38 +144,26 @@ public final class VariantContextAnnotator {
 	 *         alternative alleles in <code>vc</code>
 	 */
 	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) {
-		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
-		// for the "random" and "alternative locus" contigs etc.
-		Integer boxedInt = refDict.contigID.get(vc.getChr());
-		if (boxedInt == null)
-			return buildUnknownRefAnnotationLists(vc);
-		int chr = boxedInt.intValue();
-
 		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
 
 		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
-			// Get shortcuts to REF, ALT, and POS and build a GenomeChange with stripped common prefixes.
-			final String ref = vc.getReference().getBaseString();
-			final String alt = vc.getAlternateAllele(alleleID).getBaseString();
-			final int pos = vc.getStart();
-			final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos,
-					PositionType.ONE_BASED), ref, alt);
+			GenomeChange change;
+			try {
+				change = buildGenomeChange(vc, alleleID);
+			} catch (InvalidCoordinatesException e1) {
+				return buildUnknownRefAnnotationLists(vc);
+			}
 
 			// Build AnnotationList object for this allele.
-			if (alt.contains("[") || alt.contains("]") || alt.equals(".")) {
-				builder.add(AnnotationList.EMPTY);
-				LOGGER.trace("symbolic allele, adding annotation list {}", new Object[] { AnnotationList.EMPTY });
-			} else {
-				try {
-					final AnnotationList lst = annotator.buildAnnotationList(change);
-					builder.add(lst);
-					LOGGER.trace("adding annotation list {}", new Object[] { lst });
-				} catch (Exception e) {
-					final AnnotationList lst = buildErrorAnnotationList(vc);
-					builder.add(lst);
-					LOGGER.trace("adding error annotation list {}", new Object[] { lst });
-				}
+			try {
+				final AnnotationList lst = annotator.buildAnnotationList(change);
+				builder.add(lst);
+				LOGGER.trace("adding annotation list {}", new Object[] { lst });
+			} catch (Exception e) {
+				final AnnotationList lst = buildErrorAnnotationList(vc);
+				builder.add(lst);
+				LOGGER.trace("adding error annotation list {}", new Object[] { lst });
 			}
 		}
 
@@ -209,7 +228,7 @@ public final class VariantContextAnnotator {
 		vc.getCommonInfo().putAttribute("HGVS", Joiner.on(',').join(hgvsList), true); // true allows overwriting
 	}
 
-	private AnnotationList buildErrorAnnotationList(VariantContext vc) {
+	public AnnotationList buildErrorAnnotationList(VariantContext vc) {
 		return new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
 				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}

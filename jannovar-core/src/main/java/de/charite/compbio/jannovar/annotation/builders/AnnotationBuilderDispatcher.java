@@ -6,7 +6,6 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.reference.GenomeChange;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
@@ -26,7 +25,7 @@ public final class AnnotationBuilderDispatcher {
 	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeChange change,
 			AnnotationBuilderOptions options) {
 		this.transcript = transcript;
-		this.change = change.withPositionType(PositionType.ZERO_BASED);
+		this.change = change;
 		this.options = options;
 	}
 
