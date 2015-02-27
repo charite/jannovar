@@ -113,7 +113,8 @@ class CompatibilityCheckerXRecessive {
 		for (Person person : pedigree.members) {
 			if (parentNames.contains(person.name)) {
 				final Genotype gt = gtList.get(i);
-				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED && gt != Genotype.HOMOZYGOUS_REF)
+				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED
+						&& gt != Genotype.HOMOZYGOUS_REF && gt != Genotype.NOT_OBSERVED)
 					return false; // cannot be disease-causing mutation if an unaffected father has it
 				if (person.sex == Sex.FEMALE && gt == Genotype.HOMOZYGOUS_ALT)
 					return false; // cannot be disease-causing mutation if mother of patient is homozygous

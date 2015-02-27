@@ -35,23 +35,23 @@ public class CompatibilityCheckerXDominantSmallFemaleTest extends CompatibilityC
 		Assert.assertFalse(buildCheckerXD(lst(UKN, UKN, UKN, UKN)).run());
 
 		Assert.assertFalse(buildCheckerXD(lst(HET, REF, HET, HET)).run());
-		Assert.assertFalse(buildCheckerXD(lst(HET, HET, HET, REF)).run());
+		Assert.assertFalse(buildCheckerXD(lst(HET, HET, REF, HET)).run());
 		Assert.assertFalse(buildCheckerXD(lst(HET, REF, REF, REF)).run());
-		Assert.assertFalse(buildCheckerXD(lst(REF, REF, HET, REF)).run());
+		Assert.assertFalse(buildCheckerXD(lst(REF, REF, REF, HET)).run());
 
 		Assert.assertFalse(buildCheckerXD(lst(HET, ALT, HET, HET)).run());
-		Assert.assertFalse(buildCheckerXD(lst(HET, HET, HET, ALT)).run());
-		Assert.assertFalse(buildCheckerXD(lst(HET, REF, ALT, REF)).run());
-		Assert.assertFalse(buildCheckerXD(lst(ALT, REF, HET, REF)).run());
+		Assert.assertFalse(buildCheckerXD(lst(HET, HET, ALT, HET)).run());
+		Assert.assertFalse(buildCheckerXD(lst(HET, REF, REF, ALT)).run());
+		Assert.assertFalse(buildCheckerXD(lst(ALT, REF, REF, HET)).run());
 
-		Assert.assertFalse(buildCheckerXD(lst(ALT, HET, HET, REF)).run());
-		Assert.assertFalse(buildCheckerXD(lst(ALT, ALT, HET, REF)).run());
+		Assert.assertFalse(buildCheckerXD(lst(ALT, HET, REF, HET)).run());
+		Assert.assertFalse(buildCheckerXD(lst(ALT, ALT, REF, HET)).run());
 		Assert.assertFalse(buildCheckerXD(lst(ALT, REF, HET, HET)).run());
-		Assert.assertFalse(buildCheckerXD(lst(ALT, REF, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerXD(lst(ALT, REF, ALT, HET)).run());
 
-		Assert.assertFalse(buildCheckerXD(lst(HET, ALT, HET, ALT)).run());
-		Assert.assertFalse(buildCheckerXD(lst(HET, UKN, HET, ALT)).run());
-		Assert.assertFalse(buildCheckerXD(lst(HET, ALT, HET, UKN)).run());
+		Assert.assertFalse(buildCheckerXD(lst(HET, ALT, ALT, HET)).run());
+		Assert.assertFalse(buildCheckerXD(lst(HET, UKN, ALT, HET)).run());
+		Assert.assertFalse(buildCheckerXD(lst(HET, ALT, UKN, HET)).run());
 
 		// Note that the following case are NOT considered as AD since we require the mutation to be heterozygous for
 		// AD.
