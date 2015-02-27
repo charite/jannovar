@@ -84,6 +84,18 @@ public class CompatibilityCheckerTestBase {
 		return new CompatibilityCheckerXDominant(pedigree, lst);
 	}
 
+	protected CompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list)
+			throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(list));
+		return new CompatibilityCheckerXDominant(pedigree, lst);
+	}
+
+	protected CompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list1, ImmutableList<Genotype> list2)
+			throws CompatibilityCheckerException {
+		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(list1, list2));
+		return new CompatibilityCheckerXDominant(pedigree, lst);
+	}
+
 	protected CompatibilityCheckerXDominant buildCheckerXD(Genotype gt1, Genotype gt2)
 			throws CompatibilityCheckerException {
 		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(ImmutableList.of(gt1),

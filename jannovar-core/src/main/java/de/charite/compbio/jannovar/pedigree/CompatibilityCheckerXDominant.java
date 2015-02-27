@@ -74,17 +74,40 @@ class CompatibilityCheckerXDominant {
 
 	private boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
-			int i = 0;
-			for (Person person : pedigree.members) {
-				if (person.disease == Disease.AFFECTED && gtList.get(i) == Genotype.HOMOZYGOUS_REF)
-					return false;
-				else if (person.disease == Disease.UNAFFECTED
-						&& (gtList.get(i) == Genotype.HOMOZYGOUS_ALT || gtList.get(i) == Genotype.HETEROZYGOUS))
-					return false;
-				i++;
+			boolean currentVariantCompatible = true; // current variant compatible with XD?
+			int numAffectedWithMut = 0;
+
+			for (int i = 0; i < pedigree.members.size(); ++i) {
+				final Sex sex = pedigree.members.get(i).sex;
+				final Genotype gt = gtList.get(i);
+				final Disease d = pedigree.members.get(i).disease;
+
+				if (d == Disease.AFFECTED) {
+					if (gt == Genotype.HOMOZYGOUS_REF || (sex == Sex.FEMALE && gt == Genotype.HOMOZYGOUS_ALT)) {
+						// we do not allow HOM_ALT for females to have the same behaviour as AD for females
+						currentVariantCompatible = false;
+						break;
+					} else if (sex == Sex.MALE && (gt == Genotype.HETEROZYGOUS || gt == Genotype.HOMOZYGOUS_ALT)) {
+						// we allow heterozygous here as well in case of mis-calls in the one X copy in the male
+						numAffectedWithMut++;
+					} else if (sex == Sex.FEMALE && gt == Genotype.HETEROZYGOUS) {
+						numAffectedWithMut++;
+					}
+				} else if (d == Disease.UNAFFECTED) {
+					if (gt == Genotype.HETEROZYGOUS || gt == Genotype.HOMOZYGOUS_ALT) {
+						currentVariantCompatible = false; // current variant not compatible with AD
+						break;
+					}
+				}
 			}
+
+			// If we reach here, we have either examined all members of the pedigree or have decided that the
+			// variant is incompatible in one person. If any one variant is compatible with AD inheritance, than the
+			// Gene is compatible and we can return true without examining the other variants.
+			if (currentVariantCompatible && numAffectedWithMut > 0)
+				return true;
 		}
 
-		return true;
+		return false;
 	}
 }
