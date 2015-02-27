@@ -57,7 +57,9 @@ class CompatibilityCheckerXDominant {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public boolean run() throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 1)
+		if (!list.isXChromosomal)
+			return false;
+		else if (pedigree.members.size() == 1)
 			return runSingleSampleCase();
 		else
 			return runMultiSampleCase();

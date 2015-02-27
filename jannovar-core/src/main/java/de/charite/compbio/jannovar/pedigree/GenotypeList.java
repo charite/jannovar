@@ -24,6 +24,9 @@ public final class GenotypeList {
 	/** the list of individual names */
 	public final ImmutableList<String> names;
 
+	/** whether or not the variants are on the X chromsome */
+	public final boolean isXChromosomal;
+
 	/** the lists of genotype calls, each contains one entry for each individual */
 	public final ImmutableList<ImmutableList<Genotype>> calls;
 
@@ -45,6 +48,7 @@ public final class GenotypeList {
 			ImmutableList<ImmutableList<Genotype>> calls) {
 		this.geneName = geneID;
 		this.names = ImmutableList.copyOf(names);
+		this.isXChromosomal = isXChromosomal;
 		this.calls = calls;
 	}
 
