@@ -112,10 +112,13 @@ public final class VariantAnnotator {
 	 *             on problems building the annotation list
 	 */
 	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
-		change = change.withPositionType(PositionType.ZERO_BASED);
-		final GenomeInterval changeInterval = change.getGenomeInterval();
+		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
+		// described as shortcuts in the VCF file. We cannot annotate these yet.
+		if (change.isSymbolic())
+			return AnnotationList.EMPTY;
 
-		/* The following command "resets" the annovarFactory object */
+		// Get genomic change interval and reset the factory.
+		final GenomeInterval changeInterval = change.getGenomeInterval();
 		this.annovarFactory.clearAnnotationLists();
 
 		// Get the TranscriptModel objects that overlap with changeInterval.

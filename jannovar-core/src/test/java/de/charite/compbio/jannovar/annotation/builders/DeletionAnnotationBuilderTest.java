@@ -116,7 +116,7 @@ public class DeletionAnnotationBuilderTest {
 	public void testForwardTranscriptAblation() throws InvalidGenomeChange {
 		StringBuilder chars200 = new StringBuilder();
 		for (int i = 0; i < 200; ++i)
-			chars200.append(".");
+			chars200.append("A");
 		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 				PositionType.ZERO_BASED), chars200.toString(), "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())

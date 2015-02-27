@@ -19,7 +19,6 @@ import de.charite.compbio.jannovar.reference.GenomeChangeNormalizer;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
@@ -88,7 +87,7 @@ abstract class AnnotationBuilder {
 		this.options = options;
 
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
-		change = change.withPositionType(PositionType.ZERO_BASED).withStrand(transcript.getStrand());
+		change = change.withStrand(transcript.getStrand());
 		this.transcript = transcript;
 
 		this.so = new TranscriptSequenceOntologyDecorator(transcript);

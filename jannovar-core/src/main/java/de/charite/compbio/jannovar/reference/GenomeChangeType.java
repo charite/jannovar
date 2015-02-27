@@ -13,5 +13,7 @@ public enum GenomeChangeType {
 	/** deletion */
 	DELETION,
 	/** block substitution */
-	BLOCK_SUBSTITUTION
+	BLOCK_SUBSTITUTION,
+	/** other, e.g., structural variant from symbolic allele */
+	OTHER;
 }
