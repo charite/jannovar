@@ -5,6 +5,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,7 +125,8 @@ public final class VariantContextAnnotator {
 		// for the "random" and "alternative locus" contigs etc.
 		Integer boxedInt = refDict.contigID.get(vc.getChr());
 		if (boxedInt == null)
-			throw new InvalidCoordinatesException("Unknown reference " + vc.getChr());
+			throw new InvalidCoordinatesException("Unknown reference " + vc.getChr(),
+					AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 		int chr = boxedInt.intValue();
 
 		// Build the GenomeChange object.
@@ -136,24 +138,41 @@ public final class VariantContextAnnotator {
 	}
 
 	/**
+	 * Put error annotation messages to a {@link VariantContext} into the ANN field in the INFO column.
+	 *
+	 * Previous values are overwritten.
+	 *
+	 * @param vc
+	 *            {@link VariantContext} to add the error message to
+	 * @param messages
+	 *            set of messages to write into the {@link VariantContext}
+	 */
+	public void putErrorAnnotation(VariantContext vc, Set<AnnotationMessage> messages) {
+		// TODO(holtgrewe): Do something more elegant way than 15 * "|", needs to be kept in sync with VCFAnnotationData
+		final String annotation = "|||||||||||||||" + Joiner.on('&').join(messages);
+		vc.getCommonInfo().putAttribute("ANN", annotation, true); // true allows overwriting
+	}
+
+	/**
 	 * Given a {@link VariantContext}, generate one {@link AnnotationList} for each alternative allele.
+	 *
+	 * Note that in the case of an exception being thrown, you have to add an error annotation yourself to the
+	 * {@link VariantContext} yourself, e.g. by using {@link #putErrorAnnotation}.
 	 *
 	 * @param vc
 	 *            the VCF record to annotate, remains unchanged
 	 * @return {@link ImmutableList} of {@link AnnotationList}s, one for each alternative allele, in the order of the
 	 *         alternative alleles in <code>vc</code>
+	 * @throws InvalidCoordinatesException
+	 *             in the case of problems with resolving coordinates internally, namely building the
+	 *             {@link GenomeChange} object one one of the returned {@link AnnotationList}s.
 	 */
-	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) {
+	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) throws InvalidCoordinatesException {
 		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
 
 		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
-			GenomeChange change;
-			try {
-				change = buildGenomeChange(vc, alleleID);
-			} catch (InvalidCoordinatesException e1) {
-				return buildUnknownRefAnnotationLists(vc);
-			}
+			GenomeChange change = buildGenomeChange(vc, alleleID);
 
 			// Build AnnotationList object for this allele.
 			try {
@@ -161,7 +180,7 @@ public final class VariantContextAnnotator {
 				builder.add(lst);
 				LOGGER.trace("adding annotation list {}", new Object[] { lst });
 			} catch (Exception e) {
-				final AnnotationList lst = buildErrorAnnotationList(vc);
+				final AnnotationList lst = buildErrorAnnotationList(change);
 				builder.add(lst);
 				LOGGER.trace("adding error annotation list {}", new Object[] { lst });
 			}
@@ -228,17 +247,14 @@ public final class VariantContextAnnotator {
 		vc.getCommonInfo().putAttribute("HGVS", Joiner.on(',').join(hgvsList), true); // true allows overwriting
 	}
 
-	public AnnotationList buildErrorAnnotationList(VariantContext vc) {
-		return new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
+	/**
+	 * @param change
+	 *            {@link GenomeChange} to build error annotation for
+	 * @return AnnotationList having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
+	 */
+	public AnnotationList buildErrorAnnotationList(GenomeChange change) {
+		return new AnnotationList(change, ImmutableList.of(new Annotation(ImmutableList
 				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
-	}
-
-	public ImmutableList<AnnotationList> buildUnknownRefAnnotationLists(VariantContext vc) {
-		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
-		for (int i = 0; i < vc.getAlternateAlleles().size(); ++i)
-			builder.add(new AnnotationList(ImmutableList.of(new Annotation(ImmutableList
-					.of(AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND)))));
-		return builder.build();
 	}
 
 }

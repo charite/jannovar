@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMultiset;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.reference.GenomeChange;
 
 /**
  * A list of priority-sorted {@link Annotation} objects.
@@ -21,20 +22,39 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class AnnotationList implements List<Annotation> {
 
-	/** empty annotation list */
-	public static final AnnotationList EMPTY = new AnnotationList(ImmutableList.<Annotation> of());
+	/** the {@link GenomeChange} that this <code>AnnotationList</code> contains entries for. */
+	private final GenomeChange change;
 
 	/** the list of the annotations */
 	private final ImmutableList<Annotation> entries;
 
 	/**
+	 * @param change
+	 *            to use for the empty list
+	 * @return empty <code>AnnotationList</code> with the given {@link GenomeChange}
+	 */
+	public static AnnotationList buildEmptyList(GenomeChange change) {
+		return new AnnotationList(change, ImmutableList.<Annotation> of());
+	}
+
+	/**
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
 	 *
+	 * @param change
+	 *            {@link GenomeChange} that this anotation list annotates
 	 * @param entries
 	 *            {@link Collection} of {@link Annotation} objects
 	 */
-	public AnnotationList(Collection<Annotation> entries) {
+	public AnnotationList(GenomeChange change, Collection<Annotation> entries) {
+		this.change = change;
 		this.entries = ImmutableList.copyOf(ImmutableSortedMultiset.copyOf(entries));
+	}
+
+	/**
+	 * @return {@link GenomeChange} that this <code>AnnotationList</code> contains entries for.
+	 */
+	public GenomeChange getChange() {
+		return change;
 	}
 
 	/**
@@ -63,7 +83,7 @@ public final class AnnotationList implements List<Annotation> {
 
 	@Override
 	public String toString() {
-		return "[" + entries + "]";
+		return "AnnotationList(change=" + change + ", entries=[" + entries + "])";
 	}
 
 	@Override
@@ -213,7 +233,7 @@ public final class AnnotationList implements List<Annotation> {
 
 	@Override
 	public AnnotationList subList(int fromIndex, int toIndex) {
-		return new AnnotationList(entries.subList(fromIndex, toIndex));
+		return new AnnotationList(change, entries.subList(fromIndex, toIndex));
 	}
 
 }
