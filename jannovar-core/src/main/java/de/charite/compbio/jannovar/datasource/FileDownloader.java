@@ -77,7 +77,7 @@ final class FileDownloader {
 			dest.getParentFile().mkdirs();
 		}
 
-		if (src.getProtocol().equals("ftp") && options.ftp.host == null)
+		if (src.getProtocol().equals("ftp") && options.ftp.host != null)
 			return copyURLToFileWithFTP(src, dest);
 		else
 			return copyURLToFileThroughURL(src, dest);
