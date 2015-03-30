@@ -2,20 +2,19 @@ package de.charite.compbio.jannovar.pedigree;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-public class CompatibilityCheckerXRecessiveSmallFemaleTest extends CompatibilityCheckerTestBase {
+public class CompatibilityCheckerXRecessiveSmallMaleTest extends CompatibilityCheckerTestBase {
 
 	@Before
 	public void setUp() throws PedParseException {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // father
 		individuals.add(new PedPerson("ped", "I.2", "0", "0", Sex.FEMALE, Disease.UNAFFECTED)); // mother
-		individuals.add(new PedPerson("ped", "II.1", "I.1", "I.2", Sex.MALE, Disease.UNAFFECTED)); // son
-		individuals.add(new PedPerson("ped", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.AFFECTED)); // daughter
+		individuals.add(new PedPerson("ped", "II.1", "I.1", "I.2", Sex.MALE, Disease.AFFECTED)); // son
+		individuals.add(new PedPerson("ped", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.UNAFFECTED)); // daughter
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
 				individuals.build());
 		this.pedigree = new Pedigree(pedFileContents, "ped");
@@ -39,7 +38,6 @@ public class CompatibilityCheckerXRecessiveSmallFemaleTest extends Compatibility
 		Assert.assertFalse(buildCheckerXR(lst(HET, HET, REF, HET)).run());
 		Assert.assertFalse(buildCheckerXR(lst(HET, REF, REF, REF)).run());
 		Assert.assertFalse(buildCheckerXR(lst(REF, REF, REF, HET)).run());
-		Assert.assertFalse(buildCheckerXR(lst(REF, REF, HET, REF)).run());
 
 		Assert.assertFalse(buildCheckerXR(lst(HET, ALT, HET, ALT)).run());
 		Assert.assertFalse(buildCheckerXR(lst(HET, HET, ALT, ALT)).run());
@@ -61,7 +59,6 @@ public class CompatibilityCheckerXRecessiveSmallFemaleTest extends Compatibility
 
 		Assert.assertFalse(buildCheckerXR(lst(HET, HET, ALT, ALT)).run());
 		Assert.assertFalse(buildCheckerXR(lst(HET, REF, HET, ALT)).run());
-		Assert.assertFalse(buildCheckerXR(lst(REF, HET, REF, ALT)).run());
 
 		// at least one hom_alt
 		Assert.assertFalse(buildCheckerXR(lst(HET, UKN, UKN, UKN)).run());
@@ -86,14 +83,22 @@ public class CompatibilityCheckerXRecessiveSmallFemaleTest extends Compatibility
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+		
+		// male has it ALT
+		Assert.assertTrue(buildCheckerXR(lst(REF, HET, ALT, REF)).run());
+		Assert.assertTrue(buildCheckerXR(lst(REF, HET, ALT, HET)).run());
 
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, ALT)).run());
+		Assert.assertTrue(buildCheckerXR(lst(REF, UKN, ALT, UKN)).run());
+		Assert.assertTrue(buildCheckerXR(lst(UKN, UKN, ALT, UKN)).run());
+		
+		//Make has it HET (misscall)
+		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, REF)).run());
+		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, HET)).run());
 
-		Assert.assertTrue(buildCheckerXR(lst(REF, UKN, UKN, ALT)).run());
-		Assert.assertTrue(buildCheckerXR(lst(UKN, UKN, UKN, ALT)).run());
+		Assert.assertTrue(buildCheckerXR(lst(REF, UKN, HET, UKN)).run());
+		Assert.assertTrue(buildCheckerXR(lst(UKN, UKN, HET, UKN)).run());
 	}
 
-	@Ignore
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
 		// compound heterozygous
