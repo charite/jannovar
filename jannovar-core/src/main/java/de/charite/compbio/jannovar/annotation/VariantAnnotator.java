@@ -115,7 +115,7 @@ public final class VariantAnnotator {
 		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
 		// described as shortcuts in the VCF file. We cannot annotate these yet.
 		if (change.isSymbolic())
-			return AnnotationList.EMPTY;
+			return AnnotationList.buildEmptyList(change);
 
 		// Get genomic change interval and reset the factory.
 		final GenomeInterval changeInterval = change.getGenomeInterval();
@@ -138,7 +138,7 @@ public final class VariantAnnotator {
 				buildSVAnnotation(change, null);
 			else
 				buildNonSVAnnotation(change, qr.left, qr.right);
-			return annovarFactory.getAnnotationList();
+			return annovarFactory.getAnnotationList(change);
 		}
 
 		// If we reach here, then there is at least one transcript that overlaps with the query. Iterate over these
@@ -149,7 +149,7 @@ public final class VariantAnnotator {
 			else
 				buildNonSVAnnotation(change, tm);
 
-		return annovarFactory.getAnnotationList();
+		return annovarFactory.getAnnotationList(change);
 	}
 
 	private void buildSVAnnotation(GenomeChange change, TranscriptModel transcript) throws AnnotationException {

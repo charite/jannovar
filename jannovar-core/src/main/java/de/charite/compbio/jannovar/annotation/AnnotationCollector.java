@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 
+import de.charite.compbio.jannovar.reference.GenomeChange;
+
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
  * a given variant. The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} objects each use an instance of
@@ -61,6 +63,9 @@ final class AnnotationCollector {
 
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationCollector.class);
+
+	/** The genomic change to collect annotations for. */
+	private GenomeChange change;
 
 	/** List of all {@link Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;
@@ -126,6 +131,7 @@ final class AnnotationCollector {
 	public AnnotationCollector(int initialCapacity) {
 		this.annotationLst = new ArrayList<Annotation>();
 		this.geneSymbolSet = new HashSet<String>();
+		this.change = change;
 	}
 
 	/**
@@ -194,10 +200,12 @@ final class AnnotationCollector {
 	 * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
 	 * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
 	 *
+	 * @param change
+	 *            <code>GenomeChange</code> to build the <code>AnnotationList</code> for
 	 * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
 	 */
-	public AnnotationList getAnnotationList() {
-		return new AnnotationList(this.annotationLst);
+	public AnnotationList getAnnotationList(GenomeChange change) {
+		return new AnnotationList(change, this.annotationLst);
 	}
 
 	/**

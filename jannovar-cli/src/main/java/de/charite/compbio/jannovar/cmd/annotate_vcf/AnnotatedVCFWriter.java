@@ -13,8 +13,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.JannovarOptions;
-import de.charite.compbio.jannovar.annotation.AnnotationException;
 import de.charite.compbio.jannovar.htsjdk.InfoFields;
+import de.charite.compbio.jannovar.htsjdk.InvalidCoordinatesException;
 import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
 import de.charite.compbio.jannovar.htsjdk.VariantContextWriterConstructionHelper;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
@@ -82,9 +82,13 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	}
 
 	@Override
-	public void put(VariantContext vc) throws AnnotationException {
-		vc = annotator.applyAnnotations(vc, annotator.buildAnnotationList(vc));
-		vc.getCommonInfo().removeAttribute("");
+	public void put(VariantContext vc) {
+		try {
+			vc = annotator.applyAnnotations(vc, annotator.buildAnnotationList(vc));
+		} catch (InvalidCoordinatesException e) {
+			annotator.putErrorAnnotation(vc, ImmutableSet.of(e.getAnnotationMessage()));
+		}
+		vc.getCommonInfo().removeAttribute(""); // remove leading/trailing comma
 		out.add(vc);
 	}
 
