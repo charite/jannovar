@@ -31,10 +31,8 @@ public class GenotypeListTest {
 				personList.build()), "FAM");
 
 		// create GenotypeList
-		this.geneName = null;
 		this.names = ImmutableList.of("father", "mother", "son", "daughter");
-		this.calls = null;
-		this.list = new GenotypeList(geneName, names, false, calls);
+		this.list = new GenotypeList(null, names, false, null);
 	}
 
 	@Test
