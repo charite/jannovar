@@ -30,6 +30,8 @@ import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Annotate variant in {@link VariantContext} and write out in Jannovar format.
+ * 
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
@@ -146,7 +148,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			String effect = Joiner.on("+").join(FluentIterable.from(a.effects).transform(VariantEffect.TO_LEGACY_NAME));
 			String annt = Joiner.on(":").skipNulls().join(a.ntHGVSDescription, a.aaHGVSDescription);
 			String sym = a.transcript.geneSymbol;
-			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
+			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
 					chrStr, change.pos, change.ref, change.alt, gtype, qual);
 			out.write(s);
 		}
