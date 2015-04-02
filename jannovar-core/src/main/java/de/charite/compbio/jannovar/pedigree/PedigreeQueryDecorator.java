@@ -31,7 +31,8 @@ public class PedigreeQueryDecorator {
 	/**
 	 * @param person
 	 *            the person to check
-	 * @return <code>true</code> if the nth person in the PED file is parent of an affected child
+	 * @return <code>true</code> if the nth person in the PED file is parent of
+	 *         an affected child
 	 */
 	public boolean isParentOfAffected(Person person) {
 		for (Person member : pedigree.members)
@@ -66,7 +67,40 @@ public class PedigreeQueryDecorator {
 	}
 
 	/**
-	 * @return list of parents in the same order as in {@link Pedigree#members pedigree.members}
+	 * @return set with the name of the parents from affected females.
+	 */
+	public ImmutableSet<String> getAffectedFemaleParentNames() {
+		ImmutableSet.Builder<String> parentNames = new ImmutableSet.Builder<String>();
+		for (Person member : pedigree.members) {
+			if (member.isAffected() && member.isFemale()) {
+				if (member.father != null)
+					parentNames.add(member.father.name);
+				if (member.mother != null)
+					parentNames.add(member.mother.name);
+			}
+		}
+		return parentNames.build();
+	}
+	
+	/**
+	 * @return set with the name of the parents from affected males.
+	 */
+	public ImmutableSet<String> getAffectedMaleParentNames() {
+		ImmutableSet.Builder<String> parentNames = new ImmutableSet.Builder<String>();
+		for (Person member : pedigree.members) {
+			if (member.isAffected() && member.isMale()) {
+				if (member.father != null)
+					parentNames.add(member.father.name);
+				if (member.mother != null)
+					parentNames.add(member.mother.name);
+			}
+		}
+		return parentNames.build();
+	}
+
+	/**
+	 * @return list of parents in the same order as in {@link Pedigree#members
+	 *         pedigree.members}
 	 */
 	public ImmutableList<Person> getParents() {
 		ImmutableSet<String> parentNames = getParentNames();

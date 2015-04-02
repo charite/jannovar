@@ -2,12 +2,11 @@ package de.charite.compbio.jannovar.pedigree;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-public class CompatibilityCheckerXRecessiveSmallTestFemale extends CompatibilityCheckerTestBase {
+public class CompatibilityCheckerXRecessiveStupidSmallFemaleTest extends CompatibilityCheckerTestBase {
 
 	@Before
 	public void setUp() throws PedParseException {
@@ -28,7 +27,6 @@ public class CompatibilityCheckerXRecessiveSmallTestFemale extends Compatibility
 		Assert.assertEquals(4, pedigree.members.size());
 	}
 
-	@Ignore
 	@Test
 	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXR(lst(HET, HET, HET, HET)).run());
@@ -60,18 +58,28 @@ public class CompatibilityCheckerXRecessiveSmallTestFemale extends Compatibility
 		Assert.assertFalse(buildCheckerXR(lst(ALT, REF, REF, ALT)).run());
 		Assert.assertFalse(buildCheckerXR(lst(REF, REF, REF, HET)).run());
 
-		Assert.assertFalse(buildCheckerXR(lst(REF, HET, REF, ALT)).run());
 		Assert.assertFalse(buildCheckerXR(lst(HET, HET, ALT, ALT)).run());
-		Assert.assertFalse(buildCheckerXR(lst(HET, REF, HET, ALT)).run());
-		Assert.assertFalse(buildCheckerXR(lst(REF, HET, UKN, ALT)).run());
-		Assert.assertFalse(buildCheckerXR(lst(REF, REF, REF, ALT)).run());
+		// Assert.assertFalse(buildCheckerXR(lst(REF, REF, REF, ALT)).run());
 
 		// at least one hom_alt
 		Assert.assertFalse(buildCheckerXR(lst(HET, UKN, UKN, UKN)).run());
 
+		// A male cannot be unaffected
+		Assert.assertFalse(buildCheckerXR(lst(REF, HET, HET, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(HET, REF, REF, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(HET, REF, HET, ALT)).run());
+
+		Assert.assertFalse(buildCheckerXR(lst(REF, HET, REF, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(REF, UKN, REF, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(UKN, HET, REF, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(REF, HET, UKN, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(UKN, HET, UKN, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(REF, UKN, UKN, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(UKN, UKN, REF, ALT)).run());
+		Assert.assertFalse(buildCheckerXR(lst(UKN, UKN, UKN, ALT)).run());
+
 	}
 
-	@Ignore
 	@Test
 	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
 		// compound heterozygous
@@ -90,30 +98,12 @@ public class CompatibilityCheckerXRecessiveSmallTestFemale extends Compatibility
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, REF, ALT)).run());
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, ALT)).run());
 
-		Assert.assertTrue(buildCheckerXR(lst(REF, UKN, UKN, ALT)).run());
-		Assert.assertTrue(buildCheckerXR(lst(UKN, UKN, UKN, ALT)).run());
 	}
 
-	@Ignore
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
-		// compound heterozygous
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, REF), lst(HET, REF, HET, REF)).run());
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, HET), lst(HET, REF, HET, REF)).run());
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, REF), lst(HET, REF, HET, HET)).run());
 
-		Assert.assertTrue(buildCheckerXR(lst(UKN, HET, HET, REF), lst(HET, REF, HET, REF)).run());
-		Assert.assertTrue(buildCheckerXR(lst(REF, UKN, HET, HET), lst(HET, REF, HET, REF)).run());
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, UKN), lst(HET, REF, HET, HET)).run());
-
-		// homozygous
-		Assert.assertTrue(buildCheckerXR(lst(REF, ALT, HET, REF), lst(HET, HET, ALT, REF)).run());
-		Assert.assertTrue(buildCheckerXR(lst(ALT, REF, HET, REF), lst(HET, UKN, ALT, REF)).run());
-		Assert.assertTrue(buildCheckerXR(lst(HET, HET, HET, REF), lst(UKN, HET, ALT, HET)).run());
-		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, REF), lst(HET, HET, ALT, UKN)).run());
 	}
 
 }
