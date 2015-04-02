@@ -260,9 +260,6 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		if (result != 0)
 			return result;
 
-		if (result != 0)
-			return result;
-
 		if (transcript == null && other.transcript == null)
 			return 0;
 		else if (other.transcript == null)

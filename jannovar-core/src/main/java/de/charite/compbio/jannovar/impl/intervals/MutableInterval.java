@@ -4,6 +4,7 @@ package de.charite.compbio.jannovar.impl.intervals;
  * Mutable half-open interval, for incremental building of {@link Interval} objects.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public class MutableInterval<T> implements java.io.Serializable, Comparable<MutableInterval<T>> {
 
