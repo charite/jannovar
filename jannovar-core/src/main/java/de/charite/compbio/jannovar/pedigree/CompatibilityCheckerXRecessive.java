@@ -18,7 +18,11 @@ import com.google.common.collect.ImmutableSet;
  * If the pedigree has more samples, the checks are more involved.
  *
  * <b>Note</b> that the case of X-chromosomal compound heterozygous mutations is
- * not handled. We assume that female individuals are not affected.
+ * only handled in the single case. For larger pedigrees we assume that female
+ * individuals are not affected. Otherwise it will be a dominant mutation,
+ * because only affected males can be heredity the variant. De-novo mutations
+ * will be handled also from dominant compatibility checker. If the gene is
+ * recessive some have to look for the second mutation by its own.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -122,7 +126,8 @@ class CompatibilityCheckerXRecessive {
 					 * instead of het)
 					 */
 					return false;
-				else if (gtList.get(i) == Genotype.HOMOZYGOUS_ALT || (person.sex == Sex.MALE && gtList.get(i) == Genotype.HETEROZYGOUS))
+				else if (gtList.get(i) == Genotype.HOMOZYGOUS_ALT
+						|| (person.sex == Sex.MALE && gtList.get(i) == Genotype.HETEROZYGOUS))
 					numMut += 1;
 			}
 			++i;
@@ -131,16 +136,32 @@ class CompatibilityCheckerXRecessive {
 		return (numMut > 0);
 	}
 
+	/**
+	 * For XR the parents of male and female behaves different. The father of a
+	 * Female individual must always be affected. If the sex is unknown to check
+	 * is made!
+	 * 
+	 * @param gtList
+	 * @return
+	 */
 	private boolean checkCompatibilityParents(ImmutableList<Genotype> gtList) {
-		final ImmutableSet<String> parentNames = queryDecorator.getParentNames();
+		final ImmutableSet<String> femaleParentNames = queryDecorator.getAffectedFemaleParentNames();
+		final ImmutableSet<String> maleParentNames = queryDecorator.getAffectedFemaleParentNames();
 		int i = 0;
 		for (Person person : pedigree.members) {
-			if (parentNames.contains(person.name)) {
-				final Genotype gt = gtList.get(i);
-				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED && gt != Genotype.HOMOZYGOUS_REF
-						&& gt != Genotype.NOT_OBSERVED)
-					return false; // cannot be disease-causing mutation if an
-									// unaffected father has it
+			final Genotype gt = gtList.get(i);
+			if (femaleParentNames.contains(person.name)) {
+				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED)
+					return false; // must always be affected. If affected it is
+									// already checked!
+				if (person.sex == Sex.FEMALE && (gt == Genotype.HOMOZYGOUS_ALT || gt == Genotype.HOMOZYGOUS_REF))
+					return false; // cannot be disease-causing mutation if
+									// mother of patient is homozygous or not the carrier
+			} else if (maleParentNames.contains(person.name)) {
+				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED
+						&& (gt == Genotype.HOMOZYGOUS_ALT || gt != Genotype.HETEROZYGOUS))
+					return false; // unaffected male can not me heterozygos
+									// (wrong call) or hemizygous
 				if (person.sex == Sex.FEMALE && gt == Genotype.HOMOZYGOUS_ALT)
 					return false; // cannot be disease-causing mutation if
 									// mother of patient is homozygous
@@ -157,13 +178,13 @@ class CompatibilityCheckerXRecessive {
 		for (Person person : pedigree.members) {
 			if (unaffectedNames.contains(person.name)) {
 				final Genotype gt = gtList.get(i);
-				// Males with a hemizygous mutation have to be encoded as
-				// HOMOZYGOUS_ALT in the VCF. Thus, the handling
-				// of Kleinefelder here is not comprehensive for simplicity's
-				// sake.
-				if (gt == Genotype.HOMOZYGOUS_ALT)
-					return false; // cannot be disease-causing mutation, an
-									// unaffected individual has it
+				// Strict handling. Males cannot be called heterozygous (will be
+				// seen as a homozygous mutation)
+				if (person.isMale() && (gt == Genotype.HETEROZYGOUS || gt == Genotype.HOMOZYGOUS_ALT))
+					return false;
+				else if (gt == Genotype.HOMOZYGOUS_ALT)
+					return false; // cannot be disease-causing mutation (female
+									// or unknown)
 			}
 			++i;
 		}
