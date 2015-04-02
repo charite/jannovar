@@ -18,6 +18,7 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
  * sensible results.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 @Immutable
@@ -268,7 +269,7 @@ public final class GenomeChange implements VariantDescription {
 	 */
 	@Override
 	public int hashCode() {
-		if (pos.strand.isReverse())
+		if (pos != null && pos.strand != null && pos.strand.isReverse())
 			return withStrand(Strand.FWD).hashCode();
 		final int prime = 31;
 		int result = 1;
@@ -293,7 +294,7 @@ public final class GenomeChange implements VariantDescription {
 			return false;
 
 		GenomeChange other = (GenomeChange) obj;
-		if (pos.strand != Strand.FWD)
+		if (pos != null && pos.strand != Strand.FWD)
 			return withStrand(Strand.FWD).equals(obj);
 		other = other.withStrand(Strand.FWD);
 
