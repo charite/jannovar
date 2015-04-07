@@ -56,14 +56,14 @@ public final class ReferenceDictionaryBuilder {
 	}
 
 	/**
-	 * Allows contig id to name translation before final construction of the {@link ReferenceDictionary}.
+	 * Allows get contig name from a contig id.
 	 *
-	 * @param name
-	 *            contig name to translate
+	 * @param id
+	 *            numeric contig ID
 	 * @return primary contig name or <code>null</code> if none could be found
 	 */
-	public String getContigName(String name) {
-		return tmpContigName.get(name);
+	public String getContigName(Integer id) {
+		return tmpContigName.get(id);
 	}
 
 	/**

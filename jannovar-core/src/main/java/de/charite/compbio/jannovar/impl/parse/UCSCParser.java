@@ -31,12 +31,13 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
 /**
  * Parser for the UCCSC knownGene and related files.
  *
- * Parses the four files from the UCSC database relating the KnownGenes. The main file, <code>knownGene.txt</code>, is
- * tab-separated and has the following fields:
+ * Parses the four files from the UCSC database relating the KnownGenes. The
+ * main file, <code>knownGene.txt</code>, is tab-separated and has the following
+ * fields:
  *
  * <ol>
- * <li>`name` e.g., uc001irt.4. This is a UCSC knownGene identifier. We will use the kgXref table to convert to gene
- * symbol etc.</li>
+ * <li>`name` e.g., uc001irt.4. This is a UCSC knownGene identifier. We will use
+ * the kgXref table to convert to gene symbol etc.</li>
  * <li>`chrom` e.g., chr10</li>
  * <li>`strand` e.g., +</li>
  * <li>`txStart` e.g., 24497719</li>
@@ -44,17 +45,22 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
  * <li>`cdsStart` e.g., 24498122</li>
  * <li>`cdsEnd` e.g., 24835253</li>
  * <li>`exonCount` e.g., 17</li>
- * <li>`exonStarts` e.g., 24497719,24508554,24669797,.... (total of 17 ints for this example)</li>
- * <li>`exonEnds` e.g., 24498192,24508838,24669996, .... (total of 17 ints for this example)</li>
+ * <li>`exonStarts` e.g., 24497719,24508554,24669797,.... (total of 17 ints for
+ * this example)</li>
+ * <li>`exonEnds` e.g., 24498192,24508838,24669996, .... (total of 17 ints for
+ * this example)</li>
  * <li>`proteinID` e.g., NP_001091971</li>
- * <li>`alignID` e.g., uc001irt.4 (Note: We do not need this field for our app).</li>
+ * <li>`alignID` e.g., uc001irt.4 (Note: We do not need this field for our app).
+ * </li>
  * </ol>
  *
- * Note that this file is a MySQL dump file used at the UCSC database. We will use this program to create a serialized
- * java object that can quickly be input to the Jannovar program.
+ * Note that this file is a MySQL dump file used at the UCSC database. We will
+ * use this program to create a serialized java object that can quickly be input
+ * to the Jannovar program.
  *
- * This class additionally parses the ucsc <code>KnownToLocusLink.txt</code> file, which contains cross references from
- * the ucsc IDs to the corresponding Entrez Gene ids (earlier known as Locus Link):
+ * This class additionally parses the ucsc <code>KnownToLocusLink.txt</code>
+ * file, which contains cross references from the ucsc IDs to the corresponding
+ * Entrez Gene ids (earlier known as Locus Link):
  *
  * <pre>
  * uc010eve.3      3805
@@ -63,25 +69,35 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
  * ...
  * </pre>
  *
- * The class additionally parses the files <code>knownGeneMrna.txt</code> and <code>kgXref.txt</code>.
+ * The class additionally parses the files <code>knownGeneMrna.txt</code> and
+ * <code>kgXref.txt</code>.
  *
- * The result of parsing is the creation of a list of {@link TranscriptInfo} objects.
+ * The result of parsing is the creation of a list of {@link TranscriptInfo}
+ * objects.
  *
- * It is possible to parse directly from the gzip file without decompressing them, or the start from the decompressed
- * files. The class checks of the files exist and if they have the suffix "gz". *
+ * It is possible to parse directly from the gzip file without decompressing
+ * them, or the start from the decompressed files. The class checks of the files
+ * exist and if they have the suffix "gz". *
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public class UCSCParser implements TranscriptParser {
 
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(UCSCParser.class);
 
-	/** Number of tab-separated fields in then UCSC knownGene.txt file (build hg19). */
+	/**
+	 * Number of tab-separated fields in then UCSC knownGene.txt file (build
+	 * hg19).
+	 */
 	private static final int NFIELDS = 12;
 
-	/** Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping */
+	/**
+	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length
+	 * mapping
+	 */
 	private final ReferenceDictionary refDict;
 
 	/** Path to directory where the to-be-parsed files live */
@@ -90,12 +106,15 @@ public class UCSCParser implements TranscriptParser {
 	/** INI {@link Section} from the configuration. */
 	private final Section iniSection;
 
-	/** Map of all genes loaded so far. The key is the UCSC id, e.g. uc0001234.3. */
+	/**
+	 * Map of all genes loaded so far. The key is the UCSC id, e.g. uc0001234.3.
+	 */
 	private HashMap<String, TranscriptModelBuilder> knownGeneMap;
 
 	/**
 	 * @param refDict
-	 *            path to {@link ReferenceDictionary} to use for name/id and id/length mapping.
+	 *            path to {@link ReferenceDictionary} to use for name/id and
+	 *            id/length mapping.
 	 * @param basePath
 	 *            path to where the to-be-parsed files live
 	 * @param iniSection
@@ -163,7 +182,8 @@ public class UCSCParser implements TranscriptParser {
 	/**
 	 * The function parses a single line of the knownGene.txt file.
 	 *
-	 * The fields of the file are tab separated and have the following structure:
+	 * The fields of the file are tab separated and have the following
+	 * structure:
 	 *
 	 * <ul>
 	 * <li>0: name (UCSC known gene id, e.g., "uc021olp.1"</li>
@@ -179,12 +199,16 @@ public class UCSCParser implements TranscriptParser {
 	 * <li>10: name, again (?), e.g., "uc021olp.1"</li>
 	 * </ul>
 	 *
-	 * The function additionally parses the start and end of the exons. Note that in the UCSC database, positions are
-	 * represented using half-open, zero-based coordinates. That is, if start is 2 and end is 7, then the first
-	 * nucleotide is at position 3 (one-based) and the last nucleotide is at positon 7 (one-based). For now, we are
-	 * switching the coordinates to fully-closed one based by incrementing all start positions by one. This is the way
-	 * coordinates are typically represented in VCF files and is the way coordinate calculations are done in annovar. At
-	 * a later date, it may be worthwhile to switch to the UCSC-way of half-open zero based coordinates.
+	 * The function additionally parses the start and end of the exons. Note
+	 * that in the UCSC database, positions are represented using half-open,
+	 * zero-based coordinates. That is, if start is 2 and end is 7, then the
+	 * first nucleotide is at position 3 (one-based) and the last nucleotide is
+	 * at positon 7 (one-based). For now, we are switching the coordinates to
+	 * fully-closed one based by incrementing all start positions by one. This
+	 * is the way coordinates are typically represented in VCF files and is the
+	 * way coordinate calculations are done in annovar. At a later date, it may
+	 * be worthwhile to switch to the UCSC-way of half-open zero based
+	 * coordinates.
 	 *
 	 * @param line
 	 *            A single line of the UCSC knownGene.txt file
@@ -203,9 +227,11 @@ public class UCSCParser implements TranscriptParser {
 		}
 		/* Field 0 has the accession number, e.g., uc010nxr.1. */
 		tib.setAccession(A[0]);
-		tib.setGeneSymbol(tib.getAccession()); // will be replaced when parsing geneXref file.
+		tib.setGeneSymbol(tib.getAccession()); // will be replaced when parsing
+												// geneXref file.
 		Integer chrID = refDict.contigID.get(A[1]);
-		if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception to be thrown.
+		if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception
+							// to be thrown.
 			throw new TranscriptParseException("Could not parse chromosome field: " + A[1]);
 
 		char strandC = A[2].charAt(0);
@@ -217,7 +243,8 @@ public class UCSCParser implements TranscriptParser {
 
 		int txStart, txEnd;
 		try {
-			txStart = Integer.parseInt(A[3]) + 1; // +1 to convert to one-based fully closed numbering
+			txStart = Integer.parseInt(A[3]) + 1; // +1 to convert to one-based
+													// fully closed numbering
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse txStart:" + A[3]);
 		}
@@ -231,7 +258,8 @@ public class UCSCParser implements TranscriptParser {
 
 		int cdsStart, cdsEnd;
 		try {
-			cdsStart = Integer.parseInt(A[5]) + 1;// +1 to convert to one-based fully closed numbering
+			cdsStart = Integer.parseInt(A[5]) + 1;// +1 to convert to one-based
+													// fully closed numbering
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse cdsStart:" + A[5]);
 		}
@@ -266,7 +294,8 @@ public class UCSCParser implements TranscriptParser {
 		}
 		for (int i = 0; i < exonCount; ++i) {
 			try {
-				exonStarts[i] = Integer.parseInt(B[i]) + 1; // Change 0-based to 1-based numbering
+				exonStarts[i] = Integer.parseInt(B[i]) + 1; // Change 0-based to
+															// 1-based numbering
 			} catch (NumberFormatException e) {
 				String error = String
 						.format("[UCSCKGParser] Malformed exon start at position %d of line %s", i, starts);
@@ -321,7 +350,8 @@ public class UCSCParser implements TranscriptParser {
 					// exceptionCount++;
 				}
 			}
-			// System.out.println("[INFO] Parsed " + knownGeneMap.size() + " transcripts from UCSC knownGene resource");
+			// System.out.println("[INFO] Parsed " + knownGeneMap.size() +
+			// " transcripts from UCSC knownGene resource");
 		} catch (FileNotFoundException fnfe) {
 			s = String.format("[Jannovar/USCSKGParser] Could not find KnownGene.txt file: %s\n%s", kgPath,
 					fnfe.toString());
@@ -341,8 +371,10 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	/**
-	 * Parses the ucsc knownToLocusLink.txt file, which contains cross references from ucsc KnownGene ids to Entrez Gene
-	 * ids. The function than adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder} objects.
+	 * Parses the ucsc knownToLocusLink.txt file, which contains cross
+	 * references from ucsc KnownGene ids to Entrez Gene ids. The function than
+	 * adds an Entrez gene id to the corresponding {@link TranscriptInfoBuilder}
+	 * objects.
 	 */
 	private void parseKnown2LocusLink(String locusPath) throws TranscriptParseException {
 		try {
@@ -363,7 +395,10 @@ public class UCSCParser implements TranscriptParser {
 				Integer geneID = Integer.parseInt(A[1]);
 				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
 				if (tbi == null) {
-					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
+					/**
+					 * Note: many of these sequences seem to be for genes on
+					 * scaffolds, e.g., chrUn_gl000243
+					 */
 					notFoundID++;
 					continue;
 				}
@@ -385,7 +420,8 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	/**
-	 * Parse the knownCanonical.txt file and set the transcript support level of {@link #tmb}.
+	 * Parse the knownCanonical.txt file and set the transcript support level of
+	 * {@link #tmb}.
 	 *
 	 * @param knownCanonicalPath
 	 *            path to the knownCanonical.txt file
@@ -432,9 +468,11 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	/**
-	 * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt} Note that the UCSC sequences are all in
-	 * lower case, but we convert them here to all upper case letters to simplify processing in other places of this
-	 * program. The sequences are then added to the corresponding {@link TranscriptInfoBuilder} objects.
+	 * Input FASTA sequences from the UCSC hg19 file {@code knownGeneMrna.txt}
+	 * Note that the UCSC sequences are all in lower case, but we convert them
+	 * here to all upper case letters to simplify processing in other places of
+	 * this program. The sequences are then added to the corresponding
+	 * {@link TranscriptInfoBuilder} objects.
 	 */
 	private void parseKnownGeneMrna(String mRNAPath) throws TranscriptParseException {
 		try {
@@ -455,8 +493,12 @@ public class UCSCParser implements TranscriptParser {
 				String seq = A[1].toUpperCase();
 				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
 				if (tbi == null) {
-					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
-					// System.err.println("Error, could not find FASTA sequence for known gene \"" + id + "\"");
+					/**
+					 * Note: many of these sequences seem to be for genes on
+					 * scaffolds, e.g., chrUn_gl000243
+					 */
+					// System.err.println("Error, could not find FASTA sequence for known gene \""
+					// + id + "\"");
 					kgWithNoSequence++;
 					continue;
 					// System.exit(1);
@@ -478,19 +520,23 @@ public class UCSCParser implements TranscriptParser {
 	}
 
 	/**
-	 * Input xref information for the known genes. This method parses the ucsc xref table to get the gene symbol that
-	 * corresponds to the ucsc kgID. The information is then added to the corresponding {@link TranscriptInfoBuilder}
-	 * object.
+	 * Input xref information for the known genes. This method parses the ucsc
+	 * xref table to get the gene symbol that corresponds to the ucsc kgID. The
+	 * information is then added to the corresponding
+	 * {@link TranscriptInfoBuilder} object.
 	 * <P>
-	 * Note that some of the fields are empty, which can cause a problem for Java's split function, which then conflates
-	 * neighboring fields. Therefore, we instead just count the number of tab signs to get to the 5th field.
+	 * Note that some of the fields are empty, which can cause a problem for
+	 * Java's split function, which then conflates neighboring fields.
+	 * Therefore, we instead just count the number of tab signs to get to the
+	 * 5th field.
 	 * <P>
-	 * uc001aca.2 NM_198317 Q6TDP4 KLH17_HUMAN KLHL17 NM_198317 NP_938073 Homo sapiens kelch-like 17 (Drosophila)
-	 * (KLHL17), mRNA.
+	 * uc001aca.2 NM_198317 Q6TDP4 KLH17_HUMAN KLHL17 NM_198317 NP_938073 Homo
+	 * sapiens kelch-like 17 (Drosophila) (KLHL17), mRNA.
 	 * <P>
 	 * The structure of the file is
 	 * <UL>
-	 * <LI>0: UCSC knownGene id, e.g., "uc001aca.2" (this is the key used to match entries to the knownGene.txt file)
+	 * <LI>0: UCSC knownGene id, e.g., "uc001aca.2" (this is the key used to
+	 * match entries to the knownGene.txt file)
 	 * <LI>1: Accession number (refseq if availabl), e.g., "NM_198317"
 	 * <LI>2: Uniprot accession number, e.g., "Q6TDP4"
 	 * <LI>3: UCSC stable id, e.g., "KLH17_HUMAN"
@@ -524,8 +570,12 @@ public class UCSCParser implements TranscriptParser {
 				String geneSymbol = A[4];
 				TranscriptModelBuilder tbi = this.knownGeneMap.get(transcriptID);
 				if (tbi == null) {
-					/** Note: many of these sequences seem to be for genes on scaffolds, e.g., chrUn_gl000243 */
-					// System.err.println("Error, could not find xref sequence for known gene \"" + id + "\"");
+					/**
+					 * Note: many of these sequences seem to be for genes on
+					 * scaffolds, e.g., chrUn_gl000243
+					 */
+					// System.err.println("Error, could not find xref sequence for known gene \""
+					// + id + "\"");
 					// kgWithNoXref++;
 					continue;
 					// System.exit(1);
@@ -540,11 +590,12 @@ public class UCSCParser implements TranscriptParser {
 			err = String.format("Exception while parsing UCSC KnownGene xref file at \"%s\"\n%s", xRefPath,
 					e.toString());
 		} finally {
-			try {
-				br.close();
-			} catch (IOException e) {
-				// swallow, nothing we can do about it
-			}
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					// swallow, nothing we can do about it
+				}
 		}
 		if (err != null)
 			throw new TranscriptParseException(err);

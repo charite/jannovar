@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 
+import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.reference.GenomeChange;
 
 /**
@@ -57,15 +58,13 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
  * Used for the implementation of VariantAnnotator.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
 final class AnnotationCollector {
 
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationCollector.class);
-
-	/** The genomic change to collect annotations for. */
-	private GenomeChange change;
 
 	/** List of all {@link Annotation} objects found for exonic variation. */
 	private ArrayList<Annotation> annotationLst = null;
@@ -131,7 +130,6 @@ final class AnnotationCollector {
 	public AnnotationCollector(int initialCapacity) {
 		this.annotationLst = new ArrayList<Annotation>();
 		this.geneSymbolSet = new HashSet<String>();
-		this.change = change;
 	}
 
 	/**

@@ -26,6 +26,7 @@ import de.charite.compbio.jannovar.reference.Strand;
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
@@ -81,10 +82,10 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	}
 
 	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
-		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
+		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]+)>([ACGTN]+)");
 		Matcher match = pat.matcher(changeStr);
 
-		if (!match.matches() | match.groupCount() != 4) {
+		if (!match.matches()) {
 			System.err.println("[ERROR] Input string for the chromosomal change " + changeStr
 					+ " does not fit the regular expression ... :(");
 			System.exit(3);

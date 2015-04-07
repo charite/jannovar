@@ -20,6 +20,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public final class JannovarDataSerializer {
 
@@ -54,7 +55,8 @@ public final class JannovarDataSerializer {
 		if (data == null || data.refDict.contigID.isEmpty())
 			throw new SerializationException("Attempting to serialize empty data set");
 
-		// This is waiting for Java 7 to be improved. Also see: http://stackoverflow.com/questions/4092914
+		// This is waiting for Java 7 to be improved. Also see:
+		// http://stackoverflow.com/questions/4092914
 		String error = null;
 		FileOutputStream fos = null;
 		GZIPOutputStream gzos = null;
@@ -67,12 +69,19 @@ public final class JannovarDataSerializer {
 		} catch (IOException i) {
 			error = String.format("Could not serialize data file list: %s", i.toString());
 		} finally {
-			try {
-				oos.close();
-				fos.close();
-			} catch (IOException e) {
-				// swallow, nothing we can do
-			}
+			if (oos != null)
+				try {
+					oos.close();
+					fos.close();
+				} catch (IOException e) {
+					// swallow, nothing we can do
+				}
+			if (fos != null)
+				try {
+					fos.close();
+				} catch (IOException e) {
+					// swallow, nothing we can do
+				}
 			if (error != null)
 				throw new SerializationException(error);
 		}
