@@ -12,11 +12,11 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public final class AminoAcidChange {
 
 	/** 0-based position of the change */
-	public final int pos;
+	private final int pos;
 	/** reference amino acid string */
-	public final String ref;
+	private final String ref;
 	/** alternative amino acid string */
-	public final String alt;
+	private final String alt;
 
 	/** Construct object with given values. */
 	public AminoAcidChange(int pos, String ref, String alt) {
@@ -24,6 +24,21 @@ public final class AminoAcidChange {
 		this.pos = pos;
 		this.ref = ref;
 		this.alt = alt;
+	}
+
+	/** @return 0-based position of the change */
+	public int getPos() {
+		return pos;
+	}
+
+	/** @return reference amino acid string */
+	public String getRef() {
+		return ref;
+	}
+
+	/** @return alternative amino acid string */
+	public String getAlt() {
+		return alt;
 	}
 
 	/**

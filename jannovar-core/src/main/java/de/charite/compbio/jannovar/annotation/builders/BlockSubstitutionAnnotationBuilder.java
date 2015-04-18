@@ -192,12 +192,12 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			}
 
 			// Normalize the amino acid change with the var AA sequence.
-			while (aaChange.ref.length() > 0 && aaChange.alt.length() > 0
-					&& aaChange.ref.charAt(0) == aaChange.alt.charAt(0))
+			while (aaChange.getRef().length() > 0 && aaChange.getAlt().length() > 0
+					&& aaChange.getRef().charAt(0) == aaChange.getAlt().charAt(0))
 				aaChange = aaChange.shiftRight();
 			// Truncate change.alt after stop codon.
 			aaChange = AminoAcidChangeNormalizer.truncateAltAfterStopCodon(aaChange);
-			if (aaChange.alt.equals("*"))
+			if (aaChange.getAlt().equals("*"))
 				varTypes.add(VariantEffect.STOP_GAINED);
 
 			// Handle the case of no change.
@@ -206,32 +206,32 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				return;
 			}
 
-			char wtAAFirst = wtAASeq.charAt(aaChange.pos);
+			char wtAAFirst = wtAASeq.charAt(aaChange.getPos());
 			char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
-			String insertedAAs = varAASeq.substring(aaChange.pos, aaChange.pos + aaChange.alt.length());
+			String insertedAAs = varAASeq.substring(aaChange.getPos(), aaChange.getPos() + aaChange.getAlt().length());
 			String wtAAFirstLong = (wtAAFirst == '*') ? "*" : t.toLong(wtAAFirst);
 			String wtAALastLong = (wtAALast == '*') ? "*" : t.toLong(wtAALast);
 
 			// We differentiate the case of replacing a single amino acid and replacing multiple ones. Note that
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
-			if (insertedAAs.isEmpty() && aaChange.ref.length() > 1)
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "_", wtAALastLong,
+			if (insertedAAs.isEmpty() && aaChange.getRef().length() > 1)
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1, "_", wtAALastLong,
 						aaChange.getLastPos() + 1, "del");
-			if (insertedAAs.isEmpty() && aaChange.ref.length() == 1)
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "del");
-			else if (aaChange.pos == aaChange.getLastPos() || aaChange.alt.equals("*"))
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1,
+			if (insertedAAs.isEmpty() && aaChange.getRef().length() == 1)
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1, "del");
+			else if (aaChange.getPos() == aaChange.getLastPos() || aaChange.getAlt().equals("*"))
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1,
 						t.toLong(insertedAAs.charAt(0)));
 			else
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.pos + 1, "_", wtAALastLong,
+				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1, "_", wtAALastLong,
 						aaChange.getLastPos() + 1, "delins", t.toLong(insertedAAs));
 
 			// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
 			if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 				// Differentiate between the variant AA string containing a stop codon or not.
 				if (varAAStopPos >= 0)
-					protAnno = StringUtil.concatenate(protAnno, "ext*", varAAStopPos - aaChange.pos + 1);
+					protAnno = StringUtil.concatenate(protAnno, "ext*", varAAStopPos - aaChange.getPos() + 1);
 				else
 					protAnno = StringUtil.concatenate(protAnno, "ext*?");
 			}
@@ -259,15 +259,15 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
 				// We have a stop codon, yay!
-				char wtAA = wtAASeq.charAt(aaChange.pos);
-				char varAA = varAASeq.charAt(aaChange.pos);
-				int stopCodonOffset = varAAStopPos - aaChange.pos + 1;
+				char wtAA = wtAASeq.charAt(aaChange.getPos());
+				char varAA = varAASeq.charAt(aaChange.getPos());
+				int stopCodonOffset = varAAStopPos - aaChange.getPos() + 1;
 				String wtAALong = (wtAA == '*') ? "*" : t.toLong(wtAA);
 				String varAALong = (varAA == '*') ? "*" : t.toLong(varAA);
 				String opDesc = "fs"; // operation description
-				if (aaChange.ref.indexOf('*') >= 0)
+				if (aaChange.getRef().indexOf('*') >= 0)
 					opDesc = "ext"; // stop codon deleted
-				protAnno = StringUtil.concatenate("p.", wtAALong, aaChange.pos + 1, varAALong, opDesc, "*",
+				protAnno = StringUtil.concatenate("p.", wtAALong, aaChange.getPos() + 1, varAALong, opDesc, "*",
 						stopCodonOffset);
 				if (varAALong.length() > varAALong.length())
 					varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
