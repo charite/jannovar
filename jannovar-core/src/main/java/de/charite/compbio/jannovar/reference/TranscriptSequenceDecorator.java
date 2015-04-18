@@ -81,7 +81,7 @@ public final class TranscriptSequenceDecorator {
 	 */
 	public String getCodonAt(TranscriptPosition txPos, CDSPosition cdsPos) {
 		int frameShift = cdsPos.getPos() % 3;
-		int codonStart = txPos.pos - frameShift; // codon start in transcript string
+		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
 		return transcript.sequence.substring(codonStart, codonStart + 3);
 	}
 
@@ -102,7 +102,7 @@ public final class TranscriptSequenceDecorator {
 	 */
 	public String getCodonsStartingFrom(TranscriptPosition txPos, CDSPosition cdsPos, int count) {
 		int frameShift = cdsPos.getPos() % 3;
-		int codonStart = txPos.pos - frameShift; // codon start in transcript string
+		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
 		int endPos = codonStart + 3 * count;
 		if (endPos > transcript.sequence.length())
 			endPos = transcript.sequence.length();

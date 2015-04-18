@@ -87,8 +87,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
-		if (txPos.pos >= transcript.sequence.length()
-				|| !transcript.sequence.substring(txPos.pos, txPos.pos + 1).equals(change.ref))
+		if (txPos.getPos() >= transcript.sequence.length()
+				|| !transcript.sequence.substring(txPos.getPos(), txPos.getPos() + 1).equals(change.ref))
 			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.

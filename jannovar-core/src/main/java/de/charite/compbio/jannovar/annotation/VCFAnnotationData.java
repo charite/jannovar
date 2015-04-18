@@ -69,7 +69,7 @@ class VCFAnnotationData {
 			txPos = annoLoc.txLocation.getBeginPos().shifted(-1); // change length == 0, insertion
 		else
 			txPos = annoLoc.txLocation.getBeginPos(); // all other variants
-		this.txPos = txPos.pos;
+		this.txPos = txPos.getPos();
 		this.txLength = annoLoc.transcript.txRegion.length();
 
 		try {

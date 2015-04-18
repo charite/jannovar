@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.Immutable;
 public final class TranscriptSequenceChangeHelper {
 
 	/** The {@link TranscriptInfo} with the sequence and position infos. */
-	final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 
 	/**
 	 * Construct helper with the given {@link TranscriptInfo}.
@@ -62,9 +62,9 @@ public final class TranscriptSequenceChangeHelper {
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(transcript.sequence);
 		if (change.getType() == GenomeChangeType.SNV)
-			builder.setCharAt(tPos.pos, change.alt.charAt(0));
+			builder.setCharAt(tPos.getPos(), change.alt.charAt(0));
 		else
-			builder.insert(tPos.pos, change.alt);
+			builder.insert(tPos.getPos(), change.alt);
 		return builder.toString();
 	}
 
@@ -93,8 +93,8 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(transcript.sequence);
-		builder.delete(tBeginPos.pos, tEndPos.pos);
-		builder.insert(tBeginPos.pos, change.alt);
+		builder.delete(tBeginPos.getPos(), tEndPos.getPos());
+		builder.insert(tBeginPos.getPos(), change.alt);
 		return builder.toString();
 	}
 

@@ -30,7 +30,7 @@
 
 ### jannovar-core
 
-* Making members of `AminoAcidChange`, `CDSPosition`,
+* Making members of `AminoAcidChange`, `CDSPosition`, `TranscriptPosition`,
   `TranscriptSequenceDecorator`, and `CDSInterval` private and accessible
   through public getters.
 * Removing position type member of `CDSInterval`.

@@ -62,13 +62,13 @@ public final class HGVSPositionBuilder {
 
 			if (getCDSRegion().contains(pos)) {
 				// pos lies within the CDS, the easiest case
-				return Integer.toString(tPos.pos - tCDSStartPos.pos + 1);
+				return Integer.toString(tPos.getPos() - tCDSStartPos.getPos() + 1);
 			} else if (getCDSRegion().isRightOf(pos)) {
 				// pos lies upstream of the CDS
-				return StringUtil.concatenate("-", tCDSStartPos.pos - tPos.pos);
+				return StringUtil.concatenate("-", tCDSStartPos.getPos() - tPos.getPos());
 			} else {
 				// pos lies downstream of the CDS
-				return StringUtil.concatenate("*", tPos.pos - tCDSEndPos.pos);
+				return StringUtil.concatenate("*", tPos.getPos() - tCDSEndPos.getPos());
 			}
 		} catch (ProjectionException e) {
 			throw new Error("Bug: position must lie in CDS at this point. " + e.getMessage());
@@ -117,7 +117,7 @@ public final class HGVSPositionBuilder {
 		try {
 			TranscriptPosition tPos = projector.genomeToTranscriptPos(getCDSRegion().getGenomeBeginPos());
 			int numBases = transcript.txRegion.getGenomeBeginPos().differenceTo(pos);
-			return StringUtil.concatenate("-", tPos.pos + numBases);
+			return StringUtil.concatenate("-", tPos.getPos() + numBases);
 		} catch (ProjectionException e) {
 			throw new Error("CDS end position must be translatable to transcript position.");
 		}

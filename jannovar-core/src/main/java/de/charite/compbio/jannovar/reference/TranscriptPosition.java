@@ -12,9 +12,9 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public final class TranscriptPosition {
 
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 	/** the position within the transcript */
-	public final int pos;
+	private final int pos;
 
 	/** construct transcript position with one-based coordinate system */
 	public TranscriptPosition(TranscriptModel transcript, int pos) {
@@ -25,6 +25,16 @@ public final class TranscriptPosition {
 	public TranscriptPosition(TranscriptModel transcript, int pos, PositionType positionType) {
 		this.transcript = transcript;
 		this.pos = pos + ((positionType == PositionType.ONE_BASED) ? -1 : 0);
+	}
+
+	/** @return the transcript that this position is relative to */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/** @return the position within the transcript */
+	public int getPos() {
+		return pos;
 	}
 
 	/**

@@ -95,7 +95,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		} catch (ProjectionException e) {
 			throw new Error("Bug: at this point, the position must be a transcript position");
 		}
-		if (DuplicationChecker.isDuplication(transcript.sequence, change.alt, txPos.pos)) {
+		if (DuplicationChecker.isDuplication(transcript.sequence, change.alt, txPos.getPos())) {
 			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
