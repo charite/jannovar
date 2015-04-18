@@ -14,10 +14,15 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public final class TranscriptSequenceDecorator {
 
 	/** The wrapped {@link TranscriptInfo}. */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 
 	public TranscriptSequenceDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
+	}
+
+	/** @return the wrapped {@link TranscriptInfo} */
+	public TranscriptModel getTranscript() {
+		return transcript;
 	}
 
 	/**

@@ -30,8 +30,9 @@
 
 ### jannovar-core
 
-* Making members of `AminoAcidChange`, `CDSPosition`, and `CDSInterval`
-  private and accessible through public getters.
+* Making members of `AminoAcidChange`, `CDSPosition`,
+  `TranscriptSequenceDecorator`, and `CDSInterval` private and accessible
+  through public getters.
 * Removing position type member of `CDSInterval`.
 * Using type `Strand` instead of `'+'` and `'-'`, requires database rebuild.
 * Adding enum `Strand` with `PLUS` and `MINUS` values.
