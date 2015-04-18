@@ -40,18 +40,18 @@ public class CDSIntervalTest {
 	@Test
 	public void testConstructor() {
 		CDSInterval interval = new CDSInterval(this.infoForward, 23, 45);
-		Assert.assertEquals(interval.transcript, this.infoForward);
-		Assert.assertEquals(interval.beginPos, 23);
-		Assert.assertEquals(interval.endPos, 45);
+		Assert.assertEquals(interval.getTranscript(), this.infoForward);
+		Assert.assertEquals(interval.getBeginPos(), 23);
+		Assert.assertEquals(interval.getEndPos(), 45);
 		Assert.assertEquals(interval.length(), 22);
 	}
 
 	@Test
 	public void testConstructorOneBased() {
 		CDSInterval interval = new CDSInterval(this.infoForward, 23, 45, PositionType.ONE_BASED);
-		Assert.assertEquals(interval.transcript, this.infoForward);
-		Assert.assertEquals(interval.beginPos, 22);
-		Assert.assertEquals(interval.endPos, 45);
+		Assert.assertEquals(interval.getTranscript(), this.infoForward);
+		Assert.assertEquals(interval.getBeginPos(), 22);
+		Assert.assertEquals(interval.getEndPos(), 45);
 		Assert.assertEquals(interval.length(), 23);
 	}
 

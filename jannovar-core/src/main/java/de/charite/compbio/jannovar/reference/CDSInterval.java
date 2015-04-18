@@ -12,11 +12,11 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public final class CDSInterval {
 
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 	/** the begin position within the transcript */
-	public final int beginPos;
+	private final int beginPos;
 	/** the end position within the transcript */
-	public final int endPos;
+	private final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
 	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos) {
@@ -33,6 +33,21 @@ public final class CDSInterval {
 		else
 			this.beginPos = beginPos;
 		this.endPos = endPos;
+	}
+
+	/** @return the transcript that this position is relative to */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/** @return the begin position within the transcript */
+	public int getBeginPos() {
+		return beginPos;
+	}
+
+	/** @return the end position within the transcript */
+	public int getEndPos() {
+		return endPos;
 	}
 
 	/** returns length of the interval */
