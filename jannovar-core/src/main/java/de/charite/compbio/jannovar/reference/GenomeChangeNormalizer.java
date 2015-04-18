@@ -54,7 +54,7 @@ public final class GenomeChangeNormalizer {
 	public static GenomeChange normalizeInsertion(TranscriptModel transcript, GenomeChange change,
 			TranscriptPosition txPos) {
 		assert (change.ref.length() == 0);
-		if (change.pos.strand != transcript.getStrand()) // ensure that we have the correct strand
+		if (change.pos.getStrand() != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
 		// Insert the ALT bases at the position indicated by txPos.
@@ -108,7 +108,7 @@ public final class GenomeChangeNormalizer {
 			TranscriptPosition txPos) {
 		// TODO(holtgrem): check the splice site invariant?
 		assert (change.ref.length() != 0 && change.alt.length() == 0);
-		if (change.pos.strand != transcript.getStrand()) // ensure that we have the correct strand
+		if (change.pos.getStrand() != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
 		// Shift the deletion to the 3' (right) end of the transcript.

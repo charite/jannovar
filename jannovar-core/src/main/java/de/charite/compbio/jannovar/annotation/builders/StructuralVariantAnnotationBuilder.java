@@ -50,7 +50,7 @@ public final class StructuralVariantAnnotationBuilder {
 	public Annotation build() {
 		// Obtain shortcuts.
 		GenomePosition position = change.pos;
-		final int beginPos = position.pos;
+		final int beginPos = position.getPos();
 		final String ref = change.ref;
 		final String alt = change.alt;
 

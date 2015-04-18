@@ -49,14 +49,14 @@ public final class GenomeChange implements VariantDescription {
 			return;
 		}
 
-		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
+		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
 		if (corr.ref.equals("-"))
 			corr.ref = "";
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr,
+		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(),
 				corr.position, PositionType.ZERO_BASED);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
@@ -74,7 +74,7 @@ public final class GenomeChange implements VariantDescription {
 			Strand strand) {
 		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
 			this.pos = pos.withStrand(strand);
-			if (strand == pos.strand) {
+			if (strand == pos.getStrand()) {
 				this.ref = ref;
 				this.alt = alt;
 			} else {
@@ -85,14 +85,14 @@ public final class GenomeChange implements VariantDescription {
 		}
 
 		// Correct variant data.
-		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.pos);
+		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
 		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
 		if (corr.ref.equals("-"))
 			corr.ref = "";
 		if (corr.alt.equals("-"))
 			corr.alt = "";
 
-		if (strand == pos.strand) {
+		if (strand == pos.getStrand()) {
 			this.ref = corr.ref;
 			this.alt = corr.alt;
 		} else {
@@ -101,12 +101,12 @@ public final class GenomeChange implements VariantDescription {
 		}
 
 		int delta = 0;
-		if (strand != pos.strand && ref.length() == 0)
+		if (strand != pos.getStrand() && ref.length() == 0)
 			delta = -1;
-		else if (strand != pos.strand /* && ref.length() != 0 */)
+		else if (strand != pos.getStrand() /* && ref.length() != 0 */)
 			delta = ref.length() - 1;
 
-		this.pos = new GenomePosition(pos.refDict, pos.strand, pos.chr,
+		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(),
 				corr.position, PositionType.ZERO_BASED).shifted(delta)
 				.withStrand(strand);
 	}
@@ -136,11 +136,11 @@ public final class GenomeChange implements VariantDescription {
 	}
 
 	public String getChrName() {
-		return this.pos.refDict.contigName.get(this.pos.chr);
+		return this.pos.getRefDict().contigName.get(this.pos.getChr());
 	}
 
 	public int getPos() {
-		return this.pos.pos;
+		return this.pos.getPos();
 	}
 
 	public String getRef() {
@@ -155,7 +155,7 @@ public final class GenomeChange implements VariantDescription {
 	 * Construct object and enforce strand.
 	 */
 	public GenomeChange(GenomeChange other, Strand strand) {
-		if (strand == other.pos.strand) {
+		if (strand == other.pos.getStrand()) {
 			this.ref = other.ref;
 			this.alt = other.alt;
 		} else {
@@ -165,7 +165,7 @@ public final class GenomeChange implements VariantDescription {
 
 		// Get position as 0-based position.
 
-		if (strand == other.pos.strand) {
+		if (strand == other.pos.getStrand()) {
 			this.pos = other.pos;
 		} else {
 			this.pos = other.pos.shifted(this.ref.length() - 1).withStrand(
@@ -177,7 +177,7 @@ public final class GenomeChange implements VariantDescription {
 	 * @return numeric ID of chromosome this change is on
 	 */
 	public int getChr() {
-		return pos.chr;
+		return pos.getChr();
 	}
 
 	/**
@@ -202,14 +202,14 @@ public final class GenomeChange implements VariantDescription {
 	 */
 	@Override
 	public String toString() {
-		if (pos.strand != Strand.FWD)
+		if (pos.getStrand() != Strand.FWD)
 			return withStrand(Strand.FWD).toString();
 		else if (ref.equals("")) // handle insertion as special case
-			return Joiner.on("").join(pos.refDict.contigName.get(pos.chr),
-					":g.", pos.pos, "_", pos.pos + 1, "ins", alt);
+			return Joiner.on("").join(pos.getRefDict().contigName.get(pos.getChr()),
+					":g.", pos.getPos(), "_", pos.getPos() + 1, "ins", alt);
 		else if (alt.equals(""))
-			return Joiner.on("").join(pos.refDict.contigName.get(pos.chr),
-					":g.", pos.pos, "_", pos.pos + ref.length(), "del", ref);
+			return Joiner.on("").join(pos.getRefDict().contigName.get(pos.getChr()),
+					":g.", pos.getPos(), "_", pos.getPos() + ref.length(), "del", ref);
 		else
 			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref),
 					">", (alt.equals("") ? "-" : alt));
@@ -282,7 +282,7 @@ public final class GenomeChange implements VariantDescription {
 	 */
 	@Override
 	public int hashCode() {
-		if (pos != null && pos.strand != null && pos.strand.isReverse())
+		if (pos != null && pos.getStrand() != null && pos.getStrand().isReverse())
 			return withStrand(Strand.FWD).hashCode();
 		final int prime = 31;
 		int result = 1;
@@ -307,7 +307,7 @@ public final class GenomeChange implements VariantDescription {
 			return false;
 
 		GenomeChange other = (GenomeChange) obj;
-		if (pos != null && pos.strand != Strand.FWD)
+		if (pos != null && pos.getStrand() != Strand.FWD)
 			return withStrand(Strand.FWD).equals(obj);
 		other = other.withStrand(Strand.FWD);
 

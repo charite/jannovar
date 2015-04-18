@@ -81,8 +81,8 @@ public class GenomeChangeTest {
 	@Test
 	public void testConstructorStripLeading() {
 		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "AAA", "AAC");
-		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.strand,
-				this.genomePosOneBasedForward.chr, this.genomePosOneBasedForward.pos + 2, PositionType.ZERO_BASED);
+		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.getStrand(),
+				this.genomePosOneBasedForward.getChr(), this.genomePosOneBasedForward.getPos() + 2, PositionType.ZERO_BASED);
 		Assert.assertEquals(expectedPos, change.pos);
 		Assert.assertEquals("A", change.ref);
 		Assert.assertEquals("C", change.alt);
@@ -99,8 +99,8 @@ public class GenomeChangeTest {
 	@Test
 	public void testConstructorStripBoth() {
 		GenomeChange change = new GenomeChange(this.genomePosOneBasedForward, "GGACC", "GGCCC");
-		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.strand,
-				this.genomePosOneBasedForward.chr, this.genomePosOneBasedForward.pos + 2, PositionType.ZERO_BASED);
+		GenomePosition expectedPos = new GenomePosition(refDict, this.genomePosOneBasedForward.getStrand(),
+				this.genomePosOneBasedForward.getChr(), this.genomePosOneBasedForward.getPos() + 2, PositionType.ZERO_BASED);
 		Assert.assertEquals(expectedPos, change.pos);
 		Assert.assertEquals("A", change.ref);
 		Assert.assertEquals("C", change.alt);

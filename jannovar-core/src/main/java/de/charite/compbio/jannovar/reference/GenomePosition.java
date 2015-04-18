@@ -36,14 +36,14 @@ public final class GenomePosition implements Serializable,
 	private static final long serialVersionUID = 2L;
 
 	/** reference dictionary to use for coordinate translation */
-	public final ReferenceDictionary refDict;
+	private final ReferenceDictionary refDict;
 
 	/** the strand that the position is located on */
-	public final Strand strand;
+	private final Strand strand;
 	/** the chromosome number, as index in chromosome dictionary */
-	public final int chr;
+	private final int chr;
 	/** the position on the chromosome */
-	public final int pos;
+	private final int pos;
 
 	/** construct genome position with zero-based coordinate system */
 	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr,
@@ -85,6 +85,26 @@ public final class GenomePosition implements Serializable,
 			this.pos = other.pos;
 		else
 			this.pos = refDict.contigLength.get(other.chr) - other.pos - 1;
+	}
+
+	/** @return reference dictionary to use for coordinate translation */
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	/** @return the strand that the position is located on */
+	public Strand getStrand() {
+		return strand;
+	}
+
+	/** @return the chromosome number, as index in chromosome dictionary */
+	public int getChr() {
+		return chr;
+	}
+
+	/** @return the position on the chromosome */
+	public int getPos() {
+		return pos;
 	}
 
 	/** convert into GenomePosition of the given strand */
@@ -170,6 +190,8 @@ public final class GenomePosition implements Serializable,
 			pos = pos.withStrand(strand);
 		return (this.pos - pos.pos);
 	}
+	
+	// TODO(holtgrem): add differenceTo(GenomeInterval interval)
 
 	/**
 	 * Return shifted GenomePosition.

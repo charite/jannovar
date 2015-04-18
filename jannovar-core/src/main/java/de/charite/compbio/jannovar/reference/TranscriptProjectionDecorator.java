@@ -200,9 +200,9 @@ public final class TranscriptProjectionDecorator {
 	 *         region but in transcript interval
 	 */
 	public int locateIntron(GenomePosition pos) {
-		if (pos.chr != transcript.getChr()) // guard against different chromosomes
+		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
 			return INVALID_INTRON_ID;
-		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
+		if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region
@@ -231,9 +231,9 @@ public final class TranscriptProjectionDecorator {
 	 *         but in transcript interval
 	 */
 	public int locateExon(GenomePosition pos) {
-		if (pos.chr != transcript.getChr()) // guard against different chromosomes
+		if (pos.getChr() != transcript.getChr()) // guard against different chromosomes
 			return INVALID_EXON_ID;
-		if (pos.strand != transcript.getStrand()) // ensure pos is on the same strand
+		if (pos.getStrand() != transcript.getStrand()) // ensure pos is on the same strand
 			pos = pos.withStrand(transcript.getStrand());
 
 		// handle the case that the position is outside the transcript region

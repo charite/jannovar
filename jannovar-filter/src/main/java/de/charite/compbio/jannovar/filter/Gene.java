@@ -45,7 +45,7 @@ class Gene {
 	private GenomeInterval mergeRegions(GenomeInterval lhs, GenomeInterval rhs) {
 		lhs = lhs.withStrand(Strand.FWD);
 		rhs = rhs.withStrand(Strand.FWD);
-		return new GenomeInterval(lhs.getGenomeBeginPos().refDict, Strand.FWD, lhs.getGenomeBeginPos().chr, Math.min(
+		return new GenomeInterval(lhs.getGenomeBeginPos().getRefDict(), Strand.FWD, lhs.getGenomeBeginPos().getChr(), Math.min(
 				lhs.beginPos, rhs.beginPos), Math.max(lhs.endPos, rhs.endPos));
 	}
 
