@@ -128,17 +128,17 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
 			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.pos / 3);
+			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.getPos() / 3);
 
 			// protect against going behind transcript
 			// "(...+2)/3" => round up integer division result
-			final int wtAAEndPos = Math.min((changeLastPos.pos + 1 + 2) / 3, wtAASeq.length());
-			final String delAA = wtAASeq.substring(changeBeginPos.pos / 3, wtAAEndPos);
+			final int wtAAEndPos = Math.min((changeLastPos.getPos() + 1 + 2) / 3, wtAASeq.length());
+			final String delAA = wtAASeq.substring(changeBeginPos.getPos() / 3, wtAAEndPos);
 			final int delta = (changeBeginPos.getFrameshift() == 0 ? 0 : 1);
 			// protect against going behind transcript
-			final int varAAEndPos = Math.min(changeBeginPos.pos / 3 + delta, varAASeq.length());
-			final String insAA = varAASeq.substring(changeBeginPos.pos / 3, varAAEndPos);
-			this.aaChange = new AminoAcidChange(changeBeginPos.pos / 3, delAA, insAA);
+			final int varAAEndPos = Math.min(changeBeginPos.getPos() / 3 + delta, varAASeq.length());
+			final String insAA = varAASeq.substring(changeBeginPos.getPos() / 3, varAAEndPos);
+			this.aaChange = new AminoAcidChange(changeBeginPos.getPos() / 3, delAA, insAA);
 			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(this.aaChange);
 			this.aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, this.aaChange);
 		}
@@ -169,7 +169,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.STOP_LOST);
 
 			// Differentiate the cases disruptive and a non-disruptive deletions.
-			if (changeBeginPos.pos % 3 == 0)
+			if (changeBeginPos.getPos() % 3 == 0)
 				varTypes.add(VariantEffect.INFRAME_DELETION);
 			else
 				varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_DELETION);

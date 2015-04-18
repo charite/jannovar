@@ -92,7 +92,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.
-		int frameShift = cdsPos.pos % 3;
+		int frameShift = cdsPos.getPos() % 3;
 		// Get the transcript codon. From this, we generate the WT and the variant codon. This is important in the case
 		// where the transcript differs from the reference. This inconsistency of the reference and the transcript is
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
@@ -112,7 +112,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// Construct annotation part for the protein.
 		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
 		String varAA = Translator.getTranslator().translateDNA3(varCodon);
-		String protAnno = StringUtil.concatenate("p.", wtAA, cdsPos.pos / 3 + 1, varAA);
+		String protAnno = StringUtil.concatenate("p.", wtAA, cdsPos.getPos() / 3 + 1, varAA);
 		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
 			protAnno = StringUtil.concatenate("p.=");
 
@@ -129,8 +129,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.STOP_LOST);
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
-				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
-				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.pos / 3);
+				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
+				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.getPos() / 3);
 			}
 		}
 		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.

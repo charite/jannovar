@@ -178,9 +178,9 @@ public final class TranscriptSequenceChangeHelper {
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(cdsSeq);
 		if (change.getType() == GenomeChangeType.SNV)
-			builder.setCharAt(cdsChangePos.pos, change.alt.charAt(0));
+			builder.setCharAt(cdsChangePos.getPos(), change.alt.charAt(0));
 		else
-			builder.insert(cdsChangePos.pos, change.alt);
+			builder.insert(cdsChangePos.getPos(), change.alt);
 		return builder.toString();
 	}
 
@@ -206,8 +206,8 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(cdsSeq);
-		builder.delete(cdsChangeBeginPos.pos, cdsChangeEndPos.pos);
-		builder.insert(cdsChangeBeginPos.pos, change.alt);
+		builder.delete(cdsChangeBeginPos.getPos(), cdsChangeEndPos.getPos());
+		builder.insert(cdsChangeBeginPos.getPos(), change.alt);
 		return builder.toString();
 	}
 }

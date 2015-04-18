@@ -73,7 +73,7 @@ class VCFAnnotationData {
 		this.txLength = annoLoc.transcript.txRegion.length();
 
 		try {
-			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).pos;
+			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).getPos();
 			this.cdsLength = transcript.cdsTranscriptLength();
 		} catch (ProjectionException e) {
 			// e.printStackTrace();

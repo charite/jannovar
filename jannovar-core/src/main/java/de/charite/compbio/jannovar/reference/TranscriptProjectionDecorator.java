@@ -134,7 +134,7 @@ public final class TranscriptProjectionDecorator {
 			}
 		}
 
-		return new TranscriptPosition(transcript, currPos + pos.pos);
+		return new TranscriptPosition(transcript, currPos + pos.getPos());
 	}
 
 	/**

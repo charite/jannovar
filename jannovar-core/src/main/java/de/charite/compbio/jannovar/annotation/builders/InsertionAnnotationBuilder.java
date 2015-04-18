@@ -175,13 +175,13 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
-			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.pos / 3);
+			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.getPos() / 3);
 			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*', this.insertPos.pos / 3);
+			this.varAAStopPos = varAASeq.indexOf('*', this.insertPos.getPos() / 3);
 
 			// Build initial aaChange. This is correct for non-FS insertions, and the first affected bases for FS
 			// insertions
-			final int insertAAPos = this.insertPos.pos / 3;
+			final int insertAAPos = this.insertPos.getPos() / 3;
 			final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
 			int insertAALength = ((change.alt.length() + 2) / 3) + delta;
 			if (insertAAPos + insertAALength > varAASeq.length())
@@ -352,7 +352,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					varTypes.add(VariantEffect.STOP_GAINED);
 
 					// Differentiate the case of disruptive and non-disruptive insertions.
-					if (insertPos.pos % 3 == 0)
+					if (insertPos.getPos() % 3 == 0)
 						varTypes.add(VariantEffect.INFRAME_INSERTION);
 					else
 						varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
@@ -414,7 +414,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		 */
 		private void addNonFrameshiftInsertionEffect() {
 			// Differentiate the case of disruptive and non-disruptive insertions.
-			if (insertPos.pos % 3 == 0)
+			if (insertPos.getPos() % 3 == 0)
 				varTypes.add(VariantEffect.INFRAME_INSERTION);
 			else
 				varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_INSERTION);
