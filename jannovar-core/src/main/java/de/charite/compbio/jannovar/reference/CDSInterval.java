@@ -11,8 +11,6 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 @Immutable
 public final class CDSInterval {
 
-	/** the selected coordinate system (0-based, 1-based) */
-	public final PositionType positionType;
 	/** the transcript that this position is relative to */
 	public final TranscriptModel transcript;
 	/** the begin position within the transcript */
@@ -22,7 +20,6 @@ public final class CDSInterval {
 
 	/** construct transcript interval with one-based coordinate system */
 	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos) {
-		this.positionType = PositionType.ONE_BASED;
 		this.transcript = transcript;
 		this.beginPos = beginPos;
 		this.endPos = endPos;
@@ -30,29 +27,17 @@ public final class CDSInterval {
 
 	/** construct transcript interval with selected coordinate system */
 	public CDSInterval(TranscriptModel transcript, int beginPos, int endPos, PositionType positionType) {
-		this.positionType = positionType;
 		this.transcript = transcript;
-		this.beginPos = beginPos;
+		if (positionType == PositionType.ONE_BASED)
+			this.beginPos = beginPos - 1;
+		else
+			this.beginPos = beginPos;
 		this.endPos = endPos;
-	}
-
-	/** construct transcript interval from other with selected coordinate system */
-	public CDSInterval(CDSInterval other, PositionType positionType) {
-		this.positionType = positionType;
-		this.transcript = other.transcript;
-		this.endPos = other.endPos;
-
-		int beginPos = other.beginPos;
-		if (other.positionType == PositionType.ZERO_BASED && this.positionType == PositionType.ONE_BASED)
-			beginPos += 1;
-		else if (other.positionType == PositionType.ONE_BASED && this.positionType == PositionType.ZERO_BASED)
-			beginPos -= 1;
-		this.beginPos = beginPos;
 	}
 
 	/** returns length of the interval */
 	public int length() {
-		return this.endPos - this.beginPos + (positionType == PositionType.ONE_BASED ? 1 : 0);
+		return this.endPos - this.beginPos;
 	}
 
 	/*
@@ -62,8 +47,7 @@ public final class CDSInterval {
 	 */
 	@Override
 	public String toString() {
-		int beginPos = this.beginPos + (positionType == PositionType.ZERO_BASED ? 1 : 0);
-		return StringUtil.concatenate(this.transcript.accession, ":c.", beginPos, "-", endPos);
+		return StringUtil.concatenate(this.transcript.accession, ":c.", beginPos + 1, "-", endPos);
 	}
 
 	/*
@@ -77,7 +61,6 @@ public final class CDSInterval {
 		int result = 1;
 		result = prime * result + beginPos;
 		result = prime * result + endPos;
-		result = prime * result + ((positionType == null) ? 0 : positionType.hashCode());
 		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
 		return result;
 	}
@@ -99,8 +82,6 @@ public final class CDSInterval {
 		if (beginPos != other.beginPos)
 			return false;
 		if (endPos != other.endPos)
-			return false;
-		if (positionType != other.positionType)
 			return false;
 		if (transcript == null) {
 			if (other.transcript != null)
