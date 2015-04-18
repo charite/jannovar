@@ -207,7 +207,6 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		return true;
 	}
 
-	@Override
 	public int compareTo(TranscriptModel o) {
 		int result = -1;
 		if (geneID != null && o.geneID != null) {

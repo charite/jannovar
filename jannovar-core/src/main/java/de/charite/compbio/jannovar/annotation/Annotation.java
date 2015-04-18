@@ -222,32 +222,26 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return effects.first();
 	}
 
-	@Override
 	public String getChrName() {
 		return change.getChrName();
 	}
 
-	@Override
 	public int getChr() {
 		return change.getChr();
 	}
 
-	@Override
 	public int getPos() {
 		return change.getPos();
 	}
 
-	@Override
 	public String getRef() {
 		return change.getRef();
 	}
 
-	@Override
 	public String getAlt() {
 		return change.getAlt();
 	}
 
-	@Override
 	public int compareTo(Annotation other) {
 		if (getMostPathogenicVarType() == null && getMostPathogenicVarType() == other.getMostPathogenicVarType())
 			return 0;

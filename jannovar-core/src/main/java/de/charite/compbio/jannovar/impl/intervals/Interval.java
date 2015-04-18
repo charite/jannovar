@@ -106,7 +106,6 @@ public class Interval<T> implements java.io.Serializable, Comparable<Interval<T>
 		return true;
 	}
 
-	@Override
 	public int compareTo(Interval<T> o) {
 		final int result = (begin - o.begin);
 		if (result == 0)

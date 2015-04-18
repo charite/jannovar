@@ -127,7 +127,6 @@ public class UCSCParser implements TranscriptParser {
 		this.knownGeneMap = new HashMap<String, TranscriptModelBuilder>();
 	}
 
-	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Build paths to UCSC files.
 		final String knownGenePath = PathUtil.join(basePath, getINIFileName("knownGene"));

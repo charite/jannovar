@@ -263,7 +263,6 @@ public final class FeatureProcessor {
 		 * end positions are the same. According to the used {@link Collator}, the exon is smaller/bigger if the
 		 * chromosom differs.
 		 */
-		@Override
 		public int compareTo(GFFStruct o) {
 			if (chromosom == o.chromosom) {
 

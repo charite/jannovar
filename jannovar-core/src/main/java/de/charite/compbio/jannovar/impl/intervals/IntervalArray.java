@@ -105,7 +105,6 @@ public final class IntervalArray<T> implements Serializable {
 	private T findRightNeighbor(int point) {
 		final Interval<T> query = new Interval<T>(point, point, null, point);
 		int idx = Collections.binarySearch(intervals, query, new Comparator<Interval<T>>() {
-			@Override
 			public int compare(Interval<T> o1, Interval<T> o2) {
 				return (o1.begin - o2.begin);
 			}
@@ -127,7 +126,6 @@ public final class IntervalArray<T> implements Serializable {
 	private T findLeftNeighbor(int point) {
 		final Interval<T> query = new Interval<T>(point, point, null, point);
 		int idx = Collections.binarySearch(intervalsEnd, query, new Comparator<Interval<T>>() {
-			@Override
 			public int compare(Interval<T> o1, Interval<T> o2) {
 				return (o1.end - o2.end);
 			}
@@ -321,7 +319,6 @@ public final class IntervalArray<T> implements Serializable {
 		void buildIntervalsEnd() {
 			// sort by (end, begin)
 			Collections.sort(tmpList, new Comparator<MutableInterval<T>>() {
-				@Override
 				public int compare(MutableInterval<T> o1, MutableInterval<T> o2) {
 					final int result = (o1.end - o2.end);
 					if (result == 0)

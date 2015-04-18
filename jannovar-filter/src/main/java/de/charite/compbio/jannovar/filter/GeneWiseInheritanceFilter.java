@@ -105,7 +105,6 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	/**
 	 * Main entry function for filter, see {@link VariantContextFilter#put} for more information.
 	 */
-	@Override
 	public void put(FlaggedVariant vc) throws FilterException {
 		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc.vc });
 
@@ -230,7 +229,6 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 *
 	 * See {@link VariantContextFilter#finish} for more details.
 	 */
-	@Override
 	public void finish() throws FilterException {
 		// perform a final round of tests on all currently active genes
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
@@ -338,7 +336,6 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
 		// sort done by coordinate
 		Collections.sort(done, new Comparator<FlaggedVariantCounter>() {
-			@Override
 			public int compare(FlaggedVariantCounter lhs, FlaggedVariantCounter rhs) {
 				return (lhs.var.vc.getStart() - rhs.var.vc.getStart());
 			}

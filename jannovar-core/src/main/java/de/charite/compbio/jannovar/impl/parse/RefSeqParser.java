@@ -59,7 +59,6 @@ public class RefSeqParser implements TranscriptParser {
 		this.printProgressBars = printProgressBars;
 	}
 
-	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Parse GFF file, yielding a list of features.
 		LOGGER.info("Parsing GFF...");

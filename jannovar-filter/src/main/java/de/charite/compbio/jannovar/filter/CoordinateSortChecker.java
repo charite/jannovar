@@ -31,7 +31,6 @@ public class CoordinateSortChecker implements VariantContextFilter {
 		this.nextFilter = filter;
 	}
 
-	@Override
 	public void put(FlaggedVariant fv) throws FilterException {
 		VariantContext vc = fv.vc;
 
@@ -52,7 +51,6 @@ public class CoordinateSortChecker implements VariantContextFilter {
 		prevVC = vc;
 	}
 
-	@Override
 	public void finish() throws FilterException {
 		nextFilter.finish();
 	}

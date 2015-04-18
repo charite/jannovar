@@ -72,7 +72,6 @@ public class MutableInterval<T> implements java.io.Serializable, Comparable<Muta
 		return true;
 	}
 
-	@Override
 	public int compareTo(MutableInterval<T> o) {
 		final int result = (begin - o.begin);
 		if (result == 0)

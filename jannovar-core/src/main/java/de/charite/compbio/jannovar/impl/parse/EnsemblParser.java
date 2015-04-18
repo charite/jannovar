@@ -59,7 +59,6 @@ public class EnsemblParser implements TranscriptParser {
 		this.printProgressBars = printProgressBars;
 	}
 
-	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Parse GTF file, yielding a list of features.
 		LOGGER.info("Parsing GTF...");

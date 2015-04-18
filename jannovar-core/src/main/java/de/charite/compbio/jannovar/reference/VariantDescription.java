@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.reference;
 
+import de.charite.compbio.jannovar.annotation.Annotation;
+
 /**
  * Minimal description of a variant as triple (position, ref, alt).
  *
@@ -30,5 +32,7 @@ public interface VariantDescription {
 	 * @return String with the alternative allele in the variant, without common suffix or prefix to reference allele.
 	 */
 	public String getAlt();
+
+	int compareTo(Annotation other);
 
 }

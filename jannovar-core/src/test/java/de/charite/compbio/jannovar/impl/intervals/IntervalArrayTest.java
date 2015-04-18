@@ -28,7 +28,6 @@ public class IntervalArrayTest {
 			return "Triple [beginPos=" + beginPos + ", endPos=" + endPos + ", text=" + text + "]";
 		}
 
-		@Override
 		public int compareTo(Triple o) {
 			final int result = (beginPos - o.beginPos);
 			if (result != 0)
@@ -78,12 +77,10 @@ public class IntervalArrayTest {
 
 	class TripleEndExtractor implements IntervalEndExtractor<Triple> {
 
-		@Override
 		public int getBegin(Triple triple) {
 			return triple.beginPos;
 		}
 
-		@Override
 		public int getEnd(Triple triple) {
 			return triple.endPos;
 		}

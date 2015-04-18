@@ -52,7 +52,6 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 		this.personNames = namesBuilder.build();
 	}
 
-	@Override
 	public void put(FlaggedVariant fv) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 
@@ -105,7 +104,6 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 		}
 	}
 
-	@Override
 	public void finish() throws FilterException {
 		next.finish();
 	}
