@@ -31,8 +31,12 @@
 ### jannovar-core
 
 * Making members of `AminoAcidChange`, `CDSPosition`, `TranscriptPosition`,
-  `TranscriptSequenceDecorator`, and `CDSInterval` private and accessible
-  through public getters.
+  `TranscriptSequenceDecorator`, `TranscriptInterval`, and `CDSInterval`
+  private and accessible through public getters.
+* Renaming `TranscriptInterval.getBeginPos()` and
+  `TranscriptInterval.getEndPos()` to
+  `TranscriptInterval.getTranscriptBeginPos()` and
+  `TranscriptInterval.getTranscriptEndPos()`.
 * Removing position type member of `CDSInterval`.
 * Using type `Strand` instead of `'+'` and `'-'`, requires database rebuild.
 * Adding enum `Strand` with `PLUS` and `MINUS` values.

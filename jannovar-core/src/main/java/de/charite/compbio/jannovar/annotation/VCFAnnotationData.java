@@ -66,9 +66,9 @@ class VCFAnnotationData {
 		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		final TranscriptPosition txPos;
 		if (annoLoc != null && annoLoc.txLocation.length() == 0)
-			txPos = annoLoc.txLocation.getBeginPos().shifted(-1); // change length == 0, insertion
+			txPos = annoLoc.txLocation.getTranscriptBeginPos().shifted(-1); // change length == 0, insertion
 		else
-			txPos = annoLoc.txLocation.getBeginPos(); // all other variants
+			txPos = annoLoc.txLocation.getTranscriptBeginPos(); // all other variants
 		this.txPos = txPos.getPos();
 		this.txLength = annoLoc.transcript.txRegion.length();
 
