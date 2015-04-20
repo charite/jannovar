@@ -1,9 +1,17 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar;
 
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Genotype;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Person;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
@@ -18,14 +26,9 @@ import com.google.common.collect.ImmutableMap;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerAutosomalRecessiveCompoundHet {
+public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatibilityChecker {
 
-	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
-
-	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
-
+	
 	/** list of siblings for each person in {@link #pedigree} */
 	public final ImmutableMap<Person, ImmutableList<Person>> siblings;
 
@@ -47,16 +50,7 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 	 */
 	public CompatibilityCheckerAutosomalRecessiveCompoundHet(Pedigree pedigree, GenotypeList list)
 			throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree (" + pedigree.getNames()
-					+ ") and genotype list (" + list.names + ")");
-		if (list.calls.get(0).size() == 0)
-			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
-
-		this.pedigree = pedigree;
-		this.list = list;
+		super(pedigree, list);
 		this.siblings = buildSiblings(pedigree);
 	}
 

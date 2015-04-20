@@ -1,6 +1,8 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
 import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
 
 /**
  * Exception that occurs when using invalid {@link GenotypeList} or {@link Pedigree} objects in the compatibility

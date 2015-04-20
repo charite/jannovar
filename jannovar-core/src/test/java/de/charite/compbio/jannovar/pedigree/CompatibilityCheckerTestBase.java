@@ -3,6 +3,11 @@ package de.charite.compbio.jannovar.pedigree;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.CompatibilityCheckerAutosomalDominant;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.CompatibilityCheckerAutosomalRecessive;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.CompatibilityCheckerXDominant;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.CompatibilityCheckerXRecessive;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 
 /** Base class for compatibility checkers with utility methods. */

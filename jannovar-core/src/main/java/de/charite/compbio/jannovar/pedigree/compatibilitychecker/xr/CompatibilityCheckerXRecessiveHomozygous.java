@@ -1,46 +1,47 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Genotype;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
+import de.charite.compbio.jannovar.pedigree.Person;
+import de.charite.compbio.jannovar.pedigree.Sex;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
- * {@link Pedigree} and X recessive mode of inheritance.
+ * {@link Pedigree} and autosomal recessive homozygous mode.
  *
  * <h2>Compatibility Check</h2>
  *
- * If the pedigree has only one sample then the check is as follows. If the
- * index is female, the checker returns true if the genotype call list is
- * compatible with autosomal recessive compound heterozygous inheritance or if
- * the list contains a homozygous alt call. If the index is male then return
- * true if the list contains a homozygous alt call.
+ * In the case of a single individual, we require
+ * {@link Genotype#HOMOZYGOUS_ALT}.
  *
- * If the pedigree has more samples, the checks are more involved.
- *
- * <b>Note</b> that the case of X-chromosomal compound heterozygous mutations is
- * only handled in the single case. For larger pedigrees we assume that female
- * individuals are not affected. Otherwise it will be a dominant mutation,
- * because only affected males can be heredity the variant. De-novo mutations
- * will be handled also from dominant compatibility checker. If the gene is
- * recessive some have to look for the second mutation by its own.
+ * In the case of multiple individuals, we require that the affects are
+ * compatible, that the unaffected parents of affected individuals are not
+ * {@link Genotype#HOMOZYGOUS_ALT}, unaffected females are not are not
+ * {@link Genotype#HOMOZYGOUS_REF}, and that all unaffected individuals are not
+ * {@link Genotype#HOMOZYGOUS_ALT}. The affected individuals are compatible if
+ * no affected individual is {@link Genotype#HOMOZYGOUS_REF} or
+ * {@link Genotype#HETEROZYGOUS} and there is at least one affected individual
+ * that is {@link Genotype#HOMOZYGOUS_ALT}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerXRecessive {
-
-	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
-
-	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
+class CompatibilityCheckerXRecessiveHomozygous extends ACompatibilityChecker {
 
 	/**
 	 * decorator for getting unaffected individuals and such from the
 	 * {@link Pedigree}
 	 */
-	private final PedigreeQueryDecorator queryDecorator;
+	protected final PedigreeQueryDecorator queryDecorator;
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -58,35 +59,26 @@ class CompatibilityCheckerXRecessive {
 	 * @throws CompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
-	public CompatibilityCheckerXRecessive(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
-		if (list.calls.get(0).size() == 0)
-			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
+	public CompatibilityCheckerXRecessiveHomozygous(Pedigree pedigree, GenotypeList list)
+			throws CompatibilityCheckerException {
+		super(pedigree, list);
 
-		this.pedigree = pedigree;
-		this.list = list;
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
 	}
 
-	public boolean run() throws CompatibilityCheckerException {
-		if (!list.isXChromosomal)
-			return false;
-		else if (pedigree.members.size() == 1)
+	/**
+	 * @return <code>true</code> if {@link #list} is compatible with
+	 *         {@link #pedigree} and the recessive homozygous mode of
+	 *         inheritances.
+	 */
+	public boolean run() {
+		if (pedigree.members.size() == 1)
 			return runSingleSampleCase();
 		else
 			return runMultiSampleCase();
 	}
 
-	private boolean runSingleSampleCase() throws CompatibilityCheckerException {
-		// for female single case samples, allow autosomal recessive compound
-		// heterozygous
-		if (pedigree.members.get(0).sex == Sex.FEMALE)
-			if (new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run())
-				return true;
-
+	private boolean runSingleSampleCase() {
 		// for both male and female subjects, return true if homozygous alt
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
@@ -156,7 +148,8 @@ class CompatibilityCheckerXRecessive {
 									// already checked!
 				if (person.sex == Sex.FEMALE && (gt == Genotype.HOMOZYGOUS_ALT || gt == Genotype.HOMOZYGOUS_REF))
 					return false; // cannot be disease-causing mutation if
-									// mother of patient is homozygous or not the carrier
+									// mother of patient is homozygous or not
+									// the carrier
 			} else if (maleParentNames.contains(person.name)) {
 				if (person.sex == Sex.MALE && person.disease == Disease.UNAFFECTED
 						&& (gt == Genotype.HOMOZYGOUS_ALT || gt != Genotype.HETEROZYGOUS))
