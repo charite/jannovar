@@ -54,20 +54,19 @@ public class CompatibilityCheckerXDominant extends ACompatibilityChecker {
 	public boolean run() throws CompatibilityCheckerException {
 		if (!list.isXChromosomal)
 			return false;
-		else if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
+		return super.run();
 	}
 
-	private boolean runSingleSampleCase() throws CompatibilityCheckerException {
+	@Override
+	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		if (pedigree.members.get(0).sex == Sex.FEMALE)
 			return new CompatibilityCheckerAutosomalDominant(pedigree, list).run();
 		else
 			return new CompatibilityCheckerXRecessive(pedigree, list).run();
 	}
-
-	private boolean runMultiSampleCase() {
+	
+	@Override
+	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			boolean currentVariantCompatible = true; // current variant compatible with XD?
 			int numAffectedWithMut = 0;

@@ -74,21 +74,8 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		return mapBuilder.build();
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with
-	 *         {@link #pedigree} and the recessive compound hererozygous mode of
-	 *         inheritances.
-	 * @throws CompatibilityCheckerException
-	 *             if the pedigree or variant list is invalid
-	 */
-	public boolean run() throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
-	}
-
-	private boolean runSingleSampleCase() {
+	@Override
+	public boolean runSingleSampleCase() {
 		int numHet = 0;
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
@@ -111,7 +98,8 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		}
 	}
 
-	private boolean runMultiSampleCase() {
+	@Override
+	public boolean runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.
 		ArrayList<Candidate> candidates = collectTrioCandidates();

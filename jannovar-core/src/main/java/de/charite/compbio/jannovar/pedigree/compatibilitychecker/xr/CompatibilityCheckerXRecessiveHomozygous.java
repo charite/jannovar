@@ -66,19 +66,8 @@ class CompatibilityCheckerXRecessiveHomozygous extends ACompatibilityChecker {
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with
-	 *         {@link #pedigree} and the recessive homozygous mode of
-	 *         inheritances.
-	 */
-	public boolean run() {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
-	}
-
-	private boolean runSingleSampleCase() {
+	@Override
+	public boolean runSingleSampleCase() {
 		// for both male and female subjects, return true if homozygous alt
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
@@ -87,7 +76,8 @@ class CompatibilityCheckerXRecessiveHomozygous extends ACompatibilityChecker {
 		return false;
 	}
 
-	private boolean runMultiSampleCase() {
+	@Override
+	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			// Check whether this list of genotype calls is compatible when with
 			// the set of affected individuals, the

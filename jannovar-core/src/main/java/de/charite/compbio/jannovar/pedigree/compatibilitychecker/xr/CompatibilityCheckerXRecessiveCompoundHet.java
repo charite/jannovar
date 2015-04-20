@@ -53,28 +53,20 @@ class CompatibilityCheckerXRecessiveCompoundHet extends ACompatibilityChecker {
 		super(pedigree, list);
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with
-	 *         {@link #pedigree} and the recessive homozygous mode of
-	 *         inheritances.
-	 * @throws CompatibilityCheckerException 
-	 */
-	public boolean run() throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-//		else
-//			return runMultiSampleCase();
-		// FIXME Multisample case is needed.
-		return false;
+	@Override
+	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
+		// for female single case samples, allow autosomal recessive compound
+				// heterozygous
+				if (pedigree.members.get(0).sex == Sex.FEMALE)
+					if (new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run())
+						return true;
+
+				return false;
 	}
 
-	private boolean runSingleSampleCase() throws CompatibilityCheckerException {
-		// for female single case samples, allow autosomal recessive compound
-		// heterozygous
-		if (pedigree.members.get(0).sex == Sex.FEMALE)
-			if (new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run())
-				return true;
-
+	@Override
+	public boolean runMultiSampleCase() {
+		// FIXME Multisample case is needed.
 		return false;
 	}
 

@@ -53,7 +53,8 @@ public class CompatibilityCheckerXRecessive extends ACompatibilityChecker {
 	public CompatibilityCheckerXRecessive(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
 		super(pedigree, list);
 	}
-
+	
+	@Override
 	public boolean run() throws CompatibilityCheckerException {
 		if (!list.isXChromosomal)
 			return false;
@@ -61,6 +62,16 @@ public class CompatibilityCheckerXRecessive extends ACompatibilityChecker {
 			return true;
 		else
 			return new CompatibilityCheckerXRecessiveCompoundHet(pedigree, list).run();
+	}
+
+	@Override
+	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
+		return false;
+	}
+
+	@Override
+	public boolean runMultiSampleCase() {
+		return false;
 	}
 	
 }

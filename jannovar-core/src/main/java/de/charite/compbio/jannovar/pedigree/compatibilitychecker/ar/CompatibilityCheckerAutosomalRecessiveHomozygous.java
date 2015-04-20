@@ -51,25 +51,16 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 		super(pedigree, list);
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the recessive homozygous mode
-	 *         of inheritances.
-	 */
-	public boolean run() {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
-	}
-
-	private boolean runSingleSampleCase() {
+	@Override
+	public boolean runSingleSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
 				return true;
 		return false;
 	}
 
-	private boolean runMultiSampleCase() {
+	@Override
+	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (containsCompatibleHomozygousVariants(gtList))
 				return true;

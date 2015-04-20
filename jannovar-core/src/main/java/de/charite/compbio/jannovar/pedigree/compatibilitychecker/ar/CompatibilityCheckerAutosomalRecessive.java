@@ -41,11 +41,22 @@ public class CompatibilityCheckerAutosomalRecessive extends ACompatibilityChecke
 		super(pedigree, list);
 	}
 
+	@Override
 	public boolean run() throws CompatibilityCheckerException {
 		if (new CompatibilityCheckerAutosomalRecessiveHomozygous(pedigree, list).run())
 			return true;
 		else
 			return new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run();
+	}
+
+	@Override
+	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
+		return false;
+	}
+
+	@Override
+	public boolean runMultiSampleCase() {
+		return false;
 	}
 
 }

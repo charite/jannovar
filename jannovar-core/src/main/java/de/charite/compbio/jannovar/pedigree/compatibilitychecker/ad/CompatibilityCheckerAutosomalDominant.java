@@ -46,18 +46,8 @@ public class CompatibilityCheckerAutosomalDominant extends ACompatibilityChecker
 		super(pedigree, list);
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the autosomal dominant mode
-	 *         of inheritances.
-	 */
-	public boolean run() {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
-	}
-
-	private boolean runSingleSampleCase() {
+	@Override
+	public boolean runSingleSampleCase() {
 		// We could also allow Genotye.HOMOZYGOUS_ALT here but that is not the interesting case.
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
@@ -65,7 +55,8 @@ public class CompatibilityCheckerAutosomalDominant extends ACompatibilityChecker
 		return false;
 	}
 
-	private boolean runMultiSampleCase() {
+	@Override
+	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			boolean currentVariantCompatible = true; // current variant compatible with AD?
 			int numAffectedWithHet = 0;

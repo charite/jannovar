@@ -3,15 +3,15 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 
-
 /**
- * Abstract helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree}.
+ * Abstract helper class for checking a {@link GenotypeList} for compatibility
+ * with a {@link Pedigree}.
  * 
  * This class summarizes the builder compatibility checks.
  *
  * @author Max Schubach <max.schubach@charite.de>
  */
-public class ACompatibilityChecker {
+public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 
 	/** the pedigree to use for the checking */
 	public final Pedigree pedigree;
@@ -22,9 +22,11 @@ public class ACompatibilityChecker {
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
-	 * The {@link GenotypeList} object passed to the constructor is expected to represent all of the variants found in a
-	 * certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented by the
-	 * {@link GenotypeList} must be in the same order as the list of individuals contained in this pedigree.
+	 * The {@link GenotypeList} object passed to the constructor is expected to
+	 * represent all of the variants found in a certain gene (possibly after
+	 * filtering for rarity or predicted pathogenicity). The samples represented
+	 * by the {@link GenotypeList} must be in the same order as the list of
+	 * individuals contained in this pedigree.
 	 *
 	 * @param pedigree
 	 *            the {@link Pedigree} to use for the initialize
@@ -43,5 +45,16 @@ public class ACompatibilityChecker {
 
 		this.pedigree = pedigree;
 		this.list = list;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.ICompatibilityChecker#run()
+	 */
+	public boolean run() throws CompatibilityCheckerException {
+		if (pedigree.members.size() == 1)
+			return runSingleSampleCase();
+		else
+			return runMultiSampleCase();
 	}
 }
