@@ -262,7 +262,7 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 
 		// none of the unaffected siblings may have the same genotypes
 		// as p
-		if (siblings != null && !siblings.isEmpty())
+		if (siblings != null && !siblings.isEmpty() && siblings.containsKey(p))
 		for (Person sibling : siblings.get(p))
 			if (sibling.disease == Disease.UNAFFECTED) {
 				final Genotype pGT = paternal.get(pedigree.nameToMember.get(sibling.name).idx);
