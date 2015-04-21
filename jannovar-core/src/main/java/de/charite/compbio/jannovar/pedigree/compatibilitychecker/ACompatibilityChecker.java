@@ -1,7 +1,12 @@
 package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Person;
 
 /**
  * Abstract helper class for checking a {@link GenotypeList} for compatibility
@@ -18,6 +23,21 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 
 	/** the genotype call list to use for the checking */
 	public final GenotypeList list;
+	
+	/**
+	 * Collects list of compatible mutations from father an mother for compound heterozygous.
+	 */
+	protected class Candidate {
+		/** one VCF record compatible with mutation in father */
+		public final ImmutableList<Genotype> paternal;
+		/** one VCF record compatible with mutation in mother */
+		public final ImmutableList<Genotype> maternal;
+
+		public Candidate(ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
+			this.paternal = paternal;
+			this.maternal = maternal;
+		}
+	}
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -56,5 +76,26 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 			return runSingleSampleCase();
 		else
 			return runMultiSampleCase();
+	}
+	
+	
+	/**
+	 * @return siblig map for each person in <code>pedigree</code>, both parents
+	 *         must be in <code>pedigree</code> and the same
+	 */
+	protected static ImmutableMap<Person, ImmutableList<Person>> buildSiblings(Pedigree pedigree) {
+		ImmutableMap.Builder<Person, ImmutableList<Person>> mapBuilder = new ImmutableMap.Builder<Person, ImmutableList<Person>>();
+		for (Person p1 : pedigree.members) {
+			if (p1.mother == null || p1.father == null)
+				continue;
+			ImmutableList.Builder<Person> listBuilder = new ImmutableList.Builder<Person>();
+			for (Person p2 : pedigree.members) {
+				if (p1.equals(p2) || !p1.mother.equals(p2.mother) || !p1.father.equals(p2.father))
+					continue;
+				listBuilder.add(p2);
+			}
+			mapBuilder.put(p1, listBuilder.build());
+		}
+		return mapBuilder.build();
 	}
 }

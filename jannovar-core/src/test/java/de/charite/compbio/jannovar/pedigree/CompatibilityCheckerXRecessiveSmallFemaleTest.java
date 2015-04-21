@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.pedigree;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -107,8 +106,6 @@ public class CompatibilityCheckerXRecessiveSmallFemaleTest extends Compatibility
 		Assert.assertTrue(buildCheckerXR(lst(HET, UKN, UKN, UKN)).run());
 		Assert.assertTrue(buildCheckerXR(lst(UKN, UKN, UKN, ALT)).run());
 	}
-	
-	@Ignore
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
 

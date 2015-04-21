@@ -15,11 +15,11 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
- * {@link Pedigree} and autosomal recessive compound mode of inheritance.
+ * {@link Pedigree} and autosomal recessive compound het mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
  *
- * In the case of a single individual, we require at least two heterozygous
+ * In the case of a single individual, we require at least two  {@link Genotype#HETEROZYGOUS}
  * genotype calls.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
@@ -54,25 +54,7 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		this.siblings = buildSiblings(pedigree);
 	}
 
-	/**
-	 * @return siblig map for each person in <code>pedigree</code>, both parents
-	 *         must be in <code>pedigree</code> and the same
-	 */
-	private static ImmutableMap<Person, ImmutableList<Person>> buildSiblings(Pedigree pedigree) {
-		ImmutableMap.Builder<Person, ImmutableList<Person>> mapBuilder = new ImmutableMap.Builder<Person, ImmutableList<Person>>();
-		for (Person p1 : pedigree.members) {
-			if (p1.mother == null || p1.father == null)
-				continue;
-			ImmutableList.Builder<Person> listBuilder = new ImmutableList.Builder<Person>();
-			for (Person p2 : pedigree.members) {
-				if (p1.equals(p2) || !p1.mother.equals(p2.mother) || !p1.father.equals(p2.father))
-					continue;
-				listBuilder.add(p2);
-			}
-			mapBuilder.put(p1, listBuilder.build());
-		}
-		return mapBuilder.build();
-	}
+	
 
 	@Override
 	public boolean runSingleSampleCase() {
@@ -83,20 +65,7 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		return (numHet > 1);
 	}
 
-	/**
-	 * Collects list of compatible mutations from father an mother.
-	 */
-	private class Candidate {
-		/** one VCF record compatible with mutation in father */
-		public final ImmutableList<Genotype> paternal;
-		/** one VCF record compatible with mutation in mother */
-		public final ImmutableList<Genotype> maternal;
 
-		public Candidate(ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
-			this.paternal = paternal;
-			this.maternal = maternal;
-		}
-	}
 
 	@Override
 	public boolean runMultiSampleCase() {
@@ -248,8 +217,8 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		// the paternal variant may not be homozygous in the father of
 		// p, if any
 		if (paternal != null && p.father != null) {
-			final Genotype mGT = paternal.get(pedigree.nameToMember.get(p.father.name).idx);
-			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+			final Genotype pGT = paternal.get(pedigree.nameToMember.get(p.father.name).idx);
+			if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
 				return false;
 		}
 
