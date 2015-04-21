@@ -218,49 +218,58 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		int pIdx = 0;
 		for (Person p : pedigree.members) {
 			if (p.disease == Disease.AFFECTED) {
-				// none of the genotypes from the paternal or maternal call
-				// lists may be homozygous in the index
-				if (c.paternal != null) {
-					final Genotype pGT = c.paternal.get(pIdx);
-					if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
-						return false;
-				}
-				if (c.maternal != null) {
-					final Genotype mGT = c.maternal.get(pIdx);
-					if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
-						return false;
-				}
 
-				// the paternal variant may not be homozygous in the father of
-				// p, if any
-				if (c.paternal != null && p.father != null) {
-					final Genotype mGT = c.paternal.get(pedigree.nameToMember.get(p.father.name).idx);
-					if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+				if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.paternal, c.maternal))
+					if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.maternal, c.paternal))
 						return false;
-				}
-
-				// the maternal variant may not be homozygous in the mother of
-				// p, if any
-				if (c.maternal != null && p.mother != null) {
-					final Genotype mGT = c.maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
-					if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
-						return false;
-				}
-
-				// none of the unaffected siblings may have the same genotypes
-				// as p
-				if (siblings != null && !siblings.isEmpty())
-				for (Person sibling : siblings.get(p))
-					if (sibling.disease == Disease.UNAFFECTED) {
-						final Genotype pGT = c.paternal.get(pedigree.nameToMember.get(sibling.name).idx);
-						final Genotype mGT = c.maternal.get(pedigree.nameToMember.get(sibling.name).idx);
-						if (pGT == Genotype.HETEROZYGOUS && mGT == Genotype.HETEROZYGOUS)
-							return false;
-					}
 			}
 			pIdx++;
 		}
 
+		return true;
+	}
+
+	private boolean isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(int pIdx, Person p,
+			ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
+		// none of the genotypes from the paternal or maternal call
+		// lists may be homozygous in the index
+		if (paternal != null) {
+			final Genotype pGT = paternal.get(pIdx);
+			if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+		if (maternal != null) {
+			final Genotype mGT = maternal.get(pIdx);
+			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+
+		// the paternal variant may not be homozygous in the father of
+		// p, if any
+		if (paternal != null && p.father != null) {
+			final Genotype mGT = paternal.get(pedigree.nameToMember.get(p.father.name).idx);
+			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+
+		// the maternal variant may not be homozygous in the mother of
+		// p, if any
+		if (maternal != null && p.mother != null) {
+			final Genotype mGT = maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
+			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+
+		// none of the unaffected siblings may have the same genotypes
+		// as p
+		if (siblings != null && !siblings.isEmpty())
+		for (Person sibling : siblings.get(p))
+			if (sibling.disease == Disease.UNAFFECTED) {
+				final Genotype pGT = paternal.get(pedigree.nameToMember.get(sibling.name).idx);
+				final Genotype mGT = maternal.get(pedigree.nameToMember.get(sibling.name).idx);
+				if (pGT == Genotype.HETEROZYGOUS && mGT == Genotype.HETEROZYGOUS)
+					return false;
+			}
 		return true;
 	}
 

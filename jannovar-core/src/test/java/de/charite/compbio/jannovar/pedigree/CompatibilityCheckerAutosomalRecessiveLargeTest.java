@@ -15,12 +15,12 @@ public class CompatibilityCheckerAutosomalRecessiveLargeTest extends Compatibili
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // grandgrandfather
 		individuals.add(new PedPerson("ped", "I.2", "0", "0", Sex.FEMALE, Disease.UNAFFECTED)); // grandgrandmother
-		individuals.add(new PedPerson("ped", "II.1", "I.1", "I.1", Sex.FEMALE, Disease.UNAFFECTED)); // parent1
-		individuals.add(new PedPerson("ped", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.AFFECTED)); // parent3
-		individuals.add(new PedPerson("ped", "II.3", "I.1", "I.2", Sex.FEMALE, Disease.UNKNOWN)); // parent4
-		individuals.add(new PedPerson("ped", "II.4", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // parent5
-		individuals.add(new PedPerson("ped", "III.1", "II.4", "II.1", Sex.MALE, Disease.UNAFFECTED)); // child1
-		individuals.add(new PedPerson("ped", "III.2", "0", "II.2", Sex.MALE, Disease.UNAFFECTED)); // child2
+		individuals.add(new PedPerson("ped", "II.1", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // parent1
+		individuals.add(new PedPerson("ped", "II.2", "I.1", "I.2", Sex.FEMALE, Disease.UNAFFECTED)); // parent2
+		individuals.add(new PedPerson("ped", "II.3", "I.1", "I.2", Sex.FEMALE, Disease.AFFECTED)); // parent3
+		individuals.add(new PedPerson("ped", "II.4", "I.1", "I.2", Sex.FEMALE, Disease.UNKNOWN)); // parent4
+		individuals.add(new PedPerson("ped", "III.1", "II.1", "II.2", Sex.MALE, Disease.UNAFFECTED)); // child1
+		individuals.add(new PedPerson("ped", "III.2", "0", "II.3", Sex.MALE, Disease.UNAFFECTED)); // child2
 		individuals.add(new PedPerson("ped", "IV.1", "III.1", "0", Sex.FEMALE, Disease.AFFECTED)); // baby1
 		individuals.add(new PedPerson("ped", "IV.2", "III.2", "0", Sex.FEMALE, Disease.UNAFFECTED)); // baby2
 		PedFileContents pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(),
@@ -42,13 +42,13 @@ public class CompatibilityCheckerAutosomalRecessiveLargeTest extends Compatibili
 		Assert.assertFalse(buildCheckerAR(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT)).run());
 		Assert.assertFalse(buildCheckerAR(lst(UKN, UKN, UKN, UKN, UKN, UKN, UKN, UKN, UKN, UKN)).run());
 
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, ALT, UKN, REF, HET, HET, ALT, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, UKN, HET, HET, ALT, REF)).run());
 
 		// at least one hom_alt
-		Assert.assertFalse(buildCheckerAR(lst(HET, HET, HET, UKN, UKN, REF, HET, HET, UKN, REF)).run());
+		Assert.assertFalse(buildCheckerAR(lst(HET, HET, REF, HET, UKN, UKN, HET, HET, UKN, REF)).run());
 
 		// Only one UKN has ALT is not sufficient!
-		Assert.assertFalse(buildCheckerAR(lst(HET, HET, HET, UKN, ALT, REF, HET, HET, UKN, REF)).run());
+		Assert.assertFalse(buildCheckerAR(lst(HET, HET, REF, HET, UKN, ALT, HET, HET, UKN, REF)).run());
 
 	}
 
@@ -58,25 +58,29 @@ public class CompatibilityCheckerAutosomalRecessiveLargeTest extends Compatibili
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, ALT, UKN, REF, HET, HET, ALT, REF)).run());
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, ALT, REF, REF, HET, HET, ALT, REF)).run());
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, ALT, ALT, REF, HET, HET, ALT, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, UKN, HET, HET, ALT, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, REF, HET, HET, ALT, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, ALT, HET, HET, ALT, REF)).run());
 
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, ALT, REF, REF, HET, HET, UKN, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, REF, HET, HET, UKN, REF)).run());
 
-		// correct inheritance!II.4 is now HET.
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, ALT, UKN, HET, HET, HET, ALT, REF)).run());
-		// False inheritance II.2 or II.4 must be HET/UKN (or ALT and affected).
+		// correct inheritance from II.1/2 to III.1=> II.1 is now HET.
+		// but false inheritance from I.1/2 to II.2 (cause II.3 is alt, II.2 must be het).
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, REF, ALT, UKN, HET, HET, ALT, REF)).run());
+		// correct inheritance from II.1/2 to III.1. II.1 must have the same allele affected than II.2
+		// correct inheritance from I.1/2 to II.2.
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, HET, HET, ALT, UKN, HET, HET, ALT, REF)).run());
+		// False inheritance II.1 or II.2 must be HET/UKN (or ALT and affected).
 		// But it is (very unlikely) a de-novo mutation in III.1.
-		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, ALT, UKN, REF, HET, HET, ALT, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, REF, ALT, UKN, HET, HET, ALT, REF)).run());
 	}
 
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
-		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, HET, UKN, REF, REF, REF, HET, REF),
-										 lst(REF, HET, REF, HET, UKN, HET, HET, REF, HET, REF)).run());
-		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, HET, UKN, REF, REF, REF, HET, REF),
-										 lst(REF, HET, REF, HET, UKN, HET, HET, REF, HET, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF),
+										 lst(REF, HET, HET, REF, HET, UKN, HET, REF, HET, REF)).run());
+		Assert.assertTrue(buildCheckerAR(lst(REF, HET, REF, HET, HET, UKN, HET, HET, HET, REF),
+										 lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF)).run());
 	}
 
 }
