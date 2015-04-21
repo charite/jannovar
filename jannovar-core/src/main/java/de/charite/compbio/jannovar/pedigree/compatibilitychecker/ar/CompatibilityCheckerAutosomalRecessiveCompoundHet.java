@@ -218,7 +218,8 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		int pIdx = 0;
 		for (Person p : pedigree.members) {
 			if (p.disease == Disease.AFFECTED) {
-
+				//we have to check this for paternal,maternal and vice versa. 
+				// Paternal maternal inheritance can be different for other parents in the pedigree. 
 				if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.paternal, c.maternal))
 					if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.maternal, c.paternal))
 						return false;
