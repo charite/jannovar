@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar.pedigree;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -11,9 +10,6 @@ public class CompatibilityCheckerXRecessiveSmallFemaleTest extends Compatibility
 
 	@Before
 	public void setUp() throws PedParseException {
-		// STUPID PEDIGREE! The male must be affected. Otherwise it can only be
-		// a de-novo second second hit. But we do not want to cover special
-		// cases. So this case should always return no variant!
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "I.1", "0", "0", Sex.MALE, Disease.AFFECTED)); // father
 		individuals.add(new PedPerson("ped", "I.2", "0", "0", Sex.FEMALE, Disease.UNAFFECTED)); // mother
@@ -108,7 +104,6 @@ public class CompatibilityCheckerXRecessiveSmallFemaleTest extends Compatibility
 		Assert.assertTrue(buildCheckerXR(lst(HET, UKN, UKN, UKN)).run());
 		Assert.assertTrue(buildCheckerXR(lst(UKN, UKN, UKN, ALT)).run());
 	}
-	@Ignore
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
 

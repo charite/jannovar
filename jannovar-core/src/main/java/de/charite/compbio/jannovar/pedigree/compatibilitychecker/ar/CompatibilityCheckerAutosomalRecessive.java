@@ -1,4 +1,9 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar;
+
+import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
@@ -15,13 +20,7 @@ package de.charite.compbio.jannovar.pedigree;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerAutosomalRecessive {
-
-	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
-
-	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
+public class CompatibilityCheckerAutosomalRecessive extends ACompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -39,23 +38,25 @@ class CompatibilityCheckerAutosomalRecessive {
 	 */
 	public CompatibilityCheckerAutosomalRecessive(Pedigree pedigree, GenotypeList list)
 			throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree (" + pedigree.getNames()
-					+ ") and genotype list (" + list.names + ")");
-		if (list.calls.get(0).size() == 0)
-			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
-
-		this.pedigree = pedigree;
-		this.list = list;
+		super(pedigree, list);
 	}
 
+	@Override
 	public boolean run() throws CompatibilityCheckerException {
 		if (new CompatibilityCheckerAutosomalRecessiveHomozygous(pedigree, list).run())
 			return true;
 		else
 			return new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run();
+	}
+
+	@Override
+	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
+		return false;
+	}
+
+	@Override
+	public boolean runMultiSampleCase() {
+		return false;
 	}
 
 }

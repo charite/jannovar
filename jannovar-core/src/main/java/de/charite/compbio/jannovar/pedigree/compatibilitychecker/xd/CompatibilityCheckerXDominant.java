@@ -1,6 +1,16 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd;
 
 import com.google.common.collect.ImmutableList;
+
+import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Genotype;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Sex;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.CompatibilityCheckerAutosomalDominant;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.CompatibilityCheckerXRecessive;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and X dominant mode of
@@ -15,13 +25,7 @@ import com.google.common.collect.ImmutableList;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerXDominant {
-
-	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
-
-	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
+public class CompatibilityCheckerXDominant extends ACompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -38,16 +42,7 @@ class CompatibilityCheckerXDominant {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public CompatibilityCheckerXDominant(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
-		if (list.calls.get(0).size() == 0)
-			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
-
-		this.pedigree = pedigree;
-		this.list = list;
-		new PedigreeQueryDecorator(pedigree);
+		super(pedigree, list);
 	}
 
 	/**
@@ -59,20 +54,19 @@ class CompatibilityCheckerXDominant {
 	public boolean run() throws CompatibilityCheckerException {
 		if (!list.isXChromosomal)
 			return false;
-		else if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
+		return super.run();
 	}
 
-	private boolean runSingleSampleCase() throws CompatibilityCheckerException {
+	@Override
+	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		if (pedigree.members.get(0).sex == Sex.FEMALE)
 			return new CompatibilityCheckerAutosomalDominant(pedigree, list).run();
 		else
 			return new CompatibilityCheckerXRecessive(pedigree, list).run();
 	}
-
-	private boolean runMultiSampleCase() {
+	
+	@Override
+	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			boolean currentVariantCompatible = true; // current variant compatible with XD?
 			int numAffectedWithMut = 0;
