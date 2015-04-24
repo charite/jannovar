@@ -82,7 +82,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	}
 
 	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
-		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]+)>([ACGTN]+)");
+		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
 		Matcher match = pat.matcher(changeStr);
 
 		if (!match.matches()) {
