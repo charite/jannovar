@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;

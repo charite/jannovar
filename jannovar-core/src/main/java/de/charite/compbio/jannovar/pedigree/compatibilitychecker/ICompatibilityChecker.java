@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
+import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
+
 public interface ICompatibilityChecker {
 
 	/**
