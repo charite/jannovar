@@ -46,43 +46,30 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public static final String INFO_HGVS = "HGVS Nomenclature";
 
 	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
-	public final static String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
+	public static final String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
 			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
 			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'";
 
 	/** the annotated {@link GenomeChange} */
-	public final GenomeChange change;
+	private final GenomeChange change;
 
 	/** variant types, sorted by internal pathogenicity score */
-	public final ImmutableSortedSet<VariantEffect> effects;
+	private final ImmutableSortedSet<VariantEffect> effects;
 
 	/** errors and warnings */
-	public final ImmutableSortedSet<AnnotationMessage> messages;
-
-	/**
-	 * @return highest {@link PutativeImpact} of all {@link #effects}.
-	 */
-	public final PutativeImpact getPutativeImpact() {
-		if (effects.isEmpty())
-			return null;
-		VariantEffect worst = effects.first();
-		for (VariantEffect vt : effects)
-			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
-				worst = vt;
-		return worst.getImpact();
-	}
+	private final ImmutableSortedSet<AnnotationMessage> messages;
 
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
-	public final AnnotationLocation annoLoc;
+	private final AnnotationLocation annoLoc;
 
 	/** HGVS nucleotide variant annotation */
-	public final String ntHGVSDescription;
+	private final String ntHGVSDescription;
 
 	/** amino acid variant annotation */
-	public final String aaHGVSDescription;
+	private final String aaHGVSDescription;
 
 	/** the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 
 	/**
 	 * Initialize object with messages only.
@@ -92,6 +79,54 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 */
 	public Annotation(Collection<AnnotationMessage> messages) {
 		this(null, null, null, null, null, null, messages);
+	}
+
+	/** @return the annotated {@link GenomeChange} */
+	public GenomeChange getChange() {
+		return change;
+	}
+
+	/** @return variant types, sorted by internal pathogenicity score */
+	public ImmutableSortedSet<VariantEffect> getEffects() {
+		return effects;
+	}
+
+	/** @return errors and warnings */
+	public ImmutableSortedSet<AnnotationMessage> getMessages() {
+		return messages;
+	}
+
+	/** @return location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
+	public AnnotationLocation getAnnoLoc() {
+		return annoLoc;
+	}
+
+	/** @return HGVS nucleotide variant annotation */
+	public String getNucleotideHGVSDescription() {
+		return ntHGVSDescription;
+	}
+
+	/** @return amino acid variant annotation */
+	public String getAminoAcidHGVSDescription() {
+		return aaHGVSDescription;
+	}
+
+	/** @return the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/**
+	 * @return highest {@link PutativeImpact} of all {@link #effects}.
+	 */
+	public PutativeImpact getPutativeImpact() {
+		if (effects.isEmpty())
+			return null;
+		VariantEffect worst = effects.first();
+		for (VariantEffect vt : effects)
+			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
+				worst = vt;
+		return worst.getImpact();
 	}
 
 	/**
@@ -192,10 +227,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * @return gene symbol or <code>"."</code>
 	 */
 	public String getGeneSymbol() {
-		if (transcript == null || transcript.geneSymbol == null)
+		if (transcript == null || transcript.getGeneSymbol() == null)
 			return ".";
 		else
-			return transcript.geneSymbol;
+			return transcript.getGeneSymbol();
 	}
 
 	/**
@@ -210,7 +245,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		if (transcript == null)
 			return null;
 		return Joiner.on(":").skipNulls()
-				.join(transcript.geneSymbol, transcript.accession, ntHGVSDescription, aaHGVSDescription);
+				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription, aaHGVSDescription);
 	}
 
 	/**
@@ -222,32 +257,26 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return effects.first();
 	}
 
-	@Override
 	public String getChrName() {
 		return change.getChrName();
 	}
 
-	@Override
 	public int getChr() {
 		return change.getChr();
 	}
 
-	@Override
 	public int getPos() {
 		return change.getPos();
 	}
 
-	@Override
 	public String getRef() {
 		return change.getRef();
 	}
 
-	@Override
 	public String getAlt() {
 		return change.getAlt();
 	}
 
-	@Override
 	public int compareTo(Annotation other) {
 		if (getMostPathogenicVarType() == null && getMostPathogenicVarType() == other.getMostPathogenicVarType())
 			return 0;
@@ -273,7 +302,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	@Override
 	public String toString() {
 		return "Annotation [change=" + change + ", effects=" + effects + ", ntHGVSDescription=" + ntHGVSDescription
-				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.accession=" + transcript.accession + "]";
+				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.getAccession()=" + transcript.getAccession() + "]";
 	}
 
 	@Override

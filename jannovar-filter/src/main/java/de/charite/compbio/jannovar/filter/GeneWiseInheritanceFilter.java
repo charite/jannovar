@@ -35,7 +35,8 @@ import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * A {@link VariantContext} filter that collects variants for each genes and then checks for compatibility.
+ * A {@link VariantContext} filter that collects variants for each genes and
+ * then checks for compatibility.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -72,8 +73,8 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		this.checker = new PedigreeDiseaseCompatibilityDecorator(pedigree);
 
 		ImmutableList.Builder<String> namesBuilder = new ImmutableList.Builder<String>();
-		for (Person p : pedigree.members)
-			namesBuilder.add(p.name);
+		for (Person p : pedigree.getMembers())
+			namesBuilder.add(p.getName());
 		this.personNames = namesBuilder.build();
 	}
 
@@ -87,12 +88,12 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	private static GeneList buildGeneList(JannovarData jannovarDB) {
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
-		for (Chromosome chrom : jannovarDB.chromosomes.values())
-			for (Interval<TranscriptModel> itv : chrom.tmIntervalTree.intervals) {
-				TranscriptModel tm = itv.value;
-				if (!geneMap.containsKey(tm.geneSymbol))
-					geneMap.put(tm.geneSymbol, new GeneBuilder(jannovarDB.refDict, tm.geneSymbol));
-				geneMap.get(tm.geneSymbol).addTranscriptModel(tm);
+		for (Chromosome chrom : jannovarDB.getChromosomes().values())
+			for (Interval<TranscriptModel> itv : chrom.getTmIntervalTree().getIntervals()) {
+				TranscriptModel tm = itv.getValue();
+				if (!geneMap.containsKey(tm.getGeneSymbol()))
+					geneMap.put(tm.getGeneSymbol(), new GeneBuilder(jannovarDB.getRefDict(), tm.getGeneSymbol()));
+				geneMap.get(tm.getGeneSymbol()).addTranscriptModel(tm);
 			}
 
 		// construct GeneList from geneMap
@@ -103,22 +104,22 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	}
 
 	/**
-	 * Main entry function for filter, see {@link VariantContextFilter#put} for more information.
+	 * Main entry function for filter, see {@link VariantContextFilter#put} for
+	 * more information.
 	 */
-	@Override
 	public void put(FlaggedVariant vc) throws FilterException {
-		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc.vc });
+		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc.getVC() });
 
-		final ReferenceDictionary refDict = jannovarDB.refDict;
+		final ReferenceDictionary refDict = jannovarDB.getRefDict();
 		// TODO(holtgrew): for now, we simply ignore variants on contigs unknown to us, this has to be fixed
-		if (!refDict.contigID.containsKey(vc.vc.getChr()))
+		if (!refDict.getContigNameToID().containsKey(vc.getVC().getChr()))
 			return;
-		final int contigID = refDict.contigID.get(vc.vc.getChr());
-		IntervalArray<Gene> iTree = geneList.gIntervalTree.get(contigID);
+		final int contigID = refDict.getContigNameToID().get(vc.getVC().getChr());
+		IntervalArray<Gene> iTree = geneList.getGeneIntervalTree().get(contigID);
 
 		// consider each alternative allele of the variant
-		for (int alleleID = 0; alleleID < vc.vc.getAlternateAlleles().size(); ++alleleID) {
-			final GenomeChange change = getGenomeChangeFromAltAllele(vc.vc, alleleID);
+		for (int alleleID = 0; alleleID < vc.getVC().getAlternateAlleles().size(); ++alleleID) {
+			final GenomeChange change = getGenomeChangeFromAltAllele(vc.getVC(), alleleID);
 
 			// query the gene interval tree for overlapping genes
 			final GenomeInterval changeInterval = change.getGenomeInterval();
@@ -128,43 +129,44 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			else
 				qr = iTree.findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
 
-			for (Gene gene : qr.entries)
+			for (Gene gene : qr.getEntries())
 				if (isGeneAffectedByChange(gene, change))
 					putVariantForGene(vc, gene);
 		}
 
 		// write out all variants left of variant
-		markDoneGenes(contigID, vc.vc.getStart() - 1);
+		markDoneGenes(contigID, vc.getVC().getStart() - 1);
 	}
 
 	/**
 	 * Register {@link FlaggedVariant} as active for the given gene.
 	 */
 	private void putVariantForGene(FlaggedVariant vc, Gene gene) {
-		LOGGER.trace("Assigning variant {} to gene {}", new Object[] { vc.vc, gene });
+		LOGGER.trace("Assigning variant {} to gene {}", new Object[] { vc.getVC(), gene });
 		// register variant as active
 		if (!activeVariants.containsKey(vc))
 			activeVariants.put(vc, new FlaggedVariantCounter(vc, 1));
 		else
-			activeVariants.get(vc).count += 1;
+			activeVariants.get(vc).setCount(activeVariants.get(vc).getCount() + 1);
 
 		// create new GenotypeListBuilder for the gene if necessary
 		if (!activeGenes.containsKey(gene))
-			activeGenes.put(gene, new GenotypeListBuilder(gene.name, personNames));
+			activeGenes.put(gene, new GenotypeListBuilder(gene.getName(), personNames));
 
 		// register Genotypes for vc
 		putGenotypes(vc, gene);
 	}
 
 	/**
-	 * Construct {@link GenomeChange} from one allele in a {@link VariantContext}.
+	 * Construct {@link GenomeChange} from one allele in a
+	 * {@link VariantContext}.
 	 */
 	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
-		final int contigID = jannovarDB.refDict.contigID.get(vc.getChr());
+		final int contigID = jannovarDB.getRefDict().getContigNameToID().get(vc.getChr());
 		final String ref = vc.getReference().getBaseString();
 		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeChange(new GenomePosition(jannovarDB.refDict, Strand.FWD, contigID, pos,
+		return new GenomeChange(new GenomePosition(jannovarDB.getRefDict(), Strand.FWD, contigID, pos,
 				PositionType.ONE_BASED), ref, alt);
 	}
 
@@ -172,7 +174,8 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * Mark genes left of <code>(contigID, pos)</code> as done.
 	 *
 	 * @param contigID
-	 *            numeric contig ID, as taken from {@link JannovarDB#refDict} from {@link #jannovarDB}.
+	 *            numeric contig ID, as taken from {@link JannovarDB#refDict}
+	 *            from {@link #jannovarDB}.
 	 * @param pos
 	 *            zero-based position on the given contig
 	 * @throws FilterException
@@ -182,9 +185,9 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
 		for (Map.Entry<Gene, GenotypeListBuilder> entry : activeGenes.entrySet()) {
 			Gene gene = entry.getKey();
-			if (gene.region.chr != contigID)
+			if (gene.getRegion().chr != contigID)
 				doneGenes.add(gene);
-			else if (gene.region.endPos <= pos)
+			else if (gene.getRegion().endPos <= pos)
 				doneGenes.add(gene);
 		}
 
@@ -195,7 +198,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	}
 
 	private void putGenotypes(FlaggedVariant fv, Gene gene) {
-		final VariantContext vc = fv.vc;
+		final VariantContext vc = fv.getVC();
 		for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
 			Allele currAlt = vc.getAlternateAllele(i);
 
@@ -230,7 +233,6 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 *
 	 * See {@link VariantContextFilter#finish} for more details.
 	 */
-	@Override
 	public void finish() throws FilterException {
 		// perform a final round of tests on all currently active genes
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
@@ -243,7 +245,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			processedGene(gene);
 
 		for (FlaggedVariantCounter fvc : activeVariants.values())
-			LOGGER.trace("Variant remains {} with count {}", new Object[] { fvc.var.vc, fvc.count });
+			LOGGER.trace("Variant remains {} with count {}", new Object[] { fvc.getVar().getVC(), fvc.getCount() });
 
 		// there should be no more active variants or genes
 		if (!activeVariants.isEmpty())
@@ -253,9 +255,11 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	}
 
 	/**
-	 * Mark currently buffered variants that are located in <code>gene</code> as "included".
+	 * Mark currently buffered variants that are located in <code>gene</code> as
+	 * "included".
 	 *
-	 * Called when we found out that the variants in <code>gene</code> are compatible with {@link #modeOfInheritance}.
+	 * Called when we found out that the variants in <code>gene</code> are
+	 * compatible with {@link #modeOfInheritance}.
 	 *
 	 * @param gene
 	 *            the {@link Gene} to mark the variants for
@@ -263,42 +267,45 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	private void markVariantsInGeneAsCompatible(Gene gene) {
 		LOGGER.trace("Marking variants in {} as compatible", new Object[] { gene });
 		for (FlaggedVariantCounter var : activeVariants.values()) {
-			for (int alleleID = 0; alleleID < var.var.vc.getAlternateAlleles().size(); ++alleleID) {
-				if (isGeneAffectedByChange(gene, getGenomeChangeFromAltAllele(var.var.vc, alleleID))) {
-					LOGGER.trace("Including variant {}", new Object[] { var.var.vc });
-					var.var.setIncluded(true);
+			for (int alleleID = 0; alleleID < var.getVar().getVC().getAlternateAlleles().size(); ++alleleID) {
+				if (isGeneAffectedByChange(gene, getGenomeChangeFromAltAllele(var.getVar().getVC(), alleleID))) {
+					LOGGER.trace("Including variant {}", new Object[] { var.getVar().getVC() });
+					var.getVar().setIncluded(true);
 				}
 			}
 		}
 	}
 
 	/**
-	 * Utility function to test whether a {@link Gene} is affected by a {@link GenomeChage}.
+	 * Utility function to test whether a {@link Gene} is affected by a
+	 * {@link GenomeChage}.
 	 *
 	 * @param gene
 	 *            to use for the check
 	 * @param change
 	 *            to use for the check
-	 * @return <code>true</code> if <code>gene</code> is affected by <code>change</code>
+	 * @return <code>true</code> if <code>gene</code> is affected by
+	 *         <code>change</code>
 	 */
 	private static boolean isGeneAffectedByChange(Gene gene, GenomeChange change) {
 		final GenomeInterval changeInterval = change.getGenomeInterval();
-		if (changeInterval.length() == 0 && gene.region.contains(changeInterval.getGenomeBeginPos())
-				&& gene.region.contains(changeInterval.getGenomeBeginPos().shifted(-1)))
+		if (changeInterval.length() == 0 && gene.getRegion().contains(changeInterval.getGenomeBeginPos())
+				&& gene.getRegion().contains(changeInterval.getGenomeBeginPos().shifted(-1)))
 			return false;
-		else if (changeInterval.length() != 0 && gene.region.overlapsWith(changeInterval))
+		else if (changeInterval.length() != 0 && gene.getRegion().overlapsWith(changeInterval))
 			return true;
 		return false;
 	}
 
 	/**
-	 * Builds genotype call lists for variants in currently active genes, checks for compatibility, and in case of
-	 * compatibility, marks variants in <code>gene</code> as compatible.
+	 * Builds genotype call lists for variants in currently active genes, checks
+	 * for compatibility, and in case of compatibility, marks variants in
+	 * <code>gene</code> as compatible.
 	 */
 	private void checkVariantsForGene(Gene gene) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
-		boolean isXChromosomal = (gene.refDict.contigID.get("chrX") != null && gene.refDict.contigID.get("chrX")
-				.intValue() == gene.region.chr);
+		boolean isXChromosomal = (gene.getRefDict().getContigNameToID().get("chrX") != null && gene.getRefDict().getContigNameToID().get(
+				"chrX").intValue() == gene.getRegion().chr);
 		GenotypeList lst = activeGenes.get(gene).setIsXChromosomal(isXChromosomal).build();
 		try {
 			if (checker.isCompatibleWith(lst, modeOfInheritance))
@@ -323,35 +330,34 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		ArrayList<FlaggedVariantCounter> done = new ArrayList<FlaggedVariantCounter>();
 		for (FlaggedVariantCounter var : activeVariants.values()) {
 			int sum = 0;
-			for (int alleleID = 0; alleleID < var.var.vc.getAlternateAlleles().size(); ++alleleID) {
-				if (isGeneAffectedByChange(gene, getGenomeChangeFromAltAllele(var.var.vc, alleleID))) {
-					LOGGER.trace("Gene {} done for variant {}", new Object[] { var.var.vc, gene });
+			for (int alleleID = 0; alleleID < var.getVar().getVC().getAlternateAlleles().size(); ++alleleID) {
+				if (isGeneAffectedByChange(gene, getGenomeChangeFromAltAllele(var.getVar().getVC(), alleleID))) {
+					LOGGER.trace("Gene {} done for variant {}", new Object[] { var.getVar().getVC(), gene });
 					sum += 1;
 				}
 			}
 			if (sum > 0) {
-				var.count -= sum;
-				if (var.count == 0)
+				var.setCount(var.getCount() - sum);
+				if (var.getCount() == 0)
 					done.add(var);
 			}
 		}
 
 		// sort done by coordinate
 		Collections.sort(done, new Comparator<FlaggedVariantCounter>() {
-			@Override
 			public int compare(FlaggedVariantCounter lhs, FlaggedVariantCounter rhs) {
-				return (lhs.var.vc.getStart() - rhs.var.vc.getStart());
+				return (lhs.getVar().getVC().getStart() - rhs.getVar().getVC().getStart());
 			}
 		});
 
 		// remove done variants and write out if passing
 		for (FlaggedVariantCounter var : done) {
-			activeVariants.remove(var.var);
-			if (var.var.isIncluded()) {
-				LOGGER.trace("Keeping variant {}", new Object[] { var.var.vc });
-				next.put(var.var);
+			activeVariants.remove(var.getVar());
+			if (var.getVar().isIncluded()) {
+				LOGGER.trace("Keeping variant {}", new Object[] { var.getVar().getVC() });
+				next.put(var.getVar());
 			} else {
-				LOGGER.trace("Removing variant {}", new Object[] { var.var.vc });
+				LOGGER.trace("Removing variant {}", new Object[] { var.getVar().getVC() });
 			}
 		}
 

@@ -155,7 +155,7 @@ final class FileDownloader {
 			}
 			in.close();
 			out.close();
-			if (pb != null && pos != pb.max)
+			if (pb != null && pos != pb.getMax())
 				pb.print(fileSize);
 			// if (!ftp.completePendingCommand())
 			// throw new IOException("Could not finish download!");
@@ -251,7 +251,7 @@ final class FileDownloader {
 			}
 			in.close();
 			out.close();
-			if (pb != null && pos != pb.max)
+			if (pb != null && pos != pb.getMax())
 				pb.print(fileSize);
 		} catch (IOException e) {
 			throw new FileDownloadException("ERROR: Problem downloading file: " + e.getMessage());

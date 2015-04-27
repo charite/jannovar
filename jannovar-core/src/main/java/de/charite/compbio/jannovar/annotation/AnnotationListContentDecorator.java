@@ -13,7 +13,7 @@ import java.util.HashSet;
 public class AnnotationListContentDecorator {
 
 	/** the decorated {@link AnnotationList} */
-	public final AnnotationList annotations;
+	private final AnnotationList annotations;
 
 	/**
 	 * Initialize the decorator.
@@ -25,13 +25,18 @@ public class AnnotationListContentDecorator {
 		this.annotations = annotations;
 	}
 
+	/** @returnthe decorated {@link AnnotationList} */
+	public AnnotationList getAnnotations() {
+		return annotations;
+	}
+
 	/**
 	 * @return <code>true</code> if the list has entries for multiple gene symbols.
 	 */
 	public boolean hasMultipleGeneSymbols() {
 		HashSet<String> geneSymbols = new HashSet<String>();
 		for (Annotation entry : annotations)
-			geneSymbols.add(entry.transcript.geneSymbol);
+			geneSymbols.add(entry.getTranscript().getGeneSymbol());
 		return (geneSymbols.size() > 0);
 	}
 
@@ -54,7 +59,7 @@ public class AnnotationListContentDecorator {
 		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.get(0).transcript.geneSymbol;
+			return annotations.get(0).getTranscript().getGeneSymbol();
 	}
 
 	/**
@@ -64,7 +69,7 @@ public class AnnotationListContentDecorator {
 		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.get(0).transcript.geneID;
+			return annotations.get(0).getTranscript().getGeneID();
 	}
 
 	/**

@@ -9,16 +9,16 @@ package de.charite.compbio.jannovar.impl.intervals;
 public class MutableInterval<T> implements java.io.Serializable, Comparable<MutableInterval<T>> {
 
 	/** start point of the interval (inclusive) */
-	public int begin = -1;
+	private int begin = -1;
 
 	/** end point of the interval (exclusive) */
-	public int end = -1;
+	private int end = -1;
 
 	/** the value stored for the Interval */
-	public T value = null;
+	private T value = null;
 
 	/** the maximum of this nodes {@link #end} and both of it children's {@link #end} */
-	public int maxEnd = -1;
+	private int maxEnd = -1;
 
 	/** verioin number for serializing an Interval */
 	private static final long serialVersionUID = 1L;
@@ -35,6 +35,38 @@ public class MutableInterval<T> implements java.io.Serializable, Comparable<Muta
 
 	public MutableInterval(int begin, int end, T value) {
 		this(begin, end, value, -1);
+	}
+
+	public int getBegin() {
+		return begin;
+	}
+
+	public void setBegin(int begin) {
+		this.begin = begin;
+	}
+
+	public int getEnd() {
+		return end;
+	}
+
+	public void setEnd(int end) {
+		this.end = end;
+	}
+
+	public T getValue() {
+		return value;
+	}
+
+	public void setValue(T value) {
+		this.value = value;
+	}
+
+	public int getMaxEnd() {
+		return maxEnd;
+	}
+
+	public void setMaxEnd(int maxEnd) {
+		this.maxEnd = maxEnd;
 	}
 
 	@Override
@@ -58,21 +90,20 @@ public class MutableInterval<T> implements java.io.Serializable, Comparable<Muta
 			return false;
 		@SuppressWarnings("rawtypes")
 		Interval other = (Interval) obj;
-		if (begin != other.begin)
+		if (begin != other.getBegin())
 			return false;
-		if (end != other.end)
+		if (end != other.getEnd())
 			return false;
-		if (maxEnd != other.maxEnd)
+		if (maxEnd != other.getMaxEnd())
 			return false;
 		if (value == null) {
-			if (other.value != null)
+			if (other.getValue() != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!value.equals(other.getValue()))
 			return false;
 		return true;
 	}
 
-	@Override
 	public int compareTo(MutableInterval<T> o) {
 		final int result = (begin - o.begin);
 		if (result == 0)

@@ -43,7 +43,7 @@ public class TranscriptSequenceChangeHelperTest {
 				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.setCharAt(895, 'C');
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
@@ -53,7 +53,7 @@ public class TranscriptSequenceChangeHelperTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6648257,
 				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class TranscriptSequenceChangeHelperTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class TranscriptSequenceChangeHelperTest {
 				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.insert(895, "CTTG");
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
@@ -80,7 +80,7 @@ public class TranscriptSequenceChangeHelperTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6648257,
 				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class TranscriptSequenceChangeHelperTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class TranscriptSequenceChangeHelperTest {
 				PositionType.ZERO_BASED), "CTT", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.delete(896, 899);
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
@@ -107,7 +107,7 @@ public class TranscriptSequenceChangeHelperTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6647530,
 				PositionType.ZERO_BASED), "CTTG", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
@@ -115,7 +115,7 @@ public class TranscriptSequenceChangeHelperTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640058,
 				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class TranscriptSequenceChangeHelperTest {
 				PositionType.ZERO_BASED), "TTTT", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.delete(0, 2);
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
@@ -135,7 +135,7 @@ public class TranscriptSequenceChangeHelperTest {
 				PositionType.ZERO_BASED), "TTTT", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.delete(infoForward.transcriptLength() - 2, infoForward.transcriptLength());
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}

@@ -35,15 +35,15 @@ public class TranscriptPositionTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		TranscriptPosition pos = new TranscriptPosition(this.infoForward, 10, PositionType.ONE_BASED);
-		Assert.assertEquals(pos.transcript, this.infoForward);
-		Assert.assertEquals(pos.pos, 9);
+		Assert.assertEquals(pos.getTranscript(), this.infoForward);
+		Assert.assertEquals(pos.getPos(), 9);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		TranscriptPosition pos = new TranscriptPosition(this.infoForward, 10, PositionType.ZERO_BASED);
-		Assert.assertEquals(pos.transcript, this.infoForward);
-		Assert.assertEquals(pos.pos, 10);
+		Assert.assertEquals(pos.getTranscript(), this.infoForward);
+		Assert.assertEquals(pos.getPos(), 10);
 	}
 
 }

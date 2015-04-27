@@ -20,22 +20,22 @@ public class AnnotationLocation {
 	};
 
 	/** Sentinel value for "invalid rank". */
-	public static int INVALID_RANK = -1;
+	public static final int INVALID_RANK = -1;
 
-	/** The that this location lies on */
-	public final TranscriptModel transcript;
+	/** The transcript that this location lies on */
+	private final TranscriptModel transcript;
 
 	/** The rank type (whether {@link #rank} and {@link #totalRank} are exon/intron positions). */
-	public final RankType rankType;
+	private final RankType rankType;
 
 	/** Current exon/intron rank, 0-based. */
-	public final int rank;
+	private final int rank;
 
 	/** Total number of exons/introns in transcript */
-	public final int totalRank;
+	private final int totalRank;
 
 	/** Location of the change on the transcript, null if outside of transcript */
-	public final TranscriptInterval txLocation;
+	private final TranscriptInterval txLocation;
 
 	public AnnotationLocation(TranscriptModel transcript, RankType rankType, int rank, int totalRank,
 			TranscriptInterval txLocation) {
@@ -46,13 +46,38 @@ public class AnnotationLocation {
 		this.txLocation = txLocation;
 	}
 
+	/** @return transcript that this location lies on */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/** @return rank type (whether {@link #rank} and {@link #totalRank} are exon/intron positions). */
+	public RankType getRankType() {
+		return rankType;
+	}
+
+	/** @return current exon/intron rank, 0-based. */
+	public int getRank() {
+		return rank;
+	}
+
+	/** @return total number of exons/introns in transcript */
+	public int getTotalRank() {
+		return totalRank;
+	}
+
+	/** @return location of the change on the transcript, null if outside of transcript */
+	public TranscriptInterval getTXLocation() {
+		return txLocation;
+	}
+
 	// TODO(holtgrem): rename!
 	/**
 	 * @return location as a HGVS String
 	 */
 	public String toHGVSString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(transcript.accession);
+		builder.append(transcript.getAccession());
 		if (rankType != RankType.UNDEFINED)
 			builder.append(":").append(rankType.toString().toLowerCase()).append(rank + 1);
 		return builder.toString();

@@ -5,12 +5,24 @@ package de.charite.compbio.jannovar.filter;
  * Store {@link FlaggedVariant} and a counter.
  */
 class FlaggedVariantCounter {
-	public final FlaggedVariant var;
-	public int count;
+	private final FlaggedVariant var;
+	private int count;
 
 	FlaggedVariantCounter(FlaggedVariant var, int count) {
 		this.var = var;
 		this.count = count;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public FlaggedVariant getVar() {
+		return var;
 	}
 
 	@Override

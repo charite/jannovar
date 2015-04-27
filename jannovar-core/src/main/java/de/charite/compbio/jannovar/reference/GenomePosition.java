@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.reference;
 
 import java.io.Serializable;
 
+import com.google.common.collect.ComparisonChain;
+
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -9,35 +11,38 @@ import de.charite.compbio.jannovar.io.ReferenceDictionary;
 /**
  * Representation of a position on a genome (chromosome, position).
  *
- * Internally, positions are always stored zero-based, but the position type can be explicitely given to the constructor
- * of {@link GenomePosition}.
+ * Internally, positions are always stored zero-based, but the position type can
+ * be explicitely given to the constructor of {@link GenomePosition}.
  *
- * In the case of one-based position, {@link #pos} points to the {@link #pos}-th base in string from the left when
- * starting to count at 1. In the case of zero-based positions, {@link #pos} points to the gap left of the character in
- * the case of positions on the forward strand and to the gap right of the character in the case of positions on the
- * reverse strand. When interpreting this for the reverse strand (i.e. counting from the right), the position right of a
- * character is interpreted as the gap <b>before</b> the character.
+ * In the case of one-based position, {@link #pos} points to the {@link #pos}-th
+ * base in string from the left when starting to count at 1. In the case of
+ * zero-based positions, {@link #pos} points to the gap left of the character in
+ * the case of positions on the forward strand and to the gap right of the
+ * character in the case of positions on the reverse strand. When interpreting
+ * this for the reverse strand (i.e. counting from the right), the position
+ * right of a character is interpreted as the gap <b>before</b> the character.
  *
- * Reverse-complementing a zero-based GenomePosition must be equivalent to reverse-complementing its one-based position
- * representation. Thus, they are shifted towards the right gap besides the character they point at when changing the
- * strand.
+ * Reverse-complementing a zero-based GenomePosition must be equivalent to
+ * reverse-complementing its one-based position representation. Thus, they are
+ * shifted towards the right gap besides the character they point at when
+ * changing the strand.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class GenomePosition implements Serializable {
+public final class GenomePosition implements Serializable, Comparable<GenomePosition> {
 
 	private static final long serialVersionUID = 2L;
 
 	/** reference dictionary to use for coordinate translation */
-	public final ReferenceDictionary refDict;
+	private final ReferenceDictionary refDict;
 
 	/** the strand that the position is located on */
-	public final Strand strand;
+	private final Strand strand;
 	/** the chromosome number, as index in chromosome dictionary */
-	public final int chr;
+	private final int chr;
 	/** the position on the chromosome */
-	public final int pos;
+	private final int pos;
 
 	/** construct genome position with zero-based coordinate system */
 	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr, int pos) {
@@ -76,7 +81,27 @@ public final class GenomePosition implements Serializable {
 		if (strand == other.strand)
 			this.pos = other.pos;
 		else
-			this.pos = refDict.contigLength.get(other.chr) - other.pos - 1;
+			this.pos = refDict.getContigIDToLength().get(other.chr) - other.pos - 1;
+	}
+
+	/** @return reference dictionary to use for coordinate translation */
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	/** @return the strand that the position is located on */
+	public Strand getStrand() {
+		return strand;
+	}
+
+	/** @return the chromosome number, as index in chromosome dictionary */
+	public int getChr() {
+		return chr;
+	}
+
+	/** @return the position on the chromosome */
+	public int getPos() {
+		return pos;
 	}
 
 	/** convert into GenomePosition of the given strand */
@@ -84,14 +109,20 @@ public final class GenomePosition implements Serializable {
 		return new GenomePosition(this, strand);
 	}
 
-	/** @return <tt>true</tt> if this position is left of the other (on this strand). */
+	/**
+	 * @return <tt>true</tt> if this position is left of the other (on this
+	 *         strand).
+	 */
 	public boolean isLt(GenomePosition other) {
 		if (other.strand != strand)
 			other = other.withStrand(strand);
 		return (pos < other.pos);
 	}
 
-	/** @return <tt>true</tt> if this position is left of or equal to the other (on this strand). */
+	/**
+	 * @return <tt>true</tt> if this position is left of or equal to the other
+	 *         (on this strand).
+	 */
 	public boolean isLeq(GenomePosition other) {
 		if (other.chr != chr)
 			return false;
@@ -100,7 +131,10 @@ public final class GenomePosition implements Serializable {
 		return (pos <= other.pos);
 	}
 
-	/** @return <tt>true</tt> if this position is right of the other (on this strand). */
+	/**
+	 * @return <tt>true</tt> if this position is right of the other (on this
+	 *         strand).
+	 */
 	public boolean isGt(GenomePosition other) {
 		if (other.chr != chr)
 			return false;
@@ -109,7 +143,10 @@ public final class GenomePosition implements Serializable {
 		return (pos > other.pos);
 	}
 
-	/** @return <tt>true</tt> if this position is right of or equal to the other (on this strand). */
+	/**
+	 * @return <tt>true</tt> if this position is right of or equal to the other
+	 *         (on this strand).
+	 */
 	public boolean isGeq(GenomePosition other) {
 		if (other.chr != chr)
 			return false;
@@ -118,7 +155,10 @@ public final class GenomePosition implements Serializable {
 		return (pos >= other.pos);
 	}
 
-	/** @return <tt>true</tt> if this position is equal to the other (on this strand). */
+	/**
+	 * @return <tt>true</tt> if this position is equal to the other (on this
+	 *         strand).
+	 */
 	public boolean isEq(GenomePosition other) {
 		if (other.chr != chr)
 			return false;
@@ -130,10 +170,12 @@ public final class GenomePosition implements Serializable {
 	/**
 	 * @param pos
 	 *            other position to compute distance to
-	 * @return the result of <code>(this.pos - pos.pos)</code> (<code>pos</code> is adjusted to the coordinate system
-	 *         and strand of <code>this</code>)
+	 * @return the result of <code>(this.pos - pos.pos)</code> (<code>pos</code>
+	 *         is adjusted to the coordinate system and strand of
+	 *         <code>this</code>)
 	 * @throws InvalidCoordinateException
-	 *             if <code>this</code> and <code>pos</code> are on different chromosomes
+	 *             if <code>this</code> and <code>pos</code> are on different
+	 *             chromosomes
 	 */
 	// TODO(holtgrem): test this!
 	public int differenceTo(GenomePosition pos) {
@@ -144,11 +186,13 @@ public final class GenomePosition implements Serializable {
 		return (this.pos - pos.pos);
 	}
 
+	// TODO(holtgrem): add differenceTo(GenomeInterval interval)
+
 	/**
 	 * Return shifted GenomePosition.
 	 *
-	 * The position is shifted towards the 3' end of current strand if <code>delta &gt; 0</code> and towards the 5' end
-	 * otherwise.
+	 * The position is shifted towards the 3' end of current strand if
+	 * <code>delta &gt; 0</code> and towards the 5' end otherwise.
 	 *
 	 * @param delta
 	 *            the value to add to the position
@@ -160,7 +204,7 @@ public final class GenomePosition implements Serializable {
 
 	/*
 	 * String representation with one-based positions, on forward strand.
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -168,12 +212,12 @@ public final class GenomePosition implements Serializable {
 		if (strand.isReverse())
 			return withStrand(Strand.FWD).toString();
 
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", pos + 1);
+		return StringUtil.concatenate(refDict.getContigIDToName().get(chr), ":g.", pos + 1);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -191,7 +235,7 @@ public final class GenomePosition implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -215,6 +259,10 @@ public final class GenomePosition implements Serializable {
 		if (pos != other.pos)
 			return false;
 		return true;
+	}
+
+	public int compareTo(GenomePosition other) {
+		return ComparisonChain.start().compare(chr, other.chr).compare(pos, other.pos).result();
 	}
 
 }

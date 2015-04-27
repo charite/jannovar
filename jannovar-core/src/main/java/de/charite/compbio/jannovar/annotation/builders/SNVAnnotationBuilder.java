@@ -49,7 +49,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		super(transcript, change, options);
 
 		// guard against invalid genome change
-		if (change.ref.length() != 1 || change.alt.length() != 1)
+		if (change.getRef().length() != 1 || change.getAlt().length() != 1)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
 	}
 
@@ -62,7 +62,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			return buildNonCodingAnnotation();
 
 		final GenomeInterval changeInterval = change.getGenomeInterval();
-		if (so.liesInCDSExon(changeInterval) && transcript.cdsRegion.contains(changeInterval))
+		if (so.liesInCDSExon(changeInterval) && transcript.getCDSRegion().contains(changeInterval))
 			return buildCDSExonicAnnotation(); // lies in coding part of exon
 		else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
 			return buildIntronicAnnotation(); // intron but no exon => intronic variant
@@ -79,29 +79,29 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		TranscriptPosition txPos;
 		CDSPosition cdsPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.pos);
-			cdsPos = projector.genomeToCDSPos(change.pos);
+			txPos = projector.genomeToTranscriptPos(change.getGenomePos());
+			cdsPos = projector.genomeToCDSPos(change.getGenomePos());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS exon position must be translatable to transcript position");
 		}
 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
-		if (txPos.pos >= transcript.sequence.length()
-				|| !transcript.sequence.substring(txPos.pos, txPos.pos + 1).equals(change.ref))
+		if (txPos.getPos() >= transcript.getSequence().length()
+				|| !transcript.getSequence().substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
 			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.
-		int frameShift = cdsPos.pos % 3;
+		int frameShift = cdsPos.getPos() % 3;
 		// Get the transcript codon. From this, we generate the WT and the variant codon. This is important in the case
 		// where the transcript differs from the reference. This inconsistency of the reference and the transcript is
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
 		// the transcript.
 		String transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
 		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
-				change.ref.charAt(0));
+				change.getRef().charAt(0));
 		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
-				change.alt.charAt(0));
+				change.getAlt().charAt(0));
 
 		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
 		// positions).
@@ -112,7 +112,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// Construct annotation part for the protein.
 		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
 		String varAA = Translator.getTranslator().translateDNA3(varCodon);
-		String protAnno = StringUtil.concatenate("p.", wtAA, cdsPos.pos / 3 + 1, varAA);
+		String protAnno = StringUtil.concatenate("p.", wtAA, cdsPos.getPos() / 3 + 1, varAA);
 		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
 			protAnno = StringUtil.concatenate("p.=");
 
@@ -129,8 +129,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.STOP_LOST);
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
-				int stopCodonPos = varAAString.indexOf('*', cdsPos.pos / 3);
-				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.pos / 3);
+				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
+				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.getPos() / 3);
 			}
 		}
 		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
@@ -148,7 +148,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return StringUtil.concatenate(dnaAnno, change.ref, ">", change.alt);
+			return StringUtil.concatenate(dnaAnno, change.getRef(), ">", change.getAlt());
 		else
 			return StringUtil.concatenate(dnaAnno, hgvsSNVOverride);
 	}

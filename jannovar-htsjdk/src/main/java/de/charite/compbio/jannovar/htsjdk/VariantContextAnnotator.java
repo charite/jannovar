@@ -40,19 +40,19 @@ public final class VariantContextAnnotator {
 
 	public static class Options {
 		/** selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN}) */
-		public final InfoFields infoFields;
+		private final InfoFields infoFields;
 
 		/**
 		 * Whether or not to trim each annotation list to the first (one with highest putative impact), defaults to
 		 * <code>true</code>
 		 */
-		public final boolean oneAnnotationOnly;
+		private final boolean oneAnnotationOnly;
 
 		/** whether or not to escape values in the ANN field (defaults to <code>true</code>) */
-		public final boolean escapeAnnField;
+		private final boolean escapeAnnField;
 
 		/** whether or not to perform shifting towards the 3' end of the transcript (defaults to <code>true</code>) */
-		public final boolean nt3PrimeShifting;
+		private final boolean nt3PrimeShifting;
 
 		public Options() {
 			infoFields = InfoFields.VCF_ANN;
@@ -68,14 +68,31 @@ public final class VariantContextAnnotator {
 			this.escapeAnnField = escapeAnnField;
 			this.nt3PrimeShifting = nt3PrimeShifting;
 		}
+
+		public InfoFields getInfoFields() {
+			return infoFields;
+		}
+
+		public boolean isOneAnnotationOnly() {
+			return oneAnnotationOnly;
+		}
+
+		public boolean isEscapeAnnField() {
+			return escapeAnnField;
+		}
+
+		public boolean isNt3PrimeShifting() {
+			return nt3PrimeShifting;
+		}
+
 	}
 
 	/** the {@link ReferenceDictionary} to use */
-	public final ReferenceDictionary refDict;
-	/** {@link Chromsome} map with the {@link TranscriptModel}s, probably from {@link JannovarData} */
-	public final ImmutableMap<Integer, Chromosome> chromosomeMap;
+	private final ReferenceDictionary refDict;
+	/** {@link Chromosome} map with the {@link TranscriptModel}s, probably from {@link JannovarData} */
+	private final ImmutableMap<Integer, Chromosome> chromosomeMap;
 	/** configuration */
-	public final Options options;
+	private final Options options;
 
 	/** implementation of the actual variant annotation */
 	private final VariantAnnotator annotator;
@@ -106,6 +123,22 @@ public final class VariantContextAnnotator {
 				options.nt3PrimeShifting));
 	}
 
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	public ImmutableMap<Integer, Chromosome> getChromosomeMap() {
+		return chromosomeMap;
+	}
+
+	public Options getOptions() {
+		return options;
+	}
+
+	public VariantAnnotator getAnnotator() {
+		return annotator;
+	}
+
 	/**
 	 * Build a {@link GenomeChange} from a {@link VariantContext} object.
 	 *
@@ -123,7 +156,7 @@ public final class VariantContextAnnotator {
 	public GenomeChange buildGenomeChange(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
-		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		Integer boxedInt = refDict.getContigNameToID().get(vc.getChr());
 		if (boxedInt == null)
 			throw new InvalidCoordinatesException("Unknown reference " + vc.getChr(),
 					AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);

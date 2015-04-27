@@ -40,25 +40,25 @@ import de.charite.compbio.jannovar.Immutable;
 public final class PedPerson {
 
 	/** pedigree name */
-	public final String pedigree;
+	private final String pedigree;
 
 	/** name of the individual */
-	public final String name;
+	private final String name;
 
 	/** individual's father's name, <code>"0"</code> if father not in pedigree */
-	public final String father;
+	private final String father;
 
 	/** individual's mother's name, <code>"0"</code> if father not in pedigree */
-	public final String mother;
+	private final String mother;
 
 	/** invidual's sex */
-	public final Sex sex;
+	private final Sex sex;
 
 	/** individual's disease status */
-	public final Disease disease;
+	private final Disease disease;
 
 	/** the additional fields stored for this person */
-	public final ImmutableList<String> extraFields;
+	private final ImmutableList<String> extraFields;
 
 	/**
 	 * Initialize object with the given data.
@@ -79,6 +79,41 @@ public final class PedPerson {
 	 */
 	public PedPerson(String pedigree, String name, String father, String mother, Sex sex, Disease disease) {
 		this(pedigree, name, father, mother, sex, disease, new ArrayList<String>());
+	}
+
+	/** @return pedigree name */
+	public String getPedigree() {
+		return pedigree;
+	}
+
+	/** @return name of the individual */
+	public String getName() {
+		return name;
+	}
+
+	/** @return individual's father's name, <code>"0"</code> if father not in pedigree */
+	public String getFather() {
+		return father;
+	}
+
+	/** @return individual's mother's name, <code>"0"</code> if father not in pedigree */
+	public String getMother() {
+		return mother;
+	}
+
+	/** @return invidual's sex */
+	public Sex getSex() {
+		return sex;
+	}
+
+	/** @return individual's disease status */
+	public Disease getDisease() {
+		return disease;
+	}
+
+	/** @return the additional fields stored for this person */
+	public ImmutableList<String> getExtraFields() {
+		return extraFields;
 	}
 
 	/**

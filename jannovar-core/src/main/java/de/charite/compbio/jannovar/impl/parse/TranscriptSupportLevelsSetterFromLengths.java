@@ -42,8 +42,8 @@ class TranscriptSupportLevelsSetterFromLengths {
 				continue;
 			}
 
-			final GenomeInterval longestRegion = longest.get(geneID).getTxRegion();
-			final GenomeInterval txRegion = builder.getTxRegion();
+			final GenomeInterval longestRegion = longest.get(geneID).getTXRegion();
+			final GenomeInterval txRegion = builder.getTXRegion();
 			final boolean isShorter = (longestRegion.length() < txRegion.length());
 			final boolean haveSameLength = (longestRegion.length() == txRegion.length());
 			final boolean isLeftOf = (longestRegion.getGenomeBeginPos().isLt(txRegion.getGenomeBeginPos()));

@@ -27,19 +27,16 @@ public final class Chromosome implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** reference dictionary to use */
-	public final ReferenceDictionary refDict;
+	private final ReferenceDictionary refDict;
 
-	/**
-	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
-	 * way of dealing with scaffolds etc.
-	 */
-	public final int chrID;
+	/** numeric chromsome ID */
+	private final int chrID;
 
 	/**
 	 * An {@link IntervalArray} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
 	 * chromosome.
 	 */
-	public final IntervalArray<TranscriptModel> tmIntervalTree;
+	private final IntervalArray<TranscriptModel> tmIntervalTree;
 
 	/**
 	 * Initialize object.
@@ -57,11 +54,26 @@ public final class Chromosome implements Serializable {
 		this.tmIntervalTree = tmIntervalTree;
 	}
 
+	/** @return reference dictionary to use */
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	/** @return numeric chromsome ID */
+	public int getChrID() {
+		return chrID;
+	}
+
+	/** @return {@link IntervalArray} with transcripts of this chromosome */
+	public IntervalArray<TranscriptModel> getTmIntervalTree() {
+		return tmIntervalTree;
+	}
+
 	/**
 	 * @return String representation of name of chromosome, e.g., <code>"chr2"</code>
 	 */
 	public String getChromosomeName() {
-		return refDict.contigName.get(chrID);
+		return refDict.getContigIDToName().get(chrID);
 	}
 
 	/**

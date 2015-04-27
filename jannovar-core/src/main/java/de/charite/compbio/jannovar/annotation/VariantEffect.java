@@ -465,7 +465,6 @@ public enum VariantEffect {
 	 * {@link Predicate} for testing whether a {@link VariantEffect} is related to splicing.
 	 */
 	public static final Predicate<VariantEffect> IS_SPLICING = new Predicate<VariantEffect>() {
-		@Override
 		public boolean apply(VariantEffect arg) {
 			return arg.isSplicing();
 		}
@@ -475,7 +474,6 @@ public enum VariantEffect {
 	 * {@link Predicate} for testing whether a {@link VariantEffect} is intronic.
 	 */
 	public static final Predicate<VariantEffect> IS_INTRONIC = new Predicate<VariantEffect>() {
-		@Override
 		public boolean apply(VariantEffect arg) {
 			return arg.isIntronic();
 		}
@@ -485,7 +483,6 @@ public enum VariantEffect {
 	 * {@link Function} for converting from {@link VariantEffect} to SO term String.
 	 */
 	public static final Function<VariantEffect, String> TO_SO_TERM = new Function<VariantEffect, String>() {
-		@Override
 		public String apply(VariantEffect arg) {
 			return arg.getSequenceOntologyTerm();
 		}
@@ -495,7 +492,6 @@ public enum VariantEffect {
 	 * {@link Function} for converting from {@link VariantEffect} to legacy term.
 	 */
 	public static final Function<VariantEffect, String> TO_LEGACY_NAME = new Function<VariantEffect, String>() {
-		@Override
 		public String apply(VariantEffect arg) {
 			return arg.getLegacyTerm();
 		}

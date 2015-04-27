@@ -30,6 +30,9 @@
 
 ### jannovar-core
 
+* Making previous `public final` members `private final` (or
+ `protected final`) and adding getters for read-only access to them.
+* Removing position type member of `CDSInterval`.
 * Using type `Strand` instead of `'+'` and `'-'`, requires database rebuild.
 * Adding enum `Strand` with `PLUS` and `MINUS` values.
 * Adding `VariantEffect.isOffExome` and updating
@@ -64,7 +67,12 @@
 
 ### jannovar-filter
 
+* Changing public final members to accessors. 
 * `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
+
+### jannovar-htsjdk
+
+* Changing public final members to accessors. 
 
 ## v0.12
 

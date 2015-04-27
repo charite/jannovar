@@ -13,7 +13,7 @@ public class TranscriptModelFactory {
 	 * Helper function to parse a knownGenes.txt.gz line into a TranscriptModel.
 	 *
 	 * @param refDict
-	 *            reference dictionary
+//	 *            reference dictionary
 	 * @param s
 	 *            The knownGeneList line to parse.
 	 */
@@ -22,15 +22,15 @@ public class TranscriptModelFactory {
 		TranscriptModelBuilder result = new TranscriptModelBuilder();
 		result.setAccession(fields[0]);
 
-		int chr = refDict.contigID.get(fields[1].substring(3));
+		int chr = refDict.getContigNameToID().get(fields[1].substring(3));
 
 		result.setStrand(fields[2].charAt(0) == '+' ? Strand.FWD : Strand.REV);
 		GenomeInterval txRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[3]) + 1,
 				Integer.parseInt(fields[4]), PositionType.ONE_BASED);
-		result.setTxRegion(txRegion);
+		result.setTXRegion(txRegion);
 		GenomeInterval cdsRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[5]) + 1,
 				Integer.parseInt(fields[6]), PositionType.ONE_BASED);
-		result.setCdsRegion(cdsRegion);
+		result.setCDSRegion(cdsRegion);
 
 		int exonCount = Integer.parseInt(fields[7]);
 		String[] startFields = fields[8].split(",");

@@ -22,7 +22,7 @@ public class CompatibilityCheckerAutosomalRecessiveVerySmallTest extends Compati
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(2, pedigree.members.size());
+		Assert.assertEquals(2, pedigree.getMembers().size());
 	}
 
 	@Test

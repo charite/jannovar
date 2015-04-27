@@ -16,11 +16,11 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 public final class AnnotationBuilderDispatcher {
 
 	/** transcript to build annotation for */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 	/** genomic change to build annotation for */
-	public final GenomeChange change;
+	private final GenomeChange change;
 	/** configuration to use */
-	public final AnnotationBuilderOptions options;
+	private final AnnotationBuilderOptions options;
 
 	public AnnotationBuilderDispatcher(TranscriptModel transcript, GenomeChange change,
 			AnnotationBuilderOptions options) {

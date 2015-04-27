@@ -30,7 +30,7 @@ public class CompatibilityCheckerAutosomalRecessiveLargeTest extends Compatibili
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(10, pedigree.members.size());
+		Assert.assertEquals(10, pedigree.getMembers().size());
 	}
 
 	@Test

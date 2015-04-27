@@ -17,13 +17,18 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.Compatibilit
 public class PedigreeDiseaseCompatibilityDecorator {
 
 	/** the pedigree */
-	public final Pedigree pedigree;
+	private final Pedigree pedigree;
 
 	/**
 	 * Initialize decorator.
 	 */
 	public PedigreeDiseaseCompatibilityDecorator(Pedigree pedigree) {
 		this.pedigree = pedigree;
+	}
+
+	/** @return decorated pedigree */
+	public Pedigree getPedigree() {
+		return pedigree;
 	}
 
 	/**

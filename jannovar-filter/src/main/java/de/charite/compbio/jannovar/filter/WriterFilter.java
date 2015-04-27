@@ -25,14 +25,12 @@ public class WriterFilter implements VariantContextFilter {
 		this.writer = writer;
 	}
 
-	@Override
 	public void put(FlaggedVariant fv) throws FilterException {
-		LOGGER.trace("Variant added to writer {} => included? {}", new Object[] { fv.vc, fv.isIncluded() });
+		LOGGER.trace("Variant added to writer {} => included? {}", new Object[] { fv.getVC(), fv.isIncluded() });
 		if (fv.isIncluded())
-			writer.add(fv.vc);
+			writer.add(fv.getVC());
 	}
 
-	@Override
 	public void finish() {
 		/* no-op */
 	}

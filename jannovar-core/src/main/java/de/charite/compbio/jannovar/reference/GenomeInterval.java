@@ -73,8 +73,8 @@ public final class GenomeInterval implements Serializable {
 			this.beginPos = other.beginPos;
 			this.endPos = other.endPos;
 		} else {
-			int beginPos = refDict.contigLength.get(other.chr) - other.beginPos;
-			int endPos = refDict.contigLength.get(other.chr) - other.endPos;
+			int beginPos = refDict.getContigIDToLength().get(other.chr) - other.beginPos;
+			int endPos = refDict.getContigIDToLength().get(other.chr) - other.endPos;
 			this.endPos = beginPos;
 			this.beginPos = endPos;
 		}
@@ -82,12 +82,12 @@ public final class GenomeInterval implements Serializable {
 
 	/** construct genome interval from {@link GenomePosition} with a length towards 3' of pos' coordinate system */
 	public GenomeInterval(GenomePosition pos, int length) {
-		this.refDict = pos.refDict;
-		this.strand = pos.strand;
-		this.chr = pos.chr;
-		this.beginPos = pos.pos;
+		this.refDict = pos.getRefDict();
+		this.strand = pos.getStrand();
+		this.chr = pos.getChr();
+		this.beginPos = pos.getPos();
 
-		this.endPos = pos.pos + length;
+		this.endPos = pos.getPos() + length;
 	}
 
 	/** convert into GenomeInterval of the given strand */
@@ -132,11 +132,11 @@ public final class GenomeInterval implements Serializable {
 	 * @return <tt>true</tt> if the interval is truly left of the position
 	 */
 	public boolean isLeftOf(GenomePosition pos) {
-		if (chr != pos.chr)
+		if (chr != pos.getChr())
 			return false; // wrong chromosome
-		if (pos.strand != strand)
+		if (pos.getStrand() != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		return (pos.pos >= endPos);
+		return (pos.getPos() >= endPos);
 	}
 
 	/**
@@ -145,11 +145,11 @@ public final class GenomeInterval implements Serializable {
 	 * @return <tt>true</tt> if the interval is truly right of the position
 	 */
 	public boolean isRightOf(GenomePosition pos) {
-		if (chr != pos.chr)
+		if (chr != pos.getChr())
 			return false; // wrong chromosome
-		if (pos.strand != strand)
+		if (pos.getStrand() != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		return (pos.pos < beginPos);
+		return (pos.getPos() < beginPos);
 	}
 
 	/**
@@ -158,11 +158,11 @@ public final class GenomeInterval implements Serializable {
 	 * @return <tt>true</tt> if the interval contains <tt>pos</tt>
 	 */
 	public boolean contains(GenomePosition pos) {
-		if (chr != pos.chr)
+		if (chr != pos.getChr())
 			return false; // wrong chromosome
-		if (pos.strand != strand)
+		if (pos.getStrand() != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
-		return (pos.pos >= beginPos && pos.pos < endPos);
+		return (pos.getPos() >= beginPos && pos.getPos() < endPos);
 	}
 
 	/**
@@ -209,7 +209,7 @@ public final class GenomeInterval implements Serializable {
 		if (strand.isReverse())
 			return withStrand(Strand.FWD).toString();
 
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(refDict.getContigNameToID().get(chr), ":g.", beginPos + 1, "-", endPos);
 	}
 
 	/*

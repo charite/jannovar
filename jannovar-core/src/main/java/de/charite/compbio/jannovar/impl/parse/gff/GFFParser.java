@@ -29,10 +29,10 @@ public final class GFFParser {
 	private boolean printProgressBars = false;
 
 	/** {@link File} to parse */
-	public final File file;
+	private final File file;
 
 	/** version of the underlying GFF file */
-	public final GFFVersion gffVersion;
+	private final GFFVersion gffVersion;
 
 	/**
 	 * Initalize with path and enforce the given GFF version.
@@ -50,6 +50,26 @@ public final class GFFParser {
 		this.printProgressBars = printProgressBars;
 	}
 
+	/** @return whether or not to print progress bars */
+	public boolean isPrintProgressBars() {
+		return printProgressBars;
+	}
+
+	/** Set whether or not to print progress bars */
+	public void setPrintProgressBars(boolean printProgressBars) {
+		this.printProgressBars = printProgressBars;
+	}
+
+	/** @return {@link File} to parse */
+	public File getFile() {
+		return file;
+	}
+
+	/** @return version of the underlying GFF file */
+	public GFFVersion getGffVersion() {
+		return gffVersion;
+	}
+
 	/**
 	 * Initialize with path to the file to parse and detect GFF version.
 	 *
@@ -64,7 +84,7 @@ public final class GFFParser {
 		this.file = new File(path);
 		LOGGER.info("Determining GFF version...");
 		this.gffVersion = determineGFFVersion(file);
-		LOGGER.info("  GFF version is {}", gffVersion.version);
+		LOGGER.info("  GFF version is {}", gffVersion.getVersion());
 	}
 
 	/**
@@ -101,8 +121,8 @@ public final class GFFParser {
 					lineNo = 0;
 				}
 			}
-			if (fip.getChannel().position() != bar.max)
-				bar.print(bar.max);
+			if (fip.getChannel().position() != bar.getMax())
+				bar.print(bar.getMax());
 		} catch (FeatureFormatException e) {
 			LOGGER.warn("GFF with wrong Feature format: {}", e);
 		} catch (IOException e) {
@@ -192,7 +212,7 @@ public final class GFFParser {
 		while ((index = attributeString.indexOf(";", start)) > 0) {
 			splitAndAddAttribute(attributeString.substring(start, index), feature);
 
-			if (gffVersion.version == 3)
+			if (gffVersion.getVersion() == 3)
 				start = index + 1;
 			else
 				start = index + 2;
@@ -211,8 +231,8 @@ public final class GFFParser {
 	 */
 	private void splitAndAddAttribute(String attribute, Feature feature) throws FeatureFormatException {
 		int subIndex = 0;
-		if ((subIndex = attribute.indexOf(gffVersion.valueSeparator)) > 0) {
-			if (gffVersion.version == 3) {
+		if ((subIndex = attribute.indexOf(gffVersion.getValueSeparator())) > 0) {
+			if (gffVersion.getVersion() == 3) {
 				feature.addAttribute(attribute.substring(0, subIndex), attribute.substring(subIndex + 1));
 				// System.out.println(String.format("%s\t%s",attribute.substring(0, subIndex),
 				// attribute.substring(subIndex+1)));
@@ -224,7 +244,7 @@ public final class GFFParser {
 			}
 		} else {
 			throw new FeatureFormatException("attribut String without valid value separator ('"
-					+ gffVersion.valueSeparator + "'): '" + attribute + "'");
+					+ gffVersion.getValueSeparator() + "'): '" + attribute + "'");
 		}
 	}
 

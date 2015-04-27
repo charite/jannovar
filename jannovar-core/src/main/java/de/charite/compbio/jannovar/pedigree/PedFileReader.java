@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
 public final class PedFileReader {
 
 	/** the file to read from */
-	public final File file;
+	private final File file;
 
 	/**
 	 * Initialize object with the given file.

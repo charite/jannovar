@@ -35,18 +35,18 @@ public class TranscriptIntervalTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		TranscriptInterval interval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ZERO_BASED);
-		Assert.assertEquals(interval.transcript, this.infoForward);
-		Assert.assertEquals(interval.beginPos, 23);
-		Assert.assertEquals(interval.endPos, 45);
+		Assert.assertEquals(interval.getTranscript(), this.infoForward);
+		Assert.assertEquals(interval.getBeginPos(), 23);
+		Assert.assertEquals(interval.getEndPos(), 45);
 		Assert.assertEquals(interval.length(), 22);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		TranscriptInterval interval = new TranscriptInterval(this.infoForward, 23, 45, PositionType.ZERO_BASED);
-		Assert.assertEquals(interval.transcript, this.infoForward);
-		Assert.assertEquals(interval.beginPos, 23);
-		Assert.assertEquals(interval.endPos, 45);
+		Assert.assertEquals(interval.getTranscript(), this.infoForward);
+		Assert.assertEquals(interval.getBeginPos(), 23);
+		Assert.assertEquals(interval.getEndPos(), 45);
 		Assert.assertEquals(interval.length(), 22);
 	}
 

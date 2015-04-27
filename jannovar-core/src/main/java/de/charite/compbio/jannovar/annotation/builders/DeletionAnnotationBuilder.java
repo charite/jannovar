@@ -17,7 +17,8 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * Builds {@link Annotation} objects for the deletion {@link GenomeChange}s in the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the deletion {@link GenomeChange}s in
+ * the given {@link TranscriptInfo}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -38,7 +39,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
-		if (change.ref.length() == 0 || change.alt.length() != 0)
+		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a deletion.");
 	}
 
@@ -84,7 +85,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	/**
 	 * Helper class for generating annotations for exonic CDS variants.
 	 *
-	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
+	 * We use this helper class to simplify the access to the parameters such as
+	 * {@link #wtCDSSeq} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
 		final GenomeInterval changeInterval;
@@ -116,7 +118,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
-			this.delFrameShift = DeletionAnnotationBuilder.this.change.ref.length() % 3;
+			this.delFrameShift = DeletionAnnotationBuilder.this.change.getRef().length() % 3;
 
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
@@ -126,17 +128,17 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
 			this.varAASeq = t.translateDNA(varCDSSeq);
-			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.pos / 3);
+			this.varAAStopPos = varAASeq.indexOf('*', this.changeBeginPos.getPos() / 3);
 
 			// protect against going behind transcript
 			// "(...+2)/3" => round up integer division result
-			final int wtAAEndPos = Math.min((changeLastPos.pos + 1 + 2) / 3, wtAASeq.length());
-			final String delAA = wtAASeq.substring(changeBeginPos.pos / 3, wtAAEndPos);
+			final int wtAAEndPos = Math.min((changeLastPos.getPos() + 1 + 2) / 3, wtAASeq.length());
+			final String delAA = wtAASeq.substring(changeBeginPos.getPos() / 3, wtAAEndPos);
 			final int delta = (changeBeginPos.getFrameshift() == 0 ? 0 : 1);
 			// protect against going behind transcript
-			final int varAAEndPos = Math.min(changeBeginPos.pos / 3 + delta, varAASeq.length());
-			final String insAA = varAASeq.substring(changeBeginPos.pos / 3, varAAEndPos);
-			this.aaChange = new AminoAcidChange(changeBeginPos.pos / 3, delAA, insAA);
+			final int varAAEndPos = Math.min(changeBeginPos.getPos() / 3 + delta, varAASeq.length());
+			final String insAA = varAASeq.substring(changeBeginPos.getPos() / 3, varAAEndPos);
+			this.aaChange = new AminoAcidChange(changeBeginPos.getPos() / 3, delAA, insAA);
 			this.aaChange = AminoAcidChangeNormalizer.truncateBothSides(this.aaChange);
 			this.aaChange = AminoAcidChangeNormalizer.normalizeDeletion(wtAASeq, this.aaChange);
 		}
@@ -167,7 +169,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.STOP_LOST);
 
 			// Differentiate the cases disruptive and a non-disruptive deletions.
-			if (changeBeginPos.pos % 3 == 0)
+			if (changeBeginPos.getPos() % 3 == 0)
 				varTypes.add(VariantEffect.INFRAME_DELETION);
 			else
 				varTypes.add(VariantEffect.DISRUPTIVE_INFRAME_DELETION);
@@ -175,15 +177,15 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
 				String suffix = ""; // for "ins${aminoAcidCode}" in case of "delins" on AA level
-				if (aaChange.alt.length() > 0)
-					suffix = StringUtil.concatenate("ins", t.toLong(aaChange.alt));
+				if (aaChange.getAlt().length() > 0)
+					suffix = StringUtil.concatenate("ins", t.toLong(aaChange.getAlt()));
 
-				char wtAAFirst = wtAASeq.charAt(aaChange.pos);
+				char wtAAFirst = wtAASeq.charAt(aaChange.getPos());
 				char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
-				if (aaChange.pos == aaChange.getLastPos())
-					protAnno = StringUtil.concatenate("p.", t.toLong(wtAAFirst), aaChange.pos + 1, "del", suffix);
+				if (aaChange.getPos() == aaChange.getLastPos())
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAAFirst), aaChange.getPos() + 1, "del", suffix);
 				else
-					protAnno = StringUtil.concatenate("p.", t.toLong(wtAAFirst), aaChange.pos + 1, "_",
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAAFirst), aaChange.getPos() + 1, "_",
 							t.toLong(wtAALast), aaChange.getLastPos() + 1, "del", suffix);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
@@ -216,42 +218,42 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
 
 			// Normalize the amino acid change, shifting to the right as long as change ref char equals var ref char.
-			while (aaChange.ref.length() > 0 && aaChange.pos < varAASeq.length()
-					&& aaChange.ref.charAt(0) == varAASeq.charAt(aaChange.pos))
+			while (aaChange.getRef().length() > 0 && aaChange.getPos() < varAASeq.length()
+					&& aaChange.getRef().charAt(0) == varAASeq.charAt(aaChange.getPos()))
 				aaChange = aaChange.shiftRight();
 
 			// Handle the case of deleting a stop codon at the very last entry of the translated amino acid string and
 			// short-circuit.
-			if (varTypes.contains(VariantEffect.STOP_LOST) && aaChange.pos == varAASeq.length()) {
-				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, "del?");
+			if (varTypes.contains(VariantEffect.STOP_LOST) && aaChange.getPos() == varAASeq.length()) {
+				protAnno = StringUtil.concatenate("p.*", aaChange.getPos() + 1, "del?");
 				return;
 			}
 			// Handle the case of deleting up to the end of the sequence.
-			if (aaChange.pos >= varAASeq.length()) {
-				if (aaChange.ref.length() == 1)
-					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
-							"del");
+			if (aaChange.getPos() >= varAASeq.length()) {
+				if (aaChange.getRef().length() == 1)
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(aaChange.getPos())),
+							aaChange.getPos() + 1, "del");
 				else
-					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(aaChange.pos)), aaChange.pos + 1,
+					protAnno = StringUtil.concatenate("p.", t.toLong(wtAASeq.charAt(aaChange.getPos())), aaChange.getPos() + 1,
 							"_", t.toLong(wtAASeq.charAt(aaChange.getLastPos())), aaChange.getLastPos() + 1, "del");
 				return;
 			}
 
-			char wtAA = wtAASeq.charAt(aaChange.pos);
-			char varAA = varAASeq.charAt(aaChange.pos);
+			char wtAA = wtAASeq.charAt(aaChange.getPos());
+			char varAA = varAASeq.charAt(aaChange.getPos());
 			int delta = (wtAA == '*') ? 0 : 1;
 
 			// Compute suffix for HGVS protein annotation.
 			String suffix = "*?"; // "?" or "*${distance}" in case of extension/frameshift
 			if (varAAStopPos >= 0) {
-				int stopCodonOffset = varAAStopPos - aaChange.pos + delta;
+				int stopCodonOffset = varAAStopPos - aaChange.getPos() + delta;
 				suffix = StringUtil.concatenate("*", stopCodonOffset);
 			}
 			if (varTypes.contains(VariantEffect.STOP_LOST))
-				protAnno = StringUtil.concatenate("p.*", aaChange.pos + 1, t.toLong(varAA), "ext", suffix);
+				protAnno = StringUtil.concatenate("p.*", aaChange.getPos() + 1, t.toLong(varAA), "ext", suffix);
 			else
 				protAnno = StringUtil
-						.concatenate("p.", t.toLong(wtAA), aaChange.pos + 1, t.toLong(varAA), "fs", suffix);
+						.concatenate("p.", t.toLong(wtAA), aaChange.getPos() + 1, t.toLong(varAA), "fs", suffix);
 		}
 	}
 

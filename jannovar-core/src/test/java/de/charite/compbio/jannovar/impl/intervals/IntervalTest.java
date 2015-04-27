@@ -17,10 +17,10 @@ public class IntervalTest {
 
 	@Test
 	public void testValues() {
-		Assert.assertEquals(1, interval.begin);
-		Assert.assertEquals(10, interval.end);
-		Assert.assertEquals(13, interval.maxEnd);
-		Assert.assertEquals("x", interval.value);
+		Assert.assertEquals(1, interval.getBegin());
+		Assert.assertEquals(10, interval.getEnd());
+		Assert.assertEquals(13, interval.getMaxEnd());
+		Assert.assertEquals("x", interval.getValue());
 	}
 
 	@Test

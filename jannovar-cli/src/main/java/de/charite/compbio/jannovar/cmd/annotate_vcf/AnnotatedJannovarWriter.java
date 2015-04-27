@@ -35,7 +35,10 @@ import de.charite.compbio.jannovar.reference.Strand;
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
-	/** {@link ReferenceDictionary} object to use for information about the genome. */
+	/**
+	 * {@link ReferenceDictionary} object to use for information about the
+	 * genome.
+	 */
 	private final ReferenceDictionary refDict;
 
 	/** the VCF file to process */
@@ -121,7 +124,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		String chrStr = vc.getChr();
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" contigs etc. In this case, we simply ignore the record.
-		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		Integer boxedInt = refDict.getContigNameToID().get(vc.getChr());
 		if (boxedInt == null)
 			return;
 		int chr = boxedInt.intValue();
@@ -145,17 +148,20 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		}
 
 		for (Annotation a : anno) {
-			String effect = Joiner.on("+").join(FluentIterable.from(a.effects).transform(VariantEffect.TO_LEGACY_NAME));
-			String annt = Joiner.on(":").skipNulls().join(a.ntHGVSDescription, a.aaHGVSDescription);
-			String sym = a.transcript.geneSymbol;
+			String effect = Joiner.on("+").join(
+					FluentIterable.from(a.getEffects()).transform(VariantEffect.TO_LEGACY_NAME));
+			String annt = Joiner.on(":").skipNulls()
+					.join(a.getNucleotideHGVSDescription(), a.getAminoAcidHGVSDescription());
+			String sym = a.getTranscript().getGeneSymbol();
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
-					chrStr, change.pos, change.ref, change.alt, gtype, qual);
+					chrStr, change.getPos(), change.getRef(), change.getAlt(), gtype, qual);
 			out.write(s);
 		}
 	}
 
 	/**
-	 * Return genotype string as in VCF for the i-th individual at the position in variantContext.
+	 * Return genotype string as in VCF for the i-th individual at the position
+	 * in variantContext.
 	 *
 	 * @param variantContext
 	 *            The VariantContext to query.

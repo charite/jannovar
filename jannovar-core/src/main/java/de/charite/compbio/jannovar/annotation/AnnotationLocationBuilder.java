@@ -32,9 +32,9 @@ public class AnnotationLocationBuilder {
 	public AnnotationLocation build() {
 		int totalRank = -1;
 		if (rankType == RankType.EXON)
-			totalRank = transcript.exonRegions.size();
+			totalRank = transcript.getExonRegions().size();
 		else if (rankType == RankType.INTRON)
-			totalRank = transcript.exonRegions.size() - 1;
+			totalRank = transcript.getExonRegions().size() - 1;
 		return new AnnotationLocation(transcript, rankType, rank, totalRank, txLocation);
 	}
 
@@ -62,11 +62,11 @@ public class AnnotationLocationBuilder {
 		this.rank = rank;
 	}
 
-	public TranscriptInterval getTxLocation() {
+	public TranscriptInterval getTXLocation() {
 		return txLocation;
 	}
 
-	public void setTxLocation(TranscriptInterval txLocation) {
+	public void setTXLocation(TranscriptInterval txLocation) {
 		this.txLocation = txLocation;
 	}
 

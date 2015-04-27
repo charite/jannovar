@@ -37,39 +37,39 @@ public class PedigreeTest {
 	public void testConstruction() throws PedParseException {
 		Pedigree pedigree = new Pedigree(pedFileContents, "fam");
 
-		Assert.assertEquals("fam", pedigree.name);
+		Assert.assertEquals("fam", pedigree.getName());
 
-		Assert.assertEquals(4, pedigree.members.size());
+		Assert.assertEquals(4, pedigree.getMembers().size());
 
-		Assert.assertEquals("father", pedigree.members.get(0).name);
-		Assert.assertEquals("mother", pedigree.members.get(1).name);
-		Assert.assertEquals("son", pedigree.members.get(2).name);
-		Assert.assertEquals("daughter", pedigree.members.get(3).name);
+		Assert.assertEquals("father", pedigree.getMembers().get(0).getName());
+		Assert.assertEquals("mother", pedigree.getMembers().get(1).getName());
+		Assert.assertEquals("son", pedigree.getMembers().get(2).getName());
+		Assert.assertEquals("daughter", pedigree.getMembers().get(3).getName());
 
-		Assert.assertSame(null, pedigree.members.get(0).father);
-		Assert.assertSame(null, pedigree.members.get(1).father);
-		Assert.assertSame(pedigree.members.get(0), pedigree.members.get(2).father);
-		Assert.assertSame(pedigree.members.get(0), pedigree.members.get(3).father);
+		Assert.assertSame(null, pedigree.getMembers().get(0).getFather());
+		Assert.assertSame(null, pedigree.getMembers().get(1).getFather());
+		Assert.assertSame(pedigree.getMembers().get(0), pedigree.getMembers().get(2).getFather());
+		Assert.assertSame(pedigree.getMembers().get(0), pedigree.getMembers().get(3).getFather());
 
-		Assert.assertSame(null, pedigree.members.get(0).mother);
-		Assert.assertSame(null, pedigree.members.get(1).mother);
-		Assert.assertSame(pedigree.members.get(1), pedigree.members.get(2).mother);
-		Assert.assertSame(pedigree.members.get(1), pedigree.members.get(3).mother);
+		Assert.assertSame(null, pedigree.getMembers().get(0).getMother());
+		Assert.assertSame(null, pedigree.getMembers().get(1).getMother());
+		Assert.assertSame(pedigree.getMembers().get(1), pedigree.getMembers().get(2).getMother());
+		Assert.assertSame(pedigree.getMembers().get(1), pedigree.getMembers().get(3).getMother());
 
-		Assert.assertEquals(Sex.MALE, pedigree.members.get(0).sex);
-		Assert.assertEquals(Sex.FEMALE, pedigree.members.get(1).sex);
-		Assert.assertEquals(Sex.MALE, pedigree.members.get(2).sex);
-		Assert.assertEquals(Sex.FEMALE, pedigree.members.get(3).sex);
+		Assert.assertEquals(Sex.MALE, pedigree.getMembers().get(0).getSex());
+		Assert.assertEquals(Sex.FEMALE, pedigree.getMembers().get(1).getSex());
+		Assert.assertEquals(Sex.MALE, pedigree.getMembers().get(2).getSex());
+		Assert.assertEquals(Sex.FEMALE, pedigree.getMembers().get(3).getSex());
 
-		Assert.assertEquals(Disease.UNKNOWN, pedigree.members.get(0).disease);
-		Assert.assertEquals(Disease.UNKNOWN, pedigree.members.get(1).disease);
-		Assert.assertEquals(Disease.UNKNOWN, pedigree.members.get(2).disease);
-		Assert.assertEquals(Disease.UNKNOWN, pedigree.members.get(3).disease);
+		Assert.assertEquals(Disease.UNKNOWN, pedigree.getMembers().get(0).getDisease());
+		Assert.assertEquals(Disease.UNKNOWN, pedigree.getMembers().get(1).getDisease());
+		Assert.assertEquals(Disease.UNKNOWN, pedigree.getMembers().get(2).getDisease());
+		Assert.assertEquals(Disease.UNKNOWN, pedigree.getMembers().get(3).getDisease());
 
-		Assert.assertEquals(0, pedigree.members.get(0).extraFields.size());
-		Assert.assertEquals(0, pedigree.members.get(1).extraFields.size());
-		Assert.assertEquals(0, pedigree.members.get(2).extraFields.size());
-		Assert.assertEquals(0, pedigree.members.get(3).extraFields.size());
+		Assert.assertEquals(0, pedigree.getMembers().get(0).getExtraFields().size());
+		Assert.assertEquals(0, pedigree.getMembers().get(1).getExtraFields().size());
+		Assert.assertEquals(0, pedigree.getMembers().get(2).getExtraFields().size());
+		Assert.assertEquals(0, pedigree.getMembers().get(3).getExtraFields().size());
 	}
 
 }

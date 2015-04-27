@@ -14,13 +14,13 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public abstract class AnnotationListTextGenerator {
 
 	/** the decorated {@link AnnotationList} */
-	public final AnnotationList annotations;
+	protected final AnnotationList annotations;
 
 	/** alternative allele ID (1 from VCF is 0 here) */
-	public final int alleleID;
+	private final int alleleID;
 
 	/** total number of alternative alleles */
-	public final int altCount;
+	private final int altCount;
 
 	/**
 	 * Initialize the decorator.
@@ -38,6 +38,16 @@ public abstract class AnnotationListTextGenerator {
 		this.altCount = altCount;
 	}
 
+	/** @return alternative allele ID (1 from VCF is 0 here) */
+	public int getAlleleID() {
+		return alleleID;
+	}
+
+	/** @return total number of alternative alleles */
+	public int getAltCount() {
+		return altCount;
+	}
+
 	/**
 	 * @return String with the effect text, comma separated if {@link #getAnnotations} returns more than one element
 	 */
@@ -48,7 +58,7 @@ public abstract class AnnotationListTextGenerator {
 				builder.append(',');
 			if (altCount > 1)
 				builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
-			builder.append(Joiner.on("+").join(anno.effects));
+			builder.append(Joiner.on("+").join(anno.getEffects()));
 		}
 		return builder.toString();
 	}

@@ -35,15 +35,15 @@ public class CDSPositionTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		CDSPosition pos = new CDSPosition(this.infoForward, 10);
-		Assert.assertEquals(pos.transcript, this.infoForward);
-		Assert.assertEquals(pos.pos, 10);
+		Assert.assertEquals(pos.getTranscript(), this.infoForward);
+		Assert.assertEquals(pos.getPos(), 10);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		CDSPosition pos = new CDSPosition(this.infoForward, 10, PositionType.ZERO_BASED);
-		Assert.assertEquals(pos.transcript, this.infoForward);
-		Assert.assertEquals(pos.pos, 10);
+		Assert.assertEquals(pos.getTranscript(), this.infoForward);
+		Assert.assertEquals(pos.getPos(), 10);
 	}
 
 }

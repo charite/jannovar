@@ -18,13 +18,13 @@ import de.charite.compbio.jannovar.Immutable;
 public final class Pedigree {
 
 	/** the pedigree's name */
-	public final String name;
+	private final String name;
 
 	/** the pedigree's members */
-	public final ImmutableList<Person> members;
+	private final ImmutableList<Person> members;
 
 	/** mapping from member name to member */
-	public final ImmutableMap<String, IndexedPerson> nameToMember;
+	private final ImmutableMap<String, IndexedPerson> nameToMember;
 
 	/**
 	 * Initialize the object with the given values
@@ -41,7 +41,7 @@ public final class Pedigree {
 		ImmutableMap.Builder<String, IndexedPerson> mapBuilder = new ImmutableMap.Builder<String, IndexedPerson>();
 		int i = 0;
 		for (Person person : members)
-			mapBuilder.put(person.name, new IndexedPerson(i++, person));
+			mapBuilder.put(person.getName(), new IndexedPerson(i++, person));
 		this.nameToMember = mapBuilder.build();
 	}
 
@@ -58,6 +58,21 @@ public final class Pedigree {
 	 */
 	public Pedigree(PedFileContents contents, String pedigreeName) throws PedParseException {
 		this(pedigreeName, new PedigreeExtractor(pedigreeName, contents).run());
+	}
+
+	/** @return the pedigree's name */
+	public String getName() {
+		return name;
+	}
+
+	/** @return the pedigree's members */
+	public ImmutableList<Person> getMembers() {
+		return members;
+	}
+
+	/** @return mapping from member name to member */
+	public ImmutableMap<String, IndexedPerson> getNameToMember() {
+		return nameToMember;
 	}
 
 	/**
@@ -81,7 +96,7 @@ public final class Pedigree {
 	public ImmutableList<String> getNames() {
 		ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
 		for (Person p : members)
-			builder.add(p.name);
+			builder.add(p.getName());
 		return builder.build();
 	}
 
@@ -91,12 +106,20 @@ public final class Pedigree {
 	}
 
 	public static class IndexedPerson {
-		public final int idx;
-		public final Person person;
+		private final int idx;
+		private final Person person;
 
 		public IndexedPerson(int idx, Person person) {
 			this.idx = idx;
 			this.person = person;
+		}
+
+		public int getIdx() {
+			return idx;
+		}
+
+		public Person getPerson() {
+			return person;
 		}
 	}
 

@@ -18,29 +18,29 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 * Accession number of the transcript (e.g., the UCSC knownGene id - uc011nca.2). The version number may be
 	 * included.
 	 */
-	public final String accession;
+	private final String accession;
 
 	/**
 	 * Gene symbol of the known Gene. Can be null for some genes. Note that in annovar, $name2 corresponds to the
 	 * geneSymbol if available, otherwise the kgID is used.
 	 */
-	public final String geneSymbol;
+	private final String geneSymbol;
 
 	/** Genomic interval with transcript begin/end. */
-	public final GenomeInterval txRegion;
+	private final GenomeInterval txRegion;
 
 	/**
 	 * Genomic interval with CDS begin/end.
 	 *
 	 * @note Note that in Jannovar, the CDS region includes the start and stop codon.
 	 */
-	public final GenomeInterval cdsRegion;
+	private final GenomeInterval cdsRegion;
 
 	/** Genomic intervals with the exons, order is dictated by strand of transcript. */
-	public final ImmutableList<GenomeInterval> exonRegions;
+	private final ImmutableList<GenomeInterval> exonRegions;
 
 	/** cDNA sequence of the spliced RNA of this known gene transcript. */
-	public final String sequence;
+	private final String sequence;
 
 	/**
 	 * The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>ENTREZ([0-9]+)</code>
@@ -48,7 +48,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 *
 	 * <code>null</code> for no available gene ID.
 	 */
-	public final String geneID;
+	private final String geneID;
 
 	/**
 	 * The transcript support level of the this transcript (the lower the better).
@@ -56,10 +56,10 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 * @see TranscriptSupportLevels
 	 * @see {@link http://www.ensembl.org/Help/Glossary?id=492}
 	 */
-	public final int transcriptSupportLevel;
+	private final int transcriptSupportLevel;
 
 	/** Class version (for serialization). */
-	public static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 3L;
 
 	/**
 	 * Initialize the TranscriptInfo object from the given parameters.
@@ -75,6 +75,54 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		this.geneID = geneID;
 		this.transcriptSupportLevel = transcriptSupportLevel;
 		checkForConsistency();
+	}
+
+	/** @return accession number */
+	public String getAccession() {
+		return accession;
+	}
+
+	/** @return the gene symbol */
+	public String getGeneSymbol() {
+		return geneSymbol;
+	}
+
+	/** @return transcript's genomic region */
+	public GenomeInterval getTXRegion() {
+		return txRegion;
+	}
+
+	/** @return CDS genomic region */
+	public GenomeInterval getCDSRegion() {
+		return cdsRegion;
+	}
+
+	/** @return genomic intervals with the exons, order is dictated by strand of transcript. */
+	public ImmutableList<GenomeInterval> getExonRegions() {
+		return exonRegions;
+	}
+
+	/** @return cDNA sequence of the spliced RNA of this known gene transcript. */
+	public String getSequence() {
+		return sequence;
+	}
+
+	/**
+	 * @return The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>ENTREZ([0-9]+)</code>
+	 * "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no available gene ID.
+	 */
+	public String getGeneID() {
+		return geneID;
+	}
+
+	/**
+	 * @return transcript support level of the this transcript (the lower the better).
+	 *
+	 * @see TranscriptSupportLevels
+	 * @see {@link http://www.ensembl.org/Help/Glossary?id=492}
+	 */
+	public int getTranscriptSupportLevel() {
+		return transcriptSupportLevel;
 	}
 
 	/** @return the strand of the transcript */
@@ -207,7 +255,6 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		return true;
 	}
 
-	@Override
 	public int compareTo(TranscriptModel o) {
 		int result = -1;
 		if (geneID != null && o.geneID != null) {

@@ -51,17 +51,15 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 		super(pedigree, list);
 	}
 
-	@Override
 	public boolean runSingleSampleCase() {
-		for (ImmutableList<Genotype> gtList : list.calls)
+		for (ImmutableList<Genotype> gtList : list.getCalls())
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
 				return true;
 		return false;
 	}
 
-	@Override
 	public boolean runMultiSampleCase() {
-		for (ImmutableList<Genotype> gtList : list.calls)
+		for (ImmutableList<Genotype> gtList : list.getCalls())
 			if (containsCompatibleHomozygousVariants(gtList))
 				return true;
 		return false;
@@ -72,18 +70,18 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 	}
 
 	private boolean unaffectedsAreNotHomozygousAlt(ImmutableList<Genotype> gtList) {
-		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
-			if (entry.person.disease == Disease.UNAFFECTED && gtList.get(entry.idx) == Genotype.HOMOZYGOUS_ALT)
+		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values())
+			if (entry.getPerson().getDisease() == Disease.UNAFFECTED && gtList.get(entry.getIdx()) == Genotype.HOMOZYGOUS_ALT)
 				return false;
 		return true;
 	}
 
 	private boolean unaffectedParentsOfAffectedAreNotHomozygous(ImmutableList<Genotype> gtList) {
 		for (String name : getUnaffectedParentNamesOfAffecteds()) {
-			IndexedPerson iPerson = pedigree.nameToMember.get(name);
+			IndexedPerson iPerson = pedigree.getNameToMember().get(name);
 			// INVARIANT: iPerson cannot be null due to construction of Pedigree class
-			if (gtList.get(iPerson.idx) == Genotype.HOMOZYGOUS_ALT
-					|| gtList.get(iPerson.idx) == Genotype.HOMOZYGOUS_REF)
+			if (gtList.get(iPerson.getIdx()) == Genotype.HOMOZYGOUS_ALT
+					|| gtList.get(iPerson.getIdx()) == Genotype.HOMOZYGOUS_REF)
 				return false;
 		}
 		return true;
@@ -95,12 +93,12 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 	private ImmutableSet<String> getUnaffectedParentNamesOfAffecteds() {
 		ImmutableSet.Builder<String> builder = new ImmutableSet.Builder<String>();
 
-		for (Person person : pedigree.members)
-			if (person.disease == Disease.AFFECTED) {
-				if (person.father != null && person.father.disease == Disease.UNAFFECTED)
-					builder.add(person.father.name);
-				if (person.mother != null && person.mother.disease == Disease.UNAFFECTED)
-					builder.add(person.mother.name);
+		for (Person person : pedigree.getMembers())
+			if (person.getDisease() == Disease.AFFECTED) {
+				if (person.getFather() != null && person.getFather().getDisease() == Disease.UNAFFECTED)
+					builder.add(person.getFather().getName());
+				if (person.getMother() != null && person.getMother().getDisease() == Disease.UNAFFECTED)
+					builder.add(person.getMother().getName());
 			}
 
 		return builder.build();
@@ -109,11 +107,11 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 	private boolean affectedsAreCompatible(ImmutableList<Genotype> gtList) {
 		int numHomozygousAlt = 0;
 
-		for (Pedigree.IndexedPerson entry : pedigree.nameToMember.values())
-			if (entry.person.disease == Disease.AFFECTED) {
-				if (gtList.get(entry.idx) == Genotype.HOMOZYGOUS_REF || gtList.get(entry.idx) == Genotype.HETEROZYGOUS)
+		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values())
+			if (entry.getPerson().getDisease() == Disease.AFFECTED) {
+				if (gtList.get(entry.getIdx()) == Genotype.HOMOZYGOUS_REF || gtList.get(entry.getIdx()) == Genotype.HETEROZYGOUS)
 					return false;
-				else if (gtList.get(entry.idx) == Genotype.HOMOZYGOUS_ALT)
+				else if (gtList.get(entry.getIdx()) == Genotype.HOMOZYGOUS_ALT)
 					numHomozygousAlt += 1;
 			}
 

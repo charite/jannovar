@@ -12,9 +12,9 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public final class CDSPosition {
 
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 	/** the position within the transcript */
-	public final int pos;
+	private final int pos;
 
 	/** construct transcript position with one-based coordinate system */
 	public CDSPosition(TranscriptModel transcript, int pos) {
@@ -28,6 +28,16 @@ public final class CDSPosition {
 			this.pos = pos - 1;
 		else
 			this.pos = pos;
+	}
+
+	/** @return the transcript that this position is relative to */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/** @return the position within the transcript */
+	public int getPos() {
+		return pos;
 	}
 
 	/**
@@ -55,7 +65,7 @@ public final class CDSPosition {
 	 */
 	@Override
 	public String toString() {
-		return StringUtil.concatenate(transcript.accession, ":c.", pos + 1);
+		return StringUtil.concatenate(transcript.getAccession(), ":c.", pos + 1);
 	}
 
 	/*

@@ -127,7 +127,6 @@ public class UCSCParser implements TranscriptParser {
 		this.knownGeneMap = new HashMap<String, TranscriptModelBuilder>();
 	}
 
-	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Build paths to UCSC files.
 		final String knownGenePath = PathUtil.join(basePath, getINIFileName("knownGene"));
@@ -172,8 +171,8 @@ public class UCSCParser implements TranscriptParser {
 	 * @return <code>false</code> if known problems have been found
 	 */
 	private boolean checkTranscriptInfo(TranscriptModel info) {
-		if (info.transcriptLength() > info.sequence.length()) {
-			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.accession);
+		if (info.transcriptLength() > info.getSequence().length()) {
+			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.getAccession());
 			return false;
 		}
 		return true;
@@ -229,7 +228,7 @@ public class UCSCParser implements TranscriptParser {
 		tib.setAccession(A[0]);
 		tib.setGeneSymbol(tib.getAccession()); // will be replaced when parsing
 												// geneXref file.
-		Integer chrID = refDict.contigID.get(A[1]);
+		Integer chrID = refDict.getContigNameToID().get(A[1]);
 		if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception
 							// to be thrown.
 			throw new TranscriptParseException("Could not parse chromosome field: " + A[1]);
@@ -253,7 +252,7 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
-		tib.setTxRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd,
+		tib.setTXRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd,
 				PositionType.ONE_BASED).withStrand(strand));
 
 		int cdsStart, cdsEnd;
@@ -268,7 +267,7 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
-		tib.setCdsRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd,
+		tib.setCDSRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd,
 				PositionType.ONE_BASED).withStrand(strand));
 
 		// Get number of exons.

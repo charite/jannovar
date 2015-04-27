@@ -34,7 +34,7 @@ public class CompatibilityCheckerAutosomalDominantLargeTest extends Compatibilit
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(13, pedigree.members.size());
+		Assert.assertEquals(13, pedigree.getMembers().size());
 	}
 
 	@Test

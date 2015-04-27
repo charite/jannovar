@@ -100,7 +100,7 @@ abstract class AnnotationBuilder {
 			try {
 				// normalize amino acid change and add information about this into {@link messages}
 				this.change = GenomeChangeNormalizer.normalizeGenomeChange(transcript, change,
-						projector.genomeToTranscriptPos(change.pos));
+						projector.genomeToTranscriptPos(change.getGenomePos()));
 				if (!change.equals(this.change))
 					messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
 			} catch (ProjectionException e) {
@@ -140,7 +140,7 @@ abstract class AnnotationBuilder {
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithUpstreamRegion(changeInterval) || so.overlapsWithDownstreamRegion(changeInterval))
 			return buildUpOrDownstreamAnnotation();
-		else if (!changeInterval.overlapsWith(transcript.txRegion))
+		else if (!changeInterval.overlapsWith(transcript.getTXRegion()))
 			return buildIntergenicAnnotation();
 
 		// Project genome to CDS position.
@@ -313,7 +313,7 @@ abstract class AnnotationBuilder {
 		// System.err.println("CHANGE\t" + change.getGenomeInterval());
 		// System.err.println("TX REGION\t" + transcript.txRegion);
 		// System.err.println("PROJECTED CHANGE\t" + projector.projectGenomeToTXInterval(change.getGenomeInterval()));
-		locBuilder.setTxLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
+		locBuilder.setTXLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is changed => insertion

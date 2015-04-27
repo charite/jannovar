@@ -9,9 +9,9 @@ public final class ProgressBar {
 
 	// TODO(holtgrem): improve documentation
 	// TODO(holtgrem): allow incremental printing for text files
-	public final long min;
-	public final long max;
-	public final boolean doPrint;
+	private final long min;
+	private final long max;
+	private final boolean doPrint;
 
 	public ProgressBar(long min, long max) {
 		this(min, max, true);
@@ -21,6 +21,18 @@ public final class ProgressBar {
 		this.min = min;
 		this.max = max;
 		this.doPrint = true;
+	}
+
+	public long getMin() {
+		return min;
+	}
+
+	public long getMax() {
+		return max;
+	}
+
+	public boolean isDoPrint() {
+		return doPrint;
 	}
 
 	public void print(long pos) {

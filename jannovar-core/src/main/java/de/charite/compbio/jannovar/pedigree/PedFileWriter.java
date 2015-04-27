@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 public final class PedFileWriter {
 
 	/** the file to write to */
-	final public File file;
+	private final File file;
 
 	public PedFileWriter(File file) {
 		this.file = file;
@@ -54,32 +54,32 @@ public final class PedFileWriter {
 
 		// write header
 		out.append("#PEDIGREE\tNAME\tFATHER\tMOTHER\tSEX\tDISEASE");
-		for (String header : contents.extraColumnHeaders) {
+		for (String header : contents.getExtraColumnHeaders()) {
 			out.append('\t');
 			out.append(header);
 		}
 		out.append('\n');
 
 		// write payload
-		for (PedPerson individual : contents.individuals)
+		for (PedPerson individual : contents.getIndividuals())
 			writeIndividual(individual, out);
 		out.close();
 	}
 
 	private static void writeIndividual(PedPerson individual, PrintWriter out) throws IOException {
-		out.append(individual.pedigree);
+		out.append(individual.getPedigree());
 		out.append('\t');
-		out.append(individual.name);
+		out.append(individual.getName());
 		out.append('\t');
-		out.append(individual.father);
+		out.append(individual.getFather());
 		out.append('\t');
-		out.append(individual.mother);
+		out.append(individual.getMother());
 		out.append('\t');
-		out.append("" + individual.sex.toInt());
+		out.append("" + individual.getSex().toInt());
 		out.append('\t');
-		out.append("" + individual.disease.toInt());
+		out.append("" + individual.getDisease().toInt());
 
-		for (String field : individual.extraFields) {
+		for (String field : individual.getExtraFields()) {
 			out.append('\t');
 			out.append(field);
 		}

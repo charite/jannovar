@@ -66,10 +66,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
-		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
+		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -77,10 +77,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
-		Assert.assertEquals(null, anno.transcript);
-		Assert.assertEquals(null, anno.annoLoc);
-		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(null, anno.getTranscript());
+		Assert.assertEquals(null, anno.getAnnoLoc());
+		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -88,10 +88,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
-		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
+		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -99,10 +99,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
-		Assert.assertEquals(null, anno.transcript);
-		Assert.assertEquals(null, anno.annoLoc);
-		Assert.assertEquals("g.6640063_6640066del", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(null, anno.getTranscript());
+		Assert.assertEquals(null, anno.getAnnoLoc());
+		Assert.assertEquals("g.6640063_6640066del", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -110,10 +110,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "ATCG");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
-		Assert.assertEquals("g.6640063_6640066inv", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
+		Assert.assertEquals("g.6640063_6640066inv", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -121,10 +121,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "ATCG");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
-		Assert.assertEquals(null, anno.transcript);
-		Assert.assertEquals(null, anno.annoLoc);
-		Assert.assertEquals("g.6640063_6640066inv", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(null, anno.getTranscript());
+		Assert.assertEquals(null, anno.getAnnoLoc());
+		Assert.assertEquals("g.6640063_6640066inv", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -132,10 +132,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "TTTTA");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
-		Assert.assertEquals(infoForward.accession, anno.transcript.accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.annoLoc.rank);
-		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
+		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 	@Test
@@ -143,10 +143,10 @@ public class StructuralVariantAnnotationBuilderTest {
 		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "TTTTA");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
-		Assert.assertEquals(null, anno.transcript);
-		Assert.assertEquals(null, anno.annoLoc);
-		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.ntHGVSDescription);
-		Assert.assertEquals(null, anno.aaHGVSDescription);
+		Assert.assertEquals(null, anno.getTranscript());
+		Assert.assertEquals(null, anno.getAnnoLoc());
+		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
 
 }
