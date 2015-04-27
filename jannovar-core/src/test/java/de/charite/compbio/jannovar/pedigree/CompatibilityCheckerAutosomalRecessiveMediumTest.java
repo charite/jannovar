@@ -29,7 +29,7 @@ public class CompatibilityCheckerAutosomalRecessiveMediumTest extends Compatibil
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(9, pedigree.members.size());
+		Assert.assertEquals(9, pedigree.getMembers().size());
 	}
 
 	@Test

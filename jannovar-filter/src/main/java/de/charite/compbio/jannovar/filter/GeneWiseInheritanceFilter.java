@@ -73,8 +73,8 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		this.checker = new PedigreeDiseaseCompatibilityDecorator(pedigree);
 
 		ImmutableList.Builder<String> namesBuilder = new ImmutableList.Builder<String>();
-		for (Person p : pedigree.members)
-			namesBuilder.add(p.name);
+		for (Person p : pedigree.getMembers())
+			namesBuilder.add(p.getName());
 		this.personNames = namesBuilder.build();
 	}
 

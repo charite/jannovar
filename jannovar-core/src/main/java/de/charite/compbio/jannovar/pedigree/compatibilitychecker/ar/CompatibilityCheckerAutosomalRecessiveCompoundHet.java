@@ -30,7 +30,7 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 
 	
 	/** list of siblings for each person in {@link #pedigree} */
-	public final ImmutableMap<Person, ImmutableList<Person>> siblings;
+	private final ImmutableMap<Person, ImmutableList<Person>> siblings;
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -56,7 +56,7 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 
 	public boolean runSingleSampleCase() {
 		int numHet = 0;
-		for (ImmutableList<Genotype> gtList : list.calls)
+		for (ImmutableList<Genotype> gtList : list.getCalls())
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
 				numHet++;
 		return (numHet > 1);
@@ -79,21 +79,21 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 
 	private boolean isCompatibleWithUnaffected(Candidate c) {
 		int pIdx = 0;
-		for (Person p : pedigree.members) {
-			if (p.disease == Disease.UNAFFECTED) {
+		for (Person p : pedigree.getMembers()) {
+			if (p.getDisease() == Disease.UNAFFECTED) {
 				boolean patHet = false;
 				boolean matHet = false;
 				// none of the genotypes from the paternal or maternal call
 				// lists may be homozygous in the index
-				if (c.paternal != null) {
-					final Genotype pGT = c.paternal.get(pIdx);
+				if (c.getPaternal() != null) {
+					final Genotype pGT = c.getPaternal().get(pIdx);
 					if (pGT == Genotype.HOMOZYGOUS_ALT)
 						return false;
 					if (pGT == Genotype.HETEROZYGOUS)
 						patHet = true;
 				}
-				if (c.maternal != null) {
-					final Genotype mGT = c.maternal.get(pIdx);
+				if (c.getMaternal() != null) {
+					final Genotype mGT = c.getMaternal().get(pIdx);
 					if (mGT == Genotype.HOMOZYGOUS_ALT)
 						return false;
 					if (mGT == Genotype.HETEROZYGOUS)
@@ -103,11 +103,11 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 				// if mat and pat variant are heterozygous in an unaffected,
 				// check if they are on the same allele or not
 				if (patHet && matHet) {
-					if (c.paternal != null && p.father != null && c.maternal != null && p.mother != null) {
-						final Genotype ppGT = c.paternal.get(pedigree.nameToMember.get(p.father.name).idx);
-						final Genotype mpGT = c.paternal.get(pedigree.nameToMember.get(p.mother.name).idx);
-						final Genotype pmGT = c.maternal.get(pedigree.nameToMember.get(p.father.name).idx);
-						final Genotype mmGT = c.maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
+					if (c.getPaternal() != null && p.getFather() != null && c.getMaternal() != null && p.getMother() != null) {
+						final Genotype ppGT = c.getPaternal().get(pedigree.getNameToMember().get(p.getFather().getName()).getIdx());
+						final Genotype mpGT = c.getPaternal().get(pedigree.getNameToMember().get(p.getMother().getName()).getIdx());
+						final Genotype pmGT = c.getMaternal().get(pedigree.getNameToMember().get(p.getFather().getName()).getIdx());
+						final Genotype mmGT = c.getMaternal().get(pedigree.getNameToMember().get(p.getMother().getName()).getIdx());
 						// way one (paternal and maternal can now be switched around!
 						if (ppGT == Genotype.HETEROZYGOUS && mpGT == Genotype.HOMOZYGOUS_REF && pmGT == Genotype.HOMOZYGOUS_REF && mmGT == Genotype.HETEROZYGOUS)
 							return false;
@@ -127,17 +127,17 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		ArrayList<Candidate> result = new ArrayList<Candidate>();
 
 		int pIdx = 0;
-		for (Person p : pedigree.members) {
-			if (p.disease == Disease.AFFECTED && (p.father != null || p.mother != null)) {
+		for (Person p : pedigree.getMembers()) {
+			if (p.getDisease() == Disease.AFFECTED && (p.getFather() != null || p.getMother() != null)) {
 				ArrayList<ImmutableList<Genotype>> paternal = new ArrayList<ImmutableList<Genotype>>();
 				ArrayList<ImmutableList<Genotype>> maternal = new ArrayList<ImmutableList<Genotype>>();
 
 				// collect candidates towards the paternal side (heterozygous or
 				// not observed in child and father. Not
 				// hom_alt or het in mother)
-				final int motherIdx = (p.mother == null) ? -1 : pedigree.nameToMember.get(p.mother.name).idx;
-				final int fatherIdx = (p.father == null) ? -1 : pedigree.nameToMember.get(p.father.name).idx;
-				for (ImmutableList<Genotype> lst : list.calls)
+				final int motherIdx = (p.getMother() == null) ? -1 : pedigree.getNameToMember().get(p.getMother().getName()).getIdx();
+				final int fatherIdx = (p.getFather() == null) ? -1 : pedigree.getNameToMember().get(p.getFather().getName()).getIdx();
+				for (ImmutableList<Genotype> lst : list.getCalls())
 					if ((lst.get(pIdx) == Genotype.HETEROZYGOUS || lst.get(pIdx) == Genotype.NOT_OBSERVED)
 							&& (fatherIdx == -1 || lst.get(fatherIdx) == Genotype.HETEROZYGOUS || lst.get(fatherIdx) == Genotype.NOT_OBSERVED)
 							&& (motherIdx == -1 || lst.get(motherIdx) == Genotype.NOT_OBSERVED || lst.get(motherIdx) == Genotype.HOMOZYGOUS_REF))
@@ -145,7 +145,7 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 				// collect candidates towards the paternal side (heterozygous or
 				// not observed in child and mother. Not
 				// hom_alt or het in father)
-				for (ImmutableList<Genotype> lst : list.calls)
+				for (ImmutableList<Genotype> lst : list.getCalls())
 					if ((lst.get(pIdx) == Genotype.HETEROZYGOUS || lst.get(pIdx) == Genotype.NOT_OBSERVED)
 							&& (motherIdx == -1 || lst.get(motherIdx) == Genotype.HETEROZYGOUS || lst.get(motherIdx) == Genotype.NOT_OBSERVED)
 							&& (fatherIdx == -1 || lst.get(fatherIdx) == Genotype.NOT_OBSERVED || lst.get(fatherIdx) == Genotype.HOMOZYGOUS_REF))
@@ -179,12 +179,12 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 
 	private boolean isCompatibleWithTriosAroundAffected(Candidate c) {
 		int pIdx = 0;
-		for (Person p : pedigree.members) {
-			if (p.disease == Disease.AFFECTED) {
+		for (Person p : pedigree.getMembers()) {
+			if (p.getDisease() == Disease.AFFECTED) {
 				//we have to check this for paternal,maternal and vice versa. 
 				// Paternal maternal inheritance can be different for other parents in the pedigree. 
-				if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.paternal, c.maternal))
-					if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.maternal, c.paternal))
+				if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.getPaternal(), c.getMaternal()))
+					if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.getMaternal(), c.getPaternal()))
 						return false;
 			}
 			pIdx++;
@@ -210,16 +210,16 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 
 		// the paternal variant may not be homozygous in the father of
 		// p, if any
-		if (paternal != null && p.father != null) {
-			final Genotype pGT = paternal.get(pedigree.nameToMember.get(p.father.name).idx);
+		if (paternal != null && p.getFather() != null) {
+			final Genotype pGT = paternal.get(pedigree.getNameToMember().get(p.getFather().getName()).getIdx());
 			if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
 				return false;
 		}
 
 		// the maternal variant may not be homozygous in the mother of
 		// p, if any
-		if (maternal != null && p.mother != null) {
-			final Genotype mGT = maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
+		if (maternal != null && p.getMother() != null) {
+			final Genotype mGT = maternal.get(pedigree.getNameToMember().get(p.getMother().getName()).getIdx());
 			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
 				return false;
 		}
@@ -228,9 +228,9 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		// as p
 		if (siblings != null && !siblings.isEmpty() && siblings.containsKey(p))
 		for (Person sibling : siblings.get(p))
-			if (sibling.disease == Disease.UNAFFECTED) {
-				final Genotype pGT = paternal.get(pedigree.nameToMember.get(sibling.name).idx);
-				final Genotype mGT = maternal.get(pedigree.nameToMember.get(sibling.name).idx);
+			if (sibling.getDisease() == Disease.UNAFFECTED) {
+				final Genotype pGT = paternal.get(pedigree.getNameToMember().get(sibling.getName()).getIdx());
+				final Genotype mGT = maternal.get(pedigree.getNameToMember().get(sibling.getName()).getIdx());
 				if (pGT == Genotype.HETEROZYGOUS && mGT == Genotype.HETEROZYGOUS)
 					return false;
 			}

@@ -76,14 +76,14 @@ public class PedFileReaderTest {
 		PedFileReader reader = new PedFileReader(this.tmpFileWithHeader);
 		PedFileContents pedFileContents = reader.read();
 
-		Assert.assertEquals(pedFileContents.extraColumnHeaders.size(), 0);
+		Assert.assertEquals(pedFileContents.getExtraColumnHeaders().size(), 0);
 
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("fam", "father", "0", "0", Sex.MALE, Disease.UNKNOWN));
 		individuals.add(new PedPerson("fam", "mother", "0", "0", Sex.FEMALE, Disease.UNKNOWN));
 		individuals.add(new PedPerson("fam", "son", "father", "mother", Sex.MALE, Disease.UNKNOWN));
 		individuals.add(new PedPerson("fam", "daughter", "father", "mother", Sex.FEMALE, Disease.UNKNOWN));
-		Assert.assertEquals(pedFileContents.individuals, individuals.build());
+		Assert.assertEquals(pedFileContents.getIndividuals(), individuals.build());
 	}
 
 	@Test
@@ -91,14 +91,14 @@ public class PedFileReaderTest {
 		PedFileReader reader = new PedFileReader(this.tmpFileWithoutHeader);
 		PedFileContents pedFileContents = reader.read();
 
-		Assert.assertEquals(pedFileContents.extraColumnHeaders.size(), 0);
+		Assert.assertEquals(pedFileContents.getExtraColumnHeaders().size(), 0);
 
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("fam", "father", "0", "0", Sex.MALE, Disease.UNKNOWN));
 		individuals.add(new PedPerson("fam", "mother", "0", "0", Sex.FEMALE, Disease.UNKNOWN));
 		individuals.add(new PedPerson("fam", "son", "father", "mother", Sex.MALE, Disease.UNKNOWN));
 		individuals.add(new PedPerson("fam", "daughter", "father", "mother", Sex.FEMALE, Disease.UNKNOWN));
-		Assert.assertEquals(pedFileContents.individuals, individuals.build());
+		Assert.assertEquals(pedFileContents.getIndividuals(), individuals.build());
 	}
 
 }

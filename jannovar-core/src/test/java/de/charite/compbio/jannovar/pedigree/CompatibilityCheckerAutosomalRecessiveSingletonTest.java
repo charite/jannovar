@@ -21,7 +21,7 @@ public class CompatibilityCheckerAutosomalRecessiveSingletonTest extends Compati
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(1, pedigree.members.size());
+		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
 	@Test

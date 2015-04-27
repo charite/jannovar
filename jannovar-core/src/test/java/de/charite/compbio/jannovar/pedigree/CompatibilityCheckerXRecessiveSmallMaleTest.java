@@ -24,7 +24,7 @@ public class CompatibilityCheckerXRecessiveSmallMaleTest extends CompatibilityCh
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(4, pedigree.members.size());
+		Assert.assertEquals(4, pedigree.getMembers().size());
 	}
 
 	@Test

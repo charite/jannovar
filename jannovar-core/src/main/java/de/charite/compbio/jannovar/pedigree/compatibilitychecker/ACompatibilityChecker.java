@@ -20,25 +20,35 @@ import de.charite.compbio.jannovar.pedigree.Person;
 public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 
 	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
+	protected final Pedigree pedigree;
 
 	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
+	protected final GenotypeList list;
 	
 	/**
 	 * Collects list of compatible mutations from father an mother for compound heterozygous.
 	 */
 	protected class Candidate {
 		/** one VCF record compatible with mutation in father */
-		public final ImmutableList<Genotype> paternal;
+		private final ImmutableList<Genotype> paternal;
 		/** one VCF record compatible with mutation in mother */
-		public final ImmutableList<Genotype> maternal;
+		private final ImmutableList<Genotype> maternal;
 
 		public Candidate(ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
 			this.paternal = paternal;
 			this.maternal = maternal;
 		}
-	}
+
+		/** @return one VCF record compatible with mutation in father */
+		public ImmutableList<Genotype> getPaternal() {
+			return paternal;
+		}
+		
+		/** @return one VCF record compatible with mutation in mother */
+		public ImmutableList<Genotype> getMaternal() {
+			return maternal;
+		}
+}
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -57,11 +67,11 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public ACompatibilityChecker(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
+		if (pedigree.getMembers().size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
 		if (!list.namesEqual(pedigree))
 			throw new CompatibilityCheckerException("Incompatible names in pedigree and genotype list.");
-		if (list.calls.get(0).size() == 0)
+		if (list.getCalls().get(0).size() == 0)
 			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
 
 		this.pedigree = pedigree;
@@ -73,7 +83,7 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.ICompatibilityChecker#run()
 	 */
 	public boolean run() throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 1)
+		if (pedigree.getMembers().size() == 1)
 			return runSingleSampleCase();
 		else
 			return runMultiSampleCase();
@@ -86,12 +96,12 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 	 */
 	protected static ImmutableMap<Person, ImmutableList<Person>> buildSiblings(Pedigree pedigree) {
 		ImmutableMap.Builder<Person, ImmutableList<Person>> mapBuilder = new ImmutableMap.Builder<Person, ImmutableList<Person>>();
-		for (Person p1 : pedigree.members) {
-			if (p1.mother == null || p1.father == null)
+		for (Person p1 : pedigree.getMembers()) {
+			if (p1.getMother() == null || p1.getFather() == null)
 				continue;
 			ImmutableList.Builder<Person> listBuilder = new ImmutableList.Builder<Person>();
-			for (Person p2 : pedigree.members) {
-				if (p1.equals(p2) || !p1.mother.equals(p2.mother) || !p1.father.equals(p2.father))
+			for (Person p2 : pedigree.getMembers()) {
+				if (p1.equals(p2) || !p1.getMother().equals(p2.getMother()) || !p1.getFather().equals(p2.getFather()))
 					continue;
 				listBuilder.add(p2);
 			}

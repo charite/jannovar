@@ -11,10 +11,15 @@ package de.charite.compbio.jannovar.annotation;
 final public class AnnotationTextGenerator {
 
 	/** the decorated {@link Annotation} */
-	final public Annotation annotation;
+	private final Annotation annotation;
 
 	AnnotationTextGenerator(Annotation annotation) {
 		this.annotation = annotation;
+	}
+
+	/** @return the decorated {@link Annotation} */
+	public Annotation getAnnotation() {
+		return annotation;
 	}
 
 	/**

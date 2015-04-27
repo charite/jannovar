@@ -19,16 +19,16 @@ import de.charite.compbio.jannovar.Immutable;
 public final class GenotypeList {
 
 	/** the name of the gene for this genotype call list */
-	public final String geneName;
+	private final String geneName;
 
 	/** the list of individual names */
-	public final ImmutableList<String> names;
+	private final ImmutableList<String> names;
 
 	/** whether or not the variants are on the X chromsome */
-	public final boolean isXChromosomal;
+	private final boolean isXChromosomal;
 
 	/** the lists of genotype calls, each contains one entry for each individual */
-	public final ImmutableList<ImmutableList<Genotype>> calls;
+	private final ImmutableList<ImmutableList<Genotype>> calls;
 
 	/**
 	 * Construct and initialize object.
@@ -50,6 +50,26 @@ public final class GenotypeList {
 		this.names = ImmutableList.copyOf(names);
 		this.isXChromosomal = isXChromosomal;
 		this.calls = calls;
+	}
+
+	/** the name of the gene for this genotype call list */
+	public String getGeneName() {
+		return geneName;
+	}
+
+	/** the list of individual names */
+	public ImmutableList<String> getNames() {
+		return names;
+	}
+
+	/** whether or not the variants are on the X chromsome */
+	public boolean isXChromosomal() {
+		return isXChromosomal;
+	};
+
+	/** the lists of genotype calls, each contains one entry for each individual */
+	public ImmutableList<ImmutableList<Genotype>> getCalls() {
+		return calls;
 	}
 
 	/**

@@ -48,20 +48,20 @@ public class CompatibilityCheckerAutosomalDominant extends ACompatibilityChecker
 
 	public boolean runSingleSampleCase() {
 		// We could also allow Genotye.HOMOZYGOUS_ALT here but that is not the interesting case.
-		for (ImmutableList<Genotype> gtList : list.calls)
+		for (ImmutableList<Genotype> gtList : list.getCalls())
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
 				return true;
 		return false;
 	}
 
 	public boolean runMultiSampleCase() {
-		for (ImmutableList<Genotype> gtList : list.calls) {
+		for (ImmutableList<Genotype> gtList : list.getCalls()) {
 			boolean currentVariantCompatible = true; // current variant compatible with AD?
 			int numAffectedWithHet = 0;
 
-			for (int i = 0; i < pedigree.members.size(); ++i) {
+			for (int i = 0; i < pedigree.getMembers().size(); ++i) {
 				final Genotype gt = gtList.get(i);
-				final Disease d = pedigree.members.get(i).disease;
+				final Disease d = pedigree.getMembers().get(i).getDisease();
 
 				if (d == Disease.AFFECTED) {
 					if (gt == Genotype.HOMOZYGOUS_REF || gt == Genotype.HOMOZYGOUS_ALT) {

@@ -50,10 +50,10 @@ public class JannovarFilterApp {
 		} catch (IOException e) {
 			throw new JannovarException("Could not parse Pedigree from " + options.pedPath, e);
 		}
-		Pedigree pedigree = new Pedigree(pedContents, pedContents.individuals.get(0).pedigree);
-		System.err.println("Family used from PED file: " + pedigree.name);
-		for (Person p : pedigree.members)
-			System.err.println("    " + p.name);
+		Pedigree pedigree = new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+		System.err.println("Family used from PED file: " + pedigree.getName());
+		for (Person p : pedigree.getMembers())
+			System.err.println("    " + p.getName());
 		new FilteredWriter(pedigree, options.modeOfInheritance, jannovarDB, reader, writer).run(options);
 		writer.close();
 		final long endTime = System.nanoTime();

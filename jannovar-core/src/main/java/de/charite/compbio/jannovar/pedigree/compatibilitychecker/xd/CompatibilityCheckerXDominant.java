@@ -52,27 +52,27 @@ public class CompatibilityCheckerXDominant extends ACompatibilityChecker {
 	 *             if the pedigree or variant list is invalid
 	 */
 	public boolean run() throws CompatibilityCheckerException {
-		if (!list.isXChromosomal)
+		if (!list.isXChromosomal())
 			return false;
 		return super.run();
 	}
 
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
-		if (pedigree.members.get(0).sex == Sex.FEMALE)
+		if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE)
 			return new CompatibilityCheckerAutosomalDominant(pedigree, list).run();
 		else
 			return new CompatibilityCheckerXRecessive(pedigree, list).run();
 	}
 	
 	public boolean runMultiSampleCase() {
-		for (ImmutableList<Genotype> gtList : list.calls) {
+		for (ImmutableList<Genotype> gtList : list.getCalls()) {
 			boolean currentVariantCompatible = true; // current variant compatible with XD?
 			int numAffectedWithMut = 0;
 
-			for (int i = 0; i < pedigree.members.size(); ++i) {
-				final Sex sex = pedigree.members.get(i).sex;
+			for (int i = 0; i < pedigree.getMembers().size(); ++i) {
+				final Sex sex = pedigree.getMembers().get(i).getSex();
 				final Genotype gt = gtList.get(i);
-				final Disease d = pedigree.members.get(i).disease;
+				final Disease d = pedigree.getMembers().get(i).getDisease();
 
 				if (d == Disease.AFFECTED) {
 					if (gt == Genotype.HOMOZYGOUS_REF || (sex == Sex.FEMALE && gt == Genotype.HOMOZYGOUS_ALT)) {

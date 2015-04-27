@@ -22,22 +22,22 @@ import de.charite.compbio.jannovar.Immutable;
 public final class Person {
 
 	/** the individual's name */
-	public final String name;
+	private final String name;
 
 	/** the individual's father, or <code>null</code> if father is not in pedigree */
-	public final Person father;
+	private final Person father;
 
 	/** the individual's mother, or <code>null</code> if mother is not in pedigree */
-	public final Person mother;
+	private final Person mother;
 
 	/** the individual's sex */
-	public final Sex sex;
+	private final Sex sex;
 
 	/** the individual's disease state */
-	public final Disease disease;
+	private final Disease disease;
 
 	/** extra fields from the PED file */
-	public final ImmutableList<String> extraFields;
+	private final ImmutableList<String> extraFields;
 
 	/**
 	 * Initialize object with the given values.
@@ -62,21 +62,51 @@ public final class Person {
 	 * Constructor used by {@link PedigreeExtractor} for construction of pedigrees with potential cycles.
 	 */
 	Person(PedPerson pedPerson, PedFileContents pedFileContents, HashMap<String, Person> existing) {
-		existing.put(pedPerson.name, this);
+		existing.put(pedPerson.getName(), this);
 
-		this.name = pedPerson.name;
-		this.sex = pedPerson.sex;
-		this.disease = pedPerson.disease;
-		this.extraFields = pedPerson.extraFields;
+		this.name = pedPerson.getName();
+		this.sex = pedPerson.getSex();
+		this.disease = pedPerson.getDisease();
+		this.extraFields = pedPerson.getExtraFields();
 
 		// construct father and mother if necessary, construction will put them into existing
-		if (!"0".equals(pedPerson.father) && !existing.containsKey(pedPerson.father))
-			new Person(pedFileContents.nameToPerson.get(pedPerson.father), pedFileContents, existing);
-		if (!"0".equals(pedPerson.mother) && !existing.containsKey(pedPerson.mother))
-			new Person(pedFileContents.nameToPerson.get(pedPerson.mother), pedFileContents, existing);
+		if (!"0".equals(pedPerson.getFather()) && !existing.containsKey(pedPerson.getFather()))
+			new Person(pedFileContents.getNameToPerson().get(pedPerson.getFather()), pedFileContents, existing);
+		if (!"0".equals(pedPerson.getMother()) && !existing.containsKey(pedPerson.getMother()))
+			new Person(pedFileContents.getNameToPerson().get(pedPerson.getMother()), pedFileContents, existing);
 
-		this.father = existing.get(pedPerson.father);
-		this.mother = existing.get(pedPerson.mother);
+		this.father = existing.get(pedPerson.getFather());
+		this.mother = existing.get(pedPerson.getMother());
+	}
+
+	/** @return the individual's name */
+	public String getName() {
+		return name;
+	}
+
+	/** @return the individual's father, or <code>null</code> if father is not in pedigree */
+	public Person getFather() {
+		return father;
+	}
+
+	/** @return the individual's mother, or <code>null</code> if mother is not in pedigree */
+	public Person getMother() {
+		return mother;
+	}
+
+	/** @return the individual's sex */
+	public Sex getSex() {
+		return sex;
+	}
+
+	/** @return the individual's disease state */
+	public Disease getDisease() {
+		return disease;
+	}
+
+	/** @return extra fields from the PED file */
+	public ImmutableList<String> getExtraFields() {
+		return extraFields;
 	}
 
 	/**
