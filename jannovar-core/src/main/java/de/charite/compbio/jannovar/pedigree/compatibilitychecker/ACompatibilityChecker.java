@@ -99,4 +99,5 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 		}
 		return mapBuilder.build();
 	}
+
 }

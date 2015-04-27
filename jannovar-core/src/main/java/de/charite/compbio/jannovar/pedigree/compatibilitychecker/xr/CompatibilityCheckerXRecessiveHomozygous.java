@@ -66,7 +66,6 @@ class CompatibilityCheckerXRecessiveHomozygous extends ACompatibilityChecker {
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
 	}
 
-	@Override
 	public boolean runSingleSampleCase() {
 		// for both male and female subjects, return true if homozygous alt
 		for (ImmutableList<Genotype> gtList : list.calls)
@@ -76,7 +75,6 @@ class CompatibilityCheckerXRecessiveHomozygous extends ACompatibilityChecker {
 		return false;
 	}
 
-	@Override
 	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			// Check whether this list of genotype calls is compatible when with

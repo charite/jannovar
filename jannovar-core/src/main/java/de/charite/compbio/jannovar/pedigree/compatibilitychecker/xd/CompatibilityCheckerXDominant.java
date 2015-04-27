@@ -57,7 +57,6 @@ public class CompatibilityCheckerXDominant extends ACompatibilityChecker {
 		return super.run();
 	}
 
-	@Override
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		if (pedigree.members.get(0).sex == Sex.FEMALE)
 			return new CompatibilityCheckerAutosomalDominant(pedigree, list).run();
@@ -65,7 +64,6 @@ public class CompatibilityCheckerXDominant extends ACompatibilityChecker {
 			return new CompatibilityCheckerXRecessive(pedigree, list).run();
 	}
 	
-	@Override
 	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			boolean currentVariantCompatible = true; // current variant compatible with XD?

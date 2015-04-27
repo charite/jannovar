@@ -51,7 +51,6 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 		super(pedigree, list);
 	}
 
-	@Override
 	public boolean runSingleSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
@@ -59,7 +58,6 @@ class CompatibilityCheckerAutosomalRecessiveHomozygous extends ACompatibilityChe
 		return false;
 	}
 
-	@Override
 	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (containsCompatibleHomozygousVariants(gtList))

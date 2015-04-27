@@ -66,7 +66,6 @@ class CompatibilityCheckerXRecessiveCompoundHet extends ACompatibilityChecker {
 		this.siblings = buildSiblings(pedigree);
 	}
 
-	@Override
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		// for female single case samples, allow autosomal recessive compound
 		// heterozygous
@@ -77,7 +76,6 @@ class CompatibilityCheckerXRecessiveCompoundHet extends ACompatibilityChecker {
 		return false;
 	}
 
-	@Override
 	public boolean runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.

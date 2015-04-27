@@ -54,9 +54,6 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		this.siblings = buildSiblings(pedigree);
 	}
 
-	
-
-	@Override
 	public boolean runSingleSampleCase() {
 		int numHet = 0;
 		for (ImmutableList<Genotype> gtList : list.calls)
@@ -65,9 +62,6 @@ public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatib
 		return (numHet > 1);
 	}
 
-
-
-	@Override
 	public boolean runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.

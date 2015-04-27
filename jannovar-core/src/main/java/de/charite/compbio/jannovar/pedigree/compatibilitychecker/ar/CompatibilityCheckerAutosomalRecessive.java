@@ -49,12 +49,10 @@ public class CompatibilityCheckerAutosomalRecessive extends ACompatibilityChecke
 			return new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run();
 	}
 
-	@Override
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		return false;
 	}
 
-	@Override
 	public boolean runMultiSampleCase() {
 		return false;
 	}
