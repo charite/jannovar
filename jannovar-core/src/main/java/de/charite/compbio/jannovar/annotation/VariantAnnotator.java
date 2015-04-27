@@ -128,7 +128,7 @@ public final class VariantAnnotator {
 			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
 		else
 			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
-		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.entries);
+		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.getEntries());
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.
@@ -137,7 +137,7 @@ public final class VariantAnnotator {
 			if (isStructuralVariant)
 				buildSVAnnotation(change, null);
 			else
-				buildNonSVAnnotation(change, qr.left, qr.right);
+				buildNonSVAnnotation(change, qr.getLeft(), qr.getRight());
 			return annovarFactory.getAnnotationList(change);
 		}
 

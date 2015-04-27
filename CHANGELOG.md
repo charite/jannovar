@@ -33,8 +33,8 @@
 * Making members of `AminoAcidChange`, `CDSPosition`, `TranscriptPosition`,
   `TranscriptSequenceDecorator`, `TranscriptInterval`, `GenomePosition`,
   `Annotation`, `AnnotationListContentDecorator`,
-  `AnnotationListTextGenerator`, `AnnotationLocation`, and `CDSInterval`
-  private and accessible through public getters.
+  `AnnotationListTextGenerator`, `AnnotationLocation`, `CDSInterval`, and the
+  module `intervals` private and accessible through public getters.
 * Renaming `TranscriptInterval.getBeginPos()` and
   `TranscriptInterval.getEndPos()` to
   `TranscriptInterval.getTranscriptBeginPos()` and

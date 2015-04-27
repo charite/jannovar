@@ -90,7 +90,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
 		for (Chromosome chrom : jannovarDB.chromosomes.values())
 			for (Interval<TranscriptModel> itv : chrom.tmIntervalTree.intervals) {
-				TranscriptModel tm = itv.value;
+				TranscriptModel tm = itv.getValue();
 				if (!geneMap.containsKey(tm.geneSymbol))
 					geneMap.put(tm.geneSymbol, new GeneBuilder(jannovarDB.refDict, tm.geneSymbol));
 				geneMap.get(tm.geneSymbol).addTranscriptModel(tm);
@@ -129,7 +129,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			else
 				qr = iTree.findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
 
-			for (Gene gene : qr.entries)
+			for (Gene gene : qr.getEntries())
 				if (isGeneAffectedByChange(gene, change))
 					putVariantForGene(vc, gene);
 		}

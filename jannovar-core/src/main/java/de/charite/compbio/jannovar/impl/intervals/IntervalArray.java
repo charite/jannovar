@@ -9,7 +9,8 @@ import java.util.Comparator;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Sorted array of {@link Interval} objects representing an immutable interval tree.
+ * Sorted array of {@link Interval} objects representing an immutable interval
+ * tree.
  *
  * The query results are sorted lexicographically by <code>(begin, end)</code>.
  *
@@ -26,16 +27,28 @@ public final class IntervalArray<T> implements Serializable {
 	 */
 	public class QueryResult {
 		/** the values that overlapped with the given point or interval */
-		public final ImmutableList<T> entries;
+		private final ImmutableList<T> entries;
 		/** the value to the left of the given point */
-		public final T left;
+		private final T left;
 		/** the value to the right of the given point */
-		public final T right;
+		private final T right;
 
 		QueryResult(ImmutableList<T> values, T left, T right) {
 			this.entries = values;
 			this.left = left;
 			this.right = right;
+		}
+
+		public ImmutableList<T> getEntries() {
+			return entries;
+		}
+
+		public T getLeft() {
+			return left;
+		}
+
+		public T getRight() {
+			return right;
 		}
 	}
 
@@ -44,11 +57,11 @@ public final class IntervalArray<T> implements Serializable {
 	 */
 	private class QueryResultBuilder {
 		/** the values that overlapped with the given point or interval */
-		public ImmutableList.Builder<T> values = new ImmutableList.Builder<T>();
+		private ImmutableList.Builder<T> values = new ImmutableList.Builder<T>();
 		/** the value to the left of the given point */
-		public T left = null;
+		private T left = null;
 		/** the value to the right of the given point */
-		public T right = null;
+		private T right = null;
 
 		public QueryResult build() {
 			return new QueryResult(values.build(), left, right);
@@ -78,11 +91,13 @@ public final class IntervalArray<T> implements Serializable {
 	}
 
 	/**
-	 * Query the encoded interval tree for all values with intervals overlapping with a given <code>point</code>.
+	 * Query the encoded interval tree for all values with intervals overlapping
+	 * with a given <code>point</code>.
 	 *
 	 * @param point
 	 *            zero-based point for the query
-	 * @return the elements from the intervals overlapping with the point <code>point</code>
+	 * @return the elements from the intervals overlapping with the point
+	 *         <code>point</code>
 	 */
 	public QueryResult findOverlappingWithPoint(int point) {
 		QueryResultBuilder resultBuilder = new QueryResultBuilder();
@@ -106,7 +121,7 @@ public final class IntervalArray<T> implements Serializable {
 		final Interval<T> query = new Interval<T>(point, point, null, point);
 		int idx = Collections.binarySearch(intervals, query, new Comparator<Interval<T>>() {
 			public int compare(Interval<T> o1, Interval<T> o2) {
-				return (o1.begin - o2.begin);
+				return (o1.getBegin() - o2.getBegin());
 			}
 		});
 
@@ -117,7 +132,7 @@ public final class IntervalArray<T> implements Serializable {
 		if (idx == intervals.size())
 			return null;
 		else
-			return intervals.get(idx).value;
+			return intervals.get(idx).getValue();
 	}
 
 	/**
@@ -127,7 +142,7 @@ public final class IntervalArray<T> implements Serializable {
 		final Interval<T> query = new Interval<T>(point, point, null, point);
 		int idx = Collections.binarySearch(intervalsEnd, query, new Comparator<Interval<T>>() {
 			public int compare(Interval<T> o1, Interval<T> o2) {
-				return (o1.end - o2.end);
+				return (o1.getEnd() - o2.getEnd());
 			}
 		});
 
@@ -139,11 +154,12 @@ public final class IntervalArray<T> implements Serializable {
 		if (idx == 0)
 			return null;
 		else
-			return intervalsEnd.get(idx - 1).value;
+			return intervalsEnd.get(idx - 1).getValue();
 	}
 
 	/**
-	 * Implementation of in-order traversal of the encoded tree with pruning using {@link Interval#maxEnd}.
+	 * Implementation of in-order traversal of the encoded tree with pruning
+	 * using {@link Interval#maxEnd}.
 	 *
 	 * @param begin
 	 *            begin index of subtree to search through
@@ -169,7 +185,7 @@ public final class IntervalArray<T> implements Serializable {
 			findOverlappingWithPoint(begin, center, begin + (center - begin) / 2, point, result);
 
 		if (node.contains(point)) // check this node
-			result.values.add(node.value);
+			result.values.add(node.getValue());
 
 		if (node.isRightOf(point)) // point is left of the start of the interval, can't to the right
 			return;
@@ -179,13 +195,15 @@ public final class IntervalArray<T> implements Serializable {
 	}
 
 	/**
-	 * Query the encoded interval tree for all values with intervals overlapping with a given <code>interval</code>.
+	 * Query the encoded interval tree for all values with intervals overlapping
+	 * with a given <code>interval</code>.
 	 *
 	 * @param begin
 	 *            zero-based begin position of the query interval
 	 * @param end
 	 *            zero-based end position of the query interval
-	 * @return the elements from the intervals overlapping with the interval <code>[begin, end)</code>
+	 * @return the elements from the intervals overlapping with the interval
+	 *         <code>[begin, end)</code>
 	 */
 	public QueryResult findOverlappingWithInterval(int begin, int end) {
 		QueryResultBuilder resultBuilder = new QueryResultBuilder();
@@ -203,7 +221,8 @@ public final class IntervalArray<T> implements Serializable {
 	}
 
 	/**
-	 * Implementation of in-order traversal of the encoded tree with pruning using {@link Interval#maxEnd}.
+	 * Implementation of in-order traversal of the encoded tree with pruning
+	 * using {@link Interval#maxEnd}.
 	 *
 	 * @param begin
 	 *            begin index of subtree to search through
@@ -232,7 +251,7 @@ public final class IntervalArray<T> implements Serializable {
 			findOverlappingWithInterval(begin, center, begin + (center - begin) / 2, iBegin, iEnd, result);
 
 		if (node.overlapsWith(iBegin, iEnd)) // check this node
-			result.values.add(node.value);
+			result.values.add(node.getValue());
 
 		if (node.isRightOf(iEnd - 1)) // last interval entry is left of the start of the interval, can't to the right
 			return;
@@ -304,13 +323,13 @@ public final class IntervalArray<T> implements Serializable {
 			MutableInterval<T> mi = lst.get(centerIdx);
 
 			if (beginIdx + 1 == endIdx)
-				return mi.maxEnd;
+				return mi.getMaxEnd();
 
-			mi.maxEnd = Math.max(
-					mi.maxEnd,
+			mi.setMaxEnd(Math.max(
+					mi.getMaxEnd(),
 					Math.max(computeMaxEndProperties(lst, beginIdx, centerIdx),
-							computeMaxEndProperties(lst, centerIdx + 1, endIdx)));
-			return mi.maxEnd;
+							computeMaxEndProperties(lst, centerIdx + 1, endIdx))));
+			return mi.getMaxEnd();
 		}
 
 		/**
@@ -320,9 +339,9 @@ public final class IntervalArray<T> implements Serializable {
 			// sort by (end, begin)
 			Collections.sort(tmpList, new Comparator<MutableInterval<T>>() {
 				public int compare(MutableInterval<T> o1, MutableInterval<T> o2) {
-					final int result = (o1.end - o2.end);
+					final int result = (o1.getEnd() - o2.getEnd());
 					if (result == 0)
-						return (o1.begin - o2.begin);
+						return (o1.getBegin() - o2.getBegin());
 					else
 						return result;
 				}
