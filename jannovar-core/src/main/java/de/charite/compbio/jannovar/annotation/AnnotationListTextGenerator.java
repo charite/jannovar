@@ -14,13 +14,13 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public abstract class AnnotationListTextGenerator {
 
 	/** the decorated {@link AnnotationList} */
-	public final AnnotationList annotations;
+	protected final AnnotationList annotations;
 
 	/** alternative allele ID (1 from VCF is 0 here) */
-	public final int alleleID;
+	private final int alleleID;
 
 	/** total number of alternative alleles */
-	public final int altCount;
+	private final int altCount;
 
 	/**
 	 * Initialize the decorator.
@@ -36,6 +36,16 @@ public abstract class AnnotationListTextGenerator {
 		this.annotations = annotations;
 		this.alleleID = alleleID;
 		this.altCount = altCount;
+	}
+
+	/** @return alternative allele ID (1 from VCF is 0 here) */
+	public int getAlleleID() {
+		return alleleID;
+	}
+
+	/** @return total number of alternative alleles */
+	public int getAltCount() {
+		return altCount;
 	}
 
 	/**

@@ -13,7 +13,7 @@ import java.util.HashSet;
 public class AnnotationListContentDecorator {
 
 	/** the decorated {@link AnnotationList} */
-	public final AnnotationList annotations;
+	private final AnnotationList annotations;
 
 	/**
 	 * Initialize the decorator.
@@ -23,6 +23,11 @@ public class AnnotationListContentDecorator {
 	 */
 	public AnnotationListContentDecorator(AnnotationList annotations) {
 		this.annotations = annotations;
+	}
+
+	/** @returnthe decorated {@link AnnotationList} */
+	public AnnotationList getAnnotations() {
+		return annotations;
 	}
 
 	/**
