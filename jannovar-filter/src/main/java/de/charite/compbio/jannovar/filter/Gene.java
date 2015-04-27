@@ -48,9 +48,9 @@ class Gene {
 		if (transcripts.isEmpty())
 			return null;
 
-		GenomeInterval region = transcripts.get(0).txRegion.withStrand(Strand.FWD);
+		GenomeInterval region = transcripts.get(0).getTXRegion().withStrand(Strand.FWD);
 		for (TranscriptModel tm : transcripts)
-			region = mergeRegions(region, tm.txRegion);
+			region = mergeRegions(region, tm.getTXRegion());
 		return region;
 	}
 

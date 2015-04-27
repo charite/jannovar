@@ -41,9 +41,9 @@ class GeneBuilder {
 		// Transcript must be within 10kbp of a previously seen one. Otherwise, we get too large genes from RNA
 		// transcript matches.
 		final int MORE_PADDING = 10000;
-		final GenomeInterval tmRegion = tm.txRegion.withMorePadding(MORE_PADDING);
+		final GenomeInterval tmRegion = tm.getTXRegion().withMorePadding(MORE_PADDING);
 		for (TranscriptModel model : tmpModels)
-			if (model.txRegion.overlapsWith(tmRegion)) {
+			if (model.getTXRegion().overlapsWith(tmRegion)) {
 				LOGGER.trace("Adding next transcript {} to gene {}.", new Object[] { tm, name });
 				builder.add(tm);
 				tmpModels.add(tm);

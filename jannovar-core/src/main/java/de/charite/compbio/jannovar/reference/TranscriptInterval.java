@@ -69,7 +69,7 @@ public final class TranscriptInterval {
 	 */
 	@Override
 	public String toString() {
-		return StringUtil.concatenate(transcript.accession, ":n.", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(transcript.getAccession(), ":n.", beginPos + 1, "-", endPos);
 	}
 
 	/*

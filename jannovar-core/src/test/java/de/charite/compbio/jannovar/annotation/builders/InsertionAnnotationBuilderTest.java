@@ -68,7 +68,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals(null, anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
@@ -80,7 +80,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals(null, anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
@@ -93,7 +93,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6639062,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals(null, anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
@@ -103,7 +103,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno2.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(null, anno2.getAnnoLoc());
 		Assert.assertEquals(null, anno2.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno2.getAminoAcidHGVSDescription());
@@ -115,7 +115,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6646098,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(3, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1044+8_1044+9insA", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
@@ -127,7 +127,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
 				PositionType.ZERO_BASED), "", "C");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("c.-1dup", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
@@ -139,7 +139,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649272,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2067_*1insA", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
@@ -152,7 +152,7 @@ public class InsertionAnnotationBuilderTest {
 		GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
 				PositionType.ZERO_BASED), "", "ACT");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(2, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("c.691-1_691insACT", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Glu230_Trp231insThr", anno.getAminoAcidHGVSDescription());
@@ -171,7 +171,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AGC");
 		Annotation annotation1agc = new InsertionAnnotationBuilder(infoForward, change1agc,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation1agc.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1agc.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1agc.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2066_2067insAGC", annotation1agc.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1agc.getAminoAcidHGVSDescription());
@@ -182,7 +182,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TGC");
 		Annotation annotation1tgc = new InsertionAnnotationBuilder(infoForward, change1tgc,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation1tgc.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1tgc.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1tgc.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2066_2067insTGC", annotation1tgc.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.*689Tyrext*24", annotation1tgc.getAminoAcidHGVSDescription());
@@ -193,7 +193,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AGC");
 		Annotation annotation2agc = new InsertionAnnotationBuilder(infoForward, change2agc,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation2agc.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation2agc.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2agc.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_2insAGC", annotation2agc.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation2agc.getAminoAcidHGVSDescription());
@@ -207,7 +207,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TAA");
 		Annotation annotation3taa = new InsertionAnnotationBuilder(infoForward, change3taa,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation3taa.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3taa.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3taa.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insTAA", annotation3taa.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2*", annotation3taa.getAminoAcidHGVSDescription());
@@ -219,7 +219,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TCCTAA");
 		Annotation annotation3tcctaa = new InsertionAnnotationBuilder(infoForward, change3tcctaa,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation3tcctaa.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3tcctaa.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3tcctaa.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insTCCTAA", annotation3tcctaa.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2_Gly3delinsSer", annotation3tcctaa.getAminoAcidHGVSDescription());
@@ -231,7 +231,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TCCTCCTCC");
 		Annotation annotation4tcctcctcc = new InsertionAnnotationBuilder(infoForward, change4tcctcctcc,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation4tcctcctcc.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4tcctcctcc.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4tcctcctcc.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insTCCTCCTCC", annotation4tcctcctcc.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Met1_Asp2insSerSerSer", annotation4tcctcctcc.getAminoAcidHGVSDescription());
@@ -242,7 +242,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GATGGC");
 		Annotation annotation5gatggc = new InsertionAnnotationBuilder(infoForward, change5gatggc,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation5gatggc.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation5gatggc.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation5gatggc.getAnnoLoc().getRank());
 		Assert.assertEquals("c.5_6insTGGCGA", annotation5gatggc.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2_Gly3dup", annotation5gatggc.getAminoAcidHGVSDescription());
@@ -259,7 +259,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_2insG", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation1.getAminoAcidHGVSDescription());
@@ -269,7 +269,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "A");
 		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation2.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2_3insA", annotation2.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation2.getAminoAcidHGVSDescription());
@@ -281,7 +281,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "A");
 		Annotation annotation3a = new InsertionAnnotationBuilder(infoForward, change3a, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation3a.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3a.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3a.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insA", annotation3a.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Argfs*37", annotation3a.getAminoAcidHGVSDescription());
@@ -291,7 +291,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "C");
 		Annotation annotation3c = new InsertionAnnotationBuilder(infoForward, change3c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation3c.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3c.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insC", annotation3c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Argfs*37", annotation3c.getAminoAcidHGVSDescription());
@@ -301,7 +301,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation3t = new InsertionAnnotationBuilder(infoForward, change3t, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation3t.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3t.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3t.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insT", annotation3t.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2*", annotation3t.getAminoAcidHGVSDescription());
@@ -313,7 +313,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "C");
 		Annotation annotation4c = new InsertionAnnotationBuilder(infoForward, change4c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation4c.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4c.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.4_5insC", annotation4c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Alafs*37", annotation4c.getAminoAcidHGVSDescription());
@@ -323,7 +323,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation4t = new InsertionAnnotationBuilder(infoForward, change4t, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation4t.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4t.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4t.getAnnoLoc().getRank());
 		Assert.assertEquals("c.4_5insT", annotation4t.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Valfs*37", annotation4t.getAminoAcidHGVSDescription());
@@ -335,7 +335,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation5g = new InsertionAnnotationBuilder(infoForward, change5g, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation5g.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation5g.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation5g.getAnnoLoc().getRank());
 		Assert.assertEquals("c.5_6insG", annotation5g.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Glufs*37", annotation5g.getAminoAcidHGVSDescription());
@@ -345,7 +345,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation5t = new InsertionAnnotationBuilder(infoForward, change5t, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation5t.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation5t.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation5t.getAnnoLoc().getRank());
 		Assert.assertEquals("c.5_6insT", annotation5t.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gly3Argfs*36", annotation5t.getAminoAcidHGVSDescription());
@@ -358,7 +358,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation6t = new InsertionAnnotationBuilder(infoForward, change6t, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation6t.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation6t.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation6t.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2066_2067insT", annotation6t.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.*689Tyrext*15", annotation6t.getAminoAcidHGVSDescription());
@@ -368,7 +368,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "C");
 		Annotation annotation6c = new InsertionAnnotationBuilder(infoForward, change6c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation6c.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation6c.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation6c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2065_2066insC", annotation6c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.*689Serext*15", annotation6c.getAminoAcidHGVSDescription());
@@ -379,7 +379,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation7g = new InsertionAnnotationBuilder(infoForward, change7g, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation7g.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation7g.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation7g.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2065_2066insG", annotation7g.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation7g.getAminoAcidHGVSDescription());
@@ -395,7 +395,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_2insGA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation1.getAminoAcidHGVSDescription());
@@ -405,7 +405,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AG");
 		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation2.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2_3insAG", annotation2.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation2.getAminoAcidHGVSDescription());
@@ -417,7 +417,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AC");
 		Annotation annotation3ac = new InsertionAnnotationBuilder(infoForward, change3ac,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation3ac.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3ac.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3ac.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insAC", annotation3ac.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Thrfs*10", annotation3ac.getAminoAcidHGVSDescription());
@@ -427,7 +427,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CG");
 		Annotation annotation3cg = new InsertionAnnotationBuilder(infoForward, change3cg,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation3cg.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3cg.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3cg.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insCG", annotation3cg.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Argfs*10", annotation3cg.getAminoAcidHGVSDescription());
@@ -437,7 +437,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TA");
 		Annotation annotation3ta = new InsertionAnnotationBuilder(infoForward, change3ta,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation3ta.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation3ta.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3ta.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insTA", annotation3ta.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2*", annotation3ta.getAminoAcidHGVSDescription());
@@ -449,7 +449,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CT");
 		Annotation annotation4ct = new InsertionAnnotationBuilder(infoForward, change4ct,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation4ct.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4ct.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4ct.getAnnoLoc().getRank());
 		Assert.assertEquals("c.4_5insCT", annotation4ct.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Alafs*10", annotation4ct.getAminoAcidHGVSDescription());
@@ -459,7 +459,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TG");
 		Annotation annotation4tg = new InsertionAnnotationBuilder(infoForward, change4tg,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation4tg.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4tg.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4tg.getAnnoLoc().getRank());
 		Assert.assertEquals("c.4_5insTG", annotation4tg.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Valfs*10", annotation4tg.getAminoAcidHGVSDescription());
@@ -471,7 +471,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GC");
 		Annotation annotation5gc = new InsertionAnnotationBuilder(infoForward, change5gc,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation5gc.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation5gc.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation5gc.getAnnoLoc().getRank());
 		Assert.assertEquals("c.5_6insGC", annotation5gc.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Glufs*10", annotation5gc.getAminoAcidHGVSDescription());
@@ -481,7 +481,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TA");
 		Annotation annotation5ta = new InsertionAnnotationBuilder(infoForward, change5ta,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation5ta.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation5ta.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation5ta.getAnnoLoc().getRank());
 		Assert.assertEquals("c.5_6insTA", annotation5ta.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gly3Thrfs*9", annotation5ta.getAminoAcidHGVSDescription());
@@ -499,7 +499,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "ACTAGACT");
 		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoForward, change4actagact,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation4actagact.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4actagact.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4actagact.getAnnoLoc().getRank());
 		Assert.assertEquals("c.6_7insTAGACTAC", annotation4actagact.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gly3*", annotation4actagact.getAminoAcidHGVSDescription());
@@ -509,7 +509,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CGTG");
 		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoForward, change4cgtg,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.accession, annotation4cgtg.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation4cgtg.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4cgtg.getAnnoLoc().getRank());
 		Assert.assertEquals("c.4_5insCGTG", annotation4cgtg.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2Alafs*2", annotation4cgtg.getAminoAcidHGVSDescription());
@@ -528,7 +528,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "C");
 		Annotation annotation1c = new InsertionAnnotationBuilder(infoReverse, change1c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation1c.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation1c.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_2insG", annotation1c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation1c.getAminoAcidHGVSDescription());
@@ -538,7 +538,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1g = new InsertionAnnotationBuilder(infoReverse, change1g, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation1g.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation1g.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1g.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_2insC", annotation1g.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation1g.getAminoAcidHGVSDescription());
@@ -550,7 +550,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation2a = new InsertionAnnotationBuilder(infoReverse, change2a, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation2a.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation2a.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2a.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2_3insA", annotation2a.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation2a.getAminoAcidHGVSDescription());
@@ -560,7 +560,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation2c = new InsertionAnnotationBuilder(infoReverse, change2c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation2c.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation2c.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2_3insC", annotation2c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation2c.getAminoAcidHGVSDescription());
@@ -572,7 +572,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation3a = new InsertionAnnotationBuilder(infoReverse, change3a, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation3a.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation3a.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3a.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insA", annotation3a.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ala2Serfs*16", annotation3a.getAminoAcidHGVSDescription());
@@ -582,7 +582,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation3c = new InsertionAnnotationBuilder(infoReverse, change3c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation3c.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation3c.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_4insC", annotation3c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ala2Argfs*16", annotation3c.getAminoAcidHGVSDescription());
@@ -594,7 +594,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation4g = new InsertionAnnotationBuilder(infoReverse, change4g, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation4g.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation4g.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation4g.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1411_1412insC", annotation4g.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.*471Serext*7", annotation4g.getAminoAcidHGVSDescription());
@@ -604,7 +604,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "C");
 		Annotation annotation4c = new InsertionAnnotationBuilder(infoReverse, change4c, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoReverse.accession, annotation4c.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation4c.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation4c.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1411_1412insG", annotation4c.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation4c.getAminoAcidHGVSDescription());
@@ -622,7 +622,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "ACTAGACT");
 		Annotation annotation4actagact = new InsertionAnnotationBuilder(infoReverse, change4actagact,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoReverse.accession, annotation4actagact.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation4actagact.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4actagact.getAnnoLoc().getRank());
 		Assert.assertEquals("c.4_5insAGTCTAGT", annotation4actagact.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ala2Glufs*16", annotation4actagact.getAminoAcidHGVSDescription());
@@ -633,7 +633,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CGTG");
 		Annotation annotation4cgtg = new InsertionAnnotationBuilder(infoReverse, change4cgtg,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoReverse.accession, annotation4cgtg.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation4cgtg.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation4cgtg.getAnnoLoc().getRank());
 		Assert.assertEquals("c.6_7insCGCA", annotation4cgtg.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ala3Argfs*16", annotation4cgtg.getAminoAcidHGVSDescription());
@@ -644,7 +644,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "ATTA");
 		Annotation annotation5cgtg = new InsertionAnnotationBuilder(infoReverse, change5cgtg,
 				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoReverse.accession, annotation5cgtg.getTranscript().accession);
+		Assert.assertEquals(infoReverse.getAccession(), annotation5cgtg.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation5cgtg.getAnnoLoc().getRank());
 		Assert.assertEquals("c.6_7insTAAT", annotation5cgtg.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ala3*", annotation5cgtg.getAminoAcidHGVSDescription());
@@ -668,7 +668,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.*255dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
@@ -692,7 +692,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AAG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.-37_-36insCTT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
@@ -716,7 +716,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("n.492_493insGA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
@@ -739,7 +739,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("n.511_512dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
@@ -771,7 +771,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.769_771dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Phe257dup", annotation1.getAminoAcidHGVSDescription());
@@ -813,7 +813,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.439dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Met147Asnfs*8", annotation1.getAminoAcidHGVSDescription());
@@ -841,7 +841,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AGA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.325_327dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Arg109dup", annotation1.getAminoAcidHGVSDescription());
@@ -865,7 +865,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.956dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
@@ -895,7 +895,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CTCTTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.766_771dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu256_Phe257dup", annotation1.getAminoAcidHGVSDescription());
@@ -922,7 +922,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CTGCTGCTCTTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.760_771dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu254_Phe257dup", annotation1.getAminoAcidHGVSDescription());
@@ -951,7 +951,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AGT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.424_426dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Thr142dup", annotation1.getAminoAcidHGVSDescription());
@@ -981,7 +981,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TTTGTT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.439_444dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asn147_Lys148dup", annotation1.getAminoAcidHGVSDescription());
@@ -1008,7 +1008,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TTTTAGTTTGTT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.439_450dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asn147_Lys150dup", annotation1.getAminoAcidHGVSDescription());
@@ -1040,7 +1040,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GAAAAG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.949_954dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.*319Gluext*2", annotation1.getAminoAcidHGVSDescription());
@@ -1073,7 +1073,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TCC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.474_476dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Glu158dup", annotation1.getAminoAcidHGVSDescription());
@@ -1103,7 +1103,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "ATCG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.628_629insCGAT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu210Profs*61", annotation1.getAminoAcidHGVSDescription());
@@ -1130,7 +1130,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(15, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2265_2266insCC", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Tyr756Profs*21", annotation1.getAminoAcidHGVSDescription());
@@ -1159,7 +1159,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.93_94insA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gln32Thrfs*39", annotation1.getAminoAcidHGVSDescription());
@@ -1186,7 +1186,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AGCG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(19, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.6318_6319insAGCG", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Trp2107Serfs*6", annotation1.getAminoAcidHGVSDescription());
@@ -1215,7 +1215,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CAT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(19, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.6882_6883insCAT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asp2294_Glu2295insHis", annotation1.getAminoAcidHGVSDescription());
@@ -1242,7 +1242,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AAGT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(111, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.21594_21595insACTT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Val7199Thrfs*8", annotation1.getAminoAcidHGVSDescription());
@@ -1272,7 +1272,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TTC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.15_16insTTC", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ile5_Lys6insPhe", annotation1.getAminoAcidHGVSDescription());
@@ -1301,7 +1301,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.8108_8109insTG", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ser2704Alafs*301", annotation1.getAminoAcidHGVSDescription());
@@ -1328,7 +1328,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CTG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.6858_6859insCAG", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Thr2286_Thr2287insGln", annotation1.getAminoAcidHGVSDescription());
@@ -1355,7 +1355,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GACT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.608_609insGACT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gln204Thrfs*4", annotation1.getAminoAcidHGVSDescription());
@@ -1382,7 +1382,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TGA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1147_1148insTGA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Pro383delinsLeuThr", annotation1.getAminoAcidHGVSDescription());
@@ -1412,7 +1412,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "T");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.730_731insT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Asn244Ilefs*52", annotation1.getAminoAcidHGVSDescription());
@@ -1437,7 +1437,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "ATGC");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1806_1807insATGC", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ser603Metfs*144", annotation1.getAminoAcidHGVSDescription());
@@ -1463,7 +1463,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TTTG");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.255_256insAACA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Val86Asnfs*13", annotation1.getAminoAcidHGVSDescription());
@@ -1490,7 +1490,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TCT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.863_864insTCT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu288dup", annotation1.getAminoAcidHGVSDescription());
@@ -1518,7 +1518,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AAAA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.118_119insAAAA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gly40Glufs*10", annotation1.getAminoAcidHGVSDescription());
@@ -1545,7 +1545,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GTA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3442_3443insGTA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ser1147dup", annotation1.getAminoAcidHGVSDescription());
@@ -1573,7 +1573,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "AA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.328_329insAA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Gly110Glufs*51", annotation1.getAminoAcidHGVSDescription());
@@ -1600,7 +1600,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "G");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.286dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu96Profs*16", annotation1.getAminoAcidHGVSDescription());
@@ -1631,7 +1631,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "C");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_2insC", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation1.getAminoAcidHGVSDescription());
@@ -1658,7 +1658,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "A");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2_3insA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.0?", annotation1.getAminoAcidHGVSDescription());
@@ -1689,7 +1689,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.*28_*29insTA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
@@ -1716,7 +1716,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "TAAT");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.*18_*21dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
@@ -1745,7 +1745,7 @@ public class InsertionAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "GACA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.*5_*6insGACA", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
@@ -1772,7 +1772,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 		// The following result is equal to the one of Mutalyzer.
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.660_686dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Ala225_Asp233dup", annotation1.getAminoAcidHGVSDescription());
@@ -1801,7 +1801,7 @@ public class InsertionAnnotationBuilderTest {
 		// Mutalyzer: NM_001258274.1(MLH1_v001):c.940_941insTAAG NM_001258274.1(MLH1_i001):p.(Glu316*)
 		//
 		// The UCSC transcript DNA sequence is bogus here.
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.590_591insAAGT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu197LeuSer*", annotation1.getAminoAcidHGVSDescription());
@@ -1827,7 +1827,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1588-2_1588-1insT", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
@@ -1839,7 +1839,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation2 = new InsertionAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions())
 				.build();
 
-		Assert.assertEquals(infoForward.accession, annotation2.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1587+1_1587+2insT", annotation2.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.?", annotation2.getAminoAcidHGVSDescription());
@@ -1865,7 +1865,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.126dup", annotation1.getNucleotideHGVSDescription());
@@ -1891,7 +1891,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.73_73+1insG", annotation1.getNucleotideHGVSDescription());
@@ -1917,7 +1917,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
 		Assert.assertEquals(16, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1429_1431dup", annotation1.getNucleotideHGVSDescription());
@@ -1945,7 +1945,7 @@ public class InsertionAnnotationBuilderTest {
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
 
-		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
+		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.RankType.EXON, annotation1.getAnnoLoc().getRankType());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1250dup", annotation1.getNucleotideHGVSDescription());

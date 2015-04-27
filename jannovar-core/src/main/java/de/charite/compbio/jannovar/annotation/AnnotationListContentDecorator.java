@@ -36,7 +36,7 @@ public class AnnotationListContentDecorator {
 	public boolean hasMultipleGeneSymbols() {
 		HashSet<String> geneSymbols = new HashSet<String>();
 		for (Annotation entry : annotations)
-			geneSymbols.add(entry.getTranscript().geneSymbol);
+			geneSymbols.add(entry.getTranscript().getGeneSymbol());
 		return (geneSymbols.size() > 0);
 	}
 
@@ -59,7 +59,7 @@ public class AnnotationListContentDecorator {
 		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.get(0).getTranscript().geneSymbol;
+			return annotations.get(0).getTranscript().getGeneSymbol();
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class AnnotationListContentDecorator {
 		if (annotations.size() == 0)
 			return null;
 		else
-			return annotations.get(0).getTranscript().geneID;
+			return annotations.get(0).getTranscript().getGeneID();
 	}
 
 	/**

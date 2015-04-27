@@ -59,7 +59,7 @@ public final class GenomeChangeNormalizer {
 
 		// Insert the ALT bases at the position indicated by txPos.
 		int pos = txPos.getPos();
-		StringBuilder builder = new StringBuilder(transcript.sequence);
+		StringBuilder builder = new StringBuilder(transcript.getSequence());
 		builder.insert(pos, change.getAlt());
 
 		// Execute algorithm and compute the shift.
@@ -114,7 +114,7 @@ public final class GenomeChangeNormalizer {
 		// Shift the deletion to the 3' (right) end of the transcript.
 		int pos = txPos.getPos();
 		final int LEN = change.getRef().length(); // length of the deletion
-		final String seq = transcript.sequence;
+		final String seq = transcript.getSequence();
 		int shift = 0;
 
 		while ((pos + LEN < seq.length()) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {

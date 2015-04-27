@@ -138,14 +138,14 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			CDSPosition refChangeLastPos = projector.projectGenomeToCDSPosition(refChangeLastGenomePos);
 			// shift if end lies in intro or was project to end position
 			if (so.liesInCDSIntron(refChangeLastGenomePos)
-					|| !transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+					|| !transcript.getCDSRegion().contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				refChangeLastPos = refChangeLastPos.shifted(-1);
 			this.refChangeLastPos = refChangeLastPos;
 			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
 			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos()
 					.shifted(change.getAlt().length() - 1));
-			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
+			if (!transcript.getCDSRegion().contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result

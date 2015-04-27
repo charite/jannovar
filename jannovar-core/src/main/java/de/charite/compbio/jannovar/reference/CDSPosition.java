@@ -65,7 +65,7 @@ public final class CDSPosition {
 	 */
 	@Override
 	public String toString() {
-		return StringUtil.concatenate(transcript.accession, ":c.", pos + 1);
+		return StringUtil.concatenate(transcript.getAccession(), ":c.", pos + 1);
 	}
 
 	/*

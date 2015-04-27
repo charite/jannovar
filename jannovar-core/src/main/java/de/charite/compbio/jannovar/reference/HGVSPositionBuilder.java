@@ -33,9 +33,9 @@ public final class HGVSPositionBuilder {
 	 */
 	public String getCDNAPosStr(GenomePosition pos) {
 		// Guard against cases upstream/downstream of transcription region.
-		if (transcript.txRegion.isRightOf(pos)) // upstream of transcription region
+		if (transcript.getTXRegion().isRightOf(pos)) // upstream of transcription region
 			return getCDNAPosStrForUpstreamPos(pos);
-		else if (transcript.txRegion.isLeftOf(pos)) // downstream of transcription region
+		else if (transcript.getTXRegion().isLeftOf(pos)) // downstream of transcription region
 			return getCDNAPosStrForDownstreamPos(pos);
 
 		// The main difference now is between intronic and exonic regions.
@@ -88,8 +88,8 @@ public final class HGVSPositionBuilder {
 		final int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
 		if (exonNumber == TranscriptProjectionDecorator.INVALID_INTRON_ID)
 			throw new Error("Bug: position must lie in CDS at this point.");
-		GenomePosition exonEndPos = transcript.exonRegions.get(exonNumber).getGenomeEndPos();
-		GenomePosition nextExonBeginPos = transcript.exonRegions.get(exonNumber + 1).getGenomeBeginPos();
+		GenomePosition exonEndPos = transcript.getExonRegions().get(exonNumber).getGenomeEndPos();
+		GenomePosition nextExonBeginPos = transcript.getExonRegions().get(exonNumber + 1).getGenomeBeginPos();
 		GenomePosition basePos = null;
 		String offsetStr = null;
 		if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
@@ -116,7 +116,7 @@ public final class HGVSPositionBuilder {
 		// start plus the genomic base distance of pos to the CDS start.
 		try {
 			TranscriptPosition tPos = projector.genomeToTranscriptPos(getCDSRegion().getGenomeBeginPos());
-			int numBases = transcript.txRegion.getGenomeBeginPos().differenceTo(pos);
+			int numBases = transcript.getTXRegion().getGenomeBeginPos().differenceTo(pos);
 			return StringUtil.concatenate("-", tPos.getPos() + numBases);
 		} catch (ProjectionException e) {
 			throw new Error("CDS end position must be translatable to transcript position.");
@@ -142,9 +142,9 @@ public final class HGVSPositionBuilder {
 	 */
 	private GenomeInterval getCDSRegion() {
 		if (transcript.isCoding())
-			return transcript.cdsRegion;
+			return transcript.getCDSRegion();
 		else
-			return transcript.txRegion;
+			return transcript.getTXRegion();
 	}
 
 }

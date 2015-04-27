@@ -46,9 +46,9 @@ public final class TranscriptSequenceChangeHelper {
 	private String getTranscriptWithPointInRefAffected(GenomeChange change) {
 		// Short-circuit in the case of change that does not affect the transcript.
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
-		if (!transcript.txRegion.overlapsWith(change.getGenomeInterval())
+		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval())
 				|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
-			return transcript.sequence; // non-coding change, does not affect transcript
+			return transcript.getSequence(); // non-coding change, does not affect transcript
 
 		// Get transcript position for the change position.
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
@@ -60,7 +60,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 
 		// Update base in string using StringBuilder.
-		StringBuilder builder = new StringBuilder(transcript.sequence);
+		StringBuilder builder = new StringBuilder(transcript.getSequence());
 		if (change.getType() == GenomeChangeType.SNV)
 			builder.setCharAt(tPos.getPos(), change.getAlt().charAt(0));
 		else
@@ -70,8 +70,8 @@ public final class TranscriptSequenceChangeHelper {
 
 	private String getTranscriptWithRangeInRefAffected(GenomeChange change) {
 		// Short-circuit in the case of change that does not affect the transcript.
-		if (!transcript.txRegion.overlapsWith(change.getGenomeInterval()))
-			return transcript.sequence;
+		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval()))
+			return transcript.getSequence();
 
 		// Get transcript begin and end position.
 		GenomePosition changeBeginPos = change.getGenomeInterval().getGenomeBeginPos();
@@ -92,7 +92,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 
 		// Build resulting transcript string.
-		StringBuilder builder = new StringBuilder(transcript.sequence);
+		StringBuilder builder = new StringBuilder(transcript.getSequence());
 		builder.delete(tBeginPos.getPos(), tEndPos.getPos());
 		builder.insert(tBeginPos.getPos(), change.getAlt());
 		return builder.toString();
@@ -115,17 +115,17 @@ public final class TranscriptSequenceChangeHelper {
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 
 		// Get transcript begin position.
-		if (transcript.txRegion.isRightOf(pos)) {
+		if (transcript.getTXRegion().isRightOf(pos)) {
 			// Deletion begins left of TX, project to begin of TX.
 			return new TranscriptPosition(transcript, 0, PositionType.ZERO_BASED);
-		} else if (transcript.txRegion.isLeftOf(pos)) {
+		} else if (transcript.getTXRegion().isLeftOf(pos)) {
 			// Deletion begins right of TX, project to end of TX.
 			return new TranscriptPosition(transcript, transcript.transcriptLength(), PositionType.ZERO_BASED);
 		} else if (soDecorator.liesInExon(pos)) {
 			return projector.genomeToTranscriptPos(pos);
 		} else { // lies in intron, project to begin position of next exon
 			int intronNum = projector.locateIntron(pos);
-			return projector.genomeToTranscriptPos(transcript.exonRegions.get(intronNum).getGenomeBeginPos());
+			return projector.genomeToTranscriptPos(transcript.getExonRegions().get(intronNum).getGenomeBeginPos());
 		}
 	}
 
@@ -161,13 +161,13 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (change.getType() == GenomeChangeType.SNV) {
-			if (!transcript.cdsRegion.overlapsWith(change.getGenomeInterval())
+			if (!transcript.getCDSRegion().overlapsWith(change.getGenomeInterval())
 					|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
 				return cdsSeq;
 		} else { // insertion
 			// Get change position and the one left of it.
 			GenomePosition lPos = change.getGenomePos().shifted(-1);
-			if (!transcript.cdsRegion.contains(change.getGenomePos()) || !transcript.cdsRegion.contains(lPos)
+			if (!transcript.getCDSRegion().contains(change.getGenomePos()) || !transcript.getCDSRegion().contains(lPos)
 					|| (!soDecorator.liesInExon(change.getGenomePos()) && !soDecorator.liesInExon(lPos)))
 				return cdsSeq;
 		}
@@ -192,7 +192,7 @@ public final class TranscriptSequenceChangeHelper {
 		String cdsSeq = projector.getTranscriptStartingAtCDS();
 
 		// Short-circuit in the case of change that does not affect the transcript.
-		if (!transcript.cdsRegion.overlapsWith(change.getGenomeInterval())
+		if (!transcript.getCDSRegion().overlapsWith(change.getGenomeInterval())
 				|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
 			return cdsSeq;
 

@@ -34,14 +34,14 @@ public class TranscriptInfoBuilderTest {
 
 		Assert.assertEquals(Strand.REV, info.getStrand());
 		Assert.assertEquals(1, info.getChr());
-		Assert.assertEquals("accession", info.accession);
-		Assert.assertEquals("ENTREZ10", info.geneID);
-		Assert.assertEquals("gene-symbol", info.geneSymbol);
-		Assert.assertEquals(builder.getTXRegion(), info.txRegion);
-		Assert.assertEquals(builder.getCDSRegion(), info.cdsRegion);
-		Assert.assertEquals(builder.getSequence(), info.sequence);
-		Assert.assertEquals(1, info.exonRegions.size());
-		Assert.assertEquals(builder.getExonRegions().get(0), info.exonRegions.get(0));
+		Assert.assertEquals("accession", info.getAccession());
+		Assert.assertEquals("ENTREZ10", info.getGeneID());
+		Assert.assertEquals("gene-symbol", info.getGeneSymbol());
+		Assert.assertEquals(builder.getTXRegion(), info.getTXRegion());
+		Assert.assertEquals(builder.getCDSRegion(), info.getCDSRegion());
+		Assert.assertEquals(builder.getSequence(), info.getSequence());
+		Assert.assertEquals(1, info.getExonRegions().size());
+		Assert.assertEquals(builder.getExonRegions().get(0), info.getExonRegions().get(0));
 	}
 
 }

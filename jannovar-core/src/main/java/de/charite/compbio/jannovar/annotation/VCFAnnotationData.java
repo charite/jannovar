@@ -70,7 +70,7 @@ class VCFAnnotationData {
 		else
 			txPos = annoLoc.getTXLocation().getTranscriptBeginPos(); // all other variants
 		this.txPos = txPos.getPos();
-		this.txLength = annoLoc.getTranscript().txRegion.length();
+		this.txLength = annoLoc.getTranscript().getTXRegion().length();
 
 		try {
 			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).getPos();
@@ -85,19 +85,19 @@ class VCFAnnotationData {
 		if (tm == null)
 			return;
 		featureType = "transcript";
-		featureID = tm.accession;
-		geneSymbol = tm.geneSymbol;
-		geneID = tm.geneID;
+		featureID = tm.getAccession();
+		geneSymbol = tm.getGeneSymbol();
+		geneID = tm.getGeneID();
 		featureBioType = tm.isCoding() ? "Coding" : "Noncoding";
 
 		if (effects.contains(VariantEffect.INTERGENIC_VARIANT) || effects.contains(VariantEffect.UPSTREAM_GENE_VARIANT)
 				|| effects.contains(VariantEffect.DOWNSTREAM_GENE_VARIANT)) {
-			if (change.getGenomeInterval().isLeftOf(tm.txRegion.getGenomeBeginPos()))
-				this.distance = tm.txRegion.getGenomeBeginPos().differenceTo(
+			if (change.getGenomeInterval().isLeftOf(tm.getTXRegion().getGenomeBeginPos()))
+				this.distance = tm.getTXRegion().getGenomeBeginPos().differenceTo(
 						change.getGenomeInterval().getGenomeEndPos());
 			else
 				this.distance = change.getGenomeInterval().getGenomeBeginPos()
-				.differenceTo(tm.txRegion.getGenomeEndPos());
+				.differenceTo(tm.getTXRegion().getGenomeEndPos());
 		}
 	}
 

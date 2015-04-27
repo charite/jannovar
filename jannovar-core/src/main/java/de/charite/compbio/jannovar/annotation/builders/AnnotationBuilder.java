@@ -140,7 +140,7 @@ abstract class AnnotationBuilder {
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithUpstreamRegion(changeInterval) || so.overlapsWithDownstreamRegion(changeInterval))
 			return buildUpOrDownstreamAnnotation();
-		else if (!changeInterval.overlapsWith(transcript.txRegion))
+		else if (!changeInterval.overlapsWith(transcript.getTXRegion()))
 			return buildIntergenicAnnotation();
 
 		// Project genome to CDS position.

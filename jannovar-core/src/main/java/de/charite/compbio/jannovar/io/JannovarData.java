@@ -84,7 +84,7 @@ public final class JannovarData implements Serializable {
 			ImmutableList<TranscriptModel> transcriptInfos) {
 		ImmutableMultimap.Builder<String, TranscriptModel> builder = new ImmutableMultimap.Builder<String, TranscriptModel>();
 		for (TranscriptModel tm : transcriptInfos)
-			builder.put(tm.geneSymbol, tm);
+			builder.put(tm.getGeneSymbol(), tm);
 		return builder.build();
 	}
 
@@ -97,7 +97,7 @@ public final class JannovarData implements Serializable {
 			ImmutableList<TranscriptModel> transcriptInfos) {
 		ImmutableMap.Builder<String, TranscriptModel> builder = new ImmutableMap.Builder<String, TranscriptModel>();
 		for (TranscriptModel tm : transcriptInfos)
-			builder.put(tm.accession, tm);
+			builder.put(tm.getAccession(), tm);
 		return builder.build();
 	}
 

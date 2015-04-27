@@ -62,7 +62,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			return buildNonCodingAnnotation();
 
 		final GenomeInterval changeInterval = change.getGenomeInterval();
-		if (so.liesInCDSExon(changeInterval) && transcript.cdsRegion.contains(changeInterval))
+		if (so.liesInCDSExon(changeInterval) && transcript.getCDSRegion().contains(changeInterval))
 			return buildCDSExonicAnnotation(); // lies in coding part of exon
 		else if (so.overlapsWithCDSIntron(changeInterval) && so.overlapsWithCDS(changeInterval))
 			return buildIntronicAnnotation(); // intron but no exon => intronic variant
@@ -87,8 +87,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
-		if (txPos.getPos() >= transcript.sequence.length()
-				|| !transcript.sequence.substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
+		if (txPos.getPos() >= transcript.getSequence().length()
+				|| !transcript.getSequence().substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
 			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.

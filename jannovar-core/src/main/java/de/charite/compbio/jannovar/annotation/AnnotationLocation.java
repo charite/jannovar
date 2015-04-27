@@ -77,7 +77,7 @@ public class AnnotationLocation {
 	 */
 	public String toHGVSString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(transcript.accession);
+		builder.append(transcript.getAccession());
 		if (rankType != RankType.UNDEFINED)
 			builder.append(":").append(rankType.toString().toLowerCase()).append(rank + 1);
 		return builder.toString();

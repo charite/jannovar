@@ -30,7 +30,7 @@ final public class AnnotationTextGenerator {
 		if (this.annotation.getTranscript() == null)
 			return ".";
 		else
-			return this.annotation.getTranscript().accession;
+			return this.annotation.getTranscript().getAccession();
 	}
 
 }

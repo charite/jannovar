@@ -62,7 +62,7 @@ public final class CDSInterval {
 	 */
 	@Override
 	public String toString() {
-		return StringUtil.concatenate(this.transcript.accession, ":c.", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(this.transcript.getAccession(), ":c.", beginPos + 1, "-", endPos);
 	}
 
 	/*

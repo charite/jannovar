@@ -227,10 +227,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * @return gene symbol or <code>"."</code>
 	 */
 	public String getGeneSymbol() {
-		if (transcript == null || transcript.geneSymbol == null)
+		if (transcript == null || transcript.getGeneSymbol() == null)
 			return ".";
 		else
-			return transcript.geneSymbol;
+			return transcript.getGeneSymbol();
 	}
 
 	/**
@@ -245,7 +245,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		if (transcript == null)
 			return null;
 		return Joiner.on(":").skipNulls()
-				.join(transcript.geneSymbol, transcript.accession, ntHGVSDescription, aaHGVSDescription);
+				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription, aaHGVSDescription);
 	}
 
 	/**
@@ -302,7 +302,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	@Override
 	public String toString() {
 		return "Annotation [change=" + change + ", effects=" + effects + ", ntHGVSDescription=" + ntHGVSDescription
-				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.accession=" + transcript.accession + "]";
+				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.getAccession()=" + transcript.getAccession() + "]";
 	}
 
 	@Override

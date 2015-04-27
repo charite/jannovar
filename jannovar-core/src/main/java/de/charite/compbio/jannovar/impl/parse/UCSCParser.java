@@ -171,8 +171,8 @@ public class UCSCParser implements TranscriptParser {
 	 * @return <code>false</code> if known problems have been found
 	 */
 	private boolean checkTranscriptInfo(TranscriptModel info) {
-		if (info.transcriptLength() > info.sequence.length()) {
-			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.accession);
+		if (info.transcriptLength() > info.getSequence().length()) {
+			LOGGER.debug("Transcript {} is indicated to be longer than its sequence. Ignoring.", info.getAccession());
 			return false;
 		}
 		return true;
