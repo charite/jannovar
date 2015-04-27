@@ -67,7 +67,7 @@ public class StructuralVariantAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().rank);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
@@ -89,7 +89,7 @@ public class StructuralVariantAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().rank);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
@@ -111,7 +111,7 @@ public class StructuralVariantAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "CGAT", "ATCG");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().rank);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640063_6640066inv", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}
@@ -133,7 +133,7 @@ public class StructuralVariantAnnotationBuilderTest {
 				PositionType.ZERO_BASED), "CGAT", "TTTTA");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
 		Assert.assertEquals(infoForward.accession, anno.getTranscript().accession);
-		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().rank);
+		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.getNucleotideHGVSDescription());
 		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
 	}

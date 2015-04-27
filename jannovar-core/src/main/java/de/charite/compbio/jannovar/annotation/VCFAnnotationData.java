@@ -57,20 +57,20 @@ class VCFAnnotationData {
 	public void setAnnoLoc(AnnotationLocation annoLoc) {
 		if (annoLoc == null)
 			return;
-		if (annoLoc.rankType != RankType.UNDEFINED) {
-			this.rank = annoLoc.rank;
-			this.totalRank = annoLoc.totalRank;
+		if (annoLoc.getRankType() != RankType.UNDEFINED) {
+			this.rank = annoLoc.getRank();
+			this.totalRank = annoLoc.getTotalRank();
 		}
 
-		final TranscriptModel transcript = annoLoc.transcript;
+		final TranscriptModel transcript = annoLoc.getTranscript();
 		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		final TranscriptPosition txPos;
-		if (annoLoc != null && annoLoc.txLocation.length() == 0)
-			txPos = annoLoc.txLocation.getTranscriptBeginPos().shifted(-1); // change length == 0, insertion
+		if (annoLoc != null && annoLoc.getTxLocation().length() == 0)
+			txPos = annoLoc.getTxLocation().getTranscriptBeginPos().shifted(-1); // change length == 0, insertion
 		else
-			txPos = annoLoc.txLocation.getTranscriptBeginPos(); // all other variants
+			txPos = annoLoc.getTxLocation().getTranscriptBeginPos(); // all other variants
 		this.txPos = txPos.getPos();
-		this.txLength = annoLoc.transcript.txRegion.length();
+		this.txLength = annoLoc.getTranscript().txRegion.length();
 
 		try {
 			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).getPos();
