@@ -27,16 +27,16 @@ public final class Chromosome implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/** reference dictionary to use */
-	public final ReferenceDictionary refDict;
+	private final ReferenceDictionary refDict;
 
 	/** numeric chromsome ID */
-	public final int chrID;
+	private final int chrID;
 
 	/**
 	 * An {@link IntervalArray} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
 	 * chromosome.
 	 */
-	public final IntervalArray<TranscriptModel> tmIntervalTree;
+	private final IntervalArray<TranscriptModel> tmIntervalTree;
 
 	/**
 	 * Initialize object.

@@ -27,10 +27,10 @@ public class TranscriptModelFactory {
 		result.setStrand(fields[2].charAt(0) == '+' ? Strand.FWD : Strand.REV);
 		GenomeInterval txRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[3]) + 1,
 				Integer.parseInt(fields[4]), PositionType.ONE_BASED);
-		result.setTxRegion(txRegion);
+		result.setTXRegion(txRegion);
 		GenomeInterval cdsRegion = new GenomeInterval(refDict, Strand.FWD, chr, Integer.parseInt(fields[5]) + 1,
 				Integer.parseInt(fields[6]), PositionType.ONE_BASED);
-		result.setCdsRegion(cdsRegion);
+		result.setCDSRegion(cdsRegion);
 
 		int exonCount = Integer.parseInt(fields[7]);
 		String[] startFields = fields[8].split(",");

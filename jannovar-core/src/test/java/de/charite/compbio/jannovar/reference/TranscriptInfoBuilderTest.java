@@ -24,8 +24,8 @@ public class TranscriptInfoBuilderTest {
 		builder.setAccession("accession");
 		builder.setGeneID("ENTREZ10");
 		builder.setGeneSymbol("gene-symbol");
-		builder.setTxRegion(new GenomeInterval(refDict, Strand.FWD, 1, 100, 200, PositionType.ONE_BASED));
-		builder.setCdsRegion(new GenomeInterval(refDict, Strand.FWD, 1, 110, 190, PositionType.ONE_BASED));
+		builder.setTXRegion(new GenomeInterval(refDict, Strand.FWD, 1, 100, 200, PositionType.ONE_BASED));
+		builder.setCDSRegion(new GenomeInterval(refDict, Strand.FWD, 1, 110, 190, PositionType.ONE_BASED));
 		builder.addExonRegion(new GenomeInterval(refDict, Strand.FWD, 1, 120, 170, PositionType.ONE_BASED));
 		builder.setSequence("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 				+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -37,8 +37,8 @@ public class TranscriptInfoBuilderTest {
 		Assert.assertEquals("accession", info.accession);
 		Assert.assertEquals("ENTREZ10", info.geneID);
 		Assert.assertEquals("gene-symbol", info.geneSymbol);
-		Assert.assertEquals(builder.getTxRegion(), info.txRegion);
-		Assert.assertEquals(builder.getCdsRegion(), info.cdsRegion);
+		Assert.assertEquals(builder.getTXRegion(), info.txRegion);
+		Assert.assertEquals(builder.getCDSRegion(), info.cdsRegion);
 		Assert.assertEquals(builder.getSequence(), info.sequence);
 		Assert.assertEquals(1, info.exonRegions.size());
 		Assert.assertEquals(builder.getExonRegions().get(0), info.exonRegions.get(0));

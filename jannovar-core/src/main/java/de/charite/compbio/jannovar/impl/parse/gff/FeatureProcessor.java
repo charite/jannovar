@@ -353,7 +353,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return transcription start index (1-based, including)
 		 */
-		int getTxStart() {
+		int getTXStart() {
 			if (start == Integer.MAX_VALUE)
 				for (GFFStruct exon : exons)
 					if (start > exon.start)
@@ -366,7 +366,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return transcription end index (1-based, including)
 		 */
-		int getTxEnd() {
+		int getTXEnd() {
 			if (end == Integer.MIN_VALUE)
 				for (GFFStruct exon : exons)
 					if (end < exon.end)
@@ -380,7 +380,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return translation start index (1-based, including)
 		 */
-		int getCdsStart() {
+		int getCDSStart() {
 			if (cdsStart == Integer.MAX_VALUE)
 				for (GFFStruct cds : cdss)
 					if (cdsStart > cds.start) {
@@ -392,7 +392,7 @@ public final class FeatureProcessor {
 						}
 					}
 			if (cdsStart == Integer.MAX_VALUE)
-				cdsStart = getTxStart() + 1;
+				cdsStart = getTXStart() + 1;
 			return cdsStart;
 		}
 
@@ -402,7 +402,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return translation end index (1-based, including)
 		 */
-		int getCdsEnd() {
+		int getCDSEnd() {
 			if (cdsEnd == Integer.MIN_VALUE)
 				for (GFFStruct cds : cdss)
 					if (cdsEnd < cds.end) {
@@ -414,7 +414,7 @@ public final class FeatureProcessor {
 						}
 					}
 			if (cdsEnd == Integer.MIN_VALUE)
-				cdsEnd = getTxStart();
+				cdsEnd = getTXStart();
 			return cdsEnd;
 		}
 	}

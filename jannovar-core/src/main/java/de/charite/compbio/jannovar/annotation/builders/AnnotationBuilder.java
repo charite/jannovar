@@ -313,7 +313,7 @@ abstract class AnnotationBuilder {
 		// System.err.println("CHANGE\t" + change.getGenomeInterval());
 		// System.err.println("TX REGION\t" + transcript.txRegion);
 		// System.err.println("PROJECTED CHANGE\t" + projector.projectGenomeToTXInterval(change.getGenomeInterval()));
-		locBuilder.setTxLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
+		locBuilder.setTXLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is changed => insertion

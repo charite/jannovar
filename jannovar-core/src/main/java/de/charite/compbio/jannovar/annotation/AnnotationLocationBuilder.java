@@ -62,11 +62,11 @@ public class AnnotationLocationBuilder {
 		this.rank = rank;
 	}
 
-	public TranscriptInterval getTxLocation() {
+	public TranscriptInterval getTXLocation() {
 		return txLocation;
 	}
 
-	public void setTxLocation(TranscriptInterval txLocation) {
+	public void setTXLocation(TranscriptInterval txLocation) {
 		this.txLocation = txLocation;
 	}
 

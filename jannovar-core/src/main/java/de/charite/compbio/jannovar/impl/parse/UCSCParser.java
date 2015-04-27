@@ -252,7 +252,7 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
-		tib.setTxRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd,
+		tib.setTXRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd,
 				PositionType.ONE_BASED).withStrand(strand));
 
 		int cdsStart, cdsEnd;
@@ -267,7 +267,7 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
-		tib.setCdsRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd,
+		tib.setCDSRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd,
 				PositionType.ONE_BASED).withStrand(strand));
 
 		// Get number of exons.

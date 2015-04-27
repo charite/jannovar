@@ -121,8 +121,8 @@ public final class GFFParser {
 					lineNo = 0;
 				}
 			}
-			if (fip.getChannel().position() != bar.max)
-				bar.print(bar.max);
+			if (fip.getChannel().position() != bar.getMax())
+				bar.print(bar.getMax());
 		} catch (FeatureFormatException e) {
 			LOGGER.warn("GFF with wrong Feature format: {}", e);
 		} catch (IOException e) {

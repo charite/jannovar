@@ -67,7 +67,7 @@ public class AnnotationLocation {
 	}
 
 	/** @return location of the change on the transcript, null if outside of transcript */
-	public TranscriptInterval getTxLocation() {
+	public TranscriptInterval getTXLocation() {
 		return txLocation;
 	}
 

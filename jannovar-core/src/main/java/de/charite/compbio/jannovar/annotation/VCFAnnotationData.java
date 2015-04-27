@@ -65,10 +65,10 @@ class VCFAnnotationData {
 		final TranscriptModel transcript = annoLoc.getTranscript();
 		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		final TranscriptPosition txPos;
-		if (annoLoc != null && annoLoc.getTxLocation().length() == 0)
-			txPos = annoLoc.getTxLocation().getTranscriptBeginPos().shifted(-1); // change length == 0, insertion
+		if (annoLoc != null && annoLoc.getTXLocation().length() == 0)
+			txPos = annoLoc.getTXLocation().getTranscriptBeginPos().shifted(-1); // change length == 0, insertion
 		else
-			txPos = annoLoc.getTxLocation().getTranscriptBeginPos(); // all other variants
+			txPos = annoLoc.getTXLocation().getTranscriptBeginPos(); // all other variants
 		this.txPos = txPos.getPos();
 		this.txLength = annoLoc.getTranscript().txRegion.length();
 
@@ -111,7 +111,7 @@ class VCFAnnotationData {
 		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantEffect.TO_SO_TERM));
 		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
 				featureBioType, getRankString(), ntHGVSDescription, aaHGVSDescription, getTXPosString(),
-				getCdsPosString(), getAAPosString(), getDistanceString(), joiner.join(messages) };
+				getCDSPosString(), getAminoAcidPosString(), getDistanceString(), joiner.join(messages) };
 	}
 
 	public String toUnescapedString(String allele) {
@@ -147,7 +147,7 @@ class VCFAnnotationData {
 		return Joiner.on('/').join(txPos + 1, txLength);
 	}
 
-	private String getCdsPosString() {
+	private String getCDSPosString() {
 		if (cdsPos == -1)
 			return null;
 		if (!featureBioType.equals("Coding"))
@@ -155,7 +155,7 @@ class VCFAnnotationData {
 		return Joiner.on('/').join(cdsPos + 1, cdsLength);
 	}
 
-	private String getAAPosString() {
+	private String getAminoAcidPosString() {
 		if (cdsPos == -1)
 			return null;
 		if (!featureBioType.equals("Coding"))

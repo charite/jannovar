@@ -89,7 +89,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
 		for (Chromosome chrom : jannovarDB.chromosomes.values())
-			for (Interval<TranscriptModel> itv : chrom.tmIntervalTree.getIntervals()) {
+			for (Interval<TranscriptModel> itv : chrom.getTmIntervalTree().getIntervals()) {
 				TranscriptModel tm = itv.getValue();
 				if (!geneMap.containsKey(tm.geneSymbol))
 					geneMap.put(tm.geneSymbol, new GeneBuilder(jannovarDB.refDict, tm.geneSymbol));

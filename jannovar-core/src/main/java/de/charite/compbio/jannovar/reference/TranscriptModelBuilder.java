@@ -138,7 +138,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return the txRegion
 	 */
-	public GenomeInterval getTxRegion() {
+	public GenomeInterval getTXRegion() {
 		return txRegion;
 	}
 
@@ -146,14 +146,14 @@ public class TranscriptModelBuilder {
 	 * @param txRegion
 	 *            the txRegion to set
 	 */
-	public void setTxRegion(GenomeInterval txRegion) {
+	public void setTXRegion(GenomeInterval txRegion) {
 		this.txRegion = txRegion;
 	}
 
 	/**
 	 * @return the cdsRegion
 	 */
-	public GenomeInterval getCdsRegion() {
+	public GenomeInterval getCDSRegion() {
 		return cdsRegion;
 	}
 
@@ -161,7 +161,7 @@ public class TranscriptModelBuilder {
 	 * @param cdsRegion
 	 *            the cdsRegion to set
 	 */
-	public void setCdsRegion(GenomeInterval cdsRegion) {
+	public void setCDSRegion(GenomeInterval cdsRegion) {
 		this.cdsRegion = cdsRegion;
 	}
 
