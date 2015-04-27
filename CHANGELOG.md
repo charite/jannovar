@@ -71,6 +71,10 @@
 * Changing public final members to accessors. 
 * `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
 
+### jannovar-htsjdk
+
+* Changing public final members to accessors. 
+
 ## v0.12
 
 ### jannovar-htsjdk
