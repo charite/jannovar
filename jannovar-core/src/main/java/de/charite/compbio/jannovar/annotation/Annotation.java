@@ -81,30 +81,37 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		this(null, null, null, null, null, null, messages);
 	}
 
+	/** @return the annotated {@link GenomeChange} */
 	public GenomeChange getChange() {
 		return change;
 	}
 
+	/** @return variant types, sorted by internal pathogenicity score */
 	public ImmutableSortedSet<VariantEffect> getEffects() {
 		return effects;
 	}
 
+	/** @return errors and warnings */
 	public ImmutableSortedSet<AnnotationMessage> getMessages() {
 		return messages;
 	}
 
+	/** @return location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
 	public AnnotationLocation getAnnoLoc() {
 		return annoLoc;
 	}
 
+	/** @return HGVS nucleotide variant annotation */
 	public String getNucleotideHGVSDescription() {
 		return ntHGVSDescription;
 	}
 
+	/** @return amino acid variant annotation */
 	public String getAminoAcidHGVSDescription() {
 		return aaHGVSDescription;
 	}
 
+	/** @return the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}
