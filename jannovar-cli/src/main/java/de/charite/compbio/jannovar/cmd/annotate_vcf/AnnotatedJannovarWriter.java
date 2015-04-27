@@ -124,7 +124,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		String chrStr = vc.getChr();
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" contigs etc. In this case, we simply ignore the record.
-		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		Integer boxedInt = refDict.getContigNameToID().get(vc.getChr());
 		if (boxedInt == null)
 			return;
 		int chr = boxedInt.intValue();

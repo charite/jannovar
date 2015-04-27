@@ -47,13 +47,13 @@ public class ReferenceDictionary implements Serializable {
 	 * stores a mapping from the string chromosome/contig name to its numeric id, e.g. from both <code>"chr1"</code> and
 	 * <code>"1"</code> to <code>(int)1</code>
 	 */
-	public final ImmutableMap<String, Integer> contigID;
+	private final ImmutableMap<String, Integer> contigID;
 
 	/** stores primary name for each numeric chromsomomeID/contigID */
-	public final ImmutableMap<Integer, String> contigName;
+	private final ImmutableMap<Integer, String> contigName;
 
 	/** stores a mapping from numeric chromosomeID/contigID to chromosome/contig length */
-	public final ImmutableMap<Integer, Integer> contigLength;
+	private final ImmutableMap<Integer, Integer> contigLength;
 
 	/**
 	 * Initialize the object with the given values.
@@ -70,6 +70,21 @@ public class ReferenceDictionary implements Serializable {
 		this.contigID = contigID;
 		this.contigName = contigName;
 		this.contigLength = contigLength;
+	}
+
+	/** @return map from contig name to contig id */
+	public ImmutableMap<String, Integer> getContigNameToID() {
+		return contigID;
+	}
+
+	/** @return map from numeric contig id to primary name */
+	public ImmutableMap<Integer, String> getContigIDToName() {
+		return contigName;
+	}
+
+	/** @return map from numeric contig id to length */
+	public ImmutableMap<Integer, Integer> getContigIDToLength() {
+		return contigLength;
 	}
 
 	/**

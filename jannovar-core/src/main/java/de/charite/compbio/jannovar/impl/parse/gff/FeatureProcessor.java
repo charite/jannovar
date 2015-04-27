@@ -61,7 +61,7 @@ public final class FeatureProcessor {
 	 */
 	public void addFeature(Feature feature) throws InvalidAttributeException, FeatureFormatException {
 		// System.out.println(feature.toLine());
-		if (refDict.contigID.get(feature.getSequenceID()) == null)
+		if (refDict.getContigNameToID().get(feature.getSequenceID()) == null)
 			return;
 
 		switch (feature.getType()) {
@@ -110,7 +110,7 @@ public final class FeatureProcessor {
 		curRna.end = feature.getEnd();
 		curRna.id = curRnaID;
 		curRna.name = feature.getAttributes().get("Name");
-		curRna.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curRna.chromosom = refDict.getContigNameToID().get(feature.getSequenceID()).byteValue();
 		if (curGene.chromosom != curRna.chromosom) {
 			// throw new
 			// InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match: "+curGene.chromosom+
@@ -157,14 +157,14 @@ public final class FeatureProcessor {
 		// System.out.println(curGeneID);
 		// if the gene is not known yet --> add
 		if (!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID, curGeneName, refDict.contigID.get(feature.getSequenceID())
+			genes.put(curGeneID, new Gene(curGeneID, curGeneName, refDict.getContigNameToID().get(feature.getSequenceID())
 					.byteValue(), feature.getStrand()));
 		// get Gene
 		curGene = genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, refDict.contigID.get(feature.getSequenceID())
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, refDict.getContigNameToID().get(feature.getSequenceID())
 					.byteValue(), feature.getStrand()));
 		}
 		// get RNA
@@ -175,7 +175,7 @@ public final class FeatureProcessor {
 
 		// now finally process the Subregion
 		curGFF = new GFFStruct();
-		curGFF.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curGFF.chromosom = refDict.getContigNameToID().get(feature.getSequenceID()).byteValue();
 		curGFF.start = feature.getStart();
 		curGFF.end = feature.getEnd();
 		curGFF.strand = feature.getStrand();
@@ -228,7 +228,7 @@ public final class FeatureProcessor {
 		curGene.strand = feature.getStrand();
 		curGene.start = feature.getStart();
 		curGene.end = feature.getEnd();
-		curGene.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curGene.chromosom = refDict.getContigNameToID().get(feature.getSequenceID()).byteValue();
 		// extract the Genesymbol
 		if (feature.getAttributes().get("Name") != null)
 			curGene.name = feature.getAttributes().get("Name");

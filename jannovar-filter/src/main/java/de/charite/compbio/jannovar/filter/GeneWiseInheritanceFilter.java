@@ -88,11 +88,11 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	private static GeneList buildGeneList(JannovarData jannovarDB) {
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
-		for (Chromosome chrom : jannovarDB.chromosomes.values())
+		for (Chromosome chrom : jannovarDB.getChromosomes().values())
 			for (Interval<TranscriptModel> itv : chrom.getTmIntervalTree().getIntervals()) {
 				TranscriptModel tm = itv.getValue();
 				if (!geneMap.containsKey(tm.geneSymbol))
-					geneMap.put(tm.geneSymbol, new GeneBuilder(jannovarDB.refDict, tm.geneSymbol));
+					geneMap.put(tm.geneSymbol, new GeneBuilder(jannovarDB.getRefDict(), tm.geneSymbol));
 				geneMap.get(tm.geneSymbol).addTranscriptModel(tm);
 			}
 
@@ -110,11 +110,11 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	public void put(FlaggedVariant vc) throws FilterException {
 		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc.getVC() });
 
-		final ReferenceDictionary refDict = jannovarDB.refDict;
+		final ReferenceDictionary refDict = jannovarDB.getRefDict();
 		// TODO(holtgrew): for now, we simply ignore variants on contigs unknown to us, this has to be fixed
-		if (!refDict.contigID.containsKey(vc.getVC().getChr()))
+		if (!refDict.getContigNameToID().containsKey(vc.getVC().getChr()))
 			return;
-		final int contigID = refDict.contigID.get(vc.getVC().getChr());
+		final int contigID = refDict.getContigNameToID().get(vc.getVC().getChr());
 		IntervalArray<Gene> iTree = geneList.getGeneIntervalTree().get(contigID);
 
 		// consider each alternative allele of the variant
@@ -162,11 +162,11 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * {@link VariantContext}.
 	 */
 	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
-		final int contigID = jannovarDB.refDict.contigID.get(vc.getChr());
+		final int contigID = jannovarDB.getRefDict().getContigNameToID().get(vc.getChr());
 		final String ref = vc.getReference().getBaseString();
 		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeChange(new GenomePosition(jannovarDB.refDict, Strand.FWD, contigID, pos,
+		return new GenomeChange(new GenomePosition(jannovarDB.getRefDict(), Strand.FWD, contigID, pos,
 				PositionType.ONE_BASED), ref, alt);
 	}
 
@@ -304,7 +304,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 */
 	private void checkVariantsForGene(Gene gene) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
-		boolean isXChromosomal = (gene.getRefDict().contigID.get("chrX") != null && gene.getRefDict().contigID.get(
+		boolean isXChromosomal = (gene.getRefDict().getContigNameToID().get("chrX") != null && gene.getRefDict().getContigNameToID().get(
 				"chrX").intValue() == gene.getRegion().chr);
 		GenotypeList lst = activeGenes.get(gene).setIsXChromosomal(isXChromosomal).build();
 		try {

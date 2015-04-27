@@ -1767,7 +1767,7 @@ public class InsertionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("22"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("22"),
 				20640690, PositionType.ZERO_BASED), "", "ATGCCGTGCACGGCATCCTCGTTAGCA");
 		Annotation annotation1 = new InsertionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();

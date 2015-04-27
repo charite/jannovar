@@ -91,7 +91,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			System.exit(3);
 		}
 
-		int chr = refDict.contigID.get(match.group(1));
+		int chr = refDict.getContigNameToID().get(match.group(1));
 		int pos = Integer.parseInt(match.group(2));
 		String ref = match.group(3);
 		String alt = match.group(4);

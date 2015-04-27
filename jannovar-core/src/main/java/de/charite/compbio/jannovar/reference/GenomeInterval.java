@@ -73,8 +73,8 @@ public final class GenomeInterval implements Serializable {
 			this.beginPos = other.beginPos;
 			this.endPos = other.endPos;
 		} else {
-			int beginPos = refDict.contigLength.get(other.chr) - other.beginPos;
-			int endPos = refDict.contigLength.get(other.chr) - other.endPos;
+			int beginPos = refDict.getContigIDToLength().get(other.chr) - other.beginPos;
+			int endPos = refDict.getContigIDToLength().get(other.chr) - other.endPos;
 			this.endPos = beginPos;
 			this.beginPos = endPos;
 		}
@@ -209,7 +209,7 @@ public final class GenomeInterval implements Serializable {
 		if (strand.isReverse())
 			return withStrand(Strand.FWD).toString();
 
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(refDict.getContigNameToID().get(chr), ":g.", beginPos + 1, "-", endPos);
 	}
 
 	/*

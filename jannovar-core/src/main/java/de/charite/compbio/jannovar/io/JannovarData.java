@@ -29,16 +29,16 @@ public final class JannovarData implements Serializable {
 	private static final long serialVersionUID = 3L;
 
 	/** map from chromosome ID to {@link Chromosome} */
-	public final ImmutableMap<Integer, Chromosome> chromosomes;
+	private final ImmutableMap<Integer, Chromosome> chromosomes;
 
 	/** map from transcript accession to {@link TranscriptModel} instance. */
-	public final ImmutableMap<String, TranscriptModel> tmByAccession;
+	private final ImmutableMap<String, TranscriptModel> tmByAccession;
 
 	/** map from transcript accession to {@link TranscriptModel} instance. */
-	public final ImmutableMultimap<String, TranscriptModel> tmByGeneSymbol;
+	private final ImmutableMultimap<String, TranscriptModel> tmByGeneSymbol;
 
 	/** information about reference lengths and identities */
-	public final ReferenceDictionary refDict;
+	private final ReferenceDictionary refDict;
 
 	/**
 	 * Initialize the object with the given values.
@@ -53,6 +53,26 @@ public final class JannovarData implements Serializable {
 		this.chromosomes = makeChromsomes(refDict, transcriptInfos);
 		this.tmByAccession = makeTMByAccession(transcriptInfos);
 		this.tmByGeneSymbol = makeTMByGeneSymbol(transcriptInfos);
+	}
+
+	/** @return map from chromosome ID to {@link Chromosome} */
+	public ImmutableMap<Integer, Chromosome> getChromosomes() {
+		return chromosomes;
+	}
+
+	/** @return map from transcript accession to {@link TranscriptModel} instance. */
+	public ImmutableMap<String, TranscriptModel> getTmByAccession() {
+		return tmByAccession;
+	}
+
+	/** @return map from transcript accession to {@link TranscriptModel} instance. */
+	public ImmutableMultimap<String, TranscriptModel> getTmByGeneSymbol() {
+		return tmByGeneSymbol;
+	}
+
+	/** @return information about reference lengths and identities */
+	public ReferenceDictionary getRefDict() {
+		return refDict;
 	}
 
 	/**
@@ -99,7 +119,7 @@ public final class JannovarData implements Serializable {
 
 		// create hash map for this
 		HashMap<Integer, ArrayList<TranscriptModel>> transcripts = new HashMap<Integer, ArrayList<TranscriptModel>>();
-		for (Integer chrID : refDict.contigName.keySet())
+		for (Integer chrID : refDict.getContigIDToName().keySet())
 			transcripts.put(chrID, new ArrayList<TranscriptModel>());
 		// distribute TranscriptInfo lists
 		for (TranscriptModel transcript : transcriptInfos)

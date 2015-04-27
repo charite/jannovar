@@ -228,7 +228,7 @@ public class UCSCParser implements TranscriptParser {
 		tib.setAccession(A[0]);
 		tib.setGeneSymbol(tib.getAccession()); // will be replaced when parsing
 												// geneXref file.
-		Integer chrID = refDict.contigID.get(A[1]);
+		Integer chrID = refDict.getContigNameToID().get(A[1]);
 		if (chrID == null) // scaffolds such as chrUn_gl000243 cause Exception
 							// to be thrown.
 			throw new TranscriptParseException("Could not parse chromosome field: " + A[1]);

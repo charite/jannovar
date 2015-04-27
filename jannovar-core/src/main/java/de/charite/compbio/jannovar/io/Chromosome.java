@@ -73,7 +73,7 @@ public final class Chromosome implements Serializable {
 	 * @return String representation of name of chromosome, e.g., <code>"chr2"</code>
 	 */
 	public String getChromosomeName() {
-		return refDict.contigName.get(chrID);
+		return refDict.getContigIDToName().get(chrID);
 	}
 
 	/**

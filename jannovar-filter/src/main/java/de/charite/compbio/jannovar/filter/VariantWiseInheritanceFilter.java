@@ -55,8 +55,8 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	public void put(FlaggedVariant fv) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 
-		final int contigID = jannovarDB.refDict.contigID.get(fv.getVC().getChr());
-		boolean isXChromosomal = (jannovarDB.refDict.contigID.get("chrX") != null && jannovarDB.refDict.contigID.get(
+		final int contigID = jannovarDB.getRefDict().getContigNameToID().get(fv.getVC().getChr());
+		boolean isXChromosomal = (jannovarDB.getRefDict().getContigNameToID().get("chrX") != null && jannovarDB.getRefDict().getContigNameToID().get(
 				"chrX").intValue() == contigID);
 
 		GenotypeListBuilder builder = new GenotypeListBuilder(null, personNames, isXChromosomal);

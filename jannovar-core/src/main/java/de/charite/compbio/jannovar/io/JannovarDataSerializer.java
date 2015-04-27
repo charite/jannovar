@@ -28,7 +28,7 @@ public final class JannovarDataSerializer {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** path to file to serialize to or deserialize from */
-	public final String filename;
+	private final String filename;
 
 	/**
 	 * Initialize the (de)serializer with the path to the file to load/save.
@@ -52,7 +52,7 @@ public final class JannovarDataSerializer {
 		logger.info(StringUtil.concatenate("Serializing JannovarData to ", filename));
 		final long startTime = System.nanoTime();
 
-		if (data == null || data.refDict.contigID.isEmpty())
+		if (data == null || data.getRefDict().getContigNameToID().isEmpty())
 			throw new SerializationException("Attempting to serialize empty data set");
 
 		// This is waiting for Java 7 to be improved. Also see:

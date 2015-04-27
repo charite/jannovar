@@ -136,7 +136,7 @@ public final class GenomeChange implements VariantDescription {
 	}
 
 	public String getChrName() {
-		return this.pos.getRefDict().contigName.get(this.pos.getChr());
+		return this.pos.getRefDict().getContigIDToName().get(this.pos.getChr());
 	}
 	
 	public GenomePosition getGenomePos() {
@@ -209,10 +209,10 @@ public final class GenomeChange implements VariantDescription {
 		if (pos.getStrand() != Strand.FWD)
 			return withStrand(Strand.FWD).toString();
 		else if (ref.equals("")) // handle insertion as special case
-			return Joiner.on("").join(pos.getRefDict().contigName.get(pos.getChr()),
+			return Joiner.on("").join(pos.getRefDict().getContigNameToID().get(pos.getChr()),
 					":g.", pos.getPos(), "_", pos.getPos() + 1, "ins", alt);
 		else if (alt.equals(""))
-			return Joiner.on("").join(pos.getRefDict().contigName.get(pos.getChr()),
+			return Joiner.on("").join(pos.getRefDict().getContigNameToID().get(pos.getChr()),
 					":g.", pos.getPos(), "_", pos.getPos() + ref.length(), "del", ref);
 		else
 			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref),

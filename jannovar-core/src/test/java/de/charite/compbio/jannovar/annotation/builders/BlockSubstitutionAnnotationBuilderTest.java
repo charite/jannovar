@@ -522,7 +522,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001128834.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				103041655, PositionType.ONE_BASED), "GGTGATC", "A");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();

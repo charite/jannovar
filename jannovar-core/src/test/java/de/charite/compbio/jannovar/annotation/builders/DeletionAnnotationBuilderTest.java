@@ -1051,7 +1051,7 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				7811233, PositionType.ZERO_BASED), "AGCTGCG", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();
@@ -1173,7 +1173,7 @@ public class DeletionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("Y"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("Y"),
 				23749506, PositionType.ZERO_BASED), "G", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
 				.build();

@@ -30,8 +30,7 @@ import de.charite.compbio.jannovar.io.ReferenceDictionary;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class GenomePosition implements Serializable,
-		Comparable<GenomePosition> {
+public final class GenomePosition implements Serializable, Comparable<GenomePosition> {
 
 	private static final long serialVersionUID = 2L;
 
@@ -46,8 +45,7 @@ public final class GenomePosition implements Serializable,
 	private final int pos;
 
 	/** construct genome position with zero-based coordinate system */
-	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr,
-			int pos) {
+	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr, int pos) {
 		this.refDict = refDict;
 		this.strand = strand;
 		this.chr = chr;
@@ -55,8 +53,7 @@ public final class GenomePosition implements Serializable,
 	}
 
 	/** construct genome position with selected coordinate system */
-	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr,
-			int pos, PositionType positionType) {
+	public GenomePosition(ReferenceDictionary refDict, Strand strand, int chr, int pos, PositionType positionType) {
 		this.refDict = refDict;
 		this.strand = strand;
 		this.chr = chr;
@@ -84,7 +81,7 @@ public final class GenomePosition implements Serializable,
 		if (strand == other.strand)
 			this.pos = other.pos;
 		else
-			this.pos = refDict.contigLength.get(other.chr) - other.pos - 1;
+			this.pos = refDict.getContigIDToLength().get(other.chr) - other.pos - 1;
 	}
 
 	/** @return reference dictionary to use for coordinate translation */
@@ -183,14 +180,12 @@ public final class GenomePosition implements Serializable,
 	// TODO(holtgrem): test this!
 	public int differenceTo(GenomePosition pos) {
 		if (chr != pos.chr)
-			throw new InvalidCoordinateException(
-					"Coordinates are on different chromosomes " + this
-							+ " vs. " + pos);
+			throw new InvalidCoordinateException("Coordinates are on different chromosomes " + this + " vs. " + pos);
 		if (pos.strand != strand)
 			pos = pos.withStrand(strand);
 		return (this.pos - pos.pos);
 	}
-	
+
 	// TODO(holtgrem): add differenceTo(GenomeInterval interval)
 
 	/**
@@ -204,8 +199,7 @@ public final class GenomePosition implements Serializable,
 	 * @return the position shifted by <tt>delta</tt>
 	 */
 	public GenomePosition shifted(int delta) {
-		return new GenomePosition(refDict, strand, chr, pos + delta,
-				PositionType.ZERO_BASED);
+		return new GenomePosition(refDict, strand, chr, pos + delta, PositionType.ZERO_BASED);
 	}
 
 	/*
@@ -218,8 +212,7 @@ public final class GenomePosition implements Serializable,
 		if (strand.isReverse())
 			return withStrand(Strand.FWD).toString();
 
-		return StringUtil.concatenate(refDict.contigName.get(chr), ":g.",
-				pos + 1);
+		return StringUtil.concatenate(refDict.getContigIDToName().get(chr), ":g.", pos + 1);
 	}
 
 	/*
@@ -269,8 +262,7 @@ public final class GenomePosition implements Serializable,
 	}
 
 	public int compareTo(GenomePosition other) {
-		return ComparisonChain.start().compare(chr, other.chr)
-				.compare(pos, other.pos).result();
+		return ComparisonChain.start().compare(chr, other.chr).compare(pos, other.pos).result();
 	}
 
 }

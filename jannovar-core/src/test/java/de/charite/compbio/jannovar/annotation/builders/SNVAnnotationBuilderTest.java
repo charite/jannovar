@@ -824,7 +824,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
@@ -848,7 +848,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
@@ -872,7 +872,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
@@ -896,7 +896,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_002436.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
@@ -1451,7 +1451,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
@@ -2787,7 +2787,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("X"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				70711957, PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
@@ -2811,7 +2811,7 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.contigID.get("Y"),
+		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("Y"),
 				8657214, PositionType.ZERO_BASED), "C", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.accession, annotation1.getTranscript().accession);
