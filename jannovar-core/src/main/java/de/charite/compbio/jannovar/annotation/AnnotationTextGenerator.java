@@ -27,10 +27,10 @@ final public class AnnotationTextGenerator {
 	 * @return the accession number
 	 */
 	public String getAccessionNumber() {
-		if (this.annotation.transcript == null)
+		if (this.annotation.getTranscript() == null)
 			return ".";
 		else
-			return this.annotation.transcript.accession;
+			return this.annotation.getTranscript().accession;
 	}
 
 }

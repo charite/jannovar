@@ -48,7 +48,7 @@ public abstract class AnnotationListTextGenerator {
 				builder.append(',');
 			if (altCount > 1)
 				builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
-			builder.append(Joiner.on("+").join(anno.effects));
+			builder.append(Joiner.on("+").join(anno.getEffects()));
 		}
 		return builder.toString();
 	}

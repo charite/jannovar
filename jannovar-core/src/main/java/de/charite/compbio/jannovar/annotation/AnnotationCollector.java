@@ -292,14 +292,14 @@ final class AnnotationCollector {
 	 */
 	public void addExonicAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		if (FluentIterable.from(ann.effects).anyMatch(Predicates.equalTo(VariantEffect.SYNONYMOUS_VARIANT)))
+		if (FluentIterable.from(ann.getEffects()).anyMatch(Predicates.equalTo(VariantEffect.SYNONYMOUS_VARIANT)))
 			this.hasSynonymous = true;
-		else if (FluentIterable.from(ann.effects).anyMatch(VariantEffect.IS_SPLICING))
+		else if (FluentIterable.from(ann.getEffects()).anyMatch(VariantEffect.IS_SPLICING))
 			this.hasSplicing = true;
 		else
 			this.hasExonic = true;
 
-		this.geneSymbolSet.add(ann.transcript.geneSymbol);
+		this.geneSymbolSet.add(ann.getTranscript().geneSymbol);
 		this.hasGenicMutation = true;
 		this.annotationCount++;
 	}
@@ -327,8 +327,8 @@ final class AnnotationCollector {
 	 *            the Intronic annotation to be added.
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
-		this.geneSymbolSet.add(ann.transcript.geneSymbol);
-		if (FluentIterable.from(ann.effects).anyMatch(VariantEffect.IS_INTRONIC)) {
+		this.geneSymbolSet.add(ann.getTranscript().geneSymbol);
+		if (FluentIterable.from(ann.getEffects()).anyMatch(VariantEffect.IS_INTRONIC)) {
 			for (Annotation a : this.annotationLst) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
@@ -353,7 +353,7 @@ final class AnnotationCollector {
 	 */
 	public void addStructuralAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		this.geneSymbolSet.add(ann.transcript.geneSymbol);
+		this.geneSymbolSet.add(ann.getTranscript().geneSymbol);
 		this.hasStructural = true;
 		this.annotationCount++;
 	}

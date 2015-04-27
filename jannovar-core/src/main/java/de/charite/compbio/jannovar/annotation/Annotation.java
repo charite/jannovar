@@ -46,18 +46,68 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public static final String INFO_HGVS = "HGVS Nomenclature";
 
 	/** The DESCRIPTION string to use in the VCF header for VCFVariantAnnotation objects */
-	public final static String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
+	public static final String VCF_ANN_DESCRIPTION_STRING = "Functional annotations:'Allele|Annotation|"
 			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
 			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'";
 
 	/** the annotated {@link GenomeChange} */
-	public final GenomeChange change;
+	private final GenomeChange change;
 
 	/** variant types, sorted by internal pathogenicity score */
-	public final ImmutableSortedSet<VariantEffect> effects;
+	private final ImmutableSortedSet<VariantEffect> effects;
 
 	/** errors and warnings */
-	public final ImmutableSortedSet<AnnotationMessage> messages;
+	private final ImmutableSortedSet<AnnotationMessage> messages;
+
+	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
+	private final AnnotationLocation annoLoc;
+
+	/** HGVS nucleotide variant annotation */
+	private final String ntHGVSDescription;
+
+	/** amino acid variant annotation */
+	private final String aaHGVSDescription;
+
+	/** the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
+	private final TranscriptModel transcript;
+
+	/**
+	 * Initialize object with messages only.
+	 *
+	 * @param messages
+	 *            {@link AnnotationMessage}s to use in this annotation
+	 */
+	public Annotation(Collection<AnnotationMessage> messages) {
+		this(null, null, null, null, null, null, messages);
+	}
+
+	public GenomeChange getChange() {
+		return change;
+	}
+
+	public ImmutableSortedSet<VariantEffect> getEffects() {
+		return effects;
+	}
+
+	public ImmutableSortedSet<AnnotationMessage> getMessages() {
+		return messages;
+	}
+
+	public AnnotationLocation getAnnoLoc() {
+		return annoLoc;
+	}
+
+	public String getNucleotideHGVSDescription() {
+		return ntHGVSDescription;
+	}
+
+	public String getAminoAcidHGVSDescription() {
+		return aaHGVSDescription;
+	}
+
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
 
 	/**
 	 * @return highest {@link PutativeImpact} of all {@link #effects}.
@@ -70,28 +120,6 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
 				worst = vt;
 		return worst.getImpact();
-	}
-
-	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
-	public final AnnotationLocation annoLoc;
-
-	/** HGVS nucleotide variant annotation */
-	public final String ntHGVSDescription;
-
-	/** amino acid variant annotation */
-	public final String aaHGVSDescription;
-
-	/** the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
-	public final TranscriptModel transcript;
-
-	/**
-	 * Initialize object with messages only.
-	 *
-	 * @param messages
-	 *            {@link AnnotationMessage}s to use in this annotation
-	 */
-	public Annotation(Collection<AnnotationMessage> messages) {
-		this(null, null, null, null, null, null, messages);
 	}
 
 	/**

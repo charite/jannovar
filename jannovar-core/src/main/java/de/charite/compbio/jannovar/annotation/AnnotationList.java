@@ -75,10 +75,10 @@ public final class AnnotationList implements List<Annotation> {
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();
-		if (anno.effects.isEmpty())
+		if (anno.getEffects().isEmpty())
 			return VariantEffect.SEQUENCE_VARIANT;
 		else
-			return anno.effects.first();
+			return anno.getEffects().first();
 	}
 
 	@Override
