@@ -30,15 +30,8 @@
 
 ### jannovar-core
 
-* Making members of `AminoAcidChange`, `CDSPosition`, `TranscriptPosition`,
-  `TranscriptSequenceDecorator`, `TranscriptInterval`, `GenomePosition`,
-  `Annotation`, `AnnotationListContentDecorator`,
-  `AnnotationListTextGenerator`, `AnnotationLocation`, `CDSInterval`, and the
-  module `intervals` private and accessible through public getters.
-* Renaming `TranscriptInterval.getBeginPos()` and
-  `TranscriptInterval.getEndPos()` to
-  `TranscriptInterval.getTranscriptBeginPos()` and
-  `TranscriptInterval.getTranscriptEndPos()`.
+* Making previous `public final` members `private final` (or
+ `protected final`) and adding getters for read-only access to them.
 * Removing position type member of `CDSInterval`.
 * Using type `Strand` instead of `'+'` and `'-'`, requires database rebuild.
 * Adding enum `Strand` with `PLUS` and `MINUS` values.
