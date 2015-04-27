@@ -154,7 +154,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 					.join(a.getNucleotideHGVSDescription(), a.getAminoAcidHGVSDescription());
 			String sym = a.getTranscript().geneSymbol;
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
-					chrStr, change.pos, change.ref, change.alt, gtype, qual);
+					chrStr, change.getPos(), change.getRef(), change.getAlt(), gtype, qual);
 			out.write(s);
 		}
 	}

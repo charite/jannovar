@@ -27,11 +27,11 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
 public final class GenomeChange implements VariantDescription {
 
 	/** position of the change */
-	public final GenomePosition pos;
+	private final GenomePosition pos;
 	/** nucleic acid reference string */
-	public final String ref;
+	private final String ref;
 	/** nucleic acid alternative string */
-	public final String alt;
+	private final String alt;
 
 	/**
 	 * Construct object given the position, reference, and alternative nucleic
@@ -137,6 +137,10 @@ public final class GenomeChange implements VariantDescription {
 
 	public String getChrName() {
 		return this.pos.getRefDict().contigName.get(this.pos.getChr());
+	}
+	
+	public GenomePosition getGenomePos() {
+		return this.pos;
 	}
 
 	public int getPos() {

@@ -53,7 +53,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
-		if (change.ref.length() != 0 || change.alt.length() == 0)
+		if (change.getRef().length() != 0 || change.getAlt().length() == 0)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe an insertion.");
 	}
 
@@ -66,8 +66,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			return buildNonCodingAnnotation();
 
 		// We have the base left and/or right of the insertion to determine the cases.
-		final GenomePosition pos = change.pos;
-		final GenomePosition lPos = change.pos.shifted(-1);
+		final GenomePosition pos = change.getGenomePos();
+		final GenomePosition lPos = change.getGenomePos().shifted(-1);
 		if ((so.liesInCDSExon(lPos) || so.liesInCDSExon(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
 			return buildCDSExonicAnnotation(); // can affect amino acids
 		else if ((so.liesInCDSIntron(lPos) || so.liesInCDSIntron(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
@@ -82,8 +82,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 	@Override
 	protected String ncHGVS() {
-		if (!so.liesInExon(change.pos))
-			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
+		if (!so.liesInExon(change.getGenomePos()))
+			return StringUtil.concatenate(dnaAnno, "ins", change.getAlt());
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -91,15 +91,15 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		// duplicated characters are left of the insertion.
 		TranscriptPosition txPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.pos);
+			txPos = projector.genomeToTranscriptPos(change.getGenomePos());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: at this point, the position must be a transcript position");
 		}
-		if (DuplicationChecker.isDuplication(transcript.sequence, change.alt, txPos.getPos())) {
+		if (DuplicationChecker.isDuplication(transcript.sequence, change.getAlt(), txPos.getPos())) {
 			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			String dnaAnno = null; // override this.dnaAnno
-			if (change.alt.length() == 1) {
+			if (change.getAlt().length() == 1) {
 				try {
 					dnaAnno = StringUtil.concatenate(prefix, ".",
 							posBuilder.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
@@ -109,7 +109,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			} else {
 				try {
 					dnaAnno = StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(projector
-							.transcriptToGenomePos(txPos.shifted(-change.alt.length()))), "_", posBuilder
+							.transcriptToGenomePos(txPos.shifted(-change.getAlt().length()))), "_", posBuilder
 							.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
 				} catch (ProjectionException e) {
 					throw new RuntimeException("Bug: positions should be valid here", e);
@@ -119,7 +119,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			// TODO(holtgrew): We should somehow tell the caller that this is a direct tandem duplication.
 			return dnaAnno;
 		} else {
-			return StringUtil.concatenate(dnaAnno, "ins", change.alt);
+			return StringUtil.concatenate(dnaAnno, "ins", change.getAlt());
 		}
 	}
 
@@ -170,7 +170,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 
 			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
-			this.insertPos = projector.projectGenomeToCDSPosition(change.pos);
+			this.insertPos = projector.projectGenomeToCDSPosition(change.getGenomePos());
 
 			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
@@ -183,7 +183,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			// insertions
 			final int insertAAPos = this.insertPos.getPos() / 3;
 			final int delta = (this.insertPos.getFrameshift() == 0 ? 0 : 1);
-			int insertAALength = ((change.alt.length() + 2) / 3) + delta;
+			int insertAALength = ((change.getAlt().length() + 2) / 3) + delta;
 			if (insertAAPos + insertAALength > varAASeq.length())
 				insertAALength = varAASeq.length() - insertAAPos;
 			final String delAA = wtAASeq.substring(insertAAPos, insertAAPos + delta);
@@ -203,7 +203,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.SYNONYMOUS_VARIANT);
 			} else {
 				// We do not have the corner case of "">"" but can go on with frameshift/non-frameshift distinction.
-				if (change.alt.length() % 3 == 0)
+				if (change.getAlt().length() % 3 == 0)
 					handleNonFrameShiftCase();
 				else
 					handleFrameShiftCase();

@@ -42,7 +42,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
-		if (change.ref.length() == 0 || change.alt.length() == 0)
+		if (change.getRef().length() == 0 || change.getAlt().length() == 0)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a block substitution.");
 	}
 
@@ -73,7 +73,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 	@Override
 	protected String ncHGVS() {
-		return StringUtil.concatenate(dnaAnno, "delins", change.alt);
+		return StringUtil.concatenate(dnaAnno, "delins", change.getAlt());
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
@@ -144,7 +144,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
 			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos()
-					.shifted(change.alt.length() - 1));
+					.shifted(change.getAlt().length() - 1));
 			if (!transcript.cdsRegion.contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
@@ -180,9 +180,9 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			if (so.overlapsWithTranslationalStopSite(changeInterval))
 				varTypes.add(VariantEffect.STOP_LOST);
-			else if (change.alt.length() > change.ref.length())
+			else if (change.getAlt().length() > change.getRef().length())
 				varTypes.addAll(ImmutableList.of(VariantEffect.INTERNAL_FEATURE_ELONGATION));
-			else if (change.alt.length() < change.ref.length())
+			else if (change.getAlt().length() < change.getRef().length())
 				varTypes.addAll(ImmutableList.of(VariantEffect.FEATURE_TRUNCATION, VariantEffect.COMPLEX_SUBSTITUTION));
 			else
 				varTypes.add(VariantEffect.MNV);

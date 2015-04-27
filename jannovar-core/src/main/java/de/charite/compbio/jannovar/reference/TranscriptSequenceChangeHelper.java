@@ -54,7 +54,7 @@ public final class TranscriptSequenceChangeHelper {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		TranscriptPosition tPos;
 		try {
-			tPos = projector.genomeToTranscriptPos(change.pos);
+			tPos = projector.genomeToTranscriptPos(change.getGenomePos());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: should be able to get transcript pos for CDS exon position");
 		}
@@ -62,9 +62,9 @@ public final class TranscriptSequenceChangeHelper {
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(transcript.sequence);
 		if (change.getType() == GenomeChangeType.SNV)
-			builder.setCharAt(tPos.getPos(), change.alt.charAt(0));
+			builder.setCharAt(tPos.getPos(), change.getAlt().charAt(0));
 		else
-			builder.insert(tPos.getPos(), change.alt);
+			builder.insert(tPos.getPos(), change.getAlt());
 		return builder.toString();
 	}
 
@@ -94,7 +94,7 @@ public final class TranscriptSequenceChangeHelper {
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(transcript.sequence);
 		builder.delete(tBeginPos.getPos(), tEndPos.getPos());
-		builder.insert(tBeginPos.getPos(), change.alt);
+		builder.insert(tBeginPos.getPos(), change.getAlt());
 		return builder.toString();
 	}
 
@@ -166,21 +166,21 @@ public final class TranscriptSequenceChangeHelper {
 				return cdsSeq;
 		} else { // insertion
 			// Get change position and the one left of it.
-			GenomePosition lPos = change.pos.shifted(-1);
-			if (!transcript.cdsRegion.contains(change.pos) || !transcript.cdsRegion.contains(lPos)
-					|| (!soDecorator.liesInExon(change.pos) && !soDecorator.liesInExon(lPos)))
+			GenomePosition lPos = change.getGenomePos().shifted(-1);
+			if (!transcript.cdsRegion.contains(change.getGenomePos()) || !transcript.cdsRegion.contains(lPos)
+					|| (!soDecorator.liesInExon(change.getGenomePos()) && !soDecorator.liesInExon(lPos)))
 				return cdsSeq;
 		}
 
 		// Get transcript position for the change position.
-		CDSPosition cdsChangePos = projector.projectGenomeToCDSPosition(change.pos);
+		CDSPosition cdsChangePos = projector.projectGenomeToCDSPosition(change.getGenomePos());
 
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(cdsSeq);
 		if (change.getType() == GenomeChangeType.SNV)
-			builder.setCharAt(cdsChangePos.getPos(), change.alt.charAt(0));
+			builder.setCharAt(cdsChangePos.getPos(), change.getAlt().charAt(0));
 		else
-			builder.insert(cdsChangePos.getPos(), change.alt);
+			builder.insert(cdsChangePos.getPos(), change.getAlt());
 		return builder.toString();
 	}
 
@@ -207,7 +207,7 @@ public final class TranscriptSequenceChangeHelper {
 		// Build resulting transcript string.
 		StringBuilder builder = new StringBuilder(cdsSeq);
 		builder.delete(cdsChangeBeginPos.getPos(), cdsChangeEndPos.getPos());
-		builder.insert(cdsChangeBeginPos.getPos(), change.alt);
+		builder.insert(cdsChangeBeginPos.getPos(), change.getAlt());
 		return builder.toString();
 	}
 }

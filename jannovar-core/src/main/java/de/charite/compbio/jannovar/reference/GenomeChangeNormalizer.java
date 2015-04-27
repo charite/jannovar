@@ -53,18 +53,18 @@ public final class GenomeChangeNormalizer {
 	 */
 	public static GenomeChange normalizeInsertion(TranscriptModel transcript, GenomeChange change,
 			TranscriptPosition txPos) {
-		assert (change.ref.length() == 0);
-		if (change.pos.getStrand() != transcript.getStrand()) // ensure that we have the correct strand
+		assert (change.getRef().length() == 0);
+		if (change.getGenomePos().getStrand() != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
 		// Insert the ALT bases at the position indicated by txPos.
 		int pos = txPos.getPos();
 		StringBuilder builder = new StringBuilder(transcript.sequence);
-		builder.insert(pos, change.alt);
+		builder.insert(pos, change.getAlt());
 
 		// Execute algorithm and compute the shift.
 		int shift = 0;
-		final int LEN = change.alt.length();
+		final int LEN = change.getAlt().length();
 		final String seq = builder.toString();
 		while ((pos + LEN < seq.length()) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {
 			++shift;
@@ -107,13 +107,13 @@ public final class GenomeChangeNormalizer {
 	public static GenomeChange normalizeDeletion(TranscriptModel transcript, GenomeChange change,
 			TranscriptPosition txPos) {
 		// TODO(holtgrem): check the splice site invariant?
-		assert (change.ref.length() != 0 && change.alt.length() == 0);
-		if (change.pos.getStrand() != transcript.getStrand()) // ensure that we have the correct strand
+		assert (change.getRef().length() != 0 && change.getAlt().length() == 0);
+		if (change.getGenomePos().getStrand() != transcript.getStrand()) // ensure that we have the correct strand
 			change = change.withStrand(transcript.getStrand());
 
 		// Shift the deletion to the 3' (right) end of the transcript.
 		int pos = txPos.getPos();
-		final int LEN = change.ref.length(); // length of the deletion
+		final int LEN = change.getRef().length(); // length of the deletion
 		final String seq = transcript.sequence;
 		int shift = 0;
 
@@ -125,7 +125,7 @@ public final class GenomeChangeNormalizer {
 		if (shift == 0) // only rebuild if shift > 0
 			return change;
 		else
-			return new GenomeChange(change.pos.shifted(shift), seq.substring(pos, pos + LEN), "");
+			return new GenomeChange(change.getGenomePos().shifted(shift), seq.substring(pos, pos + LEN), "");
 	}
 
 }

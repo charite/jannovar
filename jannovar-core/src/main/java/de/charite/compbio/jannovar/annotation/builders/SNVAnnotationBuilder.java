@@ -49,7 +49,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		super(transcript, change, options);
 
 		// guard against invalid genome change
-		if (change.ref.length() != 1 || change.alt.length() != 1)
+		if (change.getRef().length() != 1 || change.getAlt().length() != 1)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
 	}
 
@@ -79,8 +79,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		TranscriptPosition txPos;
 		CDSPosition cdsPos;
 		try {
-			txPos = projector.genomeToTranscriptPos(change.pos);
-			cdsPos = projector.genomeToCDSPos(change.pos);
+			txPos = projector.genomeToTranscriptPos(change.getGenomePos());
+			cdsPos = projector.genomeToCDSPos(change.getGenomePos());
 		} catch (ProjectionException e) {
 			throw new Error("Bug: CDS exon position must be translatable to transcript position");
 		}
@@ -88,7 +88,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// Check that the WT nucleotide from the transcript is consistent with change.ref and generate a warning message
 		// if this is not the case.
 		if (txPos.getPos() >= transcript.sequence.length()
-				|| !transcript.sequence.substring(txPos.getPos(), txPos.getPos() + 1).equals(change.ref))
+				|| !transcript.sequence.substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
 			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
 
 		// Compute the frame shift and codon start position.
@@ -99,9 +99,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// the transcript.
 		String transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
 		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
-				change.ref.charAt(0));
+				change.getRef().charAt(0));
 		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
-				change.alt.charAt(0));
+				change.getAlt().charAt(0));
 
 		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
 		// positions).
@@ -148,7 +148,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	@Override
 	protected String ncHGVS() {
 		if (hgvsSNVOverride == null)
-			return StringUtil.concatenate(dnaAnno, change.ref, ">", change.alt);
+			return StringUtil.concatenate(dnaAnno, change.getRef(), ">", change.getAlt());
 		else
 			return StringUtil.concatenate(dnaAnno, hgvsSNVOverride);
 	}

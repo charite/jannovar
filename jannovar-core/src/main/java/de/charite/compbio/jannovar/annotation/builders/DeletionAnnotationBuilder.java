@@ -39,7 +39,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
-		if (change.ref.length() == 0 || change.alt.length() != 0)
+		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
 			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a deletion.");
 	}
 
@@ -118,7 +118,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
-			this.delFrameShift = DeletionAnnotationBuilder.this.change.ref.length() % 3;
+			this.delFrameShift = DeletionAnnotationBuilder.this.change.getRef().length() % 3;
 
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());

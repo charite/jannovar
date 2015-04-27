@@ -100,7 +100,7 @@ abstract class AnnotationBuilder {
 			try {
 				// normalize amino acid change and add information about this into {@link messages}
 				this.change = GenomeChangeNormalizer.normalizeGenomeChange(transcript, change,
-						projector.genomeToTranscriptPos(change.pos));
+						projector.genomeToTranscriptPos(change.getGenomePos()));
 				if (!change.equals(this.change))
 					messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
 			} catch (ProjectionException e) {

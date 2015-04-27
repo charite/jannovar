@@ -132,7 +132,7 @@ public final class VariantAnnotator {
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.
-		boolean isStructuralVariant = (change.ref.length() >= 1000 || change.alt.length() >= 1000);
+		boolean isStructuralVariant = (change.getRef().length() >= 1000 || change.getAlt().length() >= 1000);
 		if (candidateTranscripts.isEmpty()) {
 			if (isStructuralVariant)
 				buildSVAnnotation(change, null);
