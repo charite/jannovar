@@ -67,6 +67,10 @@
 * Renaming `VariantType` to `VariantEffect`
 * Changing `VariantType` to use proper Sequence Ontology terms. Legacy
   names can be obtained through `VariantType#getLegacyName`.
+* Spliting `CompatibilityCheckerXRecessive` into `CompatibilityCheckerXRecessiveCompoundHet` and `CompatibilityCheckerXRecessiveHomozygous`. Now all inheritance checkers ar ready to use (AR,XR,AD,XD)
+* move all pedigree compatibility checkers from `de.charite.compbio.jannovar.pedigree` to `de.charite.compbio.jannovar.pedigree.compatibilitychecker` and divide it into ar,xr,ad,xd.
+* generate interface `ICompatibilityChecker` for pedigree compatibility checkers.
+* Combine compatibility fields and methods in an abstract class`ACompatibilityChecker` to unify methods, builders, and fields.
 
 ### jannovar-filter
 

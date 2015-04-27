@@ -1,6 +1,13 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad;
 
 import com.google.common.collect.ImmutableList;
+
+import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Genotype;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal dominant
@@ -18,13 +25,7 @@ import com.google.common.collect.ImmutableList;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerAutosomalDominant {
-
-	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
-
-	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
+public class CompatibilityCheckerAutosomalDominant extends ACompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -42,30 +43,11 @@ class CompatibilityCheckerAutosomalDominant {
 	 */
 	public CompatibilityCheckerAutosomalDominant(Pedigree pedigree, GenotypeList list)
 			throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 0.");
-		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree (" + pedigree.getNames()
-					+ ") and genotype list (" + list.names + ")");
-		if (list.calls.get(0).size() == 0)
-			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
-
-		this.pedigree = pedigree;
-		this.list = list;
+		super(pedigree, list);
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the autosomal dominant mode
-	 *         of inheritances.
-	 */
-	public boolean run() {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
-	}
-
-	private boolean runSingleSampleCase() {
+	@Override
+	public boolean runSingleSampleCase() {
 		// We could also allow Genotye.HOMOZYGOUS_ALT here but that is not the interesting case.
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
@@ -73,7 +55,8 @@ class CompatibilityCheckerAutosomalDominant {
 		return false;
 	}
 
-	private boolean runMultiSampleCase() {
+	@Override
+	public boolean runMultiSampleCase() {
 		for (ImmutableList<Genotype> gtList : list.calls) {
 			boolean currentVariantCompatible = true; // current variant compatible with AD?
 			int numAffectedWithHet = 0;

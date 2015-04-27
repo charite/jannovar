@@ -1,31 +1,34 @@
-package de.charite.compbio.jannovar.pedigree;
+package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar;
 
 import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.Disease;
+import de.charite.compbio.jannovar.pedigree.Genotype;
+import de.charite.compbio.jannovar.pedigree.GenotypeList;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Person;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
- * {@link Pedigree} and autosomal recessive compound mode of inheritance.
+ * {@link Pedigree} and autosomal recessive compound het mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
  *
- * In the case of a single individual, we require at least two heterozygous
+ * In the case of a single individual, we require at least two  {@link Genotype#HETEROZYGOUS}
  * genotype calls.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerAutosomalRecessiveCompoundHet {
+public class CompatibilityCheckerAutosomalRecessiveCompoundHet extends ACompatibilityChecker {
 
-	/** the pedigree to use for the checking */
-	public final Pedigree pedigree;
-
-	/** the genotype call list to use for the checking */
-	public final GenotypeList list;
-
+	
 	/** list of siblings for each person in {@link #pedigree} */
 	public final ImmutableMap<Person, ImmutableList<Person>> siblings;
 
@@ -47,54 +50,14 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 	 */
 	public CompatibilityCheckerAutosomalRecessiveCompoundHet(Pedigree pedigree, GenotypeList list)
 			throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 0)
-			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
-		if (!list.namesEqual(pedigree))
-			throw new CompatibilityCheckerException("Incompatible names in pedigree (" + pedigree.getNames()
-					+ ") and genotype list (" + list.names + ")");
-		if (list.calls.get(0).size() == 0)
-			throw new CompatibilityCheckerException("Genotype call list must not be empty!");
-
-		this.pedigree = pedigree;
-		this.list = list;
+		super(pedigree, list);
 		this.siblings = buildSiblings(pedigree);
 	}
 
-	/**
-	 * @return siblig map for each person in <code>pedigree</code>, both parents
-	 *         must be in <code>pedigree</code> and the same
-	 */
-	private static ImmutableMap<Person, ImmutableList<Person>> buildSiblings(Pedigree pedigree) {
-		ImmutableMap.Builder<Person, ImmutableList<Person>> mapBuilder = new ImmutableMap.Builder<Person, ImmutableList<Person>>();
-		for (Person p1 : pedigree.members) {
-			if (p1.mother == null || p1.father == null)
-				continue;
-			ImmutableList.Builder<Person> listBuilder = new ImmutableList.Builder<Person>();
-			for (Person p2 : pedigree.members) {
-				if (p1.equals(p2) || !p1.mother.equals(p2.mother) || !p1.father.equals(p2.father))
-					continue;
-				listBuilder.add(p2);
-			}
-			mapBuilder.put(p1, listBuilder.build());
-		}
-		return mapBuilder.build();
-	}
+	
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with
-	 *         {@link #pedigree} and the recessive compound hererozygous mode of
-	 *         inheritances.
-	 * @throws CompatibilityCheckerException
-	 *             if the pedigree or variant list is invalid
-	 */
-	public boolean run() throws CompatibilityCheckerException {
-		if (pedigree.members.size() == 1)
-			return runSingleSampleCase();
-		else
-			return runMultiSampleCase();
-	}
-
-	private boolean runSingleSampleCase() {
+	@Override
+	public boolean runSingleSampleCase() {
 		int numHet = 0;
 		for (ImmutableList<Genotype> gtList : list.calls)
 			if (gtList.get(0) == Genotype.HETEROZYGOUS)
@@ -102,22 +65,10 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 		return (numHet > 1);
 	}
 
-	/**
-	 * Collects list of compatible mutations from father an mother.
-	 */
-	private class Candidate {
-		/** one VCF record compatible with mutation in father */
-		public final ImmutableList<Genotype> paternal;
-		/** one VCF record compatible with mutation in mother */
-		public final ImmutableList<Genotype> maternal;
 
-		public Candidate(ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
-			this.paternal = paternal;
-			this.maternal = maternal;
-		}
-	}
 
-	private boolean runMultiSampleCase() {
+	@Override
+	public boolean runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.
 		ArrayList<Candidate> candidates = collectTrioCandidates();
@@ -236,48 +187,59 @@ class CompatibilityCheckerAutosomalRecessiveCompoundHet {
 		int pIdx = 0;
 		for (Person p : pedigree.members) {
 			if (p.disease == Disease.AFFECTED) {
-				// none of the genotypes from the paternal or maternal call
-				// lists may be homozygous in the index
-				if (c.paternal != null) {
-					final Genotype pGT = c.paternal.get(pIdx);
-					if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
+				//we have to check this for paternal,maternal and vice versa. 
+				// Paternal maternal inheritance can be different for other parents in the pedigree. 
+				if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.paternal, c.maternal))
+					if (!isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(pIdx, p, c.maternal, c.paternal))
 						return false;
-				}
-				if (c.maternal != null) {
-					final Genotype mGT = c.maternal.get(pIdx);
-					if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
-						return false;
-				}
-
-				// the paternal variant may not be homozygous in the father of
-				// p, if any
-				if (c.paternal != null && p.father != null) {
-					final Genotype mGT = c.paternal.get(pedigree.nameToMember.get(p.father.name).idx);
-					if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
-						return false;
-				}
-
-				// the maternal variant may not be homozygous in the mother of
-				// p, if any
-				if (c.maternal != null && p.mother != null) {
-					final Genotype mGT = c.maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
-					if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
-						return false;
-				}
-
-				// none of the unaffected siblings may have the same genotypes
-				// as p
-				for (Person sibling : siblings.get(p))
-					if (sibling.disease == Disease.UNAFFECTED) {
-						final Genotype pGT = c.paternal.get(pedigree.nameToMember.get(sibling.name).idx);
-						final Genotype mGT = c.maternal.get(pedigree.nameToMember.get(sibling.name).idx);
-						if (pGT == Genotype.HETEROZYGOUS && mGT == Genotype.HETEROZYGOUS)
-							return false;
-					}
 			}
 			pIdx++;
 		}
 
+		return true;
+	}
+
+	private boolean isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(int pIdx, Person p,
+			ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
+		// none of the genotypes from the paternal or maternal call
+		// lists may be homozygous in the index
+		if (paternal != null) {
+			final Genotype pGT = paternal.get(pIdx);
+			if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+		if (maternal != null) {
+			final Genotype mGT = maternal.get(pIdx);
+			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+
+		// the paternal variant may not be homozygous in the father of
+		// p, if any
+		if (paternal != null && p.father != null) {
+			final Genotype pGT = paternal.get(pedigree.nameToMember.get(p.father.name).idx);
+			if (pGT == Genotype.HOMOZYGOUS_ALT || pGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+
+		// the maternal variant may not be homozygous in the mother of
+		// p, if any
+		if (maternal != null && p.mother != null) {
+			final Genotype mGT = maternal.get(pedigree.nameToMember.get(p.mother.name).idx);
+			if (mGT == Genotype.HOMOZYGOUS_ALT || mGT == Genotype.HOMOZYGOUS_REF)
+				return false;
+		}
+
+		// none of the unaffected siblings may have the same genotypes
+		// as p
+		if (siblings != null && !siblings.isEmpty() && siblings.containsKey(p))
+		for (Person sibling : siblings.get(p))
+			if (sibling.disease == Disease.UNAFFECTED) {
+				final Genotype pGT = paternal.get(pedigree.nameToMember.get(sibling.name).idx);
+				final Genotype mGT = maternal.get(pedigree.nameToMember.get(sibling.name).idx);
+				if (pGT == Genotype.HETEROZYGOUS && mGT == Genotype.HETEROZYGOUS)
+					return false;
+			}
 		return true;
 	}
 
