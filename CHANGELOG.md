@@ -68,6 +68,7 @@
 
 ### jannovar-filter
 
+* Changing public final members to accessors. 
 * `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
 
 ## v0.12

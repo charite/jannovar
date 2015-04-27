@@ -14,21 +14,29 @@ import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
  */
 class GeneList {
 	/** overall gene list */
-	public final ImmutableList<Gene> genes;
+	private final ImmutableList<Gene> genes;
 	/** map from numeric chromosome id to interval tree of genes */
-	public final ImmutableMap<Integer, IntervalArray<Gene>> gIntervalTree;
+	private final ImmutableMap<Integer, IntervalArray<Gene>> gIntervalTree;
 
 	public GeneList(ImmutableList<Gene> genes) {
 		this.genes = genes;
 		this.gIntervalTree = buildIntervalTree();
 	}
 
+	public ImmutableList<Gene> getGenes() {
+		return genes;
+	}
+
+	public ImmutableMap<Integer, IntervalArray<Gene>> getGeneIntervalTree() {
+		return gIntervalTree;
+	}
+
 	private ImmutableMap<Integer, IntervalArray<Gene>> buildIntervalTree() {
 		HashMap<Integer, ArrayList<Gene>> chrToGene = new HashMap<Integer, ArrayList<Gene>>();
 		for (Gene gene : genes) {
-			if (!chrToGene.containsKey(gene.region.chr))
-				chrToGene.put(gene.region.chr, new ArrayList<Gene>());
-			chrToGene.get(gene.region.chr).add(gene);
+			if (!chrToGene.containsKey(gene.getRegion().chr))
+				chrToGene.put(gene.getRegion().chr, new ArrayList<Gene>());
+			chrToGene.get(gene.getRegion().chr).add(gene);
 		}
 
 		ImmutableMap.Builder<Integer, IntervalArray<Gene>> builder = new ImmutableMap.Builder<Integer, IntervalArray<Gene>>();

@@ -32,7 +32,7 @@ public class CoordinateSortChecker implements VariantContextFilter {
 	}
 
 	public void put(FlaggedVariant fv) throws FilterException {
-		VariantContext vc = fv.vc;
+		VariantContext vc = fv.getVC();
 
 		// perform sortedness check and throw exception otherwise
 		if (prevVC != null)

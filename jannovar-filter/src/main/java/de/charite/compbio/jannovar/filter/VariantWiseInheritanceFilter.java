@@ -55,7 +55,7 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	public void put(FlaggedVariant fv) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 
-		final int contigID = jannovarDB.refDict.contigID.get(fv.vc.getChr());
+		final int contigID = jannovarDB.refDict.contigID.get(fv.getVC().getChr());
 		boolean isXChromosomal = (jannovarDB.refDict.contigID.get("chrX") != null && jannovarDB.refDict.contigID.get(
 				"chrX").intValue() == contigID);
 
@@ -66,14 +66,14 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 			if (fv.isIncluded())
 				next.put(fv);
 			LOGGER.trace("Variant {}compatible with {} (gt={}, var={})", new Object[] { fv.isIncluded() ? "" : "in",
-					modeOfInheritance, builder.build(), fv.vc });
+					modeOfInheritance, builder.build(), fv.getVC() });
 		} catch (CompatibilityCheckerException e) {
 			throw new FilterException("Problem in mode of inheritance filter.", e);
 		}
 	}
 
 	private void putGenotypes(FlaggedVariant fv, GenotypeListBuilder genotypeListBuilder) {
-		final VariantContext vc = fv.vc;
+		final VariantContext vc = fv.getVC();
 		for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
 			Allele currAlt = vc.getAlternateAllele(i);
 

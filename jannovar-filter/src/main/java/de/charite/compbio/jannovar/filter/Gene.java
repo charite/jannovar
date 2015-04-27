@@ -13,16 +13,32 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * Genes are identified by their name, {@link #equals} and {@link #hashCode} only consider the field {@link #name}!
  */
 class Gene {
-	public final String name;
-	public final ImmutableList<TranscriptModel> transcripts;
-	public final ReferenceDictionary refDict;
-	public final GenomeInterval region;
+	private final String name;
+	private final ImmutableList<TranscriptModel> transcripts;
+	private final ReferenceDictionary refDict;
+	private final GenomeInterval region;
 
 	public Gene(ReferenceDictionary refDict, String name, ImmutableList<TranscriptModel> transcripts) {
 		this.refDict = refDict;
 		this.name = name;
 		this.transcripts = transcripts;
 		this.region = buildGeneRegion();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ImmutableList<TranscriptModel> getTranscripts() {
+		return transcripts;
+	}
+
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	public GenomeInterval getRegion() {
+		return region;
 	}
 
 	/**
