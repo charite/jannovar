@@ -11,13 +11,23 @@ import de.charite.compbio.jannovar.Immutable;
 public final class GFFVersion {
 
 	/** the version */
-	public final int version;
+	private final int version;
 	/** the string to use for separating attributes */
-	public final String valueSeparator;
+	private final String valueSeparator;
 
 	public GFFVersion(int version) {
 		this.version = version;
 		this.valueSeparator = (version == 3) ? "=" : " ";
+	}
+
+	/** @return GFF version */
+	public int getVersion() {
+		return version;
+	}
+
+	/** @return string used for separating keys and values */
+	public String getValueSeparator() {
+		return valueSeparator;
 	}
 
 	@Override

@@ -69,10 +69,10 @@ public final class IntervalArray<T> implements Serializable {
 	}
 
 	/** list of {@link Interval} objects, sorted by begin position */
-	public final ImmutableList<Interval<T>> intervals;
+	private final ImmutableList<Interval<T>> intervals;
 
 	/** list of {@link Interval} objects, sorted by end position */
-	public final ImmutableList<Interval<T>> intervalsEnd;
+	private final ImmutableList<Interval<T>> intervalsEnd;
 
 	/**
 	 * Construct object with the given values.
@@ -83,9 +83,17 @@ public final class IntervalArray<T> implements Serializable {
 		this.intervalsEnd = pair.intervalsEnd;
 	}
 
-	/**
-	 * @return the number of elements in the tree
-	 */
+	/** @return {@link Interval}s, sorted by begin position */
+	public ImmutableList<Interval<T>> getIntervals() {
+		return intervals;
+	}
+
+	/** @return {@link Interval}s, sorted by end position */
+	public ImmutableList<Interval<T>> getIntervalsEnd() {
+		return intervalsEnd;
+	}
+
+	/** @return the number of elements in the tree */
 	public int size() {
 		return intervals.size();
 	}
@@ -266,8 +274,8 @@ public final class IntervalArray<T> implements Serializable {
 	private class IntervalListBuilder {
 
 		class TwoIntervalList {
-			public final ImmutableList<Interval<T>> intervals;
-			public final ImmutableList<Interval<T>> intervalsEnd;
+			private final ImmutableList<Interval<T>> intervals;
+			private final ImmutableList<Interval<T>> intervalsEnd;
 
 			public TwoIntervalList(ImmutableList<Interval<T>> intervals, ImmutableList<Interval<T>> intervalsEnd) {
 				this.intervals = intervals;

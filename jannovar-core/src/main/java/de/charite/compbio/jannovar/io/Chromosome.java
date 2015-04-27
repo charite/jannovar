@@ -29,10 +29,7 @@ public final class Chromosome implements Serializable {
 	/** reference dictionary to use */
 	public final ReferenceDictionary refDict;
 
-	/**
-	 * Chromosome. chr1...chr22 are 1..22, chrX=23, chrY=24, mito=25. Ignore other chromosomes. TODO. Add more flexible
-	 * way of dealing with scaffolds etc.
-	 */
+	/** numeric chromsome ID */
 	public final int chrID;
 
 	/**
@@ -55,6 +52,21 @@ public final class Chromosome implements Serializable {
 		this.refDict = refDict;
 		this.chrID = chrID;
 		this.tmIntervalTree = tmIntervalTree;
+	}
+
+	/** @return reference dictionary to use */
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	/** @return numeric chromsome ID */
+	public int getChrID() {
+		return chrID;
+	}
+
+	/** @return {@link IntervalArray} with transcripts of this chromosome */
+	public IntervalArray<TranscriptModel> getTmIntervalTree() {
+		return tmIntervalTree;
 	}
 
 	/**

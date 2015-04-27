@@ -71,13 +71,13 @@ public class RefSeqParser implements TranscriptParser {
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
-		FeatureProcessor fp = new FeatureProcessor(gffParser.gffVersion, refDict);
+		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), refDict);
 		gffParser.parse(fp);
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
 			LOGGER.info("Building transcript models...");
-			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
+			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.getGffVersion(), refDict);
 			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {

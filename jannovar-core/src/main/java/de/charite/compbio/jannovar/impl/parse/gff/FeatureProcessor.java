@@ -136,7 +136,7 @@ public final class FeatureProcessor {
 	 */
 	private void processSubregion(Feature feature) {
 		int index;
-		if (gffVersion.version == 3) {
+		if (gffVersion.getVersion() == 3) {
 			curID = feature.getAttributes().get("ID");
 			curRnaID = feature.getAttributes().get("Parent");
 			curGeneID = rna2gene.get(curRnaID);
