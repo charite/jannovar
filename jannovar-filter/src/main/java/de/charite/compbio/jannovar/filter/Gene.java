@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.filter;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -62,7 +62,7 @@ class Gene {
 		lhs = lhs.withStrand(Strand.FWD);
 		rhs = rhs.withStrand(Strand.FWD);
 		return new GenomeInterval(lhs.getGenomeBeginPos().getRefDict(), Strand.FWD, lhs.getGenomeBeginPos().getChr(), Math.min(
-				lhs.beginPos, rhs.beginPos), Math.max(lhs.endPos, rhs.endPos));
+lhs.getBeginPos(), rhs.getBeginPos()), Math.max(lhs.getEndPos(), rhs.getEndPos()));
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar;
 import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
@@ -20,7 +20,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityC
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class CompatibilityCheckerAutosomalRecessive extends ACompatibilityChecker {
+public class CompatibilityCheckerAutosomalRecessive extends CompatibilityCheckerBase {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.

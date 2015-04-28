@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar;
+package de.charite.compbio.jped;
 
 import htsjdk.variant.variantcontext.writer.Options;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
@@ -14,8 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 
-import de.charite.compbio.jannovar.io.JannovarData;
-import de.charite.compbio.jannovar.io.JannovarDataSerializer;
+import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
@@ -23,15 +24,15 @@ import de.charite.compbio.jannovar.pedigree.Person;
 
 // TODO(holtgrew): Add support for DE NOVO
 
-public class JannovarFilterApp {
+public class JPedApp {
 
 	/** Configuration */
-	private JannovarFilterOptions options;
+	private JPedOptions options;
 
 	/** Jannovar DB */
 	JannovarData jannovarDB;
 
-	JannovarFilterApp(JannovarFilterOptions options) {
+	JPedApp(JPedOptions options) {
 		this.options = options;
 	}
 
@@ -86,10 +87,10 @@ public class JannovarFilterApp {
 	}
 
 	public static void main(String[] args) {
-		JannovarFilterCommandLineParser parser = new JannovarFilterCommandLineParser();
+		JPedCommandLineParser parser = new JPedCommandLineParser();
 		try {
-			JannovarFilterOptions options = parser.parse(args);
-			new JannovarFilterApp(options).run();
+			JPedOptions options = parser.parse(args);
+			new JPedApp(options).run();
 		} catch (ParseException e) {
 			System.err.println("ERROR: " + e.getMessage());
 			parser.printHelp();

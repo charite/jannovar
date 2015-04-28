@@ -6,7 +6,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -81,7 +81,7 @@ class VCFAnnotationData {
 		}
 	}
 
-	public void setTranscriptAndChange(TranscriptModel tm, GenomeChange change) {
+	public void setTranscriptAndChange(TranscriptModel tm, GenomeVariant change) {
 		if (tm == null)
 			return;
 		featureType = "transcript";

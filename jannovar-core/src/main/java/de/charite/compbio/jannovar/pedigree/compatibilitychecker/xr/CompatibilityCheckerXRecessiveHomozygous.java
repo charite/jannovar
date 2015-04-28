@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
@@ -35,7 +35,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityC
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerXRecessiveHomozygous extends ACompatibilityChecker {
+class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase {
 
 	/**
 	 * decorator for getting unaffected individuals and such from the

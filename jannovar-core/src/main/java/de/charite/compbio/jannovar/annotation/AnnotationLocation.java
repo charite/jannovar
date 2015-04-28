@@ -71,11 +71,10 @@ public class AnnotationLocation {
 		return txLocation;
 	}
 
-	// TODO(holtgrem): rename!
 	/**
-	 * @return location as a HGVS String
+	 * @return location to be used in a HGVS String
 	 */
-	public String toHGVSString() {
+	public String toHGVSChunk() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(transcript.getAccession());
 		if (rankType != RankType.UNDEFINED)

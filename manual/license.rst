@@ -3,7 +3,7 @@
 Jannovar License
 ================
 
-Jannovar is licensed under the BSD License:
+Jannovar is licensed under the 3-Clause BSD License:
 
 .. code-block:: text
 

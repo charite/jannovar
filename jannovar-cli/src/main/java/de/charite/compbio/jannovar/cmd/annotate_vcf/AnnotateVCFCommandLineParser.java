@@ -72,13 +72,13 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		options.addOption(new Option("o", "output-dir", true,
 				"output directory (default is to write parallel to input file)"));
 
-		options.addOption(new Option("", "old-info-fields", false,
+		options.addOption(new Option(null, "old-info-fields", false,
 				"write out old Jannovar VCF INFO fields \"EFFECT\" and \"HGVS\" (default is off)"));
-		options.addOption(new Option("", "no-new-info-field", false,
+		options.addOption(new Option(null, "no-new-info-field", false,
 				"do not write out the new VCF annotation standard INFO field \"ANN\" (default is on)"));
-		options.addOption(new Option("", "no-escape-ann-field", false,
+		options.addOption(new Option(null, "no-escape-ann-field", false,
 				"do not escape characters in INFO field \"ANN\" (default is on)"));
-		options.addOption(new Option("", "no-3-prime-shifting", false,
+		options.addOption(new Option(null, "no-3-prime-shifting", false,
 				"disable shifting of variants towards the 3' end of the transcript (default is on)"));
 	}
 

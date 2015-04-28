@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar;
+package de.charite.compbio.jped;
 
 import java.io.PrintStream;
 
@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class JannovarFilterOptions {
+public class JPedOptions {
 
 	/** verbosity level */
 	int verbosity = 1;

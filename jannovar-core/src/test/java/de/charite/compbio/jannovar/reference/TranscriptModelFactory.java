@@ -1,6 +1,6 @@
 package de.charite.compbio.jannovar.reference;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
 /**
  * Allows the easy creation of transcript models from knownGenes.txt.gz lines.

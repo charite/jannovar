@@ -14,8 +14,8 @@ import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.reference.GenomeChange;
-import de.charite.compbio.jannovar.reference.GenomeChangeNormalizer;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.GenomeVariantNormalizer;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
@@ -53,7 +53,7 @@ abstract class AnnotationBuilder {
 	/** transcript to annotate. */
 	protected final TranscriptModel transcript;
 	/** genome change to use for annotation */
-	protected final GenomeChange change;
+	protected final GenomeVariant change;
 
 	/** helper for sequence ontology terms */
 	protected final TranscriptSequenceOntologyDecorator so;
@@ -79,11 +79,11 @@ abstract class AnnotationBuilder {
 	 * @param transcript
 	 *            the {@link TranscriptInfo} to build the annotation for
 	 * @param change
-	 *            the {@link GenomeChange} to use for building the annotation
+	 *            the {@link GenomeVariant} to use for building the annotation
 	 * @param options
 	 *            the configuration to use for the {@link AnnotationBuilder}
 	 */
-	AnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options) {
+	AnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options) {
 		this.options = options;
 
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
@@ -99,7 +99,7 @@ abstract class AnnotationBuilder {
 		if (so.liesInExon(change.getGenomeInterval())) {
 			try {
 				// normalize amino acid change and add information about this into {@link messages}
-				this.change = GenomeChangeNormalizer.normalizeGenomeChange(transcript, change,
+				this.change = GenomeVariantNormalizer.normalizeGenomeChange(transcript, change,
 						projector.genomeToTranscriptPos(change.getGenomePos()));
 				if (!change.equals(this.change))
 					messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
@@ -300,10 +300,10 @@ abstract class AnnotationBuilder {
 	 * @param transcript
 	 *            {@link TranscriptInfo} to build annotation for
 	 * @param change
-	 *            {@link GenomeChange} to build annotation for
+	 *            {@link GenomeVariant} to build annotation for
 	 * @return AnnotationLocation with location annotation
 	 */
-	private AnnotationLocation buildLocAnno(TranscriptModel transcript, GenomeChange change) {
+	private AnnotationLocation buildLocAnno(TranscriptModel transcript, GenomeVariant change) {
 		// System.err.println("ACCESSION\t" + transcript.accession);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
@@ -377,10 +377,10 @@ abstract class AnnotationBuilder {
 	 * @param transcript
 	 *            {@link TranscriptInfo} to build annotation for
 	 * @param change
-	 *            {@link GenomeChange} to build annotation for
+	 *            {@link GenomeVariant} to build annotation for
 	 * @return String with the HGVS DNA Annotation string (with coordinates for this transcript).
 	 */
-	private String buildDNAAnno(TranscriptModel transcript, GenomeChange change) {
+	private String buildDNAAnno(TranscriptModel transcript, GenomeVariant change) {
 		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 
 		GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();

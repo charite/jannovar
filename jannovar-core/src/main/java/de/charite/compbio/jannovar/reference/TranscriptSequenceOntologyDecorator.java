@@ -436,7 +436,11 @@ public final class TranscriptSequenceOntologyDecorator {
 		return interval.overlapsWith(getFivePrimeUTRInterval());
 	}
 
-	// TODO(holtgrem): Document me!
+	/**
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return <code>true</code> if the {@link GenomePosition} lies in the 5' UTR
+	 */
 	public boolean liesInFivePrimeUTR(GenomePosition pos) {
 		return getFivePrimeUTRInterval().contains(pos);
 	}
@@ -450,7 +454,11 @@ public final class TranscriptSequenceOntologyDecorator {
 		return interval.overlapsWith(getThreePrimeUTRInterval());
 	}
 
-	// TODO(holtgrem): Document me!
+	/**
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return <code>true</code> if the {@link GenomePosition} lies in the 3' UTR
+	 */
 	public boolean liesInThreePrimeUTR(GenomePosition pos) {
 		return getThreePrimeUTRInterval().contains(pos);
 	}

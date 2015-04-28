@@ -17,7 +17,7 @@ import de.charite.compbio.jannovar.pedigree.Person;
  *
  * @author Max Schubach <max.schubach@charite.de>
  */
-public abstract class ACompatibilityChecker implements ICompatibilityChecker {
+public abstract class CompatibilityCheckerBase implements CompatibilityChecker {
 
 	/** the pedigree to use for the checking */
 	protected final Pedigree pedigree;
@@ -66,7 +66,7 @@ public abstract class ACompatibilityChecker implements ICompatibilityChecker {
 	 * @throws CompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
-	public ACompatibilityChecker(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
+	public CompatibilityCheckerBase(Pedigree pedigree, GenotypeList list) throws CompatibilityCheckerException {
 		if (pedigree.getMembers().size() == 0)
 			throw new CompatibilityCheckerException("Invalid pedigree of size 1.");
 		if (!list.namesEqual(pedigree))

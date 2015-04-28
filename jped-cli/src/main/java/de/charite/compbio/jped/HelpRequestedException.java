@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar;
+package de.charite.compbio.jped;
 
 public class HelpRequestedException extends Exception {
 

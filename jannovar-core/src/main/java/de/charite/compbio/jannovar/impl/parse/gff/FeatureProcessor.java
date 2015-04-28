@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 
 /**
  * Processes {@link Feature} objects for {@link TranscriptInfoFactory}.

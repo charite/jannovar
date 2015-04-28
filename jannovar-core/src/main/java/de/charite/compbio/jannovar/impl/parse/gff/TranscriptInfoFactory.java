@@ -9,10 +9,10 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor.Gene;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor.Transcript;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;

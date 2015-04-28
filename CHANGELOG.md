@@ -30,6 +30,15 @@
 
 ### jannovar-core
 
+* Renaming `ACompatibilityChecker` and `ICompatibilityChecker`.
+* Adding `GenomePosition.differenceTo(GenomeInterval)`.
+* Renaming package `de.charite.compbio.jannovar.io` to `de.charite.compbio.jannovar.data`
+* Renaming `AnnotationLocation.toHGVSString` to `.toHGVSChunk`.
+* Adding `Pedigree.subsetOfMembers`
+* Renaming `GenomeChange` to `GenomeVariant`, same with types having the same
+  prefix.
+* Introducing `DatasourceOptions` for configuring data download.
+* Removing support for using `"-"` as REF or ALT value.
 * Making previous `public final` members `private final` (or
  `protected final`) and adding getters for read-only access to them.
 * Removing position type member of `CDSInterval`.
@@ -67,6 +76,7 @@
 
 ### jannovar-filter
 
+* Splitting into `jped-cli` and `jannovar-filter`
 * Changing public final members to accessors. 
 * `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
 

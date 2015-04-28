@@ -5,8 +5,6 @@ import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.charite.compbio.jannovar.JannovarFilterCommandLineParser;
-
 /**
  * Write results to a {@link VariantContextWriter}
  *
@@ -15,7 +13,7 @@ import de.charite.compbio.jannovar.JannovarFilterCommandLineParser;
 public class WriterFilter implements VariantContextFilter {
 
 	/** the logger object to use */
-	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarFilterCommandLineParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(WriterFilter.class);
 
 	/** the {@link VariantContextWriter} to use for writing out */
 	private final VariantContextWriter writer;

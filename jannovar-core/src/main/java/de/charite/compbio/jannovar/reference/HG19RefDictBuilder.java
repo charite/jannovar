@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.reference;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.io.ReferenceDictionaryBuilder;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
 
 /**
  * Builds a {@link ReferenceDictionary} for the hg19 release.

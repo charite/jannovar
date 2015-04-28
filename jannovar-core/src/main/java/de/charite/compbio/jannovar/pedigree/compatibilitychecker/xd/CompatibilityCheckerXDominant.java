@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Sex;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.CompatibilityCheckerAutosomalDominant;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.CompatibilityCheckerXRecessive;
 
@@ -25,7 +25,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.Compatibilit
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class CompatibilityCheckerXDominant extends ACompatibilityChecker {
+public class CompatibilityCheckerXDominant extends CompatibilityCheckerBase {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.

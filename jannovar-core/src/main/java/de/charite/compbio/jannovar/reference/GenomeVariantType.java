@@ -1,11 +1,11 @@
 package de.charite.compbio.jannovar.reference;
 
 /**
- * Types of genome changes represented by {@link GenomeChange}.
+ * Types of genomic variants represented by {@link GenomeVariant}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public enum GenomeChangeType {
+public enum GenomeVariantType {
 	/** single nucleotide variant */
 	SNV,
 	/** insertion */

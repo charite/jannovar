@@ -6,14 +6,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.VariantDescription;
 
 // TODO(holtgrem): Test me!
-// TODO(holtgrem): Sorting of annotations
-// TODO(holtgrem): collection of warnings
 
 /**
  * Collect the information for one variant's annotation.
@@ -50,8 +48,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 			+ "Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|"
 			+ "cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'";
 
-	/** the annotated {@link GenomeChange} */
-	private final GenomeChange change;
+	/** the annotated {@link GenomeVariant} */
+	private final GenomeVariant change;
 
 	/** variant types, sorted by internal pathogenicity score */
 	private final ImmutableSortedSet<VariantEffect> effects;
@@ -81,8 +79,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		this(null, null, null, null, null, null, messages);
 	}
 
-	/** @return the annotated {@link GenomeChange} */
-	public GenomeChange getChange() {
+	/** @return the annotated {@link GenomeVariant} */
+	public GenomeVariant getChange() {
 		return change;
 	}
 
@@ -135,7 +133,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
 	 * @param change
-	 *            the annotated {@link GenomeChange}
+	 *            the annotated {@link GenomeVariant}
 	 * @param transcript
 	 *            transcript for this annotation
 	 * @param effects
@@ -147,7 +145,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * @param aaHGVSDescription
 	 *            amino acid variant description following the HGVS nomenclauture
 	 */
-	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
+	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription) {
 		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, aaHGVSDescription, ImmutableSortedSet
 				.<AnnotationMessage> of());
@@ -159,7 +157,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * The constructor will sort <code>effects</code> by pathogenicity before storing.
 	 *
 	 * @param change
-	 *            the annotated {@link GenomeChange}
+	 *            the annotated {@link GenomeVariant}
 	 * @param transcript
 	 *            transcript for this annotation
 	 * @param effects
@@ -173,7 +171,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
-	public Annotation(TranscriptModel transcript, GenomeChange change, Collection<VariantEffect> varTypes,
+	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
 			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
 			Collection<AnnotationMessage> messages) {
 		if (change != null)

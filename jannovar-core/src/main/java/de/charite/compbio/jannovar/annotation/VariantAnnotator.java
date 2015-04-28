@@ -7,12 +7,12 @@ import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderDispatcher;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
-import de.charite.compbio.jannovar.io.Chromosome;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -94,7 +94,7 @@ public final class VariantAnnotator {
 
 		// Build the GenomeChange to build annotation for.
 		GenomePosition pos = new GenomePosition(refDict, Strand.FWD, chr, position, posType);
-		GenomeChange change = new GenomeChange(pos, ref, alt);
+		GenomeVariant change = new GenomeVariant(pos, ref, alt);
 
 		return buildAnnotationList(change);
 	}
@@ -106,12 +106,12 @@ public final class VariantAnnotator {
 	 * coordinates on that chromosome.
 	 *
 	 * @param change
-	 *            the {@link GenomeChange} to annotate
+	 *            the {@link GenomeVariant} to annotate
 	 * @return {@link AnnotationList} for the genome change
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
+	public AnnotationList buildAnnotationList(GenomeVariant change) throws AnnotationException {
 		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
 		// described as shortcuts in the VCF file. We cannot annotate these yet.
 		if (change.isSymbolic())
@@ -125,9 +125,10 @@ public final class VariantAnnotator {
 		final Chromosome chr = chromosomeMap.get(change.getChr());
 		IntervalArray<TranscriptModel>.QueryResult qr;
 		if (changeInterval.length() == 0)
-			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
+			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.getBeginPos());
 		else
-			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
+			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.getBeginPos(),
+					changeInterval.getEndPos());
 		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.getEntries());
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
@@ -152,17 +153,17 @@ public final class VariantAnnotator {
 		return annovarFactory.getAnnotationList(change);
 	}
 
-	private void buildSVAnnotation(GenomeChange change, TranscriptModel transcript) throws AnnotationException {
+	private void buildSVAnnotation(GenomeVariant change, TranscriptModel transcript) throws AnnotationException {
 		annovarFactory.addStructuralAnnotation(new StructuralVariantAnnotationBuilder(transcript, change).build());
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
+	private void buildNonSVAnnotation(GenomeVariant change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
 			throws AnnotationException {
 		buildNonSVAnnotation(change, leftNeighbor);
 		buildNonSVAnnotation(change, rightNeighbor);
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel transcript) throws InvalidGenomeChange {
+	private void buildNonSVAnnotation(GenomeVariant change, TranscriptModel transcript) throws InvalidGenomeChange {
 		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
 			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change, options).build());
 	}

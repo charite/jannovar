@@ -20,10 +20,10 @@ import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.io.Chromosome;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -136,7 +136,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		final String alt = vc.getAlternateAllele(0).getBaseString();
 		final int pos = vc.getStart();
 		// Construct GenomeChange from this and strip common prefixes.
-		final GenomeChange change = new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos,
+		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos,
 				PositionType.ONE_BASED), ref, alt);
 
 		String gtype = stringForGenotype(vc, 0);

@@ -127,19 +127,19 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
 	/** @return the strand of the transcript */
 	public Strand getStrand() {
-		return txRegion.strand;
+		return txRegion.getStrand();
 	}
 
 	/** @return the chromosome of the transcript */
 	public int getChr() {
-		return txRegion.chr;
+		return txRegion.getChr();
 	}
 
 	/**
 	 * @return <tt>true</tt> if this is a gene-coding transcript, marked by <tt>cdsRegion</tt> being empty.
 	 */
 	public boolean isCoding() {
-		return (this.cdsRegion.beginPos < this.cdsRegion.endPos);
+		return (this.cdsRegion.getBeginPos() < this.cdsRegion.getEndPos());
 	}
 
 	/**
@@ -171,19 +171,19 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		// TODO(holtgrem): test me!
 		GenomeInterval exonRegionL = exonRegions.get(i);
 		GenomeInterval exonRegionR = exonRegions.get(i + 1);
-		return new GenomeInterval(exonRegionL.refDict, exonRegionL.strand, exonRegionL.chr, exonRegionL.endPos,
-				exonRegionR.beginPos, PositionType.ZERO_BASED);
+		return new GenomeInterval(exonRegionL.refDict, exonRegionL.getStrand(), exonRegionL.getChr(),
+				exonRegionL.getEndPos(), exonRegionR.getBeginPos(), PositionType.ZERO_BASED);
 	}
 
 	/**
 	 * Ensures that the strands are consistent.
 	 */
 	private void checkForConsistency() {
-		Strand strand = txRegion.strand;
-		assert (txRegion.strand == strand);
-		assert (cdsRegion.strand == strand);
+		Strand strand = txRegion.getStrand();
+		assert (txRegion.getStrand() == strand);
+		assert (cdsRegion.getStrand() == strand);
 		for (GenomeInterval region : exonRegions)
-			assert (region.strand == strand);
+			assert (region.getStrand() == strand);
 	}
 
 	@Override

@@ -3,8 +3,8 @@ package de.charite.compbio.jannovar.reference;
 import java.io.Serializable;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 
 /**
  * Representation of a genomic interval (chromsome, begin, end).
@@ -23,13 +23,13 @@ public final class GenomeInterval implements Serializable {
 	final ReferenceDictionary refDict;
 
 	/** the strand that the position is located on */
-	public Strand strand;
+	private final Strand strand;
 	/** the chromosome number, as index in chromosome dictionary */
-	public int chr;
+	private final int chr;
 	/** the begin position on the chromosome */
-	public int beginPos;
+	private final int beginPos;
 	/** the end position on the chromosome */
-	public int endPos;
+	private final int endPos;
 
 	/** construct genome interval with zero-based coordinate system */
 	public GenomeInterval(ReferenceDictionary refDict, Strand strand, int chr, int beginPos, int endPos) {
@@ -88,6 +88,31 @@ public final class GenomeInterval implements Serializable {
 		this.beginPos = pos.getPos();
 
 		this.endPos = pos.getPos() + length;
+	}
+
+	/** @return {@link ReferenceDitionary} to use */
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	/** @return {@link Strand} of this {@link GenomeInterval} */
+	public Strand getStrand() {
+		return strand;
+	}
+
+	/** @return numeric chromosome id */
+	public int getChr() {
+		return chr;
+	}
+
+	/** @return 0-based begin position */
+	public int getBeginPos() {
+		return beginPos;
+	}
+
+	/** @return 0-based end position */
+	public int getEndPos() {
+		return endPos;
 	}
 
 	/** convert into GenomeInterval of the given strand */

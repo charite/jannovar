@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
 public class GenomePositionTest {
 
@@ -134,5 +134,49 @@ public class GenomePositionTest {
 		Assert.assertFalse(posL.isEq(posR));
 		Assert.assertTrue(posL.isEq(posL));
 		Assert.assertFalse(posR.isEq(posL));
+	}
+
+	@Test
+	public void testDifferenceToPositionForward() {
+		GenomePosition posL = new GenomePosition(refDict, Strand.FWD, 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, Strand.FWD, 1, 101, PositionType.ONE_BASED);
+
+		Assert.assertEquals(posL.differenceTo(posR), -1);
+		Assert.assertEquals(posL.differenceTo(posL), 0);
+		Assert.assertEquals(posR.differenceTo(posL), 1);
+	}
+
+	@Test
+	public void testDifferenceToPositionReverse() {
+		GenomePosition posL = new GenomePosition(refDict, Strand.REV, 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, Strand.REV, 1, 101, PositionType.ONE_BASED);
+
+		Assert.assertEquals(posL.differenceTo(posR), -1);
+		Assert.assertEquals(posL.differenceTo(posL), 0);
+		Assert.assertEquals(posR.differenceTo(posL), 1);
+	}
+
+	@Test
+	public void testDifferenceToIntervalForward() {
+		GenomePosition posL = new GenomePosition(refDict, Strand.FWD, 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, Strand.FWD, 1, 201, PositionType.ONE_BASED);
+		GenomeInterval itv = new GenomeInterval(refDict, Strand.FWD, 1, 101, 200, PositionType.ONE_BASED);
+
+		Assert.assertEquals(posL.differenceTo(itv), -1);
+		Assert.assertEquals(posL.shifted(1).differenceTo(itv), 0);
+		Assert.assertEquals(posR.differenceTo(itv), 1);
+		Assert.assertEquals(posR.shifted(-1).differenceTo(itv), 0);
+	}
+
+	@Test
+	public void testDifferenceToIntervalReverse() {
+		GenomePosition posL = new GenomePosition(refDict, Strand.REV, 1, 100, PositionType.ONE_BASED);
+		GenomePosition posR = new GenomePosition(refDict, Strand.REV, 1, 201, PositionType.ONE_BASED);
+		GenomeInterval itv = new GenomeInterval(refDict, Strand.REV, 1, 101, 200, PositionType.ONE_BASED);
+
+		Assert.assertEquals(posL.differenceTo(itv), -1);
+		Assert.assertEquals(posL.shifted(1).differenceTo(itv), 0);
+		Assert.assertEquals(posR.differenceTo(itv), 1);
+		Assert.assertEquals(posR.shifted(-1).differenceTo(itv), 0);
 	}
 }

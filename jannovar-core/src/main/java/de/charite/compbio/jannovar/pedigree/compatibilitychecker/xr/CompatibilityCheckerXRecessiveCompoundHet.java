@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.CompatibilityCheckerAutosomalRecessiveCompoundHet;
 
 /**
@@ -39,7 +39,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.Compatibilit
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerXRecessiveCompoundHet extends ACompatibilityChecker {
+class CompatibilityCheckerXRecessiveCompoundHet extends CompatibilityCheckerBase {
 
 	/** list of siblings for each person in {@link #pedigree} */
 	public final ImmutableMap<Person, ImmutableList<Person>> siblings;

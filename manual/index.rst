@@ -14,7 +14,7 @@ Jannovar is a Java-based program and library for the functional annotation of VC
    proxy
    annotate_vcf
    annotate_pos
-   jannovar_filter
+   jped
    lib_coordinates
    var_effects
    ped_filters

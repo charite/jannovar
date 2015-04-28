@@ -27,7 +27,7 @@ public class VariantDataCorrectorTest {
 		VariantDataCorrector corr = new VariantDataCorrector("CGAT", "C", 100);
 		Assert.assertEquals(corr.position, 101);
 		Assert.assertEquals(corr.ref, "GAT");
-		Assert.assertEquals(corr.alt, "-");
+		Assert.assertEquals(corr.alt, "");
 	}
 
 	/** Test with substitution data. */
@@ -44,7 +44,7 @@ public class VariantDataCorrectorTest {
 	public void testDeletion() {
 		VariantDataCorrector corr = new VariantDataCorrector("C", "CGAT", 100);
 		Assert.assertEquals(corr.position, 101);
-		Assert.assertEquals(corr.ref, "-");
+		Assert.assertEquals(corr.ref, "");
 		Assert.assertEquals(corr.alt, "GAT");
 	}
 

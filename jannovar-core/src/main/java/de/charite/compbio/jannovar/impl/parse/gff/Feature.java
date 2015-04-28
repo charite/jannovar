@@ -2,8 +2,6 @@ package de.charite.compbio.jannovar.impl.parse.gff;
 
 import java.util.HashMap;
 
-// TODO(holtgrem): Convert back to @Immutable?
-
 /**
  * Class for representing one line out of a GFF file.
  *

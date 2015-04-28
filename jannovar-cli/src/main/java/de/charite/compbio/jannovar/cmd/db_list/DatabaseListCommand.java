@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
 import de.charite.compbio.jannovar.datasource.DataSourceFactory;
+import de.charite.compbio.jannovar.datasource.DatasourceOptions;
 
 public class DatabaseListCommand extends JannovarCommand {
 
@@ -23,7 +24,10 @@ public class DatabaseListCommand extends JannovarCommand {
 		System.err.println("Options");
 		options.print(System.err);
 
-		DataSourceFactory factory = new DataSourceFactory(options, options.dataSourceFiles);
+		DatasourceOptions dsOptions = new DatasourceOptions(options.httpProxy, options.httpsProxy, options.ftpProxy,
+				options.printProgressBars);
+
+		DataSourceFactory factory = new DataSourceFactory(dsOptions, options.dataSourceFiles);
 		System.err.println("Available data sources:\n");
 		for (String name : factory.getNames())
 			System.err.println(String.format("    %s", name));
@@ -31,7 +35,7 @@ public class DatabaseListCommand extends JannovarCommand {
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+			HelpRequestedException {
 		try {
 			return new DatabaseListCommandLineParser().parse(argv);
 		} catch (ParseException e) {

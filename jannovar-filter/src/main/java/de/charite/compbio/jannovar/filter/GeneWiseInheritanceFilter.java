@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.Interval;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
-import de.charite.compbio.jannovar.io.Chromosome;
-import de.charite.compbio.jannovar.io.JannovarData;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
@@ -27,9 +27,9 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -119,15 +119,15 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
 		// consider each alternative allele of the variant
 		for (int alleleID = 0; alleleID < vc.getVC().getAlternateAlleles().size(); ++alleleID) {
-			final GenomeChange change = getGenomeChangeFromAltAllele(vc.getVC(), alleleID);
+			final GenomeVariant change = getGenomeChangeFromAltAllele(vc.getVC(), alleleID);
 
 			// query the gene interval tree for overlapping genes
 			final GenomeInterval changeInterval = change.getGenomeInterval();
 			IntervalArray<Gene>.QueryResult qr;
 			if (changeInterval.length() == 0)
-				qr = iTree.findOverlappingWithPoint(changeInterval.beginPos);
+				qr = iTree.findOverlappingWithPoint(changeInterval.getBeginPos());
 			else
-				qr = iTree.findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
+				qr = iTree.findOverlappingWithInterval(changeInterval.getBeginPos(), changeInterval.getEndPos());
 
 			for (Gene gene : qr.getEntries())
 				if (isGeneAffectedByChange(gene, change))
@@ -158,15 +158,15 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	}
 
 	/**
-	 * Construct {@link GenomeChange} from one allele in a
+	 * Construct {@link GenomeVariant} from one allele in a
 	 * {@link VariantContext}.
 	 */
-	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
+	private GenomeVariant getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
 		final int contigID = jannovarDB.getRefDict().getContigNameToID().get(vc.getChr());
 		final String ref = vc.getReference().getBaseString();
 		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeChange(new GenomePosition(jannovarDB.getRefDict(), Strand.FWD, contigID, pos,
+		return new GenomeVariant(new GenomePosition(jannovarDB.getRefDict(), Strand.FWD, contigID, pos,
 				PositionType.ONE_BASED), ref, alt);
 	}
 
@@ -185,9 +185,9 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
 		for (Map.Entry<Gene, GenotypeListBuilder> entry : activeGenes.entrySet()) {
 			Gene gene = entry.getKey();
-			if (gene.getRegion().chr != contigID)
+			if (gene.getRegion().getChr() != contigID)
 				doneGenes.add(gene);
-			else if (gene.getRegion().endPos <= pos)
+			else if (gene.getRegion().getEndPos() <= pos)
 				doneGenes.add(gene);
 		}
 
@@ -287,7 +287,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * @return <code>true</code> if <code>gene</code> is affected by
 	 *         <code>change</code>
 	 */
-	private static boolean isGeneAffectedByChange(Gene gene, GenomeChange change) {
+	private static boolean isGeneAffectedByChange(Gene gene, GenomeVariant change) {
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (changeInterval.length() == 0 && gene.getRegion().contains(changeInterval.getGenomeBeginPos())
 				&& gene.getRegion().contains(changeInterval.getGenomeBeginPos().shifted(-1)))
@@ -305,7 +305,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	private void checkVariantsForGene(Gene gene) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 		boolean isXChromosomal = (gene.getRefDict().getContigNameToID().get("chrX") != null && gene.getRefDict().getContigNameToID().get(
-				"chrX").intValue() == gene.getRegion().chr);
+"chrX").intValue() == gene.getRegion().getChr());
 		GenotypeList lst = activeGenes.get(gene).setIsXChromosomal(isXChromosomal).build();
 		try {
 			if (checker.isCompatibleWith(lst, modeOfInheritance))

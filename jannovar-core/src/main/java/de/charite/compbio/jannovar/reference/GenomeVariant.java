@@ -24,7 +24,7 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 @Immutable
-public final class GenomeChange implements VariantDescription {
+public final class GenomeVariant implements VariantDescription {
 
 	/** position of the change */
 	private final GenomePosition pos;
@@ -41,7 +41,7 @@ public final class GenomeChange implements VariantDescription {
 	 * right/incremented by the length of the longest common prefix and suffix
 	 * of ref and alt.
 	 */
-	public GenomeChange(GenomePosition pos, String ref, String alt) {
+	public GenomeVariant(GenomePosition pos, String ref, String alt) {
 		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
 			this.pos = pos;
 			this.ref = ref;
@@ -50,12 +50,6 @@ public final class GenomeChange implements VariantDescription {
 		}
 
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
-		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
-		if (corr.ref.equals("-"))
-			corr.ref = "";
-		if (corr.alt.equals("-"))
-			corr.alt = "";
-
 		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(),
 				corr.position, PositionType.ZERO_BASED);
 		this.ref = corr.ref;
@@ -70,7 +64,7 @@ public final class GenomeChange implements VariantDescription {
 	 * right/incremented by the length of the longest common prefix and suffix
 	 * of ref and alt. Further, the position is adjusted to the given strand.
 	 */
-	public GenomeChange(GenomePosition pos, String ref, String alt,
+	public GenomeVariant(GenomePosition pos, String ref, String alt,
 			Strand strand) {
 		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
 			this.pos = pos.withStrand(strand);
@@ -86,12 +80,6 @@ public final class GenomeChange implements VariantDescription {
 
 		// Correct variant data.
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
-		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
-		if (corr.ref.equals("-"))
-			corr.ref = "";
-		if (corr.alt.equals("-"))
-			corr.alt = "";
-
 		if (strand == pos.getStrand()) {
 			this.ref = corr.ref;
 			this.alt = corr.alt;
@@ -158,7 +146,7 @@ public final class GenomeChange implements VariantDescription {
 	/**
 	 * Construct object and enforce strand.
 	 */
-	public GenomeChange(GenomeChange other, Strand strand) {
+	public GenomeVariant(GenomeVariant other, Strand strand) {
 		if (strand == other.pos.getStrand()) {
 			this.ref = other.ref;
 			this.alt = other.alt;
@@ -197,8 +185,8 @@ public final class GenomeChange implements VariantDescription {
 	/**
 	 * @return the GenomeChange on the given strand
 	 */
-	public GenomeChange withStrand(Strand strand) {
-		return new GenomeChange(this, strand);
+	public GenomeVariant withStrand(Strand strand) {
+		return new GenomeVariant(this, strand);
 	}
 
 	/**
@@ -220,17 +208,17 @@ public final class GenomeChange implements VariantDescription {
 	}
 
 	/**
-	 * @return the {@link GenomeChangeType} of this GenomeChange
+	 * @return the {@link GenomeVariantType} of this GenomeChange
 	 */
-	public GenomeChangeType getType() {
+	public GenomeVariantType getType() {
 		if (ref.length() > 0 && alt.length() == 0)
-			return GenomeChangeType.DELETION;
+			return GenomeVariantType.DELETION;
 		else if (ref.length() == 0 && alt.length() > 0)
-			return GenomeChangeType.INSERTION;
+			return GenomeVariantType.INSERTION;
 		else if (ref.length() == 1 && alt.length() == 1)
-			return GenomeChangeType.SNV;
+			return GenomeVariantType.SNV;
 		else
-			return GenomeChangeType.BLOCK_SUBSTITUTION;
+			return GenomeVariantType.BLOCK_SUBSTITUTION;
 	}
 
 	/**
@@ -240,7 +228,7 @@ public final class GenomeChange implements VariantDescription {
 	 * @return true if the variant is a SNV and a transition.
 	 */
 	public boolean isTransition() {
-		if (getType() != GenomeChangeType.SNV)
+		if (getType() != GenomeVariantType.SNV)
 			return false;
 		// purine to purine change
 		if (this.ref.equals("A") && this.alt.equals("G"))
@@ -263,7 +251,7 @@ public final class GenomeChange implements VariantDescription {
 	 * @return true if the variant is a SNV and a transversion.
 	 */
 	public boolean isTransversion() {
-		if (getType() != GenomeChangeType.SNV)
+		if (getType() != GenomeVariantType.SNV)
 			return false;
 		// purine to purine change
 		if (this.ref.equals("A") && this.alt.equals("G"))
@@ -310,7 +298,7 @@ public final class GenomeChange implements VariantDescription {
 		if (getClass() != obj.getClass())
 			return false;
 
-		GenomeChange other = (GenomeChange) obj;
+		GenomeVariant other = (GenomeVariant) obj;
 		if (pos != null && pos.getStrand() != Strand.FWD)
 			return withStrand(Strand.FWD).equals(obj);
 		other = other.withStrand(Strand.FWD);

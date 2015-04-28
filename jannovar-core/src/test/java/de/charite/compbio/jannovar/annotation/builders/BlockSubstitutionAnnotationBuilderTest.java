@@ -10,8 +10,8 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -19,8 +19,6 @@ import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
-
-// TODO(holtgrem): Extend tests to also use reverse transcript?
 
 public class BlockSubstitutionAnnotationBuilderTest {
 
@@ -63,7 +61,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardUstream() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640059,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640059,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -76,7 +74,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardDownstream() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -90,7 +88,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	@Test
 	public void testForwardIntergenic() throws InvalidGenomeChange {
 		// intergenic upstream
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6639059,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639059,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -100,7 +98,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 		// intergenic downstream
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2,
 				new AnnotationBuilderOptions()).build();
@@ -116,7 +114,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		StringBuilder chars200 = new StringBuilder();
 		for (int i = 0; i < 200; ++i)
 			chars200.append("A");
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 				PositionType.ZERO_BASED), chars200.toString(), "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -127,7 +125,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardIntronic() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642106,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642106,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -138,7 +136,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640070,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640070,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -150,7 +148,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	@Test
 	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649329,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649329,
 				PositionType.ZERO_BASED), "ACG", "CGGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -165,7 +163,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// Testing with some START_LOST scenarios.
 
 		// Delete one base of start codon.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -176,7 +174,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 
 		// Delete chunk out of first exon, spanning start codon from the left.
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640660,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640660,
 				PositionType.ZERO_BASED), "CCCTCCAGACC", "GTTG");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2,
 				new AnnotationBuilderOptions()).build();
@@ -187,7 +185,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
 
 		// Delete chunk out of first exon, spanning start codon from the right.
-		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6640671,
+		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640671,
 				PositionType.ZERO_BASED), "GGACGGCTCCT", "CTTG");
 		Annotation annotation3 = new BlockSubstitutionAnnotationBuilder(infoForward, change3,
 				new AnnotationBuilderOptions()).build();
@@ -198,7 +196,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation3.getEffects());
 
 		// Deletion from before transcript, reaching into the start codon.
-		GenomeChange change4 = new GenomeChange(
+		GenomeVariant change4 = new GenomeVariant(
 				new GenomePosition(refDict, Strand.FWD, 1, 6640399, PositionType.ZERO_BASED),
 				"TCTCACCAGGCCCTTCTTCACGACCCTGGCCCCCCATCCAGCATCCCCCCTGGCCAATCCAATATGGCCCCCGGCCCCCGGGAGGCTGTCAGTGTGTTCCAGCCCTCCGCGTGCACCCCTCACCCTGACCCAAGCCCTCGTGCTGATAAATATGATTATTTGAGTAGAGGCCAACTTCCCGTTTCTCTCTCTTGACTCCAGGAGCTTTCTCTTGCATACCCTCGCTTAGGCTGGCCGGGGTGTCACTTCTGCCTCCCTGCCCTCCAGACCA",
 				"ACCT");
@@ -214,7 +212,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	@Test
 	public void testForwardStopLoss() throws InvalidGenomeChange {
 		// Replace bases of stop codon by 4 nucleotides, frameshift case.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
@@ -227,7 +225,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				annotation1.getEffects());
 
 		// Replace stop codon by 6 nucleotides, non-frameshift case.
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
 				PositionType.ZERO_BASED), "ACT", "CGGTCG");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2,
 				new AnnotationBuilderOptions()).build();
@@ -240,7 +238,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				annotation2.getEffects());
 
 		// Delete first base of stop codon, leads to complete loss.
-		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6649269,
+		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649269,
 				PositionType.ZERO_BASED), "ACG", "CGGT");
 		Annotation annotation3 = new BlockSubstitutionAnnotationBuilder(infoForward, change3,
 				new AnnotationBuilderOptions()).build();
@@ -256,7 +254,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	@Test
 	public void testForwardSplicing() throws InvalidGenomeChange {
 		// intronic splicing
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642116,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642116,
 				PositionType.ZERO_BASED), "G", "TT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -268,7 +266,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 
 		// exonic splicing
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
 				PositionType.ZERO_BASED), "TGG", "AA");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2,
 				new AnnotationBuilderOptions()).build();
@@ -284,7 +282,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	@Test
 	public void testForwardFrameShiftBlockSubstitution() throws InvalidGenomeChange {
 		// The following case contains a shift in the nucleotide sequence.
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6647537,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6647537,
 				PositionType.ZERO_BASED), "TGCCCCACCT", "CCC");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -300,7 +298,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	@Test
 	public void testForwardNonFrameBlockSubstitution() throws InvalidGenomeChange {
 		// deletion of two codons, insertion of one
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642114,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642114,
 				PositionType.ZERO_BASED), "TAAACA", "GTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -312,7 +310,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT, VariantEffect.FEATURE_TRUNCATION), annotation1.getEffects());
 
 		// deletion of three codons, insertion of one
-		GenomeChange change2 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642126,
+		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642126,
 				PositionType.ZERO_BASED), "GTGGTTCAA", "ACC");
 		Annotation annotation2 = new BlockSubstitutionAnnotationBuilder(infoForward, change2,
 				new AnnotationBuilderOptions()).build();
@@ -325,7 +323,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				annotation2.getEffects());
 
 		// deletion of three codons, insertion of one, includes truncation of replacement ref from the right
-		GenomeChange change3 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 6642134,
+		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642134,
 				PositionType.ZERO_BASED), "AGTGGAGGAT", "CTT");
 		Annotation annotation3 = new BlockSubstitutionAnnotationBuilder(infoForward, change3,
 				new AnnotationBuilderOptions()).build();
@@ -349,7 +347,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_025055.4
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 15, 74536399,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 15, 74536399,
 				PositionType.ZERO_BASED), "TAAGAAGGAGACCATCA", "ACTACCAGAGGAAT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -373,7 +371,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001004754.2
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 11, 5475430,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 11, 5475430,
 				PositionType.ZERO_BASED), "TCAACA", "ACAACACT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -397,7 +395,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_012206.2
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 5, 156479564,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 5, 156479564,
 				PositionType.ZERO_BASED), "AGTCGT", "AGTGAG");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -421,7 +419,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 15, 74536399,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 15, 74536399,
 				PositionType.ZERO_BASED), "TAAGAAGGAGACCATCA", "ACTACCAGAGGAAT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -447,7 +445,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_012206.2
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 5, 156479564,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 5, 156479564,
 				PositionType.ZERO_BASED), "AGTCGT", "GAGCTA");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -471,7 +469,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_000396.3
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 1, 150771702,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 150771702,
 				PositionType.ZERO_BASED), "TG", "CA");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -496,7 +494,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001258273
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, 3, 37090097,
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 3, 37090097,
 				PositionType.ONE_BASED), "TGAGG", "C");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
@@ -522,7 +520,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001128834.1
 
-		GenomeChange change1 = new GenomeChange(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
 				103041655, PositionType.ONE_BASED), "GGTGATC", "A");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();

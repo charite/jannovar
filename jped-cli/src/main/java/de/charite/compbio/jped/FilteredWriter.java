@@ -1,8 +1,10 @@
-package de.charite.compbio.jannovar;
+package de.charite.compbio.jped;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.vcf.VCFFileReader;
+import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.filter.CoordinateSortChecker;
 import de.charite.compbio.jannovar.filter.FilterException;
 import de.charite.compbio.jannovar.filter.FlaggedVariant;
@@ -10,7 +12,6 @@ import de.charite.compbio.jannovar.filter.GeneWiseInheritanceFilter;
 import de.charite.compbio.jannovar.filter.VariantContextFilter;
 import de.charite.compbio.jannovar.filter.VariantWiseInheritanceFilter;
 import de.charite.compbio.jannovar.filter.WriterFilter;
-import de.charite.compbio.jannovar.io.JannovarData;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 
@@ -36,7 +37,7 @@ public class FilteredWriter {
 		this.sink = sink;
 	}
 
-	void run(JannovarFilterOptions options) throws JannovarException {
+	void run(JPedOptions options) throws JannovarException {
 		// public GeneWiseInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB, ModeOfInheritance
 		// modeOfInheritance,
 		// ImmutableList<String> names, VariantContextFilter next) {

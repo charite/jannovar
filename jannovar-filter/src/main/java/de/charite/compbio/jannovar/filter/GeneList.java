@@ -34,9 +34,9 @@ class GeneList {
 	private ImmutableMap<Integer, IntervalArray<Gene>> buildIntervalTree() {
 		HashMap<Integer, ArrayList<Gene>> chrToGene = new HashMap<Integer, ArrayList<Gene>>();
 		for (Gene gene : genes) {
-			if (!chrToGene.containsKey(gene.getRegion().chr))
-				chrToGene.put(gene.getRegion().chr, new ArrayList<Gene>());
-			chrToGene.get(gene.getRegion().chr).add(gene);
+			if (!chrToGene.containsKey(gene.getRegion().getChr()))
+				chrToGene.put(gene.getRegion().getChr(), new ArrayList<Gene>());
+			chrToGene.get(gene.getRegion().getChr()).add(gene);
 		}
 
 		ImmutableMap.Builder<Integer, IntervalArray<Gene>> builder = new ImmutableMap.Builder<Integer, IntervalArray<Gene>>();

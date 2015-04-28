@@ -76,7 +76,7 @@ public class TranscriptModelBuilder {
 		// Build list of immutable exons in the correct order.
 		ImmutableList.Builder<GenomeInterval> builder = new ImmutableList.Builder<GenomeInterval>();
 		if (exonRegions.size() > 0) {
-			if (strand == exonRegions.get(0).strand) {
+			if (strand == exonRegions.get(0).getStrand()) {
 				for (int i = 0; i < exonRegions.size(); ++i)
 					builder.add(exonRegions.get(i));
 			} else {

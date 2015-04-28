@@ -7,10 +7,10 @@ import de.charite.compbio.jannovar.impl.intervals.IntervalEndExtractor;
  */
 class GeneIntervalEndExtractor implements IntervalEndExtractor<Gene> {
 	public int getBegin(Gene gene) {
-		return gene.getRegion().beginPos;
+		return gene.getRegion().getBeginPos();
 	}
 
 	public int getEnd(Gene gene) {
-		return gene.getRegion().endPos;
+		return gene.getRegion().getEndPos();
 	}
 }

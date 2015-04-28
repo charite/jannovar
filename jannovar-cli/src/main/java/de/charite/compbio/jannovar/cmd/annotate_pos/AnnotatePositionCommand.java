@@ -16,7 +16,7 @@ import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -55,7 +55,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		System.out.println("#change\teffect\thgvs_annotation");
 		for (String chromosomalChange : options.chromosomalChanges) {
 			// Parse the chromosomal change string into a GenomeChange object.
-			final GenomeChange genomeChange = parseGenomeChange(chromosomalChange);
+			final GenomeVariant genomeChange = parseGenomeChange(chromosomalChange);
 
 			// Construct VariantAnnotator for building the variant annotations.
 			AnnotationList annoList = null;
@@ -81,7 +81,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		}
 	}
 
-	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
+	private GenomeVariant parseGenomeChange(String changeStr) throws JannovarException {
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
 		Matcher match = pat.matcher(changeStr);
 
@@ -96,7 +96,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		String ref = match.group(3);
 		String alt = match.group(4);
 
-		return new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
+		return new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 	@Override

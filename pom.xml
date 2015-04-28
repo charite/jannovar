@@ -13,6 +13,7 @@
 		<module>jannovar-htsjdk</module>
 		<module>jannovar-cli</module>
 		<module>jannovar-filter</module>
+		<module>jped-cli</module>
 	</modules>
 
 	<licenses>
@@ -116,7 +117,7 @@
 		</plugins>
 	</build>
 
-	<!-- Sphinx Manual -->
+	<!-- Sphinx Manual, build with "mvn site". -->
 	<reporting>
 		<plugins>
 			<plugin>

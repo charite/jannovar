@@ -79,7 +79,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
 		try {
 			return parser.parse(argv);
-		} catch (ParseException e) { // TODO(holtgrem): do not translate?
+		} catch (ParseException e) {
 			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
 	}

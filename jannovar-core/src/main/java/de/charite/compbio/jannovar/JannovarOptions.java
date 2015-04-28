@@ -93,13 +93,6 @@ public final class JannovarOptions {
 	}
 
 	/**
-	 * Enumeration of the supported data sources.
-	 */
-	public enum DataSource {
-		ENSEMBL, REFSEQ, REFSEQ_CURATED, UCSC
-	}
-
-	/**
 	 * Print option values to stderr.
 	 */
 	public void print(PrintStream out) {
