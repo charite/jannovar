@@ -5,6 +5,7 @@ import com.google.common.collect.ComparisonChain;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.annotation.Annotation;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.DNAUtils;
 
 // TODO(holtgrewe): We only want genome changes on the forward strand, make sure this does not lead to problems downstream.
@@ -194,17 +195,18 @@ public final class GenomeVariant implements VariantDescription {
 	 */
 	@Override
 	public String toString() {
-		if (pos.getStrand() != Strand.FWD)
-			return withStrand(Strand.FWD).toString();
-		else if (ref.equals("")) // handle insertion as special case
-			return Joiner.on("").join(pos.getRefDict().getContigNameToID().get(pos.getChr()),
-					":g.", pos.getPos(), "_", pos.getPos() + 1, "ins", alt);
-		else if (alt.equals(""))
-			return Joiner.on("").join(pos.getRefDict().getContigNameToID().get(pos.getChr()),
-					":g.", pos.getPos(), "_", pos.getPos() + ref.length(), "del", ref);
-		else
-			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref),
-					">", (alt.equals("") ? "-" : alt));
+		if (pos.getStrand() != Strand.FWD) {
+                    return withStrand(Strand.FWD).toString();
+                } else if (ref.equals("")) { // handle insertion as special case
+                    return Joiner.on("").join(pos.getRefDict().getContigIDToName().get(pos.getChr()),
+                            ":g.", pos.getPos(), "_", pos.getPos() + 1, "ins", alt);
+                } else if (alt.equals("")) {
+			return Joiner.on("").join(pos.getRefDict().getContigIDToName().get(pos.getChr()),
+                            ":g.", pos.getPos(), "_", pos.getPos() + ref.length(), "del", ref);
+                } else {
+                    return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref),
+                            ">", (alt.equals("") ? "-" : alt));
+                }
 	}
 
 	/**

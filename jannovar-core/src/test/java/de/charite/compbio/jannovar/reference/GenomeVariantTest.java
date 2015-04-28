@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
-public class GenomeChangeTest {
+public class GenomeVariantTest {
 
 	/** this test uses this static hg19 reference dictionary */
 	static final ReferenceDictionary refDict = HG19RefDictBuilder.build();
@@ -164,4 +164,5 @@ public class GenomeChangeTest {
 		Assert.assertTrue(expectedInterval.equals(genomeInterval));
 		Assert.assertEquals(expectedInterval, genomeInterval);
 	}
+        
 }
