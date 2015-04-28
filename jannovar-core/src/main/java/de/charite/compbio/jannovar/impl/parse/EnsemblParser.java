@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor;
 import de.charite.compbio.jannovar.impl.parse.gff.GFFParser;
 import de.charite.compbio.jannovar.impl.parse.gff.TranscriptInfoFactory;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
@@ -59,7 +59,6 @@ public class EnsemblParser implements TranscriptParser {
 		this.printProgressBars = printProgressBars;
 	}
 
-	@Override
 	public ImmutableList<TranscriptModel> run() throws TranscriptParseException {
 		// Parse GTF file, yielding a list of features.
 		LOGGER.info("Parsing GTF...");
@@ -68,22 +67,22 @@ public class EnsemblParser implements TranscriptParser {
 			gffParser = new GFFParser(PathUtil.join(basePath, getINIFileName("gtf")));
 		} catch (IOException e) {
 			LOGGER.error("Unable to load GTF data from Ensembl files: {}", e.getMessage());
-			throw new TranscriptParseException(e.getMessage());
+			throw new TranscriptParseException("Problem loading GTF data.", e);
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
-		FeatureProcessor fp = new FeatureProcessor(gffParser.gffVersion, refDict);
+		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), refDict);
 		gffParser.parse(fp);
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
 			LOGGER.info("Building transcript models...");
-			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.gffVersion, refDict);
+			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.getGffVersion(), refDict);
 			builders = tif.buildTranscripts(fp.getGenes());
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from Ensembl files: {}", e.getMessage());
-			throw new TranscriptParseException(e.getMessage());
+			throw new TranscriptParseException("Problem loading GTF data.", e);
 		}
 
 		// Load sequences.

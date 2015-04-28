@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.JannovarOptions;
@@ -17,19 +18,27 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationException;
 import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.io.Chromosome;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Annotate variant in {@link VariantContext} and write out in Jannovar format.
+ * 
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
-	/** {@link ReferenceDictionary} object to use for information about the genome. */
+	/**
+	 * {@link ReferenceDictionary} object to use for information about the
+	 * genome.
+	 */
 	private final ReferenceDictionary refDict;
 
 	/** the VCF file to process */
@@ -50,7 +59,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	public AnnotatedJannovarWriter(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap,
 			String vcfPath, JannovarOptions options) throws IOException {
 		this.refDict = refDict;
-		this.annotator = new VariantAnnotator(refDict, chromosomeMap);
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
 		this.vcfPath = vcfPath;
 		this.options = options;
 		this.openBufferedWriter();
@@ -115,7 +124,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		String chrStr = vc.getChr();
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" contigs etc. In this case, we simply ignore the record.
-		Integer boxedInt = refDict.contigID.get(vc.getChr());
+		Integer boxedInt = refDict.getContigNameToID().get(vc.getChr());
 		if (boxedInt == null)
 			return;
 		int chr = boxedInt.intValue();
@@ -127,8 +136,8 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		final String alt = vc.getAlternateAllele(0).getBaseString();
 		final int pos = vc.getStart();
 		// Construct GenomeChange from this and strip common prefixes.
-		final GenomeChange change = new GenomeChange(
-				new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
+		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos,
+				PositionType.ONE_BASED), ref, alt);
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
@@ -138,18 +147,21 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			throw new AnnotationException(e);
 		}
 
-		for (Annotation a : anno.entries) {
-			String effect = Joiner.on("+").join(a.effects);
-			String annt = Joiner.on(":").skipNulls().join(a.ntHGVSDescription, a.aaHGVSDescription);
-			String sym = a.transcript.geneSymbol;
-			String s = String.format("%d\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
-					chrStr, change.pos, change.ref, change.alt, gtype, qual);
+		for (Annotation a : anno) {
+			String effect = Joiner.on("+").join(
+					FluentIterable.from(a.getEffects()).transform(VariantEffect.TO_LEGACY_NAME));
+			String annt = Joiner.on(":").skipNulls()
+					.join(a.getNucleotideHGVSDescription(), a.getAminoAcidHGVSDescription());
+			String sym = a.getTranscript().getGeneSymbol();
+			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
+					chrStr, change.getPos(), change.getRef(), change.getAlt(), gtype, qual);
 			out.write(s);
 		}
 	}
 
 	/**
-	 * Return genotype string as in VCF for the i-th individual at the position in variantContext.
+	 * Return genotype string as in VCF for the i-th individual at the position
+	 * in variantContext.
 	 *
 	 * @param variantContext
 	 *            The VariantContext to query.

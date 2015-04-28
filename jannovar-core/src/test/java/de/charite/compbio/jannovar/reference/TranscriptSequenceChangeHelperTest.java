@@ -4,15 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
-import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
-import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
-import de.charite.compbio.jannovar.reference.TranscriptSequenceChangeHelper;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
 public class TranscriptSequenceChangeHelperTest {
 
@@ -47,111 +39,111 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testTXSNVInExonForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642119, PositionType.ZERO_BASED),
-				"A", "C");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642119,
+				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.setCharAt(895, 'C');
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
 	@Test
 	public void testTXSNVInIntronForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6648257, PositionType.ZERO_BASED),
-				"A", "C");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6648257,
+				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
 	public void testTXSNVOutsideTXForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640062, PositionType.ZERO_BASED),
-				"A", "C");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
+				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
 	public void testTXInsertionInExonForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642119, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642119,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.insert(895, "CTTG");
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
 	@Test
 	public void testTXInsertionInIntronForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6648257, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6648257,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
 	public void testTXInsertionOutsideTXForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640062, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
 	public void testTXDeletionInExonForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642120, PositionType.ZERO_BASED),
-				"CTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642120,
+				PositionType.ZERO_BASED), "CTT", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.delete(896, 899);
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
 	@Test
 	public void testTXDeletionInIntronForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6647530, PositionType.ZERO_BASED),
-				"CTTG", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6647530,
+				PositionType.ZERO_BASED), "CTTG", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
 	public void testTXDeletionOutsideTXForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640058, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640058,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
-		Assert.assertEquals(infoForward.sequence, resultTranscript);
+		Assert.assertEquals(infoForward.getSequence(), resultTranscript);
 	}
 
 	@Test
 	public void testTXDeletionSpanningIntoTXFromTheLeftForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640060, PositionType.ZERO_BASED),
-				"TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640060,
+				PositionType.ZERO_BASED), "TTTT", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.delete(0, 2);
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
 	@Test
 	public void testTXDeletionSpanningIntoTXFromTheRightForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649338, PositionType.ZERO_BASED),
-				"TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649338,
+				PositionType.ZERO_BASED), "TTTT", "");
 		String resultTranscript = helperForward.getTranscriptWithChange(change);
 
-		StringBuilder expectedBuilder = new StringBuilder(infoForward.sequence);
+		StringBuilder expectedBuilder = new StringBuilder(infoForward.getSequence());
 		expectedBuilder.delete(infoForward.transcriptLength() - 2, infoForward.transcriptLength());
 		Assert.assertEquals(expectedBuilder.toString(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSSNVInExonForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642119, PositionType.ZERO_BASED),
-				"A", "C");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642119,
+				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorForward.getTranscriptStartingAtCDS());
@@ -161,24 +153,24 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testCDSSNVInIntronForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6648257, PositionType.ZERO_BASED),
-				"A", "C");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6648257,
+				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 		Assert.assertEquals(projectorForward.getTranscriptStartingAtCDS(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSSNVOutsideCDSForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640062, PositionType.ZERO_BASED),
-				"A", "C");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
+				PositionType.ZERO_BASED), "A", "C");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 		Assert.assertEquals(projectorForward.getTranscriptStartingAtCDS(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSInsertionInExonForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642119, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642119,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorForward.getTranscriptStartingAtCDS());
@@ -188,24 +180,24 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testCDSInsertionInIntronForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6648257, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6648257,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 		Assert.assertEquals(projectorForward.getTranscriptStartingAtCDS(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSInsertionOutsideCDSForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640062, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 		Assert.assertEquals(projectorForward.getTranscriptStartingAtCDS(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSDeletionInExonForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6642120, PositionType.ZERO_BASED),
-				"CTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642120,
+				PositionType.ZERO_BASED), "CTT", "");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorForward.getTranscriptStartingAtCDS());
@@ -215,24 +207,24 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testCDSDeletionInIntronForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640665, PositionType.ZERO_BASED),
-				"CTTG", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640665,
+				PositionType.ZERO_BASED), "CTTG", "");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 		Assert.assertEquals(projectorForward.getTranscriptStartingAtCDS(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSDeletionOutsideCDSForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649272, PositionType.ZERO_BASED),
-				"", "CTTG");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649272,
+				PositionType.ZERO_BASED), "", "CTTG");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 		Assert.assertEquals(projectorForward.getTranscriptStartingAtCDS(), resultTranscript);
 	}
 
 	@Test
 	public void testCDSDeletionSpanningIntoCDSFromTheLeftForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6640667, PositionType.ZERO_BASED),
-				"TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640667,
+				PositionType.ZERO_BASED), "TTTT", "");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorForward.getTranscriptStartingAtCDS());
@@ -242,8 +234,8 @@ public class TranscriptSequenceChangeHelperTest {
 
 	@Test
 	public void testCDSDeletionSpanningIntoCDSFromTheRightForward() {
-		GenomeChange change = new GenomeChange(new GenomePosition(refDict, '+', 1, 6649270, PositionType.ZERO_BASED),
-				"TTTT", "");
+		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
+				PositionType.ZERO_BASED), "TTTT", "");
 		String resultTranscript = helperForward.getCDSWithChange(change);
 
 		StringBuilder expectedBuilder = new StringBuilder(projectorForward.getTranscriptStartingAtCDS());

@@ -21,7 +21,7 @@ public class CompatibilityCheckerXRecessiveSingletonFemaleTest extends Compatibi
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(1, pedigree.members.size());
+		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
 	@Test
@@ -36,19 +36,17 @@ public class CompatibilityCheckerXRecessiveSingletonFemaleTest extends Compatibi
 		Assert.assertFalse(buildCheckerXR(REF, REF).run());
 		Assert.assertFalse(buildCheckerXR(REF, UKN).run());
 		Assert.assertFalse(buildCheckerXR(UKN, UKN).run());
+		Assert.assertFalse(buildCheckerXR(HET, UKN).run());
 	}
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
-		// FIXME This is the only case with one variant where XR is true!
 		Assert.assertTrue(buildCheckerXR(ALT).run());
 	}
 
 	@Test
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerXR(HET, HET).run());
-		// FIXME Comp. het is possible here! or should it always be Het Het
-		// Assert.assertTrue(buildCheckerXR(HET, UKN).run());
 		Assert.assertTrue(buildCheckerXR(ALT, REF).run());
 		Assert.assertTrue(buildCheckerXR(UKN, ALT).run());
 		Assert.assertTrue(buildCheckerXR(ALT, ALT).run());

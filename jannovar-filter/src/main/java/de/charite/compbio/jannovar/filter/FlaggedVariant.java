@@ -13,11 +13,15 @@ public class FlaggedVariant {
 
 	private boolean included = false;
 
-	public final VariantContext vc;
+	private final VariantContext vc;
 
 	/** Initialize with the given {@link VariantContext}. */
 	public FlaggedVariant(VariantContext vc) {
 		this.vc = vc;
+	}
+
+	public VariantContext getVC() {
+		return vc;
 	}
 
 	/** @return <code>true</code> if flagged as included */

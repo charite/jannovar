@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeListBuilder;
@@ -26,6 +27,8 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(VariantWiseInheritanceFilter.class);
 
+	/** Deserialized Jannovar data */
+	private final JannovarData jannovarDB;
 	/** The mode of inheritance to filter for */
 	private final ModeOfInheritance modeOfInheritance;
 	/** Names of {@link pedigree#members}. */
@@ -36,37 +39,41 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 	private final PedigreeDiseaseCompatibilityDecorator checker;
 
 	/** Initialize */
-	public VariantWiseInheritanceFilter(Pedigree pedigree, ModeOfInheritance modeOfInheritance,
-			VariantContextFilter next) {
+	public VariantWiseInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB,
+			ModeOfInheritance modeOfInheritance, VariantContextFilter next) {
+		this.jannovarDB = jannovarDB;
 		this.modeOfInheritance = modeOfInheritance;
 		this.next = next;
 		this.checker = new PedigreeDiseaseCompatibilityDecorator(pedigree);
 
 		ImmutableList.Builder<String> namesBuilder = new ImmutableList.Builder<String>();
-		for (Person p : pedigree.members)
-			namesBuilder.add(p.name);
+		for (Person p : pedigree.getMembers())
+			namesBuilder.add(p.getName());
 		this.personNames = namesBuilder.build();
 	}
 
-	@Override
 	public void put(FlaggedVariant fv) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 
-		GenotypeListBuilder builder = new GenotypeListBuilder(null, null, personNames);
+		final int contigID = jannovarDB.getRefDict().getContigNameToID().get(fv.getVC().getChr());
+		boolean isXChromosomal = (jannovarDB.getRefDict().getContigNameToID().get("chrX") != null && jannovarDB.getRefDict().getContigNameToID().get(
+				"chrX").intValue() == contigID);
+
+		GenotypeListBuilder builder = new GenotypeListBuilder(null, personNames, isXChromosomal);
 		putGenotypes(fv, builder);
 		try {
 			fv.setIncluded(checker.isCompatibleWith(builder.build(), modeOfInheritance));
 			if (fv.isIncluded())
 				next.put(fv);
 			LOGGER.trace("Variant {}compatible with {} (gt={}, var={})", new Object[] { fv.isIncluded() ? "" : "in",
-					modeOfInheritance, builder.build(), fv.vc });
+					modeOfInheritance, builder.build(), fv.getVC() });
 		} catch (CompatibilityCheckerException e) {
-			throw new FilterException("Problem in mode of inheritance filter: " + e.getMessage());
+			throw new FilterException("Problem in mode of inheritance filter.", e);
 		}
 	}
 
 	private void putGenotypes(FlaggedVariant fv, GenotypeListBuilder genotypeListBuilder) {
-		final VariantContext vc = fv.vc;
+		final VariantContext vc = fv.getVC();
 		for (int i = 0; i < vc.getAlternateAlleles().size(); ++i) {
 			Allele currAlt = vc.getAlternateAllele(i);
 
@@ -97,7 +104,6 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 		}
 	}
 
-	@Override
 	public void finish() throws FilterException {
 		next.finish();
 	}

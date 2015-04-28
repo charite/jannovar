@@ -1,9 +1,10 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.reference.GenomeInterval;
 
 /**
  * Wrapper for a immutable lists of {@link Genotype} calls for one {@link TranscriptInfo}, one list of calls for each
@@ -18,27 +19,57 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 public final class GenotypeList {
 
 	/** the name of the gene for this genotype call list */
-	public final String geneName;
-
-	// TODO(holtgrem): Remove genomeRegion?
-	/**
-	 * The approximate genomic interval of this gene, e.g. the region of one transcript. This information is only used
-	 * for getting the chromosome of the gene.
-	 */
-	public final GenomeInterval genomeRegion;
+	private final String geneName;
 
 	/** the list of individual names */
-	public final ImmutableList<String> names;
+	private final ImmutableList<String> names;
+
+	/** whether or not the variants are on the X chromsome */
+	private final boolean isXChromosomal;
 
 	/** the lists of genotype calls, each contains one entry for each individual */
-	public final ImmutableList<ImmutableList<Genotype>> calls;
+	private final ImmutableList<ImmutableList<Genotype>> calls;
 
-	public GenotypeList(String geneID, GenomeInterval genomeRegion, ImmutableList<String> names,
+	/**
+	 * Construct and initialize object.
+	 *
+	 * @param geneID
+	 *            name of gene that this genotype list is for
+	 * @param names
+	 *            individual names, gives sorting of individuals in the call lists
+	 * @param isXChromosomal
+	 *            <code>true</code> if the gene list is on the X chromosome, only affects X-linked compatibility checks
+	 *            (setting this to <code>true</code> can lead to too false positives and but neither <code>true</code>
+	 *            nor <code>false</code> can lead to false negatives, given the filter's properties)
+	 * @param calls
+	 *            the genotype calls for this list
+	 */
+	public GenotypeList(String geneID, List<String> names, boolean isXChromosomal,
 			ImmutableList<ImmutableList<Genotype>> calls) {
 		this.geneName = geneID;
-		this.genomeRegion = genomeRegion;
-		this.names = names;
+		this.names = ImmutableList.copyOf(names);
+		this.isXChromosomal = isXChromosomal;
 		this.calls = calls;
+	}
+
+	/** the name of the gene for this genotype call list */
+	public String getGeneName() {
+		return geneName;
+	}
+
+	/** the list of individual names */
+	public ImmutableList<String> getNames() {
+		return names;
+	}
+
+	/** whether or not the variants are on the X chromsome */
+	public boolean isXChromosomal() {
+		return isXChromosomal;
+	};
+
+	/** the lists of genotype calls, each contains one entry for each individual */
+	public ImmutableList<ImmutableList<Genotype>> getCalls() {
+		return calls;
 	}
 
 	/**
@@ -53,19 +84,12 @@ public final class GenotypeList {
 	 *         <code>pedigree</code>
 	 */
 	public boolean namesEqual(Pedigree pedigree) {
-		if (pedigree.members.size() != names.size())
-			return false;
-
-		int i = 0;
-		for (Person person : pedigree.members)
-			if (!person.name.equals(names.get(i++)))
-				return false;
-		return true;
+		return (pedigree.getNames().equals(names));
 	}
 
 	@Override
 	public String toString() {
-		return "[" + calls + "]";
+		return "GenotypeList(" + calls + ")";
 	}
 
 }

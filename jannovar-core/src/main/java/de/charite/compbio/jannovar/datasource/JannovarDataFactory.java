@@ -10,13 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.FileDownloader.ProxyOptions;
 import de.charite.compbio.jannovar.impl.parse.ReferenceDictParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.io.JannovarData;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
@@ -29,8 +28,8 @@ public abstract class JannovarDataFactory {
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarDataFactory.class);
 
-	/** the {@link JannovarOptions} to use for proxy settings */
-	protected final JannovarOptions options;
+	/** the {@link DatasourceOptions} to use for proxy settings */
+	protected final DatasourceOptions options;
 	/** the {@link DataSource} to use */
 	protected final DataSource dataSource;
 	/** configuration section from INI file */
@@ -46,7 +45,7 @@ public abstract class JannovarDataFactory {
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public JannovarDataFactory(JannovarOptions options, DataSource dataSource, Section iniSection) {
+	public JannovarDataFactory(DatasourceOptions options, DataSource dataSource, Section iniSection) {
 		this.options = options;
 		this.dataSource = dataSource;
 		this.iniSection = iniSection;
@@ -83,7 +82,7 @@ public abstract class JannovarDataFactory {
 				downloader.copyURLToFile(src, dest);
 			}
 		} catch (MalformedURLException e) {
-			throw new FileDownloadException("Invalid URL: " + e.getMessage());
+			throw new FileDownloadException("Invalid URL.", e);
 		}
 
 		// Parse files for building ReferenceDictionary objects.
@@ -104,39 +103,6 @@ public abstract class JannovarDataFactory {
 	}
 
 	/**
-	 * Build {@link FileDownloader.ProxyOptions} from an environment proxy configuration
-	 *
-	 * @param envValue
-	 *            environment value with proxy host and port as URL
-	 * @return {@link FileDownloader.ProxyOptions} with configuration from <code>envValue</code.
-	 */
-	private FileDownloader.ProxyOptions buildProxyOptions(String envValue) {
-		FileDownloader.ProxyOptions result = new FileDownloader.ProxyOptions();
-		if (envValue == null)
-			return result;
-
-		try {
-			URL url = new URL(envValue);
-			result.host = url.getHost();
-			if (url.getPort() != -1)
-				result.port = url.getPort();
-			String userInfo = url.getUserInfo();
-			if (userInfo != null) {
-				if (userInfo.contains(":")) {
-					String[] tokens = userInfo.split(":");
-					result.user = tokens[0];
-					result.password = tokens[1];
-				} else {
-					result.user = userInfo;
-				}
-			}
-		} catch (MalformedURLException e) {
-			LOGGER.warn("Could not parse HTTP_PROXY value {} as URL.", envValue);
-		}
-		return result;
-	}
-
-	/**
 	 * @return {@link FileDownloader.Options} with proxy settings from {@link #options} and environment.
 	 */
 	private FileDownloader.Options buildOptions(boolean printProgressBars) {
@@ -144,9 +110,9 @@ public abstract class JannovarDataFactory {
 
 		// Get proxy settings from options.
 		result.printProgressBar = printProgressBars;
-		updateProxyOptions(result.http, options.httpProxy);
-		updateProxyOptions(result.https, options.httpsProxy);
-		updateProxyOptions(result.ftp, options.ftpProxy);
+		updateProxyOptions(result.http, options.getHTTPProxy());
+		updateProxyOptions(result.https, options.getHTTPSProxy());
+		updateProxyOptions(result.ftp, options.getFTPProxy());
 
 		return result;
 	}

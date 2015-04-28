@@ -5,13 +5,15 @@
 	<artifactId>jannovar-filter</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-filter</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jannovar-filter provides functionality for filtering variants call lists to
+      the variants that are compatible with a given pedigree and mode of inheritance</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.12</version>
+		<version>0.13-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -19,22 +21,10 @@
 	</properties>
 
 	<dependencies>
-		<!--commons-cli used for parsing the command line -->
 		<dependency>
-			<groupId>commons-cli</groupId>
-			<artifactId>commons-cli</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.seqdoop</groupId>
+			<groupId>com.github.samtools</groupId>
 			<artifactId>htsjdk</artifactId>
-			<version>1.118</version>
+			<version>1.128</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -156,26 +146,6 @@
 								</resource>
 							</resources>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!--This plugin assembles the various elements together into a redistributable 
-				zip/tar.gz file -->
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<descriptors>
-						<descriptor>src/assembly/dep.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>

@@ -77,7 +77,7 @@ final class FileDownloader {
 			dest.getParentFile().mkdirs();
 		}
 
-		if (src.getProtocol().equals("ftp") && options.ftp.host == null)
+		if (src.getProtocol().equals("ftp") && options.ftp.host != null)
 			return copyURLToFileWithFTP(src, dest);
 		else
 			return copyURLToFileThroughURL(src, dest);
@@ -97,10 +97,9 @@ final class FileDownloader {
 			if (!ftp.isConnected())
 				LOGGER.error("Weird, not connected!");
 		} catch (SocketException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file.", e);
 		} catch (IOException e) {
-			throw new FileDownloadException("ERROR: problem connecting when downloading file: " + e.getMessage() + ": "
-					+ e.getCause());
+			throw new FileDownloadException("ERROR: problem connecting when downloading file.", e);
 		}
 		try {
 			ftp.setFileType(FTP.BINARY_FILE_TYPE); // binary file transfer
@@ -115,7 +114,7 @@ final class FileDownloader {
 			} catch (IOException e1) {
 				// swallow, nothing we can do about it
 			}
-			throw new FileDownloadException("ERROR: could not use binary transfer " + e.getMessage());
+			throw new FileDownloadException("ERROR: could not use binary transfer.", e);
 		}
 		InputStream in = null;
 		OutputStream out = null;
@@ -156,7 +155,7 @@ final class FileDownloader {
 			}
 			in.close();
 			out.close();
-			if (pb != null && pos != pb.max)
+			if (pb != null && pos != pb.getMax())
 				pb.print(fileSize);
 			// if (!ftp.completePendingCommand())
 			// throw new IOException("Could not finish download!");
@@ -173,7 +172,7 @@ final class FileDownloader {
 			} catch (IOException e1) {
 				// swallow, nothing we can do about it
 			}
-			throw new FileDownloadException("ERROR: problem downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem downloading file.", e);
 		} catch (IOException e) {
 			dest.delete();
 			try {
@@ -186,7 +185,7 @@ final class FileDownloader {
 			} catch (IOException e1) {
 				// swallow, nothing we can do about it
 			}
-			throw new FileDownloadException("ERROR: problem downloading file " + e.getMessage());
+			throw new FileDownloadException("ERROR: problem downloading file.", e);
 		} finally {
 			if (in != null) {
 				try {
@@ -252,7 +251,7 @@ final class FileDownloader {
 			}
 			in.close();
 			out.close();
-			if (pb != null && pos != pb.max)
+			if (pb != null && pos != pb.getMax())
 				pb.print(fileSize);
 		} catch (IOException e) {
 			throw new FileDownloadException("ERROR: Problem downloading file: " + e.getMessage());

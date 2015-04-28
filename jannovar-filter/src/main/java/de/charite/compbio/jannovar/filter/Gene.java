@@ -2,8 +2,9 @@ package de.charite.compbio.jannovar.filter;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
@@ -12,16 +13,32 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * Genes are identified by their name, {@link #equals} and {@link #hashCode} only consider the field {@link #name}!
  */
 class Gene {
-	public final String name;
-	public final ImmutableList<TranscriptModel> transcripts;
-	public final ReferenceDictionary refDict;
-	public final GenomeInterval region;
+	private final String name;
+	private final ImmutableList<TranscriptModel> transcripts;
+	private final ReferenceDictionary refDict;
+	private final GenomeInterval region;
 
 	public Gene(ReferenceDictionary refDict, String name, ImmutableList<TranscriptModel> transcripts) {
 		this.refDict = refDict;
 		this.name = name;
 		this.transcripts = transcripts;
 		this.region = buildGeneRegion();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ImmutableList<TranscriptModel> getTranscripts() {
+		return transcripts;
+	}
+
+	public ReferenceDictionary getRefDict() {
+		return refDict;
+	}
+
+	public GenomeInterval getRegion() {
+		return region;
 	}
 
 	/**
@@ -31,9 +48,9 @@ class Gene {
 		if (transcripts.isEmpty())
 			return null;
 
-		GenomeInterval region = transcripts.get(0).txRegion.withStrand('+');
+		GenomeInterval region = transcripts.get(0).getTXRegion().withStrand(Strand.FWD);
 		for (TranscriptModel tm : transcripts)
-			region = mergeRegions(region, tm.txRegion);
+			region = mergeRegions(region, tm.getTXRegion());
 		return region;
 	}
 
@@ -42,10 +59,10 @@ class Gene {
 	 *         <code>rhs</code>.
 	 */
 	private GenomeInterval mergeRegions(GenomeInterval lhs, GenomeInterval rhs) {
-		lhs = lhs.withStrand('+');
-		rhs = rhs.withStrand('+');
-		return new GenomeInterval(lhs.getGenomeBeginPos().refDict, '+', lhs.getGenomeBeginPos().chr, Math.min(
-				lhs.beginPos, rhs.beginPos), Math.max(lhs.endPos, rhs.endPos));
+		lhs = lhs.withStrand(Strand.FWD);
+		rhs = rhs.withStrand(Strand.FWD);
+		return new GenomeInterval(lhs.getGenomeBeginPos().getRefDict(), Strand.FWD, lhs.getGenomeBeginPos().getChr(), Math.min(
+lhs.getBeginPos(), rhs.getBeginPos()), Math.max(lhs.getEndPos(), rhs.getEndPos()));
 	}
 
 	@Override

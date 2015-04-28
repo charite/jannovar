@@ -14,11 +14,15 @@ public class FileDownloadException extends JannovarException {
 	private static final long serialVersionUID = 1L;
 
 	public FileDownloadException() {
-		super("Exception while downloading transcript annotation files");
+		super();
 	}
 
 	public FileDownloadException(String msg) {
 		super(msg);
+	}
+
+	public FileDownloadException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

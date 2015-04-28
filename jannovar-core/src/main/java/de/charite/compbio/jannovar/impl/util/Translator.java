@@ -18,6 +18,7 @@ public final class Translator {
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (three-letter code) */
 	private ImmutableMap<String, String> codon3 = null;
 	/** Map of IUPAC ambiguity codes. */
+	@SuppressWarnings("unused")
 	private ImmutableMap<String, String> iupac = null;
 	/** Map of short AA codes to long ones */
 	private ImmutableMap<String, String> shortToLong = null;

@@ -1,14 +1,102 @@
-**v0.13**
+# Jannovar Changelog
 
-*jannovar-htsjdk*
+## develop
+
+### jannovar-cli
+
+* Moving `JannovarOptions` into jannovar-cli.
+* Displaying online help on unknown Jannovar command.
+* Fixing `NullPointerException` bug for local paths.
+* Switching to official HTSJDK release and version 0.128.
+* Writing out annotation about Jannovar call and version into the VCF file.
+* Added option `--no-3-prime-shifting` to disable shifting towards the
+  3' end of the transcripts.
+* Added option `--no-escape-ann-field` to disable escaping of the `ANN`
+  `INFO` field.
+* Variants in `ANN` field are now annotated with proper Sequence Ontology
+  terms.
+
+### jannovar-htsjdk
+
+* Modified `VariantContextWriterConstructionHelper` to allow explicit
+  disabling of index creation.
+* Modified `VariantContextAnnotator` for adjustment to the new Exomiser.
+* Switching to official HTSJDK release and version 0.128.
+* Changing `VariantContextWriterConstructionHelper` to allow writing out
+  of additional header lines.
+* Added option to `VariantContextAnnotator#Options` for disabling
+  3' shifting.
+* Modified `VariantContextAnnotator` allowing to disable escaping of the
+  `ANN` `INFO` field.
+
+### jannovar-core
+
+* Moving `JannovarOptions` into jannovar-cli.
+* Renaming `ACompatibilityChecker` and `ICompatibilityChecker`.
+* Adding `GenomePosition.differenceTo(GenomeInterval)`.
+* Renaming package `de.charite.compbio.jannovar.io` to `de.charite.compbio.jannovar.data`
+* Renaming `AnnotationLocation.toHGVSString` to `.toHGVSChunk`.
+* Adding `Pedigree.subsetOfMembers`
+* Renaming `GenomeChange` to `GenomeVariant`, same with types having the same
+  prefix.
+* Introducing `DatasourceOptions` for configuring data download.
+* Removing support for using `"-"` as REF or ALT value.
+* Making previous `public final` members `private final` (or
+ `protected final`) and adding getters for read-only access to them.
+* Removing position type member of `CDSInterval`.
+* Using type `Strand` instead of `'+'` and `'-'`, requires database rebuild.
+* Adding enum `Strand` with `PLUS` and `MINUS` values.
+* Adding `VariantEffect.isOffExome` and updating
+  `VariantEffect.isOffTranscript`.
+* Removing `genomeRegion` member from `GenotypeList`. Also, adjusting the
+  pedigree compatibility checkers for this, the check for being on the X
+  chromosome has to be performed outside the checker now.
+* `VariantList.getHighestImpactEffect` now returns
+  `VariantEffect#SEQUENCE_VARIANT` if no annotation can be found.
+* `VariantList` implements the `List<Annotation>` interface now and the
+  `entries` member has become private.
+* Adding `VariantEffect#SEQUENCE_VARIANT` for variants with unknown
+  effects.
+* `GenomeChange.toString()` now always converts to forward strand.
+* Fixing bug in `Annotation` and enforcing forward strand `GenomeChange`
+  instances.
+* Updates to the manual.
+* `JannovarData` now also stores a mapping from transcript accession to
+  `TranscriptModel` and from gene symbol to `TranscriptModel`.
+* Adding functionality for conversion from CDS to transcript and genome
+  position and tests.
+* Adding `AnnotationBuilderOption` object that allows disabling of 3'
+  shifting towards the transcript.
+* Adding `JannovarOptions#escapeAnnField`.
+* Renaming `VariantType` to `VariantEffect`
+* Changing `VariantType` to use proper Sequence Ontology terms. Legacy
+  names can be obtained through `VariantType#getLegacyName`.
+* Spliting `CompatibilityCheckerXRecessive` into `CompatibilityCheckerXRecessiveCompoundHet` and `CompatibilityCheckerXRecessiveHomozygous`. Now all inheritance checkers ar ready to use (AR,XR,AD,XD)
+* move all pedigree compatibility checkers from `de.charite.compbio.jannovar.pedigree` to `de.charite.compbio.jannovar.pedigree.compatibilitychecker` and divide it into ar,xr,ad,xd.
+* generate interface `ICompatibilityChecker` for pedigree compatibility checkers.
+* Combine compatibility fields and methods in an abstract class`ACompatibilityChecker` to unify methods, builders, and fields.
+
+### jannovar-filter
+
+* Splitting into `jped-cli` and `jannovar-filter`
+* Changing public final members to accessors. 
+* `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
+
+### jannovar-htsjdk
+
+* Changing public final members to accessors. 
+
+## v0.12
+
+### jannovar-htsjdk
 
 * Started bridge module between Jannovar and HTSJDK.
 
-*jannovar-filter*
+### jannovar-filter
 
 * Started tool for mode of inheritance--based filters.
 
-*jannovar-cli*
+### jannovar-cli
 
 * Splitting out bridge module between jannovar-core and HTSJDK to
   jannovar-htsjdk.
@@ -20,7 +108,7 @@
 * Adding `-v` and `-vv` command line options.
 * Fixing problems with block substitution (delins) case (#87).
 
-*jannovar-core*
+### jannovar-core
 
 * Adding initial support for the transcript support level feature of the new VCF
   annotation standard (only in very recent ENSEMBL releases, apparently).
@@ -47,4 +135,4 @@
 * `GenomePosition` and `GenomeInterval` use zero-based coordinates internally
   now.
 
-**v0.11**
+## v0.11

@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 public class TranscriptModelBuilder {
 
 	/** The explicit strand of the target transcript. */
-	private char strand = '?';
+	private Strand strand = Strand.FWD;
 
 	/** {@link TranscriptInfo#accession} of next {@link TranscriptInfo} to build. */
 	private String accession = null;
@@ -58,7 +58,7 @@ public class TranscriptModelBuilder {
 	 * Reset the builder into the state after initialization.
 	 */
 	public void reset() {
-		strand = '?';
+		strand = Strand.FWD;
 		accession = null;
 		geneSymbol = null;
 		txRegion = null;
@@ -76,7 +76,7 @@ public class TranscriptModelBuilder {
 		// Build list of immutable exons in the correct order.
 		ImmutableList.Builder<GenomeInterval> builder = new ImmutableList.Builder<GenomeInterval>();
 		if (exonRegions.size() > 0) {
-			if (strand == exonRegions.get(0).strand) {
+			if (strand == exonRegions.get(0).getStrand()) {
 				for (int i = 0; i < exonRegions.size(); ++i)
 					builder.add(exonRegions.get(i));
 			} else {
@@ -93,7 +93,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return the strand
 	 */
-	public char getStrand() {
+	public Strand getStrand() {
 		return strand;
 	}
 
@@ -101,7 +101,7 @@ public class TranscriptModelBuilder {
 	 * @param strand
 	 *            the strand to set
 	 */
-	public void setStrand(char strand) {
+	public void setStrand(Strand strand) {
 		this.strand = strand;
 	}
 
@@ -138,7 +138,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return the txRegion
 	 */
-	public GenomeInterval getTxRegion() {
+	public GenomeInterval getTXRegion() {
 		return txRegion;
 	}
 
@@ -146,14 +146,14 @@ public class TranscriptModelBuilder {
 	 * @param txRegion
 	 *            the txRegion to set
 	 */
-	public void setTxRegion(GenomeInterval txRegion) {
+	public void setTXRegion(GenomeInterval txRegion) {
 		this.txRegion = txRegion;
 	}
 
 	/**
 	 * @return the cdsRegion
 	 */
-	public GenomeInterval getCdsRegion() {
+	public GenomeInterval getCDSRegion() {
 		return cdsRegion;
 	}
 
@@ -161,7 +161,7 @@ public class TranscriptModelBuilder {
 	 * @param cdsRegion
 	 *            the cdsRegion to set
 	 */
-	public void setCdsRegion(GenomeInterval cdsRegion) {
+	public void setCDSRegion(GenomeInterval cdsRegion) {
 		this.cdsRegion = cdsRegion;
 	}
 

@@ -5,11 +5,10 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): Make AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
@@ -26,21 +25,21 @@ public final class StructuralVariantAnnotationBuilder {
 	/** the transcript to build the annotation for */
 	private final TranscriptModel transcript;
 	/** the genome change to build the annotation for */
-	private final GenomeChange change;
+	private final GenomeVariant change;
 
 	/**
-	 * Initialize the builder for the structural variant {@link GenomeChange} in the given {@link TranscriptInfo}.
+	 * Initialize the builder for the structural variant {@link GenomeVariant} in the given {@link TranscriptInfo}.
 	 *
 	 * @param transcript
 	 *            {@link TranscriptInfo} for the transcript to compute the affection for, use <code>null</code> for
 	 *            intergenic variants
 	 * @param change
-	 *            {@link GenomeChange} to compute the annotation for, must describe a structural variant affecting
+	 *            {@link GenomeVariant} to compute the annotation for, must describe a structural variant affecting
 	 *            <code>transcript</code>
 	 */
-	public StructuralVariantAnnotationBuilder(TranscriptModel transcript, GenomeChange change) {
+	public StructuralVariantAnnotationBuilder(TranscriptModel transcript, GenomeVariant change) {
 		this.transcript = transcript;
-		this.change = change.withPositionType(PositionType.ZERO_BASED);
+		this.change = change;
 	}
 
 	/**
@@ -50,10 +49,10 @@ public final class StructuralVariantAnnotationBuilder {
 	 */
 	public Annotation build() {
 		// Obtain shortcuts.
-		GenomePosition position = change.pos;
-		final int beginPos = position.pos;
-		final String ref = change.ref;
-		final String alt = change.alt;
+		GenomePosition position = change.getGenomePos();
+		final int beginPos = position.getPos();
+		final String ref = change.getRef();
+		final String alt = change.getAlt();
 
 		// Build reverse-complement of alt string.
 		StringBuilder altRC = new StringBuilder(alt).reverse();
@@ -74,41 +73,46 @@ public final class StructuralVariantAnnotationBuilder {
 
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
-				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
-						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
+				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
+						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
+								+ ref.length(), "inv"), null);
 			} else {
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.SV_INVERSION), annoLoc,
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
 						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
-						StringUtil.concatenate("g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
-								alt.substring(alt.length() - 2, alt.length())), null);
+				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
+						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos, "_",
+								beginPos + 1, "ins", alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())),
+								null);
 			} else {
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.SV_INSERTION), annoLoc,
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
 						StringUtil.concatenate("g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
 								alt.substring(alt.length() - 2, alt.length())), null);
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
-						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
+				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
+						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
+								+ ref.length(), "del"), null);
 			} else {
-				return new Annotation(null, change, ImmutableList.of(VariantType.SV_DELETION), annoLoc,
+				return new Annotation(this.transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT),
+						annoLoc,
 						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
 			}
 		} else { // SV substitution
 			// if tm is null it is intergenic
 			if (transcript == null) {
-				return new Annotation(null, change, ImmutableList.of(VariantType.INTERGENIC), null,
-						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
-								alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), null);
+				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
+						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
+								+ ref.length(), "delins", alt.substring(0, 2), "..",
+								alt.substring(alt.length() - 2, alt.length())), null);
 			} else {
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.SV_SUBSTITUTION), annoLoc,
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
 						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
 								alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), null);
 			}

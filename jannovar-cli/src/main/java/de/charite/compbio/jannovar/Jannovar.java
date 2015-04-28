@@ -1,8 +1,6 @@
 package de.charite.compbio.jannovar;
 
 /** Command line functions from apache */
-import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
@@ -10,7 +8,6 @@ import de.charite.compbio.jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import de.charite.compbio.jannovar.cmd.db_list.DatabaseListCommand;
 import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
@@ -78,18 +75,22 @@ public final class Jannovar {
 		// Create the corresponding command.
 		JannovarCommand cmd = null;
 		try {
-			if (argv[0].equals("download"))
+			if (argv[0].equals("download")) {
 				cmd = new DownloadCommand(argv);
-			else if (argv[0].equals("db-list"))
+			} else if (argv[0].equals("db-list")) {
 				cmd = new DatabaseListCommand(argv);
-			else if (argv[0].equals("annotate"))
+			} else if (argv[0].equals("annotate")) {
 				cmd = new AnnotateVCFCommand(argv);
-			else if (argv[0].equals("annotate-pos"))
+			} else if (argv[0].equals("annotate-pos")) {
 				cmd = new AnnotatePositionCommand(argv);
-			else
+			} else {
 				System.err.println("unrecognized command " + argv[0]);
+				printTopLevelHelp();
+			}
 		} catch (CommandLineParsingException e) {
-			System.err.println("problem with parsing command line options: " + e.getMessage());
+			System.err.println("ERROR: problem with parsing command line options: " + e.getMessage());
+			System.err.println("");
+			System.err.println("Use --help for obtaining usage instructions.");
 		} catch (HelpRequestedException e) {
 			return; // no error, user wanted help
 		}
@@ -112,7 +113,7 @@ public final class Jannovar {
 	 */
 	private static void printTopLevelHelp() {
 		System.err.println("Program: de.charite.compbio.jannovar (functional annotation of VCF files)");
-		System.err.println("Version: 0.10");
+		System.err.println("Version: " + JannovarOptions.JANNOVAR_VERSION);
 		System.err.println("Contact: Peter N Robinson <peter.robinson@charite.de>");
 		System.err.println("");
 		System.err.println("Usage: java -jar de.charite.compbio.jannovar.jar <command> [options]");
@@ -124,8 +125,10 @@ public final class Jannovar {
 		System.err.println("");
 		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download hg19/ucsc");
 		System.err.println("         java -jar de.charite.compbio.jannovar.jar db-list");
-		System.err.println("         java -jar de.charite.compbio.jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
-		System.err.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
+		System.err
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
+		System.err
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
 		System.err.println("");
 	}
 

@@ -21,14 +21,13 @@ public class CompatibilityCheckerXDominantSingletonFemaleTest extends Compatibil
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(1, pedigree.members.size());
+		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
 	@Test
 	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXD(REF).run());
 		Assert.assertFalse(buildCheckerXD(UKN).run());
-		//FIXME Het is always pathogenic for XD in female
 		Assert.assertFalse(buildCheckerXD(ALT).run());
 	}
 

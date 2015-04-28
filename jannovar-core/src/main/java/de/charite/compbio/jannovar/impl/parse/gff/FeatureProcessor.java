@@ -1,13 +1,12 @@
 package de.charite.compbio.jannovar.impl.parse.gff;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 
 /**
  * Processes {@link Feature} objects for {@link TranscriptInfoFactory}.
@@ -62,7 +61,7 @@ public final class FeatureProcessor {
 	 */
 	public void addFeature(Feature feature) throws InvalidAttributeException, FeatureFormatException {
 		// System.out.println(feature.toLine());
-		if (refDict.contigID.get(feature.getSequenceID()) == null)
+		if (refDict.getContigNameToID().get(feature.getSequenceID()) == null)
 			return;
 
 		switch (feature.getType()) {
@@ -111,7 +110,7 @@ public final class FeatureProcessor {
 		curRna.end = feature.getEnd();
 		curRna.id = curRnaID;
 		curRna.name = feature.getAttributes().get("Name");
-		curRna.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curRna.chromosom = refDict.getContigNameToID().get(feature.getSequenceID()).byteValue();
 		if (curGene.chromosom != curRna.chromosom) {
 			// throw new
 			// InvalidAttributException("The chromosome/sequenceID of the gene and transcript do not match: "+curGene.chromosom+
@@ -137,7 +136,7 @@ public final class FeatureProcessor {
 	 */
 	private void processSubregion(Feature feature) {
 		int index;
-		if (gffVersion.version == 3) {
+		if (gffVersion.getVersion() == 3) {
 			curID = feature.getAttributes().get("ID");
 			curRnaID = feature.getAttributes().get("Parent");
 			curGeneID = rna2gene.get(curRnaID);
@@ -158,14 +157,14 @@ public final class FeatureProcessor {
 		// System.out.println(curGeneID);
 		// if the gene is not known yet --> add
 		if (!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID, curGeneName, refDict.contigID.get(feature.getSequenceID())
+			genes.put(curGeneID, new Gene(curGeneID, curGeneName, refDict.getContigNameToID().get(feature.getSequenceID())
 					.byteValue(), feature.getStrand()));
 		// get Gene
 		curGene = genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, refDict.contigID.get(feature.getSequenceID())
+			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, refDict.getContigNameToID().get(feature.getSequenceID())
 					.byteValue(), feature.getStrand()));
 		}
 		// get RNA
@@ -176,7 +175,7 @@ public final class FeatureProcessor {
 
 		// now finally process the Subregion
 		curGFF = new GFFStruct();
-		curGFF.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curGFF.chromosom = refDict.getContigNameToID().get(feature.getSequenceID()).byteValue();
 		curGFF.start = feature.getStart();
 		curGFF.end = feature.getEnd();
 		curGFF.strand = feature.getStrand();
@@ -229,7 +228,7 @@ public final class FeatureProcessor {
 		curGene.strand = feature.getStrand();
 		curGene.start = feature.getStart();
 		curGene.end = feature.getEnd();
-		curGene.chromosom = refDict.contigID.get(feature.getSequenceID()).byteValue();
+		curGene.chromosom = refDict.getContigNameToID().get(feature.getSequenceID()).byteValue();
 		// extract the Genesymbol
 		if (feature.getAttributes().get("Name") != null)
 			curGene.name = feature.getAttributes().get("Name");
@@ -264,7 +263,6 @@ public final class FeatureProcessor {
 		 * end positions are the same. According to the used {@link Collator}, the exon is smaller/bigger if the
 		 * chromosom differs.
 		 */
-		@Override
 		public int compareTo(GFFStruct o) {
 			if (chromosom == o.chromosom) {
 
@@ -355,7 +353,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return transcription start index (1-based, including)
 		 */
-		int getTxStart() {
+		int getTXStart() {
 			if (start == Integer.MAX_VALUE)
 				for (GFFStruct exon : exons)
 					if (start > exon.start)
@@ -368,7 +366,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return transcription end index (1-based, including)
 		 */
-		int getTxEnd() {
+		int getTXEnd() {
 			if (end == Integer.MIN_VALUE)
 				for (GFFStruct exon : exons)
 					if (end < exon.end)
@@ -382,7 +380,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return translation start index (1-based, including)
 		 */
-		int getCdsStart() {
+		int getCDSStart() {
 			if (cdsStart == Integer.MAX_VALUE)
 				for (GFFStruct cds : cdss)
 					if (cdsStart > cds.start) {
@@ -394,7 +392,7 @@ public final class FeatureProcessor {
 						}
 					}
 			if (cdsStart == Integer.MAX_VALUE)
-				cdsStart = getTxStart() + 1;
+				cdsStart = getTXStart() + 1;
 			return cdsStart;
 		}
 
@@ -404,7 +402,7 @@ public final class FeatureProcessor {
 		 *
 		 * @return translation end index (1-based, including)
 		 */
-		int getCdsEnd() {
+		int getCDSEnd() {
 			if (cdsEnd == Integer.MIN_VALUE)
 				for (GFFStruct cds : cdss)
 					if (cdsEnd < cds.end) {
@@ -416,7 +414,7 @@ public final class FeatureProcessor {
 						}
 					}
 			if (cdsEnd == Integer.MIN_VALUE)
-				cdsEnd = getTxStart();
+				cdsEnd = getTXStart();
 			return cdsEnd;
 		}
 	}

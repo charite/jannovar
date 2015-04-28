@@ -36,10 +36,10 @@ public class PedigreeQueryDecoratorTest {
 
 	@Test
 	public void testIsParentOfAffected() {
-		Assert.assertTrue(decorator.isParentOfAffected(pedigree.members.get(0)));
-		Assert.assertTrue(decorator.isParentOfAffected(pedigree.members.get(1)));
-		Assert.assertFalse(decorator.isParentOfAffected(pedigree.members.get(2)));
-		Assert.assertFalse(decorator.isParentOfAffected(pedigree.members.get(3)));
+		Assert.assertTrue(decorator.isParentOfAffected(pedigree.getMembers().get(0)));
+		Assert.assertTrue(decorator.isParentOfAffected(pedigree.getMembers().get(1)));
+		Assert.assertFalse(decorator.isParentOfAffected(pedigree.getMembers().get(2)));
+		Assert.assertFalse(decorator.isParentOfAffected(pedigree.getMembers().get(3)));
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class PedigreeQueryDecoratorTest {
 
 	@Test
 	public void testGetParents() {
-		Assert.assertEquals(ImmutableList.of(pedigree.members.get(0), pedigree.members.get(1)), decorator.getParents());
+		Assert.assertEquals(ImmutableList.of(pedigree.getMembers().get(0), pedigree.getMembers().get(1)), decorator.getParents());
 	}
 
 	@Test

@@ -2,10 +2,11 @@ package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -19,7 +20,7 @@ import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 class VCFAnnotationData {
 
 	/** predicted effects */
-	public ImmutableSortedSet<VariantType> effects = ImmutableSortedSet.<VariantType> of();
+	public ImmutableSortedSet<VariantEffect> effects = ImmutableSortedSet.<VariantEffect> of();
 	/** predicted impact */
 	public PutativeImpact impact = null;
 	/** symbol of affected gene */
@@ -56,47 +57,47 @@ class VCFAnnotationData {
 	public void setAnnoLoc(AnnotationLocation annoLoc) {
 		if (annoLoc == null)
 			return;
-		if (annoLoc.rankType != RankType.UNDEFINED) {
-			this.rank = annoLoc.rank;
-			this.totalRank = annoLoc.totalRank;
+		if (annoLoc.getRankType() != RankType.UNDEFINED) {
+			this.rank = annoLoc.getRank();
+			this.totalRank = annoLoc.getTotalRank();
 		}
 
-		final TranscriptModel transcript = annoLoc.transcript;
+		final TranscriptModel transcript = annoLoc.getTranscript();
 		final TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		final TranscriptPosition txPos;
-		if (annoLoc != null && annoLoc.txLocation.length() == 0)
-			txPos = annoLoc.txLocation.getBeginPos().shifted(-1); // change length == 0, insertion
+		if (annoLoc != null && annoLoc.getTXLocation().length() == 0)
+			txPos = annoLoc.getTXLocation().getTranscriptBeginPos().shifted(-1); // change length == 0, insertion
 		else
-			txPos = annoLoc.txLocation.getBeginPos(); // all other variants
-		this.txPos = txPos.pos;
-		this.txLength = annoLoc.transcript.txRegion.length();
+			txPos = annoLoc.getTXLocation().getTranscriptBeginPos(); // all other variants
+		this.txPos = txPos.getPos();
+		this.txLength = annoLoc.getTranscript().getTXRegion().length();
 
 		try {
-			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).pos;
+			this.cdsPos = projector.projectGenomeToCDSPosition(projector.transcriptToGenomePos(txPos)).getPos();
 			this.cdsLength = transcript.cdsTranscriptLength();
 		} catch (ProjectionException e) {
 			// e.printStackTrace();
-			throw new Error("Bug: problem with projection!: " + e.getMessage());
+			throw new Error("Bug: problem with projection!", e);
 		}
 	}
 
-	public void setTranscriptAndChange(TranscriptModel tm, GenomeChange change) {
+	public void setTranscriptAndChange(TranscriptModel tm, GenomeVariant change) {
 		if (tm == null)
 			return;
 		featureType = "transcript";
-		featureID = tm.accession;
-		geneSymbol = tm.geneSymbol;
-		geneID = tm.geneID;
+		featureID = tm.getAccession();
+		geneSymbol = tm.getGeneSymbol();
+		geneID = tm.getGeneID();
 		featureBioType = tm.isCoding() ? "Coding" : "Noncoding";
 
-		if (effects.contains(VariantType.INTERGENIC) || effects.contains(VariantType.UPSTREAM)
-				|| effects.contains(VariantType.DOWNSTREAM)) {
-			if (change.getGenomeInterval().isLeftOf(tm.txRegion.getGenomeBeginPos()))
-				this.distance = tm.txRegion.getGenomeBeginPos().differenceTo(
+		if (effects.contains(VariantEffect.INTERGENIC_VARIANT) || effects.contains(VariantEffect.UPSTREAM_GENE_VARIANT)
+				|| effects.contains(VariantEffect.DOWNSTREAM_GENE_VARIANT)) {
+			if (change.getGenomeInterval().isLeftOf(tm.getTXRegion().getGenomeBeginPos()))
+				this.distance = tm.getTXRegion().getGenomeBeginPos().differenceTo(
 						change.getGenomeInterval().getGenomeEndPos());
 			else
 				this.distance = change.getGenomeInterval().getGenomeBeginPos()
-				.differenceTo(tm.txRegion.getGenomeEndPos());
+				.differenceTo(tm.getTXRegion().getGenomeEndPos());
 		}
 	}
 
@@ -107,12 +108,13 @@ class VCFAnnotationData {
 	 */
 	public Object[] toArray(String allele) {
 		final Joiner joiner = Joiner.on('&').useForNull("");
-		return new Object[] { allele, joiner.join(effects), impact, geneSymbol, geneID, featureType, featureID,
+		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantEffect.TO_SO_TERM));
+		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
 				featureBioType, getRankString(), ntHGVSDescription, aaHGVSDescription, getTXPosString(),
-				getCdsPosString(), getAAPosString(), getDistanceString(), joiner.join(messages) };
+				getCDSPosString(), getAminoAcidPosString(), getDistanceString(), joiner.join(messages) };
 	}
 
-	private String toUnescapedString(String allele) {
+	public String toUnescapedString(String allele) {
 		return Joiner.on('|').useForNull("").join(toArray(allele));
 	}
 
@@ -145,7 +147,7 @@ class VCFAnnotationData {
 		return Joiner.on('/').join(txPos + 1, txLength);
 	}
 
-	private String getCdsPosString() {
+	private String getCDSPosString() {
 		if (cdsPos == -1)
 			return null;
 		if (!featureBioType.equals("Coding"))
@@ -153,7 +155,7 @@ class VCFAnnotationData {
 		return Joiner.on('/').join(cdsPos + 1, cdsLength);
 	}
 
-	private String getAAPosString() {
+	private String getAminoAcidPosString() {
 		if (cdsPos == -1)
 			return null;
 		if (!featureBioType.equals("Coding"))

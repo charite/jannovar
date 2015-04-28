@@ -9,14 +9,12 @@ import de.charite.compbio.jannovar.impl.intervals.IntervalEndExtractor;
  */
 public class TranscriptIntervalEndExtractor implements IntervalEndExtractor<TranscriptModel> {
 
-	@Override
 	public int getBegin(TranscriptModel transcript) {
-		return transcript.txRegion.withStrand('+').beginPos;
+		return transcript.getTXRegion().withStrand(Strand.FWD).getBeginPos();
 	}
 
-	@Override
 	public int getEnd(TranscriptModel transcript) {
-		return transcript.txRegion.withStrand('+').endPos;
+		return transcript.getTXRegion().withStrand(Strand.FWD).getEndPos();
 	}
 
 }

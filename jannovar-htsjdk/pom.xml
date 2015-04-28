@@ -5,13 +5,14 @@
 	<artifactId>jannovar-htsjdk</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-htsjdk</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jannovar-htsjdk is the module for bridging between Jannovar and HTSJDK</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.12</version>
+                <version>0.13-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -41,9 +42,9 @@
 			<version>18.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.seqdoop</groupId>
+			<groupId>com.github.samtools</groupId>
 			<artifactId>htsjdk</artifactId>
-			<version>1.118</version>
+			<version>1.128</version>
 		</dependency>
 		<dependency>
 			<groupId>de.charite.compbio</groupId>

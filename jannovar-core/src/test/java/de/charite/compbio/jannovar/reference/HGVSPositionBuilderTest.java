@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
@@ -65,111 +65,111 @@ public class HGVSPositionBuilderTest {
 	public void testForwardUpstreamOfTranscription() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("-204",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640061, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640061, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-225",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640040, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640040, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardDownstreamOfTranscription() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("*69",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6649340, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6649340, PositionType.ZERO_BASED)));
 		Assert.assertEquals("*88",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6649359, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6649359, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardUpstreamOfCDS() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("-1",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640668, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640668, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-21",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640648, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640648, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardDownstreamOfCDS() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("*1",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6649272, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6649272, PositionType.ZERO_BASED)));
 		Assert.assertEquals("*8",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6649279, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6649279, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardCDSExon() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("381",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6641049, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6641049, PositionType.ZERO_BASED)));
 		Assert.assertEquals("360",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6641028, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6641028, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardCDSIntron() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("691-217",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6641900, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6641900, PositionType.ZERO_BASED)));
 		Assert.assertEquals("690+142",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6641500, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6641500, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardNonCDSExon() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("-39",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640630, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640630, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-14",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640655, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640655, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-14",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640655, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640655, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-115",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640150, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640150, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testForwardNonCDSIntron() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
 		Assert.assertEquals("-69-20",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640580, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640580, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-70+5",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 6640200, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 6640200, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testReverseUpstreamOfTranscription() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoReverse);
 		Assert.assertEquals("-562",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 23696359, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 23696359, PositionType.ZERO_BASED)));
 		Assert.assertEquals("-582",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 23696379, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 23696379, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testReverseDownstreamOfTranscription() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoReverse);
 		Assert.assertEquals("*2522",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 23685939, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 23685939, PositionType.ZERO_BASED)));
 		Assert.assertEquals("*2542",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 23685919, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 23685919, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testNonCodingForwardExon() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.ncInfoForward);
 		Assert.assertEquals("1",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 11873, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 11873, PositionType.ZERO_BASED)));
 		Assert.assertEquals("355",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 12612, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 12612, PositionType.ZERO_BASED)));
 	}
 
 	@Test
 	public void testNonCodingForwardIntron() {
 		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.ncInfoForward);
 		Assert.assertEquals("354+1",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 12227, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 12227, PositionType.ZERO_BASED)));
 		Assert.assertEquals("355-1",
-				builderForward.getCDNAPosStr(new GenomePosition(refDict, '+', 1, 12611, PositionType.ZERO_BASED)));
+				builderForward.getCDNAPosStr(new GenomePosition(refDict, Strand.FWD, 1, 12611, PositionType.ZERO_BASED)));
 	}
 }

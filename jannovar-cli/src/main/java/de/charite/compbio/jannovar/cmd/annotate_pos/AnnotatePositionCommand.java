@@ -12,18 +12,21 @@ import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Allows the annotation of a single position.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 
@@ -48,16 +51,16 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		System.err.println("Deserializing transcripts...");
 		deserializeTranscriptDefinitionFile();
 
-		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap);
+		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
 		System.out.println("#change\teffect\thgvs_annotation");
 		for (String chromosomalChange : options.chromosomalChanges) {
 			// Parse the chromosomal change string into a GenomeChange object.
-			final GenomeChange genomeChange = parseGenomeChange(chromosomalChange);
+			final GenomeVariant genomeChange = parseGenomeChange(chromosomalChange);
 
 			// Construct VariantAnnotator for building the variant annotations.
 			AnnotationList annoList = null;
 			try {
-				annotator.buildAnnotationList(genomeChange);
+				annoList = annotator.buildAnnotationList(genomeChange);
 			} catch (Exception e) {
 				System.err.println(String.format("[ERROR] Could not annotate variant %s!", chromosomalChange));
 				continue;
@@ -78,32 +81,32 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		}
 	}
 
-	private GenomeChange parseGenomeChange(String changeStr) throws JannovarException {
+	private GenomeVariant parseGenomeChange(String changeStr) throws JannovarException {
 		Pattern pat = Pattern.compile("(chr[0-9MXY]+):([0-9]+)([ACGTN]*)>([ACGTN]*)");
 		Matcher match = pat.matcher(changeStr);
 
-		if (!match.matches() | match.groupCount() != 4) {
+		if (!match.matches()) {
 			System.err.println("[ERROR] Input string for the chromosomal change " + changeStr
 					+ " does not fit the regular expression ... :(");
 			System.exit(3);
 		}
 
-		int chr = refDict.contigID.get(match.group(1));
+		int chr = refDict.getContigNameToID().get(match.group(1));
 		int pos = Integer.parseInt(match.group(2));
 		String ref = match.group(3);
 		String alt = match.group(4);
 
-		return new GenomeChange(new GenomePosition(refDict, '+', chr, pos, PositionType.ONE_BASED), ref, alt);
+		return new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 	@Override
 	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+			HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);
 		} catch (ParseException e) {
-			throw new CommandLineParsingException(e.getMessage());
+			throw new CommandLineParsingException("Problem with command line parsing.", e);
 		}
 	}
 

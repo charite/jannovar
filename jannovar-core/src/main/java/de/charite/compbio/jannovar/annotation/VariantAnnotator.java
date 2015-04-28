@@ -5,14 +5,16 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderDispatcher;
+import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.annotation.builders.StructuralVariantAnnotationBuilder;
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
-import de.charite.compbio.jannovar.io.Chromosome;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): We should directly pass in a JannovarData object after adding the interval trees to it. Then, this should be fine.
@@ -28,6 +30,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class VariantAnnotator {
+
+	/** configuration for annotation builders */
+	final private AnnotationBuilderOptions options;
 
 	/** {@link ReferenceDictionary} to use for genome information. */
 	final private ReferenceDictionary refDict;
@@ -52,10 +57,14 @@ public final class VariantAnnotator {
 	 *            {@link ReferenceDictionary} with information about the genome.
 	 * @param chromosomeMap
 	 *            chromosome map to use for the annotator.
+	 * @param options
+	 *            configuration to use for building the annotations
 	 */
-	public VariantAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap) {
+	public VariantAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap,
+			AnnotationBuilderOptions options) {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
+		this.options = options;
 	}
 
 	// TODO(holtgrem): Remove this?
@@ -84,8 +93,8 @@ public final class VariantAnnotator {
 			throw new AnnotationException(String.format("Could not identify chromosome \"%d\"", chr));
 
 		// Build the GenomeChange to build annotation for.
-		GenomePosition pos = new GenomePosition(refDict, '+', chr, position, posType);
-		GenomeChange change = new GenomeChange(pos, ref, alt);
+		GenomePosition pos = new GenomePosition(refDict, Strand.FWD, chr, position, posType);
+		GenomeVariant change = new GenomeVariant(pos, ref, alt);
 
 		return buildAnnotationList(change);
 	}
@@ -97,36 +106,40 @@ public final class VariantAnnotator {
 	 * coordinates on that chromosome.
 	 *
 	 * @param change
-	 *            the {@link GenomeChange} to annotate
+	 *            the {@link GenomeVariant} to annotate
 	 * @return {@link AnnotationList} for the genome change
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
-		change = change.withPositionType(PositionType.ZERO_BASED);
-		final GenomeInterval changeInterval = change.getGenomeInterval();
+	public AnnotationList buildAnnotationList(GenomeVariant change) throws AnnotationException {
+		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
+		// described as shortcuts in the VCF file. We cannot annotate these yet.
+		if (change.isSymbolic())
+			return AnnotationList.buildEmptyList(change);
 
-		/* The following command "resets" the annovarFactory object */
+		// Get genomic change interval and reset the factory.
+		final GenomeInterval changeInterval = change.getGenomeInterval();
 		this.annovarFactory.clearAnnotationLists();
 
 		// Get the TranscriptModel objects that overlap with changeInterval.
 		final Chromosome chr = chromosomeMap.get(change.getChr());
 		IntervalArray<TranscriptModel>.QueryResult qr;
 		if (changeInterval.length() == 0)
-			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
+			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.getBeginPos());
 		else
-			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
-		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.entries);
+			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.getBeginPos(),
+					changeInterval.getEndPos());
+		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.getEntries());
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations
 		// and return the result.
-		boolean isStructuralVariant = (change.ref.length() >= 1000 || change.alt.length() >= 1000);
+		boolean isStructuralVariant = (change.getRef().length() >= 1000 || change.getAlt().length() >= 1000);
 		if (candidateTranscripts.isEmpty()) {
 			if (isStructuralVariant)
 				buildSVAnnotation(change, null);
 			else
-				buildNonSVAnnotation(change, qr.left, qr.right);
-			return annovarFactory.getAnnotationList();
+				buildNonSVAnnotation(change, qr.getLeft(), qr.getRight());
+			return annovarFactory.getAnnotationList(change);
 		}
 
 		// If we reach here, then there is at least one transcript that overlaps with the query. Iterate over these
@@ -137,22 +150,22 @@ public final class VariantAnnotator {
 			else
 				buildNonSVAnnotation(change, tm);
 
-		return annovarFactory.getAnnotationList();
+		return annovarFactory.getAnnotationList(change);
 	}
 
-	private void buildSVAnnotation(GenomeChange change, TranscriptModel transcript) throws AnnotationException {
+	private void buildSVAnnotation(GenomeVariant change, TranscriptModel transcript) throws AnnotationException {
 		annovarFactory.addStructuralAnnotation(new StructuralVariantAnnotationBuilder(transcript, change).build());
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
+	private void buildNonSVAnnotation(GenomeVariant change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
 			throws AnnotationException {
 		buildNonSVAnnotation(change, leftNeighbor);
 		buildNonSVAnnotation(change, rightNeighbor);
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel transcript) throws InvalidGenomeChange {
+	private void buildNonSVAnnotation(GenomeVariant change, TranscriptModel transcript) throws InvalidGenomeChange {
 		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
-			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change).build());
+			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change, options).build());
 	}
 
 }

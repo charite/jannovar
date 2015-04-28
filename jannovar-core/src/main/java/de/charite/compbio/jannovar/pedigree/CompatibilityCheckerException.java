@@ -12,8 +12,16 @@ public class CompatibilityCheckerException extends JannovarException {
 
 	public static final long serialVersionUID = 1L;
 
+	public CompatibilityCheckerException() {
+		super();
+	}
+
 	public CompatibilityCheckerException(String msg) {
 		super(msg);
+	}
+
+	public CompatibilityCheckerException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

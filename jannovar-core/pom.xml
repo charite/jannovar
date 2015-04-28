@@ -5,13 +5,14 @@
 	<artifactId>jannovar-core</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-core</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jannovar-core is a library for the functional annotation of genomic variants</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.12</version>
+		<version>0.13-SNAPSHOT</version>
 	</parent>
 
 	<properties>

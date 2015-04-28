@@ -7,10 +7,11 @@ import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.datasource.DataSourceFactory;
+import de.charite.compbio.jannovar.datasource.DatasourceOptions;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.io.JannovarData;
-import de.charite.compbio.jannovar.io.JannovarDataSerializer;
 
 /**
  * Implementation of download step in Jannovar.
@@ -31,7 +32,10 @@ public final class DownloadCommand extends JannovarCommand {
 		System.err.println("Options");
 		options.print(System.err);
 
-		DataSourceFactory factory = new DataSourceFactory(options, options.dataSourceFiles);
+		DatasourceOptions dsOptions = new DatasourceOptions(options.httpProxy, options.httpsProxy, options.ftpProxy,
+				options.printProgressBars);
+
+		DataSourceFactory factory = new DataSourceFactory(dsOptions, options.dataSourceFiles);
 		for (String name : options.dataSourceNames) {
 			System.err.println("Downloading/parsing for data source \"" + name + "\"");
 			JannovarData data = factory.getDataSource(name).getDataFactory()
@@ -48,7 +52,7 @@ public final class DownloadCommand extends JannovarCommand {
 		try {
 			return new DownloadCommandLineParser().parse(argv);
 		} catch (ParseException e) {
-			throw new CommandLineParsingException(e.getMessage());
+			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
 	}
 

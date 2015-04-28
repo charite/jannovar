@@ -7,8 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarFilterCommandLineParser;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
@@ -18,7 +17,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 class GeneBuilder {
 
 	/** the logger object to use */
-	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarFilterCommandLineParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeneBuilder.class);
 
 	private final ReferenceDictionary refDict;
 	private String name = null;
@@ -41,9 +40,9 @@ class GeneBuilder {
 		// Transcript must be within 10kbp of a previously seen one. Otherwise, we get too large genes from RNA
 		// transcript matches.
 		final int MORE_PADDING = 10000;
-		final GenomeInterval tmRegion = tm.txRegion.withMorePadding(MORE_PADDING);
+		final GenomeInterval tmRegion = tm.getTXRegion().withMorePadding(MORE_PADDING);
 		for (TranscriptModel model : tmpModels)
-			if (model.txRegion.overlapsWith(tmRegion)) {
+			if (model.getTXRegion().overlapsWith(tmRegion)) {
 				LOGGER.trace("Adding next transcript {} to gene {}.", new Object[] { tm, name });
 				builder.add(tm);
 				tmpModels.add(tm);

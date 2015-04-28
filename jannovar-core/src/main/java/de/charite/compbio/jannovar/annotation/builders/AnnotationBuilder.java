@@ -5,19 +5,20 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
-import de.charite.compbio.jannovar.annotation.VariantType;
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.reference.GenomeChange;
-import de.charite.compbio.jannovar.reference.GenomeChangeNormalizer;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.GenomeVariantNormalizer;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
@@ -46,10 +47,13 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  */
 abstract class AnnotationBuilder {
 
+	/** configuration */
+	protected final AnnotationBuilderOptions options;
+
 	/** transcript to annotate. */
 	protected final TranscriptModel transcript;
 	/** genome change to use for annotation */
-	protected final GenomeChange change;
+	protected final GenomeVariant change;
 
 	/** helper for sequence ontology terms */
 	protected final TranscriptSequenceOntologyDecorator so;
@@ -75,11 +79,15 @@ abstract class AnnotationBuilder {
 	 * @param transcript
 	 *            the {@link TranscriptInfo} to build the annotation for
 	 * @param change
-	 *            the {@link GenomeChange} to use for building the annotation
+	 *            the {@link GenomeVariant} to use for building the annotation
+	 * @param options
+	 *            the configuration to use for the {@link AnnotationBuilder}
 	 */
-	AnnotationBuilder(TranscriptModel transcript, GenomeChange change) {
+	AnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options) {
+		this.options = options;
+
 		// Project the change to the same strand as transcript, reverse-complementing the REF/ALT strings.
-		change = change.withPositionType(PositionType.ZERO_BASED).withStrand(transcript.getStrand());
+		change = change.withStrand(transcript.getStrand());
 		this.transcript = transcript;
 
 		this.so = new TranscriptSequenceOntologyDecorator(transcript);
@@ -91,8 +99,8 @@ abstract class AnnotationBuilder {
 		if (so.liesInExon(change.getGenomeInterval())) {
 			try {
 				// normalize amino acid change and add information about this into {@link messages}
-				this.change = GenomeChangeNormalizer.normalizeGenomeChange(transcript, change,
-						projector.genomeToTranscriptPos(change.pos));
+				this.change = GenomeVariantNormalizer.normalizeGenomeChange(transcript, change,
+						projector.genomeToTranscriptPos(change.getGenomePos()));
 				if (!change.equals(this.change))
 					messages.add(AnnotationMessage.INFO_REALIGN_3_PRIME);
 			} catch (ProjectionException e) {
@@ -132,40 +140,40 @@ abstract class AnnotationBuilder {
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithUpstreamRegion(changeInterval) || so.overlapsWithDownstreamRegion(changeInterval))
 			return buildUpOrDownstreamAnnotation();
-		else if (!changeInterval.overlapsWith(transcript.txRegion))
+		else if (!changeInterval.overlapsWith(transcript.getTXRegion()))
 			return buildIntergenicAnnotation();
 
 		// Project genome to CDS position.
 		GenomePosition pos = changeInterval.getGenomeBeginPos();
 
-		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
+		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
 		if (changeInterval.length() == 0) {
-			GenomePosition lPos = pos.shifted(-1);
+			final GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
-			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varTypes.add(VariantType.ncRNA_SPLICE_DONOR);
-			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varTypes.add(VariantType.ncRNA_SPLICE_ACCEPTOR);
-			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varTypes.add(VariantType.ncRNA_SPLICE_REGION);
+			if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos))
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+			else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos))
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+			else if (so.liesInSpliceRegion(pos))
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in intron/exon.
 			if (so.liesInExon(lPos) && so.liesInExon(pos))
-				varTypes.add(VariantType.ncRNA_EXONIC);
+				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT);
 			else
-				varTypes.add(VariantType.ncRNA_INTRONIC);
+				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
 		} else {
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.ncRNA_SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.ncRNA_SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.ncRNA_SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in intron/exon.
 			if (so.overlapsWithExon(changeInterval))
-				varTypes.add(VariantType.ncRNA_EXONIC);
+				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT);
 			else
-				varTypes.add(VariantType.ncRNA_INTRONIC);
+				varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
 		}
 		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), null);
 	}
@@ -176,32 +184,37 @@ abstract class AnnotationBuilder {
 	protected Annotation buildIntronicAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
-		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
-		varTypes.add(VariantType.INTRONIC); // always include intronic as variant type
+		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
+		if (transcript.isCoding()) // always include intronic as variant type
+			varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+		else
+			varTypes.add(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT);
 		if (change.getGenomeInterval().length() == 0) {
-			GenomePosition lPos = pos.shifted(-1);
+			final GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
-			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varTypes.add(VariantType.SPLICE_DONOR);
-			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
-			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varTypes.add(VariantType.SPLICE_REGION);
+			if (so.liesInSpliceDonorSite(pos) || so.liesInSpliceDonorSite(lPos))
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
+			else if (so.liesInSpliceAcceptorSite(lPos) || so.liesInSpliceAcceptorSite(pos))
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
+			else if (so.liesInSpliceRegion(pos))
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 		}
 		// intronic variants have no effect on the protein but splice variants lead to "probably no protein produced"
 		// annotation, as in Mutalyzer.
 		String aaAnno = "p.=";
-		if (varTypes.contains(VariantType.SPLICE_DONOR) || varTypes.contains(VariantType.SPLICE_ACCEPTOR)
-				|| varTypes.contains(VariantType.SPLICE_REGION))
+		if (!Sets.intersection(
+				ImmutableSet.copyOf(varTypes),
+				ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.SPLICE_ACCEPTOR_VARIANT,
+						VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
 			aaAnno = "p.?";
 		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), aaAnno);
 	}
@@ -212,37 +225,37 @@ abstract class AnnotationBuilder {
 	protected Annotation buildUTRAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
-		ArrayList<VariantType> varTypes = new ArrayList<VariantType>();
+		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
 		if (change.getGenomeInterval().length() == 0) {
 			GenomePosition lPos = pos.shifted(-1);
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if ((so.liesInSpliceDonorSite(lPos) && so.liesInSpliceDonorSite(pos)))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 			else if ((so.liesInSpliceAcceptorSite(lPos) && so.liesInSpliceAcceptorSite(pos)))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in 5' or 3' UTR.
 			if (so.liesInFivePrimeUTR(lPos))
-				varTypes.add(VariantType.UTR5);
+				varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
 			else
 				// so.liesInThreePrimeUTR(pos)
-				varTypes.add(VariantType.UTR3);
+				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
 			if (so.overlapsWithSpliceDonorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_DONOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_DONOR_VARIANT));
 			else if (so.overlapsWithSpliceAcceptorSite(changeInterval))
-				varTypes.add(VariantType.SPLICE_ACCEPTOR);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT));
 			else if (so.overlapsWithSpliceRegion(changeInterval))
-				varTypes.add(VariantType.SPLICE_REGION);
+				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in 5' or 3' UTR.
 			if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-				varTypes.add(VariantType.UTR5);
+				varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
 			else
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-				varTypes.add(VariantType.UTR3);
+				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
 		}
 		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), "p.=");
 	}
@@ -257,18 +270,22 @@ abstract class AnnotationBuilder {
 			// Empty interval, is insertion.
 			GenomePosition lPos = pos.shifted(-1);
 			if (so.liesInUpstreamRegion(lPos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.UPSTREAM_GENE_VARIANT), null,
+						null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
+						null, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			if (so.overlapsWithUpstreamRegion(changeInterval))
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.UPSTREAM), null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.UPSTREAM_GENE_VARIANT), null,
+						null, null);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, change, ImmutableList.of(VariantType.DOWNSTREAM), null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
+						null, null, null);
 		}
 	}
 
@@ -276,31 +293,17 @@ abstract class AnnotationBuilder {
 	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
 	 */
 	protected Annotation buildIntergenicAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantType.INTERGENIC), null, null, null);
-	}
-
-	/**
-	 * @return base pair distance of transcript and variant
-	 */
-	private int distance() {
-		GenomeInterval changeInterval = change.withStrand('+').getGenomeInterval();
-		GenomeInterval txInterval = transcript.txRegion.withStrand('+');
-		if (changeInterval.overlapsWith(txInterval))
-			return 0;
-		else if (changeInterval.isLeftOf(txInterval.getGenomeBeginPos()))
-			return txInterval.getGenomeBeginPos().differenceTo(changeInterval.getGenomeEndPos());
-		else
-			return changeInterval.getGenomeBeginPos().differenceTo(txInterval.getGenomeEndPos());
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null, null, null);
 	}
 
 	/**
 	 * @param transcript
 	 *            {@link TranscriptInfo} to build annotation for
 	 * @param change
-	 *            {@link GenomeChange} to build annotation for
+	 *            {@link GenomeVariant} to build annotation for
 	 * @return AnnotationLocation with location annotation
 	 */
-	private AnnotationLocation buildLocAnno(TranscriptModel transcript, GenomeChange change) {
+	private AnnotationLocation buildLocAnno(TranscriptModel transcript, GenomeVariant change) {
 		// System.err.println("ACCESSION\t" + transcript.accession);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
@@ -310,28 +313,37 @@ abstract class AnnotationBuilder {
 		// System.err.println("CHANGE\t" + change.getGenomeInterval());
 		// System.err.println("TX REGION\t" + transcript.txRegion);
 		// System.err.println("PROJECTED CHANGE\t" + projector.projectGenomeToTXInterval(change.getGenomeInterval()));
-		locBuilder.setTxLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
+		locBuilder.setTXLocation(projector.projectGenomeToTXInterval(change.getGenomeInterval()));
 
 		if (change.getGenomeInterval().length() == 0) {
 			// no base is changed => insertion
 			GenomePosition changePos = change.getGenomeInterval().getGenomeBeginPos();
+			GenomePosition lPos = changePos.shifted(-1);
 
 			// Handle the cases for which no exon and no intron number is available.
 			if (!soDecorator.liesInExon(changePos) && !soDecorator.liesInIntron(changePos))
 				return locBuilder.build(); // no exon information if change pos does not lie in exon
+
+			final int exonNum = projector.locateExon(changePos);
+			final int lExonNum = projector.locateExon(lPos);
+			if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID
+					|| lExonNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
+				locBuilder.setRankType(AnnotationLocation.RankType.EXON);
+				if (exonNum != TranscriptProjectionDecorator.INVALID_EXON_ID)
+					locBuilder.setRank(exonNum);
+				else
+					locBuilder.setRank(lExonNum);
+				return locBuilder.build();
+			}
+
 			final int intronNum = projector.locateIntron(changePos);
 			if (intronNum != TranscriptProjectionDecorator.INVALID_EXON_ID) {
 				locBuilder.setRankType(AnnotationLocation.RankType.INTRON);
 				locBuilder.setRank(intronNum);
 				return locBuilder.build();
 			}
-			final int exonNum = projector.locateExon(changePos);
-			if (exonNum == TranscriptProjectionDecorator.INVALID_EXON_ID)
-				throw new Error("Bug: position should be in exon if we reach here");
 
-			locBuilder.setRankType(AnnotationLocation.RankType.EXON);
-			locBuilder.setRank(exonNum);
-			return locBuilder.build();
+			throw new Error("Bug: position should be in exon if we reach here");
 		} else {
 			// at least one base is changed
 			GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
@@ -365,10 +377,10 @@ abstract class AnnotationBuilder {
 	 * @param transcript
 	 *            {@link TranscriptInfo} to build annotation for
 	 * @param change
-	 *            {@link GenomeChange} to build annotation for
+	 *            {@link GenomeVariant} to build annotation for
 	 * @return String with the HGVS DNA Annotation string (with coordinates for this transcript).
 	 */
-	private String buildDNAAnno(TranscriptModel transcript, GenomeChange change) {
+	private String buildDNAAnno(TranscriptModel transcript, GenomeVariant change) {
 		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 
 		GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();

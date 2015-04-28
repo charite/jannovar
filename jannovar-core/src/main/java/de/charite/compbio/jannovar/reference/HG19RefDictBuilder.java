@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.reference;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.io.ReferenceDictionaryBuilder;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
 
 /**
  * Builds a {@link ReferenceDictionary} for the hg19 release.
@@ -46,6 +46,7 @@ public class HG19RefDictBuilder {
 		for (int i = 1; i < 23; ++i) {
 			builder.putContigName(i, "" + i);
 			builder.putContigID("" + i, i);
+			builder.putContigID("chr" + i, i);
 		}
 		builder.putContigName(23, "X");
 		builder.putContigID("X", 23);
@@ -53,6 +54,9 @@ public class HG19RefDictBuilder {
 		builder.putContigID("Y", 24);
 		builder.putContigName(25, "M");
 		builder.putContigID("M", 25);
+		builder.putContigID("chrX", 23);
+		builder.putContigID("chrY", 24);
+		builder.putContigID("chrM", 25);
 
 		return builder.build();
 	}

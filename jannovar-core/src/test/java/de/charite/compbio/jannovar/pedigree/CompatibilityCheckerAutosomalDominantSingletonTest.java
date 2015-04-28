@@ -20,7 +20,7 @@ public class CompatibilityCheckerAutosomalDominantSingletonTest extends Compatib
 
 	@Test
 	public void testSizeOfPedigree() {
-		Assert.assertEquals(1, pedigree.members.size());
+		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
 	@Test

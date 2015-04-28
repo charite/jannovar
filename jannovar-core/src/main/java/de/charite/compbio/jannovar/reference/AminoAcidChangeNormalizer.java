@@ -15,10 +15,10 @@ public final class AminoAcidChangeNormalizer {
 	 * @return normalized {@link AminoAcidChange}
 	 */
 	public static AminoAcidChange truncateAltAfterStopCodon(AminoAcidChange change) {
-		int stopCodonPos = change.alt.indexOf('*');
+		int stopCodonPos = change.getAlt().indexOf('*');
 		if (stopCodonPos == -1)
 			return change; // no stop codon found in change.alt
-		return new AminoAcidChange(change.pos, change.ref, change.alt.substring(0, stopCodonPos + 1));
+		return new AminoAcidChange(change.getPos(), change.getRef(), change.getAlt().substring(0, stopCodonPos + 1));
 	}
 
 	/**
@@ -33,22 +33,22 @@ public final class AminoAcidChangeNormalizer {
 	 * @return normalized AminoAcidChange
 	 */
 	public static AminoAcidChange normalizeDeletion(String ref, AminoAcidChange change) {
-		if (change.ref.length() == 0 || change.alt.length() != 0)
+		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
 			return change;
 
 		// Compute shift of deletion.
 		int shift = 0;
-		final int LEN = change.ref.length();
-		while (change.pos + LEN + shift < ref.length()
-				&& ref.charAt(change.pos) == ref.charAt(change.pos + LEN + shift))
+		final int LEN = change.getRef().length();
+		while (change.getPos() + LEN + shift < ref.length()
+				&& ref.charAt(change.getPos()) == ref.charAt(change.getPos() + LEN + shift))
 			shift += 1;
 		if (shift == 0)
 			return change;
 
 		// Build new AminoAcidChange.
 		StringBuilder changeRefBuilder = new StringBuilder();
-		changeRefBuilder.append(ref.substring(change.pos + shift, change.pos + shift + change.ref.length()));
-		return new AminoAcidChange(change.pos + shift, changeRefBuilder.toString(), "");
+		changeRefBuilder.append(ref.substring(change.getPos() + shift, change.getPos() + shift + change.getRef().length()));
+		return new AminoAcidChange(change.getPos() + shift, changeRefBuilder.toString(), "");
 	}
 
 	/**
@@ -65,25 +65,25 @@ public final class AminoAcidChangeNormalizer {
 		// TODO(holtgrem): Test me!
 
 		// Truncate suffixes / from the right.
-		final int REFLEN = aaChange.ref.length() - 1;
-		final int ALTLEN = aaChange.alt.length() - 1;
+		final int REFLEN = aaChange.getRef().length() - 1;
+		final int ALTLEN = aaChange.getAlt().length() - 1;
 		int truncSuffix = 0;
-		while (truncSuffix < aaChange.ref.length() && truncSuffix < aaChange.alt.length()
-				&& aaChange.ref.charAt(REFLEN - truncSuffix) == aaChange.alt.charAt(ALTLEN - truncSuffix))
+		while (truncSuffix < aaChange.getRef().length() && truncSuffix < aaChange.getAlt().length()
+				&& aaChange.getRef().charAt(REFLEN - truncSuffix) == aaChange.getAlt().charAt(ALTLEN - truncSuffix))
 			++truncSuffix;
 		if (truncSuffix != 0)
-			aaChange = new AminoAcidChange(aaChange.pos,
-					aaChange.ref.substring(0, aaChange.ref.length() - truncSuffix), aaChange.alt.substring(0,
-							aaChange.alt.length() - truncSuffix));
+			aaChange = new AminoAcidChange(aaChange.getPos(),
+					aaChange.getRef().substring(0, aaChange.getRef().length() - truncSuffix), aaChange.getAlt().substring(0,
+							aaChange.getAlt().length() - truncSuffix));
 
 		// Truncate prefixes / from the left.
 		int truncPrefix = 0;
-		while (truncPrefix < aaChange.ref.length() && truncPrefix < aaChange.alt.length()
-				&& aaChange.ref.charAt(truncPrefix) == aaChange.alt.charAt(truncPrefix))
+		while (truncPrefix < aaChange.getRef().length() && truncPrefix < aaChange.getAlt().length()
+				&& aaChange.getRef().charAt(truncPrefix) == aaChange.getAlt().charAt(truncPrefix))
 			++truncPrefix;
 		if (truncPrefix != 0)
-			aaChange = new AminoAcidChange(aaChange.pos + truncPrefix, aaChange.ref.substring(truncPrefix),
-					aaChange.alt.substring(truncPrefix));
+			aaChange = new AminoAcidChange(aaChange.getPos() + truncPrefix, aaChange.getRef().substring(truncPrefix),
+					aaChange.getAlt().substring(truncPrefix));
 
 		return aaChange;
 	}
@@ -101,17 +101,17 @@ public final class AminoAcidChangeNormalizer {
 	 */
 	public static AminoAcidChange shiftInsertion(AminoAcidChange aaChange, String wtAASeq) {
 		// TODO(holtgrem): Test me!
-		if (aaChange.ref.length() != 0)
+		if (aaChange.getRef().length() != 0)
 			return aaChange;
 
 		// Insert the alternative bases at the position indicated by txPos.
 		StringBuilder builder = new StringBuilder(wtAASeq);
-		builder.insert(aaChange.pos, aaChange.alt);
+		builder.insert(aaChange.getPos(), aaChange.getAlt());
 
 		// Execute algorithm and compute the shift.
-		int pos = aaChange.pos;
+		int pos = aaChange.getPos();
 		int shift = 0;
-		final int LEN = aaChange.alt.length();
+		final int LEN = aaChange.getAlt().length();
 		final String seq = builder.toString();
 		while ((pos + LEN < seq.length()) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {
 			++shift;

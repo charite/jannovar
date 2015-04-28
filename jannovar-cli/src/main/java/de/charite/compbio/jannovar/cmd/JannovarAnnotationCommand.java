@@ -3,10 +3,10 @@ package de.charite.compbio.jannovar.cmd;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.io.Chromosome;
-import de.charite.compbio.jannovar.io.JannovarData;
-import de.charite.compbio.jannovar.io.JannovarDataSerializer;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.JannovarDataSerializer;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
 /**
  * Base class for commands needing annotation data.
@@ -40,8 +40,8 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	 */
 	protected void deserializeTranscriptDefinitionFile() throws JannovarException, HelpRequestedException {
 		JannovarData data = new JannovarDataSerializer(this.options.dataFile).load();
-		this.refDict = data.refDict;
-		this.chromosomeMap = data.chromosomes;
+		this.refDict = data.getRefDict();
+		this.chromosomeMap = data.getChromosomes();
 	}
 
 }

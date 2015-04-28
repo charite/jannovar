@@ -13,8 +13,8 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.io.ReferenceDictionaryBuilder;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
 
 /**
  * Allows loading of {@link ReferenceDictParser} from UCSC and RefSeq data.
@@ -155,7 +155,7 @@ public final class ReferenceDictParser {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new TranscriptParseException("Problem reading TSV file: " + e.getMessage());
+			throw new TranscriptParseException("Problem reading TSV file.", e);
 		}
 
 		return result.build();

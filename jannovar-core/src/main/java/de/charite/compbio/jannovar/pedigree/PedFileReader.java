@@ -18,11 +18,12 @@ import com.google.common.collect.ImmutableList;
  * Allows reading of {@link PedFileContents} from a {@link InputStream} or {@link File}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 public final class PedFileReader {
 
 	/** the file to read from */
-	public final File file;
+	private final File file;
 
 	/**
 	 * Initialize object with the given file.
@@ -60,7 +61,7 @@ public final class PedFileReader {
 		// Parse header.
 		ImmutableList<String> extraHeaders = ImmutableList.of(); // default to empty
 		String line = in.readLine();
-		if (line.startsWith("#")) {
+		if (line != null && line.startsWith("#")) {
 			extraHeaders = parseHeader(line);
 			line = in.readLine();
 		}

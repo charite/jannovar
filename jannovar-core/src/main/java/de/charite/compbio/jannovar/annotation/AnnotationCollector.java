@@ -7,9 +7,15 @@ import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
+
+import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
+
 /**
  * This class collects all the information about a variant and its annotations and calculates the final annotations for
- * a given variant. The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} objects each use an instance of
+ * a given variant. The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} objects each use an instance of
  * this class to assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least
  * one {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
@@ -38,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * "obvious candidates" for pathogenic mutations, i.e., NS/SS/I, nonsynonymous, splice site, indel.
  *
  * One object of this class is created for each variant we want to annotate. The
- * {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class goes through a list of genes in the vicinity of
+ * {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class goes through a list of genes in the vicinity of
  * the variant and adds one {@link Annotation} object for each gene. These are essentially candidates for the actual
  * correct annotation of the variant, but we can only decide what the correct annotation is once we have seen enough
  * candidates. Therefore, once we have gone through the candidates, this class decides what the best annotation is and
@@ -52,6 +58,7 @@ import org.slf4j.LoggerFactory;
  * Used for the implementation of VariantAnnotator.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author Max Schubach <max.schubach@charite.de>
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
 final class AnnotationCollector {
@@ -182,7 +189,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * After the {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} object has added annotations for all of
+	 * After the {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} object has added annotations for all of
 	 * the transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if
 	 * the variant does not intersect with any transcript), it calls this function to return the list of annotations in
 	 * form of an {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object.
@@ -191,10 +198,12 @@ final class AnnotationCollector {
 	 * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
 	 * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
 	 *
+	 * @param change
+	 *            <code>GenomeChange</code> to build the <code>AnnotationList</code> for
 	 * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
 	 */
-	public AnnotationList getAnnotationList() {
-		return new AnnotationList(this.annotationLst);
+	public AnnotationList getAnnotationList(GenomeVariant change) {
+		return new AnnotationList(change, this.annotationLst);
 	}
 
 	/**
@@ -211,15 +220,15 @@ final class AnnotationCollector {
 	 * @return most pathogenic variant type for current variant.
 	 */
 	@SuppressWarnings("unused")
-	private VariantType getMostPathogenicVariantType() {
-		VariantType vt;
+	private VariantEffect getMostPathogenicVariantType() {
+		VariantEffect vt;
 		Collections.sort(this.annotationLst);
 		Annotation a = this.annotationLst.get(0);
 		return a.getMostPathogenicVarType();
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a non-coding
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to add a non-coding
 	 * RNA exon variant. From the program logic, only one such Annotation should be added per variant.
 	 *
 	 * @param ann
@@ -232,7 +241,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a 5' UTR
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to add a 5' UTR
 	 * variant.
 	 *
 	 * @param ann
@@ -246,7 +255,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add a 3' UTR
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to add a 3' UTR
 	 * variant.
 	 *
 	 * @param ann
@@ -260,7 +269,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to register an
 	 * Annotation for a variant that is located between two genes. From the program logic, only one such Annotation
 	 * should be added per variant.
 	 *
@@ -274,7 +283,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to register an
 	 * Annotation for a variant that affects the coding sequence of an exon. Many different variant types are summarized
 	 * (NONSYNONYMOUS, DELETION etc.).
 	 *
@@ -283,22 +292,20 @@ final class AnnotationCollector {
 	 */
 	public void addExonicAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		if (ann.getMostPathogenicVarType() == VariantType.SYNONYMOUS) {
+		if (FluentIterable.from(ann.getEffects()).anyMatch(Predicates.equalTo(VariantEffect.SYNONYMOUS_VARIANT)))
 			this.hasSynonymous = true;
-		} else if (ann.getMostPathogenicVarType() == VariantType.SPLICE_DONOR
-				|| ann.getMostPathogenicVarType() == VariantType.SPLICE_ACCEPTOR
-				|| ann.getMostPathogenicVarType() == VariantType.SPLICE_REGION) {
+		else if (FluentIterable.from(ann.getEffects()).anyMatch(VariantEffect.IS_SPLICING))
 			this.hasSplicing = true;
-		} else {
+		else
 			this.hasExonic = true;
-		}
-		this.geneSymbolSet.add(ann.transcript.geneSymbol);
+
+		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
 		this.hasGenicMutation = true;
 		this.annotationCount++;
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to register an
 	 * annotation for a noncoding RNA transcript that is affected by a splice mutation.
 	 *
 	 * @param ann
@@ -312,7 +319,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to add an annotation
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to add an annotation
 	 * for an intronic variant. Note that if the same intronic annotation already exists, nothing is done, i.e., this
 	 * method avoids duplicate annotations.
 	 *
@@ -320,18 +327,17 @@ final class AnnotationCollector {
 	 *            the Intronic annotation to be added.
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
-		this.geneSymbolSet.add(ann.transcript.geneSymbol);
-		if (ann.getMostPathogenicVarType() == VariantType.INTRONIC
-				|| ann.getMostPathogenicVarType() == VariantType.ncRNA_INTRONIC) {
+		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
+		if (FluentIterable.from(ann.getEffects()).anyMatch(VariantEffect.IS_INTRONIC)) {
 			for (Annotation a : this.annotationLst) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
 			}
 			this.annotationLst.add(ann);
 		}
-		if (ann.getMostPathogenicVarType() == VariantType.INTRONIC) {
+		if (ann.getMostPathogenicVarType() == VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT) {
 			this.hasIntronic = true;
-		} else if (ann.getMostPathogenicVarType() == VariantType.ncRNA_INTRONIC) {
+		} else if (ann.getMostPathogenicVarType() == VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT) {
 			this.hasNcrnaIntronic = true;
 		}
 		this.hasGenicMutation = true;
@@ -339,7 +345,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * The {@link de.charite.compbio.jannovar.io.Chromosome Chromosome} class calls this function to register an
+	 * The {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} class calls this function to register an
 	 * annotation for a transcript inside a structural variant.
 	 *
 	 * @param ann
@@ -347,7 +353,7 @@ final class AnnotationCollector {
 	 */
 	public void addStructuralAnnotation(Annotation ann) {
 		this.annotationLst.add(ann);
-		this.geneSymbolSet.add(ann.transcript.geneSymbol);
+		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
 		this.hasStructural = true;
 		this.annotationCount++;
 	}
@@ -378,10 +384,10 @@ final class AnnotationCollector {
 				return;
 		}
 		this.annotationLst.add(ann);
-		VariantType type = ann.getMostPathogenicVarType();
-		if (type == VariantType.DOWNSTREAM) {
+		VariantEffect type = ann.getMostPathogenicVarType();
+		if (type == VariantEffect.DOWNSTREAM_GENE_VARIANT) {
 			this.hasDownstream = true;
-		} else if (type == VariantType.UPSTREAM) {
+		} else if (type == VariantEffect.UPSTREAM_GENE_VARIANT) {
 			this.hasUpstream = true;
 		} else {
 			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got {}", type);

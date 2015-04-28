@@ -4,15 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
-import de.charite.compbio.jannovar.reference.GenomeChangeNormalizer;
-import de.charite.compbio.jannovar.reference.GenomePosition;
-import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
-import de.charite.compbio.jannovar.reference.PositionType;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
-import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
-import de.charite.compbio.jannovar.reference.TranscriptPosition;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
 public class GenomeChangeNormalizerTest {
 
@@ -23,10 +15,14 @@ public class GenomeChangeNormalizerTest {
 	TranscriptModelBuilder builderForward;
 	/** transcript on reverse strand */
 	TranscriptModelBuilder builderReverse;
+	/** projector for forward transcript */
+	TranscriptProjectionDecorator projectorForward;
 	/** transcript info on forward strand */
 	TranscriptModel infoForward;
 	/** transcript info on reverse strand */
 	TranscriptModel infoReverse;
+	/** projector for reverse transcript */
+	TranscriptProjectionDecorator projectorReverse;
 
 	@Before
 	public void setUp() {
@@ -35,10 +31,11 @@ public class GenomeChangeNormalizerTest {
 						refDict,
 						"uc001anx.3	chr1	+	6640062	6649340	6640669	6649272	11	6640062,6640600,6642117,6645978,6646754,6647264,6647537,6648119,6648337,6648815,6648975,	6640196,6641359,6642359,6646090,6646847,6647351,6647692,6648256,6648502,6648904,6649340,	P10074	uc001anx.3");
 		this.builderForward
-				.setSequence("cgtcacgtccggcgcggagacggtggagtctccgcactgtcggcggggtacgcatagccgggcactaggttcgtgggctgtggaggcgacggagcagggggccagtggggccagctcagggaggacctgcctgggagctttctcttgcataccctcgcttaggctggccggggtgtcacttctgcctccctgccctccagaccatggacggctccttcgtccagcacagtgtgagggttctgcaggagctcaacaagcagcgggagaagggccagtactgcgacgccactctggacgtggggggcctggtgtttaaggcacactggagtgtccttgcctgctgcagtcactttttccagagcctctacggggatggctcagggggcagtgtcgtcctccctgctggcttcgctgagatctttggcctcttgttggactttttctacactggtcacctcgctctcacctcagggaaccgggatcaggtgctcctggcagccagggagttgcgagtgccagaggccgtagagctgtgccagagcttcaagcccaaaacttcagtgggacaggcagcaggtggccagagtgggctggggccccctgcctcccagaatgtgaacagccacgtcaaggagccggcaggcttggaagaagaggaagtttcgaggactctgggtctagtccccagggatcaggagcccagaggcagtcatagtcctcagaggccccagctccattccccagctcagagtgagggcccctcctccctctgtgggaaactgaagcaggccttgaagccttgtccccttgaggacaagaaacccgaggactgcaaagtgcccccaaggcccttagaggctgaaggtgcccagctgcagggcggcagtaatgagtgggaagtggtggttcaagtggaggatgatggggatggcgattacatgtctgagcctgaggctgtgctgaccaggaggaagtcaaatgtaatccgaaagccctgtgcagctgagccagccctgagcgcgggctccctagcagctgagcctgctgagaacagaaaaggtacagcggtgccggtcgaatgccccacatgtcataaaaagttcctcagcaaatattatctaaaagtccacaacaggaaacatactggggagaaaccctttgagtgtcccaaatgtgggaagtgttactttcggaaggagaacctcctggagcatgaagcccggaattgcatgaaccgctcggaacaggtcttcacgtgctctgtgtgccaggagacattccgccgaaggatggagctgcgggtgcacatggtgtctcacacaggggagatgccctacaagtgttcctcctgctcccagcagttcatgcagaagaaggacttgcagagccacatgatcaaacttcatggagcccccaagccccatgcatgccccacctgtgccaagtgcttcctgtctcggacagagctgcagctgcatgaagctttcaagcaccgtggtgagaagctgtttgtgtgtgaggagtgtgggcaccgggcctcgagccggaatggcctgcagatgcacatcaaggccaagcacaggaatgagaggccacacgtatgtgagttctgcagccacgccttcacccaaaaggccaatctcaacatgcacctgcgcacacacacgggtgagaagcccttccagtgccacctctgtggcaagaccttccgaacccaagccagcctggacaagcacaaccgcacccacaccggggaaaggcccttcagttgcgagttctgtgaacagcgcttcactgagaaggggcccctcctgaggcacgtggccagccgccatcaggagggccggccccacttctgccagatatgcggcaagaccttcaaagccgtggagcaactgcgtgtgcacgtcagacggcacaagggggtgaggaagtttgagtgcaccgagtgtggctacaagtttacccgacaggcccacctgcggaggcacatggagatccacgaccgggtagagaactacaacccgcggcagcgcaagctccgcaacctgatcatcgaggacgagaagatggtggtggtggcgctgcagccgcctgcagagctggaggtgggctcggcggaggtcattgtggagtccctggcccagggcggcctggcctcccagctccccggccagagactgtgtgcagaggagagcttcaccggcccaggtgtcctggagccctccctcatcatcacagctgctgtccccgaggactgtgacacatagcccattctggccaccagagcccacttggccccacccctcaataaaccgtgtggctttggactctcgtaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-						.toUpperCase());
+		.setSequence("cgtcacgtccggcgcggagacggtggagtctccgcactgtcggcggggtacgcatagccgggcactaggttcgtgggctgtggaggcgacggagcagggggccagtggggccagctcagggaggacctgcctgggagctttctcttgcataccctcgcttaggctggccggggtgtcacttctgcctccctgccctccagaccatggacggctccttcgtccagcacagtgtgagggttctgcaggagctcaacaagcagcgggagaagggccagtactgcgacgccactctggacgtggggggcctggtgtttaaggcacactggagtgtccttgcctgctgcagtcactttttccagagcctctacggggatggctcagggggcagtgtcgtcctccctgctggcttcgctgagatctttggcctcttgttggactttttctacactggtcacctcgctctcacctcagggaaccgggatcaggtgctcctggcagccagggagttgcgagtgccagaggccgtagagctgtgccagagcttcaagcccaaaacttcagtgggacaggcagcaggtggccagagtgggctggggccccctgcctcccagaatgtgaacagccacgtcaaggagccggcaggcttggaagaagaggaagtttcgaggactctgggtctagtccccagggatcaggagcccagaggcagtcatagtcctcagaggccccagctccattccccagctcagagtgagggcccctcctccctctgtgggaaactgaagcaggccttgaagccttgtccccttgaggacaagaaacccgaggactgcaaagtgcccccaaggcccttagaggctgaaggtgcccagctgcagggcggcagtaatgagtgggaagtggtggttcaagtggaggatgatggggatggcgattacatgtctgagcctgaggctgtgctgaccaggaggaagtcaaatgtaatccgaaagccctgtgcagctgagccagccctgagcgcgggctccctagcagctgagcctgctgagaacagaaaaggtacagcggtgccggtcgaatgccccacatgtcataaaaagttcctcagcaaatattatctaaaagtccacaacaggaaacatactggggagaaaccctttgagtgtcccaaatgtgggaagtgttactttcggaaggagaacctcctggagcatgaagcccggaattgcatgaaccgctcggaacaggtcttcacgtgctctgtgtgccaggagacattccgccgaaggatggagctgcgggtgcacatggtgtctcacacaggggagatgccctacaagtgttcctcctgctcccagcagttcatgcagaagaaggacttgcagagccacatgatcaaacttcatggagcccccaagccccatgcatgccccacctgtgccaagtgcttcctgtctcggacagagctgcagctgcatgaagctttcaagcaccgtggtgagaagctgtttgtgtgtgaggagtgtgggcaccgggcctcgagccggaatggcctgcagatgcacatcaaggccaagcacaggaatgagaggccacacgtatgtgagttctgcagccacgccttcacccaaaaggccaatctcaacatgcacctgcgcacacacacgggtgagaagcccttccagtgccacctctgtggcaagaccttccgaacccaagccagcctggacaagcacaaccgcacccacaccggggaaaggcccttcagttgcgagttctgtgaacagcgcttcactgagaaggggcccctcctgaggcacgtggccagccgccatcaggagggccggccccacttctgccagatatgcggcaagaccttcaaagccgtggagcaactgcgtgtgcacgtcagacggcacaagggggtgaggaagtttgagtgcaccgagtgtggctacaagtttacccgacaggcccacctgcggaggcacatggagatccacgaccgggtagagaactacaacccgcggcagcgcaagctccgcaacctgatcatcgaggacgagaagatggtggtggtggcgctgcagccgcctgcagagctggaggtgggctcggcggaggtcattgtggagtccctggcccagggcggcctggcctcccagctccccggccagagactgtgtgcagaggagagcttcaccggcccaggtgtcctggagccctccctcatcatcacagctgctgtccccgaggactgtgacacatagcccattctggccaccagagcccacttggccccacccctcaataaaccgtgtggctttggactctcgtaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+				.toUpperCase());
 		this.builderForward.setGeneSymbol("ZBTB48");
 		this.infoForward = builderForward.build();
+		this.projectorForward = new TranscriptProjectionDecorator(infoForward);
 		// RefSeq: NM_005341.3
 
 		this.builderReverse = TranscriptModelFactory
@@ -46,146 +43,148 @@ public class GenomeChangeNormalizerTest {
 						refDict,
 						"uc001bgu.3	chr1	-	23685940	23696357	23688461	23694498	4	23685940,23693534,23694465,23695858,	23689714,23693661,23694558,23696357,	Q9C0F3	uc001bgu.3");
 		this.builderReverse
-				.setSequence("aataagctgctatattctttttccatcacttccctctccaaggctacagcgagctgggagctcttccccacgcagaatgcctgctttccccagtgctcgacttccattgtctaattccctcatcctggctggggaaagggagagctgcgagtcctcccgttccgaggaactccagctgaatgcagcttagttgctggtggtttctcggccagcctctgtggtctcagggatctgcctatgagcctgtggtttctgagctgcctgcgagtctgaggcctcgggaatctgagtctttaggatcagcctacgatatctgggcttcgcctgcaagtctacgaattcgagatctacctgcgggtctgagacctccgggacctgcccgtgctctctagaatcttcctgaacgccaggtctgagagaacgctgcggctctggaacccgttcgcggtctctcaggttttggagacgacgatctagtggatcttttgcgggacaggagcgctgtctgctagctgcttttcctgctctctctccctggaggcgaacccttgtgctcgagatggcagccaccctgctcatggctgggtcccaggcacctgtgacgtttgaagatatggccatgtatctcacccgggaagaatggagacctctggacgctgcacagagggacctttaccgggatgttatgcaggagaattatggaaatgttgtctcactagattttgagatcaggagtgagaacgaggtaaatcccaagcaagagattagtgaagatgtacaatttgggactacatctgaaagacctgctgagaatgctgaggaaaatcctgaaagtgaagagggctttgaaagcggagataggtcagaaagacaatggggagatttaacagcagaagagtgggtaagctatcctctccaaccagtcactgatctacttgtccacaaagaagtccacacaggcatccgctatcatatatgttctcattgtggaaaggccttcagtcagatctcagaccttaatcgacatcagaagacccacactggagacagaccctataaatgttatgaatgtggaaaaggcttcagtcgcagctcacaccttattcagcatcaaagaacacatactggggagaggccttatgactgtaacgagtgtgggaaaagttttggaagaagttctcacctgattcagcatcagacaatccacactggagagaagcctcacaaatgtaatgagtgtggaaaaagtttctgccgtctctctcacctaatccaacaccaaaggacccacagtggtgagaaaccctatgagtgtgaggagtgtgggaaaagcttcagccggagctctcacctagctcagcaccagaggacccacacgggtgagaaaccttatgaatgtaacgaatgtggccgaggcttcagtgagagatctgatctcatcaaacactatcgagtccacacaggggagaggccctacaagtgtgatgagtgtgggaagaatttcagtcagaactccgaccttgtgcgtcatcgcagagcccacacgggagagaagccataccactgtaacgaatgtggggaaaatttcagccgcatctcacacttggttcagcaccagagaactcacactggagagaagccatatgaatgcaatgcttgtgggaaaagcttcagccggagctctcatctcatcacacaccagaaaattcacactggagagaagccttatgagtgtaatgagtgttggcgaagctttggtgaaaggtcagatctaattaaacatcagagaacccacacaggggagaagccctacgagtgtgtgcagtgtgggaaaggtttcacccagagctccaacctcatcacacatcaaagagttcacacgggagagaaaccttatgaatgtaccgaatgtgagaagagtttcagcaggagctcagctcttattaaacataagagagttcatacggactaagctgtaattatgatggctgagaaatgattcatttgaagatacaattttatttgatatcaatgaacgccctcaagactgagctgcttttatcatactctcctagttgtgggccacgatttaaaccatcagagatgacaagccatttgaaattctgaccctcagctttgggaatgttatctcctccaaaatggtgatttttattcactcaatgggttacttcattaaaagcagccccacaagtaactggaaatctgaagaccaggggacaaatgctggtgaatgcttaggcctggaaatggagtaaatctttcaatgttattttctcccatccttggcccaaggaactatgctaagtgaaacgtgggactgtaatagggtggtaatggctgctttggaaaaaggcaactagagactctgcctaaattgccacacctattcacacaccatagtagttgggcacacacatcttcccttccaaagggctttttccttgagttgctcatgcatttgtatcttttccatcttcctgagggcaagattttgcacgatgaaggcaatgattgtaacttttctccttctcattgtttctaattagctcctttaaagcttgcatctttgtgaaggctaactgaagatacggttggaaaggaaaaatgagacacaggtttggggaccaaggacccatcaatgatggtgactttagcagaagatgcccacagttattactgccattaatcagatttatgaattttctttggggatcactatagggaatattgtatagaaaatatcttcaagaaaagataggaccatcagtgacagttaagtgtaaggagcaagtggaattgagtccttcagggaaggaaccacagagtcccttcccaaggaatgtaggtcgtttctgtgttctttcccttctaatctttaagatcaactcttcctatcctgctaactctaagatttgataagggccacatcccagtgtttatcttagcttgcatcagggcatgtgtatgtacagtaatgtgtattcctgtggtttttctaatagaaactgaatttacagagacttagcatgttcttgggtgatgtgagtcatgtgacagaagtacagacataactccaatgtgagaaatgtccttttttcattatggaaaataatttaaacactagtgctttagtgtgcactctcctgtaaggtctgtctttgtacagagctaagcacttgtttgtatgtgtttgtcaattgtggaagataatgaccagacaaataggtcgattgtcctattctcagaatgaattatcttctatggtaatgaagaactctttggcttagtcagaaggaattaacgaacctcggtaggaatgtatttccatcctcccaccctacagatataagaggttaaaataacagttcgcccaatttaagcccagtagtgtcagttttcctaatctcagtccaggtaggaattaagaaatatctcaagtgttgatgctatccaagcatgttggggtggaagggaattggtgcccagaaaatgggactggagtgaggaatatcttttcttttgagagtacccccagtttatttctactgtgctttattgctactgttctttattgtgaatgttgtaacattttaaaaatgttttgccatagctttttaggacttggtgttaaaggagccagtggtctctctgggtgggtactataatgagttattgtgacccacagctgtgtgggaccacatcacttgttaataacacaacctttaaagtaacccatcttccaggggggttccttcatgttgccactcctttttaaggacaaactcaggcaaggagcatgtttttttgttatttacaaaatctagcagactgtgggtatccatattttaattgtcgggtgacacatgttcttggtaactaaactcaaatatgtcttttctcatatatgttgctgatggttttaataaatgtcaaagttctcctgttgcttctgtgagccactatgggtatcagcttgggagtggccatagatgaccgcatttccatgacctaactgtatttcacccccttttccttccctactgttcttgccccaccccaaccagttcctgctgctgcttttggcttcttggaggtgaagggcttaaaacaaggcttctaagcacccagctatctccatacatgaacaatctagctgggaaacttaagggacaagggccacaccagctgtctcctctttctgccaattgttgcccgtttgctgtgttgaactttgtatagaactcatgcatcagactcccttcactaatgctttttgcatgccttctgctcccaagtccctggctgcctctgcacatcccgtgaacactttgtgcctgttttctatggttgtggagaattaatgaacaaatcaatatgtagaacagttttccttatggtattggtcacagttatcctagtgtttgtattattctaacaatattctataattaaaaatataatttttaaagtca"
-						.toUpperCase());
+		.setSequence("aataagctgctatattctttttccatcacttccctctccaaggctacagcgagctgggagctcttccccacgcagaatgcctgctttccccagtgctcgacttccattgtctaattccctcatcctggctggggaaagggagagctgcgagtcctcccgttccgaggaactccagctgaatgcagcttagttgctggtggtttctcggccagcctctgtggtctcagggatctgcctatgagcctgtggtttctgagctgcctgcgagtctgaggcctcgggaatctgagtctttaggatcagcctacgatatctgggcttcgcctgcaagtctacgaattcgagatctacctgcgggtctgagacctccgggacctgcccgtgctctctagaatcttcctgaacgccaggtctgagagaacgctgcggctctggaacccgttcgcggtctctcaggttttggagacgacgatctagtggatcttttgcgggacaggagcgctgtctgctagctgcttttcctgctctctctccctggaggcgaacccttgtgctcgagatggcagccaccctgctcatggctgggtcccaggcacctgtgacgtttgaagatatggccatgtatctcacccgggaagaatggagacctctggacgctgcacagagggacctttaccgggatgttatgcaggagaattatggaaatgttgtctcactagattttgagatcaggagtgagaacgaggtaaatcccaagcaagagattagtgaagatgtacaatttgggactacatctgaaagacctgctgagaatgctgaggaaaatcctgaaagtgaagagggctttgaaagcggagataggtcagaaagacaatggggagatttaacagcagaagagtgggtaagctatcctctccaaccagtcactgatctacttgtccacaaagaagtccacacaggcatccgctatcatatatgttctcattgtggaaaggccttcagtcagatctcagaccttaatcgacatcagaagacccacactggagacagaccctataaatgttatgaatgtggaaaaggcttcagtcgcagctcacaccttattcagcatcaaagaacacatactggggagaggccttatgactgtaacgagtgtgggaaaagttttggaagaagttctcacctgattcagcatcagacaatccacactggagagaagcctcacaaatgtaatgagtgtggaaaaagtttctgccgtctctctcacctaatccaacaccaaaggacccacagtggtgagaaaccctatgagtgtgaggagtgtgggaaaagcttcagccggagctctcacctagctcagcaccagaggacccacacgggtgagaaaccttatgaatgtaacgaatgtggccgaggcttcagtgagagatctgatctcatcaaacactatcgagtccacacaggggagaggccctacaagtgtgatgagtgtgggaagaatttcagtcagaactccgaccttgtgcgtcatcgcagagcccacacgggagagaagccataccactgtaacgaatgtggggaaaatttcagccgcatctcacacttggttcagcaccagagaactcacactggagagaagccatatgaatgcaatgcttgtgggaaaagcttcagccggagctctcatctcatcacacaccagaaaattcacactggagagaagccttatgagtgtaatgagtgttggcgaagctttggtgaaaggtcagatctaattaaacatcagagaacccacacaggggagaagccctacgagtgtgtgcagtgtgggaaaggtttcacccagagctccaacctcatcacacatcaaagagttcacacgggagagaaaccttatgaatgtaccgaatgtgagaagagtttcagcaggagctcagctcttattaaacataagagagttcatacggactaagctgtaattatgatggctgagaaatgattcatttgaagatacaattttatttgatatcaatgaacgccctcaagactgagctgcttttatcatactctcctagttgtgggccacgatttaaaccatcagagatgacaagccatttgaaattctgaccctcagctttgggaatgttatctcctccaaaatggtgatttttattcactcaatgggttacttcattaaaagcagccccacaagtaactggaaatctgaagaccaggggacaaatgctggtgaatgcttaggcctggaaatggagtaaatctttcaatgttattttctcccatccttggcccaaggaactatgctaagtgaaacgtgggactgtaatagggtggtaatggctgctttggaaaaaggcaactagagactctgcctaaattgccacacctattcacacaccatagtagttgggcacacacatcttcccttccaaagggctttttccttgagttgctcatgcatttgtatcttttccatcttcctgagggcaagattttgcacgatgaaggcaatgattgtaacttttctccttctcattgtttctaattagctcctttaaagcttgcatctttgtgaaggctaactgaagatacggttggaaaggaaaaatgagacacaggtttggggaccaaggacccatcaatgatggtgactttagcagaagatgcccacagttattactgccattaatcagatttatgaattttctttggggatcactatagggaatattgtatagaaaatatcttcaagaaaagataggaccatcagtgacagttaagtgtaaggagcaagtggaattgagtccttcagggaaggaaccacagagtcccttcccaaggaatgtaggtcgtttctgtgttctttcccttctaatctttaagatcaactcttcctatcctgctaactctaagatttgataagggccacatcccagtgtttatcttagcttgcatcagggcatgtgtatgtacagtaatgtgtattcctgtggtttttctaatagaaactgaatttacagagacttagcatgttcttgggtgatgtgagtcatgtgacagaagtacagacataactccaatgtgagaaatgtccttttttcattatggaaaataatttaaacactagtgctttagtgtgcactctcctgtaaggtctgtctttgtacagagctaagcacttgtttgtatgtgtttgtcaattgtggaagataatgaccagacaaataggtcgattgtcctattctcagaatgaattatcttctatggtaatgaagaactctttggcttagtcagaaggaattaacgaacctcggtaggaatgtatttccatcctcccaccctacagatataagaggttaaaataacagttcgcccaatttaagcccagtagtgtcagttttcctaatctcagtccaggtaggaattaagaaatatctcaagtgttgatgctatccaagcatgttggggtggaagggaattggtgcccagaaaatgggactggagtgaggaatatcttttcttttgagagtacccccagtttatttctactgtgctttattgctactgttctttattgtgaatgttgtaacattttaaaaatgttttgccatagctttttaggacttggtgttaaaggagccagtggtctctctgggtgggtactataatgagttattgtgacccacagctgtgtgggaccacatcacttgttaataacacaacctttaaagtaacccatcttccaggggggttccttcatgttgccactcctttttaaggacaaactcaggcaaggagcatgtttttttgttatttacaaaatctagcagactgtgggtatccatattttaattgtcgggtgacacatgttcttggtaactaaactcaaatatgtcttttctcatatatgttgctgatggttttaataaatgtcaaagttctcctgttgcttctgtgagccactatgggtatcagcttgggagtggccatagatgaccgcatttccatgacctaactgtatttcacccccttttccttccctactgttcttgccccaccccaaccagttcctgctgctgcttttggcttcttggaggtgaagggcttaaaacaaggcttctaagcacccagctatctccatacatgaacaatctagctgggaaacttaagggacaagggccacaccagctgtctcctctttctgccaattgttgcccgtttgctgtgttgaactttgtatagaactcatgcatcagactcccttcactaatgctttttgcatgccttctgctcccaagtccctggctgcctctgcacatcccgtgaacactttgtgcctgttttctatggttgtggagaattaatgaacaaatcaatatgtagaacagttttccttatggtattggtcacagttatcctagtgtttgtattattctaacaatattctataattaaaaatataatttttaaagtca"
+				.toUpperCase());
 		this.builderReverse.setGeneSymbol("ZNF436");
 		this.infoReverse = builderReverse.build();
+		this.projectorReverse = new TranscriptProjectionDecorator(infoReverse);
 		// RefSeq: NM_001077195.1
 	}
 
 	@Test
-	public void testForwardInsertNoNormalizationNecessaryOneBaseFirst() {
+	public void testForwardInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640669, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "G", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
+		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
 
 	@Test
-	public void testForwardInsertNoNormalizationNecessaryOneBaseSecond() {
+	public void testForwardInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException {
 		// one base at second CDS position
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "A", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
+		GenomeVariant change = new GenomeVariant(gPos, "", "A", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
 
 	@Test
-	public void testForwardInsertNoNormalizationNecessaryMoreBasesSecond() {
+	public void testForwardInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "AAA", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
+		GenomeVariant change = new GenomeVariant(gPos, "", "AAA", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
 
 	@Test
-	public void testForwardInsertNormalizationNecessaryOneBaseFirst() {
+	public void testForwardInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640669, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "C", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "", "C", '+');
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
+		GenomeVariant change = new GenomeVariant(gPos, "", "C", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(1), "", "C", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testForwardInsertNormalizationNecessaryOneBaseSecond() {
+	public void testForwardInsertNormalizationNecessaryOneBaseSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "G", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "", "G", '+');
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
+		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(1), "", "G", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testForwardInsertNormalizationNecessaryMoreBasesSecond() {
+	public void testForwardInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640670, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "GTGC", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(2), "", "GCGT", '+');
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos);
+		GenomeVariant change = new GenomeVariant(gPos, "", "GTGC", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoForward, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(2), "", "GCGT", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testReverseInsertNoNormalizationNecessaryOneBaseFirst() {
+	public void testReverseInsertNoNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23694498, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "G", '-');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "", "G", Strand.REV);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
 
 	@Test
-	public void testReverseInsertNoNormalizationNecessaryOneBaseSecond() {
-		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23694498, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "A", '-');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
+	public void testReverseInsertNoNormalizationNecessaryOneBaseSecond() throws ProjectionException {
+		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 2, PositionType.ZERO_BASED);
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "", "A", Strand.REV);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
 
 	@Test
-	public void testReverseInsertNoNormalizationNecessaryMoreBasesSecond() {
-		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23694497, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "AAA", '-');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
+	public void testReverseInsertNoNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
+		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 2, PositionType.ZERO_BASED);
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "", "AAA", Strand.REV);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
 		Assert.assertEquals(change, updatedChange);
 	}
 
 	@Test
-	public void testReverseInsertNormalizationNecessaryOneBaseFirst() {
+	public void testReverseInsertNormalizationNecessaryOneBaseFirst() throws ProjectionException {
 		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23694497, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "T", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-2), "", "T", '-');
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "", "T", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-1), "", "T", Strand.REV);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testReverseInsertNormalizationNecessaryOneBaseSecond() {
+	public void testReverseInsertNormalizationNecessaryOneBaseThird() throws ProjectionException {
 		// one base at second CDS position
-		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23694497, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "T", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "", "T", '-');
+		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 3, PositionType.ZERO_BASED);
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "", "T", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-1), "", "T", Strand.REV);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testReverseInsertNormalizationNecessaryMoreBasesSecond() {
-		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 1, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23694497, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "", "GGGTTAT", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-4), "", "TTATGGG", '-');
+	public void testReverseInsertNormalizationNecessaryMoreBasesSecond() throws ProjectionException {
+		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 17, PositionType.ZERO_BASED);
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "", "AA", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeInsertion(this.infoReverse, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-4), "", "AA", Strand.REV);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testForwardDeletionNormalization() {
-		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 24, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 6640062 + 24, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "GGAGTCTCCGCACT", "", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeDeletion(this.infoForward, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(1), "GAGTCTCCGCACTG", "", '+');
+	public void testForwardDeletionNormalization() throws ProjectionException {
+		TranscriptPosition txPos = new TranscriptPosition(infoForward, 1, PositionType.ZERO_BASED);
+		GenomePosition gPos = projectorForward.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "GTCACGTCCGGCGCG", "", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeDeletion(this.infoForward, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(1), "TCACGTCCGGCGCGG", "", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
 
 	@Test
-	public void testReverseDeletionNormalization() {
-		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 0, PositionType.ZERO_BASED);
-		GenomePosition gPos = new GenomePosition(refDict, '+', 1, 23696357 - 15, PositionType.ZERO_BASED);
-		GenomeChange change = new GenomeChange(gPos, "ATAGCAGCTTATT", "", '+');
-		GenomeChange updatedChange = GenomeChangeNormalizer.normalizeDeletion(this.infoReverse, change, txPos);
-		GenomeChange expectedChange = new GenomeChange(gPos.shifted(-1), "TATAGCAGCTTAT", "", '+');
+	public void testReverseDeletionNormalization() throws ProjectionException {
+		TranscriptPosition txPos = new TranscriptPosition(infoReverse, 17, PositionType.ZERO_BASED);
+		GenomePosition gPos = projectorReverse.transcriptToGenomePos(txPos).withStrand(Strand.FWD);
+		GenomeVariant change = new GenomeVariant(gPos, "AA", "", Strand.FWD);
+		GenomeVariant updatedChange = GenomeVariantNormalizer.normalizeDeletion(this.infoReverse, change, txPos);
+		GenomeVariant expectedChange = new GenomeVariant(gPos.shifted(-3), "AA", "", Strand.FWD);
 		Assert.assertEquals(expectedChange, updatedChange);
 	}
+
 }

@@ -97,7 +97,7 @@ public abstract class FastaParser {
 			if (sequence != null)
 				addSequenceToModel();
 			if (bar != null)
-				bar.print(bar.max);
+				bar.print(bar.getMax());
 		} catch (IOException e) {
 			LOGGER.warn("failed to read the FASTA file: {}", e);
 		} finally {

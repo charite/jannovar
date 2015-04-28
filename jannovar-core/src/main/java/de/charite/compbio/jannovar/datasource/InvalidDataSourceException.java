@@ -11,7 +11,16 @@ public class InvalidDataSourceException extends JannovarException {
 
 	private static final long serialVersionUID = 1L;
 
+	public InvalidDataSourceException() {
+		super();
+	}
+
 	public InvalidDataSourceException(String msg) {
 		super(msg);
 	}
+
+	public InvalidDataSourceException(String msg, Throwable cause) {
+		super(msg);
+	}
+
 }

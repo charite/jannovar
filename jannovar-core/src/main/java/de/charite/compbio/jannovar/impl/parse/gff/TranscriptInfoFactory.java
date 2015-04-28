@@ -9,12 +9,13 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor.Gene;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor.Transcript;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.PositionType;
+import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
@@ -29,6 +30,7 @@ public final class TranscriptInfoFactory {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptInfoFactory.class);
 
 	/** {@link GFFVersion} to assume for building transcripts from Feature objects */
+	@SuppressWarnings("unused")
 	private final GFFVersion gffVersion;
 
 	/** reference dictionary to use */
@@ -71,32 +73,32 @@ public final class TranscriptInfoFactory {
 				TranscriptModelBuilder tib = new TranscriptModelBuilder();
 				tib.setAccession(rna.name);
 				tib.setGeneSymbol(gene.name);
-				tib.setStrand(rna.strand ? '+' : '-');
-				tib.setTxRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getTxStart(), rna.getTxEnd(),
-						PositionType.ONE_BASED));
+				tib.setStrand(rna.strand ? Strand.FWD : Strand.REV);
+				tib.setTXRegion(new GenomeInterval(refDict, Strand.FWD, rna.chromosom, rna.getTXStart(), rna
+						.getTXEnd(), PositionType.ONE_BASED));
 
-				// Check whether the corrected CDS start position returned from getCdsStart() is within an exon and do
+				// Check whether the corrected CDS start position returned from getCDSStart() is within an exon and do
 				// the same for the CDS end position. The correction in these methods can lead to inconsistent positions
 				// in the case of 3' and 5' UTR truncation.
 				boolean cdsStartInExon = false;
-				int cdsStart = rna.getCdsStart();
+				int cdsStart = rna.getCDSStart();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsStartInExon = cdsStartInExon
-					|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
+							|| (cdsStart >= rna.getExonStarts()[i] && cdsStart <= rna.getExonEnds()[i]);
 				boolean cdsEndInExon = false;
-				int cdsEnd = rna.getCdsEnd();
+				int cdsEnd = rna.getCDSEnd();
 				for (int i = 0; i < rna.getExonStarts().length; ++i)
 					cdsEndInExon = cdsEndInExon || (cdsEnd >= rna.getExonStarts()[i] && cdsEnd <= rna.getExonEnds()[i]);
 				if (!cdsStartInExon || !cdsEndInExon) {
 					LOGGER.info("Transcript {} appears to be 3'/5' truncated. Ignoring.", new Object[] { rna.id });
 					continue;
 				}
-				tib.setCdsRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getCdsStart(), rna.getCdsEnd(),
-						PositionType.ONE_BASED));
+				tib.setCDSRegion(new GenomeInterval(refDict, Strand.FWD, rna.chromosom, rna.getCDSStart(), rna
+						.getCDSEnd(), PositionType.ONE_BASED));
 
 				for (int i = 0; i < rna.exons.size(); ++i)
-					tib.addExonRegion(new GenomeInterval(refDict, '+', rna.chromosom, rna.getExonStarts()[i], rna
-							.getExonEnds()[i], PositionType.ONE_BASED));
+					tib.addExonRegion(new GenomeInterval(refDict, Strand.FWD, rna.chromosom, rna.getExonStarts()[i],
+							rna.getExonEnds()[i], PositionType.ONE_BASED));
 
 				tib.setGeneID(gene.id);
 

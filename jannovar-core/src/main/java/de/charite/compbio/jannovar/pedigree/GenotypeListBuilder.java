@@ -1,10 +1,8 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
-
-import de.charite.compbio.jannovar.reference.GenomeInterval;
-
-// TODO(holtgrew): Renomve genomeRegion member?
 
 /**
  * Builder for {@link GenotypeList}.
@@ -13,14 +11,30 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
  */
 public class GenotypeListBuilder {
 	private final String geneID;
-	private final GenomeInterval genomeRegion;
+	private boolean isXChromosomal;
 	private final ImmutableList<String> names;
 	private final ImmutableList.Builder<ImmutableList<Genotype>> callBuilder = new ImmutableList.Builder<ImmutableList<Genotype>>();
 
-	public GenotypeListBuilder(String geneID, GenomeInterval genomeRegion, ImmutableList<String> names) {
+	public GenotypeListBuilder(String geneID, List<String> names) {
+		this(geneID, names, true);
+	}
+
+	public GenotypeListBuilder(String geneID, List<String> names, boolean isXChromosomal) {
 		this.geneID = geneID;
-		this.genomeRegion = genomeRegion;
-		this.names = names;
+		this.names = ImmutableList.copyOf(names);
+		this.isXChromosomal = isXChromosomal;
+	}
+
+	/**
+	 * Set "is X chromosomal" flag of next build GenotypeList.
+	 *
+	 * @param isXChromosomal
+	 *            <code>true</code> if the next built genotype list is X chromosomal
+	 * @return <code>this</code> for chaining
+	 */
+	public GenotypeListBuilder setIsXChromosomal(boolean isXChromosomal) {
+		this.isXChromosomal = isXChromosomal;
+		return this;
 	}
 
 	/**
@@ -28,15 +42,17 @@ public class GenotypeListBuilder {
 	 *
 	 * @param lst
 	 *            list of {@link Genotype} objects, one for each individual
+	 * @return <code>this</code> for chaining
 	 */
-	public void addGenotypes(ImmutableList<Genotype> lst) {
+	public GenotypeListBuilder addGenotypes(ImmutableList<Genotype> lst) {
 		callBuilder.add(lst);
+		return this;
 	}
 
 	/**
 	 * @return new {@link GenotypeList}
 	 */
 	public GenotypeList build() {
-		return new GenotypeList(geneID, genomeRegion, names, callBuilder.build());
+		return new GenotypeList(geneID, names, isXChromosomal, callBuilder.build());
 	}
 }

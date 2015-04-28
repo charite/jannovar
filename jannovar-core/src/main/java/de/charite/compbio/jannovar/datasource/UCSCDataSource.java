@@ -4,8 +4,6 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
-
 /**
  * {@link DataSource} implementation for data from UCSC.
  *
@@ -17,7 +15,7 @@ final class UCSCDataSource extends DataSource {
 	private final ImmutableList<String> urlKeys = ImmutableList.of("knownCanonical", "knownGene", "knownGeneMrna",
 			"kgXref", "knownToLocusLink", "chromInfo", "chrToAccessions");
 
-	UCSCDataSource(JannovarOptions options, Section iniSection) throws InvalidDataSourceException {
+	UCSCDataSource(DatasourceOptions options, Section iniSection) throws InvalidDataSourceException {
 		super(options, iniSection);
 
 		checkURLs();

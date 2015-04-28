@@ -1,9 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
-import de.charite.compbio.jannovar.reference.GenomeChange;
-
 /**
- * Thrown when the the given {@link GenomeChange} does not fit the used annotation builder class.
+ * Thrown when the the given {@link GenomeVariant} does not fit the used annotation builder class.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */

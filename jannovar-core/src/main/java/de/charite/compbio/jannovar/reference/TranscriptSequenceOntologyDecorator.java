@@ -34,14 +34,14 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return the {@link GenomeInterval} with the start codon
 	 */
 	public GenomeInterval getStartCodonInterval() {
-		return new GenomeInterval(transcript.cdsRegion.getGenomeBeginPos(), 3);
+		return new GenomeInterval(transcript.getCDSRegion().getGenomeBeginPos(), 3);
 	}
 
 	/**
 	 * @return the {@link GenomeInterval} with the start codon
 	 */
 	public GenomeInterval getStopCodonInterval() {
-		GenomePosition pos = transcript.cdsRegion.getGenomeEndPos();
+		GenomePosition pos = transcript.getCDSRegion().getGenomeEndPos();
 		return new GenomeInterval(pos.shifted(-3), 3);
 	}
 
@@ -51,8 +51,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return the {@link GenomeInterval} with the 5' UTR
 	 */
 	public GenomeInterval getFivePrimeUTRInterval() {
-		GenomePosition fivePrimeUTRBeginPos = transcript.txRegion.getGenomeBeginPos();
-		int fivePrimeUTRLen = transcript.cdsRegion.getGenomeBeginPos().differenceTo(fivePrimeUTRBeginPos);
+		GenomePosition fivePrimeUTRBeginPos = transcript.getTXRegion().getGenomeBeginPos();
+		int fivePrimeUTRLen = transcript.getCDSRegion().getGenomeBeginPos().differenceTo(fivePrimeUTRBeginPos);
 		return new GenomeInterval(fivePrimeUTRBeginPos, fivePrimeUTRLen);
 	}
 
@@ -62,8 +62,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return the {@link GenomeInterval} with the 3' UTR
 	 */
 	public GenomeInterval getThreePrimeUTRInterval() {
-		GenomePosition threePrimeUTRBeginPos = transcript.cdsRegion.getGenomeEndPos();
-		int threePrimeUTRLen = transcript.txRegion.getGenomeEndPos().differenceTo(threePrimeUTRBeginPos);
+		GenomePosition threePrimeUTRBeginPos = transcript.getCDSRegion().getGenomeEndPos();
+		int threePrimeUTRLen = transcript.getTXRegion().getGenomeEndPos().differenceTo(threePrimeUTRBeginPos);
 		return new GenomeInterval(threePrimeUTRBeginPos, threePrimeUTRLen);
 	}
 
@@ -73,7 +73,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if <code>interval</code> contains a full exon (coding or non-coding).
 	 */
 	public boolean containsExon(GenomeInterval interval) {
-		for (GenomeInterval region : transcript.exonRegions)
+		for (GenomeInterval region : transcript.getExonRegions())
 			if (interval.contains(region))
 				return true;
 		return false;
@@ -85,8 +85,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if <code>interval</code> overlaps with a CDS-overlapping exon
 	 */
 	public boolean overlapsWithCDSExon(GenomeInterval interval) {
-		for (GenomeInterval region : transcript.exonRegions)
-			if (transcript.cdsRegion.overlapsWith(region) && interval.overlapsWith(region))
+		for (GenomeInterval region : transcript.getExonRegions())
+			if (transcript.getCDSRegion().overlapsWith(region) && interval.overlapsWith(region))
 				return true;
 		return false;
 	}
@@ -97,7 +97,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomeInterval} falls fully into the coding part of an exon
 	 */
 	public boolean liesInCDSExon(GenomeInterval interval) {
-		return (transcript.cdsRegion.contains(interval) && liesInExon(interval));
+		return (transcript.getCDSRegion().contains(interval) && liesInExon(interval));
 	}
 
 	/**
@@ -106,7 +106,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the {@link GenomePosition} points to a base in the coding part of an exon
 	 */
 	public boolean liesInCDSExon(GenomePosition pos) {
-		return (transcript.cdsRegion.contains(pos) && liesInExon(pos));
+		return (transcript.getCDSRegion().contains(pos) && liesInExon(pos));
 	}
 
 	/**
@@ -115,14 +115,14 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if <code>interval</code> overlaps with the CDS region of the transcript
 	 */
 	public boolean overlapsWithCDS(GenomeInterval interval) {
-		return transcript.cdsRegion.overlapsWith(interval);
+		return transcript.getCDSRegion().overlapsWith(interval);
 	}
 
 	/**
 	 * @return <code>true</code> if <code>pos</code> lies within the CDS of {@link #transcript}
 	 */
 	public boolean liesInCDS(GenomePosition pos) {
-		return transcript.cdsRegion.contains(pos);
+		return transcript.getCDSRegion().contains(pos);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean overlapsWithIntron(GenomeInterval changeInterval) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i + 1 < transcript.exonRegions.size(); ++i) {
+		for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
 			GenomeInterval intronRegion = transcript.intronRegion(i);
 			if (changeInterval.overlapsWith(intronRegion))
 				return true;
@@ -145,7 +145,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean liesInIntron(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i + 1 < transcript.exonRegions.size(); ++i) {
+		for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
 			GenomeInterval intronRegion = transcript.intronRegion(i);
 			if (intronRegion.contains(pos))
 				return true;
@@ -161,9 +161,9 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean overlapsWithCDSIntron(GenomeInterval changeInterval) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i + 1 < transcript.exonRegions.size(); ++i) {
+		for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
 			GenomeInterval intronRegion = transcript.intronRegion(i);
-			if (transcript.cdsRegion.overlapsWith(intronRegion) && changeInterval.overlapsWith(intronRegion))
+			if (transcript.getCDSRegion().overlapsWith(intronRegion) && changeInterval.overlapsWith(intronRegion))
 				return true;
 		}
 		return false;
@@ -175,9 +175,9 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean liesInCDSIntron(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i + 1 < transcript.exonRegions.size(); ++i) {
+		for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
 			GenomeInterval intronRegion = transcript.intronRegion(i);
-			if (transcript.cdsRegion.overlapsWith(intronRegion) && intronRegion.contains(pos))
+			if (transcript.getCDSRegion().overlapsWith(intronRegion) && intronRegion.contains(pos))
 				return true;
 		}
 		return false;
@@ -227,9 +227,9 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean overlapsWithSpliceRegion(GenomeInterval interval) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i < transcript.exonRegions.size(); ++i) {
-			GenomeInterval exonInterval = transcript.exonRegions.get(i);
-			if (i + 1 < transcript.exonRegions.size()) {
+		for (int i = 0; i < transcript.getExonRegions().size(); ++i) {
+			GenomeInterval exonInterval = transcript.getExonRegions().get(i);
+			if (i + 1 < transcript.getExonRegions().size()) {
 				// check for donor region
 				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
 				if (interval.overlapsWith(spliceRegionInterval))
@@ -258,9 +258,9 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean liesInSpliceRegion(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i < transcript.exonRegions.size(); ++i) {
-			GenomeInterval exonInterval = transcript.exonRegions.get(i);
-			if (i + 1 < transcript.exonRegions.size()) {
+		for (int i = 0; i < transcript.getExonRegions().size(); ++i) {
+			GenomeInterval exonInterval = transcript.getExonRegions().get(i);
+			if (i + 1 < transcript.getExonRegions().size()) {
 				// check for donor region
 				GenomeInterval spliceRegionInterval = new GenomeInterval(exonInterval.getGenomeEndPos().shifted(-3), 11);
 				if (spliceRegionInterval.contains(pos))
@@ -288,8 +288,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean overlapsWithSpliceDonorSite(GenomeInterval interval) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i + 1 < transcript.exonRegions.size(); ++i) {
-			GenomeInterval exonInterval = transcript.exonRegions.get(i);
+		for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
+			GenomeInterval exonInterval = transcript.getExonRegions().get(i);
 			GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
 			if (interval.overlapsWith(donorInterval))
 				return true;
@@ -308,8 +308,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean liesInSpliceDonorSite(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
-		for (int i = 0; i + 1 < transcript.exonRegions.size(); ++i) {
-			GenomeInterval exonInterval = transcript.exonRegions.get(i);
+		for (int i = 0; i + 1 < transcript.getExonRegions().size(); ++i) {
+			GenomeInterval exonInterval = transcript.getExonRegions().get(i);
 			GenomeInterval donorInterval = new GenomeInterval(exonInterval.getGenomeEndPos(), 2);
 			if (donorInterval.contains(pos))
 				return true;
@@ -328,8 +328,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean overlapsWithSpliceAcceptorSite(GenomeInterval interval) {
 		// TODO(holtgrem): Test me!
-		for (int i = 1; i < transcript.exonRegions.size(); ++i) {
-			GenomeInterval exonInterval = transcript.exonRegions.get(i);
+		for (int i = 1; i < transcript.getExonRegions().size(); ++i) {
+			GenomeInterval exonInterval = transcript.getExonRegions().get(i);
 			GenomeInterval acceptorInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
 			if (interval.overlapsWith(acceptorInterval))
 				return true;
@@ -348,8 +348,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 */
 	public boolean liesInSpliceAcceptorSite(GenomePosition pos) {
 		// TODO(holtgrem): Test me!
-		for (int i = 1; i < transcript.exonRegions.size(); ++i) {
-			GenomeInterval exonInterval = transcript.exonRegions.get(i);
+		for (int i = 1; i < transcript.getExonRegions().size(); ++i) {
+			GenomeInterval exonInterval = transcript.getExonRegions().get(i);
 			GenomeInterval acceptorInterval = new GenomeInterval(exonInterval.getGenomeBeginPos().shifted(-2), 2);
 			if (acceptorInterval.contains(pos))
 				return true;
@@ -361,7 +361,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return {@link GenomeInterval} that gives the upstream region of the transcript.
 	 */
 	public GenomeInterval getUpstreamInterval() {
-		return new GenomeInterval(transcript.txRegion.getGenomeBeginPos().shifted(-1000), 1000);
+		return new GenomeInterval(transcript.getTXRegion().getGenomeBeginPos().shifted(-1000), 1000);
 	}
 
 	/**
@@ -396,7 +396,7 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return {@link GenomeInterval} that gives the downstream region of the transcript.
 	 */
 	public GenomeInterval getDownstreamInterval() {
-		return new GenomeInterval(transcript.txRegion.getGenomeEndPos(), 1000);
+		return new GenomeInterval(transcript.getTXRegion().getGenomeEndPos(), 1000);
 	}
 
 	/**
@@ -436,7 +436,11 @@ public final class TranscriptSequenceOntologyDecorator {
 		return interval.overlapsWith(getFivePrimeUTRInterval());
 	}
 
-	// TODO(holtgrem): Document me!
+	/**
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return <code>true</code> if the {@link GenomePosition} lies in the 5' UTR
+	 */
 	public boolean liesInFivePrimeUTR(GenomePosition pos) {
 		return getFivePrimeUTRInterval().contains(pos);
 	}
@@ -450,7 +454,11 @@ public final class TranscriptSequenceOntologyDecorator {
 		return interval.overlapsWith(getThreePrimeUTRInterval());
 	}
 
-	// TODO(holtgrem): Document me!
+	/**
+	 * @param pos
+	 *            the {@link GenomePosition} to use for querying
+	 * @return <code>true</code> if the {@link GenomePosition} lies in the 3' UTR
+	 */
 	public boolean liesInThreePrimeUTR(GenomePosition pos) {
 		return getThreePrimeUTRInterval().contains(pos);
 	}
@@ -468,7 +476,7 @@ public final class TranscriptSequenceOntologyDecorator {
 		if (intronNo == TranscriptProjectionDecorator.INVALID_INTRON_ID)
 			return false;
 
-		return !transcript.exonRegions.get(intronNo + 1).contains(interval.getGenomeEndPos().shifted(-1));
+		return !transcript.getExonRegions().get(intronNo + 1).contains(interval.getGenomeEndPos().shifted(-1));
 	}
 
 	/**
@@ -484,7 +492,7 @@ public final class TranscriptSequenceOntologyDecorator {
 		if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID)
 			return false;
 
-		return transcript.exonRegions.get(exonNo).contains(interval);
+		return transcript.getExonRegions().get(exonNo).contains(interval);
 	}
 
 	/**
@@ -501,7 +509,7 @@ public final class TranscriptSequenceOntologyDecorator {
 		if (exonNo == TranscriptProjectionDecorator.INVALID_EXON_ID)
 			return false;
 
-		return transcript.exonRegions.get(exonNo).contains(pos);
+		return transcript.getExonRegions().get(exonNo).contains(pos);
 	}
 
 	/**
@@ -510,8 +518,8 @@ public final class TranscriptSequenceOntologyDecorator {
 	 * @return <code>true</code> if the interval overlaps with an exon
 	 */
 	public boolean overlapsWithExon(GenomeInterval interval) {
-		for (int i = 0; i < transcript.exonRegions.size(); ++i)
-			if (interval.overlapsWith(transcript.exonRegions.get(i)))
+		for (int i = 0; i < transcript.getExonRegions().size(); ++i)
+			if (interval.overlapsWith(transcript.getExonRegions().get(i)))
 				return true;
 		return false;
 	}

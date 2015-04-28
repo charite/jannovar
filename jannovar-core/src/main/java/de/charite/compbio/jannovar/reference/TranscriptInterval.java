@@ -12,11 +12,11 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 public final class TranscriptInterval {
 
 	/** the transcript that this position is relative to */
-	public final TranscriptModel transcript;
+	private final TranscriptModel transcript;
 	/** the begin position within the transcript */
-	public final int beginPos;
+	private final int beginPos;
 	/** the end position within the transcript */
-	public final int endPos;
+	private final int endPos;
 
 	/** construct transcript interval with one-based coordinate system */
 	public TranscriptInterval(TranscriptModel transcript, int beginPos, int endPos) {
@@ -30,19 +30,34 @@ public final class TranscriptInterval {
 		this.endPos = endPos;
 	}
 
-	/** returns length of the interval */
+	/** @return transcript that this position is relative to */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/** @return zero-based begin position */
+	public int getBeginPos() {
+		return beginPos;
+	}
+
+	/** @return zero-based end position */
+	public int getEndPos() {
+		return endPos;
+	}
+
+	/** @return length of the interval */
 	public int length() {
 		return this.endPos - this.beginPos;
 	}
 
 	/** @return begin position of the interval */
-	public TranscriptPosition getBeginPos() {
+	public TranscriptPosition getTranscriptBeginPos() {
 		// TODO(holtgrem): test me!
 		return new TranscriptPosition(transcript, beginPos, PositionType.ZERO_BASED);
 	}
 
 	/** @return end position of the interval */
-	public TranscriptPosition getEndPos() {
+	public TranscriptPosition getTranscriptEndPos() {
 		// TODO(holtgrem): test me!
 		return new TranscriptPosition(transcript, endPos, PositionType.ZERO_BASED);
 	}
@@ -54,7 +69,7 @@ public final class TranscriptInterval {
 	 */
 	@Override
 	public String toString() {
-		return StringUtil.concatenate(transcript.accession, ":n.", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(transcript.getAccession(), ":n.", beginPos + 1, "-", endPos);
 	}
 
 	/*

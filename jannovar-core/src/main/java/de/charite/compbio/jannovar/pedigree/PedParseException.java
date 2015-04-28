@@ -12,11 +12,15 @@ public class PedParseException extends JannovarException {
 	public static final long serialVersionUID = 2L;
 
 	public PedParseException() {
-		super("Unknown exception during parsing of Ped File");
+		super();
 	}
 
 	public PedParseException(String msg) {
 		super(msg);
+	}
+
+	public PedParseException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }
