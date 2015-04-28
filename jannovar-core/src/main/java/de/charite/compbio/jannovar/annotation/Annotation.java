@@ -12,8 +12,6 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.VariantDescription;
 
 // TODO(holtgrem): Test me!
-// TODO(holtgrem): Sorting of annotations
-// TODO(holtgrem): collection of warnings
 
 /**
  * Collect the information for one variant's annotation.
