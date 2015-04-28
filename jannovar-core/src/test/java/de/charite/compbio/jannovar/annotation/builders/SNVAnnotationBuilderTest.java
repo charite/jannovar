@@ -19,8 +19,6 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
 
-// TODO(holtgrem): Extend tests for reverse transcript?
-
 public class SNVAnnotationBuilderTest {
 
 	/** this test uses this static hg19 reference dictionary */

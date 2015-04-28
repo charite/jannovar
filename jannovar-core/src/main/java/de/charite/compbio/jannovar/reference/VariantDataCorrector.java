@@ -45,7 +45,7 @@ final class VariantDataCorrector {
 		while (xdi > 0 && xdi - diff > 0 && ref.charAt(xdi - 1) == alt.charAt(xdi - 1 - diff)) {
 			xdi--;
 		}
-		ref = xdi == 0 ? "-" : ref.substring(0, xdi);
-		alt = xdi - diff == 0 ? "-" : alt.substring(0, xdi - diff);
+		ref = xdi == 0 ? "" : ref.substring(0, xdi);
+		alt = xdi - diff == 0 ? "" : alt.substring(0, xdi - diff);
 	}
 }

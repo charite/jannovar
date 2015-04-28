@@ -20,8 +20,6 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
 
-// TODO(holtgrem): Extend tests to also use reverse transcript?
-
 public class BlockSubstitutionAnnotationBuilderTest {
 
 	/** this test uses this static hg19 reference dictionary */

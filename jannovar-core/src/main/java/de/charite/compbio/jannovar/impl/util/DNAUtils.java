@@ -18,7 +18,7 @@ public final class DNAUtils {
 	 * @return reverse complement version of the input string sq.
 	 */
 	public static String reverseComplement(String sq) {
-		if (sq.equals("-"))
+		if (sq.isEmpty())
 			return sq; // deletion, insertion do not need rc
 
 		StringBuffer sb = new StringBuffer();
