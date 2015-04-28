@@ -5,13 +5,15 @@
 	<artifactId>jped-cli</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jped-cli</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jped-cli is the command line interface to jannovar-filter, for filtering VCF files
+	  for compatibility with a given pedigree and mode of inheritance</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.13-SNAPSHOT</version>
+		<version>0.13</version>
 	</parent>
 
 	<properties>
