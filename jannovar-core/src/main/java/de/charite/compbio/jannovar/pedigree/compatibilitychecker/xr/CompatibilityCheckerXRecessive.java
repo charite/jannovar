@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr;
 import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
@@ -30,7 +30,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityC
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class CompatibilityCheckerXRecessive extends ACompatibilityChecker {
+public class CompatibilityCheckerXRecessive extends CompatibilityCheckerBase {
 	
 	
 

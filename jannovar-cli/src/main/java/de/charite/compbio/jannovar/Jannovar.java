@@ -88,7 +88,9 @@ public final class Jannovar {
 				printTopLevelHelp();
 			}
 		} catch (CommandLineParsingException e) {
-			System.err.println("problem with parsing command line options: " + e.getMessage());
+			System.err.println("ERROR: problem with parsing command line options: " + e.getMessage());
+			System.err.println("");
+			System.err.println("Use --help for obtaining usage instructions.");
 		} catch (HelpRequestedException e) {
 			return; // no error, user wanted help
 		}

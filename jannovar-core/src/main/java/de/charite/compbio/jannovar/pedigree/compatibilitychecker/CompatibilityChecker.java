@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
 import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 
-public interface ICompatibilityChecker {
+public interface CompatibilityChecker {
 
 	/**
 	 * @return <code>true</code> if {@link #list} is compatible with

@@ -7,8 +7,8 @@ import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): Make AnnotationBuilder an interface and rename AnnotationBuilder to AnnotationBuilderBase?
@@ -100,7 +100,8 @@ public final class StructuralVariantAnnotationBuilder {
 						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
 								+ ref.length(), "del"), null);
 			} else {
-				return new Annotation(null, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
+				return new Annotation(this.transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT),
+						annoLoc,
 						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
 			}
 		} else { // SV substitution

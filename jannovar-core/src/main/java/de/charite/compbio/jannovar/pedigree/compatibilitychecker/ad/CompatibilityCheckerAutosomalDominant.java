@@ -7,7 +7,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal dominant
@@ -25,7 +25,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ACompatibilityC
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class CompatibilityCheckerAutosomalDominant extends ACompatibilityChecker {
+public class CompatibilityCheckerAutosomalDominant extends CompatibilityCheckerBase {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
