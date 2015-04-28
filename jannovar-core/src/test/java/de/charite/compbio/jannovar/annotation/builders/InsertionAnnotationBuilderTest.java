@@ -11,8 +11,8 @@ import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -816,7 +816,6 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.439dup", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Met147Asnfs*8", annotation1.getAminoAcidHGVSDescription());
-		// TODO(holtgrem): Duplication on nucleotide level but FS insertion for AAs.
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
 

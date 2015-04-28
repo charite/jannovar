@@ -10,9 +10,9 @@ import de.charite.compbio.jannovar.annotation.builders.StructuralVariantAnnotati
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -125,9 +125,10 @@ public final class VariantAnnotator {
 		final Chromosome chr = chromosomeMap.get(change.getChr());
 		IntervalArray<TranscriptModel>.QueryResult qr;
 		if (changeInterval.length() == 0)
-			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.beginPos);
+			qr = chr.getTMIntervalTree().findOverlappingWithPoint(changeInterval.getBeginPos());
 		else
-			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
+			qr = chr.getTMIntervalTree().findOverlappingWithInterval(changeInterval.getBeginPos(),
+					changeInterval.getEndPos());
 		ArrayList<TranscriptModel> candidateTranscripts = new ArrayList<TranscriptModel>(qr.getEntries());
 
 		// Handle the case of no overlapping transcript. Then, create intergenic, upstream, or downstream annotations

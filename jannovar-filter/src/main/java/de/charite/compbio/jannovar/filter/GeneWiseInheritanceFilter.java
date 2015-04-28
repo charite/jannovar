@@ -27,9 +27,9 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -125,9 +125,9 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			final GenomeInterval changeInterval = change.getGenomeInterval();
 			IntervalArray<Gene>.QueryResult qr;
 			if (changeInterval.length() == 0)
-				qr = iTree.findOverlappingWithPoint(changeInterval.beginPos);
+				qr = iTree.findOverlappingWithPoint(changeInterval.getBeginPos());
 			else
-				qr = iTree.findOverlappingWithInterval(changeInterval.beginPos, changeInterval.endPos);
+				qr = iTree.findOverlappingWithInterval(changeInterval.getBeginPos(), changeInterval.getEndPos());
 
 			for (Gene gene : qr.getEntries())
 				if (isGeneAffectedByChange(gene, change))
@@ -185,9 +185,9 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
 		for (Map.Entry<Gene, GenotypeListBuilder> entry : activeGenes.entrySet()) {
 			Gene gene = entry.getKey();
-			if (gene.getRegion().chr != contigID)
+			if (gene.getRegion().getChr() != contigID)
 				doneGenes.add(gene);
-			else if (gene.getRegion().endPos <= pos)
+			else if (gene.getRegion().getEndPos() <= pos)
 				doneGenes.add(gene);
 		}
 
@@ -305,7 +305,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	private void checkVariantsForGene(Gene gene) throws FilterException {
 		// check gene for compatibility and mark variants as compatible if so
 		boolean isXChromosomal = (gene.getRefDict().getContigNameToID().get("chrX") != null && gene.getRefDict().getContigNameToID().get(
-				"chrX").intValue() == gene.getRegion().chr);
+"chrX").intValue() == gene.getRegion().getChr());
 		GenotypeList lst = activeGenes.get(gene).setIsXChromosomal(isXChromosomal).build();
 		try {
 			if (checker.isCompatibleWith(lst, modeOfInheritance))

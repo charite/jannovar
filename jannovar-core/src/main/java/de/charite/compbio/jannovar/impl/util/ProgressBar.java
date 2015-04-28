@@ -3,38 +3,47 @@ package de.charite.compbio.jannovar.impl.util;
 /**
  * A simple status bar that only work on terminals where "\r" has an affect.
  *
+ * The progress is done/shown in the closed interval <code>[min, max]</code>.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 public final class ProgressBar {
 
-	// TODO(holtgrem): improve documentation
-	// TODO(holtgrem): allow incremental printing for text files
+	/** smallest value */
 	private final long min;
+	/** largest value */
 	private final long max;
+	/** whether or not to print */
 	private final boolean doPrint;
 
+	/** Initialize progress bar with the given settings */
 	public ProgressBar(long min, long max) {
 		this(min, max, true);
 	}
 
+	/** Initialize progress bar with the given settings */
 	public ProgressBar(long min, long max, boolean doPrint) {
 		this.min = min;
 		this.max = max;
 		this.doPrint = true;
 	}
 
+	/** @return smallest value to represent */
 	public long getMin() {
 		return min;
 	}
 
+	/** @return largest value to represent */
 	public long getMax() {
 		return max;
 	}
 
-	public boolean isDoPrint() {
+	/** @return <code>true</code> if the progress bar has printing enabled */
+	public boolean doPrint() {
 		return doPrint;
 	}
 
+	/** print progress up to position <code>pos</code>, if {@link #doPrint} */
 	public void print(long pos) {
 		if (!doPrint)
 			return;

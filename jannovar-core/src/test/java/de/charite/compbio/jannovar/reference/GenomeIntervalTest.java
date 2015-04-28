@@ -15,18 +15,18 @@ public class GenomeIntervalTest {
 	@Test
 	public void testConstructorDefaultPositionType() {
 		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, 1, 23, 45, PositionType.ONE_BASED);
-		Assert.assertEquals(interval.chr, 1);
-		Assert.assertEquals(interval.beginPos, 22);
-		Assert.assertEquals(interval.endPos, 45);
+		Assert.assertEquals(interval.getChr(), 1);
+		Assert.assertEquals(interval.getBeginPos(), 22);
+		Assert.assertEquals(interval.getEndPos(), 45);
 		Assert.assertEquals(interval.length(), 23);
 	}
 
 	@Test
 	public void testConstructorExplicitPositionType() {
 		GenomeInterval interval = new GenomeInterval(refDict, Strand.FWD, 1, 23, 45, PositionType.ZERO_BASED);
-		Assert.assertEquals(interval.chr, 1);
-		Assert.assertEquals(interval.beginPos, 23);
-		Assert.assertEquals(interval.endPos, 45);
+		Assert.assertEquals(interval.getChr(), 1);
+		Assert.assertEquals(interval.getBeginPos(), 23);
+		Assert.assertEquals(interval.getEndPos(), 45);
 		Assert.assertEquals(interval.length(), 22);
 	}
 
@@ -53,10 +53,10 @@ public class GenomeIntervalTest {
 		GenomeInterval fwdInterval = new GenomeInterval(refDict, Strand.FWD, 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval revInterval = new GenomeInterval(fwdInterval, Strand.REV);
 
-		Assert.assertEquals(revInterval.strand, Strand.REV);
-		Assert.assertEquals(revInterval.chr, 1);
-		Assert.assertEquals(revInterval.beginPos, 249249521);
-		Assert.assertEquals(revInterval.endPos, 249249622);
+		Assert.assertEquals(revInterval.getStrand(), Strand.REV);
+		Assert.assertEquals(revInterval.getChr(), 1);
+		Assert.assertEquals(revInterval.getBeginPos(), 249249521);
+		Assert.assertEquals(revInterval.getEndPos(), 249249622);
 		Assert.assertEquals(revInterval.length(), 101);
 
 		// check contains() after flip
@@ -75,10 +75,10 @@ public class GenomeIntervalTest {
 		GenomeInterval fwdInterval = new GenomeInterval(refDict, Strand.FWD, 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval fwdInterval2 = new GenomeInterval(fwdInterval, Strand.FWD);
 
-		Assert.assertEquals(fwdInterval2.strand, Strand.FWD);
-		Assert.assertEquals(fwdInterval2.chr, 1);
-		Assert.assertEquals(fwdInterval2.beginPos, 999);
-		Assert.assertEquals(fwdInterval2.endPos, 1100);
+		Assert.assertEquals(fwdInterval2.getStrand(), Strand.FWD);
+		Assert.assertEquals(fwdInterval2.getChr(), 1);
+		Assert.assertEquals(fwdInterval2.getBeginPos(), 999);
+		Assert.assertEquals(fwdInterval2.getEndPos(), 1100);
 		Assert.assertEquals(fwdInterval2.length(), 101);
 	}
 
@@ -87,10 +87,10 @@ public class GenomeIntervalTest {
 		GenomeInterval revInterval = new GenomeInterval(refDict, Strand.REV, 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval fwdInterval = new GenomeInterval(revInterval, Strand.FWD);
 
-		Assert.assertEquals(fwdInterval.strand, Strand.FWD);
-		Assert.assertEquals(fwdInterval.chr, 1);
-		Assert.assertEquals(fwdInterval.beginPos, 249249521);
-		Assert.assertEquals(fwdInterval.endPos, 249249622);
+		Assert.assertEquals(fwdInterval.getStrand(), Strand.FWD);
+		Assert.assertEquals(fwdInterval.getChr(), 1);
+		Assert.assertEquals(fwdInterval.getBeginPos(), 249249521);
+		Assert.assertEquals(fwdInterval.getEndPos(), 249249622);
 		Assert.assertEquals(fwdInterval.length(), 101);
 
 		// check contains() after flip
@@ -109,10 +109,10 @@ public class GenomeIntervalTest {
 		GenomeInterval revInterval = new GenomeInterval(refDict, Strand.REV, 1, 1000, 1100, PositionType.ONE_BASED);
 		GenomeInterval revInterval2 = new GenomeInterval(revInterval, Strand.REV);
 
-		Assert.assertEquals(revInterval2.strand, Strand.REV);
-		Assert.assertEquals(revInterval2.chr, 1);
-		Assert.assertEquals(revInterval2.beginPos, 999);
-		Assert.assertEquals(revInterval2.endPos, 1100);
+		Assert.assertEquals(revInterval2.getStrand(), Strand.REV);
+		Assert.assertEquals(revInterval2.getChr(), 1);
+		Assert.assertEquals(revInterval2.getBeginPos(), 999);
+		Assert.assertEquals(revInterval2.getEndPos(), 1100);
 		Assert.assertEquals(revInterval2.length(), 101);
 	}
 
@@ -121,10 +121,10 @@ public class GenomeIntervalTest {
 		GenomeInterval fwdInterval = new GenomeInterval(refDict, Strand.FWD, 1, 1000, 1100, PositionType.ZERO_BASED);
 		GenomeInterval revInterval = new GenomeInterval(fwdInterval, Strand.REV);
 
-		Assert.assertEquals(revInterval.strand, Strand.REV);
-		Assert.assertEquals(revInterval.chr, 1);
-		Assert.assertEquals(revInterval.beginPos, 249249521);
-		Assert.assertEquals(revInterval.endPos, 249249621);
+		Assert.assertEquals(revInterval.getStrand(), Strand.REV);
+		Assert.assertEquals(revInterval.getChr(), 1);
+		Assert.assertEquals(revInterval.getBeginPos(), 249249521);
+		Assert.assertEquals(revInterval.getEndPos(), 249249621);
 		Assert.assertEquals(revInterval.length(), 100);
 
 		// check contains() after flip
@@ -143,10 +143,10 @@ public class GenomeIntervalTest {
 		GenomeInterval revInterval = new GenomeInterval(refDict, Strand.REV, 1, 1000, 1100, PositionType.ZERO_BASED);
 		GenomeInterval fwdInterval = new GenomeInterval(revInterval, Strand.FWD);
 
-		Assert.assertEquals(fwdInterval.strand, Strand.FWD);
-		Assert.assertEquals(fwdInterval.chr, 1);
-		Assert.assertEquals(fwdInterval.beginPos, 249249521);
-		Assert.assertEquals(fwdInterval.endPos, 249249621);
+		Assert.assertEquals(fwdInterval.getStrand(), Strand.FWD);
+		Assert.assertEquals(fwdInterval.getChr(), 1);
+		Assert.assertEquals(fwdInterval.getBeginPos(), 249249521);
+		Assert.assertEquals(fwdInterval.getEndPos(), 249249621);
 		Assert.assertEquals(fwdInterval.length(), 100);
 
 		// check contains() after flip
