@@ -50,12 +50,6 @@ public final class GenomeChange implements VariantDescription {
 		}
 
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
-		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
-		if (corr.ref.equals("-"))
-			corr.ref = "";
-		if (corr.alt.equals("-"))
-			corr.alt = "";
-
 		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(),
 				corr.position, PositionType.ZERO_BASED);
 		this.ref = corr.ref;
@@ -86,12 +80,6 @@ public final class GenomeChange implements VariantDescription {
 
 		// Correct variant data.
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
-		// TODO(holtgrem): what's the reason for placing "-" in there anyway?
-		if (corr.ref.equals("-"))
-			corr.ref = "";
-		if (corr.alt.equals("-"))
-			corr.alt = "";
-
 		if (strand == pos.getStrand()) {
 			this.ref = corr.ref;
 			this.alt = corr.alt;

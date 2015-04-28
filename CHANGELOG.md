@@ -30,6 +30,7 @@
 
 ### jannovar-core
 
+* Removing support for using `"-"` as REF or ALT value.
 * Making previous `public final` members `private final` (or
  `protected final`) and adding getters for read-only access to them.
 * Removing position type member of `CDSInterval`.
