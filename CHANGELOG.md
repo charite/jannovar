@@ -30,6 +30,7 @@
 
 ### jannovar-core
 
+* Renaming `ACompatibilityChecker` and `ICompatibilityChecker`.
 * Adding `GenomePosition.differenceTo(GenomeInterval)`.
 * Renaming package `de.charite.compbio.jannovar.io` to `de.charite.compbio.jannovar.data`
 * Renaming `AnnotationLocation.toHGVSString` to `.toHGVSChunk`.
@@ -75,6 +76,7 @@
 
 ### jannovar-filter
 
+* Splitting into `jped-cli` and `jannovar-filter`
 * Changing public final members to accessors. 
 * `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
 

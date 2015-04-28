@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarFilterCommandLineParser;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -18,7 +17,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 class GeneBuilder {
 
 	/** the logger object to use */
-	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarFilterCommandLineParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeneBuilder.class);
 
 	private final ReferenceDictionary refDict;
 	private String name = null;

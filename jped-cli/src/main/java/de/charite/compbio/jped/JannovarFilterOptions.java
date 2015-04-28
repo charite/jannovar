@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar;
+package de.charite.compbio.jped;
 
 import java.io.PrintStream;
 
