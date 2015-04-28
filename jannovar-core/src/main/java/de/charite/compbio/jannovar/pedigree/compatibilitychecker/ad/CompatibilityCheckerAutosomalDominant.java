@@ -79,7 +79,7 @@ public class CompatibilityCheckerAutosomalDominant extends CompatibilityCheckerB
 			}
 
 			// If we reach here, we have either examined all members of the pedigree or have decided that the
-			// variant is incompatible in one person. If any one variant is compatible with AD inheritance, than the
+			// variant is incompatible in one person. If any one variant is compatible with AD inheritance, then the
 			// Gene is compatible and we can return true without examining the other variants.
 			if (currentVariantCompatible && numAffectedWithHet > 0)
 				return true;
