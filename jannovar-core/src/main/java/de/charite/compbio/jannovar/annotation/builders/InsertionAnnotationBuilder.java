@@ -11,8 +11,8 @@ import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
 import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.DuplicationChecker;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -172,7 +172,6 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
 			this.insertPos = projector.projectGenomeToCDSPosition(change.getGenomePos());
 
-			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
 			this.wtAAStopPos = wtAASeq.indexOf('*', this.insertPos.getPos() / 3);

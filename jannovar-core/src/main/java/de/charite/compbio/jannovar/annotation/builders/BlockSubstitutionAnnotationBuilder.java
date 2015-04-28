@@ -12,9 +12,9 @@ import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
 import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
@@ -127,7 +127,6 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
 			this.delFrameShift = (varCDSSeq.length() - wtCDSSeq.length()) % 3;
 
-			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
 			this.varAASeq = t.translateDNA(varCDSSeq);

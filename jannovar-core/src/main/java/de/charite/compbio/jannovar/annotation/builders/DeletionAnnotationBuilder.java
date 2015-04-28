@@ -12,8 +12,8 @@ import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
 import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
@@ -124,7 +124,6 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			this.changeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
 			this.changeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeEndPos().shifted(-1));
 
-			// TODO(holtgrem): Not translating in the cases we don't need it might save time
 			// Translate the variant CDS sequence and look for stop codon.
 			this.wtAASeq = t.translateDNA(wtCDSSeq);
 			this.varAASeq = t.translateDNA(varCDSSeq);
