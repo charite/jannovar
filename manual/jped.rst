@@ -1,23 +1,23 @@
 .. _jannovar_filter:
 
-The Jannovar Filter Program
-===========================
+JPed - Filter for Compatible Variants
+=====================================
 
-The Jannovar package ``de.charite.compbio.jannovar.pedigree`` contains functionality to load PED files and check lists of genotype calls for compatibility with a given pedigree and a selected mode of inheritance.
-This functionality is exposed in the ``jannovar-filter`` program.
-You can get the command line help for ``jannovar-filter`` as follows:
+The Jannovar package ``de.charite.compbio.jannovar.filter`` contains functionality to load PED files and check lists of genotype calls for compatibility with a given pedigree and a selected mode of inheritance.
+This functionality is exposed in the ``jped-cli`` program.
+You can get the command line help for ``jped-cli`` as follows:
 
 ::
 
-    # java -jar jannovar-filter-0.13.jar -h
+    # java -jar jped-cli-0.13.jar -h
 
 A basic call looks as follows:
 
 ::
 
-    # java -jar jannovar-filter-0.13.jar -m MODE IN.ped IN.vcf OUT.vcf
+    # java -jar jped-cli-0.13.jar -m MODE IN.ped IN.vcf OUT.vcf
 
-This call of ``jannovar-filter`` will first read in the pedigree from ``IN.ped``.
+This call of ``jped-cli`` will first read in the pedigree from ``IN.ped``.
 Then, it will read the file ``IN.vcf`` and filter the variants therein for compatibility with the given ``MODE`` of inheritance and the pedigree.
 The resulting VCF file will be written to ``OUT.vcf``.
 
@@ -42,12 +42,12 @@ You can select one of the following modes of inheritance:
 Gene-Wise Processing
 --------------------
 
-By default, ``jannovar-filter`` checks each record individually for compatibility.
+By default, ``jped-cli`` checks each record individually for compatibility.
 Of course, this does not account for composite recessive autosomal mode of inheritance.
 Here, all variants for a given gene have to be analyzed.
 
 To enable gene-wise processing, you have to pass the ``--gene-wise`` flag and pass in a path to a Jannovar database (a ``.ser`` file, as previously downloaded with ``jannovar download``).
-In this case, ``jannovar-filter`` will check all variants for compatibility with the selected mode of inheritance and will write out all variants in genes with possible compatibility.
+In this case, ``jped-cli`` will check all variants for compatibility with the selected mode of inheritance and will write out all variants in genes with possible compatibility.
 
 .. note::
 

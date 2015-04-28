@@ -117,7 +117,7 @@
 		</plugins>
 	</build>
 
-	<!-- Sphinx Manual -->
+	<!-- Sphinx Manual, build with "mvn site". -->
 	<reporting>
 		<plugins>
 			<plugin>
