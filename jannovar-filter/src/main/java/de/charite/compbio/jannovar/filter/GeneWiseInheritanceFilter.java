@@ -27,7 +27,7 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -119,7 +119,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
 		// consider each alternative allele of the variant
 		for (int alleleID = 0; alleleID < vc.getVC().getAlternateAlleles().size(); ++alleleID) {
-			final GenomeChange change = getGenomeChangeFromAltAllele(vc.getVC(), alleleID);
+			final GenomeVariant change = getGenomeChangeFromAltAllele(vc.getVC(), alleleID);
 
 			// query the gene interval tree for overlapping genes
 			final GenomeInterval changeInterval = change.getGenomeInterval();
@@ -158,15 +158,15 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	}
 
 	/**
-	 * Construct {@link GenomeChange} from one allele in a
+	 * Construct {@link GenomeVariant} from one allele in a
 	 * {@link VariantContext}.
 	 */
-	private GenomeChange getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
+	private GenomeVariant getGenomeChangeFromAltAllele(VariantContext vc, int alleleID) {
 		final int contigID = jannovarDB.getRefDict().getContigNameToID().get(vc.getChr());
 		final String ref = vc.getReference().getBaseString();
 		final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeChange(new GenomePosition(jannovarDB.getRefDict(), Strand.FWD, contigID, pos,
+		return new GenomeVariant(new GenomePosition(jannovarDB.getRefDict(), Strand.FWD, contigID, pos,
 				PositionType.ONE_BASED), ref, alt);
 	}
 
@@ -287,7 +287,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * @return <code>true</code> if <code>gene</code> is affected by
 	 *         <code>change</code>
 	 */
-	private static boolean isGeneAffectedByChange(Gene gene, GenomeChange change) {
+	private static boolean isGeneAffectedByChange(Gene gene, GenomeVariant change) {
 		final GenomeInterval changeInterval = change.getGenomeInterval();
 		if (changeInterval.length() == 0 && gene.getRegion().contains(changeInterval.getGenomeBeginPos())
 				&& gene.getRegion().contains(changeInterval.getGenomeBeginPos().shifted(-1)))

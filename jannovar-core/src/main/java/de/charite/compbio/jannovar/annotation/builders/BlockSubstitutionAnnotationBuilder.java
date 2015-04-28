@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
 import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -20,7 +20,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
 /**
- * Builds {@link Annotation} objects for the block substitution {@link GenomeChange} in the given {@link TranscriptInfo}
+ * Builds {@link Annotation} objects for the block substitution {@link GenomeVariant} in the given {@link TranscriptInfo}
  * .
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
@@ -31,13 +31,13 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	 * @param transcript
 	 *            {@link TranscriptInfo} to build the annotation for
 	 * @param change
-	 *            {@link GenomeChange} to build the annotation with
+	 *            {@link GenomeVariant} to build the annotation with
 	 * @param options
 	 *            the configuration to use for the {@link AnnotationBuilder}
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a block substitution
 	 */
-	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeChange change, AnnotationBuilderOptions options)
+	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
 			throws InvalidGenomeChange {
 		super(transcript, change, options);
 

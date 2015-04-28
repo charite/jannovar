@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.annotation.builders.StructuralVariantAnnotati
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -94,7 +94,7 @@ public final class VariantAnnotator {
 
 		// Build the GenomeChange to build annotation for.
 		GenomePosition pos = new GenomePosition(refDict, Strand.FWD, chr, position, posType);
-		GenomeChange change = new GenomeChange(pos, ref, alt);
+		GenomeVariant change = new GenomeVariant(pos, ref, alt);
 
 		return buildAnnotationList(change);
 	}
@@ -106,12 +106,12 @@ public final class VariantAnnotator {
 	 * coordinates on that chromosome.
 	 *
 	 * @param change
-	 *            the {@link GenomeChange} to annotate
+	 *            the {@link GenomeVariant} to annotate
 	 * @return {@link AnnotationList} for the genome change
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(GenomeChange change) throws AnnotationException {
+	public AnnotationList buildAnnotationList(GenomeVariant change) throws AnnotationException {
 		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
 		// described as shortcuts in the VCF file. We cannot annotate these yet.
 		if (change.isSymbolic())
@@ -152,17 +152,17 @@ public final class VariantAnnotator {
 		return annovarFactory.getAnnotationList(change);
 	}
 
-	private void buildSVAnnotation(GenomeChange change, TranscriptModel transcript) throws AnnotationException {
+	private void buildSVAnnotation(GenomeVariant change, TranscriptModel transcript) throws AnnotationException {
 		annovarFactory.addStructuralAnnotation(new StructuralVariantAnnotationBuilder(transcript, change).build());
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
+	private void buildNonSVAnnotation(GenomeVariant change, TranscriptModel leftNeighbor, TranscriptModel rightNeighbor)
 			throws AnnotationException {
 		buildNonSVAnnotation(change, leftNeighbor);
 		buildNonSVAnnotation(change, rightNeighbor);
 	}
 
-	private void buildNonSVAnnotation(GenomeChange change, TranscriptModel transcript) throws InvalidGenomeChange {
+	private void buildNonSVAnnotation(GenomeVariant change, TranscriptModel transcript) throws InvalidGenomeChange {
 		if (transcript != null) // TODO(holtgrew): Is not necessarily an exonic annotation!
 			annovarFactory.addExonicAnnotation(new AnnotationBuilderDispatcher(transcript, change, options).build());
 	}

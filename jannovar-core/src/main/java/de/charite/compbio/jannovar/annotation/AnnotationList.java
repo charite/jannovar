@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMultiset;
 
 import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 
 /**
  * A list of priority-sorted {@link Annotation} objects.
@@ -22,8 +22,8 @@ import de.charite.compbio.jannovar.reference.GenomeChange;
 @Immutable
 public final class AnnotationList implements List<Annotation> {
 
-	/** the {@link GenomeChange} that this <code>AnnotationList</code> contains entries for. */
-	private final GenomeChange change;
+	/** the {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for. */
+	private final GenomeVariant change;
 
 	/** the list of the annotations */
 	private final ImmutableList<Annotation> entries;
@@ -31,9 +31,9 @@ public final class AnnotationList implements List<Annotation> {
 	/**
 	 * @param change
 	 *            to use for the empty list
-	 * @return empty <code>AnnotationList</code> with the given {@link GenomeChange}
+	 * @return empty <code>AnnotationList</code> with the given {@link GenomeVariant}
 	 */
-	public static AnnotationList buildEmptyList(GenomeChange change) {
+	public static AnnotationList buildEmptyList(GenomeVariant change) {
 		return new AnnotationList(change, ImmutableList.<Annotation> of());
 	}
 
@@ -41,19 +41,19 @@ public final class AnnotationList implements List<Annotation> {
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
 	 *
 	 * @param change
-	 *            {@link GenomeChange} that this anotation list annotates
+	 *            {@link GenomeVariant} that this anotation list annotates
 	 * @param entries
 	 *            {@link Collection} of {@link Annotation} objects
 	 */
-	public AnnotationList(GenomeChange change, Collection<Annotation> entries) {
+	public AnnotationList(GenomeVariant change, Collection<Annotation> entries) {
 		this.change = change;
 		this.entries = ImmutableList.copyOf(ImmutableSortedMultiset.copyOf(entries));
 	}
 
 	/**
-	 * @return {@link GenomeChange} that this <code>AnnotationList</code> contains entries for.
+	 * @return {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for.
 	 */
-	public GenomeChange getChange() {
+	public GenomeVariant getChange() {
 		return change;
 	}
 

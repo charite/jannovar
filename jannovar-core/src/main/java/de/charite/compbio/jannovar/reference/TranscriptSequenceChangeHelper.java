@@ -24,13 +24,13 @@ public final class TranscriptSequenceChangeHelper {
 	}
 
 	/**
-	 * Return modified transcript after applying a {@link GenomeChange}.
+	 * Return modified transcript after applying a {@link GenomeVariant}.
 	 *
 	 * @param change
-	 *            {@link GenomeChange} to apply to the transcript
-	 * @return transcript string with applied {@link GenomeChange}
+	 *            {@link GenomeVariant} to apply to the transcript
+	 * @return transcript string with applied {@link GenomeVariant}
 	 */
-	public String getTranscriptWithChange(GenomeChange change) {
+	public String getTranscriptWithChange(GenomeVariant change) {
 		switch (change.getType()) {
 		case SNV:
 		case INSERTION:
@@ -43,7 +43,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 	}
 
-	private String getTranscriptWithPointInRefAffected(GenomeChange change) {
+	private String getTranscriptWithPointInRefAffected(GenomeVariant change) {
 		// Short-circuit in the case of change that does not affect the transcript.
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval())
@@ -61,14 +61,14 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(transcript.getSequence());
-		if (change.getType() == GenomeChangeType.SNV)
+		if (change.getType() == GenomeVariantType.SNV)
 			builder.setCharAt(tPos.getPos(), change.getAlt().charAt(0));
 		else
 			builder.insert(tPos.getPos(), change.getAlt());
 		return builder.toString();
 	}
 
-	private String getTranscriptWithRangeInRefAffected(GenomeChange change) {
+	private String getTranscriptWithRangeInRefAffected(GenomeVariant change) {
 		// Short-circuit in the case of change that does not affect the transcript.
 		if (!transcript.getTXRegion().overlapsWith(change.getGenomeInterval()))
 			return transcript.getSequence();
@@ -136,10 +136,10 @@ public final class TranscriptSequenceChangeHelper {
 	 * frameshift changes.
 	 *
 	 * @param change
-	 *            {@link GenomeChange} to apply to the CDS region of the transcript
-	 * @return CDS of transcript with applied {@link GenomeChange}
+	 *            {@link GenomeVariant} to apply to the CDS region of the transcript
+	 * @return CDS of transcript with applied {@link GenomeVariant}
 	 */
-	public String getCDSWithChange(GenomeChange change) {
+	public String getCDSWithChange(GenomeVariant change) {
 		switch (change.getType()) {
 		case SNV:
 		case INSERTION:
@@ -152,7 +152,7 @@ public final class TranscriptSequenceChangeHelper {
 		}
 	}
 
-	private String getCDSWithPointInRefAffected(GenomeChange change) {
+	private String getCDSWithPointInRefAffected(GenomeVariant change) {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 
@@ -160,7 +160,7 @@ public final class TranscriptSequenceChangeHelper {
 		String cdsSeq = projector.getTranscriptStartingAtCDS();
 
 		// Short-circuit in the case of change that does not affect the transcript.
-		if (change.getType() == GenomeChangeType.SNV) {
+		if (change.getType() == GenomeVariantType.SNV) {
 			if (!transcript.getCDSRegion().overlapsWith(change.getGenomeInterval())
 					|| !soDecorator.overlapsWithExon(change.getGenomeInterval()))
 				return cdsSeq;
@@ -177,14 +177,14 @@ public final class TranscriptSequenceChangeHelper {
 
 		// Update base in string using StringBuilder.
 		StringBuilder builder = new StringBuilder(cdsSeq);
-		if (change.getType() == GenomeChangeType.SNV)
+		if (change.getType() == GenomeVariantType.SNV)
 			builder.setCharAt(cdsChangePos.getPos(), change.getAlt().charAt(0));
 		else
 			builder.insert(cdsChangePos.getPos(), change.getAlt());
 		return builder.toString();
 	}
 
-	private String getCDSWithRangeInRefAffected(GenomeChange change) {
+	private String getCDSWithRangeInRefAffected(GenomeVariant change) {
 		TranscriptProjectionDecorator projector = new TranscriptProjectionDecorator(transcript);
 		TranscriptSequenceOntologyDecorator soDecorator = new TranscriptSequenceOntologyDecorator(transcript);
 

@@ -23,7 +23,7 @@ import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.io.Chromosome;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeChange;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -140,7 +140,7 @@ public final class VariantContextAnnotator {
 	}
 
 	/**
-	 * Build a {@link GenomeChange} from a {@link VariantContext} object.
+	 * Build a {@link GenomeVariant} from a {@link VariantContext} object.
 	 *
 	 * In the case of exceptions, you can use {@link #buildbuildUnknownRefAnnotationLists} to build an
 	 * {@link AnnotationList} with an error message.
@@ -149,11 +149,11 @@ public final class VariantContextAnnotator {
 	 *            {@link VariantContext} describing the variatn
 	 * @param alleleID
 	 *            numeric identifier of the allele
-	 * @return {@link GenomeChange} corresponding to <ocde>vc</code>, guaranteed to be on {@link Strand#FWD}.
+	 * @return {@link GenomeVariant} corresponding to <ocde>vc</code>, guaranteed to be on {@link Strand#FWD}.
 	 * @throws InvalidCoordinatesException
 	 *             in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
 	 */
-	public GenomeChange buildGenomeChange(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
+	public GenomeVariant buildGenomeChange(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
 		Integer boxedInt = refDict.getContigNameToID().get(vc.getChr());
@@ -167,7 +167,7 @@ public final class VariantContextAnnotator {
 		final Allele altAllele = vc.getAlternateAllele(alleleID);
 		final String alt = altAllele.getBaseString();
 		final int pos = vc.getStart();
-		return new GenomeChange(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
+		return new GenomeVariant(new GenomePosition(refDict, Strand.FWD, chr, pos, PositionType.ONE_BASED), ref, alt);
 	}
 
 	/**
@@ -198,14 +198,14 @@ public final class VariantContextAnnotator {
 	 *         alternative alleles in <code>vc</code>
 	 * @throws InvalidCoordinatesException
 	 *             in the case of problems with resolving coordinates internally, namely building the
-	 *             {@link GenomeChange} object one one of the returned {@link AnnotationList}s.
+	 *             {@link GenomeVariant} object one one of the returned {@link AnnotationList}s.
 	 */
 	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) throws InvalidCoordinatesException {
 		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
 
 		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
-			GenomeChange change = buildGenomeChange(vc, alleleID);
+			GenomeVariant change = buildGenomeChange(vc, alleleID);
 
 			// Build AnnotationList object for this allele.
 			try {
@@ -282,10 +282,10 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * @param change
-	 *            {@link GenomeChange} to build error annotation for
+	 *            {@link GenomeVariant} to build error annotation for
 	 * @return AnnotationList having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
 	 */
-	public AnnotationList buildErrorAnnotationList(GenomeChange change) {
+	public AnnotationList buildErrorAnnotationList(GenomeVariant change) {
 		return new AnnotationList(change, ImmutableList.of(new Annotation(ImmutableList
 				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}

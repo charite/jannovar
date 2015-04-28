@@ -30,6 +30,8 @@
 
 ### jannovar-core
 
+* Renaming `GenomeChange` to `GenomeVariant`, same with types having the same
+  prefix.
 * Introducing `DatasourceOptions` for configuring data download.
 * Removing support for using `"-"` as REF or ALT value.
 * Making previous `public final` members `private final` (or

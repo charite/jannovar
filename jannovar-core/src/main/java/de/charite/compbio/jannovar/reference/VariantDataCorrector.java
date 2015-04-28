@@ -5,9 +5,9 @@ package de.charite.compbio.jannovar.reference;
  *
  * The longest prefix of ref and alt is removed and position is incremented by the number of removed characters.
  *
- * This is used in the constructor {@link GenomeChange} so there is no need for using this class directly when the
- * change is converted into a {@link GenomeChange} before processing. This class has package-visibility only because its
- * members are visible to the outside. Rather construct a {@link GenomeChange} and use this immutable class.
+ * This is used in the constructor {@link GenomeVariant} so there is no need for using this class directly when the
+ * change is converted into a {@link GenomeVariant} before processing. This class has package-visibility only because its
+ * members are visible to the outside. Rather construct a {@link GenomeVariant} and use this immutable class.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
