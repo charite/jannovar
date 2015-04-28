@@ -30,6 +30,7 @@
 
 ### jannovar-core
 
+* Adding `GenomePosition.differenceTo(GenomeInterval)`.
 * Renaming package `de.charite.compbio.jannovar.io` to `de.charite.compbio.jannovar.data`
 * Renaming `AnnotationLocation.toHGVSString` to `.toHGVSChunk`.
 * Adding `Pedigree.subsetOfMembers`

@@ -167,7 +167,6 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
 	 * @throws InvalidCoordinateException
 	 *             if <code>this</code> and <code>pos</code> are on different chromosomes
 	 */
-	// TODO(holtgrem): test this!
 	public int differenceTo(GenomePosition pos) {
 		if (chr != pos.chr)
 			throw new InvalidCoordinateException("Coordinates are on different chromosomes " + this + " vs. " + pos);
@@ -178,21 +177,29 @@ public final class GenomePosition implements Serializable, Comparable<GenomePosi
 
 	/**
 	 * @param itv
-	 *            other position to compute distance to
-	 * @return the result of <code>(this.pos - border)</code> (<code>border</code> the begin/end position of
-	 *         <code>itv</code> closest to <code>this</code> after adjusting <code>itv</code> to the coordinate system
-	 *         and strand of <code>this</code>)
+	 *            interval to compute difference to
+	 * @return difference to closest base in <code>itv</code>, as would be returned by
+	 *         {@link #differenceTo(GenomePosition)}), <code>0</code> if <code>this</code> lies in <code>itv</code>
 	 * @throws InvalidCoordinateException
-	 *             if <code>this</code> and <code>pos</code> are on different chromosomes
+	 *             if <code>this</code> and <code>itv</code> are on different chromosomes
 	 */
-	// TODO(holtgrem): test this!
 	public int differenceTo(GenomeInterval itv) {
-		//		if (chr != itv.getChr())
-		//			throw new InvalidCoordinateException("Coordinates are on different chromosomes " + this + " vs. " + pos);
-		//		if (itv.getStrand() != strand)
-		//			pos = itv.withStrand(strand);
-		throw new RuntimeException("FIX ME");
-		//		return (this.pos - pos.pos);
+		if (chr != itv.getChr())
+			throw new InvalidCoordinateException("Coordinates are on different chromosomes " + this + " vs. " + itv);
+		if (itv.getStrand() != strand)
+			itv = itv.withStrand(strand);
+
+		if (itv.contains(this))
+			return 0;
+
+		int a = differenceTo(itv.getGenomeBeginPos());
+		if (itv.length() == 0)
+			return a;
+		int b = differenceTo(itv.getGenomeEndPos().shifted(-1));
+		if (Math.abs(a) < Math.abs(b))
+			return a;
+		else
+			return b;
 	}
 
 	/**
