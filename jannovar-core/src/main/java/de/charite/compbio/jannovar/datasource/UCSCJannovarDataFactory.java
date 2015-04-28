@@ -4,9 +4,9 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.UCSCParser;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**

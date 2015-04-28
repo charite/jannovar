@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.io;
+package de.charite.compbio.jannovar.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,8 +12,6 @@ import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.reference.TranscriptIntervalEndExtractor;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
-
-// TODO(holtgrem): Rename package "de.charite.compbio.jannovar.io" to "de.charite.compbio.jannovar.data"?
 
 /**
  * This data type is used for serialization after downloading.

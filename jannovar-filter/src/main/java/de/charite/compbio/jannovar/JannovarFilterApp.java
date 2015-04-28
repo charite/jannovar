@@ -14,8 +14,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 
-import de.charite.compbio.jannovar.io.JannovarData;
-import de.charite.compbio.jannovar.io.JannovarDataSerializer;
+import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
 import de.charite.compbio.jannovar.pedigree.Pedigree;

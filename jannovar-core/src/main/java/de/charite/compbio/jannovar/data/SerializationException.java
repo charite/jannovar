@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.io;
+package de.charite.compbio.jannovar.data;
 
 import de.charite.compbio.jannovar.JannovarException;
 

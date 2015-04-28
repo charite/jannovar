@@ -5,8 +5,8 @@ import java.io.Serializable;
 import com.google.common.collect.ComparisonChain;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
 
 /**
  * Representation of a position on a genome (chromosome, position).

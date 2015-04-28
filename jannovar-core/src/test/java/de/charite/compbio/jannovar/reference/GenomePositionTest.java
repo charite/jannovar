@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.io.ReferenceDictionary;
+import de.charite.compbio.jannovar.data.ReferenceDictionary;
 
 public class GenomePositionTest {
 

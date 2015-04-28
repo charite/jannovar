@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.vcf.VCFFileReader;
+import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.filter.CoordinateSortChecker;
 import de.charite.compbio.jannovar.filter.FilterException;
 import de.charite.compbio.jannovar.filter.FlaggedVariant;
@@ -10,7 +11,6 @@ import de.charite.compbio.jannovar.filter.GeneWiseInheritanceFilter;
 import de.charite.compbio.jannovar.filter.VariantContextFilter;
 import de.charite.compbio.jannovar.filter.VariantWiseInheritanceFilter;
 import de.charite.compbio.jannovar.filter.WriterFilter;
-import de.charite.compbio.jannovar.io.JannovarData;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 

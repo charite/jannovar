@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.io;
+package de.charite.compbio.jannovar.data;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
