@@ -108,7 +108,7 @@
 							<!-- set useUniqueVersions=false in order that the classpath has the 
 								SNAPSHOT instead of the build number prefixed to the dependency -->
 							<useUniqueVersions>false</useUniqueVersions>
-							<mainClass>de.charite.compbio.jannovar.Jannovar</mainClass>
+							<mainClass>de.charite.compbio.jped.JPedApp</mainClass>
 						</manifest>
 					</archive>
 					<compilerArgument>-Xlint:all</compilerArgument>
@@ -131,7 +131,7 @@
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.charite.compbio.jannovar.Jannovar</mainClass>
+									<mainClass>de.charite.compbio.jped.JPedApp</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>

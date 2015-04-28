@@ -13,9 +13,9 @@ import org.apache.commons.cli.Parser;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 
 /**
- * Command line parser for the jannovar-filter app.
+ * Command line parser for the jped-cli application for the pedigree-based filtration of VCF.
  */
-public class JannovarFilterCommandLineParser {
+public class JPedCommandLineParser {
 
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
@@ -25,16 +25,16 @@ public class JannovarFilterCommandLineParser {
 	/**
 	 * Calls initializeParser().
 	 */
-	public JannovarFilterCommandLineParser() {
+	public JPedCommandLineParser() {
 		initializeParser();
 	}
 
-	public JannovarFilterOptions parse(String[] argv) throws ParseException, HelpRequestedException {
+	public JPedOptions parse(String[] argv) throws ParseException, HelpRequestedException {
 		// Parse the command line.
 		CommandLine cmd = parser.parse(options, argv);
 
 		// Fill the resulting JannovarOptions.
-		JannovarFilterOptions result = new JannovarFilterOptions();
+		JPedOptions result = new JPedOptions();
 
 		if (cmd.hasOption("help")) {
 			printHelp();
@@ -82,16 +82,16 @@ public class JannovarFilterCommandLineParser {
 	public void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Filter Tool")
 				.append("Use this command to filter VCF files.\n\n")
-				.append("Usage: java -jar jannovar-filter.jar <DB.ser> <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
+				.append("Usage: java -jar jped-cli.jar <DB.ser> <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
 		final String FOOTER = new StringBuilder()
-		.append("\n\nExample: java -jar jannovar-filter.jar -m AUTOSOMAL_DOMINANT data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n")
-				.append("         java -jar jannovar-filter.jar -g -m AUTOSOMAL_RECESSIVE data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n\n")
-		.append("Diseases\n\n")
-		.append("The --inheritance-mode parameter can take one of the following values. When given")
-		.append("then the variants will be filtered to those being compatible with the given mode")
-		.append("of inheritance.\n\n").append("  AUTOSOMAL_DOMINANT\n").append("  AUTOSOMAL_RECESSIVE\n")
-		.append("  X_RECESSIVE\n").append("  X_DOMINANT\n").append("  UNINITIALIZED (no filtration)\n")
-		.toString();
+				.append("\n\nExample: java -jar jped-cli.jar -m AUTOSOMAL_DOMINANT data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n")
+				.append("         java -jar jped-cli.jar -g -m AUTOSOMAL_RECESSIVE data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n\n")
+				.append("Diseases\n\n")
+				.append("The --inheritance-mode parameter can take one of the following values. When given")
+				.append("then the variants will be filtered to those being compatible with the given mode")
+				.append("of inheritance.\n\n").append("  AUTOSOMAL_DOMINANT\n").append("  AUTOSOMAL_RECESSIVE\n")
+				.append("  X_RECESSIVE\n").append("  X_DOMINANT\n").append("  UNINITIALIZED (no filtration)\n")
+				.toString();
 		System.err.print(HEADER);
 
 		HelpFormatter hf = new HelpFormatter();

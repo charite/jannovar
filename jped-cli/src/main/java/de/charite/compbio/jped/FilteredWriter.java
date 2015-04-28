@@ -37,7 +37,7 @@ public class FilteredWriter {
 		this.sink = sink;
 	}
 
-	void run(JannovarFilterOptions options) throws JannovarException {
+	void run(JPedOptions options) throws JannovarException {
 		// public GeneWiseInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB, ModeOfInheritance
 		// modeOfInheritance,
 		// ImmutableList<String> names, VariantContextFilter next) {

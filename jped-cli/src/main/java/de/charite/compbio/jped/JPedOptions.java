@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class JannovarFilterOptions {
+public class JPedOptions {
 
 	/** verbosity level */
 	int verbosity = 1;

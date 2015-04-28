@@ -24,15 +24,15 @@ import de.charite.compbio.jannovar.pedigree.Person;
 
 // TODO(holtgrew): Add support for DE NOVO
 
-public class JannovarFilterApp {
+public class JPedApp {
 
 	/** Configuration */
-	private JannovarFilterOptions options;
+	private JPedOptions options;
 
 	/** Jannovar DB */
 	JannovarData jannovarDB;
 
-	JannovarFilterApp(JannovarFilterOptions options) {
+	JPedApp(JPedOptions options) {
 		this.options = options;
 	}
 
@@ -87,10 +87,10 @@ public class JannovarFilterApp {
 	}
 
 	public static void main(String[] args) {
-		JannovarFilterCommandLineParser parser = new JannovarFilterCommandLineParser();
+		JPedCommandLineParser parser = new JPedCommandLineParser();
 		try {
-			JannovarFilterOptions options = parser.parse(args);
-			new JannovarFilterApp(options).run();
+			JPedOptions options = parser.parse(args);
+			new JPedApp(options).run();
 		} catch (ParseException e) {
 			System.err.println("ERROR: " + e.getMessage());
 			parser.printHelp();
