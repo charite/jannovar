@@ -1,12 +1,15 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.Immutable;
 
 // TODO(holtgrem): Test me!
-// TODO(holtgrem): Reordering of the pedigree members according to a list of individual names
 
 /**
  * Represent one pedigree from a PED file.
@@ -34,9 +37,9 @@ public final class Pedigree {
 	 * @param members
 	 *            list of the members
 	 */
-	public Pedigree(String name, ImmutableList<Person> members) {
+	public Pedigree(String name, Collection<Person> members) {
 		this.name = name;
-		this.members = members;
+		this.members = ImmutableList.copyOf(members);
 
 		ImmutableMap.Builder<String, IndexedPerson> mapBuilder = new ImmutableMap.Builder<String, IndexedPerson>();
 		int i = 0;
@@ -76,6 +79,30 @@ public final class Pedigree {
 	}
 
 	/**
+	 * Obtain subset of members in a pedigree or change order.
+	 *
+	 * If a {@link Person} is selected that has parents in <code>this</code> but the parent's name is not in
+	 * <code>name</code> then the {@link Person} will have <code>null</code> as the parent object.
+	 *
+	 * @return <code>Pedigree</code> with the members from <code>names</code> in the given order
+	 */
+	public Pedigree subsetOfMembers(Collection<String> names) {
+		HashSet<String> nameSet = new HashSet<String>();
+		nameSet.addAll(names);
+
+		ArrayList<Person> tmpMembers = new ArrayList<Person>();
+		for (String name : names)
+			if (hasPerson(name)) {
+				Person p = nameToMember.get(name).getPerson();
+				Person father = nameSet.contains(p.getFather().getName()) ? p.getFather() : null;
+				Person mother = nameSet.contains(p.getMother().getName()) ? p.getMother() : null;
+
+				tmpMembers.add(new Person(p.getName(), father, mother, p.getSex(), p.getDisease(), p.getExtraFields()));
+			}
+		return new Pedigree(name, tmpMembers);
+	}
+
+	/**
 	 * @return a pedigree with one affected sample
 	 */
 	public static Pedigree constructSingleSamplePedigree(String sampleName) {
@@ -105,6 +132,9 @@ public final class Pedigree {
 		return "Pedigree [name=" + name + ", members=" + members + ", nameToMember=" + nameToMember + "]";
 	}
 
+	/**
+	 * Helper class, used in the name to member map.
+	 */
 	public static class IndexedPerson {
 		private final int idx;
 		private final Person person;
@@ -114,10 +144,12 @@ public final class Pedigree {
 			this.person = person;
 		}
 
+		/** @return numeric index of person in pedigree */
 		public int getIdx() {
 			return idx;
 		}
 
+		/** @return the wrapped {@link Person} */
 		public Person getPerson() {
 			return person;
 		}
