@@ -4,7 +4,6 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.impl.parse.RefSeqParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -29,14 +28,14 @@ final class RefSeqJannovarDataFactory extends JannovarDataFactory {
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public RefSeqJannovarDataFactory(JannovarOptions options, RefSeqDataSource dataSource, Section iniSection) {
+	public RefSeqJannovarDataFactory(DatasourceOptions options, RefSeqDataSource dataSource, Section iniSection) {
 		super(options, dataSource, iniSection);
 	}
 
 	@Override
 	protected ImmutableList<TranscriptModel> parseTranscripts(ReferenceDictionary refDict, String targetDir)
 			throws TranscriptParseException {
-		return new RefSeqParser(refDict, targetDir, iniSection, options.printProgressBars).run();
+		return new RefSeqParser(refDict, targetDir, iniSection, options.doPrintProgressBars()).run();
 	}
 
 }

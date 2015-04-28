@@ -8,8 +8,6 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
-
 /**
  * Base class for all data sources.
  *
@@ -21,7 +19,7 @@ import de.charite.compbio.jannovar.JannovarOptions;
 public abstract class DataSource {
 
 	/** the configuration */
-	protected final JannovarOptions options;
+	protected final DatasourceOptions options;
 
 	/** the {@link Section} to create the DataSource from */
 	protected final Section iniSection;
@@ -64,7 +62,7 @@ public abstract class DataSource {
 	 * @param iniSection
 	 *            data to construct the {@link DataSource} from.
 	 */
-	DataSource(JannovarOptions options, Section iniSection) {
+	DataSource(DatasourceOptions options, Section iniSection) {
 		this.options = options;
 		this.iniSection = iniSection;
 	}

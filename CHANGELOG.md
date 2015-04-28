@@ -30,6 +30,7 @@
 
 ### jannovar-core
 
+* Introducing `DatasourceOptions` for configuring data download.
 * Removing support for using `"-"` as REF or ALT value.
 * Making previous `public final` members `private final` (or
  `protected final`) and adding getters for read-only access to them.

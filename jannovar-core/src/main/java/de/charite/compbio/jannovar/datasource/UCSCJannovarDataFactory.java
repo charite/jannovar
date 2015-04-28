@@ -4,7 +4,6 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.UCSCParser;
 import de.charite.compbio.jannovar.io.ReferenceDictionary;
@@ -27,7 +26,7 @@ final class UCSCJannovarDataFactory extends JannovarDataFactory {
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public UCSCJannovarDataFactory(JannovarOptions options, UCSCDataSource dataSource, Section iniSection) {
+	public UCSCJannovarDataFactory(DatasourceOptions options, UCSCDataSource dataSource, Section iniSection) {
 		super(options, dataSource, iniSection);
 	}
 

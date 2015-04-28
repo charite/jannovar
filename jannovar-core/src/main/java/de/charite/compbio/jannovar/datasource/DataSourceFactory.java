@@ -11,10 +11,6 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
-
-// TODO(holtgrem): Add a DataSourceOptions class with boiled-down configuration.
-
 /**
  * Factory class that allows the construction of {@link DataSource} objects as configured in INI files.
  *
@@ -22,8 +18,8 @@ import de.charite.compbio.jannovar.JannovarOptions;
  */
 final public class DataSourceFactory {
 
-	/** {@link JannovarOptions} object for proxy settings */
-	private final JannovarOptions options;
+	/** {@link DatasourceOptions} object for proxy settings */
+	private final DatasourceOptions options;
 	/** {@link Ini} object to use for loading data */
 	private final ImmutableList<Ini> inis;
 
@@ -34,7 +30,7 @@ final public class DataSourceFactory {
 	 * @throws InvalidDataSourceException
 	 *             on problems with the data source config file
 	 */
-	public DataSourceFactory(JannovarOptions options, ImmutableList<String> iniFilePaths)
+	public DataSourceFactory(DatasourceOptions options, ImmutableList<String> iniFilePaths)
 			throws InvalidDataSourceException {
 		this.options = options;
 

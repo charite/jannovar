@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.datasource.FileDownloader.ProxyOptions;
 import de.charite.compbio.jannovar.impl.parse.ReferenceDictParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
@@ -29,8 +28,8 @@ public abstract class JannovarDataFactory {
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(JannovarDataFactory.class);
 
-	/** the {@link JannovarOptions} to use for proxy settings */
-	protected final JannovarOptions options;
+	/** the {@link DatasourceOptions} to use for proxy settings */
+	protected final DatasourceOptions options;
 	/** the {@link DataSource} to use */
 	protected final DataSource dataSource;
 	/** configuration section from INI file */
@@ -46,7 +45,7 @@ public abstract class JannovarDataFactory {
 	 * @param iniSection
 	 *            {@link Section} with configuration from INI file
 	 */
-	public JannovarDataFactory(JannovarOptions options, DataSource dataSource, Section iniSection) {
+	public JannovarDataFactory(DatasourceOptions options, DataSource dataSource, Section iniSection) {
 		this.options = options;
 		this.dataSource = dataSource;
 		this.iniSection = iniSection;
@@ -111,9 +110,9 @@ public abstract class JannovarDataFactory {
 
 		// Get proxy settings from options.
 		result.printProgressBar = printProgressBars;
-		updateProxyOptions(result.http, options.httpProxy);
-		updateProxyOptions(result.https, options.httpsProxy);
-		updateProxyOptions(result.ftp, options.ftpProxy);
+		updateProxyOptions(result.http, options.getHTTPProxy());
+		updateProxyOptions(result.https, options.getHTTPSProxy());
+		updateProxyOptions(result.ftp, options.getFTPProxy());
 
 		return result;
 	}
