@@ -1,4 +1,4 @@
-**develop**
+**v0.13**
 
 *jannovar-htsjdk*
 
