@@ -30,6 +30,8 @@
 
 ### jannovar-core
 
+* Renaming `AnnotationLocation.toHGVSString` to `.toHGVSChunk`.
+* Adding `Pedigree.subsetOfMembers`
 * Renaming `GenomeChange` to `GenomeVariant`, same with types having the same
   prefix.
 * Introducing `DatasourceOptions` for configuring data download.
