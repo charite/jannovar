@@ -16,13 +16,57 @@
 		<module>jped-cli</module>
 	</modules>
 
+	<!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
+		http://java.dzone.com/articles/deploy-maven-central -->
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>9</version>
+	</parent>
+
+	<!-- License Information for Maven Central -->
 	<licenses>
 		<license>
-			<name>BSD-style</name>
+			<name>3-clause BSD</name>
 			<url>http://www.opensource.org/licenses/bsd-license.php</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
+	<!-- Developers Information for Maven Central -->
+	<developers>
+		<developer>
+			<name>Manuel Holtgrewe</name>
+			<email>manuel.holtgrewe@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Max Schubach</name>
+			<email>max.schubach@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Marten Jaeger</name>
+			<email>marten.jaeger@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Peter N Robinson</name>
+			<email>peter.robinson@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+	</developers>
+
+	<!-- SCM Information for Maven Central -->
+	<scm>
+		<connection>scm:git:https://github.com/charite/jannovar.git</connection>
+		<developerConnection>scm:git:https://github.com/charite/jannovar.git</developerConnection>
+		<url>scm:git:https://github.com/charite/jannovar.git</url>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

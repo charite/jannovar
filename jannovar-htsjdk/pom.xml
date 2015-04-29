@@ -5,8 +5,9 @@
 	<artifactId>jannovar-htsjdk</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-htsjdk</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jannovar-htsjdk is the module for bridging between Jannovar and HTSJDK</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>

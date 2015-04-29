@@ -5,13 +5,14 @@
 	<artifactId>jannovar-cli</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-cli</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jannovar-cli is the command line interface for Jannovar</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-                <version>0.13-SNAPSHOT</version>
+		<version>0.13-SNAPSHOT</version>
 	</parent>
 
 	<properties>

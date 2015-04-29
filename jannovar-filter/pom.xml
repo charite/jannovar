@@ -5,13 +5,15 @@
 	<artifactId>jannovar-filter</artifactId>
 	<packaging>jar</packaging>
 
-	<name>jannovar-filter</name>
-	<url>http://maven.apache.org</url>
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>jannovar-filter provides functionality for filtering variants call lists to
+      the variants that are compatible with a given pedigree and mode of inheritance</description>
+	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-        <version>0.13-SNAPSHOT</version>
+		<version>0.13-SNAPSHOT</version>
 	</parent>
 
 	<properties>

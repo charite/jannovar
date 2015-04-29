@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Moving `JannovarOptions` into jannovar-cli.
 * Displaying online help on unknown Jannovar command.
 * Fixing `NullPointerException` bug for local paths.
 * Switching to official HTSJDK release and version 0.128.
@@ -30,6 +31,7 @@
 
 ### jannovar-core
 
+* Moving `JannovarOptions` into jannovar-cli.
 * Renaming `ACompatibilityChecker` and `ICompatibilityChecker`.
 * Adding `GenomePosition.differenceTo(GenomeInterval)`.
 * Renaming package `de.charite.compbio.jannovar.io` to `de.charite.compbio.jannovar.data`
