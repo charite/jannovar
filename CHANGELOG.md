@@ -2,6 +2,14 @@
 
 ## develop
 
+### jannovar-core
+
+* converting `GenomeVariant` of `AnnotationList` to always be on the forward
+  strand after construction of  `AnnotationList`
+* deprecating the `{,All,Best}AnnotationTextGenerator` classes
+
+## v.0.13
+
 ### jannovar-cli
 
 * Moving `JannovarOptions` into jannovar-cli.
