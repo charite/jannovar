@@ -4,6 +4,9 @@
 
 ### jannovar-core
 
+* VariantAnnotations does not implement `List<Annotation>` any more
+* Adding `VariantAnnotations.getAnnotations`
+* Renaming `AnnotationList` to `VariantAnnotations`
 * converting `GenomeVariant` of `AnnotationList` to always be on the forward
   strand after construction of  `AnnotationList`
 * deprecating the `{,All,Best}AnnotationTextGenerator` classes

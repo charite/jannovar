@@ -69,7 +69,7 @@ public final class VariantAnnotator {
 
 	// TODO(holtgrem): Remove this?
 	/**
-	 * Convenience function for obtaining an {@link AnnotationList} from genome change in primitive types.
+	 * Convenience function for obtaining an {@link VariantAnnotations} from genome change in primitive types.
 	 *
 	 * Forwards to {@link #buildAnnotationList(int, int, String, String, PositionType)} and we recommend to use this
 	 * function directly.
@@ -82,11 +82,11 @@ public final class VariantAnnotator {
 	 *            String representation of the variant (alt) sequence
 	 * @param posType
 	 *            the position type to use
-	 * @return {@link AnnotationList} for the given genome change
+	 * @return {@link VariantAnnotations} for the given genome change
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(int chr, int position, String ref, String alt, PositionType posType)
+	public VariantAnnotations buildAnnotationList(int chr, int position, String ref, String alt, PositionType posType)
 			throws AnnotationException {
 		// Get chromosome by id.
 		if (chromosomeMap.get(chr) == null)
@@ -107,15 +107,15 @@ public final class VariantAnnotator {
 	 *
 	 * @param change
 	 *            the {@link GenomeVariant} to annotate
-	 * @return {@link AnnotationList} for the genome change
+	 * @return {@link VariantAnnotations} for the genome change
 	 * @throws AnnotationException
 	 *             on problems building the annotation list
 	 */
-	public AnnotationList buildAnnotationList(GenomeVariant change) throws AnnotationException {
+	public VariantAnnotations buildAnnotationList(GenomeVariant change) throws AnnotationException {
 		// Short-circuit in the case of symbolic changes/alleles. These could be SVs, large duplications, etc., that are
 		// described as shortcuts in the VCF file. We cannot annotate these yet.
 		if (change.isSymbolic())
-			return AnnotationList.buildEmptyList(change);
+			return VariantAnnotations.buildEmptyList(change);
 
 		// Get genomic change interval and reset the factory.
 		final GenomeInterval changeInterval = change.getGenomeInterval();
