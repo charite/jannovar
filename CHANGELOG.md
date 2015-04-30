@@ -7,6 +7,8 @@
 * VariantAnnotations does not implement `List<Annotation>` any more
 * Adding `VariantAnnotations.getAnnotations`
 * Renaming `AnnotationList` to `VariantAnnotations`
+* changing treatment of insertions at exon/intron junctions; they are
+  considered as intronic insertions now that affect splicing
 * converting `GenomeVariant` of `AnnotationList` to always be on the forward
   strand after construction of  `AnnotationList`
 * deprecating the `{,All,Best}AnnotationTextGenerator` classes
