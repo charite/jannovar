@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableSortedMultiset;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * A list of priority-sorted {@link Annotation} objects.
@@ -40,17 +41,24 @@ public final class AnnotationList implements List<Annotation> {
 	/**
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
 	 *
+	 * Note that <code>variant</code> is converted to the forward strand using {@link GenomeVariant#withStrand}.
+	 *
 	 * @param change
 	 *            {@link GenomeVariant} that this anotation list annotates
 	 * @param entries
 	 *            {@link Collection} of {@link Annotation} objects
 	 */
-	public AnnotationList(GenomeVariant change, Collection<Annotation> entries) {
-		this.change = change;
+	public AnnotationList(GenomeVariant variant, Collection<Annotation> entries) {
+		this.change = variant.withStrand(Strand.FWD);
 		this.entries = ImmutableList.copyOf(ImmutableSortedMultiset.copyOf(entries));
 	}
 
 	/**
+	 * Return the {@link GenomeVariant} that this AnnotationList is annotated with.
+	 *
+	 * Note that the {@link GenomeVariant} is converted to be on the forward strand on construction of AnnotationList
+	 * objects.
+	 *
 	 * @return {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for.
 	 */
 	public GenomeVariant getChange() {
