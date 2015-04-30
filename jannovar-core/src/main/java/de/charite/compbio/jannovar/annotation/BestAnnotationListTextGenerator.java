@@ -21,8 +21,8 @@ public final class BestAnnotationListTextGenerator extends VariantAnnotationsTex
 	@Override
 	protected VariantAnnotations getAnnotations() {
 		if (annotations.getAnnotations().isEmpty())
-			return new VariantAnnotations(annotations.getChange(), annotations.getAnnotations().subList(0, 0));
+			return new VariantAnnotations(annotations.getGenomeVariant(), annotations.getAnnotations().subList(0, 0));
 		else
-			return new VariantAnnotations(annotations.getChange(), annotations.getAnnotations().subList(0, 1));
+			return new VariantAnnotations(annotations.getGenomeVariant(), annotations.getAnnotations().subList(0, 1));
 	}
 }

@@ -141,7 +141,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	}
 
 	/** @return the annotated {@link GenomeVariant} */
-	public GenomeVariant getChange() {
+	public GenomeVariant getGenomeVariant() {
 		return change;
 	}
 

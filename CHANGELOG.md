@@ -4,6 +4,7 @@
 
 ### jannovar-core
 
+* Renaming `*.getChange()` to `*.getGenomeVariant()`
 * Renaming `VariantAnnotator.buildAnnotationList` to `.buildAnnotations`,
   `VariantContextAnnotator.buildAnnotationList` to `.buildAnnotations`,
   and `VariantContextAnnotator.buildErrorAnnotationList` to

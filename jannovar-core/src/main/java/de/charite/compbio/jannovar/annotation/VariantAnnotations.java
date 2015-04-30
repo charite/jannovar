@@ -59,7 +59,7 @@ public final class VariantAnnotations implements VariantDescription {
 	 *
 	 * @return {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for.
 	 */
-	public GenomeVariant getChange() {
+	public GenomeVariant getGenomeVariant() {
 		return change;
 	}
 
