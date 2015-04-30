@@ -19,4 +19,4 @@ The following Jannovar invocation allows to use up to 2 GB of RAM:
 
 .. code-block:: bash
 
-    java -Xms2G -Xmx2G -jar jannovar-cli-0.13.jar [...]
+    java -Xms2G -Xmx2G -jar jannovar-cli-0.14.jar [...]

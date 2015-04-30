@@ -22,7 +22,7 @@ You can view the built-in database names using the ``db-list`` Jannovar command:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.13.jar db-list
+    # java -jar jannovar-cli-0.14.jar db-list
     [...]
         hg18/refseq_curated
         hg19/ucsc
@@ -53,6 +53,6 @@ Let us now download the RefSeq and UCSC annotations for human release *hg19*:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.13.jar download hg19/refseq hg19/ucsc
+    # java -jar jannovar-cli-0.14.jar download hg19/refseq hg19/ucsc
 
 
