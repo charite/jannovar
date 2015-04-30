@@ -1,0 +1,10 @@
+Release information for Jannovar developers
+
+Articles
+
+* http://java.dzone.com/articles/deploy-maven-central
+* http://central.sonatype.org/pages/apache-maven.html
+
+Maven comments
+
+* "mvn versions:set" is useful for bumping versions
