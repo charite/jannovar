@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableList;
  */
 public final class JannovarOptions {
 	/** the version of the program */
-	public static final String JANNOVAR_VERSION = "0.13";
+	public static final String JANNOVAR_VERSION = "0.14";
 
 	/** the selected command */
 	public Command command = null;

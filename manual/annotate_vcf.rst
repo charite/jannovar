@@ -15,7 +15,7 @@ For example, for annotating the ``small.vcf`` file in the ``examples`` directory
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.13.jar annotate data/hg19_ucsc.ser examples/small.vcf
+    # java -jar jannovar-cli-0.14.jar annotate data/hg19_ucsc.ser examples/small.vcf
     [...]
     # ls examples/small.jv.vcf
     small.jv.vcf
@@ -41,7 +41,7 @@ Here is an example of using this command line option:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.13.jar annotate --no-3-prime-shifting \
+    # java -jar jannovar-cli-0.14.jar annotate --no-3-prime-shifting \
         data/hg19_refseq.ser examples/small.vcf
 
 The Show-All Option
@@ -52,7 +52,7 @@ You can use the ``--show-all``/``-a`` option to write out all functional annotat
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.13.jar annotate --show-all \
+    # java -jar jannovar-cli-0.14.jar annotate --show-all \
         data/hg19_refseq.ser examples/small.vcf
 
 For example, the first line of ``small.jv.vcf`` will look as follows and contain multiple effects and HGVS annotations.
