@@ -84,7 +84,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	@Override
 	public void put(VariantContext vc) {
 		try {
-			vc = annotator.applyAnnotations(vc, annotator.buildAnnotationList(vc));
+			vc = annotator.applyAnnotations(vc, annotator.buildAnnotations(vc));
 		} catch (InvalidCoordinatesException e) {
 			annotator.putErrorAnnotation(vc, ImmutableSet.of(e.getAnnotationMessage()));
 		}

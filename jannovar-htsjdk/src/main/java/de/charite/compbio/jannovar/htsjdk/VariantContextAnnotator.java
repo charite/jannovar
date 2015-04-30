@@ -148,7 +148,7 @@ public final class VariantContextAnnotator {
 	 * {@link VariantAnnotations} with an error message.
 	 *
 	 * @param vc
-	 *            {@link VariantContext} describing the variatn
+	 *            {@link VariantContext} describing the variant
 	 * @param alleleID
 	 *            numeric identifier of the allele
 	 * @return {@link GenomeVariant} corresponding to <ocde>vc</code>, guaranteed to be on {@link Strand#FWD}.
@@ -202,7 +202,7 @@ public final class VariantContextAnnotator {
 	 *             in the case of problems with resolving coordinates internally, namely building the
 	 *             {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.
 	 */
-	public ImmutableList<VariantAnnotations> buildAnnotationList(VariantContext vc) throws InvalidCoordinatesException {
+	public ImmutableList<VariantAnnotations> buildAnnotations(VariantContext vc) throws InvalidCoordinatesException {
 		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
 
 		ImmutableList.Builder<VariantAnnotations> builder = new ImmutableList.Builder<VariantAnnotations>();
@@ -211,11 +211,11 @@ public final class VariantContextAnnotator {
 
 			// Build AnnotationList object for this allele.
 			try {
-				final VariantAnnotations lst = annotator.buildAnnotationList(change);
+				final VariantAnnotations lst = annotator.buildAnnotations(change);
 				builder.add(lst);
 				LOGGER.trace("adding annotation list {}", new Object[] { lst });
 			} catch (Exception e) {
-				final VariantAnnotations lst = buildErrorAnnotationList(change);
+				final VariantAnnotations lst = buildErrorAnnotations(change);
 				builder.add(lst);
 				LOGGER.trace("adding error annotation list {}", new Object[] { lst });
 			}
@@ -285,9 +285,9 @@ public final class VariantContextAnnotator {
 	/**
 	 * @param change
 	 *            {@link GenomeVariant} to build error annotation for
-	 * @return AnnotationList having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
+	 * @return VariantAnnotations having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
 	 */
-	public VariantAnnotations buildErrorAnnotationList(GenomeVariant change) {
+	public VariantAnnotations buildErrorAnnotations(GenomeVariant change) {
 		return new VariantAnnotations(change, ImmutableList.of(new Annotation(ImmutableList
 				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}

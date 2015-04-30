@@ -4,6 +4,10 @@
 
 ### jannovar-core
 
+* Renaming `VariantAnnotator.buildAnnotationList` to `.buildAnnotations`,
+  `VariantContextAnnotator.buildAnnotationList` to `.buildAnnotations`,
+  and `VariantContextAnnotator.buildErrorAnnotationList` to
+  `VariantContextAnnotator.buildErrorAnnotations`
 * VariantAnnotations does not implement `List<Annotation>` any more
 * Adding `VariantAnnotations.getAnnotations`
 * Renaming `AnnotationList` to `VariantAnnotations`

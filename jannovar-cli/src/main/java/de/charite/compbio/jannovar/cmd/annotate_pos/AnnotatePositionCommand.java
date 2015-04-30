@@ -60,7 +60,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			// Construct VariantAnnotator for building the variant annotations.
 			VariantAnnotations annoList = null;
 			try {
-				annoList = annotator.buildAnnotationList(genomeChange);
+				annoList = annotator.buildAnnotations(genomeChange);
 			} catch (Exception e) {
 				System.err.println(String.format("[ERROR] Could not annotate variant %s!", chromosomalChange));
 				continue;

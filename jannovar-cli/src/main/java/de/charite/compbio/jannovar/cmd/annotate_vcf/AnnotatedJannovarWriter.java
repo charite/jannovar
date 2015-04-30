@@ -141,7 +141,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
-		VariantAnnotations anno = annotator.buildAnnotationList(change);
+		VariantAnnotations anno = annotator.buildAnnotations(change);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", vc.toString());
 			throw new AnnotationException(e);
