@@ -16,20 +16,22 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.AnnotationList;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
+import de.charite.compbio.jannovar.annotation.VariantAnnotations;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
+import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * Helper class for generating {@link AnnotationList} objects from {@link VariantContext}s.
+ * Helper class for generating {@link VariantAnnotations} objects from {@link VariantContext}s.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -143,10 +145,10 @@ public final class VariantContextAnnotator {
 	 * Build a {@link GenomeVariant} from a {@link VariantContext} object.
 	 *
 	 * In the case of exceptions, you can use {@link #buildbuildUnknownRefAnnotationLists} to build an
-	 * {@link AnnotationList} with an error message.
+	 * {@link VariantAnnotations} with an error message.
 	 *
 	 * @param vc
-	 *            {@link VariantContext} describing the variatn
+	 *            {@link VariantContext} describing the variant
 	 * @param alleleID
 	 *            numeric identifier of the allele
 	 * @return {@link GenomeVariant} corresponding to <ocde>vc</code>, guaranteed to be on {@link Strand#FWD}.
@@ -187,33 +189,33 @@ public final class VariantContextAnnotator {
 	}
 
 	/**
-	 * Given a {@link VariantContext}, generate one {@link AnnotationList} for each alternative allele.
+	 * Given a {@link VariantContext}, generate one {@link VariantAnnotations} for each alternative allele.
 	 *
 	 * Note that in the case of an exception being thrown, you have to add an error annotation yourself to the
 	 * {@link VariantContext} yourself, e.g. by using {@link #putErrorAnnotation}.
 	 *
 	 * @param vc
 	 *            the VCF record to annotate, remains unchanged
-	 * @return {@link ImmutableList} of {@link AnnotationList}s, one for each alternative allele, in the order of the
+	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of the
 	 *         alternative alleles in <code>vc</code>
 	 * @throws InvalidCoordinatesException
 	 *             in the case of problems with resolving coordinates internally, namely building the
-	 *             {@link GenomeVariant} object one one of the returned {@link AnnotationList}s.
+	 *             {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.
 	 */
-	public ImmutableList<AnnotationList> buildAnnotationList(VariantContext vc) throws InvalidCoordinatesException {
+	public ImmutableList<VariantAnnotations> buildAnnotations(VariantContext vc) throws InvalidCoordinatesException {
 		LOGGER.trace("building annotation lists for {}", new Object[] { vc });
 
-		ImmutableList.Builder<AnnotationList> builder = new ImmutableList.Builder<AnnotationList>();
+		ImmutableList.Builder<VariantAnnotations> builder = new ImmutableList.Builder<VariantAnnotations>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
 			GenomeVariant change = buildGenomeChange(vc, alleleID);
 
 			// Build AnnotationList object for this allele.
 			try {
-				final AnnotationList lst = annotator.buildAnnotationList(change);
+				final VariantAnnotations lst = annotator.buildAnnotations(change);
 				builder.add(lst);
 				LOGGER.trace("adding annotation list {}", new Object[] { lst });
 			} catch (Exception e) {
-				final AnnotationList lst = buildErrorAnnotationList(change);
+				final VariantAnnotations lst = buildErrorAnnotations(change);
 				builder.add(lst);
 				LOGGER.trace("adding error annotation list {}", new Object[] { lst });
 			}
@@ -231,7 +233,7 @@ public final class VariantContextAnnotator {
 	 *            annotations to apply (one for each alternative allele in <code>vc</code>)
 	 * @return modified <code>vc</code>
 	 */
-	public VariantContext applyAnnotations(VariantContext vc, List<AnnotationList> annos) {
+	public VariantContext applyAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
 		if (options.infoFields == InfoFields.VCF_ANN || options.infoFields == InfoFields.BOTH)
 			applyStandardAnnotations(vc, annos);
 		if (options.infoFields == InfoFields.EFFECT_HGVS || options.infoFields == InfoFields.BOTH)
@@ -239,11 +241,11 @@ public final class VariantContextAnnotator {
 		return vc;
 	}
 
-	private void applyStandardAnnotations(VariantContext vc, List<AnnotationList> annos) {
+	private void applyStandardAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
 		ArrayList<String> annotations = new ArrayList<String>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
-			if (!annos.get(alleleID).isEmpty()) {
-				for (Annotation ann : annos.get(alleleID)) {
+			if (!annos.get(alleleID).getAnnotations().isEmpty()) {
+				for (Annotation ann : annos.get(alleleID).getAnnotations()) {
 					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 					annotations.add(ann.toVCFAnnoString(alt));
 					if (options.oneAnnotationOnly)
@@ -254,14 +256,14 @@ public final class VariantContextAnnotator {
 		vc.getCommonInfo().putAttribute("ANN", Joiner.on(',').join(annotations), true); // true allows overwriting
 	}
 
-	private void applyOldJannovarAnnotations(VariantContext vc, List<AnnotationList> annos) {
+	private void applyOldJannovarAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
 		ArrayList<VariantEffect> effectList = new ArrayList<VariantEffect>();
 		ArrayList<String> hgvsList = new ArrayList<String>();
 
 		final int altAlleleCount = vc.getAlternateAlleles().size();
 		for (int alleleID = 0; alleleID < altAlleleCount; ++alleleID) {
-			if (!annos.get(alleleID).isEmpty()) {
-				for (Annotation ann : annos.get(alleleID)) {
+			if (!annos.get(alleleID).getAnnotations().isEmpty()) {
+				for (Annotation ann : annos.get(alleleID).getAnnotations()) {
 					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 					effectList.add(ann.getMostPathogenicVarType());
 					if (altAlleleCount == 1)
@@ -283,10 +285,10 @@ public final class VariantContextAnnotator {
 	/**
 	 * @param change
 	 *            {@link GenomeVariant} to build error annotation for
-	 * @return AnnotationList having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
+	 * @return VariantAnnotations having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
 	 */
-	public AnnotationList buildErrorAnnotationList(GenomeVariant change) {
-		return new AnnotationList(change, ImmutableList.of(new Annotation(ImmutableList
+	public VariantAnnotations buildErrorAnnotations(GenomeVariant change) {
+		return new VariantAnnotations(change, ImmutableList.of(new Annotation(ImmutableList
 				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}
 

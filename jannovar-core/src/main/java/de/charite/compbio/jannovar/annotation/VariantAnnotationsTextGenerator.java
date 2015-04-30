@@ -7,14 +7,14 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 // TODO(holtgrem): Test me!
 
 /**
- * Generate annotation text (effect and HGVS description) from {@link AnnotationList} object.
+ * Generate annotation text (effect and HGVS description) from {@link VariantAnnotations} object.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public abstract class AnnotationListTextGenerator {
+public abstract class VariantAnnotationsTextGenerator {
 
-	/** the decorated {@link AnnotationList} */
-	protected final AnnotationList annotations;
+	/** the decorated {@link VariantAnnotations} */
+	protected final VariantAnnotations annotations;
 
 	/** alternative allele ID (1 from VCF is 0 here) */
 	private final int alleleID;
@@ -26,13 +26,13 @@ public abstract class AnnotationListTextGenerator {
 	 * Initialize the decorator.
 	 *
 	 * @param annotations
-	 *            {@link AnnotationList} of {@link Annotation} objects
+	 *            {@link VariantAnnotations} of {@link Annotation} objects
 	 * @param alleleID
 	 *            the 0-based id of the allele
 	 * @param altCount
 	 *            total number of alternative alleles
 	 */
-	public AnnotationListTextGenerator(AnnotationList annotations, int alleleID, int altCount) {
+	public VariantAnnotationsTextGenerator(VariantAnnotations annotations, int alleleID, int altCount) {
 		this.annotations = annotations;
 		this.alleleID = alleleID;
 		this.altCount = altCount;
@@ -53,7 +53,7 @@ public abstract class AnnotationListTextGenerator {
 	 */
 	public String buildEffectText() {
 		StringBuilder builder = new StringBuilder();
-		for (Annotation anno : getAnnotations()) {
+		for (Annotation anno : annotations.getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
@@ -68,7 +68,7 @@ public abstract class AnnotationListTextGenerator {
 	 */
 	public String buildHGVSText() {
 		StringBuilder builder = new StringBuilder();
-		for (Annotation anno : getAnnotations()) {
+		for (Annotation anno : annotations.getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
@@ -79,8 +79,8 @@ public abstract class AnnotationListTextGenerator {
 	}
 
 	/**
-	 * @return {@link AnnotationList} of annotations to generate the annotation text for
+	 * @return {@link VariantAnnotations} of annotations to generate the annotation text for
 	 */
-	protected abstract AnnotationList getAnnotations();
+	protected abstract VariantAnnotations getAnnotations();
 
 }

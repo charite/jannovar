@@ -19,7 +19,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * this class to assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least
  * one {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
- * This class creates one {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object for each
+ * This class creates one {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object for each
  * variant (with one or more {@link Annotation} objects), that can return both an ArrayList of all annotations, a list
  * of all annotations of the highest priority level for the variant, and a single representative Annotation.
  *
@@ -164,7 +164,7 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * Note that this function is used by {@link Chromosome} during the construction of an {@link AnnotationList} for a
+	 * Note that this function is used by {@link Chromosome} during the construction of an {@link VariantAnnotations} for a
 	 * given variant.
 	 *
 	 * @return true if there are currently no annotations.
@@ -192,7 +192,7 @@ final class AnnotationCollector {
 	 * After the {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} object has added annotations for all of
 	 * the transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if
 	 * the variant does not intersect with any transcript), it calls this function to return the list of annotations in
-	 * form of an {@link de.charite.compbio.jannovar.annotation.AnnotationList AnnotationList} object.
+	 * form of an {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object.
 	 * <P>
 	 * The strategy is to return all variants that affect coding exons (and only these) if such variants exist, as they
 	 * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
@@ -200,10 +200,10 @@ final class AnnotationCollector {
 	 *
 	 * @param change
 	 *            <code>GenomeChange</code> to build the <code>AnnotationList</code> for
-	 * @return returns the {@link AnnotationList} with all associated {@link Annotation}s
+	 * @return returns the {@link VariantAnnotations} with all associated {@link Annotation}s
 	 */
-	public AnnotationList getAnnotationList(GenomeVariant change) {
-		return new AnnotationList(change, this.annotationLst);
+	public VariantAnnotations getAnnotationList(GenomeVariant change) {
+		return new VariantAnnotations(change, this.annotationLst);
 	}
 
 	/**
