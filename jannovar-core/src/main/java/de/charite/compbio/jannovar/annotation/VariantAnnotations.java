@@ -71,10 +71,17 @@ public final class VariantAnnotations implements VariantDescription {
 	}
 
 	/**
+	 * @return <code>true</code> if the result of {@link #getAnnotations} is empty
+	 */
+	public boolean hasAnnotation() {
+		return !entries.isEmpty();
+	}
+
+	/**
 	 * @return {@link Annotation} with highest predicted impact, or <code>null</code> if there is none.
 	 */
 	public Annotation getHighestImpactAnnotation() {
-		if (entries.isEmpty())
+		if (!hasAnnotation())
 			return null;
 		else
 			return entries.get(0);
@@ -88,7 +95,7 @@ public final class VariantAnnotations implements VariantDescription {
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();
-		if (anno.getEffects().isEmpty())
+		if (anno == null || anno.getEffects().isEmpty())
 			return VariantEffect.SEQUENCE_VARIANT;
 		else
 			return anno.getEffects().first();
