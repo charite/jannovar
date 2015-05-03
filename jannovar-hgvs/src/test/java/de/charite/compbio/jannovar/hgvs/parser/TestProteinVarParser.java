@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.junit.Test;
 
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.HgvsContext;
+
 public class TestProteinVarParser {
 
 	@Test
@@ -38,7 +40,8 @@ public class TestProteinVarParser {
 				throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
 			}
 		});
-		p.hgvs();
+		HgvsContext res = p.hgvs();
+		System.out.println(res);
 	}
 
 	@Test
