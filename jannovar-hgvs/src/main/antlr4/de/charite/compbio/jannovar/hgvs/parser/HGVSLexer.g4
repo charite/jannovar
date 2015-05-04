@@ -1,150 +1,317 @@
+/** Lexer for the HGVS mutation nomenclature.
+ *
+ * Attempts to cover the most important cases for NGS-based analyses.
+ *
+ * Current limitations:
+ *
+ * - referencing references for end positions or insertions is currently not
+ *   supported, e.g. the following from the HGVS website will not work:
+ *
+ *   - g.123_678conNG_012232.1:g.9456_10011
+ *   - c.88+101_oGJB2:c.355-1045del
+ *   - c.123+54_123+55insAB012345.2:g.76_420
+ *   - g.123_678conNG_012232.1:g.9456_10011
+ *   - c.[NM_000167.5:94A>G;NM_004006.2:76A>C]
+ *   - c.123_678conNM_004006.1:c.123_678
+ *   - c.88+101_oGJB2:c.355-1045del
+ *   - c.123+54_123+55insAB012345.2:g.76_420
+ *   - c.[GK:94A>G;DMD:76A>C]
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ */
 lexer grammar HGVSLexer;
 
-PROTEIN_CHANGE_START
+/** fire off protein change description*/
+PROTEIN_CHANGE_DESCRIPTION
 :
-	TOKEN_P_DOT .*? -> pushMode ( PROTEIN_CHANGE )
+	'p.' -> pushMode ( PROTEIN_CHANGE )
 ;
 
-NAME
+/** fire off nucleotide change description */
+NT_CHANGE_DESCRIPTION
 :
-	[a-zA-Z0-9_]+
+	[cmngr] '.' -> pushMode ( NUCLEOTIDE_CHANGE )
 ;
 
-NUMBER
+/** anything that does not match "p." or "[cmngr]." starts a reference description */
+REFERENCE
 :
-	[0-9]+
+	[abdefh-lo-qs-zA-Z0-9] REF_IDENTIFIER
+	(
+		'.' [1-9] [0-9]* // optional version
+
+	)?
 ;
 
-TOKEN_ZERO
+/** fragment used for read identifier */
+fragment
+REF_IDENTIFIER
 :
-	'0'
+	[ a-zA-Z0-9_]+
 ;
 
-TOKEN_MINUS
-:
-	'-'
-;
-
-TOKEN_PLUS
-:
-	'+'
-;
-
-TOKEN_UNDERSCORE
-:
-	'_'
-;
-
-TOKEN_COLON
+/** token used for stopping the reference description */
+REF_STOP
 :
 	':'
 ;
 
-TOKEN_P_DOT
+/** skip line breaks, spaces are kept */
+LINE_BREAKS
 :
-	'p.'
+	[ \r\n\t] -> skip
 ;
 
-TOKEN_FS
+/* Lexing of nucleotide changes
+ */
+mode NUCLEOTIDE_CHANGE;
+
+/** whitespace is ignored */
+NT_CHANGE_SPACE
 :
-	'fs'
+	' ' -> skip
 ;
 
-TOKEN_DELINS
+/** line breaks are ignored and end the nucleotide change parsing*/
+NT_CHANGE_LINE_BREAK
 :
-	'delins'
+	[\t\r\n] -> popMode , skip
 ;
 
-TOKEN_INS
+/** a colon ends the nucleotide change mode */
+NT_COLON
 :
-	'ins'
+	':' -> popMode
 ;
 
-TOKEN_EXT
+/** a nucleotide character */
+NT_CHAR
 :
-	'ext'
+	[acgtuACGTU]
 ;
 
-TOKEN_DUP
+/** a string of nucleotides */
+NT_STRING
 :
-	'dup'
+	NT_CHAR+
 ;
 
-TOKEN_DEL
+/** a number, used for positions etc. */
+NT_NUMBER
 :
-	'del'
+	[1-9] [0-9]*
 ;
 
-TOKEN_X
+NT_MINUS
 :
-	'X'
+	'-'
 ;
 
-TOKEN_EQUAL
+NT_PLUS
 :
-	'='
+	'+'
 ;
 
-TOKEN_QUESTION_MARK
+/** 'u' is used for denoting an upstream position */
+NT_UPSTREAM
+:
+	'u'
+;
+
+/** 'u' is used for denoting a downstream position */
+NT_DOWNSTREAM
+:
+	'd'
+;
+
+/** 'o' is used for denoting a position on the opposite strand */
+NT_OPPOSITE
+:
+	'o'
+;
+
+NT_QUESTION_MARK
 :
 	'?'
 ;
 
-TOKEN_M1
-:
-	'M1'
-	| 'Met1'
-;
-
-TOKEN_PAREN_OPEN
-:
-	'('
-;
-
-TOKEN_PAREN_CLOSE
-:
-	')'
-;
-
-TOKEN_ASTERISK
+NT_ASTERISK
 :
 	'*'
 ;
 
-// Lexing of protein changes
+NT_UNDERSCORE
+:
+	'_'
+;
+
+NT_PAREN_OPEN
+:
+	'('
+;
+
+NT_PAREN_CLOSE
+:
+	')'
+;
+
+NT_SQUARE_PAREN_OPEN
+:
+	'['
+;
+
+NT_SQUARE_PAREN_CLOSE
+:
+	']'
+;
+
+/** used for denoting chromosome bands */
+NT_P
+:
+	'p'
+;
+
+/** used for denoting chromosome bands */
+NT_Q
+:
+	'q'
+;
+
+NT_SEMICOLON
+:
+	';'
+;
+
+NT_DOT
+:
+	'.'
+;
+
+/**  used for specifying transcript variant */
+NT_TRANS_VAR
+:
+	'_v'
+;
+
+/** used for specifying protein isoform */
+NT_PROT_ISO
+:
+	'_i'
+;
+
+/** token for denoting deletion */
+NT_DEL
+:
+	'del'
+;
+
+/** token for denoting duplication */
+NT_DUP
+:
+	'dup'
+;
+
+/** token for denoting insertion */
+NT_INS
+:
+	'ins'
+;
+
+/** token for denoting inversion */
+NT_INV
+:
+	'inv'
+;
+
+/** token for denoting gene conversion */
+NT_CON
+:
+	'con'
+;
+
+/** token for denoting translocation */
+NT_T
+:
+	't'
+;
+
+NT_EQUAL
+:
+	'='
+;
+
+/** token for denoting splicing */
+NT_SPL
+:
+	'spl'
+;
+
+NT_ZERO
+:
+	'0'
+;
+
+NT_DASHES
+:
+	'//'
+	| '/'
+;
+
+NT_CIRCUMFLEX
+:
+	'^'
+;
+
+NT_BRACE_OPEN
+:
+	'{'
+;
+
+NT_BRACE_CLOSE
+:
+	'}'
+;
+
+NT_GT
+:
+	'>'
+;
+
+/* Lexing of protein changes */
 mode PROTEIN_CHANGE;
 
+/** protein character (3-letter, 1-letter or 'X') */
 PROTEIN_AA
 :
 	PROTEIN_AA1
 	| PROTEIN_AA3
-	| 'X'
 ;
 
-PROTEIN_AA1
+/** number used during protein annotation */
+PROTEIN_NUMBER
 :
-	'A'
-	| 'R'
-	| 'N'
-	| 'D'
-	| 'C'
-	| 'Q'
-	| 'E'
-	| 'G'
-	| 'H'
-	| 'I'
-	| 'L'
-	| 'K'
-	| 'M'
-	| 'F'
-	| 'P'
-	| 'S'
-	| 'T'
-	| 'W'
-	| 'Y'
-	| 'V'
+	[1-9] [0-9]*
 ;
 
+/** space is ignored */
+PROTEIN_CHANGE_SPACE
+:
+	[ ] -> skip
+;
+
+/** line breaks are ignored but end protein change mode */
+PROTEIN_CHANGE_LINE_BREAK
+:
+	[\t\r\n] -> popMode , skip
+;
+
+/** colon character ends the PROTEIN_CHANGE mode */
+PROTEIN_COLON
+:
+	':' -> popMode
+;
+
+/** 3-letter protein codes */
 PROTEIN_AA3
 :
 	'Ala'
@@ -169,7 +336,144 @@ PROTEIN_AA3
 	| 'Val'
 ;
 
-PROTEIN_CHANGE_WHITESPACE
+/** 1-letter protein codes */
+PROTEIN_AA1
 :
-	[ \t\r\n] -> popMode
+	'A'
+	| 'R'
+	| 'N'
+	| 'D'
+	| 'C'
+	| 'Q'
+	| 'E'
+	| 'G'
+	| 'H'
+	| 'I'
+	| 'L'
+	| 'K'
+	| 'M'
+	| 'F'
+	| 'P'
+	| 'S'
+	| 'T'
+	| 'W'
+	| 'Y'
+	| 'V'
+;
+
+/** zero, used for denoting no produced protein */
+PROTEIN_ZERO
+:
+	'0'
+;
+
+PROTEIN_MINUS
+:
+	'-'
+;
+
+PROTEIN_PLUS
+:
+	'+'
+;
+
+PROTEIN_UNDERSCORE
+:
+	'_'
+;
+
+/** frameshift */
+PROTEIN_FS
+:
+	'fs'
+;
+
+/** insertion */
+PROTEIN_INS
+:
+	'ins'
+;
+
+/** extension */
+PROTEIN_EXT
+:
+	'ext'
+;
+
+/** duplication */
+PROTEIN_DUP
+:
+	'dup'
+;
+
+/** deletion */
+PROTEIN_DEL
+:
+	'del'
+;
+
+PROTEIN_COMMA
+:
+	','
+;
+
+PROTEIN_EQUAL
+:
+	'='
+;
+
+PROTEIN_QUESTION_MARK
+:
+	'?'
+;
+
+/** start codon with position */
+PROTEIN_M1
+:
+	PROTEIN_MET '1'
+;
+
+/** start codon without position */
+PROTEIN_MET
+:
+	'M'
+	| 'Met'
+;
+
+PROTEIN_PAREN_OPEN
+:
+	'('
+;
+
+PROTEIN_PAREN_CLOSE
+:
+	')'
+;
+
+PROTEIN_SQUARE_PAREN_OPEN
+:
+	'['
+;
+
+PROTEIN_SQUARE_PAREN_CLOSE
+:
+	']'
+;
+
+PROTEIN_SEMICOLON
+:
+	';'
+;
+
+PROTEIN_DASHES
+:
+	'//'
+	| '/'
+;
+
+/** terminal codon */
+PROTEIN_TERMINAL
+:
+	'*'
+	| 'Ter'
 ;
