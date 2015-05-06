@@ -156,6 +156,8 @@
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
+					<source>${javaVersion}</source>
+					<target>${javaVersion}</target>
 				</configuration>
 			</plugin>
 		</plugins>

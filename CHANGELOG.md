@@ -4,7 +4,11 @@
 
 ### jannovar-core
 
-* Moving CompatibilityCheckerException to package de.charite.compbio.jannovar.pedigree.compatibilitychecker
+* Moving CompatibilityCheckerException to package
+  `...jannovar.pedigree.compatibilitychecker`
+* Fixing bug in transcript coordinate projection.
+* Renaming `TranscriptSequenceChangeHelper.getCDSWithChange` to
+  `.getCDSWithGenomeVariant`.
 * Renaming `*.getChange()` to `*.getGenomeVariant()`
 * Renaming `VariantAnnotator.buildAnnotationList` to `.buildAnnotations`,
   `VariantContextAnnotator.buildAnnotationList` to `.buildAnnotations`,

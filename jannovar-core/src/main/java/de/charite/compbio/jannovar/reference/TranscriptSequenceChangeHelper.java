@@ -139,7 +139,7 @@ public final class TranscriptSequenceChangeHelper {
 	 *            {@link GenomeVariant} to apply to the CDS region of the transcript
 	 * @return CDS of transcript with applied {@link GenomeVariant}
 	 */
-	public String getCDSWithChange(GenomeVariant change) {
+	public String getCDSWithGenomeVariant(GenomeVariant change) {
 		switch (change.getType()) {
 		case SNV:
 		case INSERTION:
