@@ -177,7 +177,7 @@ public final class TranscriptProjectionDecorator {
 		// handling case of transcript end position
 		// TODO(holtgrewe): add test for this
 		GenomeInterval lastRegion = transcript.getExonRegions().get(transcript.getExonRegions().size() - 1);
-		if (targetPos == currPos + lastRegion.length())
+		if (targetPos == currPos)
 			return lastRegion.getGenomeEndPos();
 
 		throw new ProjectionException("Invalid transcript position " + targetPos);
