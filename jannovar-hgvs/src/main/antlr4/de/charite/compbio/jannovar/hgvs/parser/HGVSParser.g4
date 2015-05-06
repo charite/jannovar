@@ -1,11 +1,15 @@
 /** Antlr4 grammar for HGVS variant annotations.
  *
- *  Derived from
+ * Derived from
  *
  * Laros, J. F. J., Blavier, A., den Dunnen, J. T., & Taschner, P. E. M. (2011).
  * A formalized description of the standard human variant nomenclature in Extended
  * Backus-Naur Form. BMC Bioinformatics, 12(Suppl 4), S5.
  * http://doi.org/10.1186/1471-2105-12-S4-S5
+ *
+ * Limitations
+ *
+ * * mosaicism and chimerism not supported yet
  */
 parser grammar HGVSParser;
 
@@ -16,6 +20,7 @@ options {
 hgvs_variant
 :
 	protein_single_var
+	| protein_multi_var
 ;
 
 protein_single_var
@@ -26,11 +31,20 @@ protein_single_var
 protein_reference
 :
 	(
+	/* TODO(holtgrew): reference name is missing here */
 		REFERENCE REF_STOP
 	)? PROTEIN_CHANGE_DESCRIPTION
 ;
 
 protein_raw_var
+:
+	(
+		PROTEIN_PAREN_OPEN protein_raw_var_inner PROTEIN_PAREN_CLOSE
+	)
+	| protein_raw_var_inner
+;
+
+protein_raw_var_inner
 :
 	protein_substitution
 	| protein_duplication
@@ -53,11 +67,23 @@ protein_substitution
 	(
 		PROTEIN_QUESTION_MARK
 		| PROTEIN_EXT PROTEIN_MET? PROTEIN_MINUS PROTEIN_NUMBER
-		| aa_or_terminal
+		|
+		(
+			aa_or_terminal
+			| PROTEIN_EQUAL
+		)
 	)
-	| aa_pt_loc aa_or_terminal
+	| aa_pt_loc
 	(
-		PROTEIN_EXT PROTEIN_TERMINAL PROTEIN_NUMBER
+		aa_or_terminal
+		| PROTEIN_EQUAL
+	)
+	(
+		PROTEIN_EXT PROTEIN_TERMINAL
+		(
+			PROTEIN_NUMBER
+			| PROTEIN_QUESTION_MARK
+		)
 	)?
 ;
 
@@ -109,6 +135,56 @@ protein_short_fs
 protein_long_fs
 :
 	aa_pt_loc PROTEIN_AA PROTEIN_FS PROTEIN_TERMINAL PROTEIN_NUMBER
+;
+
+/* note that UnkAlleleVars is mapped to protein-single_allele_var, using '(;') for infix separator */
+protein_multi_var
+:
+	protein_single_allele_var
+	| protein_multi_allele_var
+;
+
+protein_single_allele_var
+:
+	protein_reference protein_single_allele_var_set
+;
+
+protein_single_allele_var_set
+:
+	PROTEIN_SQUARE_PAREN_OPEN
+	(
+		protein_single_allele_var_set_inner
+		| protein_single_allele_var_set_inner_paren
+	) PROTEIN_SQUARE_PAREN_CLOSE
+;
+
+protein_single_allele_var_set_inner_paren
+:
+	PROTEIN_PAREN_OPEN protein_single_allele_var_set_inner PROTEIN_PAREN_CLOSE
+;
+
+protein_single_allele_var_set_inner
+:
+	protein_raw_var
+	(
+		(
+			PROTEIN_SEMICOLON protein_raw_var
+		)+
+		|
+		(
+			PROTEIN_COMMA protein_raw_var
+		)+
+		|
+		(
+			PROTEIN_PAREN_OPEN PROTEIN_SEMICOLON PROTEIN_PAREN_CLOSE protein_raw_var
+		)
+	)
+;
+
+protein_multi_allele_var
+:
+	protein_reference protein_single_allele_var_set PROTEIN_SEMICOLON
+	protein_reference? protein_single_allele_var_set
 ;
 
 aa_loc

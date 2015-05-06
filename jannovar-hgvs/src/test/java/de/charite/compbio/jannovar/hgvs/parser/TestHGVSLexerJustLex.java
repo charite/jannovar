@@ -19,6 +19,17 @@ public class TestHGVSLexerJustLex extends JustParseAndLexBase {
 		}
 	}
 
+	// Debug code.
+	// @Test
+	// public void testLexingOnMyProtein() {
+	// String[] arr = { "p.[(Ala25Thr; Gly28Val)]" };
+	// for (String ntString : arr) {
+	// ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
+	// HGVSLexer l = new HGVSLexer(inputStream);
+	// System.err.println(l.getAllTokens());
+	// }
+	// }
+
 	@Test
 	public void testLexingOnProteinStrings() {
 		for (String proteinString : PROTEIN_STRINGS) {

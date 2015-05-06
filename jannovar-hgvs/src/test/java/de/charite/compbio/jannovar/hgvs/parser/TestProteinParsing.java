@@ -17,10 +17,19 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 public class TestProteinParsing {
 
 	protected Hgvs_variantContext parseString(String inputString) {
+		return parseString(inputString, false);
+	}
+
+	protected Hgvs_variantContext parseString(String inputString, boolean trace) {
+		if (trace) {
+			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
+			HGVSLexer l = new HGVSLexer(inputStream);
+			System.err.println(l.getAllTokens());
+		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
 		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
-		// p.setTrace(true);
+		p.setTrace(trace);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
@@ -86,15 +95,41 @@ public class TestProteinParsing {
 	}
 
 	@Test
-	public void testProteinShortFrameShift() {
+	public void testProteinSingleShortFrameShift() {
 		String[] arr = { "p.G33fs", "p.Arg97fs" };
 		for (String s : arr)
 			parseString(s);
 	}
 
 	@Test
-	public void testProteinLongFrameShift() {
+	public void testProteinSingleLongFrameShift() {
 		String[] arr = { "p.Arg97Profs*23", "p.A97Pfs*23" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	/** test single allele substitutions */
+	@Test
+	public void testProteinSingleAlleleSubstitutions() {
+		String[] arr = { "p.[A2G,Lys33Gly]", "p.[(A2G,Lys33Gly)]", "p.[(A2G),(Lys33Gly)]", "p.[A2G;Lys33Gly]",
+				"p.[(A2G;Lys33Gly)]", "p.[(A2G);(Lys33Gly)]" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	/** test multi-allele substitutions */
+	@Test
+	public void testProteinMultiAlleleSubstitutions() {
+		String[] arr = { "p.[A2G,Lys33Gly]", "p.[(A2G,Lys33Gly)]", "p.[(A2G),(Lys33Gly)]", "p.[A2G;Lys33Gly]",
+				"p.[(A2G;Lys33Gly)]", "p.[(A2G);(Lys33Gly)]" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	/** test multi-allele substitutions with chromosome unknown */
+	@Test
+	public void testProteinUnkAlleleSubstitutions() {
+		String[] arr = { "p.[Ala25Thr(;)Pro323Leu]", "p.[(Ala25Thr(;)Pro323Leu)]", "p.[(Ala25Thr)(;)(Pro323Leu)]" };
 		for (String s : arr)
 			parseString(s);
 	}
