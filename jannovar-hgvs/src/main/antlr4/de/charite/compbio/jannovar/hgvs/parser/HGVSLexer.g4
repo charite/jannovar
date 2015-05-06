@@ -412,6 +412,12 @@ PROTEIN_DEL
 	'del'
 ;
 
+/** indel */
+PROTEIN_DELINS
+:
+	'delins'
+;
+
 PROTEIN_COMMA
 :
 	','

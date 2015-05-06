@@ -20,7 +20,7 @@ public class TestProteinParsing {
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
 		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
-		p.setTrace(true);
+		// p.setTrace(true);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
@@ -46,6 +46,55 @@ public class TestProteinParsing {
 	public void testProteinSingleVarSubstitutions() {
 		String[] arr = { "p.G33L", "p.*34Gext*34", "p.*34GextTer34", "p.Ter34GextTer34", "p.*34*",
 				"p.Met1ValextMet-12", "p.Met1?", "p.Met1ext-5" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinSingleVarDeletion() {
+		String[] arr = { "p.G33del", "p.Glu123del", "p.G33_A127del", "p.Glu33_Ala127del" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinSingleVarDuplication() {
+		String[] arr = { "p.G33dup", "p.Glu123dup" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinSingleVarVaryingShortSequenceRepeat() {
+		String[] arr = { "p.G33(3_6)", "p.Glu123(3_6)" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinSingleVarInsertion() {
+		String[] arr = { "p.G33_L34insGlu", "p.Glu33_Lys34insG", "p.G33_L34ins17", "p.Glu33_Lys34ins17" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinSingleVarDelIns() {
+		String[] arr = { "p.G33delins17", "p.Glu33_Lys34delins17", "p.G33delinsG", "p.Glu33_Lys34delinsGlu" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinShortFrameShift() {
+		String[] arr = { "p.G33fs", "p.Arg97fs" };
+		for (String s : arr)
+			parseString(s);
+	}
+
+	@Test
+	public void testProteinLongFrameShift() {
+		String[] arr = { "p.Arg97Profs*23", "p.A97Pfs*23" };
 		for (String s : arr)
 			parseString(s);
 	}

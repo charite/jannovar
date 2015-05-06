@@ -33,14 +33,13 @@ protein_reference
 protein_raw_var
 :
 	protein_substitution
-	/* 	| protein_deletion
 	| protein_duplication
-	| protein_short_sequence_repeat
+	| protein_deletion
+	| protein_varying_short_sequence_repeat
 	| protein_insertion
 	| protein_indel
-	| protein_frame_shift*/
-// the base cases '=' | '?' | '0' | '0?'
-
+	| protein_frame_shift
+	/* the base cases '=' | '?' | '0' | '0?' */
 	| PROTEIN_EQUAL
 	| PROTEIN_QUESTION_MARK
 	| PROTEIN_ZERO
@@ -60,6 +59,56 @@ protein_substitution
 	(
 		PROTEIN_EXT PROTEIN_TERMINAL PROTEIN_NUMBER
 	)?
+;
+
+protein_duplication
+:
+	aa_loc PROTEIN_DUP
+;
+
+protein_deletion
+:
+	aa_loc PROTEIN_DEL
+;
+
+protein_varying_short_sequence_repeat
+:
+	aa_loc PROTEIN_PAREN_OPEN PROTEIN_NUMBER PROTEIN_UNDERSCORE PROTEIN_NUMBER
+	PROTEIN_PAREN_CLOSE
+;
+
+protein_insertion
+:
+	aa_range PROTEIN_INS
+	(
+		PROTEIN_AA+
+		| PROTEIN_NUMBER
+	)
+;
+
+protein_indel
+:
+	aa_loc PROTEIN_DELINS
+	(
+		PROTEIN_AA+
+		| PROTEIN_NUMBER
+	)
+;
+
+protein_frame_shift
+:
+	protein_short_fs
+	| protein_long_fs
+;
+
+protein_short_fs
+:
+	aa_pt_loc PROTEIN_FS
+;
+
+protein_long_fs
+:
+	aa_pt_loc PROTEIN_AA PROTEIN_FS PROTEIN_TERMINAL PROTEIN_NUMBER
 ;
 
 aa_loc
