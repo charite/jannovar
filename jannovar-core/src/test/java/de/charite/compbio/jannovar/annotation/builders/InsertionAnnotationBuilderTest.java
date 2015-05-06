@@ -1880,7 +1880,7 @@ public class InsertionAnnotationBuilderTest {
 		// The UCSC transcript DNA sequence is bogus here.
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.590_591insAAGT", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("c.589_590insTAAG", annotation1.getNucleotideHGVSDescription());
 		Assert.assertEquals("p.Leu197LeuSer*", annotation1.getAminoAcidHGVSDescription());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_INSERTION, VariantEffect.STOP_GAINED),
 				annotation1.getEffects());
