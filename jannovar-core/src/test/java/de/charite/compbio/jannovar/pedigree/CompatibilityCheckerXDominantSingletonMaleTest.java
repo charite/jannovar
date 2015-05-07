@@ -28,20 +28,18 @@ public class CompatibilityCheckerXDominantSingletonMaleTest extends Compatibilit
 	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXD(REF).run());
 		Assert.assertFalse(buildCheckerXD(UKN).run());
-		Assert.assertFalse(buildCheckerXD(HET).run());
 	}
 
 	@Test
 	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXD(REF, REF).run());
 		Assert.assertFalse(buildCheckerXD(REF, UKN).run());
-		Assert.assertFalse(buildCheckerXD(UKN, HET).run());
-		Assert.assertFalse(buildCheckerXD(HET, HET).run());
 		Assert.assertFalse(buildCheckerXD(UKN, UKN).run());
 	}
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+		Assert.assertTrue(buildCheckerXD(HET).run());
 		Assert.assertTrue(buildCheckerXR(ALT).run());
 	}
 
@@ -49,6 +47,8 @@ public class CompatibilityCheckerXDominantSingletonMaleTest extends Compatibilit
 	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerXD(ALT, REF).run());
 		Assert.assertTrue(buildCheckerXD(UKN, ALT).run());
+		Assert.assertTrue(buildCheckerXD(UKN, HET).run());
+		Assert.assertTrue(buildCheckerXD(HET, HET).run());
 		Assert.assertTrue(buildCheckerXD(ALT, ALT).run());
 	}
 
