@@ -16,7 +16,7 @@ The mode of inheritance is selected by the filter choice.
 The whole list of genotype calls (usually the genotypes of variants falling onto one gene or transcripts) is then checked for compatibility with the given mode of inheritance and pedigree.
 
 The genotype calls of the variants can either be ``NOCALL`` (no genotype was determined for the person), ``REF`` (homozygous wild-type), ``HET`` (heterozygous alternative), or ``HOM`` (homozygous alternative).
-The persons can either be affected, unaffected, or their affection state is unknown.
+In general a caller calls a hemizygous mutations as homozygous. Therefore we use ``HOM`` and for sensitivity ``HET`` on known males as hemizygous. The persons can either be affected, unaffected, or their affection state is unknown.
 
 Autosomal Dominant Filter
 -------------------------
