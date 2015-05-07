@@ -90,7 +90,7 @@ For AR compound heterozygous, the following checks are performed.
 
 Autosomal X-Dominant Filter
 ---------------------------
-* First of all the variant must be X-Chromosomal. 
+* First of all variants must be X-Chromosomal. 
  * If the pedigree only contains one person then we decide if 
    * the person is female then the variant call list must contain one ``HET`` call.
    * else the variant call list must contain a ``HET`` or a ``HOM`` call.
@@ -102,4 +102,26 @@ Autosomal X-Dominant Filter
 
 Autosomal X-Recessive Filter
 ----------------------------
+The filter first checks for compatibility with X-chromosomal recessive (XR) homozygous and then XR compound heterozygous mode of inheritance. XR is different to the AR filter, because affected males are always hemizygous (homozygous for the callers). So males do not have compund heterozygous variants.
+
+For XR homozygous, the following checks are performed.
+
+* First of all variants must be X-Chromosomal. 
+* If the pedigree only contains one person then we decide if 
+   * the person is female then the variant call list must contain one ``HOM`` call.
+   * else the variant call list must contain a ``HET`` or a ``HOM`` call.
+* If there is more than one person in the pedigree then there must be at least one compatible variant call in the list. For this, the following must be true for one variant in the list:
+
+   * * at least one affected male has a ``HET`` or ``HOM`` call or a affected female a ``HOM`` call for this variant,
+   * no affected person has a ``REF`` or no affected female person has a ``HET`` call.
+   * For the parents of affected femals
+      * the father must be affected and 
+      * the mother cannot have it ``REF`` or ``HOM``
+    * For the parents of affected males 
+      * the unaffected father cannot have the variant ``HET`` or ``HOM``
+      * the mother cannot be ``HOM``
+   * There is no unaffected person that has a ``HOM`` call.
+   * There is no unaffected male person that has a ``HET`` call.
+
+For XR compound heterozygous, the following checks are performed.
 
