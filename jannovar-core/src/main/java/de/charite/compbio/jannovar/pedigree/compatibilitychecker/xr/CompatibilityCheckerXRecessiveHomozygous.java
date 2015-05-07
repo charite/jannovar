@@ -71,6 +71,8 @@ class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase 
 		for (ImmutableList<Genotype> gtList : list.getCalls())
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
 				return true;
+			else if (pedigree.getMembers().get(0).getSex() != Sex.FEMALE && gtList.get(0) == Genotype.HETEROZYGOUS)
+				return true;
 
 		return false;
 	}
@@ -107,7 +109,7 @@ class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase 
 					 */
 					return false;
 				else if (gtList.get(i) == Genotype.HOMOZYGOUS_ALT
-						|| (person.getSex() == Sex.MALE && gtList.get(i) == Genotype.HETEROZYGOUS))
+						|| (person.getSex() != Sex.FEMALE && gtList.get(i) == Genotype.HETEROZYGOUS))
 					numMut += 1;
 			}
 			++i;
