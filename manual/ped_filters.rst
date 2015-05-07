@@ -90,6 +90,15 @@ For AR compound heterozygous, the following checks are performed.
 
 Autosomal X-Dominant Filter
 ---------------------------
+* First of all the variant must be X-Chromosomal. 
+ * If the pedigree only contains one person then we decide if 
+   * the person is female then the variant call list must contain one ``HET`` call.
+   * else the variant call list must contain a ``HET`` or a ``HOM`` call.
+ * If there is more than one person in the pedigree then there must be at least one compatible call, meaning:
+   * at least one affected male has a ``HET`` or ``HOM`` call or a affected female a ``HET`` call for this variant,
+   * no affected person has a ``REF`` call,
+   * no a affected female has a ``HOM`` call, and
+   * no unaffected person has a ``HET`` or ``HOM`` call.
 
 Autosomal X-Recessive Filter
 ----------------------------
