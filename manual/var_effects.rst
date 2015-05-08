@@ -22,6 +22,7 @@ HIGH             SO:0001624  transcript_ablation
 HIGH             SO:0001572  exon_loss_variant
 HIGH             SO:0001909  frameshift_elongation
 HIGH             SO:0001910  frameshift_truncation
+HIGH             SO:0001589  frameshift_variant
 HIGH             SO:0001908  internal_feature_elongation
 HIGH             SO:0001906  feature_truncation
 HIGH             SO:0001583  mnv
@@ -153,6 +154,7 @@ transcript_ablation                             TRANSCRIPT_ABLATION
 exon_loss_variant                               -
 frameshift_elongation                           FS_INSERTION
 frameshift_truncation                           FS_DELETION
+frameshift_variant                              -
 internal_feature_elongation                     NON_FS_INSERTION
 feature_truncation                              NON_FS_DELETION
 mnv                                             NON_FS_SUBSTITUTION

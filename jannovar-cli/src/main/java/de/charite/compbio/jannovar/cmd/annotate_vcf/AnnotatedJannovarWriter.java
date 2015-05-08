@@ -16,21 +16,21 @@ import com.google.common.collect.ImmutableMap;
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationException;
-import de.charite.compbio.jannovar.annotation.AnnotationList;
+import de.charite.compbio.jannovar.annotation.VariantAnnotations;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 
 /**
  * Annotate variant in {@link VariantContext} and write out in Jannovar format.
- * 
+ *
  * @author Max Schubach <max.schubach@charite.de>
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
@@ -141,13 +141,13 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
 		String gtype = stringForGenotype(vc, 0);
 		float qual = (float) vc.getPhredScaledQual();
-		AnnotationList anno = annotator.buildAnnotationList(change);
+		VariantAnnotations anno = annotator.buildAnnotations(change);
 		if (anno == null) {
 			String e = String.format("No annotations found for variant %s", vc.toString());
 			throw new AnnotationException(e);
 		}
 
-		for (Annotation a : anno) {
+		for (Annotation a : anno.getAnnotations()) {
 			String effect = Joiner.on("+").join(
 					FluentIterable.from(a.getEffects()).transform(VariantEffect.TO_LEGACY_NAME));
 			String annt = Joiner.on(":").skipNulls()

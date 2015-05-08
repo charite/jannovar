@@ -3,7 +3,6 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
@@ -12,6 +11,7 @@ import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a
@@ -71,6 +71,8 @@ class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase 
 		for (ImmutableList<Genotype> gtList : list.getCalls())
 			if (gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
 				return true;
+			else if (pedigree.getMembers().get(0).getSex() != Sex.FEMALE && gtList.get(0) == Genotype.HETEROZYGOUS)
+				return true;
 
 		return false;
 	}
@@ -107,7 +109,7 @@ class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase 
 					 */
 					return false;
 				else if (gtList.get(i) == Genotype.HOMOZYGOUS_ALT
-						|| (person.getSex() == Sex.MALE && gtList.get(i) == Genotype.HETEROZYGOUS))
+						|| (person.getSex() != Sex.FEMALE && gtList.get(i) == Genotype.HETEROZYGOUS))
 					numMut += 1;
 			}
 			++i;

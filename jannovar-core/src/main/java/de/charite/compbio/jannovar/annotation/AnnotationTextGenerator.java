@@ -1,6 +1,6 @@
 package de.charite.compbio.jannovar.annotation;
 
-// TODO(holtgrew): Test me!
+//TODO(holtgrewe): Remove
 
 /**
  * Decorator for {@link Annotation} for generating annotation text.
@@ -8,6 +8,7 @@ package de.charite.compbio.jannovar.annotation;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
+@Deprecated
 final public class AnnotationTextGenerator {
 
 	/** the decorated {@link Annotation} */

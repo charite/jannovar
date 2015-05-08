@@ -102,7 +102,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		return exonRegions;
 	}
 
-	/** @return cDNA sequence of the spliced RNA of this known gene transcript. */
+	/** @return mDNA sequence of the spliced RNA of this known gene transcript. */
 	public String getSequence() {
 		return sequence;
 	}

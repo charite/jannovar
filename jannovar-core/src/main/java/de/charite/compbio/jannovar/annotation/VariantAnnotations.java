@@ -1,15 +1,14 @@
 package de.charite.compbio.jannovar.annotation;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMultiset;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.Strand;
+import de.charite.compbio.jannovar.reference.VariantDescription;
 
 /**
  * A list of priority-sorted {@link Annotation} objects.
@@ -20,7 +19,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class AnnotationList implements List<Annotation> {
+public final class VariantAnnotations implements VariantDescription {
 
 	/** the {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for. */
 	private final GenomeVariant change;
@@ -33,35 +32,56 @@ public final class AnnotationList implements List<Annotation> {
 	 *            to use for the empty list
 	 * @return empty <code>AnnotationList</code> with the given {@link GenomeVariant}
 	 */
-	public static AnnotationList buildEmptyList(GenomeVariant change) {
-		return new AnnotationList(change, ImmutableList.<Annotation> of());
+	public static VariantAnnotations buildEmptyList(GenomeVariant change) {
+		return new VariantAnnotations(change, ImmutableList.<Annotation> of());
 	}
 
 	/**
 	 * Construct ImmutableAnnotationList from a {@link Collection} of {@link Annotation} objects.
+	 *
+	 * Note that <code>variant</code> is converted to the forward strand using {@link GenomeVariant#withStrand}.
 	 *
 	 * @param change
 	 *            {@link GenomeVariant} that this anotation list annotates
 	 * @param entries
 	 *            {@link Collection} of {@link Annotation} objects
 	 */
-	public AnnotationList(GenomeVariant change, Collection<Annotation> entries) {
-		this.change = change;
+	public VariantAnnotations(GenomeVariant variant, Collection<Annotation> entries) {
+		this.change = variant.withStrand(Strand.FWD);
 		this.entries = ImmutableList.copyOf(ImmutableSortedMultiset.copyOf(entries));
 	}
 
 	/**
+	 * Return the {@link GenomeVariant} that this AnnotationList is annotated with.
+	 *
+	 * Note that the {@link GenomeVariant} is converted to be on the forward strand on construction of AnnotationList
+	 * objects.
+	 *
 	 * @return {@link GenomeVariant} that this <code>AnnotationList</code> contains entries for.
 	 */
-	public GenomeVariant getChange() {
+	public GenomeVariant getGenomeVariant() {
 		return change;
+	}
+
+	/**
+	 * @return the list of annotations
+	 */
+	public ImmutableList<Annotation> getAnnotations() {
+		return entries;
+	}
+
+	/**
+	 * @return <code>true</code> if the result of {@link #getAnnotations} is empty
+	 */
+	public boolean hasAnnotation() {
+		return !entries.isEmpty();
 	}
 
 	/**
 	 * @return {@link Annotation} with highest predicted impact, or <code>null</code> if there is none.
 	 */
 	public Annotation getHighestImpactAnnotation() {
-		if (entries.isEmpty())
+		if (!hasAnnotation())
 			return null;
 		else
 			return entries.get(0);
@@ -75,7 +95,7 @@ public final class AnnotationList implements List<Annotation> {
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();
-		if (anno.getEffects().isEmpty())
+		if (anno == null || anno.getEffects().isEmpty())
 			return VariantEffect.SEQUENCE_VARIANT;
 		else
 			return anno.getEffects().first();
@@ -102,7 +122,7 @@ public final class AnnotationList implements List<Annotation> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AnnotationList other = (AnnotationList) obj;
+		VariantAnnotations other = (VariantAnnotations) obj;
 		if (entries == null) {
 			if (other.entries != null)
 				return false;
@@ -111,106 +131,28 @@ public final class AnnotationList implements List<Annotation> {
 		return true;
 	}
 
-	public int size() {
-		return entries.size();
+	public String getChrName() {
+		return change.getChrName();
 	}
 
-	public boolean isEmpty() {
-		return entries.isEmpty();
+	public int getChr() {
+		return change.getChr();
 	}
 
-	public boolean contains(Object o) {
-		return entries.contains(o);
+	public int getPos() {
+		return change.getPos();
 	}
 
-	public Iterator<Annotation> iterator() {
-		return entries.iterator();
+	public String getRef() {
+		return change.getRef();
 	}
 
-	public Object[] toArray() {
-		return entries.toArray();
+	public String getAlt() {
+		return change.getAlt();
 	}
 
-	public <T> T[] toArray(T[] a) {
-		return entries.toArray(a);
-	}
-
-	@Deprecated
-	public boolean add(Annotation e) {
-		return entries.add(e);
-	}
-
-	@Deprecated
-	public boolean remove(Object o) {
-		return entries.remove(o);
-	}
-
-	public boolean containsAll(Collection<?> c) {
-		return entries.containsAll(c);
-	}
-
-	@Deprecated
-	public boolean addAll(Collection<? extends Annotation> c) {
-		return entries.addAll(c);
-	}
-
-	@Deprecated
-	public boolean addAll(int index, Collection<? extends Annotation> c) {
-		return entries.addAll(index, c);
-	}
-
-	@Deprecated
-	public boolean removeAll(Collection<?> c) {
-		return entries.removeAll(c);
-	}
-
-	@Deprecated
-	public boolean retainAll(Collection<?> c) {
-		return entries.retainAll(c);
-	}
-
-	@Deprecated
-	public void clear() {
-		entries.clear();
-	}
-
-	public Annotation get(int index) {
-		return entries.get(index);
-	}
-
-	@Deprecated
-	public Annotation set(int index, Annotation element) {
-		return entries.set(index, element);
-	}
-
-	@Deprecated
-	public void add(int index, Annotation element) {
-		entries.add(index, element);
-	}
-
-	@Deprecated
-	public Annotation remove(int index) {
-		return entries.remove(index);
-	}
-
-	public int indexOf(Object o) {
-		return entries.indexOf(o);
-	}
-
-	public int lastIndexOf(Object o) {
-		return entries.lastIndexOf(o);
-	}
-
-	public ListIterator<Annotation> listIterator() {
-		return entries.listIterator();
-	}
-
-	public ListIterator<Annotation> listIterator(int index) {
-		return entries.listIterator(index);
-	}
-
-	public AnnotationList subList(int fromIndex, int toIndex) {
-		return new AnnotationList(change, entries.subList(fromIndex, toIndex));
+	public int compareTo(Annotation other) {
+		return change.compareTo(other);
 	}
 
 }

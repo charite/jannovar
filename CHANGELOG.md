@@ -4,6 +4,37 @@
 
 ### jannovar-cli
 
+* Improving output file generation, jannovar-cli now uses the same extension
+  as in the input and the infix is configurable instead of being fixed to
+  ".jv".
+* Default extension is ".vcf.gz" instead of ".vcf" now.
+
+### jannovar-core
+
+* Fixing label for `FRAMESHIFT_VARIANT` in `VariantEffect`.
+* Moving CompatibilityCheckerException to package
+  `...jannovar.pedigree.compatibilitychecker`
+* Fixing bug in transcript coordinate projection.
+* Renaming `TranscriptSequenceChangeHelper.getCDSWithChange` to
+  `.getCDSWithGenomeVariant`.
+* Renaming `*.getChange()` to `*.getGenomeVariant()`
+* Renaming `VariantAnnotator.buildAnnotationList` to `.buildAnnotations`,
+  `VariantContextAnnotator.buildAnnotationList` to `.buildAnnotations`,
+  and `VariantContextAnnotator.buildErrorAnnotationList` to
+  `VariantContextAnnotator.buildErrorAnnotations`
+* VariantAnnotations does not implement `List<Annotation>` any more
+* Adding `VariantAnnotations.getAnnotations`
+* Renaming `AnnotationList` to `VariantAnnotations`
+* changing treatment of insertions at exon/intron junctions; they are
+  considered as intronic insertions now that affect splicing
+* converting `GenomeVariant` of `AnnotationList` to always be on the forward
+  strand after construction of  `AnnotationList`
+* deprecating the `{,All,Best}AnnotationTextGenerator` classes
+
+## v.0.13
+
+### jannovar-cli
+
 * Moving `JannovarOptions` into jannovar-cli.
 * Displaying online help on unknown Jannovar command.
 * Fixing `NullPointerException` bug for local paths.

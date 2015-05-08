@@ -197,11 +197,11 @@ public final class GenomeVariant implements VariantDescription {
 		if (pos.getStrand() != Strand.FWD)
 			return withStrand(Strand.FWD).toString();
 		else if (ref.equals("")) // handle insertion as special case
-			return Joiner.on("").join(pos.getRefDict().getContigNameToID().get(pos.getChr()),
-					":g.", pos.getPos(), "_", pos.getPos() + 1, "ins", alt);
+			return Joiner.on("").join(getChrName(),
+					":g.", getPos(), "_", getPos() + 1, "ins", alt);
 		else if (alt.equals(""))
-			return Joiner.on("").join(pos.getRefDict().getContigNameToID().get(pos.getChr()),
-					":g.", pos.getPos(), "_", pos.getPos() + ref.length(), "del", ref);
+			return Joiner.on("").join(getChrName(),
+					":g.", getPos(), "_", getPos() + ref.length(), "del", ref);
 		else
 			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref),
 					">", (alt.equals("") ? "-" : alt));

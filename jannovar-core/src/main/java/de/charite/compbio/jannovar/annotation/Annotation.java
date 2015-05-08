@@ -79,54 +79,6 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		this(null, null, null, null, null, null, messages);
 	}
 
-	/** @return the annotated {@link GenomeVariant} */
-	public GenomeVariant getChange() {
-		return change;
-	}
-
-	/** @return variant types, sorted by internal pathogenicity score */
-	public ImmutableSortedSet<VariantEffect> getEffects() {
-		return effects;
-	}
-
-	/** @return errors and warnings */
-	public ImmutableSortedSet<AnnotationMessage> getMessages() {
-		return messages;
-	}
-
-	/** @return location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
-	public AnnotationLocation getAnnoLoc() {
-		return annoLoc;
-	}
-
-	/** @return HGVS nucleotide variant annotation */
-	public String getNucleotideHGVSDescription() {
-		return ntHGVSDescription;
-	}
-
-	/** @return amino acid variant annotation */
-	public String getAminoAcidHGVSDescription() {
-		return aaHGVSDescription;
-	}
-
-	/** @return the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
-	public TranscriptModel getTranscript() {
-		return transcript;
-	}
-
-	/**
-	 * @return highest {@link PutativeImpact} of all {@link #effects}.
-	 */
-	public PutativeImpact getPutativeImpact() {
-		if (effects.isEmpty())
-			return null;
-		VariantEffect worst = effects.first();
-		for (VariantEffect vt : effects)
-			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
-				worst = vt;
-		return worst.getImpact();
-	}
-
 	/**
 	 * Initialize the {@link Annotation} with the given values.
 	 *
@@ -186,6 +138,54 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		this.aaHGVSDescription = aaHGVSDescription;
 		this.transcript = transcript;
 		this.messages = ImmutableSortedSet.copyOf(messages);
+	}
+
+	/** @return the annotated {@link GenomeVariant} */
+	public GenomeVariant getGenomeVariant() {
+		return change;
+	}
+
+	/** @return variant types, sorted by internal pathogenicity score */
+	public ImmutableSortedSet<VariantEffect> getEffects() {
+		return effects;
+	}
+
+	/** @return errors and warnings */
+	public ImmutableSortedSet<AnnotationMessage> getMessages() {
+		return messages;
+	}
+
+	/** @return location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
+	public AnnotationLocation getAnnoLoc() {
+		return annoLoc;
+	}
+
+	/** @return HGVS nucleotide variant annotation */
+	public String getNucleotideHGVSDescription() {
+		return ntHGVSDescription;
+	}
+
+	/** @return amino acid variant annotation */
+	public String getAminoAcidHGVSDescription() {
+		return aaHGVSDescription;
+	}
+
+	/** @return the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
+	public TranscriptModel getTranscript() {
+		return transcript;
+	}
+
+	/**
+	 * @return highest {@link PutativeImpact} of all {@link #effects}.
+	 */
+	public PutativeImpact getPutativeImpact() {
+		if (effects.isEmpty())
+			return null;
+		VariantEffect worst = effects.first();
+		for (VariantEffect vt : effects)
+			if (worst.getImpact().compareTo(vt.getImpact()) > 0)
+				worst = vt;
+		return worst.getImpact();
 	}
 
 	/**

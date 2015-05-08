@@ -65,7 +65,17 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				getOutFileName(), fields, additionalLines);
 	}
 
-	/** @return output file name, depending on this.options */
+	/**
+	 * Create and return output file name.
+	 *
+	 * The output file name is the same as the input, with the extension ".EXT" replaced by ".jv.EXT" where EXT is one
+	 * of "vcf.gz", "vcf", and "bcf". If the extension is different from these values, ".jv.vcf.gz" is appended to the
+	 * input file name.
+	 *
+	 * When <code>options.outVCFFolder</code> is set then the file is written to this folder.
+	 *
+	 * @return output file name, depending on this.options
+	 */
 	@Override
 	public String getOutFileName() {
 		File f = new File(vcfPath);
@@ -74,17 +84,23 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			outname = PathUtil.join(options.outVCFFolder, outname);
 		else if (f.getParent() != null)
 			outname = PathUtil.join(f.getParent(), outname);
-		int i = outname.toLowerCase().lastIndexOf("vcf");
+
+		String suffix = ".vcf.gz";
+		for (String x : new String[] { ".vcf.gz", ".vcf", ".bcf" })
+			if (outname.endsWith(x))
+				suffix = x;
+
+		int i = outname.toLowerCase().lastIndexOf(suffix);
 		if (i < 0)
-			return outname + ".jv.vcf";
+			return outname + options.outputInfix + ".vcf.gz";
 		else
-			return outname.substring(0, i) + "jv.vcf";
+			return outname.substring(0, i) + options.outputInfix + suffix;
 	}
 
 	@Override
 	public void put(VariantContext vc) {
 		try {
-			vc = annotator.applyAnnotations(vc, annotator.buildAnnotationList(vc));
+			vc = annotator.applyAnnotations(vc, annotator.buildAnnotations(vc));
 		} catch (InvalidCoordinatesException e) {
 			annotator.putErrorAnnotation(vc, ImmutableSet.of(e.getAnnotationMessage()));
 		}

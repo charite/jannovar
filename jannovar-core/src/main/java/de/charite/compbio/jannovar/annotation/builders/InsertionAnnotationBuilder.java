@@ -19,20 +19,17 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
 
 /**
- * Builds {@link Annotation} objects for the insertion {@link GenomeVariant} in
- * the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the insertion {@link GenomeVariant} in the given {@link TranscriptInfo}.
  *
  * <h2>Duplications</h2>
  *
- * In the case of insertions that are duplications are annotated as such. These
- * insertions must be in the coding region, such that the duplication can be
- * recognized from the transcript sequence.
+ * In the case of insertions that are duplications are annotated as such. These insertions must be in the coding region,
+ * such that the duplication can be recognized from the transcript sequence.
  *
  * <h2>Shifting of Insertions</h2>
  *
- * In the case of ambiguities, the HGVS specification requires the variant to be
- * shifted towards the 3' end of the transcript ("rightmost" position). This can
- * cause an insertion to be shifted into the 3' UTR or a splice site.
+ * In the case of ambiguities, the HGVS specification requires the variant to be shifted towards the 3' end of the
+ * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -68,7 +65,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		// We have the base left and/or right of the insertion to determine the cases.
 		final GenomePosition pos = change.getGenomePos();
 		final GenomePosition lPos = change.getGenomePos().shifted(-1);
-		if ((so.liesInCDSExon(lPos) || so.liesInCDSExon(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
+		if ((so.liesInCDSExon(lPos) && so.liesInCDSExon(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
 			return buildCDSExonicAnnotation(); // can affect amino acids
 		else if ((so.liesInCDSIntron(lPos) || so.liesInCDSIntron(pos)) && so.liesInCDS(lPos) && so.liesInCDS(pos))
 			return buildIntronicAnnotation(); // intron but no exon => intronic variant
@@ -130,8 +127,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	/**
 	 * Helper class for generating annotations for exonic CDS variants.
 	 *
-	 * We use this helper class to simplify the access to the parameters such as
-	 * {@link #wtCDSSeq} etc.
+	 * We use this helper class to simplify the access to the parameters such as {@link #wtCDSSeq} etc.
 	 */
 	private class CDSExonicAnnotationBuilder {
 		final Translator t = Translator.getTranslator();
@@ -167,7 +163,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 		public CDSExonicAnnotationBuilder() {
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
-			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
+			this.varCDSSeq = seqChangeHelper.getCDSWithGenomeVariant(change);
 
 			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
 			this.insertPos = projector.projectGenomeToCDSPosition(change.getGenomePos());
@@ -225,8 +221,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 
 		/**
-		 * Deal with an insertion to an amino acid string that does not have a
-		 * stop codon yet.
+		 * Deal with an insertion to an amino acid string that does not have a stop codon yet.
 		 */
 		private boolean handleInsertionAtEndInCaseOfNoStopCodon() {
 			// TODO(holtgrew): At some point, try to merge these corner cases that are caused by bogus transcript
@@ -408,8 +403,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 
 		/**
-		 * Add insertion effect to {@link #varTypes}, depending on whether the
-		 * insertion is disruptive or not.
+		 * Add insertion effect to {@link #varTypes}, depending on whether the insertion is disruptive or not.
 		 */
 		private void addNonFrameshiftInsertionEffect() {
 			// Differentiate the case of disruptive and non-disruptive insertions.

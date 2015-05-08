@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+
 public class CompatibilityCheckerXRecessiveSmallMaleTest extends CompatibilityCheckerTestBase {
 
 	@Before

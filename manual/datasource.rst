@@ -36,7 +36,7 @@ When saving the above file contents as ``my_ucsc.ini``, you can pass it to the J
 
 .. code-block:: bash
 
-    java -Xms2G -Xmx2G -jar jannovar-cli-0.13.jar download -s my_ucsc.ini hg19/ucsc
+    java -Xms2G -Xmx2G -jar jannovar-cli-0.14.jar download -s my_ucsc.ini hg19/ucsc
 
 Your INI file can either add new definitions or override the built-in ones.
 In fact, the definition from above is part of the INI file that is contained in the Jannovar JAR file and used by default.
