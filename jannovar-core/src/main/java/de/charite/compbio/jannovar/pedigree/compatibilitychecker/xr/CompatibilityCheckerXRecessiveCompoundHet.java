@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
@@ -13,6 +12,7 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.CompatibilityCheckerAutosomalRecessiveCompoundHet;
 
 /**

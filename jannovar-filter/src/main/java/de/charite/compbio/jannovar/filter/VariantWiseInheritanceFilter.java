@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.data.JannovarData;
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeListBuilder;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
 /**
  * A {@link VariantContext} filter that checks each variant individually for compatibility.

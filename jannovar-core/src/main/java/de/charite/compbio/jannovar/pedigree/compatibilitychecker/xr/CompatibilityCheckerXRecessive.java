@@ -1,9 +1,9 @@
 package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr;
 
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a

@@ -3,7 +3,6 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
@@ -11,6 +10,7 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Pedigree.IndexedPerson;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
