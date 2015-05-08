@@ -170,7 +170,7 @@ class CompatibilityCheckerXRecessiveCompoundHet extends CompatibilityCheckerBase
 	private boolean isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(int pIdx, Person p,
 			ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
 		// none of the genotypes from the paternal or maternal call
-		// lists may be homozygous in a female index. can be homozygouse else.
+		// lists may be homozygous in a female index. can be homozygous else.
 		if (paternal != null) {
 			final Genotype pGT = paternal.get(pIdx);
 			if ((pGT == Genotype.HOMOZYGOUS_ALT && p.getSex() == Sex.FEMALE) || pGT == Genotype.HOMOZYGOUS_REF)
