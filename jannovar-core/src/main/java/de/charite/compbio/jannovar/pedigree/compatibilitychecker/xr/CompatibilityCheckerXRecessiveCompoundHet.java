@@ -69,7 +69,7 @@ class CompatibilityCheckerXRecessiveCompoundHet extends CompatibilityCheckerBase
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		// for female single case samples, allow autosomal recessive compound
 		// heterozygous
-		if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE)
+		if (pedigree.getMembers().get(0).getSex() != Sex.MALE)
 			if (new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run())
 				return true;
 
