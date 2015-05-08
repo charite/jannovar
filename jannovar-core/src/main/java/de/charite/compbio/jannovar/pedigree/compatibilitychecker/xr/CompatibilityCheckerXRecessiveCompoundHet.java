@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
@@ -13,6 +12,7 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.CompatibilityCheckerAutosomalRecessiveCompoundHet;
 
 /**
@@ -69,7 +69,7 @@ class CompatibilityCheckerXRecessiveCompoundHet extends CompatibilityCheckerBase
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		// for female single case samples, allow autosomal recessive compound
 		// heterozygous
-		if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE)
+		if (pedigree.getMembers().get(0).getSex() != Sex.MALE)
 			if (new CompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run())
 				return true;
 
@@ -170,7 +170,7 @@ class CompatibilityCheckerXRecessiveCompoundHet extends CompatibilityCheckerBase
 	private boolean isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(int pIdx, Person p,
 			ImmutableList<Genotype> paternal, ImmutableList<Genotype> maternal) {
 		// none of the genotypes from the paternal or maternal call
-		// lists may be homozygous in a female index. can be homozygouse else.
+		// lists may be homozygous in a female index. can be homozygous else.
 		if (paternal != null) {
 			final Genotype pGT = paternal.get(pIdx);
 			if ((pGT == Genotype.HOMOZYGOUS_ALT && p.getSex() == Sex.FEMALE) || pGT == Genotype.HOMOZYGOUS_REF)
