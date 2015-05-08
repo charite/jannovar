@@ -4,6 +4,7 @@
 
 ### jannovar-core
 
+* Moving CompatibilityCheckerException to package de.charite.compbio.jannovar.pedigree.compatibilitychecker
 * Renaming `*.getChange()` to `*.getGenomeVariant()`
 * Renaming `VariantAnnotator.buildAnnotationList` to `.buildAnnotations`,
   `VariantContextAnnotator.buildAnnotationList` to `.buildAnnotations`,
