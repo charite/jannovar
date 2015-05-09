@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.google.common.collect.ImmutableList;
 
 // TODO(holtgrew): Test me!
+// TODO(holtgrew): Convenience class for parsing Pedigree files?
 
 /**
  * Helper class for extracting one family from a {@link PedFileContents} object.

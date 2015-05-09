@@ -7,8 +7,8 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Pedigree.IndexedPerson;
+import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
@@ -30,7 +30,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class CompatibilityCheckerAutosomalRecessiveHomozygous extends CompatibilityCheckerBase {
+public class CompatibilityCheckerAutosomalRecessiveHomozygous extends CompatibilityCheckerBase {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.

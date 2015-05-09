@@ -2,6 +2,12 @@
 
 ## develop
 
+### jannovar-core
+
+* making `CompatibilityCheckerAutosomalRecessiveHomozygous` public
+
+## v0.14
+
 ### jannovar-cli
 
 * Improving output file generation, jannovar-cli now uses the same extension
