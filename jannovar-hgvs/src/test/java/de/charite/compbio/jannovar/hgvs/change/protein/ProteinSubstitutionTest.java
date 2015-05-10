@@ -34,4 +34,8 @@ public class ProteinSubstitutionTest {
 		Assert.assertEquals("Ala124Gly", sub1.toHGVSString());
 	}
 
+	@Test
+	public void testFactoryMethod() {
+		Assert.assertEquals(sub1, ProteinSubstitution.build("A", 123, "G"));
+	}
 }

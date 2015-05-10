@@ -16,6 +16,13 @@ public class ProteinSubstitution implements ConvertibleToHGVSString {
 	private final String targetAA;
 
 	/**
+	 * Factory method for direct construction from source AA, position, and targetAA.
+	 */
+	public static ProteinSubstitution build(String sourceAA, int pos, String targetAA) {
+		return new ProteinSubstitution(new ProteinPointLocation(pos, sourceAA), targetAA);
+	}
+
+	/**
 	 * @param location
 	 *            location of the changed AA
 	 * @param targetAA
