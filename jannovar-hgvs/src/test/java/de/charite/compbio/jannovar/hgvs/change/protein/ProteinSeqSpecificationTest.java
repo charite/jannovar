@@ -13,6 +13,7 @@ public class ProteinSeqSpecificationTest {
 
 		Assert.assertEquals(null, spec.getAminoAcids());
 		Assert.assertEquals(4, spec.length());
+		Assert.assertFalse(spec.isBlank());
 
 		Assert.assertEquals("4", spec.toHGVSString());
 		Assert.assertEquals("4", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
@@ -25,10 +26,24 @@ public class ProteinSeqSpecificationTest {
 
 		Assert.assertEquals("ACGT", spec.getAminoAcids());
 		Assert.assertEquals(4, spec.length());
+		Assert.assertFalse(spec.isBlank());
 
 		Assert.assertEquals("AlaCysGlyThr", spec.toHGVSString());
 		Assert.assertEquals("AlaCysGlyThr", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
 		Assert.assertEquals("ACGT", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
+	}
+
+	@Test
+	public void testConstructBlank() {
+		ProteinSeqSpecification spec = new ProteinSeqSpecification();
+
+		Assert.assertEquals(null, spec.getAminoAcids());
+		Assert.assertEquals(-1, spec.length());
+		Assert.assertTrue(spec.isBlank());
+
+		Assert.assertEquals("", spec.toHGVSString());
+		Assert.assertEquals("", spec.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("", spec.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 }

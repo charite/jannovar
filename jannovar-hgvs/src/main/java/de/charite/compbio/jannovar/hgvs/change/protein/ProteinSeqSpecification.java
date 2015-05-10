@@ -18,6 +18,14 @@ public class ProteinSeqSpecification implements ConvertibleToHGVSString {
 	private final int aaCount;
 
 	/**
+	 * Construct as reporting the empty string.
+	 */
+	public ProteinSeqSpecification() {
+		this.aas = null;
+		this.aaCount = -1;
+	}
+
+	/**
 	 * Construct with amino acid string length and <code>null</code> string.
 	 */
 	public ProteinSeqSpecification(int aaCount) {
@@ -47,6 +55,11 @@ public class ProteinSeqSpecification implements ConvertibleToHGVSString {
 		return this.aas;
 	}
 
+	/** @return <code>true</code> if nothing is to be printed. */
+	public boolean isBlank() {
+		return aaCount == -1;
+	}
+
 	/** @return length of amino acids */
 	public int length() {
 		return this.aaCount;
@@ -59,7 +72,9 @@ public class ProteinSeqSpecification implements ConvertibleToHGVSString {
 
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
-		if (this.aas != null && code == AminoAcidCode.ONE_LETTER)
+		if (isBlank())
+			return "";
+		else if (this.aas != null && code == AminoAcidCode.ONE_LETTER)
 			return this.aas;
 		else if (this.aas != null && code == AminoAcidCode.THREE_LETTER)
 			return Translator.getTranslator().toLong(this.aas);
