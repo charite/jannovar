@@ -87,13 +87,11 @@ NT_COLON
 /** a nucleotide character */
 NT_CHAR
 :
-	[acgtuACGTU]
-;
-
-/** a string of nucleotides */
-NT_STRING
-:
-	NT_CHAR+
+	'A'
+	| 'C'
+	| 'G'
+	| 'T'
+	| 'U'
 ;
 
 /** a number, used for positions etc. */
