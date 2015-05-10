@@ -14,9 +14,9 @@ public class ProteinSubstitutionTest {
 
 	@Before
 	public void setUp() {
-		sub1 = new ProteinSubstitution(new ProteinPointLocation(123, "A"), "G");
-		sub2 = new ProteinSubstitution(new ProteinPointLocation(123, "A"), "G");
-		sub3 = new ProteinSubstitution(new ProteinPointLocation(123, "A"), "T");
+		sub1 = new ProteinSubstitution(true, new ProteinPointLocation(123, "A"), "G");
+		sub2 = new ProteinSubstitution(true, new ProteinPointLocation(123, "A"), "G");
+		sub3 = new ProteinSubstitution(true, new ProteinPointLocation(123, "A"), "T");
 	}
 
 	@Test
@@ -29,13 +29,13 @@ public class ProteinSubstitutionTest {
 
 	@Test
 	public void testToHGVSString() {
-		Assert.assertEquals("A124G", sub1.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("Ala124Gly", sub1.toHGVSString(AminoAcidCode.THREE_LETTER));
-		Assert.assertEquals("Ala124Gly", sub1.toHGVSString());
+		Assert.assertEquals("(A124G)", sub1.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("(Ala124Gly)", sub1.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("(Ala124Gly)", sub1.toHGVSString());
 	}
 
 	@Test
 	public void testFactoryMethod() {
-		Assert.assertEquals(sub1, ProteinSubstitution.build("A", 123, "G"));
+		Assert.assertEquals(sub1, ProteinSubstitution.build(true, "A", 123, "G"));
 	}
 }

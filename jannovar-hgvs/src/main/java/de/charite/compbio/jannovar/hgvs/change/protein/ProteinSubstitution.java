@@ -1,14 +1,13 @@
 package de.charite.compbio.jannovar.hgvs.change.protein;
 
 import de.charite.compbio.jannovar.hgvs.change.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.change.ConvertibleToHGVSString;
 
 /**
  * Represents a missense protein substitution, for example "Trp2Ala" or "T2A".
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class ProteinSubstitution implements ConvertibleToHGVSString {
+public class ProteinSubstitution extends ProteinChange {
 
 	/** location of the substituted amino acid */
 	private final ProteinPointLocation location;
@@ -18,8 +17,8 @@ public class ProteinSubstitution implements ConvertibleToHGVSString {
 	/**
 	 * Factory method for direct construction from source AA, position, and targetAA.
 	 */
-	public static ProteinSubstitution build(String sourceAA, int pos, String targetAA) {
-		return new ProteinSubstitution(new ProteinPointLocation(pos, sourceAA), targetAA);
+	public static ProteinSubstitution build(boolean onlyPredicted, String sourceAA, int pos, String targetAA) {
+		return new ProteinSubstitution(onlyPredicted, new ProteinPointLocation(pos, sourceAA), targetAA);
 	}
 
 	/**
@@ -28,7 +27,8 @@ public class ProteinSubstitution implements ConvertibleToHGVSString {
 	 * @param targetAA
 	 *            amino acid to change to
 	 */
-	public ProteinSubstitution(ProteinPointLocation location, String targetAA) {
+	public ProteinSubstitution(boolean onlyPredicted, ProteinPointLocation location, String targetAA) {
+		super(onlyPredicted);
 		this.location = location;
 		this.targetAA = targetAA;
 	}
@@ -44,16 +44,11 @@ public class ProteinSubstitution implements ConvertibleToHGVSString {
 	}
 
 	@Override
-	public String toHGVSString() {
-		return toHGVSString(AminoAcidCode.THREE_LETTER);
-	}
-
-	@Override
 	public String toHGVSString(AminoAcidCode code) {
 		if (code == AminoAcidCode.THREE_LETTER)
-			return location.toHGVSString(code) + Translator.getTranslator().toLong(targetAA);
+			return wrapIfPredicted(location.toHGVSString(code) + Translator.getTranslator().toLong(targetAA));
 		else
-			return location.toHGVSString(code) + targetAA;
+			return wrapIfPredicted(location.toHGVSString(code) + targetAA);
 	}
 
 	@Override
