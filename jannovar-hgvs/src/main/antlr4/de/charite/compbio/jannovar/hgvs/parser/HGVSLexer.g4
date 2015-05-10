@@ -145,9 +145,24 @@ NT_UNDERSCORE
 	'_'
 ;
 
+NT_COMMA
+:
+	','
+;
+
 NT_PAREN_OPEN
 :
 	'('
+;
+
+NT_DOUBLE_SLASH
+:
+	'//'
+;
+
+NT_SLASH
+:
+	'/'
 ;
 
 NT_PAREN_CLOSE
@@ -163,6 +178,16 @@ NT_SQUARE_PAREN_OPEN
 NT_SQUARE_PAREN_CLOSE
 :
 	']'
+;
+
+NT_EX
+:
+	'EX'
+;
+
+NT_IVS
+:
+	'IVS'
 ;
 
 /** used for denoting chromosome bands */

@@ -9,7 +9,7 @@
  *
  * Limitations
  *
- * * mosaicism and chimerism not supported yet
+ * * mosaicism and chimerism not supported yet in proteins
  */
 parser grammar HGVSParser;
 
@@ -19,8 +19,339 @@ options {
 
 hgvs_variant
 :
-	protein_single_var
+	nt_single_var
+	| nt_multi_var
+	| nt_multi_transcript_var
+	| nt_unknown_effect_var
+	| nt_no_rna_var
+	| nt_splicing_var
+	| protein_single_var
 	| protein_multi_var
+;
+
+nt_single_var
+:
+/* TODO(holtgrew): Rule TransLoc missing for now */
+	nt_reference nt_raw_var
+;
+
+nt_multi_var
+:
+	nt_single_allele_vars
+	| nt_multi_allele_vars
+;
+
+nt_multi_transcript_var
+:
+	nt_reference NT_SQUARE_PAREN_OPEN nt_extended_raw_var
+	(
+		NT_SEMICOLON nt_extended_raw_var
+	)*
+	(
+		NT_COMMA nt_extended_raw_var
+		(
+			NT_SEMICOLON nt_extended_raw_var
+		)*
+	)+ NT_SQUARE_PAREN_CLOSE
+;
+
+nt_unknown_effect_var
+:
+	nt_reference
+	(
+		NT_PAREN_OPEN NT_EQUAL NT_PAREN_CLOSE
+		| NT_QUESTION_MARK
+	)
+;
+
+nt_no_rna_var
+:
+	nt_reference NT_ZERO NT_QUESTION_MARK?
+;
+
+nt_single_allele_vars
+:
+	nt_reference nt_single_allele_var_set
+;
+
+nt_splicing_var
+:
+	nt_reference
+	(
+		NT_SPL NT_QUESTION_MARK
+		| NT_PAREN_OPEN NT_SPL NT_QUESTION_MARK NT_PAREN_CLOSE
+	)
+;
+
+nt_multi_allele_vars
+:
+	nt_reference nt_single_allele_var_set
+	(
+		NT_SEMICOLON nt_reference? nt_single_allele_var_set
+	)+
+;
+
+nt_single_allele_var_set
+:
+	(
+		NT_SQUARE_PAREN_OPEN nt_chimeron_set
+		(
+			(
+				NT_SEMICOLON
+				| NT_CIRCUMFLEX
+			) nt_chimeron_set
+		)*
+		(
+			NT_PAREN_OPEN NT_SEMICOLON NT_PAREN_CLOSE nt_chimeron_set
+		)* NT_SQUARE_PAREN_CLOSE
+	)
+	| nt_chimeron_set
+;
+
+nt_chimeron_set
+:
+	(
+		NT_SQUARE_PAREN_OPEN nt_mosaic_set
+		(
+			NT_DOUBLE_SLASH nt_mosaic_set
+		)* NT_SQUARE_PAREN_CLOSE
+	)
+	| nt_mosaic_set
+;
+
+nt_mosaic_set
+:
+	(
+		NT_SQUARE_PAREN_OPEN nt_simple_allele_var_set
+		(
+			NT_SLASH nt_simple_allele_var_set
+		)* NT_SQUARE_PAREN_CLOSE
+	)
+	| nt_simple_allele_var_set
+;
+
+nt_simple_allele_var_set
+:
+	(
+		NT_SQUARE_PAREN_OPEN nt_u_allele_var_set NT_SQUARE_PAREN_CLOSE
+	)
+	| nt_extended_raw_var
+;
+
+nt_extended_raw_var
+:
+	nt_raw_var
+	| NT_EQUAL
+	| NT_QUESTION_MARK
+;
+
+nt_u_allele_var_set
+:
+	(
+		nt_c_allele_var_set
+		|
+		(
+			NT_PAREN_OPEN nt_c_allele_var_set NT_PAREN_CLOSE
+		)
+	) NT_QUESTION_MARK?
+;
+
+nt_c_allele_var_set
+:
+	nt_extended_raw_var
+	(
+		NT_SEMICOLON nt_extended_raw_var
+	)*
+;
+
+nt_nest
+:
+	NT_BRACE_OPEN nt_simple_allele_var_set NT_BRACE_CLOSE
+;
+
+nt_reference
+:
+	(
+		REFERENCE REF_STOP
+	)? NT_CHANGE_DESCRIPTION
+;
+
+nt_raw_var
+:
+	(
+		NT_PAREN_OPEN nt_raw_var_inner NT_PAREN_CLOSE
+	)
+	| nt_raw_var_inner
+;
+
+nt_raw_var_inner
+:
+	nt_substitution
+	| nt_deletion
+	| nt_duplication
+	| nt_varying_short_sequence_repeat
+	| nt_insertion
+	| nt_indel
+	| nt_inversion
+	/* TODO(holtgrewe): | nt_conversion */
+;
+
+nt_substitution
+:
+	nt_pt_loc NT_CHAR NT_GT NT_CHAR
+;
+
+nt_deletion
+:
+	nt_loc NT_DEL
+	(
+		NT_CHAR+
+		| NT_NUMBER
+	)?
+;
+
+nt_duplication
+:
+	nt_loc NT_DUP
+	(
+		NT_CHAR+
+		| NT_NUMBER
+	)? nt_nest?
+;
+
+nt_abr_ssr
+:
+	nt_pt_loc NT_CHAR+ NT_PAREN_OPEN NT_NUMBER NT_UNDERSCORE NT_NUMBER
+	NT_PAREN_CLOSE
+;
+
+nt_varying_short_sequence_repeat
+:
+	(
+		nt_pt_loc NT_CHAR+ NT_SQUARE_PAREN_OPEN NT_NUMBER NT_SQUARE_PAREN_CLOSE
+	)
+	|
+	(
+		nt_pt_range_loc NT_SQUARE_PAREN_OPEN NT_NUMBER NT_SQUARE_PAREN_CLOSE
+	)
+;
+
+nt_insertion
+:
+/* TODO(holtgrew): allow far loc */
+	nt_range_loc NT_INS
+	(
+		NT_CHAR+
+		| NT_NUMBER
+		| nt_range_loc
+	) nt_nest?
+;
+
+nt_indel
+:
+	nt_range_loc NT_DEL
+	(
+		NT_CHAR+
+		| NT_NUMBER
+	)? NT_INS
+	(
+		NT_CHAR+
+		| NT_NUMBER nt_range_loc /* TODO(holtgrewe): allow farloc here */
+	) nt_nest?
+;
+
+nt_inversion
+:
+	nt_range_loc NT_INV
+	(
+		NT_CHAR+
+		| NT_NUMBER
+	)? nt_nest?
+;
+
+nt_range_loc
+:
+	nt_extent
+	| NT_PAREN_OPEN nt_extent NT_PAREN_CLOSE
+;
+
+nt_extent
+:
+	nt_real_extent
+	| nt_ex_loc
+;
+
+nt_real_extent
+:
+	nt_pt_loc NT_UNDERSCORE
+	(
+		NT_OPPOSITE?
+		(
+			REFERENCE
+		) NT_COLON
+	)? nt_pt_loc
+;
+
+nt_ex_loc
+:
+	NT_EX NT_NUMBER
+	(
+		NT_MINUS NT_NUMBER
+	)?
+;
+
+nt_pt_range_loc
+:
+	nt_extent
+	| NT_PAREN_OPEN nt_extent NT_PAREN_CLOSE
+;
+
+nt_pt_loc
+:
+	nt_ivs_loc
+	| nt_real_pt_loc
+;
+
+nt_ivs_loc
+:
+	NT_IVS NT_NUMBER
+	(
+		NT_PLUS
+		| NT_MINUS
+	) NT_NUMBER
+;
+
+nt_real_pt_loc
+:
+	(
+		(
+			NT_MINUS
+			| NT_ASTERISK
+		)? NT_NUMBER nt_offset?
+	)
+	| NT_ASTERISK
+;
+
+nt_offset
+:
+	(
+		NT_PLUS
+		| NT_MINUS
+	)
+	(
+		NT_UPSTREAM
+		| NT_DOWNSTREAM
+	)?
+	(
+		NT_NUMBER
+		| NT_QUESTION_MARK
+	)
+;
+
+nt_loc
+:
+	nt_pt_loc
+	| nt_range_loc
 ;
 
 protein_single_var
