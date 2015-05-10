@@ -14,7 +14,7 @@ public class ProteinDeletion extends ProteinChange {
 	/** range of one or more amino acids that are deleted */
 	private final ProteinRange range;
 	/** specification of the deleted characters, can be null */
-	private final ProteinSeqSpecification seqSpec;
+	private final ProteinSeqDescription seqSpec;
 
 	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos) {
 		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA));
@@ -33,26 +33,26 @@ public class ProteinDeletion extends ProteinChange {
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range) {
 		super(onlyPredicted);
 		this.range = range;
-		this.seqSpec = new ProteinSeqSpecification();
+		this.seqSpec = new ProteinSeqDescription();
 	}
 
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range, int length) {
 		super(onlyPredicted);
 		this.range = range;
-		this.seqSpec = new ProteinSeqSpecification(length);
+		this.seqSpec = new ProteinSeqDescription(length);
 	}
 
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range, String seq) {
 		super(onlyPredicted);
 		this.range = range;
-		this.seqSpec = new ProteinSeqSpecification(seq);
+		this.seqSpec = new ProteinSeqDescription(seq);
 	}
 
 	public ProteinRange getRange() {
 		return range;
 	}
 
-	public ProteinSeqSpecification getSeqSpec() {
+	public ProteinSeqDescription getSeqSpec() {
 		return seqSpec;
 	}
 

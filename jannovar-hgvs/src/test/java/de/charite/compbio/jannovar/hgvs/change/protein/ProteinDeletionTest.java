@@ -36,4 +36,5 @@ public class ProteinDeletionTest {
 		ProteinDeletion del = ProteinDeletion.build(true, "A", 123, "C", 124, 2);
 		Assert.assertEquals("(A124_C125del2)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
+
 }

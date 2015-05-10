@@ -48,6 +48,11 @@ public class ProteinRange implements ConvertibleToHGVSString {
 		return last;
 	}
 
+	/** @return length of the range */
+	public int length() {
+		return last.getPos() - first.getPos() + 1;
+	}
+
 	@Override
 	public String toHGVSString() {
 		return toHGVSString(AminoAcidCode.THREE_LETTER);

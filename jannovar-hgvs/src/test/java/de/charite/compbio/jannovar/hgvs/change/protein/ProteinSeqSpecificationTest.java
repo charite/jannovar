@@ -9,7 +9,7 @@ public class ProteinSeqSpecificationTest {
 
 	@Test
 	public void testConstructWithCount() {
-		ProteinSeqSpecification spec = new ProteinSeqSpecification(4);
+		ProteinSeqDescription spec = new ProteinSeqDescription(4);
 
 		Assert.assertEquals(null, spec.getAminoAcids());
 		Assert.assertEquals(4, spec.length());
@@ -22,7 +22,7 @@ public class ProteinSeqSpecificationTest {
 
 	@Test
 	public void testConstructWithAASeq() {
-		ProteinSeqSpecification spec = new ProteinSeqSpecification("ACGT");
+		ProteinSeqDescription spec = new ProteinSeqDescription("ACGT");
 
 		Assert.assertEquals("ACGT", spec.getAminoAcids());
 		Assert.assertEquals(4, spec.length());
@@ -35,7 +35,7 @@ public class ProteinSeqSpecificationTest {
 
 	@Test
 	public void testConstructBlank() {
-		ProteinSeqSpecification spec = new ProteinSeqSpecification();
+		ProteinSeqDescription spec = new ProteinSeqDescription();
 
 		Assert.assertEquals(null, spec.getAminoAcids());
 		Assert.assertEquals(-1, spec.length());

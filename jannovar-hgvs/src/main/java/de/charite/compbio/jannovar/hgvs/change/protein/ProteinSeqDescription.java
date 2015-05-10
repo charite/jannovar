@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.hgvs.change.ConvertibleToHGVSString;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class ProteinSeqSpecification implements ConvertibleToHGVSString {
+public class ProteinSeqDescription implements ConvertibleToHGVSString {
 
 	/** String of inserted amino acids, null if there are none */
 	private final String aas;
@@ -20,7 +20,7 @@ public class ProteinSeqSpecification implements ConvertibleToHGVSString {
 	/**
 	 * Construct as reporting the empty string.
 	 */
-	public ProteinSeqSpecification() {
+	public ProteinSeqDescription() {
 		this.aas = null;
 		this.aaCount = -1;
 	}
@@ -28,7 +28,7 @@ public class ProteinSeqSpecification implements ConvertibleToHGVSString {
 	/**
 	 * Construct with amino acid string length and <code>null</code> string.
 	 */
-	public ProteinSeqSpecification(int aaCount) {
+	public ProteinSeqDescription(int aaCount) {
 		this.aas = null;
 		this.aaCount = aaCount;
 	}
@@ -36,7 +36,7 @@ public class ProteinSeqSpecification implements ConvertibleToHGVSString {
 	/**
 	 * Construct with amino acid string length.
 	 */
-	public ProteinSeqSpecification(String aas) {
+	public ProteinSeqDescription(String aas) {
 		this.aas = aas;
 		this.aaCount = aas.length();
 	}
