@@ -193,12 +193,28 @@ nt_raw_var_inner
 	| nt_insertion
 	| nt_indel
 	| nt_inversion
+	| nt_no_change
+	| NT_NUMBER /* in the case of second allele of SRR */
+	| NT_ZERO /* to be used in [0] only */
 	/* TODO(holtgrewe): | nt_conversion */
 ;
 
 nt_substitution
 :
 	nt_pt_loc NT_CHAR NT_GT NT_CHAR
+;
+
+nt_indel
+:
+	nt_loc NT_DEL
+	(
+		NT_CHAR+
+		| NT_NUMBER
+	)? NT_INS
+	(
+		NT_CHAR+
+		| NT_NUMBER nt_range_loc /* TODO(holtgrewe): allow farloc here */
+	) nt_nest?
 ;
 
 nt_deletion
@@ -221,8 +237,10 @@ nt_duplication
 
 nt_abr_ssr
 :
-	nt_pt_loc NT_CHAR+ NT_PAREN_OPEN NT_NUMBER NT_UNDERSCORE NT_NUMBER
-	NT_PAREN_CLOSE
+	nt_loc NT_CHAR* NT_PAREN_OPEN NT_NUMBER
+	(
+		NT_UNDERSCORE NT_NUMBER
+	)? NT_PAREN_CLOSE
 ;
 
 nt_varying_short_sequence_repeat
@@ -234,6 +252,7 @@ nt_varying_short_sequence_repeat
 	(
 		nt_pt_range_loc NT_SQUARE_PAREN_OPEN NT_NUMBER NT_SQUARE_PAREN_CLOSE
 	)
+	| nt_abr_ssr
 ;
 
 nt_insertion
@@ -247,19 +266,6 @@ nt_insertion
 	) nt_nest?
 ;
 
-nt_indel
-:
-	nt_range_loc NT_DEL
-	(
-		NT_CHAR+
-		| NT_NUMBER
-	)? NT_INS
-	(
-		NT_CHAR+
-		| NT_NUMBER nt_range_loc /* TODO(holtgrewe): allow farloc here */
-	) nt_nest?
-;
-
 nt_inversion
 :
 	nt_range_loc NT_INV
@@ -267,6 +273,12 @@ nt_inversion
 		NT_CHAR+
 		| NT_NUMBER
 	)? nt_nest?
+;
+
+nt_no_change
+:
+	nt_pt_loc NT_CHAR NT_EQUAL
+	| nt_range_loc NT_CHAR+ NT_EQUAL
 ;
 
 nt_range_loc
@@ -329,7 +341,7 @@ nt_real_pt_loc
 			| NT_ASTERISK
 		)? NT_NUMBER nt_offset?
 	)
-	| NT_ASTERISK
+	| NT_QUESTION_MARK
 ;
 
 nt_offset
