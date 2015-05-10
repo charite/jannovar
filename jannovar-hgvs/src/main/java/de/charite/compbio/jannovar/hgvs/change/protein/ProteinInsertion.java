@@ -10,19 +10,19 @@ public class ProteinInsertion extends ProteinChange {
 	private final ProteinSeqDescription seq;
 
 	public static ProteinInsertion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos) {
-		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA),
+		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription());
 	}
 
 	public static ProteinInsertion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, int insertedLength) {
-		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA),
+		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(insertedLength));
 	}
 
 	public static ProteinInsertion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, String seq) {
-		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA),
+		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(seq));
 	}
 

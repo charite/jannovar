@@ -17,17 +17,17 @@ public class ProteinDeletion extends ProteinChange {
 	private final ProteinSeqDescription seqSpec;
 
 	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos) {
-		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA));
+		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos));
 	}
 
 	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, int length) {
-		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA), length);
+		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), length);
 	}
 
 	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, String seq) {
-		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstPos, firstAA, lastPos, lastAA), seq);
+		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), seq);
 	}
 
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range) {
