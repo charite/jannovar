@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.charite.compbio.jannovar.hgvs.change.AminoAcidCode;
 
-public class TestProteinInsertion {
+public class ProteinInsertionTest {
 
 	@Test
 	public void testLengthOneWithInsertedSeq() {
