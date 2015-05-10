@@ -44,9 +44,9 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
 		if (code == AminoAcidCode.THREE_LETTER)
-			return (pos + 1) + Translator.getTranslator().toLong(aa.charAt(0));
+			return Translator.getTranslator().toLong(aa.charAt(0)) + (pos + 1);
 		else
-			return (pos + 1) + aa;
+			return aa + (pos + 1);
 	}
 
 	@Override

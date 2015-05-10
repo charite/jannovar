@@ -23,9 +23,9 @@ public class ProteinPointLocationTest {
 	public void testToHGVSString() {
 		ProteinPointLocation location = new ProteinPointLocation(123, "A");
 
-		Assert.assertEquals("124Ala", location.toHGVSString());
-		Assert.assertEquals("124A", location.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124Ala", location.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("Ala124", location.toHGVSString());
+		Assert.assertEquals("A124", location.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("Ala124", location.toHGVSString(AminoAcidCode.THREE_LETTER));
 	}
 
 }

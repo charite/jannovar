@@ -32,8 +32,8 @@ public class ProteinRangeTest {
 	public void testToHGVSStringRange() {
 		ProteinRange range = new ProteinRange(firstLoc, lastLoc);
 
-		Assert.assertEquals("124A_126G", range.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124Ala_126Gly", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("A124_G126", range.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("Ala124_Gly126", range.toHGVSString(AminoAcidCode.THREE_LETTER));
 	}
 
 	/**
@@ -43,8 +43,8 @@ public class ProteinRangeTest {
 	public void testToHGVSStringSinglePos() {
 		ProteinRange range = new ProteinRange(firstLoc, firstLoc2);
 
-		Assert.assertEquals("124A", range.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124Ala", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("A124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("Ala124", range.toHGVSString(AminoAcidCode.THREE_LETTER));
 
 	}
 

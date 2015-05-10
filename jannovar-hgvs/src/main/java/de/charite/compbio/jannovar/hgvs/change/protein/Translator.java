@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableMap;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class Translator {
+final class Translator {
 
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
 	private ImmutableMap<String, String> codon1 = null;

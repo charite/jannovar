@@ -10,6 +10,9 @@ import de.charite.compbio.jannovar.hgvs.change.ConvertibleToHGVSString;
  * begin and end position. Thus, we use inclusive positions. This is also reflected by the members being named first and
  * last instead of begin and end.
  *
+ * In the case of the first position being equal to the last one, the {@link ProteinRange} degrades to a point when
+ * {@link #toHGVSString()} is called.
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public class ProteinRange implements ConvertibleToHGVSString {
@@ -21,7 +24,9 @@ public class ProteinRange implements ConvertibleToHGVSString {
 
 	/**
 	 * @param first
+	 *            first position of the range
 	 * @param last
+	 *            last position of the range
 	 */
 	public ProteinRange(ProteinPointLocation first, ProteinPointLocation last) {
 		super();
