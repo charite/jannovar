@@ -20,25 +20,30 @@ public class ProteinIndel extends ProteinChange {
 	/** description of the to be inserted sequence */
 	private final ProteinSeqDescription insSeq;
 
-	public static ProteinIndel build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos) {
+	/** Build without any sequence description */
+	public static ProteinIndel buildWithoutSeqDesc(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+			int lastPos) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(), new ProteinSeqDescription());
 	}
 
-	public static ProteinIndel build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos,
-			int deletedLength, int insertedLength) {
+	/** Build with length information */
+	public static ProteinIndel buildWithLength(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+			int lastPos, int deletedLength, int insertedLength) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(deletedLength), new ProteinSeqDescription(insertedLength));
 	}
 
-	public static ProteinIndel build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos,
-			String deletedSeq, String insertedSeq) {
+	/** Build with sequence information */
+	public static ProteinIndel buildWithSeq(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+			int lastPos, String deletedSeq, String insertedSeq) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(deletedSeq), new ProteinSeqDescription(insertedSeq));
 	}
 
-	public static ProteinIndel build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos,
-			ProteinSeqDescription delDesc, ProteinSeqDescription insDesc) {
+	/** Build with sequence description */
+	public static ProteinIndel buildWithSeqDesc(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+			int lastPos, ProteinSeqDescription delDesc, ProteinSeqDescription insDesc) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), delDesc, insDesc);
 	}
 

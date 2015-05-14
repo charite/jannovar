@@ -42,7 +42,7 @@ public class ProteinDuplication extends ProteinChange {
 
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
-		return wrapIfPredicted(range.toHGVSString(code) + "dup" + seqSpec.toHGVSString(code));
+		return wrapIfOnlyPredicted(range.toHGVSString(code) + "dup" + seqSpec.toHGVSString(code));
 	}
 
 	@Override

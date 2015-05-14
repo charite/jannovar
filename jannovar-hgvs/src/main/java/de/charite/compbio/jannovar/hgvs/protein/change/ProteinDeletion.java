@@ -16,51 +16,60 @@ public class ProteinDeletion extends ProteinChange {
 	/** range of one or more amino acids that are deleted */
 	private final ProteinRange range;
 	/** specification of the deleted characters, can be null */
-	private final ProteinSeqDescription seqSpec;
+	private final ProteinSeqDescription seqDesc;
 
-	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos) {
+	/** Construct ProteinDeletion without length and sequence information */
+	public static ProteinDeletion buildWithNoSeqDesc(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos) {
 		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos));
 	}
 
-	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos, int length) {
+	/** Construct ProteinDeletion with length information */
+	public static ProteinDeletion buildWithLengthInfo(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, int length) {
 		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), length);
 	}
 
-	public static ProteinDeletion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+	/** Construct ProteinDeletion with sequence */
+	public static ProteinDeletion buildWithSequence(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, String seq) {
 		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), seq);
 	}
 
+	/** Construct ProteinDeletion without length and sequence information */
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range) {
 		super(onlyPredicted);
 		this.range = range;
-		this.seqSpec = new ProteinSeqDescription();
+		this.seqDesc = new ProteinSeqDescription();
 	}
 
+	/** Construct ProteinDeletion with length information */
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range, int length) {
 		super(onlyPredicted);
 		this.range = range;
-		this.seqSpec = new ProteinSeqDescription(length);
+		this.seqDesc = new ProteinSeqDescription(length);
 	}
 
+	/** Construct ProteinDeletion with sequence information */
 	public ProteinDeletion(boolean onlyPredicted, ProteinRange range, String seq) {
 		super(onlyPredicted);
 		this.range = range;
-		this.seqSpec = new ProteinSeqDescription(seq);
+		this.seqDesc = new ProteinSeqDescription(seq);
 	}
 
+	/** @return deleted range in the protein */
 	public ProteinRange getRange() {
 		return range;
 	}
 
-	public ProteinSeqDescription getSeqSpec() {
-		return seqSpec;
+	/** @return description of the deleted sequence */
+	public ProteinSeqDescription getSeqDesc() {
+		return seqDesc;
 	}
 
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
-		return wrapIfPredicted(range.toHGVSString(code) + "del" + seqSpec.toHGVSString(code));
+		return wrapIfOnlyPredicted(range.toHGVSString(code) + "del" + seqDesc.toHGVSString(code));
 	}
 
 }

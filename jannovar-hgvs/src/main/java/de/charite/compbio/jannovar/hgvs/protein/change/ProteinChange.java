@@ -31,7 +31,7 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 	}
 
 	/** @return <code>s</code> wrapped in parantheses if not {@link #onlyPredicted} and plain <code>s</code> otherwise. */
-	protected String wrapIfPredicted(String s) {
+	protected String wrapIfOnlyPredicted(String s) {
 		if (onlyPredicted)
 			return "(" + s + ")";
 		else

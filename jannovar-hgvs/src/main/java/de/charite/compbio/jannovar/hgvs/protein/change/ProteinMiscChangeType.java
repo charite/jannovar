@@ -6,6 +6,7 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public enum ProteinMiscChangeType {
+
 	/** difficult to predict (<code>?</code>) */
 	DIFFICULT_TO_PREDICT,
 	/** no change (<code>=</code>) */
@@ -31,4 +32,5 @@ public enum ProteinMiscChangeType {
 			throw new RuntimeException("Unknown protein misc change tyep " + this);
 		}
 	}
+
 }

@@ -27,7 +27,7 @@ public class ProteinExtensionTest {
 
 	@Test
 	public void testBuildNoTerExtension() {
-		Assert.assertEquals(noTerExtension, ProteinExtension.buildNoTerExtension(false, position, "T"));
+		Assert.assertEquals(noTerExtension, ProteinExtension.buildWithoutTerminal(false, position, "T"));
 	}
 
 	@Test

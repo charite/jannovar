@@ -48,9 +48,9 @@ public class ProteinSubstitution extends ProteinChange {
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
 		if (code == AminoAcidCode.THREE_LETTER)
-			return wrapIfPredicted(location.toHGVSString(code) + Translator.getTranslator().toLong(targetAA));
+			return wrapIfOnlyPredicted(location.toHGVSString(code) + Translator.getTranslator().toLong(targetAA));
 		else
-			return wrapIfPredicted(location.toHGVSString(code) + targetAA);
+			return wrapIfOnlyPredicted(location.toHGVSString(code) + targetAA);
 	}
 
 	@Override

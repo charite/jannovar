@@ -11,18 +11,22 @@ public class ProteinInsertion extends ProteinChange {
 	/** specification of the inserted protein sequence */
 	private final ProteinSeqDescription seq;
 
-	public static ProteinInsertion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA, int lastPos) {
+	/** Build without any sequence description. */
+	public static ProteinInsertion buildWithLength(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+			int lastPos) {
 		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription());
 	}
 
-	public static ProteinInsertion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+	/** Build with length information */
+	public static ProteinInsertion buildWithLength(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, int insertedLength) {
 		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(insertedLength));
 	}
 
-	public static ProteinInsertion build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+	/** Build with sequence */
+	public static ProteinInsertion buildWithSeq(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, String seq) {
 		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(seq));
@@ -49,7 +53,7 @@ public class ProteinInsertion extends ProteinChange {
 
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
-		return wrapIfPredicted(position.toHGVSString(code) + "ins" + seq.toHGVSString(code));
+		return wrapIfOnlyPredicted(position.toHGVSString(code) + "ins" + seq.toHGVSString(code));
 	}
 
 	@Override

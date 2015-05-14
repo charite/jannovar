@@ -25,7 +25,7 @@ public class ProteinExtension extends ProteinChange {
 	}
 
 	/** Construct {@link ProteinExtension} without a terminal in the extension */
-	public static ProteinExtension buildNoTerExtension(boolean onlyPredicted, ProteinPointLocation position,
+	public static ProteinExtension buildWithoutTerminal(boolean onlyPredicted, ProteinPointLocation position,
 			String targetAA) {
 		return new ProteinExtension(onlyPredicted, position, targetAA, LEN_NO_TER);
 	}

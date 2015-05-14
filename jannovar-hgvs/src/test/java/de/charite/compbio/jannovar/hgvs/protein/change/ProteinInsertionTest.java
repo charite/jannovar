@@ -10,31 +10,31 @@ public class ProteinInsertionTest {
 
 	@Test
 	public void testLengthOneWithInsertedSeq() {
-		ProteinInsertion del = ProteinInsertion.build(true, "A", 123, "A", 124, "CGA");
+		ProteinInsertion del = ProteinInsertion.buildWithSeq(true, "A", 123, "A", 124, "CGA");
 		Assert.assertEquals("(A124_A125insCGA)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testLengthOneWithInsertedSeqLength() {
-		ProteinInsertion del = ProteinInsertion.build(true, "A", 123, "A", 124, 1);
+		ProteinInsertion del = ProteinInsertion.buildWithLength(true, "A", 123, "A", 124, 1);
 		Assert.assertEquals("(A124_A125ins1)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testLengthOneWithBlankInsertedSeqSpec() {
-		ProteinInsertion del = ProteinInsertion.build(true, "A", 123, "A", 124);
+		ProteinInsertion del = ProteinInsertion.buildWithLength(true, "A", 123, "A", 124);
 		Assert.assertEquals("(A124_A125ins)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testLengthTwoWithInsertedSeq() {
-		ProteinInsertion del = ProteinInsertion.build(true, "A", 123, "C", 124, "AC");
+		ProteinInsertion del = ProteinInsertion.buildWithSeq(true, "A", 123, "C", 124, "AC");
 		Assert.assertEquals("(A124_C125insAC)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testLengthTwoWithInsertedSeqLength() {
-		ProteinInsertion del = ProteinInsertion.build(true, "A", 123, "C", 124, 2);
+		ProteinInsertion del = ProteinInsertion.buildWithLength(true, "A", 123, "C", 124, 2);
 		Assert.assertEquals("(A124_C125ins2)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
