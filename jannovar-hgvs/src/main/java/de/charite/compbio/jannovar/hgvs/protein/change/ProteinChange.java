@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
-// TODO(holtgrewe): add support for frameshift changes, and extension
+// TODO(holtgrewe): add support for extension
 
 /**
  * Base class for protein changes.
@@ -38,6 +38,28 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 			return "(" + s + ")";
 		else
 			return s;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (onlyPredicted ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProteinChange other = (ProteinChange) obj;
+		if (onlyPredicted != other.onlyPredicted)
+			return false;
+		return true;
 	}
 
 }
