@@ -524,6 +524,7 @@ protein_single_allele_var_set_inner
 	)
 ;
 
+/* TODO(holtgrew): semicolon can be in parenthesis indicating that in cis/trans state is unknown */
 protein_multi_allele_var
 :
 	protein_reference protein_single_allele_var_set PROTEIN_SEMICOLON
