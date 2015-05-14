@@ -4,6 +4,8 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 import de.charite.compbio.jannovar.hgvs.Translator;
 
+// TODO(holtgrewe): Support the annotation of Val4+1, Ser4+2, ..., Phe5-2, Gln5-1 and Gln*1, Ser*2, ... as in the standard
+
 /**
  * Represent one position in a protein.
  *

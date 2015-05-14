@@ -3,6 +3,13 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
+// TODO(holtgrewe): add support for frameshift changes, short sequence repeats, and extension
+
+/**
+ * Base class for protein changes.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ */
 public abstract class ProteinChange implements ConvertibleToHGVSString {
 
 	/** change is only predicted and will be kept in parantheses */
