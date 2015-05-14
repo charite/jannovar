@@ -1,7 +1,7 @@
-package de.charite.compbio.jannovar.hgvs.change.protein;
+package de.charite.compbio.jannovar.hgvs.protein;
 
-import de.charite.compbio.jannovar.hgvs.change.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.change.ConvertibleToHGVSString;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
 public abstract class ProteinChange implements ConvertibleToHGVSString {
 

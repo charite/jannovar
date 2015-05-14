@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.parser;
+package de.charite.compbio.jannovar.hgvs;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -6,6 +6,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.junit.Test;
+
+import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 
 /**
  * Feeds valid HGSV descriptions to the parser to see whether that works.

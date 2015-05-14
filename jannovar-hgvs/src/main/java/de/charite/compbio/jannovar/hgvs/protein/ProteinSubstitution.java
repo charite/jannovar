@@ -1,6 +1,6 @@
-package de.charite.compbio.jannovar.hgvs.change.protein;
+package de.charite.compbio.jannovar.hgvs.protein;
 
-import de.charite.compbio.jannovar.hgvs.change.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 
 /**
  * Represents a missense protein substitution, for example "Trp2Ala" or "T2A".

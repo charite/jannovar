@@ -1,6 +1,6 @@
-package de.charite.compbio.jannovar.hgvs.change;
+package de.charite.compbio.jannovar.hgvs;
 
-import de.charite.compbio.jannovar.hgvs.change.protein.ProteinPointLocation;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
 
 /**
  * Provide HGVS string representation of an element.

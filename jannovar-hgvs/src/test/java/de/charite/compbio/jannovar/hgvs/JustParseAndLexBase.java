@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.parser;
+package de.charite.compbio.jannovar.hgvs;
 
 /**
  * Shared protein/nucleotide change strings for "JustParse" and "JustLex" tests.

@@ -1,9 +1,11 @@
-package de.charite.compbio.jannovar.hgvs.change.protein;
+package de.charite.compbio.jannovar.hgvs.protein;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.change.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinIndel;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
 public class ProteinIndelTest {
 

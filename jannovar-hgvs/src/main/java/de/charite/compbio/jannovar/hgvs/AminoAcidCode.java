@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.change;
+package de.charite.compbio.jannovar.hgvs;
 
 /**
  * Representation of the two possible amino acid codes, 1-letter and 3-letter.

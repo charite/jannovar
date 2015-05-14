@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.parser;
+package de.charite.compbio.jannovar.hgvs;
 
 import org.junit.Test;
 

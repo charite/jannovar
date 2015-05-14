@@ -1,7 +1,9 @@
-package de.charite.compbio.jannovar.hgvs.parser;
+package de.charite.compbio.jannovar.hgvs;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
+
+import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
 
 /**
  * Feeds valid change descriptions to the lexer to see whether this works at least.

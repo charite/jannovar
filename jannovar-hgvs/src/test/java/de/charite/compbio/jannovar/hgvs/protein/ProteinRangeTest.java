@@ -1,10 +1,12 @@
-package de.charite.compbio.jannovar.hgvs.change.protein;
+package de.charite.compbio.jannovar.hgvs.protein;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.change.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 
 public class ProteinRangeTest {
 

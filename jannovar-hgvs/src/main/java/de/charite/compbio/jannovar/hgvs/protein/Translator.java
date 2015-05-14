@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.change.protein;
+package de.charite.compbio.jannovar.hgvs.protein;
 
 import java.util.Map;
 
