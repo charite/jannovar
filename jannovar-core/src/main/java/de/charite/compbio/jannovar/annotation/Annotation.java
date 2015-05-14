@@ -243,8 +243,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public String getSymbolAndAnnotation() {
 		if (transcript == null)
 			return null;
-		return Joiner.on(":").skipNulls()
-				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription, "p." + proteinChange);
+		return Joiner
+				.on(":")
+				.skipNulls()
+				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription,
+						(proteinChange == null) ? null : "p." + proteinChange.toHGVSString());
 	}
 
 	/**

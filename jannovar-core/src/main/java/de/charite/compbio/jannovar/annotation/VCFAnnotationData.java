@@ -111,9 +111,9 @@ class VCFAnnotationData {
 		final Joiner joiner = Joiner.on('&').useForNull("");
 		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantEffect.TO_SO_TERM));
 		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
-				featureBioType, getRankString(), ntHGVSDescription, "p." + proteinChange.toHGVSString(),
-				getTXPosString(), getCDSPosString(), getAminoAcidPosString(), getDistanceString(),
-				joiner.join(messages) };
+				featureBioType, getRankString(), ntHGVSDescription,
+				(proteinChange == null) ? proteinChange : ("p." + proteinChange.toHGVSString()), getTXPosString(),
+				getCDSPosString(), getAminoAcidPosString(), getDistanceString(), joiner.join(messages) };
 	}
 
 	public String toUnescapedString(String allele) {

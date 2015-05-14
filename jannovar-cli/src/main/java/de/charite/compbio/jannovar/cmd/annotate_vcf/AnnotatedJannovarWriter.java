@@ -149,8 +149,11 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		for (Annotation a : anno.getAnnotations()) {
 			String effect = Joiner.on("+").join(
 					FluentIterable.from(a.getEffects()).transform(VariantEffect.TO_LEGACY_NAME));
-			String annt = Joiner.on(":").skipNulls()
-					.join(a.getNucleotideHGVSDescription(), "p." + a.getProteinChange().toHGVSString());
+			String annt = Joiner
+					.on(":")
+					.skipNulls()
+					.join(a.getNucleotideHGVSDescription(),
+							(a.getProteinChange() == null) ? null : ("p." + a.getProteinChange().toHGVSString()));
 			String sym = a.getTranscript().getGeneSymbol();
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
 					chrStr, change.getPos(), change.getRef(), change.getAlt(), gtype, qual);
