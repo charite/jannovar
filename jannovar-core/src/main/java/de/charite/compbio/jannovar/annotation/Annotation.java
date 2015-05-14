@@ -6,6 +6,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -63,8 +64,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	/** HGVS nucleotide variant annotation */
 	private final String ntHGVSDescription;
 
-	/** amino acid variant annotation */
-	private final String aaHGVSDescription;
+	/** change on the protein level */
+	private final ProteinChange proteinChange;
 
 	/** the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
 	private final TranscriptModel transcript;
@@ -94,12 +95,12 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *            location of the variant
 	 * @param ntHGVSDescription
 	 *            nucleotide variant description following the HGVS nomenclauture
-	 * @param aaHGVSDescription
-	 *            amino acid variant description following the HGVS nomenclauture
+	 * @param proteinChange
+	 *            predicted {@link ProteinChange}
 	 */
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
-			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription) {
-		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, aaHGVSDescription, ImmutableSortedSet
+			AnnotationLocation annoLoc, String ntHGVSDescription, ProteinChange proteinChange) {
+		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, proteinChange, ImmutableSortedSet
 				.<AnnotationMessage> of());
 	}
 
@@ -118,13 +119,13 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *            location of the variant
 	 * @param ntHGVSDescription
 	 *            nucleotide variant description following the HGVS nomenclauture
-	 * @param aaHGVSDescription
-	 *            amino acid variant description following the HGVS nomenclauture
+	 * @param proteinChange
+	 *            {@link ProteinChange} with a predicted protein change
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
-			AnnotationLocation annoLoc, String ntHGVSDescription, String aaHGVSDescription,
+			AnnotationLocation annoLoc, String ntHGVSDescription, ProteinChange proteinChange,
 			Collection<AnnotationMessage> messages) {
 		if (change != null)
 			change = change.withStrand(Strand.FWD); // enforce forward strand
@@ -135,7 +136,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 			this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
 		this.ntHGVSDescription = ntHGVSDescription;
-		this.aaHGVSDescription = aaHGVSDescription;
+		this.proteinChange = proteinChange;
 		this.transcript = transcript;
 		this.messages = ImmutableSortedSet.copyOf(messages);
 	}
@@ -165,9 +166,9 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return ntHGVSDescription;
 	}
 
-	/** @return amino acid variant annotation */
-	public String getAminoAcidHGVSDescription() {
-		return aaHGVSDescription;
+	/** @return predicted {@link ProteinChange} */
+	public ProteinChange getProteinChange() {
+		return proteinChange;
 	}
 
 	/** @return the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
@@ -204,7 +205,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		data.setTranscriptAndChange(transcript, change);
 		data.setAnnoLoc(annoLoc);
 		data.ntHGVSDescription = ntHGVSDescription;
-		data.aaHGVSDescription = aaHGVSDescription;
+		data.proteinChange = proteinChange;
 		data.messages = messages;
 		if (escape)
 			return data.toString(alt);
@@ -243,7 +244,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		if (transcript == null)
 			return null;
 		return Joiner.on(":").skipNulls()
-				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription, aaHGVSDescription);
+				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription, "p." + proteinChange);
 	}
 
 	/**
@@ -255,26 +256,32 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return effects.first();
 	}
 
+	@Override
 	public String getChrName() {
 		return change.getChrName();
 	}
 
+	@Override
 	public int getChr() {
 		return change.getChr();
 	}
 
+	@Override
 	public int getPos() {
 		return change.getPos();
 	}
 
+	@Override
 	public String getRef() {
 		return change.getRef();
 	}
 
+	@Override
 	public String getAlt() {
 		return change.getAlt();
 	}
 
+	@Override
 	public int compareTo(Annotation other) {
 		if (getMostPathogenicVarType() == null && getMostPathogenicVarType() == other.getMostPathogenicVarType())
 			return 0;
@@ -300,14 +307,15 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	@Override
 	public String toString() {
 		return "Annotation [change=" + change + ", effects=" + effects + ", ntHGVSDescription=" + ntHGVSDescription
-				+ ", aaHGVSDescription=" + aaHGVSDescription + ", transcript.getAccession()=" + transcript.getAccession() + "]";
+				+ ", proteinChange=" + proteinChange.toHGVSString() + ", transcript.getAccession()="
+				+ transcript.getAccession() + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((aaHGVSDescription == null) ? 0 : aaHGVSDescription.hashCode());
+		result = prime * result + ((proteinChange == null) ? 0 : proteinChange.hashCode());
 		result = prime * result + ((annoLoc == null) ? 0 : annoLoc.hashCode());
 		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
 		result = prime * result + ((messages == null) ? 0 : messages.hashCode());
@@ -325,10 +333,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		if (getClass() != obj.getClass())
 			return false;
 		Annotation other = (Annotation) obj;
-		if (aaHGVSDescription == null) {
-			if (other.aaHGVSDescription != null)
+		if (proteinChange == null) {
+			if (other.proteinChange != null)
 				return false;
-		} else if (!aaHGVSDescription.equals(other.aaHGVSDescription))
+		} else if (!proteinChange.equals(other.proteinChange))
 			return false;
 		if (annoLoc == null) {
 			if (other.annoLoc != null)

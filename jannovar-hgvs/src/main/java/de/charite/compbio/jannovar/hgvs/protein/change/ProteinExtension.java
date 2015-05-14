@@ -19,9 +19,19 @@ public class ProteinExtension extends ProteinChange {
 	private final int shift;
 
 	/** Construct normal {@link ProteinExtension} */
+	public static ProteinExtension build(boolean onlyPredicted, String wtAA, int pos, String targetAA, int shift) {
+		return build(onlyPredicted, new ProteinPointLocation(pos, wtAA), targetAA, shift);
+	}
+
+	/** Construct normal {@link ProteinExtension} */
 	public static ProteinExtension build(boolean onlyPredicted, ProteinPointLocation position, String targetAA,
 			int shift) {
 		return new ProteinExtension(onlyPredicted, position, targetAA, shift);
+	}
+
+	/** Construct {@link ProteinExtension} without a terminal in the extension */
+	public static ProteinExtension buildWithoutTerminal(boolean onlyPredicted, String wtAA, int pos, String targetAA) {
+		return new ProteinExtension(onlyPredicted, new ProteinPointLocation(pos, wtAA), targetAA, LEN_NO_TER);
 	}
 
 	/** Construct {@link ProteinExtension} without a terminal in the extension */
@@ -68,9 +78,9 @@ public class ProteinExtension extends ProteinChange {
 		if (code == AminoAcidCode.THREE_LETTER)
 			targetAA = Translator.getTranslator().toLong(targetAA);
 		if (isNoTerminalExtension())
-			return Joiner.on("").join(position.toHGVSString(code), targetAA, "ext*?");
+			return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), targetAA, "ext*?"));
 		else
-			return Joiner.on("").join(position.toHGVSString(code), targetAA, "ext*", shift);
+			return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), targetAA, "ext*", shift));
 	}
 
 	@Override

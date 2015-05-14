@@ -11,22 +11,27 @@ public class ProteinDuplication extends ProteinChange {
 	/** specification of the deleted characters, can be null */
 	private final ProteinSeqDescription seqSpec;
 
-	public static ProteinDuplication build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos) {
+	public static ProteinDuplication buildWithoutSeqDesc(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription());
 	}
 
-	public static ProteinDuplication build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos, String seq) {
+	public static ProteinDuplication buildWithSequence(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, String seq) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(seq));
 	}
 
-	public static ProteinDuplication build(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos, int len) {
+	public static ProteinDuplication buildWithLengthInfo(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, int len) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(len));
+	}
+
+	public static ProteinDuplication buildWithSeqDesc(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, ProteinSeqDescription desc) {
+		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), desc);
 	}
 
 	/**

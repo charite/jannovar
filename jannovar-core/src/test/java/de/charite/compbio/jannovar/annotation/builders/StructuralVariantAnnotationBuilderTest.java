@@ -69,7 +69,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -80,7 +80,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(null, anno.getTranscript());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640062_6640063insCG..AT", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(null, anno.getTranscript());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals("g.6640063_6640066del", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -113,7 +113,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640063_6640066inv", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(null, anno.getTranscript());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals("g.6640063_6640066inv", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -135,7 +135,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class StructuralVariantAnnotationBuilderTest {
 		Assert.assertEquals(null, anno.getTranscript());
 		Assert.assertEquals(null, anno.getAnnoLoc());
 		Assert.assertEquals("g.6640063_6640066delinsTT..TA", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getProteinChange());
 	}
 
 }

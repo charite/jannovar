@@ -13,11 +13,14 @@ import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocationBuilder;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
-import de.charite.compbio.jannovar.reference.GenomeVariantNormalizer;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.GenomeVariantNormalizer;
 import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -210,13 +213,14 @@ abstract class AnnotationBuilder {
 		}
 		// intronic variants have no effect on the protein but splice variants lead to "probably no protein produced"
 		// annotation, as in Mutalyzer.
+		ProteinChange proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
 		String aaAnno = "p.=";
 		if (!Sets.intersection(
 				ImmutableSet.copyOf(varTypes),
 				ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 						VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
-			aaAnno = "p.?";
-		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), aaAnno);
+			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), proteinChange);
 	}
 
 	/**
@@ -257,7 +261,8 @@ abstract class AnnotationBuilder {
 				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
 				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
 		}
-		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), "p.=");
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), ProteinMiscChange.build(true,
+				ProteinMiscChangeType.NO_CHANGE));
 	}
 
 	/**

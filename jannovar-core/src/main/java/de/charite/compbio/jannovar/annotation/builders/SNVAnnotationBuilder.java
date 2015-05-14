@@ -8,11 +8,16 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinExtension;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.CDSPosition;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -110,18 +115,18 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		hgvsSNVOverride = StringUtil.concatenate(wtNT, ">", varNT);
 
 		// Construct annotation part for the protein.
-		String wtAA = Translator.getTranslator().translateDNA3(wtCodon);
-		String varAA = Translator.getTranslator().translateDNA3(varCodon);
-		String protAnno = StringUtil.concatenate("p.", wtAA, cdsPos.getPos() / 3 + 1, varAA);
+		String wtAA = Translator.getTranslator().translateDNA(wtCodon);
+		String varAA = Translator.getTranslator().translateDNA(varCodon);
+		ProteinChange proteinChange = ProteinSubstitution.build(true, wtAA, cdsPos.getPos() / 3, varAA);
 		if (wtAA.equals(varAA)) // simplify in the case of synonymous SNV
-			protAnno = StringUtil.concatenate("p.=");
+			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
 
 		// Compute variant type.
 		ArrayList<VariantEffect> varTypes = computeVariantTypes(wtAA, varAA);
 		GenomeInterval changeInterval = change.getGenomeInterval();
 		if (so.overlapsWithTranslationalStartSite(changeInterval)) {
 			varTypes.add(VariantEffect.START_LOST);
-			protAnno = "p.0?";
+			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN);
 		} else if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 			if (wtAA.equals(varAA)) { // change in stop codon, but no AA change
 				varTypes.add(VariantEffect.STOP_RETAINED_VARIANT);
@@ -130,7 +135,8 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 				String varNTString = seqChangeHelper.getCDSWithChange(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
-				protAnno = StringUtil.concatenate(protAnno, "ext*", stopCodonPos - cdsPos.getPos() / 3);
+				int shift = stopCodonPos - cdsPos.getPos() / 3;
+				proteinChange = ProteinExtension.build(true, wtAA, cdsPos.getPos() / 3, varAA, shift);
 			}
 		}
 		// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
@@ -142,7 +148,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 			varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 
 		// Build the resulting Annotation.
-		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
+		return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), proteinChange);
 	}
 
 	@Override

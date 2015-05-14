@@ -2,6 +2,19 @@
 
 ## develop
 
+## jannovar-core
+
+* using jannovar-hgvs for representing the changes
+* more precise HGVS annotation in some cases
+* predictions are wrapped in parentheses
+
+## jannover-hgvs
+
+* adding module for parsing and representing HGVS-compatible nucleic and protein
+  changes
+
+## v.0.15
+
 ### jannovar-core
 
 * Renaming `*.getChange()` to `*.getGenomeVariant()`

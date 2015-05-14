@@ -43,9 +43,9 @@ public class ProteinInsertion extends ProteinChange {
 	public ProteinInsertion(boolean onlyPredicted, ProteinRange position, ProteinSeqDescription seq) {
 		super(onlyPredicted);
 
-		if (position.length() != 2)
-			throw new IllegalArgumentException("range describing insertion must have size 2 but was "
-					+ position.length() + " range is " + position);
+		// if (position.length() != 2)
+		// throw new IllegalArgumentException("range describing insertion must have size 2 but was "
+		// + position.length() + " range is " + position);
 
 		this.position = position;
 		this.seq = seq;

@@ -11,8 +11,8 @@ import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -68,7 +68,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// TODO(holtgrew): Check for distance==0
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), annotation1.getEffects());
 	}
 
@@ -81,7 +81,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// TODO(holtgrew): Check for distance==0
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), annotation1.getEffects());
 	}
 
@@ -95,7 +95,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// TODO(holtgrew): Check for distance==1000
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 		// intergenic downstream
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6650340,
@@ -105,7 +105,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		// TODO(holtgrew): Check for distance==1000
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation2.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation2.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation2.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation2.getEffects());
 	}
 
@@ -131,7 +131,8 @@ public class BlockSubstitutionAnnotationBuilderTest {
 				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals("c.691-11_691-9delinsCGTT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+				annotation1.getEffects());
 	}
 
 	@Test
@@ -170,7 +171,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1_3delinsCGTT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 
 		// Delete chunk out of first exon, spanning start codon from the left.
@@ -181,7 +182,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.-9_2delinsGTTG", annotation2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", annotation2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("0?", annotation2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
 
 		// Delete chunk out of first exon, spanning start codon from the right.
@@ -192,7 +193,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3.getAnnoLoc().getRank());
 		Assert.assertEquals("c.3_13delinsCTTG", annotation3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", annotation3.getAminoAcidHGVSDescription());
+		Assert.assertEquals("0?", annotation3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation3.getEffects());
 
 		// Deletion from before transcript, reaching into the start codon.
@@ -205,7 +206,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation4.getAnnoLoc().getRank());
 		Assert.assertEquals("c.-69-201_1delinsACCT", annotation4.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", annotation4.getAminoAcidHGVSDescription());
+		Assert.assertEquals("0?", annotation4.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation4.getEffects());
 	}
 
@@ -220,7 +221,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2067_*2delinsCGTT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*689Tyrext*25", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(*689Tyrext*25)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST),
 				annotation1.getEffects());
 
@@ -232,10 +233,10 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2066_*1delinsCGGTCG", annotation2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*689Serext*17", annotation2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(*689Serext*17)", annotation2.getProteinChange().toHGVSString());
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST),
-				annotation2.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION,
+				VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST), annotation2.getEffects());
 
 		// Delete first base of stop codon, leads to complete loss.
 		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649269,
@@ -245,10 +246,10 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation3.getAnnoLoc().getRank());
 		Assert.assertEquals("c.2065_2067delinsCGGT", annotation3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*689Argext*16", annotation3.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(*689Argext*16)", annotation3.getProteinChange().toHGVSString());
 		// Note that the transcript here differs to the one Mutalyzer uses after the CDS.
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.STOP_LOST),
-				annotation3.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.COMPLEX_SUBSTITUTION,
+				VariantEffect.STOP_LOST), annotation3.getEffects());
 	}
 
 	@Test
@@ -261,7 +262,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.691-1delinsTT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 
@@ -273,10 +274,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.691_693delinsAA", annotation2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Trp231Lysfs*23", annotation2.getAminoAcidHGVSDescription());
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.SPLICE_REGION_VARIANT),
-				annotation2.getEffects());
+		Assert.assertEquals("(Trp231Lysfs*23)", annotation2.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.COMPLEX_SUBSTITUTION,
+				VariantEffect.SPLICE_REGION_VARIANT), annotation2.getEffects());
 	}
 
 	@Test
@@ -289,10 +289,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1225_1234delinsCCC", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Cys409Profs*127", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.SPLICE_REGION_VARIANT),
-				annotation1.getEffects());
+		Assert.assertEquals("(Cys409Profs*127)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION,
+				VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.SPLICE_REGION_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -305,7 +304,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.691-3_693delinsGTT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Trp231Val", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Trp231Val)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT, VariantEffect.FEATURE_TRUNCATION), annotation1.getEffects());
 
@@ -317,7 +316,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation2.getAnnoLoc().getRank());
 		Assert.assertEquals("c.700_708delinsACC", annotation2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Val234_Gln236delinsThr", annotation2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Val234_Gln236delinsThr)", annotation2.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FEATURE_TRUNCATION, VariantEffect.COMPLEX_SUBSTITUTION),
 				annotation2.getEffects());
@@ -330,8 +329,10 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation3.getAnnoLoc().getRank());
 		Assert.assertEquals("c.708_716delinsCT", annotation3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gln236Hisfs*16", annotation3.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION), annotation3.getEffects());
+		Assert.assertEquals("(Gln236Hisfs*16)", annotation3.getProteinChange().toHGVSString());
+		Assert.assertEquals(
+				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.COMPLEX_SUBSTITUTION),
+				annotation3.getEffects());
 	}
 
 	@Test
@@ -354,7 +355,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.96_112delinsACTACCAGAGGAAT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Lys33_Met38delinsLeuProGluGluLeu", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Lys33_Met38delinsLeuProGluGluLeu)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION, VariantEffect.FEATURE_TRUNCATION),
 				annotation1.getEffects());
@@ -378,8 +379,10 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.713_718delinsACAACACT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Leu238Hisfs*19", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION), annotation1.getEffects());
+		Assert.assertEquals("(Leu238Hisfs*19)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(
+				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_ELONGATION, VariantEffect.COMPLEX_SUBSTITUTION),
+				annotation1.getEffects());
 	}
 
 	@Test
@@ -402,7 +405,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.475_477delinsCTC", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr159Leu", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Thr159Leu)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MNV), annotation1.getEffects());
 	}
 
@@ -426,7 +429,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.96_112delinsACTACCAGAGGAAT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Lys33_Met38delinsLeuProGluGluLeu", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Lys33_Met38delinsLeuProGluGluLeu)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FEATURE_TRUNCATION, VariantEffect.COMPLEX_SUBSTITUTION),
 				annotation1.getEffects());
@@ -452,8 +455,9 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.475_480delinsTAGCTC", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr159*", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MNV, VariantEffect.STOP_GAINED), annotation1.getEffects());
+		Assert.assertEquals("(Thr159*)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MNV, VariantEffect.STOP_GAINED),
+				annotation1.getEffects());
 	}
 
 	@Test
@@ -476,7 +480,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.830_831delinsTG", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ala277Val", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Ala277Val)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MNV), annotation1.getEffects());
 	}
 
@@ -501,7 +505,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.1263_1266+1delinsC", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu422del", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(Glu422del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION,
 				VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.FEATURE_TRUNCATION), annotation1.getEffects());
 	}
@@ -516,18 +520,18 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		this.builderForward
 				.setSequence("atggcttctcacgcttgtgctgcatatcccacaccaattagacccaaggatcagttggaagtttccaggacatcttcattttatttccaccctcaatccacatttccagatgtctctgcagcaaagcgaaattccaggagaagaggacaaagatactcagagagaaaaagtaaaagaccgaagaaggaggctggagagaccaggatccttccagctgaacaaagtcagccacaaagcagactagccagccggctacaattggagtcagagtcccaaagacatgggcttgttagagtgctgtgcaagatgtctggtaggggccccctttgcttccctggtggccactggattgtgtttctttggggtggcactgttctgtggctgtggacatgaagccctcactggcacagaaaagctaattgagacctatttctccaaaaactaccaagactatgagtatctcatcaatgtgatccatgccttccagtatgtcatctatggaactgcctctttcttcttcctttatggggccctcctgctggctgagggcttctacaccaccggcgcagtcaggcagatctttggcgactacaagaccaccatctgcggcaagggcctgagcgcaacggtaacagggggccagaaggggaggggttccagaggccaacatcaagctcattctttggagcgggtgtgtcattgtttgggaaaatggctaggacatcccgacaagtttgtgggcatcacctatgccctgaccgttgtgtggctcctggtgtttgcctgctctgctgtgcctgtgtacatttacttcaacacctggaccacctgccagtctattgccttccccagcaagacctctgccagtataggcagtctctgtgctgatgccagaatgtatggtgttctcccatggaatgctttccctggcaaggtttgtggctccaaccttctgtccatctgcaaaacagctgagttccaaatgaccttccacctgtttattgctgcatttgtgggggctgcagctacactggtttccctgctcaccttcatgattgctgccacttacaactttgccgtccttaaactcatgggccgaggcaccaagttctgatcccccgtagaaatccccctttctctaatagcgaggctctaaccacacagcctacaatgctgcgtctcccatcttaactctttgcctttgccaccaactggccctcttcttacttgatgagtgtaacaagaaaggagagtcttgcagtgattaaggtctctctttggactctcccctcttatgtacctcttttagtcattttgcttcatagctggttcctgctagaaatgggaaatgcctaagaagatgacttcccaactgcaagtcacaaaggaatggaggctctaattgaattttcaagcatctcctgaggatcagaaagtaatttcttctcaaagggtacttccactgatggaaacaaagtggaaggaaagatgctcaggtacagagaaggaatgtctttggtcctcttgccatctataggggccaaatatattctctttggtgtacaaaatggaattcattctggtctctctattaccactgaagatagaagaaaaaagaatgtcagaaaaacaataagagcgtttgcccaaatctgcctattgcagctgggagaagggggtcaaagcaaggatctttcacccacagaaagagagcactgaccccgatggcgatggactactgaagccctaactcagccaaccttacttacagcataagggagcgtagaatctgtgtagacgaagggggcatctggccttacacctcgttagggaagagaaacagggtgttgtcagcatcttctcactcccttctccttgataacagctaccatgacaaccctgtggtttccaaggagctgagaatagaaggaaactagcttacatgagaacagactggcctgaggagcagcagttgctggtggctaatggtgtaacctgagatggccctctggtagacacaggatagataactctttggatagcatgtctttttttctgttaattagttgtgtactctggcctctgtcatatcttcacaatggtgctcatttcatgggggtattatccattcagtcatcgtaggtgatttgaaggtcttgatttgttttagaatgatgcacatttcatgtattccagtttgtttattacttatttggggttgcatcagaaatgtctggagaataattctttgattatgactgttttttaaactaggaaaattggacattaagcatcacaaatgatattaaaaattggctagttgaatctattgggattttctacaagtattctgcctttgcagaaacagatttggtgaatttgaatctcaatttgagtaatctgatcgttctttctagctaatggaaaatgattttacttagcaatgttatcttggtgtgttaagagttaggtttaacataaaggttattttctcctgatatagatcacataacagaatgcaccagtcatcagctattcagttggtaagcttccaggaaaaaggacaggcagaaagagtttgagacctgaatagctcccagatttcagtcttttcctgtttttgttaactttgggttaaaaaaaaaaaaagtctgattggttttaattgaaggaaagatttgtactacagttcttttgttgtaaagagttgtgttgttcttttcccccaaagtggtttcagcaatatttaaggagatgtaagagctttacaaaaagacacttgatacttgttttcaaaccagtatacaagataagcttccaggctgcatagaaggaggagagggaaaatgttttgtaagaaaccaatcaagataaaggacagtgaagtaatccgtaccttgtgttttgttttgatttaataacataacaaataaccaacccttccctgaaaacctcacatgcatacatacacatatatacacacacaaagagagttaatcaactgaaagtgtttccttcatttctgatatagaattgcaattttaacacacataaaggataaacttttagaaacttatcttacaaagtgtattttataaaattaaagaaaataaaattaagaatgttctcaatcaaaaaaaaaaaaaaa"
 						.toUpperCase());
-		this.builderForward.setGeneSymbol("PLP1");
+		this.builderForward.setGeneSymbol("(P1)");
 		this.infoForward = builderForward.build();
 		// RefSeq NM_001128834.1
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				103041655, PositionType.ONE_BASED), "GGTGATC", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 103041655, PositionType.ONE_BASED), "GGTGATC", "A");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
 				new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("c.453_453+6delinsA", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.COMPLEX_SUBSTITUTION,
 				VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.FEATURE_TRUNCATION), annotation1.getEffects());
 	}

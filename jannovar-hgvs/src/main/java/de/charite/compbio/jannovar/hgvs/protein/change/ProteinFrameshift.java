@@ -29,14 +29,31 @@ public class ProteinFrameshift extends ProteinChange {
 	private final int shiftLength;
 
 	/** Build new {@link ProteinFrameshift} with full settings */
+	public static ProteinFrameshift build(boolean onlyPredicted, String wtAA, int position, String targetAA,
+			int shiftLength) {
+		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(position, wtAA), targetAA, shiftLength);
+	}
+
+	/** Build new {@link ProteinFrameshift} with full settings */
 	public static ProteinFrameshift build(boolean onlyPredicted, ProteinPointLocation position, String targetAA,
 			int shiftLength) {
 		return new ProteinFrameshift(onlyPredicted, position, targetAA, shiftLength);
 	}
 
 	/** Build new {@link ProteinFrameshift} short description */
+	public static ProteinFrameshift buildShort(boolean onlyPredicted, String wtAA, int position) {
+		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(position, wtAA), null, LEN_SHORT);
+	}
+
+	/** Build new {@link ProteinFrameshift} short description */
 	public static ProteinFrameshift buildShort(boolean onlyPredicted, ProteinPointLocation position) {
 		return new ProteinFrameshift(onlyPredicted, position, null, LEN_SHORT);
+	}
+
+	/** Build new {@link ProteinFrameshift} for the case that there is no terminal */
+	public static ProteinFrameshift buildWithoutTerminal(boolean onlyPredicted, String wtAA, int position,
+			String targetAA) {
+		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(position, wtAA), targetAA, LEN_NO_TER);
 	}
 
 	/** Build new {@link ProteinFrameshift} for the case that there is no terminal */
@@ -85,11 +102,11 @@ public class ProteinFrameshift extends ProteinChange {
 			targetAA = Translator.getTranslator().toLong(targetAA);
 
 		if (isShort())
-			return Joiner.on("").join(position.toHGVSString(code), "fs");
+			return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), "fs"));
 		else if (shiftLength == LEN_NO_TER)
-			return Joiner.on("").join(position.toHGVSString(code), targetAA, "fs*?");
+			return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), targetAA, "fs*?"));
 		else
-			return Joiner.on("").join(position.toHGVSString(code), targetAA, "fs*", shiftLength);
+			return wrapIfOnlyPredicted(Joiner.on("").join(position.toHGVSString(code), targetAA, "fs*", shiftLength));
 	}
 
 	@Override
