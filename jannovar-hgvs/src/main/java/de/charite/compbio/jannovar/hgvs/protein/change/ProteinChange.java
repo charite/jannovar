@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
-// TODO(holtgrewe): add support for extension
-
 /**
  * Base class for protein changes.
  *
