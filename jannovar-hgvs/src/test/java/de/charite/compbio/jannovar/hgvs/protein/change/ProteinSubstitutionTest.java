@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.protein;
+package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
-import de.charite.compbio.jannovar.hgvs.protein.ProteinSubstitution;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
 
 public class ProteinSubstitutionTest {
 

@@ -1,6 +1,8 @@
-package de.charite.compbio.jannovar.hgvs.protein;
+package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
 public class ProteinInsertion extends ProteinChange {
 

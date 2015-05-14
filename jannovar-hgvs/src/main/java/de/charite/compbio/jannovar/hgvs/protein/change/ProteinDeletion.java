@@ -1,6 +1,8 @@
-package de.charite.compbio.jannovar.hgvs.protein;
+package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
 // TODO(holtgrew): ProteinSeqSpecification should also store whether to display at all and we should integrate this here
 

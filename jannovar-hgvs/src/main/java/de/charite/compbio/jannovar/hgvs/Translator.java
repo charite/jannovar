@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.protein;
+package de.charite.compbio.jannovar.hgvs;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableMap;
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-final class Translator {
+public final class Translator {
 
 	/** Map of genetic code. Keys are codons and values are the corresponding amino acid (one-letter code) */
 	private ImmutableMap<String, String> codon1 = null;

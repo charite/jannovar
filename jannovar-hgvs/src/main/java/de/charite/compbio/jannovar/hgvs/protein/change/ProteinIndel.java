@@ -1,8 +1,10 @@
-package de.charite.compbio.jannovar.hgvs.protein;
+package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import com.google.common.base.Joiner;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
 /**
  * In-frame substitution on the protein level with more than one base.

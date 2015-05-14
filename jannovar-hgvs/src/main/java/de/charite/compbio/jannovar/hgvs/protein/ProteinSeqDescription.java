@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.hgvs.protein;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
+import de.charite.compbio.jannovar.hgvs.Translator;
 
 /**
  * Specification for inserted protein sequence, e.g. deleted or inserted.

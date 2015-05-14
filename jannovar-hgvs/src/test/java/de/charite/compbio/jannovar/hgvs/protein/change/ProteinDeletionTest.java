@@ -1,10 +1,10 @@
-package de.charite.compbio.jannovar.hgvs.protein;
+package de.charite.compbio.jannovar.hgvs.protein.change;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.protein.ProteinDeletion;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinDeletion;
 
 public class ProteinDeletionTest {
 
