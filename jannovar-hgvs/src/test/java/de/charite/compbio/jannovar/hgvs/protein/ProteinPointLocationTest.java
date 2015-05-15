@@ -10,9 +10,9 @@ public class ProteinPointLocationTest {
 
 	@Test
 	public void testEquals() {
-		ProteinPointLocation location1 = new ProteinPointLocation(123, "A");
-		ProteinPointLocation location2 = new ProteinPointLocation(123, "A");
-		ProteinPointLocation location3 = new ProteinPointLocation(123, "C");
+		ProteinPointLocation location1 = new ProteinPointLocation("A", 123);
+		ProteinPointLocation location2 = new ProteinPointLocation("A", 123);
+		ProteinPointLocation location3 = new ProteinPointLocation("C", 123);
 
 		Assert.assertTrue(location1.equals(location2));
 		Assert.assertTrue(location2.equals(location1));
@@ -22,7 +22,7 @@ public class ProteinPointLocationTest {
 
 	@Test
 	public void testToHGVSString() {
-		ProteinPointLocation location = new ProteinPointLocation(123, "A");
+		ProteinPointLocation location = new ProteinPointLocation("A", 123);
 
 		Assert.assertEquals("Ala124", location.toHGVSString());
 		Assert.assertEquals("A124", location.toHGVSString(AminoAcidCode.ONE_LETTER));

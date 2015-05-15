@@ -23,7 +23,7 @@ public class ProteinRange implements ConvertibleToHGVSString {
 	private final ProteinPointLocation last;
 
 	public static ProteinRange build(String firstAA, int first, String lastAA, int last) {
-		return new ProteinRange(new ProteinPointLocation(first, firstAA), new ProteinPointLocation(last, lastAA));
+		return new ProteinRange(new ProteinPointLocation(firstAA, first), new ProteinPointLocation(lastAA, last));
 	}
 
 	/**

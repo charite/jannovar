@@ -31,7 +31,7 @@ public class ProteinFrameshift extends ProteinChange {
 	/** Build new {@link ProteinFrameshift} with full settings */
 	public static ProteinFrameshift build(boolean onlyPredicted, String wtAA, int position, String targetAA,
 			int shiftLength) {
-		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(position, wtAA), targetAA, shiftLength);
+		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(wtAA, position), targetAA, shiftLength);
 	}
 
 	/** Build new {@link ProteinFrameshift} with full settings */
@@ -42,7 +42,7 @@ public class ProteinFrameshift extends ProteinChange {
 
 	/** Build new {@link ProteinFrameshift} short description */
 	public static ProteinFrameshift buildShort(boolean onlyPredicted, String wtAA, int position) {
-		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(position, wtAA), null, LEN_SHORT);
+		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(wtAA, position), null, LEN_SHORT);
 	}
 
 	/** Build new {@link ProteinFrameshift} short description */
@@ -53,7 +53,7 @@ public class ProteinFrameshift extends ProteinChange {
 	/** Build new {@link ProteinFrameshift} for the case that there is no terminal */
 	public static ProteinFrameshift buildWithoutTerminal(boolean onlyPredicted, String wtAA, int position,
 			String targetAA) {
-		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(position, wtAA), targetAA, LEN_NO_TER);
+		return new ProteinFrameshift(onlyPredicted, new ProteinPointLocation(wtAA, position), targetAA, LEN_NO_TER);
 	}
 
 	/** Build new {@link ProteinFrameshift} for the case that there is no terminal */

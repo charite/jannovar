@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>de.charite.compbio</groupId>
 			<artifactId>jannovar-hgvs</artifactId>
-			<version>0.14-SNAPSHOT</version>
+			<version>0.15-SNAPSHOT</version>
 		</dependency>
 		<!-- INI parsing -->
 		<dependency>

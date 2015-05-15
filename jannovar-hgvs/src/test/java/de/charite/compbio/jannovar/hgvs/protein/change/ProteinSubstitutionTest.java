@@ -16,9 +16,9 @@ public class ProteinSubstitutionTest {
 
 	@Before
 	public void setUp() {
-		sub1 = new ProteinSubstitution(true, new ProteinPointLocation(123, "A"), "G");
-		sub2 = new ProteinSubstitution(true, new ProteinPointLocation(123, "A"), "G");
-		sub3 = new ProteinSubstitution(true, new ProteinPointLocation(123, "A"), "T");
+		sub1 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123), "G");
+		sub2 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123), "G");
+		sub3 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123), "T");
 	}
 
 	@Test

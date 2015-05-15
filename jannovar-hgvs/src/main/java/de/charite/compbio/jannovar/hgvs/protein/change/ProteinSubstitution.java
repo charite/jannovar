@@ -20,7 +20,7 @@ public class ProteinSubstitution extends ProteinChange {
 	 * Factory method for direct construction from source AA, position, and targetAA.
 	 */
 	public static ProteinSubstitution build(boolean onlyPredicted, String sourceAA, int pos, String targetAA) {
-		return new ProteinSubstitution(onlyPredicted, new ProteinPointLocation(pos, sourceAA), targetAA);
+		return new ProteinSubstitution(onlyPredicted, new ProteinPointLocation(sourceAA, pos), targetAA);
 	}
 
 	/**

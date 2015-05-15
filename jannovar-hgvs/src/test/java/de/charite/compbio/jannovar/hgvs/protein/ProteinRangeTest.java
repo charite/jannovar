@@ -5,26 +5,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
-import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 
 public class ProteinRangeTest {
 
-	private ProteinPointLocation firstLoc;
-	private ProteinPointLocation firstLoc2;
-	private ProteinPointLocation lastLoc;
+	private ProteinRange firstRange;
+	private ProteinRange firstRange2;
+	private ProteinRange secondRange;
 
 	@Before
 	public void setUp() {
-		firstLoc = new ProteinPointLocation(123, "A");
-		firstLoc2 = new ProteinPointLocation(123, "A");
-		lastLoc = new ProteinPointLocation(125, "G");
+		firstRange = new ProteinRange(ProteinPointLocation.build("A", 123), ProteinPointLocation.build("T", 300));
+		firstRange2 = new ProteinRange(ProteinPointLocation.build("A", 123), ProteinPointLocation.build("T", 300));
+		secondRange = new ProteinRange(ProteinPointLocation.build("G", 125), ProteinPointLocation.build("T", 301));
 	}
 
 	@Test
 	public void testEquals() {
-		Assert.assertEquals(firstLoc, firstLoc2);
-		Assert.assertNotEquals(lastLoc, firstLoc);
+		Assert.assertEquals(firstRange, firstRange2);
+		Assert.assertNotEquals(secondRange, firstRange);
 	}
 
 	/**
@@ -32,7 +30,8 @@ public class ProteinRangeTest {
 	 */
 	@Test
 	public void testToHGVSStringRange() {
-		ProteinRange range = new ProteinRange(firstLoc, lastLoc);
+		ProteinRange range = new ProteinRange(ProteinPointLocation.build("A", 123),
+				ProteinPointLocation.build("G", 125));
 
 		Assert.assertEquals("A124_G126", range.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("Ala124_Gly126", range.toHGVSString(AminoAcidCode.THREE_LETTER));
@@ -43,7 +42,8 @@ public class ProteinRangeTest {
 	 */
 	@Test
 	public void testToHGVSStringSinglePos() {
-		ProteinRange range = new ProteinRange(firstLoc, firstLoc2);
+		ProteinRange range = new ProteinRange(ProteinPointLocation.build("A", 123),
+				ProteinPointLocation.build("A", 123));
 
 		Assert.assertEquals("A124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("Ala124", range.toHGVSString(AminoAcidCode.THREE_LETTER));

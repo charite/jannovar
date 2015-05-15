@@ -18,13 +18,17 @@ public class ProteinPointLocation implements ConvertibleToHGVSString {
 	/** 1-letter code of the AA at this position */
 	private final String aa;
 
+	public static ProteinPointLocation build(String aa, int pos) {
+		return new ProteinPointLocation(aa, pos);
+	}
+
 	/**
-	 * @param pos
-	 *            0-based position in the protein
 	 * @param aa
 	 *            1-letter code of the amino acid
+	 * @param pos
+	 *            0-based position in the protein
 	 */
-	public ProteinPointLocation(int pos, String aa) {
+	public ProteinPointLocation(String aa, int pos) {
 		this.pos = pos;
 		this.aa = aa;
 	}
