@@ -2,15 +2,14 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.GenotypeList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Sex;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerBase;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.CompatibilityCheckerAutosomalDominant;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.CompatibilityCheckerXRecessive;
 
 /**
  * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and X dominant mode of
@@ -60,8 +59,13 @@ public class CompatibilityCheckerXDominant extends CompatibilityCheckerBase {
 	public boolean runSingleSampleCase() throws CompatibilityCheckerException {
 		if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE)
 			return new CompatibilityCheckerAutosomalDominant(pedigree, list).run();
-		else
-			return new CompatibilityCheckerXRecessive(pedigree, list).run();
+		else {
+			// We allow homozygous and heterozygous (false call).
+			for (ImmutableList<Genotype> gtList : list.getCalls())
+				if (gtList.get(0) == Genotype.HETEROZYGOUS || gtList.get(0) == Genotype.HOMOZYGOUS_ALT)
+					return true;
+			return false;
+		}
 	}
 	
 	public boolean runMultiSampleCase() {
@@ -79,8 +83,8 @@ public class CompatibilityCheckerXDominant extends CompatibilityCheckerBase {
 						// we do not allow HOM_ALT for females to have the same behaviour as AD for females
 						currentVariantCompatible = false;
 						break;
-					} else if (sex == Sex.MALE && (gt == Genotype.HETEROZYGOUS || gt == Genotype.HOMOZYGOUS_ALT)) {
-						// we allow heterozygous here as well in case of mis-calls in the one X copy in the male
+					} else if (sex != Sex.FEMALE && (gt == Genotype.HETEROZYGOUS || gt == Genotype.HOMOZYGOUS_ALT)) {
+						// we allow heterozygous here as well in case of mis-calls in the one X copy in the male or unknown
 						numAffectedWithMut++;
 					} else if (sex == Sex.FEMALE && gt == Genotype.HETEROZYGOUS) {
 						numAffectedWithMut++;

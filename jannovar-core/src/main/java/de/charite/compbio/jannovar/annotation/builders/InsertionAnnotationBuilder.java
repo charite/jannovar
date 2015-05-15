@@ -173,7 +173,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 		public CDSExonicAnnotationBuilder() {
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
-			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
+			this.varCDSSeq = seqChangeHelper.getCDSWithGenomeVariant(change);
 
 			// Get position of insertion on CDS level, will obtain AA change pos after normalization.
 			this.insertPos = projector.projectGenomeToCDSPosition(change.getGenomePos());

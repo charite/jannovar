@@ -134,7 +134,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		public CDSExonicAnnotationBuilder() {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
-			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
+			this.varCDSSeq = seqChangeHelper.getCDSWithGenomeVariant(change);
 			this.delFrameShift = (varCDSSeq.length() - wtCDSSeq.length()) % 3;
 
 			// Translate the variant CDS sequence.

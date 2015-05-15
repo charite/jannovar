@@ -734,6 +734,11 @@ public enum VariantEffect {
 			return "transcript_variant";
 		case UPSTREAM_GENE_VARIANT:
 			return "upstream_gene_variant";
+		case FRAMESHIFT_VARIANT:
+			return "frameshift_variant";
+		case _SMALLEST_HIGH_IMPACT:
+		case _SMALLEST_LOW_IMPACT:
+		case _SMALLEST_MODERATE_IMPACT:
 		default:
 			return null;
 		}
@@ -855,6 +860,11 @@ public enum VariantEffect {
 			return "SO:0001624";
 		case UPSTREAM_GENE_VARIANT:
 			return "SO:0001624";
+		case FRAMESHIFT_VARIANT:
+			return "SO:0001589";
+		case _SMALLEST_HIGH_IMPACT:
+		case _SMALLEST_LOW_IMPACT:
+		case _SMALLEST_MODERATE_IMPACT:
 		default:
 			return null;
 		}

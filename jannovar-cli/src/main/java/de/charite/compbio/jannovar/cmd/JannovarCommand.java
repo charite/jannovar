@@ -70,7 +70,7 @@ public abstract class JannovarCommand {
 	 *             when the user requested the help page
 	 */
 	protected abstract JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException;
+			HelpRequestedException;
 
 	/**
 	 * Function for the execution of the command.

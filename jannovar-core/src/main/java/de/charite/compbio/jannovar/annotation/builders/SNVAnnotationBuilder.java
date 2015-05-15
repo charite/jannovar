@@ -132,7 +132,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.STOP_RETAINED_VARIANT);
 			} else { // change in stop codon, AA change
 				varTypes.add(VariantEffect.STOP_LOST);
-				String varNTString = seqChangeHelper.getCDSWithChange(change);
+				String varNTString = seqChangeHelper.getCDSWithGenomeVariant(change);
 				String varAAString = Translator.getTranslator().translateDNA(varNTString);
 				int stopCodonPos = varAAString.indexOf('*', cdsPos.getPos() / 3);
 				int shift = stopCodonPos - cdsPos.getPos() / 3;

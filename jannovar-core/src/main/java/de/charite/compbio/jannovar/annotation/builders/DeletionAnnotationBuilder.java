@@ -124,7 +124,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 		public CDSExonicAnnotationBuilder() {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
-			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
+			this.varCDSSeq = seqChangeHelper.getCDSWithGenomeVariant(change);
 			this.delFrameShift = DeletionAnnotationBuilder.this.change.getRef().length() % 3;
 
 			// Get the change begin position as CDS coordinate, handling introns and positions outside of CDS.

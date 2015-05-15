@@ -66,7 +66,8 @@ public final class GenomeVariantNormalizer {
 		int shift = 0;
 		final int LEN = change.getAlt().length();
 		final String seq = builder.toString();
-		while ((pos + LEN < seq.length()) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {
+		final int maxPos = Math.min(seq.length(), transcript.transcriptLength());
+		while ((pos + LEN < maxPos) && (seq.charAt(pos) == seq.charAt(pos + LEN))) {
 			++shift;
 			++pos;
 		}

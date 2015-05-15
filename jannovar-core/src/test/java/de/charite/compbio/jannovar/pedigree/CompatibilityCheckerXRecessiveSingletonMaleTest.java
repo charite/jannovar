@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+
 public class CompatibilityCheckerXRecessiveSingletonMaleTest extends CompatibilityCheckerTestBase {
 
 	@Before
@@ -28,21 +30,19 @@ public class CompatibilityCheckerXRecessiveSingletonMaleTest extends Compatibili
 	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXR(REF).run());
 		Assert.assertFalse(buildCheckerXR(UKN).run());
-		Assert.assertFalse(buildCheckerXR(HET).run());
 	}
 
 	@Test
 	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
 		Assert.assertFalse(buildCheckerXR(REF, REF).run());
 		Assert.assertFalse(buildCheckerXR(REF, UKN).run());
-		Assert.assertFalse(buildCheckerXR(UKN, HET).run());
-		Assert.assertFalse(buildCheckerXR(HET, HET).run());
 		Assert.assertFalse(buildCheckerXR(UKN, UKN).run());
 	}
 
 	@Test
 	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerXR(ALT).run());
+		Assert.assertTrue(buildCheckerXR(HET).run());
 	}
 
 	@Test
@@ -50,6 +50,8 @@ public class CompatibilityCheckerXRecessiveSingletonMaleTest extends Compatibili
 		Assert.assertTrue(buildCheckerXR(ALT, REF).run());
 		Assert.assertTrue(buildCheckerXR(UKN, ALT).run());
 		Assert.assertTrue(buildCheckerXR(ALT, ALT).run());
+		Assert.assertTrue(buildCheckerXR(UKN, HET).run());
+		Assert.assertTrue(buildCheckerXR(HET, HET).run());
 	}
 
 }

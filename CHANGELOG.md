@@ -13,10 +13,21 @@
 * adding module for parsing and representing HGVS-compatible nucleic and protein
   changes
 
-## v.0.15
+### jannovar-cli
+
+* Improving output file generation, jannovar-cli now uses the same extension
+  as in the input and the infix is configurable instead of being fixed to
+  ".jv".
+* Default extension is ".vcf.gz" instead of ".vcf" now.
 
 ### jannovar-core
 
+* Fixing label for `FRAMESHIFT_VARIANT` in `VariantEffect`.
+* Moving CompatibilityCheckerException to package
+  `...jannovar.pedigree.compatibilitychecker`
+* Fixing bug in transcript coordinate projection.
+* Renaming `TranscriptSequenceChangeHelper.getCDSWithChange` to
+  `.getCDSWithGenomeVariant`.
 * Renaming `*.getChange()` to `*.getGenomeVariant()`
 * Renaming `VariantAnnotator.buildAnnotationList` to `.buildAnnotations`,
   `VariantContextAnnotator.buildAnnotationList` to `.buildAnnotations`,
