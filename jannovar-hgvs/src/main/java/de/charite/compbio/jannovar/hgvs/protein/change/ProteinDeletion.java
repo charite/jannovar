@@ -19,13 +19,13 @@ public class ProteinDeletion extends ProteinChange {
 	private final ProteinSeqDescription seqDesc;
 
 	/** Construct ProteinDeletion without length and sequence information */
-	public static ProteinDeletion buildWithNoSeqDesc(boolean onlyPredicted, String firstAA, int firstPos,
+	public static ProteinDeletion buildWithoutSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
 			String lastAA, int lastPos) {
 		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos));
 	}
 
 	/** Construct ProteinDeletion with length information */
-	public static ProteinDeletion buildWithLengthInfo(boolean onlyPredicted, String firstAA, int firstPos,
+	public static ProteinDeletion buildWithLength(boolean onlyPredicted, String firstAA, int firstPos,
 			String lastAA, int lastPos, int length) {
 		return new ProteinDeletion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), length);
 	}

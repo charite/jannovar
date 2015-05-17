@@ -5,6 +5,13 @@ import com.google.common.base.Joiner;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
+// TODO(holtgrew): allowing "?" for unclear positions and offsets?
+
+/**
+ * Range in a nucleotide sequence.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ */
 public class NucleotideRange implements ConvertibleToHGVSString {
 
 	/** position of the first base */
@@ -12,8 +19,14 @@ public class NucleotideRange implements ConvertibleToHGVSString {
 	/** position of the last base */
 	private final NucleotidePointLocation lastPos;
 
-	public NucleotideRange build(NucleotidePointLocation firstPos, NucleotidePointLocation lastPos) {
-		return new NucleotideRange(firstPos, lastPos);
+	public static NucleotideRange build(int firstPos, int firstPosOffset, int lastPos, int lastPosOffset) {
+		return new NucleotideRange(NucleotidePointLocation.build(firstPos, firstPosOffset),
+				NucleotidePointLocation.build(lastPos, lastPosOffset));
+	}
+
+	public static NucleotideRange buildWithoutOffset(int firstPos, int lastPos) {
+		return new NucleotideRange(NucleotidePointLocation.buildWithoutOffset(firstPos),
+				NucleotidePointLocation.buildWithoutOffset(lastPos));
 	}
 
 	/**

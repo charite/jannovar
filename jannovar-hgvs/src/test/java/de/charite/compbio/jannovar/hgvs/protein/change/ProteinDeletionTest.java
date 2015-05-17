@@ -16,13 +16,13 @@ public class ProteinDeletionTest {
 
 	@Test
 	public void testLengthOneWithDeletedSeqLength() {
-		ProteinDeletion del = ProteinDeletion.buildWithLengthInfo(true, "A", 123, "A", 123, 1);
+		ProteinDeletion del = ProteinDeletion.buildWithLength(true, "A", 123, "A", 123, 1);
 		Assert.assertEquals("(A124del1)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testLengthOneWithBlankDeletedSeqSpec() {
-		ProteinDeletion del = ProteinDeletion.buildWithNoSeqDesc(true, "A", 123, "A", 123);
+		ProteinDeletion del = ProteinDeletion.buildWithoutSeqDescription(true, "A", 123, "A", 123);
 		Assert.assertEquals("(A124del)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
@@ -34,7 +34,7 @@ public class ProteinDeletionTest {
 
 	@Test
 	public void testLengthTwoWithDeletedSeqLength() {
-		ProteinDeletion del = ProteinDeletion.buildWithLengthInfo(true, "A", 123, "C", 124, 2);
+		ProteinDeletion del = ProteinDeletion.buildWithLength(true, "A", 123, "C", 124, 2);
 		Assert.assertEquals("(A124_C125del2)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 

@@ -5,6 +5,8 @@ import com.google.common.base.Joiner;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
+// TODO(holtgrewe): coding location is missing the case for 3' and 5' UTR
+
 /**
  * Position in a nucleotide string.
  *
@@ -18,6 +20,14 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	final int basePos;
 	/** 1-based offset into the "gaps" of the coordinate system */
 	final int offset;
+
+	public static NucleotidePointLocation build(int basePos, int offset) {
+		return new NucleotidePointLocation(basePos, offset);
+	}
+
+	public static NucleotidePointLocation buildWithoutOffset(int basePos) {
+		return new NucleotidePointLocation(basePos);
+	}
 
 	/**
 	 * Construct with given base position.
@@ -45,10 +55,18 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 		this.offset = offset;
 	}
 
+	public int getBasePos() {
+		return basePos;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
 	@Override
 	public String toHGVSString() {
 		if (offset == 0)
-			return Integer.toString(this.basePos);
+			return Integer.toString(this.basePos + 1);
 		else if (offset > 0)
 			return Joiner.on("").join(this.basePos + 1, "+", offset);
 		else

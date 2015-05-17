@@ -32,8 +32,8 @@ public class NucleotideRangeTest {
 	public void testToHGVSStringRange() {
 		NucleotideRange range = new NucleotideRange(firstLoc, lastLoc);
 
-		Assert.assertEquals("123_235-1", range.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("123_235-1", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("124_235-1", range.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("124_235-1", range.toHGVSString(AminoAcidCode.THREE_LETTER));
 	}
 
 	/**
@@ -43,8 +43,8 @@ public class NucleotideRangeTest {
 	public void testToHGVSStringSinglePos() {
 		NucleotideRange range = new NucleotideRange(firstLoc, firstLoc2);
 
-		Assert.assertEquals("123", range.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("123", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("124", range.toHGVSString(AminoAcidCode.THREE_LETTER));
 
 	}
 

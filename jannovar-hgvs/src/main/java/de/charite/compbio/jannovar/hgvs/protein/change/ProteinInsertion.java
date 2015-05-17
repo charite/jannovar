@@ -4,6 +4,11 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
+/**
+ * Insertion into a protein sequence.
+ *
+ * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ */
 public class ProteinInsertion extends ProteinChange {
 
 	/** range of length one giving the insertion location */

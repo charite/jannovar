@@ -16,13 +16,13 @@ public class ProteinDuplicationTest {
 
 	@Test
 	public void testLengthOneWithDuplicatedSeqLength() {
-		ProteinDuplication del = ProteinDuplication.buildWithLengthInfo(true, "A", 123, "A", 123, 1);
+		ProteinDuplication del = ProteinDuplication.buildWithLength(true, "A", 123, "A", 123, 1);
 		Assert.assertEquals("(A124dup1)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
 	@Test
 	public void testLengthOneWithBlankDuplicatedSeqSpec() {
-		ProteinDuplication del = ProteinDuplication.buildWithoutSeqDesc(true, "A", 123, "A", 123);
+		ProteinDuplication del = ProteinDuplication.buildWithoutSeqDescription(true, "A", 123, "A", 123);
 		Assert.assertEquals("(A124dup)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 
@@ -34,7 +34,7 @@ public class ProteinDuplicationTest {
 
 	@Test
 	public void testLengthTwoWithDuplicatedSeqLength() {
-		ProteinDuplication del = ProteinDuplication.buildWithLengthInfo(true, "A", 123, "C", 124, 2);
+		ProteinDuplication del = ProteinDuplication.buildWithLength(true, "A", 123, "C", 124, 2);
 		Assert.assertEquals("(A124_C125dup2)", del.toHGVSString(AminoAcidCode.ONE_LETTER));
 	}
 

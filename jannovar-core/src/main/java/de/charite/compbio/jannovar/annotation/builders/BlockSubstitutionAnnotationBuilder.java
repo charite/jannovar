@@ -225,10 +225,10 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() > 1)
-				proteinChange = ProteinDeletion.buildWithNoSeqDesc(true, wtAAFirst, aaChange.getPos(), wtAALast,
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
 						aaChange.getLastPos());
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() == 1)
-				proteinChange = ProteinDeletion.buildWithNoSeqDesc(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
 						aaChange.getPos());
 			else if (aaChange.getPos() == aaChange.getLastPos() || aaChange.getAlt().equals("*"))
 				proteinChange = ProteinSubstitution.build(true, wtAAFirst, aaChange.getPos(),

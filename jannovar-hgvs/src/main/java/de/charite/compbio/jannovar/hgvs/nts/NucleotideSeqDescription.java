@@ -79,4 +79,38 @@ public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 		else
 			return Integer.toString(this.ntCount);
 	}
+
+	@Override
+	public String toString() {
+		return "NucleotideSeqDescription [nts=" + nts + ", ntCount=" + ntCount + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ntCount;
+		result = prime * result + ((nts == null) ? 0 : nts.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NucleotideSeqDescription other = (NucleotideSeqDescription) obj;
+		if (ntCount != other.ntCount)
+			return false;
+		if (nts == null) {
+			if (other.nts != null)
+				return false;
+		} else if (!nts.equals(other.nts))
+			return false;
+		return true;
+	}
+
 }
