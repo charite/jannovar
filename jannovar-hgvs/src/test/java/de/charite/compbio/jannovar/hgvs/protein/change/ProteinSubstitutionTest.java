@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
 
 public class ProteinSubstitutionTest {
 
@@ -16,9 +15,9 @@ public class ProteinSubstitutionTest {
 
 	@Before
 	public void setUp() {
-		sub1 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123), "G");
-		sub2 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123), "G");
-		sub3 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123), "T");
+		sub1 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123, 0, false), "G");
+		sub2 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123, 0, false), "G");
+		sub3 = new ProteinSubstitution(true, new ProteinPointLocation("A", 123, 0, false), "T");
 	}
 
 	@Test

@@ -4,7 +4,6 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
 // TODO(holtgrewe): NucleotideTranslocation, GeneConversion are currently still missing.
-// TODO(holtgrewe): Remove superflous info about deleted characters, also in protein packages.
 
 /**
  * Base class for nucleotide changes.

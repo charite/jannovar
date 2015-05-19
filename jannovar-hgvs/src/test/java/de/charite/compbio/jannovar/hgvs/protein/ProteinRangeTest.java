@@ -11,12 +11,18 @@ public class ProteinRangeTest {
 	private ProteinRange firstRange;
 	private ProteinRange firstRange2;
 	private ProteinRange secondRange;
+	private ProteinRange offsetRange;
+	private ProteinRange downstreamOfTerminalRange;
 
 	@Before
 	public void setUp() {
 		firstRange = new ProteinRange(ProteinPointLocation.build("A", 123), ProteinPointLocation.build("T", 300));
 		firstRange2 = new ProteinRange(ProteinPointLocation.build("A", 123), ProteinPointLocation.build("T", 300));
 		secondRange = new ProteinRange(ProteinPointLocation.build("G", 125), ProteinPointLocation.build("T", 301));
+		offsetRange = new ProteinRange(ProteinPointLocation.buildWithOffset("G", 125, -1),
+				ProteinPointLocation.buildWithOffset("T", 301, -1));
+		downstreamOfTerminalRange = new ProteinRange(ProteinPointLocation.buildDownstreamOfTerminal("G", 125),
+				ProteinPointLocation.buildDownstreamOfTerminal("T", 301));
 	}
 
 	@Test
@@ -47,7 +53,16 @@ public class ProteinRangeTest {
 
 		Assert.assertEquals("A124", range.toHGVSString(AminoAcidCode.ONE_LETTER));
 		Assert.assertEquals("Ala124", range.toHGVSString(AminoAcidCode.THREE_LETTER));
+	}
 
+	@Test
+	public void testToHGVSStringWithOffset() {
+		Assert.assertEquals("Gly126-1_Thr302-1", offsetRange.toHGVSString());
+	}
+
+	@Test
+	public void testToHGVSStringDownstreamOfTerminal() {
+		Assert.assertEquals("Gly*126_Thr*302", downstreamOfTerminalRange.toHGVSString());
 	}
 
 }

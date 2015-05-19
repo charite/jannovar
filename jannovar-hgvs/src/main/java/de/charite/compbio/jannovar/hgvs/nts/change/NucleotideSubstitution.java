@@ -21,13 +21,13 @@ public class NucleotideSubstitution extends NucleotideChange {
 	/** Build {@link NucleotideSubstitution} with nucleotide positions with offset values. */
 	public static NucleotideSubstitution build(boolean onlyPredicted, int basePos, int posOffset, String fromNT,
 			String toNT) {
-		return new NucleotideSubstitution(onlyPredicted, new NucleotidePointLocation(basePos, posOffset), fromNT, toNT);
+		return new NucleotideSubstitution(onlyPredicted, NucleotidePointLocation.buildWithOffset(basePos, posOffset), fromNT, toNT);
 	}
 
 	/** Build {@link NucleotideSubstitution} with nucleotide positions without offset values. */
 	public static NucleotideSubstitution buildWithoutPosOffset(boolean onlyPredicted, int basePos, String fromNT,
 			String toNT) {
-		return new NucleotideSubstitution(onlyPredicted, new NucleotidePointLocation(basePos, 0), fromNT, toNT);
+		return new NucleotideSubstitution(onlyPredicted, NucleotidePointLocation.build(basePos), fromNT, toNT);
 	}
 
 	/** Construct with the given values */

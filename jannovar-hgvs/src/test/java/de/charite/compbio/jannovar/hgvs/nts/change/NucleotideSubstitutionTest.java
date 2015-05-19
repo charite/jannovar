@@ -13,8 +13,8 @@ public class NucleotideSubstitutionTest {
 
 	@Before
 	public void setUp() {
-		subWithOffset = new NucleotideSubstitution(true, new NucleotidePointLocation(10, 1), "A", "T");
-		subWithoutOffset = new NucleotideSubstitution(true, new NucleotidePointLocation(10, 0), "A", "T");
+		subWithOffset = new NucleotideSubstitution(true, new NucleotidePointLocation(10, 1, false), "A", "T");
+		subWithoutOffset = new NucleotideSubstitution(true, new NucleotidePointLocation(10, 0, false), "A", "T");
 	}
 
 	@Test

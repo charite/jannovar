@@ -9,9 +9,9 @@ public class NucleotidePointLocationTest {
 
 	@Test
 	public void testEquals() {
-		NucleotidePointLocation location1 = new NucleotidePointLocation(123, -3);
-		NucleotidePointLocation location2 = new NucleotidePointLocation(123, -3);
-		NucleotidePointLocation location3 = new NucleotidePointLocation(123, 3);
+		NucleotidePointLocation location1 = new NucleotidePointLocation(123, -3, false);
+		NucleotidePointLocation location2 = new NucleotidePointLocation(123, -3, false);
+		NucleotidePointLocation location3 = new NucleotidePointLocation(123, 3, false);
 
 		Assert.assertTrue(location1.equals(location2));
 		Assert.assertTrue(location2.equals(location1));
@@ -21,11 +21,13 @@ public class NucleotidePointLocationTest {
 
 	@Test
 	public void testToHGVSString() {
-		NucleotidePointLocation location = new NucleotidePointLocation(123, -3);
+		NucleotidePointLocation location1 = new NucleotidePointLocation(123, -3, false);
+		NucleotidePointLocation location2 = new NucleotidePointLocation(123, 0, true);
 
-		Assert.assertEquals("124-3", location.toHGVSString());
-		Assert.assertEquals("124-3", location.toHGVSString(AminoAcidCode.ONE_LETTER));
-		Assert.assertEquals("124-3", location.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("124-3", location1.toHGVSString());
+		Assert.assertEquals("124-3", location1.toHGVSString(AminoAcidCode.ONE_LETTER));
+		Assert.assertEquals("124-3", location1.toHGVSString(AminoAcidCode.THREE_LETTER));
+		Assert.assertEquals("*124", location2.toHGVSString());
 	}
 
 }

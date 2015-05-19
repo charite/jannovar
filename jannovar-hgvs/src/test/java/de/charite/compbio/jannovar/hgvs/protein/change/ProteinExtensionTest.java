@@ -15,7 +15,7 @@ public class ProteinExtensionTest {
 
 	@Before
 	public void setUp() throws Exception {
-		position = new ProteinPointLocation("A", 123);
+		position = new ProteinPointLocation("A", 123, 0, false);
 		normalExtension = new ProteinExtension(false, position, "T", 23);
 		noTerExtension = new ProteinExtension(false, position, "T", ProteinExtension.LEN_NO_TER);
 	}

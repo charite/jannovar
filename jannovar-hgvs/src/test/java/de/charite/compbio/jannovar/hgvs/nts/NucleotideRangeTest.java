@@ -14,9 +14,9 @@ public class NucleotideRangeTest {
 
 	@Before
 	public void setUp() {
-		firstLoc = new NucleotidePointLocation(123);
-		firstLoc2 = new NucleotidePointLocation(123, 0);
-		lastLoc = new NucleotidePointLocation(234, -1);
+		firstLoc = new NucleotidePointLocation(123, 0, false);
+		firstLoc2 = new NucleotidePointLocation(123, 0, false);
+		lastLoc = new NucleotidePointLocation(234, -1, false);
 	}
 
 	@Test

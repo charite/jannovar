@@ -20,7 +20,7 @@ public class ProteinExtension extends ProteinChange {
 
 	/** Construct normal {@link ProteinExtension} */
 	public static ProteinExtension build(boolean onlyPredicted, String wtAA, int pos, String targetAA, int shift) {
-		return build(onlyPredicted, new ProteinPointLocation(wtAA, pos), targetAA, shift);
+		return build(onlyPredicted, ProteinPointLocation.build(wtAA, pos), targetAA, shift);
 	}
 
 	/** Construct normal {@link ProteinExtension} */
@@ -31,7 +31,7 @@ public class ProteinExtension extends ProteinChange {
 
 	/** Construct {@link ProteinExtension} without a terminal in the extension */
 	public static ProteinExtension buildWithoutTerminal(boolean onlyPredicted, String wtAA, int pos, String targetAA) {
-		return new ProteinExtension(onlyPredicted, new ProteinPointLocation(wtAA, pos), targetAA, LEN_NO_TER);
+		return new ProteinExtension(onlyPredicted, ProteinPointLocation.build(wtAA, pos), targetAA, LEN_NO_TER);
 	}
 
 	/** Construct {@link ProteinExtension} without a terminal in the extension */

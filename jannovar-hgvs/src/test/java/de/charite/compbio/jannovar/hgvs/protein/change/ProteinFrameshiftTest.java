@@ -16,7 +16,7 @@ public class ProteinFrameshiftTest {
 
 	@Before
 	public void setUp() throws Exception {
-		position = new ProteinPointLocation("A", 123);
+		position = new ProteinPointLocation("A", 123, 0, false);
 		fullFrameshift = new ProteinFrameshift(false, position, "T", 23);
 		noTerFrameshift = new ProteinFrameshift(false, position, "T", ProteinFrameshift.LEN_NO_TER);
 		shortFrameshift = new ProteinFrameshift(false, position, null, ProteinFrameshift.LEN_SHORT);

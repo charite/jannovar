@@ -23,7 +23,18 @@ public class ProteinRange implements ConvertibleToHGVSString {
 	private final ProteinPointLocation last;
 
 	public static ProteinRange build(String firstAA, int first, String lastAA, int last) {
-		return new ProteinRange(new ProteinPointLocation(firstAA, first), new ProteinPointLocation(lastAA, last));
+		return new ProteinRange(ProteinPointLocation.build(firstAA, first), ProteinPointLocation.build(lastAA, last));
+	}
+
+	public static ProteinRange buildWithOffset(String firstAA, int first, int firstOffset, String lastAA, int last,
+			int lastOffset) {
+		return new ProteinRange(ProteinPointLocation.buildWithOffset(firstAA, first, firstOffset),
+				ProteinPointLocation.buildWithOffset(lastAA, last, lastOffset));
+	}
+
+	public static ProteinRange buildDownstreamOfTerminal(String firstAA, int first, String lastAA, int last) {
+		return new ProteinRange(ProteinPointLocation.buildWithOffset(firstAA, first, 0),
+				ProteinPointLocation.buildWithOffset(lastAA, last, 0));
 	}
 
 	/**

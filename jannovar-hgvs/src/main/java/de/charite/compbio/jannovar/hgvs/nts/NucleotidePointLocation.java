@@ -5,8 +5,6 @@ import com.google.common.base.Joiner;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
-// TODO(holtgrewe): coding location is missing the case for 3' and 5' UTR
-
 /**
  * Position in a nucleotide string.
  *
@@ -20,13 +18,22 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	final int basePos;
 	/** 1-based offset into the "gaps" of the coordinate system */
 	final int offset;
+	/**
+	 * <code>true</code> if the position if downstream of the CDS end (3' UTR), use negative {@link #basePos} for 5'
+	 * UTR.
+	 */
+	final boolean downstreamOfCDS;
 
-	public static NucleotidePointLocation build(int basePos, int offset) {
-		return new NucleotidePointLocation(basePos, offset);
+	public static NucleotidePointLocation build(int basePos) {
+		return new NucleotidePointLocation(basePos, 0, false);
 	}
 
-	public static NucleotidePointLocation buildWithoutOffset(int basePos) {
-		return new NucleotidePointLocation(basePos);
+	public static NucleotidePointLocation buildWithOffset(int basePos, int offset) {
+		return new NucleotidePointLocation(basePos, offset, false);
+	}
+
+	public static NucleotidePointLocation buildDownstreamOfCDS(int basePos) {
+		return new NucleotidePointLocation(basePos, 0, true);
 	}
 
 	/**
@@ -35,10 +42,13 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	 * @param basePos
 	 *            0-based position in the nucleotide string
 	 */
+	@Deprecated
+	// in favour of full constructor
 	public NucleotidePointLocation(int basePos) {
 		super();
 		this.basePos = basePos;
 		this.offset = 0;
+		this.downstreamOfCDS = false;
 	}
 
 	/**
@@ -48,11 +58,14 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 	 *            0-based position in the nucleotide string
 	 * @param offset
 	 *            1-based offset (only non-0 values are allowed)
+	 * @param downstreamOfCDS
+	 *            <code>true</code> if downstream of CDS
 	 */
-	public NucleotidePointLocation(int basePos, int offset) {
+	public NucleotidePointLocation(int basePos, int offset, boolean downstreamOfCDS) {
 		super();
 		this.basePos = basePos;
 		this.offset = offset;
+		this.downstreamOfCDS = downstreamOfCDS;
 	}
 
 	public int getBasePos() {
@@ -63,9 +76,15 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 		return offset;
 	}
 
+	public boolean isDownstreamOfCDS() {
+		return downstreamOfCDS;
+	}
+
 	@Override
 	public String toHGVSString() {
-		if (offset == 0)
+		if (downstreamOfCDS)
+			return "*" + Integer.toString(this.basePos + 1);
+		else if (offset == 0)
 			return Integer.toString(this.basePos + 1);
 		else if (offset > 0)
 			return Joiner.on("").join(this.basePos + 1, "+", offset);
@@ -81,8 +100,8 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 
 	@Override
 	public String toString() {
-		return "NucleotidePosition [basePos=" + basePos + ", offset=" + offset + ", toString()=" + super.toString()
-				+ "]";
+		return "NucleotidePointLocation [basePos=" + basePos + ", offset=" + offset + ", downstreamOfCDS="
+				+ downstreamOfCDS + ", toString()=" + super.toString() + "]";
 	}
 
 	@Override
@@ -90,6 +109,7 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + basePos;
+		result = prime * result + (downstreamOfCDS ? 1231 : 1237);
 		result = prime * result + offset;
 		return result;
 	}
@@ -104,6 +124,8 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 			return false;
 		NucleotidePointLocation other = (NucleotidePointLocation) obj;
 		if (basePos != other.basePos)
+			return false;
+		if (downstreamOfCDS != other.downstreamOfCDS)
 			return false;
 		if (offset != other.offset)
 			return false;
