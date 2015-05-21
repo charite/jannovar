@@ -57,7 +57,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardUpstreamOfTranscription() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"-204",
 				builderForward.getNucleotidePointLocation(
@@ -70,7 +70,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardDownstreamOfTranscription() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"*69",
 				builderForward.getNucleotidePointLocation(
@@ -83,7 +83,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardUpstreamOfCDS() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"-1",
 				builderForward.getNucleotidePointLocation(
@@ -96,7 +96,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardDownstreamOfCDS() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"*1",
 				builderForward.getNucleotidePointLocation(
@@ -109,7 +109,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardCDSExon() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"381",
 				builderForward.getNucleotidePointLocation(
@@ -122,7 +122,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardCDSIntron() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"691-217",
 				builderForward.getNucleotidePointLocation(
@@ -135,7 +135,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardNonCDSExon() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"-39",
 				builderForward.getNucleotidePointLocation(
@@ -156,7 +156,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testForwardNonCDSIntron() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoForward);
 		Assert.assertEquals(
 				"-69-20",
 				builderForward.getNucleotidePointLocation(
@@ -169,7 +169,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testReverseUpstreamOfTranscription() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoReverse);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoReverse);
 		Assert.assertEquals(
 				"-562",
 				builderForward.getNucleotidePointLocation(
@@ -182,7 +182,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testReverseDownstreamOfTranscription() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.infoReverse);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.infoReverse);
 		Assert.assertEquals(
 				"*2522",
 				builderForward.getNucleotidePointLocation(
@@ -195,7 +195,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testNonCodingForwardExon() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.ncInfoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.ncInfoForward);
 		Assert.assertEquals(
 				"1",
 				builderForward.getNucleotidePointLocation(
@@ -208,7 +208,7 @@ public class HGVSPositionBuilderTest {
 
 	@Test
 	public void testNonCodingForwardIntron() {
-		HGVSPositionBuilder builderForward = new HGVSPositionBuilder(this.ncInfoForward);
+		NucleotidePointLocationBuilder builderForward = new NucleotidePointLocationBuilder(this.ncInfoForward);
 		Assert.assertEquals(
 				"354+1",
 				builderForward.getNucleotidePointLocation(

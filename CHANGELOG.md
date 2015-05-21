@@ -4,6 +4,7 @@
 
 ## jannovar-core
 
+* Renaming HGVSPositionBuilder to NucleotidePointLocationBuilder.
 * using jannovar-hgvs for representing the changes
 * more precise HGVS annotation in some cases
 * predictions are wrapped in parentheses

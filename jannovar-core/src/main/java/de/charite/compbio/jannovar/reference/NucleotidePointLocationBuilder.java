@@ -3,15 +3,13 @@ package de.charite.compbio.jannovar.reference;
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 
-// TODO(holtgrewe): Rename to NucleotidePointLocationBuilder
-
 /**
  * Helper class that allows easy building of {@link NucleotidePointLocation}s.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
 @Immutable
-public final class HGVSPositionBuilder {
+public final class NucleotidePointLocationBuilder {
 
 	/** transcript to use for the coordinate system */
 	final TranscriptModel transcript;
@@ -21,7 +19,7 @@ public final class HGVSPositionBuilder {
 	final TranscriptSequenceOntologyDecorator soDecorator;
 
 	/** Construct the position builder with the given transcript */
-	public HGVSPositionBuilder(TranscriptModel transcript) {
+	public NucleotidePointLocationBuilder(TranscriptModel transcript) {
 		this.transcript = transcript;
 		this.projector = new TranscriptProjectionDecorator(transcript);
 		this.soDecorator = new TranscriptSequenceOntologyDecorator(transcript);

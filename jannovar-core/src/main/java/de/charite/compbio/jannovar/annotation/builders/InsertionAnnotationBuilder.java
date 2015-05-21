@@ -28,7 +28,7 @@ import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.DuplicationChecker;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
-import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
+import de.charite.compbio.jannovar.reference.NucleotidePointLocationBuilder;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -108,7 +108,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			throw new Error("Bug: at this point, the position must be a transcript position");
 		}
 		if (DuplicationChecker.isDuplication(transcript.getSequence(), change.getAlt(), txPos.getPos())) {
-			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+			NucleotidePointLocationBuilder posBuilder = new NucleotidePointLocationBuilder(transcript);
 			char prefix = transcript.isCoding() ? 'c' : 'n';
 			if (change.getAlt().length() == 1) {
 				try {

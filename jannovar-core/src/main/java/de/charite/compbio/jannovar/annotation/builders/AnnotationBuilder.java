@@ -22,7 +22,7 @@ import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomeVariantNormalizer;
-import de.charite.compbio.jannovar.reference.HGVSPositionBuilder;
+import de.charite.compbio.jannovar.reference.NucleotidePointLocationBuilder;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
@@ -393,7 +393,7 @@ abstract class AnnotationBuilder {
 	 *         of non-coding transcripts)
 	 */
 	private NucleotideRange buildNTChangeRange(TranscriptModel transcript, GenomeVariant change) {
-		HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
+		NucleotidePointLocationBuilder posBuilder = new NucleotidePointLocationBuilder(transcript);
 
 		GenomePosition firstChangePos = change.getGenomeInterval().getGenomeBeginPos();
 		GenomePosition lastChangePos = change.getGenomeInterval().getGenomeEndPos().shifted(-1);
