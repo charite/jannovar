@@ -6,6 +6,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.ProjectionException;
@@ -38,8 +39,10 @@ class VCFAnnotationData {
 	public int rank = -1;
 	/** total number of exons/introns */
 	public int totalRank = -1;
-	/** nucleotide HGVS description */
-	public String ntHGVSDescription = null;
+	/** whether or not the transcript is coding */
+	public boolean isCoding = false;
+	/** CDS-level {@link NucleotideChange} */
+	public NucleotideChange cdsNTChange = null;
 	/** predicted {@link ProteinChange} */
 	public ProteinChange proteinChange = null;
 	/** transcript position, zero based */
@@ -111,7 +114,8 @@ class VCFAnnotationData {
 		final Joiner joiner = Joiner.on('&').useForNull("");
 		final String effectsString = joiner.join(FluentIterable.from(effects).transform(VariantEffect.TO_SO_TERM));
 		return new Object[] { allele, effectsString, impact, geneSymbol, geneID, featureType, featureID,
-				featureBioType, getRankString(), ntHGVSDescription,
+				featureBioType, getRankString(),
+				(cdsNTChange == null) ? cdsNTChange : ((isCoding ? "c." : "n.") + cdsNTChange.toHGVSString()),
 				(proteinChange == null) ? proteinChange : ("p." + proteinChange.toHGVSString()), getTXPosString(),
 				getCDSPosString(), getAminoAcidPosString(), getDistanceString(), joiner.join(messages) };
 	}

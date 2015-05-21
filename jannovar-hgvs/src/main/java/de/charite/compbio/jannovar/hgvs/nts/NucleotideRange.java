@@ -25,8 +25,7 @@ public class NucleotideRange implements ConvertibleToHGVSString {
 	}
 
 	public static NucleotideRange buildWithoutOffset(int firstPos, int lastPos) {
-		return new NucleotideRange(NucleotidePointLocation.build(firstPos),
-				NucleotidePointLocation.build(lastPos));
+		return new NucleotideRange(NucleotidePointLocation.build(firstPos), NucleotidePointLocation.build(lastPos));
 	}
 
 	/**
@@ -37,6 +36,14 @@ public class NucleotideRange implements ConvertibleToHGVSString {
 		super();
 		this.firstPos = firstPos;
 		this.lastPos = lastPost;
+	}
+
+	public NucleotidePointLocation getFirstPos() {
+		return firstPos;
+	}
+
+	public NucleotidePointLocation getLastPos() {
+		return lastPos;
 	}
 
 	@Override

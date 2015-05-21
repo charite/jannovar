@@ -6,6 +6,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -61,8 +62,14 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	/** location of the annotation, <code>null</code> if not even nearby a {@link TranscriptModel} */
 	private final AnnotationLocation annoLoc;
 
-	/** HGVS nucleotide variant annotation */
-	private final String ntHGVSDescription;
+	/** Chromosome/genome-level change, to be prepended with "g." */
+	private final NucleotideChange genomicNTChange;
+
+	/**
+	 * CDS-level {@link NucleotideChange} for coding transcripts (to be prependend with "c.") and transcript level for
+	 * non-coding transcripts (to be prepended with "n.")
+	 */
+	private final NucleotideChange cdsNTChange;
 
 	/** change on the protein level */
 	private final ProteinChange proteinChange;
@@ -77,7 +84,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *            {@link AnnotationMessage}s to use in this annotation
 	 */
 	public Annotation(Collection<AnnotationMessage> messages) {
-		this(null, null, null, null, null, null, messages);
+		this(null, null, null, null, null, null, null, messages);
 	}
 
 	/**
@@ -93,14 +100,17 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
-	 * @param ntHGVSDescription
-	 *            nucleotide variant description following the HGVS nomenclauture
+	 * @param genomicNTChange
+	 *            ghromosome/genome-level change, to be prepended with "g."
+	 * @param cdsNTChange
+	 *            CDS-level {@link NucleotideChange}
 	 * @param proteinChange
 	 *            predicted {@link ProteinChange}
 	 */
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
-			AnnotationLocation annoLoc, String ntHGVSDescription, ProteinChange proteinChange) {
-		this(transcript, change, varTypes, annoLoc, ntHGVSDescription, proteinChange, ImmutableSortedSet
+			AnnotationLocation annoLoc, NucleotideChange genomicNTChange, NucleotideChange cdsNTChange,
+			ProteinChange proteinChange) {
+		this(transcript, change, varTypes, annoLoc, genomicNTChange, cdsNTChange, proteinChange, ImmutableSortedSet
 				.<AnnotationMessage> of());
 	}
 
@@ -117,16 +127,18 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *            type of the variants
 	 * @param annoLoc
 	 *            location of the variant
-	 * @param ntHGVSDescription
-	 *            nucleotide variant description following the HGVS nomenclauture
+	 * @param genomicNTChange
+	 *            ghromosome/genome-level change, to be prepended with "g."
+	 * @param cdsNTChange
+	 *            CDS-level {@link NucleotideChange}
 	 * @param proteinChange
 	 *            {@link ProteinChange} with a predicted protein change
 	 * @param messages
 	 *            {@link Collection} of {@link AnnotatioMessage} objects
 	 */
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> varTypes,
-			AnnotationLocation annoLoc, String ntHGVSDescription, ProteinChange proteinChange,
-			Collection<AnnotationMessage> messages) {
+			AnnotationLocation annoLoc, NucleotideChange genomicNTChange, NucleotideChange cdsNTChange,
+			ProteinChange proteinChange, Collection<AnnotationMessage> messages) {
 		if (change != null)
 			change = change.withStrand(Strand.FWD); // enforce forward strand
 		this.change = change;
@@ -135,7 +147,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		else
 			this.effects = ImmutableSortedSet.copyOf(varTypes);
 		this.annoLoc = annoLoc;
-		this.ntHGVSDescription = ntHGVSDescription;
+		this.genomicNTChange = genomicNTChange;
+		this.cdsNTChange = cdsNTChange;
 		this.proteinChange = proteinChange;
 		this.transcript = transcript;
 		this.messages = ImmutableSortedSet.copyOf(messages);
@@ -161,14 +174,49 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return annoLoc;
 	}
 
-	/** @return HGVS nucleotide variant annotation */
-	public String getNucleotideHGVSDescription() {
-		return ntHGVSDescription;
+	/**
+	 * @return {@link NucleotideChange} with genomic changes
+	 */
+	public NucleotideChange getGenomicNTChange() {
+		return genomicNTChange;
+	}
+
+	/**
+	 * @return genomic nucleotide change String, including the "g." prefix.
+	 */
+	public String getGenomicNTChangeStr() {
+		return "g." + genomicNTChange.toHGVSString();
+	}
+
+	/**
+	 * @return {@link NucleotideChange} with changes on the CDS level for coding transcripts and on the transcript level
+	 *         otherwise, null if the change does not affect any transcript
+	 */
+	public NucleotideChange getCDSNTChange() {
+		return cdsNTChange;
+	}
+
+	/** @return CDS nucleotide change String, including the "p." prefix or the empty string if there is no annotation. */
+	public String getCDSNTChangeStr() {
+		if (cdsNTChange == null || transcript == null)
+			return "";
+		else if (transcript.isCoding())
+			return "c." + cdsNTChange.toHGVSString();
+		else
+			return "n." + cdsNTChange.toHGVSString();
 	}
 
 	/** @return predicted {@link ProteinChange} */
 	public ProteinChange getProteinChange() {
 		return proteinChange;
+	}
+
+	/** @return protein change String, including the "p." prefix or the empty string if there is no annotation. */
+	public String getProteinChangeStr() {
+		if (proteinChange == null)
+			return "";
+		else
+			return "p." + proteinChange.toHGVSString();
 	}
 
 	/** @return the transcript, <code>null</code> for {@link VariantEffect#INTERGENIC} annotations */
@@ -204,7 +252,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		data.impact = getPutativeImpact();
 		data.setTranscriptAndChange(transcript, change);
 		data.setAnnoLoc(annoLoc);
-		data.ntHGVSDescription = ntHGVSDescription;
+		data.isCoding = transcript.isCoding();
+		data.cdsNTChange = cdsNTChange;
 		data.proteinChange = proteinChange;
 		data.messages = messages;
 		if (escape)
@@ -246,8 +295,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return Joiner
 				.on(":")
 				.skipNulls()
-				.join(transcript.getGeneSymbol(), transcript.getAccession(), ntHGVSDescription,
-						(proteinChange == null) ? null : "p." + proteinChange.toHGVSString());
+				.join(transcript.getGeneSymbol(), transcript.getAccession(), getCDSNTChangeStr(), getProteinChangeStr());
 	}
 
 	/**
@@ -309,7 +357,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 
 	@Override
 	public String toString() {
-		return "Annotation [change=" + change + ", effects=" + effects + ", ntHGVSDescription=" + ntHGVSDescription
+		return "Annotation [change=" + change + ", effects=" + effects + ", cdsNTChange=" + cdsNTChange
 				+ ", proteinChange=" + proteinChange.toHGVSString() + ", transcript.getAccession()="
 				+ transcript.getAccession() + "]";
 	}
@@ -322,7 +370,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		result = prime * result + ((annoLoc == null) ? 0 : annoLoc.hashCode());
 		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
 		result = prime * result + ((messages == null) ? 0 : messages.hashCode());
-		result = prime * result + ((ntHGVSDescription == null) ? 0 : ntHGVSDescription.hashCode());
+		result = prime * result + ((cdsNTChange == null) ? 0 : cdsNTChange.hashCode());
 		result = prime * result + ((transcript == null) ? 0 : transcript.hashCode());
 		return result;
 	}
@@ -356,10 +404,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 				return false;
 		} else if (!messages.equals(other.messages))
 			return false;
-		if (ntHGVSDescription == null) {
-			if (other.ntHGVSDescription != null)
+		if (cdsNTChange == null) {
+			if (other.cdsNTChange != null)
 				return false;
-		} else if (!ntHGVSDescription.equals(other.ntHGVSDescription))
+		} else if (!cdsNTChange.equals(other.cdsNTChange))
 			return false;
 		if (transcript == null) {
 			if (other.transcript != null)

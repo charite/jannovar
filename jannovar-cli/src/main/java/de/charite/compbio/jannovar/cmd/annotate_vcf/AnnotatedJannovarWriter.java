@@ -152,7 +152,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 			String annt = Joiner
 					.on(":")
 					.skipNulls()
-					.join(a.getNucleotideHGVSDescription(),
+					.join(a.getCDSNTChange().toHGVSString(),
 							(a.getProteinChange() == null) ? null : ("p." + a.getProteinChange().toHGVSString()));
 			String sym = a.getTranscript().getGeneSymbol();
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,

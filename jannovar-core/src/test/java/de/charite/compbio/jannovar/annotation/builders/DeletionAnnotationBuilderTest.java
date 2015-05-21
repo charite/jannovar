@@ -68,7 +68,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), annotation1.getEffects());
 	}
@@ -81,7 +81,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), annotation1.getEffects());
 	}
@@ -95,7 +95,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 		// intergenic downstream
@@ -105,7 +105,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation2.getEffects());
 	}
@@ -121,7 +121,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-204_-70+65del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("-204_-70+65del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.TRANSCRIPT_ABLATION), annotation1.getEffects());
 	}
@@ -134,7 +134,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.691-11del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("691-11del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.getEffects());
@@ -148,7 +148,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-192del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("-192del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
@@ -161,7 +161,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*59del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("*59del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
@@ -177,7 +177,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("0?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation1.getEffects());
 
@@ -188,7 +188,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-9_2del", annotation2.getNucleotideHGVSDescription());
+		Assert.assertEquals("-9_2del", annotation2.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("0?", annotation2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation2.getEffects());
 
@@ -199,7 +199,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.3_13del", annotation3.getNucleotideHGVSDescription());
+		Assert.assertEquals("3_13del", annotation3.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("0?", annotation3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation3.getEffects());
 
@@ -212,7 +212,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation4.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-69-201_1del", annotation4.getNucleotideHGVSDescription());
+		Assert.assertEquals("-69-201_1del", annotation4.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("0?", annotation4.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.START_LOST), annotation4.getEffects());
 	}
@@ -229,7 +229,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2067del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("2067del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(*689Tyrext*?)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 				annotation1.getEffects());
@@ -241,7 +241,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2066del", annotation2.getNucleotideHGVSDescription());
+		Assert.assertEquals("2066del", annotation2.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(*689Cysext*?)", annotation2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 				annotation2.getEffects());
@@ -253,7 +253,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2065del", annotation3.getNucleotideHGVSDescription());
+		Assert.assertEquals("2065del", annotation3.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(*689Serext*?)", annotation3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 				annotation3.getEffects());
@@ -265,7 +265,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation4.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation4.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2065_2066del", annotation4.getNucleotideHGVSDescription());
+		Assert.assertEquals("2065_2066del", annotation4.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(*689Alaext*15)", annotation4.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 				annotation4.getEffects());
@@ -277,7 +277,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation5.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation5.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2063_*3del", annotation5.getNucleotideHGVSDescription());
+		Assert.assertEquals("2063_*3del", annotation5.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(*689Hisext*14)", annotation5.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 				annotation5.getEffects());
@@ -292,7 +292,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.691-1del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("691-1del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
@@ -304,7 +304,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.691_693del", annotation2.getNucleotideHGVSDescription());
+		Assert.assertEquals("691_693del", annotation2.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Trp231del)", annotation2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation2.getEffects());
@@ -319,7 +319,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.943_952del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("943_952del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Gly315Profs*26)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -334,7 +334,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(AnnotationLocation.INVALID_RANK, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.691-3_693del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("691-3_693del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Trp231del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION, VariantEffect.SPLICE_ACCEPTOR_VARIANT),
@@ -347,7 +347,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation2.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.704_712del", annotation2.getNucleotideHGVSDescription());
+		Assert.assertEquals("704_712del", annotation2.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Val235_Val237del)", annotation2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation2.getEffects());
 
@@ -358,7 +358,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation3.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.708_716del", annotation3.getNucleotideHGVSDescription());
+		Assert.assertEquals("708_716del", annotation3.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Gln236_Asp239delinsHis)", annotation3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation3.getEffects());
 	}
@@ -382,7 +382,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.119_123del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("119_123del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Gln40Profs*18)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -404,7 +404,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.488_490del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("488_490del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Ser163del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -428,7 +428,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1476_1477del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1476_1477del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Asn494Profs*38)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -450,7 +450,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.369_377del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("369_377del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Val124_Thr126del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -472,7 +472,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.275_285del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("275_285del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Ile92Argfs*26)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -496,7 +496,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1503_1507del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1503_1507del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Glu501Aspfs*96)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -518,7 +518,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1219_1221del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1219_1221del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Val407del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -540,7 +540,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.985del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("985del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Thr329Leufs*17)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
@@ -571,7 +571,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.324_326del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("324_326del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Phe109del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -595,7 +595,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.324_326del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("324_326del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Phe109del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -619,7 +619,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1542_1544del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1542_1544del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Thr517del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -643,7 +643,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.791_792del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("791_792del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Lys264Argfs*10)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -667,7 +667,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.890_892del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("890_892del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Leu297_Lys298delinsGln)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -689,7 +689,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.422_425del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("422_425del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Cys141Serfs*21)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -713,7 +713,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.377del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("377del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Pro126Glnfs*18)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
@@ -737,7 +737,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.542_543del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("542_543del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Leu181Hisfs*20)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
@@ -761,7 +761,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.404_421del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("404_421del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Glu135_Leu140del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -785,7 +785,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.100_102del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("100_102del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Lys34del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -809,7 +809,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(13, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.842_844del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("842_844del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Glu281del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -834,7 +834,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1310del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1310del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Gly437Valfs*5)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_REGION_VARIANT),
@@ -860,7 +860,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.243_248del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("243_248del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Leu82_Gln83del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -884,7 +884,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.552_557del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("552_557del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Ser185_Leu186del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -912,7 +912,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.560del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("560del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Gly187Valfs*23)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
@@ -938,7 +938,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.317_318del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("317_318del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Pro106Argfs*?)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT), annotation1.getEffects());
 	}
@@ -960,7 +960,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.72_90del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("72_90del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Ser25Hisfs*78)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -984,7 +984,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1152_1157del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1152_1157del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(His384_Arg386delinsGln)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DISRUPTIVE_INFRAME_DELETION), annotation1.getEffects());
 	}
@@ -1008,7 +1008,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-25del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("-25del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
@@ -1032,7 +1032,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-7_-6del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("-7_-6del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
@@ -1056,7 +1056,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-11_-5del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("-11_-5del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
@@ -1080,7 +1080,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.315-2del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("315-2del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
@@ -1105,7 +1105,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1027del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1027del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Val343Trpfs*33)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_DONOR_VARIANT),
@@ -1131,7 +1131,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(42, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.5842del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("5842del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
@@ -1153,7 +1153,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.26del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("26del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
@@ -1178,7 +1178,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.385del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("385del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
@@ -1204,7 +1204,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(12, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1068_1071del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1068_1071del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Glu358del)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION), annotation1.getEffects());
 	}
@@ -1228,7 +1228,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2461del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("2461del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.STOP_LOST),
 				annotation1.getEffects());
@@ -1255,7 +1255,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(14, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2296del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("2296del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(Arg766Glyfs*77)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_TRUNCATION, VariantEffect.SPLICE_DONOR_VARIANT),
@@ -1282,7 +1282,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(-1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1260_*10del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("1260_*10del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(*420Serext*?)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST),
 				annotation1.getEffects());
@@ -1309,7 +1309,7 @@ public class DeletionAnnotationBuilderTest {
 				.build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.138+1del", annotation1.getNucleotideHGVSDescription());
+		Assert.assertEquals("138+1del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());

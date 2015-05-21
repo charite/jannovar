@@ -1,10 +1,12 @@
 package de.charite.compbio.jannovar.reference;
 
 import de.charite.compbio.jannovar.Immutable;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
+
+// TODO(holtgrewe): Rename to NucleotidePointLocationBuilder
 
 /**
- * Helper class that allows easy building of HGVS position strings.
+ * Helper class that allows easy building of {@link NucleotidePointLocation}s.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -27,32 +29,31 @@ public final class HGVSPositionBuilder {
 
 	/**
 	 * @param pos
-	 *            {@link GenomePosition} with to translate into HGSV position
-	 * @return the HGVS <code>String</code> with the positions's representation, given the transcript in
-	 *         {@link #transcript}.
+	 *            {@link GenomePosition} with to translate into {@link NucleotidePointLocation}
+	 * @return {@link NucleotidePointLocation}, given the transcript in {@link #transcript}.
 	 */
-	public String getCDNAPosStr(GenomePosition pos) {
+	public NucleotidePointLocation getNucleotidePointLocation(GenomePosition pos) {
 		// Guard against cases upstream/downstream of transcription region.
 		if (transcript.getTXRegion().isRightOf(pos)) // upstream of transcription region
-			return getCDNAPosStrForUpstreamPos(pos);
+			return getCDNANucleotidePointLocationForUpstreamPos(pos);
 		else if (transcript.getTXRegion().isLeftOf(pos)) // downstream of transcription region
-			return getCDNAPosStrForDownstreamPos(pos);
+			return getCDNANucleotidePointLocationForDownstreamPos(pos);
 
 		// The main difference now is between intronic and exonic regions.
 		if (soDecorator.liesInExon(new GenomeInterval(pos, 0)))
-			return getCDNAPosStrForExonPos(pos);
+			return getCDNANucleotidePointLocationForExonPos(pos);
 		else
-			return getCDNAPosStrForIntronPos(pos);
+			return getCDNANucleotidePointLocationForIntronPos(pos);
 	}
 
 	/**
-	 * Return HGVS position string in case of exon positions.
+	 * Return {@link NucleotidePointLocation} in case of exon positions.
 	 *
 	 * @param pos
 	 *            position to get the HGVS position for
-	 * @return HGVS position string
+	 * @return corresponding {@link NucleotidePointLocation}
 	 */
-	private String getCDNAPosStrForExonPos(GenomePosition pos) {
+	private NucleotidePointLocation getCDNANucleotidePointLocationForExonPos(GenomePosition pos) {
 		try {
 			GenomePosition zeroCDSStartPos = getCDSRegion().getGenomeBeginPos();
 			TranscriptPosition tCDSStartPos = projector.genomeToTranscriptPos(zeroCDSStartPos);
@@ -62,13 +63,13 @@ public final class HGVSPositionBuilder {
 
 			if (getCDSRegion().contains(pos)) {
 				// pos lies within the CDS, the easiest case
-				return Integer.toString(tPos.getPos() - tCDSStartPos.getPos() + 1);
+				return NucleotidePointLocation.build(tPos.getPos() - tCDSStartPos.getPos());
 			} else if (getCDSRegion().isRightOf(pos)) {
 				// pos lies upstream of the CDS
-				return StringUtil.concatenate("-", tCDSStartPos.getPos() - tPos.getPos());
+				return NucleotidePointLocation.build(-(tCDSStartPos.getPos() - tPos.getPos()));
 			} else {
 				// pos lies downstream of the CDS
-				return StringUtil.concatenate("*", tPos.getPos() - tCDSEndPos.getPos());
+				return NucleotidePointLocation.buildDownstreamOfCDS(tPos.getPos() - tCDSEndPos.getPos() - 1);
 			}
 		} catch (ProjectionException e) {
 			throw new Error("Bug: position must lie in CDS at this point. " + e.getMessage());
@@ -76,13 +77,13 @@ public final class HGVSPositionBuilder {
 	}
 
 	/**
-	 * Return HGVS position string in case of intron positions.
+	 * Return {@link NucleotidePointLocation} in case of intron positions.
 	 *
 	 * @param pos
 	 *            position to get the HGVS position for
-	 * @return HGVS position string
+	 * @return corresponding {@link NucleotidePointLocation}
 	 */
-	private String getCDNAPosStrForIntronPos(GenomePosition pos) {
+	private NucleotidePointLocation getCDNANucleotidePointLocationForIntronPos(GenomePosition pos) {
 		// Determine which exon is the closest one, ties are broken to the downstream direction as in HGVS,
 		// generate offset position within exon.
 		final int exonNumber = projector.locateIntron(pos); // also intronNumber ;)
@@ -91,50 +92,50 @@ public final class HGVSPositionBuilder {
 		GenomePosition exonEndPos = transcript.getExonRegions().get(exonNumber).getGenomeEndPos();
 		GenomePosition nextExonBeginPos = transcript.getExonRegions().get(exonNumber + 1).getGenomeBeginPos();
 		GenomePosition basePos = null;
-		String offsetStr = null;
+		int offset = 0;
 		if (pos.differenceTo(exonEndPos) < nextExonBeginPos.differenceTo(pos)) {
 			basePos = exonEndPos.shifted(-1);
-			offsetStr = StringUtil.concatenate("+", pos.differenceTo(exonEndPos) + 1);
+			offset = pos.differenceTo(exonEndPos) + 1;
 		} else {
 			basePos = nextExonBeginPos;
-			offsetStr = StringUtil.concatenate("-", nextExonBeginPos.differenceTo(pos));
+			offset = -nextExonBeginPos.differenceTo(pos);
 		}
 
-		// Get string for the exonic position exonPos and paste together final position string.
-		return StringUtil.concatenate(getCDNAPosStrForExonPos(basePos), offsetStr);
+		NucleotidePointLocation baseLoc = getCDNANucleotidePointLocationForExonPos(basePos);
+		return new NucleotidePointLocation(baseLoc.getBasePos(), offset, baseLoc.isDownstreamOfCDS());
 	}
 
 	/**
-	 * Return HGVS position string in case of upstream positions.
+	 * Return {@link NucleotidePointLocation} in case of upstream positions.
 	 *
 	 * @param pos
 	 *            position to get the HGVS position for
-	 * @return HGVS position string
+	 * @return corresponding {@link NucleotidePointLocation}
 	 */
-	private String getCDNAPosStrForUpstreamPos(GenomePosition pos) {
+	private NucleotidePointLocation getCDNANucleotidePointLocationForUpstreamPos(GenomePosition pos) {
 		// The upstream position is simply given as "-$count" where $count is the transcript position of the CDS
 		// start plus the genomic base distance of pos to the CDS start.
 		try {
 			TranscriptPosition tPos = projector.genomeToTranscriptPos(getCDSRegion().getGenomeBeginPos());
 			int numBases = transcript.getTXRegion().getGenomeBeginPos().differenceTo(pos);
-			return StringUtil.concatenate("-", tPos.getPos() + numBases);
+			return NucleotidePointLocation.build(-(tPos.getPos() + numBases));
 		} catch (ProjectionException e) {
 			throw new Error("CDS end position must be translatable to transcript position.");
 		}
 	}
 
 	/**
-	 * Return HGVS position string in case of downstream positions.
+	 * Return {@link NucleotidePointLocation} in case of downstream positions.
 	 *
 	 * @param pos
 	 *            position to get the HGVS position for
-	 * @return HGVS position string
+	 * @return corresponding {@link NucleotidePointLocation}
 	 */
-	private String getCDNAPosStrForDownstreamPos(GenomePosition pos) {
+	private NucleotidePointLocation getCDNANucleotidePointLocationForDownstreamPos(GenomePosition pos) {
 		// The downstream position is simply given as "*$count" where $count is the genomic base offset after the CDS
 		// region.
 		int numBases = -getCDSRegion().getGenomeEndPos().differenceTo(pos);
-		return StringUtil.concatenate("*", numBases + 1);
+		return NucleotidePointLocation.buildDownstreamOfCDS(numBases);
 	}
 
 	/**

@@ -7,6 +7,9 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideIndel;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinDeletion;
@@ -16,7 +19,6 @@ import de.charite.compbio.jannovar.hgvs.protein.change.ProteinIndel;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
@@ -81,18 +83,19 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	@Override
-	protected String ncHGVS() {
-		return StringUtil.concatenate(dnaAnno, "delins", change.getAlt());
+	protected NucleotideChange getCDSNTChange() {
+		return new NucleotideIndel(false, ntChangeRange, new NucleotideSeqDescription(change.getRef()),
+				new NucleotideSeqDescription(change.getAlt()));
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
-				ncHGVS(), null);
+				getGenomicNTChange(), getCDSNTChange(), null);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno, ncHGVS(),
-				ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno,
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
 	}
 
 	/**
@@ -172,7 +175,8 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), proteinChange);
+			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
+					proteinChange);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -225,11 +229,11 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() > 1)
-				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
-						aaChange.getLastPos());
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
+						wtAALast, aaChange.getLastPos());
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() == 1)
-				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
-						aaChange.getPos());
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
+						wtAAFirst, aaChange.getPos());
 			else if (aaChange.getPos() == aaChange.getLastPos() || aaChange.getAlt().equals("*"))
 				proteinChange = ProteinSubstitution.build(true, wtAAFirst, aaChange.getPos(),
 						insertedAAs.substring(0, 1));

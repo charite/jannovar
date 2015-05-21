@@ -12,6 +12,8 @@ public class NucleotideInversion extends NucleotideChange {
 	/** description of the inverted nucleotide sequence */
 	private final NucleotideSeqDescription seq;
 
+	// TODO(holtgrew): Switch build => buildWithOffset.
+
 	public static NucleotideInversion build(boolean onlyPredicted, int firstPos, int firstPosOffset, int lastPos,
 			int lastPosOffset, NucleotideSeqDescription seq) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,

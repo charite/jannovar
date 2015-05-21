@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDuplication;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinDuplication;
@@ -15,7 +21,6 @@ import de.charite.compbio.jannovar.hgvs.protein.change.ProteinInsertion;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
@@ -88,9 +93,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	protected String ncHGVS() {
+	protected NucleotideChange getCDSNTChange() {
 		if (!so.liesInExon(change.getGenomePos()))
-			return StringUtil.concatenate(dnaAnno, "ins", change.getAlt());
+			return new NucleotideInsertion(false, ntChangeRange, new NucleotideSeqDescription(change.getAlt()));
 
 		// For building the HGVS string in transcript locations, we have to check for duplications.
 		//
@@ -105,28 +110,29 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		if (DuplicationChecker.isDuplication(transcript.getSequence(), change.getAlt(), txPos.getPos())) {
 			HGVSPositionBuilder posBuilder = new HGVSPositionBuilder(transcript);
 			char prefix = transcript.isCoding() ? 'c' : 'n';
-			String dnaAnno = null; // override this.dnaAnno
 			if (change.getAlt().length() == 1) {
 				try {
-					dnaAnno = StringUtil.concatenate(prefix, ".",
-							posBuilder.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
+					final NucleotideRange range = new NucleotideRange(posBuilder.getNucleotidePointLocation(projector
+							.transcriptToGenomePos(txPos.shifted(-1))), posBuilder.getNucleotidePointLocation(projector
+							.transcriptToGenomePos(txPos.shifted(-1))));
+					return new NucleotideDuplication(false, range, new NucleotideSeqDescription());
 				} catch (ProjectionException e) {
 					throw new RuntimeException("Bug: positions should be valid here", e);
 				}
 			} else {
 				try {
-					dnaAnno = StringUtil.concatenate(prefix, ".", posBuilder.getCDNAPosStr(projector
-							.transcriptToGenomePos(txPos.shifted(-change.getAlt().length()))), "_", posBuilder
-							.getCDNAPosStr(projector.transcriptToGenomePos(txPos.shifted(-1))), "dup");
+					final NucleotidePointLocation firstPos = posBuilder.getNucleotidePointLocation(projector
+							.transcriptToGenomePos(txPos.shifted(-change.getAlt().length())));
+					final NucleotidePointLocation lastPos = posBuilder.getNucleotidePointLocation(projector
+							.transcriptToGenomePos(txPos.shifted(-1)));
+					final NucleotideRange range = new NucleotideRange(firstPos, lastPos);
+					return new NucleotideDuplication(false, range, new NucleotideSeqDescription());
 				} catch (ProjectionException e) {
 					throw new RuntimeException("Bug: positions should be valid here", e);
 				}
 			}
-
-			// TODO(holtgrew): We should somehow tell the caller that this is a direct tandem duplication.
-			return dnaAnno;
 		} else {
-			return StringUtil.concatenate(dnaAnno, "ins", change.getAlt());
+			return new NucleotideInsertion(false, ntChangeRange, new NucleotideSeqDescription(change.getAlt()));
 		}
 	}
 
@@ -214,7 +220,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 					handleFrameShiftCase();
 			}
 
-			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), proteinChange);
+			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
+					proteinChange);
 		}
 
 		private void handleFrameShiftCase() {

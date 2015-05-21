@@ -82,15 +82,16 @@ public class NucleotidePointLocation implements ConvertibleToHGVSString {
 
 	@Override
 	public String toHGVSString() {
-		if (downstreamOfCDS)
-			return "*" + Integer.toString(this.basePos + 1);
-		else if (offset == 0)
-			return Integer.toString(this.basePos + 1);
+		final int shift = (this.basePos >= 0) ? 1 : 0;
+		final String prefix = downstreamOfCDS ? "*" : "";
+
+		if (offset == 0)
+			return prefix + Integer.toString(this.basePos + shift);
 		else if (offset > 0)
-			return Joiner.on("").join(this.basePos + 1, "+", offset);
+			return prefix + Joiner.on("").join(this.basePos + shift, "+", offset);
 		else
 			// if (offset < 0)
-			return Joiner.on("").join(this.basePos + 1, "-", -offset);
+			return prefix + Joiner.on("").join(this.basePos + shift, "-", -offset);
 	}
 
 	@Override

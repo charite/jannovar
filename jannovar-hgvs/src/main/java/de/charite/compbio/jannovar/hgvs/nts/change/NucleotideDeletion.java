@@ -46,6 +46,7 @@ public class NucleotideDeletion extends NucleotideChange {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), seq);
 	}
 
+	// TODO(holtgrew): Homogenize names of static factory functions
 	public static NucleotideDeletion buildWithoutOffsetWithSequence(boolean onlyPredicted, int firstPos, int lastPos,
 			String nts) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),

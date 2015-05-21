@@ -7,6 +7,9 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDeletion;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinDeletion;
@@ -15,7 +18,6 @@ import de.charite.compbio.jannovar.hgvs.protein.change.ProteinFrameshift;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinIndel;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
@@ -76,18 +78,18 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	}
 
 	@Override
-	protected String ncHGVS() {
-		return StringUtil.concatenate(dnaAnno, "del");
+	protected NucleotideChange getCDSNTChange() {
+		return new NucleotideDeletion(false, ntChangeRange, new NucleotideSeqDescription());
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
-				ncHGVS(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno, ncHGVS(),
-				ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno,
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
 	}
 
 	/**
@@ -155,7 +157,8 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), proteinChange);
+			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
+					proteinChange);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -248,11 +251,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				final String wtAAFirst = Character.toString(wtAASeq.charAt(aaChange.getPos()));
 				final String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
 				if (aaChange.getRef().length() == 1)
-					proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
-							aaChange.getPos());
+					proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
+							wtAAFirst, aaChange.getPos());
 				else
-					proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
-							aaChange.getLastPos());
+					proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
+							wtAALast, aaChange.getLastPos());
 				return;
 			}
 
