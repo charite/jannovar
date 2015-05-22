@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.nts.variant;
 
+import com.google.common.base.Joiner;
+
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
@@ -11,15 +13,31 @@ import de.charite.compbio.jannovar.hgvs.SequenceType;
  */
 public abstract class NucleotideVariant implements ConvertibleToHGVSString {
 
+	public static final int NO_TRANSCRIPT_VERSION = -1;
+
 	/** type fo the underlying sequence */
 	protected final SequenceType seqType;
-	/** reference/transcript ID */
-	protected final String seqID;
+	/** reference ID */
+	protected final String refID;
+	/** protein ID */
+	protected final String proteinID;
+	/** protein version, {@link #NO_TRANSCRIPT_VERSION} for no version */
+	protected final int transcriptVersion;
 
-	/** Initialize with the given {@link SequenceType} and sequence ID */
-	public NucleotideVariant(SequenceType seqType, String seqID) {
+	/** Set variant's reference ID, protein ID is null, version is {@link #NO_PROTEIN_VERSION}. */
+	public NucleotideVariant(SequenceType seqType, String refID) {
 		this.seqType = seqType;
-		this.seqID = seqID;
+		this.refID = refID;
+		this.proteinID = null;
+		this.transcriptVersion = NO_TRANSCRIPT_VERSION;
+	}
+
+	/** Set variant's reference ID, protein ID, and protein version to the given value */
+	public NucleotideVariant(SequenceType seqType, String refID, String proteinID, int transcriptVersion) {
+		this.seqType = seqType;
+		this.refID = refID;
+		this.proteinID = proteinID;
+		this.transcriptVersion = transcriptVersion;
 	}
 
 	/** @return type of sequence that the change is one */
@@ -28,8 +46,8 @@ public abstract class NucleotideVariant implements ConvertibleToHGVSString {
 	}
 
 	/** @return the reference/transript ID */
-	public String getSeqID() {
-		return seqID;
+	public String getRefID() {
+		return refID;
 	}
 
 	@Override
@@ -37,17 +55,32 @@ public abstract class NucleotideVariant implements ConvertibleToHGVSString {
 		return toHGVSString();
 	}
 
+	/** @return sequence name prefix, e.g. <code>"NM_000109.3(DMD_v2)"</code>, or <code>"NM_000109.3"</code>. */
+	public String getSequenceNamePrefix() {
+		String proteinID = this.proteinID;
+		if (proteinID != null && transcriptVersion != NO_TRANSCRIPT_VERSION)
+			proteinID += "_v" + transcriptVersion;
+
+		if (proteinID == null)
+			return refID;
+		else
+			return Joiner.on("").join(refID, "(", proteinID, ")");
+	}
+
 	@Override
 	public String toString() {
-		return "NucleotideVariant [seqType=" + seqType + ", seqID=" + seqID + "]";
+		return "NucleotideVariant [seqType=" + seqType + ", refID=" + refID + ", proteinID=" + proteinID
+				+ ", transcriptVersion=" + transcriptVersion + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((seqID == null) ? 0 : seqID.hashCode());
+		result = prime * result + ((proteinID == null) ? 0 : proteinID.hashCode());
+		result = prime * result + ((refID == null) ? 0 : refID.hashCode());
 		result = prime * result + ((seqType == null) ? 0 : seqType.hashCode());
+		result = prime * result + transcriptVersion;
 		return result;
 	}
 
@@ -60,12 +93,19 @@ public abstract class NucleotideVariant implements ConvertibleToHGVSString {
 		if (getClass() != obj.getClass())
 			return false;
 		NucleotideVariant other = (NucleotideVariant) obj;
-		if (seqID == null) {
-			if (other.seqID != null)
+		if (proteinID == null) {
+			if (other.proteinID != null)
 				return false;
-		} else if (!seqID.equals(other.seqID))
+		} else if (!proteinID.equals(other.proteinID))
+			return false;
+		if (refID == null) {
+			if (other.refID != null)
+				return false;
+		} else if (!refID.equals(other.refID))
 			return false;
 		if (seqType != other.seqType)
+			return false;
+		if (transcriptVersion != other.transcriptVersion)
 			return false;
 		return true;
 	}

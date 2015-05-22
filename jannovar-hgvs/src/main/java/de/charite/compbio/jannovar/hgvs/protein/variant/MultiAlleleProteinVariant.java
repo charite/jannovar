@@ -39,7 +39,7 @@ public class MultiAlleleProteinVariant extends ProteinVariant {
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
 		ArrayList<String> parts = new ArrayList<>();
-		parts.add(proteinID);
+		parts.add(getSequenceNamePrefix());
 		parts.add(":p.");
 		boolean first = true;
 		for (ProteinChangeAllele allele : alleles) {

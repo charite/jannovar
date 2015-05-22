@@ -74,7 +74,7 @@ public class SingleAlleleProteinVariant extends ProteinVariant {
 		final String sep = allele.getVarConfig().toHGVSSeparator();
 
 		ArrayList<String> parts = new ArrayList<>();
-		parts.add(proteinID);
+		parts.add(getSequenceNamePrefix());
 		parts.add(":p.");
 		if (hasOnlyOneChange()) {
 			parts.add(getChange().toHGVSString(code));

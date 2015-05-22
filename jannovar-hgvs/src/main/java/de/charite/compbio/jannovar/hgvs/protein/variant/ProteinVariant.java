@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.protein.variant;
 
+import com.google.common.base.Joiner;
+
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 
@@ -10,12 +12,27 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  */
 public abstract class ProteinVariant implements ConvertibleToHGVSString {
 
+	public static final int NO_PROTEIN_ISOFORM = -1;
+
+	/** reference ID */
+	protected final String refID;
 	/** protein ID */
 	protected final String proteinID;
+	/** protein isoform, {@link #NO_PROTEIN_ISOFORM} for no isoform */
+	protected final int proteinIsoform;
 
-	/** Set variant's protein ID to the given value */
-	public ProteinVariant(String proteinID) {
+	/** Set variant's reference ID, protein ID is null, isoform is {@link #NO_PROTEIN_ISOFORM}. */
+	public ProteinVariant(String refID) {
+		this.refID = refID;
+		this.proteinID = null;
+		this.proteinIsoform = NO_PROTEIN_ISOFORM;
+	}
+
+	/** Set variant's reference ID, protein ID, and protein isoform to the given value */
+	public ProteinVariant(String refID, String proteinID, int proteinIsoform) {
+		this.refID = refID;
 		this.proteinID = proteinID;
+		this.proteinIsoform = proteinIsoform;
 	}
 
 	@Override
@@ -28,9 +45,21 @@ public abstract class ProteinVariant implements ConvertibleToHGVSString {
 		return proteinID;
 	}
 
+	/** @return sequence name prefix, e.g. <code>"NM_000109.3(DMD_v2)"</code>, or <code>"NM_000109.3"</code>. */
+	public String getSequenceNamePrefix() {
+		String proteinID = this.proteinID;
+		if (proteinID != null && proteinIsoform != NO_PROTEIN_ISOFORM)
+			proteinID += "_i" + proteinIsoform;
+
+		if (proteinID == null)
+			return refID;
+		else
+			return Joiner.on("").join(refID, "(", proteinID, ")");
+	}
+
 	@Override
 	public String toString() {
-		return "ProteinVariant [proteinID=" + proteinID + ", toString()=" + super.toString() + "]";
+		return "ProteinVariant [refID=" + refID + ", proteinID=" + proteinID + "]";
 	}
 
 	@Override
@@ -38,6 +67,8 @@ public abstract class ProteinVariant implements ConvertibleToHGVSString {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((proteinID == null) ? 0 : proteinID.hashCode());
+		result = prime * result + proteinIsoform;
+		result = prime * result + ((refID == null) ? 0 : refID.hashCode());
 		return result;
 	}
 
@@ -54,6 +85,13 @@ public abstract class ProteinVariant implements ConvertibleToHGVSString {
 			if (other.proteinID != null)
 				return false;
 		} else if (!proteinID.equals(other.proteinID))
+			return false;
+		if (proteinIsoform != other.proteinIsoform)
+			return false;
+		if (refID == null) {
+			if (other.refID != null)
+				return false;
+		} else if (!refID.equals(other.refID))
 			return false;
 		return true;
 	}

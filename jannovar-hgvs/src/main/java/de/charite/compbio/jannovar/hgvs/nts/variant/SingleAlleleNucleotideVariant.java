@@ -70,12 +70,13 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	@Override
 	public String toHGVSString() {
 		if (hasOnlyOneChange())
-			return Joiner.on("").join(seqID, ":", seqType.getPrefix(), getChange().toHGVSString());
+			return Joiner.on("").join(getSequenceNamePrefix(), ":", seqType.getPrefix(),
+					getChange().toHGVSString());
 
 		final String sep = allele.getVarConfig().toHGVSSeparator();
 
 		ArrayList<String> parts = new ArrayList<>();
-		parts.add(seqID);
+		parts.add(getSequenceNamePrefix());
 		parts.add(":");
 		parts.add(seqType.getPrefix());
 		if (hasOnlyOneChange()) {

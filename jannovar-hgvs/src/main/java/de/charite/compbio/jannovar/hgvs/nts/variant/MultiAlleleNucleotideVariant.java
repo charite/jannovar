@@ -43,7 +43,7 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 	@Override
 	public String toHGVSString() {
 		ArrayList<String> parts = new ArrayList<>();
-		parts.add(seqID);
+		parts.add(getSequenceNamePrefix());
 		parts.add(":");
 		parts.add(seqType.getPrefix());
 		boolean first = true;
