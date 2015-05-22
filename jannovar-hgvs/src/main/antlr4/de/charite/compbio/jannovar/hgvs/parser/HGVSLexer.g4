@@ -43,11 +43,42 @@ REFERENCE
 	)?
 ;
 
-/** fragment used for read identifier */
+/** fragment used for reference identifier */
 fragment
 REF_IDENTIFIER
 :
-	[ a-zA-Z0-9_]+
+	[a-zA-Z0-9_]+
+;
+
+/** fragment used for protein identifier */
+fragment
+PROT_IDENTIFIER
+:
+	[a-zA-Z0-9]+
+;
+
+/** opening parenthesis */
+PAREN_OPEN
+:
+	'('
+;
+
+/** closing parenthesis */
+PAREN_CLOSE
+:
+	')'
+;
+
+/**  used for specifying transcript variant */
+TRANS_VAR
+:
+	'_v'
+;
+
+/** used for specifying protein isoform */
+PROT_ISO
+:
+	'_i'
 ;
 
 /** token used for stopping the reference description */
@@ -78,20 +109,10 @@ NT_CHANGE_LINE_BREAK
 	[\t\r\n] -> popMode , skip
 ;
 
-/** a colon ends the nucleotide change mode */
-NT_COLON
-:
-	':' -> popMode
-;
-
 /** a nucleotide character */
 NT_CHAR
 :
-	'A'
-	| 'C'
-	| 'G'
-	| 'T'
-	| 'U'
+	[ACGTU]
 ;
 
 /** a number, used for positions etc. */
@@ -100,126 +121,71 @@ NT_NUMBER
 	[1-9] [0-9]*
 ;
 
+/** literal minus character, for offsets etc. */
 NT_MINUS
 :
 	'-'
 ;
 
+/** literal plus character, for offsets etc. */
 NT_PLUS
 :
 	'+'
 ;
 
-/** 'u' is used for denoting an upstream position */
-NT_UPSTREAM
-:
-	'u'
-;
-
-/** 'u' is used for denoting a downstream position */
-NT_DOWNSTREAM
-:
-	'd'
-;
-
-/** 'o' is used for denoting a position on the opposite strand */
-NT_OPPOSITE
-:
-	'o'
-;
-
-NT_QUESTION_MARK
-:
-	'?'
-;
-
+/** literal asterisk, for terminal/stop codon */
 NT_ASTERISK
 :
 	'*'
 ;
 
+/** underscore for ranges */
 NT_UNDERSCORE
 :
 	'_'
 ;
 
+/** comma, used for multi-change variants */
 NT_COMMA
 :
 	','
 ;
 
+/** opening parenthesis */
 NT_PAREN_OPEN
 :
 	'('
 ;
 
-NT_DOUBLE_SLASH
-:
-	'//'
-;
-
-NT_SLASH
-:
-	'/'
-;
-
+/** closing parenthesis */
 NT_PAREN_CLOSE
 :
 	')'
 ;
 
+/** double slash for chimeric or mosaic variants */
+NT_SLASHES
+:
+	'//'
+	| '/'
+;
+
+/** opening square parenthesis, for multi-variant case */
 NT_SQUARE_PAREN_OPEN
 :
 	'['
 ;
 
+/** closing square parenthesis, for multi-variant case */
 NT_SQUARE_PAREN_CLOSE
 :
 	']'
 ;
 
-NT_EX
-:
-	'EX'
-;
-
-NT_IVS
-:
-	'IVS'
-;
-
-/** used for denoting chromosome bands */
-NT_P
-:
-	'p'
-;
-
-/** used for denoting chromosome bands */
-NT_Q
-:
-	'q'
-;
-
+/** semicolon, used in multi-variant case */
 NT_SEMICOLON
 :
 	';'
-;
-
-NT_DOT
-:
-	'.'
-;
-
-/**  used for specifying transcript variant */
-NT_TRANS_VAR
-:
-	'_v'
-;
-
-/** used for specifying protein isoform */
-NT_PROT_ISO
-:
-	'_i'
 ;
 
 /** token for denoting deletion */
@@ -246,18 +212,6 @@ NT_INV
 	'inv'
 ;
 
-/** token for denoting gene conversion */
-NT_CON
-:
-	'con'
-;
-
-/** token for denoting translocation */
-NT_T
-:
-	't'
-;
-
 NT_EQUAL
 :
 	'='
@@ -269,32 +223,19 @@ NT_SPL
 	'spl'
 ;
 
+/** token for literal question mark */
+NT_QUESTION_MARK
+:
+	'?'
+;
+
+/** token for literal zero */
 NT_ZERO
 :
 	'0'
 ;
 
-NT_DASHES
-:
-	'//'
-	| '/'
-;
-
-NT_CIRCUMFLEX
-:
-	'^'
-;
-
-NT_BRACE_OPEN
-:
-	'{'
-;
-
-NT_BRACE_CLOSE
-:
-	'}'
-;
-
+/** literal greater than sign, for denoting single nucleotide change */
 NT_GT
 :
 	'>'
@@ -433,12 +374,6 @@ PROTEIN_DUP
 PROTEIN_DEL
 :
 	'del'
-;
-
-/** indel */
-PROTEIN_DELINS
-:
-	'delins'
 ;
 
 PROTEIN_COMMA
