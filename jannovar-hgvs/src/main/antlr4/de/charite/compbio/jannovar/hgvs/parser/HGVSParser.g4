@@ -13,6 +13,31 @@ hgvs_variant
 :
 ;
 
+// --------------------------------------------------------------------------
+// Nucleotide changes
+// --------------------------------------------------------------------------
+
+nt_change
+:
+	nt_change_deletion
+;
+
+nt_change_deletion
+:
+	(
+		nt_point_location
+		| nt_range
+	) NT_DEL
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+// --------------------------------------------------------------------------
+// Locations in nucleotide changes
+// --------------------------------------------------------------------------
+
 /** number in nucleotide variants */
 nt_point_location
 :
@@ -48,6 +73,10 @@ nt_range
 :
 	nt_point_location NT_UNDERSCORE nt_point_location
 ;
+
+// --------------------------------------------------------------------------
+// Nucleotide Strings
+// --------------------------------------------------------------------------
 
 /** String of nucleotide characters */
 nt_string

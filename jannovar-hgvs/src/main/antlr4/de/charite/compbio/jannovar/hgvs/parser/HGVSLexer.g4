@@ -112,7 +112,11 @@ NT_CHANGE_LINE_BREAK
 /** a nucleotide character */
 NT_CHAR
 :
-	[ACGTU]
+	'A'
+	| 'C'
+	| 'G'
+	| 'T'
+	| 'U'
 ;
 
 /** a nucleotide string */
