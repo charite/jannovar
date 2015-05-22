@@ -1,8 +1,8 @@
-package de.charite.compbio.jannovar.hgvs.protein.variant;
+package de.charite.compbio.jannovar.hgvs;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.protein.variant.VariantConfiguration;
+import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 
 public class VariantConfigurationTest {
 

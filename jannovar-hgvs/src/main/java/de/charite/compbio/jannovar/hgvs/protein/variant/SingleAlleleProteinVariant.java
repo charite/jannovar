@@ -7,6 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
+import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 
 /**

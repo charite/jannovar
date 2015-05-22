@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.protein.variant;
+package de.charite.compbio.jannovar.hgvs.nts.variant;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,47 +12,47 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
-import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 
 /**
- * Contains the {@link ProteinChange}s on one allee.
+ * Contains the {@link NucleotideChange}s on one allee.
  *
  * Examples:
  *
  * <ul>
- * <li><tt>[(Gly28Val);(Asn26His)]</tt></li>
- * <li><tt>[Gly28Val;Asn26His]</tt></li>
- * <li><tt>[Gly28Val;(Asn26His)]</tt></li>
+ * <li><tt>[(33A>C);(33A>C)]</tt></li>
+ * <li><tt>[33A>C;33A>C]</tt></li>
+ * <li><tt>[33A>C;(33A>C)]</tt></li>
  * </ul>
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<ProteinChange> {
+public final class NucleotideChangeAllele implements ConvertibleToHGVSString, List<NucleotideChange> {
 
 	/** variant configuration on this allele */
 	protected final VariantConfiguration varConfig;
-	/** protein changes that lie on the allele */
-	protected final ImmutableList<ProteinChange> changes;
+	/** nucleotide changes that lie on the allele */
+	protected final ImmutableList<NucleotideChange> changes;
 
-	/** @return a new allele containing one protein change */
-	public static ProteinChangeAllele singleChangeAllele(ProteinChange change) {
-		return new ProteinChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
+	/** @return a new allele containing one nucleotide change */
+	public static NucleotideChangeAllele singleChangeAllele(NucleotideChange change) {
+		return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
 	}
 
 	/** @return a new allele with the given variant configuration and changes */
-	public static ProteinChangeAllele build(VariantConfiguration varConfig, ProteinChange... changes) {
-		return new ProteinChangeAllele(varConfig, ImmutableList.copyOf(changes));
+	public static NucleotideChangeAllele build(VariantConfiguration varConfig, NucleotideChange... changes) {
+		return new NucleotideChangeAllele(varConfig, ImmutableList.copyOf(changes));
 	}
 
 	/**
-	 * Construct allele with the given a variant {@link VariantConfiguration} and {@link ProteinChange}s.
+	 * Construct allele with the given a variant {@link VariantConfiguration} and {@link NucleotideChange}s.
 	 *
 	 * @param varConfig
 	 *            configuration of the changes
 	 * @param changes
-	 *            protein changes to store in the allele
+	 *            nucleotide changes to store in the allele
 	 */
-	public ProteinChangeAllele(VariantConfiguration varConfig, Collection<? extends ProteinChange> changes) {
+	public NucleotideChangeAllele(VariantConfiguration varConfig, Collection<? extends NucleotideChange> changes) {
 		this.varConfig = varConfig;
 		this.changes = ImmutableList.copyOf(changes);
 	}
@@ -62,8 +62,8 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 		return varConfig;
 	}
 
-	/** @return list of {@link ProteinChange}s */
-	public ImmutableList<ProteinChange> getChanges() {
+	/** @return list of {@link NucleotideChange}s */
+	public ImmutableList<NucleotideChange> getChanges() {
 		return changes;
 	}
 
@@ -77,7 +77,7 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 		ArrayList<String> parts = new ArrayList<>();
 		parts.add("[");
 		boolean first = true;
-		for (ProteinChange change : changes) {
+		for (NucleotideChange change : changes) {
 			if (first)
 				first = false;
 			else
@@ -111,7 +111,7 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProteinChangeAllele other = (ProteinChangeAllele) obj;
+		NucleotideChangeAllele other = (NucleotideChangeAllele) obj;
 		if (changes == null) {
 			if (other.changes != null)
 				return false;
@@ -138,7 +138,7 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 	}
 
 	@Override
-	public Iterator<ProteinChange> iterator() {
+	public Iterator<NucleotideChange> iterator() {
 		return changes.iterator();
 	}
 
@@ -154,7 +154,7 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 
 	@Deprecated
 	@Override
-	public boolean add(ProteinChange e) {
+	public boolean add(NucleotideChange e) {
 		return changes.add(e);
 	}
 
@@ -171,13 +171,13 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 
 	@Deprecated
 	@Override
-	public boolean addAll(Collection<? extends ProteinChange> c) {
+	public boolean addAll(Collection<? extends NucleotideChange> c) {
 		return changes.addAll(c);
 	}
 
 	@Deprecated
 	@Override
-	public boolean addAll(int index, Collection<? extends ProteinChange> c) {
+	public boolean addAll(int index, Collection<? extends NucleotideChange> c) {
 		return changes.addAll(index, c);
 	}
 
@@ -200,25 +200,25 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 	}
 
 	@Override
-	public ProteinChange get(int index) {
+	public NucleotideChange get(int index) {
 		return changes.get(index);
 	}
 
 	@Deprecated
 	@Override
-	public ProteinChange set(int index, ProteinChange element) {
+	public NucleotideChange set(int index, NucleotideChange element) {
 		return changes.set(index, element);
 	}
 
 	@Deprecated
 	@Override
-	public void add(int index, ProteinChange element) {
+	public void add(int index, NucleotideChange element) {
 		changes.add(index, element);
 	}
 
 	@Deprecated
 	@Override
-	public ProteinChange remove(int index) {
+	public NucleotideChange remove(int index) {
 		return changes.remove(index);
 	}
 
@@ -233,17 +233,17 @@ public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<
 	}
 
 	@Override
-	public ListIterator<ProteinChange> listIterator() {
+	public ListIterator<NucleotideChange> listIterator() {
 		return changes.listIterator();
 	}
 
 	@Override
-	public ListIterator<ProteinChange> listIterator(int index) {
+	public ListIterator<NucleotideChange> listIterator(int index) {
 		return changes.listIterator(index);
 	}
 
 	@Override
-	public List<ProteinChange> subList(int fromIndex, int toIndex) {
+	public List<NucleotideChange> subList(int fromIndex, int toIndex) {
 		return changes.subList(fromIndex, toIndex);
 	}
 

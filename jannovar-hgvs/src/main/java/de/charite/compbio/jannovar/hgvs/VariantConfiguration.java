@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.protein.variant;
+package de.charite.compbio.jannovar.hgvs;
 
 // TODO(holtgrew): need to talk to a geneticist for improving the naming
 
