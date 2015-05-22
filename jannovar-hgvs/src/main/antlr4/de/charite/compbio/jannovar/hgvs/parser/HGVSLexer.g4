@@ -115,6 +115,12 @@ NT_CHAR
 	[ACGTU]
 ;
 
+/** a nucleotide string */
+NT_STRING
+:
+	NT_CHAR+
+;
+
 /** a number, used for positions etc. */
 NT_NUMBER
 :

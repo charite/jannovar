@@ -48,3 +48,9 @@ nt_range
 :
 	nt_point_location NT_UNDERSCORE nt_point_location
 ;
+
+/** String of nucleotide characters */
+nt_string
+:
+	NT_STRING
+;

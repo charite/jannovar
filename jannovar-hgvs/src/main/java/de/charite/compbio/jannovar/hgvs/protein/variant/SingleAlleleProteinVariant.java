@@ -69,7 +69,7 @@ public class SingleAlleleProteinVariant extends ProteinVariant {
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
 		if (hasOnlyOneChange())
-			return Joiner.on("").join(proteinID, ":p.", getChange().toHGVSString(code));
+			return Joiner.on("").join(getSequenceNamePrefix(), ":p.", getChange().toHGVSString(code));
 
 		final String sep = allele.getVarConfig().toHGVSSeparator();
 
