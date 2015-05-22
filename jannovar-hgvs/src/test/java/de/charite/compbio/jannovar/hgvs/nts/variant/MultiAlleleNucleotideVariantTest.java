@@ -21,11 +21,11 @@ public class MultiAlleleNucleotideVariantTest {
 	@Before
 	public void setUp() throws Exception {
 		firstAllele = NucleotideChangeAllele.build(VariantConfiguration.IN_CIS,
-				NucleotideSubstitution.buildWithoutPosOffset(false, 99, "A", "G"),
-				NucleotideSubstitution.buildWithoutPosOffset(false, 300, "A", "C"));
+				NucleotideSubstitution.build(false, 99, "A", "G"),
+				NucleotideSubstitution.build(false, 300, "A", "C"));
 		secondAllele = NucleotideChangeAllele.build(VariantConfiguration.IN_CIS,
-				NucleotideSubstitution.buildWithoutPosOffset(false, 33, "T", "C"),
-				NucleotideSubstitution.buildWithoutPosOffset(false, 300, "A", "G"));
+				NucleotideSubstitution.build(false, 33, "T", "C"),
+				NucleotideSubstitution.build(false, 300, "A", "G"));
 
 		singleAlleleVariant = new MultiAlleleNucleotideVariant(SequenceType.CODING_DNA, "REF",
 				ImmutableList.of(firstAllele));
@@ -35,13 +35,13 @@ public class MultiAlleleNucleotideVariantTest {
 
 	public void testStaticFactoryMakeSingleChangeVariant() {
 		Assert.assertEquals(singleAlleleVariant, SingleAlleleNucleotideVariant.makeSingleChangeVariant(
-				SequenceType.CODING_DNA, "REF", NucleotideSubstitution.buildWithoutPosOffset(false, 99, "A", "G")));
+				SequenceType.CODING_DNA, "REF", NucleotideSubstitution.build(false, 99, "A", "G")));
 	}
 
 	public void testStaticFactoryBuild() {
 		Assert.assertEquals(multiAlleleVariant, SingleAlleleNucleotideVariant.build(SequenceType.CODING_DNA, "REF",
-				VariantConfiguration.IN_CIS, NucleotideSubstitution.buildWithoutPosOffset(false, 99, "C", "T"),
-				NucleotideSubstitution.buildWithoutPosOffset(false, 300, "A", "G")));
+				VariantConfiguration.IN_CIS, NucleotideSubstitution.build(false, 99, "C", "T"),
+				NucleotideSubstitution.build(false, 300, "A", "G")));
 	}
 
 	@Test

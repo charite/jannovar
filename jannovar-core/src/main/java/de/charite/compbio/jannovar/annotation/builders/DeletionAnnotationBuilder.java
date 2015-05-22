@@ -189,7 +189,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
 				if (aaChange.getPos() == aaChange.getLastPos()) {
 					if (aaChange.getAlt().length() > 0)
-						proteinChange = ProteinIndel.buildWithSeqDesc(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
 								aaChange.getPos(), new ProteinSeqDescription(),
 								new ProteinSeqDescription(aaChange.getAlt()));
 					else
@@ -197,7 +197,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 								wtAAFirst, aaChange.getPos(), aaChange.getAlt());
 				} else {
 					if (aaChange.getAlt().length() > 0)
-						proteinChange = ProteinIndel.buildWithSeqDesc(true, wtAAFirst, aaChange.getPos(), wtAALast,
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
 								aaChange.getLastPos(), new ProteinSeqDescription(),
 								new ProteinSeqDescription(aaChange.getAlt()));
 					else

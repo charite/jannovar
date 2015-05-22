@@ -238,7 +238,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				proteinChange = ProteinSubstitution.build(true, wtAAFirst, aaChange.getPos(),
 						insertedAAs.substring(0, 1));
 			else
-				proteinChange = ProteinIndel.buildWithSeqDesc(true, wtAAFirst, aaChange.getPos(), wtAALast,
+				proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
 						aaChange.getLastPos(), new ProteinSeqDescription(), new ProteinSeqDescription(insertedAAs));
 
 			// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.

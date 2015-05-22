@@ -17,50 +17,46 @@ public class NucleotideDeletion extends NucleotideChange {
 	/** description of the deleted nucleotide sequence */
 	private final NucleotideSeqDescription seq;
 
-	public static NucleotideDeletion build(boolean onlyPredicted, int firstPos, int firstPosOffset, int lastPos,
-			int lastPosOffset, NucleotideSeqDescription seq) {
+	public static NucleotideDeletion buildWithOffset(boolean onlyPredicted, int firstPos, int firstPosOffset,
+			int lastPos, int lastPosOffset, NucleotideSeqDescription seq) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), seq);
 	}
 
-	public static NucleotideDeletion buildWithSequence(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, String nts) {
+	public static NucleotideDeletion buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos,
+			int firstPosOffset, int lastPos, int lastPosOffset, String nts) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription(nts));
 	}
 
-	public static NucleotideDeletion buildWithLength(boolean onlyPredicted, int firstPos, int firstPosOffset,
+	public static NucleotideDeletion buildWithOffsetWithLength(boolean onlyPredicted, int firstPos, int firstPosOffset,
 			int lastPos, int lastPosOffset, int seqLen) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription(seqLen));
 	}
 
-	public static NucleotideDeletion buildWithoutSeqDescription(boolean onlyPredicted, int firstPos,
+	public static NucleotideDeletion buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
 			int firstPosOffset, int lastPos, int lastPosOffset) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription());
 	}
 
-	public static NucleotideDeletion buildWithoutOffset(boolean onlyPredicted, int firstPos, int lastPos,
+	public static NucleotideDeletion build(boolean onlyPredicted, int firstPos, int lastPos,
 			NucleotideSeqDescription seq) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), seq);
 	}
 
-	// TODO(holtgrew): Homogenize names of static factory functions
-	public static NucleotideDeletion buildWithoutOffsetWithSequence(boolean onlyPredicted, int firstPos, int lastPos,
-			String nts) {
+	public static NucleotideDeletion buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos, String nts) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(nts));
 	}
 
-	public static NucleotideDeletion buildWithoutOffsetWithLength(boolean onlyPredicted, int firstPos, int lastPos,
-			int seqLen) {
+	public static NucleotideDeletion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos, int seqLen) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(seqLen));
 	}
 
-	public static NucleotideDeletion buildWithoutOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
-			int lastPos) {
+	public static NucleotideDeletion buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideDeletion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription());
 	}

@@ -7,7 +7,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
 /**
  * Representation of a duplication on the nucleotide level.
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public class NucleotideDuplication extends NucleotideChange {
@@ -17,49 +17,46 @@ public class NucleotideDuplication extends NucleotideChange {
 	/** description of the deleted nucleotide sequence */
 	private final NucleotideSeqDescription seq;
 
-	public static NucleotideDuplication build(boolean onlyPredicted, int firstPos, int firstPosOffset, int lastPos,
-			int lastPosOffset, NucleotideSeqDescription seq) {
+	public static NucleotideDuplication buildWithOffset(boolean onlyPredicted, int firstPos, int firstPosOffset,
+			int lastPos, int lastPosOffset, NucleotideSeqDescription seq) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), seq);
 	}
 
-	public static NucleotideDuplication buildWithSequence(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, String nts) {
+	public static NucleotideDuplication buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos,
+			int firstPosOffset, int lastPos, int lastPosOffset, String nts) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription(nts));
 	}
 
-	public static NucleotideDuplication buildWithLength(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, int seqLen) {
+	public static NucleotideDuplication buildWithOffsetWithLength(boolean onlyPredicted, int firstPos,
+			int firstPosOffset, int lastPos, int lastPosOffset, int seqLen) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription(seqLen));
 	}
 
-	public static NucleotideDuplication buildWithoutSeqDescription(boolean onlyPredicted, int firstPos,
+	public static NucleotideDuplication buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
 			int firstPosOffset, int lastPos, int lastPosOffset) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription());
 	}
 
-	public static NucleotideDuplication buildWithoutOffset(boolean onlyPredicted, int firstPos, int lastPos,
+	public static NucleotideDuplication build(boolean onlyPredicted, int firstPos, int lastPos,
 			NucleotideSeqDescription seq) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), seq);
 	}
 
-	public static NucleotideDuplication buildWithoutOffsetWithSequence(boolean onlyPredicted, int firstPos,
-			int lastPos, String nts) {
+	public static NucleotideDuplication buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos, String nts) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(nts));
 	}
 
-	public static NucleotideDuplication buildWithoutOffsetWithLength(boolean onlyPredicted, int firstPos, int lastPos,
-			int seqLen) {
+	public static NucleotideDuplication buildWithLength(boolean onlyPredicted, int firstPos, int lastPos, int seqLen) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(seqLen));
 	}
 
-	public static NucleotideDuplication buildWithoutOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
-			int lastPos) {
+	public static NucleotideDuplication buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideDuplication(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription());
 	}

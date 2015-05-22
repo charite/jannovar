@@ -21,8 +21,8 @@ public class ProteinIndel extends ProteinChange {
 	private final ProteinSeqDescription insSeq;
 
 	/** Build without any sequence description */
-	public static ProteinIndel buildWithoutSeqDesc(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos) {
+	public static ProteinIndel buildWithoutSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(), new ProteinSeqDescription());
 	}
@@ -35,15 +35,15 @@ public class ProteinIndel extends ProteinChange {
 	}
 
 	/** Build with sequence information */
-	public static ProteinIndel buildWithSeq(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
+	public static ProteinIndel buildWithSequence(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
 			int lastPos, String deletedSeq, String insertedSeq) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
 				new ProteinSeqDescription(deletedSeq), new ProteinSeqDescription(insertedSeq));
 	}
 
 	/** Build with sequence description */
-	public static ProteinIndel buildWithSeqDesc(boolean onlyPredicted, String firstAA, int firstPos, String lastAA,
-			int lastPos, ProteinSeqDescription delDesc, ProteinSeqDescription insDesc) {
+	public static ProteinIndel buildWithSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, ProteinSeqDescription delDesc, ProteinSeqDescription insDesc) {
 		return new ProteinIndel(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), delDesc, insDesc);
 	}
 

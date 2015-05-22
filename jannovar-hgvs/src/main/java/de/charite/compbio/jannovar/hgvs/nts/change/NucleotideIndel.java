@@ -15,57 +15,57 @@ public class NucleotideIndel extends NucleotideChange {
 	private final NucleotideSeqDescription insSeq;
 
 	/** Build without any sequence description */
-	public static NucleotideIndel buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int firstOffset,
-			int lastPos, int lastOffset) {
+	public static NucleotideIndel buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
+			int firstOffset, int lastPos, int lastOffset) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
 				new NucleotideSeqDescription(), new NucleotideSeqDescription());
 	}
 
 	/** Build with length information */
-	public static NucleotideIndel buildWithLength(boolean onlyPredicted, int firstPos, int firstOffset, int lastPos,
-			int lastOffset, int deletedLength, int insertedLength) {
+	public static NucleotideIndel buildWithOffsetWithLength(boolean onlyPredicted, int firstPos, int firstOffset,
+			int lastPos, int lastOffset, int deletedLength, int insertedLength) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
 				new NucleotideSeqDescription(deletedLength), new NucleotideSeqDescription(insertedLength));
 	}
 
 	/** Build with sequence information */
-	public static NucleotideIndel buildWithSeq(boolean onlyPredicted, int firstPos, int firstOffset, int lastPos,
-			int lastOffset, String deletedSeq, String insertedSeq) {
+	public static NucleotideIndel buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos, int firstOffset,
+			int lastPos, int lastOffset, String deletedSeq, String insertedSeq) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
 				new NucleotideSeqDescription(deletedSeq), new NucleotideSeqDescription(insertedSeq));
 	}
 
 	/** Build with sequence description */
-	public static NucleotideIndel buildWithSeqDescription(boolean onlyPredicted, int firstPos, int firstOffset,
-			int lastPos, int lastOffset, NucleotideSeqDescription delDesc, NucleotideSeqDescription insDesc) {
+	public static NucleotideIndel buildWithOffsetWithSeqDescription(boolean onlyPredicted, int firstPos,
+			int firstOffset, int lastPos, int lastOffset, NucleotideSeqDescription delDesc,
+			NucleotideSeqDescription insDesc) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
 				delDesc, insDesc);
 	}
 
 	/** Build without offset and any sequence description */
-	public static NucleotideIndel buildWithoutOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
-			int lastPos) {
+	public static NucleotideIndel buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(), new NucleotideSeqDescription());
 	}
 
 	/** Build without offset and with length information */
-	public static NucleotideIndel buildWithoutOffsetWithLength(boolean onlyPredicted, int firstPos, int lastPos,
-			int deletedLength, int insertedLength) {
+	public static NucleotideIndel buildWithLength(boolean onlyPredicted, int firstPos, int lastPos, int deletedLength,
+			int insertedLength) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(deletedLength), new NucleotideSeqDescription(insertedLength));
 	}
 
 	/** Build without offset and with sequence information */
-	public static NucleotideIndel buildWithoutOffsetWithSeq(boolean onlyPredicted, int firstPos, int lastPos,
+	public static NucleotideIndel buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos,
 			String deletedSeq, String insertedSeq) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(deletedSeq), new NucleotideSeqDescription(insertedSeq));
 	}
 
 	/** Build without offset and with sequence description */
-	public static NucleotideIndel buildWithoutOffsetWithSeqDescription(boolean onlyPredicted, int firstPos,
-			int lastPos, NucleotideSeqDescription delDesc, NucleotideSeqDescription insDesc) {
+	public static NucleotideIndel buildWithSeqDescription(boolean onlyPredicted, int firstPos, int lastPos,
+			NucleotideSeqDescription delDesc, NucleotideSeqDescription insDesc) {
 		return new NucleotideIndel(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), delDesc,
 				insDesc);
 	}

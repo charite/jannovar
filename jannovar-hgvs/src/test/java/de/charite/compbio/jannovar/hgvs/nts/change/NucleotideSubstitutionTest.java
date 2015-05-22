@@ -19,12 +19,12 @@ public class NucleotideSubstitutionTest {
 
 	@Test
 	public void testBuildWithOffset() {
-		Assert.assertEquals(subWithOffset, NucleotideSubstitution.build(true, 10, 1, "A", "T"));
+		Assert.assertEquals(subWithOffset, NucleotideSubstitution.buildWithOffset(true, 10, 1, "A", "T"));
 	}
 
 	@Test
 	public void testBuildWithoutOffset() {
-		Assert.assertEquals(subWithoutOffset, NucleotideSubstitution.build(true, 10, 0, "A", "T"));
+		Assert.assertEquals(subWithoutOffset, NucleotideSubstitution.buildWithOffset(true, 10, 0, "A", "T"));
 	}
 
 	@Test

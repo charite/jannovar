@@ -9,25 +9,25 @@ public class NucleotideIndelTest {
 
 	@Test
 	public void testWithSequenceDescription() {
-		NucleotideIndel del = NucleotideIndel.buildWithSeq(true, 123, 0, 123, 0, "A", "CT");
+		NucleotideIndel del = NucleotideIndel.buildWithOffsetWithSequence(true, 123, 0, 123, 0, "A", "CT");
 		Assert.assertEquals("(124delAinsCT)", del.toHGVSString());
 	}
 
 	@Test
 	public void testWithLengthDescription() {
-		NucleotideIndel del = NucleotideIndel.buildWithLength(true, 123, 0, 123, 0, 1, 3);
+		NucleotideIndel del = NucleotideIndel.buildWithOffsetWithLength(true, 123, 0, 123, 0, 1, 3);
 		Assert.assertEquals("(124del1ins3)", del.toHGVSString());
 	}
 
 	@Test
 	public void testWithBlankDescription() {
-		NucleotideIndel del = NucleotideIndel.buildWithoutSeqDescription(true, 123, 0, 123, 0);
+		NucleotideIndel del = NucleotideIndel.buildWithOffsetWithoutSeqDescription(true, 123, 0, 123, 0);
 		Assert.assertEquals("(124delins)", del.toHGVSString());
 	}
 
 	@Test
 	public void testWithNucleotideSeqDescription() {
-		NucleotideIndel del = NucleotideIndel.buildWithSeqDescription(true, 123, 0, 125, 0,
+		NucleotideIndel del = NucleotideIndel.buildWithOffsetWithSeqDescription(true, 123, 0, 125, 0,
 				new NucleotideSeqDescription(), new NucleotideSeqDescription("AC"));
 		Assert.assertEquals("(124_126delinsAC)", del.toHGVSString());
 	}

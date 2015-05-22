@@ -41,17 +41,17 @@ public class GenomicNucleotideChangeBuilder {
 		final int beginPos = position.getPos();
 
 		if (ref.length() == 1 && alt.length() == 1)
-			return NucleotideSubstitution.buildWithoutPosOffset(false, beginPos, ref, alt);
+			return NucleotideSubstitution.build(false, beginPos, ref, alt);
 
 		if (ref.length() == 0)
 			// if transcript is null it is intergenic
-			return NucleotideInsertion.buildWithoutOffsetWithSeq(false, beginPos - 1, beginPos, alt);
+			return NucleotideInsertion.buildWithSequence(false, beginPos - 1, beginPos, alt);
 		else if (alt.length() == 0)
 			// if tm is null it is intergenic
-			return NucleotideDeletion.buildWithoutOffsetWithSequence(false, beginPos, beginPos + ref.length() - 1, ref);
+			return NucleotideDeletion.buildWithSequence(false, beginPos, beginPos + ref.length() - 1, ref);
 		else if (ref.length() != alt.length())
 			// if tm is null it is intergenic
-			return NucleotideIndel.buildWithoutOffsetWithSeq(false, beginPos, beginPos + ref.length() - 1, ref, alt);
+			return NucleotideIndel.buildWithSequence(false, beginPos, beginPos + ref.length() - 1, ref, alt);
 
 		// Build reverse-complement of alt string.
 		StringBuilder altRC = new StringBuilder(alt).reverse();
@@ -66,10 +66,10 @@ public class GenomicNucleotideChangeBuilder {
 				altRC.setCharAt(i, 'C');
 
 		if (ref.length() == alt.length() && ref.equals(altRC.toString()))
-			return NucleotideInversion.buildWithoutOffsetWithoutSeqDescription(false, beginPos, beginPos + ref.length()
+			return NucleotideInversion.buildWithoutSeqDescription(false, beginPos, beginPos + ref.length()
 					- 1);
 		else
-			return NucleotideIndel.buildWithoutOffsetWithSeq(false, beginPos, beginPos + ref.length() - 1, ref, alt);
+			return NucleotideIndel.buildWithSequence(false, beginPos, beginPos + ref.length() - 1, ref, alt);
 	}
 
 }

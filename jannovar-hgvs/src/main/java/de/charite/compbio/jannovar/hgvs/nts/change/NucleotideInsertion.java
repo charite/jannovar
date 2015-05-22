@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 
 /**
  * Insertion into a Nucleotide sequence.
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public class NucleotideInsertion extends NucleotideChange {
@@ -16,14 +16,14 @@ public class NucleotideInsertion extends NucleotideChange {
 	private final NucleotideSeqDescription seq;
 
 	/** Build without any sequence description. */
-	public static NucleotideInsertion buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int firstOffset,
-			int lastPos, int lastOffset) {
+	public static NucleotideInsertion buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
+			int firstOffset, int lastPos, int lastOffset) {
 		return new NucleotideInsertion(onlyPredicted,
 				NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset), new NucleotideSeqDescription());
 	}
 
 	/** Build with length information */
-	public static NucleotideInsertion buildWithLength(boolean onlyPredicted, int firstPos, int firstOffset,
+	public static NucleotideInsertion buildWithOffsetWithLength(boolean onlyPredicted, int firstPos, int firstOffset,
 			int lastPos, int lastOffset, int insertedLength) {
 		return new NucleotideInsertion(onlyPredicted,
 				NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset), new NucleotideSeqDescription(
@@ -31,28 +31,27 @@ public class NucleotideInsertion extends NucleotideChange {
 	}
 
 	/** Build with sequence */
-	public static NucleotideInsertion buildWithSeq(boolean onlyPredicted, int firstPos, int firstOffset, int lastPos,
-			int lastOffset, String seq) {
+	public static NucleotideInsertion buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos, int firstOffset,
+			int lastPos, int lastOffset, String seq) {
 		return new NucleotideInsertion(onlyPredicted,
 				NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset), new NucleotideSeqDescription(seq));
 	}
 
 	/** Build without offset and no sequence description. */
-	public static NucleotideInsertion buildWithoutOffsetWithLength(boolean onlyPredicted, int firstPos, int lastPos) {
+	public static NucleotideInsertion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideInsertion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription());
 	}
 
 	/** Build without offset and with length information */
-	public static NucleotideInsertion buildWithoutOffsetWithLength(boolean onlyPredicted, int firstPos, int lastPos,
+	public static NucleotideInsertion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos,
 			int insertedLength) {
 		return new NucleotideInsertion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(insertedLength));
 	}
 
 	/** Build without offset and with sequence */
-	public static NucleotideInsertion buildWithoutOffsetWithSeq(boolean onlyPredicted, int firstPos, int lastPos,
-			String seq) {
+	public static NucleotideInsertion buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos, String seq) {
 		return new NucleotideInsertion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(seq));
 	}

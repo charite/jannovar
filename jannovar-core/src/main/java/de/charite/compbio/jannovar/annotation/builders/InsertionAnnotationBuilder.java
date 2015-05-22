@@ -250,7 +250,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 
 			// TODO(holtgrew): Check for duplication? This is a very rare corner case with bogus transcript.
 			// TODO(holtgrew): This is wrong.
-			proteinChange = ProteinInsertion.buildWithSeq(true, toString(wtAASeq.charAt(varAAInsertPos - 1)),
+			proteinChange = ProteinInsertion.buildWithSequence(true, toString(wtAASeq.charAt(varAAInsertPos - 1)),
 					varAAInsertPos, toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos,
 					varAASeq.substring(varAAInsertPos - 1, varAASeq.length()));
 			if (varAAStopPos != -1)
@@ -376,7 +376,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 							&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
 						// The insertion does not directly start with a stop codon but the insertion leads to a stop
 						// codon in the affected amino acids. This leads to an "delins" protein annotation.
-						proteinChange = ProteinIndel.buildWithSeqDesc(true, toString(wtAASeq.charAt(varAAInsertPos)),
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, toString(wtAASeq.charAt(varAAInsertPos)),
 								varAAInsertPos, toString(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 1,
 								new ProteinSeqDescription(),
 								new ProteinSeqDescription(varAASeq.substring(varAAInsertPos, varAAStopPos)));
@@ -393,12 +393,12 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 								// We have a duplication, can only be duplication of AAs to the left because of
 								// normalization in CDSExonicAnnotationBuilder constructor.
 								if (aaChange.getAlt().length() == 1) {
-									proteinChange = ProteinDuplication.buildWithSeqDesc(true,
+									proteinChange = ProteinDuplication.buildWithSeqDescription(true,
 											toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
 											toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
 											new ProteinSeqDescription());
 								} else {
-									proteinChange = ProteinDuplication.buildWithSeqDesc(true,
+									proteinChange = ProteinDuplication.buildWithSeqDescription(true,
 											toString(wtAASeq.charAt(varAAInsertPos - aaChange.getAlt().length())),
 											varAAInsertPos - aaChange.getAlt().length(),
 											toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
@@ -409,7 +409,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 								varTypes.add(VariantEffect.DIRECT_TANDEM_DUPLICATION);
 							} else {
 								// We have a simple insertion.
-								proteinChange = ProteinInsertion.buildWithSeq(true,
+								proteinChange = ProteinInsertion.buildWithSequence(true,
 										toString(wtAASeq.charAt(varAAInsertPos - 1)), varAAInsertPos - 1,
 										toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos, aaChange.getAlt());
 
@@ -417,7 +417,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 							}
 						} else {
 							// The delins/substitution case.
-							proteinChange = ProteinIndel.buildWithSeqDesc(true, aaChange.getRef(), varAAInsertPos,
+							proteinChange = ProteinIndel.buildWithSeqDescription(true, aaChange.getRef(), varAAInsertPos,
 									aaChange.getRef(), varAAInsertPos, new ProteinSeqDescription(),
 									new ProteinSeqDescription(aaChange.getAlt()));
 							addNonFrameshiftInsertionEffect();

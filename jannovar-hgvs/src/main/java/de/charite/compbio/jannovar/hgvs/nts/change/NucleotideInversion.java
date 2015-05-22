@@ -12,51 +12,46 @@ public class NucleotideInversion extends NucleotideChange {
 	/** description of the inverted nucleotide sequence */
 	private final NucleotideSeqDescription seq;
 
-	// TODO(holtgrew): Switch build => buildWithOffset.
-
-	public static NucleotideInversion build(boolean onlyPredicted, int firstPos, int firstPosOffset, int lastPos,
-			int lastPosOffset, NucleotideSeqDescription seq) {
+	public static NucleotideInversion buildWithOffset(boolean onlyPredicted, int firstPos, int firstPosOffset,
+			int lastPos, int lastPosOffset, NucleotideSeqDescription seq) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), seq);
 	}
 
-	public static NucleotideInversion buildWithSequence(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, String nts) {
+	public static NucleotideInversion buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos,
+			int firstPosOffset, int lastPos, int lastPosOffset, String nts) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription(nts));
 	}
 
-	public static NucleotideInversion buildWithLength(boolean onlyPredicted, int firstPos, int firstPosOffset,
-			int lastPos, int lastPosOffset, int seqLen) {
+	public static NucleotideInversion buildWithOffsetWithLength(boolean onlyPredicted, int firstPos,
+			int firstPosOffset, int lastPos, int lastPosOffset, int seqLen) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription(seqLen));
 	}
 
-	public static NucleotideInversion buildWithoutSeqDescription(boolean onlyPredicted, int firstPos,
+	public static NucleotideInversion buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
 			int firstPosOffset, int lastPos, int lastPosOffset) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.build(firstPos, firstPosOffset, lastPos,
 				lastPosOffset), new NucleotideSeqDescription());
 	}
 
-	public static NucleotideInversion buildWithoutOffset(boolean onlyPredicted, int firstPos, int lastPos,
+	public static NucleotideInversion build(boolean onlyPredicted, int firstPos, int lastPos,
 			NucleotideSeqDescription seq) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos), seq);
 	}
 
-	public static NucleotideInversion buildWithoutOffsetWithSequence(boolean onlyPredicted, int firstPos, int lastPos,
-			String nts) {
+	public static NucleotideInversion buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos, String nts) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(nts));
 	}
 
-	public static NucleotideInversion buildWithoutOffsetWithLength(boolean onlyPredicted, int firstPos, int lastPos,
-			int seqLen) {
+	public static NucleotideInversion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos, int seqLen) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(seqLen));
 	}
 
-	public static NucleotideInversion buildWithoutOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
-			int lastPos) {
+	public static NucleotideInversion buildWithoutSeqDescription(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideInversion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription());
 	}

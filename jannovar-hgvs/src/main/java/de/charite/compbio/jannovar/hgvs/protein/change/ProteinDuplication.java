@@ -29,7 +29,7 @@ public class ProteinDuplication extends ProteinChange {
 				new ProteinSeqDescription(len));
 	}
 
-	public static ProteinDuplication buildWithSeqDesc(boolean onlyPredicted, String firstAA, int firstPos,
+	public static ProteinDuplication buildWithSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
 			String lastAA, int lastPos, ProteinSeqDescription desc) {
 		return new ProteinDuplication(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos), desc);
 	}

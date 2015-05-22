@@ -18,16 +18,16 @@ public class NucleotideChangeAlleleTest {
 	@Before
 	public void setUp() {
 		singletonAllele = new NucleotideChangeAllele(VariantConfiguration.IN_CIS,
-				ImmutableList.of(NucleotideSubstitution.buildWithoutPosOffset(false, 100, "C", "A")));
+				ImmutableList.of(NucleotideSubstitution.build(false, 100, "C", "A")));
 		multiChangeAllele = new NucleotideChangeAllele(VariantConfiguration.CHIMERIC, ImmutableList.of(
-				NucleotideSubstitution.buildWithoutPosOffset(false, 100, "C", "A"),
-				NucleotideSubstitution.buildWithoutPosOffset(false, 99, "C", "A")));
+				NucleotideSubstitution.build(false, 100, "C", "A"),
+				NucleotideSubstitution.build(false, 99, "C", "A")));
 	}
 
 	@Test
 	public void testSingletonStaticFactory() {
 		Assert.assertEquals(singletonAllele, NucleotideChangeAllele.singleChangeAllele(NucleotideSubstitution
-				.buildWithoutPosOffset(false, 100, "C", "A")));
+				.build(false, 100, "C", "A")));
 	}
 
 	@Test
@@ -35,8 +35,8 @@ public class NucleotideChangeAlleleTest {
 		Assert.assertEquals(
 				multiChangeAllele,
 				NucleotideChangeAllele.build(VariantConfiguration.CHIMERIC,
-						NucleotideSubstitution.buildWithoutPosOffset(false, 100, "C", "A"),
-						NucleotideSubstitution.buildWithoutPosOffset(false, 99, "C", "A")));
+						NucleotideSubstitution.build(false, 100, "C", "A"),
+						NucleotideSubstitution.build(false, 99, "C", "A")));
 	}
 
 	@Test
