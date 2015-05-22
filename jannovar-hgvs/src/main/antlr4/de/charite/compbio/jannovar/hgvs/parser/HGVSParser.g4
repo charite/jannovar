@@ -22,12 +22,26 @@ nt_change
 	nt_change_deletion
 ;
 
+/** nucleotide deletion */
 nt_change_deletion
 :
 	(
 		nt_point_location
 		| nt_range
 	) NT_DEL
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** nucleotide duplication */
+nt_change_duplication
+:
+	(
+		nt_point_location
+		| nt_range
+	) NT_DUP
 	(
 		nt_number
 		| nt_string
