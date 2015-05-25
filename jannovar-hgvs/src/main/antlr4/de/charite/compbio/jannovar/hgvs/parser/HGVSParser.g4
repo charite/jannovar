@@ -22,6 +22,7 @@ nt_change
 	nt_change_deletion
 	| nt_change_duplication
 	| nt_change_indel
+	| nt_change_inversion
 ;
 
 /** nucleotide deletion */
@@ -61,6 +62,16 @@ nt_change_indel
 		nt_number
 		| nt_string
 	)? NT_INS
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** nucleotide inversion */
+nt_change_inversion
+:
+	nt_range NT_INV
 	(
 		nt_number
 		| nt_string
