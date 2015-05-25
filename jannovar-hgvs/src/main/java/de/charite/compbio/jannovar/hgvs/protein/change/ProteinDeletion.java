@@ -4,6 +4,8 @@ import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 
+// TODO(holtgrewe): Remove seqDesc?
+
 /**
  * In-frame deletion of a protein (i.e., without frameshift, but can destroy codons).
  *
