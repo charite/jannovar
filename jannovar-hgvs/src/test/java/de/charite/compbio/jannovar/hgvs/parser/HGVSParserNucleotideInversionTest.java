@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
 
 /**
- * Parser for HGVS inversion nucleotide changes.
+ * Parser for HGVS insertion nucleotide changes.
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
