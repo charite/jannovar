@@ -22,8 +22,9 @@ nt_change
 	nt_change_deletion
 	| nt_change_duplication
 	| nt_change_indel
-	| nt_change_inversion
 	| nt_change_insertion
+	| nt_change_inversion
+	| nt_change_substitution
 ;
 
 /** nucleotide deletion */
@@ -87,6 +88,12 @@ nt_change_insertion
 		nt_number
 		| nt_string
 	)?
+;
+
+/** nucleotide substitution */
+nt_change_substitution
+:
+	nt_point_location NT_STRING NT_GT NT_STRING
 ;
 
 // --------------------------------------------------------------------------
