@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_deletionCont
 public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 
 	@Test
-	public void testWithPositionWithDeletedString() {
+	public void testWithPositionWithoutDeletedString() {
 		HGVSParser parser = buildParserForString("123del", HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
 		Assert.assertEquals("(nt_change_deletion (nt_point_location (nt_base_location (nt_number 123))) del)",
@@ -30,8 +30,8 @@ public class HGVSParserNucleotideDeletionTest extends HGVSParserTestBase {
 	}
 
 	@Test
-	public void testWithPositionWithoutDeletedString() {
-		HGVSParser parser = buildParserForString("123delTA", HGVSLexer.NUCLEOTIDE_CHANGE, true);
+	public void testWithPositionWithDeletedString() {
+		HGVSParser parser = buildParserForString("123delTA", HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_deletionContext nt_change_deletion = parser.nt_change_deletion();
 		Assert.assertEquals(
 				"(nt_change_deletion (nt_point_location (nt_base_location (nt_number 123))) del (nt_string TA))",

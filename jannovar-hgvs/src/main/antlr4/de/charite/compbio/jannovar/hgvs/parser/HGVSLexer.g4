@@ -110,6 +110,7 @@ NT_CHANGE_LINE_BREAK
 ;
 
 /** a nucleotide character */
+fragment
 NT_CHAR
 :
 	'A'

@@ -31,7 +31,7 @@ public class HGVSParserNucleotideDuplicationTest extends HGVSParserTestBase {
 
 	@Test
 	public void testWithPositionWithoutDuplicatedString() {
-		HGVSParser parser = buildParserForString("123dupTA", HGVSLexer.NUCLEOTIDE_CHANGE, true);
+		HGVSParser parser = buildParserForString("123dupTA", HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_duplicationContext nt_change_deletion = parser.nt_change_duplication();
 		Assert.assertEquals(
 				"(nt_change_duplication (nt_point_location (nt_base_location (nt_number 123))) dup (nt_string TA))",

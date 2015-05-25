@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.Token;
 
 public class HGVSParserTestBase {
 
@@ -23,6 +24,14 @@ public class HGVSParserTestBase {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 			HGVSLexer l = new HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
+		}
+		if (trace) {
+			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
+			lexer.pushMode(mode);
+			System.err.println("Lexer tokens");
+			for (Token t : lexer.getAllTokens())
+				System.err.println("\t" + t.getText() + "\t" + t);
+			System.err.println("END OF LEXTER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);

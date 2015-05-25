@@ -20,6 +20,8 @@ hgvs_variant
 nt_change
 :
 	nt_change_deletion
+	| nt_change_duplication
+	| nt_change_indel
 ;
 
 /** nucleotide deletion */
@@ -42,6 +44,23 @@ nt_change_duplication
 		nt_point_location
 		| nt_range
 	) NT_DUP
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** nucleotide replacement/indel/delins */
+nt_change_indel
+:
+	(
+		nt_point_location
+		| nt_range
+	) NT_DEL
+	(
+		nt_number
+		| nt_string
+	)? NT_INS
 	(
 		nt_number
 		| nt_string
