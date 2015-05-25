@@ -21,6 +21,7 @@ aa_change
 :
 	aa_change_deletion
 	| aa_change_duplication
+	| aa_change_indel
 ;
 
 /** amino acid deletion */
@@ -43,6 +44,23 @@ aa_change_duplication
 		aa_point_location
 		| aa_range
 	) PROTEIN_DUP
+	(
+		PROTEIN_NUMBER
+		| aa_string
+	)?
+;
+
+/** amino acid indel / delins / block substitution */
+aa_change_indel
+:
+	(
+		aa_point_location
+		| aa_range
+	) PROTEIN_DEL
+	(
+		PROTEIN_NUMBER
+		| aa_string
+	)? PROTEIN_INS
 	(
 		PROTEIN_NUMBER
 		| aa_string
