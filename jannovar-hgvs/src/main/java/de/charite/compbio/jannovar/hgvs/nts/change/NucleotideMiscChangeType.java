@@ -7,11 +7,11 @@ package de.charite.compbio.jannovar.hgvs.nts.change;
  */
 public enum NucleotideMiscChangeType {
 
-	/** same RNA change as on DNA level (<code>?</code>) */
+	/** same RNA change as on DNA level (<code>(?)</code>) */
 	SAME_AS_DNA,
 	/** unknown effect (<code>?</code>) */
 	UNKNOWN_EFFECT,
-	/** splicing is expected to be affected (<code>spl?</code> */
+	/** splicing is expected to be affected (<code>spl?</code>) */
 	SPLICING_AFFECTED,
 	/** no change (<code>=</code>) */
 	NO_CHANGE,
