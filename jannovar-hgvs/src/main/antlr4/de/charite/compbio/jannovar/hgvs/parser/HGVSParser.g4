@@ -20,6 +20,7 @@ hgvs_variant
 aa_change
 :
 	aa_change_deletion
+	| aa_change_duplication
 ;
 
 /** amino acid deletion */
@@ -29,6 +30,19 @@ aa_change_deletion
 		aa_point_location
 		| aa_range
 	) PROTEIN_DEL
+	(
+		PROTEIN_NUMBER
+		| aa_string
+	)?
+;
+
+/** amino acid duplication */
+aa_change_duplication
+:
+	(
+		aa_point_location
+		| aa_range
+	) PROTEIN_DUP
 	(
 		PROTEIN_NUMBER
 		| aa_string
