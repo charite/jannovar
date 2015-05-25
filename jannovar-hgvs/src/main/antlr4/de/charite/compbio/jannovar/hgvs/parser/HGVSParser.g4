@@ -14,6 +14,64 @@ hgvs_variant
 ;
 
 // --------------------------------------------------------------------------
+// Protein changes
+// --------------------------------------------------------------------------
+
+aa_change
+:
+	aa_change_deletion
+;
+
+/** amino acid deletion */
+aa_change_deletion
+:
+	(
+		aa_point_location
+		| aa_range
+	) PROTEIN_DEL
+	(
+		PROTEIN_NUMBER
+		| aa_string
+	)?
+;
+
+/** amino acid / protein point location */
+aa_point_location
+:
+	aa_char
+	(
+		PROTEIN_MINUS
+		| PROTEIN_TERMINAL
+	)? PROTEIN_NUMBER
+	(
+		(
+			PROTEIN_PLUS
+			| PROTEIN_MINUS
+		) PROTEIN_NUMBER
+	)?
+;
+
+/** amino acid / protein range */
+aa_range
+:
+	aa_point_location PROTEIN_UNDERSCORE aa_point_location
+;
+
+/** amino acid string*/
+aa_string
+:
+	PROTEIN_AA3+
+	| PROTEIN_AA1+
+;
+
+/** amino acid character */
+aa_char
+:
+	PROTEIN_AA3
+	| PROTEIN_AA1
+;
+
+// --------------------------------------------------------------------------
 // Nucleotide changes
 // --------------------------------------------------------------------------
 

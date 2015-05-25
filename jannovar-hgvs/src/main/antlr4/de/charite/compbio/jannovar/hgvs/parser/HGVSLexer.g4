@@ -255,13 +255,6 @@ NT_GT
 /* Lexing of protein changes */
 mode PROTEIN_CHANGE;
 
-/** protein character (3-letter, 1-letter or 'X') */
-PROTEIN_AA
-:
-	PROTEIN_AA1
-	| PROTEIN_AA3
-;
-
 /** number used during protein annotation */
 PROTEIN_NUMBER
 :
