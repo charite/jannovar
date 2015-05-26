@@ -191,6 +191,7 @@ nt_change
 	| nt_change_insertion
 	| nt_change_inversion
 	| nt_change_substitution
+	| nt_change_ssr
 	| nt_change_misc
 ;
 
@@ -255,6 +256,15 @@ nt_change_insertion
 		nt_number
 		| nt_string
 	)?
+;
+
+/** nucleotide short sequence repeat variability */
+nt_change_ssr
+:
+	(
+		nt_point_location
+		| nt_range
+	) NT_PAREN_OPEN NT_NUMBER NT_UNDERSCORE NT_NUMBER NT_PAREN_CLOSE
 ;
 
 /** nucleotide substitution */
