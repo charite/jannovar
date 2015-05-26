@@ -37,6 +37,20 @@ public class ProteinInsertion extends ProteinChange {
 				new ProteinSeqDescription(seq));
 	}
 
+	/** Build with SeqDescription */
+	public static ProteinInsertion buildWithSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, ProteinSeqDescription seqDescription) {
+		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
+				seqDescription);
+	}
+
+	/** Build without any SeqDescription */
+	public static ProteinInsertion buildWithoutSeqDescription(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos) {
+		return new ProteinInsertion(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA, lastPos),
+				new ProteinSeqDescription());
+	}
+
 	/**
 	 * @param onlyPredicted
 	 *            whether the change was only predicted
