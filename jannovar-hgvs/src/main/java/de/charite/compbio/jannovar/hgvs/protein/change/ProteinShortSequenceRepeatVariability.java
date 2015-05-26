@@ -19,7 +19,14 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 	/** upper bound on length, inclusive */
 	private final int maxCount;
 
-	/** Factory forwards to {@link #ProteinShortSequenceRepeatVariability(boolean, ProteinRange, int, int)}. */
+	/** Factory forwards to {@link #build(boolean, ProteinRange, int, int)} */
+	public static ProteinShortSequenceRepeatVariability build(boolean onlyPredicted, String firstAA, int firstPos,
+			String lastAA, int lastPos, int minCount, int maxCount) {
+		return new ProteinShortSequenceRepeatVariability(onlyPredicted, ProteinRange.build(firstAA, firstPos, lastAA,
+				lastPos), minCount, maxCount);
+	}
+
+	/** Factory forwards to {@link #ProteinShortSequenceRepeatVariability(boolean, ProteinRange, int, int)} */
 	public static ProteinShortSequenceRepeatVariability build(boolean onlyPredicted, ProteinRange range, int minCount,
 			int maxCount) {
 		return new ProteinShortSequenceRepeatVariability(onlyPredicted, range, minCount, maxCount);
@@ -50,7 +57,7 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
-		return Joiner.on("").join(range.toHGVSString(code), "(", minCount, "_", maxCount, ")");
+		return wrapIfOnlyPredicted(Joiner.on("").join(range.toHGVSString(code), "(", minCount, "_", maxCount, ")"));
 	}
 
 	@Override
