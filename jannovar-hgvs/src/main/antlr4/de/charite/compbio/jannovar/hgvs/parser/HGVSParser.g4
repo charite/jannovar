@@ -21,6 +21,8 @@ aa_change
 :
 	aa_change_deletion
 	| aa_change_duplication
+	| aa_change_extension
+	| aa_change_frameshift
 	| aa_change_indel
 ;
 
@@ -48,6 +50,35 @@ aa_change_duplication
 		PROTEIN_NUMBER
 		| aa_string
 	)?
+;
+
+/** amino acid extension */
+aa_change_extension
+:
+	aa_point_location aa_char PROTEIN_EXT PROTEIN_TERMINAL
+	(
+		PROTEIN_NUMBER
+		| PROTEIN_QUESTION_MARK
+	)
+;
+
+/** amino acid frameshift */
+aa_change_frameshift
+:
+	aa_point_location
+	(
+		(
+			aa_char PROTEIN_FS
+			(
+				PROTEIN_TERMINAL
+				(
+					PROTEIN_NUMBER
+					| PROTEIN_QUESTION_MARK
+				)
+			)
+		)
+		| PROTEIN_FS
+	)
 ;
 
 /** amino acid indel / delins / block substitution */
