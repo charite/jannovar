@@ -24,6 +24,10 @@ aa_change
 	| aa_change_extension
 	| aa_change_frameshift
 	| aa_change_indel
+	| aa_change_substitution
+	| aa_change_ssr
+	| aa_change_insertion
+	| aa_change_misc
 ;
 
 /** amino acid deletion */
@@ -96,6 +100,47 @@ aa_change_indel
 		PROTEIN_NUMBER
 		| aa_string
 	)?
+;
+
+/** amino acid substitution */
+aa_change_substitution
+:
+	aa_point_location aa_char
+;
+
+/** amino acid short sequence repeat variability */
+aa_change_ssr
+:
+	(
+		aa_point_location
+		| aa_range
+	) PROTEIN_PAREN_OPEN PROTEIN_NUMBER PROTEIN_UNDERSCORE PROTEIN_NUMBER
+	PROTEIN_PAREN_CLOSE
+;
+
+/** amino acid short insertion */
+aa_change_insertion
+:
+	aa_range PROTEIN_INS
+	(
+		PROTEIN_NUMBER
+		| aa_string
+	)?
+;
+
+/** amino acid misc change */
+aa_change_misc
+:
+	PROTEIN_QUESTION_MARK
+	| PROTEIN_EQUAL
+	|
+	(
+		PROTEIN_PAREN_OPEN PROTEIN_EQUAL PROTEIN_PAREN_CLOSE
+	)
+	|
+	(
+		PROTEIN_ZERO PROTEIN_QUESTION_MARK?
+	)
 ;
 
 /** amino acid / protein point location */
