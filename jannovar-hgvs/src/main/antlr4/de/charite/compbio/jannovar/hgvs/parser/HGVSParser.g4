@@ -11,15 +11,17 @@ options {
 /** top-level production rule for both nucleotide and protein variants */
 hgvs_variant
 :
-	protein_single_allele_var
+	nt_single_allele_var
+	| nt_multi_allele_var
+	| protein_single_allele_var
 	| protein_multi_allele_var
 ;
 
 // --------------------------------------------------------------------------
-// Protein reference description
+// Reference description
 // --------------------------------------------------------------------------
 
-protein_reference
+reference
 :
 	REFERENCE
 	(
@@ -28,7 +30,7 @@ protein_reference
 ;
 
 // --------------------------------------------------------------------------
-// Protein single-allele variants
+// Protein allele variants
 // --------------------------------------------------------------------------
 
 protein_single_allele_var
@@ -39,28 +41,39 @@ protein_single_allele_var
 
 protein_single_allele_single_change_var
 :
-	protein_reference PROTEIN_CHANGE_DESCRIPTION aa_change
+	reference PROTEIN_CHANGE_DESCRIPTION aa_change
 ;
 
 protein_single_allele_multi_change_var
 :
-	protein_reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
+	reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
 ;
+
+protein_multi_allele_var
+:
+	reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
+	(
+		PROTEIN_SEMICOLON protein_multi_change_allele
+	)*
+;
+
+// --------------------------------------------------------------------------
+// Protein allele
+// --------------------------------------------------------------------------
 
 protein_multi_change_allele
 :
 	PROTEIN_SQUARE_PAREN_OPEN
 	(
-		protein_single_allele_multi_change_var_inner
+		protein_multi_change_allele_inner
 		|
 		(
-			PROTEIN_PAREN_OPEN protein_single_allele_multi_change_var_inner
-			PROTEIN_PAREN_CLOSE
+			PROTEIN_PAREN_OPEN protein_multi_change_allele_inner PROTEIN_PAREN_CLOSE
 		)
 	) PROTEIN_SQUARE_PAREN_CLOSE
 ;
 
-protein_single_allele_multi_change_var_inner
+protein_multi_change_allele_inner
 :
 	aa_change
 	(
@@ -71,20 +84,12 @@ protein_single_allele_multi_change_var_inner
 protein_var_sep
 :
 	PROTEIN_COMMA
-	| PROTEIN_DASHES
+	| PROTEIN_SLASHES
 	| PROTEIN_SEMICOLON
 	|
 	(
 		PROTEIN_PAREN_OPEN PROTEIN_SEMICOLON PROTEIN_PAREN_CLOSE
 	)
-;
-
-protein_multi_allele_var
-:
-	protein_reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
-	(
-		PROTEIN_SEMICOLON protein_multi_change_allele
-	)*
 ;
 
 // --------------------------------------------------------------------------
@@ -285,6 +290,68 @@ aa_char
 	| PROTEIN_TERMINAL
 ;
 
+// --------------------------------------------------------------------------
+// Nucleotide allele variants
+// --------------------------------------------------------------------------
+
+nt_single_allele_var
+:
+	nt_single_allele_single_change_var
+	| nt_single_allele_multi_change_var
+;
+
+nt_single_allele_single_change_var
+:
+	reference NT_CHANGE_DESCRIPTION nt_change
+;
+
+nt_single_allele_multi_change_var
+:
+	reference NT_CHANGE_DESCRIPTION nt_multi_change_allele
+;
+
+nt_multi_allele_var
+:
+	reference NT_CHANGE_DESCRIPTION nt_multi_change_allele
+	(
+		NT_SEMICOLON nt_multi_change_allele
+	)*
+;
+
+// --------------------------------------------------------------------------
+// Nucleotide allele
+// --------------------------------------------------------------------------
+
+nt_multi_change_allele
+:
+	PROTEIN_SQUARE_PAREN_OPEN
+	(
+		nt_multi_change_allele_inner
+		|
+		(
+			PROTEIN_PAREN_OPEN nt_multi_change_allele_inner PROTEIN_PAREN_CLOSE
+		)
+	) PROTEIN_SQUARE_PAREN_CLOSE
+;
+
+nt_multi_change_allele_inner
+:
+	nt_change
+	(
+		nt_var_sep nt_change
+	)+
+;
+
+nt_var_sep
+:
+	NT_COMMA
+	| NT_SLASHES
+	| NT_SEMICOLON
+	|
+	(
+		NT_PAREN_OPEN NT_SEMICOLON NT_PAREN_CLOSE
+	)
+;
 // --------------------------------------------------------------------------
 // Nucleotide changes
 // --------------------------------------------------------------------------
