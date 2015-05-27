@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs;
+package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;

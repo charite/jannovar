@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs;
+package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class TestHGVSLexerJustLex extends JustParseAndLexBase {
+public class HGVSLexerJustLexTest extends JustParseAndLexBase {
 
 	@Test
 	public void testLexingOnNTStrings() {

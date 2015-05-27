@@ -1,20 +1,23 @@
-package de.charite.compbio.jannovar.hgvs.parser;
+package de.charite.compbio.jannovar.hgvs.parser.nts.change;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_indelContext;
 
 /**
  * Parser for HGVS deletion nucleotide changes.
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public class HGVSParserNucleotideIndelTest extends HGVSParserTestBase {
 
 	@Test
 	public void testWithPositionWithStrings() {
-		HGVSParser parser = buildParserForString("123delCinsTCG", HGVSLexer.NUCLEOTIDE_CHANGE, true);
+		HGVSParser parser = buildParserForString("123delCinsTCG", HGVSLexer.NUCLEOTIDE_CHANGE, false);
 		Nt_change_indelContext nt_change_indel = parser.nt_change_indel();
 		Assert.assertEquals("(nt_change_indel (nt_point_location (nt_base_location (nt_number 123))) del (nt_string C) ins (nt_string TCG))",
 				nt_change_indel.toStringTree(parser));

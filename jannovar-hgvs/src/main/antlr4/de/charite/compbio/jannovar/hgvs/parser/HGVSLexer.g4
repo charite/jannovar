@@ -47,14 +47,7 @@ REFERENCE
 fragment
 REF_IDENTIFIER
 :
-	[a-zA-Z0-9_]+
-;
-
-/** fragment used for protein identifier */
-fragment
-PROT_IDENTIFIER
-:
-	[a-zA-Z0-9]+
+	[_a-zA-Z0-9_]+
 ;
 
 /** opening parenthesis */
@@ -67,18 +60,6 @@ PAREN_OPEN
 PAREN_CLOSE
 :
 	')'
-;
-
-/**  used for specifying transcript variant */
-TRANS_VAR
-:
-	'_v'
-;
-
-/** used for specifying protein isoform */
-PROT_ISO
-:
-	'_i'
 ;
 
 /** token used for stopping the reference description */
@@ -279,7 +260,7 @@ PROTEIN_COLON
 	':' -> popMode
 ;
 
-/** 3-letter protein codes */
+/** 3-letter protein codes, excluding Met */
 PROTEIN_AA3
 :
 	'Ala'
@@ -294,7 +275,6 @@ PROTEIN_AA3
 	| 'Ile'
 	| 'Leu'
 	| 'Lys'
-	| 'Met'
 	| 'Phe'
 	| 'Pro'
 	| 'Ser'
@@ -304,7 +284,7 @@ PROTEIN_AA3
 	| 'Val'
 ;
 
-/** 1-letter protein codes */
+/** 1-letter protein codes, excluding M */
 PROTEIN_AA1
 :
 	'A'
@@ -319,7 +299,6 @@ PROTEIN_AA1
 	| 'I'
 	| 'L'
 	| 'K'
-	| 'M'
 	| 'F'
 	| 'P'
 	| 'S'
@@ -327,6 +306,13 @@ PROTEIN_AA1
 	| 'W'
 	| 'Y'
 	| 'V'
+;
+
+/** start codon without position */
+PROTEIN_MET
+:
+	'M'
+	| 'Met'
 ;
 
 /** zero, used for denoting no produced protein */
@@ -393,19 +379,6 @@ PROTEIN_EQUAL
 PROTEIN_QUESTION_MARK
 :
 	'?'
-;
-
-/** start codon with position */
-PROTEIN_M1
-:
-	PROTEIN_MET '1'
-;
-
-/** start codon without position */
-PROTEIN_MET
-:
-	'M'
-	| 'Met'
 ;
 
 PROTEIN_PAREN_OPEN

@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs;
+package de.charite.compbio.jannovar.hgvs.parser;
 
 /**
  * Shared protein/nucleotide change strings for "JustParse" and "JustLex" tests.
@@ -23,7 +23,7 @@ public class JustParseAndLexBase {
 			"g.1209_4523[14];[23]" };
 
 	/** protein changes that should be parseable/lexable */
-	public static String[] PROTEIN_STRINGS = { "NR12345:p.Gly2L", "p.G2L", "NR_12345.1:p.G2L", "p.Glu124Serfs*148",
+	public static String[] PROTEIN_STRINGS = { "p.Gly2L", "p.G2L", "p.G2L", "p.Glu124Serfs*148",
 			"p.Gln16dup", "p.E124Sfs*148", "p.Gln3_Leu7delinsGlnGlnTrpSerLeu", "p.Q3_L7delinsGlnGlnTrpSerLeu",
 			"p.Met1Leu", "p.Met1?", "p.M1?", "p.[(Ala25Thr)(;)(Pro323Leu)]", "p.Arg83=", /* "p.[Arg83=/Arg83Ser]", */
 			/* "p.[Arg83=//Arg83Ser]", */"p.[Ala25Thr(;)Pro323Leu]", "p.[(Ala25Thr)(;)(Pro323Leu)]",

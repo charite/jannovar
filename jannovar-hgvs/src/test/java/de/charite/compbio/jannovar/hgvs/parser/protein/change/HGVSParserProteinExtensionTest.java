@@ -1,9 +1,14 @@
-package de.charite.compbio.jannovar.hgvs.parser;
+package de.charite.compbio.jannovar.hgvs.parser.protein.change;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Aa_change_extensionContext;
+
+// TODO(holtgrewe): p.Met1ext is not representable using the classes yet
 
 /**
  * Parser for HGVS extension amino acid changes.

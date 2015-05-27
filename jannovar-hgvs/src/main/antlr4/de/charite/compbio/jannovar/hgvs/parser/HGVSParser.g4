@@ -11,6 +11,80 @@ options {
 /** top-level production rule for both nucleotide and protein variants */
 hgvs_variant
 :
+	protein_single_allele_var
+	| protein_multi_allele_var
+;
+
+// --------------------------------------------------------------------------
+// Protein reference description
+// --------------------------------------------------------------------------
+
+protein_reference
+:
+	REFERENCE
+	(
+		PAREN_OPEN REFERENCE PAREN_CLOSE
+	)? REF_STOP
+;
+
+// --------------------------------------------------------------------------
+// Protein single-allele variants
+// --------------------------------------------------------------------------
+
+protein_single_allele_var
+:
+	protein_single_allele_single_change_var
+	| protein_single_allele_multi_change_var
+;
+
+protein_single_allele_single_change_var
+:
+	protein_reference PROTEIN_CHANGE_DESCRIPTION aa_change
+;
+
+protein_single_allele_multi_change_var
+:
+	protein_reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
+;
+
+protein_multi_change_allele
+:
+	PROTEIN_SQUARE_PAREN_OPEN
+	(
+		protein_single_allele_multi_change_var_inner
+		|
+		(
+			PROTEIN_PAREN_OPEN protein_single_allele_multi_change_var_inner
+			PROTEIN_PAREN_CLOSE
+		)
+	) PROTEIN_SQUARE_PAREN_CLOSE
+;
+
+protein_single_allele_multi_change_var_inner
+:
+	aa_change
+	(
+		protein_var_sep aa_change
+	)+
+;
+
+protein_var_sep
+:
+	PROTEIN_COMMA
+	| PROTEIN_DASHES
+	| PROTEIN_SEMICOLON
+	|
+	(
+		PROTEIN_PAREN_OPEN PROTEIN_SEMICOLON PROTEIN_PAREN_CLOSE
+	)
+;
+
+protein_multi_allele_var
+:
+	protein_reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
+	(
+		PROTEIN_SEMICOLON protein_multi_change_allele
+	)*
 ;
 
 // --------------------------------------------------------------------------
@@ -18,6 +92,15 @@ hgvs_variant
 // --------------------------------------------------------------------------
 
 aa_change
+:
+	aa_change_inner
+	|
+	(
+		PROTEIN_PAREN_OPEN aa_change_inner PROTEIN_PAREN_CLOSE
+	)
+;
+
+aa_change_inner
 :
 	aa_change_deletion
 	| aa_change_duplication
@@ -59,10 +142,19 @@ aa_change_duplication
 /** amino acid extension */
 aa_change_extension
 :
-	aa_point_location aa_char PROTEIN_EXT PROTEIN_TERMINAL
+	aa_point_location aa_char? PROTEIN_EXT
 	(
-		PROTEIN_NUMBER
-		| PROTEIN_QUESTION_MARK
+		(
+			PROTEIN_TERMINAL
+			(
+				PROTEIN_NUMBER
+				| PROTEIN_QUESTION_MARK
+			)
+		)
+		|
+		(
+			PROTEIN_MINUS PROTEIN_NUMBER
+		)
 	)
 ;
 
@@ -105,7 +197,12 @@ aa_change_indel
 /** amino acid substitution */
 aa_change_substitution
 :
-	aa_point_location aa_char
+	aa_point_location
+	(
+		aa_char
+		| PROTEIN_QUESTION_MARK
+		| PROTEIN_EQUAL
+	)
 ;
 
 /** amino acid short sequence repeat variability */
@@ -168,8 +265,15 @@ aa_range
 /** amino acid string*/
 aa_string
 :
-	PROTEIN_AA3+
-	| PROTEIN_AA1+
+	(
+		PROTEIN_MET
+		| PROTEIN_AA3
+	)+
+	|
+	(
+		PROTEIN_MET
+		| PROTEIN_AA1
+	)+
 ;
 
 /** amino acid character */
@@ -177,6 +281,8 @@ aa_char
 :
 	PROTEIN_AA3
 	| PROTEIN_AA1
+	| PROTEIN_MET
+	| PROTEIN_TERMINAL
 ;
 
 // --------------------------------------------------------------------------
