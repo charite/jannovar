@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.hgvs.parser.protein;
+package de.charite.compbio.jannovar.hgvs.parser.protein.variant;
 
 import org.junit.Assert;
 import org.junit.Test;
