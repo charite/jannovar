@@ -2,6 +2,18 @@
 
 ## develop
 
+## jannovar-core
+
+* Renaming HGVSPositionBuilder to NucleotidePointLocationBuilder.
+* using jannovar-hgvs for representing the changes
+* more precise HGVS annotation in some cases
+* predictions are wrapped in parentheses
+
+## jannover-hgvs
+
+* adding module for parsing and representing HGVS-compatible nucleic and protein
+  changes
+
 ### jannovar-cli
 
 * Improving output file generation, jannovar-cli now uses the same extension

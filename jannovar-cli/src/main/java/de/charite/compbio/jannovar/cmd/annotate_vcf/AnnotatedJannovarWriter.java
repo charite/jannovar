@@ -36,8 +36,7 @@ import de.charite.compbio.jannovar.reference.Strand;
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 
 	/**
-	 * {@link ReferenceDictionary} object to use for information about the
-	 * genome.
+	 * {@link ReferenceDictionary} object to use for information about the genome.
 	 */
 	private final ReferenceDictionary refDict;
 
@@ -150,8 +149,11 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 		for (Annotation a : anno.getAnnotations()) {
 			String effect = Joiner.on("+").join(
 					FluentIterable.from(a.getEffects()).transform(VariantEffect.TO_LEGACY_NAME));
-			String annt = Joiner.on(":").skipNulls()
-					.join(a.getNucleotideHGVSDescription(), a.getAminoAcidHGVSDescription());
+			String annt = Joiner
+					.on(":")
+					.skipNulls()
+					.join(a.getCDSNTChange().toHGVSString(),
+							(a.getProteinChange() == null) ? null : ("p." + a.getProteinChange().toHGVSString()));
 			String sym = a.getTranscript().getGeneSymbol();
 			String s = String.format("%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n", currentLine, effect, sym, annt,
 					chrStr, change.getPos(), change.getRef(), change.getAlt(), gtype, qual);
@@ -160,8 +162,7 @@ public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 	}
 
 	/**
-	 * Return genotype string as in VCF for the i-th individual at the position
-	 * in variantContext.
+	 * Return genotype string as in VCF for the i-th individual at the position in variantContext.
 	 *
 	 * @param variantContext
 	 *            The VariantContext to query.
