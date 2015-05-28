@@ -78,7 +78,7 @@ protein_multi_change_allele_inner
 	aa_change
 	(
 		protein_var_sep aa_change
-	)+
+	)*
 ;
 
 protein_var_sep
