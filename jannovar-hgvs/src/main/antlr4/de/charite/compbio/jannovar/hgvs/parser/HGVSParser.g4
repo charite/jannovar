@@ -324,14 +324,14 @@ nt_multi_allele_var
 
 nt_multi_change_allele
 :
-	PROTEIN_SQUARE_PAREN_OPEN
+	NT_SQUARE_PAREN_OPEN
 	(
 		nt_multi_change_allele_inner
 		|
 		(
-			PROTEIN_PAREN_OPEN nt_multi_change_allele_inner PROTEIN_PAREN_CLOSE
+			NT_PAREN_OPEN nt_multi_change_allele_inner NT_PAREN_CLOSE
 		)
-	) PROTEIN_SQUARE_PAREN_CLOSE
+	) NT_SQUARE_PAREN_CLOSE
 ;
 
 nt_multi_change_allele_inner
@@ -339,7 +339,7 @@ nt_multi_change_allele_inner
 	nt_change
 	(
 		nt_var_sep nt_change
-	)+
+	)*
 ;
 
 nt_var_sep

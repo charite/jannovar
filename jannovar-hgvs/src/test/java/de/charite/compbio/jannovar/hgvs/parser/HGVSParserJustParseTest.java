@@ -8,8 +8,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
+// TODO(holtgrewe): Add support for "c.[83G=/83G>C]"
 
 /**
  * Feeds valid HGSV descriptions to the parser to see whether that works.
