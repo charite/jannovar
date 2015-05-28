@@ -37,7 +37,8 @@ public final class AnnotationBuilderDispatcher {
 	 */
 	public Annotation build() throws InvalidGenomeChange {
 		if (transcript == null)
-			return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null, null, null);
+			return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null,
+					new GenomicNucleotideChangeBuilder(change).build(), null, null);
 
 		switch (change.getType()) {
 		case SNV:

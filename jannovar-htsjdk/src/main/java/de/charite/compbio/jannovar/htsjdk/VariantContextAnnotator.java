@@ -196,8 +196,8 @@ public final class VariantContextAnnotator {
 	 *
 	 * @param vc
 	 *            the VCF record to annotate, remains unchanged
-	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of the
-	 *         alternative alleles in <code>vc</code>
+	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of
+	 *         the alternative alleles in <code>vc</code>
 	 * @throws InvalidCoordinatesException
 	 *             in the case of problems with resolving coordinates internally, namely building the
 	 *             {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.

@@ -10,14 +10,16 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.HG19RefDictBuilder;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
+
+// TODO(holtgrew): Test results of getGenomicNTChange()?
 
 public class SNVAnnotationBuilderTest {
 
@@ -64,8 +66,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(null, anno.getAnnoLoc());
-		Assert.assertEquals(null, anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getCDSNTChange());
+		Assert.assertEquals(null, anno.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.UPSTREAM_GENE_VARIANT), anno.getEffects());
 	}
 
@@ -76,8 +78,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(null, anno.getAnnoLoc());
-		Assert.assertEquals(null, anno.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno.getCDSNTChange());
+		Assert.assertEquals(null, anno.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), anno.getEffects());
 	}
 
@@ -89,8 +91,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno1.getTranscript().getAccession());
 		Assert.assertEquals(null, anno1.getAnnoLoc());
-		Assert.assertEquals(null, anno1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno1.getCDSNTChange());
+		Assert.assertEquals(null, anno1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno1.getEffects());
 
 		// downstream intergenic
@@ -99,8 +101,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(null, anno2.getAnnoLoc());
-		Assert.assertEquals(null, anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, anno2.getCDSNTChange());
+		Assert.assertEquals(null, anno2.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), anno2.getEffects());
 	}
 
@@ -112,8 +114,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.691-11T>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("691-11T>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno.getEffects());
 
 		// position towards left side of intron
@@ -122,8 +124,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(3, anno2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1044+11T>A", anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1044+11T>A", anno2.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), anno2.getEffects());
 	}
 
@@ -134,8 +136,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*1T>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*1T>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), anno.getEffects());
 	}
 
@@ -146,8 +148,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-1T>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-1T>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), anno.getEffects());
 	}
 
@@ -158,8 +160,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1A>T", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1A>T", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno.getEffects());
 	}
@@ -171,8 +173,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2067G>C", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*689Tyrext*23", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2067G>C", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*689Tyrext*23)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), anno.getEffects());
 	}
 
@@ -183,8 +185,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2058T>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Cys686*", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2058T>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Cys686*)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), anno.getEffects());
 	}
 
@@ -195,8 +197,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2067G>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2067G>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.STOP_RETAINED_VARIANT, VariantEffect.SYNONYMOUS_VARIANT),
 				anno.getEffects());
@@ -209,8 +211,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(0, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-70+1G>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-70+1G>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT, VariantEffect.SPLICE_DONOR_VARIANT),
 				anno.getEffects());
@@ -223,8 +225,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(0, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-69-1G>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-69-1G>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT, VariantEffect.SPLICE_ACCEPTOR_VARIANT),
 				anno.getEffects());
@@ -238,8 +240,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno.getTranscript().getAccession());
 		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-67G>A", anno.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-67G>A", anno.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				anno.getEffects());
@@ -249,8 +251,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(6, anno2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1225T>G", anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Cys409Gly", anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1225T>G", anno2.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Cys409Gly)", anno2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				anno2.getEffects());
 	}
@@ -264,8 +266,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno1.getTranscript().getAccession());
 		Assert.assertEquals(1, anno1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1A>T", anno1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1A>T", anno1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno1.getEffects());
 
@@ -274,8 +276,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(1, anno2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2T>C", anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2T>C", anno2.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno2.getEffects());
 
@@ -284,8 +286,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno3 = new SNVAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno3.getTranscript().getAccession());
 		Assert.assertEquals(1, anno3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.3G>A", anno3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno3.getAminoAcidHGVSDescription());
+		Assert.assertEquals("3G>A", anno3.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno3.getEffects());
 
@@ -294,8 +296,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno4 = new SNVAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno4.getTranscript().getAccession());
 		Assert.assertEquals(1, anno4.getAnnoLoc().getRank());
-		Assert.assertEquals("c.4G>T", anno4.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp2Tyr", anno4.getAminoAcidHGVSDescription());
+		Assert.assertEquals("4G>T", anno4.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp2Tyr)", anno4.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno4.getEffects());
 
 		GenomeVariant change5 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640673,
@@ -303,8 +305,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno5 = new SNVAnnotationBuilder(infoForward, change5, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno5.getTranscript().getAccession());
 		Assert.assertEquals(1, anno5.getAnnoLoc().getRank());
-		Assert.assertEquals("c.5A>T", anno5.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp2Val", anno5.getAminoAcidHGVSDescription());
+		Assert.assertEquals("5A>T", anno5.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp2Val)", anno5.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno5.getEffects());
 
 		GenomeVariant change6 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640674,
@@ -312,8 +314,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno6 = new SNVAnnotationBuilder(infoForward, change6, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno6.getTranscript().getAccession());
 		Assert.assertEquals(1, anno6.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6C>T", anno6.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno6.getAminoAcidHGVSDescription());
+		Assert.assertEquals("6C>T", anno6.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno6.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno6.getEffects());
 
 		GenomeVariant change7 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640675,
@@ -321,8 +323,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno7 = new SNVAnnotationBuilder(infoForward, change7, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno7.getTranscript().getAccession());
 		Assert.assertEquals(1, anno7.getAnnoLoc().getRank());
-		Assert.assertEquals("c.7G>T", anno7.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gly3Cys", anno7.getAminoAcidHGVSDescription());
+		Assert.assertEquals("7G>T", anno7.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gly3Cys)", anno7.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno7.getEffects());
 
 		GenomeVariant change8 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640676,
@@ -330,8 +332,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno8 = new SNVAnnotationBuilder(infoForward, change8, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno8.getTranscript().getAccession());
 		Assert.assertEquals(1, anno8.getAnnoLoc().getRank());
-		Assert.assertEquals("c.8G>T", anno8.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gly3Val", anno8.getAminoAcidHGVSDescription());
+		Assert.assertEquals("8G>T", anno8.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gly3Val)", anno8.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno8.getEffects());
 
 		GenomeVariant change9 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640677,
@@ -339,8 +341,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno9 = new SNVAnnotationBuilder(infoForward, change9, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno9.getTranscript().getAccession());
 		Assert.assertEquals(1, anno9.getAnnoLoc().getRank());
-		Assert.assertEquals("c.9C>G", anno9.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno9.getAminoAcidHGVSDescription());
+		Assert.assertEquals("9C>G", anno9.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno9.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno9.getEffects());
 
 		GenomeVariant change10 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640678,
@@ -348,8 +350,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno10 = new SNVAnnotationBuilder(infoForward, change10, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno10.getTranscript().getAccession());
 		Assert.assertEquals(1, anno10.getAnnoLoc().getRank());
-		Assert.assertEquals("c.10T>A", anno10.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ser4Thr", anno10.getAminoAcidHGVSDescription());
+		Assert.assertEquals("10T>A", anno10.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ser4Thr)", anno10.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno10.getEffects());
 	}
 
@@ -362,8 +364,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno1.getTranscript().getAccession());
 		Assert.assertEquals(10, anno1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2066A>G", anno1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*689Trpext*23", anno1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2066A>G", anno1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*689Trpext*23)", anno1.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno1.getEffects(), ImmutableSortedSet.of(VariantEffect.STOP_LOST));
 
 		GenomeVariant change2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649269,
@@ -371,8 +373,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoForward, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(10, anno2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2065T>C", anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*689Glnext*23", anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2065T>C", anno2.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*689Glnext*23)", anno2.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno2.getEffects(), ImmutableSortedSet.of(VariantEffect.STOP_LOST));
 
 		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649268,
@@ -380,8 +382,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno3 = new SNVAnnotationBuilder(infoForward, change3, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno3.getTranscript().getAccession());
 		Assert.assertEquals(10, anno3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2064A>T", anno3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno3.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2064A>T", anno3.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno3.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno3.getEffects(), ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT));
 
 		GenomeVariant change4 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649267,
@@ -389,8 +391,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno4 = new SNVAnnotationBuilder(infoForward, change4, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno4.getTranscript().getAccession());
 		Assert.assertEquals(10, anno4.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2063C>G", anno4.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr688Arg", anno4.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2063C>G", anno4.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr688Arg)", anno4.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno4.getEffects(), ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeVariant change5 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649266,
@@ -398,8 +400,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno5 = new SNVAnnotationBuilder(infoForward, change5, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno5.getTranscript().getAccession());
 		Assert.assertEquals(10, anno5.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2062A>G", anno5.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr688Ala", anno5.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2062A>G", anno5.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr688Ala)", anno5.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno5.getEffects(), ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeVariant change6 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649265,
@@ -407,8 +409,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno6 = new SNVAnnotationBuilder(infoForward, change6, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno6.getTranscript().getAccession());
 		Assert.assertEquals(10, anno6.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2061C>T", anno6.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno6.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2061C>T", anno6.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno6.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno6.getEffects(), ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT));
 
 		GenomeVariant change7 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649264,
@@ -416,8 +418,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno7 = new SNVAnnotationBuilder(infoForward, change7, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno7.getTranscript().getAccession());
 		Assert.assertEquals(10, anno7.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2060A>G", anno7.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp687Gly", anno7.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2060A>G", anno7.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp687Gly)", anno7.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno7.getEffects(), ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeVariant change8 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649263,
@@ -425,8 +427,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno8 = new SNVAnnotationBuilder(infoForward, change8, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno8.getTranscript().getAccession());
 		Assert.assertEquals(10, anno8.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2059G>A", anno8.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp687Asn", anno8.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2059G>A", anno8.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp687Asn)", anno8.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno8.getEffects(), ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeVariant change9 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649262,
@@ -434,8 +436,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno9 = new SNVAnnotationBuilder(infoForward, change9, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno9.getTranscript().getAccession());
 		Assert.assertEquals(10, anno9.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2058T>G", anno9.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Cys686Trp", anno9.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2058T>G", anno9.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Cys686Trp)", anno9.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno9.getEffects(), ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 
 		GenomeVariant change10 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649261,
@@ -443,8 +445,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno10 = new SNVAnnotationBuilder(infoForward, change10, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), anno10.getTranscript().getAccession());
 		Assert.assertEquals(10, anno10.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2057G>C", anno10.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Cys686Ser", anno10.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2057G>C", anno10.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Cys686Ser)", anno10.getProteinChange().toHGVSString());
 		Assert.assertEquals(anno10.getEffects(), ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT));
 	}
 
@@ -457,8 +459,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno1 = new SNVAnnotationBuilder(infoReverse, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno1.getTranscript().getAccession());
 		Assert.assertEquals(1, anno1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1A>T", anno1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1A>T", anno1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno1.getEffects());
 
@@ -467,8 +469,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoReverse, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(1, anno2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2T>C", anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2T>C", anno2.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno2.getEffects());
 
@@ -477,8 +479,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno3 = new SNVAnnotationBuilder(infoReverse, change3, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno3.getTranscript().getAccession());
 		Assert.assertEquals(1, anno3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.3G>A", anno3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.0?", anno3.getAminoAcidHGVSDescription());
+		Assert.assertEquals("3G>A", anno3.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("0?", anno3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.START_LOST),
 				anno3.getEffects());
 
@@ -487,8 +489,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno4 = new SNVAnnotationBuilder(infoReverse, change4, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno4.getTranscript().getAccession());
 		Assert.assertEquals(1, anno4.getAnnoLoc().getRank());
-		Assert.assertEquals("c.4G>T", anno4.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ala2Ser", anno4.getAminoAcidHGVSDescription());
+		Assert.assertEquals("4G>T", anno4.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ala2Ser)", anno4.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno4.getEffects());
 
 		GenomeVariant change5 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694493,
@@ -496,8 +498,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno5 = new SNVAnnotationBuilder(infoReverse, change5, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno5.getTranscript().getAccession());
 		Assert.assertEquals(1, anno5.getAnnoLoc().getRank());
-		Assert.assertEquals("c.5C>T", anno5.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ala2Val", anno5.getAminoAcidHGVSDescription());
+		Assert.assertEquals("5C>T", anno5.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ala2Val)", anno5.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno5.getEffects());
 
 		GenomeVariant change6 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694492,
@@ -505,8 +507,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno6 = new SNVAnnotationBuilder(infoReverse, change6, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno6.getTranscript().getAccession());
 		Assert.assertEquals(1, anno6.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6A>C", anno6.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno6.getAminoAcidHGVSDescription());
+		Assert.assertEquals("6A>C", anno6.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno6.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno6.getEffects());
 
 		GenomeVariant change7 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694491,
@@ -514,8 +516,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno7 = new SNVAnnotationBuilder(infoReverse, change7, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno7.getTranscript().getAccession());
 		Assert.assertEquals(1, anno7.getAnnoLoc().getRank());
-		Assert.assertEquals("c.7G>A", anno7.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ala3Thr", anno7.getAminoAcidHGVSDescription());
+		Assert.assertEquals("7G>A", anno7.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ala3Thr)", anno7.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno7.getEffects());
 
 		GenomeVariant change8 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694490,
@@ -523,8 +525,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno8 = new SNVAnnotationBuilder(infoReverse, change8, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno8.getTranscript().getAccession());
 		Assert.assertEquals(1, anno8.getAnnoLoc().getRank());
-		Assert.assertEquals("c.8C>T", anno8.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ala3Val", anno8.getAminoAcidHGVSDescription());
+		Assert.assertEquals("8C>T", anno8.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ala3Val)", anno8.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno8.getEffects());
 
 		GenomeVariant change9 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694489,
@@ -532,8 +534,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno9 = new SNVAnnotationBuilder(infoReverse, change9, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno9.getTranscript().getAccession());
 		Assert.assertEquals(1, anno9.getAnnoLoc().getRank());
-		Assert.assertEquals("c.9C>G", anno9.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno9.getAminoAcidHGVSDescription());
+		Assert.assertEquals("9C>G", anno9.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno9.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno9.getEffects());
 
 		GenomeVariant change10 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694488,
@@ -541,8 +543,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno10 = new SNVAnnotationBuilder(infoReverse, change10, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno10.getTranscript().getAccession());
 		Assert.assertEquals(1, anno10.getAnnoLoc().getRank());
-		Assert.assertEquals("c.10A>G", anno10.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr4Ala", anno10.getAminoAcidHGVSDescription());
+		Assert.assertEquals("10A>G", anno10.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr4Ala)", anno10.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno10.getEffects());
 	}
 
@@ -555,8 +557,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno1 = new SNVAnnotationBuilder(infoReverse, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno1.getTranscript().getAccession());
 		Assert.assertEquals(3, anno1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1413A>G", anno1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1413A>G", anno1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
 				ImmutableSortedSet.of(VariantEffect.STOP_RETAINED_VARIANT, VariantEffect.SYNONYMOUS_VARIANT),
 				anno1.getEffects());
@@ -566,8 +568,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno2 = new SNVAnnotationBuilder(infoReverse, change2, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno2.getTranscript().getAccession());
 		Assert.assertEquals(3, anno2.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1412A>C", anno2.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*471Serext*9", anno2.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1412A>C", anno2.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*471Serext*9)", anno2.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), anno2.getEffects());
 
 		GenomeVariant change3 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688463,
@@ -575,8 +577,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno3 = new SNVAnnotationBuilder(infoReverse, change3, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno3.getTranscript().getAccession());
 		Assert.assertEquals(3, anno3.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1411T>A", anno3.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*471Lysext*9", anno3.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1411T>A", anno3.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*471Lysext*9)", anno3.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), anno3.getEffects());
 
 		GenomeVariant change4 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688464,
@@ -584,8 +586,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno4 = new SNVAnnotationBuilder(infoReverse, change4, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno4.getTranscript().getAccession());
 		Assert.assertEquals(3, anno4.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1410C>G", anno4.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp470Glu", anno4.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1410C>G", anno4.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp470Glu)", anno4.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno4.getEffects());
 
 		GenomeVariant change5 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688465,
@@ -593,8 +595,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno5 = new SNVAnnotationBuilder(infoReverse, change5, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno5.getTranscript().getAccession());
 		Assert.assertEquals(3, anno5.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1409A>G", anno5.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp470Gly", anno5.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1409A>G", anno5.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp470Gly)", anno5.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno5.getEffects());
 
 		GenomeVariant change6 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688466,
@@ -602,8 +604,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno6 = new SNVAnnotationBuilder(infoReverse, change6, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno6.getTranscript().getAccession());
 		Assert.assertEquals(3, anno6.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1408G>T", anno6.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asp470Tyr", anno6.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1408G>T", anno6.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asp470Tyr)", anno6.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno6.getEffects());
 
 		GenomeVariant change7 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688467,
@@ -611,8 +613,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno7 = new SNVAnnotationBuilder(infoReverse, change7, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno7.getTranscript().getAccession());
 		Assert.assertEquals(3, anno7.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1407G>C", anno7.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno7.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1407G>C", anno7.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno7.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno7.getEffects());
 
 		GenomeVariant change8 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688468,
@@ -620,8 +622,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno8 = new SNVAnnotationBuilder(infoReverse, change8, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno8.getTranscript().getAccession());
 		Assert.assertEquals(3, anno8.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1406C>A", anno8.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr469Lys", anno8.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1406C>A", anno8.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr469Lys)", anno8.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno8.getEffects());
 
 		GenomeVariant change9 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688469,
@@ -629,8 +631,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno9 = new SNVAnnotationBuilder(infoReverse, change9, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno9.getTranscript().getAccession());
 		Assert.assertEquals(3, anno9.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1405A>G", anno9.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr469Ala", anno9.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1405A>G", anno9.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr469Ala)", anno9.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), anno9.getEffects());
 
 		GenomeVariant change10 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688470,
@@ -638,8 +640,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation anno10 = new SNVAnnotationBuilder(infoReverse, change10, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoReverse.getAccession(), anno10.getTranscript().getAccession());
 		Assert.assertEquals(3, anno10.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1404T>C", anno10.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", anno10.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1404T>C", anno10.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", anno10.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), anno10.getEffects());
 	}
 
@@ -663,8 +665,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1663A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Lys555*", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1663A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Lys555*)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation1.getEffects());
 	}
 
@@ -686,8 +688,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.431G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Trp144*", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("431G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Trp144*)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation1.getEffects());
 	}
 
@@ -707,8 +709,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.819T>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Tyr273*", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("819T>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Tyr273*)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_GAINED), annotation1.getEffects());
 	}
 
@@ -730,8 +732,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1000T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*334Argext*29", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1000T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*334Argext*29)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.getEffects());
 	}
 
@@ -753,8 +755,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1134+1T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1134+1T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -777,8 +779,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1135T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*379Argext*29", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1135T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*379Argext*29)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.getEffects());
 	}
 
@@ -800,8 +802,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1171T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.*391Argext*3", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1171T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(*391Argext*3)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.STOP_LOST), annotation1.getEffects());
 	}
 
@@ -822,13 +824,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				154009587, PositionType.ZERO_BASED), "T", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(11, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1060A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr354Ser", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1060A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr354Ser)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
 	}
@@ -846,13 +848,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				154009587, PositionType.ZERO_BASED), "T", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1090A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr364Ser", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1090A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr364Ser)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
 	}
@@ -870,13 +872,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				154009587, PositionType.ZERO_BASED), "T", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1099A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr367Ser", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1099A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr367Ser)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
 	}
@@ -894,13 +896,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq NM_002436.3
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				154009587, PositionType.ZERO_BASED), "T", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1150A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr384Ser", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1150A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr384Ser)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
 	}
@@ -923,8 +925,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.166A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr56Ala", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("166A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr56Ala)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -946,8 +948,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.166A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr56Ala", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("166A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr56Ala)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -967,8 +969,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.70A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr24Ala", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("70A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr24Ala)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -990,8 +992,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(16, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1718A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Asn573Ser", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1718A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Asn573Ser)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1004,7 +1006,7 @@ public class SNVAnnotationBuilderTest {
 		this.builderForward
 				.setSequence("ttcctgcttggttcttcctgaggtctgagcaccttctagactacatccagatctgttttccctgcagattcatgaagatgagcatccggattccacccagactcctggagcttgcgggcggagcctgctgagggaccaagccttggccgtctccaccctggaggagctgcccacggaacttttccccccactgttcatggaggccttcagcaggagacgctgtgaggccctgaagctgatggtgcaggcctggcccttccgccgcctccctctgaggcctctgataaagatgccttgtctggaggccttccaagctgtgctcgatgggcttgatgcactgcttacccaaggggttcgtcccaggagatggaaacttcaagtgctggatttacaggatgtctgtgagaacttctggatggtttggtctgaagctatggcccatgggtgcttcctcaatgccaagaggaacaaaacaccagtgcaggactgtccaaggatgagagaacggcagcccttgactgtgtttgtagaactttggctcaagaacaggactctggatgaatacctcacctgcctccttctatgggtcaagcagaggagagatttactacacctgtgctgtaagaagctgaaaattttgggaatgcccttccgcaatatcagaagcatcctgaaaatggtgaacctagactgtatccaggaggtggaagtgaattgcaagtggatactgcccatcctgacacagtttaccccatacctgggccacttgaggaatcttcagaagctcgttctctcccacatggatgtctctcgctacgtttccccagagcagaagaaggagattgttacccagttcaccactcagttcctcaagctgcgctgcctccaaaagctttatatgaactctgtttctttcctcgaaggccacctggaccagctgctcagctgtctgaagacctcgttaaaggtcctcacaataactaactgtgtgcttttggaatcagacttgaagcatctctcccagtgcccgagtatcagtcaactaaagaccctggacctgagtggcatcagactgaccaattacagtcttgtgcctctccaaattctcctagaaaaagttgcagccacccttgagtacctggatttagatgactgtggcatcatagactcccaagtcaacgccatcctgcctgccctgagccgctgctttgagctcaacaccttcagcttctgtggaaatcccatctgcatggccaccctggagaacctgctgagccacacaatcatactcaaaaacttatgcctggagctgtatcctgccccgcaggaaagttatggtgctgatggtactctctgctggagcagatttgctcaaattagggctgagctgatgaagaaagtgaggcacttaaggcaccccaagaggatcttgttctgtactgacaactgccctgaccatggcgacaggtcattttatgacctggaggcagatcaatactgctgttgaatgcctgcctatttggatgggtatgtcaaacgctttcttctggacacttggaaactaaaacctaggtcttaggtacatcctaaagggagcacagaacccatcgtttcacacatgggctctgaaagtgggaaaggaaagctgatcaagcaggggcaggacttgggggaaatgttgccatggattcgatgggactttgggaacctgtatcctgtagagtcgaaaatgggaatctgaatgtctagagtggaattcaggcttgagaatacatgagggagttactcttgcatggatggttgtaaagaaacaatcagaaataaaggaaaactgagcag"
 						.toUpperCase());
-		this.builderForward.setGeneSymbol("PRAMEF11");
+		this.builderForward.setGeneSymbol("(AMEF11)");
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
@@ -1013,8 +1015,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.308A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu103Gly", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("308A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu103Gly)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1035,8 +1037,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.434A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.His145Arg", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("434A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(His145Arg)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1058,8 +1060,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.197A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu66Gly", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("197A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu66Gly)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1081,8 +1083,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.320A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu107Gly", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("320A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu107Gly)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1104,8 +1106,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.515A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu172Gly", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("515A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu172Gly)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1127,8 +1129,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.515A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu172Gly", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("515A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu172Gly)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1150,8 +1152,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(20, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2756A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Glu919Gly", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2756A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Glu919Gly)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1173,8 +1175,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.194A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gln65Arg", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("194A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gln65Arg)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1196,8 +1198,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.229G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ala77Thr", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("229G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ala77Thr)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1219,8 +1221,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.47G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Cys16Tyr", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("47G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Cys16Tyr)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1242,8 +1244,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.974C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr325Ile", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("974C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr325Ile)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
 	}
@@ -1266,8 +1268,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.7G>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Val3Leu", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("7G>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Val3Leu)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1289,8 +1291,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(11, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2653G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Val885Met", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2653G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Val885Met)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1312,8 +1314,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.857A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gln286Arg", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("857A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gln286Arg)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1335,8 +1337,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.230A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gln77Arg", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("230A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gln77Arg)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1358,8 +1360,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.17A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.His6Arg", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("17A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(His6Arg)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1381,8 +1383,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.727A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Ile243Val", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("727A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Ile243Val)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1404,8 +1406,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.542G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gly181Asp", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("542G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gly181Asp)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1427,8 +1429,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.446A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Gln149Arg", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("446A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Gln149Arg)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 
@@ -1449,13 +1451,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				154009587, PositionType.ZERO_BASED), "T", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 154009587, PositionType.ZERO_BASED), "T", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(11, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1060A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Thr354Ser", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1060A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Thr354Ser)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
 	}
@@ -1478,8 +1480,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.573G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("573G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1501,8 +1503,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(20, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2922G>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2922G>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1524,8 +1526,8 @@ public class SNVAnnotationBuilderTest {
 		// XXX
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-118T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-118T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -1547,8 +1549,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.207C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("207C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1570,8 +1572,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.708C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("708C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1593,8 +1595,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1551T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1551T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1616,8 +1618,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.750G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("750G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1639,8 +1641,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.814C>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("814C>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1662,8 +1664,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.886C>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("886C>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1685,8 +1687,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.96C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("96C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1708,8 +1710,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.291A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("291A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1731,8 +1733,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(24, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.4128T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("4128T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1754,8 +1756,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.246G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("246G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1777,8 +1779,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.99G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("99G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1800,8 +1802,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.441T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("441T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1823,8 +1825,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(22, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.3030C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("3030C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1846,8 +1848,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1569T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1569T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1869,8 +1871,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.936G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("936G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1892,8 +1894,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(27, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1785A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1785A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1915,8 +1917,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.171T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("171T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1938,8 +1940,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(25, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.3429T>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("3429T>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SYNONYMOUS_VARIANT), annotation1.getEffects());
 	}
 
@@ -1965,8 +1967,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(36, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*51G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*51G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -1988,8 +1990,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-74A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-74A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2011,8 +2013,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*148C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*148C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2034,8 +2036,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-39C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-39C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2057,8 +2059,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-10A>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-10A>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2080,8 +2082,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-37T>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-37T>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2102,8 +2104,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-3T>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-3T>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2125,8 +2127,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-49G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-49G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2148,8 +2150,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-393T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-393T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2171,8 +2173,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-62T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-62T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2194,8 +2196,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-33G>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-33G>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2217,8 +2219,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-725G>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-725G>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2240,8 +2242,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.336+1G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("336+1G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
 				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 	}
@@ -2264,8 +2266,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(19, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.2818-2T>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("2818-2T>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 	}
@@ -2287,8 +2289,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.225-1G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("225-1G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.SPLICE_ACCEPTOR_VARIANT,
 				VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
 	}
@@ -2311,8 +2313,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6224-1G>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("6224-1G>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 	}
@@ -2335,8 +2337,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6332+2T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("6332+2T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -2359,8 +2361,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6332+3A>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("6332+3A>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_REGION_VARIANT), annotation1.getEffects());
 	}
@@ -2383,35 +2385,10 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6332G>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Arg2111Thr", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("6332G>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Arg2111Thr)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT, VariantEffect.SPLICE_REGION_VARIANT),
 				annotation1.getEffects());
-	}
-
-	@Test
-	public void testRealWorldCase_uc001fkt_3_fifth() throws InvalidGenomeChange {
-		this.builderForward = TranscriptModelFactory
-				.parseKnownGenesLine(
-						refDict,
-						"uc001fkt.3	chr1	-	155305051	155532324	155307450	155491310	28	155305051,155307879,155309118,155311726,155313104,155313394,155313973,155316173,155317446,155319117,155319332,155322496,155324263,155327106,155327375,155330091,155340294,155340567,155348071,155348293,155349833,155365249,155385534,155408117,155429587,155447676,155490890,155531943,	155307542,155308181,155309159,155311893,155313277,155313533,155314064,155316260,155317695,155319250,155319387,155322649,155324421,155327201,155327540,155330200,155340441,155340774,155348180,155348339,155349907,155365344,155385714,155408859,155429689,155452240,155491409,155532324,	Q9NR48-2	uc001fkt.3");
-		this.builderForward
-				.setSequence("aggagtggaaggttgaggggggcgctaggcgcccttcgctccctccctctggaggagctgccgccgccaccgccgccactctgctgctgccgccgccgccgccgccgctcccgccgccattttgggttcgctttgcggaggggagacgatcccagtctcggttgcgggacccgcctcccctcagtttgccccctttagccttccacctttcccttctcctctctcgcatttccgccagtcagcttacccgctggccgcctcctgacaagcgggagggatccgccgtggacccagggaagcggaggagcctggcggccaccccctcttccccacttccctgcactctcatcgctctcggcctcggcctcggcctccgacacgagaaagatgctggtttcgagttttggagatccttgttttttatggaacacagttctgtaaaattttcataagattccttggcaataacatacgcttgtgatggaccctagaaatactgctatgttaggattgggttctgattccgaaggtttttcaagaaagagtccttctgccatcagtactggcacattggtcagtaagagagaagtagagctagaaaaaaacacaaaggaggaagaggaccttcgcaaacggaatcgagaaagaaacatcgaagctgggaaagatgatggtttgactgatgcacagcaacagttttcagtgaaagaaacaaacttttcagagggaaatttaaaattgaaaattggcctccaggctaagagaactaaaaaacctccaaagaacttggagaactatgtatgtcgacctgccataaaaacaactattaagcacccaaggaaagcacttaaaagtggaaagatgacggatgaaaagaatgaacactgtccttcaaaacgagacccttcaaagttgtacaagaaagcagatgatgttgcagccattgaatgccagtctgaagaagtcatccgtcttcattcacagggagaaaacaatcctttgtctaagaagctgtctccagtacactcagaaatggcagattatattaatgcaacgccatctactcttcttggtagccgggatcctgatttaaaggacagagcattacttaatggaggaactagtgtaacagaaaagttggcacagctgattgctacctgtcctccttccaagtcttccaagacaaaaccgaagaagttaggaactggcactacagcaggattggttagcaaggatttgatcaggaaagcaggtgttggctctgtagctggaataatacataaggacttaataaaaaagccaaccatcagcacagcagttggattggtaactaaagatcctgggaaaaagccagtgtttaatgcagcagtaggattggtcaataaggactctgtgaaaaaactgggaactggcactacagcggtattcattaataaaaacttaggcaaaaagccaggaactatcactacagtaggactgctaagcaaagattcaggaaagaagctaggaattggtattgttccaggtttagtgcataaagagtctggcaagaagttaggacttggcactgtggttggactggttaataaagatttgggaaagaaattgggttctactgttggcctagtggccaaggactgtgcaaagaagattgtagcaagttcagcaatgggattggttaataaggacattggaaagaaactaatgagttgtcctttggcaggtctgatcagtaaagatgccataaaccttaaagccgaagcactgctccccactcaggaaccgcttaaggcttcttgtagtacaaacatcaataatcaggaaagtcaggaactttctgaatccctgaaagatagtgccaccagcaaaacttttgaaaagaatgttgtacggcagaataaagaaagcatattggaaaagttctcagtacgaaaagaaatcattaatttggagaaagaaatgtttaatgaaggaacatgcattcagcaagacagtttctcatccagtgaaaagggatcttatgaaacctcaaagcatgaaaagcagcctcctgtatattgcacttctccggactttaaaatgggaggtgcttctgatgtatctaccgctaaatccccattcagtgcagtaggagaaagcaatctcccttccccatcacctactgtatctgttaatcctttaaccagaagtccccctgaaacttcttcacagttggctcctaatccattacttttaagttctactacagaactaatcgaagaaatttctgaatctgttggaaagaaccagtttacttctgaaagtacccacttgaacgttggtcataggtcagttggtcatagtataagtattgaatgtaaagggattgataaagaggtaaatgattcaaaaactacccatatagatattccaagaataagctcttcccttggaaaaaagccaagtttgacttctgaatccagcattcatactattactccttcagttgttaacttcactagtttatttagtaataagccttttttaaaactgggtgcagtatctgcatcagacaaacactgccaagttgctgaaagcctaagtactagtttgcagtccaaaccattaaaaaaaagaaaaggaagaaaacctcggtggactaaagtggtggcaagaagcacatgccggtctccaaaagggctagaattagaaagatcagagctttttaaaaacgtttcatgtagctcactatcaaatagtaattctgagccagccaagtttatgaaaaacattggacccccttcatttgtagatcatgacttccttaaacgccgattgccaaagttgagcaaatccacagctccatctcttgctctcttagctgatagtgaaaaaccatctcataagtcttttgctactcacaaactatcctccagtatgtgtgtctctagtgaccttttgtctgatatttataagcccaaaagaggaaggcctaaatctaaggagatgcctcaactggaagggccacctaaaaggactttaaaaatccctgcttctaaagtgttttctttacagtctaaggaagaacaagaacccccaattttacagccagaaattgaaatcccttccttcaaacaaggtctgtctgtgtctccttttccaaaaaagagaggcaggcctaagaggcaaatgaggtcaccagtcaagatgaagccacctgtactgtcagtggctccatttgttgccactgaaagtccaagcaagctagaatctgaaagtgacaaccatagaagtagcagtgatttctttgagagcgaggatcaacttcaggatccagatgacctagatgacagtcataggccaagtgtctgtagtatgagtgaccttgagatggaaccagataaaaaaattaccaagagaaacaatggacaattaatgaaaacaattatccgcaaaataaataaaatgaagactttaaagagaaagaaactgttgaatcagattctttcaagttctgtagaatcaagtaataaagggaaagtgcaatccaaactccataatacggtatcaagtcttgctgccacatttggctctaaattgggccaacagataaatgtcagcaagaaaggaaccatttatataggaaagagaagaggtcgcaaaccaaaaactgtcttaaatggtattctttctggtagtcctactagccttgctgttcttgagcaaacagctcaacaggcagctgggtcagcattaggacagattcttcccccattactgccttcatctgctagtagttctgagattcttccatcacctatttgctctcagtcttctgggactagtggaggtcagagccctgtaagtagtgatgcaggttttgttgaacccagttcagtgccatatttgcatttacactccagacagggcagtatgattcagactcttgcaatgaagaaggcctcaaaggggaggaggcggttatctcctcctactttgttgccaaattctccttcgcacttgagtgaactcacatctctaaaagaagctactccttccccaatcagtgagtctcatagtgatgagaccattcccagtgatagtggaattggaacagataataacagcacatcagacagggcagagaaattttgtgggcaaaaaaagaggaggcattcttttgagcatgtttctctgattccccctgaaacctctacagtgctaagcagtcttaaagaaaaacataaacacaaatgtaagcgcaggaatcatgattacctcagctatgacaagatgaaaaggcagaaacgaaaacggaaaaagaaatatccccagcttcgaaatagacaggatccagactttattgcagagctggaggaactaataagtcgcctaagtgaaattcggatcactcatcgaagtcatcattttatcccccgagatcttctgccaactatctttcgaatcaactttaatagtttctatacacatccttctttccccttagaccctttgcactacattcgaaaacctgacttaaaaaagaaaagagggagaccccctaagatgagggaggcaatggctgaaatgccttttatgcacagccttagttttcctctttctagtactggattctatccatcttatggtatgccttactctccttcaccccttacagctgctcccataggattaggttactatggaaggtatcctcccactctttatccacctcctccatctccttctttcaccacgccacttccacctccttcctatatgcatgctggtcatttacttctcaatcctgccaaataccataagaaaaagcataagctacttcgacaggaggcctttcttacaaccagcaggactcccctcctttccatgagtacctaccccagtgttcctcctgagatggcctatggttggatggttgagcacaaacacaggcaccgtcacaaacacagagaacaccgttcttctgaacaaccccaggtttctatggacactggctcttcccgatctgtcctggaatctttgaagcgctatagatttggaaaggatgctgttggagagcgatataagcataaggaaaagcaccgttgtcacatgtcctgccctcatctctctccttcaaaaagcttaataaacagagaggaacagtgggtccaccgagagccttcagaatctagtccattggccttgggattgcagacacctttacagattgactgttcagaaagttctccaagcttatcccttggaggattcactcccaactctgagccagccagcagtgatgaacatacaaaccttttcacaagtgcaataggcagctgcagagtttcaaaccctaactccagtggccggaagaaattaactgacagccctggactcttttctgcacaggacacttcactaaatcggcttcacagaaaggagtcactgccttctaacgaaagggcagtacagactttggcaggctcccagccaacctctgataaaccctcccagcggccatcagagagcacaaattgtagccctacccggaaaaggtcttcatctgagagtacttcttcaacagtaaacggagttccctctcgaagtccaagattagttgcttctggggatgactctgtggatagtctgctgcagcggatggtacaaaatgaggaccaagagcccatggagaaaagtattgatgctgtgattgcaactgcctctgcaccaccttcttccagtccaggccgtagccacagcaaggaccgaaccctgggaaaaccagacagccttttagtgcctgcagtcacaagtgactcttgcaataatagcatctcactcctatctgaaaagttgacaagcagctgttccccccatcatatcaagagaagtgtagtggaagctatgcaacgccaagctcggaaaatgtgcaattacgacaaaatcttggccacaaagaaaaacctagaccatgtcaataaaatcttaaaagccaaaaaacttcaaaggcaggccaggacagggaataactttgtgaaacgtaggccaggtcgacctcggaaatgtccccttcaggctgtcgtatcaatgcaagcattccaggctgctcagtttgtcaacccagaattgaacagagacgaggaaggagcagcactgcacctcagtcctgacacagttacagatgtaattgaggctgttgttcagagtgtaaatctgaacccagaacataaaaaggggttgaagagaaaaggttggctattggaagaacagaccagaaaaaagcagaagccattaccagaggaagaagagcaagagaataataaaagctttaatgaagcaccagttgagattcccagtccttctgaaaccccagctaaaccttctgaacctgaaagtaccttgcagcctgtgctttctctcatcccaagggaaaagaagcccccacgtcccccaaagaagaagtatcagaaagcagggctgtattctgacgtttacaaaactacagacccaaagagtcgattgatccaattaaagaaagagaagctggagtatactccaggagagcatgaatatggattatttccagcgcccattcatgttggaaagtatctaagacaaaagagaattgacttccagcttccttatgatatcctttggcagtggaaacacaatcagctatacaaaaagccagatgtcccactatataagaaaattcgttcaaatgtctacgttgatgtcaaacccctttctggttacgaagctaccacctgtaactgtaagaagccagatgatgacaccaggaagggctgtgttgatgactgcctcaatagaatgatctttgctgagtgttcccccaacacttgcccatgtggcgagcaatgctgtaaccagaggatacagaggcatgaatgggtgcaatgtctagaacgatttcgagctgaggaaaaaggttggggaatcagaaccaaagagcccctaaaagctgggcagttcatcattgaatacctaggggaggtcgtcagtgaacaggagttcaggaacaggatgattgagcagtatcataatcacagtgaccactactgcctgaacctggatagtgggatggtgattgacagttaccgcatgggaaatgaggcccgattcatcaaccatagctgtgacccaaattgtgaaatgcagaaatggtctgttaatggagtataccggattggactctatgctcttaaagacatgccagctgggactgaactcacttatgattataactttcattccttcaatgtggaaaaacagcaactttgtaagtgtggctttgagaaatgtcgaggaatcatcggaggcaagagtcagcgtgtgaatggactcaccagcagcaaaaacagccagcccatggccacacacaaaaaatctggacggtcaaaagagaagagaaagtctaagcacaagctgaagaaaaggagaggccatctctctgaggaacccagtgaaaatatcaacaccccaactagattgaccccccaattacagatgaagccaatgtccaatcgtgaaaggaactttgtgttaaagcatcatgtattcttggtccgaaactgggagaagattcgtcaaaaacaggaggaagtaaagcacaccagtgataatattcactcagcatcattatatacccgttggaatgggatctgccgagatgatgggaatatcaagtctgatgtcttcatgacccagttctctgccctgcagacagctcgatctgttcgaacaagacggttggcagctgcagaggaaaatattgaagtggctcgggcagcccgcctagcccagatcttcaaagaaatttgtgatggtatcatctcttataaagattcttcccggcaagcactggcagctccacttttgaaccttcccccaaagaaaaagaatgctgattattatgagaagatctctgatcccctagatcttatcaccatagagaagcagatcctcactggttactataagacagtggaagcttttgatgctgacatgctcaaagtctttcggaatgctgagaagtactatgggcgtaaatccccagttgggagagatgtttgtcgtctacgaaaggcctattacaatgcccggcatgaggcatcagcccagattgatgagattgtgggagagacagcaagtgaggcagacagcagtgagacctcagtctctgaaaaggagaatgggcatgagaaggacgacgatgttattcgctgtatctgtggcctctacaaggatgaaggtctcatgatccagtgtgacaagtgcatggtatggcagcactgtgattgtatgggagtgaactcagatgtggagcactacctttgtgagcagtgtgacccaaggcctgtggacagggaggttcccatgatccctcggccccactatgcccaacctggctgtgtctacttcatctgtttgctccgagatgacttgctgcttcgtcagggtgactgtgtgtatctgatgagggatagtcggcgcacccctgatggccacccggtccgtcagtcctatcgactgttatctcacattaaccgagataaacttgacatctttcgcattgagaagctttggaagaatgaaaaagaggaacggtttgcctttggtcaccattatttccgtccccacgaaacacaccactctccatcccgtcggttctatcataatgaactatttcgggtgccactctatgagatcattcccttggaggctgtagtggggacctgctgtgtgttggacctttatacgtattgtaaagggagacccaaaggagtaaaggagcaagatgtgtacatctgtgattatcggcttgacaagtcagcacacctgttttacaagatccaccggaaccgctatcctgtctgcaccaaaccctatgcttttgatcacttccccaagaagctcactcccaaaaaagatttctcgcctcattacgtcccagacaactacaagaggaatggaggacgatcatcctggaagtctgagcgctcaaagccacccctaaaagacttgggccaggaggatgatgctctacccttgattgaagaggttctagccagtcaagagcaagcagccaatgagatacccagcctggaggagccagaacgggaaggggccactgctaacgtcagtgagggtgaaaaaaaaacagaggaaagtagtcaagaaccccagtcaacctgtacccctgaggaacgacggcataaccaacgggaacgactcaaccagatcttgctcaatctccttgaaaaaatccctggaaaaaatgccattgatgtgacctacttgctggaggaaggatcaggcaggaaactgcgaaggcgtactttgtttatcccagaaaacagctttcgaaagtgaccctcaaagaatgagaacctcaagcatctgggatccagtggagctaatcagtcctgcctcctgctctctgggtatagacaggggtgggaagggtccatctgggcaaggggaatggggccatgttgttgacattaggtacttaataagccttggagctagtggagagggagaggaaagggttctgtccaagacagttcaggttaattaattttcttctccattgcttcaccttaagggttaataatgtagagaggagggaggaccacattgatgaccagaacctactggtactttatagcatttgccccaccccacagcttaggtttttctgtcatcctcagatcccacaggcattgcgaagaagctgcttcctatacccaggtataactcaaaatccaaagggatagggccaggatccctattcctaccccatctattctctgttggctccaagagctaccccagagaccttaaacagaaacagtagctgaggcttcttcctagatacctgactagggaagtttgtctctcctttcttgcccaaccaggtcaaagtaaaatgtgagttgacagctcaaagcacttgtaactgctgccccctccctacctctactccccaaaatggaatcatgggatagggaaggcccccatggggtcagaagggcacggtagttcttgcaattatttttgttttacccttcataacctgtcaaacatatttttttctaatgagaaagccaggcccccgccagcacacatgctgtttttaatgcgctgtagttcttgtgtgtctgctgtgctgtgcaaatggagattcagttcaaaataaaatcatttaaaaacctacataaaaagaactctaaacccacccctgcaacaaaagtcactacataaactgttcagcagtattcacctatcagagtatttgttgtgagtatagattatcaattgaaaacactactcttgttttcttaattgtacagttttcaatgtccctttcttaaagagacagtatatttctcttcacccctagcccatcttccctcaccctcctgaatgacatcaggaggtatatccagggtgtctccttccttcctactctcttgaccagaagttaacagactatactgtctctttaaaaataaaatttaaaaagctttgttgtcttttcagacatacatatgcatatatgttttagatgttcttataagagaaaagatggtttttaaatgtgccaagttgtgtgtgtgtgtgtatatatatgtgtgtatgtgtgtgtatatatatatgtgtgtgtgtatatatatacacacacacacacacacctgctgtgtgattggtaagcaatacaatagtaaacatgtccccattacttttttctaatattggaccaatgctgtcctaattgtacatttccccttatggtgacgatgctctgactcgtttaggtagacacattgaccaccttccattccattaaatattttttcctttttcccctttctgtgtcattcttgaggaaaaaacaaaagagagaggggatgccaatgatccccttgagcagagaaaaagcaaaataaatattttattaaagaaaaaagagaattaagaaaatagtttggagtattttcttactgtagagaagcactgtacattactaagagacctgggtataagatactcacatgtggagctggaaaaatcgcatgtccaagcccgtttgagtggtttcttttgtttttcattgcagggagtgggtgggagggaggtgggactaggggcactttgggggtctccttttagtcaaaagcgagaaaatgacaagaaagagattaaaattcaatgtttcctttatagtgttaaacactaaaattttaaaaaagatgaaaaagaaaaaaaaactttgtaaaatgcgagaacagaagcaaaagacactacgctctgtcattttatctttcttttgttgaaagactaaaaaaaaactgaaatgttttttagacaatcaaatgttaggtaagtgcaaaaacttgttttttcttactggtgtagaaattaatgcctttttttatttttcagttattttataataacgaaataaaaagaaccccccagctgccaggcgggttttggtgtttgaaatgcggggcaaagcactacatcactgcaaatagatacagagttagtctgcatgtctgtaggctgtgtgattgcggaaaatataaatgctgctaatatatttcctttttacaaaagcatatctaaatagatgattgttttgatgttaatctttgtaaattatgtattaccaattttaacattggatgtaattgcatacaaagcttgcatctcaatccttgaaagtctagtattaaatggaaaaaacttttcctaactgtggaaaaaaaaaaa"
-						.toUpperCase());
-		this.builderForward.setGeneSymbol("ASH1L");
-		this.infoForward = builderForward.build();
-		// RefSeq REFSEQ_ID
-
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 155348067,
-				PositionType.ZERO_BASED), "GTA", "AGG");
-		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
-				new AnnotationBuilderOptions()).build();
-		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
-		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.6332+2_6332+4delinsCCT", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
-				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -2432,8 +2409,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1121+2T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1121+2T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -2456,8 +2433,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(9, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1239+2T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1239+2T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -2480,8 +2457,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.234+2T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("234+2T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -2504,8 +2481,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.135+1T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("135+1T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -2528,8 +2505,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.214-2A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("214-2A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 	}
@@ -2552,8 +2529,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(5, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1074-1G>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1074-1G>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 	}
@@ -2576,8 +2553,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.168+2T>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("168+2T>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_DONOR_VARIANT), annotation1.getEffects());
 	}
@@ -2600,8 +2577,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.337-1G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("337-1G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_ACCEPTOR_VARIANT), annotation1.getEffects());
 	}
@@ -2624,8 +2601,9 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(36, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*51G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("20620683G>A", annotation1.getGenomicNTChange().toHGVSString());
+		Assert.assertEquals("*51G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2651,8 +2629,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.359T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("359T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2674,8 +2652,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.507C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("507C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2696,8 +2674,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.60C>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("60C>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2720,8 +2698,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.876G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("876G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2744,8 +2722,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.724G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("724G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2768,8 +2746,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.375A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("375A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2785,13 +2763,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("X"),
-				70711957, PositionType.ZERO_BASED), "T", "C");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("X"), 70711957, PositionType.ZERO_BASED), "T", "C");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.647A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("647A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2809,13 +2787,13 @@ public class SNVAnnotationBuilderTest {
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
-		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID().get("Y"),
-				8657214, PositionType.ZERO_BASED), "C", "A");
+		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, refDict.getContigNameToID()
+				.get("Y"), 8657214, PositionType.ZERO_BASED), "C", "A");
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.250G>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("250G>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_EXON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -2843,8 +2821,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*66C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*66C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -2870,8 +2848,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 	}
 
@@ -2893,8 +2871,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 	}
 
@@ -2919,8 +2897,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(null, annotation1.getAnnoLoc());
-		Assert.assertEquals(null, annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals(null, annotation1.getCDSNTChange());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.INTERGENIC_VARIANT), annotation1.getEffects());
 	}
 
@@ -2939,7 +2917,7 @@ public class SNVAnnotationBuilderTest {
 		this.builderForward
 				.setSequence("gggacccagacttgccgacctgtacgactctggccatggggaacagccactgtgtccctcaggcccccaggaggctccgggcctccttctccagaaagccctcgctgaagggaaacagagaggacagcgcgcggatgtcggccggcctgccgggccccgaggctgctcgaagcggggacgccgccgccaacaagctcttccactacatcccgggcacggacatcctggacctggagaaccagcgagaaaacctggagcagccattcctgagtgtgttcaagaaggggcggcggagggtgcctgtgaggaacctgggaaaagttgtgcattacgccaaggtccagctgcggttccagcacagccaggatgtcagcgactgctacctggagctattccccgcccacctgtacttccaggcccacggctcggaaggactcacatttcaggggctgttaccgctgacggagctgagtgtctgcccgctcgaggggtcccgagagcacgccttccagatcacaggcccactgcccgcacccctcctggtgctctgccccagccgggccgagctggaccgctggctttaccacctggagaagcagacggccctcctcggggggccgcggcgctgccactcggcacccccacaggggtcctgcggagacgaactcccctggactttgcagcgccgtctaacccggctgcggacggcgtcagggcacgaacccggcggcagtgctgtctgtgcctcgagggtcaagctgcagcacctgcccgcacaggagcagtgggaccggctcttggtcctgtacccaacgtccttggccattttctccgaggagctggacgggctttgcttcaagggggagctcccactccgtgccgtccacatcaacctggaggagaaggagaagcagatccgctccttcctgattgaaggccccctcatcaacaccatccgcgtggtgtgcgccagctacgaggactacggtcactggctgctgtgccttcgcgctgtcacccacagggagggggccccgccgctgcctggtgccgagagcttcccagggtcgcaggttatgggcagtggccgaggctcactctcctcaggcggacagaccagctgggactcggggtgcttggcgcccccctccacccgcaccagccactccctgcctgagtcctcagtgccatccaccgtgggctgctcctcccagcacacaccgctgcacaggctgagcctggagagcagcccagatgcccctgaccacacttcggaaacatcacactcgcccctctatgccgacccctacacaccacccgccacctcccaccgcagggtcacagatgtccggggcctggaggagttcctcagtgccatgcagagtgcacgtggacccacgccctcgagcccactcccctcggtgcctgtgtctgtgcctgcctctgaccctcgctcctgctcctccggccccgctggcccctacttgctctccaagaagggagccctgcagtccagagccgctcagagacaccggggctcagccaaggatggggggccgcagcccccagacgcccctcagcttgtctcctctgccagggaaggttcgcccgaaccctggctgcctctgacagatggtcggtcccccaggaggagccgggaccccggctacgaccacctctgggacgagactttgtcttcctcccaccagaagtgcccccagcttggagggcctgaggccagtggggggcttgtgcagtggatctgatggccgcggtgaggtgggttctcaggaccaccctcgccaagctccagggtacctgcccctctaacccacttcaaattacaagtcagggtctgaacccagtgtgatggggggagtctctggggccctgagttcagagcccgtccctcagctcctgttccttggtgccagcagctggggcagggaagggtgggaggggccccatccaaaggatgccctggccagcgaggctgggtcacaggtcagggaggtcctggccgtccacagggtcggccctcagctcagcccgccaggagtcagggaggagactcgctgggagtgggagggcagcacgggcgtgaaggtcggaggacagagaaaggtcagcagggtcagagtatgtgaggtcagagggcatgagggtcacaggtcagcaaggtgtgaggagcacaagccagggtgccccgaggaggagggtgggtgggtccttgtgtggcctggcgcgcaccacagggcagcacgggagacgttgacaccaccggacgagaaagaaaaaa"
 						.toUpperCase());
-		this.builderForward.setGeneSymbol("PLEKHN1");
+		this.builderForward.setGeneSymbol("(EKHN1)");
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
@@ -2948,9 +2926,10 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(13, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1597+24A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
+		Assert.assertEquals("1597+24A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+				annotation1.getEffects());
 	}
 
 	/**
@@ -2977,8 +2956,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-58+141C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-58+141C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3006,8 +2985,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-57-23C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-57-23C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3027,7 +3006,7 @@ public class SNVAnnotationBuilderTest {
 		this.builderForward
 				.setSequence("gagatggggctcaaataggaaaaagtctaggggtgaaggagtggggcaaagtgtaatttggggaaccaagcaggggcctggagctatctccatcttcagctccagagtccttggtttctgtctgagaacaaatggcacagcatccctgccaggatcaggaacaaaaggtagaaatgacctccaagcagcagagaagcacatccatagaagagacaatgagaccacaggaaaaacaggtaaccatcactgaaaccctgtgggaccaggtgctgacagtttttaaggatatacaaaaggagctgcaggaagatgctcggattcgagggatgagcaactgctccatgacacccatgacatcagcacccaggactggaagcataaggcctccagattccttgatgaccccaaagttgagaagattgcagttcagctctggagagcagccatcaggaggccgtatccacaacctgaagacacagctcttcagtcaatcagcttactaccctggaccctaactctacaatcaaggaagaaggacatctctgcttccgccagcacagcttcagttggggaagatattagcagacatcatcactgaacccagaagagagggtggtgcccatgagtggagatgccagggtctatggctgaaactgggaacttggaaatcaagtgagacccaagcaaggaaaccaactgccaaagcaaggaaaccagcttggtttggcaaacagctgatgaaataaatgtgacgtagaagacttgccttcctggttcttcctgggctgtggaatgggtagtgatagaatttccaagtatgatagtgcatttggttcaaagaacagcactgtagcatgggagaacctgcactataatgtcataaactcaaaaaaaaaaaaaaaaa"
 						.toUpperCase());
-		this.builderForward.setGeneSymbol("PLEKHN1");
+		this.builderForward.setGeneSymbol("(EKHN1)");
 		this.infoForward = builderForward.build();
 		// RefSeq REFSEQ_ID
 
@@ -3036,8 +3015,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*40+38C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*40+38C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3065,8 +3044,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(7, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*41-164T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*41-164T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3094,9 +3073,10 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.135+91T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
+		Assert.assertEquals("135+91T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+				annotation1.getEffects());
 	}
 
 	/**
@@ -3123,8 +3103,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.136-7C>T", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("136-7C>T", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_REGION_VARIANT), annotation1.getEffects());
 	}
@@ -3151,8 +3131,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-174-93T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-174-93T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3178,8 +3158,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.-175+69A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("-175+69A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3207,8 +3187,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*38-90T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*38-90T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3236,8 +3216,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.*37+65A>G", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("*37+65A>G", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
 	}
 
@@ -3263,9 +3243,10 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.620-62T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
+		Assert.assertEquals("620-62T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+				annotation1.getEffects());
 	}
 
 	/**
@@ -3290,9 +3271,10 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(6, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.619+201T>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.=", annotation1.getAminoAcidHGVSDescription());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT), annotation1.getEffects());
+		Assert.assertEquals("619+201T>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+				annotation1.getEffects());
 	}
 
 	/**
@@ -3319,8 +3301,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.313+168C>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("313+168C>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -3349,8 +3331,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(2, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.314-639C>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("314-639C>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -3379,8 +3361,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.424+697T>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("424+697T>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -3409,8 +3391,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(3, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("n.425-558C>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals(null, annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("425-558C>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals(null, annotation1.getProteinChange());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT),
 				annotation1.getEffects());
 	}
@@ -3438,8 +3420,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.1803-7G>C", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.?", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("1803-7G>C", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("?", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT,
 				VariantEffect.SPLICE_REGION_VARIANT), annotation1.getEffects());
 	}
@@ -3462,8 +3444,8 @@ public class SNVAnnotationBuilderTest {
 		Annotation annotation1 = new SNVAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions()).build();
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
-		Assert.assertEquals("c.602G>A", annotation1.getNucleotideHGVSDescription());
-		Assert.assertEquals("p.Arg201His", annotation1.getAminoAcidHGVSDescription());
+		Assert.assertEquals("602G>A", annotation1.getCDSNTChange().toHGVSString());
+		Assert.assertEquals("(Arg201His)", annotation1.getProteinChange().toHGVSString());
 		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.MISSENSE_VARIANT), annotation1.getEffects());
 	}
 

@@ -11,12 +11,13 @@
 	<modules>
 		<module>jannovar-core</module>
 		<module>jannovar-htsjdk</module>
+		<module>jannovar-hgvs</module>
 		<module>jannovar-cli</module>
 		<module>jannovar-filter</module>
 		<module>jped-cli</module>
 	</modules>
 
-	<!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
+	<!-- Inherit artifact from SonaType OSS pom.xml Following this article:
 		http://java.dzone.com/articles/deploy-maven-central -->
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -156,8 +157,8 @@
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
-					<source>${javaVersion}</source>
-					<target>${javaVersion}</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 
