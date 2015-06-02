@@ -123,22 +123,26 @@ public final class GenomeVariant implements VariantDescription {
 																// breakend
 	}
 
+	@Override
 	public String getChrName() {
 		return this.pos.getRefDict().getContigIDToName().get(this.pos.getChr());
 	}
-	
+
 	public GenomePosition getGenomePos() {
 		return this.pos;
 	}
 
+	@Override
 	public int getPos() {
 		return this.pos.getPos();
 	}
 
+	@Override
 	public String getRef() {
 		return this.ref;
 	}
 
+	@Override
 	public String getAlt() {
 		return this.alt;
 	}
@@ -168,6 +172,7 @@ public final class GenomeVariant implements VariantDescription {
 	/**
 	 * @return numeric ID of chromosome this change is on
 	 */
+	@Override
 	public int getChr() {
 		return pos.getChr();
 	}
@@ -203,7 +208,7 @@ public final class GenomeVariant implements VariantDescription {
 			return Joiner.on("").join(getChrName(),
 					":g.", getPos(), "_", getPos() + ref.length(), "del", ref);
 		else
-			return Joiner.on("").join(pos, ":", (ref.equals("") ? "-" : ref),
+			return Joiner.on("").join(pos, (ref.equals("") ? "-" : ref),
 					">", (alt.equals("") ? "-" : alt));
 	}
 
@@ -269,7 +274,7 @@ public final class GenomeVariant implements VariantDescription {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -286,7 +291,7 @@ public final class GenomeVariant implements VariantDescription {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -321,6 +326,7 @@ public final class GenomeVariant implements VariantDescription {
 		return true;
 	}
 
+	@Override
 	public int compareTo(Annotation other) {
 		return ComparisonChain.start().compare(pos, other.getPos())
 				.compare(ref, other.getRef()).compare(alt, other.getAlt())
