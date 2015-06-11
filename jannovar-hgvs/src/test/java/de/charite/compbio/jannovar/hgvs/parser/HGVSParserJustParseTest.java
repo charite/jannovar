@@ -54,8 +54,6 @@ public class HGVSParserJustParseTest extends JustParseAndLexBase {
 			}
 			HGVSLexer l = new HGVSLexer(inputStream);
 			HGVSParser p = new HGVSParser(new CommonTokenStream(l));
-			if (proteinString.equals("p.Met1Leu"))
-				p.setTrace(true);
 			p.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,

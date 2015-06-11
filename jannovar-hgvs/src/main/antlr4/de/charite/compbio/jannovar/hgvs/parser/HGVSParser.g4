@@ -8,6 +8,9 @@ options {
 	tokenVocab = HGVSLexer;
 } // use tokens from HGVSLexer
 
+// TODO(holtgrem): nucleotide variants cannot be predicted/in parantheses yet
+// TODO(holtgrem): handle problem of distinction between "chr" vs. "c." as it is currently performed, probably with extra mode
+
 /** top-level production rule for both nucleotide and protein variants */
 hgvs_variant
 :

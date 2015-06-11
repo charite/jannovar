@@ -20,6 +20,14 @@ public enum SequenceType {
 	/** protein <code>"p."</code> */
 	PROTEIN;
 
+	/** @return matching {@link SequenceType} value for the given <code>prefix</code> */
+	public static SequenceType findMatchingForPrefix(String prefix) {
+		for (SequenceType st : SequenceType.values())
+			if (st.getPrefix().equals(prefix))
+				return st;
+		throw new IllegalArgumentException("No enum constant has matching prefix \"" + prefix + "\"");
+	}
+
 	/** @return prefix for the sequence variant, e.g., <code>"c."</code> or <code>"g."</code>. */
 	public String getPrefix() {
 		switch (this) {

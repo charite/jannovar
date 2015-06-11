@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,28 +29,28 @@ public class HGVSParserDriver {
 		parser.addParseListener(listener);
 		ParseTree tree = parser.hgvs_variant();
 		System.err.println(tree.toStringTree(parser));
-		return listener.getVariant();
+		return listener.getResult();
 	}
 
 	private HGVSParser getParser(String inputString) {
-		if (debug) {
-			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			System.err.println(l.getAllTokens());
-		}
-		if (debug) {
-			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
-			//			lexer.pushMode(mode);
-			System.err.println("Lexer tokens");
-			for (Token t : lexer.getAllTokens())
-				System.err.println("\t" + t.getText() + "\t" + t);
-			System.err.println("END OF LEXTER TOKENS");
-		}
+		//		if (debug) {
+		//			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
+		//			HGVSLexer l = new HGVSLexer(inputStream);
+		//			System.err.println(l.getAllTokens());
+		//		}
+		//		if (debug) {
+		//			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
+		//			//			lexer.pushMode(mode);
+		//			System.err.println("Lexer tokens");
+		//			for (Token t : lexer.getAllTokens())
+		//				System.err.println("\t" + t.getText() + "\t" + t);
+		//			System.err.println("END OF LEXTER TOKENS");
+		//		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
 		//		l.pushMode(mode);
 		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
-		p.setTrace(debug);
+		//		p.setTrace(debug);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
