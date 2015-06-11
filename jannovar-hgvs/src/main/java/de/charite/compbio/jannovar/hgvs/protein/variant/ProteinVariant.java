@@ -3,14 +3,14 @@ package de.charite.compbio.jannovar.hgvs.protein.variant;
 import com.google.common.base.Joiner;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
+import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 
 /**
  * Base class for protein changes.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public abstract class ProteinVariant implements ConvertibleToHGVSString {
+public abstract class ProteinVariant extends HGVSVariant {
 
 	public static final int NO_PROTEIN_ISOFORM = -1;
 

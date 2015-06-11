@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs.nts.variant;
 import com.google.common.base.Joiner;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
-import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
+import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 
 /**
@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.hgvs.SequenceType;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public abstract class NucleotideVariant implements ConvertibleToHGVSString {
+public abstract class NucleotideVariant extends HGVSVariant {
 
 	public static final int NO_TRANSCRIPT_VERSION = -1;
 
