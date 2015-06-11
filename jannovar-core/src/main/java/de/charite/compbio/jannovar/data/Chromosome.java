@@ -64,11 +64,6 @@ public final class Chromosome implements Serializable {
 		return chrID;
 	}
 
-	/** @return {@link IntervalArray} with transcripts of this chromosome */
-	public IntervalArray<TranscriptModel> getTmIntervalTree() {
-		return tmIntervalTree;
-	}
-
 	/**
 	 * @return String representation of name of chromosome, e.g., <code>"chr2"</code>
 	 */

@@ -89,7 +89,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
 		for (Chromosome chrom : jannovarDB.getChromosomes().values())
-			for (Interval<TranscriptModel> itv : chrom.getTmIntervalTree().getIntervals()) {
+			for (Interval<TranscriptModel> itv : chrom.getTMIntervalTree().getIntervals()) {
 				TranscriptModel tm = itv.getValue();
 				if (!geneMap.containsKey(tm.getGeneSymbol()))
 					geneMap.put(tm.getGeneSymbol(), new GeneBuilder(jannovarDB.getRefDict(), tm.getGeneSymbol()));
@@ -107,6 +107,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * Main entry function for filter, see {@link VariantContextFilter#put} for
 	 * more information.
 	 */
+	@Override
 	public void put(FlaggedVariant vc) throws FilterException {
 		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc.getVC() });
 
@@ -233,6 +234,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 *
 	 * See {@link VariantContextFilter#finish} for more details.
 	 */
+	@Override
 	public void finish() throws FilterException {
 		// perform a final round of tests on all currently active genes
 		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
@@ -345,6 +347,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
 		// sort done by coordinate
 		Collections.sort(done, new Comparator<FlaggedVariantCounter>() {
+			@Override
 			public int compare(FlaggedVariantCounter lhs, FlaggedVariantCounter rhs) {
 				return (lhs.getVar().getVC().getStart() - rhs.getVar().getVC().getStart());
 			}
