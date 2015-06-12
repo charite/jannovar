@@ -18,6 +18,30 @@ public class NucleotideMiscChange extends NucleotideChange {
 	}
 
 	/**
+	 * Build from input string.
+	 */
+	public static NucleotideMiscChange buildFromString(String str) {
+		if (str.equals("(?)"))
+			return build(false, NucleotideMiscChangeType.SAME_AS_DNA);
+		else if (str.equals("?"))
+			return build(false, NucleotideMiscChangeType.UNKNOWN_EFFECT);
+		else if (str.equals("(spl?)"))
+			return build(true, NucleotideMiscChangeType.SPLICING_AFFECTED);
+		else if (str.equals("spl?"))
+			return build(false, NucleotideMiscChangeType.SPLICING_AFFECTED);
+		else if (str.equals("(=)"))
+			return build(true, NucleotideMiscChangeType.NO_CHANGE);
+		else if (str.equals("="))
+			return build(false, NucleotideMiscChangeType.NO_CHANGE);
+		else if (str.equals("(0)"))
+			return build(true, NucleotideMiscChangeType.NO_RNA);
+		else if (str.equals("0"))
+			return build(false, NucleotideMiscChangeType.NO_RNA);
+		else
+			throw new IllegalArgumentException("Invalid nucleotide misc change string " + str);
+	}
+
+	/**
 	 * Construct with given <code>changeType</code> and <code>onlyPredicted</code> flag.
 	 *
 	 * @param onlyPredicted

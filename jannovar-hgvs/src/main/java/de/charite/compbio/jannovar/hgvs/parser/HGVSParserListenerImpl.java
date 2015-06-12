@@ -10,12 +10,14 @@ import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideMiscChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideShortSequenceRepeatVariability;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_ssrContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_substitutionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_offsetContext;
@@ -132,6 +134,17 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 		final int minCount = Integer.parseInt(ctx.NT_NUMBER(0).getText());
 		final int maxCount = Integer.parseInt(ctx.NT_NUMBER(1).getText());
 		setValue(ctx, new NucleotideShortSequenceRepeatVariability(false, range, minCount, maxCount));
+	}
+
+	/**
+	 * Leaving of nt_change_misc rule
+	 * 
+	 * Construct {@link NucleotideMiscChange} from the children's values and label ctx with this.
+	 */
+	@Override
+	public void exitNt_change_misc(Nt_change_miscContext ctx) {
+		LOGGER.debug("Leaving nt_change_misc");
+		setValue(ctx, NucleotideMiscChange.buildFromString(ctx.getText()));
 	}
 
 	/**
