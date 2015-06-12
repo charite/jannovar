@@ -31,20 +31,29 @@ PROTEIN_CHANGE_DESCRIPTION
 NT_CHANGE_DESCRIPTION
 :
 	(
-		'c'
-		| 'm'
-		| 'n'
-		| 'g'
-		| 'r'
-	) '.' -> pushMode ( NUCLEOTIDE_CHANGE )
+		'c.'
+		| 'm.'
+		| 'n.'
+		| 'g.'
+		| 'r.'
+	) -> pushMode ( NUCLEOTIDE_CHANGE )
 ;
 
 /** anything that does not match "p." or "[cmngr]." starts a reference description */
 REFERENCE
 :
-	[abdefh-lo-qs-zA-Z0-9] REF_IDENTIFIER*
+	(
+		(
+			[abdefh-lo-qs-zA-Z0-9] REF_IDENTIFIER*
+		)
+		|
+		(
+			REF_IDENTIFIER REF_IDENTIFIER+
+		)
+	)
 	(
 		'.' [1-9] [0-9]* // optional version
+
 	)?
 ;
 
