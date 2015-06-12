@@ -13,6 +13,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDeletion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDuplication;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideIndel;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideMiscChange;
@@ -24,6 +25,7 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContex
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_deletionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_duplicationContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_indelContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_insertionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
@@ -110,6 +112,35 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	public void exitNt_change(Nt_changeContext ctx) {
 		LOGGER.debug("Leaving nt_change");
 		setValue(ctx, getValue(ctx.getChild(0)));
+	}
+
+	/**
+	 * Leaving of nt_change_indel rule
+	 *
+	 * Construct {@link NucleotideIndel} from children's values and labels and label ctx with this.
+	 */
+	@Override
+	public void exitNt_change_indel(Nt_change_indelContext ctx) {
+		LOGGER.debug("Leaving nt_change_deletion");
+		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+
+		final NucleotideSeqDescription seqDesc1;
+		if (ctx.nt_number(0) != null)
+			seqDesc1 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(0).getText()));
+		else if (ctx.nt_string(0) != null)
+			seqDesc1 = new NucleotideSeqDescription(ctx.nt_string(0).getText());
+		else
+			seqDesc1 = new NucleotideSeqDescription();
+
+		final NucleotideSeqDescription seqDesc2;
+		if (ctx.nt_number(1) != null)
+			seqDesc2 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(1).getText()));
+		else if (ctx.nt_string(1) != null)
+			seqDesc2 = new NucleotideSeqDescription(ctx.nt_string(1).getText());
+		else
+			seqDesc2 = new NucleotideSeqDescription();
+
+		setValue(ctx, new NucleotideIndel(false, range, seqDesc1, seqDesc2));
 	}
 
 	/**

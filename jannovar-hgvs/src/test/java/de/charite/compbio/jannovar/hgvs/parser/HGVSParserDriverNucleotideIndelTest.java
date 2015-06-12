@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSParserDriverNucleotideDeletionTest {
+public class HGVSParserDriverNucleotideIndelTest {
 
 	HGVSParserDriver driver;
 
@@ -23,8 +23,8 @@ public class HGVSParserDriverNucleotideDeletionTest {
 
 	@Test
 	public void testWithoutSequence() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248delins", "NM_000138.4:c.247+1_247+3delins",
-				"NM_000138.4:c.247-3_247-1delins", "NM_000138.4:c.*247_*247+3delins", "NM_000138.4:c.-247_-247-3delins" };
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248del", "NM_000138.4:c.247+1_247+3del",
+				"NM_000138.4:c.247-3_247-1del", "NM_000138.4:c.*247_*247+3del", "NM_000138.4:c.-247_-247-3del" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -36,9 +36,9 @@ public class HGVSParserDriverNucleotideDeletionTest {
 
 	@Test
 	public void testWithSequence() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248delATinsCAT",
-				"NM_000138.4:c.247+1_247+3delATAinsCAT", "NM_000138.4:c.247-3_247-1delATAinsCAT",
-				"NM_000138.4:c.*247_*247+3delATATinsCAT", "NM_000138.4:c.-247_-247-3delATATinsCAT" };
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248delAT", "NM_000138.4:c.247+1_247+3delATA",
+				"NM_000138.4:c.247-3_247-1delATA", "NM_000138.4:c.*247_*247+3delATAT",
+				"NM_000138.4:c.-247_-247-3delATAT" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
@@ -50,9 +50,8 @@ public class HGVSParserDriverNucleotideDeletionTest {
 
 	@Test
 	public void testWithSequenceLength() {
-		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248del2ins3", "NM_000138.4:c.247+1_247+3del3ins3",
-				"NM_000138.4:c.247-3_247-1del3ins3", "NM_000138.4:c.*247_*247+3del4ins3",
-				"NM_000138.4:c.-247_-247-3del4ins3" };
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248del2", "NM_000138.4:c.247+1_247+3del3",
+				"NM_000138.4:c.247-3_247-1del3", "NM_000138.4:c.*247_*247+3del4", "NM_000138.4:c.-247_-247-3del4" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
