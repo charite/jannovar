@@ -23,6 +23,13 @@ public class HGVSParserDriver {
 
 	private boolean debug = false;
 
+	public HGVSParserDriver() {
+	}
+
+	public HGVSParserDriver(boolean debug) {
+		this.debug = debug;
+	}
+
 	public HGVSVariant parseHGVSString(String inputString) {
 		LOGGER.info("Parsing input string " + inputString);
 		HGVSParser parser = getParser(inputString);
@@ -46,13 +53,13 @@ public class HGVSParserDriver {
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
 				System.err.println("\t" + t.getText() + "\t" + t);
-			System.err.println("END OF LEXTER TOKENS");
+			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
 		// l.pushMode(mode);
 		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
-		// p.setTrace(debug);
+		p.setTrace(debug);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,

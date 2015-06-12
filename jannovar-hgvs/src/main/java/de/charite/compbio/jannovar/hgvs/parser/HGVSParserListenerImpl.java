@@ -8,15 +8,19 @@ import org.slf4j.LoggerFactory;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideShortSequenceRepeatVariability;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_ssrContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_substitutionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_offsetContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_point_locationContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_rangeContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_single_change_varContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_varContext;
 
@@ -112,9 +116,39 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	}
 
 	/**
+	 * Leaving of nt_change_ssr rule
+	 * 
+	 * Construct {@link NucleotideShortSequenceRepeatVariability} from the children's values and label ctx with this.
+	 */
+	@Override
+	public void exitNt_change_ssr(Nt_change_ssrContext ctx) {
+		LOGGER.debug("Leaving nt_change_ssr");
+		final NucleotideRange range;
+		if (ctx.nt_range() != null)
+			range = (NucleotideRange) getValue(ctx.nt_range());
+		else
+			range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+					(NucleotidePointLocation) getValue(ctx.nt_point_location()));
+		final int minCount = Integer.parseInt(ctx.NT_NUMBER(0).getText());
+		final int maxCount = Integer.parseInt(ctx.NT_NUMBER(1).getText());
+		setValue(ctx, new NucleotideShortSequenceRepeatVariability(false, range, minCount, maxCount));
+	}
+
+	/**
+	 * Leaving of nt_range rule
+	 */
+	@Override
+	public void exitNt_range(Nt_rangeContext ctx) {
+		LOGGER.debug("Leaving nt_range");
+		NucleotidePointLocation startPos = (NucleotidePointLocation) getValue(ctx.nt_point_location(0));
+		NucleotidePointLocation stopPos = (NucleotidePointLocation) getValue(ctx.nt_point_location(1));
+		setValue(ctx, new NucleotideRange(startPos, stopPos));
+	}
+
+	/**
 	 * Leaving of nt_point_location rule
 	 *
-	 * Construction {@link NucleotidePointLocation} from the childrens values and label ctx with this.
+	 * Construction {@link NucleotidePointLocation} from the children's values and label ctx with this.
 	 */
 	@Override
 	public void exitNt_point_location(Nt_point_locationContext ctx) {

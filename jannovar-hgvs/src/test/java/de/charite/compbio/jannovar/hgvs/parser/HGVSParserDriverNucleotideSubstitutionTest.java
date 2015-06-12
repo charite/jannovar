@@ -7,7 +7,12 @@ import org.junit.Test;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 
-public class HGVSParserDriverTest {
+/**
+ * Tests for the HGVSParserDriver for parsing nucleotide substitutions.
+ * 
+ * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ */
+public class HGVSParserDriverNucleotideSubstitutionTest {
 
 	HGVSParserDriver driver;
 
