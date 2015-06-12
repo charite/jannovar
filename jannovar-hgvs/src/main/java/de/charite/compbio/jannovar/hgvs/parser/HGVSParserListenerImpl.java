@@ -11,6 +11,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDeletion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDuplication;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
@@ -21,6 +22,7 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_deletionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_duplicationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_insertionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
@@ -108,6 +110,26 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	public void exitNt_change(Nt_changeContext ctx) {
 		LOGGER.debug("Leaving nt_change");
 		setValue(ctx, getValue(ctx.getChild(0)));
+	}
+
+	/**
+	 * Leaving of nt_change_deletion rule
+	 *
+	 * Construct {@link NucleotideDeletion} from children's values and labels and label ctx with this.
+	 */
+	@Override
+	public void exitNt_change_deletion(Nt_change_deletionContext ctx) {
+		LOGGER.debug("Leaving nt_change_deletion");
+		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		final NucleotideDeletion change;
+		if (ctx.nt_number() != null)
+			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
+					.getText())));
+		else if (ctx.nt_string() != null)
+			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+		else
+			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription());
+		setValue(ctx, change);
 	}
 
 	/**
