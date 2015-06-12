@@ -33,7 +33,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	ParseTreeProperty<Object> values = new ParseTreeProperty<Object>();
 
 	public void setValue(ParseTree node, Object value) {
-		//		System.err.println("SetValue(" + node + ", " + value + ")");
+		// System.err.println("SetValue(" + node + ", " + value + ")");
 		values.put(node, value);
 	}
 
@@ -124,7 +124,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 		} else {
 			NucleotidePointLocation baseLoc = (NucleotidePointLocation) getValue(ctx.nt_base_location());
 			Integer offset = (Integer) getValue(ctx.nt_offset());
-			setValue(ctx, new NucleotidePointLocation(baseLoc.getBasePos(), offset, false));
+			setValue(ctx, new NucleotidePointLocation(baseLoc.getBasePos(), offset, baseLoc.isDownstreamOfCDS()));
 		}
 	}
 
@@ -135,7 +135,11 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	public void exitNt_base_location(Nt_base_locationContext ctx) {
 		LOGGER.debug("Leaving nt_base_location");
 		int value = Integer.parseInt(ctx.nt_number().getText());
-		setValue(ctx, new NucleotidePointLocation(value - 1, 0, false));
+		if (ctx.NT_MINUS() != null)
+			value = -value;
+		boolean downstreamOfCDS = (ctx.NT_ASTERISK() != null);
+		int delta = (value < 0) ? 0 : 1;
+		setValue(ctx, new NucleotidePointLocation(value - delta, 0, downstreamOfCDS));
 	}
 
 	/**
