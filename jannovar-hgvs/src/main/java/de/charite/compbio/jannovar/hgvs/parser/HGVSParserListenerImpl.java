@@ -37,6 +37,9 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_rangeContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_single_change_varContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_varContext;
 
+// TODO(holtgrewe): support more than just one change in one allele
+// TODO(holtgrewe): support parsing amino acid changes
+
 /**
  * Master ParseTreeListener used in {@link HVSParser}
  *
@@ -50,7 +53,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	ParseTreeProperty<Object> values = new ParseTreeProperty<Object>();
 
 	public void setValue(ParseTree node, Object value) {
-		// System.err.println("SetValue(" + node + ", " + value + ")");
+		// System.err.println("setValue(" + node + ", " + value + ")");
 		values.put(node, value);
 	}
 
