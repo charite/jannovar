@@ -9,7 +9,10 @@ import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideMiscChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideShortSequenceRepeatVariability;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
@@ -17,6 +20,8 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_insertionContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_ssrContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_substitutionContext;
@@ -104,6 +109,48 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	}
 
 	/**
+	 * Leaving of nt_change_insertion rule
+	 *
+	 * Construct {@link NucleotideInsertion} from children's values and labels and label ctx with this.
+	 */
+	@Override
+	public void exitNt_change_insertion(Nt_change_insertionContext ctx) {
+		LOGGER.debug("Leaving nt_change_insertion");
+		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		// boolean onlyPredicted, NucleotideRange range, NucleotideSeqDescription seq
+		final NucleotideInsertion change;
+		if (ctx.nt_number() != null)
+			change = new NucleotideInsertion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx
+					.nt_number().getText())));
+		else if (ctx.nt_string() != null)
+			change = new NucleotideInsertion(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+		else
+			change = new NucleotideInsertion(false, range, new NucleotideSeqDescription());
+		setValue(ctx, change);
+	}
+
+	/**
+	 * Leaving of nt_change_inversion rule
+	 *
+	 * Construct {@link NucleotideInversion} from children's values and labels and label ctx with this.
+	 */
+	@Override
+	public void exitNt_change_inversion(Nt_change_inversionContext ctx) {
+		LOGGER.debug("Leaving nt_change_inversion");
+		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		// boolean onlyPredicted, NucleotideRange range, NucleotideSeqDescription seq
+		final NucleotideInversion change;
+		if (ctx.nt_number() != null)
+			change = new NucleotideInversion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx
+					.nt_number().getText())));
+		else if (ctx.nt_string() != null)
+			change = new NucleotideInversion(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+		else
+			change = new NucleotideInversion(false, range, new NucleotideSeqDescription());
+		setValue(ctx, change);
+	}
+
+	/**
 	 * Leaving of nt_change_substitution rule
 	 *
 	 * Construct {@link NucleotideSubstitution} from children's values and labels and label ctx with this.
@@ -111,7 +158,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_substitution(Nt_change_substitutionContext ctx) {
 		LOGGER.debug("Leaving nt_change_substitution");
-		// TODO(holtgrew): Needs change once nucleotide changes can be predicted.
+		// TODO(holtgrew): Needs change once nucleotide changes can be marked as predicted, see future.
 		NucleotidePointLocation position = (NucleotidePointLocation) getValue(ctx.nt_point_location());
 		setValue(ctx, new NucleotideSubstitution(false, position, ctx.NT_STRING(0).getText(), ctx.NT_STRING(1)
 				.getText()));
