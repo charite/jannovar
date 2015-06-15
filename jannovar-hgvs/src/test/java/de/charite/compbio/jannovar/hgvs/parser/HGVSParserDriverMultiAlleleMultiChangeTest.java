@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class CopyOfHGVSParserDriverMultiAlleleMultiChangeTest {
+public class HGVSParserDriverMultiAlleleMultiChangeTest {
 
 	HGVSParserDriver driver;
 

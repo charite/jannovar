@@ -361,6 +361,15 @@ nt_var_sep
 
 nt_change
 :
+	nt_change_inner
+	|
+	(
+		NT_PAREN_OPEN nt_change_inner NT_PAREN_CLOSE
+	)
+;
+
+nt_change_inner
+:
 	nt_change_deletion
 	| nt_change_duplication
 	| nt_change_indel

@@ -15,7 +15,7 @@ public class HGVSparserNucleotideMultiAlleleVariantTest extends HGVSParserTestBa
 		HGVSParser parser = buildParserForString("NM_000109.3:c.[123A>C];[123A>C]", HGVSLexer.DEFAULT_MODE, true);
 		Hgvs_variantContext hgvs_variant = parser.hgvs_variant();
 		Assert.assertEquals(
-				"(hgvs_variant (nt_multi_allele_var (reference NM_000109.3 :) c. (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C))) ]) ; (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C))) ])))",
+				"(hgvs_variant (nt_multi_allele_var (reference NM_000109.3 :) c. (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_inner (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C)))) ]) ; (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_inner (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C)))) ])))",
 				hgvs_variant.toStringTree(parser));
 	}
 
@@ -25,7 +25,7 @@ public class HGVSparserNucleotideMultiAlleleVariantTest extends HGVSParserTestBa
 				HGVSLexer.DEFAULT_MODE, true);
 		Hgvs_variantContext hgvs_variant = parser.hgvs_variant();
 		Assert.assertEquals(
-				"(hgvs_variant (nt_multi_allele_var (reference NM_000109.3 :) c. (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C)) (nt_var_sep ,) (nt_change (nt_change_substitution (nt_point_location (nt_base_location (nt_number 156))) C > T))) ]) ; (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C)) (nt_var_sep ,) (nt_change (nt_change_substitution (nt_point_location (nt_base_location (nt_number 156))) C > T))) ])))",
+				"(hgvs_variant (nt_multi_allele_var (reference NM_000109.3 :) c. (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_inner (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C))) (nt_var_sep ,) (nt_change (nt_change_inner (nt_change_substitution (nt_point_location (nt_base_location (nt_number 156))) C > T)))) ]) ; (nt_multi_change_allele [ (nt_multi_change_allele_inner (nt_change (nt_change_inner (nt_change_substitution (nt_point_location (nt_base_location (nt_number 123))) A > C))) (nt_var_sep ,) (nt_change (nt_change_inner (nt_change_substitution (nt_point_location (nt_base_location (nt_number 156))) C > T)))) ])))",
 				hgvs_variant.toStringTree(parser));
 	}
 

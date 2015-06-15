@@ -31,6 +31,7 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_deletionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_duplicationContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_indelContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_innerContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_insertionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
@@ -52,16 +53,16 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_var_sepContext;
 // TODO(holtgrewe): support parsing amino acid changes
 
 /**
- * Master ParseTreeListener used in {@link HVSParser}
- *
+ * Master ParseTreeListener used in {@link HVSParser} setB
+ * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 class HGVSParserListenerImpl extends HGVSParserBaseListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HGVSParserListenerImpl.class);
 
-	/** maps nodes to integers with Map<ParseTree,Object> */
-	ParseTreeProperty<Object> values = new ParseTreeProperty<Object>();
+	/** maps nodes to Objects with Map<ParseTree,Object> */
+	ParseTreeProperty<Object> values = new ParseTreeProperty<>();
 
 	public void setValue(ParseTree node, Object value) {
 		// System.err.println("setValue(" + node + ", " + value + ")");
@@ -70,6 +71,21 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 
 	public Object getValue(ParseTree node) {
 		return values.get(node);
+	}
+
+	/** maps nodes to Booleans with Map<ParseTree,Object> */
+	ParseTreeProperty<Boolean> booleanValues = new ParseTreeProperty<>();
+
+	public void setBooleanValue(ParseTree node, boolean value) {
+		LOGGER.debug("setBooleanValue({}, {})", new Object[] { node, value });
+		booleanValues.put(node, value);
+	}
+
+	public boolean getBooleanValue(ParseTree node, boolean default_) {
+		if (booleanValues.get(node) == null)
+			return default_;
+		else
+			return booleanValues.get(node);
 	}
 
 	/** resulting {@link HGVSVariant} */
@@ -191,6 +207,17 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change(Nt_changeContext ctx) {
 		LOGGER.debug("Leaving nt_change");
+		setValue(ctx, getValue(ctx.nt_change_inner()));
+	}
+
+	/**
+	 * Leaving of nt_change_inner rule.
+	 *
+	 * The result from the child is propagated to the label of this node.
+	 */
+	@Override
+	public void exitNt_change_inner(Nt_change_innerContext ctx) {
+		LOGGER.debug("Leaving nt_change_inner");
 		setValue(ctx, getValue(ctx.getChild(0)));
 	}
 
@@ -220,7 +247,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 		else
 			seqDesc2 = new NucleotideSeqDescription();
 
-		setValue(ctx, new NucleotideIndel(false, range, seqDesc1, seqDesc2));
+		setValue(ctx, new NucleotideIndel(getBooleanValue(ctx, false), range, seqDesc1, seqDesc2));
 	}
 
 	/**
@@ -231,15 +258,16 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_deletion(Nt_change_deletionContext ctx) {
 		LOGGER.debug("Leaving nt_change_deletion");
+		final boolean b = getBooleanValue(ctx, false);
 		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
 		final NucleotideDeletion change;
 		if (ctx.nt_number() != null)
-			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
+			change = new NucleotideDeletion(b, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
 					.getText())));
 		else if (ctx.nt_string() != null)
-			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+			change = new NucleotideDeletion(b, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
 		else
-			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription());
+			change = new NucleotideDeletion(b, range, new NucleotideSeqDescription());
 		setValue(ctx, change);
 	}
 
@@ -251,15 +279,16 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_duplication(Nt_change_duplicationContext ctx) {
 		LOGGER.debug("Leaving nt_change_duplication");
+		final boolean b = getBooleanValue(ctx, false);
 		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
 		final NucleotideDuplication change;
 		if (ctx.nt_number() != null)
-			change = new NucleotideDuplication(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx
-					.nt_number().getText())));
+			change = new NucleotideDuplication(b, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
+					.getText())));
 		else if (ctx.nt_string() != null)
-			change = new NucleotideDuplication(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+			change = new NucleotideDuplication(b, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
 		else
-			change = new NucleotideDuplication(false, range, new NucleotideSeqDescription());
+			change = new NucleotideDuplication(b, range, new NucleotideSeqDescription());
 		setValue(ctx, change);
 	}
 
@@ -271,15 +300,16 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_insertion(Nt_change_insertionContext ctx) {
 		LOGGER.debug("Leaving nt_change_insertion");
+		final boolean b = getBooleanValue(ctx, false);
 		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
 		final NucleotideInsertion change;
 		if (ctx.nt_number() != null)
-			change = new NucleotideInsertion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx
-					.nt_number().getText())));
+			change = new NucleotideInsertion(b, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
+					.getText())));
 		else if (ctx.nt_string() != null)
-			change = new NucleotideInsertion(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+			change = new NucleotideInsertion(b, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
 		else
-			change = new NucleotideInsertion(false, range, new NucleotideSeqDescription());
+			change = new NucleotideInsertion(b, range, new NucleotideSeqDescription());
 		setValue(ctx, change);
 	}
 
@@ -291,15 +321,16 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_inversion(Nt_change_inversionContext ctx) {
 		LOGGER.debug("Leaving nt_change_inversion");
+		final boolean b = getBooleanValue(ctx, false);
 		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
 		final NucleotideInversion change;
 		if (ctx.nt_number() != null)
-			change = new NucleotideInversion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx
-					.nt_number().getText())));
+			change = new NucleotideInversion(b, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
+					.getText())));
 		else if (ctx.nt_string() != null)
-			change = new NucleotideInversion(false, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
+			change = new NucleotideInversion(b, range, new NucleotideSeqDescription(ctx.nt_string().getText()));
 		else
-			change = new NucleotideInversion(false, range, new NucleotideSeqDescription());
+			change = new NucleotideInversion(b, range, new NucleotideSeqDescription());
 		setValue(ctx, change);
 	}
 
@@ -311,10 +342,9 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_substitution(Nt_change_substitutionContext ctx) {
 		LOGGER.debug("Leaving nt_change_substitution");
-		// TODO(holtgrew): Needs change once nucleotide changes can be marked as predicted, see future.
+		final boolean b = getBooleanValue(ctx, false);
 		NucleotidePointLocation position = (NucleotidePointLocation) getValue(ctx.nt_point_location());
-		setValue(ctx, new NucleotideSubstitution(false, position, ctx.NT_STRING(0).getText(), ctx.NT_STRING(1)
-				.getText()));
+		setValue(ctx, new NucleotideSubstitution(b, position, ctx.NT_STRING(0).getText(), ctx.NT_STRING(1).getText()));
 	}
 
 	/**
@@ -326,6 +356,8 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	public void exitNt_change_ssr(Nt_change_ssrContext ctx) {
 		LOGGER.debug("Leaving nt_change_ssr");
 		final NucleotideRange range;
+		final boolean b = getBooleanValue(ctx, false);
+
 		if (ctx.nt_range() != null)
 			range = (NucleotideRange) getValue(ctx.nt_range());
 		else
@@ -333,7 +365,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 					(NucleotidePointLocation) getValue(ctx.nt_point_location()));
 		final int minCount = Integer.parseInt(ctx.NT_NUMBER(0).getText());
 		final int maxCount = Integer.parseInt(ctx.NT_NUMBER(1).getText());
-		setValue(ctx, new NucleotideShortSequenceRepeatVariability(false, range, minCount, maxCount));
+		setValue(ctx, new NucleotideShortSequenceRepeatVariability(b, range, minCount, maxCount));
 	}
 
 	/**

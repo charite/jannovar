@@ -5,9 +5,11 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
 
-import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 
 /**
@@ -19,6 +21,12 @@ public class ParsingTestBase {
 
 	public ParsingTestBase() {
 		super();
+	}
+
+	public static void setLogLevel(Level level) {
+		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		Configuration conf = ctx.getConfiguration();
+		conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(level);
 	}
 
 	protected Hgvs_variantContext parseString(String inputString) {
