@@ -76,6 +76,11 @@ public class NucleotideInsertion extends NucleotideChange {
 	}
 
 	@Override
+	public NucleotideInsertion withOnlyPredicted(boolean flag) {
+		return new NucleotideInsertion(flag, position, seq);
+	}
+
+	@Override
 	public String toHGVSString() {
 		return wrapIfOnlyPredicted(position.toHGVSString() + "ins" + seq.toHGVSString());
 	}

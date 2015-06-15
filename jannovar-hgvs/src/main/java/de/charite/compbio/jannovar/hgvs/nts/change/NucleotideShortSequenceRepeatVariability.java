@@ -28,6 +28,11 @@ public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 		this.maxCount = maxCount;
 	}
 
+	@Override
+	public NucleotideShortSequenceRepeatVariability withOnlyPredicted(boolean flag) {
+		return new NucleotideShortSequenceRepeatVariability(flag, range, minCount, maxCount);
+	}
+
 	/** @return range of repeat */
 	public NucleotideRange getRange() {
 		return range;

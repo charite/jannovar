@@ -67,6 +67,11 @@ public class NucleotideDeletion extends NucleotideChange {
 		this.seq = seq;
 	}
 
+	@Override
+	public NucleotideDeletion withOnlyPredicted(boolean flag) {
+		return new NucleotideDeletion(flag, range, seq);
+	}
+
 	public NucleotideRange getRange() {
 		return range;
 	}

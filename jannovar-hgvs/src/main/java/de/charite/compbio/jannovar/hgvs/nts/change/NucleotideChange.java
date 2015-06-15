@@ -22,6 +22,9 @@ public abstract class NucleotideChange implements ConvertibleToHGVSString {
 		this.onlyPredicted = onlyPredicted;
 	}
 
+	/** @return {@link NucleotideChange} with given <code>onlyPredicted</code> value. */
+	public abstract NucleotideChange withOnlyPredicted(boolean flag);
+
 	/** @return <code>true</code> if the protein change is only predicted */
 	public boolean isOnlyPredicted() {
 		return onlyPredicted;

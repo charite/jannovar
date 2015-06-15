@@ -54,6 +54,11 @@ public class NucleotideMiscChange extends NucleotideChange {
 		this.changeType = changeType;
 	}
 
+	@Override
+	public NucleotideMiscChange withOnlyPredicted(boolean flag) {
+		return new NucleotideMiscChange(flag, changeType);
+	}
+
 	/** @return type of this {@link NucleotideMiscChangeType} */
 	public NucleotideMiscChangeType getChangeType() {
 		return changeType;

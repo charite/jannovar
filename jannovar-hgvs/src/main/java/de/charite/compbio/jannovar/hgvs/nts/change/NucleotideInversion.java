@@ -62,6 +62,11 @@ public class NucleotideInversion extends NucleotideChange {
 		this.seq = seq;
 	}
 
+	@Override
+	public NucleotideInversion withOnlyPredicted(boolean flag) {
+		return new NucleotideInversion(flag, range, seq);
+	}
+
 	public NucleotideRange getRange() {
 		return range;
 	}

@@ -79,6 +79,11 @@ public class NucleotideIndel extends NucleotideChange {
 	}
 
 	@Override
+	public NucleotideIndel withOnlyPredicted(boolean flag) {
+		return new NucleotideIndel(flag, range, delSeq, insSeq);
+	}
+
+	@Override
 	public String toHGVSString() {
 		String open = isOnlyPredicted() ? "(" : "";
 		String close = isOnlyPredicted() ? ")" : "";

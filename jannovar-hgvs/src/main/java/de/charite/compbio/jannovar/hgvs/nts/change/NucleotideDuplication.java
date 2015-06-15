@@ -67,6 +67,11 @@ public class NucleotideDuplication extends NucleotideChange {
 		this.seq = seq;
 	}
 
+	@Override
+	public NucleotideDuplication withOnlyPredicted(boolean flag) {
+		return new NucleotideDuplication(flag, range, seq);
+	}
+
 	public NucleotideRange getRange() {
 		return range;
 	}
