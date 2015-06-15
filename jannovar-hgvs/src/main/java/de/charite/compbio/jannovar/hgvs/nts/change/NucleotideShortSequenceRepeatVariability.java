@@ -50,7 +50,7 @@ public class NucleotideShortSequenceRepeatVariability extends NucleotideChange {
 
 	@Override
 	public String toHGVSString() {
-		return Joiner.on("").join(range.toHGVSString(), "(", minCount, "_", maxCount, ")");
+		return wrapIfOnlyPredicted(Joiner.on("").join(range.toHGVSString(), "(", minCount, "_", maxCount, ")"));
 	}
 
 	@Override

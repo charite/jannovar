@@ -21,6 +21,19 @@ public class HGVSParserDriverNucleotideSubstitutionTest {
 		driver = new HGVSParserDriver();
 	}
 
+	@Test
+	public void testOnlyPredicted() {
+		String hgvsStrings[] = new String[] { "1:g.(123C>T)", "chr1:g.(123C>T)", "11:g.(111959693G>T)",
+				"chr11:g.(111959693G>T)", "NM_000138.4:n.(247C>T)" };
+
+		for (String hgvsString : hgvsStrings) {
+			HGVSVariant variant = driver.parseHGVSString(hgvsString);
+
+			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assert.assertEquals(hgvsString, variant.toHGVSString());
+		}
+	}
+
 	/** test nucleotide substitutions at non-offset, non-UTR positions */
 	@Test
 	public void testParseNTSubstitutionNormalPos() {

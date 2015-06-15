@@ -22,6 +22,19 @@ public class HGVSParserDriverNucleotideDuplicationTest {
 	}
 
 	@Test
+	public void testPredictedOnly() {
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.(247_248dup)", "NM_000138.4:c.(247+1_247+3dup)",
+				"NM_000138.4:c.(247-3_247-1dup)", "NM_000138.4:c.(*247_*247+3dup)", "NM_000138.4:c.(-247_-247-3dup)" };
+
+		for (String hgvsString : hgvsStrings) {
+			HGVSVariant variant = driver.parseHGVSString(hgvsString);
+
+			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assert.assertEquals(hgvsString, variant.toHGVSString());
+		}
+	}
+
+	@Test
 	public void testWithoutSequence() {
 		String hgvsStrings[] = new String[] { "NM_000138.4:c.247_248dup", "NM_000138.4:c.247+1_247+3dup",
 				"NM_000138.4:c.247-3_247-1dup", "NM_000138.4:c.*247_*247+3dup", "NM_000138.4:c.-247_-247-3dup" };

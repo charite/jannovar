@@ -22,6 +22,19 @@ public class HGVSParserDriverNucleotideShortSequenceVariabilityTest {
 	}
 
 	@Test
+	public void testOnlyPredicted() {
+		String hgvsStrings[] = new String[] { "NM_000138.4:c.(247(1_6))", "NM_000138.4:c.(247+1(1_6))",
+				"NM_000138.4:c.(247-1(1_6))", "NM_000138.4:c.(*247(1_6))", "NM_000138.4:c.(-247(1_6))" };
+
+		for (String hgvsString : hgvsStrings) {
+			HGVSVariant variant = driver.parseHGVSString(hgvsString);
+
+			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assert.assertEquals(hgvsString, variant.toHGVSString());
+		}
+	}
+
+	@Test
 	public void testWithPointLocations() {
 		String hgvsStrings[] = new String[] { "NM_000138.4:c.247(1_6)", "NM_000138.4:c.247+1(1_6)",
 				"NM_000138.4:c.247-1(1_6)", "NM_000138.4:c.*247(1_6)", "NM_000138.4:c.-247(1_6)" };

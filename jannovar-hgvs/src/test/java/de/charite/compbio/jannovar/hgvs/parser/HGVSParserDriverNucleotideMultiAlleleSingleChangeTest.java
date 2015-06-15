@@ -14,13 +14,25 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSParserDriverSingleAlleleMultiChangeTest {
+public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 
 	HGVSParserDriver driver;
 
 	@Before
 	public void setUp() throws Exception {
 		driver = new HGVSParserDriver();
+	}
+
+	@Test
+	public void testOnlyPredicted() {
+		String hgvsStrings[] = new String[] { "1:r.[(123C>T)];[(123C>T)]" };
+
+		for (String hgvsString : hgvsStrings) {
+			HGVSVariant variant = driver.parseHGVSString(hgvsString);
+
+			Assert.assertTrue(variant instanceof MultiAlleleNucleotideVariant);
+			Assert.assertEquals(hgvsString, variant.toHGVSString());
+		}
 	}
 
 	@Test

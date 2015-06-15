@@ -48,8 +48,6 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_singl
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_varContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_var_sepContext;
 
-// TODO(holtgrewe): add support for isPredicted flag
-// TODO(holtgrewe): support more than just one change in one allele
 // TODO(holtgrewe): support parsing amino acid changes
 
 /**
