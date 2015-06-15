@@ -19,6 +19,24 @@ public enum VariantConfiguration {
 	/** chimeric change */
 	CHIMERIC;
 
+	/** @return VariantConfiguration matching to s */
+	public static VariantConfiguration fromString(String s) {
+		switch (s) {
+		case ",":
+			return SINGLE_ORIGIN;
+		case "//":
+			return CHIMERIC;
+		case ";":
+			return IN_CIS;
+		case "(;)":
+			return UNKNOWN_CIS_TRANS;
+		case "/":
+			return MOSAIC;
+		default:
+			throw new RuntimeException("No VariantConfiguration known for string " + s);
+		}
+	}
+
 	/** @return separator to use in HGVS strings */
 	public String toHGVSSeparator() {
 		switch (this) {
@@ -36,4 +54,5 @@ public enum VariantConfiguration {
 			throw new RuntimeException("Unhandled VariantConfiguration " + this);
 		}
 	}
+
 }

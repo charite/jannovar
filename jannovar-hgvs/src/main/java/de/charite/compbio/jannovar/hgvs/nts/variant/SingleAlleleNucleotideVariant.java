@@ -39,6 +39,8 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	/**
 	 * Construct {@link SingleAlleleNucleotideVariant}
 	 *
+	 * @param seqType
+	 *            type of the changed sequence
 	 * @param seqID
 	 *            ID of the reference/transcript that the change is on
 	 * @param varConfig
@@ -48,8 +50,22 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	 */
 	public SingleAlleleNucleotideVariant(SequenceType seqType, String seqID, VariantConfiguration varConfig,
 			Collection<? extends NucleotideChange> changes) {
+		this(seqType, seqID, new NucleotideChangeAllele(varConfig, changes));
+	}
+
+	/**
+	 * Construct {@link SingleAlleleNucleotideVariant}
+	 *
+	 * @param seqType
+	 *            type of the changed sequence
+	 * @param seqID
+	 *            ID of the reference/transcript that the change is on
+	 * @param allele
+	 *            {@link NucleotideChangeAllele} to use
+	 */
+	public SingleAlleleNucleotideVariant(SequenceType seqType, String seqID, NucleotideChangeAllele allele) {
 		super(seqType, seqID);
-		this.allele = new NucleotideChangeAllele(varConfig, changes);
+		this.allele = allele;
 	}
 
 	/** @return <code>true</code> if the variant has only one {@link NucleotideChange}. */
@@ -70,8 +86,7 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	@Override
 	public String toHGVSString() {
 		if (hasOnlyOneChange())
-			return Joiner.on("").join(getSequenceNamePrefix(), ":", seqType.getPrefix(),
-					getChange().toHGVSString());
+			return Joiner.on("").join(getSequenceNamePrefix(), ":", seqType.getPrefix(), getChange().toHGVSString());
 
 		final String sep = allele.getVarConfig().toHGVSSeparator();
 
