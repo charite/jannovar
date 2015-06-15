@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
-import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
+import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant;
 
 // TODO(holtgrew): Test with onlyPredicted flag ("(...)") once this works
 
@@ -23,54 +23,14 @@ public class HGVSParserDriverSingleAlleleMultiChangeTest {
 		driver = new HGVSParserDriver();
 	}
 
-	/** test with multi-change allele from single origin */
 	@Test
-	public void testMultiChangeAlleleSingleOrigin() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T,124T>A]" };
+	public void test() {
+		String hgvsStrings[] = new String[] { "1:r.[123C>T];[123C>T]" };
 
 		for (String hgvsString : hgvsStrings) {
 			HGVSVariant variant = driver.parseHGVSString(hgvsString);
 
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
-		}
-	}
-
-	/** test with multi-change allele with chimeric separator */
-	@Test
-	public void testMultiChangeAlleleChimeric() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T//124T>A]" };
-
-		for (String hgvsString : hgvsStrings) {
-			HGVSVariant variant = driver.parseHGVSString(hgvsString);
-
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
-		}
-	}
-
-	/** test with multi-change allele with in-cis separator */
-	@Test
-	public void testMultiChangeAlleleInCis() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T;124T>A]" };
-
-		for (String hgvsString : hgvsStrings) {
-			HGVSVariant variant = driver.parseHGVSString(hgvsString);
-
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
-			Assert.assertEquals(hgvsString, variant.toHGVSString());
-		}
-	}
-
-	/** test with multi-change allele with unknown-cis-trans separator */
-	@Test
-	public void testMultiChangeAlleleUnknownCisTrans() {
-		String hgvsStrings[] = new String[] { "1:r.[123C>T(;)124T>A]" };
-
-		for (String hgvsString : hgvsStrings) {
-			HGVSVariant variant = driver.parseHGVSString(hgvsString);
-
-			Assert.assertTrue(variant instanceof SingleAlleleNucleotideVariant);
+			Assert.assertTrue(variant instanceof MultiAlleleNucleotideVariant);
 			Assert.assertEquals(hgvsString, variant.toHGVSString());
 		}
 	}

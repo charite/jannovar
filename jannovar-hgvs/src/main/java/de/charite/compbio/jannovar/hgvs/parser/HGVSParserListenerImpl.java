@@ -22,6 +22,7 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideMiscChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideShortSequenceRepeatVariability;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
+import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideChangeAllele;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
@@ -35,6 +36,7 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionCon
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_ssrContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_substitutionContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_allele_varContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_change_alleleContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_change_allele_innerContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_offsetContext;
@@ -131,8 +133,25 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	}
 
 	/**
-	 * Leaving of nt_multi_change_allele rule.
+	 * Leaving of nt_multi_allele_var rule.
 	 * 
+	 * Construct {@link MultiAlleleNucleotideVariant} and set as this node's label from children's
+	 * {@link NucleotideChangeAllele} labels.
+	 */
+	@Override
+	public void exitNt_multi_allele_var(Nt_multi_allele_varContext ctx) {
+		LOGGER.debug("Leaving nt_multi_allele_var");
+		ArrayList<NucleotideChangeAllele> alleles = new ArrayList<>();
+		for (Nt_multi_change_alleleContext childCtx : ctx.nt_multi_change_allele())
+			alleles.add((NucleotideChangeAllele) getValue(childCtx));
+		final SequenceType seqType = SequenceType.findMatchingForPrefix(ctx.NT_CHANGE_DESCRIPTION().getText());
+		final String seqID = ctx.reference().getText().substring(0, ctx.reference().getText().length() - 1);
+		setValue(ctx, new MultiAlleleNucleotideVariant(seqType, seqID, alleles));
+	}
+
+	/**
+	 * Leaving of nt_multi_change_allele rule.
+	 *
 	 * Label this node with the label of the child nt_multi_change_allele_inner.
 	 */
 	@Override
@@ -149,15 +168,19 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_multi_change_allele_inner(Nt_multi_change_allele_innerContext ctx) {
 		LOGGER.debug("Leaving nt_multi_change_allele_inner");
-		Nt_var_sepContext firstSep = ctx.nt_var_sep().get(0);
-		for (Nt_var_sepContext otherSep : ctx.nt_var_sep())
-			if (!firstSep.getText().equals(otherSep.getText()))
-				throw new RuntimeException("Mismatching variant separators in allele: " + firstSep.getText() + " vs. "
-						+ otherSep.getText());
+		VariantConfiguration varConfig = VariantConfiguration.IN_CIS;
+		if (!ctx.nt_var_sep().isEmpty()) {
+			Nt_var_sepContext firstSep = ctx.nt_var_sep().get(0);
+			for (Nt_var_sepContext otherSep : ctx.nt_var_sep())
+				if (!firstSep.getText().equals(otherSep.getText()))
+					throw new RuntimeException("Mismatching variant separators in allele: " + firstSep.getText()
+							+ " vs. " + otherSep.getText());
+			varConfig = VariantConfiguration.fromString(firstSep.getText());
+		}
 		ArrayList<NucleotideChange> changes = new ArrayList<>();
 		for (Nt_changeContext childCtx : ctx.nt_change())
 			changes.add((NucleotideChange) getValue(childCtx));
-		setValue(ctx, new NucleotideChangeAllele(VariantConfiguration.fromString(firstSep.getText()), changes));
+		setValue(ctx, new NucleotideChangeAllele(varConfig, changes));
 	}
 
 	/**
