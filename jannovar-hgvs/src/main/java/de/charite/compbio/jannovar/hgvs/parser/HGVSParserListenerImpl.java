@@ -158,7 +158,12 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_multi_change_allele(Nt_multi_change_alleleContext ctx) {
 		LOGGER.debug("Leaving nt_multi_change_allele");
-		setValue(ctx, getValue(ctx.nt_multi_change_allele_inner()));
+		if (ctx.NT_PAREN_OPEN() == null) {
+			setValue(ctx, getValue(ctx.nt_multi_change_allele_inner()));
+		} else {
+			NucleotideChangeAllele allele = (NucleotideChangeAllele) getValue(ctx.nt_multi_change_allele_inner());
+			setValue(ctx, allele.withOnlyPredicted(true));
+		}
 	}
 
 	/**
@@ -192,7 +197,12 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change(Nt_changeContext ctx) {
 		LOGGER.debug("Leaving nt_change");
-		setValue(ctx, getValue(ctx.nt_change_inner()));
+		if (ctx.NT_PAREN_OPEN() == null) {
+			setValue(ctx, getValue(ctx.nt_change_inner()));
+		} else {
+			NucleotideChange change = (NucleotideChange) getValue(ctx.nt_change_inner());
+			setValue(ctx, change.withOnlyPredicted(true));
+		}
 	}
 
 	/**

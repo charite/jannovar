@@ -57,6 +57,14 @@ public final class NucleotideChangeAllele implements ConvertibleToHGVSString, Li
 		this.changes = ImmutableList.copyOf(changes);
 	}
 
+	/** @return Allele with the onlyPredicted state of all contained changes set to the given value */
+	public NucleotideChangeAllele withOnlyPredicted(boolean flag) {
+		ArrayList<NucleotideChange> changesCopy = new ArrayList<>();
+		for (NucleotideChange change : changes)
+			changesCopy.add(change.withOnlyPredicted(flag));
+		return new NucleotideChangeAllele(varConfig, changesCopy);
+	}
+
 	/** @return the {@link VariantConfiguration} of this allele */
 	public VariantConfiguration getVarConfig() {
 		return varConfig;
