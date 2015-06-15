@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 
 /**
- * Tests for the HGVSParserDriver for parsing nucleotide dellications.
+ * Tests for the HGVSParserDriver for parsing nucleotide delitions.
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
