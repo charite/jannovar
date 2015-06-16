@@ -17,7 +17,7 @@
 		<module>jped-cli</module>
 	</modules>
 
-	<!-- Inherit artifact from SonaType OSS pom.xml Following this article:
+	<!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
 		http://java.dzone.com/articles/deploy-maven-central -->
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -161,8 +161,37 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-
 		</plugins>
+
+		<!-- Ignore maven-enforce-plugin in Eclipse/m2e -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<!-- Sphinx Manual, build with "mvn site". -->
