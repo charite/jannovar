@@ -95,7 +95,7 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	@Override
 	public String toHGVSString() {
 		if (hasOnlyOneChange())
-			return Joiner.on("").join(getRefIDWithVersion(), ":", seqType.getPrefix(), getChange().toHGVSString());
+			return Joiner.on("").join(getSequenceNamePrefix(), ":", seqType.getPrefix(), getChange().toHGVSString());
 
 		final String sep = allele.getVarConfig().toHGVSSeparator();
 
