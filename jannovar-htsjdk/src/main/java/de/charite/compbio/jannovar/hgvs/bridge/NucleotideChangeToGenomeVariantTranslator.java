@@ -2,12 +2,12 @@ package de.charite.compbio.jannovar.hgvs.bridge;
 
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 import de.charite.compbio.jannovar.data.JannovarData;
-import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
+import de.charite.compbio.jannovar.htsjdk.GenomeRegionSequenceExtractor;
 import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
@@ -26,15 +26,12 @@ public class NucleotideChangeToGenomeVariantTranslator {
 
 	/** transcript database and reference dictionary to use for translation */
 	final private JannovarData jvDB;
-	/** shortcut to reference dictionary to use */
-	private final ReferenceDictionary refDict;
-	/** object to use for indexed access to reference FASTA file */
-	private final IndexedFastaSequenceFile indexedFasta;
+	/** extraction of {@link GenomicRegion} from FASTA files */
+	private final GenomeRegionSequenceExtractor seqExtractor;
 
 	public NucleotideChangeToGenomeVariantTranslator(JannovarData jvDB, IndexedFastaSequenceFile indexedFasta) {
 		this.jvDB = jvDB;
-		this.refDict = jvDB.getRefDict();
-		this.indexedFasta = indexedFasta;
+		this.seqExtractor = new GenomeRegionSequenceExtractor(indexedFasta);
 	}
 
 	/**
@@ -88,7 +85,7 @@ public class NucleotideChangeToGenomeVariantTranslator {
 	}
 
 	/**
-	 * Convert NucleotidePointLocation on a transcript
+	 * Convert {@link NucleotidePointLocation} on a {@link TranscriptModel} to a {@link GenomePosition}
 	 */
 	private GenomePosition translateNucleotidePointLocation(TranscriptModel tm, NucleotidePointLocation pos,
 			SequenceType sequenceType) throws CannotTranslateHGVSVariant {
