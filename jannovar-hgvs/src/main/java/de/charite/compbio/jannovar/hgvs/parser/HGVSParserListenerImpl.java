@@ -24,6 +24,7 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideShortSequenceRepeat
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideChangeAllele;
+import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
@@ -47,12 +48,13 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_multi
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_single_change_varContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_varContext;
 import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_var_sepContext;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.ReferenceContext;
 
 // TODO(holtgrewe): support parsing amino acid changes
 
 /**
  * Master ParseTreeListener used in {@link HVSParser} setB
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 class HGVSParserListenerImpl extends HGVSParserBaseListener {
@@ -111,14 +113,15 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	public void exitNt_single_allele_single_change_var(Nt_single_allele_single_change_varContext ctx) {
 		LOGGER.debug("Leaving nt_single_allele_single_change_var");
 		final SequenceType seqType = SequenceType.findMatchingForPrefix(ctx.NT_CHANGE_DESCRIPTION().getText());
-		final String seqID = ctx.reference().getText().substring(0, ctx.reference().getText().length() - 1);
+		final ReferenceLabel refLabel = (ReferenceLabel) getValue(ctx.reference());
 		final NucleotideChange ntChange = (NucleotideChange) getValue(ctx.nt_change());
-		setValue(ctx, SingleAlleleNucleotideVariant.makeSingleChangeVariant(seqType, seqID, ntChange));
+		setValue(ctx, new SingleAlleleNucleotideVariant(seqType, refLabel.getTranscriptID(), refLabel.getProteinID(),
+				refLabel.getTranscriptVersion(), NucleotideChangeAllele.singleChangeAllele(ntChange)));
 	}
 
 	/**
 	 * Leaving of the nt_single_allele_multi_change_var rule.
-	 * 
+	 *
 	 * Construct new {@link SingleAlleleNucleotideVariant} as a label for this node, using
 	 * {@link NucleotideChangeAllele} from child label.
 	 */
@@ -126,14 +129,15 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	public void exitNt_single_allele_multi_change_var(Nt_single_allele_multi_change_varContext ctx) {
 		LOGGER.debug("Leaving nt_single_allele_multi_change_var");
 		final SequenceType seqType = SequenceType.findMatchingForPrefix(ctx.NT_CHANGE_DESCRIPTION().getText());
-		final String seqID = ctx.reference().getText().substring(0, ctx.reference().getText().length() - 1);
+		final ReferenceLabel refLabel = (ReferenceLabel) getValue(ctx.reference());
 		final NucleotideChangeAllele allele = (NucleotideChangeAllele) getValue(ctx.nt_multi_change_allele());
-		setValue(ctx, new SingleAlleleNucleotideVariant(seqType, seqID, allele));
+		setValue(ctx, new SingleAlleleNucleotideVariant(seqType, refLabel.getTranscriptID(), refLabel.getProteinID(),
+				refLabel.getTranscriptVersion(), allele));
 	}
 
 	/**
 	 * Leaving of nt_multi_allele_var rule.
-	 * 
+	 *
 	 * Construct {@link MultiAlleleNucleotideVariant} and set as this node's label from children's
 	 * {@link NucleotideChangeAllele} labels.
 	 */
@@ -144,8 +148,9 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 		for (Nt_multi_change_alleleContext childCtx : ctx.nt_multi_change_allele())
 			alleles.add((NucleotideChangeAllele) getValue(childCtx));
 		final SequenceType seqType = SequenceType.findMatchingForPrefix(ctx.NT_CHANGE_DESCRIPTION().getText());
-		final String seqID = ctx.reference().getText().substring(0, ctx.reference().getText().length() - 1);
-		setValue(ctx, new MultiAlleleNucleotideVariant(seqType, seqID, alleles));
+		final ReferenceLabel refLabel = (ReferenceLabel) getValue(ctx.reference());
+		setValue(ctx, new MultiAlleleNucleotideVariant(seqType, refLabel.getTranscriptID(), refLabel.getProteinID(),
+				refLabel.getTranscriptVersion(), alleles));
 	}
 
 	/**
@@ -166,7 +171,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 
 	/**
 	 * Leaving of nt_multi_change_allele_inner rule.
-	 * 
+	 *
 	 * Construct NucleotideChangeAllele from the children's labels.
 	 */
 	@Override
@@ -338,7 +343,7 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 
 	/**
 	 * Leaving of nt_change_ssr rule
-	 * 
+	 *
 	 * Construct {@link NucleotideShortSequenceRepeatVariability} from the children's values and label ctx with this.
 	 */
 	@Override
@@ -358,13 +363,37 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 
 	/**
 	 * Leaving of nt_change_misc rule
-	 * 
+	 *
 	 * Construct {@link NucleotideMiscChange} from the children's values and label ctx with this.
 	 */
 	@Override
 	public void exitNt_change_misc(Nt_change_miscContext ctx) {
 		LOGGER.debug("Leaving nt_change_misc");
 		setValue(ctx, NucleotideMiscChange.buildFromString(ctx.getText()));
+	}
+
+	/**
+	 * Leaving of the reference rule.
+	 *
+	 * Label node with {@link ReferenceLabel}
+	 */
+	@Override
+	public void exitReference(ReferenceContext ctx) {
+		LOGGER.debug("Leaving reference");
+		String transcriptID;
+		int transcriptVersion = NucleotideVariant.NO_TRANSCRIPT_VERSION;
+		String proteinID = null;
+
+		transcriptID = ctx.REFERENCE(0).getText();
+		if (transcriptID.contains(".")) {
+			int pos = transcriptID.lastIndexOf('.');
+			transcriptVersion = Integer.parseInt(transcriptID.substring(pos + 1, transcriptID.length()));
+			transcriptID = transcriptID.substring(0, pos);
+		}
+		if (ctx.PAREN_OPEN() != null)
+			proteinID = ctx.REFERENCE(1).getText();
+
+		setValue(ctx, new ReferenceLabel(transcriptID, transcriptVersion, proteinID));
 	}
 
 	/**
@@ -419,6 +448,39 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 		if (ctx.NT_MINUS() != null)
 			value = -value;
 		setValue(ctx, value);
+	}
+
+	/**
+	 * Simple triple for labeling of "reference" nodes.
+	 */
+	private static class ReferenceLabel {
+
+		/** transcript identifier string */
+		private final String transcriptID;
+		/** transcript version or NucleotideVariant.NO_TRANSCRIPT_VERSION */
+		private final int transcriptVersion;
+		/** protein ID string or null */
+		private final String proteinID;
+
+		public ReferenceLabel(String transcriptID, int transcriptVersion, String proteinID) {
+			super();
+			this.transcriptID = transcriptID;
+			this.transcriptVersion = transcriptVersion;
+			this.proteinID = proteinID;
+		}
+
+		public String getTranscriptID() {
+			return transcriptID;
+		}
+
+		public int getTranscriptVersion() {
+			return transcriptVersion;
+		}
+
+		public String getProteinID() {
+			return proteinID;
+		}
+
 	}
 
 }

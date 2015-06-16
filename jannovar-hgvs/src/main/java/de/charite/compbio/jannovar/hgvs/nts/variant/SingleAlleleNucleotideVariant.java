@@ -55,6 +55,15 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 
 	/**
 	 * Construct {@link SingleAlleleNucleotideVariant}
+	 */
+	public SingleAlleleNucleotideVariant(SequenceType seqType, String refID, String proteinID, int transcriptVersion,
+			NucleotideChangeAllele allele) {
+		super(seqType, refID, proteinID, transcriptVersion);
+		this.allele = allele;
+	}
+
+	/**
+	 * Construct {@link SingleAlleleNucleotideVariant}
 	 *
 	 * @param seqType
 	 *            type of the changed sequence
@@ -86,7 +95,7 @@ public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 	@Override
 	public String toHGVSString() {
 		if (hasOnlyOneChange())
-			return Joiner.on("").join(getSequenceNamePrefix(), ":", seqType.getPrefix(), getChange().toHGVSString());
+			return Joiner.on("").join(getRefIDWithVersion(), ":", seqType.getPrefix(), getChange().toHGVSString());
 
 		final String sep = allele.getVarConfig().toHGVSSeparator();
 

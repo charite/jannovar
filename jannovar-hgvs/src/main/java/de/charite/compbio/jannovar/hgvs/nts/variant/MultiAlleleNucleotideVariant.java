@@ -27,6 +27,16 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 	}
 
 	/**
+	 * Construct with the given {@link SequenceType}, reference/transcript ID, protein ID, transcript version, and
+	 * collection of {@link NucleotideChangeAllele}s.
+	 */
+	public MultiAlleleNucleotideVariant(SequenceType seqType, String refID, String proteinID, int transcriptVersion,
+			Collection<NucleotideChangeAllele> alleles) {
+		super(seqType, refID, proteinID, transcriptVersion);
+		this.alleles = ImmutableList.copyOf(alleles);
+	}
+
+	/**
 	 * Construct with the given {@link SequenceType}, reference/transcript ID and collection of
 	 * {@link NucleotideChangeAllele}s.
 	 */
@@ -43,7 +53,7 @@ public class MultiAlleleNucleotideVariant extends NucleotideVariant {
 	@Override
 	public String toHGVSString() {
 		ArrayList<String> parts = new ArrayList<>();
-		parts.add(getSequenceNamePrefix());
+		parts.add(getRefIDWithVersion());
 		parts.add(":");
 		parts.add(seqType.getPrefix());
 		boolean first = true;

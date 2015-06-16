@@ -50,6 +50,16 @@ public abstract class NucleotideVariant extends HGVSVariant {
 		return refID;
 	}
 
+	/** @return transcript version, {@link #NO_TRANSCRIPT_VERSION} if no version is given */
+	public int getTranscriptVersion() {
+		return transcriptVersion;
+	}
+
+	/** @return protein ID or <code>null</code> if none */
+	public String getProteinID() {
+		return proteinID;
+	}
+
 	/** @return the reference/transcript ID with version, if set */
 	public String getRefIDWithVersion() {
 		if (transcriptVersion == NO_TRANSCRIPT_VERSION)
@@ -63,16 +73,12 @@ public abstract class NucleotideVariant extends HGVSVariant {
 		return toHGVSString();
 	}
 
-	/** @return sequence name prefix, e.g. <code>"NM_000109.3(DMD_v2)"</code>, or <code>"NM_000109.3"</code>. */
+	/** @return sequence name prefix, e.g. <code>"NM_000109.3(DMD)"</code>, or <code>"NM_000109.3"</code>. */
 	public String getSequenceNamePrefix() {
-		String proteinID = this.proteinID;
-		if (proteinID != null && transcriptVersion != NO_TRANSCRIPT_VERSION)
-			proteinID += "_v" + transcriptVersion;
-
 		if (proteinID == null)
-			return refID;
+			return getRefIDWithVersion();
 		else
-			return Joiner.on("").join(refID, "(", proteinID, ")");
+			return Joiner.on("").join(getRefIDWithVersion(), "(", proteinID, ")");
 	}
 
 	@Override
