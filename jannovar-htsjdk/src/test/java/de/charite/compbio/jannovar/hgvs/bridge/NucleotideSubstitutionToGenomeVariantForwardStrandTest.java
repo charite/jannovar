@@ -26,7 +26,7 @@ import de.charite.compbio.jannovar.utils.ResourceUtils;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class NucleotideChangeToGenomeVariantForwardStrandTest {
+public class NucleotideSubstitutionToGenomeVariantForwardStrandTest {
 
 	/** path to Jannovar database file */
 	static String dbPath;
