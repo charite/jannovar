@@ -1,6 +1,10 @@
 package de.charite.compbio.jannovar.hgvs.bridge;
 
 import htsjdk.samtools.reference.IndexedFastaSequenceFile;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
@@ -8,7 +12,10 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.htsjdk.GenomeRegionSequenceExtractor;
+import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
+import de.charite.compbio.jannovar.impl.util.DNAUtils;
 import de.charite.compbio.jannovar.reference.CDSPosition;
+import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.ProjectionException;
@@ -23,6 +30,9 @@ import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public class NucleotideChangeToGenomeVariantTranslator {
+
+	/** logger instance to use */
+	private static final Logger LOGGER = LoggerFactory.getLogger(VariantContextAnnotator.class);
 
 	/** transcript database and reference dictionary to use for translation */
 	final private JannovarData jvDB;
@@ -73,15 +83,19 @@ public class NucleotideChangeToGenomeVariantTranslator {
 	private GenomeVariant translateNucleotideSubstitution(TranscriptModel tm, SequenceType sequenceType,
 			NucleotideSubstitution ntSub) throws CannotTranslateHGVSVariant {
 		final NucleotidePointLocation pos = ntSub.getPosition();
-		final String fromNT = ntSub.getFromNT();
-		final String toNT = ntSub.getToNT();
+		final String fromNT = ntSub.getFromNT().toUpperCase();
+		final String toNT = ntSub.getToNT().toUpperCase();
 
 		if (fromNT.length() != 1 || toNT.length() != 1)
 			throw new CannotTranslateHGVSVariant("Both source and target sequence must have length 1 in "
 					+ ntSub.toHGVSString());
 
-		return new GenomeVariant(translateNucleotidePointLocation(tm, pos, sequenceType), fromNT, toNT, tm.getStrand())
-				.withStrand(Strand.FWD);
+		final GenomeVariant result = new GenomeVariant(translateNucleotidePointLocation(tm, pos, sequenceType), fromNT,
+				toNT, tm.getStrand()).withStrand(Strand.FWD);
+		final String refSeq = getGenomeSeq(tm.getStrand(), result.getGenomeInterval());
+		if (!refSeq.equals(fromNT))
+			LOGGER.warn("Invalid reference nucleotides in " + result.toString() + ", should be " + refSeq);
+		return result;
 	}
 
 	/**
@@ -150,6 +164,24 @@ public class NucleotideChangeToGenomeVariantTranslator {
 			throw new CannotTranslateHGVSVariant("could not translate base transcript position " + txPos + " of "
 					+ pos.toHGVSString() + " to a genome position", e);
 		}
+	}
+
+	/**
+	 * Return sequence from the reference in the given interval <code>gItv</code>.
+	 *
+	 * The sequence will be reverse-complemented depending on <code>strand</code> and converted to upper case.
+	 *
+	 * @param strand
+	 *            to load from
+	 * @param gItv
+	 *            {@link GenomeInterval} to load sequence for
+	 * @return sequence loaded from reference
+	 */
+	private String getGenomeSeq(Strand strand, GenomeInterval gItv) {
+		String result = seqExtractor.load(gItv.withStrand(Strand.FWD));
+		if (strand == Strand.REV)
+			result = DNAUtils.reverseComplement(result);
+		return result.toUpperCase();
 	}
 
 }
