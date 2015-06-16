@@ -45,9 +45,17 @@ public abstract class NucleotideVariant extends HGVSVariant {
 		return seqType;
 	}
 
-	/** @return the reference/transript ID */
+	/** @return the reference/transcript ID */
 	public String getRefID() {
 		return refID;
+	}
+
+	/** @return the reference/transcript ID with version, if set */
+	public String getRefIDWithVersion() {
+		if (transcriptVersion == NO_TRANSCRIPT_VERSION)
+			return getRefID();
+		else
+			return Joiner.on("").join(getRefID(), ".", transcriptVersion);
 	}
 
 	@Override
