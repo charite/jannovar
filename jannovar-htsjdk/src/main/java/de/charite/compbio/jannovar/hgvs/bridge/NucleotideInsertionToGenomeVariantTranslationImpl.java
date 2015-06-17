@@ -37,31 +37,16 @@ class NucleotideInsertionToGenomeVariantTranslationImpl extends NucleotideChange
 	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType,
 			NucleotideInsertion ntIns) throws CannotTranslateHGVSVariant {
 		final NucleotideRange range = ntIns.getRange();
-		final NucleotideSeqDescription deletedNTDesc = ntIns.getSeq();
+		final NucleotideSeqDescription insertedNTDesc = ntIns.getSeq();
 		final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);
 
-		// obtain deleted sequence, setting inconsistency warnings into warningMsg, if any
-		String warningMsg = null;
-		String deletedNTs = deletedNTDesc.getNucleotides();
-		if (deletedNTs == null) {
-			deletedNTs = getGenomeSeq(tm.getStrand(), gItv);
-			if (deletedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-					&& deletedNTDesc.length() != deletedNTs.length())
-				warningMsg = "Invalid nucleotide count in " + ntIns.toHGVSString() + ", expected "
-						+ deletedNTs.length();
-		} else {
-			final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-			if (!refSeq.equals(deletedNTs))
-				warningMsg = "Invalid nucleotides in " + ntIns.toHGVSString() + ", expected " + refSeq;
-			deletedNTs = refSeq;
-		}
+		// perform sanity check of inserted nucleotides
+		if (insertedNTDesc.getNucleotides() == null)
+			throw new CannotTranslateHGVSVariant("Nucleotides must be given but were not in " + ntIns.toHGVSString());
 
-		final GenomeVariant result = new GenomeVariant(gItv.withStrand(tm.getStrand()).getGenomeBeginPos(), deletedNTs,
-				"", tm.getStrand()).withStrand(Strand.FWD);
-		if (warningMsg != null)
-			return ResultWithWarnings.construct(result, warningMsg);
-		else
-			return ResultWithWarnings.construct(result);
+		final GenomeVariant result = new GenomeVariant(gItv.withStrand(tm.getStrand()).getGenomeBeginPos().shifted(1),
+				"", insertedNTDesc.getNucleotides(), tm.getStrand()).withStrand(Strand.FWD);
+		return ResultWithWarnings.construct(result);
 	}
 
 }

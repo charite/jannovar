@@ -58,25 +58,14 @@ public class NucleotideInsertionToGenomeVariantReverseStrandTest {
 	}
 
 	@Test
-	public void testPositionInCDS() throws CannotTranslateHGVSVariant {
-		String hgvsStr = "NM_000138.4(FBN1):c.7339delA";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
-		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
-
-		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
-		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.217680delT", gVar.toString());
-	}
-
-	@Test
 	public void testRangeInCDS() throws CannotTranslateHGVSVariant {
-		String hgvsStr = "NM_000138.4(FBN1):c.7339_7341delAGT";
+		String hgvsStr = "NM_000138.4(FBN1):c.7339_7340insCTTTG";
 		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.217678_217680delACT", gVar.toString());
+		Assert.assertEquals("ref:g.217679_217680insCAAAG", gVar.toString());
 	}
 
 }
