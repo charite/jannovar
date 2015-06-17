@@ -19,7 +19,7 @@
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-lexer grammar HGVSLexer;
+lexer grammar Antlr4HGVSLexer;
 
 /** fire off protein change description*/
 PROTEIN_CHANGE_DESCRIPTION

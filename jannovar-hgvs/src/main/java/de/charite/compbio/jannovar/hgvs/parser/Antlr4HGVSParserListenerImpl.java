@@ -26,29 +26,29 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant
 import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideChangeAllele;
 import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_deletionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_duplicationContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_indelContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_innerContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_insertionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_ssrContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_substitutionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_allele_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_change_alleleContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_change_allele_innerContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_offsetContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_point_locationContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_rangeContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_multi_change_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_single_change_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_var_sepContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.ReferenceContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Hgvs_variantContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_base_locationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_deletionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_duplicationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_indelContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_innerContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_insertionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_inversionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_miscContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_ssrContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_substitutionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_multi_allele_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_multi_change_alleleContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_multi_change_allele_innerContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_offsetContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_point_locationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_rangeContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_single_allele_multi_change_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_single_allele_single_change_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_single_allele_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_var_sepContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.ReferenceContext;
 
 // TODO(holtgrewe): support parsing amino acid changes
 
@@ -57,9 +57,9 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.ReferenceContext;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-class HGVSParserListenerImpl extends HGVSParserBaseListener {
+class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HGVSParserListenerImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Antlr4HGVSParserListenerImpl.class);
 
 	/** maps nodes to Objects with Map<ParseTree,Object> */
 	ParseTreeProperty<Object> values = new ParseTreeProperty<>();

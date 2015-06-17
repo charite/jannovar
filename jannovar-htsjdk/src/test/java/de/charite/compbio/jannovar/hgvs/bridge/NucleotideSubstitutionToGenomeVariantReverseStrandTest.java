@@ -17,7 +17,7 @@ import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParserDriver;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 
@@ -60,7 +60,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionInCDS() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339A>T";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -71,7 +71,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionWithPositiveOffsetInCDS() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339+1G>A";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -82,7 +82,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionWithNegativeOffsetInCDS() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.7339-1G>A";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -93,7 +93,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionInUTR5() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.-1A>T";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -104,7 +104,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionWithPositiveOffsetInUTR5() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.-1+1T>C";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -115,7 +115,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionWithNegativeOffsetInUTR5() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.-1-1C>G";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -126,7 +126,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionInUTR3() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.*1T>C";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -137,7 +137,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionWithPositiveOffsetInUTR3() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.*1+1C>A";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -148,7 +148,7 @@ public class NucleotideSubstitutionToGenomeVariantReverseStrandTest {
 	@Test
 	public void testPositionWithNegativeOffsetInUTR3() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_000138.4(FBN1):c.*1-1T>A";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;

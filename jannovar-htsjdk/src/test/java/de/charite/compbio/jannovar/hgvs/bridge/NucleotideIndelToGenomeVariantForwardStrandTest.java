@@ -17,7 +17,7 @@ import de.charite.compbio.jannovar.data.JannovarDataSerializer;
 import de.charite.compbio.jannovar.data.SerializationException;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParserDriver;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParser;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.utils.ResourceUtils;
 
@@ -60,7 +60,7 @@ public class NucleotideIndelToGenomeVariantForwardStrandTest {
 	@Test
 	public void testPositionInCDS() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_004937.2(CTNS):c.400delAinsCT";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
@@ -71,7 +71,7 @@ public class NucleotideIndelToGenomeVariantForwardStrandTest {
 	@Test
 	public void testRangeInCDS() throws CannotTranslateHGVSVariant {
 		String hgvsStr = "NM_004937.2(CTNS):c.400_403delATCTinsGAAAT";
-		HGVSVariant hgvsVar = new HGVSParserDriver().parseHGVSString(hgvsStr);
+		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;

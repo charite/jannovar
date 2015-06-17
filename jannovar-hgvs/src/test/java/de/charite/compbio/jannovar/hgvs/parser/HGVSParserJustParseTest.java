@@ -22,8 +22,8 @@ public class HGVSParserJustParseTest extends JustParseAndLexBase {
 	public void testParsingOnNTStrings() throws Exception {
 		for (String ntString : NT_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(PREFIX + ntString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			HGVSParser p = new HGVSParser(new CommonTokenStream(l));
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 			p.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
@@ -44,8 +44,8 @@ public class HGVSParserJustParseTest extends JustParseAndLexBase {
 		//		for (String proteinString : new String[] { "p.Met1" }) {
 		for (String proteinString : PROTEIN_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(PREFIX + proteinString);
-			HGVSLexer l = new HGVSLexer(inputStream);
-			HGVSParser p = new HGVSParser(new CommonTokenStream(l));
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 			p.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,

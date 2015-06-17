@@ -2,14 +2,11 @@
  *
  * Supports the subset of HGVS mutnomen that is relevant for annotating variant calls from NGS data.
  */
-parser grammar HGVSParser;
+parser grammar Antlr4HGVSParser;
 
 options {
-	tokenVocab = HGVSLexer;
-} // use tokens from HGVSLexer
-
-// TODO(holtgrem): nucleotide variants cannot be predicted/in parantheses yet
-// TODO(holtgrem): handle problem of distinction between "chr" vs. "c." as it is currently performed, probably with extra mode
+	tokenVocab = Antlr4HGVSLexer;
+} // use tokens from Antlr4HGVSLexer
 
 /** top-level production rule for both nucleotide and protein variants */
 hgvs_variant

@@ -14,7 +14,7 @@ public class HGVSLexerJustLexTest extends JustParseAndLexBase {
 	public void testLexingOnNTStrings() {
 		for (String ntString : NT_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
-			HGVSLexer l = new HGVSLexer(inputStream);
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			l.getAllTokens();
 		}
 	}
@@ -23,7 +23,7 @@ public class HGVSLexerJustLexTest extends JustParseAndLexBase {
 	public void testLexingOnProteinStrings() {
 		for (String proteinString : PROTEIN_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(proteinString);
-			HGVSLexer l = new HGVSLexer(inputStream);
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			l.getAllTokens();
 		}
 	}

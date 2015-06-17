@@ -12,30 +12,28 @@ import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 
-// TODO(holtgrewe): Rename the ANTLR parser to have a ANTLR suffix/prefix and call this HGVSParser.
-
 /**
  * Driver code for parsing HGVS strings into HGVSVariant objects.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSParserDriver {
+public class HGVSParser {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HGVSParserDriver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(HGVSParser.class);
 
 	private boolean debug = false;
 
-	public HGVSParserDriver() {
+	public HGVSParser() {
 	}
 
-	public HGVSParserDriver(boolean debug) {
+	public HGVSParser(boolean debug) {
 		this.debug = debug;
 	}
 
 	public HGVSVariant parseHGVSString(String inputString) {
 		LOGGER.trace("Parsing input string " + inputString);
-		HGVSParser parser = getParser(inputString);
-		HGVSParserListenerImpl listener = new HGVSParserListenerImpl();
+		Antlr4HGVSParser parser = getParser(inputString);
+		Antlr4HGVSParserListenerImpl listener = new Antlr4HGVSParserListenerImpl();
 		parser.addParseListener(listener);
 		ParseTree tree = parser.hgvs_variant();
 		if (debug)
@@ -43,14 +41,14 @@ public class HGVSParserDriver {
 		return listener.getResult();
 	}
 
-	private HGVSParser getParser(String inputString) {
+	private Antlr4HGVSParser getParser(String inputString) {
 		if (debug) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			HGVSLexer l = new HGVSLexer(inputStream);
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
 		if (debug) {
-			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
+			Antlr4HGVSLexer lexer = new Antlr4HGVSLexer(new ANTLRInputStream(inputString));
 			// lexer.pushMode(mode);
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
@@ -58,9 +56,9 @@ public class HGVSParserDriver {
 			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-		HGVSLexer l = new HGVSLexer(inputStream);
+		Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 		// l.pushMode(mode);
-		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
+		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(debug);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override

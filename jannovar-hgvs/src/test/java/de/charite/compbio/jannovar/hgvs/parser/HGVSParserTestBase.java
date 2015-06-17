@@ -19,14 +19,14 @@ public class HGVSParserTestBase {
 	 * @param trace
 	 *            whether or not to activate debug tracing
 	 */
-	protected HGVSParser buildParserForString(String inputString, int mode, boolean trace) {
+	protected Antlr4HGVSParser buildParserForString(String inputString, int mode, boolean trace) {
 		if (trace) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			HGVSLexer l = new HGVSLexer(inputStream);
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
 		if (trace) {
-			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
+			Antlr4HGVSLexer lexer = new Antlr4HGVSLexer(new ANTLRInputStream(inputString));
 			lexer.pushMode(mode);
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
@@ -34,9 +34,9 @@ public class HGVSParserTestBase {
 			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-		HGVSLexer l = new HGVSLexer(inputStream);
+		Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 		l.pushMode(mode);
-		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
+		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(trace);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override
