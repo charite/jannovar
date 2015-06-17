@@ -196,7 +196,7 @@ public final class GenomeVariant implements VariantDescription {
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref);
 		else if (alt.equals("") && ref.length() > 1) // multi-base deletion
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref);
-		else if (ref.length() == 1 && alt.length() != 0)
+		else if (ref.length() == 1 && alt.length() > 1)
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref, "ins", alt);
 		else if (ref.length() > 1 && alt.length() != 0)
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref,

@@ -5,6 +5,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
 import de.charite.compbio.jannovar.htsjdk.GenomeRegionSequenceExtractor;
+import de.charite.compbio.jannovar.impl.util.DNAUtils;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -37,27 +38,27 @@ class NucleotideInversionToGenomeVariantTranslationImpl extends NucleotideChange
 	public ResultWithWarnings<GenomeVariant> run(TranscriptModel tm, SequenceType sequenceType,
 			NucleotideInversion ntInv) throws CannotTranslateHGVSVariant {
 		final NucleotideRange range = ntInv.getRange();
-		final NucleotideSeqDescription deletedNTDesc = ntInv.getSeq();
+		final NucleotideSeqDescription invertedNTDesc = ntInv.getSeq();
 		final GenomeInterval gItv = posConverter.translateNucleotideRange(tm, range, sequenceType);
 
 		// obtain deleted sequence, setting inconsistency warnings into warningMsg, if any
 		String warningMsg = null;
-		String deletedNTs = deletedNTDesc.getNucleotides();
-		if (deletedNTs == null) {
-			deletedNTs = getGenomeSeq(tm.getStrand(), gItv);
-			if (deletedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
-					&& deletedNTDesc.length() != deletedNTs.length())
+		String invertedNTs = invertedNTDesc.getNucleotides();
+		if (invertedNTs == null) {
+			invertedNTs = getGenomeSeq(tm.getStrand(), gItv);
+			if (invertedNTDesc.length() != NucleotideSeqDescription.INVALID_NT_COUNT
+					&& invertedNTDesc.length() != invertedNTs.length())
 				warningMsg = "Invalid nucleotide count in " + ntInv.toHGVSString() + ", expected "
-						+ deletedNTs.length();
+						+ invertedNTs.length();
 		} else {
 			final String refSeq = getGenomeSeq(tm.getStrand(), gItv);
-			if (!refSeq.equals(deletedNTs))
+			if (!refSeq.equals(invertedNTs))
 				warningMsg = "Invalid nucleotides in " + ntInv.toHGVSString() + ", expected " + refSeq;
-			deletedNTs = refSeq;
+			invertedNTs = refSeq;
 		}
 
-		final GenomeVariant result = new GenomeVariant(gItv.withStrand(tm.getStrand()).getGenomeBeginPos(), deletedNTs,
-				"", tm.getStrand()).withStrand(Strand.FWD);
+		final GenomeVariant result = new GenomeVariant(gItv.withStrand(tm.getStrand()).getGenomeBeginPos(),
+				invertedNTs, DNAUtils.reverseComplement(invertedNTs), tm.getStrand()).withStrand(Strand.FWD);
 		if (warningMsg != null)
 			return ResultWithWarnings.construct(result, warningMsg);
 		else
