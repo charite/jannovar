@@ -13,11 +13,11 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
 /**
  * Denote a change with a "REF" and an "ALT" string using genome coordinates.
  *
- * GenomeChange objects are immutable, the members are automatically adjusted
- * for the longest common suffix and prefix in REF and ALT.
+ * GenomeChange objects are immutable, the members are automatically adjusted for the longest common suffix and prefix
+ * in REF and ALT.
  *
- * Symbolic alleles, as in the VCF standard, are also possible, but methods like
- * {@link #getType} etc. do not return sensible results.
+ * Symbolic alleles, as in the VCF standard, are also possible, but methods like {@link #getType} etc. do not return
+ * sensible results.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
@@ -34,12 +34,10 @@ public final class GenomeVariant implements VariantDescription {
 	private final String alt;
 
 	/**
-	 * Construct object given the position, reference, and alternative nucleic
-	 * acid string.
+	 * Construct object given the position, reference, and alternative nucleic acid string.
 	 *
-	 * On construction, pos, ref, and alt are automatically adjusted to the
-	 * right/incremented by the length of the longest common prefix and suffix
-	 * of ref and alt.
+	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
+	 * longest common prefix and suffix of ref and alt.
 	 */
 	public GenomeVariant(GenomePosition pos, String ref, String alt) {
 		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
@@ -50,22 +48,19 @@ public final class GenomeVariant implements VariantDescription {
 		}
 
 		VariantDataCorrector corr = new VariantDataCorrector(ref, alt, pos.getPos());
-		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(),
-				corr.position, PositionType.ZERO_BASED);
+		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(), corr.position,
+				PositionType.ZERO_BASED);
 		this.ref = corr.ref;
 		this.alt = corr.alt;
 	}
 
 	/**
-	 * Construct object given the position, reference, alternative nucleic acid
-	 * string, and strand.
+	 * Construct object given the position, reference, alternative nucleic acid string, and strand.
 	 *
-	 * On construction, pos, ref, and alt are automatically adjusted to the
-	 * right/incremented by the length of the longest common prefix and suffix
-	 * of ref and alt. Further, the position is adjusted to the given strand.
+	 * On construction, pos, ref, and alt are automatically adjusted to the right/incremented by the length of the
+	 * longest common prefix and suffix of ref and alt. Further, the position is adjusted to the given strand.
 	 */
-	public GenomeVariant(GenomePosition pos, String ref, String alt,
-			Strand strand) {
+	public GenomeVariant(GenomePosition pos, String ref, String alt, Strand strand) {
 		if (wouldBeSymbolicAllele(ref) || wouldBeSymbolicAllele(alt)) {
 			this.pos = pos.withStrand(strand);
 			if (strand == pos.getStrand()) {
@@ -94,9 +89,8 @@ public final class GenomeVariant implements VariantDescription {
 		else if (strand != pos.getStrand() /* && ref.length() != 0 */)
 			delta = ref.length() - 1;
 
-		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(),
-				corr.position, PositionType.ZERO_BASED).shifted(delta)
-				.withStrand(strand);
+		this.pos = new GenomePosition(pos.getRefDict(), pos.getStrand(), pos.getChr(), corr.position,
+				PositionType.ZERO_BASED).shifted(delta).withStrand(strand);
 	}
 
 	/**
@@ -107,18 +101,14 @@ public final class GenomeVariant implements VariantDescription {
 	}
 
 	/**
-	 * @return <code>true</code> if the given <code>allele</code> string
-	 *         describes a symbolic allele (events not described by replacement
-	 *         of bases, e.g. break-ends or duplications that are described in
-	 *         one line).
+	 * @return <code>true</code> if the given <code>allele</code> string describes a symbolic allele (events not
+	 *         described by replacement of bases, e.g. break-ends or duplications that are described in one line).
 	 */
 	private static boolean wouldBeSymbolicAllele(String allele) {
 		if (allele.length() <= 1)
 			return false;
-		return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>')
-				|| // symbolic or large insertion
-				(allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.')
-				|| // single breakend
+		return (allele.charAt(0) == '<' || allele.charAt(allele.length() - 1) == '>') || // symbolic or large insertion
+				(allele.charAt(0) == '.' || allele.charAt(allele.length() - 1) == '.') || // single breakend
 				(allele.contains("[") || allele.contains("]")); // mated
 																// breakend
 	}
@@ -164,8 +154,7 @@ public final class GenomeVariant implements VariantDescription {
 		if (strand == other.pos.getStrand()) {
 			this.pos = other.pos;
 		} else {
-			this.pos = other.pos.shifted(this.ref.length() - 1).withStrand(
-					strand);
+			this.pos = other.pos.shifted(this.ref.length() - 1).withStrand(strand);
 		}
 	}
 
@@ -202,14 +191,13 @@ public final class GenomeVariant implements VariantDescription {
 		if (pos.getStrand() != Strand.FWD)
 			return withStrand(Strand.FWD).toString();
 		else if (ref.equals("")) // handle insertion as special case
-			return Joiner.on("").join(getChrName(),
-					":g.", getPos(), "_", getPos() + 1, "ins", alt);
-		else if (alt.equals(""))
-			return Joiner.on("").join(getChrName(),
-					":g.", getPos(), "_", getPos() + ref.length(), "del", ref);
+			return Joiner.on("").join(getChrName(), ":g.", getPos(), "_", getPos() + 1, "ins", alt);
+		else if (alt.equals("") && ref.length() == 1)
+			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref);
+		else if (alt.equals("") && ref.length() > 1)
+			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref);
 		else
-			return Joiner.on("").join(pos, (ref.equals("") ? "-" : ref),
-					">", (alt.equals("") ? "-" : alt));
+			return Joiner.on("").join(pos, (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
 	}
 
 	/**
@@ -227,8 +215,7 @@ public final class GenomeVariant implements VariantDescription {
 	}
 
 	/**
-	 * A transition is purine <-> purine or pyrimidine <-> pyrimidine. Only
-	 * applies to single nucleotide subsitutions.
+	 * A transition is purine <-> purine or pyrimidine <-> pyrimidine. Only applies to single nucleotide subsitutions.
 	 *
 	 * @return true if the variant is a SNV and a transition.
 	 */
@@ -250,8 +237,7 @@ public final class GenomeVariant implements VariantDescription {
 	}
 
 	/**
-	 * A transversion is purine <-> pyrimidine. Only applies to single
-	 * nucleotide subsitutions.
+	 * A transversion is purine <-> pyrimidine. Only applies to single nucleotide subsitutions.
 	 *
 	 * @return true if the variant is a SNV and a transversion.
 	 */
@@ -328,9 +314,8 @@ public final class GenomeVariant implements VariantDescription {
 
 	@Override
 	public int compareTo(Annotation other) {
-		return ComparisonChain.start().compare(pos, other.getPos())
-				.compare(ref, other.getRef()).compare(alt, other.getAlt())
-				.result();
+		return ComparisonChain.start().compare(pos, other.getPos()).compare(ref, other.getRef())
+				.compare(alt, other.getAlt()).result();
 	}
 
 }

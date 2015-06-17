@@ -12,6 +12,9 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  */
 public class NucleotideSeqDescription implements ConvertibleToHGVSString {
 
+	/** sentinel value for invalid nucleotide count */
+	public static final int INVALID_NT_COUNT = -1;
+
 	/** String of nucleotides, null if there are none */
 	private final String nts;
 	/** Length of nucleotide string, fallback if {@link #nts} is empty */

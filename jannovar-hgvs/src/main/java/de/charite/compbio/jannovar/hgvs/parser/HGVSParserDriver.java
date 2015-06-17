@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 
+// TODO(holtgrewe): Rename the ANTLR parser to have a ANTLR suffix/prefix and call this HGVSParser.
+
 /**
  * Driver code for parsing HGVS strings into HGVSVariant objects.
  *
@@ -31,7 +33,7 @@ public class HGVSParserDriver {
 	}
 
 	public HGVSVariant parseHGVSString(String inputString) {
-		LOGGER.info("Parsing input string " + inputString);
+		LOGGER.trace("Parsing input string " + inputString);
 		HGVSParser parser = getParser(inputString);
 		HGVSParserListenerImpl listener = new HGVSParserListenerImpl();
 		parser.addParseListener(listener);

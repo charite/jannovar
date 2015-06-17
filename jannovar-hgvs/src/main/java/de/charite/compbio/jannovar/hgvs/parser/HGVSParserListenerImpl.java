@@ -256,7 +256,12 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_deletion(Nt_change_deletionContext ctx) {
 		LOGGER.debug("Leaving nt_change_deletion");
-		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		final NucleotideRange range;
+		if (ctx.nt_range() != null)
+			range = (NucleotideRange) getValue(ctx.nt_range());
+		else
+			range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+					(NucleotidePointLocation) getValue(ctx.nt_point_location()));
 		final NucleotideDeletion change;
 		if (ctx.nt_number() != null)
 			change = new NucleotideDeletion(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number()
@@ -276,7 +281,12 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_duplication(Nt_change_duplicationContext ctx) {
 		LOGGER.debug("Leaving nt_change_duplication");
-		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		final NucleotideRange range;
+		if (ctx.nt_range() != null)
+			range = (NucleotideRange) getValue(ctx.nt_range());
+		else
+			range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+					(NucleotidePointLocation) getValue(ctx.nt_point_location()));
 		final NucleotideDuplication change;
 		if (ctx.nt_number() != null)
 			change = new NucleotideDuplication(false, range, new NucleotideSeqDescription(Integer.parseInt(ctx

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDeletion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.htsjdk.GenomeRegionSequenceExtractor;
@@ -65,6 +66,9 @@ public class NucleotideChangeToGenomeVariantTranslator {
 		if (ntChange instanceof NucleotideSubstitution) {
 			result = new NucleotideSubstitutionToGenomeVariantTranslationImpl(seqExtractor).run(tm,
 					variant.getSeqType(), (NucleotideSubstitution) ntChange);
+		} else if (ntChange instanceof NucleotideDeletion) {
+			result = new NucleotideDeletionToGenomeVariantTranslationImpl(seqExtractor).run(tm, variant.getSeqType(),
+					(NucleotideDeletion) ntChange);
 		} else {
 			throw new CannotTranslateHGVSVariant("Currently unsupported HGVS variant type in "
 					+ ntChange.toHGVSString());

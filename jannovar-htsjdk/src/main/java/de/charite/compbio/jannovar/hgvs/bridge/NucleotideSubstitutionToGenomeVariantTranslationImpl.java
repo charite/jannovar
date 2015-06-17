@@ -40,14 +40,17 @@ class NucleotideSubstitutionToGenomeVariantTranslationImpl extends NucleotideCha
 			throw new CannotTranslateHGVSVariant("Both source and target sequence must have length 1 in "
 					+ ntSub.toHGVSString());
 
-		final GenomeVariant result = new GenomeVariant(translateNucleotidePointLocation(tm, pos, sequenceType), fromNT,
-				toNT, tm.getStrand()).withStrand(Strand.FWD);
+		final GenomeVariant result = new GenomeVariant(posConverter.translateNucleotidePointLocation(tm, pos,
+				sequenceType), fromNT, toNT, tm.getStrand()).withStrand(Strand.FWD);
 		final String refSeq = getGenomeSeq(tm.getStrand(), result.getGenomeInterval());
-		if (!refSeq.equals(fromNT))
-			return ResultWithWarnings.construct(result, "Invalid reference nucleotides in " + result.toString()
-					+ ", should be " + refSeq);
-		else
+		if (!refSeq.equals(fromNT)) {
+			final GenomeVariant result2 = new GenomeVariant(posConverter.translateNucleotidePointLocation(tm, pos,
+					sequenceType), refSeq, toNT, tm.getStrand()).withStrand(Strand.FWD);
+			return ResultWithWarnings.construct(result2, "Invalid reference nucleotides in " + result.toString()
+					+ ", should be " + refSeq + ", auto-correcting.");
+		} else {
 			return ResultWithWarnings.construct(result);
+		}
 	}
 
 }
