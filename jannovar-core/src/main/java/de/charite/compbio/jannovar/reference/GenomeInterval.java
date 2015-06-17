@@ -221,6 +221,7 @@ public final class GenomeInterval implements Serializable {
 		// TODO(holtgrem): add test for this
 		if (chr != other.chr)
 			return false;
+		other = other.withStrand(strand);
 		return (other.beginPos < endPos && beginPos < other.endPos);
 	}
 
@@ -234,7 +235,7 @@ public final class GenomeInterval implements Serializable {
 		if (strand.isReverse())
 			return withStrand(Strand.FWD).toString();
 
-		return StringUtil.concatenate(refDict.getContigNameToID().get(chr), ":g.", beginPos + 1, "-", endPos);
+		return StringUtil.concatenate(refDict.getContigIDToName().get(chr), ":g.", beginPos + 1, "_", endPos);
 	}
 
 	/*

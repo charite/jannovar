@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
 public final class JannovarOptions {
+
 	/** the version of the program */
 	public static final String JANNOVAR_VERSION = "0.14";
 
@@ -76,6 +77,9 @@ public final class JannovarOptions {
 	/** whether or not to shift variants towards the 3' end of the transcript */
 	public boolean nt3PrimeShifting = true;
 
+	/** infix added to output file name before .vcf/.vcf.gz/.bcf output */
+	public String outputInfix = ".jv";
+
 	// TODO(holtgrem): enable and use this!
 	/** path to output VCF file path (overrides generation of file name from input file name) */
 	public String outVCFFile = null;
@@ -112,6 +116,7 @@ public final class JannovarOptions {
 			out.println("jannovarFormat: " + jannovarFormat);
 			out.println("writeJannovarInfoFields: " + writeJannovarInfoFields);
 			out.println("writeVCFAnnotationStandardInfoFields: " + writeVCFAnnotationStandardInfoFields);
+			out.println("output infix: " + outputInfix);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}

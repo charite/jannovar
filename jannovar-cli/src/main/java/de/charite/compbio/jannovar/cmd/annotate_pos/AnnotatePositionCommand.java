@@ -8,16 +8,17 @@ import org.apache.commons.cli.ParseException;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.annotation.AllAnnotationListTextGenerator;
+import de.charite.compbio.jannovar.annotation.AnnotationException;
+import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.VariantAnnotations;
 import de.charite.compbio.jannovar.annotation.VariantAnnotationsTextGenerator;
-import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
-import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.GenomePosition;
+import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 
@@ -63,6 +64,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 				annoList = annotator.buildAnnotations(genomeChange);
 			} catch (Exception e) {
 				System.err.println(String.format("[ERROR] Could not annotate variant %s!", chromosomalChange));
+				e.printStackTrace(System.err);
 				continue;
 			}
 

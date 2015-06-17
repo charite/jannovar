@@ -4,13 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.charite.compbio</groupId>
 	<artifactId>Jannovar</artifactId>
-	<version>0.14-SNAPSHOT</version>
+	<version>0.15-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Jannovar</name>
 
 	<modules>
 		<module>jannovar-core</module>
 		<module>jannovar-htsjdk</module>
+		<module>jannovar-hgvs</module>
 		<module>jannovar-cli</module>
 		<module>jannovar-filter</module>
 		<module>jped-cli</module>
@@ -156,9 +157,41 @@
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<!-- Ignore maven-enforce-plugin in Eclipse/m2e -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<!-- Sphinx Manual, build with "mvn site". -->
@@ -170,7 +203,7 @@
 				<version>2.4</version>
 				<reportSets>
 					<reportSet>
-						<reports></reports>
+						<reports />
 					</reportSet>
 				</reportSets>
 			</plugin>

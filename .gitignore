@@ -12,6 +12,7 @@ dependency-reduced-pom.xml
 cov-int*
 # Maven stuff
 *.iml
+*.versionsBackup
 # download directory
 /data*
 # any inline-generated VCF/Jannovar files

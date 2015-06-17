@@ -7,7 +7,18 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
+import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideIndel;
+import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinDeletion;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinExtension;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinFrameshift;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinIndel;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChange;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinMiscChangeType;
+import de.charite.compbio.jannovar.hgvs.protein.change.ProteinSubstitution;
 import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.AminoAcidChange;
 import de.charite.compbio.jannovar.reference.AminoAcidChangeNormalizer;
@@ -20,8 +31,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 // TODO(holtgrem): The block substitution protein annotation generation needs some love in the corner cases.
 
 /**
- * Builds {@link Annotation} objects for the block substitution {@link GenomeVariant} in the given {@link TranscriptInfo}
- * .
+ * Builds {@link Annotation} objects for the block substitution {@link GenomeVariant} in the given
+ * {@link TranscriptInfo} .
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -37,8 +48,8 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	 * @throws InvalidGenomeChange
 	 *             if <code>change</code> did not describe a block substitution
 	 */
-	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
-			throws InvalidGenomeChange {
+	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change,
+			AnnotationBuilderOptions options) throws InvalidGenomeChange {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
@@ -72,17 +83,19 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 	}
 
 	@Override
-	protected String ncHGVS() {
-		return StringUtil.concatenate(dnaAnno, "delins", change.getAlt());
+	protected NucleotideChange getCDSNTChange() {
+		return new NucleotideIndel(false, ntChangeRange, new NucleotideSeqDescription(change.getRef()),
+				new NucleotideSeqDescription(change.getAlt()));
 	}
 
 	private Annotation buildFeatureAblationAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno, ncHGVS(),
-				null);
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
+				getGenomicNTChange(), getCDSNTChange(), null);
 	}
 
 	private Annotation buildStartLossAnnotation() {
-		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno, ncHGVS(), "p.0?");
+		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno,
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
 	}
 
 	/**
@@ -118,13 +131,13 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 		ArrayList<VariantEffect> varTypes = new ArrayList<VariantEffect>();
 		// the amino acid change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
 		AminoAcidChange aaChange;
-		// the protein annotation, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
-		String protAnno;
+		// the predicted protein change, updated in handleFrameShiftCase() and handleNonFrameShiftCase()
+		ProteinChange proteinChange;
 
 		public CDSExonicAnnotationBuilder() {
 			this.changeInterval = change.getGenomeInterval();
 			this.wtCDSSeq = projector.getTranscriptStartingAtCDS();
-			this.varCDSSeq = seqChangeHelper.getCDSWithChange(change);
+			this.varCDSSeq = seqChangeHelper.getCDSWithGenomeVariant(change);
 			this.delFrameShift = (varCDSSeq.length() - wtCDSSeq.length()) % 3;
 
 			// Translate the variant CDS sequence.
@@ -148,9 +161,9 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
-			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3, wtAASeq.substring(refChangeBeginPos.getPos() / 3,
-					(refChangeLastPos.getPos() + 1 + 2) / 3), varAASeq.substring(varChangeBeginPos.getPos() / 3,
-							(varChangeLastPos.getPos() + 1 + 2) / 3));
+			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3, wtAASeq.substring(
+					refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3), varAASeq.substring(
+					varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
 
 			// Look for stop codon, starting at change position.
 			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.getPos() / 3);
@@ -162,7 +175,8 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			else
 				handleFrameShiftCase();
 
-			return new Annotation(transcript, change, varTypes, locAnno, ncHGVS(), protAnno);
+			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
+					proteinChange);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -201,38 +215,41 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 			// Handle the case of no change.
 			if (aaChange.isNop()) {
-				protAnno = "p.=";
+				proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
 				return;
 			}
 
-			char wtAAFirst = wtAASeq.charAt(aaChange.getPos());
-			char wtAALast = wtAASeq.charAt(aaChange.getLastPos());
-			String insertedAAs = varAASeq.substring(aaChange.getPos(), aaChange.getPos() + aaChange.getAlt().length());
-			String wtAAFirstLong = (wtAAFirst == '*') ? "*" : t.toLong(wtAAFirst);
-			String wtAALastLong = (wtAALast == '*') ? "*" : t.toLong(wtAALast);
+			final String wtAAFirst = Character.toString(wtAASeq.charAt(aaChange.getPos()));
+			final String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
+			final String insertedAAs = varAASeq.substring(aaChange.getPos(), aaChange.getPos()
+					+ aaChange.getAlt().length());
+			final String mutAAFirst = insertedAAs.isEmpty() ? "" : insertedAAs.substring(0, 1);
 
 			// We differentiate the case of replacing a single amino acid and replacing multiple ones. Note that
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() > 1)
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1, "_", wtAALastLong,
-						aaChange.getLastPos() + 1, "del");
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
+						wtAALast, aaChange.getLastPos());
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() == 1)
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1, "del");
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
+						wtAAFirst, aaChange.getPos());
 			else if (aaChange.getPos() == aaChange.getLastPos() || aaChange.getAlt().equals("*"))
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1,
-						t.toLong(insertedAAs.charAt(0)));
+				proteinChange = ProteinSubstitution.build(true, wtAAFirst, aaChange.getPos(),
+						insertedAAs.substring(0, 1));
 			else
-				protAnno = StringUtil.concatenate("p.", wtAAFirstLong, aaChange.getPos() + 1, "_", wtAALastLong,
-						aaChange.getLastPos() + 1, "delins", t.toLong(insertedAAs));
+				proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
+						aaChange.getLastPos(), new ProteinSeqDescription(), new ProteinSeqDescription(insertedAAs));
 
 			// In the case of stop loss, we have to add the "ext" suffix to the protein annotation.
 			if (so.overlapsWithTranslationalStopSite(changeInterval)) {
 				// Differentiate between the variant AA string containing a stop codon or not.
+				final int shift = varAAStopPos - aaChange.getPos() + 1;
 				if (varAAStopPos >= 0)
-					protAnno = StringUtil.concatenate(protAnno, "ext*", varAAStopPos - aaChange.getPos() + 1);
+					proteinChange = ProteinExtension.build(true, wtAAFirst, aaChange.getPos(), mutAAFirst, shift);
 				else
-					protAnno = StringUtil.concatenate(protAnno, "ext*?");
+					proteinChange = ProteinExtension.buildWithoutTerminal(true, wtAAFirst, aaChange.getPos(),
+							mutAAFirst);
 			}
 
 			if (!varTypes.contains(VariantEffect.MNV))
@@ -258,25 +275,23 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			// Differentiate between the cases where we have a stop codon and those where we don't.
 			if (varAAStopPos >= 0) {
 				// We have a stop codon, yay!
-				char wtAA = wtAASeq.charAt(aaChange.getPos());
-				char varAA = varAASeq.charAt(aaChange.getPos());
+				String wtAA = Character.toString(wtAASeq.charAt(aaChange.getPos()));
+				String varAA = Character.toString(varAASeq.charAt(aaChange.getPos()));
 				int stopCodonOffset = varAAStopPos - aaChange.getPos() + 1;
-				String wtAALong = (wtAA == '*') ? "*" : t.toLong(wtAA);
-				String varAALong = (varAA == '*') ? "*" : t.toLong(varAA);
-				String opDesc = "fs"; // operation description
 				if (aaChange.getRef().indexOf('*') >= 0)
-					opDesc = "ext"; // stop codon deleted
-				protAnno = StringUtil.concatenate("p.", wtAALong, aaChange.getPos() + 1, varAALong, opDesc, "*",
-						stopCodonOffset);
-				if (varAALong.length() > varAALong.length())
+					proteinChange = ProteinExtension.build(true, wtAA, aaChange.getPos(), varAA, stopCodonOffset);
+				else
+					proteinChange = ProteinFrameshift.build(true, wtAA, aaChange.getPos(), varAA, stopCodonOffset);
+				if (varAASeq.length() > wtAASeq.length())
 					varTypes.add(VariantEffect.FRAMESHIFT_ELONGATION);
-				else if (varAALong.length() < varAALong.length())
+				else if (varAASeq.length() < wtAASeq.length())
 					varTypes.add(VariantEffect.FRAMESHIFT_TRUNCATION);
-				else if (varAALong.length() > varAALong.length())
+				else
+					// if (varAALong.length() == wtAALong.length())
 					varTypes.add(VariantEffect.FRAMESHIFT_VARIANT);
 			} else {
 				// There is no stop codon any more! Create a "probably no protein is produced".
-				protAnno = "p.0?";
+				proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN);
 
 				varTypes.addAll(ImmutableList.of(VariantEffect.FRAMESHIFT_VARIANT, VariantEffect.STOP_LOST));
 			}

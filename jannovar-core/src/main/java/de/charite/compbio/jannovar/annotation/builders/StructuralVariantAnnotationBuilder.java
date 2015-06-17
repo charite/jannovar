@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation.RankType;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
-import de.charite.compbio.jannovar.impl.util.StringUtil;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -66,6 +66,9 @@ public final class StructuralVariantAnnotationBuilder {
 			else if (altRC.charAt(i) == 'G')
 				altRC.setCharAt(i, 'C');
 
+		// chromosome/genome level change
+		NucleotideChange ntChange = new GenomicNucleotideChangeBuilder(change).build();
+
 		// TODO(holtgrem): we should care about breakpoints within genes
 
 		final AnnotationLocation annoLoc = new AnnotationLocation(null, RankType.UNDEFINED,
@@ -74,47 +77,37 @@ public final class StructuralVariantAnnotationBuilder {
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
-								+ ref.length(), "inv"), null);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
-						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "inv"), null);
+						ntChange, null, null);
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos, "_",
-								beginPos + 1, "ins", alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())),
-								null);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
-						StringUtil.concatenate("g.", beginPos, "_", beginPos + 1, "ins", alt.substring(0, 2), "..",
-								alt.substring(alt.length() - 2, alt.length())), null);
+						ntChange, null, null);
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
-								+ ref.length(), "del"), null);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(this.transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT),
-						annoLoc,
-						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "del"), null);
+						annoLoc, ntChange, null, null);
 			}
 		} else { // SV substitution
-			// if tm is null it is intergenic
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, StringUtil.concatenate("g.", beginPos + 1, "_", beginPos
-								+ ref.length(), "delins", alt.substring(0, 2), "..",
-								alt.substring(alt.length() - 2, alt.length())), null);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
-						StringUtil.concatenate("g.", beginPos + 1, "_", beginPos + ref.length(), "delins",
-								alt.substring(0, 2), "..", alt.substring(alt.length() - 2, alt.length())), null);
+						ntChange, null, null);
 			}
 		}
 	}

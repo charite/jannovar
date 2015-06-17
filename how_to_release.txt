@@ -1,10 +1,34 @@
-Release information for Jannovar developers
+# Release information for Jannovar developers
 
-Articles
+## Read the following first
 
 * http://java.dzone.com/articles/deploy-maven-central
 * http://central.sonatype.org/pages/apache-maven.html
 
-Maven comments
+## Prepare the Release using Maven
+
+    mvn release:prepare
+
+Answer with the default everywhere but use "vMAJOR.MINOR" for giving the
+tag name, e.g. "v0.15". Eventually, this will update the versions, create
+a tag for the version and also push the tag to Github.
+
+## Perform the Release
+
+    mvn release:perform
+
+Create the release and push it to Maven central/Sonatype.
+
+## Releasing the Deployment
+
+Read this:
+
+* http://central.sonatype.org/pages/releasing-the-deployment.html
+
+The publisher backend to Maven Central is here:
+
+* https://oss.sonatype.org/
+
+## Maven comments
 
 * "mvn versions:set" is useful for bumping versions

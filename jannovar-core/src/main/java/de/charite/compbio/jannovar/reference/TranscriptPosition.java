@@ -55,7 +55,7 @@ public final class TranscriptPosition {
 	 */
 	@Override
 	public String toString() {
-		return StringUtil.concatenate(transcript.getAccession(), "n.", pos + 1);
+		return StringUtil.concatenate(transcript.getAccession(), ":n.", pos + 1);
 	}
 
 	/*
