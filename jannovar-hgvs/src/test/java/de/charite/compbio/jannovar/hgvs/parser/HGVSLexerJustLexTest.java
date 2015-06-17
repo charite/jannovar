@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.hgvs.parser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.parser.HGVSLexer;
-
 /**
  * Feeds valid change descriptions to the lexer to see whether this works at least.
  *
@@ -20,17 +18,6 @@ public class HGVSLexerJustLexTest extends JustParseAndLexBase {
 			l.getAllTokens();
 		}
 	}
-
-	// Debug code.
-	// @Test
-	// public void testLexingOnMyProtein() {
-	// String[] arr = { "p.[(Ala25Thr; Gly28Val)]" };
-	// for (String ntString : arr) {
-	// ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
-	// HGVSLexer l = new HGVSLexer(inputStream);
-	// System.err.println(l.getAllTokens());
-	// }
-	// }
 
 	@Test
 	public void testLexingOnProteinStrings() {

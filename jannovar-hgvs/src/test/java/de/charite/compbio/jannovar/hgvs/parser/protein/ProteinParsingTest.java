@@ -25,7 +25,7 @@ public class ProteinParsingTest extends ParsingTestBase {
 		String[] arr = { "p.G33L", "p.*34Gext*34", "p.*34GextTer34", "p.Ter34GextTer34", "p.*34*", "p.Met1Valext-12",
 				"p.Met1?", "p.Met1ext-5" };
 		for (String s : arr)
-			parseString(PREFIX + s, true);
+			parseString(PREFIX + s);
 	}
 
 	@Test

@@ -31,7 +31,7 @@ public class HGVSParserTestBase {
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
 				System.err.println("\t" + t.getText() + "\t" + t);
-			System.err.println("END OF LEXTER TOKENS");
+			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
