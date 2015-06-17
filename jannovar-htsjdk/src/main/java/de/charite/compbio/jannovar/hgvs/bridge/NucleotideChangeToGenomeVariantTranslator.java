@@ -9,6 +9,10 @@ import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDeletion;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideDuplication;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideIndel;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInsertion;
+import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideInversion;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
 import de.charite.compbio.jannovar.htsjdk.GenomeRegionSequenceExtractor;
@@ -69,6 +73,18 @@ public class NucleotideChangeToGenomeVariantTranslator {
 		} else if (ntChange instanceof NucleotideDeletion) {
 			result = new NucleotideDeletionToGenomeVariantTranslationImpl(seqExtractor).run(tm, variant.getSeqType(),
 					(NucleotideDeletion) ntChange);
+		} else if (ntChange instanceof NucleotideDuplication) {
+			result = new NucleotideDuplicationToGenomeVariantTranslationImpl(seqExtractor).run(tm,
+					variant.getSeqType(), (NucleotideDuplication) ntChange);
+		} else if (ntChange instanceof NucleotideIndel) {
+			result = new NucleotideIndelToGenomeVariantTranslationImpl(seqExtractor).run(tm, variant.getSeqType(),
+					(NucleotideIndel) ntChange);
+		} else if (ntChange instanceof NucleotideInsertion) {
+			result = new NucleotideInsertionToGenomeVariantTranslationImpl(seqExtractor).run(tm, variant.getSeqType(),
+					(NucleotideInsertion) ntChange);
+		} else if (ntChange instanceof NucleotideInversion) {
+			result = new NucleotideInversionToGenomeVariantTranslationImpl(seqExtractor).run(tm, variant.getSeqType(),
+					(NucleotideInversion) ntChange);
 		} else {
 			throw new CannotTranslateHGVSVariant("Currently unsupported HGVS variant type in "
 					+ ntChange.toHGVSString());

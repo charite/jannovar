@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 public class NucleotideInsertion extends NucleotideChange {
 
 	/** range of length one giving the insertion location */
-	private final NucleotideRange position;
+	private final NucleotideRange range;
 	/** specification of the inserted Nucleotide sequence */
 	private final NucleotideSeqDescription seq;
 
@@ -71,30 +71,40 @@ public class NucleotideInsertion extends NucleotideChange {
 		// throw new IllegalArgumentException("range describing insertion must have size 2 but was "
 		// + position.length() + " range is " + position);
 
-		this.position = position;
+		this.range = position;
 		this.seq = seq;
+	}
+
+	/** @return range of length 1 with the two bases between which the sequence is inserted */
+	public NucleotideRange getRange() {
+		return range;
+	}
+
+	/** @return inserted sequenced */
+	public NucleotideSeqDescription getSeq() {
+		return seq;
 	}
 
 	@Override
 	public NucleotideInsertion withOnlyPredicted(boolean flag) {
-		return new NucleotideInsertion(flag, position, seq);
+		return new NucleotideInsertion(flag, range, seq);
 	}
 
 	@Override
 	public String toHGVSString() {
-		return wrapIfOnlyPredicted(position.toHGVSString() + "ins" + seq.toHGVSString());
+		return wrapIfOnlyPredicted(range.toHGVSString() + "ins" + seq.toHGVSString());
 	}
 
 	@Override
 	public String toString() {
-		return "NucleotideInsertion [position=" + position + ", seq=" + seq + "]";
+		return "NucleotideInsertion [position=" + range + ", seq=" + seq + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + ((range == null) ? 0 : range.hashCode());
 		result = prime * result + ((seq == null) ? 0 : seq.hashCode());
 		return result;
 	}
@@ -108,10 +118,10 @@ public class NucleotideInsertion extends NucleotideChange {
 		if (getClass() != obj.getClass())
 			return false;
 		NucleotideInsertion other = (NucleotideInsertion) obj;
-		if (position == null) {
-			if (other.position != null)
+		if (range == null) {
+			if (other.range != null)
 				return false;
-		} else if (!position.equals(other.position))
+		} else if (!range.equals(other.range))
 			return false;
 		if (seq == null) {
 			if (other.seq != null)

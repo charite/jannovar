@@ -227,7 +227,12 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_indel(Nt_change_indelContext ctx) {
 		LOGGER.debug("Leaving nt_change_deletion");
-		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		final NucleotideRange range;
+		if (ctx.nt_range() != null)
+			range = (NucleotideRange) getValue(ctx.nt_range());
+		else
+			range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+					(NucleotidePointLocation) getValue(ctx.nt_point_location()));
 
 		final NucleotideSeqDescription seqDesc1;
 		if (ctx.nt_number(0) != null)
