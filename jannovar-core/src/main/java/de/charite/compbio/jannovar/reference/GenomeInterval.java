@@ -208,8 +208,16 @@ public final class GenomeInterval implements Serializable {
 	 * @return a {@link GenomeInterval} that has <code>padding</code> more bases towards each side as padding
 	 */
 	public GenomeInterval withMorePadding(int padding) {
+		return withMorePadding(padding, padding);
+	}
+
+	/**
+	 * @return a {@link GenomeInterval} that has <code>padding</code> more bases towards either side as padding.
+	 */
+	public GenomeInterval withMorePadding(int paddingUpstream, int paddingDownstream) {
 		// TODO(holtgrem): throw when going outside of chromosome?
-		return new GenomeInterval(refDict, strand, chr, beginPos - padding, endPos + padding, PositionType.ZERO_BASED);
+		return new GenomeInterval(refDict, strand, chr, beginPos - paddingUpstream, endPos + paddingDownstream,
+				PositionType.ZERO_BASED);
 	}
 
 	/**
