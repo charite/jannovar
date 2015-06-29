@@ -17,7 +17,7 @@ public class HGVSParserProteinInsertionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testInsertionWithoutSequenceTest() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123_Ala124ins", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123_Ala124ins", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_insertionContext aa_change_insertion = parser.aa_change_insertion();
 		Assert.assertEquals(
 				"(aa_change_insertion (aa_range (aa_point_location (aa_char Cys) 123) _ (aa_point_location (aa_char Ala) 124)) ins)",
@@ -26,7 +26,8 @@ public class HGVSParserProteinInsertionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testInsertionWithSequenceTest() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123_Ala124insThrGlu", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123_Ala124insThrGlu", Antlr4HGVSLexer.AMINO_ACID_CHANGE,
+				false);
 		Aa_change_insertionContext aa_change_insertion = parser.aa_change_insertion();
 		Assert.assertEquals(
 				"(aa_change_insertion (aa_range (aa_point_location (aa_char Cys) 123) _ (aa_point_location (aa_char Ala) 124)) ins (aa_string Thr Glu))",
@@ -35,7 +36,7 @@ public class HGVSParserProteinInsertionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testInsertionWithLengthTest() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123_Ala124ins2", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123_Ala124ins2", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_insertionContext aa_change_insertion = parser.aa_change_insertion();
 		Assert.assertEquals(
 				"(aa_change_insertion (aa_range (aa_point_location (aa_char Cys) 123) _ (aa_point_location (aa_char Ala) 124)) ins 2)",

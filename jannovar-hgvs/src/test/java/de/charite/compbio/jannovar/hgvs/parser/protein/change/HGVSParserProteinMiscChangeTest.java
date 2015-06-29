@@ -17,35 +17,35 @@ public class HGVSParserProteinMiscChangeTest extends HGVSParserTestBase {
 
 	@Test
 	public void testDifficultToPredict() {
-		Antlr4HGVSParser parser = buildParserForString("?", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("?", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_miscContext aa_change_misc = parser.aa_change_misc();
 		Assert.assertEquals("(aa_change_misc ?)", aa_change_misc.toStringTree(parser));
 	}
 
 	@Test
 	public void testNoChange() {
-		Antlr4HGVSParser parser = buildParserForString("=", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("=", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_miscContext aa_change_misc = parser.aa_change_misc();
 		Assert.assertEquals("(aa_change_misc =)", aa_change_misc.toStringTree(parser));
 	}
 
 	@Test
 	public void testNoChangePredicted() {
-		Antlr4HGVSParser parser = buildParserForString("(=)", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("(=)", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_miscContext aa_change_misc = parser.aa_change_misc();
 		Assert.assertEquals("(aa_change_misc ( = ))", aa_change_misc.toStringTree(parser));
 	}
 
 	@Test
 	public void testNoProtein() {
-		Antlr4HGVSParser parser = buildParserForString("0", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("0", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_miscContext aa_change_misc = parser.aa_change_misc();
 		Assert.assertEquals("(aa_change_misc 0)", aa_change_misc.toStringTree(parser));
 	}
 
 	@Test
 	public void testNoProteinPredicted() {
-		Antlr4HGVSParser parser = buildParserForString("0?", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("0?", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_miscContext aa_change_misc = parser.aa_change_misc();
 		Assert.assertEquals("(aa_change_misc 0 ?)", aa_change_misc.toStringTree(parser));
 	}

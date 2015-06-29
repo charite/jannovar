@@ -19,7 +19,7 @@ public class HGVSParserProteinExtensionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testExtensionOneLetterWithLength() {
-		Antlr4HGVSParser parser = buildParserForString("A124Text*23", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("A124Text*23", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_extensionContext aa_change_extension = parser.aa_change_extension();
 		Assert.assertEquals("(aa_change_extension (aa_point_location (aa_char A) 124) (aa_char T) ext * 23)",
 				aa_change_extension.toStringTree(parser));
@@ -27,7 +27,7 @@ public class HGVSParserProteinExtensionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testExtensionThreeLetterWithLength() {
-		Antlr4HGVSParser parser = buildParserForString("Ala124Thrext*23", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Ala124Thrext*23", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_extensionContext aa_change_extension = parser.aa_change_extension();
 		Assert.assertEquals("(aa_change_extension (aa_point_location (aa_char Ala) 124) (aa_char Thr) ext * 23)",
 				aa_change_extension.toStringTree(parser));
@@ -35,7 +35,7 @@ public class HGVSParserProteinExtensionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testExtensionOneLetterWithoutLength() {
-		Antlr4HGVSParser parser = buildParserForString("A124Text*?", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("A124Text*?", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_extensionContext aa_change_extension = parser.aa_change_extension();
 		Assert.assertEquals("(aa_change_extension (aa_point_location (aa_char A) 124) (aa_char T) ext * ?)",
 				aa_change_extension.toStringTree(parser));
@@ -43,7 +43,7 @@ public class HGVSParserProteinExtensionTest extends HGVSParserTestBase {
 
 	@Test
 	public void testExtensionThreeLetterWithoutLength() {
-		Antlr4HGVSParser parser = buildParserForString("Ala124Thrext*?", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Ala124Thrext*?", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_extensionContext aa_change_extension = parser.aa_change_extension();
 		Assert.assertEquals("(aa_change_extension (aa_point_location (aa_char Ala) 124) (aa_char Thr) ext * ?)",
 				aa_change_extension.toStringTree(parser));

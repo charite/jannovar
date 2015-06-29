@@ -17,7 +17,7 @@ public class HGVSParserProteinIndelTest extends HGVSParserTestBase {
 
 	@Test
 	public void testPointIndelWithoutSequence() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123delins", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123delins", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_indelContext aa_change_indel = parser.aa_change_indel();
 		Assert.assertEquals("(aa_change_indel (aa_point_location (aa_char Cys) 123) del ins)",
 				aa_change_indel.toStringTree(parser));
@@ -25,7 +25,7 @@ public class HGVSParserProteinIndelTest extends HGVSParserTestBase {
 
 	@Test
 	public void testRangeIndellWithoutSequence() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123_Arg125delins", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123_Arg125delins", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_indelContext aa_change_indel = parser.aa_change_indel();
 		Assert.assertEquals(
 				"(aa_change_indel (aa_range (aa_point_location (aa_char Cys) 123) _ (aa_point_location (aa_char Arg) 125)) del ins)",
@@ -34,7 +34,7 @@ public class HGVSParserProteinIndelTest extends HGVSParserTestBase {
 
 	@Test
 	public void testPointIndelWithSequence() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123delCysinsArg", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123delCysinsArg", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_indelContext aa_change_indel = parser.aa_change_indel();
 		Assert.assertEquals(
 				"(aa_change_indel (aa_point_location (aa_char Cys) 123) del (aa_string Cys) ins (aa_string Arg))",
@@ -44,7 +44,7 @@ public class HGVSParserProteinIndelTest extends HGVSParserTestBase {
 	@Test
 	public void testRangeIndellWithSequence() {
 		Antlr4HGVSParser parser = buildParserForString("Cys123_Arg125delCysCysArginsAla",
-				Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+				Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_indelContext aa_change_indel = parser.aa_change_indel();
 		Assert.assertEquals(
 				"(aa_change_indel (aa_range (aa_point_location (aa_char Cys) 123) _ (aa_point_location (aa_char Arg) 125)) del (aa_string Cys Cys Arg) ins (aa_string Ala))",
@@ -53,7 +53,7 @@ public class HGVSParserProteinIndelTest extends HGVSParserTestBase {
 
 	@Test
 	public void testPointIndelWithLength() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123del1ins3", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123del1ins3", Antlr4HGVSLexer.AMINO_ACID_CHANGE, false);
 		Aa_change_indelContext aa_change_indel = parser.aa_change_indel();
 		Assert.assertEquals("(aa_change_indel (aa_point_location (aa_char Cys) 123) del 1 ins 3)",
 				aa_change_indel.toStringTree(parser));
@@ -61,7 +61,8 @@ public class HGVSParserProteinIndelTest extends HGVSParserTestBase {
 
 	@Test
 	public void testRangeIndellWithLength() {
-		Antlr4HGVSParser parser = buildParserForString("Cys123_Arg125del3ins1", Antlr4HGVSLexer.PROTEIN_CHANGE, false);
+		Antlr4HGVSParser parser = buildParserForString("Cys123_Arg125del3ins1", Antlr4HGVSLexer.AMINO_ACID_CHANGE,
+				false);
 		Aa_change_indelContext aa_change_indel = parser.aa_change_indel();
 		Assert.assertEquals(
 				"(aa_change_indel (aa_range (aa_point_location (aa_char Cys) 123) _ (aa_point_location (aa_char Arg) 125)) del 3 ins 1)",
