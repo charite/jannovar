@@ -16,7 +16,7 @@ public class HGVSparserProteinMultiAlleleVariantTest extends HGVSParserTestBase 
 				Antlr4HGVSLexer.DEFAULT_MODE, false);
 		Hgvs_variantContext hgvs_variant = parser.hgvs_variant();
 		Assert.assertEquals(
-				"(hgvs_variant (protein_multi_allele_var (reference NM_000109.3 :) p. (protein_multi_change_allele [ (protein_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Cys) 23) (aa_char Ala))))) ]) ; (protein_multi_change_allele [ (protein_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Ala) 23) (aa_char Cys))))) ])))",
+				"(hgvs_variant (aa_multi_allele_var (reference NM_000109.3 :) p. (aa_multi_change_allele [ (aa_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Cys) 23) (aa_char Ala))))) ]) ; (aa_multi_change_allele [ (aa_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Ala) 23) (aa_char Cys))))) ])))",
 				hgvs_variant.toStringTree(parser));
 	}
 
@@ -26,7 +26,7 @@ public class HGVSparserProteinMultiAlleleVariantTest extends HGVSParserTestBase 
 				Antlr4HGVSLexer.DEFAULT_MODE, false);
 		Hgvs_variantContext hgvs_variant = parser.hgvs_variant();
 		Assert.assertEquals(
-				"(hgvs_variant (protein_multi_allele_var (reference NM_000109.3 :) p. (protein_multi_change_allele [ (protein_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Cys) 23) (aa_char Ala)))) (protein_var_sep ,) (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Thr) 44) (aa_char Cys))))) ]) ; (protein_multi_change_allele [ (protein_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Ala) 23) (aa_char Cys)))) (protein_var_sep ,) (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Thr) 44) (aa_char Ala))))) ])))",
+				"(hgvs_variant (aa_multi_allele_var (reference NM_000109.3 :) p. (aa_multi_change_allele [ (aa_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Cys) 23) (aa_char Ala)))) (aa_var_sep ,) (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Thr) 44) (aa_char Cys))))) ]) ; (aa_multi_change_allele [ (aa_multi_change_allele_inner (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Ala) 23) (aa_char Cys)))) (aa_var_sep ,) (aa_change (aa_change_inner (aa_change_substitution (aa_point_location (aa_char Thr) 44) (aa_char Ala))))) ])))",
 				hgvs_variant.toStringTree(parser));
 	}
 
