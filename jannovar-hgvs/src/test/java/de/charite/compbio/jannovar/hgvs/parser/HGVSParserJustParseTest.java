@@ -14,7 +14,7 @@ import org.junit.Test;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSParserJustParseTest extends JustParseAndLexBase {
+public class HGVSParserJustParseTest extends HGVSJustParseAndLexBase {
 
 	public static String PREFIX = "NM_000109.3:";
 

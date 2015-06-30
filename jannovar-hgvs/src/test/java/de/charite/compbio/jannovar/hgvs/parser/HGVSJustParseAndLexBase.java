@@ -5,7 +5,7 @@ package de.charite.compbio.jannovar.hgvs.parser;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class JustParseAndLexBase {
+public class HGVSJustParseAndLexBase {
 
 	// "c.(87+1_88-1)_(923+1_924-1)del", "c.(87+1_88-1)_(301+1_302-1)dup", "c.(?_-30)_(*220_?)del",
 

@@ -2,14 +2,14 @@ package de.charite.compbio.jannovar.hgvs.parser.nts;
 
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.parser.ParsingTestBase;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParsingTestBase;
 
 /**
  * Systematically test parsing of nucleotide changes.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class NucleotideParsingTest extends ParsingTestBase {
+public class NucleotideParsingTest extends HGVSParsingTestBase {
 
 	public static String PREFIX = "NM_000109.3:";
 

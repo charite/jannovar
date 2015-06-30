@@ -8,7 +8,7 @@ import org.junit.Test;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSLexerJustLexTest extends JustParseAndLexBase {
+public class HGVSLexerJustLexTest extends HGVSJustParseAndLexBase {
 
 	@Test
 	public void testLexingOnNTStrings() {

@@ -2,14 +2,14 @@ package de.charite.compbio.jannovar.hgvs.parser.protein;
 
 import org.junit.Test;
 
-import de.charite.compbio.jannovar.hgvs.parser.ParsingTestBase;
+import de.charite.compbio.jannovar.hgvs.parser.HGVSParsingTestBase;
 
 /**
  * Systematically test parsing of protein changes
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class ProteinParsingTest extends ParsingTestBase {
+public class ProteinParsingTest extends HGVSParsingTestBase {
 
 	public static String PREFIX = "NM_000109.3:";
 
