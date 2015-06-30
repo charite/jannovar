@@ -216,8 +216,7 @@ aa_change_ssr
 	(
 		aa_point_location
 		| aa_range
-	) AA_PAREN_OPEN AA_NUMBER AA_UNDERSCORE AA_NUMBER
-	AA_PAREN_CLOSE
+	) AA_PAREN_OPEN AA_NUMBER AA_UNDERSCORE AA_NUMBER AA_PAREN_CLOSE
 ;
 
 /** amino acid short insertion */
@@ -530,4 +529,71 @@ nt_range
 nt_string
 :
 	NT_STRING
+;
+
+// --------------------------------------------------------------------------
+// Legacy Variant Descriptions
+// --------------------------------------------------------------------------
+
+/** top-level production rule for legacy variant (using IVS or EX) */
+legacy_variant
+:
+	reference legacy_change
+;
+
+legacy_change
+:
+	legacy_change_substitution
+	| legacy_change_indel
+	| legacy_change_insertion
+	| legacy_change_deletion
+;
+
+/** legacy deletion */
+legacy_change_deletion
+:
+	legacy_point_location NT_DEL
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** legacy replacement/indel/delins */
+legacy_change_indel
+:
+	legacy_point_location NT_DEL
+	(
+		nt_number
+		| nt_string
+	)? NT_INS
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** legacy insertion */
+legacy_change_insertion
+:
+	legacy_point_location NT_INS
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** legacy substitution */
+legacy_change_substitution
+:
+	legacy_point_location NT_STRING NT_GT NT_STRING
+;
+
+legacy_point_location
+:
+	LEGACY_IVS_OR_EX nt_number
+	(
+		NT_MINUS
+		| NT_PLUS
+	) nt_number
 ;

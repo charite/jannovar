@@ -21,24 +21,6 @@
  */
 lexer grammar Antlr4HGVSLexer;
 
-/** fire off protein change description*/
-AA_CHANGE_DESCRIPTION
-:
-	'p.' -> pushMode ( AMINO_ACID_CHANGE )
-;
-
-/** fire off nucleotide change description */
-NT_CHANGE_DESCRIPTION
-:
-	(
-		'c.'
-		| 'm.'
-		| 'n.'
-		| 'g.'
-		| 'r.'
-	) -> pushMode ( NUCLEOTIDE_CHANGE )
-;
-
 /** anything that does not match "p." or "[cmngr]." starts a reference description */
 REFERENCE
 :
@@ -79,13 +61,44 @@ PAREN_CLOSE
 /** token used for stopping the reference description */
 REF_STOP
 :
-	':'
+	':' -> pushMode ( CHANGE_BRANCH )
 ;
 
 /** skip line breaks, spaces are kept */
 LINE_BREAKS
 :
 	[ \r\n\t] -> skip
+;
+
+/* the following rules branch into the NUCLEOTIDE_CHANGE or the AMINO_ACID_CHANGE mode */
+mode CHANGE_BRANCH;
+
+/** fire off protein change description*/
+AA_CHANGE_DESCRIPTION
+:
+	'p.' -> pushMode ( AMINO_ACID_CHANGE )
+;
+
+/** fire off nucleotide change description */
+NT_CHANGE_DESCRIPTION
+:
+	(
+		'c.'
+		| 'm.'
+		| 'n.'
+		| 'g.'
+		| 'r.'
+	) -> pushMode ( NUCLEOTIDE_CHANGE )
+;
+
+/** legacy positions start with "IVS", "EX", or "E" */
+LEGACY_IVS_OR_EX
+:
+	(
+		'IVS'
+		| 'EX'
+		| 'E'
+	) -> pushMode ( NUCLEOTIDE_CHANGE )
 ;
 
 /* Lexing of nucleotide changes

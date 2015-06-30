@@ -8,11 +8,20 @@ import org.junit.Test;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSLexerJustLexTest extends HGVSJustParseAndLexBase {
+public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 
 	@Test
 	public void testLexingOnNTStrings() {
 		for (String ntString : NT_STRINGS) {
+			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			l.getAllTokens();
+		}
+	}
+
+	@Test
+	public void testLexingOnLegacyStrings() {
+		for (String ntString : LEGACY_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
 			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			l.getAllTokens();
