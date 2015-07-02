@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
@@ -74,11 +75,19 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 	}
 
 	/** resulting {@link HGVSVariant} */
-	HGVSVariant result = null;
+	HGVSVariant hgvsVariant = null;
 
 	/** @return resulting {@link HGVSVariant} */
-	public HGVSVariant getResult() {
-		return result;
+	public HGVSVariant getHGVSVariant() {
+		return hgvsVariant;
+	}
+
+	/** resulting {@link LegacyVariant} */
+	LegacyVariant legacyVariant = null;
+
+	/** @return resulting {@link LegacyVariant} */
+	public LegacyVariant getLegacyVariant() {
+		return legacyVariant;
 	}
 
 	/**
@@ -89,7 +98,7 @@ class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 	@Override
 	public void exitHgvs_variant(Hgvs_variantContext ctx) {
 		LOGGER.debug("Leaving hgvs_variant");
-		result = (HGVSVariant) getValue(ctx.getChild(0));
+		hgvsVariant = (HGVSVariant) getValue(ctx.getChild(0));
 	}
 
 	/**

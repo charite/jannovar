@@ -38,7 +38,7 @@ public class HGVSParser {
 		ParseTree tree = parser.hgvs_variant();
 		if (debug)
 			System.err.println(tree.toStringTree(parser));
-		return listener.getResult();
+		return listener.getHGVSVariant();
 	}
 
 	private Antlr4HGVSParser getParser(String inputString) {

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 /**
  * Parser for legacy mutations syntax (starting with "IVS", "EX", or "E").
@@ -30,7 +31,7 @@ public class LegacyMutationParser {
 		this.debug = debug;
 	}
 
-	public HGVSVariant parseLegacyMutationString(String inputString) {
+	public LegacyVariant parseLegacyMutationString(String inputString) {
 		LOGGER.trace("Parsing input string " + inputString);
 		Antlr4HGVSParser parser = getParser(inputString);
 		Antlr4HGVSParserListenerImpl listener = new Antlr4HGVSParserListenerImpl();
@@ -38,7 +39,7 @@ public class LegacyMutationParser {
 		ParseTree tree = parser.legacy_variant();
 		if (debug)
 			System.err.println(tree.toStringTree(parser));
-		return listener.getResult();
+		return listener.getLegacyVariant();
 	}
 
 	private Antlr4HGVSParser getParser(String inputString) {
