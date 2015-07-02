@@ -36,6 +36,7 @@ public class LegacyMutationParser {
 		Antlr4HGVSParser parser = getParser(inputString);
 		Antlr4HGVSParserListenerImpl listener = new Antlr4HGVSParserListenerImpl();
 		parser.addParseListener(listener);
+		parser.setTrace(true);
 		ParseTree tree = parser.legacy_variant();
 		if (debug)
 			System.err.println(tree.toStringTree(parser));
