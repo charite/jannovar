@@ -154,7 +154,7 @@ public final class GenomeInterval implements Serializable {
 	/**
 	 * @param pos
 	 *            query position
-	 * @return <tt>true</tt> if the interval is truly left of the position
+	 * @return <tt>true</tt> if the interval is truly left of the base that base pos points to
 	 */
 	public boolean isLeftOf(GenomePosition pos) {
 		if (chr != pos.getChr())
@@ -167,7 +167,7 @@ public final class GenomeInterval implements Serializable {
 	/**
 	 * @param pos
 	 *            query position
-	 * @return <tt>true</tt> if the interval is truly right of the position
+	 * @return <tt>true</tt> if the interval is truly right of the base that base pos points to
 	 */
 	public boolean isRightOf(GenomePosition pos) {
 		if (chr != pos.getChr())
@@ -175,6 +175,32 @@ public final class GenomeInterval implements Serializable {
 		if (pos.getStrand() != strand)
 			pos = pos.withStrand(strand); // ensure that we are on the correct strand
 		return (pos.getPos() < beginPos);
+	}
+
+	/**
+	 * @param pos
+	 *            query position
+	 * @return <tt>true</tt> if the interval is truly left of the gap between bases that <code>pos</code> points at
+	 */
+	public boolean isLeftOfGap(GenomePosition pos) {
+		if (chr != pos.getChr())
+			return false; // wrong chromosome
+		if (pos.getStrand() != strand)
+			pos = pos.withStrand(strand); // ensure that we are on the correct strand
+		return (pos.getPos() >= endPos);
+	}
+
+	/**
+	 * @param pos
+	 *            query position
+	 * @return <tt>true</tt> if the interval is truly right of the gap between bases that <code>pos</code> points at
+	 */
+	public boolean isRightOfGap(GenomePosition pos) {
+		if (chr != pos.getChr())
+			return false; // wrong chromosome
+		if (pos.getStrand() != strand)
+			pos = pos.withStrand(strand); // ensure that we are on the correct strand
+		return (pos.getPos() <= beginPos);
 	}
 
 	/**
@@ -235,7 +261,7 @@ public final class GenomeInterval implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -248,7 +274,7 @@ public final class GenomeInterval implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -267,7 +293,7 @@ public final class GenomeInterval implements Serializable {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

@@ -99,6 +99,8 @@ final public class DataSourceFactory {
 				return new EnsemblDataSource(options, section);
 			else if (type.equals("refseq"))
 				return new RefSeqDataSource(options, section);
+			else if (type.equals("flat_bed"))
+				return new FlatBEDDataSource(options, section);
 			else
 				throw new InvalidDataSourceException("Data source config has invalid \"type\" key: " + type);
 		}
