@@ -17,11 +17,11 @@ public class NucleotideChangeToGenomeVariantTranslationImplBase {
 	/** extraction of {@link GenomicRegion} from FASTA files */
 	protected final GenomeRegionSequenceExtractor seqExtractor;
 	/** implementation of position conversion */
-	protected final NucleotidePositionConverter posConverter;
+	protected final NucleotideLocationConverter posConverter;
 
 	public NucleotideChangeToGenomeVariantTranslationImplBase(GenomeRegionSequenceExtractor seqExtractor) {
 		this.seqExtractor = seqExtractor;
-		this.posConverter = new NucleotidePositionConverter();
+		this.posConverter = new NucleotideLocationConverter();
 	}
 
 	/**

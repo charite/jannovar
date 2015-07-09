@@ -30,7 +30,7 @@ public class NucleotidePositionConverterTest {
 	/** TranscriptModel */
 	TranscriptModel tm;
 	/** Position conversion */
-	NucleotidePositionConverter converter;
+	NucleotideLocationConverter converter;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -45,7 +45,7 @@ public class NucleotidePositionConverterTest {
 		jannovarData = new JannovarDataSerializer(dbPath).load();
 		tm = (TranscriptModel) jannovarData.getTmByGeneSymbol().get("CTNS").toArray()[0];
 
-		converter = new NucleotidePositionConverter();
+		converter = new NucleotideLocationConverter();
 	}
 
 	@Test
