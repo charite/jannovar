@@ -14,7 +14,8 @@ public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 	public void testLexingOnNTStrings() {
 		for (String ntString : NT_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			HGVSLexer l = new HGVSLexer(inputStream);
+			l.mode(HGVSLexer.CHANGE_BRANCH);
 			l.getAllTokens();
 		}
 	}
@@ -23,7 +24,8 @@ public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 	public void testLexingOnLegacyStrings() {
 		for (String ntString : LEGACY_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(ntString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			HGVSLexer l = new HGVSLexer(inputStream);
+			l.mode(HGVSLexer.CHANGE_BRANCH);
 			l.getAllTokens();
 		}
 	}
@@ -32,7 +34,8 @@ public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 	public void testLexingOnProteinStrings() {
 		for (String proteinString : PROTEIN_STRINGS) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(proteinString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			HGVSLexer l = new HGVSLexer(inputStream);
+			l.mode(HGVSLexer.AMINO_ACID_CHANGE);
 			l.getAllTokens();
 		}
 	}

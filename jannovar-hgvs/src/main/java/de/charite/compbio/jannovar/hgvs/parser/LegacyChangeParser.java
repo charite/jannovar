@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -14,29 +15,39 @@ import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 /**
- * Parser for legacy mutations syntax (starting with "IVS", "EX", or "E").
+ * Parser for legacy change syntax (starting with "IVS", "EX", or "E").
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class LegacyMutationParser {
+public class LegacyChangeParser {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LegacyMutationParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LegacyChangeParser.class);
 
 	private boolean debug = false;
 
-	public LegacyMutationParser() {
+	public LegacyChangeParser() {
 	}
 
-	public LegacyMutationParser(boolean debug) {
+	public LegacyChangeParser(boolean debug) {
 		this.debug = debug;
 	}
 
-	public LegacyVariant parseLegacyMutationString(String inputString) {
+	/**
+	 * Parse legacy change
+	 * 
+	 * @param inputString
+	 *            with the legacy change to parse
+	 * @return {@link LegacyVariant} representing <code>inputString</code>
+	 * @throws HGVSParsingException
+	 *             if the parsing failed (note that this is an unchecked Exception)
+	 */
+	public LegacyVariant parseLegacyChangeString(String inputString) {
 		LOGGER.trace("Parsing input string " + inputString);
 		Antlr4HGVSParser parser = getParser(inputString);
+		parser.setErrorHandler(new HGVSErrorStrategy());
 		Antlr4HGVSParserListenerImpl listener = new Antlr4HGVSParserListenerImpl();
 		parser.addParseListener(listener);
-		parser.setTrace(true);
+		parser.setTrace(debug);
 		ParseTree tree = parser.legacy_variant();
 		if (debug)
 			System.err.println(tree.toStringTree(parser));
@@ -46,11 +57,11 @@ public class LegacyMutationParser {
 	private Antlr4HGVSParser getParser(String inputString) {
 		if (debug) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			HGVSLexer l = new HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
 		if (debug) {
-			Antlr4HGVSLexer lexer = new Antlr4HGVSLexer(new ANTLRInputStream(inputString));
+			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
 			// lexer.pushMode(mode);
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
@@ -58,7 +69,7 @@ public class LegacyMutationParser {
 			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-		Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+		HGVSLexer l = new HGVSLexer(inputStream);
 		// l.pushMode(mode);
 		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(debug);

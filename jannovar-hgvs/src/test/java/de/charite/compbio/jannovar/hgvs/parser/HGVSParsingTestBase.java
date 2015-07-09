@@ -40,7 +40,7 @@ public class HGVSParsingTestBase {
 			System.err.println(l.getAllTokens());
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-		Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+		HGVSLexer l = new HGVSLexer(inputStream);
 		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(trace);
 		p.addErrorListener(new BaseErrorListener() {

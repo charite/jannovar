@@ -8,11 +8,11 @@ import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 public class LegacyMutationParserInsertionTest {
 
-	LegacyMutationParser driver;
+	LegacyChangeParser driver;
 
 	@Before
 	public void setUp() throws Exception {
-		driver = new LegacyMutationParser();
+		driver = new LegacyChangeParser();
 	}
 
 	@Test
@@ -20,7 +20,7 @@ public class LegacyMutationParserInsertionTest {
 		String legacyVariantStrings[] = new String[] { "XXX:IVS3+3del", "XXX:IVS3-3delT", "XXX:IVS3-3delTCT", "XXX:IVS3-3del3" };
 
 		for (String legacyVariantString : legacyVariantStrings) {
-			LegacyVariant variant = driver.parseLegacyMutationString(legacyVariantString);
+			LegacyVariant variant = driver.parseLegacyChangeString(legacyVariantString);
 
 			Assert.assertEquals(legacyVariantString, variant.toLegacyString());
 		}
@@ -31,7 +31,7 @@ public class LegacyMutationParserInsertionTest {
 		String legacyVariantStrings[] = new String[] { "XXX:EX3+3del", "XXX:EX3-3delT", "XXX:EX3-3delTCT", "XXX:EX3-3del3" };
 
 		for (String legacyVariantString : legacyVariantStrings) {
-			LegacyVariant variant = driver.parseLegacyMutationString(legacyVariantString);
+			LegacyVariant variant = driver.parseLegacyChangeString(legacyVariantString);
 
 			Assert.assertEquals(legacyVariantString, variant.toLegacyString());
 		}

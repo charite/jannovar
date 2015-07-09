@@ -445,3 +445,5 @@ AA_TERMINAL
 	'*'
 	| 'Ter'
 ;
+
+ErrorChar : . ;

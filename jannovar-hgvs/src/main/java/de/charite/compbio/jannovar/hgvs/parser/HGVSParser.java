@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 /**
  * Driver code for parsing HGVS strings into HGVSVariant objects.
@@ -30,11 +32,22 @@ public class HGVSParser {
 		this.debug = debug;
 	}
 
+	/**
+	 * Parse HGVS change string
+	 * 
+	 * @param inputString
+	 *            with the legacy mutation to parse
+	 * @return {@link LegacyVariant} representing <code>inputString</code>
+	 * @throws HGVSParsingException
+	 *             if the parsing failed (note that this is an unchecked Exception)
+	 */
 	public HGVSVariant parseHGVSString(String inputString) {
 		LOGGER.trace("Parsing input string " + inputString);
 		Antlr4HGVSParser parser = getParser(inputString);
+		parser.setErrorHandler(new HGVSErrorStrategy());
 		Antlr4HGVSParserListenerImpl listener = new Antlr4HGVSParserListenerImpl();
 		parser.addParseListener(listener);
+		parser.setTrace(debug);
 		ParseTree tree = parser.hgvs_variant();
 		if (debug)
 			System.err.println(tree.toStringTree(parser));
@@ -44,11 +57,11 @@ public class HGVSParser {
 	private Antlr4HGVSParser getParser(String inputString) {
 		if (debug) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			HGVSLexer l = new HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
 		if (debug) {
-			Antlr4HGVSLexer lexer = new Antlr4HGVSLexer(new ANTLRInputStream(inputString));
+			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
 			// lexer.pushMode(mode);
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
@@ -56,7 +69,7 @@ public class HGVSParser {
 			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-		Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+		HGVSLexer l = new HGVSLexer(inputStream);
 		// l.pushMode(mode);
 		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(debug);

@@ -22,11 +22,11 @@ public class HGVSParserTestBase {
 	protected Antlr4HGVSParser buildParserForString(String inputString, int mode, boolean trace) {
 		if (trace) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+			HGVSLexer l = new HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
 		if (trace) {
-			Antlr4HGVSLexer lexer = new Antlr4HGVSLexer(new ANTLRInputStream(inputString));
+			HGVSLexer lexer = new HGVSLexer(new ANTLRInputStream(inputString));
 			lexer.pushMode(mode);
 			System.err.println("Lexer tokens");
 			for (Token t : lexer.getAllTokens())
@@ -34,7 +34,7 @@ public class HGVSParserTestBase {
 			System.err.println("END OF LEXER TOKENS");
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-		Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
+		HGVSLexer l = new HGVSLexer(inputStream);
 		l.pushMode(mode);
 		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(trace);
