@@ -116,6 +116,8 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 			return;
 		final int contigID = refDict.getContigNameToID().get(vc.getVC().getChr());
 		IntervalArray<Gene> iTree = geneList.getGeneIntervalTree().get(contigID);
+		if (iTree == null)
+			return;
 
 		// consider each alternative allele of the variant
 		for (int alleleID = 0; alleleID < vc.getVC().getAlternateAlleles().size(); ++alleleID) {
