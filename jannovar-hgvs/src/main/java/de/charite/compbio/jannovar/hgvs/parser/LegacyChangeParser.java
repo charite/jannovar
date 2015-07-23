@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.hgvs.parser;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -11,39 +12,49 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
-
-// TODO(holtgrewe): Rename the ANTLR parser to have a ANTLR suffix/prefix and call this HGVSParser.
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 
 /**
- * Driver code for parsing HGVS strings into HGVSVariant objects.
- *
+ * Parser for legacy change syntax (starting with "IVS", "EX", or "E").
+ * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class HGVSParserDriver {
+public class LegacyChangeParser {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HGVSParserDriver.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LegacyChangeParser.class);
 
 	private boolean debug = false;
 
-	public HGVSParserDriver() {
+	public LegacyChangeParser() {
 	}
 
-	public HGVSParserDriver(boolean debug) {
+	public LegacyChangeParser(boolean debug) {
 		this.debug = debug;
 	}
 
-	public HGVSVariant parseHGVSString(String inputString) {
+	/**
+	 * Parse legacy change
+	 * 
+	 * @param inputString
+	 *            with the legacy change to parse
+	 * @return {@link LegacyVariant} representing <code>inputString</code>
+	 * @throws HGVSParsingException
+	 *             if the parsing failed (note that this is an unchecked Exception)
+	 */
+	public LegacyVariant parseLegacyChangeString(String inputString) {
 		LOGGER.trace("Parsing input string " + inputString);
-		HGVSParser parser = getParser(inputString);
-		HGVSParserListenerImpl listener = new HGVSParserListenerImpl();
+		Antlr4HGVSParser parser = getParser(inputString);
+		parser.setErrorHandler(new HGVSErrorStrategy());
+		Antlr4HGVSParserListenerImpl listener = new Antlr4HGVSParserListenerImpl();
 		parser.addParseListener(listener);
-		ParseTree tree = parser.hgvs_variant();
+		parser.setTrace(debug);
+		ParseTree tree = parser.legacy_variant();
 		if (debug)
 			System.err.println(tree.toStringTree(parser));
-		return listener.getResult();
+		return listener.getLegacyVariant();
 	}
 
-	private HGVSParser getParser(String inputString) {
+	private Antlr4HGVSParser getParser(String inputString) {
 		if (debug) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 			HGVSLexer l = new HGVSLexer(inputStream);
@@ -60,7 +71,7 @@ public class HGVSParserDriver {
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
 		// l.pushMode(mode);
-		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
+		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(debug);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override

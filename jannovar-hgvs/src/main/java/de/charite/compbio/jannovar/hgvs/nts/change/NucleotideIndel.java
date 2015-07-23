@@ -100,8 +100,12 @@ public class NucleotideIndel extends NucleotideChange {
 		return range;
 	}
 
-	public NucleotideSeqDescription getSeq() {
+	public NucleotideSeqDescription getInsSeq() {
 		return insSeq;
+	}
+
+	public NucleotideSeqDescription getDelSeq() {
+		return delSeq;
 	}
 
 	@Override

@@ -19,25 +19,7 @@
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-lexer grammar HGVSLexer;
-
-/** fire off protein change description*/
-PROTEIN_CHANGE_DESCRIPTION
-:
-	'p.' -> pushMode ( PROTEIN_CHANGE )
-;
-
-/** fire off nucleotide change description */
-NT_CHANGE_DESCRIPTION
-:
-	(
-		'c.'
-		| 'm.'
-		| 'n.'
-		| 'g.'
-		| 'r.'
-	) -> pushMode ( NUCLEOTIDE_CHANGE )
-;
+lexer grammar Antlr4HGVSLexer;
 
 /** anything that does not match "p." or "[cmngr]." starts a reference description */
 REFERENCE
@@ -79,13 +61,44 @@ PAREN_CLOSE
 /** token used for stopping the reference description */
 REF_STOP
 :
-	':'
+	':' -> pushMode ( CHANGE_BRANCH )
 ;
 
 /** skip line breaks, spaces are kept */
 LINE_BREAKS
 :
 	[ \r\n\t] -> skip
+;
+
+/* the following rules branch into the NUCLEOTIDE_CHANGE or the AMINO_ACID_CHANGE mode */
+mode CHANGE_BRANCH;
+
+/** fire off protein change description*/
+AA_CHANGE_DESCRIPTION
+:
+	'p.' -> pushMode ( AMINO_ACID_CHANGE )
+;
+
+/** fire off nucleotide change description */
+NT_CHANGE_DESCRIPTION
+:
+	(
+		'c.'
+		| 'm.'
+		| 'n.'
+		| 'g.'
+		| 'r.'
+	) -> pushMode ( NUCLEOTIDE_CHANGE )
+;
+
+/** legacy positions start with "IVS", "EX", or "E" */
+LEGACY_IVS_OR_EX
+:
+	(
+		'IVS'
+		| 'EX'
+		| 'E'
+	) -> pushMode ( NUCLEOTIDE_CHANGE )
 ;
 
 /* Lexing of nucleotide changes
@@ -247,35 +260,35 @@ NT_GT
 	'>'
 ;
 
-/* Lexing of protein changes */
-mode PROTEIN_CHANGE;
+/* Lexing of amino acidchanges */
+mode AMINO_ACID_CHANGE;
 
 /** number used during protein annotation */
-PROTEIN_NUMBER
+AA_NUMBER
 :
 	[1-9] [0-9]*
 ;
 
 /** space is ignored */
-PROTEIN_CHANGE_SPACE
+AA_CHANGE_SPACE
 :
 	[ ] -> skip
 ;
 
 /** line breaks are ignored but end protein change mode */
-PROTEIN_CHANGE_LINE_BREAK
+AA_CHANGE_LINE_BREAK
 :
 	[\t\r\n] -> popMode , skip
 ;
 
-/** colon character ends the PROTEIN_CHANGE mode */
-PROTEIN_COLON
+/** colon character ends the AA_CHANGE mode */
+AA_COLON
 :
 	':' -> popMode
 ;
 
 /** 3-letter protein codes, excluding Met */
-PROTEIN_AA3
+AA_AA3
 :
 	'Ala'
 	| 'Arg'
@@ -299,7 +312,7 @@ PROTEIN_AA3
 ;
 
 /** 1-letter protein codes, excluding M */
-PROTEIN_AA1
+AA_AA1
 :
 	'A'
 	| 'R'
@@ -323,112 +336,114 @@ PROTEIN_AA1
 ;
 
 /** start codon without position */
-PROTEIN_MET
+AA_MET
 :
 	'M'
 	| 'Met'
 ;
 
 /** zero, used for denoting no produced protein */
-PROTEIN_ZERO
+AA_ZERO
 :
 	'0'
 ;
 
-PROTEIN_MINUS
+AA_MINUS
 :
 	'-'
 ;
 
-PROTEIN_PLUS
+AA_PLUS
 :
 	'+'
 ;
 
-PROTEIN_UNDERSCORE
+AA_UNDERSCORE
 :
 	'_'
 ;
 
 /** frameshift */
-PROTEIN_FS
+AA_FS
 :
 	'fs'
 ;
 
 /** insertion */
-PROTEIN_INS
+AA_INS
 :
 	'ins'
 ;
 
 /** extension */
-PROTEIN_EXT
+AA_EXT
 :
 	'ext'
 ;
 
 /** duplication */
-PROTEIN_DUP
+AA_DUP
 :
 	'dup'
 ;
 
 /** deletion */
-PROTEIN_DEL
+AA_DEL
 :
 	'del'
 ;
 
-PROTEIN_COMMA
+AA_COMMA
 :
 	','
 ;
 
-PROTEIN_EQUAL
+AA_EQUAL
 :
 	'='
 ;
 
-PROTEIN_QUESTION_MARK
+AA_QUESTION_MARK
 :
 	'?'
 ;
 
-PROTEIN_PAREN_OPEN
+AA_PAREN_OPEN
 :
 	'('
 ;
 
-PROTEIN_PAREN_CLOSE
+AA_PAREN_CLOSE
 :
 	')'
 ;
 
-PROTEIN_SQUARE_PAREN_OPEN
+AA_SQUARE_PAREN_OPEN
 :
 	'['
 ;
 
-PROTEIN_SQUARE_PAREN_CLOSE
+AA_SQUARE_PAREN_CLOSE
 :
 	']'
 ;
 
-PROTEIN_SEMICOLON
+AA_SEMICOLON
 :
 	';'
 ;
 
-PROTEIN_SLASHES
+AA_SLASHES
 :
 	'//'
 	| '/'
 ;
 
 /** terminal codon */
-PROTEIN_TERMINAL
+AA_TERMINAL
 :
 	'*'
 	| 'Ter'
 ;
+
+ErrorChar : . ;

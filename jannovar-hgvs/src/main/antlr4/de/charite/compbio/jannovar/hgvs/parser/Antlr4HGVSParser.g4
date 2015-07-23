@@ -2,22 +2,19 @@
  *
  * Supports the subset of HGVS mutnomen that is relevant for annotating variant calls from NGS data.
  */
-parser grammar HGVSParser;
+parser grammar Antlr4HGVSParser;
 
 options {
-	tokenVocab = HGVSLexer;
-} // use tokens from HGVSLexer
-
-// TODO(holtgrem): nucleotide variants cannot be predicted/in parantheses yet
-// TODO(holtgrem): handle problem of distinction between "chr" vs. "c." as it is currently performed, probably with extra mode
+	tokenVocab = Antlr4HGVSLexer;
+} // use tokens from Antlr4HGVSLexer
 
 /** top-level production rule for both nucleotide and protein variants */
 hgvs_variant
 :
 	nt_single_allele_var
 	| nt_multi_allele_var
-	| protein_single_allele_var
-	| protein_multi_allele_var
+	| aa_single_allele_var
+	| aa_multi_allele_var
 ;
 
 // --------------------------------------------------------------------------
@@ -36,27 +33,27 @@ reference
 // Protein allele variants
 // --------------------------------------------------------------------------
 
-protein_single_allele_var
+aa_single_allele_var
 :
-	protein_single_allele_single_change_var
-	| protein_single_allele_multi_change_var
+	aa_single_allele_single_change_var
+	| aa_single_allele_multi_change_var
 ;
 
-protein_single_allele_single_change_var
+aa_single_allele_single_change_var
 :
-	reference PROTEIN_CHANGE_DESCRIPTION aa_change
+	reference AA_CHANGE_DESCRIPTION aa_change
 ;
 
-protein_single_allele_multi_change_var
+aa_single_allele_multi_change_var
 :
-	reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
+	reference AA_CHANGE_DESCRIPTION aa_multi_change_allele
 ;
 
-protein_multi_allele_var
+aa_multi_allele_var
 :
-	reference PROTEIN_CHANGE_DESCRIPTION protein_multi_change_allele
+	reference AA_CHANGE_DESCRIPTION aa_multi_change_allele
 	(
-		PROTEIN_SEMICOLON protein_multi_change_allele
+		AA_SEMICOLON aa_multi_change_allele
 	)*
 ;
 
@@ -64,34 +61,34 @@ protein_multi_allele_var
 // Protein allele
 // --------------------------------------------------------------------------
 
-protein_multi_change_allele
+aa_multi_change_allele
 :
-	PROTEIN_SQUARE_PAREN_OPEN
+	AA_SQUARE_PAREN_OPEN
 	(
-		protein_multi_change_allele_inner
+		aa_multi_change_allele_inner
 		|
 		(
-			PROTEIN_PAREN_OPEN protein_multi_change_allele_inner PROTEIN_PAREN_CLOSE
+			AA_PAREN_OPEN aa_multi_change_allele_inner AA_PAREN_CLOSE
 		)
-	) PROTEIN_SQUARE_PAREN_CLOSE
+	) AA_SQUARE_PAREN_CLOSE
 ;
 
-protein_multi_change_allele_inner
+aa_multi_change_allele_inner
 :
 	aa_change
 	(
-		protein_var_sep aa_change
+		aa_var_sep aa_change
 	)*
 ;
 
-protein_var_sep
+aa_var_sep
 :
-	PROTEIN_COMMA
-	| PROTEIN_SLASHES
-	| PROTEIN_SEMICOLON
+	AA_COMMA
+	| AA_SLASHES
+	| AA_SEMICOLON
 	|
 	(
-		PROTEIN_PAREN_OPEN PROTEIN_SEMICOLON PROTEIN_PAREN_CLOSE
+		AA_PAREN_OPEN AA_SEMICOLON AA_PAREN_CLOSE
 	)
 ;
 
@@ -104,7 +101,7 @@ aa_change
 	aa_change_inner
 	|
 	(
-		PROTEIN_PAREN_OPEN aa_change_inner PROTEIN_PAREN_CLOSE
+		AA_PAREN_OPEN aa_change_inner AA_PAREN_CLOSE
 	)
 ;
 
@@ -127,9 +124,9 @@ aa_change_deletion
 	(
 		aa_point_location
 		| aa_range
-	) PROTEIN_DEL
+	) AA_DEL
 	(
-		PROTEIN_NUMBER
+		AA_NUMBER
 		| aa_string
 	)?
 ;
@@ -140,9 +137,9 @@ aa_change_duplication
 	(
 		aa_point_location
 		| aa_range
-	) PROTEIN_DUP
+	) AA_DUP
 	(
-		PROTEIN_NUMBER
+		AA_NUMBER
 		| aa_string
 	)?
 ;
@@ -150,18 +147,18 @@ aa_change_duplication
 /** amino acid extension */
 aa_change_extension
 :
-	aa_point_location aa_char? PROTEIN_EXT
+	aa_point_location aa_char? AA_EXT
 	(
 		(
-			PROTEIN_TERMINAL
+			AA_TERMINAL
 			(
-				PROTEIN_NUMBER
-				| PROTEIN_QUESTION_MARK
+				AA_NUMBER
+				| AA_QUESTION_MARK
 			)
 		)
 		|
 		(
-			PROTEIN_MINUS PROTEIN_NUMBER
+			AA_MINUS AA_NUMBER
 		)
 	)
 ;
@@ -172,16 +169,16 @@ aa_change_frameshift
 	aa_point_location
 	(
 		(
-			aa_char PROTEIN_FS
+			aa_char AA_FS
 			(
-				PROTEIN_TERMINAL
+				AA_TERMINAL
 				(
-					PROTEIN_NUMBER
-					| PROTEIN_QUESTION_MARK
+					AA_NUMBER
+					| AA_QUESTION_MARK
 				)
 			)
 		)
-		| PROTEIN_FS
+		| AA_FS
 	)
 ;
 
@@ -191,13 +188,13 @@ aa_change_indel
 	(
 		aa_point_location
 		| aa_range
-	) PROTEIN_DEL
+	) AA_DEL
 	(
-		PROTEIN_NUMBER
+		AA_NUMBER
 		| aa_string
-	)? PROTEIN_INS
+	)? AA_INS
 	(
-		PROTEIN_NUMBER
+		AA_NUMBER
 		| aa_string
 	)?
 ;
@@ -208,8 +205,8 @@ aa_change_substitution
 	aa_point_location
 	(
 		aa_char
-		| PROTEIN_QUESTION_MARK
-		| PROTEIN_EQUAL
+		| AA_QUESTION_MARK
+		| AA_EQUAL
 	)
 ;
 
@@ -219,16 +216,15 @@ aa_change_ssr
 	(
 		aa_point_location
 		| aa_range
-	) PROTEIN_PAREN_OPEN PROTEIN_NUMBER PROTEIN_UNDERSCORE PROTEIN_NUMBER
-	PROTEIN_PAREN_CLOSE
+	) AA_PAREN_OPEN AA_NUMBER AA_UNDERSCORE AA_NUMBER AA_PAREN_CLOSE
 ;
 
 /** amino acid short insertion */
 aa_change_insertion
 :
-	aa_range PROTEIN_INS
+	aa_range AA_INS
 	(
-		PROTEIN_NUMBER
+		AA_NUMBER
 		| aa_string
 	)?
 ;
@@ -236,15 +232,15 @@ aa_change_insertion
 /** amino acid misc change */
 aa_change_misc
 :
-	PROTEIN_QUESTION_MARK
-	| PROTEIN_EQUAL
+	AA_QUESTION_MARK
+	| AA_EQUAL
 	|
 	(
-		PROTEIN_PAREN_OPEN PROTEIN_EQUAL PROTEIN_PAREN_CLOSE
+		AA_PAREN_OPEN AA_EQUAL AA_PAREN_CLOSE
 	)
 	|
 	(
-		PROTEIN_ZERO PROTEIN_QUESTION_MARK?
+		AA_ZERO AA_QUESTION_MARK?
 	)
 ;
 
@@ -253,44 +249,44 @@ aa_point_location
 :
 	aa_char
 	(
-		PROTEIN_MINUS
-		| PROTEIN_TERMINAL
-	)? PROTEIN_NUMBER
+		AA_MINUS
+		| AA_TERMINAL
+	)? AA_NUMBER
 	(
 		(
-			PROTEIN_PLUS
-			| PROTEIN_MINUS
-		) PROTEIN_NUMBER
+			AA_PLUS
+			| AA_MINUS
+		) AA_NUMBER
 	)?
 ;
 
 /** amino acid / protein range */
 aa_range
 :
-	aa_point_location PROTEIN_UNDERSCORE aa_point_location
+	aa_point_location AA_UNDERSCORE aa_point_location
 ;
 
 /** amino acid string*/
 aa_string
 :
 	(
-		PROTEIN_MET
-		| PROTEIN_AA3
+		AA_MET
+		| AA_AA3
 	)+
 	|
 	(
-		PROTEIN_MET
-		| PROTEIN_AA1
+		AA_MET
+		| AA_AA1
 	)+
 ;
 
 /** amino acid character */
 aa_char
 :
-	PROTEIN_AA3
-	| PROTEIN_AA1
-	| PROTEIN_MET
-	| PROTEIN_TERMINAL
+	AA_AA3
+	| AA_AA1
+	| AA_MET
+	| AA_TERMINAL
 ;
 
 // --------------------------------------------------------------------------
@@ -533,4 +529,71 @@ nt_range
 nt_string
 :
 	NT_STRING
+;
+
+// --------------------------------------------------------------------------
+// Legacy Variant Descriptions
+// --------------------------------------------------------------------------
+
+/** top-level production rule for legacy variant (using IVS or EX) */
+legacy_variant
+:
+	reference legacy_change
+;
+
+legacy_change
+:
+	legacy_change_substitution
+	| legacy_change_indel
+	| legacy_change_insertion
+	| legacy_change_deletion
+;
+
+/** legacy deletion */
+legacy_change_deletion
+:
+	legacy_point_location NT_DEL
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** legacy replacement/indel/delins */
+legacy_change_indel
+:
+	legacy_point_location NT_DEL
+	(
+		nt_number
+		| nt_string
+	)? NT_INS
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** legacy insertion */
+legacy_change_insertion
+:
+	legacy_point_location NT_INS
+	(
+		nt_number
+		| nt_string
+	)?
+;
+
+/** legacy substitution */
+legacy_change_substitution
+:
+	legacy_point_location NT_STRING NT_GT NT_STRING
+;
+
+legacy_point_location
+:
+	LEGACY_IVS_OR_EX nt_number
+	(
+		NT_MINUS
+		| NT_PLUS
+	) nt_number
 ;

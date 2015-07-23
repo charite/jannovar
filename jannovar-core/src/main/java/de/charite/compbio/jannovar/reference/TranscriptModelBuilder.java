@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Class for building immutable {@link TranscriptInfo} objects field-by-field.
+ * Class for building immutable {@link TranscriptModel} objects field-by-field.
  *
  * In this sense, it is similar to {@link StringBuilder} for building {@link String} objects.
  *

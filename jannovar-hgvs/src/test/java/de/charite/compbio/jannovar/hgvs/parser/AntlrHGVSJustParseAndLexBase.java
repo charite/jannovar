@@ -5,7 +5,7 @@ package de.charite.compbio.jannovar.hgvs.parser;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class JustParseAndLexBase {
+public class AntlrHGVSJustParseAndLexBase {
 
 	// "c.(87+1_88-1)_(923+1_924-1)del", "c.(87+1_88-1)_(301+1_302-1)dup", "c.(?_-30)_(*220_?)del",
 
@@ -17,6 +17,12 @@ public class JustParseAndLexBase {
 			"c.113delinsTACTAGC", "c.113delGinsTACTAGC", "c.[114G>A; 115delT]", "c.203_506inv", "c.203_506inv304",
 			"c.[76A>C; 83G>C]", "c.[76A>C];[83G>C]", "c.[76A>C];[?]", "c.[76A>C];[=]", "c.[76A>C];[0]", "c.[638T>A]",
 			"c.[732C>G]", "c.[=//83G>C]", "c.123+74_123+75(3_6)", "g.1209_4523(12_45)" };
+
+	/** legacy changes that should be parseable/lexable */
+	public static String[] LEGACY_STRINGS = { "IVS3+3G>T", "IVS3-3G>T", "E3+3G>T", "E3-3G>T", "EX3+3G>T", "EX3-3G>T",
+			"IVS3+3delG", "IVS3-3delGT", "E3+3delGTT", "E3-3del10", "EX3+3del1", "EX3-3del5", "IVS3+3insG",
+			"IVS3-3insGT", "E3+3insGTT", "E3-3ins10", "EX3+3ins1", "EX3-3ins5", "IVS3+3delCTTAinsG", "IVS3-3del3insGT",
+			"E3+3delCTTAinsGTT", "E3-3delCTTAins10", "EX3+3delCTTAins1", "EX3-3delCTTAins5", };
 
 	/** protein changes that should be parseable/lexable */
 	public static String[] PROTEIN_STRINGS = { "p.Gly2L", "p.G2L", "p.G2L", "p.Glu124Serfs*148", "p.Gln16dup",

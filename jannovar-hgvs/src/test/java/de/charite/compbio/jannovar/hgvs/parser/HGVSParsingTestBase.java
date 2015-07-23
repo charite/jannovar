@@ -10,16 +10,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Hgvs_variantContext;
 
 /**
  * Base class for parsing tests.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class ParsingTestBase {
+public class HGVSParsingTestBase {
 
-	public ParsingTestBase() {
+	public HGVSParsingTestBase() {
 		super();
 	}
 
@@ -36,12 +36,12 @@ public class ParsingTestBase {
 	protected Hgvs_variantContext parseString(String inputString, boolean trace) {
 		if (trace) {
 			ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
-			HGVSLexer l = new HGVSLexer(inputStream);
+			Antlr4HGVSLexer l = new Antlr4HGVSLexer(inputStream);
 			System.err.println(l.getAllTokens());
 		}
 		ANTLRInputStream inputStream = new ANTLRInputStream(inputString);
 		HGVSLexer l = new HGVSLexer(inputStream);
-		HGVSParser p = new HGVSParser(new CommonTokenStream(l));
+		Antlr4HGVSParser p = new Antlr4HGVSParser(new CommonTokenStream(l));
 		p.setTrace(trace);
 		p.addErrorListener(new BaseErrorListener() {
 			@Override

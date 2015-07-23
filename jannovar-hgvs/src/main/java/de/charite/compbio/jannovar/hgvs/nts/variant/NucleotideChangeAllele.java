@@ -36,7 +36,10 @@ public final class NucleotideChangeAllele implements ConvertibleToHGVSString, Li
 
 	/** @return a new allele containing one nucleotide change */
 	public static NucleotideChangeAllele singleChangeAllele(NucleotideChange change) {
-		return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
+		if (change == null)  // parsing failed below
+			return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.<NucleotideChange> of());
+		else
+			return new NucleotideChangeAllele(VariantConfiguration.IN_CIS, ImmutableList.of(change));
 	}
 
 	/** @return a new allele with the given variant configuration and changes */

@@ -192,10 +192,15 @@ public final class GenomeVariant implements VariantDescription {
 			return withStrand(Strand.FWD).toString();
 		else if (ref.equals("")) // handle insertion as special case
 			return Joiner.on("").join(getChrName(), ":g.", getPos(), "_", getPos() + 1, "ins", alt);
-		else if (alt.equals("") && ref.length() == 1)
+		else if (alt.equals("") && ref.length() == 1) // single-base deletion
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref);
-		else if (alt.equals("") && ref.length() > 1)
+		else if (alt.equals("") && ref.length() > 1) // multi-base deletion
 			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref);
+		else if (ref.length() == 1 && alt.length() > 1)
+			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "del", ref, "ins", alt);
+		else if (ref.length() > 1 && alt.length() != 0)
+			return Joiner.on("").join(getChrName(), ":g.", getPos() + 1, "_", getPos() + ref.length(), "del", ref,
+					"ins", alt);
 		else
 			return Joiner.on("").join(pos, (ref.equals("") ? "-" : ref), ">", (alt.equals("") ? "-" : alt));
 	}

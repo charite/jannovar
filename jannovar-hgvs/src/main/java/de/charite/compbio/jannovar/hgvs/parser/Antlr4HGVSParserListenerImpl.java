@@ -10,6 +10,13 @@ import org.slf4j.LoggerFactory;
 import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 import de.charite.compbio.jannovar.hgvs.SequenceType;
 import de.charite.compbio.jannovar.hgvs.VariantConfiguration;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyChange;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyDeletion;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyIndel;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyInsertion;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyLocation;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacySubstitution;
+import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
@@ -26,29 +33,36 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant
 import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideChangeAllele;
 import de.charite.compbio.jannovar.hgvs.nts.variant.NucleotideVariant;
 import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVariant;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Hgvs_variantContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_base_locationContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_changeContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_deletionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_duplicationContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_indelContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_innerContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_insertionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_inversionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_miscContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_ssrContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_change_substitutionContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_allele_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_change_alleleContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_multi_change_allele_innerContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_offsetContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_point_locationContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_rangeContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_multi_change_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_single_change_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_single_allele_varContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.Nt_var_sepContext;
-import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.ReferenceContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Hgvs_variantContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_change_deletionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_change_indelContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_change_insertionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_change_substitutionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_point_locationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Legacy_variantContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_base_locationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_changeContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_deletionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_duplicationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_indelContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_innerContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_insertionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_inversionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_miscContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_ssrContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_change_substitutionContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_multi_allele_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_multi_change_alleleContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_multi_change_allele_innerContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_offsetContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_point_locationContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_rangeContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_single_allele_multi_change_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_single_allele_single_change_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_single_allele_varContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Nt_var_sepContext;
+import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.ReferenceContext;
 
 // TODO(holtgrewe): support parsing amino acid changes
 
@@ -57,9 +71,9 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParser.ReferenceContext;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-class HGVSParserListenerImpl extends HGVSParserBaseListener {
+class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HGVSParserListenerImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Antlr4HGVSParserListenerImpl.class);
 
 	/** maps nodes to Objects with Map<ParseTree,Object> */
 	ParseTreeProperty<Object> values = new ParseTreeProperty<>();
@@ -74,22 +88,30 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	}
 
 	/** resulting {@link HGVSVariant} */
-	HGVSVariant result = null;
+	HGVSVariant hgvsVariant = null;
 
 	/** @return resulting {@link HGVSVariant} */
-	public HGVSVariant getResult() {
-		return result;
+	public HGVSVariant getHGVSVariant() {
+		return hgvsVariant;
+	}
+
+	/** resulting {@link LegacyVariant} */
+	LegacyVariant legacyVariant = null;
+
+	/** @return resulting {@link LegacyVariant} */
+	public LegacyVariant getLegacyVariant() {
+		return legacyVariant;
 	}
 
 	/**
 	 * Leaving of the top-level hgvs_variant rule.
 	 *
-	 * The HGVSVariant for the result is stored in the map for the only child.
+	 * The HGVSVariant for the result is taken from the child and stored in the object member.
 	 */
 	@Override
 	public void exitHgvs_variant(Hgvs_variantContext ctx) {
 		LOGGER.debug("Leaving hgvs_variant");
-		result = (HGVSVariant) getValue(ctx.getChild(0));
+		hgvsVariant = (HGVSVariant) getValue(ctx.getChild(0));
 	}
 
 	/**
@@ -227,7 +249,12 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 	@Override
 	public void exitNt_change_indel(Nt_change_indelContext ctx) {
 		LOGGER.debug("Leaving nt_change_deletion");
-		final NucleotideRange range = (NucleotideRange) getValue(ctx.nt_range());
+		final NucleotideRange range;
+		if (ctx.nt_range() != null)
+			range = (NucleotideRange) getValue(ctx.nt_range());
+		else
+			range = new NucleotideRange((NucleotidePointLocation) getValue(ctx.nt_point_location()),
+					(NucleotidePointLocation) getValue(ctx.nt_point_location()));
 
 		final NucleotideSeqDescription seqDesc1;
 		if (ctx.nt_number(0) != null)
@@ -458,6 +485,137 @@ class HGVSParserListenerImpl extends HGVSParserBaseListener {
 		if (ctx.NT_MINUS() != null)
 			value = -value;
 		setValue(ctx, value);
+	}
+
+	/**
+	 * Leaving rule legacy_variant.
+	 * 
+	 * The LegacyVariant for the result is taken from the child and stored in the object member.
+	 */
+	@Override
+	public void exitLegacy_variant(Legacy_variantContext ctx) {
+		LOGGER.debug("Leaving legacy_variant");
+		
+		String ref = ctx.reference().REFERENCE(0).getText();
+		LegacyChange change = (LegacyChange) getValue(ctx.getChild(1));
+		this.legacyVariant = new LegacyVariant(ref, change); 
+	}
+
+	/**
+	 * Leaving rule legacy_change.
+	 * 
+	 * Propagate result of child to label of this node.
+	 */
+	@Override
+	public void exitLegacy_change(Legacy_changeContext ctx) {
+		LOGGER.debug("Leaving legacy_change");
+		setValue(ctx, getValue(ctx.getChild(0)));
+	}
+
+	/**
+	 * Leaving of legacy_change_deletion rule
+	 * 
+	 * Construct {@link LegacyDeletion} from children's value and label this node with it.
+	 */
+	@Override
+	public void exitLegacy_change_deletion(Legacy_change_deletionContext ctx) {
+		LOGGER.debug("Leaving legacy_change_deletion");
+		LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
+
+		final NucleotideSeqDescription seqDesc;
+		if (ctx.nt_number() != null)
+			seqDesc = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText()));
+		else if (ctx.nt_string() != null)
+			seqDesc = new NucleotideSeqDescription(ctx.nt_string().getText());
+		else
+			seqDesc = new NucleotideSeqDescription();
+
+		setValue(ctx, new LegacyDeletion(location, seqDesc));
+	}
+
+	/**
+	 * Leaving of legacy_change_substitution rule
+	 * 
+	 * Construct {@link LegacySubstitution} from children's value and label this node with it.
+	 */
+	@Override
+	public void exitLegacy_change_substitution(Legacy_change_substitutionContext ctx) {
+		LOGGER.debug("Leaving legacy_change_substitution");
+		LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
+
+		String from = ctx.NT_STRING(0).getText();
+		String to = ctx.NT_STRING(1).getText();
+
+		setValue(ctx, new LegacySubstitution(location, from, to));
+	}
+
+	/**
+	 * Leaving of legacy_change_indel rule
+	 * 
+	 * Construct {@link LegacyIndel} from children's value and label this node with it.
+	 */
+	@Override
+	public void exitLegacy_change_indel(Legacy_change_indelContext ctx) {
+		LOGGER.debug("Leaving legacy_change_insertion");
+		LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
+
+		final NucleotideSeqDescription seqDesc1;
+		if (ctx.nt_number(0) != null)
+			seqDesc1 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(0).getText()));
+		else if (ctx.nt_string(0) != null)
+			seqDesc1 = new NucleotideSeqDescription(ctx.nt_string(0).getText());
+		else
+			seqDesc1 = new NucleotideSeqDescription();
+
+		final NucleotideSeqDescription seqDesc2;
+		if (ctx.nt_number(1) != null)
+			seqDesc2 = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number(1).getText()));
+		else if (ctx.nt_string(1) != null)
+			seqDesc2 = new NucleotideSeqDescription(ctx.nt_string(1).getText());
+		else
+			seqDesc2 = new NucleotideSeqDescription();
+
+		setValue(ctx, new LegacyIndel(location, seqDesc1, seqDesc2));
+	}
+
+	/**
+	 * Leaving of legacy_change_insertion rule
+	 * 
+	 * Construct {@link LegacyInsertion} from children's value and label this node with it.
+	 */
+	@Override
+	public void exitLegacy_change_insertion(Legacy_change_insertionContext ctx) {
+		LOGGER.debug("Leaving legacy_change_insertion");
+		LegacyLocation location = (LegacyLocation) getValue(ctx.legacy_point_location());
+
+		final NucleotideSeqDescription seqDesc;
+		if (ctx.nt_number() != null)
+			seqDesc = new NucleotideSeqDescription(Integer.parseInt(ctx.nt_number().getText()));
+		else if (ctx.nt_string() != null)
+			seqDesc = new NucleotideSeqDescription(ctx.nt_string().getText());
+		else
+			seqDesc = new NucleotideSeqDescription();
+
+		setValue(ctx, new LegacyInsertion(location, seqDesc));
+	}
+
+	/**
+	 * Leaving of legacy_point_location rule
+	 * 
+	 * Construct {@link LegacyInsertion} from children's value and label this node with it.
+	 */
+	@Override
+	public void exitLegacy_point_location(Legacy_point_locationContext ctx) {
+		LOGGER.debug("Leaving legacy_point_location");
+		int featureNo = Integer.parseInt(ctx.nt_number(0).getText());
+		int offset = Integer.parseInt(ctx.nt_number(1).getText());
+		if (ctx.NT_MINUS() != null)
+			offset = -offset;
+		
+		if (ctx.LEGACY_IVS_OR_EX().getText().equals("IVS"))
+			setValue(ctx, LegacyLocation.buildIntronicLocation(featureNo, offset));
+		else
+			setValue(ctx, LegacyLocation.buildExonicLocation(featureNo, offset));
 	}
 
 	/**

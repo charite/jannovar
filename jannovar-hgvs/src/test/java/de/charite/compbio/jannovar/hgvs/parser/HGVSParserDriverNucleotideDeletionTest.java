@@ -15,16 +15,16 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
  */
 public class HGVSParserDriverNucleotideDeletionTest {
 
-	HGVSParserDriver driver;
+	HGVSParser driver;
 
 	@Before
 	public void setUp() throws Exception {
-		driver = new HGVSParserDriver(false);
+		driver = new HGVSParser(false);
 	}
 
 	@Test
 	public void testPredictedOnly() {
-		ParsingTestBase.setLogLevel(Level.DEBUG);
+		HGVSParsingTestBase.setLogLevel(Level.DEBUG);
 
 		String hgvsStrings[] = new String[] { "NM_000138.4:c.(247_248del)", "NM_000138.4:c.(247+1_247+3del)",
 				"NM_000138.4:c.(247-3_247-1del)", "NM_000138.4:c.(*247_*247+3del)",

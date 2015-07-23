@@ -16,11 +16,11 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
  */
 public class HGVSParserDriverNucleotideSingleAlleleMultiChangeTest {
 
-	HGVSParserDriver driver;
+	HGVSParser driver;
 
 	@Before
 	public void setUp() throws Exception {
-		driver = new HGVSParserDriver();
+		driver = new HGVSParser();
 	}
 
 	@Test

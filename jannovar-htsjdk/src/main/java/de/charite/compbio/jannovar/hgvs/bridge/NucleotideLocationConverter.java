@@ -17,7 +17,7 @@ import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class NucleotidePositionConverter {
+public class NucleotideLocationConverter {
 
 	/**
 	 * Convert {@link NucleotidePointLocation} on a {@link TranscriptModel} to a {@link GenomePosition}
