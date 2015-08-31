@@ -14,7 +14,10 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.Compatibilit
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
+ * 
+ *  @deprecated use {@link PedigreeCompatibilityChecker} instead.  
  */
+@Deprecated
 public class PedigreeDiseaseCompatibilityDecorator {
 
 	/** the pedigree */
