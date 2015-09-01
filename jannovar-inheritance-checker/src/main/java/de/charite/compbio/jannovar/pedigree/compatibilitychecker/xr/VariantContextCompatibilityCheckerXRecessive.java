@@ -3,8 +3,6 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;

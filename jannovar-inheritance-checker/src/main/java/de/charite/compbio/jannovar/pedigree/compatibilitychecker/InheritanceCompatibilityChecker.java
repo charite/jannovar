@@ -22,7 +22,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  */
 public class InheritanceCompatibilityChecker {
 
-	static final class Builder {
+	public static final class Builder {
 
 		private ImmutableSet.Builder<ModeOfInheritance> modeSetBuilder;
 		private Pedigree pedigree;
@@ -89,7 +89,7 @@ public class InheritanceCompatibilityChecker {
 	 * @throws CompatibilityCheckerException
 	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
-	public List<VariantContext> isCompatibleWith(List<VariantContext> vcList) throws CompatibilityCheckerException {
+	public List<VariantContext> getCompatibleWith(List<VariantContext> vcList) throws CompatibilityCheckerException {
 
 		InheritanceVariantContextList list = new InheritanceVariantContextList(vcList);
 		for (ModeOfInheritance mode : inheritanceModes) {
