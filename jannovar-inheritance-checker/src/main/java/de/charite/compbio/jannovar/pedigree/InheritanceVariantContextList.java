@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.pedigree;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Joiner;
@@ -26,7 +27,6 @@ public final class InheritanceVariantContextList {
 	private final boolean isAutosomal;
 
 	private final List<InheritanceVariantContext> vcList;
-	
 
 	/** the lists of genotype calls, each contains one entry for each individual */
 	// private final ImmutableList<ImmutableList<Genotype>> calls;
@@ -36,7 +36,7 @@ public final class InheritanceVariantContextList {
 		boolean[] chromosomalLocation = getChromosomalLocation(vcList);
 		isAutosomal = chromosomalLocation[0];
 		isXChromosomal = chromosomalLocation[1];
-		this.vcList = new InheritanceVariantContext.ListBuilder().variants(vcList).build();
+		this.vcList = new InheritanceVariantContext.Builder().variants(vcList).build();
 	}
 
 	private boolean[] getChromosomalLocation(List<VariantContext> vcList) {
@@ -54,8 +54,7 @@ public final class InheritanceVariantContextList {
 	}
 
 	private boolean isAutosomal(VariantContext vc) {
-		return vc.getContig().toLowerCase()
-				.matches("(^chr([0-9])|(1[0-9])|(2[012])$)|(^([0-9])|(1[0-9])|(2[012])$)");
+		return vc.getContig().toLowerCase().matches("(^chr([0-9])|(1[0-9])|(2[012])$)|(^([0-9])|(1[0-9])|(2[012])$)");
 	}
 
 	private ImmutableList<String> getNames(List<VariantContext> vcList) {
@@ -76,7 +75,7 @@ public final class InheritanceVariantContextList {
 	public boolean isXChromosomal() {
 		return this.isXChromosomal;
 	};
-	
+
 	/** whether or not the variants are on the Autosome */
 	public boolean isAutosomal() {
 		return this.isAutosomal;
@@ -85,6 +84,7 @@ public final class InheritanceVariantContextList {
 	public List<InheritanceVariantContext> getVcList() {
 		return vcList;
 	}
+
 	/**
 	 * Check whether the {@link #names} of this GenotypeList are the same as the names of the members of
 	 * <code>pedigree</code>.
@@ -107,6 +107,16 @@ public final class InheritanceVariantContextList {
 	@Override
 	public String toString() {
 		return "GenotypeList(" + Joiner.on(",").join(vcList) + ")";
+	}
+
+	public List<VariantContext> getMatchedVariants() {
+		List<VariantContext> output = new ArrayList<VariantContext>();
+		for (InheritanceVariantContext vc : getVcList()) {
+			if (vc.isMatchInheritance())
+				output.add(vc);
+		}
+		return output;
+
 	}
 
 }

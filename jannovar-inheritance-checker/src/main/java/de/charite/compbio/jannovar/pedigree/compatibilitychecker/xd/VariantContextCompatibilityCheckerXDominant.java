@@ -49,6 +49,10 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractCompati
 		super(pedigree, list);
 	}
 
+	public VariantContextCompatibilityCheckerXDominant(Pedigree pedigree, InheritanceVariantContextList list) {
+		super(pedigree, list);
+	}
+
 	/**
 	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the X-chromosomal dominant
 	 *         mode of inheritances.

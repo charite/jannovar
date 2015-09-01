@@ -7,11 +7,11 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 public class InheritanceVariantContext extends VariantContext {
 
-	static final class ListBuilder {
+	static final class Builder {
 
 		List<InheritanceVariantContext> list = new ArrayList<InheritanceVariantContext>();
 
-		public ListBuilder variants(List<VariantContext> vcList) {
+		public Builder variants(List<VariantContext> vcList) {
 			for (VariantContext vc : vcList) {
 				list.add(new InheritanceVariantContext(vc));
 			}

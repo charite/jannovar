@@ -44,6 +44,10 @@ public class VariantContextCompatibilityCheckerAutosomalRecessive extends Abstra
 		super(pedigree, list);
 	}
 
+	public VariantContextCompatibilityCheckerAutosomalRecessive(Pedigree pedigree, InheritanceVariantContextList list) {
+		super(pedigree, list);
+	}
+
 	@Override
 	public List<VariantContext> run() throws CompatibilityCheckerException {
 		new VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous(pedigree, list).run();

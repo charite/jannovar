@@ -1,6 +1,5 @@
 package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -122,12 +121,7 @@ public abstract class AbstractCompatibilityChecker implements InterfaceCompatibi
 	}
 	
 	public List<VariantContext> getMatchedVariants() {
-		List<VariantContext> output = new ArrayList<VariantContext>();
-		for (InheritanceVariantContext vc : list.getVcList()) {
-			if (vc.isMatchInheritance())
-				output.add(vc);
-		}
-		return output;
+		return list.getMatchedVariants();
 	}
 
 }
