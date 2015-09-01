@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>com.github.samtools</groupId>
 			<artifactId>htsjdk</artifactId>
-			<version>1.128</version>
+			<version>1.138</version>
 		</dependency>
 		<dependency>
 			<groupId>de.charite.compbio</groupId>
