@@ -23,7 +23,10 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.Compatibilit
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
+ * 
+ * @deprecated use {@link VariantContextCompatibilityCheckerXDominant} instead.
  */
+@Deprecated
 public class CompatibilityCheckerXDominant extends CompatibilityCheckerBase {
 
 	/**
