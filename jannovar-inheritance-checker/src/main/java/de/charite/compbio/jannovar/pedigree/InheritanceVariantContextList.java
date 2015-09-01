@@ -50,7 +50,7 @@ public final class InheritanceVariantContextList {
 	}
 
 	private boolean isXChromosomal(VariantContext vc) {
-		return vc.getContig().toLowerCase().matches("(^chrX$)|(^X$)|(^chr23$)|(^23$)");
+		return vc.getContig().toLowerCase().matches("(^chrx$)|(^x$)|(^chr23$)|(^23$)");
 	}
 
 	private boolean isAutosomal(VariantContext vc) {

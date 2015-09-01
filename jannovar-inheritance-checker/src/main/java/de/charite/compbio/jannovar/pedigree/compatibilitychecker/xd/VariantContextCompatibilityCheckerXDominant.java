@@ -63,7 +63,7 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractCompati
 
 	public void runSingleSampleCase() throws CompatibilityCheckerException {
 		if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE)
-			new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, list).run();
+			new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, list).runSingleSampleCase();
 		else {
 			// We allow homozygous and heterozygous (false call).
 			for (InheritanceVariantContext vc : list.getVcList())

@@ -8,8 +8,8 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.CompatibilityCheckerXDominant;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.CompatibilityCheckerXRecessive;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.VariantContextCompatibilityCheckerXDominant;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantContextCompatibilityCheckerXRecessive;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.GenotypeBuilder;
 import htsjdk.variant.variantcontext.VariantContext;
@@ -32,19 +32,19 @@ public abstract class AbstractCompatibilityCheckerTest {
 
 	String geneName = "bla";
 
-	private List<VariantContext> getInheritanceVariantContextList(ImmutableList<Genotype> genotypes) {
+	private List<VariantContext> getInheritanceVariantContextList(ImmutableList<Genotype> genotypes, boolean isXchromosomal) {
 
 		List<VariantContext> vcs = new ArrayList<VariantContext>();
-		vcs.add(getVariantContext(genotypes, "chr1", 1));
+		vcs.add(getVariantContext(genotypes, (isXchromosomal? "chrX" :"chr1"), 1));
 		return vcs;
 	}
 
 	private List<VariantContext> getInheritanceVariantContextList(ImmutableList<Genotype> genotypes1,
-			ImmutableList<Genotype> genotypes2) {
+			ImmutableList<Genotype> genotypes2, boolean isXchromosomal) {
 
 		List<VariantContext> vcs = new ArrayList<VariantContext>();
-		vcs.add(getVariantContext(genotypes1, "chr1", 1));
-		vcs.add(getVariantContext(genotypes2, "chr1", 2));
+		vcs.add(getVariantContext(genotypes1, (isXchromosomal? "chrX" :"chr1"), 1));
+		vcs.add(getVariantContext(genotypes2, (isXchromosomal? "chrX" :"chr1"), 2));
 		return vcs;
 	}
 
@@ -79,98 +79,98 @@ public abstract class AbstractCompatibilityCheckerTest {
 
 	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt)
 			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt));
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt1, Genotype gt2)
 			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2));
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list)
 			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list);
+		List<VariantContext> lst = getInheritanceVariantContextList(list,false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list1,
 			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2);
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt)
 			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt));
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt1, Genotype gt2)
 			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2));
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list)
 			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list);
+		List<VariantContext> lst = getInheritanceVariantContextList(list,false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
 	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list1,
 			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2);
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerXRecessive buildCheckerXR(Genotype gt) throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(ImmutableList.of(gt)));
-		return new CompatibilityCheckerXRecessive(pedigree, lst);
-	}
-
-	protected CompatibilityCheckerXRecessive buildCheckerXR(Genotype gt1, Genotype gt2)
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(Genotype gt)
 			throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true,
-				ImmutableList.of(ImmutableList.of(gt1), ImmutableList.of(gt2)));
-		return new CompatibilityCheckerXRecessive(pedigree, lst);
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),true);
+		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list)
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(Genotype gt1, Genotype gt2)
 			throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(list));
-		return new CompatibilityCheckerXRecessive(pedigree, lst);
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),true);
+		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list1,
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list)
+			throws CompatibilityCheckerException {
+		List<VariantContext> lst = getInheritanceVariantContextList(list,true);
+		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
+	}
+
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list1,
 			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(list1, list2));
-		return new CompatibilityCheckerXRecessive(pedigree, lst);
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,true);
+		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerXDominant buildCheckerXD(Genotype gt) throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(ImmutableList.of(gt)));
-		return new CompatibilityCheckerXDominant(pedigree, lst);
-	}
-
-	protected CompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list)
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(Genotype gt)
 			throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(list));
-		return new CompatibilityCheckerXDominant(pedigree, lst);
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),true);
+		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list1, ImmutableList<Genotype> list2)
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list)
 			throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true, ImmutableList.of(list1, list2));
-		return new CompatibilityCheckerXDominant(pedigree, lst);
+		List<VariantContext> lst = getInheritanceVariantContextList(list,true);
+		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
-	protected CompatibilityCheckerXDominant buildCheckerXD(Genotype gt1, Genotype gt2)
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list1,
+			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,true);
+		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
+	}
+
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(Genotype gt1, Genotype gt2)
 			throws CompatibilityCheckerException {
-		GenotypeList lst = new GenotypeList(geneName, names, true,
-				ImmutableList.of(ImmutableList.of(gt1), ImmutableList.of(gt2)));
-		return new CompatibilityCheckerXDominant(pedigree, lst);
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),true);
+		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
 	protected ImmutableList<Genotype> lst(Genotype... gts) {
