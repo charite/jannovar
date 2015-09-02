@@ -9,12 +9,13 @@ import com.google.common.collect.ImmutableList;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * Wrapper for a {@link List} of {@link VariantContext} for one {@link TranscriptInfo}.
+ * 
+ * This class is a wrapper for a {@link List} of {@link VariantContext}. It transforms every {@link VariantContext} into
+ * an {@link InheritanceVariantContext}. At also has teh ability to find out if the variants are XChromosomal or
+ * autosomal (or both).
+ * 
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  *
- * This name list is used for ensuring that the same order and number of individuals is used in the VCF file as in the
- * pedigree file.
- *
- * Max Schubach <max.schubach@charite.de>
  */
 public final class InheritanceVariantContextList {
 
@@ -25,20 +26,30 @@ public final class InheritanceVariantContextList {
 	private final boolean isXChromosomal;
 	/** whether or not the variants or only some of them are on the Autosomes */
 	private final boolean isAutosomal;
-
+	/** List of the {@link InheritanceVariantContext} */
 	private final List<InheritanceVariantContext> vcList;
 
-	/** the lists of genotype calls, each contains one entry for each individual */
-	// private final ImmutableList<ImmutableList<Genotype>> calls;
-
+	/**
+	 * Default constructor. Sets the List, the {@link #names}, and the chromosomal locations.
+	 * 
+	 * @param vcList
+	 *            The {@link VariantContext} list to store into this wrapper.
+	 */
 	public InheritanceVariantContextList(List<VariantContext> vcList) {
 		this.names = getNames(vcList);
 		boolean[] chromosomalLocation = getChromosomalLocation(vcList);
 		isAutosomal = chromosomalLocation[0];
 		isXChromosomal = chromosomalLocation[1];
-		this.vcList = new InheritanceVariantContext.Builder().variants(vcList).build();
+		this.vcList = new InheritanceVariantContext.ListBuilder().variants(vcList).build();
 	}
 
+	/**
+	 * Goes through the variants and checks weather they lie on the the X chromosome or on the autosomes (or both)
+	 * 
+	 * @param vcList
+	 *            List to iterate through the contigs.
+	 * @return Boolean array of size 2. First value is the autosomal, second the xchromosomal.
+	 */
 	private boolean[] getChromosomalLocation(List<VariantContext> vcList) {
 		boolean[] output = new boolean[] { false, false };
 		for (VariantContext vc : vcList) {
@@ -46,17 +57,33 @@ public final class InheritanceVariantContextList {
 			output[1] = output[1] || isXChromosomal(vc);
 		}
 		return output;
-
 	}
 
+	/**
+	 * @param vc
+	 *            Variant to check
+	 * @return <code>true</code> if the contig of the variant is on the chromosomeX (chrX|chr23|23|X)
+	 */
 	private boolean isXChromosomal(VariantContext vc) {
 		return vc.getContig().toLowerCase().matches("(^chrx$)|(^x$)|(^chr23$)|(^23$)");
 	}
 
+	/**
+	 * @param vc
+	 *            Variant to check
+	 * @return <code>true</code> if the contig of the variant is on one of the autosomes (chr1-chr22|1-22)
+	 */
 	private boolean isAutosomal(VariantContext vc) {
 		return vc.getContig().toLowerCase().matches("(^chr([0-9])|(1[0-9])|(2[012])$)|(^([0-9])|(1[0-9])|(2[012])$)");
 	}
 
+	/**
+	 * Extracts the sampel names out of the first variant.
+	 * 
+	 * @param vcList
+	 *            List of {@link VariantContext} to extract the names out of the first variant.
+	 * @return The sample names stored in the first variant of the list. If the list is empty the names are empty.
+	 */
 	private ImmutableList<String> getNames(List<VariantContext> vcList) {
 		ImmutableList.Builder<String> namesBuilder = new ImmutableList.Builder<String>();
 		for (VariantContext vc : vcList) {
@@ -106,9 +133,15 @@ public final class InheritanceVariantContextList {
 
 	@Override
 	public String toString() {
-		return "GenotypeList(" + Joiner.on(",").join(vcList) + ")";
+		return "InheritanceVariantContextList(" + Joiner.on(",").join(vcList) + ")";
 	}
 
+	/**
+	 * Getter for all {@link VariantContext} that matched the {@link ModeOfInheritance}.
+	 * 
+	 * @return A List of {@link VariantContext} that are <code>true</code> for
+	 *         {@link InheritanceVariantContext#isMatchInheritance()}.
+	 */
 	public List<VariantContext> getMatchedVariants() {
 		List<VariantContext> output = new ArrayList<VariantContext>();
 		for (InheritanceVariantContext vc : getVcList()) {
