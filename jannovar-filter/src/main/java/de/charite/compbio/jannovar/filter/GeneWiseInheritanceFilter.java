@@ -20,7 +20,6 @@ import de.charite.compbio.jannovar.impl.intervals.Interval;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -34,7 +33,12 @@ import htsjdk.variant.variantcontext.VariantContextComparator;
 /**
  * A {@link VariantContext} filter that collects variants for each genes and then checks for compatibility.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ */
+/**
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ *
  */
 public class GeneWiseInheritanceFilter implements VariantContextFilter {
 
@@ -50,10 +54,10 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	/** Compatibility checker for genotype call lists and {@link #pedigree}. */
 	private final InheritanceCompatibilityChecker checker;
 
-	/** Currently active genes and variants assigned to them. */
-	HashMap<Gene, List<VariantContext>> activeGenes = new HashMap<Gene, List<VariantContext>>();
-	Set<VariantContext> activeVariants;
-	
+	/** Stores the gene/variants relation. */
+	HashMap<Gene, List<VariantContext>> variantToGeneMap = new HashMap<Gene, List<VariantContext>>();
+	/** All variants that matches the inheritance will be stored here */
+	Set<VariantContext> passedVariants;
 
 	/** Initialize */
 	public GeneWiseInheritanceFilter(Pedigree pedigree, JannovarData jannovarDB,
@@ -63,11 +67,12 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		this.next = next;
 		this.checker = new InheritanceCompatibilityChecker.Builder().pedigree(pedigree).addModes(modeOfInheritances)
 				.build();
-		List<String> contigs = new ArrayList<String> ();
+		// TODO(mschubach) what about chr1 and 1?
+		List<String> contigs = new ArrayList<String>();
 		for (Chromosome chr : jannovarDB.getChromosomes().values()) {
 			contigs.add(chr.getChromosomeName());
 		}
-		this.activeVariants = Sets.newTreeSet(new VariantContextComparator(contigs));
+		this.passedVariants = Sets.newTreeSet(new VariantContextComparator(contigs));
 	}
 
 	/**
@@ -78,7 +83,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * @return list of genes, built from <code>jannovarDB</code>.
 	 */
 	private static GeneList buildGeneList(JannovarData jannovarDB) {
-		
+
 		// create one GeneBuilder for each gene, collect all transcripts for the gene
 		HashMap<String, GeneBuilder> geneMap = new HashMap<String, GeneBuilder>();
 		for (Chromosome chrom : jannovarDB.getChromosomes().values())
@@ -133,13 +138,20 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 				putVariantForGene(vc, gene);
 	}
 
+	/**
+	 * Adds a variant to a gene
+	 * 
+	 * @param vc
+	 *            The variant
+	 * @param gene
+	 *            The gene where the variant should be associated.
+	 */
 	private void putVariantForGene(VariantContext vc, Gene gene) {
-		if (!activeGenes.containsKey(gene)) {
-			activeGenes.put(gene, new ArrayList<VariantContext>());
+		if (!variantToGeneMap.containsKey(gene)) {
+			variantToGeneMap.put(gene, new ArrayList<VariantContext>());
 		}
-		activeGenes.get(gene).add(vc);
+		variantToGeneMap.get(gene).add(vc);
 	}
-
 
 	/**
 	 * Called when done with processing.
@@ -148,10 +160,10 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 */
 	@Override
 	public void finish() throws FilterException {
-		for (Map.Entry<Gene, List<VariantContext>> entry : activeGenes.entrySet()) {
+		for (Map.Entry<Gene, List<VariantContext>> entry : variantToGeneMap.entrySet()) {
 			checkVariantsForGene(entry.getKey());
 		}
-		for (VariantContext vc : activeVariants) {
+		for (VariantContext vc : passedVariants) {
 			LOGGER.trace("Variant remains {} ", new Object[] { vc });
 			if (next != null) {
 				FlaggedVariant fvc = new FlaggedVariant(vc);
@@ -160,24 +172,22 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		}
 
 		// there should be no more active variants or genes
-		if (activeVariants.isEmpty())
+		if (passedVariants.isEmpty())
 			throw new RuntimeException("all variants should be inactive now");
 		if (next != null)
 			next.finish();
 	}
 
 	/**
-	 * Mark currently buffered variants that are located in <code>gene</code> as "included".
-	 *
-	 * Called when we found out that the variants in <code>gene</code> are compatible with {@link #modeOfInheritances}.
-	 *
-	 * @param gene
-	 *            the {@link Gene} to mark the variants for
+	 * Adds the gioven varaints to the {@link #passedVariants}.
+	 * 
+	 * @param variants
+	 *            List of {@link VariantContext} that are arred to the {@link #passedVariants} tree
 	 */
 	private void addCompatibleVariants(List<VariantContext> variants) {
 
 		for (VariantContext vc : variants) {
-			activeVariants.add(vc);
+			passedVariants.add(vc);
 		}
 	}
 
@@ -203,15 +213,14 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	/**
 	 * Builds genotype call lists for variants in currently active genes, checks for compatibility, and in case of
 	 * compatibility, marks variants in <code>gene</code> as compatible.
+	 * 
+	 * @param gene
+	 * @throws FilterException
 	 */
-	private void checkVariantsForGene(Gene gene) throws FilterException {
-		try {
-			LOGGER.trace("Check inheritance and marking variants in gene {} ", new Object[] { gene });
-			List<VariantContext> filteredOutput = this.checker.getCompatibleWith(activeGenes.get(gene));
-			addCompatibleVariants(filteredOutput);
-		} catch (CompatibilityCheckerException e) {
-			throw new FilterException("Problem in mode of inheritance filter.", e);
-		}
+	private void checkVariantsForGene(Gene gene)  {
+		LOGGER.trace("Check inheritance and marking variants in gene {} ", new Object[] { gene });
+		List<VariantContext> filteredOutput = this.checker.getCompatibleWith(variantToGeneMap.get(gene));
+		addCompatibleVariants(filteredOutput);
 	}
 
 }

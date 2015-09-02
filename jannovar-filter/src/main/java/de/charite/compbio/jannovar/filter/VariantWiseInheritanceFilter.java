@@ -13,14 +13,14 @@ import com.google.common.collect.ImmutableSet;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * A {@link VariantContext} filter that checks each variant individually for compatibility.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public class VariantWiseInheritanceFilter implements VariantContextFilter {
 
@@ -48,16 +48,12 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 		// check gene for compatibility and mark variants as compatible if so
 		List<VariantContext> list = new ArrayList<VariantContext>();
 		list.add(fv.getVC());
-		try {
 
-			fv.setIncluded(!checker.getCompatibleWith(list).isEmpty());
-			if (fv.isIncluded())
-				next.put(fv);
-			LOGGER.trace("Variant {} compatible with {} (var={})", new Object[] { fv.isIncluded() ? "" : "in",
-					Joiner.on(", ").join(checker.getInheritanceModes()), fv.getVC() });
-		} catch (CompatibilityCheckerException e) {
-			throw new FilterException("Problem in mode of inheritance filter.", e);
-		}
+		fv.setIncluded(!checker.getCompatibleWith(list).isEmpty());
+		if (fv.isIncluded())
+			next.put(fv);
+		LOGGER.trace("Variant {} compatible with {} (var={})", new Object[] { fv.isIncluded() ? "" : "in",
+				Joiner.on(", ").join(checker.getInheritanceModes()), fv.getVC() });
 	}
 
 	public void finish() throws FilterException {
