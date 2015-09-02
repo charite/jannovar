@@ -55,7 +55,7 @@ public class JPedApp {
 		System.err.println("Family used from PED file: " + pedigree.getName());
 		for (Person p : pedigree.getMembers())
 			System.err.println("    " + p.getName());
-		new FilteredWriter(pedigree, options.modeOfInheritance, jannovarDB, reader, writer).run(options);
+		new FilteredWriter(pedigree, options.modeOfInheritances, jannovarDB, reader, writer).run(options);
 		writer.close();
 		final long endTime = System.nanoTime();
 		System.err.println(String.format("Filtering and writing took %.2f sec.",

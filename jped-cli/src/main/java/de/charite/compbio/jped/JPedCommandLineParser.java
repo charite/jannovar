@@ -3,12 +3,14 @@ package de.charite.compbio.jped;
 import java.io.PrintWriter;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
+
+import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 
@@ -20,7 +22,7 @@ public class JPedCommandLineParser {
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
 	/** the Apache commons command line parser */
-	protected Parser parser;
+	protected CommandLineParser parser;
 
 	/**
 	 * Calls initializeParser().
@@ -50,9 +52,14 @@ public class JPedCommandLineParser {
 		if (args.length != 4)
 			throw new ParseException("must have exactly four none-option arguments, had: " + args.length);
 
-		if (cmd.getOptionValue("inheritance-mode") != null)
-			result.modeOfInheritance = ModeOfInheritance.valueOf(ModeOfInheritance.class,
-					cmd.getOptionValue("inheritance-mode"));
+		ImmutableSet.Builder<ModeOfInheritance> inheritanceBuilder = new ImmutableSet.Builder<ModeOfInheritance>();
+		for (String modeString : cmd.getOptionValues("inheritance-mode")) {
+			ModeOfInheritance mode = ModeOfInheritance.valueOf(ModeOfInheritance.class, modeString);
+			inheritanceBuilder.add(mode);
+		}
+		ImmutableSet<ModeOfInheritance> inheritances = inheritanceBuilder.build();
+		if (!inheritances.isEmpty())
+			result.modeOfInheritances = inheritances;
 
 		result.geneWise = cmd.hasOption("gene-wise");
 		if (cmd.getOptionValue("database") != null)
@@ -72,11 +79,12 @@ public class JPedCommandLineParser {
 		options.addOption(new Option("v", "verbose", false, "enable verbose output"));
 		options.addOption(new Option("vv", "very-verbose", false, "enable very verbose output"));
 
-		options.addOption(new Option("m", "inheritance-mode", true, "enable very verbose output"));
+		Option.builder("m").hasArgs().desc("Check for the given inheritance mode(s) (can be multiple)")
+				.longOpt("inheritance-mode").build();
 		options.addOption(new Option("g", "gene-wise", false,
 				"gene-wise instead of variant-wise processing (required for compound heterozygous filtration)"));
 
-		parser = new GnuParser();
+		parser = new DefaultParser();
 	}
 
 	public void printHelp() {

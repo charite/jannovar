@@ -2,6 +2,9 @@ package de.charite.compbio.jped;
 
 import java.io.PrintStream;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableSet;
+
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 
 /**
@@ -27,7 +30,7 @@ public class JPedOptions {
 	String outputPath = null;
 
 	/** selected mode of inheritance */
-	ModeOfInheritance modeOfInheritance = ModeOfInheritance.UNINITIALIZED;
+	ImmutableSet<ModeOfInheritance> modeOfInheritances = ImmutableSet.of(ModeOfInheritance.UNINITIALIZED);
 
 	/** gene-wise instead of variant-wise processing (required for composite heterozygous) */
 	boolean geneWise = false;
@@ -41,7 +44,7 @@ public class JPedOptions {
 		out.println("ped path: " + pedPath);
 		out.println("input path: " + inputPath);
 		out.println("output path: " + outputPath);
-		out.println("modeOfInheritance: " + modeOfInheritance);
+		out.println("modeOfInheritance: " + Joiner.on(", ").join(modeOfInheritances));
 		out.println("geneWise: " + geneWise);
 	}
 

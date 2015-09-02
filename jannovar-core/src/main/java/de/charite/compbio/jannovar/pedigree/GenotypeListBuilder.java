@@ -8,7 +8,10 @@ import com.google.common.collect.ImmutableList;
  * Builder for {@link GenotypeList}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * 
+ *  @deprecated use {@link VariantContextList.Builder} instead.  
  */
+@Deprecated
 public class GenotypeListBuilder {
 	private final String geneID;
 	private boolean isXChromosomal;

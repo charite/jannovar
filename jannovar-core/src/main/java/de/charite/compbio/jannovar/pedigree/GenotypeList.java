@@ -14,8 +14,11 @@ import de.charite.compbio.jannovar.Immutable;
  * the pedigree file.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * 
+ * @deprecated Use {@link VariantContextList} instead
  */
 @Immutable
+@Deprecated
 public final class GenotypeList {
 
 	/** the name of the gene for this genotype call list */
