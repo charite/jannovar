@@ -7,11 +7,12 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceComp
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * 
- * This class is an extension of {@link VariantContext} for the {@link InheritanceCompatibilityChecker}.
- * 
- * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  *
+ * This class is an extension of {@link htsjdk.variant.variantcontext.VariantContext} for the
+ * {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}.
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @version 0.15-SNAPSHOT
  */
 public class InheritanceVariantContext extends VariantContext {
 
@@ -20,7 +21,7 @@ public class InheritanceVariantContext extends VariantContext {
 	 * {@link InheritanceVariantContext}.
 	 * 
 	 * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
-	 *
+	 * @version 0.15-SNAPSHOT
 	 */
 	static final class ListBuilder {
 
@@ -65,11 +66,11 @@ public class InheritanceVariantContext extends VariantContext {
 	private boolean matchInheritance;
 
 	/**
-	 * Default constructor. Copies the given {@link VariantContext} and sets the {@link #matchInheritance} to
-	 * <code>false</code>.
-	 * 
+	 * Default constructor. Copies the given {@link htsjdk.variant.variantcontext.VariantContext} and sets the
+	 * {@link #matchInheritance} to <code>false</code>.
+	 *
 	 * @param other
-	 *            Other {@link VariantContext} to copy.
+	 *            Other {@link htsjdk.variant.variantcontext.VariantContext} to copy.
 	 */
 	protected InheritanceVariantContext(VariantContext other) {
 		super(other);
@@ -77,18 +78,25 @@ public class InheritanceVariantContext extends VariantContext {
 	}
 
 	/**
+	 * <p>
+	 * Setter for the field <code>matchInheritance</code>.
+	 * </p>
+	 *
 	 * @param matchInheritance
-	 *            <code>true</code> if the {@link InheritanceVariantContext} matches the {@link ModeOfInheritance}
+	 *            <code>true</code> if the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext}
+	 *            matches the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}
 	 */
 	public void setMatchInheritance(boolean matchInheritance) {
 		this.matchInheritance = matchInheritance;
 	}
 
 	/**
-	 * Single {@link Person} {@link Genotype} getter. Used for the Single mode of the
-	 * {@link InheritanceCompatibilityChecker}.
-	 * 
-	 * @return the first {@link htsjdk.variant.variantcontext.Genotype} stored in the {@link VariantContext}
+	 * Single {@link de.charite.compbio.jannovar.pedigree.Person} {@link de.charite.compbio.jannovar.pedigree.Genotype}
+	 * getter. Used for the Single mode of the
+	 * {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}.
+	 *
+	 * @return the first {@link htsjdk.variant.variantcontext.Genotype} stored in the
+	 *         {@link htsjdk.variant.variantcontext.VariantContext}
 	 */
 	public Genotype getSingleSampleGenotype() {
 		return getGenotype(getGenotype(0));
@@ -96,8 +104,9 @@ public class InheritanceVariantContext extends VariantContext {
 
 	/**
 	 * getter of {@link #matchInheritance}.
-	 * 
-	 * @return <code>true</code> if the {@link InheritanceVariantContext} matches the {@link ModeOfInheritance}.
+	 *
+	 * @return <code>true</code> if the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext} matches
+	 *         the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
 	 */
 	public boolean isMatchInheritance() {
 		return matchInheritance;
@@ -128,10 +137,14 @@ public class InheritanceVariantContext extends VariantContext {
 	}
 
 	/**
-	 * Gets the Jannovar {@link Genotype} for a {@link Person} (name must be the same than in the VCF file)
-	 * 
-	 * @param p A {@link Person} in the {@link InheritanceVariantContext}
-	 * @return The {@link Genotype} of the {@link Person}.
+	 * Gets the Jannovar {@link de.charite.compbio.jannovar.pedigree.Genotype} for a
+	 * {@link de.charite.compbio.jannovar.pedigree.Person} (name must be the same than in the VCF file)
+	 *
+	 * @param p
+	 *            A {@link de.charite.compbio.jannovar.pedigree.Person} in the
+	 *            {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext}
+	 * @return The {@link de.charite.compbio.jannovar.pedigree.Genotype} of the
+	 *         {@link de.charite.compbio.jannovar.pedigree.Person}.
 	 */
 	public Genotype getGenotype(Person p) {
 		return getGenotype(getGenotype(p.getName()));

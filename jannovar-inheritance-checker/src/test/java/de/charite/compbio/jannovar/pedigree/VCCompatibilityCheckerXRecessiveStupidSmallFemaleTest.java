@@ -6,10 +6,19 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
-
+/**
+ * <p>VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest class.</p>
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @since 0.15
+ */
 public class VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest extends AbstractCompatibilityCheckerTest {
 
+	/**
+	 * <p>setUp.</p>
+	 *
+	 * @throws de.charite.compbio.jannovar.pedigree.PedParseException if any.
+	 */
 	@Before
 	public void setUp() throws PedParseException {
 		// STUPID PEDIGREE! The male must be affected. Otherwise it can only be
@@ -27,13 +36,19 @@ public class VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest extends Abstr
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2");
 	}
 
+	/**
+	 * <p>testSizeOfPedigree.</p>
+	 */
 	@Test
 	public void testSizeOfPedigree() {
 		Assert.assertEquals(4, pedigree.getMembers().size());
 	}
 
+	/**
+	 * <p>testCaseNegativesOneVariant.</p>
+	 */
 	@Test
-	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
+	public void testCaseNegativesOneVariant() {
 		Assert.assertFalse(!buildCheckerXR(lst(HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -85,8 +100,11 @@ public class VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest extends Abstr
 
 	}
 
+	/**
+	 * <p>testCaseNegativesTwoVariants.</p>
+	 */
 	@Test
-	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
+	public void testCaseNegativesTwoVariants() {
 		// compound heterozygous
 		Assert.assertFalse(!buildCheckerXR(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run().isEmpty());
@@ -101,13 +119,19 @@ public class VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest extends Abstr
 		Assert.assertFalse(!buildCheckerXR(lst(REF, HET, HET, HET), lst(HET, REF, HET, HET)).run().isEmpty());
 	}
 
+	/**
+	 * <p>testCasePositiveOneVariant.</p>
+	 */
 	@Test
-	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+	public void testCasePositiveOneVariant() {
 
 	}
 
+	/**
+	 * <p>testCasePositiveTwoVariants.</p>
+	 */
 	@Test
-	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
+	public void testCasePositiveTwoVariants() {
 
 	}
 

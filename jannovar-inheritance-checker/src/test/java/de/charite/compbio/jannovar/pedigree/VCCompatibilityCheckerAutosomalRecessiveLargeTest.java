@@ -6,10 +6,19 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
-
+/**
+ * <p>VCCompatibilityCheckerAutosomalRecessiveLargeTest class.</p>
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @since 0.15
+ */
 public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractCompatibilityCheckerTest {
 
+	/**
+	 * <p>setUp.</p>
+	 *
+	 * @throws de.charite.compbio.jannovar.pedigree.PedParseException if any.
+	 */
 	@Before
 	public void setUp() throws PedParseException {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
@@ -30,13 +39,19 @@ public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractC
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2", "II.3", "II.4", "III.1", "III.2", "IV.1", "IV.2");
 	}
 
+	/**
+	 * <p>testSizeOfPedigree.</p>
+	 */
 	@Test
 	public void testSizeOfPedigree() {
 		Assert.assertEquals(10, pedigree.getMembers().size());
 	}
 
+	/**
+	 * <p>testCaseNegativesOneVariant.</p>
+	 */
 	@Test
-	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
+	public void testCaseNegativesOneVariant() {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET, HET, HET, HET, HET, HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(REF, REF, REF, REF, REF, REF, REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -52,12 +67,18 @@ public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractC
 
 	}
 
+	/**
+	 * <p>testCaseNegativesTwoVariants.</p>
+	 */
 	@Test
-	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
+	public void testCaseNegativesTwoVariants() {
 	}
 
+	/**
+	 * <p>testCasePositiveOneVariant.</p>
+	 */
 	@Test
-	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+	public void testCasePositiveOneVariant() {
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, UKN, HET, HET, ALT, REF)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, REF, HET, HET, ALT, REF)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, ALT, HET, HET, ALT, REF)).run().size() == 1);
@@ -75,8 +96,11 @@ public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractC
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, REF, ALT, UKN, HET, HET, ALT, REF)).run().size() == 1);
 	}
 
+	/**
+	 * <p>testCasePositiveTwoVariants.</p>
+	 */
 	@Test
-	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
+	public void testCasePositiveTwoVariants() {
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF),
 										 lst(REF, HET, HET, REF, HET, UKN, HET, REF, HET, REF)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(lst(REF, HET, REF, HET, HET, UKN, HET, HET, HET, REF),

@@ -6,10 +6,19 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
-
+/**
+ * <p>VCCompatibilityCheckerXDominantSingletonFemaleTest class.</p>
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @since 0.15
+ */
 public class VCCompatibilityCheckerXDominantSingletonFemaleTest extends AbstractCompatibilityCheckerTest {
 
+	/**
+	 * <p>setUp.</p>
+	 *
+	 * @throws de.charite.compbio.jannovar.pedigree.PedParseException if any.
+	 */
 	@Before
 	public void setUp() throws PedParseException {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
@@ -21,20 +30,29 @@ public class VCCompatibilityCheckerXDominantSingletonFemaleTest extends Abstract
 		this.names = ImmutableList.of("I.1");
 	}
 
+	/**
+	 * <p>testSizeOfPedigree.</p>
+	 */
 	@Test
 	public void testSizeOfPedigree() {
 		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
+	/**
+	 * <p>testCaseNegativesOneVariant.</p>
+	 */
 	@Test
-	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
+	public void testCaseNegativesOneVariant() {
 		Assert.assertFalse(!buildCheckerXD(REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXD(UKN).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXD(ALT).run().isEmpty());
 	}
 
+	/**
+	 * <p>testCaseNegativesTwoVariants.</p>
+	 */
 	@Test
-	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
+	public void testCaseNegativesTwoVariants() {
 		Assert.assertFalse(!buildCheckerXD(REF, REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXD(REF, UKN).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXD(UKN, UKN).run().isEmpty());
@@ -43,13 +61,19 @@ public class VCCompatibilityCheckerXDominantSingletonFemaleTest extends Abstract
 		Assert.assertFalse(!buildCheckerXD(ALT, ALT).run().isEmpty());
 	}
 
+	/**
+	 * <p>testCasePositiveOneVariant.</p>
+	 */
 	@Test
-	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+	public void testCasePositiveOneVariant() {
 		Assert.assertTrue(buildCheckerXD(HET).run().size() == 1);
 	}
 
+	/**
+	 * <p>testCasePositiveTwoVariants.</p>
+	 */
 	@Test
-	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
+	public void testCasePositiveTwoVariants() {
 		Assert.assertTrue(buildCheckerXD(HET, REF).run().size() == 1);
 		Assert.assertTrue(buildCheckerXD(UKN, HET).run().size() == 1);
 		Assert.assertTrue(buildCheckerXD(HET, HET).run().size() == 2);

@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceComp
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and X
+ * Helper class for checking a {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} for compatibility with a {@link de.charite.compbio.jannovar.pedigree.Pedigree} and X
  * recessive mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
@@ -26,39 +26,45 @@ import htsjdk.variant.variantcontext.VariantContext;
  * because only affected males can be heredity the variant. De-novo mutations will be handled also from dominant
  * compatibility checker. If the gene is recessive some have to look for the second mutation by its own.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @version 0.15-SNAPSHOT
  */
 public class VariantContextCompatibilityCheckerXRecessive extends AbstractVariantContextCompatibilityChecker {
 
 	/**
-	 * Initialize compatibility checker and perform some sanity checks.
+	 * Initialize compatibility checker for X recessive and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the
-	 * variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples
-	 * represented by the {@link InheritanceVariantContextList} must be in the same order as the list of individuals
-	 * contained in this pedigree.
-	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      InheritanceVariantContextList)
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the initialize
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerXRecessive(Pedigree pedigree, InheritanceVariantContextList list)
 			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
-
+	/**
+	 * Initialize compatibility checker for X recessive and perform some sanity checks.
+	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      List)
+	 * @param pedigree
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
+	 * @param list
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
+	 *             if the pedigree or variant list is invalid
+	 */
 	public VariantContextCompatibilityCheckerXRecessive(Pedigree pedigree, List<VariantContext> list) throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker#run()
-	 */
 	@Override
 	public List<VariantContext> run() throws InheritanceCompatibilityCheckerException {
 		if (!list.isXChromosomal())
@@ -68,15 +74,9 @@ public class VariantContextCompatibilityCheckerXRecessive extends AbstractVarian
 		return super.getMatchedVariants();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
-	 */
 	public void runSingleSampleCase() throws InheritanceCompatibilityCheckerException {
 	}
 
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
-	 */
 	public void runMultiSampleCase() {
 	}
 

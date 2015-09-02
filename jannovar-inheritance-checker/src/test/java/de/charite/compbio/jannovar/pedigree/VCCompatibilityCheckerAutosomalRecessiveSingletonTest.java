@@ -6,10 +6,19 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
-
+/**
+ * <p>VCCompatibilityCheckerAutosomalRecessiveSingletonTest class.</p>
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @since 0.15
+ */
 public class VCCompatibilityCheckerAutosomalRecessiveSingletonTest extends AbstractCompatibilityCheckerTest {
 
+	/**
+	 * <p>setUp.</p>
+	 *
+	 * @throws de.charite.compbio.jannovar.pedigree.PedParseException if any.
+	 */
 	@Before
 	public void setUp() throws PedParseException {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
@@ -21,33 +30,48 @@ public class VCCompatibilityCheckerAutosomalRecessiveSingletonTest extends Abstr
 		this.names = ImmutableList.of("I.1");
 	}
 
+	/**
+	 * <p>testSizeOfPedigree.</p>
+	 */
 	@Test
 	public void testSizeOfPedigree() {
 		Assert.assertEquals(1, pedigree.getMembers().size());
 	}
 
+	/**
+	 * <p>testCaseNegativesOneVariant.</p>
+	 */
 	@Test
-	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
+	public void testCaseNegativesOneVariant() {
 		Assert.assertFalse(!buildCheckerAR(REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(UKN).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(HET).run().isEmpty());
 	}
 
+	/**
+	 * <p>testCaseNegativesTwoVariants.</p>
+	 */
 	@Test
-	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
+	public void testCaseNegativesTwoVariants() {
 		Assert.assertFalse(!buildCheckerAR(HET, REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(REF, UKN).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(UKN, HET).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(UKN, UKN).run().isEmpty());
 	}
 
+	/**
+	 * <p>testCasePositiveOneVariant.</p>
+	 */
 	@Test
-	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+	public void testCasePositiveOneVariant() {
 		Assert.assertTrue(buildCheckerAR(ALT).run().size() == 1);
 	}
 
+	/**
+	 * <p>testCasePositiveTwoVariants.</p>
+	 */
 	@Test
-	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
+	public void testCasePositiveTwoVariants() {
 		Assert.assertTrue(buildCheckerAR(HET, HET).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(ALT, REF).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(UKN, ALT).run().size() == 1);

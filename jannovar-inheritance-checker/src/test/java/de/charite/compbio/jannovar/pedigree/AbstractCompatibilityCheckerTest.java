@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.VariantContextCompatibilityCheckerXDominant;
@@ -15,7 +14,12 @@ import htsjdk.variant.variantcontext.GenotypeBuilder;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
-/** Base class for compatibility checkers with utility methods. */
+/**
+ * Base class for compatibility checkers with utility methods.
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @since 0.15
+ */
 public abstract class AbstractCompatibilityCheckerTest {
 
 	protected final Genotype HET = Genotype.HETEROZYGOUS;
@@ -32,10 +36,11 @@ public abstract class AbstractCompatibilityCheckerTest {
 
 	String geneName = "bla";
 
-	private List<VariantContext> getInheritanceVariantContextList(ImmutableList<Genotype> genotypes, boolean isXchromosomal) {
+	private List<VariantContext> getInheritanceVariantContextList(ImmutableList<Genotype> genotypes,
+			boolean isXchromosomal) {
 
 		List<VariantContext> vcs = new ArrayList<VariantContext>();
-		vcs.add(getVariantContext(genotypes, (isXchromosomal? "chrX" :"chr1"), 1));
+		vcs.add(getVariantContext(genotypes, (isXchromosomal ? "chrX" : "chr1"), 1));
 		return vcs;
 	}
 
@@ -43,8 +48,8 @@ public abstract class AbstractCompatibilityCheckerTest {
 			ImmutableList<Genotype> genotypes2, boolean isXchromosomal) {
 
 		List<VariantContext> vcs = new ArrayList<VariantContext>();
-		vcs.add(getVariantContext(genotypes1, (isXchromosomal? "chrX" :"chr1"), 1));
-		vcs.add(getVariantContext(genotypes2, (isXchromosomal? "chrX" :"chr1"), 2));
+		vcs.add(getVariantContext(genotypes1, (isXchromosomal ? "chrX" : "chr1"), 1));
+		vcs.add(getVariantContext(genotypes2, (isXchromosomal ? "chrX" : "chr1"), 2));
 		return vcs;
 	}
 
@@ -77,102 +82,202 @@ public abstract class AbstractCompatibilityCheckerTest {
 		return vcBuilder.genotypes(vcGenotypes).make();
 	}
 
-	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),false);
+	/**
+	 * <p>buildCheckerAD.</p>
+	 *
+	 * @param gt a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant} object.
+	 */
+	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt), false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt1, Genotype gt2)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),false);
+	/**
+	 * <p>buildCheckerAD.</p>
+	 *
+	 * @param gt1 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @param gt2 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant} object.
+	 */
+	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(Genotype gt1, Genotype gt2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),
+				false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list,false);
+	/**
+	 * <p>buildCheckerAD.</p>
+	 *
+	 * @param list a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant} object.
+	 */
+	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list, false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
+	/**
+	 * <p>buildCheckerAD.</p>
+	 *
+	 * @param list1 a {@link com.google.common.collect.ImmutableList} object.
+	 * @param list2 a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant} object.
+	 */
 	protected VariantContextCompatibilityCheckerAutosomalDominant buildCheckerAD(ImmutableList<Genotype> list1,
-			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,false);
+			ImmutableList<Genotype> list2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2, false);
 		return new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),false);
+	/**
+	 * <p>buildCheckerAR.</p>
+	 *
+	 * @param gt a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive} object.
+	 */
+	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt), false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt1, Genotype gt2)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),false);
+	/**
+	 * <p>buildCheckerAR.</p>
+	 *
+	 * @param gt1 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @param gt2 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive} object.
+	 */
+	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(Genotype gt1, Genotype gt2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),
+				false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list,false);
+	/**
+	 * <p>buildCheckerAR.</p>
+	 *
+	 * @param list a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive} object.
+	 */
+	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list, false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
+	/**
+	 * <p>buildCheckerAR.</p>
+	 *
+	 * @param list1 a {@link com.google.common.collect.ImmutableList} object.
+	 * @param list2 a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive} object.
+	 */
 	protected VariantContextCompatibilityCheckerAutosomalRecessive buildCheckerAR(ImmutableList<Genotype> list1,
-			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,false);
+			ImmutableList<Genotype> list2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2, false);
 		return new VariantContextCompatibilityCheckerAutosomalRecessive(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(Genotype gt)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),true);
+	/**
+	 * <p>buildCheckerXR.</p>
+	 *
+	 * @param gt a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantContextCompatibilityCheckerXRecessive} object.
+	 */
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(Genotype gt) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt), true);
 		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(Genotype gt1, Genotype gt2)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),true);
+	/**
+	 * <p>buildCheckerXR.</p>
+	 *
+	 * @param gt1 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @param gt2 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantContextCompatibilityCheckerXRecessive} object.
+	 */
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(Genotype gt1, Genotype gt2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2), true);
 		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list,true);
+	/**
+	 * <p>buildCheckerXR.</p>
+	 *
+	 * @param list a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantContextCompatibilityCheckerXRecessive} object.
+	 */
+	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list, true);
 		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
+	/**
+	 * <p>buildCheckerXR.</p>
+	 *
+	 * @param list1 a {@link com.google.common.collect.ImmutableList} object.
+	 * @param list2 a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantContextCompatibilityCheckerXRecessive} object.
+	 */
 	protected VariantContextCompatibilityCheckerXRecessive buildCheckerXR(ImmutableList<Genotype> list1,
-			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,true);
+			ImmutableList<Genotype> list2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2, true);
 		return new VariantContextCompatibilityCheckerXRecessive(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(Genotype gt)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt),true);
+	/**
+	 * <p>buildCheckerXD.</p>
+	 *
+	 * @param gt a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.VariantContextCompatibilityCheckerXDominant} object.
+	 */
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(Genotype gt) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt), true);
 		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list,true);
+	/**
+	 * <p>buildCheckerXD.</p>
+	 *
+	 * @param list a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.VariantContextCompatibilityCheckerXDominant} object.
+	 */
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list, true);
 		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
+	/**
+	 * <p>buildCheckerXD.</p>
+	 *
+	 * @param list1 a {@link com.google.common.collect.ImmutableList} object.
+	 * @param list2 a {@link com.google.common.collect.ImmutableList} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.VariantContextCompatibilityCheckerXDominant} object.
+	 */
 	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(ImmutableList<Genotype> list1,
-			ImmutableList<Genotype> list2) throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2,true);
+			ImmutableList<Genotype> list2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(list1, list2, true);
 		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
-	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(Genotype gt1, Genotype gt2)
-			throws CompatibilityCheckerException {
-		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2),true);
+	/**
+	 * <p>buildCheckerXD.</p>
+	 *
+	 * @param gt1 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @param gt2 a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.VariantContextCompatibilityCheckerXDominant} object.
+	 */
+	protected VariantContextCompatibilityCheckerXDominant buildCheckerXD(Genotype gt1, Genotype gt2) {
+		List<VariantContext> lst = getInheritanceVariantContextList(ImmutableList.of(gt1), ImmutableList.of(gt2), true);
 		return new VariantContextCompatibilityCheckerXDominant(pedigree, lst);
 	}
 
+	/**
+	 * <p>lst.</p>
+	 *
+	 * @param gts a {@link de.charite.compbio.jannovar.pedigree.Genotype} object.
+	 * @return a {@link com.google.common.collect.ImmutableList} object.
+	 */
 	protected ImmutableList<Genotype> lst(Genotype... gts) {
 		ImmutableList.Builder<Genotype> builder = new ImmutableList.Builder<Genotype>();
 		for (int i = 0; i < gts.length; ++i)

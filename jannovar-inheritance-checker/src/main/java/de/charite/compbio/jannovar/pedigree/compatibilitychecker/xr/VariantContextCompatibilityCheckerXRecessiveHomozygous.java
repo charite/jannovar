@@ -27,9 +27,10 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceComp
  * affected individuals are compatible if no affected individual is {@link Genotype#HOMOZYGOUS_REF} or
  * {@link Genotype#HETEROZYGOUS} and there is at least one affected individual that is {@link Genotype#HOMOZYGOUS_ALT}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @version 0.15-SNAPSHOT
  */
 class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractVariantContextCompatibilityChecker {
 
@@ -39,18 +40,16 @@ class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractVar
 	protected final PedigreeQueryDecorator queryDecorator;
 
 	/**
-	 * Initialize compatibility checker and perform some sanity checks.
+	 * Initialize compatibility checker for X recessive homozygous and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the
-	 * variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples
-	 * represented by the {@link InheritanceVariantContextList} must be in the same order as the list of individuals
-	 * contained in this pedigree.
-	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      InheritanceVariantContextList)
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the initialize
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the
+	 *            initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerXRecessiveHomozygous(Pedigree pedigree, InheritanceVariantContextList list)
@@ -59,7 +58,7 @@ class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractVar
 
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);
 	}
-
+	
 	public void runSingleSampleCase() {
 		// for both male and female subjects, return true if homozygous alt
 		for (InheritanceVariantContext vc : list.getVcList())

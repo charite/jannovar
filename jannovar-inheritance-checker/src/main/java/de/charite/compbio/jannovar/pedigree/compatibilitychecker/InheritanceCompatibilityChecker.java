@@ -15,10 +15,11 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantConte
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * Decorator for {@link Pedigree} that allows checking whether a {@link htsjdk.variant.variantcontext.Genotype} call of
- * a {@link VariantContext} is compatible with a selected mode of inheritance.
+ * Decorator for {@link de.charite.compbio.jannovar.pedigree.Pedigree} that allows checking whether a {@link htsjdk.variant.variantcontext.Genotype} call of
+ * a {@link htsjdk.variant.variantcontext.VariantContext} is compatible with a selected mode of inheritance.
  *
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @version 0.15-SNAPSHOT
  */
 public class InheritanceCompatibilityChecker {
 
@@ -104,27 +105,31 @@ public class InheritanceCompatibilityChecker {
 	}
 
 	/**
-	 * @return The pedigree used in this {@link InheritanceCompatibilityChecker}
+	 * <p>Getter for the field <code>pedigree</code>.</p>
+	 *
+	 * @return The pedigree used in this {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}
 	 */
 	public Pedigree getPedigree() {
 		return pedigree;
 	}
 
 	/**
-	 * @return mode of inheritances to check in this {@link InheritanceCompatibilityChecker}
+	 * <p>Getter for the field <code>inheritanceModes</code>.</p>
+	 *
+	 * @return mode of inheritances to check in this {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}
 	 */
 	public ImmutableSet<ModeOfInheritance> getInheritanceModes() {
 		return inheritanceModes;
 	}
 
 	/**
-	 * Method for checking whether a {@link List} of {@link VariantContext} is compatible with a given
-	 * {@link ModeOfInheritance} and {@link Pedigree}.
+	 * Method for checking whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is compatible with a given
+	 * {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} and {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
 	 *
 	 * @param vcList
-	 *            {@link List} of {@link VariantContext} to check for compatibility
-	 * @return A list with all {@link VariantContext} that matches the mode of inheritances.
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} to check for compatibility
+	 * @return A list with all {@link htsjdk.variant.variantcontext.VariantContext} that matches the mode of inheritances.
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
 	public List<VariantContext> getCompatibleWith(List<VariantContext> vcList)

@@ -16,35 +16,34 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariant
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 
 /**
- * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and
+ * Helper class for checking a {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} for compatibility with a {@link de.charite.compbio.jannovar.pedigree.Pedigree} and
  * autosomal recessive compound het mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
  *
- * In the case of a single individual, we require at least two {@link Genotype#HETEROZYGOUS} genotype calls.
+ * In the case of a single individual, we require at least two {@link de.charite.compbio.jannovar.pedigree.Genotype#HETEROZYGOUS} genotype calls.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @version 0.15-SNAPSHOT
  */
-public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet extends AbstractVariantContextCompatibilityChecker {
+public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet
+		extends AbstractVariantContextCompatibilityChecker {
 
 	/** list of siblings for each person in {@link #pedigree} */
 	private final ImmutableMap<Person, ImmutableList<Person>> siblings;
 
 	/**
-	 * Initialize compatibility checker and perform some sanity checks.
+	 * Initialize compatibility checker for autosomal recessive compund het and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the
-	 * variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples
-	 * represented by the {@link InheritanceVariantContextList} must be in the same order as the list of individuals
-	 * contained in this pedigree.
-	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      InheritanceVariantContextList)
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the initialize
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet(Pedigree pedigree,
@@ -52,10 +51,7 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet ext
 		super(pedigree, list);
 		this.siblings = buildSiblings(pedigree);
 	}
-
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
-	 */
+	
 	public void runSingleSampleCase() {
 		List<Integer> hets = new ArrayList<Integer>();
 		for (int i = 0; i < list.getVcList().size(); i++) {
@@ -69,9 +65,6 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet ext
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
-	 */
 	public void runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.
@@ -168,7 +161,7 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet ext
 				// variants
 				for (InheritanceVariantContext pat : paternal)
 					for (InheritanceVariantContext mat : maternal) {
-						if (pat == mat) //FIXME what means this NOW?
+						if (pat == mat) // FIXME what means this NOW?
 							continue; // exclude if variants are identical
 						if (pat.getGenotype(p) == Genotype.NOT_OBSERVED
 								&& (p.getFather() == null || pat.getGenotype(p.getFather()) == Genotype.NOT_OBSERVED)

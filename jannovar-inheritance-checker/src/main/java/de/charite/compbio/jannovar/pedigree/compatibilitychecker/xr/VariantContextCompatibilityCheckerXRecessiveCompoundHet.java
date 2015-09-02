@@ -34,9 +34,10 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantConte
  * individuals are not {@link Genotype#HOMOZYGOUS_ALT} and should not have it comp. het (only possible if parents are
  * available).
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @version 0.15-SNAPSHOT
  */
 class VariantContextCompatibilityCheckerXRecessiveCompoundHet extends AbstractVariantContextCompatibilityChecker {
 
@@ -44,18 +45,15 @@ class VariantContextCompatibilityCheckerXRecessiveCompoundHet extends AbstractVa
 	public final ImmutableMap<Person, ImmutableList<Person>> siblings;
 
 	/**
-	 * Initialize compatibility checker and perform some sanity checks.
+	 * Initialize compatibility checker for X recessive compund heterozygous and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the
-	 * variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples
-	 * represented by the {@link InheritanceVariantContextList} must be in the same order as the list of individuals
-	 * contained in this pedigree.
-	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      InheritanceVariantContextList)
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the initialize
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerXRecessiveCompoundHet(Pedigree pedigree,
@@ -63,10 +61,7 @@ class VariantContextCompatibilityCheckerXRecessiveCompoundHet extends AbstractVa
 		super(pedigree, list);
 		this.siblings = buildSiblings(pedigree);
 	}
-
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
-	 */
+	
 	public void runSingleSampleCase() throws InheritanceCompatibilityCheckerException {
 		// for female single case samples, allow autosomal recessive compound
 		// heterozygous
@@ -75,9 +70,6 @@ class VariantContextCompatibilityCheckerXRecessiveCompoundHet extends AbstractVa
 
 	}
 
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
-	 */
 	public void runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.

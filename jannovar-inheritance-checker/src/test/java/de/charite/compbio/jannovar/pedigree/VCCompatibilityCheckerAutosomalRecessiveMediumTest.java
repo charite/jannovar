@@ -6,10 +6,19 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
-
+/**
+ * <p>VCCompatibilityCheckerAutosomalRecessiveMediumTest class.</p>
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @since 0.15
+ */
 public class VCCompatibilityCheckerAutosomalRecessiveMediumTest extends AbstractCompatibilityCheckerTest {
 
+	/**
+	 * <p>setUp.</p>
+	 *
+	 * @throws de.charite.compbio.jannovar.pedigree.PedParseException if any.
+	 */
 	@Before
 	public void setUp() throws PedParseException {
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
@@ -29,13 +38,19 @@ public class VCCompatibilityCheckerAutosomalRecessiveMediumTest extends Abstract
 		this.names = ImmutableList.of("I.1", "I.2", "II.1", "II.2", "II.3", "II.4", "III.1", "III.2", "IV.1");
 	}
 
+	/**
+	 * <p>testSizeOfPedigree.</p>
+	 */
 	@Test
 	public void testSizeOfPedigree() {
 		Assert.assertEquals(9, pedigree.getMembers().size());
 	}
 
+	/**
+	 * <p>testCaseNegativesOneVariant.</p>
+	 */
 	@Test
-	public void testCaseNegativesOneVariant() throws CompatibilityCheckerException {
+	public void testCaseNegativesOneVariant() {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET, HET, HET, HET, HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(REF, REF, REF, REF, REF, REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -65,8 +80,11 @@ public class VCCompatibilityCheckerAutosomalRecessiveMediumTest extends Abstract
 
 	}
 
+	/**
+	 * <p>testCaseNegativesTwoVariants.</p>
+	 */
 	@Test
-	public void testCaseNegativesTwoVariants() throws CompatibilityCheckerException {
+	public void testCaseNegativesTwoVariants() {
 		// compound heterozygous
 		Assert.assertFalse(!buildCheckerAR(lst(HET, REF, REF, HET, REF, REF, ALT, REF, HET), lst(REF, REF, REF, REF, REF, HET, REF, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(HET, REF, REF, HET, REF, REF, HET, ALT, HET), lst(REF, REF, REF, REF, REF, HET, REF, HET, HET)).run().isEmpty());
@@ -78,8 +96,11 @@ public class VCCompatibilityCheckerAutosomalRecessiveMediumTest extends Abstract
 		Assert.assertFalse(!buildCheckerAR(lst(REF, HET, REF, HET, REF, REF, HET, REF, HET), lst(HET, REF, REF, HET, REF, HET, REF, HET, HET)).run().isEmpty());
 	}
 
+	/**
+	 * <p>testCasePositiveOneVariant.</p>
+	 */
 	@Test
-	public void testCasePositiveOneVariant() throws CompatibilityCheckerException {
+	public void testCasePositiveOneVariant() {
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, HET, HET, REF, HET, HET, ALT)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, HET, REF, HET, HET, ALT)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, HET, HET, HET, REF, HET, HET, ALT)).run().size() == 1);
@@ -101,8 +122,11 @@ public class VCCompatibilityCheckerAutosomalRecessiveMediumTest extends Abstract
 		
 	}
 
+	/**
+	 * <p>testCasePositiveTwoVariants.</p>
+	 */
 	@Test
-	public void testCasePositiveTwoVariants() throws CompatibilityCheckerException {
+	public void testCasePositiveTwoVariants() {
 		// compound heterozygous
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, HET, REF, REF, HET, REF, HET), lst(REF, REF, REF, REF, REF, HET, REF, HET, HET)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(lst(REF, REF, REF, REF, REF, HET, REF, HET, HET), lst(HET, REF, REF, HET, REF, REF, HET, REF, HET)).run().size() == 2);

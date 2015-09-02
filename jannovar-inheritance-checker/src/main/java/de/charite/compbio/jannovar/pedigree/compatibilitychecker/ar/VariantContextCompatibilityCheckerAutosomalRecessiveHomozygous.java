@@ -13,57 +13,49 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariant
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 
 /**
- * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and autosomal
+ * Helper class for checking a {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} for compatibility with a {@link de.charite.compbio.jannovar.pedigree.Pedigree} and autosomal
  * recessive homozygous mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
  *
- * In the case of a single individual, we require {@link Genotype#HOMOZYGOUS_ALT}.
+ * In the case of a single individual, we require {@link de.charite.compbio.jannovar.pedigree.Genotype#HOMOZYGOUS_ALT}.
  *
  * In the case of multiple individuals, we require that the affects are compatible, that the unaffected parents of
- * affected individuals are not {@link Genotype#HOMOZYGOUS_REF} or {@link Genotype#HOMOZYGOUS_ALT} and that the
- * unaffected individuals are not {@link Genotype#HOMOZYGOUS_ALT}. The affected individuals are compatible if no
- * affected individual is {@link Genotype#HOMOZYGOUS_REF} or {@link Genotype#HETEROZYGOUS} and there is at least one
- * affected individual that is {@link Genotype#HOMOZYGOUS_ALT}.
+ * affected individuals are not {@link de.charite.compbio.jannovar.pedigree.Genotype#HOMOZYGOUS_REF} or {@link de.charite.compbio.jannovar.pedigree.Genotype#HOMOZYGOUS_ALT} and that the
+ * unaffected individuals are not {@link de.charite.compbio.jannovar.pedigree.Genotype#HOMOZYGOUS_ALT}. The affected individuals are compatible if no
+ * affected individual is {@link de.charite.compbio.jannovar.pedigree.Genotype#HOMOZYGOUS_REF} or {@link de.charite.compbio.jannovar.pedigree.Genotype#HETEROZYGOUS} and there is at least one
+ * affected individual that is {@link de.charite.compbio.jannovar.pedigree.Genotype#HOMOZYGOUS_ALT}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @version 0.15-SNAPSHOT
  */
 public class VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous extends AbstractVariantContextCompatibilityChecker {
 
 	/**
-	 * Initialize compatibility checker and perform some sanity checks.
+	 * Initialize compatibility checker for autosomal recessive homozygout and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the variants
-	 * found in a certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented
-	 * by the {@link InheritanceVariantContextList} must be in the same order as the list of individuals contained in this
-	 * pedigree.
-	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      InheritanceVariantContextList)
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the initialize
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous(Pedigree pedigree, InheritanceVariantContextList list)
 			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
-
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
-	 */
+	
 	public void runSingleSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (vc.getSingleSampleGenotype() == Genotype.HOMOZYGOUS_ALT)
 				vc.setMatchInheritance(true);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
-	 */
 	public void runMultiSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (containsCompatibleHomozygousVariants(vc))

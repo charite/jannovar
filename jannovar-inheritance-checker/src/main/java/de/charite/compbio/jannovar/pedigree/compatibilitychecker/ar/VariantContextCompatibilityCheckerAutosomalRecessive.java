@@ -1,5 +1,6 @@
 package de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
@@ -9,34 +10,33 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceComp
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and autosomal recessive
- * mode of inheritance.
+ * Helper class for checking a {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} for compatibility with a {@link de.charite.compbio.jannovar.pedigree.Pedigree} and
+ * autosomal recessive mode of inheritance.
  *
  * <h2>Compatibility Check</h2>
  *
  * This class first checks whether we have a case of autosomal recessive homozygous and falls back to a check to
  * autosomal recessive compound heterozygous. The checks themselves are delegated to
- * {@link VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous} and
- * {@link VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet}.
+ * {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous} and
+ * {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @version 0.15-SNAPSHOT
  */
 public class VariantContextCompatibilityCheckerAutosomalRecessive extends AbstractVariantContextCompatibilityChecker {
 
 	/**
-	 * Initialize compatibility checker and perform some sanity checks.
+	 * Initialize compatibility checker for Autosomal recessive and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the variants found in a
-	 * certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented by the
-	 * {@link InheritanceVariantContextList} must be in the same order as the list of individuals contained in this pedigree.
-	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree, List)
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the initialize
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalRecessive(Pedigree pedigree, List<VariantContext> list)
@@ -44,15 +44,27 @@ public class VariantContextCompatibilityCheckerAutosomalRecessive extends Abstra
 		super(pedigree, list);
 	}
 
-	public VariantContextCompatibilityCheckerAutosomalRecessive(Pedigree pedigree, InheritanceVariantContextList list) {
+	/**
+	 * Initialize compatibility checker for autosomal recessive and perform some sanity checks.
+	 *
+	 * @see AbstractVariantContextCompatibilityChecker#AbstractVariantContextCompatibilityChecker(Pedigree,
+	 *      InheritanceVariantContextList)
+	 * @param pedigree
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the initialize
+	 * @param list
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
+	 *             if the pedigree or variant list is invalid
+	 */
+	public VariantContextCompatibilityCheckerAutosomalRecessive(Pedigree pedigree, InheritanceVariantContextList list)
+			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
-
-	/* (non-Javadoc)
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker#run()
-	 */
+	
 	@Override
 	public List<VariantContext> run() throws InheritanceCompatibilityCheckerException {
+		if (!list.isAutosomal())
+			return new ArrayList<VariantContext>(0);
 		new VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous(pedigree, list).run();
 		new VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run();
 		return super.getMatchedVariants();

@@ -7,18 +7,18 @@ import com.google.common.collect.ImmutableMap;
 
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * Abstract helper class for checking a {@link List} of {@link VariantContext} for compatibility with a {@link Pedigree}
+ * Abstract helper class for checking a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} for compatibility with a {@link de.charite.compbio.jannovar.pedigree.Pedigree}
  * .
- * 
+ *
  * This class summarizes the builder compatibility checks.
  *
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @version 0.15-SNAPSHOT
  */
 public abstract class AbstractVariantContextCompatibilityChecker
 		implements InterfaceVariantContextCompatibilityChecker {
@@ -61,15 +61,15 @@ public abstract class AbstractVariantContextCompatibilityChecker
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
-	 * The {@link List} of {@link VariantContext} is transformed to a {@link InheritanceVariantContextList}, passed to
+	 * The {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is transformed to a {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList}, passed to
 	 * the constructor and is expected to represent all of the variants found in a certain gene (possibly after
 	 * filtering for rarity or predicted pathogenicity).
 	 *
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the compatibility
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the compatibility
 	 * @param list
-	 *            the {@link List} of {@link VariantContext} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public AbstractVariantContextCompatibilityChecker(Pedigree pedigree, List<VariantContext> list)
@@ -100,14 +100,14 @@ public abstract class AbstractVariantContextCompatibilityChecker
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
-	 * The {@link InheritanceVariantContextList} object passed to the constructor is expected to represent all of the
+	 * The {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} object passed to the constructor is expected to represent all of the
 	 * variants found in a certain gene (possibly after filtering for rarity or predicted pathogenicity).
 	 *
 	 * @param pedigree
-	 *            the {@link Pedigree} to use for the compatibility
+	 *            the {@link de.charite.compbio.jannovar.pedigree.Pedigree} to use for the compatibility
 	 * @param vcList
-	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws InheritanceCompatibilityCheckerException
+	 *            the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList} to use for the initialization
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public AbstractVariantContextCompatibilityChecker(Pedigree pedigree, InheritanceVariantContextList vcList)
@@ -117,11 +117,6 @@ public abstract class AbstractVariantContextCompatibilityChecker
 		this.list = vcList;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.ICompatibilityChecker#run()
-	 */
 	public List<VariantContext> run() throws InheritanceCompatibilityCheckerException {
 		if (pedigree.getMembers().size() == 1)
 			runSingleSampleCase();
@@ -131,8 +126,11 @@ public abstract class AbstractVariantContextCompatibilityChecker
 	}
 
 	/**
-	 * @return sibling map for each {@link Person} in {@link Pedigree}, both parents must be in {@link Pedigree} and the
+	 * <p>buildSiblings.</p>
+	 *
+	 * @return sibling map for each {@link de.charite.compbio.jannovar.pedigree.Person} in {@link de.charite.compbio.jannovar.pedigree.Pedigree}, both parents must be in {@link de.charite.compbio.jannovar.pedigree.Pedigree} and the
 	 *         same
+	 * @param pedigree a {@link de.charite.compbio.jannovar.pedigree.Pedigree} object.
 	 */
 	protected static ImmutableMap<Person, ImmutableList<Person>> buildSiblings(Pedigree pedigree) {
 		ImmutableMap.Builder<Person, ImmutableList<Person>> mapBuilder = new ImmutableMap.Builder<Person, ImmutableList<Person>>();
@@ -151,10 +149,10 @@ public abstract class AbstractVariantContextCompatibilityChecker
 	}
 
 	/**
-	 * Getter for all {@link VariantContext} that matched the {@link ModeOfInheritance}.
-	 * 
-	 * @return A List of {@link VariantContext} that are <code>true</code> for
-	 *         {@link InheritanceVariantContext#isMatchInheritance()}.
+	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 *
+	 * @return A List of {@link htsjdk.variant.variantcontext.VariantContext} that are <code>true</code> for
+	 *         {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext#isMatchInheritance()}.
 	 */
 	public List<VariantContext> getMatchedVariants() {
 		return list.getMatchedVariants();

@@ -9,13 +9,13 @@ import com.google.common.collect.ImmutableList;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * 
- * This class is a wrapper for a {@link List} of {@link VariantContext}. It transforms every {@link VariantContext} into
- * an {@link InheritanceVariantContext}. At also has teh ability to find out if the variants are XChromosomal or
- * autosomal (or both).
- * 
- * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  *
+ * This class is a wrapper for a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext}. It transforms every {@link htsjdk.variant.variantcontext.VariantContext} into
+ * an {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext}. At also has teh ability to find out if the variants are XChromosomal or
+ * autosomal (or both).
+ *
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @version 0.15-SNAPSHOT
  */
 public final class InheritanceVariantContextList {
 
@@ -31,9 +31,9 @@ public final class InheritanceVariantContextList {
 
 	/**
 	 * Default constructor. Sets the List, the {@link #names}, and the chromosomal locations.
-	 * 
+	 *
 	 * @param vcList
-	 *            The {@link VariantContext} list to store into this wrapper.
+	 *            The {@link htsjdk.variant.variantcontext.VariantContext} list to store into this wrapper.
 	 */
 	public InheritanceVariantContextList(List<VariantContext> vcList) {
 		this.names = getNames(vcList);
@@ -93,21 +93,38 @@ public final class InheritanceVariantContextList {
 		return namesBuilder.build();
 	}
 
-	/** the list of individual names */
+	/**
+	 * the list of individual names
+	 *
+	 * @return a {@link com.google.common.collect.ImmutableList} object.
+	 */
 	public ImmutableList<String> getNames() {
 		return names;
 	}
 
-	/** whether or not the variants are on the X chromsome */
+	/**
+	 * whether or not the variants are on the X chromsome
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isXChromosomal() {
 		return this.isXChromosomal;
 	};
 
-	/** whether or not the variants are on the Autosome */
+	/**
+	 * whether or not the variants are on the Autosome
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isAutosomal() {
 		return this.isAutosomal;
 	};
 
+	/**
+	 * <p>Getter for the field <code>vcList</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<InheritanceVariantContext> getVcList() {
 		return vcList;
 	}
@@ -117,11 +134,12 @@ public final class InheritanceVariantContextList {
 	 * <code>pedigree</code>.
 	 *
 	 * For this, the order of the names has to be the same as the number of the names. This check is important for the
-	 * {@link PedigreeDiseaseCompatibilityDecorator}, where the names in the pedigree must be the same as the names in
+	 * {@link de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator}, where the names in the pedigree must be the same as the names in
 	 * the genotype list.
 	 *
 	 * @return <code>true</code> if the list of {@link #names} is the same as the names of the members of
 	 *         <code>pedigree</code>
+	 * @param pedigree a {@link de.charite.compbio.jannovar.pedigree.Pedigree} object.
 	 */
 	public boolean namesEqual(Pedigree pedigree) {
 		for (String name : names) {
@@ -137,10 +155,10 @@ public final class InheritanceVariantContextList {
 	}
 
 	/**
-	 * Getter for all {@link VariantContext} that matched the {@link ModeOfInheritance}.
-	 * 
-	 * @return A List of {@link VariantContext} that are <code>true</code> for
-	 *         {@link InheritanceVariantContext#isMatchInheritance()}.
+	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 *
+	 * @return A List of {@link htsjdk.variant.variantcontext.VariantContext} that are <code>true</code> for
+	 *         {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext#isMatchInheritance()}.
 	 */
 	public List<VariantContext> getMatchedVariants() {
 		List<VariantContext> output = new ArrayList<VariantContext>();
