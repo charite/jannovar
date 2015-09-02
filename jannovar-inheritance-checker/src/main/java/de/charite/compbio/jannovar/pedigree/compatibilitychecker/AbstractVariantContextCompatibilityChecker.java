@@ -20,7 +20,8 @@ import htsjdk.variant.variantcontext.VariantContext;
  *
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
-public abstract class AbstractVariantContextCompatibilityChecker implements InterfaceVariantContextCompatibilityChecker {
+public abstract class AbstractVariantContextCompatibilityChecker
+		implements InterfaceVariantContextCompatibilityChecker {
 
 	/** the pedigree to use for the checking */
 	protected final Pedigree pedigree;

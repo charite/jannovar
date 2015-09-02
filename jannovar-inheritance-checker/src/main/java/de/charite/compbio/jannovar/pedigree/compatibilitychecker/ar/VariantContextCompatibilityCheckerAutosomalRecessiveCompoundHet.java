@@ -12,8 +12,8 @@ import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and
@@ -27,7 +27,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet extends AbstractCompatibilityChecker {
+public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet extends AbstractVariantContextCompatibilityChecker {
 
 	/** list of siblings for each person in {@link #pedigree} */
 	private final ImmutableMap<Person, ImmutableList<Person>> siblings;
@@ -44,15 +44,18 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet ext
 	 *            the {@link Pedigree} to use for the initialize
 	 * @param list
 	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws CompatibilityCheckerException
+	 * @throws InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet(Pedigree pedigree,
-			InheritanceVariantContextList list) throws CompatibilityCheckerException {
+			InheritanceVariantContextList list) throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 		this.siblings = buildSiblings(pedigree);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
+	 */
 	public void runSingleSampleCase() {
 		List<Integer> hets = new ArrayList<Integer>();
 		for (int i = 0; i < list.getVcList().size(); i++) {
@@ -66,6 +69,9 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet ext
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
+	 */
 	public void runMultiSampleCase() {
 		// First, collect candidate genotype call lists from trios around
 		// affected individuals.

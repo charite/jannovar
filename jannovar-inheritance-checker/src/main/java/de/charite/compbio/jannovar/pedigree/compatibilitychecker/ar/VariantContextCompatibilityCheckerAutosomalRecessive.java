@@ -4,8 +4,8 @@ import java.util.List;
 
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -23,7 +23,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class VariantContextCompatibilityCheckerAutosomalRecessive extends AbstractCompatibilityChecker {
+public class VariantContextCompatibilityCheckerAutosomalRecessive extends AbstractVariantContextCompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -36,11 +36,11 @@ public class VariantContextCompatibilityCheckerAutosomalRecessive extends Abstra
 	 *            the {@link Pedigree} to use for the initialize
 	 * @param list
 	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws CompatibilityCheckerException
+	 * @throws InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalRecessive(Pedigree pedigree, List<VariantContext> list)
-			throws CompatibilityCheckerException {
+			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
 
@@ -48,14 +48,17 @@ public class VariantContextCompatibilityCheckerAutosomalRecessive extends Abstra
 		super(pedigree, list);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker#run()
+	 */
 	@Override
-	public List<VariantContext> run() throws CompatibilityCheckerException {
+	public List<VariantContext> run() throws InheritanceCompatibilityCheckerException {
 		new VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous(pedigree, list).run();
 		new VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet(pedigree, list).run();
 		return super.getMatchedVariants();
 	}
 
-	public void runSingleSampleCase() throws CompatibilityCheckerException {
+	public void runSingleSampleCase() {
 	}
 
 	public void runMultiSampleCase() {

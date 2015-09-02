@@ -10,8 +10,8 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and
@@ -31,7 +31,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractCompatibilityChecker {
+class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractVariantContextCompatibilityChecker {
 
 	/**
 	 * decorator for getting unaffected individuals and such from the {@link Pedigree}
@@ -50,11 +50,11 @@ class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractCom
 	 *            the {@link Pedigree} to use for the initialize
 	 * @param list
 	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws CompatibilityCheckerException
+	 * @throws InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerXRecessiveHomozygous(Pedigree pedigree, InheritanceVariantContextList list)
-			throws CompatibilityCheckerException {
+			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 
 		this.queryDecorator = new PedigreeQueryDecorator(pedigree);

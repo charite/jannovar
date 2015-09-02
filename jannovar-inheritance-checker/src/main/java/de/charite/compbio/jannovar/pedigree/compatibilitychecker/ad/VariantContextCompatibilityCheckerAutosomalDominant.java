@@ -5,11 +5,11 @@ import java.util.List;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
+import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -28,7 +28,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class VariantContextCompatibilityCheckerAutosomalDominant extends AbstractCompatibilityChecker {
+public class VariantContextCompatibilityCheckerAutosomalDominant extends AbstractVariantContextCompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -41,11 +41,11 @@ public class VariantContextCompatibilityCheckerAutosomalDominant extends Abstrac
 	 *            the {@link Pedigree} to use for the initialize
 	 * @param list
 	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws CompatibilityCheckerException
+	 * @throws InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalDominant(Pedigree pedigree, List<VariantContext> list)
-			throws CompatibilityCheckerException {
+			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
 
@@ -53,6 +53,9 @@ public class VariantContextCompatibilityCheckerAutosomalDominant extends Abstrac
 		super(pedigree, list);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
+	 */
 	public void runSingleSampleCase() {
 		// We could also allow Genotye.HOMOZYGOUS_ALT here but that is not the interesting case.
 		for (InheritanceVariantContext vc : list.getVcList())
@@ -60,6 +63,9 @@ public class VariantContextCompatibilityCheckerAutosomalDominant extends Abstrac
 				vc.setMatchInheritance(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
+	 */
 	public void runMultiSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList()) {
 			boolean currentVariantCompatible = true; // current variant compatible with AD?

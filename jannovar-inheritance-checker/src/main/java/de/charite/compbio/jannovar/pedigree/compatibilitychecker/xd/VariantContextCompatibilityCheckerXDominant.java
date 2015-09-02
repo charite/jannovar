@@ -6,12 +6,12 @@ import java.util.List;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
+import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
-import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant;
 import htsjdk.variant.variantcontext.VariantContext;
 
@@ -28,7 +28,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class VariantContextCompatibilityCheckerXDominant extends AbstractCompatibilityChecker {
+public class VariantContextCompatibilityCheckerXDominant extends AbstractVariantContextCompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -40,12 +40,12 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractCompati
 	 * @param pedigree
 	 *            the {@link Pedigree} to use for the initialize
 	 * @param list
-	 *            the {@link GenotypeList} to use for the initialization
-	 * @throws CompatibilityCheckerException
+	 *            the {@link InheritanceVariantContextList} to use for the initialization
+	 * @throws InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerXDominant(Pedigree pedigree, List<VariantContext> list)
-			throws CompatibilityCheckerException {
+			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
 
@@ -53,19 +53,20 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractCompati
 		super(pedigree, list);
 	}
 
-	/**
-	 * @return <code>true</code> if {@link #list} is compatible with {@link #pedigree} and the X-chromosomal dominant
-	 *         mode of inheritances.
-	 * @throws CompatibilityCheckerException
-	 *             if the pedigree or variant list is invalid
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker#run()
 	 */
-	public List<VariantContext> run() throws CompatibilityCheckerException {
+	@Override
+	public List<VariantContext> run() throws InheritanceCompatibilityCheckerException {
 		if (!list.isXChromosomal())
 			return  new ArrayList<VariantContext>(0);
 		return super.run();
 	}
 
-	public void runSingleSampleCase() throws CompatibilityCheckerException {
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
+	 */
+	public void runSingleSampleCase() throws InheritanceCompatibilityCheckerException {
 		if (pedigree.getMembers().get(0).getSex() == Sex.FEMALE)
 			new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, list).runSingleSampleCase();
 		else {
@@ -77,6 +78,9 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractCompati
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
+	 */
 	public void runMultiSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList()) {
 			boolean currentVariantCompatible = true; // current variant compatible with XD?

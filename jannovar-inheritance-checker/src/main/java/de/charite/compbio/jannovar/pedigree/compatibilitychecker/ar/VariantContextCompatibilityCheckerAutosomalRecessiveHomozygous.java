@@ -5,12 +5,12 @@ import com.google.common.collect.ImmutableSet;
 import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
+import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Pedigree.IndexedPerson;
 import de.charite.compbio.jannovar.pedigree.Person;
-import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractCompatibilityChecker;
-import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 
 /**
  * Helper class for checking a {@link InheritanceVariantContextList} for compatibility with a {@link Pedigree} and autosomal
@@ -30,7 +30,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  */
-public class VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous extends AbstractCompatibilityChecker {
+public class VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous extends AbstractVariantContextCompatibilityChecker {
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
@@ -44,20 +44,26 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous exte
 	 *            the {@link Pedigree} to use for the initialize
 	 * @param list
 	 *            the {@link InheritanceVariantContextList} to use for the initialization
-	 * @throws CompatibilityCheckerException
+	 * @throws InheritanceCompatibilityCheckerException
 	 *             if the pedigree or variant list is invalid
 	 */
 	public VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous(Pedigree pedigree, InheritanceVariantContextList list)
-			throws CompatibilityCheckerException {
+			throws InheritanceCompatibilityCheckerException {
 		super(pedigree, list);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runSingleSampleCase()
+	 */
 	public void runSingleSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (vc.getSingleSampleGenotype() == Genotype.HOMOZYGOUS_ALT)
 				vc.setMatchInheritance(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.charite.compbio.jannovar.pedigree.compatibilitychecker.InterfaceCompatibilityChecker#runMultiSampleCase()
+	 */
 	public void runMultiSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (containsCompatibleHomozygousVariants(vc))
