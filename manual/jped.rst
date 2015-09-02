@@ -15,10 +15,11 @@ A basic call looks as follows:
 
 ::
 
-    # java -jar jped-cli-0.14.jar -m MODE IN.ped IN.vcf OUT.vcf
+    # java -jar jped-cli-0.14.jar -m MODE(S) IN.ped IN.vcf OUT.vcf
 
 This call of ``jped-cli`` will first read in the pedigree from ``IN.ped``.
-Then, it will read the file ``IN.vcf`` and filter the variants therein for compatibility with the given ``MODE`` of inheritance and the pedigree.
+Then, it will read the file ``IN.vcf`` and filter the variants therein for compatibility with the given ``MODE(S)`` of inheritance and the pedigree.
+Multiple `MODE(S)`` can be used. This can be usefull if you like to have autosomal dominant and x recessive in one file.
 The resulting VCF file will be written to ``OUT.vcf``.
 
 Available Modes of Inheritance
