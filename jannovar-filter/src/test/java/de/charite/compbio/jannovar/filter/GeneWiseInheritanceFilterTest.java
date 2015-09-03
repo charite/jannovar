@@ -30,12 +30,11 @@ public class GeneWiseInheritanceFilterTest {
 	private Pedigree pedigreeAffectedTwoAffected;
 	private JannovarData jannovarDB;
 	private List<VariantContext> variants;
-	private String inheritanceFilterVCFPath;
 	private VCFFileReader reader;
 
 	@Before
 	public void setUp() throws PedParseException, URISyntaxException {
-		this.inheritanceFilterVCFPath =  this.getClass().getResource("/inheritanceFilterTest.vcf").toURI().getPath();
+		final String inheritanceFilterVCFPath =  this.getClass().getResource("/inheritanceFilterTest.vcf").toURI().getPath();
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "Eva", "0", "0", Sex.FEMALE, Disease.UNAFFECTED)); // Mother
 		individuals.add(new PedPerson("ped", "Adam", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // Father
