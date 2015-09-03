@@ -11,8 +11,9 @@ import de.charite.compbio.jannovar.JannovarException;
  */
 public class InheritanceCompatibilityCheckerException extends JannovarException {
 
-	/** Constant <code>serialVersionUID=1L</code> */
-	public static final long serialVersionUID = 1L;
+
+	/** Constant <code>serialVersionUID=4032184488029441661L</code> */
+	private static final long serialVersionUID = -4032184488029441661L;
 
 	/**
 	 * <p>Constructor for InheritanceCompatibilityCheckerException.</p>

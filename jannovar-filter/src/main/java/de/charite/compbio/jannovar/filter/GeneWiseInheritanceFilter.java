@@ -21,6 +21,7 @@ import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
@@ -217,10 +218,16 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 	 * @param gene
 	 * @throws FilterException
 	 */
-	private void checkVariantsForGene(Gene gene)  {
+	private void checkVariantsForGene(Gene gene) throws FilterException  {
 		LOGGER.trace("Check inheritance and marking variants in gene {} ", new Object[] { gene });
-		List<VariantContext> filteredOutput = this.checker.getCompatibleWith(variantToGeneMap.get(gene));
-		addCompatibleVariants(filteredOutput);
+		List<VariantContext> filteredOutput;
+		try {
+			filteredOutput = this.checker.getCompatibleWith(variantToGeneMap.get(gene));
+			addCompatibleVariants(filteredOutput);
+		} catch (InheritanceCompatibilityCheckerException e) {
+			throw new FilterException("Problem in mode of inheritance filter.", e);
+		}
+		
 	}
 
 }

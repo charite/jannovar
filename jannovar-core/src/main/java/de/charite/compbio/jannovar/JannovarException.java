@@ -6,7 +6,7 @@ package de.charite.compbio.jannovar;
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class JannovarException extends RuntimeException {
+public class JannovarException extends Exception {
 
 	public static final long serialVersionUID = 2L;
 

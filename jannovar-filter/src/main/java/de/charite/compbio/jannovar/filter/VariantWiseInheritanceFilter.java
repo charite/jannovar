@@ -14,6 +14,7 @@ import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -49,7 +50,11 @@ public class VariantWiseInheritanceFilter implements VariantContextFilter {
 		List<VariantContext> list = new ArrayList<VariantContext>();
 		list.add(fv.getVC());
 
-		fv.setIncluded(!checker.getCompatibleWith(list).isEmpty());
+		try {
+			fv.setIncluded(!checker.getCompatibleWith(list).isEmpty());
+		} catch (InheritanceCompatibilityCheckerException e) {
+			throw new FilterException("Problem in mode of inheritance filter.", e);
+		}
 		if (fv.isIncluded())
 			next.put(fv);
 		LOGGER.trace("Variant {} compatible with {} (var={})", new Object[] { fv.isIncluded() ? "" : "in",
