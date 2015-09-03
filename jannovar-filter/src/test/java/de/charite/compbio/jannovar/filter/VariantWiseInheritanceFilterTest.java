@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.filter;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,11 +27,12 @@ public class VariantWiseInheritanceFilterTest {
 	private Pedigree pedigreeAffectedChild;
 	private Pedigree pedigreeAffectedTwoAffected;
 	private List<VariantContext> variants;
-	final Path inheritanceFilterVCFPath = Paths.get("src/test/resources/inheritanceFilterTest.vcf");
+	private String inheritanceFilterVCFPath;
 	private VCFFileReader reader;
 
 	@Before
-	public void setUp() throws PedParseException {
+	public void setUp() throws PedParseException, URISyntaxException {
+		this.inheritanceFilterVCFPath =  this.getClass().getResource("/inheritanceFilterTest.vcf").toURI().getPath();
 		ImmutableList.Builder<PedPerson> individuals = new ImmutableList.Builder<PedPerson>();
 		individuals.add(new PedPerson("ped", "Eva", "0", "0", Sex.FEMALE, Disease.UNAFFECTED)); // Mother
 		individuals.add(new PedPerson("ped", "Adam", "0", "0", Sex.MALE, Disease.UNAFFECTED)); // Father
@@ -47,7 +48,7 @@ public class VariantWiseInheritanceFilterTest {
 		pedFileContents = new PedFileContents(new ImmutableList.Builder<String>().build(), individuals.build());
 		pedigreeAffectedTwoAffected = new Pedigree(pedFileContents, "ped");
 
-		reader = new VCFFileReader(inheritanceFilterVCFPath.toFile(),false);
+		reader = new VCFFileReader(new File(inheritanceFilterVCFPath),false);
 		variants = new ArrayList<VariantContext>();
 		for (VariantContext variantContext : reader) {
 			variants.add(variantContext);
