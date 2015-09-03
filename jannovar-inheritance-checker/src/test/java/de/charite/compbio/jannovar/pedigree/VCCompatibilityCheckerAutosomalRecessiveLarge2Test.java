@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalRecessiveLarge2Test class.</p>
  *
@@ -46,9 +48,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveLarge2Test extends Abstract
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET, HET, HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(REF, REF, REF, REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -58,9 +61,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveLarge2Test extends Abstract
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, REF, HET, HET, REF, HET, HET),
 										  lst(REF, HET, HET, REF, HET, HET, HET)).run().isEmpty());
 	}
@@ -74,9 +78,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveLarge2Test extends Abstract
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, HET, HET, REF, HET, HET),
 										 lst(REF, HET, HET, REF, HET, HET, REF)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, HET, HET, REF, HET, UKN),

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest class.</p>
  *
@@ -46,9 +48,10 @@ public class VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest extends Abstr
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerXR(lst(HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -102,9 +105,10 @@ public class VCCompatibilityCheckerXRecessiveStupidSmallFemaleTest extends Abstr
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// compound heterozygous
 		Assert.assertFalse(!buildCheckerXR(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run().isEmpty());

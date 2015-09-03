@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalRecessiveVerySmallTest class.</p>
  *
@@ -41,9 +43,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveVerySmallTest extends Abstr
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, ALT)).run().isEmpty());
@@ -56,9 +59,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveVerySmallTest extends Abstr
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// compound heterozygous
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET), lst(HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, HET), lst(HET, HET)).run().isEmpty());
@@ -69,9 +73,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveVerySmallTest extends Abstr
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAR(lst(HET, ALT)).run().size() == 1);
 
 		Assert.assertTrue(buildCheckerAR(lst(HET, ALT)).run().size() == 1);
@@ -80,9 +85,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveVerySmallTest extends Abstr
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// compound heterozygous
 		Assert.assertTrue(buildCheckerAR(lst(REF, HET), lst(HET, HET)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(lst(UKN, HET), lst(HET, HET)).run().size() == 2);

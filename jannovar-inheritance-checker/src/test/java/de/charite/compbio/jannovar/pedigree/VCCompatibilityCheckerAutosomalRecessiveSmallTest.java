@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalRecessiveSmallTest class.</p>
  *
@@ -43,9 +45,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveSmallTest extends AbstractC
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -88,9 +91,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveSmallTest extends AbstractC
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// compound heterozygous
 		Assert.assertFalse(!buildCheckerAR(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run().isEmpty());
@@ -107,9 +111,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveSmallTest extends AbstractC
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, ALT, REF)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, ALT, HET)).run().size() == 1);
 
@@ -119,9 +124,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveSmallTest extends AbstractC
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// compound heterozygous
 		Assert.assertTrue(buildCheckerAR(lst(REF, HET, HET, REF), lst(HET, REF, HET, REF)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(lst(REF, HET, HET, HET), lst(HET, REF, HET, REF)).run().size() == 2);

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalDominantVerySmallTest class.</p>
  *
@@ -33,9 +35,10 @@ public class VCCompatibilityCheckerAutosomalDominantVerySmallTest extends Abstra
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(lst(HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(ALT, ALT)).run().isEmpty());
@@ -55,9 +58,10 @@ public class VCCompatibilityCheckerAutosomalDominantVerySmallTest extends Abstra
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(lst(HET, HET), lst(HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(ALT, HET), lst(HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(ALT, HET), lst(REF, UKN)).run().isEmpty());
@@ -67,18 +71,20 @@ public class VCCompatibilityCheckerAutosomalDominantVerySmallTest extends Abstra
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAD(lst(REF, HET)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAD(lst(UKN, HET)).run().size() == 1);
 	}
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAD(lst(ALT, HET), lst(REF, HET)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAD(lst(UKN, HET), lst(UKN, HET)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAD(lst(HET, HET), lst(REF, HET)).run().size() == 1);

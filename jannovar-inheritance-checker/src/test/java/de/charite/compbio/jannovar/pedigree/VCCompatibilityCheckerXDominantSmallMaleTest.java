@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerXDominantSmallMaleTest class.</p>
  *
@@ -43,9 +45,10 @@ public class VCCompatibilityCheckerXDominantSmallMaleTest extends AbstractCompat
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		// first, with ALT in son
 		Assert.assertFalse(!buildCheckerXD(lst(HET, HET, ALT, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXD(lst(ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -106,9 +109,10 @@ public class VCCompatibilityCheckerXDominantSmallMaleTest extends AbstractCompat
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// first, with ALT in son
 		Assert.assertFalse(!buildCheckerXD(lst(REF, ALT, ALT, HET), lst(REF, UKN, ALT, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXD(lst(REF, HET, ALT, ALT), lst(REF, UKN, ALT, ALT)).run().isEmpty());
@@ -124,9 +128,10 @@ public class VCCompatibilityCheckerXDominantSmallMaleTest extends AbstractCompat
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		// first, with ALT in son
 		Assert.assertTrue(buildCheckerXD(lst(REF, HET, ALT, REF)).run().size() == 1);
 
@@ -144,9 +149,10 @@ public class VCCompatibilityCheckerXDominantSmallMaleTest extends AbstractCompat
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// first, with ALT in son
 		Assert.assertTrue(buildCheckerXD(lst(REF, HET, ALT, REF), lst(REF, HET, ALT, REF)).run().size() == 2);
 

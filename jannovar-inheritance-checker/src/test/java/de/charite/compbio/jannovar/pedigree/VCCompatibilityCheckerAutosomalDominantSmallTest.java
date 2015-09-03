@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalDominantSmallTest class.</p>
  *
@@ -43,9 +45,10 @@ public class VCCompatibilityCheckerAutosomalDominantSmallTest extends AbstractCo
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(lst(HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -78,9 +81,10 @@ public class VCCompatibilityCheckerAutosomalDominantSmallTest extends AbstractCo
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(HET, REF, ALT, REF), lst(HET, UKN, HET, ALT)).run().isEmpty());
@@ -89,9 +93,10 @@ public class VCCompatibilityCheckerAutosomalDominantSmallTest extends AbstractCo
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAD(lst(HET, REF, HET, REF)).run().size() == 1);
 
 		Assert.assertTrue(buildCheckerAD(lst(HET, UKN, HET, UKN)).run().size() == 1);
@@ -101,9 +106,10 @@ public class VCCompatibilityCheckerAutosomalDominantSmallTest extends AbstractCo
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAD(lst(HET, REF, HET, REF), lst(HET, REF, HET, REF)).run().size() == 2);
 
 		Assert.assertTrue(buildCheckerAD(lst(HET, UKN, HET, UKN), lst(ALT, ALT, ALT, ALT)).run().size() == 1);

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerXRecessiveSingletonMaleTest class.</p>
  *
@@ -40,18 +42,20 @@ public class VCCompatibilityCheckerXRecessiveSingletonMaleTest extends AbstractC
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerXR(REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(UKN).run().isEmpty());
 	}
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerXR(REF, REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(REF, UKN).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(UKN, UKN).run().isEmpty());
@@ -59,18 +63,20 @@ public class VCCompatibilityCheckerXRecessiveSingletonMaleTest extends AbstractC
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerXR(ALT).run().size() == 1);
 		Assert.assertTrue(buildCheckerXR(HET).run().size() == 1);
 	}
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerXR(ALT, REF).run().size() == 1);
 		Assert.assertTrue(buildCheckerXR(UKN, ALT).run().size() == 1);
 		Assert.assertTrue(buildCheckerXR(ALT, ALT).run().size() == 2);

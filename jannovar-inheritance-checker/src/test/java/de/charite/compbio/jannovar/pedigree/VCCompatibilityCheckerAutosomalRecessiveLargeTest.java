@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalRecessiveLargeTest class.</p>
  *
@@ -49,9 +51,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractC
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAR(lst(HET, HET, HET, HET, HET, HET, HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(REF, REF, REF, REF, REF, REF, REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAR(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -76,9 +79,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractC
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, UKN, HET, HET, ALT, REF)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, REF, HET, HET, ALT, REF)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAR(lst(HET, HET, REF, HET, ALT, ALT, HET, HET, ALT, REF)).run().size() == 1);
@@ -98,9 +102,10 @@ public class VCCompatibilityCheckerAutosomalRecessiveLargeTest extends AbstractC
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAR(lst(HET, REF, REF, REF, HET, UKN, REF, REF, HET, REF),
 										 lst(REF, HET, HET, REF, HET, UKN, HET, REF, HET, REF)).run().size() == 2);
 		Assert.assertTrue(buildCheckerAR(lst(REF, HET, REF, HET, HET, UKN, HET, HET, HET, REF),

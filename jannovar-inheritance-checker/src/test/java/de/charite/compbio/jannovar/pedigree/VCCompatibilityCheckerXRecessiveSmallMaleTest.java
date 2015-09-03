@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerXRecessiveSmallMaleTest class.</p>
  *
@@ -43,9 +45,10 @@ public class VCCompatibilityCheckerXRecessiveSmallMaleTest extends AbstractCompa
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerXR(lst(HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -84,9 +87,10 @@ public class VCCompatibilityCheckerXRecessiveSmallMaleTest extends AbstractCompa
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerXR(lst(HET, ALT, HET, HET), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(HET, HET, HET, ALT), lst(HET, UKN, HET, ALT)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerXR(lst(HET, REF, ALT, REF), lst(HET, UKN, HET, ALT)).run().isEmpty());
@@ -102,9 +106,10 @@ public class VCCompatibilityCheckerXRecessiveSmallMaleTest extends AbstractCompa
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		
 		// male has it HOM ALT
 		Assert.assertTrue(buildCheckerXR(lst(REF, HET, ALT, REF)).run().size() == 1);
@@ -126,9 +131,10 @@ public class VCCompatibilityCheckerXRecessiveSmallMaleTest extends AbstractCompa
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		// heterozygous misscalls
 		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, REF), lst(HET, REF, HET, REF)).run().size() == 1);
 		Assert.assertTrue(buildCheckerXR(lst(REF, HET, HET, HET), lst(HET, REF, HET, REF)).run().size() == 1);

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 
 /**
  * <p>VCCompatibilityCheckerAutosomalDominantLargeTest class.</p>
@@ -54,9 +56,10 @@ public class VCCompatibilityCheckerAutosomalDominantLargeTest extends AbstractCo
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(lst(HET, HET, HET, HET, HET, HET, HET, HET, HET, HET, HET, HET, HET)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(REF, REF, REF, REF, REF, REF, REF, REF, REF, REF, REF, REF, REF)).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(lst(ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT, ALT)).run().isEmpty());
@@ -83,9 +86,10 @@ public class VCCompatibilityCheckerAutosomalDominantLargeTest extends AbstractCo
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant()  {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException  {
 		Assert.assertTrue(buildCheckerAD(lst(REF, REF, REF, HET, REF, HET, HET, REF, REF, HET, REF, REF, HET)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAD(lst(REF, REF, REF, HET, REF, HET, REF, REF, REF, HET, REF, REF, HET)).run().size() == 1);
 		Assert.assertTrue(buildCheckerAD(lst(REF, REF, REF, HET, REF, HET, UKN, REF, REF, HET, REF, REF, HET)).run().size() == 1);

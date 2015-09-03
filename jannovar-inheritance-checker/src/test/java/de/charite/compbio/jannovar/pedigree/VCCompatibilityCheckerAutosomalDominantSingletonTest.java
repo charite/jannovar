@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
+
 /**
  * <p>VCCompatibilityCheckerAutosomalDominantSingletonTest class.</p>
  *
@@ -39,9 +41,10 @@ public class VCCompatibilityCheckerAutosomalDominantSingletonTest extends Abstra
 
 	/**
 	 * <p>testCaseNegativesOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesOneVariant() {
+	public void testCaseNegativesOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(ALT).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(UKN).run().isEmpty());
@@ -49,9 +52,10 @@ public class VCCompatibilityCheckerAutosomalDominantSingletonTest extends Abstra
 
 	/**
 	 * <p>testCaseNegativesTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCaseNegativesTwoVariants() {
+	public void testCaseNegativesTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertFalse(!buildCheckerAD(ALT, REF).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(REF, UKN).run().isEmpty());
 		Assert.assertFalse(!buildCheckerAD(UKN, ALT).run().isEmpty());
@@ -59,17 +63,19 @@ public class VCCompatibilityCheckerAutosomalDominantSingletonTest extends Abstra
 
 	/**
 	 * <p>testCasePositiveOneVariant.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveOneVariant() {
+	public void testCasePositiveOneVariant() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAD(HET).run().size() == 1);
 	}
 
 	/**
 	 * <p>testCasePositiveTwoVariants.</p>
+	 * @throws InheritanceCompatibilityCheckerException 
 	 */
 	@Test
-	public void testCasePositiveTwoVariants() {
+	public void testCasePositiveTwoVariants() throws InheritanceCompatibilityCheckerException {
 		Assert.assertTrue(buildCheckerAD(HET, REF).run().size() == 1);
 		Assert.assertTrue(buildCheckerAD(HET, HET).run().size() == 2);
 		Assert.assertTrue(buildCheckerAD(HET, ALT).run().size() == 1);
