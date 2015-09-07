@@ -1,8 +1,8 @@
 package de.charite.compbio.jannovar.filter;
 
-import htsjdk.variant.variantcontext.VariantContext;
-
 import java.util.HashSet;
+
+import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * Check that the VCF file is sorted by coordinate.
@@ -36,9 +36,9 @@ public class CoordinateSortChecker implements VariantContextFilter {
 
 		// perform sortedness check and throw exception otherwise
 		if (prevVC != null)
-			if (!vc.getChr().equals(prevVC.getChr())) { // change in chromosomes
-				if (seenChromosomes.contains(vc.getChr()))
-					throw new FilterException("Unsorted VCF file, seen " + vc.getChr() + " twice!");
+			if (!vc.getContig().equals(prevVC.getContig())) { // change in chromosomes
+				if (seenChromosomes.contains(vc.getContig()))
+					throw new FilterException("Unsorted VCF file, seen " + vc.getContig() + " twice!");
 			} else {
 				if (vc.getStart() < prevVC.getStart())
 					throw new FilterException("Unsorted VCF file, seen " + vc.getStart() + " < " + prevVC.getStart());

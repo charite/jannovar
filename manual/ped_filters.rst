@@ -11,11 +11,12 @@ That is, they can fail to filter out less than theoretically possible, but they 
 
 This section describes in detail the checks performed on the variant and pedigrees to give the user a clear understanding on the algorithms and limitations.
 
-The filters are passed a pedigree and a list of genotype calls.
-The mode of inheritance is selected by the filter choice.
-The whole list of genotype calls (usually the genotypes of variants falling onto one gene or transcripts) is then checked for compatibility with the given mode of inheritance and pedigree.
+The filters are passed a pedigree and a list of VariantContext calls from the HTSJDK lib (which include Genotypes).
+The mode of inheritance is selected by the filter choice. Multiple modes are possible.
+The whole list of VariantContext calls (usually the variants falling onto one gene or transcripts) is then checked for compatibility with the given mode of inheritance(s) and pedigree.
 
-The genotype calls of the variants can either be ``NOCALL`` (no genotype was determined for the person), ``REF`` (homozygous wild-type), ``HET`` (heterozygous alternative), or ``HOM`` (homozygous alternative).
+The program rewrites the VariantContext Genotypes to own genotypes.
+These own genotypes can either be ``NOCALL`` (no genotype was determined for the person), ``REF`` (homozygous wild-type), ``HET`` (heterozygous alternative), or ``HOM`` (homozygous alternative).
 In general a caller calls a hemizygous mutations as homozygous. Therefore we use ``HOM`` and for sensitivity ``HET`` on known males as hemizygous. The persons can either be affected, unaffected, or their affection state is unknown.
 
 Autosomal Dominant Filter

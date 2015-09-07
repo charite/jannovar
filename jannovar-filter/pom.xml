@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.15-SNAPSHOT</version>
+		<version>0.15</version>
 	</parent>
 
 	<properties>
@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.github.samtools</groupId>
 			<artifactId>htsjdk</artifactId>
-			<version>1.128</version>
+			<version>1.138</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -38,6 +38,11 @@
 		<dependency>
 			<groupId>de.charite.compbio</groupId>
 			<artifactId>jannovar-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.charite.compbio</groupId>
+			<artifactId>jannovar-inheritance-checker</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!--Logging framework -->
@@ -61,6 +66,11 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
 		</dependency>
 	</dependencies>
 

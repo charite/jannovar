@@ -158,9 +158,9 @@ public final class VariantContextAnnotator {
 	public GenomeVariant buildGenomeChange(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
-		Integer boxedInt = refDict.getContigNameToID().get(vc.getChr());
+		Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
 		if (boxedInt == null)
-			throw new InvalidCoordinatesException("Unknown reference " + vc.getChr(),
+			throw new InvalidCoordinatesException("Unknown reference " + vc.getContig(),
 					AnnotationMessage.ERROR_CHROMOSOME_NOT_FOUND);
 		int chr = boxedInt.intValue();
 
@@ -196,8 +196,8 @@ public final class VariantContextAnnotator {
 	 *
 	 * @param vc
 	 *            the VCF record to annotate, remains unchanged
-	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of the
-	 *         alternative alleles in <code>vc</code>
+	 * @return {@link ImmutableList} of {@link VariantAnnotations}s, one for each alternative allele, in the order of
+	 *         the alternative alleles in <code>vc</code>
 	 * @throws InvalidCoordinatesException
 	 *             in the case of problems with resolving coordinates internally, namely building the
 	 *             {@link GenomeVariant} object one one of the returned {@link VariantAnnotations}s.
