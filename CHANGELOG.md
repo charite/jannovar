@@ -2,20 +2,52 @@
 
 ## develop
 
-### jannovar-pedigree
+
+### jannovar-core
 
 * making `CompatibilityCheckerAutosomalRecessiveHomozygous` public
-
-## jannovar-core
-
 * using jannovar-hgvs for representing the changes
 * more precise HGVS annotation in some cases
 * predictions are wrapped in parentheses
+* Mark everything that is related to the compatibility checkers as depricated (see new jannovar-inheritance-checker)
 
-## jannover-hgvs
+### jannover-hgvs
 
-* adding module for parsing and representing HGVS-compatible nucleic and protein
-  changes
+* adding module for parsing and representing HGVS-compatible nucleic and protein changes
+
+
+### jannover-htsjdk
+
+* Updating htsjdk to 1.138
+* Replacing depricatded method `VariantContext.getChr()` with `VariantContext.getContig()`
+
+### jannovar-cli
+
+* Updating htsjdk to 1.138
+* Replacing depricatded method `VariantContext.getChr()` with `VariantContext.getContig()`
+* Updating commons-cli to 1.3.1
+
+### jannover-inheritance-checker
+
+* Adding this new module.
+* Replaces the compatibility checker oh jannobvar-core.
+* Now runs with VariantContext (htsjdk) instead of Jannovar Genotypes
+* Use `InheritanceCompatibilityChecker.Builder` to build `InheritanceCompatibilityChecker`.
+* Use the method `getCompatibleWith` of the `InheritanceCompatibilityChecker` with a List of `VariantContext`.
+* The method will return all `VariantContext` that matches the inheritance. If no variant matches the List is empty.
+
+### jannover-filter
+
+* Refactoring `VariantWiseInheritanceFilter` to handle the new `InheritanceCompatibilityChecker`.
+* Rewrite `GeneWiseInheritanceFilter` to handle the new `InheritanceCompatibilityChecker`.
+* Updating htsjdk to 1.138
+* Replacing depricatded method `VariantContext.getChr()` with `VariantContext.getContig()`
+
+### jped-cli
+
+* Adapting program to the `GeneWiseInheritanceFilter` and `VariantWiseInheritanceFilter` (see jannovar-filter)
+* Updating commons-cli to 1.3.1
+* Changing cli option inheritance-mode to multiple args (Now you can check multiple inheritances at once)
 
 ## v0.14
 

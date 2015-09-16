@@ -36,9 +36,10 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.Compatibilit
  * possible if parents are available).
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * 
+ * @deprecated use {@link VariantContextCompatibilityCheckerXRecessiveCompoundHet} instead.
  */
+@Deprecated
 class CompatibilityCheckerXRecessiveCompoundHet extends CompatibilityCheckerBase {
 
 	/** list of siblings for each person in {@link #pedigree} */

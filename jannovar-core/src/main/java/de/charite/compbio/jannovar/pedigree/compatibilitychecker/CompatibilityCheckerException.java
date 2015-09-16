@@ -9,7 +9,9 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
  * checking.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @deprecated Use {@link InheritanceCompatibilityCheckerException}
  */
+@Deprecated
 public class CompatibilityCheckerException extends JannovarException {
 
 	public static final long serialVersionUID = 1L;

@@ -15,7 +15,10 @@ import de.charite.compbio.jannovar.pedigree.Person;
  * This class summarizes the builder compatibility checks.
  *
  * @author Max Schubach <max.schubach@charite.de>
+ * 
+ * @deprecated use {@link AbstractCompatibilityChecker} instead.
  */
+@Deprecated
 public abstract class CompatibilityCheckerBase implements CompatibilityChecker {
 
 	/** the pedigree to use for the checking */

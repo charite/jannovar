@@ -38,7 +38,7 @@ public class FlaggedVariant {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((vc == null) ? 0 : vc.getChr().hashCode());
+		result = prime * result + ((vc == null) ? 0 : vc.getContig().hashCode());
 		result = prime * result + ((vc == null) ? 0 : vc.getStart());
 		result = prime * result + ((vc == null) ? 0 : vc.getReference().hashCode());
 		result = prime * result + ((vc == null) ? 0 : vc.getAlleles().hashCode());
@@ -62,6 +62,11 @@ public class FlaggedVariant {
 		} else if (!vc.equals(other.vc))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Included:" + isIncluded() + " -> " + getVC().toString();
 	}
 
 }

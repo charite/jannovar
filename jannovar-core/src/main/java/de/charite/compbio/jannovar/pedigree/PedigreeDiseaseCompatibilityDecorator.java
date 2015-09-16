@@ -6,15 +6,16 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.Compatibilit
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xd.CompatibilityCheckerXDominant;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.CompatibilityCheckerXRecessive;
 
-// TODO(holtgrewe): Add functionality to compute marker for non-compa
-
 /**
  * Decorator for {@link Pedigree} that allows checking whether a Genotype call is compatible with a selected mode of
  * inheritance.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
+ * 
+ *  @deprecated use {@link InheritanceCompatibilityChecker} instead.  
  */
+@Deprecated
 public class PedigreeDiseaseCompatibilityDecorator {
 
 	/** the pedigree */

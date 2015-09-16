@@ -14,43 +14,39 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCheckerException;
 
 /**
- * Helper class for checking a {@link GenotypeList} for compatibility with a
- * {@link Pedigree} and autosomal recessive homozygous mode.
+ * Helper class for checking a {@link GenotypeList} for compatibility with a {@link Pedigree} and autosomal recessive
+ * homozygous mode.
  *
  * <h2>Compatibility Check</h2>
  *
- * In the case of a single individual, we require
- * {@link Genotype#HOMOZYGOUS_ALT}.
+ * In the case of a single individual, we require {@link Genotype#HOMOZYGOUS_ALT}.
  *
- * In the case of multiple individuals, we require that the affects are
- * compatible, that the unaffected parents of affected individuals are not
- * {@link Genotype#HOMOZYGOUS_ALT}, unaffected females are not are not
- * {@link Genotype#HOMOZYGOUS_REF}, and that all unaffected individuals are not
- * {@link Genotype#HOMOZYGOUS_ALT}. The affected individuals are compatible if
- * no affected individual is {@link Genotype#HOMOZYGOUS_REF} or
- * {@link Genotype#HETEROZYGOUS} and there is at least one affected individual
- * that is {@link Genotype#HOMOZYGOUS_ALT}.
+ * In the case of multiple individuals, we require that the affects are compatible, that the unaffected parents of
+ * affected individuals are not {@link Genotype#HOMOZYGOUS_ALT}, unaffected females are not are not
+ * {@link Genotype#HOMOZYGOUS_REF}, and that all unaffected individuals are not {@link Genotype#HOMOZYGOUS_ALT}. The
+ * affected individuals are compatible if no affected individual is {@link Genotype#HOMOZYGOUS_REF} or
+ * {@link Genotype#HETEROZYGOUS} and there is at least one affected individual that is {@link Genotype#HOMOZYGOUS_ALT}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Max Schubach <max.schubach@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
+ * 
+ * @deprecated use {@link VariantContextCompatibilityCheckerXRecessiveHomozygous} instead.
  */
+@Deprecated
 class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase {
 
 	/**
-	 * decorator for getting unaffected individuals and such from the
-	 * {@link Pedigree}
+	 * decorator for getting unaffected individuals and such from the {@link Pedigree}
 	 */
 	protected final PedigreeQueryDecorator queryDecorator;
 
 	/**
 	 * Initialize compatibility checker and perform some sanity checks.
 	 *
-	 * The {@link GenotypeList} object passed to the constructor is expected to
-	 * represent all of the variants found in a certain gene (possibly after
-	 * filtering for rarity or predicted pathogenicity). The samples represented
-	 * by the {@link GenotypeList} must be in the same order as the list of
-	 * individuals contained in this pedigree.
+	 * The {@link GenotypeList} object passed to the constructor is expected to represent all of the variants found in a
+	 * certain gene (possibly after filtering for rarity or predicted pathogenicity). The samples represented by the
+	 * {@link GenotypeList} must be in the same order as the list of individuals contained in this pedigree.
 	 *
 	 * @param pedigree
 	 *            the {@link Pedigree} to use for the initialize
@@ -97,15 +93,13 @@ class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase 
 			if (person.getDisease() == Disease.AFFECTED) {
 				if (gtList.get(i) == Genotype.HOMOZYGOUS_REF)
 					/**
-					 * acnnot be disease-causing mutation, an affected male or
-					 * female does not have it.
+					 * acnnot be disease-causing mutation, an affected male or female does not have it.
 					 */
 					return false;
 				else if (person.getSex() == Sex.FEMALE && gtList.get(i) == Genotype.HETEROZYGOUS)
 					/**
-					 * cannot be disease-causing mutation if a female have it
-					 * heterozygous. For a male we think it is a misscall (alt
-					 * instead of het)
+					 * cannot be disease-causing mutation if a female have it heterozygous. For a male we think it is a
+					 * misscall (alt instead of het)
 					 */
 					return false;
 				else if (gtList.get(i) == Genotype.HOMOZYGOUS_ALT
@@ -119,9 +113,8 @@ class CompatibilityCheckerXRecessiveHomozygous extends CompatibilityCheckerBase 
 	}
 
 	/**
-	 * For XR the parents of male and female behaves different. The father of a
-	 * Female individual must always be affected. If the sex is unknown to check
-	 * is made!
+	 * For XR the parents of male and female behaves different. The father of a Female individual must always be
+	 * affected. If the sex is unknown to check is made!
 	 * 
 	 * @param gtList
 	 * @return

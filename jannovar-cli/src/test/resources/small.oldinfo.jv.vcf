@@ -1,4 +1,4 @@
-##fileformat=VCFv4.1
+##fileformat=VCFv4.2
 ##INFO=<ID=EFFECT,Number=1,Type=String,Description="variant effect (UTR5,UTR3,intronic,splicing,missense,stoploss,stopgain,startloss,duplication,frameshift-insertion,frameshift-deletion,non-frameshift-deletion,non-frameshift-insertion,synonymous)">
 ##INFO=<ID=HGVS,Number=1,Type=String,Description="HGVS Nomenclature">
 ##jannovarCommand
