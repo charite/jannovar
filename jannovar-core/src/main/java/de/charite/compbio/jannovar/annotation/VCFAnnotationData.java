@@ -125,10 +125,15 @@ class VCFAnnotationData {
 	}
 
 	private String escape(String str) {
-		String result = CharMatcher.anyOf(",;").or(CharMatcher.WHITESPACE).replaceFrom(str, "_");
+		// Escaping follows the requirements of (1) VCF 4.2 and (2) the "Variant annotations in VCF format document.
+		// We use the strategy of keeping as much as possible reconstructable (bijective mappings, for the
+		// mathematically inclined).
+		String result = CharMatcher.is('%').replaceFrom(str, "%25");
+		result = CharMatcher.is(',').replaceFrom(result, "%2C");
+		result = CharMatcher.is(';').replaceFrom(result, "%3B");
 		result = CharMatcher.is('=').replaceFrom(result, "%3D");
-		result = CharMatcher.is('(').replaceFrom(result, "%28");
-		result = CharMatcher.is(')').replaceFrom(result, "%29");
+		result = CharMatcher.is(' ').replaceFrom(result, "%20");
+		result = CharMatcher.is('\t').replaceFrom(result, "%09");
 		return result;
 	}
 
