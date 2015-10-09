@@ -5,14 +5,14 @@ package de.charite.compbio.jannovar.annotation;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public class InvalidGenomeChange extends AnnotationException {
+public class InvalidGenomeVariant extends AnnotationException {
 
 	private static final long serialVersionUID = -6983204936815945929L;
 
-	public InvalidGenomeChange() {
+	public InvalidGenomeVariant() {
 	}
 
-	public InvalidGenomeChange(String msg) {
+	public InvalidGenomeVariant(String msg) {
 		super(msg);
 	}
 

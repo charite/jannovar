@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.annotation.builders;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
@@ -32,10 +32,10 @@ public final class AnnotationBuilderDispatcher {
 	/**
 	 * @return {@link Annotation} for {@link #transcript} and {@link #change}
 	 *
-	 * @throws InvalidGenomeChange
+	 * @throws InvalidGenomeVariant
 	 *             if there is a problem with {@link #change}
 	 */
-	public Annotation build() throws InvalidGenomeChange {
+	public Annotation build() throws InvalidGenomeVariant {
 		if (transcript == null)
 			return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null,
 					new GenomicNucleotideChangeBuilder(change).build(), null, null);
