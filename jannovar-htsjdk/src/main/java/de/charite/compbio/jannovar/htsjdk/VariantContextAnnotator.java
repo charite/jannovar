@@ -155,7 +155,7 @@ public final class VariantContextAnnotator {
 	 * @throws InvalidCoordinatesException
 	 *             in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
 	 */
-	public GenomeVariant buildGenomeChange(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
+	public GenomeVariant buildGenomeVariant(VariantContext vc, int alleleID) throws InvalidCoordinatesException {
 		// Catch the case that vc.getChr() is not in ChromosomeMap.identifier2chromosom. This is the case
 		// for the "random" and "alternative locus" contigs etc.
 		Integer boxedInt = refDict.getContigNameToID().get(vc.getContig());
@@ -207,7 +207,7 @@ public final class VariantContextAnnotator {
 
 		ImmutableList.Builder<VariantAnnotations> builder = new ImmutableList.Builder<VariantAnnotations>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
-			GenomeVariant change = buildGenomeChange(vc, alleleID);
+			GenomeVariant change = buildGenomeVariant(vc, alleleID);
 
 			// Build AnnotationList object for this allele.
 			try {

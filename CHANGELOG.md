@@ -2,6 +2,9 @@
 
 ## develop
 
+### jannovar-htsjdk
+
+* renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
 
 ### jannovar-core
 
