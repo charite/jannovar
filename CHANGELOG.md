@@ -2,6 +2,14 @@
 
 ## develop
 
+## jannovar-core
+
+* less intrusive escaping in `ANN` field
+
+## jannovar-htsjdk
+
+* renaming `InvalidGenomeChange` to `InvalidGenomeVariant`
+
 ### jannovar-htsjdk
 
 * renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
