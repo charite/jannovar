@@ -43,11 +43,11 @@ public class BuildExampleJannovarDB {
 		ReferenceDictionary refDict = refDictBuilder.build();
 		// parse TranscriptModel
 		GFFParser gffParser = new GFFParser(tmpDir + "/transcript.gff3", new GFFVersion(3), false);
-		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), refDict);
+		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), false, refDict);
 		gffParser.parse(fp);
 		// build ArrayList of TranscriptModelBuilder objects from feature list
 		ArrayList<TranscriptModelBuilder> builders;
-		TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.getGffVersion(), refDict);
+		TranscriptInfoFactory tif = new TranscriptInfoFactory(false, gffParser.getGffVersion(), refDict);
 		builders = tif.buildTranscripts(fp.getGenes(), false);
 		builders = new RefSeqFastaParser(tmpDir + "/rna.fa", builders, false).parse();
 		// create final list of TranscriptInfos

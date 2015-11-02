@@ -2,6 +2,11 @@
 
 ## develop
 
+### jannovar-core
+
+* fixing bug in parsing GFF3 with some transcripts (e.g. GNAT1)
+
+## v0.15
 
 ### jannovar-core
 

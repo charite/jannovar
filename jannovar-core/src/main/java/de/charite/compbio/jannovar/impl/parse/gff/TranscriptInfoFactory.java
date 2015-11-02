@@ -29,6 +29,8 @@ public final class TranscriptInfoFactory {
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptInfoFactory.class);
 
+	/** Whether or not the data comes from GTF */
+	private final boolean isGTF;
 	/** {@link GFFVersion} to assume for building transcripts from Feature objects */
 	@SuppressWarnings("unused")
 	private final GFFVersion gffVersion;
@@ -36,7 +38,8 @@ public final class TranscriptInfoFactory {
 	/** reference dictionary to use */
 	private final ReferenceDictionary refDict;
 
-	public TranscriptInfoFactory(GFFVersion gffVersion, ReferenceDictionary refDict) {
+	public TranscriptInfoFactory(boolean isGTF, GFFVersion gffVersion, ReferenceDictionary refDict) {
+		this.isGTF = isGTF;
 		this.gffVersion = gffVersion;
 		this.refDict = refDict;
 	}
@@ -74,8 +77,8 @@ public final class TranscriptInfoFactory {
 				tib.setAccession(rna.name);
 				tib.setGeneSymbol(gene.name);
 				tib.setStrand(rna.strand ? Strand.FWD : Strand.REV);
-				tib.setTXRegion(new GenomeInterval(refDict, Strand.FWD, rna.chromosom, rna.getTXStart(), rna
-						.getTXEnd(), PositionType.ONE_BASED));
+				tib.setTXRegion(new GenomeInterval(refDict, Strand.FWD, rna.chromosom, rna.getTXStart(),
+						rna.getTXEnd(), PositionType.ONE_BASED));
 
 				// Check whether the corrected CDS start position returned from getCDSStart() is within an exon and do
 				// the same for the CDS end position. The correction in these methods can lead to inconsistent positions
