@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -60,7 +60,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardUpstream() throws InvalidGenomeChange {
+	public void testForwardUpstream() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -72,7 +72,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardDownstream() throws InvalidGenomeChange {
+	public void testForwardDownstream() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -84,7 +84,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntergenic() throws InvalidGenomeChange {
+	public void testForwardIntergenic() throws InvalidGenomeVariant {
 		// upstream intergenic
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639061,
 				PositionType.ZERO_BASED), "T", "A");
@@ -107,7 +107,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntronic() throws InvalidGenomeChange {
+	public void testForwardIntronic() throws InvalidGenomeVariant {
 		// position towards right side of intron
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642106,
 				PositionType.ZERO_BASED), "T", "A");
@@ -130,7 +130,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardThreePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649272,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -142,7 +142,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardFivePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640668,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -154,7 +154,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStartLoss() throws InvalidGenomeChange {
+	public void testForwardStartLoss() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
 				PositionType.ZERO_BASED), "A", "T");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -167,7 +167,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStopLoss() throws InvalidGenomeChange {
+	public void testForwardStopLoss() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
 				PositionType.ZERO_BASED), "G", "C");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -179,7 +179,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStopGained() throws InvalidGenomeChange {
+	public void testForwardStopGained() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649262,
 				PositionType.ZERO_BASED), "T", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -191,7 +191,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStopRetained() throws InvalidGenomeChange {
+	public void testForwardStopRetained() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
 				PositionType.ZERO_BASED), "G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -205,7 +205,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardSplicingDonor() throws InvalidGenomeChange {
+	public void testForwardSplicingDonor() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640196,
 				PositionType.ZERO_BASED), "G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -219,7 +219,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardSplicingAcceptor() throws InvalidGenomeChange {
+	public void testForwardSplicingAcceptor() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640599,
 				PositionType.ZERO_BASED), "G", "A");
 		Annotation anno = new SNVAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -233,7 +233,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardSplicingRegion() throws InvalidGenomeChange {
+	public void testForwardSplicingRegion() throws InvalidGenomeVariant {
 		// in UTR
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640602,
 				PositionType.ZERO_BASED), "G", "A");
@@ -258,7 +258,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFirstCDSBases() throws InvalidGenomeChange {
+	public void testForwardFirstCDSBases() throws InvalidGenomeVariant {
 		// We check the first 10 CDS bases and compared them by hand to Mutalyzer results.
 
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
@@ -356,7 +356,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardLastCDSBases() throws InvalidGenomeChange {
+	public void testForwardLastCDSBases() throws InvalidGenomeVariant {
 		// Here, we start off 3 positions before the end (2 positions before the inclusive end).
 
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649270,
@@ -451,7 +451,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testReverseFirstCDSBases() throws InvalidGenomeChange {
+	public void testReverseFirstCDSBases() throws InvalidGenomeVariant {
 		// We check the first 10 CDS bases and compared them by hand to Mutalyzer results.
 
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23694497,
@@ -549,7 +549,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testReverseLastCDSBases() throws InvalidGenomeChange {
+	public void testReverseLastCDSBases() throws InvalidGenomeVariant {
 		// Here, we start off 3 positions before the end (2 positions before the inclusive end).
 
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 23688461,
@@ -650,7 +650,7 @@ public class SNVAnnotationBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc001hjk_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hjk_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001hjk.3	chr1	+	212797788	212800120	212798219	212800004	1	212797788,	212800120,	Q8IYT1	uc001hjk.3");
 		this.builderForward
@@ -671,7 +671,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003npv_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003npv_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -694,7 +694,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010rht_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010rht_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc010rht.2	chr11	+	48285412	48286330	48285412	48286330	1	48285412,	48286330,	Q8NH49	uc010rht.2");
 		this.builderForward
@@ -715,7 +715,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010zdp_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010zdp_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -738,7 +738,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010zdo_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010zdo_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -762,7 +762,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002ugu_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002ugu_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -785,7 +785,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003teh_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003teh_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -812,7 +812,7 @@ public class SNVAnnotationBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc011mzv_2_missense() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011mzv_2_missense() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -836,7 +836,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010nvg_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010nvg_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -860,7 +860,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc011mzw_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011mzw_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -884,7 +884,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc004fmp_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc004fmp_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -908,7 +908,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010fks_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010fks_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -931,7 +931,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002tjq_5() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002tjq_5() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -954,7 +954,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003vmj_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003vmj_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003vmj.2	chr7	+	127637561	127640130	127637746	127638079	1	127637561,	127640130,	Q9HBX3	uc003vmj.2");
 		this.builderForward
@@ -975,7 +975,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001amg_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001amg_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -998,7 +998,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001auk_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001auk_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1021,7 +1021,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010obg_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010obg_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,
 						"uc010obg.2	chr1	-	13182959	13184326	13182990	13183872	2	13182959,13184264,	13184053,13184326,	NP_001130033	uc010obg.2");
@@ -1043,7 +1043,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001awf_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001awf_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1066,7 +1066,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001awe_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001awe_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1089,7 +1089,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010obl_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010obl_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1112,7 +1112,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001awd_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001awd_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1135,7 +1135,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001awb_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001awb_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1158,7 +1158,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001awp_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001awp_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1181,7 +1181,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc021oho_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc021oho_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1204,7 +1204,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc021ohn_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc021ohn_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1227,7 +1227,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_c001bem_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_c001bem_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1251,7 +1251,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001bfa_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bfa_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1274,7 +1274,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc009vqi_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc009vqi_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1297,7 +1297,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001bie_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bie_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1320,7 +1320,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010oez_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010oez_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1343,7 +1343,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001bwx_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bwx_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1366,7 +1366,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002rcc_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002rcc_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1389,7 +1389,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002rew_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002rew_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1412,7 +1412,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010eyq_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010eyq_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1439,7 +1439,7 @@ public class SNVAnnotationBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc011mzv_2_synonymous() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011mzv_2_synonymous() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1463,7 +1463,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001aya_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001aya_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1486,7 +1486,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001bbk_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bbk_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1509,7 +1509,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001bxq_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bxq_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,
 						"uc001bxq.3	chr1	+	34329679	34330392	34330014	34330353	2	34329679,34329863,	34329778,34330392,	Q8WW32	uc001bxq.3");
@@ -1532,7 +1532,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001cas_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001cas_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1555,7 +1555,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001dsh_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001dsh_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1578,7 +1578,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001dxa_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001dxa_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1601,7 +1601,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001ebt_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001ebt_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1624,7 +1624,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001ezt_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001ezt_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1647,7 +1647,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001gde_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001gde_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1670,7 +1670,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001ggz_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001ggz_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1693,7 +1693,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001gih_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001gih_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1716,7 +1716,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001gpy_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001gpy_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1739,7 +1739,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001gxe_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001gxe_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1762,7 +1762,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001hnh_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hnh_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1785,7 +1785,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003str_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003str_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1808,7 +1808,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003suh_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003suh_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1831,7 +1831,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003tta_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003tta_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1854,7 +1854,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010lft_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010lft_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1877,7 +1877,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003vtu_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003vtu_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1900,7 +1900,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002lzv_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002lzv_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1923,7 +1923,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003apg_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003apg_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1950,7 +1950,7 @@ public class SNVAnnotationBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc003gpr_1_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003gpr_1_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1973,7 +1973,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001vjy_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001vjy_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1996,7 +1996,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010pcf_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010pcf_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2019,7 +2019,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001ibf_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001ibf_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2042,7 +2042,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001idp_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001idp_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2065,7 +2065,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010yrl_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010yrl_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2088,7 +2088,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010fyp_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010fyp_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,
 						"uc010fyp.1	chr2	-	237146331	237150258	237146333	237150163	2	237146331,237149922,	237146599,237150258,	uc010fyp.1");
@@ -2110,7 +2110,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010kdf_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010kdf_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2133,7 +2133,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003ztp_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003ztp_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2156,7 +2156,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010mug_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010mug_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2179,7 +2179,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010ddv_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010ddv_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2202,7 +2202,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003ach_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003ach_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2225,7 +2225,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001dcv_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001dcv_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2249,7 +2249,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001alq_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001alq_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2273,7 +2273,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001byw_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001byw_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2296,7 +2296,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fkt_3_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fkt_3_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2320,7 +2320,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fkt_3_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fkt_3_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2344,7 +2344,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fkt_3_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fkt_3_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2368,7 +2368,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fkt_3_fourth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fkt_3_fourth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2392,7 +2392,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fpu_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fpu_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2416,7 +2416,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fro_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fro_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2440,7 +2440,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001hjn_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hjn_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2464,7 +2464,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010pyu_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010pyu_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2488,7 +2488,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002rso_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002rso_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2512,7 +2512,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010ysm_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010ysm_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2536,7 +2536,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002spq_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002spq_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2560,7 +2560,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002tfo_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002tfo_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2584,7 +2584,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003gpr_1_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003gpr_1_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2612,7 +2612,7 @@ public class SNVAnnotationBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc009zky_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc009zky_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2636,7 +2636,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010pmp_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010pmp_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,
 						"uc010pmp.1	chr1	-	173387087	173430501	173387087	173387087	2	173387087,173429516,	173387761,173430501,	uc010pmp.1");
@@ -2659,7 +2659,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc021yhe_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc021yhe_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc021yhe.1	chr5	+	159912358	159912457	159912358	159912358	1	159912358,	159912457,		uc021yhe.1");
 		this.builderForward
@@ -2681,7 +2681,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010wdn_1_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010wdn_1_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2705,7 +2705,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002kts_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002kts_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2729,7 +2729,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002wve_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002wve_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2753,7 +2753,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc004dzz_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc004dzz_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc004dzz.3	chrX	-	70711376	70712604	70711376	70711376	1	70711376,	70712604,		uc004dzz.3");
 		this.builderForward
@@ -2775,7 +2775,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc004frk_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc004frk_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2804,7 +2804,7 @@ public class SNVAnnotationBuilderTest {
 	 * </P>
 	 */
 	@Test
-	public void testRealWorldCase_uc010zjy_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010zjy_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2831,7 +2831,7 @@ public class SNVAnnotationBuilderTest {
 	//
 
 	@Test
-	public void testRealWorldCase_uc001abo_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001abo_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2854,7 +2854,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc021vpr_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc021vpr_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2882,7 +2882,7 @@ public class SNVAnnotationBuilderTest {
 	 * </P>
 	 */
 	@Test
-	public void testRealWorldCase_uc001bgg_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bgg_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001bgg.1	chr1	+	23243782	23247347	23243782	23243782	1	23243782,	23247347,		uc001bgg.1");
 		this.builderForward
@@ -2909,7 +2909,7 @@ public class SNVAnnotationBuilderTest {
 	 * Result hand-checked OK.
 	 */
 	@Test
-	public void testRealWorldCase_uc001acf_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001acf_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2939,7 +2939,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001rrr_3_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rrr_3_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2968,7 +2968,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001rrr_3_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rrr_3_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2998,7 +2998,7 @@ public class SNVAnnotationBuilderTest {
 	 */
 
 	@Test
-	public void testRealWorldCase_uc001rrr_3_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rrr_3_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3027,7 +3027,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001rrr_3_fourth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rrr_3_fourth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3056,7 +3056,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001rrr_3_fifth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rrr_3_fifth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3086,7 +3086,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001rrr_3_sixth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rrr_3_sixth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3116,7 +3116,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001hni_2_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hni_2_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3143,7 +3143,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001hni_2_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hni_2_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3170,7 +3170,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc009xdy_1_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc009xdy_1_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3199,7 +3199,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc009xdy_1_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc009xdy_1_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3228,7 +3228,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001hni_2_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hni_2_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3256,7 +3256,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001hni_2_fourth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001hni_2_fourth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3284,7 +3284,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc002wvf_3_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002wvf_3_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3314,7 +3314,7 @@ public class SNVAnnotationBuilderTest {
 	 * '+'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc002wvf_3_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002wvf_3_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3344,7 +3344,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc010wdn_1_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010wdn_1_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3374,7 +3374,7 @@ public class SNVAnnotationBuilderTest {
 	 * '-'-strand
 	 */
 	@Test
-	public void testRealWorldCase_uc010wdn_1_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010wdn_1_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3403,7 +3403,7 @@ public class SNVAnnotationBuilderTest {
 	 * </P>
 	 */
 	@Test
-	public void testRealWorldCase_uc001amb_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001amb_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -3427,7 +3427,7 @@ public class SNVAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010pha_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010pha_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
