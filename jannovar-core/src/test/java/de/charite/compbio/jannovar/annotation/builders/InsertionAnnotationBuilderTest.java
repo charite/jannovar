@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -63,7 +63,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardUpstream() throws InvalidGenomeChange {
+	public void testForwardUpstream() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -75,7 +75,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardDownstream() throws InvalidGenomeChange {
+	public void testForwardDownstream() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -87,7 +87,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntergenic() throws InvalidGenomeChange {
+	public void testForwardIntergenic() throws InvalidGenomeVariant {
 		// upstream intergenic
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639062,
 				PositionType.ZERO_BASED), "", "A");
@@ -110,7 +110,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntronic() throws InvalidGenomeChange {
+	public void testForwardIntronic() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6646098,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -122,7 +122,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardFivePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640669,
 				PositionType.ZERO_BASED), "", "C");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -134,7 +134,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardThreePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649272,
 				PositionType.ZERO_BASED), "", "A");
 		Annotation anno = new InsertionAnnotationBuilder(infoForward, change, new AnnotationBuilderOptions()).build();
@@ -146,7 +146,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardSplicing() throws InvalidGenomeChange {
+	public void testForwardSplicing() throws InvalidGenomeVariant {
 		// TODO(holtgrem): test more cases
 		GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
 				PositionType.ZERO_BASED), "", "ACT");
@@ -160,7 +160,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardThreeBasesNoFrameShiftInsertion() throws InvalidGenomeChange {
+	public void testForwardThreeBasesNoFrameShiftInsertion() throws InvalidGenomeVariant {
 		// Tests insertion of three bases (smallest no-frameshift insertion).
 
 		// TODO(holtgrem): The WT stop codon is replaced by another one -- duplication.
@@ -251,7 +251,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardOneBaseFrameShiftInsertion() throws InvalidGenomeChange {
+	public void testForwardOneBaseFrameShiftInsertion() throws InvalidGenomeVariant {
 		// We check some one-nucleotide insertions in the first ten bases and compared them by hand to Mutalyzer
 		// results.
 
@@ -387,7 +387,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardTwoBaseFrameShiftInsertion() throws InvalidGenomeChange {
+	public void testForwardTwoBaseFrameShiftInsertion() throws InvalidGenomeVariant {
 		// We check some two-nucleotide insertions in the first ten bases and compared them by hand to Mutalyzer
 		// results.
 
@@ -489,7 +489,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardOnFourBaseFrameShiftInsertion() throws InvalidGenomeChange {
+	public void testForwardOnFourBaseFrameShiftInsertion() throws InvalidGenomeVariant {
 		// We check some four-nucleotide insertions in the first ten bases and compared them by hand to Mutalyzer
 		// results.
 
@@ -517,7 +517,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testReverseOneBaseFrameShiftInsertion() throws InvalidGenomeChange {
+	public void testReverseOneBaseFrameShiftInsertion() throws InvalidGenomeVariant {
 		// We check some one-nucleotide insertions in the first ten bases and compared them by hand to Mutalyzer
 		// results. We perform less tests than for the forward case since the only change is the coordinate system
 		// transformation to the reverse strand and the reverse-complementing of the inserted bases.
@@ -612,7 +612,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testReverseOnFourBaseFrameShiftInsertion() throws InvalidGenomeChange {
+	public void testReverseOnFourBaseFrameShiftInsertion() throws InvalidGenomeVariant {
 		// We check some four-nucleotide insertions in the first ten bases and in the stop codon and compared them by
 		// hand to Mutalyzer results.
 
@@ -653,7 +653,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testInsertionAtIntronExonBorder() throws InvalidGenomeChange {
+	public void testInsertionAtIntronExonBorder() throws InvalidGenomeVariant {
 		String x = "uc001anx.3	chr1	+	6640062	6649340	6640669	6649272	11	6640062,6640600,6642117,6645978,6646754,6647264,6647537,6648119,6648337,6648815,6648975,	6640196,6641359,6642359,6646090,6646847,6647351,6647692,6648256,6648502,6648904,6649340,	P10074	uc001anx.3";
 
 		// directly after the exons
@@ -730,7 +730,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010slx_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010slx_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -754,7 +754,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010vsd_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010vsd_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -778,7 +778,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc004aus_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc004aus_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -803,7 +803,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010arh_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010arh_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc010arh.1	chr14	-	73075741	73079803	73075741	73075741	1	73075741,	73079803,		uc010arh.1");
 		this.builderForward
@@ -835,7 +835,7 @@ public class InsertionAnnotationBuilderTest {
 	 * Mutalyzer: NM_001005495(OR2T3_v001):c.769_771dup NM_001005495(OR2T3_i001):p.(Phe257dup)
 	 */
 	@Test
-	public void testRealWorldCase_uc001iel_1_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001iel_1_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
 		this.builderForward
@@ -875,7 +875,7 @@ public class InsertionAnnotationBuilderTest {
 	 * but was: <...c003izs.3:exon6:c.43[8]dupA:p.M147fs)>
 	 */
 	@Test
-	public void testRealWorldCase_uc003izs_3_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003izs_3_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -902,7 +902,7 @@ public class InsertionAnnotationBuilderTest {
 	 * This is the test for the in-frame duplication of a single triplicate / one amino acids '+' strand
 	 */
 	@Test
-	public void testRealWorldCase_uc010naq_2_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010naq_2_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -928,7 +928,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001iel_1_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001iel_1_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
 		this.builderForward
@@ -958,7 +958,7 @@ public class InsertionAnnotationBuilderTest {
 	 * <...6_771dupCTCTTC:p.L25[6_F257]dup)> but was: <...6_771dupCTCTTC:p.L25[4_F256]dup)>
 	 */
 	@Test
-	public void testRealWorldCase_uc001iel_1_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001iel_1_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
 		this.builderForward
@@ -985,7 +985,7 @@ public class InsertionAnnotationBuilderTest {
 	 * This is the test for the in-frame duplication of 12 nuc.acids / tree amino acids '+' strand
 	 */
 	@Test
-	public void testRealWorldCase_uc001iel_1_fourth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001iel_1_fourth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
 		this.builderForward
@@ -1014,7 +1014,7 @@ public class InsertionAnnotationBuilderTest {
 	 * Mutalyzer: NM_022149.4(MAGEF1_v001):c.424_426dup NM_022149.4(MAGEF1_i001):p.(Thr142dup)
 	 */
 	@Test
-	public void testRealWorldCase_uc003fpa_3_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003fpa_3_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
 		this.builderForward
@@ -1044,7 +1044,7 @@ public class InsertionAnnotationBuilderTest {
 	 * mutalzyer: NM_022149.4(MAGEF1_v001):c.439_444dup NM_022149.4(MAGEF1_i001):p.(Asn147_Lys148dup)
 	 */
 	@Test
-	public void testRealWorldCase_uc003fpa_3_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003fpa_3_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
 		this.builderForward
@@ -1071,7 +1071,7 @@ public class InsertionAnnotationBuilderTest {
 	 * This is the test for the in-frame duplication of 12 nuc.acids / three amino acids '-' strand
 	 */
 	@Test
-	public void testRealWorldCase_uc003fpa_3_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003fpa_3_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
 		this.builderForward
@@ -1103,7 +1103,7 @@ public class InsertionAnnotationBuilderTest {
 	 * is wrong here, the stop is right after the duplication.
 	 */
 	@Test
-	public void testRealWorldCase_uc001iel_1_fifth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001iel_1_fifth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001iel.1	chr1	+	248636651	248637608	248636651	248637608	1	248636651,	248637608,	Q8NH03	uc001iel.1");
 		this.builderForward
@@ -1136,7 +1136,7 @@ public class InsertionAnnotationBuilderTest {
 	 * NM_022149.4(MAGEF1_v001):c.474_476dup NM_022149.4(MAGEF1_i001):p.(Glu158dup)
 	 */
 	@Test
-	public void testRealWorldCase_uc003fpa_3_fourth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003fpa_3_fourth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003fpa.3	chr3	-	184428154	184429836	184428685	184429609	1	184428154,	184429836,	Q9HAY2	uc003fpa.3");
 		this.builderForward
@@ -1164,7 +1164,7 @@ public class InsertionAnnotationBuilderTest {
 	 * chr2:97568428->ATCG
 	 */
 	@Test
-	public void testRealWorldCase_uc002sxk_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002sxk_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1191,7 +1191,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: RANBP2:uc002tem.4:exon16:c.2265_2266insCC:p.D755fs, chr2:109371423->CC
 	 */
 	@Test
-	public void testRealWorldCase_uc002tem_4_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002tem_4_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1220,7 +1220,7 @@ public class InsertionAnnotationBuilderTest {
 	 * mutalzyer: NM_012159(FBXL21_v001):c.93_94insA NM_012159(FBXL21_i001):p.(Gln32Thrfs*39)
 	 */
 	@Test
-	public void testRealWorldCase_uc031sld_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc031sld_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1247,7 +1247,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: RANBP2:uc002tem.4:exon20:c.6318_6319insAGCG:p.M2106fs, chr2:109383313->AGCG
 	 */
 	@Test
-	public void testRealWorldCase_uc002tem_4_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002tem_4_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1276,7 +1276,7 @@ public class InsertionAnnotationBuilderTest {
 	 * Mutalyzer: NM_006267.4(RANBP2_v001):c.6882_6883insCAT NM_006267.4(RANBP2_i001):p.(Asp2294_Glu2295insHis)
 	 */
 	@Test
-	public void testRealWorldCase_uc002tem_4_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002tem_4_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1303,7 +1303,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: TTN:uc002umz.1:exon112:c.21594_21595insACTT:p.K7198fs, chr2:179519685->AAGT
 	 */
 	@Test
-	public void testRealWorldCase_uc002umz_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002umz_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1333,7 +1333,7 @@ public class InsertionAnnotationBuilderTest {
 	 * NM_001122633.2(CPS1_i001):p.(Ile5_Lys6insPhe)
 	 */
 	@Test
-	public void testRealWorldCase_uc010fur_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010fur_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1362,7 +1362,7 @@ public class InsertionAnnotationBuilderTest {
 	 * Mutalyzer: NM_018406.6:n.8263_8264insTG NM_018406.6:c.8108_8109insTG NM_018406.6:p.(Ser2704Alafs*301)
 	 */
 	@Test
-	public void testRealWorldCase_uc021xjp_1_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc021xjp_1_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1389,7 +1389,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: MUC4:uc021xjp.1:exon2:c.6858_6859insCAG:p.T2286delinsTS, chr3:195511593->CTG
 	 */
 	@Test
-	public void testRealWorldCase_uc021xjp_1_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc021xjp_1_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1416,7 +1416,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: FRG1:uc003izs.3:exon7:c.608_609insGACT:p.K203fs, chr4:190881973->GACT
 	 */
 	@Test
-	public void testRealWorldCase_uc003izs_3_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003izs_3_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1443,7 +1443,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: PRDM9:uc003jgo.3:exon11:c.1147_1148insTGA:p.P383delinsLT, chr5:23526344->TGA
 	 */
 	@Test
-	public void testRealWorldCase_uc003jgo_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003jgo_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1473,7 +1473,7 @@ public class InsertionAnnotationBuilderTest {
 	 * says, annovar finds a "C")
 	 */
 	@Test
-	public void testRealWorldCase_uc003kfl_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003kfl_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1500,7 +1500,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: PCDHB10:uc003lix.3:exon1:c.1806_1807insATGC:p.L602fs, chr5:140573931->ATGC
 	 */
 	@Test
-	public void testRealWorldCase_uc003lix_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003lix_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003lix.3	chr5	+	140571951	140575213	140572125	140574528	1	140571951,	140575213,	Q9UN67	uc003lix.3");
 		this.builderForward
@@ -1525,7 +1525,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: AK098012:uc003nrp.1:exon2:c.254_255insCAAA:p.P85fs, chr6:30782220->TTTG
 	 */
 	@Test
-	public void testRealWorldCase_uc003nrp_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003nrp_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,
 						"uc003nrp.1	chr6	-	30780642	30798436	30781987	30782473	2	30780642,30798291,	30782549,30798436,	uc003nrp.1");
@@ -1551,7 +1551,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: PRICKLE4:uc011duf.1:exon8:c.863_864insTCT:p.L288delinsLL, chr6:41754575->TCT
 	 */
 	@Test
-	public void testRealWorldCase_uc011duf_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011duf_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1579,7 +1579,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: AEBP1:uc003tkb.3:exon1:c.118_119insAAAA:p.G40fs, chr7:44144382->AAAA
 	 */
 	@Test
-	public void testRealWorldCase_uc003tkb_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003tkb_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1606,7 +1606,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: MUC12:uc003uxo.3:exon2:c.3442_3443insGTA:p.T1148delinsST, chr7:100637286->GTA
 	 */
 	@Test
-	public void testRealWorldCase_uc003uxo_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003uxo_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1634,7 +1634,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: OLFM1:uc010naq.2:exon2:c.328_329insAA:p.G110fs, chr9:137968919->AA
 	 */
 	@Test
-	public void testRealWorldCase_uc010naq_2second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010naq_2second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1661,7 +1661,7 @@ public class InsertionAnnotationBuilderTest {
 	 * Mutalyzer: NM_033419.3:n.328dup NM_033419.3(PGAP3_v001):c.285dup NM_033419.3(PGAP3_i001):p.(Phe96Leufs*67)
 	 */
 	@Test
-	public void testRealWorldCase_uc002hsk_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002hsk_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1692,7 +1692,7 @@ public class InsertionAnnotationBuilderTest {
 	 * is destroyed.
 	 */
 	@Test
-	public void testRealWorldCase_uc003izs_3_third() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003izs_3_third() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1719,7 +1719,7 @@ public class InsertionAnnotationBuilderTest {
 	 * This duplication variation should lead to the loss of the translation initiation site
 	 */
 	@Test
-	public void testRealWorldCase_uc003izs_3_fourth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003izs_3_fourth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1750,7 +1750,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: THAP3 chr1:6693165->TA
 	 */
 	@Test
-	public void testRealWorldCase_uc001aod_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001aod_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1777,7 +1777,7 @@ public class InsertionAnnotationBuilderTest {
 	 * annovar: RGS21 chr1:192335275->TAAT
 	 */
 	@Test
-	public void testRealWorldCase_uc001gsh_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001gsh_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1806,7 +1806,7 @@ public class InsertionAnnotationBuilderTest {
 	 * </P>
 	 */
 	@Test
-	public void testRealWorldCase_uc003izs_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003izs_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1832,7 +1832,7 @@ public class InsertionAnnotationBuilderTest {
 	// The following variant from the Platinum Genome project caused problems against hg19/ucsc:
 	// chr22:20640691:>ATGCCGTGCACGGCATCCTCGTTAGCA
 	@Test
-	public void testRealWorldCase_uc011aho_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011aho_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1859,7 +1859,7 @@ public class InsertionAnnotationBuilderTest {
 
 	// The following variant from the clinvar project caused problems against hg19/ucsc: chr3:37081782:>TAAG
 	@Test
-	public void testRealWorldCase_uc010hgj_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010hgj_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1887,7 +1887,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorld_uc002udr_1() throws InvalidGenomeChange {
+	public void testRealWorld_uc002udr_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1925,7 +1925,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorld_uc001qsh_4() throws InvalidGenomeChange {
+	public void testRealWorld_uc001qsh_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1952,7 +1952,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorld_uc002shg_3() throws InvalidGenomeChange {
+	public void testRealWorld_uc002shg_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1979,7 +1979,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorld_uc002ulp_3() throws InvalidGenomeChange {
+	public void testRealWorld_uc002ulp_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -2007,7 +2007,7 @@ public class InsertionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorld_uc010crz_1() throws InvalidGenomeChange {
+	public void testRealWorld_uc010crz_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
