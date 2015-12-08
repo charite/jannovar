@@ -1,10 +1,9 @@
 package de.charite.compbio.jannovar.cmd;
 
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
 
 import de.charite.compbio.jannovar.JannovarOptions;
 
@@ -13,11 +12,12 @@ import de.charite.compbio.jannovar.JannovarOptions;
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
+
 public abstract class JannovarAnnotationCommandLineParser {
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
 	/** the Apache commons command line parser */
-	protected Parser parser;
+	protected DefaultParser parser;
 
 	/**
 	 * Calls initializeParser().
@@ -35,7 +35,7 @@ public abstract class JannovarAnnotationCommandLineParser {
 		options = new Options();
 		options.addOption(new Option("h", "help", false, "show this help"));
 
-		parser = new GnuParser();
+		parser = new DefaultParser();
 	}
 
 	/**
