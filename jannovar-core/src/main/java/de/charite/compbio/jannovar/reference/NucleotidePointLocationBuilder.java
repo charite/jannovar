@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 /**
  * Helper class that allows easy building of {@link NucleotidePointLocation}s.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class NucleotidePointLocationBuilder {

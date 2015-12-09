@@ -16,7 +16,7 @@ import de.charite.compbio.jannovar.pedigree.Sex;
 /**
  * Unit tests for the {@link Pedigree} class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class PedigreeTest {
 

@@ -24,7 +24,7 @@ import de.charite.compbio.jannovar.utils.ResourceUtils;
 /**
  * Tests using FBN1 transcript that is on the reverse strand.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class NucleotideSubstitutionToGenomeVariantForwardStrandTest {
 

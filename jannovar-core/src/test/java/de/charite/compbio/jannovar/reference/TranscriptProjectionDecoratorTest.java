@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 /**
  * Tests for the coordinate conversion decorator.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranscriptProjectionDecoratorTest {
 

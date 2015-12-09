@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 /**
  * Helper class for checking whether an insertion in a string is a duplication.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class DuplicationChecker {
 

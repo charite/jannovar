@@ -12,7 +12,7 @@ import org.junit.Test;
 /**
  * Feeds valid HGSV descriptions to the parser to see whether that works.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class AntlrHGVSParserJustParseTest extends AntlrHGVSJustParseAndLexBase {
 

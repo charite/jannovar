@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.hgvs.parser.HGVSParserTestBase;
 /**
  * Test parsing of nucleotide strings.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParserNucleotideStringTest extends HGVSParserTestBase {
 

@@ -13,9 +13,9 @@ import com.google.common.base.Predicate;
  * gives the sequence ontology (SO) ID and the SO description. Also, the documentation of each value explains whether
  * Jannovar generates this annotation or not.
  *
- * @author Peter Robinson <peter.robinson@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter Robinson</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum VariantEffect {
 
@@ -128,12 +128,12 @@ public enum VariantEffect {
 	// splicing changes, might change splicing
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001574">SO:0001574</a> A splice variant
-	 * that changes the 2 base region at the 3' end of an intron (is a: {@link #SPLICE_SITE_VARIANT})
+	 * that changes the 2 base region at the 3' end of an intron (is a {@link #SPLICE_REGION_VARIANT}).
 	 */
 	SPLICE_ACCEPTOR_VARIANT,
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001575">SO:0001575</a> A splice variant
-	 * that changes the 2 base pair region at the 5' end of an intron (is a: {@link #SPLICE_SITE_VARIANT}).
+	 * that changes the 2 base pair region at the 5' end of an intron (is a {@link #SPLICE_REGION_VARIANT}).
 	 */
 	SPLICE_DONOR_VARIANT,
 
@@ -416,7 +416,7 @@ public enum VariantEffect {
 	GENE_VARIANT,
 	/**
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001968">SO:0001968</a> A transcript variant
-	 * of a protein coding gene (is a: {@link TRANSCRIPT_VARIANT}).
+	 * of a protein coding gene (is a: {@link #TRANSCRIPT_VARIANT}).
 	 *
 	 * <b>Not</not> used in Jannovar annotations.
 	 */
@@ -916,7 +916,7 @@ public enum VariantEffect {
 	/**
 	 * @return <code>true</code> if the variant effect does not indicate a change affecting the exome, {@link #CUSTOM}
 	 *         is considered on-exome
-	 * @see {@link #isOffTranscript}
+	 * @see #isOffTranscript
 	 */
 	public boolean isOffExome() {
 		// Note that this function is called by isOffTranscript() which allows intronic and UTR changes.
@@ -958,7 +958,7 @@ public enum VariantEffect {
 	/**
 	 * @return <code>true</code> if the variant effect does not indicate a change affecting a transcript,
 	 *         {@link #CUSTOM} is considered on-transcript
-	 * @see {@link #isOffExome}
+	 * @see #isOffExome
 	 */
 	public boolean isOffTranscript() {
 		// This function first calls isOffExome() to check whether the variant effect is off-exome. Then, this function

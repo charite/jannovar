@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
  * In the case of the first position being equal to the last one, the {@link ProteinRange} degrades to a point when
  * {@link #toHGVSString()} is called.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinRange implements ConvertibleToHGVSString {
 

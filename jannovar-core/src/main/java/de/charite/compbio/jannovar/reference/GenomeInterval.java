@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
  * Internally, positions are always stored zero-based, but the position type can be explicitely given to the constructor
  * of {@link GenomeInterval}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class GenomeInterval implements Serializable {
@@ -90,7 +90,7 @@ public final class GenomeInterval implements Serializable {
 		this.endPos = pos.getPos() + length;
 	}
 
-	/** @return {@link ReferenceDitionary} to use */
+	/** @return {@link ReferenceDictionary} to use */
 	public ReferenceDictionary getRefDict() {
 		return refDict;
 	}

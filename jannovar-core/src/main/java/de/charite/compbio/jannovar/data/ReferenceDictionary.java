@@ -35,7 +35,7 @@ import de.charite.compbio.jannovar.Immutable;
  * This class is immutable which makes it safe to share it between many other objects. You can easily construct objects
  * of its type using {@link ReferenceDictionaryBuilder}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public class ReferenceDictionary implements Serializable {

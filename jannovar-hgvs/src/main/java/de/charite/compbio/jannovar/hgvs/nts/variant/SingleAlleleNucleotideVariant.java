@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 /**
  * Nucleotide change with one allele only.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class SingleAlleleNucleotideVariant extends NucleotideVariant {
 

@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.JannovarOptions;
 /**
  * Base class for the command line parser for the annotation commands.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 
 public abstract class JannovarAnnotationCommandLineParser {

@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.JannovarException;
 /**
  * Thrown when a coordinate conversion failed.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class ProjectionException extends JannovarException {
 

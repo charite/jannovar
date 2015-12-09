@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 /**
  * In-frame deletion of a protein (i.e., without frameshift, but can destroy codons).
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinDeletion extends ProteinChange {
 

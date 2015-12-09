@@ -7,7 +7,7 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
 /**
  * Represents a missense protein substitution, for example "Trp2Ala" or "T2A".
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinSubstitution extends ProteinChange {
 

@@ -10,8 +10,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Helper class for extracting one family from a {@link PedFileContents} object.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class PedigreeExtractor {
 

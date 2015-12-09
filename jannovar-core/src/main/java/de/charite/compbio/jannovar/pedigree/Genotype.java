@@ -12,7 +12,7 @@ package de.charite.compbio.jannovar.pedigree;
  * Note that the constant {@link #NOT_OBSERVED} refers to <tt>./.</tt> in a VCF file with multiple samples means a call
  * cannot be made for the sample at this given locus (e.g., because there were nor reads).
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public enum Genotype {
 	/** <tt>0/0</tt> in the VCF genotype field, homozygous reference sequence. */

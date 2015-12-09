@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Helper class for getting updated transcript sequence for deletions and block substitutions.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptSequenceChangeHelper {
@@ -14,7 +14,7 @@ public final class TranscriptSequenceChangeHelper {
 	private final TranscriptModel transcript;
 
 	/**
-	 * Construct helper with the given {@link TranscriptInfo}.
+	 * Construct helper with the given {@link TranscriptModel}
 	 *
 	 * @param transcript
 	 *            with position and sequence information

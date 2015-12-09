@@ -15,7 +15,7 @@ import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 /**
  * Parser for legacy change syntax (starting with "IVS", "EX", or "E").
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacyChangeParser {
 

@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 /**
  * Thrown in {@link VariantContextAnnotator} in the case of invalid positions (unknown chromsomes).
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class InvalidCoordinatesException extends Exception {
 

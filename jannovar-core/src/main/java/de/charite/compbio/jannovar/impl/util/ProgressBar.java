@@ -5,7 +5,7 @@ package de.charite.compbio.jannovar.impl.util;
  *
  * The progress is done/shown in the closed interval <code>[min, max]</code>.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class ProgressBar {
 

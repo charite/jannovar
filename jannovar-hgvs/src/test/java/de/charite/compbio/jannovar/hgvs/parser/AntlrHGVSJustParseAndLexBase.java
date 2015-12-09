@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs.parser;
 /**
  * Shared protein/nucleotide change strings for "JustParse" and "JustLex" tests.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class AntlrHGVSJustParseAndLexBase {
 

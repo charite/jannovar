@@ -5,8 +5,8 @@ import java.util.HashMap;
 /**
  * Class for representing one line out of a GFF file.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  */
 public final class Feature {
 
