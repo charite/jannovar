@@ -6,6 +6,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
@@ -211,7 +212,22 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return proteinChange;
 	}
 
-	/** @return protein change String, including the "p." prefix or the empty string if there is no annotation. */
+	/**
+	 * @param code
+	 *            the protein change code to use.
+	 * @return protein change String, including the "p." prefix or the empty string if there is no annotation.
+	 */
+	public String getProteinChangeStr(AminoAcidCode code) {
+		if (proteinChange == null)
+			return "";
+		else
+			return "p." + proteinChange.toHGVSString(code);
+	}
+
+	/**
+	 * @return protein change String, including the "p." prefix or the empty string if there is no annotation, uses
+	 *         default amino acid code from {@link ProteinChange#toHGVSString()}.
+	 */
 	public String getProteinChangeStr() {
 		if (proteinChange == null)
 			return "";

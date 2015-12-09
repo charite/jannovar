@@ -86,4 +86,9 @@ public class ProteinDuplication extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinDuplication(onlyPredicted, this.range, this.seqSpec);
+	}
+
 }

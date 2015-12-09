@@ -116,4 +116,9 @@ public class ProteinIndel extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinIndel(onlyPredicted, this.range, this.delSeq, this.insSeq);
+	}
+
 }
