@@ -3,19 +3,20 @@ package de.charite.compbio.jannovar.data;
 import java.io.Serializable;
 
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
+import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * This class encapsulates a chromosome and all of the genes its contains. It is intended to be used together with the
- * {@link TranscriptInfo} class to make a list of gene models that will be used to annotate chromosomal variants. We use
- * an {@link IntervalArray} to store all of the {@link TranscriptInfo} objects that belong to this Chromosome and to
- * search for all transcripts that overlap with any given variant. Note that the IntervalTree class has functionality
+ * {@link TranscriptModel} class to make a list of gene models that will be used to annotate chromosomal variants. We
+ * use an {@link IntervalArray} to store all of the {@link TranscriptModel} objects that belong to this Chromosome and
+ * to search for all transcripts that overlap with any given variant. Note that the IntervalTree class has functionality
  * also to find the neighbors (5' and 3') of the closest gene in order to find the right and left genes of intergenic
  * variants and to find the correct gene in the cases of complex regions of the chromosome with one gene located in the
  * intron of the next or with overlapping genes.
  *
- * Note that the {@link Interval} objects in the interval tree are defined by the transcription start and stop sites of
- * the isoform.
+ * Note that the {@link GenomeInterval} objects in the interval tree are defined by the transcription start and stop
+ * sites of the isoform.
  *
  * @author Peter N Robinson <peter.robinson@charite.de>
  * @author Marten Jaeger <marten.jaeger@charite.de>

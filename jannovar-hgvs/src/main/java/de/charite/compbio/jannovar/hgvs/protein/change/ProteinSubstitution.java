@@ -101,4 +101,9 @@ public class ProteinSubstitution extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinSubstitution(onlyPredicted, this.location, this.targetAA);
+	}
+
 }

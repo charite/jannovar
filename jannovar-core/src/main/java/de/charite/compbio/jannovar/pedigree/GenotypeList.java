@@ -5,10 +5,11 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.Immutable;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * Wrapper for a immutable lists of {@link Genotype} calls for one {@link TranscriptInfo}, one list of calls for each
- * individual.
+ * Wrapper for a immutable lists of {@link Genotype} calls for one {@link TranscriptModel}, one list of calls for
+ * each individual.
  *
  * This name list is used for ensuring that the same order and number of individuals is used in the genotype file as in
  * the pedigree file.

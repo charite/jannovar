@@ -41,7 +41,7 @@ public final class VariantAnnotations implements VariantDescription {
 	 *
 	 * Note that <code>variant</code> is converted to the forward strand using {@link GenomeVariant#withStrand}.
 	 *
-	 * @param change
+	 * @param variant
 	 *            {@link GenomeVariant} that this anotation list annotates
 	 * @param entries
 	 *            {@link Collection} of {@link Annotation} objects

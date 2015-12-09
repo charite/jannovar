@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.annotation.builders;
 import java.util.ArrayList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotidePointLocation;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideRange;
@@ -34,7 +34,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
 
 /**
- * Builds {@link Annotation} objects for the insertion {@link GenomeVariant} in the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the insertion {@link GenomeVariant} in the given {@link TranscriptModel}
  *
  * <h2>Duplications</h2>
  *
@@ -57,16 +57,16 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 	 *            {@link GenomeVariant} to build the annotation with
 	 * @param options
 	 *            the configuration to use for the {@link AnnotationBuilder}
-	 * @throws InvalidGenomeChange
+	 * @throws InvalidGenomeVariant
 	 *             if <code>change</code> did not describe an insertion
 	 */
 	InsertionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
-			throws InvalidGenomeChange {
+			throws InvalidGenomeVariant {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
 		if (change.getRef().length() != 0 || change.getAlt().length() == 0)
-			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe an insertion.");
+			throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe an insertion.");
 	}
 
 	@Override
@@ -109,7 +109,6 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 		}
 		if (DuplicationChecker.isDuplication(transcript.getSequence(), change.getAlt(), txPos.getPos())) {
 			NucleotidePointLocationBuilder posBuilder = new NucleotidePointLocationBuilder(transcript);
-			char prefix = transcript.isCoding() ? 'c' : 'n';
 			if (change.getAlt().length() == 1) {
 				try {
 					final NucleotideRange range = new NucleotideRange(posBuilder.getNucleotidePointLocation(projector
@@ -376,8 +375,9 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 							&& varAASeq.length() - varAAStopPos != wtAASeq.length() - wtAAStopPos) {
 						// The insertion does not directly start with a stop codon but the insertion leads to a stop
 						// codon in the affected amino acids. This leads to an "delins" protein annotation.
-						proteinChange = ProteinIndel.buildWithSeqDescription(true, toString(wtAASeq.charAt(varAAInsertPos)),
-								varAAInsertPos, toString(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 1,
+						proteinChange = ProteinIndel.buildWithSeqDescription(true,
+								toString(wtAASeq.charAt(varAAInsertPos)), varAAInsertPos,
+								toString(wtAASeq.charAt(varAAInsertPos + 1)), varAAInsertPos + 1,
 								new ProteinSeqDescription(),
 								new ProteinSeqDescription(varAASeq.substring(varAAInsertPos, varAAStopPos)));
 						varTypes.add(VariantEffect.STOP_GAINED);
@@ -417,8 +417,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 							}
 						} else {
 							// The delins/substitution case.
-							proteinChange = ProteinIndel.buildWithSeqDescription(true, aaChange.getRef(), varAAInsertPos,
-									aaChange.getRef(), varAAInsertPos, new ProteinSeqDescription(),
+							proteinChange = ProteinIndel.buildWithSeqDescription(true, aaChange.getRef(),
+									varAAInsertPos, aaChange.getRef(), varAAInsertPos, new ProteinSeqDescription(),
 									new ProteinSeqDescription(aaChange.getAlt()));
 							addNonFrameshiftInsertionEffect();
 						}

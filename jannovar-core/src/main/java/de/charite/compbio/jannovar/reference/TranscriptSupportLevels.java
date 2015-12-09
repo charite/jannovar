@@ -9,7 +9,7 @@ package de.charite.compbio.jannovar.reference;
  * <code>7</code>. A value of <code>-1</code> is used for N/A.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @see {@link http://www.ensembl.org/Help/Glossary?id=492}
+ * @see <a href="http://www.ensembl.org/Help/Glossary?id=492">http://www.ensembl.org/Help/Glossary?id=492</a>
  */
 public interface TranscriptSupportLevels {
 

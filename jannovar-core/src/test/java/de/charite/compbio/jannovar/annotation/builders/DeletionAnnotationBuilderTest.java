@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -61,7 +61,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardUstream() throws InvalidGenomeChange {
+	public void testForwardUstream() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640061,
 				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
@@ -74,7 +74,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardDownstream() throws InvalidGenomeChange {
+	public void testForwardDownstream() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
@@ -87,7 +87,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntergenic() throws InvalidGenomeChange {
+	public void testForwardIntergenic() throws InvalidGenomeVariant {
 		// intergenic upstream
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639061,
 				PositionType.ZERO_BASED), "A", "");
@@ -111,7 +111,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardTranscriptAblation() throws InvalidGenomeChange {
+	public void testForwardTranscriptAblation() throws InvalidGenomeVariant {
 		StringBuilder chars200 = new StringBuilder();
 		for (int i = 0; i < 200; ++i)
 			chars200.append("A");
@@ -127,7 +127,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntronic() throws InvalidGenomeChange {
+	public void testForwardIntronic() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642106,
 				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
@@ -141,7 +141,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardFivePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640072,
 				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
@@ -154,7 +154,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardThreePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649329,
 				PositionType.ZERO_BASED), "A", "");
 		Annotation annotation1 = new DeletionAnnotationBuilder(infoForward, change1, new AnnotationBuilderOptions())
@@ -167,7 +167,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStartLoss() throws InvalidGenomeChange {
+	public void testForwardStartLoss() throws InvalidGenomeVariant {
 		// Testing with some START_LOST scenarios.
 
 		// Delete one base of start codon.
@@ -218,7 +218,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStopLoss() throws InvalidGenomeChange {
+	public void testForwardStopLoss() throws InvalidGenomeVariant {
 		// Note that Mutalyzer has a different transcript sequence such that it does not report full loss for the cases
 		// below.
 
@@ -284,7 +284,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardSplicing() throws InvalidGenomeChange {
+	public void testForwardSplicing() throws InvalidGenomeVariant {
 		// intronic splicing
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642116,
 				PositionType.ZERO_BASED), "G", "");
@@ -311,7 +311,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFrameShiftDeletion() throws InvalidGenomeChange {
+	public void testForwardFrameShiftDeletion() throws InvalidGenomeVariant {
 		// The following case contains a shift in the nucleotide sequence.
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6645988,
 				PositionType.ZERO_BASED), "TGGGGAGAAA", "");
@@ -325,7 +325,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardNonFrameShiftDeletion() throws InvalidGenomeChange {
+	public void testForwardNonFrameShiftDeletion() throws InvalidGenomeVariant {
 		// clean (FS of begin position is 0) deletion of one codon, starting in intron (thus no "exon3" annotation is
 		// generated).
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642114,
@@ -364,7 +364,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010ock_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010ock_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -388,7 +388,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001idm_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001idm_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001idm.1	chr1	-	247978101	247979031	247978101	247979031	1	247978101,	247979031,	Q8NHC5	uc001idm.1");
 		this.builderForward
@@ -410,7 +410,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc011azx_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011azx_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -434,7 +434,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003dsi_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003dsi_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003dsi.1	chr3	+	97983128	97984106	97983128	97984106	1	97983128,	97984106,	Q8NGV6	uc003dsi.1");
 		this.builderForward
@@ -456,7 +456,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc011bgx_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011bgx_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc011bgx.2	chr3	+	98216524	98217475	98216524	98217475	1	98216524,	98217475,	Q8NHB8	uc011bgx.2");
 		this.builderForward
@@ -478,7 +478,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003lhq_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003lhq_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -502,7 +502,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003ljc_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003ljc_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003ljc.1	chr5	+	140613937	140617101	140614285	140616490	1	140613937,	140617101,	Q96TA0	uc003ljc.1");
 		this.builderForward
@@ -524,7 +524,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc011dkw_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011dkw_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc011dkw.2	chr6	-	27878962	27880174	27879023	27880097	1	27878962,	27880174,	Q9GZK3	uc011dkw.2");
 		this.builderForward
@@ -553,7 +553,7 @@ public class DeletionAnnotationBuilderTest {
 	 */
 	@Ignore("See method comment.")
 	@Test
-	public void testRealWorldCase_uc003ooo_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003ooo_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003ooo.3	chr6	-	39266776	39282237	39267202	39282096	"
 						+ "5	39266776,39271732,39272270,39278668,39281859,	"
@@ -577,7 +577,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003ooo_3_REFSEQ() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003ooo_3_REFSEQ() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003ooo.3	chr6	-	39266777	39282236	39267202	39282096	"
 						+ "5	39266777,39271732,39272270,39278668,39281859,	"
@@ -601,7 +601,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010mht_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010mht_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -625,7 +625,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001jix_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001jix_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -649,7 +649,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001jix_4_no2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001jix_4_no2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -673,7 +673,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001nja_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001nja_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc001nja.1	chr11	-	56380030	56380978	56380030	56380978	1	56380030,	56380978,	Q8NGP8	uc001nja.1");
 		this.builderForward
@@ -695,7 +695,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001qui_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001qui_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -719,7 +719,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001uew_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001uew_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -743,7 +743,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001val_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001val_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -767,7 +767,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002axo_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002axo_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -791,7 +791,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010bky_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010bky_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -815,7 +815,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002ghm_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002ghm_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -842,7 +842,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002hft_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002hft_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -866,7 +866,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002hfs_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002hfs_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -894,7 +894,7 @@ public class DeletionAnnotationBuilderTest {
 	 * that this is caused because of a discrepancy between UCSC and RefSeq.
 	 */
 	@Test
-	public void testRealWorldCase_uc002jbc_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002jbc_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -920,7 +920,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002wcx_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002wcx_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc002wcx.3	chr20	+	123251	126392	123269	126333	2	123251,126055,	123327,126392,	Q9BYW3	uc002wcx.3");
 		this.builderForward
@@ -944,7 +944,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002yyz_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002yyz_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc002yyz.3	chr21	-	42547157	42557166	42551102	42551555	1	42547157,	42557166,	Q8WY50	uc002yyz.3");
 		this.builderForward
@@ -966,7 +966,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002qrd_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002qrd_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -990,7 +990,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001ogt_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001ogt_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1014,7 +1014,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001rtm_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001rtm_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1038,7 +1038,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc004crz_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc004crz_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1062,7 +1062,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001cjx_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001cjx_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1087,7 +1087,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001bak_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001bak_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1113,7 +1113,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc031rom_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc031rom_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1138,7 +1138,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003nxo_1() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003nxo_1() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc003nxo.1	chr6	+	31803039	31803103	31803039	31803039	1	31803039,	31803103,		uc003nxo.1");
 		this.builderForward.setSequence("agtgatgatgaccccaggtaactcttgagtgtgtcgctgatgccatcaccgcagcgctctgacc"
@@ -1160,7 +1160,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc004fus_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc004fus_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1186,7 +1186,7 @@ public class DeletionAnnotationBuilderTest {
 
 	// This variant was called on the Platinum genomes and caused a problem with string access.
 	@Test
-	public void testRealWorldCase_uc011mcs_() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011mcs_() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1211,7 +1211,7 @@ public class DeletionAnnotationBuilderTest {
 
 	// This variant was called on the Platinum genomes and caused a problem with string access.
 	@Test
-	public void testRealWorldCase_uc011dba_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011dba_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(refDict,
 						"uc011dba.2	chr5	+	140810157	140812789	140810326	140812789	1	140810157,	140812789,	O60330-2	uc011dba.2");
@@ -1235,7 +1235,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc003zdj_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc003zdj_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1263,7 +1263,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001sbo_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001sbo_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -1289,7 +1289,7 @@ public class DeletionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010eqp_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010eqp_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,

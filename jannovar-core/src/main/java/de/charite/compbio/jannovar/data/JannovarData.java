@@ -44,7 +44,7 @@ public final class JannovarData implements Serializable {
 	 * @param refDict
 	 *            the {@link ReferenceDictionary} to use in this object
 	 * @param transcriptInfos
-	 *            the list of {@link TranscriptInfo} objects to use in this object
+	 *            the list of {@link TranscriptModel} objects to use in this object
 	 */
 	public JannovarData(ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptInfos) {
 		this.refDict = refDict;
@@ -109,8 +109,8 @@ public final class JannovarData implements Serializable {
 	 *            list of {@link TranscriptInfo} objects with the transcripts of all chromosomes
 	 * @return a mapping from numeric chromsome ID to {@link Chromosome} object
 	 */
-	private static ImmutableMap<Integer, Chromosome> makeChromsomes(
-			ReferenceDictionary refDict, ImmutableList<TranscriptModel> transcriptInfos) {
+	private static ImmutableMap<Integer, Chromosome> makeChromsomes(ReferenceDictionary refDict,
+			ImmutableList<TranscriptModel> transcriptInfos) {
 		ImmutableMap.Builder<Integer, Chromosome> builder = new ImmutableMap.Builder<Integer, Chromosome>();
 
 		// First, factorize the TranscriptInfo objects by chromosome ID.

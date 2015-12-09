@@ -10,8 +10,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * Parser for the FASTA formated files from RefSeq.
  *
- * An {@link ArrayList} of {@link TranscriptInfoBuilder}s is passed to this class together with the path to the
- * corresponding FASTA file, containing the sequence informations for the {@link TranscriptInfoBuilder}s.
+ * An {@link ArrayList} of {@link TranscriptModelBuilder}s is passed to this class together with the path to the
+ * corresponding FASTA file, containing the sequence informations for the {@link TranscriptModelBuilder}s.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  */
@@ -25,7 +25,7 @@ public final class RefSeqFastaParser extends FastaParser {
 	 * @param filename
 	 *            path to the FASTA file
 	 * @param models
-	 *            the {@link TranscriptInfoBuilder transcript info builders}s without sequence information
+	 *            the {@link TranscriptModelBuilder}s without sequence information
 	 * @param printProgressBars
 	 *            whether or not to print progress bars
 	 */
@@ -35,7 +35,7 @@ public final class RefSeqFastaParser extends FastaParser {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.charite.compbio.jannovar.io.FastaParser#processHeader(java.lang.String)
 	 */
 	@Override

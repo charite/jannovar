@@ -41,7 +41,10 @@ public class NucleotideChangeToGenomeVariantTranslator {
 		this.seqExtractor = new GenomeRegionSequenceExtractor(indexedFasta);
 	}
 
-	/** Shortcut to {@link #translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant, true)}. */
+	/**
+	 * Shortcut to {@link #translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant, boolean)} with using
+	 * <code>true</code> for the second parameter.
+	 */
 	public GenomeVariant translateNucleotideVariantToGenomeVariant(SingleAlleleNucleotideVariant variant)
 			throws CannotTranslateHGVSVariant {
 		return translateNucleotideVariantToGenomeVariant(variant, true);
@@ -52,9 +55,10 @@ public class NucleotideChangeToGenomeVariantTranslator {
 	 *
 	 * @param variant
 	 *            {@link SingleAlleleNucleotideVariant} to translate
+	 * @param autocorrect
+	 *            try to auto-correct mismatching reference sequence instead of throwing
+	 *            {@link CannotTranslateHGVSVariant}
 	 * @return {@link GenomeVariant} resulting from the conversion, possibly annotated with some warning messages
-	 * @return autocorrect try to auto-correct mismatching reference sequence instead of throwing
-	 *         {@link CannotTranslateHGVSVariant}
 	 * @throws CannotTranslateHGVSVariant
 	 *             in the case of problems such as more than one entry in the allele of <code>variant</code> or
 	 *             unsupported {@link NucleotideChange}s

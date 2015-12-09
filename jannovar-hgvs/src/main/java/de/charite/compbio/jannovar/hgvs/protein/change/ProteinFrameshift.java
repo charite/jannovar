@@ -149,4 +149,9 @@ public class ProteinFrameshift extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinFrameshift(onlyPredicted, this.position, this.targetAA, this.shiftLength);
+	}
+
 }

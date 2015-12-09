@@ -64,4 +64,9 @@ public class ProteinMiscChange extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinMiscChange(onlyPredicted, this.changeType);
+	}
+
 }

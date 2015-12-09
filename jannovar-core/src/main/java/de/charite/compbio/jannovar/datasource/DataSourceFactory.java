@@ -24,7 +24,8 @@ final public class DataSourceFactory {
 	private final ImmutableList<Ini> inis;
 
 	/**
-	 * @params options for proxy configuration
+	 * @param options
+	 *            for proxy configuration
 	 * @param iniFilePaths
 	 *            path to INI file to load the data source config from
 	 * @throws InvalidDataSourceException

@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor;
 import de.charite.compbio.jannovar.impl.parse.gff.GFFParser;
-import de.charite.compbio.jannovar.impl.parse.gff.TranscriptInfoFactory;
+import de.charite.compbio.jannovar.impl.parse.gff.TranscriptModelBuilderFactory;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
@@ -71,14 +71,14 @@ public class RefSeqParser implements TranscriptParser {
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
-		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), refDict);
+		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), false, refDict);
 		gffParser.parse(fp);
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
 			LOGGER.info("Building transcript models...");
-			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.getGffVersion(), refDict);
-			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
+			TranscriptModelBuilderFactory tif = new TranscriptModelBuilderFactory(false, gffParser.getGffVersion(), refDict);
+			builders = tif.buildTranscriptModelBuilders(fp.getGenes(), onlyCurated());
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from RefSeq files: {}", e);

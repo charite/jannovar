@@ -26,9 +26,9 @@ final public class AnnotationTextGenerator {
 	/**
 	 * Return the accession number of the transcript associated with this variant (if possible).
 	 *
-	 * If there is no transcript, e.g., for {@link VariantEffect#DOWNSTREAM} annotations, then it returns the geneSymbol
-	 * (if possible). If there is no gene symbol (e.g., for {@link VariantEffect#INTERGENIC} annotations), it returns
-	 * <code>"."</code>
+	 * If there is no transcript, e.g., for {@link VariantEffect#DOWNSTREAM_GENE_VARIANT} annotations, then it returns
+	 * the geneSymbol (if possible). If there is no gene symbol (e.g., for {@link VariantEffect#INTERGENIC_VARIANT}
+	 * annotations), it returns <code>"."</code>
 	 *
 	 * @return the accession number
 	 */

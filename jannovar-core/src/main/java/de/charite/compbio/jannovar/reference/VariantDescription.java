@@ -10,7 +10,8 @@ import de.charite.compbio.jannovar.annotation.Annotation;
  * in programs.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @see {@link http://genome.sph.umich.edu/wiki/Variant_Normalization}
+ * @see <a href="http://genome.sph.umich.edu/wiki/Variant_Normalization">
+ *      http://genome.sph.umich.edu/wiki/Variant_Normalization</a>
  */
 public interface VariantDescription {
 

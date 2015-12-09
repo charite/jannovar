@@ -3,12 +3,11 @@ package de.charite.compbio.jannovar.cmd.db_list;
 import java.io.PrintWriter;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
+import org.apache.commons.cli.DefaultParser;
 
 import com.google.common.collect.ImmutableList;
 
@@ -20,7 +19,7 @@ public class DatabaseListCommandLineParser {
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
 	/** the Apache commons command line parser */
-	protected Parser parser;
+	protected DefaultParser parser;
 
 	/**
 	 * Calls initializeParser().
@@ -32,15 +31,14 @@ public class DatabaseListCommandLineParser {
 	/**
 	 * Initialize {@link #parser} and {@link #options}.
 	 */
-	@SuppressWarnings("static-access")
-	// OptionBuilder causes this warning.
+
 	private void initializeParser() {
 		options = new Options();
-		options.addOption(OptionBuilder.withDescription("show this help").withLongOpt("help").create("h"));
-		options.addOption(OptionBuilder.withDescription("INI file with data source list").hasArgs(1)
-				.withLongOpt("data-source-list").create("s"));
+		options.addOption(Option.builder("h").desc("show this help").longOpt("help").build());
+		options.addOption(Option.builder("s").desc("INI file with data source list").numberOfArgs(1)
+				.longOpt("data-source-list").build());
 
-		parser = new GnuParser();
+		parser = new DefaultParser();
 	}
 
 	/**

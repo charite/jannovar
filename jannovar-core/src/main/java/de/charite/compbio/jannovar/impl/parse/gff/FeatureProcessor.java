@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
 
 /**
- * Processes {@link Feature} objects for {@link TranscriptInfoFactory}.
+ * Processes {@link Feature} objects for {@link TranscriptModelBuilderFactory}.
  *
  * Implementation class that groups the features into RNAs/Genes.
  *
@@ -21,6 +21,8 @@ public final class FeatureProcessor {
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = Logger.getLogger(GFFParser.class.getSimpleName());
 
+	/** Whether features are stored in GTF format */
+	private final boolean isGTF;
 	/** GFF version to assume */
 	private final GFFVersion gffVersion;
 
@@ -42,8 +44,9 @@ public final class FeatureProcessor {
 	private Transcript curRna;
 	private GFFStruct curGFF;
 
-	public FeatureProcessor(GFFVersion gffVersion, ReferenceDictionary refDict) {
+	public FeatureProcessor(GFFVersion gffVersion, boolean isGTF, ReferenceDictionary refDict) {
 		this.gffVersion = gffVersion;
+		this.isGTF = isGTF;
 		this.refDict = refDict;
 		this.genes = new HashMap<String, Gene>();
 		this.rna2gene = new HashMap<String, String>();
@@ -157,15 +160,17 @@ public final class FeatureProcessor {
 		// System.out.println(curGeneID);
 		// if the gene is not known yet --> add
 		if (!genes.containsKey(curGeneID))
-			genes.put(curGeneID, new Gene(curGeneID, curGeneName, refDict.getContigNameToID().get(feature.getSequenceID())
-					.byteValue(), feature.getStrand()));
+			genes.put(curGeneID,
+					new Gene(curGeneID, curGeneName, refDict.getContigNameToID().get(feature.getSequenceID())
+							.byteValue(), feature.getStrand()));
 		// get Gene
 		curGene = genes.get(curGeneID);
 		// if the RNA is unknown --> add to map and gene
 		if (!rna2gene.containsKey(curRnaID)) {
 			rna2gene.put(curRnaID, curGeneID);
-			curGene.rnas.put(curRnaID, new Transcript(curRnaID, curRnaID, refDict.getContigNameToID().get(feature.getSequenceID())
-					.byteValue(), feature.getStrand()));
+			curGene.rnas.put(curRnaID,
+					new Transcript(curRnaID, curRnaID, refDict.getContigNameToID().get(feature.getSequenceID())
+							.byteValue(), feature.getStrand()));
 		}
 		// get RNA
 		curRna = curGene.rnas.get(curRnaID);
@@ -260,8 +265,7 @@ public final class FeatureProcessor {
 
 		/**
 		 * Implementation of the compare function for the Comparator. A exon is equal if the chromosom and the start and
-		 * end positions are the same. According to the used {@link Collator}, the exon is smaller/bigger if the
-		 * chromosom differs.
+		 * end positions are the same.
 		 */
 		public int compareTo(GFFStruct o) {
 			if (chromosom == o.chromosom) {
@@ -378,17 +382,21 @@ public final class FeatureProcessor {
 		 * Returns the highest cds start index.<br>
 		 * The index can be extended when the phase of the CDS feature contains an offset.
 		 *
+		 * @param isGTF
+		 *            whether or not the feature comes from GTF
 		 * @return translation start index (1-based, including)
 		 */
 		int getCDSStart() {
 			if (cdsStart == Integer.MAX_VALUE)
 				for (GFFStruct cds : cdss)
-					if (cdsStart > cds.start) {
-						cdsStart = cds.start;
-						if (cds.strand) {
-							cdsStart -= (3 - cds.frame) % 3;
-						} else {
-							cdsStart -= 3 - ((cds.length() - cds.frame) % 3);
+					if (isGTF) {
+						if (cdsStart > cds.start) {
+							cdsStart = cds.start;
+							if (cds.strand) {
+								cdsStart -= (3 - cds.frame) % 3;
+							} else {
+								cdsStart -= 3 - ((cds.length() - cds.frame) % 3);
+							}
 						}
 					}
 			if (cdsStart == Integer.MAX_VALUE)
@@ -400,6 +408,8 @@ public final class FeatureProcessor {
 		 * Returns the highest cds end index.<br>
 		 * The index can be extended when the phase of the CDS feature contains an offset.
 		 *
+		 * @param isGTF
+		 *            whether or not the feature comes from GTF
 		 * @return translation end index (1-based, including)
 		 */
 		int getCDSEnd() {
@@ -407,10 +417,12 @@ public final class FeatureProcessor {
 				for (GFFStruct cds : cdss)
 					if (cdsEnd < cds.end) {
 						cdsEnd = cds.end;
-						if (cds.strand) {
-							cdsEnd += 3 - ((cds.length() - cds.frame) % 3);
-						} else {
-							cdsEnd += (3 - cds.frame) % 3;
+						if (isGTF) {
+							if (cds.strand) {
+								cdsEnd += 3 - ((cds.length() - cds.frame) % 3);
+							} else {
+								cdsEnd += (3 - cds.frame) % 3;
+							}
 						}
 					}
 			if (cdsEnd == Integer.MIN_VALUE)

@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.Compatibilit
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  * @author Peter N Robinson <peter.robinson@charite.de>
  * 
- *  @deprecated use {@link InheritanceCompatibilityChecker} instead.  
+ * @deprecated use {@link InheritanceCompatibilityChecker} instead.
  */
 @Deprecated
 public class PedigreeDiseaseCompatibilityDecorator {
@@ -98,8 +98,7 @@ public class PedigreeDiseaseCompatibilityDecorator {
 	 * @throws CompatibilityCheckerException
 	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
-	public boolean isCompatibleWith(GenotypeList list, ModeOfInheritance mode)
-			throws CompatibilityCheckerException {
+	public boolean isCompatibleWith(GenotypeList list, ModeOfInheritance mode) throws CompatibilityCheckerException {
 		switch (mode) {
 		case AUTOSOMAL_DOMINANT:
 			return isCompatibleWithAutosomalDominant(list);

@@ -25,6 +25,9 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 		return onlyPredicted;
 	}
 
+	/** @return <code>ProteinChange</code> object with prediction state set to the one given by the parameter */
+	abstract public ProteinChange withOnlyPredicted(boolean onlyPredicted);
+
 	@Override
 	public String toHGVSString() {
 		return toHGVSString(AminoAcidCode.THREE_LETTER);

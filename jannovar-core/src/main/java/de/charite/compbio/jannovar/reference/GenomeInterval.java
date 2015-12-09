@@ -90,7 +90,7 @@ public final class GenomeInterval implements Serializable {
 		this.endPos = pos.getPos() + length;
 	}
 
-	/** @return {@link ReferenceDitionary} to use */
+	/** @return {@link ReferenceDictionary} to use */
 	public ReferenceDictionary getRefDict() {
 		return refDict;
 	}

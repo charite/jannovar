@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 // TODO(holtgrem): Test this class!
 
 /**
- * Decorator for {@link TranscriptInfo} that helps with operations on its sequence.
+ * Decorator for {@link TranscriptModel} that helps with operations on its sequence
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -20,7 +20,7 @@ public final class TranscriptSequenceDecorator {
 		this.transcript = transcript;
 	}
 
-	/** @return the wrapped {@link TranscriptInfo} */
+	/** @return the wrapped {@link TranscriptModel} */
 	public TranscriptModel getTranscript() {
 		return transcript;
 	}

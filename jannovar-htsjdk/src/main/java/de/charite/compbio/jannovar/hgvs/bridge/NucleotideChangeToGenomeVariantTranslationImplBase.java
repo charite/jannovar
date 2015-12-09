@@ -14,7 +14,7 @@ public class NucleotideChangeToGenomeVariantTranslationImplBase {
 	protected static final Logger LOGGER = LoggerFactory
 			.getLogger(NucleotideChangeToGenomeVariantTranslationImplBase.class);
 
-	/** extraction of {@link GenomicRegion} from FASTA files */
+	/** extraction of {@link GenomeInterval} from FASTA files */
 	protected final GenomeRegionSequenceExtractor seqExtractor;
 	/** implementation of position conversion */
 	protected final NucleotideLocationConverter posConverter;

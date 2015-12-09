@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
@@ -32,7 +32,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * Builds {@link Annotation} objects for the block substitution {@link GenomeVariant} in the given
- * {@link TranscriptInfo} .
+ * {@link TranscriptModel} .
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -40,21 +40,21 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 	/**
 	 * @param transcript
-	 *            {@link TranscriptInfo} to build the annotation for
+	 *            {@link TranscriptModel} to build the annotation for
 	 * @param change
 	 *            {@link GenomeVariant} to build the annotation with
 	 * @param options
 	 *            the configuration to use for the {@link AnnotationBuilder}
-	 * @throws InvalidGenomeChange
+	 * @throws InvalidGenomeVariant
 	 *             if <code>change</code> did not describe a block substitution
 	 */
 	public BlockSubstitutionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change,
-			AnnotationBuilderOptions options) throws InvalidGenomeChange {
+			AnnotationBuilderOptions options) throws InvalidGenomeVariant {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
 		if (change.getRef().length() == 0 || change.getAlt().length() == 0)
-			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a block substitution.");
+			throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe a block substitution.");
 	}
 
 	@Override

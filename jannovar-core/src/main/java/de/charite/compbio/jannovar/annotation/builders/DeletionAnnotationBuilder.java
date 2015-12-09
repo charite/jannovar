@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.hgvs.nts.NucleotideSeqDescription;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
@@ -27,7 +27,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * Builds {@link Annotation} objects for the deletion {@link GenomeVariant}s in the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the deletion {@link GenomeVariant}s in the given {@link TranscriptModel}.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
@@ -40,16 +40,16 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 	 *            {@link GenomeVariant} to build the annotation with
 	 * @param options
 	 *            the configuration to use for the {@link AnnotationBuilder}
-	 * @throws InvalidGenomeChange
+	 * @throws InvalidGenomeVariant
 	 *             if <code>change</code> did not describe a deletion
 	 */
 	DeletionAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
-			throws InvalidGenomeChange {
+			throws InvalidGenomeVariant {
 		super(transcript, change, options);
 
 		// Guard against invalid genome change.
 		if (change.getRef().length() == 0 || change.getAlt().length() != 0)
-			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a deletion.");
+			throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe a deletion.");
 	}
 
 	@Override
@@ -189,16 +189,16 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
 				if (aaChange.getPos() == aaChange.getLastPos()) {
 					if (aaChange.getAlt().length() > 0)
-						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
-								aaChange.getPos(), new ProteinSeqDescription(),
-								new ProteinSeqDescription(aaChange.getAlt()));
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(),
+								wtAAFirst, aaChange.getPos(), new ProteinSeqDescription(), new ProteinSeqDescription(
+										aaChange.getAlt()));
 					else
 						proteinChange = ProteinDeletion.buildWithSequence(true, wtAAFirst, aaChange.getPos(),
 								wtAAFirst, aaChange.getPos(), aaChange.getAlt());
 				} else {
 					if (aaChange.getAlt().length() > 0)
-						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
-								aaChange.getLastPos(), new ProteinSeqDescription(),
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(),
+								wtAALast, aaChange.getLastPos(), new ProteinSeqDescription(),
 								new ProteinSeqDescription(aaChange.getAlt()));
 					else
 						proteinChange = ProteinDeletion.buildWithSequence(true, wtAAFirst, aaChange.getPos(), wtAALast,
