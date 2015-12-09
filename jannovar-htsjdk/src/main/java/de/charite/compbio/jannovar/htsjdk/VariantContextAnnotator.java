@@ -144,8 +144,8 @@ public final class VariantContextAnnotator {
 	/**
 	 * Build a {@link GenomeVariant} from a {@link VariantContext} object.
 	 *
-	 * In the case of exceptions, you can use {@link #buildbuildUnknownRefAnnotationLists} to build an
-	 * {@link VariantAnnotations} with an error message.
+	 * In the case of exceptions, you can use {@link #buildErrorAnnotations} to build an {@link VariantAnnotations} with
+	 * an error message.
 	 *
 	 * @param vc
 	 *            {@link VariantContext} describing the variant

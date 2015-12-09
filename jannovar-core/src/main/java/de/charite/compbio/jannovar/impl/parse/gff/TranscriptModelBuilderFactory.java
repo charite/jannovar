@@ -1,6 +1,3 @@
-/**
- *
- */
 package de.charite.compbio.jannovar.impl.parse.gff;
 
 import java.util.ArrayList;
@@ -19,15 +16,15 @@ import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 /**
- * This is the builder for the {@link TranscriptInfo}s from GFF files.
+ * This is the builder for the {@link TranscriptModelBuilder}s from GFF files.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
  */
-public final class TranscriptInfoFactory {
+public final class TranscriptModelBuilderFactory {
 
 	/** {@link Logger} to use for logging */
-	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptInfoFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptModelBuilderFactory.class);
 
 	/** Whether or not the data comes from GTF */
 	private final boolean isGTF;
@@ -38,33 +35,34 @@ public final class TranscriptInfoFactory {
 	/** reference dictionary to use */
 	private final ReferenceDictionary refDict;
 
-	public TranscriptInfoFactory(boolean isGTF, GFFVersion gffVersion, ReferenceDictionary refDict) {
+	public TranscriptModelBuilderFactory(boolean isGTF, GFFVersion gffVersion, ReferenceDictionary refDict) {
 		this.isGTF = isGTF;
 		this.gffVersion = gffVersion;
 		this.refDict = refDict;
 	}
 
 	/**
-	 * Forward to {@link #buildTranscripts(HashMap, boolean)}, setting the second parameter to <code>false</code>.
+	 * Forward to {@link #buildTranscriptModelBuilders(HashMap, boolean)}, setting the second parameter to
+	 * <code>false</code>.
 	 */
-	public ArrayList<TranscriptModelBuilder> buildTranscripts(HashMap<String, Gene> genes)
+	public ArrayList<TranscriptModelBuilder> buildTranscriptModelBuilders(HashMap<String, Gene> genes)
 			throws InvalidAttributeException {
-		return buildTranscripts(genes, false);
+		return buildTranscriptModelBuilders(genes, false);
 	}
 
 	/**
-	 * Process the <code>genes</code> and convert into an {@link ArrayList} of {@link TranscriptInfoBuilder}s.
+	 * Process the <code>genes</code> and convert into an {@link ArrayList} of {@link TranscriptModelBuilder}s.
 	 *
 	 * @param genes
-	 *            the name/Gene map to build the {@link TranscriptInfo} objects for.
+	 *            the name/Gene map to build the {@link TranscriptModelBuilder} objects for
 	 * @param useOnlyCurated
 	 *            whether or not to only return curated transcripts
-	 * @return list of {@link TranscriptInfoBuilder} objects
+	 * @return list of {@link TranscriptModelBuilder} objects
 	 * @throws InvalidAttributeException
 	 *             on problems with invalid attributes
 	 */
-	public ArrayList<TranscriptModelBuilder> buildTranscripts(HashMap<String, Gene> genes, boolean useOnlyCurated)
-			throws InvalidAttributeException {
+	public ArrayList<TranscriptModelBuilder> buildTranscriptModelBuilders(HashMap<String, Gene> genes,
+			boolean useOnlyCurated) throws InvalidAttributeException {
 		ArrayList<TranscriptModelBuilder> models = new ArrayList<TranscriptModelBuilder>();
 		for (FeatureProcessor.Gene gene : genes.values()) {
 			if (gene.id == null)

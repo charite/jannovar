@@ -28,10 +28,10 @@ public final class StructuralVariantAnnotationBuilder {
 	private final GenomeVariant change;
 
 	/**
-	 * Initialize the builder for the structural variant {@link GenomeVariant} in the given {@link TranscriptInfo}.
+	 * Initialize the builder for the structural variant {@link GenomeVariant} in the given {@link TranscriptModel}.
 	 *
 	 * @param transcript
-	 *            {@link TranscriptInfo} for the transcript to compute the affection for, use <code>null</code> for
+	 *            {@link TranscriptModel} for the transcript to compute the affection for, use <code>null</code> for
 	 *            intergenic variants
 	 * @param change
 	 *            {@link GenomeVariant} to compute the annotation for, must describe a structural variant affecting
@@ -50,7 +50,6 @@ public final class StructuralVariantAnnotationBuilder {
 	public Annotation build() {
 		// Obtain shortcuts.
 		GenomePosition position = change.getGenomePos();
-		final int beginPos = position.getPos();
 		final String ref = change.getRef();
 		final String alt = change.getAlt();
 

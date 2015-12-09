@@ -32,7 +32,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	/**
 	 * Genomic interval with CDS begin/end.
 	 *
-	 * @note Note that in Jannovar, the CDS region includes the start and stop codon.
+	 * <b>Note</b> that in Jannovar, the CDS region includes the start and stop codon.
 	 */
 	private final GenomeInterval cdsRegion;
 
@@ -54,7 +54,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 * The transcript support level of the this transcript (the lower the better).
 	 *
 	 * @see TranscriptSupportLevels
-	 * @see {@link http://www.ensembl.org/Help/Glossary?id=492}
+	 * @see <a href="http://www.ensembl.org/Help/Glossary?id=492">http://www.ensembl.org/Help/Glossary?id=492</a>
 	 */
 	private final int transcriptSupportLevel;
 
@@ -109,7 +109,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 
 	/**
 	 * @return The gene ID, from Ensembl (<code>"ENS[MUS]*G0+([0-9]+)"</code>), Entrez ("<code>ENTREZ([0-9]+)</code>
-	 * "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no available gene ID.
+	 *         "), RefSeq ("<code>gene([0-9]+)</code>"). <code>null</code> for no available gene ID.
 	 */
 	public String getGeneID() {
 		return geneID;
@@ -119,7 +119,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 * @return transcript support level of the this transcript (the lower the better).
 	 *
 	 * @see TranscriptSupportLevels
-	 * @see {@link http://www.ensembl.org/Help/Glossary?id=492}
+	 * @see <a href="http://www.ensembl.org/Help/Glossary?id=492">http://www.ensembl.org/Help/Glossary?id=492</a>
 	 */
 	public int getTranscriptSupportLevel() {
 		return transcriptSupportLevel;

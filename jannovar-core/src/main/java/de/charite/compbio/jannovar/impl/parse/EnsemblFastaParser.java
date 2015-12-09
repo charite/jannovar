@@ -7,8 +7,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * Parser for the FASTA formated files from RefSeq.
  *
- * An {@link ArrayList} of {@link TranscriptInfoBuilder}s is passed to this class together with the path to the
- * corresponding FASTA file, containing the sequence informations for the {@link TranscriptInfoBuilder}s.
+ * An {@link ArrayList} of {@link TranscriptModelBuilder}s is passed to this class together with the path to the
+ * corresponding FASTA file, containing the sequence informations for the {@link TranscriptModelBuilder}s.
  *
  * @author Marten Jaeger <marten.jaeger@charite.de>
  */

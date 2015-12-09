@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor;
 import de.charite.compbio.jannovar.impl.parse.gff.GFFParser;
-import de.charite.compbio.jannovar.impl.parse.gff.TranscriptInfoFactory;
+import de.charite.compbio.jannovar.impl.parse.gff.TranscriptModelBuilderFactory;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
@@ -77,8 +77,8 @@ public class RefSeqParser implements TranscriptParser {
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
 			LOGGER.info("Building transcript models...");
-			TranscriptInfoFactory tif = new TranscriptInfoFactory(false, gffParser.getGffVersion(), refDict);
-			builders = tif.buildTranscripts(fp.getGenes(), onlyCurated());
+			TranscriptModelBuilderFactory tif = new TranscriptModelBuilderFactory(false, gffParser.getGffVersion(), refDict);
+			builders = tif.buildTranscriptModelBuilders(fp.getGenes(), onlyCurated());
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from RefSeq files: {}", e);

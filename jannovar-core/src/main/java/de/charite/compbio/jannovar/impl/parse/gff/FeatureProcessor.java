@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
 
 /**
- * Processes {@link Feature} objects for {@link TranscriptInfoFactory}.
+ * Processes {@link Feature} objects for {@link TranscriptModelBuilderFactory}.
  *
  * Implementation class that groups the features into RNAs/Genes.
  *
@@ -265,8 +265,7 @@ public final class FeatureProcessor {
 
 		/**
 		 * Implementation of the compare function for the Comparator. A exon is equal if the chromosom and the start and
-		 * end positions are the same. According to the used {@link Collator}, the exon is smaller/bigger if the
-		 * chromosom differs.
+		 * end positions are the same.
 		 */
 		public int compareTo(GFFStruct o) {
 			if (chromosom == o.chromosom) {

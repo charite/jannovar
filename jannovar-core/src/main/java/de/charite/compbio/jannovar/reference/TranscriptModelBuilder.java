@@ -70,7 +70,7 @@ public class TranscriptModelBuilder {
 	}
 
 	/**
-	 * @return {@link TranscriptInfo} with the currently set configuration.
+	 * @return {@link TranscriptModel} with the currently set configuration.
 	 */
 	public TranscriptModel build() {
 		// Build list of immutable exons in the correct order.

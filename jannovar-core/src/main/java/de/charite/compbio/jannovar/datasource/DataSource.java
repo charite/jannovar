@@ -8,6 +8,8 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.data.JannovarData;
+
 /**
  * Base class for all data sources.
  *

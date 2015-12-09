@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.reference.TranscriptProjectionDecorator;
 
 /**
  * Helper class for converting {@link NucleotidePointLocation}s and {@link NucleotideRange}s to {@link GenomePosition}s
- * and {@link GenomeRange}s.
+ * and {@link GenomeInterval}s.
  *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */

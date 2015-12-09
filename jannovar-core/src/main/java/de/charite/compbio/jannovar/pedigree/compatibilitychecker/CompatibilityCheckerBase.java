@@ -16,7 +16,7 @@ import de.charite.compbio.jannovar.pedigree.Person;
  *
  * @author Max Schubach <max.schubach@charite.de>
  * 
- * @deprecated use {@link AbstractCompatibilityChecker} instead.
+ * @deprecated use {@link CompatibilityChecker} instead.
  */
 @Deprecated
 public abstract class CompatibilityCheckerBase implements CompatibilityChecker {

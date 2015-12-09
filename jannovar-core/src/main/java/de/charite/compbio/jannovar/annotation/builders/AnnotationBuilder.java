@@ -39,8 +39,7 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  * decorators for {@link #transcript} and initializes {@link #locAnno} and {@link #dnaAnno}. The annotation building
  * process is greatly simplified by this.
  *
- * The realizing classes then override {@link #build} and implement their annotation building logic there. Override
- * {@link #ncHGVS} for defining the non-coding HGVS string.
+ * The realizing classes then override {@link #build} and implement their annotation building logic there.
  *
  * At the moment, this has package visibility only since it is not clear yet whether and how client code should extend
  * the builder hierarchy.
@@ -186,9 +185,7 @@ abstract class AnnotationBuilder {
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(), null);
 	}
 
-	/**
-	 * @return intronic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
-	 */
+	/** @return intronic anotation */
 	protected Annotation buildIntronicAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
@@ -229,7 +226,7 @@ abstract class AnnotationBuilder {
 	}
 
 	/**
-	 * @return 3'/5' UTR anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
+	 * @return 3'/5' UTR anotation
 	 */
 	protected Annotation buildUTRAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
@@ -270,9 +267,7 @@ abstract class AnnotationBuilder {
 				ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE));
 	}
 
-	/**
-	 * @return upstream/downstream annotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
-	 */
+	/** @return upstream/downstream annotation */
 	protected Annotation buildUpOrDownstreamAnnotation() {
 		GenomePosition pos = change.getGenomeInterval().getGenomeBeginPos();
 
@@ -299,9 +294,7 @@ abstract class AnnotationBuilder {
 		}
 	}
 
-	/**
-	 * @return intergenic anotation, using {@link #ncHGVS} for building the DNA HGVS annotation.
-	 */
+	/** @return intergenic anotation */
 	protected Annotation buildIntergenicAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT), null, null, null,
 				null);
