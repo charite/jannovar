@@ -5,7 +5,7 @@ import com.google.common.base.Joiner;
 /**
  * Representation of a {@link LegacyChange} on a reference sequence.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacyVariant {
 

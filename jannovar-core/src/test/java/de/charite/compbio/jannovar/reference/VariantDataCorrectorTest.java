@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.reference.VariantDataCorrector;
 /**
  * Test for the VariantCorrectorData class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class VariantDataCorrectorTest {
 

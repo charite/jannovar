@@ -13,7 +13,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  *
  * In case of problems, {@link #put} throws a {@link FilterException}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class CoordinateSortChecker implements VariantContextFilter {
 

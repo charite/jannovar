@@ -10,8 +10,8 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.Compatibilit
  * Decorator for {@link Pedigree} that allows checking whether a Genotype call is compatible with a selected mode of
  * inheritance.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  * 
  * @deprecated use {@link InheritanceCompatibilityChecker} instead.
  */

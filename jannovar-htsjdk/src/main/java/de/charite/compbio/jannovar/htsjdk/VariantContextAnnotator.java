@@ -33,7 +33,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Helper class for generating {@link VariantAnnotations} objects from {@link VariantContext}s.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class VariantContextAnnotator {
 

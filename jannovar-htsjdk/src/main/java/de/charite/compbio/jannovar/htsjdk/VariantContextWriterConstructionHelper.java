@@ -22,7 +22,7 @@ import de.charite.compbio.jannovar.annotation.Annotation;
  *
  * Part of the Jannovar-HTSJDK bridge.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class VariantContextWriterConstructionHelper {
 

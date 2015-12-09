@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
  * {@link TranscriptModel} transcript = builder.{@link TranscriptModelBuilder#build build}();
  * </pre>
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranscriptModelBuilder {
 

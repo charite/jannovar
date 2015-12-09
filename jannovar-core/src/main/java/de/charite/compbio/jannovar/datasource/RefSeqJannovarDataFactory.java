@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Creation of {@link JannovarData} objects from a {@link RefSeqDataSource}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 final class RefSeqJannovarDataFactory extends JannovarDataFactory {
 

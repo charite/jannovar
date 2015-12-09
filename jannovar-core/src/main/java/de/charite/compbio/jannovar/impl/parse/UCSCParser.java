@@ -70,9 +70,9 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
  * It is possible to parse directly from the gzip file without decompressing them, or the start from the decompressed
  * files. The class checks of the files exist and if they have the suffix "gz". *
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public class UCSCParser implements TranscriptParser {
 

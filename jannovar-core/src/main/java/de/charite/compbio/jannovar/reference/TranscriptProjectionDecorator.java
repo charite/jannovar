@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Wraps a {@link TranscriptModel} object and allow the coordinate conversion.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptProjectionDecorator {

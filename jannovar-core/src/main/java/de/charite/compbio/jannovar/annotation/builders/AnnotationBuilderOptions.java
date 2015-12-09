@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.annotation.builders;
 /**
  * Configuration for the {@link AnnotationBuilder} subclasses.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class AnnotationBuilderOptions {
 	/**

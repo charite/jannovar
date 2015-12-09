@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
  * Exception that occurs when using invalid {@link GenotypeList} or {@link Pedigree} objects in the compatibility
  * checking.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @deprecated Use {@link InheritanceCompatibilityCheckerException}
  */
 @Deprecated

@@ -34,7 +34,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * Builds {@link Annotation} objects for the block substitution {@link GenomeVariant} in the given
  * {@link TranscriptModel} .
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder {
 

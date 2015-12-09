@@ -16,7 +16,7 @@ import de.charite.compbio.jannovar.reference.VariantDescription;
  * @see AllAnnotationListTextGenerator
  * @see BestAnnotationListTextGenerator
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class VariantAnnotations implements VariantDescription {

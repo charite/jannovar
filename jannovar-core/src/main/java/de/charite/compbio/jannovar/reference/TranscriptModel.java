@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * The information representing a transcript model.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptModel implements Serializable, Comparable<TranscriptModel> {

@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Utility class with static methods for path manipulation.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class PathUtil {
 

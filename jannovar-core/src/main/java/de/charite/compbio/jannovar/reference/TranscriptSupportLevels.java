@@ -8,7 +8,7 @@ package de.charite.compbio.jannovar.reference;
  * and UCSC primary marking), and <code>8</code> for transcripts that fall neither into pseudo-level <code>6</code> and
  * <code>7</code>. A value of <code>-1</code> is used for N/A.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @see <a href="http://www.ensembl.org/Help/Glossary?id=492">http://www.ensembl.org/Help/Glossary?id=492</a>
  */
 public interface TranscriptSupportLevels {

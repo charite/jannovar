@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Builder class for incremental building of immutable {@link ReferenceDictionary} objects.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class ReferenceDictionaryBuilder {
 

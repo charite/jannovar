@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 /**
  * Helper class thrown on problems with translating {@link HGVSVariant} to {@link GenomeVariant}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class CannotTranslateHGVSVariant extends Exception {
 

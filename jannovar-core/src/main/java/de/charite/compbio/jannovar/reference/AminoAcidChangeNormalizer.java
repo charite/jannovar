@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 /**
  * Helper for normalizing changes in amino acid sequences.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class AminoAcidChangeNormalizer {
 

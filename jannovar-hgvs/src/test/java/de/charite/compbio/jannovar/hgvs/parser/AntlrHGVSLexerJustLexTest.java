@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Feeds valid change descriptions to the lexer to see whether this works at least.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class AntlrHGVSLexerJustLexTest extends AntlrHGVSJustParseAndLexBase {
 

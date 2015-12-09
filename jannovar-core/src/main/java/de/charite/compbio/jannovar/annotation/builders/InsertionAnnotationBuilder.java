@@ -46,7 +46,7 @@ import de.charite.compbio.jannovar.reference.TranscriptPosition;
  * In the case of ambiguities, the HGVS specification requires the variant to be shifted towards the 3' end of the
  * transcript ("rightmost" position). This can cause an insertion to be shifted into the 3' UTR or a splice site.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 

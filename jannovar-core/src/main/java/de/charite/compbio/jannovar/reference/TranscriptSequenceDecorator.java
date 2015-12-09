@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 /**
  * Decorator for {@link TranscriptModel} that helps with operations on its sequence
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptSequenceDecorator {

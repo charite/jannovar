@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * This name list is used for ensuring that the same order and number of individuals is used in the genotype file as in
  * the pedigree file.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * 
  * @deprecated Use {@link VariantContextList} instead
  */

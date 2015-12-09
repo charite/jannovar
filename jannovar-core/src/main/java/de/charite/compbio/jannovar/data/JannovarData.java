@@ -18,7 +18,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  *
  * Making this class immutable makes it a convenient serializeable read-only database.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class JannovarData implements Serializable {

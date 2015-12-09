@@ -13,8 +13,8 @@ import de.charite.compbio.jannovar.impl.parse.InvalidAttributeException;
  *
  * Implementation class that groups the features into RNAs/Genes.
  *
- * @author Marten Jaeger <marten.jaeger@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class FeatureProcessor {
 

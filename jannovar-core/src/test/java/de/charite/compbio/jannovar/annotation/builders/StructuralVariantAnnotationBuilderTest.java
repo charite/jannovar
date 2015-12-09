@@ -20,7 +20,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
 /**
  * Tests for the StructuralVariantAnnotationBuilder.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class StructuralVariantAnnotationBuilderTest {
 

@@ -18,7 +18,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * This is the base class for FASTA parsers.
  *
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  */
 public abstract class FastaParser {
 

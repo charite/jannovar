@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.annotation.Annotation;
  * prefixes. Note that this is not the same as normalized variants (see the link below) but allows for easier querying
  * in programs.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @see <a href="http://genome.sph.umich.edu/wiki/Variant_Normalization">
  *      http://genome.sph.umich.edu/wiki/Variant_Normalization</a>
  */

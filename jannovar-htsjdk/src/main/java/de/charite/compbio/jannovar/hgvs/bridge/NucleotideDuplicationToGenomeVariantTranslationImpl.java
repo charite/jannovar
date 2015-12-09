@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Implementation of converting nucleotide duplications to genome variants.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 class NucleotideDuplicationToGenomeVariantTranslationImpl extends NucleotideChangeToGenomeVariantTranslationImplBase {
 

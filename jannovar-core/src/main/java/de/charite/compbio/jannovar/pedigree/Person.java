@@ -15,8 +15,8 @@ import de.charite.compbio.jannovar.Immutable;
  * construction. However, since the members only have <code>package</code> visibility, <code>Person</code> is immutable
  * for all practical considerations after construction.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class Person {

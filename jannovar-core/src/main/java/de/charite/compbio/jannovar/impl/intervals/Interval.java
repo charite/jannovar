@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.impl.intervals;
 /**
  * Half-open interval for serialization of an {@link IntervalArray}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class Interval<T> implements java.io.Serializable, Comparable<Interval<T>> {
 

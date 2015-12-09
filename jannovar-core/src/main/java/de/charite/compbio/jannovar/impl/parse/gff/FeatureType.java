@@ -4,7 +4,7 @@ package de.charite.compbio.jannovar.impl.parse.gff;
  * This are the currently known feature types in GFF/GFT3 files.
  *
  * @see <a href="http://www.sequenceontology.org/gff3.shtml">http://www.sequenceontology.org/gff3.shtml</a>
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  */
 public enum FeatureType {
 

@@ -29,7 +29,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Builds {@link Annotation} objects for the deletion {@link GenomeVariant}s in the given {@link TranscriptModel}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 

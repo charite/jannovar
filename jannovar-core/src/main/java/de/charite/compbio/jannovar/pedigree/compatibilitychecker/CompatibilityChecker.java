@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
 /**
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  *
  * @deprecated use {@link InterfaceCompatibilityChecker} instead.
  */

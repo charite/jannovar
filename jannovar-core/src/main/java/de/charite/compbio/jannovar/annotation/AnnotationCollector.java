@@ -57,8 +57,8 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  *
  * Used for the implementation of VariantAnnotator.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
 final class AnnotationCollector {

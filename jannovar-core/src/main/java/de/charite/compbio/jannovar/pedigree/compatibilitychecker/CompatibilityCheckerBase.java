@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.pedigree.Person;
  * 
  * This class summarizes the builder compatibility checks.
  *
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  * 
  * @deprecated use {@link CompatibilityChecker} instead.
  */

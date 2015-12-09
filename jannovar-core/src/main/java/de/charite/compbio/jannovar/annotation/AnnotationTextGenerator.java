@@ -5,8 +5,8 @@ package de.charite.compbio.jannovar.annotation;
 /**
  * Decorator for {@link Annotation} for generating annotation text.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 @Deprecated
 final public class AnnotationTextGenerator {

@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Helper class that allows annotating a result type with warning messages.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 class ResultWithWarnings<Value> {
 

@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.reference.PositionType;
 /**
  * We only need a few tests so we can double-check if the PositionType enum changes.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class PositionTypeTest {
 	@Test

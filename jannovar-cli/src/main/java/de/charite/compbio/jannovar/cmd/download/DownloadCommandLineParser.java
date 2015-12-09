@@ -20,7 +20,7 @@ import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 /**
  * Helper class for parsing the commandline of the download command.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 
 public final class DownloadCommandLineParser {

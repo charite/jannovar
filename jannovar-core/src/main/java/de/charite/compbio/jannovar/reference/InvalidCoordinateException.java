@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 /**
  * Thrown if two coordinates were on different chromosomes.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class InvalidCoordinateException extends RuntimeException {
 

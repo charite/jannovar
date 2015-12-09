@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * 
  * The generated data contains one transcript each for the genes FGFR2, GNRHR2A, RBM8A (overlaps with GNRHR2A), and SHH.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TestJannovarDataFactory {
 

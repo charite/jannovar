@@ -44,7 +44,7 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  * At the moment, this has package visibility only since it is not clear yet whether and how client code should extend
  * the builder hierarchy.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 abstract class AnnotationBuilder {
 

@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
 /**
  * Set the transcript support level from transcript lengths.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 class TranscriptSupportLevelsSetterFromLengths {
 

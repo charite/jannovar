@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Functionality for finding out about certain points/regions of {@link TranscriptModel} using <b>genomic</b> positions.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptSequenceOntologyDecorator {

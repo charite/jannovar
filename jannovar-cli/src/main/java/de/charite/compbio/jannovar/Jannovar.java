@@ -59,8 +59,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
  * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  */
 public final class Jannovar {
 	/** Configuration for the Jannovar program. */

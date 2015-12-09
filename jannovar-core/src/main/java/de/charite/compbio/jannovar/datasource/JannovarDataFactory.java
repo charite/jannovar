@@ -21,7 +21,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Interface for data factories, allowing to create {@link JannovarData} objects from {@link DataSource}s.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class JannovarDataFactory {
 
