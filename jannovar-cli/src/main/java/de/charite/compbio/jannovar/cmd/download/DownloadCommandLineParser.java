@@ -6,12 +6,11 @@ import java.net.URL;
 import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
 
 import com.google.common.collect.ImmutableList;
 
@@ -21,14 +20,15 @@ import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 /**
  * Helper class for parsing the commandline of the download command.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
+
 public final class DownloadCommandLineParser {
 
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
 	/** the Apache commons command line parser */
-	protected Parser parser;
+	protected DefaultParser parser;
 
 	/**
 	 * Calls initializeParser().
@@ -40,35 +40,33 @@ public final class DownloadCommandLineParser {
 	/**
 	 * Initialize {@link #parser} and {@link #options}.
 	 */
-	@SuppressWarnings("static-access")
-	// OptionBuilder causes this warning.
+
 	private void initializeParser() {
 		options = new Options();
-		options.addOption(OptionBuilder.withDescription("show this help").withLongOpt("help").create("h"));
-		options.addOption(OptionBuilder.withDescription("create verbose output").withLongOpt("verbose").create("v"));
-		options.addOption(OptionBuilder.withDescription("create very verbose output").withLongOpt("very-verbose")
-				.create("vv"));
-		options.addOption(OptionBuilder.withDescription("INI file with data source list").hasArgs(1)
-				.withLongOpt("data-source-list").create("s"));
-		options.addOption(OptionBuilder
-				.withDescription("target folder for downloaded and serialized files, defaults to \"data\"").hasArgs(1)
-				.withLongOpt("data-dir").create("d"));
-		options.addOption(OptionBuilder
-				.withDescription(
+		options.addOption(Option.builder("h").desc("show this help").longOpt("help").build());
+		options.addOption(Option.builder("v").desc("create verbose output").longOpt("verbose").build());
+		options.addOption(Option.builder("vv").desc("create very verbose output").longOpt("very-verbose").build());
+		options.addOption(Option.builder("s").desc("INI file with data source list").numberOfArgs(1)
+				.longOpt("data-source-list").build());
+		options.addOption(Option.builder("d")
+				.desc("target folder for downloaded and serialized files, defaults to \"data\"").numberOfArgs(1)
+				.longOpt("data-dir").build());
+		options.addOption(Option.builder()
+				.desc(
 						"proxy to use for HTTP/HTTPS/FTP downloads (lower precedence than "
-								+ "the other proxy options)").hasArgs(1).withLongOpt("proxy").withArgName("proxy")
-								.create());
-		options.addOption(OptionBuilder
-				.withDescription("proxy to use for HTTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
-				.withLongOpt("http-proxy").withArgName("http-proxy").create());
-		options.addOption(OptionBuilder
-				.withDescription("proxy to use for HTTPS downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
-				.withLongOpt("https-proxy").withArgName("https-proxy").create());
-		options.addOption(OptionBuilder
-				.withDescription("proxy to use for FTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
-				.withLongOpt("ftp-proxy").withArgName("ftp-proxy").create());
+								+ "the other proxy options)").numberOfArgs(1).longOpt("proxy").argName("proxy")
+								.build());
+		options.addOption(Option.builder()
+				.desc("proxy to use for HTTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").numberOfArgs(1)
+				.longOpt("http-proxy").argName("http-proxy").build());
+		options.addOption(Option.builder()
+				.desc("proxy to use for HTTPS downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").numberOfArgs(1)
+				.longOpt("https-proxy").argName("https-proxy").build());
+		options.addOption(Option.builder()
+				.desc("proxy to use for FTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").numberOfArgs(1)
+				.longOpt("ftp-proxy").argName("ftp-proxy").build());
 
-		parser = new GnuParser();
+		parser = new DefaultParser();
 	}
 
 	/**

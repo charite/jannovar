@@ -23,7 +23,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * Class for parsing flat BED data.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class FlatBEDParser implements TranscriptParser {
 

@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommandLineParser;
 /**
  * Parse the command line for the "annotate-position" command.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommandLineParser {
 

@@ -15,7 +15,7 @@ import de.charite.compbio.jannovar.annotation.AnnotationException;
  * Currently, we have to convert HTSJDK VariantContext objects into Jannovar Variant objects but that should be
  * simplified later on.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class AnnotatedVariantWriter {
 

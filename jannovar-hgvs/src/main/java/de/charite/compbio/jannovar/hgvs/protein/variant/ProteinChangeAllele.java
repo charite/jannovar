@@ -25,7 +25,7 @@ import de.charite.compbio.jannovar.hgvs.protein.change.ProteinChange;
  * <li><tt>[Gly28Val;(Asn26His)]</tt></li>
  * </ul>
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class ProteinChangeAllele implements ConvertibleToHGVSString, List<ProteinChange> {
 

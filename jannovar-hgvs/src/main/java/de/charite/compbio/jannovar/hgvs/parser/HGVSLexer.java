@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.LexerNoViableAltException;
 /**
  * Extends the generated Antlr4HGVSLexer to bail out at the first lexing error.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSLexer extends Antlr4HGVSLexer {
 

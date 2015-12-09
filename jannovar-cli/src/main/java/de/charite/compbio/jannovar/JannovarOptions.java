@@ -12,8 +12,8 @@ import com.google.common.collect.ImmutableList;
  * This class contains the configuration for all Jannovar commands, even though most are not used by some commands. For
  * example, the proxy setting is only used when downloading data.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public final class JannovarOptions {
 

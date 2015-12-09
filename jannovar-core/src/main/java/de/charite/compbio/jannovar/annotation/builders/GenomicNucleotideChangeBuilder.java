@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 /**
  * Build {@link NucleotideChange} for a {@link GenomeVariant}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GenomicNucleotideChangeBuilder {
 

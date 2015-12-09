@@ -5,7 +5,7 @@ import com.google.common.base.Joiner;
 /**
  * Exonic location for legacy variants, e.g. <code>"IVS3+3"</code>.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LegacyLocation {
 

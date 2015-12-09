@@ -13,7 +13,7 @@ import de.charite.compbio.jannovar.JannovarOptions;
 /**
  * Super class for all commands, i.e. the classes implementing one Jannovar execution step.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class JannovarCommand {
 

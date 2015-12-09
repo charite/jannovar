@@ -5,7 +5,7 @@ import java.net.URL;
 /**
  * Configuration for data sources.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class DatasourceOptions {
 

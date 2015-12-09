@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.MultiAlleleNucleotideVariant
 /**
  * Tests for the HGVSParserDriver for parsing nucleotide substitutions.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParserDriverNucleotideMultiAlleleSingleChangeTest {
 

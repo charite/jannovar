@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.gff.FeatureProcessor;
 import de.charite.compbio.jannovar.impl.parse.gff.GFFParser;
-import de.charite.compbio.jannovar.impl.parse.gff.TranscriptInfoFactory;
+import de.charite.compbio.jannovar.impl.parse.gff.TranscriptModelBuilderFactory;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
@@ -21,9 +21,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * Class for orchestrating the parsing of Ensembl data.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class EnsemblParser implements TranscriptParser {
 
@@ -71,14 +71,15 @@ public class EnsemblParser implements TranscriptParser {
 		}
 
 		// Parse the GFF file and feed the resulting Feature objects into a TranscriptModelBuilder.
-		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), refDict);
+		FeatureProcessor fp = new FeatureProcessor(gffParser.getGffVersion(), true, refDict);
 		gffParser.parse(fp);
 		// Build ArrayList of TranscriptModelBuilder objects from feature list.
 		ArrayList<TranscriptModelBuilder> builders;
 		try {
 			LOGGER.info("Building transcript models...");
-			TranscriptInfoFactory tif = new TranscriptInfoFactory(gffParser.getGffVersion(), refDict);
-			builders = tif.buildTranscripts(fp.getGenes());
+			TranscriptModelBuilderFactory tmbf = new TranscriptModelBuilderFactory(true, gffParser.getGffVersion(),
+					refDict);
+			builders = tmbf.buildTranscriptModelBuilders(fp.getGenes());
 			TranscriptSupportLevelsSetterFromLengths.run(builders);
 		} catch (InvalidAttributeException e) {
 			LOGGER.error("Unable to load data from Ensembl files: {}", e.getMessage());

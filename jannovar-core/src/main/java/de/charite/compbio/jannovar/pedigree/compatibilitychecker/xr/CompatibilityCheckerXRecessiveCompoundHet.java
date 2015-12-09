@@ -35,7 +35,7 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.Compatibilit
  * {@link Genotype#HOMOZYGOUS_ALT} and should not have it comp. het (only
  * possible if parents are available).
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * 
  * @deprecated use {@link VariantContextCompatibilityCheckerXRecessiveCompoundHet} instead.
  */

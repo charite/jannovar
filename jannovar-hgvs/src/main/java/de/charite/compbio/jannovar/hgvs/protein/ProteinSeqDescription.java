@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.hgvs.Translator;
  *
  * This can be either just a count or an amino acid sequence.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinSeqDescription implements ConvertibleToHGVSString {
 

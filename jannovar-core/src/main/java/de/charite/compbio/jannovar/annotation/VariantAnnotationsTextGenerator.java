@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 /**
  * Generate annotation text (effect and HGVS description) from {@link VariantAnnotations} object.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class VariantAnnotationsTextGenerator {
 

@@ -8,14 +8,15 @@ import de.charite.compbio.jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import de.charite.compbio.jannovar.cmd.db_list.DatabaseListCommand;
 import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
  * <OL>
  * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt, and to create
- * corresponding {@link TranscriptInfo} objects and to serialize them. The resulting serialized file can be used both by
- * this program itself (see next item) or by the main Exomizer program to annotated VCF file.
- * <LI>Using the serialized file of {@link TranscriptInfo} objects (see above item) annotate a VCF file using
+ * corresponding {@link TranscriptModel} objects and to serialize them. The resulting serialized file can be used both
+ * by this program itself (see next item) or by the main Exomizer program to annotated VCF file.
+ * <LI>Using the serialized file of {@link TranscriptModel} objects (see above item) annotate a VCF file using
  * annovar-type program logic. Note that this functionality is also used by the main Exomizer program and thus this
  * program can be used as a stand-alone annotator ("Jannovar") or as a way of testing the code for the Exomizer.
  * </OL>
@@ -58,8 +59,8 @@ import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
  * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
  * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  */
 public final class Jannovar {
 	/** Configuration for the Jannovar program. */

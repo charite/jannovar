@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
  * {@link TranscriptModel} transcript = builder.{@link TranscriptModelBuilder#build build}();
  * </pre>
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranscriptModelBuilder {
 
@@ -70,7 +70,7 @@ public class TranscriptModelBuilder {
 	}
 
 	/**
-	 * @return {@link TranscriptInfo} with the currently set configuration.
+	 * @return {@link TranscriptModel} with the currently set configuration.
 	 */
 	public TranscriptModel build() {
 		// Build list of immutable exons in the correct order.

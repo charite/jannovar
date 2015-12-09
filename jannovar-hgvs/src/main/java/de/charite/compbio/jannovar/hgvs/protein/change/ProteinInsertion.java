@@ -7,7 +7,7 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 /**
  * Insertion into a protein sequence.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinInsertion extends ProteinChange {
 
@@ -109,6 +109,11 @@ public class ProteinInsertion extends ProteinChange {
 		} else if (!seq.equals(other.seq))
 			return false;
 		return true;
+	}
+
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinInsertion(onlyPredicted, this.position, this.seq);
 	}
 
 }

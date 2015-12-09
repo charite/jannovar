@@ -17,8 +17,8 @@ import com.google.common.collect.ImmutableList;
 /**
  * Allows reading of {@link PedFileContents} from a {@link InputStream} or {@link File}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class PedFileReader {
 

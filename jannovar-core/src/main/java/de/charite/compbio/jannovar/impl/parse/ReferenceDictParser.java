@@ -22,7 +22,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionaryBuilder;
  * The mapping between chromosome names and RefSeq/GeneBank IDs is done using a RefSeq "chr_accessions_*" file and the
  * chromosome information is retrieved from the UCSC chromInfo.txt.gz file.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class ReferenceDictParser {
 

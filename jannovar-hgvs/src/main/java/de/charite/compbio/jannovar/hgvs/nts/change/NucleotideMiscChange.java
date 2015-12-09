@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs.nts.change;
 /**
  * Represents a silent protein-level change, i.e., "p.=".
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class NucleotideMiscChange extends NucleotideChange {
 

@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinRange;
 /**
  * Describes short sequence repeat (SSR) variability.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 
@@ -95,6 +95,11 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 		} else if (!range.equals(other.range))
 			return false;
 		return true;
+	}
+
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinShortSequenceRepeatVariability(onlyPredicted, this.range, this.minCount, this.maxCount);
 	}
 
 }

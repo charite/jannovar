@@ -2,6 +2,30 @@
 
 ## develop
 
+### jannovar-cli
+
+* removing deprecated usage of commons-cli command line parser
+* renaming of some internal classes and functions, fixing Javadocs
+
+### jannovar-core
+
+* fixing bug in `TranscriptSequenceChangeHelper` for reverse transcript (did not reverse complement alternate allele)
+* fixing bug in parsing GFF3 with some transcripts (e.g. GNAT1)
+* less intrusive escaping in `ANN` field
+* renaming of some internal classes and functions, fixing Javadocs
+
+## jannovar-htsjdk
+
+* renaming `InvalidGenomeChange` to `InvalidGenomeVariant`
+* renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
+* renaming of some internal classes and functions, fixing Javadocs
+
+## jannovar-hgvs
+
+* extending API of ProteinChange hierarchy for HGVS generation
+* renaming of some internal classes and functions, fixing Javadocs
+
+## v0.15
 
 ### jannovar-core
 
