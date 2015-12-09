@@ -31,6 +31,8 @@ public final class TranscriptSequenceChangeHelper {
 	 * @return transcript string with applied {@link GenomeVariant}
 	 */
 	public String getTranscriptWithChange(GenomeVariant change) {
+		change = change.withStrand(transcript.getStrand());
+
 		switch (change.getType()) {
 		case SNV:
 		case INSERTION:
@@ -140,6 +142,8 @@ public final class TranscriptSequenceChangeHelper {
 	 * @return CDS of transcript with applied {@link GenomeVariant}
 	 */
 	public String getCDSWithGenomeVariant(GenomeVariant change) {
+		change = change.withStrand(transcript.getStrand());
+
 		switch (change.getType()) {
 		case SNV:
 		case INSERTION:
