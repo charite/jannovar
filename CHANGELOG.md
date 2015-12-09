@@ -17,6 +17,10 @@
 * renaming `InvalidGenomeChange` to `InvalidGenomeVariant`
 * renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
 
+## jannovar-hgvs
+
+* Extending API of ProteinChange hierarchy for HGVS generation
+
 ## v0.15
 
 ### jannovar-core

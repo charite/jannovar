@@ -57,6 +57,12 @@ public class ProteinDeletion extends ProteinChange {
 		this.seqDesc = new ProteinSeqDescription(seq);
 	}
 
+	private ProteinDeletion(boolean onlyPredicted, ProteinRange range, ProteinSeqDescription seqDesc) {
+		super(onlyPredicted);
+		this.range = range;
+		this.seqDesc = seqDesc;
+	}
+
 	/** @return deleted range in the protein */
 	public ProteinRange getRange() {
 		return range;
@@ -70,6 +76,11 @@ public class ProteinDeletion extends ProteinChange {
 	@Override
 	public String toHGVSString(AminoAcidCode code) {
 		return wrapIfOnlyPredicted(range.toHGVSString(code) + "del" + seqDesc.toHGVSString(code));
+	}
+
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinDeletion(onlyPredicted, this.range, this.seqDesc);
 	}
 
 }

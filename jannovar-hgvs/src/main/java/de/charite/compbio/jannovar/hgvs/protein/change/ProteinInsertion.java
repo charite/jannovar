@@ -111,4 +111,9 @@ public class ProteinInsertion extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinInsertion(onlyPredicted, this.position, this.seq);
+	}
+
 }

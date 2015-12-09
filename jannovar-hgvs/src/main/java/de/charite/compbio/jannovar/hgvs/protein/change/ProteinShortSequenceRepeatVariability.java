@@ -97,4 +97,9 @@ public class ProteinShortSequenceRepeatVariability extends ProteinChange {
 		return true;
 	}
 
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinShortSequenceRepeatVariability(onlyPredicted, this.range, this.minCount, this.maxCount);
+	}
+
 }
