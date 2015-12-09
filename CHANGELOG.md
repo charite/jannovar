@@ -2,8 +2,13 @@
 
 ## develop
 
+### jannovar-cli
+
+* removing deprecated usage of commons-cli command line parser
+
 ### jannovar-core
 
+* fixing bug in `TranscriptSequenceChangeHelper` for reverse transcript (did not reverse complement alternate allele)
 * fixing bug in parsing GFF3 with some transcripts (e.g. GNAT1)
 * less intrusive escaping in `ANN` field
 
