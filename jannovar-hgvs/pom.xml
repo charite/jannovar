@@ -38,12 +38,6 @@
 			<artifactId>antlr4-runtime</artifactId>
 			<version>4.3</version>
 		</dependency>
-		<!-- Logging framework -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
-		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
