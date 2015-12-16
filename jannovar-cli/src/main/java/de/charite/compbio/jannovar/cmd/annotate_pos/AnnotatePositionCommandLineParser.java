@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 
 import de.charite.compbio.jannovar.JannovarOptions;
@@ -20,41 +21,47 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 	@Override
 	public JannovarOptions parse(String[] argv) throws ParseException, HelpRequestedException {
 		// Parse the command line.
-		CommandLine cmd = parser.parse(options, argv);
+		CommandLine cmd = parser.parse(helpOptions, argv, true);
+		printHelpIfOptionIsSet(cmd);
+		cmd = parser.parse(options, argv);
 
+		printHelpIfOptionIsSet(cmd);
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
 		result.printProgressBars = true;
 		result.command = JannovarOptions.Command.ANNOTATE_POSITION;
 
-		if (cmd.hasOption("help")) {
-			printHelp();
-			throw new HelpRequestedException();
-		}
+		
 
 		if (cmd.hasOption("verbose"))
 			result.verbosity = 2;
 		if (cmd.hasOption("very-verbose"))
 			result.verbosity = 3;
 
-		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length < 3)
-			throw new ParseException("must have at least two none-option argument, had: " + (args.length - 1));
-
-		result.dataFile = args[1];
-
-		for (int i = 2; i < args.length; ++i)
-			result.chromosomalChanges.add(args[i]);
+		
+		result.dataFile = cmd.getOptionValue("database");
+		
+		for (String change : cmd.getOptionValues("change")) {
+			result.chromosomalChanges.add(change);
+		}
 
 		return result;
+	}
+
+	@Override
+	protected void initializeParser() {
+		super.initializeParser();
+
+		options.addOption(Option.builder("c").longOpt("change").required().hasArgs()
+				.desc("Genomic variant change").build());
 	}
 
 	public void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Command: annotate-pos\n\n")
 				.append("Use this command to annotate a chromosomal change.\n\n")
-				.append("Usage: java -jar de.charite.compbio.jannovar.jar annotate-pos [options] <database.ser> <CHANGE>\n\n").toString();
+				.append("Usage: java -jar de.charite.compbio.jannovar.jar annotate-pos [options] -d <database.ser> -c <CHANGE>\n\n").toString();
 		final String FOOTER = new StringBuilder().append(
-				"\n\nExample: java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'\n\n").toString();
+				"\n\nExample: java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'\n\n").toString();
 
 		System.err.print(HEADER);
 

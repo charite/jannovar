@@ -14,11 +14,12 @@ import com.google.common.collect.ImmutableList;
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class JannovarOptions {
 
 	/** the version of the program */
-	public static final String JANNOVAR_VERSION = "0.14";
+	public static final String JANNOVAR_VERSION = "0.16";
 
 	/** the selected command */
 	public Command command = null;

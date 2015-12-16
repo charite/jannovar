@@ -18,6 +18,7 @@ import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
  * Run annotation steps (read in VCF, write out VCF or Jannovar file format).
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 

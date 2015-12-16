@@ -61,6 +61,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  *
  * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class Jannovar {
 	/** Configuration for the Jannovar program. */
@@ -124,12 +125,12 @@ public final class Jannovar {
 		System.err.println("         annotate      functional annotation of VCF files");
 		System.err.println("         annotate-pos  functional annotation of genomic change");
 		System.err.println("");
-		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download hg19/ucsc");
+		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download -d hg19/ucsc");
 		System.err.println("         java -jar de.charite.compbio.jannovar.jar db-list");
 		System.err
-				.println("         java -jar de.charite.compbio.jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate -d data/hg19_ucsc.ser -i variants.vcf");
 		System.err
-				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'");
 		System.err.println("");
 	}
 
