@@ -72,7 +72,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<log4j.version>2.1</log4j.version>
+		<log4j.version>2.5</log4j.version>
 	</properties>
 
 	<dependencies>
@@ -80,18 +80,27 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+			<version>1.7.12</version>
 		</dependency>
-		<!-- Logging -->
+		<!-- Logging implementation for test only. -->
+		<dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j.version}</version>
+				<scope>test</scope>
+      </dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
+			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
+			<scope>test</scope>
 		</dependency>
+		<!-- JUnit testing -->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j.version}</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -112,6 +121,25 @@
 						<user.region>GB</user.region>
 					</systemPropertyVariables>
 				</configuration>
+			</plugin>
+
+			<plugin>
+    		<groupId>org.apache.maven.plugins</groupId>
+   		 	<artifactId>maven-enforcer-plugin</artifactId>
+   	 		<version>1.4.1</version>
+   		 	<executions>
+      		<execution>
+        		<id>enforce</id>
+        		<configuration>
+        	  	<rules>
+        	    	<DependencyConvergence/>
+        	  	</rules>
+        		</configuration>
+        		<goals>
+        	  	<goal>enforce</goal>
+        		</goals>
+      		</execution>
+    		</executions>
 			</plugin>
 
 			<!-- Javadoc generation. -->
