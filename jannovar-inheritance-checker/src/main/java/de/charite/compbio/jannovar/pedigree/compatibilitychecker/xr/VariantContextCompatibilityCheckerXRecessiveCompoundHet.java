@@ -10,6 +10,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
+import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
@@ -81,8 +82,8 @@ class VariantContextCompatibilityCheckerXRecessiveCompoundHet extends AbstractVa
 				// If candidate holds, check all unaffected for not being
 				// homozygous alt.
 				if (isCompatibleWithUnaffected(c)) {
-					c.getPaternal().setMatchInheritance(true);
-					c.getMaternal().setMatchInheritance(true);
+					c.getPaternal().addMatchInheritance(ModeOfInheritance.X_RECESSIVE);
+					c.getMaternal().addMatchInheritance(ModeOfInheritance.X_RECESSIVE);
 				}
 	}
 

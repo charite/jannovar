@@ -7,6 +7,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
+import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.Sex;
@@ -79,7 +80,7 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractVariant
 			for (InheritanceVariantContext vc : list.getVcList())
 				if (vc.getSingleSampleGenotype() == Genotype.HETEROZYGOUS
 						|| vc.getSingleSampleGenotype() == Genotype.HOMOZYGOUS_ALT)
-					vc.setMatchInheritance(true);
+					vc.addMatchInheritance(ModeOfInheritance.X_DOMINANT);
 		}
 	}
 
@@ -118,7 +119,7 @@ public class VariantContextCompatibilityCheckerXDominant extends AbstractVariant
 			// variant is incompatible in one person. If any one variant is compatible with AD inheritance, than the
 			// Gene is compatible and we can return true without examining the other variants.
 			if (currentVariantCompatible && numAffectedWithMut > 0)
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.X_DOMINANT);
 		}
 	}
 }

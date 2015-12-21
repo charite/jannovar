@@ -7,6 +7,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
+import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
@@ -75,7 +76,7 @@ public class VariantContextCompatibilityCheckerAutosomalDominant extends Abstrac
 		// We could also allow Genotye.HOMOZYGOUS_ALT here but that is not the interesting case.
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (vc.getSingleSampleGenotype() == Genotype.HETEROZYGOUS)
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.AUTOSOMAL_DOMINANT);
 	}
 
 	public void runMultiSampleCase() {
@@ -106,7 +107,7 @@ public class VariantContextCompatibilityCheckerAutosomalDominant extends Abstrac
 			// variant is incompatible in one person. If any one genotype is compatible with AD inheritance, then the
 			// Gene is compatible and we can return true without examining the other variants.
 			if (currentVariantCompatible && numAffectedWithHet > 0)
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.AUTOSOMAL_DOMINANT);
 		}
 
 	}

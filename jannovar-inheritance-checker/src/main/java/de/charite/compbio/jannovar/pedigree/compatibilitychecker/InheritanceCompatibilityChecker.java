@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.pedigree.compatibilitychecker;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -15,8 +17,9 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.xr.VariantConte
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
- * Decorator for {@link de.charite.compbio.jannovar.pedigree.Pedigree} that allows checking whether a {@link htsjdk.variant.variantcontext.Genotype} call of
- * a {@link htsjdk.variant.variantcontext.VariantContext} is compatible with a selected mode of inheritance.
+ * Decorator for {@link de.charite.compbio.jannovar.pedigree.Pedigree} that allows checking whether a
+ * {@link htsjdk.variant.variantcontext.Genotype} call of a {@link htsjdk.variant.variantcontext.VariantContext} is
+ * compatible with a selected mode of inheritance.
  *
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  * @version 0.15-SNAPSHOT
@@ -105,38 +108,97 @@ public class InheritanceCompatibilityChecker {
 	}
 
 	/**
-	 * <p>Getter for the field <code>pedigree</code>.</p>
+	 * <p>
+	 * Getter for the field <code>pedigree</code>.
+	 * </p>
 	 *
-	 * @return The pedigree used in this {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}
+	 * @return The pedigree used in this
+	 *         {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}
 	 */
 	public Pedigree getPedigree() {
 		return pedigree;
 	}
 
 	/**
-	 * <p>Getter for the field <code>inheritanceModes</code>.</p>
+	 * <p>
+	 * Getter for the field <code>inheritanceModes</code>.
+	 * </p>
 	 *
-	 * @return mode of inheritances to check in this {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}
+	 * @return mode of inheritances to check in this
+	 *         {@link de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker}
 	 */
 	public ImmutableSet<ModeOfInheritance> getInheritanceModes() {
 		return inheritanceModes;
 	}
 
 	/**
-	 * Method for checking whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is compatible with a given
-	 * {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} and {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
+	 * Method for filtering whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is
+	 * compatible with a given {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} and
+	 * {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
 	 *
 	 * @param vcList
-	 *            {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} to check for compatibility
-	 * @return A list with all {@link htsjdk.variant.variantcontext.VariantContext} that matches the mode of inheritances.
+	 *            {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} to check for
+	 *            compatibility
+	 * @return A list with all {@link htsjdk.variant.variantcontext.VariantContext} that matches the mode of
+	 *         inheritances.
 	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
 	 *             if there are problems with <code>list</code> or {@link #pedigree}.
 	 */
 	public List<VariantContext> getCompatibleWith(List<VariantContext> vcList)
 			throws InheritanceCompatibilityCheckerException {
 
+		InheritanceVariantContextList list = checkVariantContextsWithInheritances(vcList, inheritanceModes);
+		return list.getMatchedVariants();
+	}
+
+
+	/**
+	 * Method for checking whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is
+	 * compatible with ALL possible modes of inheritance (UNINITIALIZED is excluded) and the given
+	 * {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
+	 *
+	 * @param vcList
+	 *            {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} to check for
+	 *            compatibility
+	 * @return A set with all possible modes of inheritance in the given list.
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
+	 *             if there are problems with <code>list</code> or {@link #pedigree}.
+	 */
+	public Set<ModeOfInheritance> getAllCompatibleModes(List<VariantContext> vcList)
+			throws InheritanceCompatibilityCheckerException {
+
+		InheritanceVariantContextList list = checkVariantContextsWithInheritances(vcList,
+				new ImmutableSet.Builder<ModeOfInheritance>().add(ModeOfInheritance.AUTOSOMAL_DOMINANT)
+						.add(ModeOfInheritance.AUTOSOMAL_RECESSIVE).add(ModeOfInheritance.X_RECESSIVE)
+						.add(ModeOfInheritance.X_DOMINANT).build());
+		return list.getMatchedModeOfInheritances();
+
+	}
+	
+
+	/**
+	 * Method for checking whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is
+	 * compatible with a given {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} and
+	 * {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
+	 *
+	 * @param vcList
+	 *            {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} to check for
+	 *            compatibility
+	 * @return A Map with all {@link htsjdk.variant.variantcontext.VariantContext} and a set to which inheritance mode
+	 *         they belong.
+	 * @throws de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException
+	 *             if there are problems with <code>list</code> or {@link #pedigree}.
+	 */
+	public Map<VariantContext, Set<ModeOfInheritance>> check(List<VariantContext> vcList)
+			throws InheritanceCompatibilityCheckerException {
+		InheritanceVariantContextList list = checkVariantContextsWithInheritances(vcList, inheritanceModes);
+		return list.getAnnotatedMap();
+	}
+	
+	private InheritanceVariantContextList checkVariantContextsWithInheritances(List<VariantContext> vcList,
+			Set<ModeOfInheritance> modesOfInheritance) throws InheritanceCompatibilityCheckerException {
 		InheritanceVariantContextList list = new InheritanceVariantContextList(vcList);
-		for (ModeOfInheritance mode : inheritanceModes) {
+		for (ModeOfInheritance mode : modesOfInheritance) {
 			switch (mode) {
 			case AUTOSOMAL_DOMINANT:
 				new VariantContextCompatibilityCheckerAutosomalDominant(pedigree, list).run();
@@ -155,7 +217,7 @@ public class InheritanceCompatibilityChecker {
 				continue;
 			}
 		}
-		return list.getMatchedVariants();
+		return list;
 	}
 
 }
