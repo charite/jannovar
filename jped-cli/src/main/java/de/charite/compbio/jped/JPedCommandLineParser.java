@@ -21,6 +21,7 @@ public class JPedCommandLineParser {
 
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
+	protected Options helpOptions;
 	/** the Apache commons command line parser */
 	protected CommandLineParser parser;
 
@@ -32,9 +33,11 @@ public class JPedCommandLineParser {
 	}
 
 	public JPedOptions parse(String[] argv) throws ParseException, HelpRequestedException {
+		CommandLine cmd = parser.parse(helpOptions, argv, true);
+		printHelpIfOptionIsSet(cmd);
 		// Parse the command line.
-		CommandLine cmd = parser.parse(options, argv);
-
+		cmd = parser.parse(options, argv);
+		printHelpIfOptionIsSet(cmd);
 		// Fill the resulting JannovarOptions.
 		JPedOptions result = new JPedOptions();
 
@@ -48,10 +51,6 @@ public class JPedCommandLineParser {
 		if (cmd.hasOption("very-verbose"))
 			result.verbosity = 3;
 
-		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length != 4)
-			throw new ParseException("must have exactly four none-option arguments, had: " + args.length);
-
 		ImmutableSet.Builder<ModeOfInheritance> inheritanceBuilder = new ImmutableSet.Builder<ModeOfInheritance>();
 		for (String modeString : cmd.getOptionValues("inheritance-mode")) {
 			ModeOfInheritance mode = ModeOfInheritance.valueOf(ModeOfInheritance.class, modeString);
@@ -62,27 +61,42 @@ public class JPedCommandLineParser {
 			result.modeOfInheritances = inheritances;
 
 		result.geneWise = cmd.hasOption("gene-wise");
-		if (cmd.getOptionValue("database") != null)
-			result.jannovarDB = cmd.getOptionValue("database");
-
-		result.jannovarDB = args[0];
-		result.pedPath = args[1];
-		result.inputPath = args[2];
-		result.outputPath = args[3];
+		result.jannovarDB = cmd.getOptionValue("database");
+		result.pedPath = cmd.getOptionValue("ped");
+		result.inputPath = cmd.getOptionValue("vcf-in");
+		result.outputPath = cmd.getOptionValue("vcf-out");
 
 		return result;
+	}
+	
+	private void printHelpIfOptionIsSet(CommandLine cmd) throws HelpRequestedException {
+		if (cmd.hasOption("help")) {
+			printHelp();
+			throw new HelpRequestedException();
+		}
 	}
 
 	protected void initializeParser() {
 		options = new Options();
-		options.addOption(new Option("h", "help", false, "show this help"));
+		helpOptions = new Options();
+		Option helpOption = Option.builder("h").desc("show this help").longOpt("help").build();
+		helpOptions.addOption(helpOption);
+		options.addOption(helpOption);
 		options.addOption(new Option("v", "verbose", false, "enable verbose output"));
 		options.addOption(new Option("vv", "very-verbose", false, "enable very verbose output"));
 
-		Option.builder("m").hasArgs().desc("Check for the given inheritance mode(s) (can be multiple)")
-				.longOpt("inheritance-mode").build();
+		options.addOption(Option.builder("m").hasArgs()
+				.desc("Check for the given inheritance mode(s) (can be multiple)").longOpt("inheritance-mode").build());
 		options.addOption(new Option("g", "gene-wise", false,
 				"gene-wise instead of variant-wise processing (required for compound heterozygous filtration)"));
+		options.addOption(Option.builder("d").longOpt("database").required().hasArg().desc("Jannovar database")
+				.argName("database.ser").build());
+		options.addOption(Option.builder("i").longOpt("vcf-in").required().hasArgs()
+				.desc("VCF file to annotate (.vcf/.gz)").argName("IN.vcf").build());
+		options.addOption(Option.builder("o").longOpt("vcf-out").required().hasArg()
+				.desc("VCF output file").argName("OUT.vcf").build());
+		options.addOption(Option.builder("p").longOpt("ped").required().hasArg()
+				.desc("Pedigree file in ped format containing all samples of the input vcf").argName("FAM.ped").build());
 
 		parser = new DefaultParser();
 	}
@@ -90,10 +104,10 @@ public class JPedCommandLineParser {
 	public void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Filter Tool")
 				.append("Use this command to filter VCF files.\n\n")
-				.append("Usage: java -jar jped-cli.jar <DB.ser> <PED.ped> <IN.vcf> <OUT.vcf>\n\n").toString();
+				.append("Usage: java -jar jped-cli.jar -d <DB.ser> -p <PED.ped> -v <IN.vcf> -o <OUT.vcf>\n\n").toString();
 		final String FOOTER = new StringBuilder()
-				.append("\n\nExample: java -jar jped-cli.jar -m AUTOSOMAL_DOMINANT data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n")
-				.append("         java -jar jped-cli.jar -g -m AUTOSOMAL_RECESSIVE data/hg19_ucsc.ser fam.ped 123.vcf 123.filtered.vcf\n\n")
+				.append("\n\nExample: java -jar jped-cli.jar -m AUTOSOMAL_DOMINANT -d data/hg19_ucsc.ser -p fam.ped -i 123.vcf -o 123.filtered.vcf\n")
+				.append("         java -jar jped-cli.jar -g -m AUTOSOMAL_RECESSIVE -d data/hg19_ucsc.ser -p fam.ped -i 123.vcf -o 123.filtered.vcf\n\n")
 				.append("Diseases\n\n")
 				.append("The --inheritance-mode parameter can take one of the following values. When given")
 				.append("then the variants will be filtered to those being compatible with the given mode")
