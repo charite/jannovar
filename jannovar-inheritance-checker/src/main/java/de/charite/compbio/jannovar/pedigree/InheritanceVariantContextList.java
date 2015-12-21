@@ -1,7 +1,11 @@
 package de.charite.compbio.jannovar.pedigree;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
@@ -10,9 +14,10 @@ import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  *
- * This class is a wrapper for a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext}. It transforms every {@link htsjdk.variant.variantcontext.VariantContext} into
- * an {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext}. At also has teh ability to find out if the variants are XChromosomal or
- * autosomal (or both).
+ * This class is a wrapper for a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext}. It
+ * transforms every {@link htsjdk.variant.variantcontext.VariantContext} into an
+ * {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext}. At also has teh ability to find out if the
+ * variants are XChromosomal or autosomal (or both).
  *
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  * @version 0.15-SNAPSHOT
@@ -121,7 +126,9 @@ public final class InheritanceVariantContextList {
 	};
 
 	/**
-	 * <p>Getter for the field <code>vcList</code>.</p>
+	 * <p>
+	 * Getter for the field <code>vcList</code>.
+	 * </p>
 	 *
 	 * @return a {@link java.util.List} object.
 	 */
@@ -134,12 +141,13 @@ public final class InheritanceVariantContextList {
 	 * <code>pedigree</code>.
 	 *
 	 * For this, the order of the names has to be the same as the number of the names. This check is important for the
-	 * {@link de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator}, where the names in the pedigree must be the same as the names in
-	 * the genotype list.
+	 * {@link de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator}, where the names in the
+	 * pedigree must be the same as the names in the genotype list.
 	 *
 	 * @return <code>true</code> if the list of {@link #names} is the same as the names of the members of
 	 *         <code>pedigree</code>
-	 * @param pedigree a {@link de.charite.compbio.jannovar.pedigree.Pedigree} object.
+	 * @param pedigree
+	 *            a {@link de.charite.compbio.jannovar.pedigree.Pedigree} object.
 	 */
 	public boolean namesEqual(Pedigree pedigree) {
 		for (String name : names) {
@@ -155,7 +163,8 @@ public final class InheritanceVariantContextList {
 	}
 
 	/**
-	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the
+	 * {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
 	 *
 	 * @return A List of {@link htsjdk.variant.variantcontext.VariantContext} that are <code>true</code> for
 	 *         {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext#isMatchInheritance()}.
@@ -168,6 +177,34 @@ public final class InheritanceVariantContextList {
 		}
 		return output;
 
+	}
+
+	/**
+	 * Getter for all possible associated {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 *
+	 * @return A Set of {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} that are associated with the
+	 *         list.
+	 */
+	public Set<ModeOfInheritance> getMatchedModeOfInheritances() {
+		Set<ModeOfInheritance> output = new HashSet<ModeOfInheritance>();
+		for (InheritanceVariantContext vc : getVcList()) {
+			output.addAll(vc.getMatchedModesOfInheritance());
+		}
+		return output;
+	}
+
+	/**
+	 * Getter for all {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} for every variant context
+	 *
+	 * @return A Map with all {@link htsjdk.variant.variantcontext.VariantContext} and a set to which inheritance mode
+	 *         they belong.
+	 */
+	public Map<VariantContext, Set<ModeOfInheritance>> getAnnotatedMap() {
+		Map<VariantContext, Set<ModeOfInheritance>> output = new HashMap<VariantContext, Set<ModeOfInheritance>>();
+		for (InheritanceVariantContext vc : getVcList()) {
+				output.put(vc, vc.getMatchedModesOfInheritance());
+		}
+		return output;
 	}
 
 }
