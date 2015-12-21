@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Updating htsjdk to 1.142
 * using simple logger of slf4j
 * fixing version output in command line help
 * changing command line interface to use more named arguments
@@ -19,6 +20,7 @@
 
 ## jannovar-htsjdk
 
+* Updating htsjdk to 1.142
 * renaming `InvalidGenomeChange` to `InvalidGenomeVariant`
 * renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
 * renaming of some internal classes and functions, fixing Javadocs
@@ -27,6 +29,22 @@
 
 * extending API of ProteinChange hierarchy for HGVS generation
 * renaming of some internal classes and functions, fixing Javadocs
+
+## jped-cli
+
+* Updating htsjdk to 1.142
+* changing command line interface to use more named arguments
+
+## jannovar-inheritance-checker
+
+* adding two new functions to InheritanceCompatibilityChecker
+* resolve boolean if passes inheritance into set where passed inheritances are stored
+* Updating htsjdk to 1.142
+
+## manual
+
+* updating manual for 0.16 and using parameters for commands!
+* updating readme for parameters
 
 ## v0.15
 
