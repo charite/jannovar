@@ -111,6 +111,7 @@ public final class Jannovar {
 			cmd.run();
 		} catch (JannovarException e) {
 			System.err.println("ERROR: " + e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
