@@ -4,6 +4,8 @@
 
 ### jannovar-cli
 
+* fixing version output in command line help
+* changing command line interface to use more named arguments
 * removing deprecated usage of commons-cli command line parser
 * renaming of some internal classes and functions, fixing Javadocs
 
