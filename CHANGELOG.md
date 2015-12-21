@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* using simple logger of slf4j
 * fixing version output in command line help
 * changing command line interface to use more named arguments
 * removing deprecated usage of commons-cli command line parser
