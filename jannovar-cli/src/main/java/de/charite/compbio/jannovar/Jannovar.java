@@ -73,18 +73,23 @@ public final class Jannovar {
 			printTopLevelHelp();
 			System.exit(1);
 		}
+		
+		String[] newArgs = new String[argv.length - 1];
+		for (int i = 0; i < newArgs.length; i++) {
+			newArgs[i] = argv[i + 1];
+		}
 
 		// Create the corresponding command.
 		JannovarCommand cmd = null;
 		try {
 			if (argv[0].equals("download")) {
-				cmd = new DownloadCommand(argv);
+				cmd = new DownloadCommand(newArgs);
 			} else if (argv[0].equals("db-list")) {
-				cmd = new DatabaseListCommand(argv);
+				cmd = new DatabaseListCommand(newArgs);
 			} else if (argv[0].equals("annotate")) {
-				cmd = new AnnotateVCFCommand(argv);
+				cmd = new AnnotateVCFCommand(newArgs);
 			} else if (argv[0].equals("annotate-pos")) {
-				cmd = new AnnotatePositionCommand(argv);
+				cmd = new AnnotatePositionCommand(newArgs);
 			} else {
 				System.err.println("unrecognized command " + argv[0]);
 				printTopLevelHelp();
