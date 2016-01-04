@@ -2,6 +2,8 @@
 
 ## develop
 
+## v0.16
+
 ### jannovar-cli
 
 * Updating htsjdk to 1.142
