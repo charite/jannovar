@@ -79,7 +79,7 @@ public final class InheritanceVariantContextList {
 	 * @return <code>true</code> if the contig of the variant is on one of the autosomes (chr1-chr22|1-22)
 	 */
 	private boolean isAutosomal(VariantContext vc) {
-		return vc.getContig().toLowerCase().matches("(^chr([0-9])|(1[0-9])|(2[012])$)|(^([0-9])|(1[0-9])|(2[012])$)");
+		return vc.getContig().toLowerCase().matches("(^chr([0-9])|(chr1[0-9])|(chr2[012])$)|(^([0-9])|(1[0-9])|(2[012])$)");
 	}
 
 	/**

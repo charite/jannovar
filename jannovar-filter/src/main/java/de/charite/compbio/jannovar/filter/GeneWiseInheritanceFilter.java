@@ -72,6 +72,7 @@ public class GeneWiseInheritanceFilter implements VariantContextFilter {
 		List<String> contigs = new ArrayList<String>();
 		for (Chromosome chr : jannovarDB.getChromosomes().values()) {
 			contigs.add(chr.getChromosomeName());
+			contigs.add("chr"+chr.getChromosomeName());
 		}
 		this.passedVariants = Sets.newTreeSet(new VariantContextComparator(contigs));
 	}
