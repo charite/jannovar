@@ -29,6 +29,8 @@
 
 ### jannover-inheritance-checker
 
+* Bugfix detecting autosomal chromosomes
+* Bugfix with handling variant files with a leading "chr" in the contig.
 * Adding this new module.
 * Replaces the compatibility checker oh jannobvar-core.
 * Now runs with VariantContext (htsjdk) instead of Jannovar Genotypes
