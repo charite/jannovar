@@ -25,9 +25,9 @@ import de.charite.compbio.jannovar.reference.Strand;
 /**
  * Allows the annotation of a single position.
  *
- * @author Marten Jaeger <marten.jaeger@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 

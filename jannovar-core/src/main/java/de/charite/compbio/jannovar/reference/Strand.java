@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 /**
  * Representation for forward/backward strand.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum Strand {
 

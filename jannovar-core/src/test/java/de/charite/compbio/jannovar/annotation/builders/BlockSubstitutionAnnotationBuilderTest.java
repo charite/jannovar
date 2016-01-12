@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSortedSet;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
@@ -60,7 +60,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardUpstream() throws InvalidGenomeChange {
+	public void testForwardUpstream() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640059,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
@@ -73,7 +73,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardDownstream() throws InvalidGenomeChange {
+	public void testForwardDownstream() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649340,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
@@ -86,7 +86,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntergenic() throws InvalidGenomeChange {
+	public void testForwardIntergenic() throws InvalidGenomeVariant {
 		// intergenic upstream
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6639059,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
@@ -110,7 +110,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardTranscriptAblation() throws InvalidGenomeChange {
+	public void testForwardTranscriptAblation() throws InvalidGenomeVariant {
 		StringBuilder chars200 = new StringBuilder();
 		for (int i = 0; i < 200; ++i)
 			chars200.append("A");
@@ -126,7 +126,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardIntronic() throws InvalidGenomeChange {
+	public void testForwardIntronic() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642106,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
@@ -138,7 +138,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFivePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardFivePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640070,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
@@ -150,7 +150,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardThreePrimeUTR() throws InvalidGenomeChange {
+	public void testForwardThreePrimeUTR() throws InvalidGenomeVariant {
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649329,
 				PositionType.ZERO_BASED), "ACG", "CGGTT");
 		Annotation annotation1 = new BlockSubstitutionAnnotationBuilder(infoForward, change1,
@@ -162,7 +162,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStartLoss() throws InvalidGenomeChange {
+	public void testForwardStartLoss() throws InvalidGenomeVariant {
 		// Testing with some START_LOST scenarios.
 
 		// Delete one base of start codon.
@@ -215,7 +215,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardStopLoss() throws InvalidGenomeChange {
+	public void testForwardStopLoss() throws InvalidGenomeVariant {
 		// Replace bases of stop codon by 4 nucleotides, frameshift case.
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6649271,
 				PositionType.ZERO_BASED), "ACG", "CGTT");
@@ -257,7 +257,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardSplicing() throws InvalidGenomeChange {
+	public void testForwardSplicing() throws InvalidGenomeVariant {
 		// intronic splicing
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642116,
 				PositionType.ZERO_BASED), "G", "TT");
@@ -284,7 +284,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardFrameShiftBlockSubstitution() throws InvalidGenomeChange {
+	public void testForwardFrameShiftBlockSubstitution() throws InvalidGenomeVariant {
 		// The following case contains a shift in the nucleotide sequence.
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6647537,
 				PositionType.ZERO_BASED), "TGCCCCACCT", "CCC");
@@ -299,7 +299,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testForwardNonFrameBlockSubstitution() throws InvalidGenomeChange {
+	public void testForwardNonFrameBlockSubstitution() throws InvalidGenomeVariant {
 		// deletion of two codons, insertion of one
 		GenomeVariant change1 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642114,
 				PositionType.ZERO_BASED), "TAAACA", "GTT");
@@ -340,7 +340,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002djq_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002djq_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -366,7 +366,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc010qzf_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010qzf_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory.parseKnownGenesLine(refDict,
 				"uc010qzf.2	chr11	+	5474637	5475707	5474718	5475657	1	5474637,	5475707,	Q9H344	uc010qzf.2");
 		this.builderForward
@@ -390,7 +390,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc011ddm_2_first() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011ddm_2_first() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -414,7 +414,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc002axo_4() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc002axo_4() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -440,7 +440,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc011ddm_2_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011ddm_2_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -465,7 +465,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001evp_2_second() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001evp_2_second() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -490,7 +490,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	// This change was in clinvar37 and made problems.
 	@Test
-	public void testRealWorldCase_uc011ayb_2() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc011ayb_2() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -516,7 +516,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 
 	// Bug found #87 on GitHub
 	@Test
-	public void testRealWorldCase_uc010nov_3() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc010nov_3() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,
@@ -541,7 +541,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testRealWorldCase_uc001fkt_3_fifth() throws InvalidGenomeChange {
+	public void testRealWorldCase_uc001fkt_3_fifth() throws InvalidGenomeVariant {
 		this.builderForward = TranscriptModelFactory
 				.parseKnownGenesLine(
 						refDict,

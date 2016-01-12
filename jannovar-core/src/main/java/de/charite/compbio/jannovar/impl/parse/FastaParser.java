@@ -18,7 +18,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * This is the base class for FASTA parsers.
  *
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  */
 public abstract class FastaParser {
 
@@ -34,12 +34,12 @@ public abstract class FastaParser {
 	protected HashMap<String, Integer> transcript2index;
 
 	/**
-	 * Constructs a new {@link FastaParser} and initiates the path to the FASTA file and the {@link TranscriptInfo}s
+	 * Constructs a new {@link FastaParser} and initiates the path to the FASTA file and the {@link TranscriptModelBuilder}s
 	 *
 	 * @param filename
 	 *            path to the FASTA file
 	 * @param models
-	 *            list of {@link TranscriptInfo}s w/o mRNA sequence data
+	 *            list of {@link TranscriptModelBuilder}s w/o mRNA sequence data
 	 * @param printProgressBars
 	 *            whether or not to print progress bars
 	 */
@@ -55,9 +55,9 @@ public abstract class FastaParser {
 	}
 
 	/**
-	 * Parse the mRNA sequences and thereby add these to the {@link TranscriptInfo}s.
+	 * Parse the mRNA sequences and thereby add these to the {@link TranscriptModelBuilder}s.
 	 *
-	 * @return list of sequence annotated {@link TranscriptInfo}s
+	 * @return list of sequence annotated {@link TranscriptModelBuilder}s
 	 */
 	public ArrayList<TranscriptModelBuilder> parse() {
 		BufferedReader in = null;

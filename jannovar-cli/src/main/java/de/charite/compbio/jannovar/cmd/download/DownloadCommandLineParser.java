@@ -6,12 +6,11 @@ import java.net.URL;
 import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.Parser;
 
 import com.google.common.collect.ImmutableList;
 
@@ -21,14 +20,16 @@ import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 /**
  * Helper class for parsing the commandline of the download command.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
+
 public final class DownloadCommandLineParser {
 
 	/** options representation for the Apache commons command line parser */
 	protected Options options;
+	protected Options helpOptions;
 	/** the Apache commons command line parser */
-	protected Parser parser;
+	protected DefaultParser parser;
 
 	/**
 	 * Calls initializeParser().
@@ -40,35 +41,37 @@ public final class DownloadCommandLineParser {
 	/**
 	 * Initialize {@link #parser} and {@link #options}.
 	 */
-	@SuppressWarnings("static-access")
-	// OptionBuilder causes this warning.
+
 	private void initializeParser() {
 		options = new Options();
-		options.addOption(OptionBuilder.withDescription("show this help").withLongOpt("help").create("h"));
-		options.addOption(OptionBuilder.withDescription("create verbose output").withLongOpt("verbose").create("v"));
-		options.addOption(OptionBuilder.withDescription("create very verbose output").withLongOpt("very-verbose")
-				.create("vv"));
-		options.addOption(OptionBuilder.withDescription("INI file with data source list").hasArgs(1)
-				.withLongOpt("data-source-list").create("s"));
-		options.addOption(OptionBuilder
-				.withDescription("target folder for downloaded and serialized files, defaults to \"data\"").hasArgs(1)
-				.withLongOpt("data-dir").create("d"));
-		options.addOption(OptionBuilder
-				.withDescription(
-						"proxy to use for HTTP/HTTPS/FTP downloads (lower precedence than "
-								+ "the other proxy options)").hasArgs(1).withLongOpt("proxy").withArgName("proxy")
-								.create());
-		options.addOption(OptionBuilder
-				.withDescription("proxy to use for HTTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
-				.withLongOpt("http-proxy").withArgName("http-proxy").create());
-		options.addOption(OptionBuilder
-				.withDescription("proxy to use for HTTPS downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
-				.withLongOpt("https-proxy").withArgName("https-proxy").create());
-		options.addOption(OptionBuilder
-				.withDescription("proxy to use for FTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"").hasArgs(1)
-				.withLongOpt("ftp-proxy").withArgName("ftp-proxy").create());
+		helpOptions = new Options();
 
-		parser = new GnuParser();
+		Option helpOption = Option.builder("h").desc("show this help").longOpt("help").build();
+		helpOptions.addOption(helpOption);
+
+		options.addOption(helpOption);
+		options.addOption(Option.builder("v").desc("create verbose output").longOpt("verbose").build());
+		options.addOption(Option.builder("vv").desc("create very verbose output").longOpt("very-verbose").build());
+		options.addOption(Option.builder("s").desc("INI file with data source list").numberOfArgs(1)
+				.longOpt("data-source-list").build());
+		options.addOption(
+				Option.builder("dir").desc("target folder for downloaded and serialized files, defaults to \"data\"")
+						.numberOfArgs(1).longOpt("data-dir").build());
+		options.addOption(
+				Option.builder()
+						.desc("proxy to use for HTTP/HTTPS/FTP downloads (lower precedence than "
+								+ "the other proxy options)")
+						.numberOfArgs(1).longOpt("proxy").argName("proxy").build());
+		options.addOption(Option.builder().desc("proxy to use for HTTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"")
+				.numberOfArgs(1).longOpt("http-proxy").argName("http-proxy").build());
+		options.addOption(Option.builder().desc("proxy to use for HTTPS downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"")
+				.numberOfArgs(1).longOpt("https-proxy").argName("https-proxy").build());
+		options.addOption(Option.builder().desc("proxy to use for FTP downloads as \"<PROTOCOL>://<HOST>[:<PORT>]\"")
+				.numberOfArgs(1).longOpt("ftp-proxy").argName("ftp-proxy").build());
+		options.addOption(Option.builder("d").desc("Datasource for the transcipt database").hasArgs().required()
+				.longOpt("datasource").hasArgs().argName("datasource").build());
+
+		parser = new DefaultParser();
 	}
 
 	/**
@@ -80,18 +83,17 @@ public final class DownloadCommandLineParser {
 	 *             if the user requested help on the command line
 	 */
 	public JannovarOptions parse(String argv[]) throws ParseException, HelpRequestedException {
+		//Parse the help
+		CommandLine cmd = parser.parse(helpOptions, argv, true);
+		printHelpIfOptionIsSet(cmd);
 		// Parse the command line.
-		CommandLine cmd = parser.parse(options, argv);
+		cmd = parser.parse(options, argv);
+		printHelpIfOptionIsSet(cmd);
 
 		// Fill the resulting JannovarOptions.
 		JannovarOptions result = new JannovarOptions();
 		result.printProgressBars = true;
 		result.command = JannovarOptions.Command.DOWNLOAD;
-
-		if (cmd.hasOption("help")) {
-			printHelp();
-			throw new HelpRequestedException();
-		}
 
 		if (cmd.hasOption("verbose"))
 			result.verbosity = 2;
@@ -102,12 +104,10 @@ public final class DownloadCommandLineParser {
 			result.downloadPath = cmd.getOptionValue("data-dir");
 
 		// Get data source names from args.
-		String args[] = cmd.getArgs(); // get remaining arguments
-		if (args.length <= 1)
-			throw new ParseException("You must specify at least one data source name to download from.");
 		ImmutableList.Builder<String> dsBuilder = new ImmutableList.Builder<String>();
-		for (int i = 1; i < args.length; ++i)
-			dsBuilder.add(args[i]);
+		for (String datasource : cmd.getOptionValues("datasource")) {
+			dsBuilder.add(datasource);
+		}
 		result.dataSourceNames = dsBuilder.build();
 
 		// Get data source (INI) file paths.
@@ -151,6 +151,13 @@ public final class DownloadCommandLineParser {
 
 		return result;
 	}
+	
+	private void printHelpIfOptionIsSet(CommandLine cmd) throws HelpRequestedException {
+		if (cmd.hasOption("help")) {
+			printHelp();
+			throw new HelpRequestedException();
+		}
+	}
 
 	/**
 	 * Build {@link URL} from an environment proxy configuration
@@ -176,10 +183,12 @@ public final class DownloadCommandLineParser {
 		final String HEADER = new StringBuilder().append("Jannovar Command: download\n\n")
 				.append("Use this command to download a transcript database and build a serialization file \n")
 				.append("of it. This file can then be later loaded by the annotation commands.\n\n")
-				.append("Usage: java -jar de.charite.compbio.jannovar.jar download [options] <datasource>+\n\n").toString();
+				.append("Usage: java -jar de.charite.compbio.jannovar.jar download [options] -d <datasource>+\n\n")
+				.toString();
 		// TODO(holtgrem): Explain data sources and refer to manual.
 
-		final String FOOTER = new StringBuilder().append("\n\nExample: java -jar de.charite.compbio.jannovar.jar download hg19/ucsc\n\n")
+		final String FOOTER = new StringBuilder()
+				.append("\n\nExample: java -jar de.charite.compbio.jannovar.jar download -d hg19/ucsc\n\n")
 				.append("Note that Jannovar also interprets the environment variables\n")
 				.append("HTTP_PROXY, HTTPS_PROXY and FTP_PROXY for downloading files.\n").toString();
 

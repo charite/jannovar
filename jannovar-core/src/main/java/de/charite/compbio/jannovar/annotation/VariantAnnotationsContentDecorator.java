@@ -7,8 +7,8 @@ import java.util.HashSet;
 /**
  * Decorator for {@link VariantAnnotations} that allows queries on the content.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public class VariantAnnotationsContentDecorator {
 
@@ -25,7 +25,7 @@ public class VariantAnnotationsContentDecorator {
 		this.annotations = annotations;
 	}
 
-	/** @returnthe decorated {@link VariantAnnotations} */
+	/** @return the decorated {@link VariantAnnotations} */
 	public VariantAnnotations getAnnotations() {
 		return annotations;
 	}
@@ -41,8 +41,8 @@ public class VariantAnnotationsContentDecorator {
 	}
 
 	/**
-	 * @return <code>true</code> if the list contains a variant where {@link VariantEffect#isSV()} returns
-	 *         <code>true</code>.
+	 * @return <code>true</code> if the list contains a variant where {@link VariantEffect#isStructural()} returns
+	 *         <code>true</code>
 	 */
 	public boolean hasStructuralVariant() {
 		for (Annotation entry : annotations.getAnnotations())
@@ -53,7 +53,7 @@ public class VariantAnnotationsContentDecorator {
 
 	/**
 	 * @return the gene symbol of the annotation with highest priority or <code>null</code> if {@link #annotations} is
-	 *         empty.
+	 *         empty
 	 */
 	public String getGeneSymbol() {
 		if (annotations.getAnnotations().size() == 0)

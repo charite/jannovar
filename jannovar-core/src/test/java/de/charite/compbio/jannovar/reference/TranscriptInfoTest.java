@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * Tests for the TranscriptInfo class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranscriptInfoTest {
 

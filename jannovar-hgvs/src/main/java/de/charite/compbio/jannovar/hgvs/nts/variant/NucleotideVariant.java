@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.hgvs.SequenceType;
 /**
  * Base class for nucleotide changes.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class NucleotideVariant extends HGVSVariant {
 
@@ -24,7 +24,7 @@ public abstract class NucleotideVariant extends HGVSVariant {
 	/** protein version, {@link #NO_TRANSCRIPT_VERSION} for no version */
 	protected final int transcriptVersion;
 
-	/** Set variant's reference ID, protein ID is null, version is {@link #NO_PROTEIN_VERSION}. */
+	/** Set variant's reference ID, protein ID is null, version is {@link #NO_TRANSCRIPT_VERSION} */
 	public NucleotideVariant(SequenceType seqType, String refID) {
 		this.seqType = seqType;
 		this.refID = refID;

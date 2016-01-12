@@ -2,6 +2,51 @@
 
 ## develop
 
+### jannovar-cli
+
+* Updating htsjdk to 1.142
+* using simple logger of slf4j
+* fixing version output in command line help
+* changing command line interface to use more named arguments
+* removing deprecated usage of commons-cli command line parser
+* renaming of some internal classes and functions, fixing Javadocs
+
+### jannovar-core
+
+* fixing bug in `TranscriptSequenceChangeHelper` for reverse transcript (did not reverse complement alternate allele)
+* fixing bug in parsing GFF3 with some transcripts (e.g. GNAT1)
+* less intrusive escaping in `ANN` field
+* renaming of some internal classes and functions, fixing Javadocs
+
+## jannovar-htsjdk
+
+* Updating htsjdk to 1.142
+* renaming `InvalidGenomeChange` to `InvalidGenomeVariant`
+* renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
+* renaming of some internal classes and functions, fixing Javadocs
+
+## jannovar-hgvs
+
+* extending API of ProteinChange hierarchy for HGVS generation
+* renaming of some internal classes and functions, fixing Javadocs
+
+## jped-cli
+
+* Updating htsjdk to 1.142
+* changing command line interface to use more named arguments
+
+## jannovar-inheritance-checker
+
+* adding two new functions to InheritanceCompatibilityChecker
+* resolve boolean if passes inheritance into set where passed inheritances are stored
+* Updating htsjdk to 1.142
+
+## manual
+
+* updating manual for 0.16 and using parameters for commands!
+* updating readme for parameters
+
+## v0.15
 
 ### jannovar-core
 

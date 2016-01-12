@@ -9,7 +9,7 @@ package de.charite.compbio.jannovar.reference;
  * change is converted into a {@link GenomeVariant} before processing. This class has package-visibility only because its
  * members are visible to the outside. Rather construct a {@link GenomeVariant} and use this immutable class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 final class VariantDataCorrector {
 

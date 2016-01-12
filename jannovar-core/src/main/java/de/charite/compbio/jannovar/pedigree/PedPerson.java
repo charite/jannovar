@@ -34,7 +34,7 @@ import de.charite.compbio.jannovar.Immutable;
  * example, the record stores the id of the parents but not references to the parent objects. The class {@link Person}
  * provides a more Java-programmer oriented version of this information.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class PedPerson {

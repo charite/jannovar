@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationLocation;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
@@ -20,7 +20,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelFactory;
 /**
  * Tests for the StructuralVariantAnnotationBuilder.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class StructuralVariantAnnotationBuilderTest {
 
@@ -62,7 +62,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVInsertionOnTranscript() throws InvalidGenomeChange {
+	public void testSVInsertionOnTranscript() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
@@ -74,7 +74,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVInsertionIntergenic() throws InvalidGenomeChange {
+	public void testSVInsertionIntergenic() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
@@ -86,7 +86,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVDeletionOnTranscript() throws InvalidGenomeChange {
+	public void testSVDeletionOnTranscript() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "", "CGAT");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
@@ -98,7 +98,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVDeletionIntergenic() throws InvalidGenomeChange {
+	public void testSVDeletionIntergenic() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
@@ -110,7 +110,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVInversionOnTranscript() throws InvalidGenomeChange {
+	public void testSVInversionOnTranscript() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "ATCG");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
@@ -122,7 +122,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVInversionIntergenic() throws InvalidGenomeChange {
+	public void testSVInversionIntergenic() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "ATCG");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();
@@ -134,7 +134,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVSubstitutionOnTranscript() throws InvalidGenomeChange {
+	public void testSVSubstitutionOnTranscript() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "TTTTA");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(infoForward, change).build();
@@ -146,7 +146,7 @@ public class StructuralVariantAnnotationBuilderTest {
 	}
 
 	@Test
-	public void testSVSubstitutionIntergenic() throws InvalidGenomeChange {
+	public void testSVSubstitutionIntergenic() throws InvalidGenomeVariant {
 		final GenomeVariant change = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6640062,
 				PositionType.ZERO_BASED), "CGAT", "TTTTA");
 		final Annotation anno = new StructuralVariantAnnotationBuilder(null, change).build();

@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.JannovarException;
 /**
  * Exception that occurs during parsing of transcript database files.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public class TranscriptParseException extends JannovarException {
 

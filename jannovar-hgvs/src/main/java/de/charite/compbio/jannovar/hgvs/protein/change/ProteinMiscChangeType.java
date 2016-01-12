@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs.protein.change;
 /**
  * Enum with for the miscellaneous protein changes.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum ProteinMiscChangeType {
 

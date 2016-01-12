@@ -40,6 +40,7 @@ public class ProteinExtension extends ProteinChange {
 		return new ProteinExtension(onlyPredicted, position, targetAA, LEN_NO_TER);
 	}
 
+	/** Construct {@link ProteinExtension} with the given values */
 	public ProteinExtension(boolean onlyPredicted, ProteinPointLocation position, String targetAA, int shift) {
 		super(onlyPredicted);
 		this.position = position;
@@ -121,6 +122,11 @@ public class ProteinExtension extends ProteinChange {
 		} else if (!targetAA.equals(other.targetAA))
 			return false;
 		return true;
+	}
+
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinExtension(onlyPredicted, this.position, this.targetAA, this.shift);
 	}
 
 }

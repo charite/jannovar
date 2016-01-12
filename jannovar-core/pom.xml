@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>de.charite.compbio</groupId>
 		<artifactId>Jannovar</artifactId>
-		<version>0.15</version>
+		<version>0.16</version>
 	</parent>
 
 	<properties>
@@ -30,21 +30,15 @@
 			<version>3.3</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>18.0</version>
+			<version>19.0</version>
 		</dependency>
 		<!-- HGVS variant description -->
 		<dependency>
 			<groupId>de.charite.compbio</groupId>
 			<artifactId>jannovar-hgvs</artifactId>
-			<version>0.15</version>
+			<version>0.16</version>
 		</dependency>
 		<!-- INI parsing -->
 		<dependency>
@@ -52,30 +46,7 @@
 			<artifactId>ini4j</artifactId>
 			<version>0.5.1</version>
 		</dependency>
-		<!--Logging framework -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
-		</dependency>
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<!-- Logging implementation for test only. -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j.version}</version>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
 
 	<build>

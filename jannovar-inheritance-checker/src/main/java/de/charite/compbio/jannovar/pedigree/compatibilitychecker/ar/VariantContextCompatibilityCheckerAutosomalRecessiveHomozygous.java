@@ -6,6 +6,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
+import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Pedigree.IndexedPerson;
 import de.charite.compbio.jannovar.pedigree.Person;
@@ -53,13 +54,13 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveHomozygous exte
 	public void runSingleSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (vc.getSingleSampleGenotype() == Genotype.HOMOZYGOUS_ALT)
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.AUTOSOMAL_RECESSIVE);
 	}
 
 	public void runMultiSampleCase() {
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (containsCompatibleHomozygousVariants(vc))
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.AUTOSOMAL_RECESSIVE);
 	}
 
 	private boolean containsCompatibleHomozygousVariants(InheritanceVariantContext vc) {

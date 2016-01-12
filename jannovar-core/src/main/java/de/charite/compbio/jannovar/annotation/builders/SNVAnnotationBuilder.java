@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
-import de.charite.compbio.jannovar.annotation.InvalidGenomeChange;
+import de.charite.compbio.jannovar.annotation.InvalidGenomeVariant;
 import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
 import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideSubstitution;
@@ -25,9 +25,9 @@ import de.charite.compbio.jannovar.reference.TranscriptPosition;
 import de.charite.compbio.jannovar.reference.TranscriptSequenceDecorator;
 
 /**
- * Builds {@link Annotation} objects for the SNV {@link GenomeVariant}s in the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the SNV {@link GenomeVariant}s in the given {@link TranscriptModel}
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
@@ -46,16 +46,16 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 	 *            {@link GenomeVariant} to build the annotation with
 	 * @param options
 	 *            the configuration to use for the {@link AnnotationBuilder}
-	 * @throws InvalidGenomeChange
+	 * @throws InvalidGenomeVariant
 	 *             if <code>change</code> did not describe a deletion
 	 */
 	SNVAnnotationBuilder(TranscriptModel transcript, GenomeVariant change, AnnotationBuilderOptions options)
-			throws InvalidGenomeChange {
+			throws InvalidGenomeVariant {
 		super(transcript, change, options);
 
 		// guard against invalid genome change
 		if (change.getRef().length() != 1 || change.getAlt().length() != 1)
-			throw new InvalidGenomeChange("GenomeChange " + change + " does not describe a SNV.");
+			throw new InvalidGenomeVariant("GenomeChange " + change + " does not describe a SNV.");
 	}
 
 	@Override

@@ -8,13 +8,15 @@ import org.ini4j.Profile.Section;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.data.JannovarData;
+
 /**
  * Base class for all data sources.
  *
  * Data sources combine the information of (1) a name, (2) a list of URLs with files to download, and (3) obtaining a
  * factory for constructing a {@link JannovarData} object from this information.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class DataSource {
 

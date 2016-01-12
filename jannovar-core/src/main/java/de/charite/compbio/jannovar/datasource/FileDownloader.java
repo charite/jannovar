@@ -25,7 +25,7 @@ import de.charite.compbio.jannovar.impl.util.ProgressBar;
  * The implementation of FTP downloads is more complex since we need passive FTP transfer through firewalls. This is not
  * possible when just opening a stream through an {@link URL} object with Java's builtin features.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 final class FileDownloader {
 

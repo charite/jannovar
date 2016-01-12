@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 /**
  * Position on a transcript.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class CDSPosition {

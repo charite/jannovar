@@ -8,7 +8,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * keep variants
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class WriterFilterHelper implements VariantContextFilter {
 

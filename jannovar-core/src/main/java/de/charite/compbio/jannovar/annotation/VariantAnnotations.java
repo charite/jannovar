@@ -16,7 +16,7 @@ import de.charite.compbio.jannovar.reference.VariantDescription;
  * @see AllAnnotationListTextGenerator
  * @see BestAnnotationListTextGenerator
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class VariantAnnotations implements VariantDescription {
@@ -41,7 +41,7 @@ public final class VariantAnnotations implements VariantDescription {
 	 *
 	 * Note that <code>variant</code> is converted to the forward strand using {@link GenomeVariant#withStrand}.
 	 *
-	 * @param change
+	 * @param variant
 	 *            {@link GenomeVariant} that this anotation list annotates
 	 * @param entries
 	 *            {@link Collection} of {@link Annotation} objects

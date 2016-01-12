@@ -12,7 +12,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * {@link JannovarDataFactory} for flat BED files.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class FlatBEDJannovarDataFactory extends JannovarDataFactory {
 

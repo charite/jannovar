@@ -15,7 +15,7 @@ import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.Hgvs_variantCont
 /**
  * Base class for parsing tests.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParsingTestBase {
 

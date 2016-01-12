@@ -20,9 +20,9 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.Compatibilit
  * For X-chromosomal dominant inheritance, there must be at least one {@link Genotype} that is shared by all affected
  * individuals but no unaffected individuals in the pedigree.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  * 
  * @deprecated use {@link VariantContextCompatibilityCheckerXDominant} instead.
  */

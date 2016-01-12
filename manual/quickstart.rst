@@ -5,10 +5,10 @@ Quickstart
 
 This short How-To guides you from downloading the Jannovar program to annotating a VCF file in 5 steps.
 
-#. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking `here <https://github.com/charite/jannovar/releases/download/v0.14/jannovar-0.14.zip>`_.
+#. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking `here <https://github.com/charite/jannovar/releases/download/v0.16/jannovar-0.16.zip>`_.
 #. Extract the ZIP archive.
 
-   * you should find file called ``jannovar-cli-0.14.jar`` in the ZIP
+   * you should find file called ``jannovar-cli-0.16.jar`` in the ZIP
    * you should also find a file ``small.vcf`` file in the folder ``examples``
 
 #. Download the `RefSeq <http://www.ncbi.nlm.nih.gov/refseq/>`_ transcript database for the release *hg19/GRCh37*.
@@ -20,14 +20,14 @@ This short How-To guides you from downloading the Jannovar program to annotating
 
    .. code-block:: console
 
-      # java -jar jannovar-cli-0.14.jar download hg19/refseq
+      # java -jar jannovar-cli-0.16.jar download -d hg19/refseq
 
    This will create the file ``data/hg19_refseq.ser`` which is a self-contained transcript database and can be used for functional annotation.
 #. Annotate the file ``small.vcf`` from the ``examples`` directory.
 
    .. code-block:: console
 
-      # java -jar jannovar-cli-0.14.jar annotate data/hg19_refseq.ser examples/small.vcf
+      # java -jar jannovar-cli-0.16.jar annotate -d data/hg19_refseq.ser -i examples/small.vcf
 
    Jannovar will now load the transcript database from ``data/hg19_refseq.ser`` and then read ``examples/small.vcf`` file.
    Each contained variant in this file will be annotated with an ``EFFECT`` and an ``HGVS`` field in the ``VCF`` info column.
