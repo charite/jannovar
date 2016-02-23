@@ -667,7 +667,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals("-70_-70+1insA", annoInsertionAfterExon1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annoInsertionAfterExon1.getProteinChange().toHGVSString()); // XXX
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_VARIANT),
 				annoInsertionAfterExon1.getEffects());
 
 		GenomeVariant varInsertionAfterExon2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6641359,
@@ -703,7 +703,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals("-69-1_-69insA", annoInsertionBeforeExon1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annoInsertionBeforeExon1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT),
 				annoInsertionBeforeExon1.getEffects());
 
 		GenomeVariant varInsertionBeforeExon2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
