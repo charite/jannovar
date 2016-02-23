@@ -242,11 +242,29 @@ abstract class AnnotationBuilder {
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in 5' or 3' UTR.
-			if (so.liesInFivePrimeUTR(lPos))
-				varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
-			else
-				// so.liesInThreePrimeUTR(pos)
-				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+			if (so.liesInFivePrimeUTR(lPos)) {
+				// Check if variant overlaps really with an UTR
+				if (so.liesInExon(lPos))
+					varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+				}
+			} else {
+				// Check if variant overlaps really with an UTR
+				if (so.liesInExon(lPos))
+					varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+				}
+			}
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
@@ -257,11 +275,29 @@ abstract class AnnotationBuilder {
 			else if (so.overlapsWithSpliceRegion(changeInterval))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in 5' or 3' UTR.
-			if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-				varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
-			else
-				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+			if (so.overlapsWithFivePrimeUTR(changeInterval)) {
+				// Check if variant overlaps really with an UTR
+				if (so.overlapsWithExon(changeInterval))
+					varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+				}
+			} else {
+				// Check if variant overlaps really with an UTR
+				if (so.overlapsWithExon(changeInterval))
+					varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+				}
+			}
 		}
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
 				ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE));
