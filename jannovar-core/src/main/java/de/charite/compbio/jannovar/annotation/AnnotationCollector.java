@@ -59,6 +59,7 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * @author Max Schubach <max.schubach@charite.de>
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
+@Deprecated
 class AnnotationCollector {
 
 	/** the logger object to use */
