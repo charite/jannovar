@@ -1,8 +1,6 @@
 package de.charite.compbio.jannovar.annotation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,19 +59,19 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * @author Max Schubach <max.schubach@charite.de>
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
-final class AnnotationCollector {
+class AnnotationCollector {
 
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationCollector.class);
 
 	/** List of all {@link Annotation} objects found for exonic variation. */
-	private ArrayList<Annotation> annotationLst = null;
+	private List<Annotation> annotations;
 
 	/**
 	 * Set of all gene symbols used for the current annotation (usually one, but if the size of this set is greater than
 	 * one, then there qare annotations to multiple genes and we will need to use special treatment).
 	 */
-	private HashSet<String> geneSymbolSet = null;
+	private Set<String> geneSymbols;
 
 	/** Flag to state that we have at least one exonic variant. */
 	private boolean hasExonic;
@@ -120,47 +118,27 @@ final class AnnotationCollector {
 	/** The current number of annotations for the variant being annotated */
 	private int annotationCount;
 
+	public AnnotationCollector() {
+		annotations = new ArrayList<>();
+		geneSymbols = new HashSet<>();
+	}
+
 	/**
 	 * The constructor initializes an ArrayList of {@link Annotation} objects as well as a HashSet of Gene symbols
 	 * (Strings).
 	 *
-	 * @param initialCapacity
-	 *            The initial capacity of the arraylist and hashset.
+	 * @param initialCapacity The initial capacity of the {@link AnnotationCollector}.
 	 */
 	public AnnotationCollector(int initialCapacity) {
-		this.annotationLst = new ArrayList<Annotation>();
-		this.geneSymbolSet = new HashSet<String>();
-	}
-
-	/**
-	 * This function should be called before a new variant is annotation in order to clear the lists used to store
-	 * Annotations.
-	 */
-	public void clearAnnotationLists() {
-		this.annotationLst.clear();
-		this.geneSymbolSet.clear();
-		this.hasExonic = false;
-		this.hasSplicing = false;
-		this.hasNcRna = false;
-		this.hasUTR5 = false;
-		this.hasUTR3 = false;
-		this.hasIntronic = false;
-		this.hasSynonymous = false;
-		this.hasNcrnaIntronic = false;
-		this.hasUpstream = false;
-		this.hasDownstream = false;
-		this.hasIntergenic = false;
-		this.hasError = false;
-		this.hasGenicMutation = false;
-		this.annotationCount = 0;
-
+		annotations = new ArrayList<>(initialCapacity);
+		geneSymbols = new HashSet<>(initialCapacity);
 	}
 
 	/**
 	 * @return The number of {@link Annotation} objects for the current variant.
 	 */
 	public int getAnnotationCount() {
-		return this.annotationCount;
+		return annotationCount;
 	}
 
 	/**
@@ -170,8 +148,24 @@ final class AnnotationCollector {
 	 * @return true if there are currently no annotations.
 	 */
 	public boolean isEmpty() {
-		return this.annotationCount == 0;
+		return annotations.isEmpty();
 	}
+
+    /**
+     * After the {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} object has added annotations for all of
+     * the transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if
+     * the variant does not intersect with any transcript), it calls this function to return the list of annotations in
+     * form of an {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object.
+     * <P>
+     * The strategy is to return all variants that affect coding exons (and only these) if such variants exist, as they
+     * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
+     * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
+     *
+     * @return returns the {@link Annotation}s collected
+     */
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
 
 	/**
 	 * @return true if there is a nonsynonymous, splice site, or insertion/deletion variant
@@ -185,25 +179,7 @@ final class AnnotationCollector {
 	 *         INTRONIC
 	 */
 	public boolean hasGenic() {
-		return this.hasGenicMutation;
-	}
-
-	/**
-	 * After the {@link de.charite.compbio.jannovar.data.Chromosome Chromosome} object has added annotations for all of
-	 * the transcripts that intersect with the current variant (or a DOWNSTREAM, UPSTREAM, or INTERGENIC annotation if
-	 * the variant does not intersect with any transcript), it calls this function to return the list of annotations in
-	 * form of an {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object.
-	 * <P>
-	 * The strategy is to return all variants that affect coding exons (and only these) if such variants exist, as they
-	 * are the best candidates. Otherwise, return all variants that affect other exonic sequences (UTRs, ncRNA).
-	 * Otherwise, return UPSTREAM and DOWNSTREAM annotations if they exist. Otherwise, return an intergenic Annotation.
-	 *
-	 * @param change
-	 *            <code>GenomeChange</code> to build the <code>AnnotationList</code> for
-	 * @return returns the {@link VariantAnnotations} with all associated {@link Annotation}s
-	 */
-	public VariantAnnotations getAnnotationList(GenomeVariant change) {
-		return new VariantAnnotations(change, this.annotationLst);
+		return hasGenicMutation;
 	}
 
 	/**
@@ -222,8 +198,8 @@ final class AnnotationCollector {
 	@SuppressWarnings("unused")
 	private VariantEffect getMostPathogenicVariantType() {
 		VariantEffect vt;
-		Collections.sort(this.annotationLst);
-		Annotation a = this.annotationLst.get(0);
+		Collections.sort(annotations);
+		Annotation a = annotations.get(0);
 		return a.getMostPathogenicVarType();
 	}
 
@@ -235,9 +211,9 @@ final class AnnotationCollector {
 	 *            A noncoding RNA exonic annotation object.
 	 */
 	public void addNonCodingRNAExonicAnnotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.hasNcRna = true;
-		this.annotationCount++;
+		annotations.add(ann);
+		hasNcRna = true;
+		annotationCount++;
 	}
 
 	/**
@@ -248,10 +224,10 @@ final class AnnotationCollector {
 	 *            A 5' UTR annotation object.
 	 */
 	public void addUTR5Annotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.hasUTR5 = true;
-		this.hasGenicMutation = true;
-		this.annotationCount++;
+		annotations.add(ann);
+		hasUTR5 = true;
+		hasGenicMutation = true;
+		annotationCount++;
 	}
 
 	/**
@@ -262,10 +238,10 @@ final class AnnotationCollector {
 	 *            A 3' UTR annotation object.
 	 */
 	public void addUTR3Annotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.hasUTR3 = true;
-		this.hasGenicMutation = true;
-		this.annotationCount++;
+		annotations.add(ann);
+		hasUTR3 = true;
+		hasGenicMutation = true;
+		annotationCount++;
 	}
 
 	/**
@@ -277,9 +253,9 @@ final class AnnotationCollector {
 	 *            An Annotation with type INTERGENIC
 	 */
 	public void addIntergenicAnnotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.hasIntergenic = true;
-		this.annotationCount++;
+		annotations.add(ann);
+		hasIntergenic = true;
+		annotationCount++;
 	}
 
 	/**
@@ -291,17 +267,17 @@ final class AnnotationCollector {
 	 *            An Annotation to be added.
 	 */
 	public void addExonicAnnotation(Annotation ann) {
-		this.annotationLst.add(ann);
+		annotations.add(ann);
 		if (FluentIterable.from(ann.getEffects()).anyMatch(Predicates.equalTo(VariantEffect.SYNONYMOUS_VARIANT)))
-			this.hasSynonymous = true;
+			hasSynonymous = true;
 		else if (FluentIterable.from(ann.getEffects()).anyMatch(VariantEffect.IS_SPLICING))
-			this.hasSplicing = true;
+			hasSplicing = true;
 		else
-			this.hasExonic = true;
+			hasExonic = true;
 
-		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
-		this.hasGenicMutation = true;
-		this.annotationCount++;
+		geneSymbols.add(ann.getTranscript().getGeneSymbol());
+		hasGenicMutation = true;
+		annotationCount++;
 	}
 
 	/**
@@ -313,9 +289,9 @@ final class AnnotationCollector {
 	 */
 	public void addNcRNASplicing(Annotation ann) {
 		// String s = String.format("%s", ann.hgvsDescription);
-		this.hasNcRna = true;
+		hasNcRna = true;
 		// ann.setVariantAnnotation(s); // TODO(holtgrew): necessary?
-		this.annotationLst.add(ann);
+		annotations.add(ann);
 	}
 
 	/**
@@ -327,21 +303,21 @@ final class AnnotationCollector {
 	 *            the Intronic annotation to be added.
 	 */
 	public void addIntronicAnnotation(Annotation ann) {
-		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
+		geneSymbols.add(ann.getTranscript().getGeneSymbol());
 		if (FluentIterable.from(ann.getEffects()).anyMatch(VariantEffect.IS_INTRONIC)) {
-			for (Annotation a : this.annotationLst) {
+			for (Annotation a : annotations) {
 				if (a.equals(ann))
 					return; /* already have identical annotation */
 			}
-			this.annotationLst.add(ann);
+			annotations.add(ann);
 		}
 		if (ann.getMostPathogenicVarType() == VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT) {
-			this.hasIntronic = true;
+			hasIntronic = true;
 		} else if (ann.getMostPathogenicVarType() == VariantEffect.NON_CODING_TRANSCRIPT_INTRON_VARIANT) {
-			this.hasNcrnaIntronic = true;
+			hasNcrnaIntronic = true;
 		}
-		this.hasGenicMutation = true;
-		this.annotationCount++;
+		hasGenicMutation = true;
+		annotationCount++;
 	}
 
 	/**
@@ -352,10 +328,10 @@ final class AnnotationCollector {
 	 *            the Structual annotation to be added
 	 */
 	public void addStructuralAnnotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
-		this.hasStructural = true;
-		this.annotationCount++;
+		annotations.add(ann);
+		geneSymbols.add(ann.getTranscript().getGeneSymbol());
+		hasStructural = true;
+		annotationCount++;
 	}
 
 	/**
@@ -365,9 +341,9 @@ final class AnnotationCollector {
 	 *            An Annotation object that contains a String representing the error.
 	 */
 	public void addErrorAnnotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.hasError = true;
-		this.annotationCount++;
+		annotations.add(ann);
+		hasError = true;
+		annotationCount++;
 	}
 
 	/**
@@ -379,20 +355,20 @@ final class AnnotationCollector {
 	 *            The annotation that is to be added to the list of annotations for the current sequence variant.
 	 */
 	public void addUpDownstreamAnnotation(Annotation ann) {
-		for (Annotation a : annotationLst) {
+		for (Annotation a : annotations) {
 			if (a.equals(ann))
 				return;
 		}
-		this.annotationLst.add(ann);
+		annotations.add(ann);
 		VariantEffect type = ann.getMostPathogenicVarType();
 		if (type == VariantEffect.DOWNSTREAM_GENE_VARIANT) {
-			this.hasDownstream = true;
+			hasDownstream = true;
 		} else if (type == VariantEffect.UPSTREAM_GENE_VARIANT) {
-			this.hasUpstream = true;
+			hasUpstream = true;
 		} else {
 			LOGGER.error("Expecting UPSTREAM or DOWNSTREAM variant but got {}", type);
 		}
-		this.annotationCount++;
+		annotationCount++;
 	}
 
 }
