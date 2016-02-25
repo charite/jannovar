@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 /**
  * Base class for commands needing annotation data.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class JannovarAnnotationCommand extends JannovarCommand {
 

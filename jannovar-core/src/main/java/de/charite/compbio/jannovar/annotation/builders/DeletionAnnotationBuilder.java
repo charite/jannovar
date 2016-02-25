@@ -27,9 +27,9 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
- * Builds {@link Annotation} objects for the deletion {@link GenomeVariant}s in the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the deletion {@link GenomeVariant}s in the given {@link TranscriptModel}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
@@ -189,16 +189,16 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
 				if (aaChange.getPos() == aaChange.getLastPos()) {
 					if (aaChange.getAlt().length() > 0)
-						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
-								aaChange.getPos(), new ProteinSeqDescription(),
-								new ProteinSeqDescription(aaChange.getAlt()));
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(),
+								wtAAFirst, aaChange.getPos(), new ProteinSeqDescription(), new ProteinSeqDescription(
+										aaChange.getAlt()));
 					else
 						proteinChange = ProteinDeletion.buildWithSequence(true, wtAAFirst, aaChange.getPos(),
 								wtAAFirst, aaChange.getPos(), aaChange.getAlt());
 				} else {
 					if (aaChange.getAlt().length() > 0)
-						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
-								aaChange.getLastPos(), new ProteinSeqDescription(),
+						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(),
+								wtAALast, aaChange.getLastPos(), new ProteinSeqDescription(),
 								new ProteinSeqDescription(aaChange.getAlt()));
 					else
 						proteinChange = ProteinDeletion.buildWithSequence(true, wtAAFirst, aaChange.getPos(), wtAALast,

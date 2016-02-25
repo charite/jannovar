@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Represents the contents of a pedigree file.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public class PedFileContents {

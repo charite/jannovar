@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.reference;
 import de.charite.compbio.jannovar.impl.intervals.IntervalEndExtractor;
 
 /**
- * Extraction of interval end points for {@link TranscriptInfo}.
+ * Extraction of interval end points for {@link TranscriptModel}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranscriptIntervalEndExtractor implements IntervalEndExtractor<TranscriptModel> {
 

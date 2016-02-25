@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs.parser;
 /**
  * Thrown in case of problems in {@link HGVSParser}.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParsingException extends RuntimeException {
 

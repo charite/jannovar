@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Builder for the immutable {@link AnnotationLocation} class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public class AnnotationLocationBuilder {

@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.hgvs.HGVSVariant;
 /**
  * Base class for protein changes.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class ProteinVariant extends HGVSVariant {
 

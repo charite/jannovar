@@ -21,7 +21,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Interface for data factories, allowing to create {@link JannovarData} objects from {@link DataSource}s.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public abstract class JannovarDataFactory {
 
@@ -65,8 +65,7 @@ public abstract class JannovarDataFactory {
 	 *             on problems while downloading files.
 	 */
 	public final JannovarData build(String downloadDir, boolean printProgressBars) throws InvalidDataSourceException,
-	TranscriptParseException,
-	FileDownloadException {
+			TranscriptParseException, FileDownloadException {
 		String targetDir = PathUtil.join(downloadDir, dataSource.getName());
 
 		FileDownloader downloader = new FileDownloader(buildOptions(printProgressBars));
@@ -137,7 +136,7 @@ public abstract class JannovarDataFactory {
 	 *            {@link ReferenceDictionary} to use
 	 * @param targetDir
 	 *            path where the downloaded files are
-	 * @return list of {@link TranscriptInfo} objects that are parsed from the files in <code>targetDir</code>
+	 * @return list of {@link TranscriptModel} objects that are parsed from the files in <code>targetDir</code>
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the transcript database
 	 */

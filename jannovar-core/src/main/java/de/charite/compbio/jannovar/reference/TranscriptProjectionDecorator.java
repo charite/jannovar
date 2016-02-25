@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.reference;
 import de.charite.compbio.jannovar.Immutable;
 
 /**
- * Wraps a {@link TranscriptInfo} object and allow the coordinate conversion.
+ * Wraps a {@link TranscriptModel} object and allow the coordinate conversion.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptProjectionDecorator {
@@ -19,10 +19,10 @@ public final class TranscriptProjectionDecorator {
 	private final TranscriptModel transcript;
 
 	/**
-	 * Initialize the object with the given {@link TranscriptInfo}.
+	 * Initialize the object with the given {@link TranscriptModel}
 	 *
 	 * @param transcript
-	 *            the {@link TranscriptInfo} to decorate
+	 *            the {@link TranscriptModel} to decorate
 	 */
 	public TranscriptProjectionDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;
@@ -328,8 +328,8 @@ public final class TranscriptProjectionDecorator {
 	 * Positions upstream of CDS region are projected to the CDS begin position, downstream of CDS are projected to the
 	 * CDS end.
 	 *
-	 * @param pos
-	 *            the position to translate
+	 * @param interval
+	 *            the {@link GenomeInterval} to project
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public CDSInterval projectGenomeToCDSInterval(GenomeInterval interval) {
@@ -379,8 +379,8 @@ public final class TranscriptProjectionDecorator {
 	 * Positions upstream of TX region are projected to the TX begin position, downstream of TX are projected to the TX
 	 * end.
 	 *
-	 * @param pos
-	 *            the position to translate
+	 * @param interval
+	 *            the {@link GenomeInterval} to project
 	 * @return the corresponding position in the transcript sequence
 	 */
 	public TranscriptInterval projectGenomeToTXInterval(GenomeInterval interval) {

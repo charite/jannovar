@@ -19,9 +19,9 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * this class to assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least
  * one {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
- * This class creates one {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object for each
- * variant (with one or more {@link Annotation} objects), that can return both an ArrayList of all annotations, a list
- * of all annotations of the highest priority level for the variant, and a single representative Annotation.
+ * This class creates one {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object for
+ * each variant (with one or more {@link Annotation} objects), that can return both an ArrayList of all annotations, a
+ * list of all annotations of the highest priority level for the variant, and a single representative Annotation.
  *
  * The default preference for annotations is thus
  *
@@ -57,8 +57,8 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  *
  * Used for the implementation of VariantAnnotator.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 // TODO(holtgrem): expose the hasNcRna etc. fields?
 final class AnnotationCollector {
@@ -164,8 +164,8 @@ final class AnnotationCollector {
 	}
 
 	/**
-	 * Note that this function is used by {@link Chromosome} during the construction of an {@link VariantAnnotations} for a
-	 * given variant.
+	 * Note that this function is used by {@link Chromosome} during the construction of an {@link VariantAnnotations}
+	 * for a given variant.
 	 *
 	 * @return true if there are currently no annotations.
 	 */
@@ -352,10 +352,12 @@ final class AnnotationCollector {
 	 *            the Structual annotation to be added
 	 */
 	public void addStructuralAnnotation(Annotation ann) {
-		this.annotationLst.add(ann);
-		this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
-		this.hasStructural = true;
-		this.annotationCount++;
+		if (ann.getTranscript() != null) {
+			this.annotationLst.add(ann);
+			this.geneSymbolSet.add(ann.getTranscript().getGeneSymbol());
+			this.hasStructural = true;
+			this.annotationCount++;
+		}
 	}
 
 	/**

@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableList;
  *
  * The query results are sorted lexicographically by <code>(begin, end)</code>.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class IntervalArray<T> implements Serializable {
 

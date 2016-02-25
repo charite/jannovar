@@ -25,7 +25,7 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
  * <li><tt>[33A>C;(33A>C)]</tt></li>
  * </ul>
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class NucleotideChangeAllele implements ConvertibleToHGVSString, List<NucleotideChange> {
 

@@ -33,7 +33,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Helper class for generating {@link VariantAnnotations} objects from {@link VariantContext}s.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class VariantContextAnnotator {
 
@@ -144,8 +144,8 @@ public final class VariantContextAnnotator {
 	/**
 	 * Build a {@link GenomeVariant} from a {@link VariantContext} object.
 	 *
-	 * In the case of exceptions, you can use {@link #buildbuildUnknownRefAnnotationLists} to build an
-	 * {@link VariantAnnotations} with an error message.
+	 * In the case of exceptions, you can use {@link #buildErrorAnnotations} to build an {@link VariantAnnotations} with
+	 * an error message.
 	 *
 	 * @param vc
 	 *            {@link VariantContext} describing the variant

@@ -10,7 +10,7 @@ import de.charite.compbio.jannovar.impl.util.Translator;
 /**
  * Test for the TranscriptModel class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class TranslatorTest {
 

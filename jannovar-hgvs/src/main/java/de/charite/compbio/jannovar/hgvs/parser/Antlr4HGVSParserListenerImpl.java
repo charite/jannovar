@@ -69,7 +69,7 @@ import de.charite.compbio.jannovar.hgvs.parser.Antlr4HGVSParser.ReferenceContext
 /**
  * Master ParseTreeListener used in {@link HVSParser} setB
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 class Antlr4HGVSParserListenerImpl extends Antlr4HGVSParserBaseListener {
 

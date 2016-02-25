@@ -18,9 +18,9 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
 /**
  * Manager for serializing and deserializing {@link JannovarData} objects.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class JannovarDataSerializer {
 

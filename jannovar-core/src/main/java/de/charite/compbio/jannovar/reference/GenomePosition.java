@@ -24,7 +24,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
  * representation. Thus, they are shifted towards the right gap besides the character they point at when changing the
  * strand.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class GenomePosition implements Serializable, Comparable<GenomePosition> {

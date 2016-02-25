@@ -16,7 +16,7 @@ import de.charite.compbio.jannovar.hgvs.legacy.LegacyVariant;
 /**
  * Driver code for parsing HGVS strings into HGVSVariant objects.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParser {
 

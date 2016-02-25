@@ -31,7 +31,7 @@ import de.charite.compbio.jannovar.reference.Strand;
 /**
  * Annotate variant in {@link VariantContext} and write out in Jannovar format.
  *
- * @author Max Schubach <max.schubach@charite.de>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public class AnnotatedJannovarWriter extends AnnotatedVariantWriter {
 

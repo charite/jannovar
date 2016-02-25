@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.JannovarException;
  * Annotation exceptions are thrown when the information provided is not well formed or not sufficient to create a
  * correct annotation.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public class AnnotationException extends JannovarException {
 

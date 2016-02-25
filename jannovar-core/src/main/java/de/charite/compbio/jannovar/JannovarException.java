@@ -3,8 +3,8 @@ package de.charite.compbio.jannovar;
 /**
  * Base class for exceptions in Jannovar.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class JannovarException extends Exception {
 

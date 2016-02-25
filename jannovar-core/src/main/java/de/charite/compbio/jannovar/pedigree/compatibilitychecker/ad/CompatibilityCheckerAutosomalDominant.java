@@ -21,9 +21,9 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
  * We do not allow {@link Genotype#HOMOZYGOUS_ALT} for any affected (and also for the one person in the case of
  * single-person pedigrees) since this is not the interesting case for users of this class.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  * 
  * @deprecated use {@link VariantContextCompatibilityCheckerAutosomalDominant} instead.
  */

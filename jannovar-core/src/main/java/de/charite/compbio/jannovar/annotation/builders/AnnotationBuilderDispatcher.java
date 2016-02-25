@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Dispatches annotation building to the specific classes, depending on their {@link GenomeVariant#getType}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class AnnotationBuilderDispatcher {
 

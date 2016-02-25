@@ -5,6 +5,12 @@
 * http://java.dzone.com/articles/deploy-maven-central
 * http://central.sonatype.org/pages/apache-maven.html
 
+## Update the CHANGELOG file
+
+- Update the CHANGELOG file to reflect the new version.
+- Create a new commit with this version.
+- Do not create a git tag as this will be done by Maven below.
+
 ## Prepare the Release using Maven
 
     mvn release:prepare
@@ -29,6 +35,11 @@ The publisher backend to Maven Central is here:
 
 * https://oss.sonatype.org/
 
+## Update README and JannovarOptions.java
+
+Open README.md and JannovarOptions.java and update the version there.
+
 ## Maven comments
 
 * "mvn versions:set" is useful for bumping versions
+

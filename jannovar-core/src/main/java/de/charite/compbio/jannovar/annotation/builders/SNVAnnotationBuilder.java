@@ -25,9 +25,9 @@ import de.charite.compbio.jannovar.reference.TranscriptPosition;
 import de.charite.compbio.jannovar.reference.TranscriptSequenceDecorator;
 
 /**
- * Builds {@link Annotation} objects for the SNV {@link GenomeVariant}s in the given {@link TranscriptInfo}.
+ * Builds {@link Annotation} objects for the SNV {@link GenomeVariant}s in the given {@link TranscriptModel}
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class SNVAnnotationBuilder extends AnnotationBuilder {
 

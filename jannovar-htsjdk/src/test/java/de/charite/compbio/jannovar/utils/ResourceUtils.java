@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 /**
  * Helper class with static methods for handling resources in tests
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ResourceUtils {
 

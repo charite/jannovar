@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.pedigree;
 /**
  * An enumeration of the four main Mendelian modes of inheritance for prioritizing exome data.
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public enum ModeOfInheritance {
 	/** autosomal dominant inheritance */

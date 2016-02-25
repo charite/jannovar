@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * {@link DataSource} implementation for data from RefSeq.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 final class RefSeqDataSource extends DataSource {
 
