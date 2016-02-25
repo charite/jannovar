@@ -1,7 +1,9 @@
 package de.charite.compbio.jannovar.pedigree;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
 import htsjdk.variant.variantcontext.VariantContext;
@@ -60,10 +62,10 @@ public class InheritanceVariantContext extends VariantContext {
 	private static final long serialVersionUID = 6381923752159274326L;
 
 	/**
-	 * <code>true</code> if the {@link VariantContext} matches the {@link ModeOfInheritance}. This flag is set by the
-	 * {@link InheritanceCompatibilityChecker}.
+	 * Set of stored possible modes of inheritances. The set is build by the the {@link InheritanceCompatibilityChecker}
+	 * .
 	 */
-	private boolean matchInheritance;
+	private Set<ModeOfInheritance> matchedModesOfInheritance;
 
 	/**
 	 * Default constructor. Copies the given {@link htsjdk.variant.variantcontext.VariantContext} and sets the
@@ -74,20 +76,18 @@ public class InheritanceVariantContext extends VariantContext {
 	 */
 	protected InheritanceVariantContext(VariantContext other) {
 		super(other);
-		this.matchInheritance = false;
 	}
 
 	/**
 	 * <p>
-	 * Setter for the field <code>matchInheritance</code>.
+	 * Add a mode of inheritance to this variant.
 	 * </p>
 	 *
 	 * @param matchInheritance
-	 *            <code>true</code> if the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext}
-	 *            matches the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}
+	 *            A mode of inheritance that matches to this variant.
 	 */
-	public void setMatchInheritance(boolean matchInheritance) {
-		this.matchInheritance = matchInheritance;
+	public void addMatchInheritance(ModeOfInheritance matchInheritance) {
+		getMatchedModesOfInheritance().add(matchInheritance);
 	}
 
 	/**
@@ -103,13 +103,25 @@ public class InheritanceVariantContext extends VariantContext {
 	}
 
 	/**
-	 * getter of {@link #matchInheritance}.
+	 * getter of {@link #matchedModesOfInheritance}.
+	 * 
+	 * @return A {@link Set} with {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} that matches with this
+	 *         variant.
+	 */
+	public Set<ModeOfInheritance> getMatchedModesOfInheritance() {
+		if (matchedModesOfInheritance == null)
+			this.matchedModesOfInheritance = new HashSet<ModeOfInheritance>();
+		return matchedModesOfInheritance;
+	}
+
+	/**
+	 * Getter of {@link #matchInheritance}.
 	 *
 	 * @return <code>true</code> if the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext} matches
 	 *         the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
 	 */
 	public boolean isMatchInheritance() {
-		return matchInheritance;
+		return getMatchedModesOfInheritance().size() > 0;
 	}
 
 	/**

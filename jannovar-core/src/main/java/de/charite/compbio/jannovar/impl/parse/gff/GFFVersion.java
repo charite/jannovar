@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Wraps information about the version of a GFF/GTF file and allows to query format specific values.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class GFFVersion {

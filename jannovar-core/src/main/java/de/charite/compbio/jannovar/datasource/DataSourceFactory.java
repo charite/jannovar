@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Factory class that allows the construction of {@link DataSource} objects as configured in INI files.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 final public class DataSourceFactory {
 
@@ -24,7 +24,8 @@ final public class DataSourceFactory {
 	private final ImmutableList<Ini> inis;
 
 	/**
-	 * @params options for proxy configuration
+	 * @param options
+	 *            for proxy configuration
 	 * @param iniFilePaths
 	 *            path to INI file to load the data source config from
 	 * @throws InvalidDataSourceException

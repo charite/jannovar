@@ -6,6 +6,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
+import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.PedigreeQueryDecorator;
 import de.charite.compbio.jannovar.pedigree.Person;
@@ -63,10 +64,10 @@ class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractVar
 		// for both male and female subjects, return true if homozygous alt
 		for (InheritanceVariantContext vc : list.getVcList())
 			if (vc.getSingleSampleGenotype() == Genotype.HOMOZYGOUS_ALT)
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.X_RECESSIVE);
 			else if (pedigree.getMembers().get(0).getSex() != Sex.FEMALE
 					&& vc.getSingleSampleGenotype() == Genotype.HETEROZYGOUS)
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.X_RECESSIVE);
 
 	}
 
@@ -76,7 +77,7 @@ class VariantContextCompatibilityCheckerXRecessiveHomozygous extends AbstractVar
 			// the set of affected individuals, the
 			// parents, and the unaffected individuals.
 			if (checkCompatibilityAffected(vc) && checkCompatibilityParents(vc) && checkCompatibilityUnaffected(vc))
-				vc.setMatchInheritance(true);
+				vc.addMatchInheritance(ModeOfInheritance.X_RECESSIVE);
 		}
 	}
 

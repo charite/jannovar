@@ -6,7 +6,7 @@ import de.charite.compbio.jannovar.hgvs.ConvertibleToHGVSString;
 /**
  * Base class for protein changes.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class ProteinChange implements ConvertibleToHGVSString {
 
@@ -24,6 +24,9 @@ public abstract class ProteinChange implements ConvertibleToHGVSString {
 	public boolean isOnlyPredicted() {
 		return onlyPredicted;
 	}
+
+	/** @return <code>ProteinChange</code> object with prediction state set to the one given by the parameter */
+	abstract public ProteinChange withOnlyPredicted(boolean onlyPredicted);
 
 	@Override
 	public String toHGVSString() {

@@ -24,9 +24,9 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * Given, a chromosome map, objects of this class can be used to annotate variants identified by a genomic position
  * (chr, pos), a reference, and an alternative nucleotide String.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 public class VariantAnnotator {
 

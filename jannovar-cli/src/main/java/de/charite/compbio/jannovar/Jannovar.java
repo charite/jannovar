@@ -8,14 +8,15 @@ import de.charite.compbio.jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import de.charite.compbio.jannovar.cmd.db_list.DatabaseListCommand;
 import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
+import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**
  * This is the driver class for a program called Jannovar. It has two purposes
  * <OL>
  * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt, and to create
- * corresponding {@link TranscriptInfo} objects and to serialize them. The resulting serialized file can be used both by
- * this program itself (see next item) or by the main Exomizer program to annotated VCF file.
- * <LI>Using the serialized file of {@link TranscriptInfo} objects (see above item) annotate a VCF file using
+ * corresponding {@link TranscriptModel} objects and to serialize them. The resulting serialized file can be used both
+ * by this program itself (see next item) or by the main Exomizer program to annotated VCF file.
+ * <LI>Using the serialized file of {@link TranscriptModel} objects (see above item) annotate a VCF file using
  * annovar-type program logic. Note that this functionality is also used by the main Exomizer program and thus this
  * program can be used as a stand-alone annotator ("Jannovar") or as a way of testing the code for the Exomizer.
  * </OL>
@@ -58,8 +59,9 @@ import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
  * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
  * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  *
- * @author Peter N Robinson <peter.robinson@charite.de>
- * @author Marten Jaeger <marten.jaeger@charite.de>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class Jannovar {
 	/** Configuration for the Jannovar program. */
@@ -71,18 +73,23 @@ public final class Jannovar {
 			printTopLevelHelp();
 			System.exit(1);
 		}
+		
+		String[] newArgs = new String[argv.length - 1];
+		for (int i = 0; i < newArgs.length; i++) {
+			newArgs[i] = argv[i + 1];
+		}
 
 		// Create the corresponding command.
 		JannovarCommand cmd = null;
 		try {
 			if (argv[0].equals("download")) {
-				cmd = new DownloadCommand(argv);
+				cmd = new DownloadCommand(newArgs);
 			} else if (argv[0].equals("db-list")) {
-				cmd = new DatabaseListCommand(argv);
+				cmd = new DatabaseListCommand(newArgs);
 			} else if (argv[0].equals("annotate")) {
-				cmd = new AnnotateVCFCommand(argv);
+				cmd = new AnnotateVCFCommand(newArgs);
 			} else if (argv[0].equals("annotate-pos")) {
-				cmd = new AnnotatePositionCommand(argv);
+				cmd = new AnnotatePositionCommand(newArgs);
 			} else {
 				System.err.println("unrecognized command " + argv[0]);
 				printTopLevelHelp();
@@ -104,6 +111,7 @@ public final class Jannovar {
 			cmd.run();
 		} catch (JannovarException e) {
 			System.err.println("ERROR: " + e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}
@@ -123,12 +131,12 @@ public final class Jannovar {
 		System.err.println("         annotate      functional annotation of VCF files");
 		System.err.println("         annotate-pos  functional annotation of genomic change");
 		System.err.println("");
-		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download hg19/ucsc");
+		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download -d hg19/ucsc");
 		System.err.println("         java -jar de.charite.compbio.jannovar.jar db-list");
 		System.err
-				.println("         java -jar de.charite.compbio.jannovar.jar annotate data/hg19_ucsc.ser variants.vcf");
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate -d data/hg19_ucsc.ser -i variants.vcf");
 		System.err
-				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos data/hg19_ucsc.ser 'chr1:12345C>A'");
+				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'");
 		System.err.println("");
 	}
 

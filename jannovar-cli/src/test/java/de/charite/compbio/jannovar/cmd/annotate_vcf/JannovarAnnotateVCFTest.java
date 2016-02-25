@@ -37,7 +37,7 @@ public class JannovarAnnotateVCFTest {
 	public void testOnSmallExample() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), pathToSmallSer, inputFilePath };
+		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), "-d", pathToSmallSer, "-i",inputFilePath };
 		System.err.println(Joiner.on(" ").join(argv));
 		new AnnotateVCFCommand(argv).run();
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
@@ -54,8 +54,8 @@ public class JannovarAnnotateVCFTest {
 	public void testOnSmallExampleBothInfoFields() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "--old-info-fields", "-o", outFolder.toString(), pathToSmallSer,
-				inputFilePath };
+		String[] argv = new String[] { "annotate", "--old-info-fields", "-o", outFolder.toString(), "-d", pathToSmallSer,
+				"-i", inputFilePath };
 		System.err.println(Joiner.on(" ").join(argv));
 		new AnnotateVCFCommand(argv).run();
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
@@ -73,7 +73,7 @@ public class JannovarAnnotateVCFTest {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
 		String[] argv = new String[] { "annotate", "--old-info-fields", "--no-new-info-field", "-o",
-				outFolder.toString(), pathToSmallSer, inputFilePath };
+				outFolder.toString(), "-d",pathToSmallSer, "-i", inputFilePath };
 		System.err.println(Joiner.on(" ").join(argv));
 		new AnnotateVCFCommand(argv).run();
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
@@ -92,7 +92,7 @@ public class JannovarAnnotateVCFTest {
 	public void testOnTrailingSemicolons() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/semicolons.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), pathToSmallSer, inputFilePath };
+		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), "-d",pathToSmallSer, "-i", inputFilePath };
 		System.err.println(Joiner.on(" ").join(argv));
 		new AnnotateVCFCommand(argv).run();
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "semicolons.jv.vcf");

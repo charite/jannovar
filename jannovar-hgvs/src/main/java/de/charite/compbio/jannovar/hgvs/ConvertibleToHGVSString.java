@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinPointLocation;
 /**
  * Provide HGVS string representation of an element.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public interface ConvertibleToHGVSString {
 

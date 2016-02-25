@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.reference;
 /**
  * Types of genomic variants represented by {@link GenomeVariant}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum GenomeVariantType {
 	/** single nucleotide variant */

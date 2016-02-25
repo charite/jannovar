@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.hgvs.protein.ProteinSeqDescription;
 /**
  * In-frame substitution on the protein level with more than one base.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProteinIndel extends ProteinChange {
 
@@ -114,6 +114,11 @@ public class ProteinIndel extends ProteinChange {
 		} else if (!range.equals(other.range))
 			return false;
 		return true;
+	}
+
+	@Override
+	public ProteinChange withOnlyPredicted(boolean onlyPredicted) {
+		return new ProteinIndel(onlyPredicted, this.range, this.delSeq, this.insSeq);
 	}
 
 }

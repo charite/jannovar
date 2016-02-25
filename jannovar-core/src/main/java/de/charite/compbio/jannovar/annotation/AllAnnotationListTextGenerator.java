@@ -7,8 +7,8 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Decorator for {@link VariantAnnotations} for generating variant annotation strings for all variants
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
 @Deprecated
 @Immutable

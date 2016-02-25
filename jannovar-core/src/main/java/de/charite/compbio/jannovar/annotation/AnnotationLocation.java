@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * Describes the location of an annotation.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public class AnnotationLocation {

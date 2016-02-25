@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar.htsjdk;
 import htsjdk.variant.variantcontext.writer.Options;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
+import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLineType;
@@ -21,15 +22,15 @@ import de.charite.compbio.jannovar.annotation.Annotation;
  *
  * Part of the Jannovar-HTSJDK bridge.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class VariantContextWriterConstructionHelper {
 
 	/**
-	 * Return a new {@link ContextWriter} that uses the header from <code>reader</code> but has the header extended
-	 * header through {@link extendHeaderFields}.
+	 * Return a new {@link VariantContextWriter} that uses the header from <code>reader</code> but has the header
+	 * extended header through {@link #extendHeaderFields}.
 	 *
-	 * @param VCFHeader
+	 * @param header
 	 *            the VCF header to use for the construction
 	 * @param outStream
 	 *            {@link OutputStream} to write to
@@ -54,10 +55,10 @@ public final class VariantContextWriterConstructionHelper {
 	}
 
 	/**
-	 * Return a new {@link ContextWriter} that uses the header from <code>reader</code> but has the header extended
-	 * header through {@link extendHeaderFields}.
+	 * Return a new {@link VariantContextWriter} that uses the header from <code>reader</code> but has the header
+	 * extended header through {@link #extendHeaderFields}.
 	 *
-	 * @param VCFHeader
+	 * @param header
 	 *            the VCF header to use for the construction
 	 * @param fileName
 	 *            path to output file
@@ -72,10 +73,10 @@ public final class VariantContextWriterConstructionHelper {
 	}
 
 	/**
-	 * Return a new {@link ContextWriter} that uses the header from <code>reader</code> but has the header extended
-	 * header through {@link extendHeaderFields}.
+	 * Return a new {@link VariantContextWriter} that uses the header from <code>reader</code> but has the header
+	 * extended header through {@link #extendHeaderFields}.
 	 *
-	 * @param VCFHeader
+	 * @param header
 	 *            the VCF header to use for the construction
 	 * @param fileName
 	 *            path to output file
@@ -118,7 +119,7 @@ public final class VariantContextWriterConstructionHelper {
 	}
 
 	/**
-	 * Forward to {@link #openVariantContextWriter(VCFFileReader, String, InfoFields, Collection)}.
+	 * Forward to {@link #openVariantContextWriter(VCFHeader, String, InfoFields, Collection)}.
 	 */
 	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields) {
 		return openVariantContextWriter(header, fileName, fields, ImmutableList.<VCFHeaderLine> of());

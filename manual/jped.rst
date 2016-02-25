@@ -9,13 +9,13 @@ You can get the command line help for ``jped-cli`` as follows:
 
 ::
 
-    # java -jar jped-cli-0.14.jar -h
+    # java -jar jped-cli-0.16.jar --help
 
 A basic call looks as follows:
 
 ::
 
-    # java -jar jped-cli-0.14.jar -m MODE(S) IN.ped IN.vcf OUT.vcf
+    # java -jar jped-cli-0.16.jar -m MODE(S) -p IN.ped -i IN.vcf -o OUT.vcf
 
 This call of ``jped-cli`` will first read in the pedigree from ``IN.ped``.
 Then, it will read the file ``IN.vcf`` and filter the variants therein for compatibility with the given ``MODE(S)`` of inheritance and the pedigree.

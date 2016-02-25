@@ -10,6 +10,7 @@ import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.Genotype;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContext;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
+import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.AbstractVariantContextCompatibilityChecker;
@@ -60,7 +61,7 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet
 		}
 		if (hets.size() > 1) {
 			for (Integer i : hets) {
-				list.getVcList().get(i).setMatchInheritance(true);
+				list.getVcList().get(i).addMatchInheritance(ModeOfInheritance.AUTOSOMAL_RECESSIVE);
 			}
 		}
 	}
@@ -76,8 +77,8 @@ public class VariantContextCompatibilityCheckerAutosomalRecessiveCompoundHet
 				// If candidate holds, check all unaffected for not being
 				// homozygous alt.
 				if (isCompatibleWithUnaffected(c)) {
-					c.getPaternal().setMatchInheritance(true);
-					c.getMaternal().setMatchInheritance(true);
+					c.getPaternal().addMatchInheritance(ModeOfInheritance.AUTOSOMAL_RECESSIVE);
+					c.getMaternal().addMatchInheritance(ModeOfInheritance.AUTOSOMAL_RECESSIVE);
 				}
 	}
 

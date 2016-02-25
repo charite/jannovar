@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 /**
  * Allows writing of {@link PedFileContents} to a {@link OutputStream} or {@link File}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class PedFileWriter {
 

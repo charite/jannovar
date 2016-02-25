@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Builder for {@link GenotypeList}.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * 
  *  @deprecated use {@link VariantContextList.Builder} instead.  
  */

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Write results to a {@link VariantContextWriter}
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public class WriterFilter implements VariantContextFilter {
 

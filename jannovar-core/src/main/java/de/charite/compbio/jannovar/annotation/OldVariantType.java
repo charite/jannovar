@@ -5,7 +5,7 @@ package de.charite.compbio.jannovar.annotation;
  *
  * These are only here for compatibility with the output of the old version.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum OldVariantType {
         /** Variant is downstream of a gene */

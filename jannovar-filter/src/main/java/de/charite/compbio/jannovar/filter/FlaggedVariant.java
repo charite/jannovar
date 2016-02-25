@@ -7,7 +7,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  *
  * By default, variants are not included.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite>
+ * @author <a href="mailto:manuel.holtgrewe@charite">Manuel Holtgrewe</a>
  */
 public class FlaggedVariant {
 

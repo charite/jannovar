@@ -7,12 +7,12 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
 /**
  * General interface for transcript parsers.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public interface TranscriptParser {
 
 	/**
-	 * @return list of {@link TranscriptInfo} objects as parsed from the input.
+	 * @return list of {@link TranscriptModel} objects as parsed from the input.
 	 * @throws TranscriptParseException
 	 *             on problems with parsing the transcript files
 	 */

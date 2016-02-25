@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
  * 
  * It then generates one transcript with one exon for each entry in the BED file.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class FlatBEDDataSource extends DataSource {
 

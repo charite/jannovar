@@ -3,9 +3,9 @@ package de.charite.compbio.jannovar.reference;
 import de.charite.compbio.jannovar.Immutable;
 
 /**
- * Functionality for finding out about certain points/regions of {@link TranscriptInfo} using <b>genomic</b> positions.
+ * Functionality for finding out about certain points/regions of {@link TranscriptModel} using <b>genomic</b> positions.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class TranscriptSequenceOntologyDecorator {
@@ -14,10 +14,10 @@ public final class TranscriptSequenceOntologyDecorator {
 	private final TranscriptModel transcript;
 
 	/**
-	 * Initialize the object with the given {@link TranscriptInfo}.
+	 * Initialize the object with the given {@link TranscriptModel}.
 	 *
 	 * @param transcript
-	 *            the {@link TranscriptInfo} to decorate
+	 *            the {@link TranscriptModel} to decorate
 	 */
 	public TranscriptSequenceOntologyDecorator(TranscriptModel transcript) {
 		this.transcript = transcript;

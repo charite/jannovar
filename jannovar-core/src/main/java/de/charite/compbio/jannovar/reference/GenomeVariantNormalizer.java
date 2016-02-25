@@ -4,7 +4,7 @@ package de.charite.compbio.jannovar.reference;
 /**
  * Helper code for the normalization of {@link GenomeVariant}s.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class GenomeVariantNormalizer {
 

@@ -17,9 +17,9 @@ import de.charite.compbio.jannovar.reference.GenomeVariant;
  * this class to assemble a list of {@link Annotation} objects for each variant. Each variant should receive at least
  * one {@link Annotation}, but variants that affect multiple transcripts will have multiple annotations.
  *
- * This class creates one {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object for each
- * variant (with one or more {@link Annotation} objects), that can return both an ArrayList of all annotations, a list
- * of all annotations of the highest priority level for the variant, and a single representative Annotation.
+ * This class creates one {@link de.charite.compbio.jannovar.annotation.VariantAnnotations AnnotationList} object for
+ * each variant (with one or more {@link Annotation} objects), that can return both an ArrayList of all annotations, a
+ * list of all annotations of the highest priority level for the variant, and a single representative Annotation.
  *
  * The default preference for annotations is thus
  *
@@ -143,8 +143,8 @@ class AnnotationCollector {
 	}
 
 	/**
-	 * Note that this function is used by {@link Chromosome} during the construction of an {@link VariantAnnotations} for a
-	 * given variant.
+	 * Note that this function is used by {@link Chromosome} during the construction of an {@link VariantAnnotations}
+	 * for a given variant.
 	 *
 	 * @return true if there are currently no annotations.
 	 */
@@ -329,10 +329,12 @@ class AnnotationCollector {
 	 *            the Structual annotation to be added
 	 */
 	public void addStructuralAnnotation(Annotation ann) {
-		annotations.add(ann);
-		geneSymbols.add(ann.getTranscript().getGeneSymbol());
-		hasStructural = true;
-		annotationCount++;
+        if (ann.getTranscript() != null) {
+            annotations.add(ann);
+            geneSymbols.add(ann.getTranscript().getGeneSymbol());
+            hasStructural = true;
+            annotationCount++;
+        }
 	}
 
 	/**

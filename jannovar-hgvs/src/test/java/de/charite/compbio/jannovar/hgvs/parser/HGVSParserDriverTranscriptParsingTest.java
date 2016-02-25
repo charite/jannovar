@@ -9,7 +9,7 @@ import de.charite.compbio.jannovar.hgvs.nts.variant.SingleAlleleNucleotideVarian
 /**
  * Tests for the HGVSParserDriver that targets parsing of the transcript properties.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class HGVSParserDriverTranscriptParsingTest {
 

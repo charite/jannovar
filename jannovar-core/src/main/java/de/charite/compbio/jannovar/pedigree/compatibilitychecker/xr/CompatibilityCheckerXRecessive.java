@@ -26,9 +26,9 @@ import de.charite.compbio.jannovar.pedigree.compatibilitychecker.CompatibilityCh
  * will be handled also from dominant compatibility checker. If the gene is
  * recessive some have to look for the second mutation by its own.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@charite.de>
- * @author Max Schubach <max.schubach@charite.de>
- * @author Peter N Robinson <peter.robinson@charite.de>
+ * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+ * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  * 
  * @deprecated use {@link VariantContextCompatibilityCheckerXRecessive} instead.
  */

@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.hgvs;
 /**
  * Type of the sequence that the variant is on.
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum SequenceType {
 
