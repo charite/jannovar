@@ -1,6 +1,10 @@
 # Jannovar Changelog
 
-## develop
+## 0.16.1
+
+* hotfix about intronic variants between 5' or 3' UTRs. These variants were misclassified as FIVE_PRIME_UTR_VARIANT or THREE_PRIME_UTR_VARIANT. Now they are CODING_TRANSCRIPT_INTRON_VARIANT or NON_CODING_TRANSCRIPT_INTRON_VARIANT (if coding or non-coding transcript). We suggest new terms like FIVE_PRIME_UTR_INTRON_VARIANT but right now, they are not in the SequenceOntology.
+
+## 0.16
 
 ## v0.16
 
@@ -76,6 +80,8 @@
 
 ### jannover-inheritance-checker
 
+* Bugfix detecting autosomal chromosomes
+* Bugfix with handling variant files with a leading "chr" in the contig.
 * Adding this new module.
 * Replaces the compatibility checker oh jannobvar-core.
 * Now runs with VariantContext (htsjdk) instead of Jannovar Genotypes
