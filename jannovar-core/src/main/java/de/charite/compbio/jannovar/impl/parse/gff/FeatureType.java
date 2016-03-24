@@ -31,7 +31,20 @@ public enum FeatureType {
 	/** transfer RNA */
 	TRNA,
 	/** ribosomal RNA */
-	RRNA;
+	RRNA,
+	/** operon */
+	OPERON,
+	/** promotor */
+	PROMOTOR,
+	/** tf binding site */
+	TF_BINDING_SITE,
+	/** intron */
+	INTRON,
+	/** three prime utr */
+	THREE_PRIME_UTR,
+	/** five prime utr */
+	FIVE_PRIME_UTR;
+
 
 	public static String toString(FeatureType type) {
 		switch (type) {
@@ -57,6 +70,18 @@ public enum FeatureType {
 			return "tRNA";
 		case RRNA:
 			return "rRNA";
+		case OPERON:
+			return "operon";
+		case PROMOTOR:
+			return "promoter";
+		case TF_BINDING_SITE:
+			return "TF_binding_site";
+		case INTRON:
+			return "intron";
+		case THREE_PRIME_UTR:
+			return "three_prime_UTR";
+		case FIVE_PRIME_UTR:
+			return "five_prime_UTR";
 		default:
 			return ".";
 		}

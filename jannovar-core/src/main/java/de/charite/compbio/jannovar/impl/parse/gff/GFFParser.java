@@ -314,6 +314,20 @@ public final class GFFParser {
 			return FeatureType.NCRNA;
 		if (type.equals("tRNA"))
 			return FeatureType.TRNA;
+		if (type.equals("rRNA"))
+			return FeatureType.RRNA;
+		if (type.equals("operon"))
+			return FeatureType.OPERON;
+		if (type.equals("promotor"))
+			return FeatureType.PROMOTOR;
+		if (type.equals("TF_binding_site"))
+			return FeatureType.TF_BINDING_SITE;
+		if (type.equals("intron"))
+			return FeatureType.INTRON;
+		if (type.equals("three_prime_UTR"))
+			return FeatureType.THREE_PRIME_UTR;
+		if (type.equals("five_prime_UTR"))
+			return FeatureType.FIVE_PRIME_UTR;
 		return FeatureType.UNKNOWN;
 	}
 
