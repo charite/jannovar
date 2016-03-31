@@ -2,6 +2,7 @@
 
 ## develop
 
+* Bumping HTSJDK to 2.1.0, requiring Java 8 from now on.
 * Removal of `AnnotationCollector`, priotization of variant effects is done after collecting all effect predictions now.
 * Fix for intronic variants between 5' or 3' UTRs. These variants were misclassified as FIVE_PRIME_UTR_VARIANT or THREE_PRIME_UTR_VARIANT. Now they are CODING_TRANSCRIPT_INTRON_VARIANT or NON_CODING_TRANSCRIPT_INTRON_VARIANT (if coding or non-coding transcript). We suggest new terms like FIVE_PRIME_UTR_INTRON_VARIANT but right now, they are not in the SequenceOntology.
 
