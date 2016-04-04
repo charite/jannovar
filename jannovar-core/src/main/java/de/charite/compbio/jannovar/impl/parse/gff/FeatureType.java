@@ -34,8 +34,8 @@ public enum FeatureType {
 	RRNA,
 	/** operon */
 	OPERON,
-	/** promotor */
-	PROMOTOR,
+	/** promoter */
+	PROMOTER,
 	/** tf binding site */
 	TF_BINDING_SITE,
 	/** intron */
@@ -72,7 +72,7 @@ public enum FeatureType {
 			return "rRNA";
 		case OPERON:
 			return "operon";
-		case PROMOTOR:
+		case PROMOTER:
 			return "promoter";
 		case TF_BINDING_SITE:
 			return "TF_binding_site";

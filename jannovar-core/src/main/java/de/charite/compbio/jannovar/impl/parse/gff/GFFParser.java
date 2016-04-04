@@ -318,8 +318,8 @@ public final class GFFParser {
 			return FeatureType.RRNA;
 		if (type.equals("operon"))
 			return FeatureType.OPERON;
-		if (type.equals("promotor"))
-			return FeatureType.PROMOTOR;
+		if (type.equals("promoter"))
+			return FeatureType.PROMOTER;
 		if (type.equals("TF_binding_site"))
 			return FeatureType.TF_BINDING_SITE;
 		if (type.equals("intron"))
