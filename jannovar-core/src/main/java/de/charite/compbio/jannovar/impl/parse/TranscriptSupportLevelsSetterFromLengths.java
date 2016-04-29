@@ -15,7 +15,7 @@ import de.charite.compbio.jannovar.reference.TranscriptSupportLevels;
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
-class TranscriptSupportLevelsSetterFromLengths {
+public class TranscriptSupportLevelsSetterFromLengths {
 
 	/** {@link Logger} to use for logging */
 	private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptSupportLevelsSetterFromLengths.class);

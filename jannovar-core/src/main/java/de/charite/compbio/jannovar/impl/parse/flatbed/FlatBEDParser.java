@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.impl.parse;
+package de.charite.compbio.jannovar.impl.parse.flatbed;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
@@ -71,6 +73,7 @@ public class FlatBEDParser implements TranscriptParser {
 		LOGGER.error("Parsing FASTA...");
 		FlatBEDFastaParser efp = new FlatBEDFastaParser(PathUtil.join(basePath, getINIFileName("dna")), builders,
 				printProgressBars);
+		/*
 		int before = builders.size();
 		builders = efp.parse();
 		int after = builders.size();
@@ -78,6 +81,7 @@ public class FlatBEDParser implements TranscriptParser {
 		// Log success and statistics.
 		Object params[] = { before, after };
 		LOGGER.info("Found {} transcript models from flat BED resource, {} of which had sequences", params);
+		*/
 
 		// Create final list of TranscriptInfos.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
