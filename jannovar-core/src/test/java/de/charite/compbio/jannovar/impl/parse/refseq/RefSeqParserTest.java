@@ -89,6 +89,11 @@ public class RefSeqParserTest {
 						"XM_005252753.1(11:g.47487489_47517587)", "XM_005252754.1(11:g.47487489_47517587)",
 						"XM_005252755.1(11:g.47487489_47517587)", "XM_005252756.1(11:g.47487489_47522484)",
 						"XM_005252757.1(11:g.47487489_47522484)", "XM_005252758.1(11:g.47487489_47545089)"));
+
+		Assert.assertEquals("10658", result.get(0).getGeneID());
+		Assert.assertEquals("CELF1", result.get(0).getGeneSymbol());
+		Assert.assertEquals("{GeneID=10658, HGNC=2549, HPRD=03046, MIM=601074}",
+				result.get(0).getAltGeneIDs().toString());
 	}
 
 	@Test

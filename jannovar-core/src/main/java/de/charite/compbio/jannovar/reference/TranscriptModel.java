@@ -1,8 +1,11 @@
 package de.charite.compbio.jannovar.reference;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
 
 import de.charite.compbio.jannovar.Immutable;
 
@@ -51,6 +54,13 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	private final String geneID;
 
 	/**
+	 * Alternative gene IDs, as parsed from RefSeq GFF3 file
+	 * 
+	 * See {@link #getAltGeneIDs()} for more information
+	 */
+	private final ImmutableSortedMap<String, String> altGeneIDs;
+
+	/**
 	 * The transcript support level of the this transcript (the lower the better).
 	 *
 	 * @see TranscriptSupportLevels
@@ -66,6 +76,16 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
 			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel) {
+		this(accession, geneSymbol, txRegion, cdsRegion, exonRegions, sequence, geneID, transcriptSupportLevel,
+				ImmutableMap.<String, String> of());
+	}
+
+	/**
+	 * Initialize the TranscriptInfo object from the given parameters.
+	 */
+	public TranscriptModel(String accession, String geneSymbol, GenomeInterval txRegion, GenomeInterval cdsRegion,
+			ImmutableList<GenomeInterval> exonRegions, String sequence, String geneID, int transcriptSupportLevel,
+			Map<String, String> altGeneIDs) {
 		this.accession = accession;
 		this.geneSymbol = geneSymbol;
 		this.txRegion = txRegion;
@@ -74,6 +94,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 		this.sequence = sequence;
 		this.geneID = geneID;
 		this.transcriptSupportLevel = transcriptSupportLevel;
+		this.altGeneIDs = ImmutableSortedMap.copyOf(altGeneIDs);
 		checkForConsistency();
 	}
 
@@ -113,6 +134,24 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	 */
 	public String getGeneID() {
 		return geneID;
+	}
+
+	/**
+	 * Return mapping containing alternative gene IDs, as parsed from RefSeq GFF3 file
+	 * 
+	 * Popular alternative identifiers (used as keys here):
+	 * 
+	 * <dl>
+	 * <dt>GeneID</dt>
+	 * <dd>String of the Entrez/NCBI gene ID</dd>
+	 * <dt>Genbank</dt>
+	 * <dd>String of the Genbank accession</dd>
+	 * <dt>HGNC</dt>
+	 * <dd>String of the numeric HGNC (Human Gene Nomenclature Committee) identifier</dd>
+	 * </dl>
+	 */
+	public ImmutableSortedMap<String, String> getAltGeneIDs() {
+		return altGeneIDs;
 	}
 
 	/**

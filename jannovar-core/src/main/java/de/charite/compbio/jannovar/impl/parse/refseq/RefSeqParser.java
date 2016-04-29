@@ -213,7 +213,7 @@ public class RefSeqParser implements TranscriptParser {
 			builder.setGeneSymbol(geneRecord.getAttributes().get("Name"));
 			final String mrnaName = mrnaRecord.getAttributes().get("Name");
 			builder.setSequence(mrnaName);
-			parseOutEntrez(builder, geneRecord);
+			parseAltGeneIDs(builder, geneRecord);
 
 			// Iterate over the features, interpreting "exon" and "CDS" entries
 			GenomeInterval txRegion = null;
@@ -273,20 +273,21 @@ public class RefSeqParser implements TranscriptParser {
 	}
 
 	/**
-	 * Parse out Entrez ID and set it into <code>builder</code>
+	 * Parse out alternative geneIDs
 	 * 
 	 * @param builder
-	 *            The TranscriptModelBuilder to put the Entrez ID to
+	 *            The {@link TranscriptModelBuilder} to put the alternative geneIDs to
 	 * @param geneRecord
-	 *            GFFRecord with the gene information
+	 *            {@link FeatureRecord} with the gene information
 	 */
-	private void parseOutEntrez(TranscriptModelBuilder builder, FeatureRecord geneRecord) {
-		if (!geneRecord.getAttributes().containsKey("DBxref"))
+	private void parseAltGeneIDs(TranscriptModelBuilder builder, FeatureRecord geneRecord) {
+		if (!geneRecord.getAttributes().containsKey("Dbxref"))
 			return;
-		for (String token : Splitter.on(',').split(geneRecord.getAttributes().get("DBxref"))) {
-			List<String> keyValue = Splitter.on(',').limit(1).splitToList(token);
+		for (String token : Splitter.on(',').split(geneRecord.getAttributes().get("Dbxref"))) {
+			List<String> keyValue = Splitter.on(':').limit(2).splitToList(token);
 			if (keyValue.size() != 2)
 				continue;
+			builder.getAltGeneIDs().put(keyValue.get(0), keyValue.get(1));
 			if (keyValue.get(0).equals("GeneID"))
 				builder.setGeneID(keyValue.get(1));
 		}
