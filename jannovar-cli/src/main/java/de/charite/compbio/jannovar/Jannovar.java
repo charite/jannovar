@@ -41,7 +41,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * annovar program as follows.
  *
  * <PRE>
- * $ perl convert2annovar.pl BLA.vcf -format vcf4 > BLA.av
+ * $ perl convert2annovar.pl BLA.vcf -format vcf4 &gt; BLA.av
  * $ perl annotate_variation.pl -buildver hg19 --geneanno BLA.av --dbtype knowngene humandb/
  * </PRE>
  *

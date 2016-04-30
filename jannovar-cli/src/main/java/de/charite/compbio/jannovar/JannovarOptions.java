@@ -87,7 +87,7 @@ public final class JannovarOptions {
 
 	// Configuration for the annotate-position command
 
-	/** chromosomal position and a change, e.g. "chr1:12345C>A" */
+	/** chromosomal position and a change, e.g. {@code chr1:12345C>A}. */
 	public ArrayList<String> chromosomalChanges = new ArrayList<String>();
 
 	/**
@@ -99,6 +99,7 @@ public final class JannovarOptions {
 
 	/**
 	 * Print option values to stderr.
+	 @param out Stream to print to.
 	 */
 	public void print(PrintStream out) {
 		out.println("verbosity: " + verbosity);
