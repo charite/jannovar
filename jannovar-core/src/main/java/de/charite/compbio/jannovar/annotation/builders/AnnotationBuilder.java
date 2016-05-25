@@ -245,24 +245,24 @@ abstract class AnnotationBuilder {
 			if (so.liesInFivePrimeUTR(lPos)) {
 				// Check if variant overlaps really with an UTR
 				if (so.liesInExon(lPos))
-					varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
+					varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
 				else {
 					// between two UTRs. check for coding or non-coding transcript.
 					if (transcript.isCoding())
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
 					else
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
 				}
 			} else {
 				// Check if variant overlaps really with an UTR
 				if (so.liesInExon(lPos))
-					varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+					varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
 				else {
 					// between two UTRs. check for coding or non-coding transcript.
 					if (transcript.isCoding())
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
 					else
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
 				}
 			}
 		} else {
@@ -278,24 +278,24 @@ abstract class AnnotationBuilder {
 			if (so.overlapsWithFivePrimeUTR(changeInterval)) {
 				// Check if variant overlaps really with an UTR
 				if (so.overlapsWithExon(changeInterval))
-					varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
+					varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
 				else {
 					// between two UTRs. check for coding or non-coding transcript.
 					if (transcript.isCoding())
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
 					else
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
 				}
 			} else {
 				// Check if variant overlaps really with an UTR
 				if (so.overlapsWithExon(changeInterval))
-					varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+					varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
 				else {
 					// between two UTRs. check for coding or non-coding transcript.
 					if (transcript.isCoding())
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
 					else
-						varTypes.add(VariantEffect.CODING_TRANSCRIPT_INTRON_VARIANT);
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
 				}
 			}
 		}

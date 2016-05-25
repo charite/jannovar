@@ -150,7 +150,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-192del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -163,7 +163,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("*59del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1010,7 +1010,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-25del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1034,7 +1034,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-7_-6del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1058,7 +1058,7 @@ public class DeletionAnnotationBuilderTest {
 		Assert.assertEquals(1, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-11_-5del", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
