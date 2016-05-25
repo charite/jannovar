@@ -2,6 +2,8 @@ package de.charite.compbio.jannovar.reference;
 
 import java.io.Serializable;
 
+import com.google.common.collect.ComparisonChain;
+
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
@@ -15,7 +17,7 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
-public final class GenomeInterval implements Serializable {
+public final class GenomeInterval implements Serializable, Comparable<GenomeInterval> {
 
 	private static final long serialVersionUID = 2L;
 
@@ -145,6 +147,24 @@ public final class GenomeInterval implements Serializable {
 
 		int beginPos = Math.max(this.beginPos, other.beginPos);
 		int endPos = Math.min(this.endPos, other.endPos);
+		if (endPos < beginPos)
+			beginPos = endPos;
+
+		return new GenomeInterval(refDict, strand, chr, beginPos, endPos, PositionType.ZERO_BASED);
+	}
+
+	// TODO(holtgrewe): Test me!
+	/**
+	 * @return GenomeInterval with union of <code>this</code> and <code>other</code> and everything in between,
+	 *         <code>this</code> if on different chromosomes. Result will be on the same strand as <code>this</code>.
+	 */
+	public GenomeInterval union(GenomeInterval other) {
+		if (chr != other.chr)
+			return new GenomeInterval(refDict, strand, chr, beginPos, beginPos, PositionType.ZERO_BASED);
+		other = other.withStrand(strand);
+
+		int beginPos = Math.min(this.beginPos, other.beginPos);
+		int endPos = Math.max(this.endPos, other.endPos);
 		if (endPos < beginPos)
 			beginPos = endPos;
 
@@ -315,6 +335,13 @@ public final class GenomeInterval implements Serializable {
 		if (strand != other.strand)
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(GenomeInterval other) {
+		other = other.withStrand(strand);
+		return ComparisonChain.start().compare(getChr(), other.getChr()).compare(getBeginPos(), other.getBeginPos())
+				.compare(getEndPos(), other.getEndPos()).result();
 	}
 
 }

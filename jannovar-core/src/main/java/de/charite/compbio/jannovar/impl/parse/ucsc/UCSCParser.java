@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.impl.parse;
+package de.charite.compbio.jannovar.impl.parse.ucsc;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
+import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
+import de.charite.compbio.jannovar.impl.parse.TranscriptSupportLevelsSetterFromLengths;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.PositionType;
