@@ -16,6 +16,7 @@ import com.google.common.base.Predicate;
  * @author <a href="mailto:peter.robinson@charite.de">Peter Robinson</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public enum VariantEffect {
 
@@ -270,15 +271,25 @@ public enum VariantEffect {
 	// TODO(holtgrem): use
 	FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT,
 	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001623">SO:0001623</a> A UTR variant of the
-	 * 5' UTR (is a: UTR_variant).
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002092">SO:0002092</a> A UTR variant of the
+	 * 5' UTR (is a: 5_prime_UTR_variant; is a: UTR_variant).
 	 */
-	FIVE_PRIME_UTR_VARIANT,
+	FIVE_PRIME_UTR_EXON_VARIANT,
 	/**
-	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0001624">SO:0001624</a> A UTR variant of the
-	 * 3' UTR (is a: UTR_variant).
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002089">SO:0002089</a> A UTR variant of the
+	 * 3' UTR (is a: 3_prime_UTR_variant; is a: UTR_variant).
 	 */
-	THREE_PRIME_UTR_VARIANT,
+	THREE_PRIME_UTR_EXON_VARIANT,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002091">SO:0002091</a> A UTR variant between
+	 * 5' UTRs (is a: 5_prime_UTR_variant; is a: UTR_variant).
+	 */
+	FIVE_PRIME_UTR_INTRON_VARIANT,
+	/**
+	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002090">SO:0002090</a> A UTR variant between
+	 * 3' UTRs (is a: 3_prime_UTR_variant; is a: UTR_variant).
+	 */
+	THREE_PRIME_UTR_INTRON_VARIANT,
 
 	/**
 	 * Marker for smallest {@link VariantEffect} with {@link PutativeImpact#LOW} impact.
@@ -529,7 +540,7 @@ public enum VariantEffect {
 			return "DOWNSTREAM";
 		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
 		case FIVE_PRIME_UTR_TRUNCATION:
-		case FIVE_PRIME_UTR_VARIANT:
+		case FIVE_PRIME_UTR_EXON_VARIANT:
 			return "UTR5";
 		case FRAMESHIFT_ELONGATION:
 			return "FS_INSERTION";
@@ -551,6 +562,8 @@ public enum VariantEffect {
 		case CONSERVED_INTRON_VARIANT:
 		case CODING_TRANSCRIPT_INTRON_VARIANT:
 		case INTRON_VARIANT:
+		case FIVE_PRIME_UTR_INTRON_VARIANT:
+		case THREE_PRIME_UTR_INTRON_VARIANT:
 			return "INTRONIC";
 		case MNV:
 			return "NON_FS_SUBSTITUTION";
@@ -576,7 +589,7 @@ public enum VariantEffect {
 		case SYNONYMOUS_VARIANT:
 			return "SYNONYMOUS";
 		case THREE_PRIME_UTR_TRUNCATION:
-		case THREE_PRIME_UTR_VARIANT:
+		case THREE_PRIME_UTR_EXON_VARIANT:
 			return "UTR3";
 		case TRANSCRIPT_ABLATION:
 			return "TRANSCRIPT_ABLATION";
@@ -663,9 +676,11 @@ public enum VariantEffect {
 		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
 			return "5_prime_UTR_premature_start_codon_gain_variant";
 		case FIVE_PRIME_UTR_TRUNCATION:
-			return "5_prime_utr_truncation";
-		case FIVE_PRIME_UTR_VARIANT:
-			return "5_prime_utr_variant";
+			return "5_prime_UTR_truncation";
+		case FIVE_PRIME_UTR_EXON_VARIANT:
+			return "5_prime_UTR_exon_variant";
+		case FIVE_PRIME_UTR_INTRON_VARIANT:
+			return "5_prime_UTR_intron_variant";
 		case FRAMESHIFT_ELONGATION:
 			return "frameshift_elongation";
 		case FRAMESHIFT_TRUNCATION:
@@ -729,9 +744,11 @@ public enum VariantEffect {
 		case TF_BINDING_SITE_VARIANT:
 			return "tf_binding_site_variant";
 		case THREE_PRIME_UTR_TRUNCATION:
-			return "3_prime_utr_truncation";
-		case THREE_PRIME_UTR_VARIANT:
-			return "3_prime_utr_variant";
+			return "3_prime_UTR_truncation";
+		case THREE_PRIME_UTR_EXON_VARIANT:
+			return "3_prime_UTR_exon_variant";
+		case THREE_PRIME_UTR_INTRON_VARIANT:
+			return "3_prime_UTR_intron_variant";
 		case TRANSCRIPT_ABLATION:
 			return "transcript_ablation";
 		case TRANSCRIPT_VARIANT:
@@ -790,8 +807,10 @@ public enum VariantEffect {
 			return "SO:0001983";
 		case FIVE_PRIME_UTR_TRUNCATION:
 			return "SO:0002013";
-		case FIVE_PRIME_UTR_VARIANT:
-			return "SO:0001623";
+		case FIVE_PRIME_UTR_EXON_VARIANT:
+			return "SO:0002092";
+		case FIVE_PRIME_UTR_INTRON_VARIANT:
+			return "SO:0002091";
 		case FRAMESHIFT_ELONGATION:
 			return "SO:0001909";
 		case FRAMESHIFT_TRUNCATION:
@@ -856,8 +875,10 @@ public enum VariantEffect {
 			return "SO:0001782";
 		case THREE_PRIME_UTR_TRUNCATION:
 			return "SO:0002015";
-		case THREE_PRIME_UTR_VARIANT:
-			return "SO:0001624";
+		case THREE_PRIME_UTR_EXON_VARIANT:
+			return "SO:0002089";
+		case THREE_PRIME_UTR_INTRON_VARIANT:
+			return "SO:0002090";
 		case TRANSCRIPT_ABLATION:
 			return "SO:0001893";
 		case TRANSCRIPT_VARIANT:
@@ -969,9 +990,11 @@ public enum VariantEffect {
 		switch (this) {
 		case CODING_TRANSCRIPT_INTRON_VARIANT:
 		case FIVE_PRIME_UTR_TRUNCATION:
-		case FIVE_PRIME_UTR_VARIANT:
+		case FIVE_PRIME_UTR_INTRON_VARIANT:
+		case FIVE_PRIME_UTR_EXON_VARIANT:
 		case THREE_PRIME_UTR_TRUNCATION:
-		case THREE_PRIME_UTR_VARIANT:
+		case THREE_PRIME_UTR_EXON_VARIANT:
+		case THREE_PRIME_UTR_INTRON_VARIANT:
 		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
 		case NON_CODING_TRANSCRIPT_VARIANT:
 			return false;
