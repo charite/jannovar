@@ -830,29 +830,29 @@ public enum VariantEffect {
 		case INTERNAL_FEATURE_ELONGATION:
 			return "SO:0001908";
 		case INTRAGENIC_VARIANT:
-			return "SO:0001908";
+			return "SO:0002011";
 		case INTRON_VARIANT:
-			return "SO:0001908";
+			return "SO:0001627";
 		case MIRNA:
-			return "SO:0001908";
+			return "SO:0000276";
 		case MISSENSE_VARIANT:
 			return "SO:0001583";
 		case MNV:
-			return "SO:0001583";
+			return "SO:0002007";
 		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
-			return "SO:0001583";
+			return "SO:0001792";
 		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
 			return "SO:0001970";
 		case NON_CODING_TRANSCRIPT_VARIANT:
 			return "SO:0001619";
 		case RARE_AMINO_ACID_VARIANT:
-			return "SO:0001619";
+			return "SO:0002008";
 		case REGULATORY_REGION_VARIANT:
-			return "SO:0001619";
+			return "SO:0001566";
 		case SEQUENCE_VARIANT:
 			return "SO:0001060";
 		case SPLICE_ACCEPTOR_VARIANT:
-			return "SO:0001619";
+			return "SO:0001574";
 		case SPLICE_DONOR_VARIANT:
 			return "SO:0001575";
 		case SPLICE_REGION_VARIANT:
@@ -862,9 +862,9 @@ public enum VariantEffect {
 		case START_LOST:
 			return "SO:0002012";
 		case STOP_GAINED:
-			return "SO:0002012";
+			return "SO:0001587";
 		case STOP_LOST:
-			return "SO:0002012";
+			return "SO:0001578";
 		case STOP_RETAINED_VARIANT:
 			return "SO:0001567";
 		case STRUCTURAL_VARIANT:
@@ -872,19 +872,19 @@ public enum VariantEffect {
 		case SYNONYMOUS_VARIANT:
 			return "SO:0001819 ";
 		case TF_BINDING_SITE_VARIANT:
-			return "SO:0001819 ";
+			return "SO:0001782";
 		case THREE_PRIME_UTR_TRUNCATION:
-			return "SO:0001819 ";
+			return "SO:0002015";
 		case THREE_PRIME_UTR_EXON_VARIANT:
 			return "SO:0002089";
 		case THREE_PRIME_UTR_INTRON_VARIANT:
 			return "SO:0002090";
 		case TRANSCRIPT_ABLATION:
-			return "SO:0001624";
+			return "SO:0001893";
 		case TRANSCRIPT_VARIANT:
-			return "SO:0001624";
+			return "SO:0001576";
 		case UPSTREAM_GENE_VARIANT:
-			return "SO:0001624";
+			return "SO:0001631";
 		case FRAMESHIFT_VARIANT:
 			return "SO:0001589";
 		case _SMALLEST_HIGH_IMPACT:
