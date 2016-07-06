@@ -88,8 +88,9 @@ public class JPedApp {
 
 	public static void main(String[] args) {
 		JPedCommandLineParser parser = new JPedCommandLineParser();
+		JPedOptions options = null;
 		try {
-			JPedOptions options = parser.parse(args);
+			options = parser.parse(args);
 			new JPedApp(options).run();
 		} catch (ParseException e) {
 			System.err.println("ERROR: " + e.getMessage());
@@ -101,6 +102,10 @@ public class JPedApp {
 			System.exit(1);
 		} catch (JannovarException e) {
 			System.err.println("ERROR: " + e.getMessage());
+			if (options != null && options.verbosity >= 2)
+				e.printStackTrace(System.err);
+			else
+				System.err.println("Use --verbose to see more information");
 			parser.printHelp();
 			System.exit(1);
 		}
