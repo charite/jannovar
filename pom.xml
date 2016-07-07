@@ -12,6 +12,7 @@
 		<module>jannovar-inheritance-checker</module>
 		<module>jannovar-htsjdk</module>
 		<module>jannovar-hgvs</module>
+		<module>jannovar-vardbs</module>
 		<module>jannovar-cli</module>
 		<module>jannovar-filter</module>
 		<module>jped-cli</module>
