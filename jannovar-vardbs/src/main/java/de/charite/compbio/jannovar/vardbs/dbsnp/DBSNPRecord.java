@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableSet;
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public class DBSNPRecord {
+public final class DBSNPRecord {
 
 	// Fields up to the INFO column
 
@@ -98,7 +98,7 @@ public class DBSNPRecord {
 	/** Has >5% minor allele frequency in each and all populations */
 	final boolean fivePercentAll;
 	/** Has >5% minor allele frequency in >=1 population */
-	final boolean fivePersonOne;
+	final boolean fivePercentOne;
 	/** Marker is on high-density genotyping kit */
 	final boolean highDensityGenotyping;
 	/** Individual genotypes available */
@@ -184,7 +184,7 @@ public class DBSNPRecord {
 		this.mutation = mutation;
 		this.validated = validated;
 		this.fivePercentAll = fivePercentAll;
-		this.fivePersonOne = fivePersonOne;
+		this.fivePercentOne = fivePersonOne;
 		this.highDensityGenotyping = highDensityGenotyping;
 		this.genotypesAvailable = genotypesAvailable;
 		this.g1kPhase1 = g1kPhase1;
@@ -357,8 +357,8 @@ public class DBSNPRecord {
 		return fivePercentAll;
 	}
 
-	public boolean isFivePersonOne() {
-		return fivePersonOne;
+	public boolean isFivePercentOne() {
+		return fivePercentOne;
 	}
 
 	public boolean isHighDensityGenotyping() {
@@ -432,7 +432,7 @@ public class DBSNPRecord {
 		result = prime * result + dbSNPBuildID;
 		result = prime * result + ((filter == null) ? 0 : filter.hashCode());
 		result = prime * result + (fivePercentAll ? 1231 : 1237);
-		result = prime * result + (fivePersonOne ? 1231 : 1237);
+		result = prime * result + (fivePercentOne ? 1231 : 1237);
 		result = prime * result + (g1kPhase1 ? 1231 : 1237);
 		result = prime * result + (g1kPhase3 ? 1231 : 1237);
 		result = prime * result + ((geneInfos == null) ? 0 : geneInfos.hashCode());
@@ -521,7 +521,7 @@ public class DBSNPRecord {
 			return false;
 		if (fivePercentAll != other.fivePercentAll)
 			return false;
-		if (fivePersonOne != other.fivePersonOne)
+		if (fivePercentOne != other.fivePercentOne)
 			return false;
 		if (g1kPhase1 != other.g1kPhase1)
 			return false;
@@ -647,7 +647,7 @@ public class DBSNPRecord {
 				+ ", inIntron=" + inIntron + ", inThreePrime=" + inThreePrime + ", inFivePrime=" + inFivePrime
 				+ ", otherVariant=" + otherVariant + ", assemblyConflict=" + assemblyConflict + ", assemblySpecific="
 				+ assemblySpecific + ", mutation=" + mutation + ", validated=" + validated + ", fivePercentAll="
-				+ fivePercentAll + ", fivePersonOne=" + fivePersonOne + ", highDensityGenotyping="
+				+ fivePercentAll + ", fivePersonOne=" + fivePercentOne + ", highDensityGenotyping="
 				+ highDensityGenotyping + ", genotypesAvailable=" + genotypesAvailable + ", g1kPhase1=" + g1kPhase1
 				+ ", g1kPhase3=" + g1kPhase3 + ", clinicalDiagnosticAssay=" + clinicalDiagnosticAssay
 				+ ", locusSpecificDatabase=" + locusSpecificDatabase + ", microattributionThirdParty="

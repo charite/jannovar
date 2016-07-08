@@ -22,7 +22,8 @@ public interface DBAnnotationDriver {
 	 *
 	 * @param vc
 	 *            {@link VariantContext} to annotate
+	 * @return Updated {@link VariantContext} object
 	 */
-	public void annotateVariantContext(VariantContext vc);
+	public VariantContext annotateVariantContext(VariantContext vc);
 
 }

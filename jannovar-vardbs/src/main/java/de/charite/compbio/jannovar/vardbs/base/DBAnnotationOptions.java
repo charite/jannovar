@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
+import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions.MultipleMatchBehaviour;
+
 /**
  * Configuration for annotating variants with information from databases.
  * 
@@ -7,25 +9,40 @@ package de.charite.compbio.jannovar.vardbs.base;
  */
 public class DBAnnotationOptions {
 
+	/** Enum for representing behaviour in the case of multiple matches */
+	public enum MultipleMatchBehaviour {
+		/** Annotate best one (highest frequency) only */
+		BEST_ONLY,
+		/** Annotate best one (highest frequency), give alternative ones as an additional list */
+		BEST_AND_ALL  // TODO
+	}
+
 	/**
 	 * @return Default options
 	 */
-	static DBAnnotationOptions createDefaults() {
-		return new DBAnnotationOptions(true, false, "");
+	public static DBAnnotationOptions createDefaults() {
+		// TODO: reportOverlapping should be true!
+		return new DBAnnotationOptions(false, false, "", MultipleMatchBehaviour.BEST_ONLY);
 	}
 
 	/** Whether or not to report overlapping variants at all (default: true) */
 	private boolean reportOverlapping;
 	/** Whether or not to consider overlapping variants as identical (behaviour of other tools, default: false */
 	private boolean reportOverlappingAsIdentical;
-	/** Prefix for identifiers, e.g. "RS_" */
+	/** Prefix for identifiers, e.g. "DBSNP_" */
 	private String identifierPrefix;
+	/** Behaviour on multiple matching annotations */
+	private MultipleMatchBehaviour multiMatchBehaviour;
 
-	public DBAnnotationOptions(boolean reportOverlapping, boolean reportOverlappingAsIdentical,
-			String identifierPrefix) {
+	public DBAnnotationOptions(boolean reportOverlapping, boolean reportOverlappingAsIdentical, String identifierPrefix,
+			MultipleMatchBehaviour multiMatchBehaviour) {
 		this.reportOverlapping = reportOverlapping;
 		this.reportOverlappingAsIdentical = reportOverlappingAsIdentical;
 		this.identifierPrefix = identifierPrefix;
+		this.multiMatchBehaviour = multiMatchBehaviour;
+		
+		if (multiMatchBehaviour == MultipleMatchBehaviour.BEST_AND_ALL)
+			throw new RuntimeException("Not implemented yet!");
 	}
 
 	public boolean isReportOverlapping() {
