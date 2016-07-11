@@ -2,11 +2,9 @@ package de.charite.compbio.jannovar.vardbs.dbsnp;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -22,7 +20,6 @@ import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import htsjdk.variant.vcf.VCFFileReader;
 
-// TODO: check for compatible VCF version
 // TODO: handle MNVs appropriately
 
 /**
@@ -42,6 +39,8 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 	final private DBAnnotationOptions options;
 	/** VCFReader to use for loading the VCF records */
 	final private VCFFileReader vcfReader;
+	/** Information about the dbSNP VCF file */
+	final private DBSNPInfo dbSNPInfo;
 
 	/**
 	 * Create annotation driver for a coordinate-sorted, bgzip-compressed, dbSNP VCF file
@@ -51,7 +50,7 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 	 * @param vcfPath
 	 *            Path to VCF file with dbSNP.
 	 * @throws JannovarVarDBException
-	 *             on problems loading the reference FASTA/FAI file
+	 *             on problems loading the reference FASTA/FAI file or incompatible dbSNP version
 	 */
 	public DBSNPAnnotationDriver(String vcfPath, String fastaPath, DBAnnotationOptions options)
 			throws JannovarVarDBException {
@@ -60,6 +59,11 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 		this.vcToRecord = new DBSNPVariantContextToRecordConverter();
 		this.vcfReader = new VCFFileReader(new File(this.vcfPath), true);
 		this.options = options;
+
+		this.dbSNPInfo = new DBSNPInfoFactory().build(vcfReader.getFileHeader());
+		if (dbSNPInfo.dbSNPBuildID != 147)
+			throw new JannovarVarDBException(
+					"Unsupported dbSNP build ID " + dbSNPInfo.dbSNPBuildID + " only supported is b174");
 	}
 
 	@Override
@@ -260,6 +264,11 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 			}
 		}
 		return annotatingDBSNPRecord;
+	}
+
+	/** @return Information about the used dbSNP VCF file */
+	public DBSNPInfo getDbSNPInfo() {
+		return dbSNPInfo;
 	}
 
 }
