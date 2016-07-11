@@ -57,9 +57,6 @@ public final class JannovarOptions {
 	/** path to the file with the serialized data */
 	public String dataFile = null;
 
-	/** whether to write the result in the Jannovar format */
-	public boolean jannovarFormat = false;
-
 	/** whether to report the annotations for all affected transcripts for each alternative allele */
 	public boolean showAll = false;
 
@@ -115,7 +112,6 @@ public final class JannovarOptions {
 			out.println("vcfFilePaths: " + vcfFilePaths);
 			out.println("chromosomalChanges: " + chromosomalChanges);
 			out.println("showAll: " + showAll);
-			out.println("jannovarFormat: " + jannovarFormat);
 			out.println("writeJannovarInfoFields: " + writeJannovarInfoFields);
 			out.println("writeVCFAnnotationStandardInfoFields: " + writeVCFAnnotationStandardInfoFields);
 			out.println("output infix: " + outputInfix);

@@ -40,7 +40,6 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		if (cmd.hasOption("output-dir"))
 			result.outVCFFolder = cmd.getOptionValue("output-dir");
 
-		result.jannovarFormat = cmd.hasOption("jannovar");
 		result.showAll = cmd.hasOption("showall");
 
 		result.writeJannovarInfoFields = cmd.hasOption("old-info-fields");

@@ -49,10 +49,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			AnnotatedVariantWriter writer = null;
 			try {
 				// construct the variant writer
-				if (this.options.jannovarFormat)
-					writer = new AnnotatedJannovarWriter(refDict, chromosomeMap, vcfPath, options);
-				else
-					writer = new AnnotatedVCFWriter(refDict, parser, chromosomeMap, vcfPath, options, args);
+				writer = new AnnotatedVCFWriter(refDict, parser, chromosomeMap, vcfPath, options, args);
 
 				// annotate and write out all variants
 				for (VariantContext vc : parser)
@@ -75,8 +72,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	}
 
 	@Override
-	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+	protected JannovarOptions parseCommandLine(String[] argv)
+			throws CommandLineParsingException, HelpRequestedException {
 		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
 		try {
 			return parser.parse(argv);

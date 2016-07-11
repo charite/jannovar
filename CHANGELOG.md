@@ -14,6 +14,10 @@
 * Removal of `AnnotationCollector`, priotization of variant effects is done after collecting all effect predictions now.
 * Fix for intronic variants between 5' or 3' UTRs. These variants were misclassified as `FIVE_PRIME_UTR_VARIANT` or `THREE_PRIME_UTR_VARIANT`. SequenceOntology implements new terms so that we can decide between the two UTR exon and intron variants. Now we have `FIVE_PRIME_UTR_EXON_VARIANT` or `FIVE_PRIME_UTR_EXON_INTRON_VARIANT` (the same for `THREE_PRIME_UTR_EXON_VARIANT` or `THREE_PRIME_UTR_EXON_INTRON_VARIANT`).
 
+### jannovar-cli
+
+* Removing support for Jannovar output format, VCF offer all features and more.
+
 ## v0.16
 
 ### jannovar-cli
