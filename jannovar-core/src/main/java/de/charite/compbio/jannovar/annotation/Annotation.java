@@ -265,7 +265,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		data.impact = getPutativeImpact();
 		data.setTranscriptAndChange(transcript, change);
 		data.setAnnoLoc(annoLoc);
-		data.isCoding = transcript.isCoding();
+		data.isCoding = (transcript == null) ? false : transcript.isCoding();
 		data.cdsNTChange = cdsNTChange;
 		data.proteinChange = proteinChange;
 		data.messages = messages;
