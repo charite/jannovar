@@ -35,9 +35,11 @@ final public class DBVariantContextAnnotator {
 	 *
 	 * @param vcfHeader
 	 *            Extend VCF header
+	 * @return The modified <code>vcfHeader</code>
 	 */
-	public void extendHeader(VCFHeader vcfHeader) {
+	public VCFHeader extendHeader(VCFHeader vcfHeader) {
 		driver.constructVCFHeaderExtender().addHeaders(vcfHeader, options.getVCFIdentifierPrefix());
+		return vcfHeader;
 	}
 
 	/**
@@ -45,9 +47,11 @@ final public class DBVariantContextAnnotator {
 	 *
 	 * @param vc
 	 *            {@link VariantContext} to annotate
+	 * @return the updated {@link VariantContext} <code>vc</code>
 	 */
-	public void annotateVariantContext(VariantContext vc) {
+	public VariantContext annotateVariantContext(VariantContext vc) {
 		driver.annotateVariantContext(vc);
+		return vc;
 	}
 
 	/**
