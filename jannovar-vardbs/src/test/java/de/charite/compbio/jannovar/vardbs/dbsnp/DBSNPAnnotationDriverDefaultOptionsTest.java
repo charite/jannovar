@@ -2,11 +2,15 @@ package de.charite.compbio.jannovar.vardbs.dbsnp;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.SortedSet;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 import de.charite.compbio.jannovar.utils.ResourceUtils;
@@ -105,9 +109,14 @@ public class DBSNPAnnotationDriverDefaultOptionsTest {
 		Assert.assertEquals("rs28775022", annotated.getID());
 
 		Assert.assertEquals(5, annotated.getAttributes().size());
-		Assert.assertEquals("[G5A, COMMON, CAF, G5, MATCH]", annotated.getAttributes().keySet().toString());
+		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
+		Collections.sort(keys);
+		Assert.assertEquals("[CAF, COMMON, G5, G5A, MATCH]", keys.toString());
 		
-		Assert.fail("Continue here!");
+		Assert.assertEquals("[0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
+		Assert.assertEquals("[false]", annotated.getAttributeAsString("G5", null));
+		Assert.assertEquals("[false]", annotated.getAttributeAsString("G5A", null));
+		Assert.assertEquals("[rs28775022]", annotated.getAttributeAsString("MATCH", null));
 	}
 
 }
