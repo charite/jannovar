@@ -40,6 +40,9 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		if (cmd.hasOption("output-dir"))
 			result.outVCFFolder = cmd.getOptionValue("output-dir");
 
+		if (cmd.hasOption("dbsnp-vcf") && !cmd.hasOption("reference-fasta"))
+			throw new HelpRequestedException("Argument --reference-fasta is required if --dbsnp-vcf is given");
+
 		result.showAll = cmd.hasOption("showall");
 
 		result.writeJannovarInfoFields = cmd.hasOption("old-info-fields");
@@ -81,6 +84,11 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 				"output infix to place before .vcf/.vcf.gz/.bcf in output file name (default is \".jv\")"));
 		options.addOption(Option.builder("i").longOpt("vcf-in").required().hasArgs()
 				.desc("VCF file to annotate (.vcf/.gz)").argName("IN.vcf").build());
+
+		options.addOption(new Option(null, "reference-fasta", true,
+				"path to FAI-indexed FASTA reference, required for dbSNP annotation"));
+		options.addOption(new Option(null, "dbsnp-vcf", true,
+				"path to indexed, bgzip-compressed, and normalized dbSNP VCF file"));
 	}
 
 	protected void printHelp() {

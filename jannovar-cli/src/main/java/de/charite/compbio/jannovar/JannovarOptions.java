@@ -82,6 +82,12 @@ public final class JannovarOptions {
 	/** path to output VCF file path (overrides generation of file name from input file name) */
 	public String outVCFFile = null;
 
+	/** Path to dbSNP VCF file to use for the annotation */
+	public String pathVCFDBSNP = null;
+
+	/** Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation */
+	public String pathFASTARef = null;
+
 	// Configuration for the annotate-position command
 
 	/** chromosomal position and a change, e.g. {@code chr1:12345C>A}. */
@@ -96,7 +102,9 @@ public final class JannovarOptions {
 
 	/**
 	 * Print option values to stderr.
-	 @param out Stream to print to.
+	 *
+	 * @param out
+	 *            Stream to print to.
 	 */
 	public void print(PrintStream out) {
 		out.println("verbosity: " + verbosity);
@@ -115,6 +123,8 @@ public final class JannovarOptions {
 			out.println("writeJannovarInfoFields: " + writeJannovarInfoFields);
 			out.println("writeVCFAnnotationStandardInfoFields: " + writeVCFAnnotationStandardInfoFields);
 			out.println("output infix: " + outputInfix);
+			out.println("reference FASTA: " + pathFASTARef);
+			out.println("dbSNP VCF: " + pathVCFDBSNP);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}
