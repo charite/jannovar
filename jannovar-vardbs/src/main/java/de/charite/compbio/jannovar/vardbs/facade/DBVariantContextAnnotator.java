@@ -1,7 +1,10 @@
-package de.charite.compbio.jannovar.vardbs.base;
+package de.charite.compbio.jannovar.vardbs.facade;
 
 import java.util.Collection;
 
+import de.charite.compbio.jannovar.vardbs.base.DBAnnotationDriver;
+import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
+import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFHeader;
 

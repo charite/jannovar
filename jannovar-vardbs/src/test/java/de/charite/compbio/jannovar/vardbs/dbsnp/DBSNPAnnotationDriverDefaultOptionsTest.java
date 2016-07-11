@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.SortedSet;
 
 import org.junit.Assert;
 import org.junit.Before;

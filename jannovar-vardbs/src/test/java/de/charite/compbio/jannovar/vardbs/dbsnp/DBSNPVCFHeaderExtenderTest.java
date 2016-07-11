@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar.vardbs.dbsnp;
 
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
