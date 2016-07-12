@@ -83,13 +83,14 @@ public class DBSNPAnnotationDriverDefaultOptionsTest {
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(4, header.getInfoHeaderLines().size());
+		Assert.assertEquals(5, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(4, header.getIDHeaderLines().size());
+		Assert.assertEquals(5, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_MATCH"));
 	}
@@ -113,8 +114,8 @@ public class DBSNPAnnotationDriverDefaultOptionsTest {
 		Assert.assertEquals("[CAF, COMMON, G5, G5A, MATCH]", keys.toString());
 		
 		Assert.assertEquals("[0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
-		Assert.assertEquals("[false]", annotated.getAttributeAsString("G5", null));
-		Assert.assertEquals("[false]", annotated.getAttributeAsString("G5A", null));
+		Assert.assertEquals("[0]", annotated.getAttributeAsString("G5", null));
+		Assert.assertEquals("[0]", annotated.getAttributeAsString("G5A", null));
 		Assert.assertEquals("[rs28775022]", annotated.getAttributeAsString("MATCH", null));
 	}
 

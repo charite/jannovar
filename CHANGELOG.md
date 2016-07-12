@@ -17,6 +17,9 @@
 
 ### jannovar-cli
 
+* Adding support for annotating values from dbSNP VCF file (currently, only b147 is supported).
+* Adding simple progress reporting (from verbosity level 2).
+* Using Java 8 stream interface for `VariantContext` processing.
 * Removing support for Jannovar output format, VCF offer all features and more.
 
 ## v0.16

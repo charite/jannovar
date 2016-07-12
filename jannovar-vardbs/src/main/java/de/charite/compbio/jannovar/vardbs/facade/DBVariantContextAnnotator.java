@@ -50,8 +50,7 @@ final public class DBVariantContextAnnotator {
 	 * @return the updated {@link VariantContext} <code>vc</code>
 	 */
 	public VariantContext annotateVariantContext(VariantContext vc) {
-		driver.annotateVariantContext(vc);
-		return vc;
+		return driver.annotateVariantContext(vc);
 	}
 
 	/**

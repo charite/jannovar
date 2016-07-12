@@ -1,7 +1,11 @@
 package de.charite.compbio.jannovar.vardbs.dbsnp;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
@@ -37,10 +41,14 @@ final class DBSNPVariantContextToRecordConverter {
 		builder.setRSPos(vc.getAttributeAsInt("RSPOS", -1));
 		builder.setReversed(vc.hasAttribute("RV"));
 		builder.setVariantProperty(null); // TODO
-		builder.getGeneInfos()
-				.addAll(Stream.of(vc.getAttributeAsString("GENEINFO", "").split("\\|"))
-						.map(x -> new DBSNPGeneInfo(x.split(":")[0], Integer.parseInt(x.split(":")[1])))
-						.collect(Collectors.toList()));
+		for (String strGeneInfo : Splitter.on("|").split(vc.getAttributeAsString("GENEINFO", ""))) {
+			strGeneInfo = strGeneInfo.trim();
+			if (strGeneInfo.isEmpty())
+				continue;
+			ArrayList<String> arr = Lists.newArrayList(Splitter.on(":").split(strGeneInfo));
+			assert arr.size() == 2;
+			builder.getGeneInfos().add(new DBSNPGeneInfo(arr.get(0), Integer.parseInt(arr.get(1))));
+		}
 		builder.setDbSNPBuildID(vc.getAttributeAsInt("dbSNPBuildID", -1));
 
 		// TODO: can be cleaned up by having methods in Enum
@@ -114,8 +122,13 @@ final class DBSNPVariantContextToRecordConverter {
 		builder.setContigAlelleNotVariant(vc.hasAttribute("NOC"));
 		builder.setWithdrawn(vc.hasAttribute("WTD"));
 		builder.setNonOverlappingAlleleSet(vc.hasAttribute("NOV"));
-		builder.getAlleleFrequenciesG1K()
-				.addAll(vc.getAttributeAsList("CAF").stream().map(x -> (Double) x).collect(Collectors.toList()));
+		builder.getAlleleFrequenciesG1K().addAll(vc.getAttributeAsList("CAF").stream()
+				.map(x -> {
+					if (".".equals(x))
+						return 0.0;
+					else
+						return (Double) Double.parseDouble((String) x);
+				}).collect(Collectors.toList()));
 		builder.setCommon(vc.hasAttribute("COMMON"));
 		builder.getOldVariants().addAll(
 				vc.getAttributeAsList("OLD_VARIANT").stream().map(x -> (String) x).collect(Collectors.toList()));

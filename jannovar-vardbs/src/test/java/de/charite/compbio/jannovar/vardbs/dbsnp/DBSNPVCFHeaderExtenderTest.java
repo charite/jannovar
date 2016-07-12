@@ -28,13 +28,14 @@ public class DBSNPVCFHeaderExtenderTest {
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(4, header.getInfoHeaderLines().size());
+		Assert.assertEquals(5, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(4, header.getIDHeaderLines().size());
+		Assert.assertEquals(5, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_MATCH"));
 	}

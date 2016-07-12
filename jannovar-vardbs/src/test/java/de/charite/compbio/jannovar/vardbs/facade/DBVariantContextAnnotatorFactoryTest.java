@@ -77,24 +77,29 @@ public class DBVariantContextAnnotatorFactoryTest {
 		for (VariantContext vc : vcfReader)
 			writer.add(annotator.annotateVariantContext(vc));
 
-		Assert.assertEquals("##fileformat=VCFv4.2\n"
-				+ "##INFO=<ID=CAF,Number=R,Type=Float,Description=\"Allele frequencies from dbSNP. Original "
-				+ "description: An ordered, comma delimited list of allele frequencies based on 1000Genomes, "
-				+ "starting with the reference allele followed by alternate alleles as ordered in the ALT "
-				+ "column. Where a 1000Genomes alternate allele is not in the dbSNPs alternate allele set, the "
-				+ "allele is added to the ALT column.  The minor allele is the second largest value in the list, "
-				+ "and was previuosly reported in VCF as the GMAF.  This is the GMAF reported on the RefSNP and "
-				+ "EntrezSNP pages and VariationReporter\">\n"
-				+ "##INFO=<ID=COMMON,Number=A,Type=Integer,Description=\"Flagged as common in dbSNP. Original "
-				+ "description: RS is a common SNP.  A common SNP is one that has at least one 1000Genomes "
-				+ "population with a minor allele of frequency >= 1% and for which 2 or more founders contribute "
-				+ "to that minor allele frequency.\">\n"
-				+ "##INFO=<ID=G5A,Number=A,Type=Float,Description=\"Allele frequency >5% in all populations from "
-				+ "dbSNP. Original description: >5% minor allele frequency in 1+ populations\">\n"
-				+ "##INFO=<ID=MATCH,Number=.,Type=String,Description=\"dbSNP cluster identifiers with matching "
-				+ "alternative positions and alleles\">\n"
-				+ "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	individual\n"
-				+ "1	11022	.	G	A	.	.	.	GT	0/1\n", outStream.toString());
+		Assert.assertEquals(
+				"##fileformat=VCFv4.2\n"
+						+ "##INFO=<ID=CAF,Number=R,Type=Float,Description=\"Allele frequencies from dbSNP. Original "
+						+ "description: An ordered, comma delimited list of allele frequencies based on 1000Genomes, "
+						+ "starting with the reference allele followed by alternate alleles as ordered in the ALT "
+						+ "column. Where a 1000Genomes alternate allele is not in the dbSNPs alternate allele set, the "
+						+ "allele is added to the ALT column.  The minor allele is the second largest value in the list, "
+						+ "and was previuosly reported in VCF as the GMAF.  This is the GMAF reported on the RefSNP and "
+						+ "EntrezSNP pages and VariationReporter\">\n"
+						+ "##INFO=<ID=COMMON,Number=A,Type=Integer,Description=\"Flagged as common in dbSNP. Original "
+						+ "description: RS is a common SNP.  A common SNP is one that has at least one 1000Genomes "
+						+ "population with a minor allele of frequency >= 1% and for which 2 or more founders contribute "
+						+ "to that minor allele frequency.\">\n"
+						+ "##INFO=<ID=G5,Number=A,Type=Integer,Description=\"Allele frequency >5% in all populations from "
+						+ "dbSNP (yes: 1, no: 0). Original description: >5% minor allele frequency in 1+ populations\">\n"
+						+ "##INFO=<ID=G5A,Number=A,Type=Integer,Description=\"Allele frequency >5% in all populations from "
+						+ "dbSNP (yes: 1, no: 0). Original description: >5% minor allele frequency in each and all "
+						+ "populations\">\n"
+						+ "##INFO=<ID=MATCH,Number=.,Type=String,Description=\"dbSNP cluster identifiers with matching "
+						+ "alternative positions and alleles\">\n"
+						+ "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	individual\n"
+						+ "1	11022	rs28775022	G	A	.	.	CAF=0.00,0.00;COMMON=0;G5=0;G5A=0;MATCH=rs28775022	GT	0/1\n",
+				outStream.toString());
 	}
 
 }

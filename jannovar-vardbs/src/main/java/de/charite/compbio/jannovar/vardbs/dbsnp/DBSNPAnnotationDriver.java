@@ -138,37 +138,40 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 		if (matchList.size() > 1)
 			matchList.remove(".");
 
-		builder.attribute(idMatch, matchList);
+		if (!matchList.isEmpty())
+			builder.attribute(idMatch, matchList);
 	}
 
 	private void annotateInfoG5A(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
 			VariantContextBuilder builder) {
 		String idG5A = options.getVCFIdentifierPrefix() + "G5A";
-		ArrayList<Boolean> g5AList = new ArrayList<>();
+		ArrayList<Integer> g5AList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			final DBSNPRecord record = records.get(i);
 			if (record != null) {
-				g5AList.add(record.isFivePercentAll());
+				g5AList.add(record.isFivePercentAll() ? 1 : 0);
 			} else {
-				g5AList.add(false);
+				g5AList.add(0);
 			}
 		}
-		builder.attribute(idG5A, g5AList);
+		if (!g5AList.isEmpty())
+			builder.attribute(idG5A, g5AList);
 	}
 
 	private void annotateInfoG5(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
 			VariantContextBuilder builder) {
 		String idG5 = options.getVCFIdentifierPrefix() + "G5";
-		ArrayList<Boolean> g5List = new ArrayList<>();
+		ArrayList<Integer> g5List = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			final DBSNPRecord record = records.get(i);
 			if (record != null) {
-				g5List.add(record.isFivePercentOne());
+				g5List.add(record.isFivePercentOne() ? 1 : 0);
 			} else {
-				g5List.add(false);
+				g5List.add(0);
 			}
 		}
-		builder.attribute(idG5, g5List);
+		if (!g5List.isEmpty())
+			builder.attribute(idG5, g5List);
 	}
 
 	private void annotateInfoCAF(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
@@ -181,7 +184,10 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 			if (record != null && !record.getAlleleFrequenciesG1K().isEmpty()) {
 				if (cafList.get(0) == null)
 					cafList.set(0, record.getAlleleFrequenciesG1K().get(0));
-				cafList.add(record.getAlleleFrequenciesG1K().get(i));
+				if (i < record.getAlleleFrequenciesG1K().size())
+					cafList.add(record.getAlleleFrequenciesG1K().get(i));
+				else
+					cafList.add(0.0);
 			} else {
 				cafList.add(0.0);
 			}
@@ -190,7 +196,8 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 		if (cafList.get(0) == null)
 			cafList.set(0, 0.0);
 
-		builder.attribute(idCAF, cafList);
+		if (!cafList.isEmpty())
+			builder.attribute(idCAF, cafList);
 	}
 
 	private void annotateInfoCommon(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
@@ -205,7 +212,8 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 				commonList.add(0);
 			}
 		}
-		builder.attribute(idCommon, commonList);
+		if (!commonList.isEmpty())
+			builder.attribute(idCommon, commonList);
 	}
 
 	private void annotateIDs(VariantContext vc, HashMap<Integer, DBSNPRecord> records, VariantContextBuilder builder) {
@@ -222,7 +230,8 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 		if (idList.size() > 1)
 			idList.remove(".");
 
-		builder.id(Joiner.on(";").join(idList));
+		if (!idList.isEmpty())
+			builder.id(Joiner.on(";").join(idList));
 	}
 
 	/**
@@ -257,8 +266,10 @@ final public class DBSNPAnnotationDriver implements DBAnnotationDriver {
 				} else {
 					final DBSNPRecord current = annotatingDBSNPRecord.get(alleleNo);
 					final DBSNPRecord update = matchToDBSNP.get(m);
-					if (current.getAlleleFrequenciesG1K().get(alleleNo) < update.getAlleleFrequenciesG1K()
-							.get(alleleNo))
+					if (update.getAlleleFrequenciesG1K().size() <= alleleNo)
+						continue; // no number to update
+					else if (current.getAlleleFrequenciesG1K().size() <= alleleNo || current.getAlleleFrequenciesG1K()
+							.get(alleleNo) < update.getAlleleFrequenciesG1K().get(alleleNo))
 						annotatingDBSNPRecord.put(alleleNo, matchToDBSNP.get(m));
 				}
 			}

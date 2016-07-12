@@ -4,7 +4,7 @@ import de.charite.compbio.jannovar.JannovarException;
 
 /**
  * Raised on problems with variant database annotation
- * 
+ *
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
 public class JannovarVarDBException extends JannovarException {

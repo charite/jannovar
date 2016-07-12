@@ -85,6 +85,9 @@ public final class JannovarOptions {
 	/** Path to dbSNP VCF file to use for the annotation */
 	public String pathVCFDBSNP = null;
 
+	/** Prefix to use for dbSNP VCF INFO Fields */
+	public String prefixDBSNP = null;
+
 	/** Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation */
 	public String pathFASTARef = null;
 
@@ -125,6 +128,7 @@ public final class JannovarOptions {
 			out.println("output infix: " + outputInfix);
 			out.println("reference FASTA: " + pathFASTARef);
 			out.println("dbSNP VCF: " + pathVCFDBSNP);
+			out.println("dbSNP prefix: " + prefixDBSNP);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}
