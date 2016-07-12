@@ -79,6 +79,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 					stream = stream.map(dbSNPAnno::annotateVariantContext);
 				}
 
+				// If configured, annotate using ExAC VCF file (extend header to use for writing out)
+				if (options.pathVCFExac != null) {
+					DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
+					exacOptions.setIdentifierPrefix(options.prefixExac);
+					DBVariantContextAnnotator exacAnno = new DBVariantContextAnnotatorFactory()
+							.constructExac(options.pathVCFExac, options.pathFASTARef, exacOptions);
+					exacAnno.extendHeader(vcfHeader);
+					stream = stream.map(exacAnno::annotateVariantContext);
+				}
+
 				// Write result to output file
 				try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath,
 						options, args)) {

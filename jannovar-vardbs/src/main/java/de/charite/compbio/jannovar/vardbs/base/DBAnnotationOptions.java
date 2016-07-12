@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar.vardbs.base;
 
-import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions.MultipleMatchBehaviour;
-
 /**
  * Configuration for annotating variants with information from databases.
  * 

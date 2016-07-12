@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar.vardbs.facade;
 
-import static org.junit.Assert.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintWriter;
