@@ -2,17 +2,23 @@ package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
+import htsjdk.variant.vcf.VCFHeader;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.commons.cli.ParseException;
 
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
+import de.charite.compbio.jannovar.ProgressReporter;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
+import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotator;
+import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotatorFactory;
 
 /**
  * Run annotation steps (read in VCF, write out VCF or Jannovar file format).
@@ -22,8 +28,17 @@ import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
  */
 public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
+	/** Currently considered {@link VariantContext}, for progress reporting */
+	private VariantContext currentVC;
+	/** Progress reporting */
+	private ProgressReporter progressReporter;
+
 	public AnnotateVCFCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		super(argv);
+		if (this.options.verbosity >= 2)
+			this.progressReporter = new ProgressReporter(this::getCurrentVC, 60);
+		else
+			this.progressReporter = null;
 	}
 
 	/**
@@ -40,49 +55,60 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 		deserializeTranscriptDefinitionFile();
 
+		if (progressReporter != null)
+			progressReporter.start();
 		for (String vcfPath : options.vcfFilePaths) {
 			// initialize the VCF reader
-			System.err.println("Annotating VCF...");
-			final long startTime = System.nanoTime();
-			VCFFileReader parser = new VCFFileReader(new File(vcfPath), false);
+			try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
+				VCFHeader vcfHeader = vcfReader.getFileHeader();
+				System.err.println("Annotating VCF...");
+				final long startTime = System.nanoTime();
 
-			AnnotatedVariantWriter writer = null;
-			try {
-				// construct the variant writer
-				if (this.options.jannovarFormat)
-					writer = new AnnotatedJannovarWriter(refDict, chromosomeMap, vcfPath, options);
-				else
-					writer = new AnnotatedVCFWriter(refDict, parser, chromosomeMap, vcfPath, options, args);
+				Stream<VariantContext> stream = vcfReader.iterator().stream();
 
-				// annotate and write out all variants
-				for (VariantContext vc : parser)
-					writer.put(vc);
+				// Make current VC available to progress printer
+				stream = stream.peek(x -> this.currentVC = x);
 
-				// close parser writer again
-				parser.close();
-				writer.close();
-			} catch (IOException e) {
-				// convert exception to JannovarException and throw, writer can only be null here
-				parser.close();
-				throw new JannovarException("Problem with VCF annotation.", e);
+				// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
+				if (options.pathVCFDBSNP != null) {
+					DBAnnotationOptions dbSNPOptions = DBAnnotationOptions.createDefaults();
+					dbSNPOptions.setIdentifierPrefix(options.prefixDBSNP);
+					DBVariantContextAnnotator dbSNPAnno = new DBVariantContextAnnotatorFactory()
+							.constructDBSNP(options.pathVCFDBSNP, options.pathFASTARef, dbSNPOptions);
+					dbSNPAnno.extendHeader(vcfHeader);
+					stream = stream.map(dbSNPAnno::annotateVariantContext);
+				}
+
+				// Write result to output file
+				try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath,
+						options, args)) {
+					stream.forEachOrdered(writer::put);
+
+					System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
+					final long endTime = System.nanoTime();
+					System.err.println(String.format("Annotation and writing took %.2f sec.",
+							(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
+				}
 			}
-
-			System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
-			final long endTime = System.nanoTime();
-			System.err.println(String.format("Annotation and writing took %.2f sec.",
-					(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 		}
+		if (progressReporter != null)
+			progressReporter.stop();
 	}
 
 	@Override
-	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-	HelpRequestedException {
+	protected JannovarOptions parseCommandLine(String[] argv)
+			throws CommandLineParsingException, HelpRequestedException {
 		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
 		try {
 			return parser.parse(argv);
 		} catch (ParseException e) {
 			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
+	}
+
+	/** @return current {@link VariantContext}, for progress reporting */
+	private VariantContext getCurrentVC() {
+		return currentVC;
 	}
 
 }

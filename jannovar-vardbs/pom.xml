@@ -1,12 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>jannovar-filter</artifactId>
+	<artifactId>jannovar-vardbs</artifactId>
 	<packaging>jar</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>jannovar-filter provides functionality for filtering variants call lists to
-      the variants that are compatible with a given pedigree and mode of inheritance</description>
+	<description>jannovar-vardbs helps with using variant annotation databases, e.g. dbSNP</description>
 	<url>http://charite.github.io/jannovar/</url>
 
 	<parent>
@@ -20,16 +19,22 @@
 	</properties>
 
 	<dependencies>
+		<!-- Simple logging for console -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.12</version>
+		</dependency>
 		<dependency>
 			<groupId>com.github.samtools</groupId>
 			<artifactId>htsjdk</artifactId>
 			<version>${htsjdk.version}</version>
 			<exclusions>
 				<exclusion>
-        	<groupId>org.tukaani</groupId>
-          <artifactId>xz</artifactId>
-        </exclusion>
-	    </exclusions>
+					<groupId>org.tukaani</groupId>
+					<artifactId>xz</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -48,8 +53,19 @@
 		</dependency>
 		<dependency>
 			<groupId>de.charite.compbio</groupId>
-			<artifactId>jannovar-inheritance-checker</artifactId>
+			<artifactId>jannovar-htsjdk</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -76,34 +92,13 @@
 							<!-- set useUniqueVersions=false in order that the classpath has the 
 								SNAPSHOT instead of the build number prefixed to the dependency -->
 							<useUniqueVersions>false</useUniqueVersions>
-							<mainClass>de.charite.compbio.jannovar.JannovarFilterApp</mainClass>
+							<mainClass>de.charite.compbio.jannovar.Jannovar</mainClass>
 						</manifest>
 					</archive>
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
 				</configuration>
-			</plugin>
-			<!-- More JAR building -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>de.charite.compbio.jannovar.JannovarFilterApp</mainClass>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<!-- Specify the resources which need to be made accessible to the user -->
 			<plugin>
@@ -120,7 +115,7 @@
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/resources</directory>
+									<directory>src/main/resources</directory>
 									<!--Use filtering so that maven will replace placeholders with values 
 										from the pom e.g. ${project.version} -->
 									<filtering>true</filtering>

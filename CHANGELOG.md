@@ -2,11 +2,25 @@
 
 ## develop
 
+### jannovar-vardbs
+
+* Initial version of this module, the aim is precise annotation from variant databases.
+
+### jannovar-core
+
+* Fixing handling of invalid transcripts (e.g., incomplete 3' end)
 * Adding `altGeneIDs` mapping to `TranscriptModel`, makes data bases backwards incompatible.
 * Rewrite of GFF parsers for RefSeq and ENSEMBL.
-* Bumping HTSJDK to 2.1.0, requiring Java 8 from now on.
+* Bumping HTSJDK to 2.5.0, requiring Java 8 from now on.
 * Removal of `AnnotationCollector`, priotization of variant effects is done after collecting all effect predictions now.
 * Fix for intronic variants between 5' or 3' UTRs. These variants were misclassified as `FIVE_PRIME_UTR_VARIANT` or `THREE_PRIME_UTR_VARIANT`. SequenceOntology implements new terms so that we can decide between the two UTR exon and intron variants. Now we have `FIVE_PRIME_UTR_EXON_VARIANT` or `FIVE_PRIME_UTR_EXON_INTRON_VARIANT` (the same for `THREE_PRIME_UTR_EXON_VARIANT` or `THREE_PRIME_UTR_EXON_INTRON_VARIANT`).
+
+### jannovar-cli
+
+* Adding support for annotating values from dbSNP VCF file (currently, only b147 is supported).
+* Adding simple progress reporting (from verbosity level 2).
+* Using Java 8 stream interface for `VariantContext` processing.
+* Removing support for Jannovar output format, VCF offer all features and more.
 
 ## v0.16
 
@@ -26,30 +40,30 @@
 * less intrusive escaping in `ANN` field
 * renaming of some internal classes and functions, fixing Javadocs
 
-## jannovar-htsjdk
+### jannovar-htsjdk
 
 * Updating htsjdk to 1.142
 * renaming `InvalidGenomeChange` to `InvalidGenomeVariant`
 * renaming `VariantContextAnnotator.buildGenomeChange` to `.buildGenomeVariant`
 * renaming of some internal classes and functions, fixing Javadocs
 
-## jannovar-hgvs
+### jannovar-hgvs
 
 * extending API of ProteinChange hierarchy for HGVS generation
 * renaming of some internal classes and functions, fixing Javadocs
 
-## jped-cli
+### jped-cli
 
 * Updating htsjdk to 1.142
 * changing command line interface to use more named arguments
 
-## jannovar-inheritance-checker
+### jannovar-inheritance-checker
 
 * adding two new functions to InheritanceCompatibilityChecker
 * resolve boolean if passes inheritance into set where passed inheritances are stored
 * Updating htsjdk to 1.142
 
-## manual
+### manual
 
 * updating manual for 0.16 and using parameters for commands!
 * updating readme for parameters

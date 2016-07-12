@@ -7,11 +7,18 @@
 	<packaging>pom</packaging>
 	<name>Jannovar</name>
 
+    <properties>
+        <htsjdk.version>2.5.0</htsjdk.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <log4j.version>2.5</log4j.version>
+    </properties>
+
 	<modules>
 		<module>jannovar-core</module>
 		<module>jannovar-inheritance-checker</module>
 		<module>jannovar-htsjdk</module>
 		<module>jannovar-hgvs</module>
+		<module>jannovar-vardbs</module>
 		<module>jannovar-cli</module>
 		<module>jannovar-filter</module>
 		<module>jped-cli</module>
@@ -68,11 +75,6 @@
 		<developerConnection>scm:git:https://github.com/charite/jannovar.git</developerConnection>
 		<url>scm:git:https://github.com/charite/jannovar.git</url>
 	</scm>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<log4j.version>2.5</log4j.version>
-	</properties>
 
 	<dependencies>
 		<!--Logging framework -->

@@ -19,6 +19,7 @@ import de.charite.compbio.jannovar.impl.util.Translator;
 import de.charite.compbio.jannovar.reference.CDSPosition;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
+import de.charite.compbio.jannovar.reference.InvalidCodonException;
 import de.charite.compbio.jannovar.reference.ProjectionException;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import de.charite.compbio.jannovar.reference.TranscriptPosition;
@@ -102,11 +103,19 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// where the transcript differs from the reference. This inconsistency of the reference and the transcript is
 		// not necessarily an error in the data base but can also occur in the case of post-transcriptional changes of
 		// the transcript.
-		String transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
-		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift, change.getRef()
-				.charAt(0));
-		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift, change.getAlt()
-				.charAt(0));
+		String transcriptCodon;
+		try {
+			transcriptCodon = seqDecorator.getCodonAt(txPos, cdsPos);
+		} catch (InvalidCodonException e) {
+			// Bail out in the case of invalid codon from sequence
+			return new Annotation(transcript, change, new ArrayList<VariantEffect>(), locAnno, getGenomicNTChange(),
+					getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT),
+					ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
+		}
+		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
+				change.getRef().charAt(0));
+		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
+				change.getAlt().charAt(0));
 
 		// Construct the HGSV annotation parts for the transcript location and nucleotides (note that HGSV uses 1-based
 		// positions).
