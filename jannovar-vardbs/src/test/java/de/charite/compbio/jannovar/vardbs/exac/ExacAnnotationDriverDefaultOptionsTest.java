@@ -37,9 +37,9 @@ public class ExacAnnotationDriverDefaultOptionsTest {
 		// Setup dbSNP VCF file
 		File tmpDir = Files.createTempDir();
 		dbExacVCFPath = tmpDir + "/exac.vcf.gz";
-		ResourceUtils.copyResourceToFile("/ExAC.r0.3.sites.head.vcf.gz", new File(dbExacVCFPath));
+		ResourceUtils.copyResourceToFile("/ExAC.r0.3.sites.vep.head.vcf.gz", new File(dbExacVCFPath));
 		String tbiPath = tmpDir + "/exac.vcf.gz.tbi";
-		ResourceUtils.copyResourceToFile("/ExAC.r0.3.sites.head.vcf.gz.tbi", new File(tbiPath));
+		ResourceUtils.copyResourceToFile("/ExAC.r0.3.sites.vep.head.vcf.gz.tbi", new File(tbiPath));
 
 		// Setup reference FASTA file
 		fastaPath = tmpDir + "/chr1.fasta";
@@ -55,7 +55,7 @@ public class ExacAnnotationDriverDefaultOptionsTest {
 		String testVCFPath = tmpDir + "/test_var_in_exac.vcf";
 		PrintWriter writer = new PrintWriter(testVCFPath);
 		writer.write(vcfHeader);
-		writer.write("1\t11022\t.\tG\tA\t.\t.\t.\tGT\t0/1\n");
+		writer.write("1\t13482\t.\tG\tA,C,T\t.\t.\t.\tGT\t0/1\n");
 		writer.close();
 
 		vcfReader = new VCFFileReader(new File(testVCFPath), false);
@@ -78,16 +78,35 @@ public class ExacAnnotationDriverDefaultOptionsTest {
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(5, header.getInfoHeaderLines().size());
+		Assert.assertEquals(26, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(5, header.getIDHeaderLines().size());
+		Assert.assertEquals(26, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_MATCH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AC"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AF"));
 	}
 
 	@Test
@@ -101,17 +120,44 @@ public class ExacAnnotationDriverDefaultOptionsTest {
 
 		VariantContext annotated = driver.annotateVariantContext(vc);
 
-		Assert.assertEquals("rs28775022", annotated.getID());
+		Assert.assertEquals(".", annotated.getID());
 
-		Assert.assertEquals(5, annotated.getAttributes().size());
+		Assert.assertEquals(26, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
-		Assert.assertEquals("[CAF, COMMON, G5, G5A, MATCH]", keys.toString());
+		Assert.assertEquals("[AC_AFR, AC_ALL, AC_AMR, AC_EAS, AC_FIN, AC_NFE, AC_OTH, AC_SAS, AF_AFR, AF_ALL, "
+				+ "AF_AMR, AF_EAS, AF_FIN, AF_NFE, AF_OTH, AF_SAS, AN_AFR, AN_ALL, AN_AMR, "
+				+ "AN_EAS, AN_FIN, AN_NFE, AN_OTH, AN_SAS, BEST_AC, BEST_AF]", keys.toString());
 
-		Assert.assertEquals("[0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
-		Assert.assertEquals("[0]", annotated.getAttributeAsString("G5", null));
-		Assert.assertEquals("[0]", annotated.getAttributeAsString("G5A", null));
-		Assert.assertEquals("[rs28775022]", annotated.getAttributeAsString("MATCH", null));
+		Assert.assertEquals("[0, 0, 2, 0]", annotated.getAttributeAsString("AC_AFR", null));
+		Assert.assertEquals("[0, 0, 2, 0]", annotated.getAttributeAsString("AC_ALL", null));
+		Assert.assertEquals("[0, 0, 0, 0]", annotated.getAttributeAsString("AC_AMR", null));
+		Assert.assertEquals("[0, 0, 0, 0]", annotated.getAttributeAsString("AC_EAS", null));
+		Assert.assertEquals("[0, 0, 0, 0]", annotated.getAttributeAsString("AC_FIN", null));
+		Assert.assertEquals("[0, 0, 0, 0]", annotated.getAttributeAsString("AC_NFE", null));
+		Assert.assertEquals("[0, 0, 0, 0]", annotated.getAttributeAsString("AC_OTH", null));
+		Assert.assertEquals("[0, 0, 0, 0]", annotated.getAttributeAsString("AC_SAS", null));
+
+		Assert.assertEquals("[0.0, 0.0, 0.003194888178913738, 0.0]", annotated.getAttributeAsString("AF_AFR", null));
+		Assert.assertEquals("[0.0, 0.0, 1.7041581458759374E-4, 0.0]", annotated.getAttributeAsString("AF_ALL", null));
+		Assert.assertEquals("[0.0, 0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_AMR", null));
+		Assert.assertEquals("[0.0, 0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_EAS", null));
+		Assert.assertEquals("[0.0, 0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_FIN", null));
+		Assert.assertEquals("[0.0, 0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_NFE", null));
+		Assert.assertEquals("[0.0, 0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_OTH", null));
+		Assert.assertEquals("[0.0, 0.0, 0.0, 0.0]", annotated.getAttributeAsString("AF_SAS", null));
+
+		Assert.assertEquals("626", annotated.getAttributeAsString("AN_AFR", null));
+		Assert.assertEquals("11736", annotated.getAttributeAsString("AN_ALL", null));
+		Assert.assertEquals("148", annotated.getAttributeAsString("AN_AMR", null));
+		Assert.assertEquals("218", annotated.getAttributeAsString("AN_EAS", null));
+		Assert.assertEquals("24", annotated.getAttributeAsString("AN_FIN", null));
+		Assert.assertEquals("3078", annotated.getAttributeAsString("AN_NFE", null));
+		Assert.assertEquals("122", annotated.getAttributeAsString("AN_OTH", null));
+		Assert.assertEquals("7520", annotated.getAttributeAsString("AN_SAS", null));
+
+		Assert.assertEquals("[0, 2]", annotated.getAttributeAsString("BEST_AC", null));
+		Assert.assertEquals("[0.0, 0.003194888178913738]", annotated.getAttributeAsString("BEST_AF", null));
 	}
 
 }

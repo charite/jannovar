@@ -39,8 +39,7 @@ public class DBSNPVCFHeaderExtender extends VCFHeaderExtender {
 						+ "the RefSNP and EntrezSNP pages and VariationReporter");
 		header.addMetaDataLine(infoDBSNPFreqs);
 
-		VCFInfoHeaderLine infoG5 = new VCFInfoHeaderLine(prefix + "G5", VCFHeaderLineCount.A,
-				VCFHeaderLineType.Integer,
+		VCFInfoHeaderLine infoG5 = new VCFInfoHeaderLine(prefix + "G5", VCFHeaderLineCount.A, VCFHeaderLineType.Integer,
 				"Allele frequency >5% in all populations from dbSNP (yes: 1, no: 0). Original description: >5% "
 						+ "minor allele frequency in 1+ populations");
 		header.addMetaDataLine(infoG5);
@@ -51,14 +50,17 @@ public class DBSNPVCFHeaderExtender extends VCFHeaderExtender {
 						+ "minor allele frequency in each and all populations");
 		header.addMetaDataLine(infoG5A);
 
-		VCFInfoHeaderLine matchingRS = new VCFInfoHeaderLine(prefix + "MATCH", VCFHeaderLineCount.UNBOUNDED,
-				VCFHeaderLineType.String, "dbSNP cluster identifiers with matching alternative positions and alleles");
+		VCFInfoHeaderLine matchingRS = new VCFInfoHeaderLine(prefix + "MATCH", VCFHeaderLineCount.A,
+				VCFHeaderLineType.String,
+				"dbSNP cluster identifiers with matching alternative positions and alleles, for each alternative "
+						+ "alleles, separated by '|'");
 		header.addMetaDataLine(matchingRS);
 
 		// XXX TODO XXX
-		VCFInfoHeaderLine overlappingRS = new VCFInfoHeaderLine(prefix + "OVERLAP", VCFHeaderLineCount.UNBOUNDED,
+		VCFInfoHeaderLine overlappingRS = new VCFInfoHeaderLine(prefix + "OVERLAP", VCFHeaderLineCount.A,
 				VCFHeaderLineType.String,
-				"dbSNP cluster identifiers with overlapping alternative positions, not necessarily matching alleles");
+				"dbSNP cluster identifiers with overlapping alternative positions, not necessarily matching alleles, "
+						+ "for each alternative allele, separated '|'");
 		// header.addMetaDataLine(overlappingRS);
 	}
 

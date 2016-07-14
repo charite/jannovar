@@ -93,8 +93,8 @@ public class DBVariantContextAnnotatorFactoryTest {
 						+ "##INFO=<ID=G5A,Number=A,Type=Integer,Description=\"Allele frequency >5% in all populations from "
 						+ "dbSNP (yes: 1, no: 0). Original description: >5% minor allele frequency in each and all "
 						+ "populations\">\n"
-						+ "##INFO=<ID=MATCH,Number=.,Type=String,Description=\"dbSNP cluster identifiers with matching "
-						+ "alternative positions and alleles\">\n"
+						+ "##INFO=<ID=MATCH,Number=A,Type=String,Description=\"dbSNP cluster identifiers with matching "
+						+ "alternative positions and alleles, for each alternative alleles, separated by '|'\">\n"
 						+ "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	individual\n"
 						+ "1	11022	rs28775022	G	A	.	.	CAF=0.00,0.00;COMMON=0;G5=0;G5A=0;MATCH=rs28775022	GT	0/1\n",
 				outStream.toString());

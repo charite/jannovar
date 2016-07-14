@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPRecord;
 import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPVCFHeaderExtender;
+import de.charite.compbio.jannovar.vardbs.exac.ExacRecord;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
@@ -72,10 +73,10 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 				genotypeMatches.addAll(matcher.matchGenotypes(obsVC, iter.next()));
 
 			// Pick best dbSNP record for each alternative allele
-			HashMap<Integer, RecordType> dbSNPRecords = buildAnnotatingDBRecords(genotypeMatches);
+			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecords = buildAnnotatingDBRecordsWrapper(genotypeMatches);
 
 			// Use these records to annotate the variant call in obsVC (record-wise but also per alternative allele)
-			return annotateWithDBRecords(obsVC, dbSNPRecords);
+			return annotateWithDBRecords(obsVC, dbRecords);
 		}
 	}
 
@@ -89,7 +90,35 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	 *            List of {@link GenotypeMatch} objects to build the annotating database records from
 	 * @return Resulting map from alternative allele ID (starting with 1) to the database record to use
 	 */
-	protected abstract HashMap<Integer, RecordType> buildAnnotatingDBRecords(List<GenotypeMatch> genotypeMatches);
+	private HashMap<Integer, AnnotatingRecord<RecordType>> buildAnnotatingDBRecordsWrapper(
+			List<GenotypeMatch> genotypeMatches) {
+		// Collect annotating variants for each allele
+		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords = new HashMap<>();
+		HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord = new HashMap<>();
+		for (GenotypeMatch match : genotypeMatches) {
+			final int alleleNo = match.getObservedAllele();
+			annotatingRecords.putIfAbsent(alleleNo, new ArrayList<GenotypeMatch>());
+			annotatingRecords.get(alleleNo).add(match);
+			if (!matchToRecord.containsKey(match))
+				matchToRecord.put(match,
+						new AnnotatingRecord<RecordType>(vcToRecord.convert(match.getDBVC()), match.getDbAllele()));
+		}
+
+		return pickAnnotatingDBRecords(annotatingRecords, matchToRecord);
+	}
+
+	/**
+	 * Pick annotating DB records
+	 * 
+	 * @param annotatingRecords
+	 *            Map of alternative allele number to genotype match
+	 * @param matchToRecord
+	 *            Mapping from alternative allel number to record
+	 * @return Mapping from alternative allele number to <code>RecordType</code>
+	 */
+	protected abstract HashMap<Integer, AnnotatingRecord<RecordType>> pickAnnotatingDBRecords(
+			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+			HashMap<GenotypeMatch, AnnotatingRecord<RecordType>> matchToRecord);
 
 	/**
 	 * Annotate the given {@link VariantContext} with the given database records
@@ -99,9 +128,10 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	 * 
 	 * @param vc
 	 *            The {@link VariantContex} to annotate
-	 * @param records
-	 *            Map from alternative allele index to annotating {@link DBSNPRecord}
+	 * @param dbRecords
+	 *            Map from alternative allele index to annotating <code>RecordType</code>
 	 */
-	protected abstract VariantContext annotateWithDBRecords(VariantContext vc, HashMap<Integer, RecordType> records);
+	protected abstract VariantContext annotateWithDBRecords(VariantContext vc,
+			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecords);
 
 }

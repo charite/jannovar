@@ -7,7 +7,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  * 
  * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
  */
-public interface VariantContextToRecordConverter<T> {
+public interface VariantContextToRecordConverter<RecordType> {
 
 	/**
 	 * Convert {@link VariantContext} into record type <code>T</code>
@@ -16,6 +16,6 @@ public interface VariantContextToRecordConverter<T> {
 	 *            {@link VariantContext} to convert
 	 * @return Resulting record object of type <code>T</code>
 	 */
-	public T convert(VariantContext vc);
+	public RecordType convert(VariantContext vc);
 
 }

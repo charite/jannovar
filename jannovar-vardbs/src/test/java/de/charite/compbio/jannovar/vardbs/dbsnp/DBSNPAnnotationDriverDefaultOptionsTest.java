@@ -60,7 +60,7 @@ public class DBSNPAnnotationDriverDefaultOptionsTest {
 		String testVCFPath = tmpDir + "/test_var_in_dbsnp.vcf";
 		PrintWriter writer = new PrintWriter(testVCFPath);
 		writer.write(vcfHeader);
-		writer.write("1\t11022\t.\tG\tA\t.\t.\t.\tGT\t0/1\n");
+		writer.write("1\t13110\t.\tG\tA,T,C\t.\t.\t.\tGT\t0/1\n");
 		writer.close();
 
 		vcfReader = new VCFFileReader(new File(testVCFPath), false);
@@ -106,17 +106,17 @@ public class DBSNPAnnotationDriverDefaultOptionsTest {
 
 		VariantContext annotated = driver.annotateVariantContext(vc);
 
-		Assert.assertEquals("rs28775022", annotated.getID());
+		Assert.assertEquals("rs540538026", annotated.getID());
 
 		Assert.assertEquals(5, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
 		Assert.assertEquals("[CAF, COMMON, G5, G5A, MATCH]", keys.toString());
 		
-		Assert.assertEquals("[0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
-		Assert.assertEquals("[0]", annotated.getAttributeAsString("G5", null));
-		Assert.assertEquals("[0]", annotated.getAttributeAsString("G5A", null));
-		Assert.assertEquals("[rs28775022]", annotated.getAttributeAsString("MATCH", null));
+		Assert.assertEquals("[0.9732, 0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
+		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("G5", null));
+		Assert.assertEquals("[0, 0, 0]", annotated.getAttributeAsString("G5A", null));
+		Assert.assertEquals("[rs540538026, ., .]", annotated.getAttributeAsString("MATCH", null));
 	}
 
 }

@@ -9,9 +9,11 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import de.charite.compbio.jannovar.vardbs.base.AbstractDBAnnotationDriver;
+import de.charite.compbio.jannovar.vardbs.base.AnnotatingRecord;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import de.charite.compbio.jannovar.vardbs.exac.ExacRecord;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
@@ -48,7 +50,8 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	@Override
-	protected VariantContext annotateWithDBRecords(VariantContext vc, HashMap<Integer, DBSNPRecord> records) {
+	protected VariantContext annotateWithDBRecords(VariantContext vc,
+			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records) {
 		VariantContextBuilder builder = new VariantContextBuilder(vc);
 
 		annotateIDs(vc, records, builder);
@@ -63,38 +66,44 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 		return builder.make();
 	}
 
-	private void annotateInfoOverlap(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
+	private void annotateInfoOverlap(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
 			VariantContextBuilder builder) {
 		// XXX TODO XXX
 	}
 
-	private void annotateInfoMatch(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
+	private void annotateInfoMatch(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
 			VariantContextBuilder builder) {
 		String idMatch = options.getVCFIdentifierPrefix() + "MATCH";
-		ArrayList<String> matchList = Lists.newArrayList(vc.getID().split(";"));
+		ArrayList<ArrayList<String>> matchList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			final DBSNPRecord record = records.get(i);
-			if (record != null) {
+			ArrayList<String> lst = new ArrayList<>();
+			if (records.get(i) != null) {
+				final DBSNPRecord record = records.get(i).getRecord();
 				final String id = record.getId();
-				if (!matchList.contains(id))
-					matchList.add(id);
+				if (!lst.contains(id))
+					lst.add(id);
 			}
+			matchList.add(lst);
 		}
 
-		if (matchList.size() > 1)
-			matchList.remove(".");
+		ArrayList<String> vals = new ArrayList<>();
+		for (int i = 1; i < vc.getNAlleles(); ++i) {
+			if (matchList.get(i - 1).isEmpty())
+				vals.add(".");
+			else
+				vals.add(Joiner.on('|').join(matchList.get(i - 1)));
+		}
 
-		if (!matchList.isEmpty())
-			builder.attribute(idMatch, matchList);
+		builder.attribute(idMatch, vals);
 	}
 
-	private void annotateInfoG5A(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
+	private void annotateInfoG5A(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
 			VariantContextBuilder builder) {
 		String idG5A = options.getVCFIdentifierPrefix() + "G5A";
 		ArrayList<Integer> g5AList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			final DBSNPRecord record = records.get(i);
-			if (record != null) {
+			if (records.get(i) != null) {
+				final DBSNPRecord record = records.get(i).getRecord();
 				g5AList.add(record.isFivePercentAll() ? 1 : 0);
 			} else {
 				g5AList.add(0);
@@ -104,13 +113,13 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			builder.attribute(idG5A, g5AList);
 	}
 
-	private void annotateInfoG5(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
+	private void annotateInfoG5(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
 			VariantContextBuilder builder) {
 		String idG5 = options.getVCFIdentifierPrefix() + "G5";
 		ArrayList<Integer> g5List = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			final DBSNPRecord record = records.get(i);
-			if (record != null) {
+			if (records.get(i) != null) {
+				final DBSNPRecord record = records.get(i).getRecord();
 				g5List.add(record.isFivePercentOne() ? 1 : 0);
 			} else {
 				g5List.add(0);
@@ -120,18 +129,20 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			builder.attribute(idG5, g5List);
 	}
 
-	private void annotateInfoCAF(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
+	private void annotateInfoCAF(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
 			VariantContextBuilder builder) {
 		String idCAF = options.getVCFIdentifierPrefix() + "CAF";
 		ArrayList<Double> cafList = new ArrayList<>();
 		cafList.add(null);
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			final DBSNPRecord record = records.get(i);
+			DBSNPRecord record = null;
+			if (records.get(i) != null)
+				record = records.get(i).getRecord();
 			if (record != null && !record.getAlleleFrequenciesG1K().isEmpty()) {
 				if (cafList.get(0) == null)
 					cafList.set(0, record.getAlleleFrequenciesG1K().get(0));
-				if (i < record.getAlleleFrequenciesG1K().size())
-					cafList.add(record.getAlleleFrequenciesG1K().get(i));
+				if (i < record.getAlleleFrequenciesG1K().size()) // XXX
+					cafList.add(record.getAlleleFrequenciesG1K().get(records.get(i).getAlleleNo()));
 				else
 					cafList.add(0.0);
 			} else {
@@ -146,13 +157,13 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			builder.attribute(idCAF, cafList);
 	}
 
-	private void annotateInfoCommon(VariantContext vc, HashMap<Integer, DBSNPRecord> records,
+	private void annotateInfoCommon(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
 			VariantContextBuilder builder) {
 		String idCommon = options.getVCFIdentifierPrefix() + "COMMON";
 		ArrayList<Integer> commonList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			final DBSNPRecord record = records.get(i);
-			if (record != null) {
+			if (records.get(i) != null) {
+				final DBSNPRecord record = records.get(i).getRecord();
 				commonList.add(record.isCommon() ? 1 : 0);
 			} else {
 				commonList.add(0);
@@ -162,11 +173,12 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			builder.attribute(idCommon, commonList);
 	}
 
-	private void annotateIDs(VariantContext vc, HashMap<Integer, DBSNPRecord> records, VariantContextBuilder builder) {
+	private void annotateIDs(VariantContext vc, HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records,
+			VariantContextBuilder builder) {
 		ArrayList<String> idList = Lists.newArrayList(vc.getID().split(";"));
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			final DBSNPRecord record = records.get(i);
-			if (record != null) {
+			if (records.get(i) != null) {
+				DBSNPRecord record = records.get(i).getRecord();
 				final String id = record.getId();
 				if (!idList.contains(id))
 					idList.add(id);
@@ -181,33 +193,24 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	}
 
 	@Override
-	protected HashMap<Integer, DBSNPRecord> buildAnnotatingDBRecords(List<GenotypeMatch> genotypeMatches) {
-		// Collect annotating variants for each allele
-		HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords = new HashMap<>();
-		HashMap<GenotypeMatch, DBSNPRecord> matchToDBSNP = new HashMap<>();
-		for (GenotypeMatch match : genotypeMatches) {
-			final int alleleNo = match.getObservedAllele();
-			annotatingRecords.putIfAbsent(alleleNo, new ArrayList<GenotypeMatch>());
-			annotatingRecords.get(alleleNo).add(match);
-			if (!matchToDBSNP.containsKey(match))
-				matchToDBSNP.put(match, vcToRecord.convert(match.getDBVC()));
-		}
-
+	protected HashMap<Integer, AnnotatingRecord<DBSNPRecord>> pickAnnotatingDBRecords(
+			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
+			HashMap<GenotypeMatch, AnnotatingRecord<DBSNPRecord>> matchToRecord) {
 		// Pick best annotation for each alternative allele
-		HashMap<Integer, DBSNPRecord> annotatingDBSNPRecord = new HashMap<>();
+		HashMap<Integer, AnnotatingRecord<DBSNPRecord>> annotatingDBSNPRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
 			final int alleleNo = entry.getKey();
 			for (GenotypeMatch m : entry.getValue()) {
 				if (!annotatingDBSNPRecord.containsKey(alleleNo)) {
-					annotatingDBSNPRecord.put(alleleNo, matchToDBSNP.get(m));
+					annotatingDBSNPRecord.put(alleleNo, matchToRecord.get(m));
 				} else {
-					final DBSNPRecord current = annotatingDBSNPRecord.get(alleleNo);
-					final DBSNPRecord update = matchToDBSNP.get(m);
+					final DBSNPRecord current = annotatingDBSNPRecord.get(alleleNo).getRecord();
+					final DBSNPRecord update = matchToRecord.get(m).getRecord();
 					if (update.getAlleleFrequenciesG1K().size() <= alleleNo)
 						continue; // no number to update
 					else if (current.getAlleleFrequenciesG1K().size() <= alleleNo || current.getAlleleFrequenciesG1K()
 							.get(alleleNo) < update.getAlleleFrequenciesG1K().get(alleleNo))
-						annotatingDBSNPRecord.put(alleleNo, matchToDBSNP.get(m));
+						annotatingDBSNPRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}
 		}
