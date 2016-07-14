@@ -89,6 +89,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 					stream = stream.map(exacAnno::annotateVariantContext);
 				}
 
+				// If configured, annotate using UK10K VCF file (extend header to use for writing out)
+				if (options.pathVCFUK10K != null) {
+					DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
+					exacOptions.setIdentifierPrefix(options.prefixUK10K);
+					DBVariantContextAnnotator uk10kAnno = new DBVariantContextAnnotatorFactory()
+							.constructUK10K(options.pathVCFUK10K, options.pathFASTARef, exacOptions);
+					uk10kAnno.extendHeader(vcfHeader);
+					stream = stream.map(uk10kAnno::annotateVariantContext);
+				}
+
 				// Write result to output file
 				try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath,
 						options, args)) {

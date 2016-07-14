@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.ImmutableSortedMap.Builder;
 
 // TODO: add more values, e.g. homozygous/heterozygous/hemizygous counts?
 

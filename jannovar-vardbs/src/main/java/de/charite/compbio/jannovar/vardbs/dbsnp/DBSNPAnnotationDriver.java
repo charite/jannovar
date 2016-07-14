@@ -13,6 +13,7 @@ import de.charite.compbio.jannovar.vardbs.base.AnnotatingRecord;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
+import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
 import de.charite.compbio.jannovar.vardbs.exac.ExacRecord;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
@@ -220,6 +221,11 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 	/** @return Information about the used dbSNP VCF file */
 	public DBSNPInfo getDbSNPInfo() {
 		return dbSNPInfo;
+	}
+
+	@Override
+	public VCFHeaderExtender constructVCFHeaderExtender() {
+		return new DBSNPVCFHeaderExtender();
 	}
 
 }

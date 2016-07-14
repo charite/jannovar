@@ -84,7 +84,6 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 			} else {
 				final ExacRecord record = records.get(i).getRecord();
 				final int alleleNo = records.get(i).getAlleleNo();
-				System.err.println(record.toString());
 				final ExacPopulation pop = record.popWithHighestAlleleFreq(alleleNo);
 				afs.add(record.getAlleleFrequencies(pop).get(alleleNo));
 				acs.add(record.getAlleleCounts(pop).get(alleleNo));

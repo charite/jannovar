@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPRecord;
-import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPVCFHeaderExtender;
-import de.charite.compbio.jannovar.vardbs.exac.ExacRecord;
 import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
@@ -52,11 +49,6 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 		this.vcfReader = new VCFFileReader(new File(this.vcfPath), true);
 		this.options = options;
 
-	}
-
-	@Override
-	public VCFHeaderExtender constructVCFHeaderExtender() {
-		return new DBSNPVCFHeaderExtender();
 	}
 
 	@Override

@@ -57,6 +57,7 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 
 	/** Add header with chromosome count */
 	private void addANHeader(VCFHeader header, String prefix, ExacPopulation pop) {
+		// TODO: change counts to 1 for AN?
 		String popName;
 		if (pop != ExacPopulation.ALL)
 			popName = "all populations";

@@ -61,6 +61,15 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		else
 			result.prefixExac = "EXAC_";
 
+		if (cmd.hasOption("uk10k-vcf") && !cmd.hasOption("reference-fasta"))
+			throw new HelpRequestedException("Argument --reference-fasta is required if --uk10k-vcf is given");
+		if (cmd.hasOption("uk10k-vcf"))
+			result.pathVCFUK10K = cmd.getOptionValue("uk10k-vcf");
+		if (cmd.hasOption("uk10k-prefix"))
+			result.prefixUK10K = cmd.getOptionValue("uk10k-prefix");
+		else
+			result.prefixUK10K = "UK10K_";
+
 		result.showAll = cmd.hasOption("showall");
 
 		result.writeJannovarInfoFields = cmd.hasOption("old-info-fields");
@@ -104,6 +113,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		options.addOption(new Option(null, "reference-fasta", true,
 				"path to FAI-indexed FASTA reference, required for dbSNP annotation"));
+
 		options.addOption(new Option(null, "dbsnp-vcf", true,
 				"path to indexed, bgzip-compressed, and normalized dbSNP VCF file"));
 		options.addOption(new Option(null, "dbsnp-prefix", true, "prefix to use for dbSNP-based VCF INFO fields"));
@@ -111,6 +121,10 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		options.addOption(
 				new Option(null, "exac-vcf", true, "path to indexed, bgzip-compressed, and normalized ExAC VCF file"));
 		options.addOption(new Option(null, "exac-prefix", true, "prefix to use for ExAC-based VCF INFO fields"));
+
+		options.addOption(new Option(null, "uk10k-vcf", true,
+				"path to indexed, bgzip-compressed, and normalized UK10K COHORT VCF file"));
+		options.addOption(new Option(null, "uk10k-prefix", true, "prefix to use for UK10K-based VCF INFO fields"));
 	}
 
 	protected void printHelp() {
