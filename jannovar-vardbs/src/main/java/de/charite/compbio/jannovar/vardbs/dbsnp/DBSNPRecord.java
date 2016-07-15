@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableSet;
  * 
  * Note that as with all databases, the annotation is for actual variants and not just positions.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class DBSNPRecord {
 

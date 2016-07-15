@@ -19,7 +19,7 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
 /**
  * Annotation driver class for annotations using dbSNP
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSNPRecord> {
 

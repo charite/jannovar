@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableSortedMap;
 /**
  * Represents on entry in the ExAC VCF database file
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ExacRecord {
 

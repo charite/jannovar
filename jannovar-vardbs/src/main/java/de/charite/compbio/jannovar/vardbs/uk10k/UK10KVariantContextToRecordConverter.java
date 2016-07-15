@@ -12,7 +12,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link UK10KRecord} objects
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class UK10KVariantContextToRecordConverter implements VariantContextToRecordConverter<UK10KRecord> {
 

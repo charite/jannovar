@@ -5,7 +5,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * Interface for annotation drivers by variant databases.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public interface DBAnnotationDriver {
 

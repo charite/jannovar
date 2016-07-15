@@ -11,7 +11,7 @@ import htsjdk.variant.variantcontext.VariantContext;
  * 
  * This class is an implementation detail and not part of the public interface.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class AlleleMatcher {
 

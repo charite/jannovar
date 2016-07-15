@@ -6,7 +6,7 @@ import java.util.HashSet;
 /**
  * Builder for {@link DBSNPRecord} class
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBSNPRecordBuilder {
 

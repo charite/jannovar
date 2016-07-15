@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.vardbs.base;
 /**
  * Simple variant description, for use with variant normalization
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class VariantDescription {
 

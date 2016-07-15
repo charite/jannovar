@@ -9,7 +9,7 @@ import com.google.common.base.Splitter;
 /**
  * Parse a line of GTF and return a FeatureRecord from this
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GTFRecordParser extends FeatureRecordParser {
 

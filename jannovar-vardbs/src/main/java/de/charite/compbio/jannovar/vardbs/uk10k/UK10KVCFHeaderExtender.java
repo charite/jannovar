@@ -10,7 +10,7 @@ import htsjdk.variant.vcf.VCFInfoHeaderLine;
 /**
  * Helper class for extending {@link VCFHeader}s for UK10K annotations.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class UK10KVCFHeaderExtender extends VCFHeaderExtender {
 

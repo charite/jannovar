@@ -5,7 +5,7 @@ import htsjdk.variant.vcf.VCFHeader;
 /**
  * Extend {@link VCFHeader} object with headers for a given database
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class VCFHeaderExtender {
 

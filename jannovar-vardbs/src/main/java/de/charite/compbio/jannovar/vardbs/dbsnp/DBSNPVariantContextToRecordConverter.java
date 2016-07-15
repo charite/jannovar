@@ -13,7 +13,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * Conversion of {@link VariantContext} to {@link DBSNPRecord} objects
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class DBSNPVariantContextToRecordConverter implements VariantContextToRecordConverter<DBSNPRecord> {
 

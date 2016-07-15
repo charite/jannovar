@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.vardbs.exac;
 /**
  * Enum type for populations in the ExAC data set
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public enum ExacPopulation {
 	/** African/African American */

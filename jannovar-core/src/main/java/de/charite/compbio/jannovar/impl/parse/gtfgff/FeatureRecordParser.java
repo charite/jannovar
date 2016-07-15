@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract base class for GTF/GFF record parsers.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class FeatureRecordParser {
 

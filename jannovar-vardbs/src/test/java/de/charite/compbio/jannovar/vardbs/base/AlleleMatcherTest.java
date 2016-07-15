@@ -19,7 +19,7 @@ import htsjdk.variant.vcf.VCFFileReader;
 /**
  * Test for the matching of alleles
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class AlleleMatcherTest {
 

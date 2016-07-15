@@ -11,7 +11,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * Helper class for the conversion of {@link VariantContext} to {@link ExacRecord} objects
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final class ExacVariantContextToRecordConverter implements VariantContextToRecordConverter<ExacRecord> {
 

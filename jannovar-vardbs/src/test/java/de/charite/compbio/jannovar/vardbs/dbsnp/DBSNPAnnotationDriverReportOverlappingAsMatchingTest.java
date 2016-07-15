@@ -16,7 +16,7 @@ import htsjdk.variant.vcf.VCFHeader;
 /**
  * Test for annotation with dbSNP with overlapping as matching
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPAnnotationDriverBaseTest {
 

@@ -5,7 +5,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * A class for annotating the match between an observed genotype and a database genotype
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class GenotypeMatch {
 

@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableSortedMap;
  * 
  * When comparing, features on the forward strand come before features on the reverse strand.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class FeatureRecord implements Comparable<FeatureRecord> {
 

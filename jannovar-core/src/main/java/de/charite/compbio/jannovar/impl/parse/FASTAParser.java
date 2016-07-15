@@ -18,7 +18,7 @@ import de.charite.compbio.jannovar.impl.parse.gtfgff.GFFParser.GFFVersion;
 /**
  * Generic FASTA parser that allow record-wise loading of FASTA files
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class FASTAParser {
 

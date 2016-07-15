@@ -12,7 +12,7 @@ import htsjdk.variant.vcf.VCFFileReader;
 /**
  * Abstract base class for annotation based on VCF files.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnotationDriver {
 
