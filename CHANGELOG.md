@@ -9,6 +9,7 @@
 
 ### jannovar-core
 
+* Renaming of `ModeOfInheritance.UNINITIALIZED` to `ModeOfInheritance.UNDEFINED`.
 * Fixing handling of invalid transcripts (e.g., incomplete 3' end)
 * Adding `altGeneIDs` mapping to `TranscriptModel`, makes data bases backwards incompatible.
 * Rewrite of GFF parsers for RefSeq and ENSEMBL.

@@ -1,7 +1,7 @@
 package de.charite.compbio.jannovar.pedigree;
 
 /**
- * An enumeration of the four main Mendelian modes of inheritance for prioritizing exome data.
+ * An enumeration of the four main Mendelian modes of inheritance for prioritizing exome data
  *
  * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  */
@@ -15,5 +15,5 @@ public enum ModeOfInheritance {
 	/** dominant inheritance on X chromosome */
 	X_DOMINANT,
 	/** value for encoding uninitialized values */
-	UNINITIALIZED; // TODO(holtgrew): Rename to UNKNOWN or UNDEFINED
+	UNDEFINED;
 }
