@@ -31,6 +31,14 @@ public final class VariantDescription {
 	public int getPos() {
 		return pos;
 	}
+	
+	/** @return 0-based end position of the variant in the reference */
+	public int getEnd() {
+		if (ref.length() == 0)
+			return pos + 1;
+		else
+			return pos + ref.length();
+	}
 
 	public String getRef() {
 		return ref;
@@ -83,6 +91,15 @@ public final class VariantDescription {
 		} else if (!ref.equals(other.ref))
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return <code>true</code> on whether the two variant descriptions overlap.
+	 */
+	public boolean overlapsWith(VariantDescription other) {
+		if (!chrom.equals(other.chrom))
+			return false;
+		return (other.getPos() < getEnd() && getPos() < getEnd());
 	}
 
 }

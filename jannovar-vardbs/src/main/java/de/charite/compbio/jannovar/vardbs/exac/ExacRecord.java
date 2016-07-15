@@ -32,14 +32,14 @@ public class ExacRecord {
 	final private ImmutableList<String> alt;
 	/** Filters, NC: inconsistent genotype submission for at least one sample */
 	final private ImmutableList<String> filter;
-	
+
 	// Entries of the INFO column
 
-	/** Allele counts for each population */
+	/** Observed alternative allele counts for each population */
 	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Integer>> alleleCounts;
 	/** Chromsome counts for each population */
 	final private ImmutableSortedMap<ExacPopulation, Integer> chromCounts;
-	/** Alternative allele frequencies for each population */
+	/** Observed alternative allele frequencies for each population */
 	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Double>> alleleFrequencies;
 
 	public ExacRecord(String chrom, int pos, String id, String ref, List<String> alt, Collection<String> filter,
@@ -53,14 +53,8 @@ public class ExacRecord {
 
 		ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acBuilder = ImmutableSortedMap
 				.naturalOrder();
-		for (Entry<ExacPopulation, List<Integer>> e : alleleCounts.entrySet()) {
-			final ExacPopulation pop = e.getKey();
-			final List<Integer> counts = e.getValue();
-			ImmutableList.Builder<Integer> cBuilder = new ImmutableList.Builder<Integer>();
-			cBuilder.add(chromCounts.get(pop).intValue() - counts.stream().mapToInt(Integer::intValue).sum());
-			cBuilder.addAll(counts);
-			acBuilder.put(e.getKey(), cBuilder.build());
-		}
+		for (Entry<ExacPopulation, List<Integer>> e : alleleCounts.entrySet())
+			acBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleCounts = acBuilder.build();
 
 		this.chromCounts = ImmutableSortedMap.copyOf(chromCounts.entrySet());
@@ -129,25 +123,28 @@ public class ExacRecord {
 	public ImmutableList<Double> getAlleleFrequencies(ExacPopulation pop) {
 		return alleleFrequencies.get(pop);
 	}
-	
-	/** @return {@link ExacPopulation} with highest allele frequency for the given allele index (0 is reference) */
+
+	/**
+	 * @return {@link ExacPopulation} with highest allele frequency for the given allele index (0 is first alternative
+	 *         allele)
+	 */
 	public ExacPopulation popWithHighestAlleleFreq(int alleleNo) {
 		double bestFreq = -1;
 		ExacPopulation bestPop = ExacPopulation.ALL;
 		for (ExacPopulation pop : ExacPopulation.values()) {
-			if (alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
-				bestFreq = alleleFrequencies.get(pop).get(alleleNo);
+			if (alleleFrequencies.get(pop).get(alleleNo - 1) > bestFreq) {
+				bestFreq = alleleFrequencies.get(pop).get(alleleNo - 1);
 				bestPop = pop;
 			}
 		}
 		return bestPop;
 	}
-	
+
 	/** @return Highest frequency of the given allele */
 	public double highestAlleleFreq(int alleleNo) {
 		return getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ExacRecord [chrom=" + chrom + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt

@@ -55,20 +55,30 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	public VariantContext annotateVariantContext(VariantContext obsVC) {
 		try (CloseableIterator<VariantContext> iter = vcfReader.query(obsVC.getContig(), obsVC.getStart(),
 				obsVC.getEnd())) {
-			if (options.isReportOverlapping() || options.isReportOverlappingAsIdentical())
-				throw new RuntimeException("Not implemented yet!");
-
-			// Fetch all possibly overlapping genotypes from dbSNP and collect those with matching genotypes to the
-			// observed variant.
+			// Fetch all overlapping and matching genotypes from database and pair them with the correct allele from vc.
 			List<GenotypeMatch> genotypeMatches = new ArrayList<>();
-			while (iter.hasNext())
-				genotypeMatches.addAll(matcher.matchGenotypes(obsVC, iter.next()));
+			List<GenotypeMatch> positionOverlaps = new ArrayList<>();
+			while (iter.hasNext()) {
+				final VariantContext dbVC = iter.next();
+				genotypeMatches.addAll(matcher.matchGenotypes(obsVC, dbVC));
+				if (options.isReportOverlapping() || options.isReportOverlappingAsMatching())
+					positionOverlaps.addAll(matcher.positionOverlaps(obsVC, dbVC));
+			}
 
 			// Pick best dbSNP record for each alternative allele
-			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecords = buildAnnotatingDBRecordsWrapper(genotypeMatches);
+			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsMatch = buildAnnotatingDBRecordsWrapper(
+					genotypeMatches);
+			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsOverlap = buildAnnotatingDBRecordsWrapper(
+					positionOverlaps);
+			HashMap<Integer, AnnotatingRecord<RecordType>> emptyMap = new HashMap<Integer, AnnotatingRecord<RecordType>>();
 
 			// Use these records to annotate the variant call in obsVC (record-wise but also per alternative allele)
-			return annotateWithDBRecords(obsVC, dbRecords);
+			if (options.isReportOverlappingAsMatching())
+				return annotateWithDBRecords(obsVC, dbRecordsOverlap, emptyMap);
+			else if (options.isReportOverlapping())
+				return annotateWithDBRecords(obsVC, dbRecordsMatch, dbRecordsOverlap);
+			else
+				return annotateWithDBRecords(obsVC, dbRecordsMatch, emptyMap);
 		}
 	}
 
@@ -120,10 +130,14 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	 * 
 	 * @param vc
 	 *            The {@link VariantContex} to annotate
-	 * @param dbRecords
-	 *            Map from alternative allele index to annotating <code>RecordType</code>
+	 * @param dbRecordMatches
+	 *            Map from alternative allele index to annotating <code>RecordType</code> with matching allele
+	 * @param dbRecordOverlaps
+	 *            Map from alternative allele index to annotating <code>RecordType</code> with overlapping positions
+	 * @param arrayList
 	 */
 	protected abstract VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecords);
+			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordMatches,
+			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordOverlaps);
 
 }

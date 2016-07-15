@@ -34,14 +34,11 @@ public class ExacVariantContextToRecordConverterTest {
 		VariantContext vc = vcfReader.iterator().next();
 
 		ExacRecord record = converter.convert(vc);
-		Assert.assertEquals("ExacRecord [chrom=1, pos=13371, id=., ref=G, alt=[C], filter=[], "
-				+ "alleleCounts={AFR=[770, 0], AMR=[134, 0], EAS=[254, 0], FIN=[16, 0], "
-				+ "NFE=[2116, 0], OTH=[90, 0], SAS=[5050, 2], ALL=[8430, 2]}, "
-				+ "chromCounts={AFR=770, AMR=134, EAS=254, FIN=16, NFE=2116, OTH=90, "
-				+ "SAS=5052, ALL=8432}, alleleFrequencies={AFR=[1.0, 0.0], AMR=[1.0, 0.0], "
-				+ "EAS=[1.0, 0.0], FIN=[1.0, 0.0], NFE=[1.0, 0.0], OTH=[1.0, 0.0], "
-				+ "SAS=[0.9996041171813144, 3.95882818685669E-4], ALL=[0.9997628083491461, "
-				+ "2.3719165085388995E-4]}]", record.toString());
+		Assert.assertEquals("ExacRecord [chrom=1, pos=13371, id=., ref=G, alt=[C], filter=[], alleleCounts={AFR=[0], "
+				+ "AMR=[0], EAS=[0], FIN=[0], NFE=[0], OTH=[0], SAS=[2], ALL=[2]}, chromCounts={AFR=770, "
+				+ "AMR=134, EAS=254, FIN=16, NFE=2116, OTH=90, SAS=5052, ALL=8432}, "
+				+ "alleleFrequencies={AFR=[0.0], AMR=[0.0], EAS=[0.0], FIN=[0.0], NFE=[0.0], OTH=[0.0], "
+				+ "SAS=[3.95882818685669E-4], ALL=[2.3719165085388995E-4]}]", record.toString());
 	}
 
 }

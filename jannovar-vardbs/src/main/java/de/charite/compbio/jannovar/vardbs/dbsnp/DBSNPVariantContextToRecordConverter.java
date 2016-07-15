@@ -128,6 +128,8 @@ final class DBSNPVariantContextToRecordConverter implements VariantContextToReco
 			else
 				return (Double) Double.parseDouble((String) x);
 		}).collect(Collectors.toList()));
+		if (!builder.getAlleleFrequenciesG1K().isEmpty())
+			builder.getAlleleFrequenciesG1K().subList(0, 1).clear();
 		builder.setCommon(vc.hasAttribute("COMMON"));
 		builder.getOldVariants().addAll(
 				vc.getAttributeAsList("OLD_VARIANT").stream().map(x -> (String) x).collect(Collectors.toList()));

@@ -1,7 +1,5 @@
 package de.charite.compbio.jannovar.vardbs.uk10k;
 
-import java.io.File;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -10,55 +8,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 
-import de.charite.compbio.jannovar.utils.ResourceUtils;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
 
-public class UK10KAnnotationDriverDefaultOptionsTest {
-
-	// Path to UK10K VCF file
-	String dbUK10KVCFPath;
-	// Path to reference FASTA file
-	String fastaPath;
-	// VCF reader for file to be used in the test
-	VCFFileReader vcfReader;
-	// Configuration to use in the tests
-	DBAnnotationOptions options;
+/**
+ * Test for annotation with UK10K reporting no overlaps
+ * 
+ * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ */
+public class UK10KAnnotationDriverReportNoOverlappingTest extends UK10KAnnotationDriverBaseTest {
 
 	@Before
 	public void setUpClass() throws Exception {
-		options = DBAnnotationOptions.createDefaults();
-
-		// Setup dbSNP VCF file
-		File tmpDir = Files.createTempDir();
-		dbUK10KVCFPath = tmpDir + "/uk10k.vcf.gz";
-		ResourceUtils.copyResourceToFile("/UK10K_COHORT.20160215.sites.head.vcf.gz", new File(dbUK10KVCFPath));
-		String tbiPath = tmpDir + "/uk10k.vcf.gz.tbi";
-		ResourceUtils.copyResourceToFile("/UK10K_COHORT.20160215.sites.head.vcf.gz.tbi", new File(tbiPath));
-
-		// Setup reference FASTA file
-		fastaPath = tmpDir + "/chr1.fasta";
-		ResourceUtils.copyResourceToFile("/chr1.fasta", new File(fastaPath));
-		String faiPath = tmpDir + "/chr1.fasta.fai";
-		ResourceUtils.copyResourceToFile("/chr1.fasta.fai", new File(faiPath));
-
-		// Header of VCF file
-		String vcfHeader = "##fileformat=VCFv4.0\n"
-				+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n";
-
-		// Write out file to use in the test
-		String testVCFPath = tmpDir + "/test_var_in_exac.vcf";
-		PrintWriter writer = new PrintWriter(testVCFPath);
-		writer.write(vcfHeader);
-		writer.write("1\t714118\t.\tC\tA,G,T\t.\t.\t.\tGT\t0/1\n");
-		writer.close();
-
-		vcfReader = new VCFFileReader(new File(testVCFPath), false);
+		super.setUpClass();
+		options.setReportOverlapping(false);
+		options.setReportOverlappingAsMatching(false);
 	}
 
 	@Test
@@ -89,8 +56,10 @@ public class UK10KAnnotationDriverDefaultOptionsTest {
 	}
 
 	@Test
-	public void testAnnotateVariantContext() throws JannovarVarDBException {
+	public void testAnnotateVariantContextNoOverlaps() throws JannovarVarDBException {
 		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
+		options.setReportOverlapping(false);
+		options.setReportOverlappingAsMatching(false);
 		UK10KAnnotationDriver driver = new UK10KAnnotationDriver(dbUK10KVCFPath, fastaPath, options);
 		VariantContext vc = vcfReader.iterator().next();
 

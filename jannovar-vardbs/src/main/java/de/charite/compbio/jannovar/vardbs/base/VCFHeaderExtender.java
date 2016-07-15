@@ -9,6 +9,13 @@ import htsjdk.variant.vcf.VCFHeader;
  */
 public abstract class VCFHeaderExtender {
 
+	/** Options for header extension */
+	protected DBAnnotationOptions options;
+
+	public VCFHeaderExtender(DBAnnotationOptions options) {
+		this.options = options;
+	}
+
 	/**
 	 * @return Default prefix to use for header entries
 	 */
@@ -24,7 +31,8 @@ public abstract class VCFHeaderExtender {
 	 */
 	public abstract void addHeaders(VCFHeader header, String prefix);
 
-	/** Add headers with default prefix
+	/**
+	 * Add headers with default prefix
 	 */
 	public void addHeaders(VCFHeader header) {
 		addHeaders(header, getDefaultPrefix());

@@ -10,6 +10,7 @@ import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.GenotypeMatch;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import de.charite.compbio.jannovar.vardbs.base.VCFHeaderExtender;
+import de.charite.compbio.jannovar.vardbs.dbsnp.DBSNPRecord;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
@@ -29,7 +30,7 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 
 	@Override
 	public VCFHeaderExtender constructVCFHeaderExtender() {
-		return new ExacVCFHeaderExtender();
+		return new ExacVCFHeaderExtender(options);
 	}
 
 	@Override
@@ -59,25 +60,35 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 
 	@Override
 	protected VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<ExacRecord>> records) {
-		if (records.isEmpty())
+			HashMap<Integer, AnnotatingRecord<ExacRecord>> matchRecords,
+			HashMap<Integer, AnnotatingRecord<ExacRecord>> overlapRecords) {
+		if (matchRecords.isEmpty())
 			return vc;
 
 		VariantContextBuilder builder = new VariantContextBuilder(vc);
 
-		annotateAlleleCounts(vc, records, builder);
-		annotateChromosomeCounts(vc, records, builder);
-		annotateFrequencies(vc, records, builder);
-		annotateBestAF(vc, records, builder);
+		// Annotate with records with matching allele
+		annotateAlleleCounts(vc, "", matchRecords, builder);
+		annotateChromosomeCounts(vc, "", matchRecords, builder);
+		annotateFrequencies(vc, "", matchRecords, builder);
+		annotateBestAF(vc, "", matchRecords, builder);
+
+		// Annotate with records with overlapping positions
+		if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
+			annotateAlleleCounts(vc, "OVL_", overlapRecords, builder);
+			annotateChromosomeCounts(vc, "OVL_", overlapRecords, builder);
+			annotateFrequencies(vc, "OVL_", overlapRecords, builder);
+			annotateBestAF(vc, "OVL_", overlapRecords, builder);
+		}
 
 		return builder.make();
 	}
 
-	private void annotateBestAF(VariantContext vc, HashMap<Integer, AnnotatingRecord<ExacRecord>> records,
+	private void annotateBestAF(VariantContext vc, String infix, HashMap<Integer, AnnotatingRecord<ExacRecord>> records,
 			VariantContextBuilder builder) {
 		ArrayList<Double> afs = new ArrayList<>();
 		ArrayList<Integer> acs = new ArrayList<>();
-		for (int i = 1; i < vc.getAlternateAlleles().size(); ++i) {
+		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			if (records.get(i) == null) {
 				afs.add(0.0);
 				acs.add(0);
@@ -85,30 +96,30 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 				final ExacRecord record = records.get(i).getRecord();
 				final int alleleNo = records.get(i).getAlleleNo();
 				final ExacPopulation pop = record.popWithHighestAlleleFreq(alleleNo);
-				afs.add(record.getAlleleFrequencies(pop).get(alleleNo));
-				acs.add(record.getAlleleCounts(pop).get(alleleNo));
+				afs.add(record.getAlleleFrequencies(pop).get(alleleNo - 1));
+				acs.add(record.getAlleleCounts(pop).get(alleleNo - 1));
 			}
 		}
 
-		builder.attribute(options.getVCFIdentifierPrefix() + "BEST_AC", acs);
-		builder.attribute(options.getVCFIdentifierPrefix() + "BEST_AF", afs);
+		builder.attribute(options.getVCFIdentifierPrefix() + infix + "BEST_AC", acs);
+		builder.attribute(options.getVCFIdentifierPrefix() + infix + "BEST_AF", afs);
 	}
 
-	private void annotateChromosomeCounts(VariantContext vc, HashMap<Integer, AnnotatingRecord<ExacRecord>> records,
-			VariantContextBuilder builder) {
+	private void annotateChromosomeCounts(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<ExacRecord>> records, VariantContextBuilder builder) {
 		if (records.isEmpty())
 			return;
 		ExacRecord first = records.values().iterator().next().getRecord();
 		for (ExacPopulation pop : ExacPopulation.values())
-			builder.attribute(options.getVCFIdentifierPrefix() + "AN_" + pop, first.getChromCount(pop));
+			builder.attribute(options.getVCFIdentifierPrefix() + infix + "AN_" + pop, first.getChromCount(pop));
 	}
 
-	private void annotateAlleleCounts(VariantContext vc, HashMap<Integer, AnnotatingRecord<ExacRecord>> records,
-			VariantContextBuilder builder) {
+	private void annotateAlleleCounts(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<ExacRecord>> records, VariantContextBuilder builder) {
 		for (ExacPopulation pop : ExacPopulation.values()) {
-			final String attrID = options.getVCFIdentifierPrefix() + "AC_" + pop;
+			final String attrID = options.getVCFIdentifierPrefix() + infix + "AC_" + pop;
 			ArrayList<Integer> acList = new ArrayList<>();
-			for (int i = 0; i < vc.getNAlleles(); ++i) {
+			for (int i = 1; i < vc.getNAlleles(); ++i) {
 				if (records.get(i) == null) {
 					acList.add(0);
 					continue;
@@ -118,7 +129,7 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 				if (record.getAlleleCounts(pop).isEmpty()) {
 					acList.add(0);
 				} else {
-					acList.add(record.getAlleleCounts(pop).get(alleleNo));
+					acList.add(record.getAlleleCounts(pop).get(alleleNo - 1));
 				}
 			}
 
@@ -129,12 +140,12 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 		}
 	}
 
-	private void annotateFrequencies(VariantContext vc, HashMap<Integer, AnnotatingRecord<ExacRecord>> records,
-			VariantContextBuilder builder) {
+	private void annotateFrequencies(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<ExacRecord>> records, VariantContextBuilder builder) {
 		for (ExacPopulation pop : ExacPopulation.values()) {
-			final String attrID = options.getVCFIdentifierPrefix() + "AF_" + pop;
+			final String attrID = options.getVCFIdentifierPrefix() + infix + "AF_" + pop;
 			ArrayList<Double> afList = new ArrayList<>();
-			for (int i = 0; i < vc.getNAlleles(); ++i) {
+			for (int i = 1; i < vc.getNAlleles(); ++i) {
 				if (records.get(i) == null) {
 					afList.add(0.0);
 					continue;
@@ -144,7 +155,7 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 				if (record.getAlleleCounts(pop).isEmpty()) {
 					afList.add(0.0);
 				} else {
-					afList.add(record.getAlleleFrequencies(pop).get(alleleNo));
+					afList.add(record.getAlleleFrequencies(pop).get(alleleNo - 1));
 				}
 			}
 

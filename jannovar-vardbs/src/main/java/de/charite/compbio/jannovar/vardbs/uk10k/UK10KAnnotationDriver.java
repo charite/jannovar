@@ -52,31 +52,40 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 
 	@Override
 	public VCFHeaderExtender constructVCFHeaderExtender() {
-		return new UK10KVCFHeaderExtender();
+		return new UK10KVCFHeaderExtender(options);
 	}
 
 	@Override
 	protected VariantContext annotateWithDBRecords(VariantContext vc,
-			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records) {
+			HashMap<Integer, AnnotatingRecord<UK10KRecord>> matchRecords,
+			HashMap<Integer, AnnotatingRecord<UK10KRecord>> overlapRecords) {
 		VariantContextBuilder builder = new VariantContextBuilder(vc);
 
-		annotateAlleleCounts(vc, records, builder);
-		annotateChromosomeCounts(vc, records, builder);
-		annotateFrequencies(vc, records, builder);
+		// Annotate with records with matching allele
+		annotateAlleleCounts(vc, "", matchRecords, builder);
+		annotateChromosomeCounts(vc, "", matchRecords, builder);
+		annotateFrequencies(vc, "", matchRecords, builder);
+
+		// Annotate with records with overlapping positions
+		if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
+			annotateAlleleCounts(vc, "OVL_", overlapRecords, builder);
+			annotateChromosomeCounts(vc, "OVL_", overlapRecords, builder);
+			annotateFrequencies(vc, "OVL_", overlapRecords, builder);
+		}
 
 		return builder.make();
 	}
 
-	private void annotateChromosomeCounts(VariantContext vc, HashMap<Integer, AnnotatingRecord<UK10KRecord>> records,
-			VariantContextBuilder builder) {
+	private void annotateChromosomeCounts(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
 		if (records.isEmpty())
 			return;
 		UK10KRecord first = records.values().iterator().next().getRecord();
-		builder.attribute(options.getVCFIdentifierPrefix() + "AN", first.getChromCount());
+		builder.attribute(options.getVCFIdentifierPrefix() + infix + "AN", first.getChromCount());
 	}
 
-	private void annotateAlleleCounts(VariantContext vc, HashMap<Integer, AnnotatingRecord<UK10KRecord>> records,
-			VariantContextBuilder builder) {
+	private void annotateAlleleCounts(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
 		ArrayList<Integer> acList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			if (records.get(i) == null) {
@@ -92,13 +101,13 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 			}
 		}
 
-		final String attrID = options.getVCFIdentifierPrefix() + "AC";
+		final String attrID = options.getVCFIdentifierPrefix() + infix + "AC";
 		if (!acList.isEmpty())
 			builder.attribute(attrID, acList);
 	}
 
-	private void annotateFrequencies(VariantContext vc, HashMap<Integer, AnnotatingRecord<UK10KRecord>> records,
-			VariantContextBuilder builder) {
+	private void annotateFrequencies(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<UK10KRecord>> records, VariantContextBuilder builder) {
 		ArrayList<Double> afList = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			if (records.get(i) == null) {
@@ -114,7 +123,7 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 			}
 		}
 
-		final String attrID = options.getVCFIdentifierPrefix() + "AF";
+		final String attrID = options.getVCFIdentifierPrefix() + infix + "AF";
 		if (!afList.isEmpty())
 			builder.attribute(attrID, afList);
 	}
