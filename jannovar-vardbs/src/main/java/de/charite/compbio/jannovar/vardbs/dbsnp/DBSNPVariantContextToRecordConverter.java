@@ -2,20 +2,20 @@ package de.charite.compbio.jannovar.vardbs.dbsnp;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
+import de.charite.compbio.jannovar.vardbs.base.VariantContextToRecordConverter;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * Conversion of {@link VariantContext} to {@link DBSNPRecord} objects
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-final class DBSNPVariantContextToRecordConverter {
+final class DBSNPVariantContextToRecordConverter implements VariantContextToRecordConverter<DBSNPRecord> {
 
 	/**
 	 * Convert {@link VariantContext} to {@link DBSNPRecord}
@@ -122,13 +122,14 @@ final class DBSNPVariantContextToRecordConverter {
 		builder.setContigAlelleNotVariant(vc.hasAttribute("NOC"));
 		builder.setWithdrawn(vc.hasAttribute("WTD"));
 		builder.setNonOverlappingAlleleSet(vc.hasAttribute("NOV"));
-		builder.getAlleleFrequenciesG1K().addAll(vc.getAttributeAsList("CAF").stream()
-				.map(x -> {
-					if (".".equals(x))
-						return 0.0;
-					else
-						return (Double) Double.parseDouble((String) x);
-				}).collect(Collectors.toList()));
+		builder.getAlleleFrequenciesG1K().addAll(vc.getAttributeAsList("CAF").stream().map(x -> {
+			if (".".equals(x))
+				return 0.0;
+			else
+				return (Double) Double.parseDouble((String) x);
+		}).collect(Collectors.toList()));
+		if (!builder.getAlleleFrequenciesG1K().isEmpty())
+			builder.getAlleleFrequenciesG1K().subList(0, 1).clear();
 		builder.setCommon(vc.hasAttribute("COMMON"));
 		builder.getOldVariants().addAll(
 				vc.getAttributeAsList("OLD_VARIANT").stream().map(x -> (String) x).collect(Collectors.toList()));

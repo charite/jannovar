@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.vcf.VCFHeader;
 
@@ -24,20 +25,29 @@ public class DBSNPVCFHeaderExtenderTest {
 		Assert.assertEquals(0, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
-		new DBSNPVCFHeaderExtender().addHeaders(header);
+		DBAnnotationOptions options = DBAnnotationOptions.createDefaults();
+		options.setReportOverlapping(true);
+		options.setReportOverlappingAsMatching(false);
+
+		new DBSNPVCFHeaderExtender(options).addHeaders(header);
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(5, header.getInfoHeaderLines().size());
+		Assert.assertEquals(10, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(5, header.getIDHeaderLines().size());
+		Assert.assertEquals(10, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_MATCH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_COMMON"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_CAF"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_G5"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_G5A"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_IDS"));
 	}
 
 }

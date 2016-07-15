@@ -6,14 +6,12 @@ import java.util.List;
 
 import htsjdk.variant.variantcontext.VariantContext;
 
-// TODO: implement overlap only behaviour and add as option
-
 /**
  * Find matches between two allels (an observed and a database variant)
  * 
  * This class is an implementation detail and not part of the public interface.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class AlleleMatcher {
 
@@ -50,22 +48,56 @@ public final class AlleleMatcher {
 		Collection<VariantDescription> obsVars = ctxToVariants(obsVC);
 		Collection<VariantDescription> dbVars = ctxToVariants(dbVC);
 
-		int i = 1;  // excludes reference allele
+		int i = 1; // excludes reference allele
 		for (VariantDescription obsVar : obsVars) {
-			int j = 1;  // excludes reference allele
+			int j = 1; // excludes reference allele
 			for (VariantDescription dbVar : dbVars) {
 				if (dbVar.equals(obsVar))
 					result.add(new GenotypeMatch(i, j, obsVC, dbVC));
 				j += 1;
 			}
-			
+
 			i += 1;
 		}
 
 		return result;
 	}
 
-	Collection<VariantDescription> ctxToVariants(VariantContext vc) {
+	/**
+	 * Pair genotypes of two {@link VariantContext}s based on their position, regardless of their genotype
+	 * 
+	 * In the end, all genotypes will be matched regardless of matching alleles, such that later the "best" (e.g., the
+	 * highest frequency one) can be used for annotating a variant.
+	 * 
+	 * @param obsVC
+	 *            {@link VariantContext} describing the observed variant
+	 * @param dbVC
+	 *            {@link VariantContext} describing the database variant
+	 * @return {@link Collection} of {@link GenotypeMatch}es for the two variants
+	 */
+	public Collection<GenotypeMatch> positionOverlaps(VariantContext obsVC, VariantContext dbVC) {
+		List<GenotypeMatch> result = new ArrayList<>();
+
+		// Get normalized description of all alternative observed and database alleles
+		Collection<VariantDescription> obsVars = ctxToVariants(obsVC);
+		Collection<VariantDescription> dbVars = ctxToVariants(dbVC);
+
+		int i = 1; // excludes reference allele
+		for (VariantDescription obsVar : obsVars) {
+			int j = 1; // excludes reference allele
+			for (VariantDescription dbVar : dbVars) {
+				if (dbVar.overlapsWith(obsVar))
+					result.add(new GenotypeMatch(i, j, obsVC, dbVC));
+				j += 1;
+			}
+
+			i += 1;
+		}
+
+		return result;
+	}
+
+	private Collection<VariantDescription> ctxToVariants(VariantContext vc) {
 		List<VariantDescription> vars = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
 			vars.add(new VariantDescription(vc.getContig(), vc.getStart() - 1, vc.getAlleles().get(0).getBaseString(),

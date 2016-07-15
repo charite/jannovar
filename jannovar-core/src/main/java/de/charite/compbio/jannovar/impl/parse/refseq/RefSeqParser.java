@@ -36,7 +36,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 /**
  * Parsing of RefSeq GFF3 files
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class RefSeqParser implements TranscriptParser {
 

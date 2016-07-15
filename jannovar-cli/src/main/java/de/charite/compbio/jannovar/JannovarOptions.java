@@ -91,6 +91,18 @@ public final class JannovarOptions {
 	/** Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation */
 	public String pathFASTARef = null;
 
+	/** Path to ExAC VCF file to use for the annotation */
+	public String pathVCFExac;
+
+	/** Prefix to use for ExAC VCF INFO Fields */
+	public String prefixExac;
+
+	/** Path to UK10K VCF file to use for the annotation */
+	public String pathVCFUK10K;
+
+	/** Prefix to use for UK10K VCF INFO Fields */
+	public String prefixUK10K;
+
 	// Configuration for the annotate-position command
 
 	/** chromosomal position and a change, e.g. {@code chr1:12345C>A}. */
@@ -129,6 +141,10 @@ public final class JannovarOptions {
 			out.println("reference FASTA: " + pathFASTARef);
 			out.println("dbSNP VCF: " + pathVCFDBSNP);
 			out.println("dbSNP prefix: " + prefixDBSNP);
+			out.println("ExAC VCF: " + pathVCFExac);
+			out.println("ExAC prefix: " + prefixExac);
+			out.println("UK10K VCF: " + pathVCFUK10K);
+			out.println("UK10K prefix: " + prefixUK10K);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}

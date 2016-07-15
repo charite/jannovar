@@ -14,7 +14,7 @@ import htsjdk.samtools.reference.IndexedFastaSequenceFile;
  * Tan, Adrian, Gonçalo R. Abecasis, and Hyun Min Kang. "Unified representation of genetic variants." Bioinformatics
  * (2015): btv112.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class VariantNormalizer {
 

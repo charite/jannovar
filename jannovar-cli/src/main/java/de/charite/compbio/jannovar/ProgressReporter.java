@@ -12,7 +12,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 /**
  * Helper for displaying progress
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class ProgressReporter extends TimerTask {
 

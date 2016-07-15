@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * 
  * This class is state-ful and not thread safe.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class GFFParser {
 

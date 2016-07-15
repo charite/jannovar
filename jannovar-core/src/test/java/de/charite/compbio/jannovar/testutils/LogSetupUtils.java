@@ -8,7 +8,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 /**
  * Allows easy setting of log level, useful in tests
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class LogSetupUtils {
 

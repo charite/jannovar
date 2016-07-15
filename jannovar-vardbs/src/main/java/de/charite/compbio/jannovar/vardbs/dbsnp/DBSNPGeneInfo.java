@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Information about a gene in DBSNP (name and Entrez ID)
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
 public final class DBSNPGeneInfo {

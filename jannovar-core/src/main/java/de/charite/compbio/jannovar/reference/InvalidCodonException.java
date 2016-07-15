@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.JannovarException;
 /**
  * Raised when it is attempted to access an invalid codon
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class InvalidCodonException extends JannovarException {
 

@@ -40,16 +40,35 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		if (cmd.hasOption("output-dir"))
 			result.outVCFFolder = cmd.getOptionValue("output-dir");
 
-		if (cmd.hasOption("dbsnp-vcf") && !cmd.hasOption("reference-fasta"))
-			throw new HelpRequestedException("Argument --reference-fasta is required if --dbsnp-vcf is given");
 		if (cmd.hasOption("reference-fasta"))
 			result.pathFASTARef = cmd.getOptionValue("reference-fasta");
+
+		if (cmd.hasOption("dbsnp-vcf") && !cmd.hasOption("reference-fasta"))
+			throw new HelpRequestedException("Argument --reference-fasta is required if --dbsnp-vcf is given");
 		if (cmd.hasOption("dbsnp-vcf"))
 			result.pathVCFDBSNP = cmd.getOptionValue("dbsnp-vcf");
 		if (cmd.hasOption("dbsnp-prefix"))
 			result.prefixDBSNP = cmd.getOptionValue("dbsnp-prefix");
 		else
 			result.prefixDBSNP = "DBSNP_";
+
+		if (cmd.hasOption("exac-vcf") && !cmd.hasOption("reference-fasta"))
+			throw new HelpRequestedException("Argument --reference-fasta is required if --exac-vcf is given");
+		if (cmd.hasOption("exac-vcf"))
+			result.pathVCFExac = cmd.getOptionValue("exac-vcf");
+		if (cmd.hasOption("exac-prefix"))
+			result.prefixExac = cmd.getOptionValue("exac-prefix");
+		else
+			result.prefixExac = "EXAC_";
+
+		if (cmd.hasOption("uk10k-vcf") && !cmd.hasOption("reference-fasta"))
+			throw new HelpRequestedException("Argument --reference-fasta is required if --uk10k-vcf is given");
+		if (cmd.hasOption("uk10k-vcf"))
+			result.pathVCFUK10K = cmd.getOptionValue("uk10k-vcf");
+		if (cmd.hasOption("uk10k-prefix"))
+			result.prefixUK10K = cmd.getOptionValue("uk10k-prefix");
+		else
+			result.prefixUK10K = "UK10K_";
 
 		result.showAll = cmd.hasOption("showall");
 
@@ -73,7 +92,6 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 	protected void initializeParser() {
 		super.initializeParser();
 
-		options.addOption(new Option("J", "jannovar", false, "write result in Jannovar output"));
 		options.addOption(new Option("a", "showall", false,
 				"report annotations for all affected transcripts (by default only one "
 						+ "with the highest impact is shown for each alternative allele)"));
@@ -95,9 +113,18 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		options.addOption(new Option(null, "reference-fasta", true,
 				"path to FAI-indexed FASTA reference, required for dbSNP annotation"));
+
 		options.addOption(new Option(null, "dbsnp-vcf", true,
 				"path to indexed, bgzip-compressed, and normalized dbSNP VCF file"));
 		options.addOption(new Option(null, "dbsnp-prefix", true, "prefix to use for dbSNP-based VCF INFO fields"));
+
+		options.addOption(
+				new Option(null, "exac-vcf", true, "path to indexed, bgzip-compressed, and normalized ExAC VCF file"));
+		options.addOption(new Option(null, "exac-prefix", true, "prefix to use for ExAC-based VCF INFO fields"));
+
+		options.addOption(new Option(null, "uk10k-vcf", true,
+				"path to indexed, bgzip-compressed, and normalized UK10K COHORT VCF file"));
+		options.addOption(new Option(null, "uk10k-prefix", true, "prefix to use for UK10K-based VCF INFO fields"));
 	}
 
 	protected void printHelp() {

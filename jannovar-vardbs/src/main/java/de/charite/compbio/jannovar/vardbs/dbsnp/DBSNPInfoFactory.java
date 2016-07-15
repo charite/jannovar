@@ -5,7 +5,7 @@ import htsjdk.variant.vcf.VCFHeader;
 /**
  * Build {@link DBSNPInfo} from a {@link VCFHeader}
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class DBSNPInfoFactory {
 	

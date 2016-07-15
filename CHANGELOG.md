@@ -4,7 +4,8 @@
 
 ### jannovar-vardbs
 
-* Initial version of this module, the aim is precise annotation from variant databases.
+* The first version ships with support for dbSNP b147, ExAC 0.3, and the UK10K COHORT data base
+* Initial version of this module, the aim is precise annotation from variant databases
 
 ### jannovar-core
 

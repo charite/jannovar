@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableSet;
  * 
  * Note that as with all databases, the annotation is for actual variants and not just positions.
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class DBSNPRecord {
 
@@ -122,11 +122,10 @@ public final class DBSNPRecord {
 	/** NonHas non-overlapping allele sets */
 	final boolean nonOverlappingAlleleSet;
 	/**
-	 * Allele frequencies as seen in 1000 Genomes project, entry with index 0 is from reference, the others are (in the
-	 * same order) the frequencies for the alternative alleles.
+	 * Alternative frequencies as seen in 1000 Genomes project, entry with index 0 is the first alternative allele
 	 */
 	final ImmutableList<Double> alleleFrequenciesG1K;
-	/** Is a common SNP (>=1% in at least one 1000 genomes population with at least 2 founders contributing */
+	/** Is a common SNP (>=1% in at least one 1000 genomes population with at least 2 founders contributing) */
 	final boolean common;
 	/** List of information on old variants */
 	final ImmutableList<String> oldVariants;

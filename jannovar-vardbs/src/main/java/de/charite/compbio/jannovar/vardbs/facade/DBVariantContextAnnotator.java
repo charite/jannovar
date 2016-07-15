@@ -11,7 +11,7 @@ import htsjdk.variant.vcf.VCFHeader;
 /**
  * Facade class for easy annotation of {@link VariantContext} objects using databases
  * 
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 final public class DBVariantContextAnnotator {
 
