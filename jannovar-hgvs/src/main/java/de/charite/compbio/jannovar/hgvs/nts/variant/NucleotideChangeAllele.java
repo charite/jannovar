@@ -20,9 +20,9 @@ import de.charite.compbio.jannovar.hgvs.nts.change.NucleotideChange;
  * Examples:
  *
  * <ul>
- * <li><tt>[(33A>C);(33A>C)]</tt></li>
- * <li><tt>[33A>C;33A>C]</tt></li>
- * <li><tt>[33A>C;(33A>C)]</tt></li>
+ * <li><tt>[(33A&gt;C);(33A&gt;C)]</tt></li>
+ * <li><tt>[33A&gt;C;33A&gt;C]</tt></li>
+ * <li><tt>[33A&gt;C;(33A&gt;C)]</tt></li>
  * </ul>
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
