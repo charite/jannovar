@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 
 /**
  * Configuration for the jannovar-filter app.
@@ -30,7 +30,7 @@ public class JPedOptions {
 	String outputPath = null;
 
 	/** selected mode of inheritance */
-	ImmutableSet<ModeOfInheritance> modeOfInheritances = ImmutableSet.of(ModeOfInheritance.UNINITIALIZED);
+	ImmutableSet<ModeOfInheritance> modeOfInheritances = ImmutableSet.of(ModeOfInheritance.ANY);
 
 	/** gene-wise instead of variant-wise processing (required for composite heterozygous) */
 	boolean geneWise = false;

@@ -12,7 +12,7 @@ import org.apache.commons.cli.ParseException;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 
 /**
  * Command line parser for the jped-cli application for the pedigree-based filtration of VCF.

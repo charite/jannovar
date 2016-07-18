@@ -11,7 +11,7 @@ import de.charite.compbio.jannovar.filter.GeneWiseInheritanceFilter;
 import de.charite.compbio.jannovar.filter.VariantContextFilter;
 import de.charite.compbio.jannovar.filter.VariantWiseInheritanceFilter;
 import de.charite.compbio.jannovar.filter.WriterFilter;
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;

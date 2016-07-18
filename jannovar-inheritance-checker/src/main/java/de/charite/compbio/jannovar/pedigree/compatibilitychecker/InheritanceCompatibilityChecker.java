@@ -7,8 +7,8 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.InheritanceVariantContextList;
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ad.VariantContextCompatibilityCheckerAutosomalDominant;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.ar.VariantContextCompatibilityCheckerAutosomalRecessive;
@@ -133,7 +133,7 @@ public class InheritanceCompatibilityChecker {
 
 	/**
 	 * Method for filtering whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is
-	 * compatible with a given {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} and
+	 * compatible with a given {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} and
 	 * {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
 	 *
 	 * @param vcList
@@ -178,7 +178,7 @@ public class InheritanceCompatibilityChecker {
 
 	/**
 	 * Method for checking whether a {@link java.util.List} of {@link htsjdk.variant.variantcontext.VariantContext} is
-	 * compatible with a given {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} and
+	 * compatible with a given {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} and
 	 * {@link de.charite.compbio.jannovar.pedigree.Pedigree}.
 	 *
 	 * @param vcList
@@ -212,7 +212,7 @@ public class InheritanceCompatibilityChecker {
 			case X_DOMINANT:
 				new VariantContextCompatibilityCheckerXDominant(pedigree, list).run();
 				continue;
-			case UNINITIALIZED:
+			case ANY:
 			default:
 				continue;
 			}

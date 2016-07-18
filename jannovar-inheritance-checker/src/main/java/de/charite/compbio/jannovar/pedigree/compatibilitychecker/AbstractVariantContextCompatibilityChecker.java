@@ -149,7 +149,7 @@ public abstract class AbstractVariantContextCompatibilityChecker
 	}
 
 	/**
-	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance}.
 	 *
 	 * @return A List of {@link htsjdk.variant.variantcontext.VariantContext} that are <code>true</code> for
 	 *         {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext#isMatchInheritance()}.

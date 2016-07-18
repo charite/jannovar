@@ -15,8 +15,8 @@ import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.factories.TestJannovarDataFactory;
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Disease;
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedParseException;
 import de.charite.compbio.jannovar.pedigree.PedPerson;

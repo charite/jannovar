@@ -9,7 +9,10 @@
 
 ### jannovar-core
 
-* Renaming of `ModeOfInheritance.UNINITIALIZED` to `ModeOfInheritance.UNDEFINED`.
+* Refurbishing `Genotype`, `GenotypeList`, and `GenotypeListBuilder` in `de.charite.compbio.jannovar.mendel`.
+* Moving `ModeOfInheritance` to `de.charite.compbio.jannovar.mendel`.
+* Creating new package `de.charite.compbio.jannovar.mendel` with code for filtering for mendelian inheritance modes.
+* Renaming of `ModeOfInheritance.UNINITIALIZED` to `ModeOfInheritance.ANY`.
 * Fixing handling of invalid transcripts (e.g., incomplete 3' end)
 * Adding `altGeneIDs` mapping to `TranscriptModel`, makes data bases backwards incompatible.
 * Rewrite of GFF parsers for RefSeq and ENSEMBL.

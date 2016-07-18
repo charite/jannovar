@@ -18,7 +18,7 @@ import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.Interval;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
-import de.charite.compbio.jannovar.pedigree.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityCheckerException;
