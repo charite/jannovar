@@ -15,6 +15,9 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
  */
 public abstract class JannovarAnnotationCommand extends JannovarCommand {
 
+	/** {@link JannovarData} with the information */
+	protected JannovarData jannovarData = null;
+
 	/** {@link ReferenceDictionary} with genome information. */
 	protected ReferenceDictionary refDict = null;
 
@@ -39,9 +42,9 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	 *             when the user requested the help page
 	 */
 	protected void deserializeTranscriptDefinitionFile() throws JannovarException, HelpRequestedException {
-		JannovarData data = new JannovarDataSerializer(this.options.dataFile).load();
-		this.refDict = data.getRefDict();
-		this.chromosomeMap = data.getChromosomes();
+		this.jannovarData = new JannovarDataSerializer(this.options.dataFile).load();
+		this.refDict = this.jannovarData.getRefDict();
+		this.chromosomeMap = this.jannovarData.getChromosomes();
 	}
 
 }

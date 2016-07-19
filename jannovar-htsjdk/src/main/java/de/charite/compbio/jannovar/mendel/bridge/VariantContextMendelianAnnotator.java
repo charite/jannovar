@@ -4,23 +4,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
+import de.charite.compbio.jannovar.mendel.ChromosomeType;
+import de.charite.compbio.jannovar.mendel.GenotypeBuilder;
 import de.charite.compbio.jannovar.mendel.GenotypeCalls;
+import de.charite.compbio.jannovar.mendel.GenotypeCallsBuilder;
 import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.MendelianInheritanceChecker;
 import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
+import htsjdk.variant.variantcontext.Allele;
+import htsjdk.variant.variantcontext.Genotype;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 
 /**
  * Helper class for annotating one {@link VariantContext} or a {@link Collection} thereof for compatibility with
- * Mendelian inheritance.
+ * Mendelian inheritance
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
@@ -113,8 +119,76 @@ public class VariantContextMendelianAnnotator {
 		return resultBuilder.build();
 	}
 
-	private List<GenotypeCalls> buildGenotypeCalls(Collection<VariantContext> vcs) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Compute compatible modes of inheritance for a list of {@link VariantContext} objects
+	 * 
+	 * @param vcs
+	 *            {@link VariantContext} objects to check for compatibility
+	 * @return A {@link Map} from {@link ModeOfInheritance} to the list of {@link VariantContext} in <code>vcs</code>
+	 *         that is compatible with each mode
+	 * @throws CannotateAnnotateMendelianInheritance
+	 *             on problems with annotating mendelian inheritance
+	 */
+	public ImmutableMap<ModeOfInheritance, ImmutableList<VariantContext>> computeCompatibleInheritanceModes(
+			List<VariantContext> vcs) throws CannotateAnnotateMendelianInheritance {
+		// Perform annotation, preceded by building GenotypeCalls list
+		List<GenotypeCalls> gcs = buildGenotypeCalls(vcs);
+		ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> checkResult;
+		try {
+			checkResult = mendelChecker.checkMendelianInheritance(gcs);
+		} catch (IncompatiblePedigreeException e) {
+			throw new CannotateAnnotateMendelianInheritance(
+					"Problem with annotating VariantContext for Mendelian inheritance.", e);
+		}
+
+		// Build final result
+		ImmutableMap.Builder<ModeOfInheritance, ImmutableList<VariantContext>> builder = new ImmutableMap.Builder<>();
+		for (Entry<ModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
+			ImmutableList.Builder<VariantContext> listBuilder = new ImmutableList.Builder<>();
+			for (GenotypeCalls gc : e.getValue())
+				listBuilder.add((VariantContext) gc.getPayload());
+			builder.put(e.getKey(), listBuilder.build());
+		}
+		return builder.build();
 	}
+
+	/**
+	 * Convert a {@link List} of {@link VariantContext} objects into a list of {@link GenotypeCalls} objects
+	 * 
+	 * @param vcs
+	 *            input {@link Collection} of {@link VariantContext} objects
+	 * @return {@link List} of corresponding {@link GenotypeCalls} objects
+	 */
+	private List<GenotypeCalls> buildGenotypeCalls(Collection<VariantContext> vcs) {
+		ArrayList<GenotypeCalls> result = new ArrayList<>();
+
+		final ImmutableList<String> xNames = ImmutableList.of("x", "X", "23", "chrx", "chrX", "chr23");
+		final ImmutableList<String> mtNames = ImmutableList.of("m", "M", "mt", "MT", "chrm", "chrM", "chrmt", "chrMT");
+
+		for (VariantContext vc : vcs) {
+			GenotypeCallsBuilder builder = new GenotypeCallsBuilder();
+			builder.setPayload(vc);
+
+			if (xNames.contains(vc.getContig()))
+				builder.setChromType(ChromosomeType.X_CHROMOSOMAL);
+			else if (mtNames.contains(vc.getContig()))
+				builder.setChromType(ChromosomeType.MITOCHONDRIAL);
+			else
+				builder.setChromType(ChromosomeType.AUTOSOMAL);
+
+			for (Genotype gt : vc.getGenotypes()) {
+				GenotypeBuilder gtBuilder = new GenotypeBuilder();
+				for (Allele allele : gt.getAlleles()) {
+					final int aIDX = vc.getAlleleIndex(allele);
+					gtBuilder.getAlleleNumbers().add(aIDX);
+				}
+				builder.getSampleToGenotype().put(gt.getSampleName(), gtBuilder.build());
+			}
+
+			result.add(builder.build());
+		}
+
+		return result;
+	}
+
 }

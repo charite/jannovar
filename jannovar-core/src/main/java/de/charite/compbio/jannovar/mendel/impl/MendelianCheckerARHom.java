@@ -78,7 +78,7 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
 
 		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values()) {
 			if (entry.getPerson().getDisease() == Disease.AFFECTED) {
-				final Genotype gt = calls.getGenotypeBySampleNo(entry.getIdx());
+				final Genotype gt = calls.getGenotypeForSample(entry.getPerson().getName());
 				if (gt.isHomRef() || gt.isHet())
 					return false;
 				else if (gt.isHomAlt())
@@ -118,7 +118,7 @@ public class MendelianCheckerARHom extends AbstractMendelianChecker {
 	private boolean unaffectedsAreNotHomozygousAlt(GenotypeCalls calls) {
 		for (Pedigree.IndexedPerson entry : pedigree.getNameToMember().values())
 			if (entry.getPerson().getDisease() == Disease.UNAFFECTED
-					&& calls.getGenotypeBySampleNo(entry.getIdx()).isHomAlt())
+					&& calls.getGenotypeForSample(entry.getPerson().getName()).isHomAlt())
 				return false;
 		return true;
 	}

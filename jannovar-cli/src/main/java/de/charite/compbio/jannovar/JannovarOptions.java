@@ -103,6 +103,9 @@ public final class JannovarOptions {
 	/** Prefix to use for UK10K VCF INFO Fields */
 	public String prefixUK10K;
 
+	/** Path to pedigree file */
+	public String pathPedFile;
+
 	// Configuration for the annotate-position command
 
 	/** chromosomal position and a change, e.g. {@code chr1:12345C>A}. */
@@ -145,6 +148,7 @@ public final class JannovarOptions {
 			out.println("ExAC prefix: " + prefixExac);
 			out.println("UK10K VCF: " + pathVCFUK10K);
 			out.println("UK10K prefix: " + prefixUK10K);
+			out.println("PED file: " + pathPedFile);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}

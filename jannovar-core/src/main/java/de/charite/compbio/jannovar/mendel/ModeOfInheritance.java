@@ -16,4 +16,22 @@ public enum ModeOfInheritance {
 	X_DOMINANT,
 	/** value for encoding uninitialized values */
 	ANY;
+
+	/** @return two-letter shortcut for the ModeOfInheritance */
+	public String getAbbreviation() {
+		switch (this) {
+		case AUTOSOMAL_DOMINANT:
+			return "AD";
+		case AUTOSOMAL_RECESSIVE:
+			return "AR";
+		case X_DOMINANT:
+			return "XD";
+		case X_RECESSIVE:
+			return "XR";
+		case ANY:
+		default:
+			return null;
+		}
+	}
+
 }

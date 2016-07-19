@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.filter;
+package de.charite.compbio.jannovar.mendel.filter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
  * List of genes, accessible through an interval tree.
  */
 class GeneList {
+
 	/** overall gene list */
 	private final ImmutableList<Gene> genes;
 	/** map from numeric chromosome id to interval tree of genes */
@@ -44,4 +45,5 @@ class GeneList {
 			builder.put(entry.getKey(), new IntervalArray<Gene>(entry.getValue(), new GeneIntervalEndExtractor()));
 		return builder.build();
 	}
+
 }

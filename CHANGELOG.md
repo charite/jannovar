@@ -2,6 +2,14 @@
 
 ## develop
 
+### jannovar-cli
+
+* this is gone, the functionality is now available as part of jannovar-cli
+
+### jannovar-filter
+
+* this module is done, everything here is merged into jannovar-htsjdk
+
 ### jannovar-vardbs
 
 * The first version ships with support for dbSNP b147, ExAC 0.3, and the UK10K COHORT data base

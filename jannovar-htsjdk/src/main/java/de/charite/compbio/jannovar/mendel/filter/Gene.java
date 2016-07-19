@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.filter;
+package de.charite.compbio.jannovar.mendel.filter;
 
 import com.google.common.collect.ImmutableList;
 

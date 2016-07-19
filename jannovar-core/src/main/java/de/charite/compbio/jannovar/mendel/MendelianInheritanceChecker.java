@@ -62,7 +62,10 @@ public final class MendelianInheritanceChecker {
 			Collection<GenotypeCalls> calls) throws IncompatiblePedigreeException {
 		ImmutableMap.Builder<ModeOfInheritance, ImmutableList<GenotypeCalls>> builder = new ImmutableMap.Builder<>();
 		for (ModeOfInheritance mode : ModeOfInheritance.values())
-			builder.put(mode, filterCompatibleRecords(calls, mode));
+			if (mode != ModeOfInheritance.ANY)
+				builder.put(mode, filterCompatibleRecords(calls, mode));
+			else
+				builder.put(mode, ImmutableList.copyOf(calls));
 		return builder.build();
 	}
 
