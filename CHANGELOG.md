@@ -2,7 +2,7 @@
 
 ## develop
 
-### jannovar-cli
+### jped-cli
 
 * this is gone, the functionality is now available as part of jannovar-cli
 
@@ -30,6 +30,7 @@
 
 ### jannovar-cli
 
+* Adding better progress display with estimate of pending time.
 * Adding support for annotating values from dbSNP VCF file (currently, only b147 is supported).
 * Adding simple progress reporting (from verbosity level 2).
 * Using Java 8 stream interface for `VariantContext` processing.

@@ -120,19 +120,13 @@ public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
 
 	@Override
 	public int hashCode() {
-		// TODO: need to use one more layer of abstraction
+		// Yes, we really need object identity here
 		return System.identityHashCode(this);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		// TODO: need to use one more layer of abstraction
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		// Yes, we really need object identity here
 		return (this.hashCode() == obj.hashCode());
 	}
 

@@ -31,7 +31,10 @@ public class VariantContextCounter {
 	}
 
 	public int decrement() {
-		return ++this.counter;
+		--this.counter;
+		if (this.counter < 0)
+			throw new RuntimeException("Negative counter " + this.counter);
+		return this.counter;
 	}
 
 	public VariantContext getVariantContext() {
@@ -48,8 +51,10 @@ public class VariantContextCounter {
 
 	public void setCounter(int counter) {
 		this.counter = counter;
+		if (this.counter < 0)
+			throw new RuntimeException("Negative counter " + this.counter);
 	}
-	
+
 	public void addCompatibleMode(ModeOfInheritance mode) {
 		this.compatibleModes.add(mode);
 	}
@@ -60,6 +65,46 @@ public class VariantContextCounter {
 
 	public void setCompatibleModes(TreeSet<ModeOfInheritance> compatibleModes) {
 		this.compatibleModes = compatibleModes;
+	}
+
+	@Override
+	public String toString() {
+		return "VariantContextCounter [variantContext=" + variantContext + ", counter=" + counter + ", compatibleModes="
+				+ compatibleModes + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((compatibleModes == null) ? 0 : compatibleModes.hashCode());
+		result = prime * result + counter;
+		result = prime * result + ((variantContext == null) ? 0 : variantContext.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VariantContextCounter other = (VariantContextCounter) obj;
+		if (compatibleModes == null) {
+			if (other.compatibleModes != null)
+				return false;
+		} else if (!compatibleModes.equals(other.compatibleModes))
+			return false;
+		if (counter != other.counter)
+			return false;
+		if (variantContext == null) {
+			if (other.variantContext != null)
+				return false;
+		} else if (!variantContext.equals(other.variantContext))
+			return false;
+		return true;
 	}
 
 }

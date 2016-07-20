@@ -86,8 +86,8 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		// Resolve contig that we work on, trigger start of new contig if necessary
 		final ReferenceDictionary refDict = jannovarData.getRefDict();
 		if (!refDict.getContigNameToID().containsKey(vc.getContig())) {
-			LOGGER.debug("Unknown contig in " + vc.getContig() + ", flushing current contig and writing out.");
-			endContig();
+			LOGGER.trace("Unknown contig in " + vc.getContig() + ", flushing current contig and writing out.");
+			markDoneGenes(-1, -1);
 			sink.accept(vc);
 			return;
 		}
@@ -107,7 +107,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			if (isGeneAffectedByChange(gene, vc))
 				putVariantForGene(vc, gene);
 
-		// write out all variants left of variant
+		// Write out all variants left of variant
 		markDoneGenes(contigID, vc.getStart() - 1);
 	}
 
@@ -132,32 +132,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	@Override
 	public void close() {
 		LOGGER.trace("Closing mendelian annotation processor");
-		endContig();
-	}
-
-	/**
-	 * End the current contig, writing out all variants
-	 */
-	private void endContig() {
-		LOGGER.trace("Force-ending processing of the contig");
-
-		// Perform a final round of tests on all currently active genes
-		ArrayList<Gene> doneGenes = new ArrayList<Gene>();
-		for (Entry<Gene, ArrayList<VariantContext>> entry : activeGenes.entrySet()) {
-			try {
-				checkVariantsForGene(entry.getKey());
-			} catch (VariantContextFilterException | CannotateAnnotateMendelianInheritance e) {
-				throw new VariantContextFilterException("Problem with annotating the variant", e);
-			}
-			doneGenes.add(entry.getKey());
-		}
-		// Mark gene as done
-		for (Gene gene : doneGenes)
-			processedGene(gene);
-
-		for (VariantContextCounter vcc : activeVariants.values())
-			LOGGER.trace("Variant remains {} with count {}",
-					new Object[] { vcc.getVariantContext(), vcc.getCounter() });
+		markDoneGenes(-1, -1);
 
 		// There should be no more active variants or genes
 		if (!activeVariants.isEmpty())
@@ -266,23 +241,18 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			throw new VariantContextFilterException("Problem with annotating variant for Mendelian inheritance", e);
 		}
 
-		LOGGER.trace("Gene done {}", new Object[] { gene });
+		LOGGER.trace("Gene done {}", new Object[] { gene.getName() });
 
 		// decrease count of variants that lie in gene (that is now ignored)
 		ArrayList<VariantContextCounter> done = new ArrayList<VariantContextCounter>();
 		for (VariantContextCounter var : activeVariants.values()) {
-			int sum = 0;
-			for (int alleleID = 0; alleleID < var.getVariantContext().getAlternateAlleles().size(); ++alleleID) {
-				if (isGeneAffectedByChange(gene, var.getVariantContext())) {
-					LOGGER.trace("Gene {} done for variant {}", new Object[] { var.getVariantContext(), gene });
-					sum += 1;
-				}
+			if (isGeneAffectedByChange(gene, var.getVariantContext())) {
+				LOGGER.trace("Gene {} done for variant {}", new Object[] { gene.getName(),
+						var.getVariantContext().getContig() + ":" + var.getVariantContext().getStart() });
+				var.decrement();
 			}
-			if (sum > 0) {
-				var.setCounter(var.getCounter() - sum);
-				if (var.getCounter() == 0)
-					done.add(var);
-			}
+			if (var.getCounter() == 0)
+				done.add(var);
 		}
 
 		// Sort done by coordinate
@@ -310,7 +280,7 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			}
 		}
 
-		LOGGER.trace("Gene {} is inactive now", new Object[] { gene });
+		LOGGER.trace("Gene {} is inactive now", new Object[] { gene.getName() });
 
 		// Mark gene as done
 		activeGenes.remove(gene);
