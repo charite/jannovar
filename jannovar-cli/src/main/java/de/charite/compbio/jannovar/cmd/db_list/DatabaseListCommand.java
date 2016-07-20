@@ -9,6 +9,9 @@ import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
 import de.charite.compbio.jannovar.datasource.DataSourceFactory;
 import de.charite.compbio.jannovar.datasource.DatasourceOptions;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.Subparser;
+import net.sourceforge.argparse4j.inf.Subparsers;
 
 public class DatabaseListCommand extends JannovarCommand {
 
@@ -34,13 +37,17 @@ public class DatabaseListCommand extends JannovarCommand {
 	}
 
 	@Override
-	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	protected JannovarOptions parseCommandLine(String[] argv)
+			throws CommandLineParsingException, HelpRequestedException {
 		try {
 			return new DatabaseListCommandLineParser().parse(argv);
 		} catch (ParseException e) {
 			throw new CommandLineParsingException("Could not parse command line", e);
 		}
+	}
+
+	public static void addSubparser(Subparsers subparsers) {
+		Subparser parser = subparsers.addParser("db-list").help("List transcript databases to download");
 	}
 
 }
