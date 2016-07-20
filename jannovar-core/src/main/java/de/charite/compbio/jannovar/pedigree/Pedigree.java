@@ -62,6 +62,11 @@ public final class Pedigree {
 	public Pedigree(PedFileContents contents, String pedigreeName) throws PedParseException {
 		this(pedigreeName, new PedigreeExtractor(pedigreeName, contents).run());
 	}
+	
+	/** @return number of members in pedigree */
+	public int getNMembers() {
+		return members.size();
+	}
 
 	/** @return the pedigree's name */
 	public String getName() {

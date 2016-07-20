@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.io.Closeable;
 import java.io.IOException;
 
 import de.charite.compbio.jannovar.annotation.AnnotationException;
@@ -17,7 +18,7 @@ import de.charite.compbio.jannovar.annotation.AnnotationException;
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
-public abstract class AnnotatedVariantWriter {
+public abstract class AnnotatedVariantWriter implements Closeable {
 
 	/**
 	 * Write out the given VariantContext with additional annotation.
@@ -33,6 +34,6 @@ public abstract class AnnotatedVariantWriter {
 	public abstract String getOutFileName();
 
 	/** Close writer, free resources */
-	abstract void close();
+	public abstract void close();
 
 }

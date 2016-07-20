@@ -1,6 +1,6 @@
 ##fileformat=VCFv4.2
 ##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
 ##jannovarCommand
-##jannovarVersion=0.16
+##jannovarVersion=0.17
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	individual
 NC_000001.10	321052	.	C	T	.	.	ANN=T|non_coding_transcript_exon_variant|LOW|LOC100132287|gene12|transcript|XR_246673.1|Noncoding|3/4|n.571C>T||571/5993||||	GT:AD:DP:GQ:PL	0/1:14,7:21:99:181,0,367

@@ -17,7 +17,7 @@
  *   - c.123+54_123+55insAB012345.2:g.76_420
  *   - c.[GK:94A>G;DMD:76A>C]
  *
- * @author Manuel Holtgrewe <manuel.holtgrewe@bihealth.de>
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 lexer grammar Antlr4HGVSLexer;
 

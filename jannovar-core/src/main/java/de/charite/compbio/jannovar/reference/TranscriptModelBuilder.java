@@ -1,8 +1,12 @@
 package de.charite.compbio.jannovar.reference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.ImmutableSortedSet.Builder;
 
 /**
  * Class for building immutable {@link TranscriptModel} objects field-by-field.
@@ -47,6 +51,9 @@ public class TranscriptModelBuilder {
 	/** {@link TranscriptInfo#geneID} of next {@link TranscriptInfo} to build. */
 	private String geneID = null;
 
+	/** Map with alternative gene IDs */
+	private Map<String, String> altGeneIDs = new HashMap<String, String>();;
+
 	/**
 	 * {@link TranscriptInfo#transcriptSupportLevel} of next {@link TranscriptInfo} to build.
 	 *
@@ -66,6 +73,7 @@ public class TranscriptModelBuilder {
 		exonRegions.clear();
 		sequence = null;
 		geneID = null;
+		altGeneIDs.clear();
 		transcriptSupportLevel = TranscriptSupportLevels.NOT_AVAILABLE;
 	}
 
@@ -74,7 +82,7 @@ public class TranscriptModelBuilder {
 	 */
 	public TranscriptModel build() {
 		// Build list of immutable exons in the correct order.
-		ImmutableList.Builder<GenomeInterval> builder = new ImmutableList.Builder<GenomeInterval>();
+		ImmutableSortedSet.Builder<GenomeInterval> builder = ImmutableSortedSet.<GenomeInterval> naturalOrder();
 		if (exonRegions.size() > 0) {
 			if (strand == exonRegions.get(0).getStrand()) {
 				for (int i = 0; i < exonRegions.size(); ++i)
@@ -87,7 +95,7 @@ public class TranscriptModelBuilder {
 
 		// Create new TranscriptInfo object.
 		return new TranscriptModel(accession, geneSymbol, txRegion.withStrand(strand), cdsRegion.withStrand(strand),
-				builder.build(), sequence, geneID, transcriptSupportLevel);
+				ImmutableList.copyOf(builder.build()), sequence, geneID, transcriptSupportLevel, altGeneIDs);
 	}
 
 	/**
@@ -173,11 +181,24 @@ public class TranscriptModelBuilder {
 	}
 
 	/**
-	 * @param exonRegions
-	 *            the exonRegions to clear
+	 * Clear exon regions list
 	 */
-	public void clearExonRegions(ArrayList<GenomeInterval> exonRegions) {
+	public void clearExonRegions() {
 		this.exonRegions.clear();
+	}
+
+	/**
+	 * @return alternative gene Ids
+	 */
+	public Map<String, String> getAltGeneIDs() {
+		return altGeneIDs;
+	}
+
+	/**
+	 * Clear alternative geneIDs map
+	 */
+	public void clearAltGeneIDs() {
+		this.altGeneIDs.clear();
 	}
 
 	/**

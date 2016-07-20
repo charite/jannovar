@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 public final class JannovarOptions {
 
 	/** the version of the program */
-	public static final String JANNOVAR_VERSION = "0.16";
+	public static final String JANNOVAR_VERSION = "0.17";
 
 	/** the selected command */
 	public Command command = null;
@@ -57,9 +57,6 @@ public final class JannovarOptions {
 	/** path to the file with the serialized data */
 	public String dataFile = null;
 
-	/** whether to write the result in the Jannovar format */
-	public boolean jannovarFormat = false;
-
 	/** whether to report the annotations for all affected transcripts for each alternative allele */
 	public boolean showAll = false;
 
@@ -85,6 +82,30 @@ public final class JannovarOptions {
 	/** path to output VCF file path (overrides generation of file name from input file name) */
 	public String outVCFFile = null;
 
+	/** Path to dbSNP VCF file to use for the annotation */
+	public String pathVCFDBSNP = null;
+
+	/** Prefix to use for dbSNP VCF INFO Fields */
+	public String prefixDBSNP = null;
+
+	/** Path to the reference FAI-indexed FASTA file (required for dbSNP/ExAC/UK10K-based annotation */
+	public String pathFASTARef = null;
+
+	/** Path to ExAC VCF file to use for the annotation */
+	public String pathVCFExac;
+
+	/** Prefix to use for ExAC VCF INFO Fields */
+	public String prefixExac;
+
+	/** Path to UK10K VCF file to use for the annotation */
+	public String pathVCFUK10K;
+
+	/** Prefix to use for UK10K VCF INFO Fields */
+	public String prefixUK10K;
+
+	/** Path to pedigree file */
+	public String pathPedFile;
+
 	// Configuration for the annotate-position command
 
 	/** chromosomal position and a change, e.g. {@code chr1:12345C>A}. */
@@ -99,7 +120,9 @@ public final class JannovarOptions {
 
 	/**
 	 * Print option values to stderr.
-	 @param out Stream to print to.
+	 *
+	 * @param out
+	 *            Stream to print to.
 	 */
 	public void print(PrintStream out) {
 		out.println("verbosity: " + verbosity);
@@ -115,10 +138,17 @@ public final class JannovarOptions {
 			out.println("vcfFilePaths: " + vcfFilePaths);
 			out.println("chromosomalChanges: " + chromosomalChanges);
 			out.println("showAll: " + showAll);
-			out.println("jannovarFormat: " + jannovarFormat);
 			out.println("writeJannovarInfoFields: " + writeJannovarInfoFields);
 			out.println("writeVCFAnnotationStandardInfoFields: " + writeVCFAnnotationStandardInfoFields);
 			out.println("output infix: " + outputInfix);
+			out.println("reference FASTA: " + pathFASTARef);
+			out.println("dbSNP VCF: " + pathVCFDBSNP);
+			out.println("dbSNP prefix: " + prefixDBSNP);
+			out.println("ExAC VCF: " + pathVCFExac);
+			out.println("ExAC prefix: " + prefixExac);
+			out.println("UK10K VCF: " + pathVCFUK10K);
+			out.println("UK10K prefix: " + prefixUK10K);
+			out.println("PED file: " + pathPedFile);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}
