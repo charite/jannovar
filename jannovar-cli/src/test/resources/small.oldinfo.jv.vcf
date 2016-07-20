@@ -1,6 +1,7 @@
 ##fileformat=VCFv4.2
 ##INFO=<ID=EFFECT,Number=1,Type=String,Description="variant effect (UTR5,UTR3,intronic,splicing,missense,stoploss,stopgain,startloss,duplication,frameshift-insertion,frameshift-deletion,non-frameshift-deletion,non-frameshift-insertion,synonymous)">
 ##INFO=<ID=HGVS,Number=1,Type=String,Description="HGVS Nomenclature">
+##contig=<ID=NC_000001.10,length=249250621>
 ##jannovarCommand
 ##jannovarVersion=0.17
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	individual
