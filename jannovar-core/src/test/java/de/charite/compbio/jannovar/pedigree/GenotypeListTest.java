@@ -12,7 +12,7 @@ public class GenotypeListTest {
 	ImmutableList<String> names;
 	ImmutableList<ImmutableList<Genotype>> calls;
 	Pedigree pedigree1, pedigree2;
-	/** the {@link GenotypeList} under test */
+	/** the {@link GenotypeCalls} under test */
 	GenotypeList list;
 
 	@Before
@@ -30,7 +30,7 @@ public class GenotypeListTest {
 		this.pedigree2 = new Pedigree(new PedFileContents(new ImmutableList.Builder<String>().build(),
 				personList.build()), "FAM");
 
-		// create GenotypeList
+		// create GenotypeCalls
 		this.names = ImmutableList.of("father", "mother", "son", "daughter");
 		this.list = new GenotypeList(null, names, false, null);
 	}

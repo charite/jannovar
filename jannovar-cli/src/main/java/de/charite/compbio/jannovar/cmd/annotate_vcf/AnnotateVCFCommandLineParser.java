@@ -69,6 +69,9 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 			result.prefixUK10K = cmd.getOptionValue("uk10k-prefix");
 		else
 			result.prefixUK10K = "UK10K_";
+		
+		if (cmd.hasOption("pedigree-file"))
+			result.pathPedFile = cmd.getOptionValue("pedigree-file");
 
 		result.showAll = cmd.hasOption("showall");
 
@@ -125,6 +128,8 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		options.addOption(new Option(null, "uk10k-vcf", true,
 				"path to indexed, bgzip-compressed, and normalized UK10K COHORT VCF file"));
 		options.addOption(new Option(null, "uk10k-prefix", true, "prefix to use for UK10K-based VCF INFO fields"));
+		
+		options.addOption(new Option(null, "pedigree-file", true, "path to pedigree file"));
 	}
 
 	protected void printHelp() {

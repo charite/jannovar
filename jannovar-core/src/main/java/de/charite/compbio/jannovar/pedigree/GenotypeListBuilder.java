@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Builder for {@link GenotypeList}.
+ * Builder for {@link GenotypeCalls}.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * 
@@ -29,7 +29,7 @@ public class GenotypeListBuilder {
 	}
 
 	/**
-	 * Set "is X chromosomal" flag of next build GenotypeList.
+	 * Set "is X chromosomal" flag of next build GenotypeCalls.
 	 *
 	 * @param isXChromosomal
 	 *            <code>true</code> if the next built genotype list is X chromosomal
@@ -53,7 +53,7 @@ public class GenotypeListBuilder {
 	}
 
 	/**
-	 * @return new {@link GenotypeList}
+	 * @return new {@link GenotypeCalls}
 	 */
 	public GenotypeList build() {
 		return new GenotypeList(geneID, names, isXChromosomal, callBuilder.build());

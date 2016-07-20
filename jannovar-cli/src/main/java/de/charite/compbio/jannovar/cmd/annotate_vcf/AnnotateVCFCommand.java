@@ -1,24 +1,33 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.vcf.VCFFileReader;
-import htsjdk.variant.vcf.VCFHeader;
-
 import java.io.File;
-import java.util.function.Supplier;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.apache.commons.cli.ParseException;
 
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.JannovarOptions;
-import de.charite.compbio.jannovar.ProgressReporter;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.mendel.filter.ConsumerProcessor;
+import de.charite.compbio.jannovar.mendel.filter.CoordinateSortingChecker;
+import de.charite.compbio.jannovar.mendel.filter.GeneWiseMendelianAnnotationProcessor;
+import de.charite.compbio.jannovar.mendel.filter.VariantContextProcessor;
+import de.charite.compbio.jannovar.pedigree.PedFileContents;
+import de.charite.compbio.jannovar.pedigree.PedFileReader;
+import de.charite.compbio.jannovar.pedigree.PedParseException;
+import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.progress.GenomeRegionListFactoryFromSAMSequenceDictionary;
+import de.charite.compbio.jannovar.progress.ProgressReporter;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotator;
 import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotatorFactory;
+import htsjdk.samtools.SAMSequenceDictionary;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.vcf.VCFFileReader;
+import htsjdk.variant.vcf.VCFHeader;
 
 /**
  * Run annotation steps (read in VCF, write out VCF or Jannovar file format).
@@ -28,17 +37,11 @@ import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotatorFactor
  */
 public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
-	/** Currently considered {@link VariantContext}, for progress reporting */
-	private VariantContext currentVC;
 	/** Progress reporting */
-	private ProgressReporter progressReporter;
+	private ProgressReporter progressReporter = null;
 
 	public AnnotateVCFCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
 		super(argv);
-		if (this.options.verbosity >= 2)
-			this.progressReporter = new ProgressReporter(this::getCurrentVC, 60);
-		else
-			this.progressReporter = null;
 	}
 
 	/**
@@ -55,19 +58,22 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 		deserializeTranscriptDefinitionFile();
 
-		if (progressReporter != null)
-			progressReporter.start();
 		for (String vcfPath : options.vcfFilePaths) {
 			// initialize the VCF reader
 			try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
+				if (this.options.verbosity >= 1) {
+					final SAMSequenceDictionary seqDict = VCFFileReader.getSequenceDictionary(new File(vcfPath));
+					final GenomeRegionListFactoryFromSAMSequenceDictionary factory = new GenomeRegionListFactoryFromSAMSequenceDictionary();
+					this.progressReporter = new ProgressReporter(factory.construct(seqDict), 60);
+					this.progressReporter.printHeader();
+					this.progressReporter.start();
+				}
+
 				VCFHeader vcfHeader = vcfReader.getFileHeader();
 				System.err.println("Annotating VCF...");
 				final long startTime = System.nanoTime();
 
 				Stream<VariantContext> stream = vcfReader.iterator().stream();
-
-				// Make current VC available to progress printer
-				stream = stream.peek(x -> this.currentVC = x);
 
 				// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
 				if (options.pathVCFDBSNP != null) {
@@ -101,18 +107,48 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 				// Write result to output file
 				try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath,
-						options, args)) {
-					stream.forEachOrdered(writer::put);
+						options, args); VariantContextProcessor sink = buildMendelianProcessors(writer);) {
+					// Make current VC available to progress printer
+					if (this.progressReporter != null)
+						stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
+
+					stream.forEachOrdered(sink::put);
 
 					System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
 					final long endTime = System.nanoTime();
 					System.err.println(String.format("Annotation and writing took %.2f sec.",
 							(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
+				} catch (IOException e) {
+					throw new JannovarException("Problem opening file", e);
 				}
 			}
 		}
 		if (progressReporter != null)
-			progressReporter.stop();
+			progressReporter.done();
+	}
+
+	/**
+	 * Construct the mendelian inheritance annotation processors
+	 * 
+	 * @param sink
+	 *            The place to put put the VariantContext to after filtration
+	 * @throws IOException
+	 *             in case of problems with opening the pedigree file
+	 * @throws PedParseException
+	 *             in the case of problems with parsing pedigrees
+	 */
+	private VariantContextProcessor buildMendelianProcessors(AnnotatedVCFWriter writer)
+			throws PedParseException, IOException {
+		if (options.pathPedFile != null) {
+			final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
+			final PedFileContents pedContents = pedReader.read();
+			final Pedigree pedigree = new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
+					pedigree, jannovarData, vc -> writer.put(vc));
+			return new CoordinateSortingChecker(mendelProcessor);
+		} else {
+			return new ConsumerProcessor(vc -> writer.put(vc));
+		}
 	}
 
 	@Override
@@ -124,11 +160,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		} catch (ParseException e) {
 			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
-	}
-
-	/** @return current {@link VariantContext}, for progress reporting */
-	private VariantContext getCurrentVC() {
-		return currentVC;
 	}
 
 }

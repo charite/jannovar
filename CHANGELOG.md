@@ -2,6 +2,14 @@
 
 ## develop
 
+### jped-cli
+
+* this is gone, the functionality is now available as part of jannovar-cli
+
+### jannovar-filter
+
+* this module is done, everything here is merged into jannovar-htsjdk
+
 ### jannovar-vardbs
 
 * The first version ships with support for dbSNP b147, ExAC 0.3, and the UK10K COHORT data base
@@ -9,6 +17,10 @@
 
 ### jannovar-core
 
+* Refurbishing `Genotype`, `GenotypeList`, and `GenotypeListBuilder` in `de.charite.compbio.jannovar.mendel`.
+* Moving `ModeOfInheritance` to `de.charite.compbio.jannovar.mendel`.
+* Creating new package `de.charite.compbio.jannovar.mendel` with code for filtering for mendelian inheritance modes.
+* Renaming of `ModeOfInheritance.UNINITIALIZED` to `ModeOfInheritance.ANY`.
 * Fixing handling of invalid transcripts (e.g., incomplete 3' end)
 * Adding `altGeneIDs` mapping to `TranscriptModel`, makes data bases backwards incompatible.
 * Rewrite of GFF parsers for RefSeq and ENSEMBL.
@@ -18,6 +30,7 @@
 
 ### jannovar-cli
 
+* Adding better progress display with estimate of pending time.
 * Adding support for annotating values from dbSNP VCF file (currently, only b147 is supported).
 * Adding simple progress reporting (from verbosity level 2).
 * Using Java 8 stream interface for `VariantContext` processing.

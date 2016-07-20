@@ -77,7 +77,7 @@ public final class GenotypeList {
 	}
 
 	/**
-	 * Check whether the {@link #names} of this GenotypeList are the same as the names of the members of
+	 * Check whether the {@link #names} of this GenotypeCalls are the same as the names of the members of
 	 * <code>pedigree</code>.
 	 *
 	 * For this, the order of the names has to be the same as the number of the names. This check is important for the
@@ -93,7 +93,7 @@ public final class GenotypeList {
 
 	@Override
 	public String toString() {
-		return "GenotypeList(" + calls + ")";
+		return "GenotypeCalls(" + calls + ")";
 	}
 
 }
