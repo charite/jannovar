@@ -132,15 +132,15 @@ public class ExacRecord {
 		double bestFreq = -1;
 		ExacPopulation bestPop = ExacPopulation.ALL;
 		for (ExacPopulation pop : ExacPopulation.values()) {
-			if (alleleFrequencies.get(pop).get(alleleNo - 1) > bestFreq) {
-				bestFreq = alleleFrequencies.get(pop).get(alleleNo - 1);
+			if (alleleFrequencies.get(pop).get(alleleNo) > bestFreq) {
+				bestFreq = alleleFrequencies.get(pop).get(alleleNo);
 				bestPop = pop;
 			}
 		}
 		return bestPop;
 	}
 
-	/** @return Highest frequency of the given allele */
+	/** @return Highest frequency of the given allele, 0 is first alternative allele */
 	public double highestAlleleFreq(int alleleNo) {
 		return getAlleleFrequencies(popWithHighestAlleleFreq(alleleNo)).get(alleleNo);
 	}

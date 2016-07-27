@@ -16,7 +16,7 @@ import htsjdk.variant.variantcontext.VariantContext;
 public final class AlleleMatcher {
 
 	/** Helper to use for indel normalization */
-	final VariantNormalizer normalizer;
+	private final VariantNormalizer normalizer;
 
 	/**
 	 * Construct GenotypeMatcher
@@ -100,8 +100,12 @@ public final class AlleleMatcher {
 	private Collection<VariantDescription> ctxToVariants(VariantContext vc) {
 		List<VariantDescription> vars = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {
-			vars.add(new VariantDescription(vc.getContig(), vc.getStart() - 1, vc.getAlleles().get(0).getBaseString(),
-					vc.getAlleles().get(i).getBaseString()));
+			VariantDescription vd = new VariantDescription(vc.getContig(), vc.getStart() - 1,
+					vc.getAlleles().get(0).getBaseString(), vc.getAlleles().get(i).getBaseString());
+			VariantDescription nd = normalizer.normalizeVariant(vd);
+			if (nd.getRef().isEmpty()) // is insertion
+				nd = normalizer.normalizeInsertion(vd);
+			vars.add(vd);
 		}
 		return vars;
 	}

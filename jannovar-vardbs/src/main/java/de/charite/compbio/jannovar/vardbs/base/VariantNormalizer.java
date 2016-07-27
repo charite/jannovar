@@ -7,13 +7,13 @@ import htsjdk.samtools.reference.IndexedFastaSequenceFile;
 
 /**
  * Helper class for normalizing two variants
- * 
+ *
  * This is necessary for indel realignment. More information can be found in the
  * <a href="http://genome.sph.umich.edu/wiki/Variant_Normalization">vt documentation</a> and in the following paper:
- * 
+ *
  * Tan, Adrian, Gonçalo R. Abecasis, and Hyun Min Kang. "Unified representation of genetic variants." Bioinformatics
  * (2015): btv112.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class VariantNormalizer {
@@ -25,7 +25,7 @@ public final class VariantNormalizer {
 
 	/**
 	 * Construct new variant normalizer object
-	 * 
+	 *
 	 * @param fastaPath
 	 *            Path to indexed FASTA file
 	 * @throws JannovarVarDBException
@@ -42,10 +42,27 @@ public final class VariantNormalizer {
 
 	/**
 	 * Normalize a variant given as a start coordinate, reference, and variant sequence
-	 * 
+	 *
 	 * The chromosome is given by its name, position is an 0-based integer, reference and variant are given as sequence.
 	 */
 	public VariantDescription normalizeVariant(VariantDescription desc) {
+		final VariantDescription shifted = shiftLeft(desc);
+		return trimBasesLeft(shifted, 0);
+	}
+
+	/**
+	 * Normalize a variant given as a start coordinate, reference, and variant sequence
+	 *
+	 * However, leave the leftmost base intact in the case so insertions have a REF base.
+	 *
+	 * The chromosome is given by its name, position is an 0-based integer, reference and variant are given as sequence.
+	 */
+	public VariantDescription normalizeInsertion(VariantDescription desc) {
+		final VariantDescription shifted = shiftLeft(desc);
+		return trimBasesLeft(shifted, 1);
+	}
+
+	private VariantDescription shiftLeft(VariantDescription desc) {
 		int pos = desc.getPos();
 		String ref = desc.getRef();
 		String alt = desc.getAlt();
@@ -70,8 +87,17 @@ public final class VariantNormalizer {
 			}
 		}
 
+		return new VariantDescription(desc.getChrom(), pos, ref, alt);
+	}
+
+	private VariantDescription trimBasesLeft(VariantDescription desc, int minSize) {
+		int pos = desc.getPos();
+		String ref = desc.getRef();
+		String alt = desc.getAlt();
+
+		// Trim left bases
 		while (true) {
-			if (ref.length() > 0 && alt.length() > 0 && ref.charAt(0) == alt.charAt(0)) {
+			if (ref.length() > minSize && alt.length() > minSize && ref.charAt(0) == alt.charAt(0)) {
 				ref = ref.substring(1);
 				alt = alt.substring(1);
 			} else {

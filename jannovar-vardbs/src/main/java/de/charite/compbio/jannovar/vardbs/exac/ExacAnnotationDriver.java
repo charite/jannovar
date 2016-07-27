@@ -47,10 +47,10 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 				} else {
 					final ExacRecord current = annotatingExacRecord.get(alleleNo).getRecord();
 					final ExacRecord update = matchToRecord.get(m).getRecord();
-					if (update.getAlleleFrequencies(ExacPopulation.ALL).size() <= alleleNo)
+					if (update.getAlleleFrequencies(ExacPopulation.ALL).size() < alleleNo)
 						continue;
-					else if (current.getAlleleFrequencies(ExacPopulation.ALL).size() <= alleleNo
-							|| current.highestAlleleFreq(alleleNo) < update.highestAlleleFreq(alleleNo))
+					else if (current.getAlleleFrequencies(ExacPopulation.ALL).size() < alleleNo
+							|| current.highestAlleleFreq(alleleNo - 1) < update.highestAlleleFreq(alleleNo - 1))
 						annotatingExacRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}
@@ -95,7 +95,7 @@ public class ExacAnnotationDriver extends AbstractDBAnnotationDriver<ExacRecord>
 			} else {
 				final ExacRecord record = records.get(i).getRecord();
 				final int alleleNo = records.get(i).getAlleleNo();
-				final ExacPopulation pop = record.popWithHighestAlleleFreq(alleleNo);
+				final ExacPopulation pop = record.popWithHighestAlleleFreq(alleleNo - 1);
 				afs.add(record.getAlleleFrequencies(pop).get(alleleNo - 1));
 				acs.add(record.getAlleleCounts(pop).get(alleleNo - 1));
 			}

@@ -11,6 +11,7 @@ import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.mendel.filter.ConsumerProcessor;
 import de.charite.compbio.jannovar.mendel.filter.CoordinateSortingChecker;
 import de.charite.compbio.jannovar.mendel.filter.GeneWiseMendelianAnnotationProcessor;
@@ -103,6 +104,12 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 							.constructUK10K(options.pathVCFUK10K, options.pathFASTARef, exacOptions);
 					uk10kAnno.extendHeader(vcfHeader);
 					stream = stream.map(uk10kAnno::annotateVariantContext);
+				}
+
+				// Extend header with INHERITANCE filter
+				if (options.pathPedFile != null) {
+					System.err.println("Extending header with INHERITANCE...");
+					new MendelVCFHeaderExtender().extendHeader(vcfHeader, "");
 				}
 
 				// Write result to output file

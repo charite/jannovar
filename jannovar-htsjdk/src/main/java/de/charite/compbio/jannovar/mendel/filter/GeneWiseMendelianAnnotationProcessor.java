@@ -29,6 +29,7 @@ import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
+import htsjdk.variant.vcf.VCFHeader;
 
 /**
  * Process {@link VariantContext} objects and annotate them with mendelian inheritance compatibility
@@ -139,6 +140,13 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			throw new VariantContextFilterException("All variants should be inactive now");
 		if (!activeGenes.isEmpty())
 			throw new VariantContextFilterException("All genes should be inactive now");
+	}
+
+	/**
+	 * Appropriately extend {@link VCFHeader}
+	 */
+	public void extendHeader(VCFHeader vcfHeader, String prefix) {
+		new MendelVCFHeaderExtender().extendHeader(vcfHeader, prefix);
 	}
 
 	/**
