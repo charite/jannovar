@@ -95,6 +95,8 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		final int contigID = refDict.getContigNameToID().get(vc.getContig());
 		IntervalArray<Gene> iTree = geneList.getGeneIntervalTree().get(contigID);
 
+		// TODO(holtgrewe): upstream and downstream is ignored...
+
 		// Consider this variant for each affected gene
 		GenomeInterval changeInterval = new GenomeInterval(refDict, Strand.FWD, contigID, vc.getStart() - 1,
 				vc.getEnd());
@@ -104,9 +106,13 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		else
 			qr = iTree.findOverlappingWithInterval(changeInterval.getBeginPos(), changeInterval.getEndPos());
 
-		for (Gene gene : qr.getEntries())
-			if (isGeneAffectedByChange(gene, vc))
-				putVariantForGene(vc, gene);
+		if (qr.getEntries().isEmpty()) {
+			putVariantForGene(vc, null);
+		} else {
+			for (Gene gene : qr.getEntries())
+				if (isGeneAffectedByChange(gene, vc))
+					putVariantForGene(vc, gene);
+		}
 
 		// Write out all variants left of variant
 		markDoneGenes(contigID, vc.getStart() - 1);
@@ -181,6 +187,8 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		LOGGER.trace("Assigning variant {} to gene {}", new Object[] { vc, gene });
 		// Register VariantContext as active
 		activeVariants.computeIfAbsent(vc, x -> new VariantContextCounter(x, 0));
+		if (gene == null)
+			return; // done, just marked is as active
 		activeVariants.get(vc).increment();
 		// Register VariantContext for gene
 		activeGenes.computeIfAbsent(gene, x -> new ArrayList<>());
