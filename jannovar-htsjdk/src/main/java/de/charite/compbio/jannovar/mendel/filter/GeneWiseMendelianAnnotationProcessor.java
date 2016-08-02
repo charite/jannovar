@@ -223,17 +223,6 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 				doneGenes.add(gene);
 		}
 
-		System.err.println("Marking " + doneGenes.size() + " as done, active genes " + activeGenes.size()
-				+ ", active variants " + activeVariants.size());
-		System.err.println("doneGenes: " + doneGenes);
-		System.err
-				.println(
-						"active variants: " + Joiner.on(' ')
-								.join(activeVariants
-										.entrySet().stream().map(e -> e.getKey().getContig() + ":"
-												+ e.getKey().getStart() + "(" + e.getValue().getCounter() + ")")
-										.iterator()));
-
 		if (doneGenes.isEmpty()) {
 			processedGene(null);
 		} else {
