@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -222,10 +223,28 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 				doneGenes.add(gene);
 		}
 
-		for (Gene gene : doneGenes) {
-			processedGene(gene);
-			activeGenes.remove(gene);
+		System.err.println("Marking " + doneGenes.size() + " as done, active genes " + activeGenes.size()
+				+ ", active variants " + activeVariants.size());
+		System.err.println("doneGenes: " + doneGenes);
+		System.err
+				.println(
+						"active variants: " + Joiner.on(' ')
+								.join(activeVariants
+										.entrySet().stream().map(e -> e.getKey().getContig() + ":"
+												+ e.getKey().getStart() + "(" + e.getValue().getCounter() + ")")
+										.iterator()));
+
+		if (doneGenes.isEmpty()) {
+			processedGene(null);
+		} else {
+			for (Gene gene : doneGenes) {
+				processedGene(gene);
+				activeGenes.remove(gene);
+			}
 		}
+
+		if (!doneGenes.isEmpty() && activeGenes.isEmpty() && !activeVariants.isEmpty())
+			throw new RuntimeException("All genes inactive, there should be no active variant");
 	}
 
 	/**
@@ -255,11 +274,13 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	 * Decrease counter for all variants located in <code>gene</code>.
 	 *
 	 * @param gene
-	 *            the {@link Gene} to mark the variants for
+	 *            the {@link Gene} to mark the variants for, <code>null</code> to trigger processing variants without
+	 *            marking a gene as processed
 	 */
 	private void processedGene(Gene gene) throws VariantContextFilterException {
 		try {
-			checkVariantsForGene(gene);
+			if (gene != null)
+				checkVariantsForGene(gene);
 		} catch (CannotAnnotateMendelianInheritance e) {
 			if (e.getCause().getClass().equals(IncompatiblePedigreeException.class))
 				throw new VariantContextFilterException(
@@ -268,12 +289,15 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 				throw new VariantContextFilterException("Problem with annotating variant for Mendelian inheritance", e);
 		}
 
-		LOGGER.trace("Gene done {}", new Object[] { gene.getName() });
+		if (gene != null)
+			LOGGER.trace("Gene done {}", new Object[] { gene.getName() });
+		else
+			LOGGER.trace("Marking variants as done without any gene");
 
 		// decrease count of variants that lie in gene (that is now ignored)
 		ArrayList<VariantContextCounter> done = new ArrayList<VariantContextCounter>();
 		for (VariantContextCounter var : activeVariants.values()) {
-			if (isGeneAffectedByChange(gene, var.getVariantContext())) {
+			if (gene != null && isGeneAffectedByChange(gene, var.getVariantContext())) {
 				LOGGER.trace("Gene {} done for variant {}", new Object[] { gene.getName(),
 						var.getVariantContext().getContig() + ":" + var.getVariantContext().getStart() });
 				var.decrement();
@@ -312,10 +336,11 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			}
 		}
 
-		LOGGER.trace("Gene {} is inactive now", new Object[] { gene.getName() });
-
-		// Mark gene as done
-		activeGenes.remove(gene);
+		if (gene != null) {
+			LOGGER.trace("Gene {} is inactive now", new Object[] { gene.getName() });
+			// Mark gene as done
+			activeGenes.remove(gene);
+		}
 	}
 
 }
