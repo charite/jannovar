@@ -48,10 +48,10 @@ public class VariantContextMendelianAnnotator {
 	 * @param vc
 	 *            {@link VariantContext} to check for compatibility and to annotate
 	 * @return Copy of <code>vc</code> with mendelian inheritance compatibility annotation
-	 * @throws CannotateAnnotateMendelianInheritance
+	 * @throws CannotAnnotateMendelianInheritance
 	 *             on problems with annotating the {@link VariantContext}
 	 */
-	public VariantContext annotateRecord(VariantContext vc) throws CannotateAnnotateMendelianInheritance {
+	public VariantContext annotateRecord(VariantContext vc) throws CannotAnnotateMendelianInheritance {
 		return annotateRecords(ImmutableList.of(vc)).get(0);
 	}
 
@@ -61,18 +61,18 @@ public class VariantContextMendelianAnnotator {
 	 * @param vcs
 	 *            {@link VariantContext} objects to annotate
 	 * @return An {@link ImmutableList} of {@link VariantContext} copies of <code>vcs</code>
-	 * @throws CannotateAnnotateMendelianInheritance
+	 * @throws CannotAnnotateMendelianInheritance
 	 *             on problems with annotating the {@link VariantContext}s
 	 */
 	public ImmutableList<VariantContext> annotateRecords(List<VariantContext> vcs)
-			throws CannotateAnnotateMendelianInheritance {
+			throws CannotAnnotateMendelianInheritance {
 		// Convert VariantContext to GenotypeCalls objects
 		List<GenotypeCalls> gcs = buildGenotypeCalls(vcs);
 		ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> checkResult;
 		try {
 			checkResult = mendelChecker.checkMendelianInheritance(gcs);
 		} catch (IncompatiblePedigreeException e) {
-			throw new CannotateAnnotateMendelianInheritance(
+			throw new CannotAnnotateMendelianInheritance(
 					"Problem with annotating VariantContext for Mendelian inheritance.", e);
 		}
 
@@ -126,18 +126,18 @@ public class VariantContextMendelianAnnotator {
 	 *            {@link VariantContext} objects to check for compatibility
 	 * @return A {@link Map} from {@link ModeOfInheritance} to the list of {@link VariantContext} in <code>vcs</code>
 	 *         that is compatible with each mode
-	 * @throws CannotateAnnotateMendelianInheritance
+	 * @throws CannotAnnotateMendelianInheritance
 	 *             on problems with annotating mendelian inheritance
 	 */
 	public ImmutableMap<ModeOfInheritance, ImmutableList<VariantContext>> computeCompatibleInheritanceModes(
-			List<VariantContext> vcs) throws CannotateAnnotateMendelianInheritance {
+			List<VariantContext> vcs) throws CannotAnnotateMendelianInheritance {
 		// Perform annotation, preceded by building GenotypeCalls list
 		List<GenotypeCalls> gcs = buildGenotypeCalls(vcs);
 		ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> checkResult;
 		try {
 			checkResult = mendelChecker.checkMendelianInheritance(gcs);
 		} catch (IncompatiblePedigreeException e) {
-			throw new CannotateAnnotateMendelianInheritance(
+			throw new CannotAnnotateMendelianInheritance(
 					"Problem with annotating VariantContext for Mendelian inheritance.", e);
 		}
 

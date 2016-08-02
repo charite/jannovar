@@ -19,14 +19,16 @@ import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.Interval;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
+import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
-import de.charite.compbio.jannovar.mendel.bridge.CannotateAnnotateMendelianInheritance;
+import de.charite.compbio.jannovar.mendel.bridge.CannotAnnotateMendelianInheritance;
 import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.mendel.bridge.VariantContextMendelianAnnotator;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import htsjdk.variant.vcf.VCFHeader;
@@ -49,6 +51,8 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	private final VariantContextMendelianAnnotator annotator;
 	/** The {@link JannovarData} to use for extracting the genes from */
 	private JannovarData jannovarData;
+	/** Sequence dictionary for ordering records */
+	private final SAMSequenceDictionary seqDict;
 	/** Next step in pipeline after processing of {@link VariantContext} is complete */
 	private final Consumer<VariantContext> sink;
 
@@ -67,13 +71,16 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	 *            the {@link Pedigree} object to use
 	 * @param jannovarData
 	 *            {@link JannovarData} object to use for getting the genes from
+	 * @param seqDict
+	 *            {@link SAMSequenceDictionary} to use for contig order
 	 * @param sink
 	 *            location to write the {@link VariantContext} to
 	 */
 	public GeneWiseMendelianAnnotationProcessor(Pedigree pedigree, JannovarData jannovarData,
-			Consumer<VariantContext> sink) {
+			SAMSequenceDictionary seqDict, Consumer<VariantContext> sink) {
 		this.pedigree = pedigree;
 		this.jannovarData = jannovarData;
+		this.seqDict = seqDict;
 		this.sink = sink;
 
 		this.geneList = buildGeneList(this.jannovarData);
@@ -227,11 +234,11 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	 * 
 	 * @throws VariantContextFilterException
 	 *             in case of problems with processing the variant
-	 * @throws CannotateAnnotateMendelianInheritance
+	 * @throws CannotAnnotateMendelianInheritance
 	 *             in case of problems with Mendelian inheritance annotation
 	 */
 	private void checkVariantsForGene(Gene gene)
-			throws VariantContextFilterException, CannotateAnnotateMendelianInheritance {
+			throws VariantContextFilterException, CannotAnnotateMendelianInheritance {
 		// Compute compatible modes for all variants in the gene
 		final ArrayList<VariantContext> variantsForGene = activeGenes.get(gene);
 		ImmutableMap<ModeOfInheritance, ImmutableList<VariantContext>> compatibleMap = annotator
@@ -253,8 +260,12 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	private void processedGene(Gene gene) throws VariantContextFilterException {
 		try {
 			checkVariantsForGene(gene);
-		} catch (CannotateAnnotateMendelianInheritance e) {
-			throw new VariantContextFilterException("Problem with annotating variant for Mendelian inheritance", e);
+		} catch (CannotAnnotateMendelianInheritance e) {
+			if (e.getCause().getClass().equals(IncompatiblePedigreeException.class))
+				throw new VariantContextFilterException(
+						"Cannot annotate Mendelian inheritance, pedigree is incompatible to genotypes", e);
+			else
+				throw new VariantContextFilterException("Problem with annotating variant for Mendelian inheritance", e);
 		}
 
 		LOGGER.trace("Gene done {}", new Object[] { gene.getName() });
@@ -275,7 +286,12 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		Collections.sort(done, new Comparator<VariantContextCounter>() {
 			@Override
 			public int compare(VariantContextCounter lhs, VariantContextCounter rhs) {
-				return (lhs.getVariantContext().getStart() - rhs.getVariantContext().getStart());
+				final int idxLhs = seqDict.getSequence(lhs.getVariantContext().getContig()).getSequenceIndex();
+				final int idxRhs = seqDict.getSequence(lhs.getVariantContext().getContig()).getSequenceIndex();
+				if (idxLhs != idxRhs)
+					return (idxLhs - idxRhs);
+				else
+					return (lhs.getVariantContext().getStart() - rhs.getVariantContext().getStart());
 			}
 		});
 

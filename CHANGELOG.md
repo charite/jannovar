@@ -15,8 +15,13 @@
 * The first version ships with support for dbSNP b147, ExAC 0.3, and the UK10K COHORT data base
 * Initial version of this module, the aim is precise annotation from variant databases
 
+### jannovar-cli
+
+* Checking pedigree for compatibility with VCF file if given
+
 ### jannovar-core
 
+* Checking pedigree for compatibility with genotypes on Mendelian inheritance checking
 * Refurbishing `Genotype`, `GenotypeList`, and `GenotypeListBuilder` in `de.charite.compbio.jannovar.mendel`.
 * Moving `ModeOfInheritance` to `de.charite.compbio.jannovar.mendel`.
 * Creating new package `de.charite.compbio.jannovar.mendel` with code for filtering for mendelian inheritance modes.

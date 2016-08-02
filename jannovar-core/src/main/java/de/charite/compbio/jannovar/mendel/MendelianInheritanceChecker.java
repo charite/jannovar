@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.mendel.impl.AbstractMendelianChecker;
@@ -82,6 +83,10 @@ public final class MendelianInheritanceChecker {
 	 */
 	private ImmutableList<GenotypeCalls> filterCompatibleRecords(Collection<GenotypeCalls> calls,
 			ModeOfInheritance mode) throws IncompatiblePedigreeException {
+		// Check for compatibility of calls with pedigree
+		if (!calls.stream().allMatch(c -> isCompatibleWithPedigree(c)))
+			throw new IncompatiblePedigreeException("GenotypeCalls not compatible with pedigree");
+		// Filter down to the compatible records
 		if (mode == ModeOfInheritance.ANY)
 			return ImmutableList.copyOf(calls);
 		else
@@ -91,6 +96,13 @@ public final class MendelianInheritanceChecker {
 	/** @return {@link Pedigree} to use */
 	public Pedigree getPedigree() {
 		return pedigree;
+	}
+
+	/**
+	 * @return <code>true</code> if <code>call</code> is compatible with this pedigree
+	 */
+	private boolean isCompatibleWithPedigree(GenotypeCalls calls) {
+		return pedigree.getNames().containsAll(calls.getSampleNames());
 	}
 
 }

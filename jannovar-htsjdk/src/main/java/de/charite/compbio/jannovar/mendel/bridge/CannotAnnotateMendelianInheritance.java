@@ -7,15 +7,15 @@ import de.charite.compbio.jannovar.JannovarException;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class CannotateAnnotateMendelianInheritance extends JannovarException {
+public class CannotAnnotateMendelianInheritance extends JannovarException {
 
 	private static final long serialVersionUID = 1L;
 
-	public CannotateAnnotateMendelianInheritance(String msg, Throwable cause) {
+	public CannotAnnotateMendelianInheritance(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public CannotateAnnotateMendelianInheritance(String msg) {
+	public CannotAnnotateMendelianInheritance(String msg) {
 		super(msg);
 	}
 

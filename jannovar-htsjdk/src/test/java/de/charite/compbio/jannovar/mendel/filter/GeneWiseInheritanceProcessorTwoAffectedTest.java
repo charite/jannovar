@@ -73,7 +73,7 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
 
 		ArrayList<VariantContext> result = new ArrayList<>();
 		try (GeneWiseMendelianAnnotationProcessor proc = new GeneWiseMendelianAnnotationProcessor(trio, jannovarDB,
-				vc -> result.add(vc))) {
+				reader.getFileHeader().getSequenceDictionary(), vc -> result.add(vc))) {
 			for (VariantContext vc : variants)
 				proc.put(vc);
 		}
@@ -115,7 +115,7 @@ public class GeneWiseInheritanceProcessorTwoAffectedTest {
 
 		ArrayList<VariantContext> result = new ArrayList<>();
 		try (GeneWiseMendelianAnnotationProcessor proc = new GeneWiseMendelianAnnotationProcessor(trio, jannovarDB,
-				vc -> result.add(vc))) {
+				reader.getFileHeader().getSequenceDictionary(), vc -> result.add(vc))) {
 			for (VariantContext vc : variants)
 				proc.put(vc);
 		}

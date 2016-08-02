@@ -11,10 +11,12 @@ import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.mendel.filter.ConsumerProcessor;
 import de.charite.compbio.jannovar.mendel.filter.CoordinateSortingChecker;
 import de.charite.compbio.jannovar.mendel.filter.GeneWiseMendelianAnnotationProcessor;
+import de.charite.compbio.jannovar.mendel.filter.VariantContextFilterException;
 import de.charite.compbio.jannovar.mendel.filter.VariantContextProcessor;
 import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
@@ -71,6 +73,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				}
 
 				VCFHeader vcfHeader = vcfReader.getFileHeader();
+
 				System.err.println("Annotating VCF...");
 				final long startTime = System.nanoTime();
 
@@ -128,6 +131,17 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				} catch (IOException e) {
 					throw new JannovarException("Problem opening file", e);
 				}
+			} catch (IncompatiblePedigreeException e) {
+				System.err
+						.println("VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
+			} catch (VariantContextFilterException e) {
+				System.err.println("There was a problem annotating the VCF file");
+				System.err.println("The error message was as follows.  The stack trace below the error "
+						+ "message can help the developers debug the problem.\n");
+				System.err.println(e.getMessage());
+				System.err.println("\n");
+				e.printStackTrace(System.err);
+				return;
 			}
 		}
 		if (progressReporter != null)
@@ -143,19 +157,38 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 *             in case of problems with opening the pedigree file
 	 * @throws PedParseException
 	 *             in the case of problems with parsing pedigrees
+	 * @throws IncompatiblePedigreeException
+	 *             If the pedigree is incompatible with the VCF file
 	 */
 	private VariantContextProcessor buildMendelianProcessors(AnnotatedVCFWriter writer)
-			throws PedParseException, IOException {
+			throws PedParseException, IOException, IncompatiblePedigreeException {
 		if (options.pathPedFile != null) {
 			final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
 			final PedFileContents pedContents = pedReader.read();
 			final Pedigree pedigree = new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+			checkPedigreeCompatibility(pedigree, writer.getVCFHeader());
 			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
-					pedigree, jannovarData, vc -> writer.put(vc));
+					pedigree, jannovarData, writer.getVCFHeader().getSequenceDictionary(), vc -> writer.put(vc));
 			return new CoordinateSortingChecker(mendelProcessor);
 		} else {
 			return new ConsumerProcessor(vc -> writer.put(vc));
 		}
+	}
+
+	/**
+	 * Check pedigree for compatibility
+	 * 
+	 * @param pedigree
+	 *            {@link Pedigree} to check for compatibility
+	 * @param vcfHeader
+	 *            {@link VCFHeader} to check for compatibility
+	 * @throws IncompatiblePedigreeException
+	 *             if the VCF file is not compatible with the pedigree
+	 */
+	private void checkPedigreeCompatibility(Pedigree pedigree, VCFHeader vcfHeader)
+			throws IncompatiblePedigreeException {
+		if (!pedigree.getMembers().containsAll(vcfHeader.getGenotypeSamples()))
+			throw new IncompatiblePedigreeException("The VCF file is not compatible with the pedigree!");
 	}
 
 	@Override

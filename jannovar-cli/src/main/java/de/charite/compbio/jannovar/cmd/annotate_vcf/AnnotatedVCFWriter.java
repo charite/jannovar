@@ -30,6 +30,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	@SuppressWarnings("unused")
 	private final ReferenceDictionary refDict;
 
+	/** VCF header to use */
+	private VCFHeader vcfHeader;
+
 	/** path to VCF file to process */
 	private final String vcfPath;
 
@@ -50,6 +53,7 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			ImmutableMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options,
 			ImmutableList<String> args) {
 		this.refDict = refDict;
+		this.vcfHeader = vcfHeader;
 		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap,
 				new VariantContextAnnotator.Options(
 						InfoFields.build(options.writeVCFAnnotationStandardInfoFields, options.writeJannovarInfoFields),
@@ -65,6 +69,13 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 				new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
 		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(vcfHeader, getOutFileName(), fields,
 				additionalLines);
+	}
+
+	/**
+	 * @return {@link VCFHeader} that is used
+	 */
+	public VCFHeader getVCFHeader() {
+		return vcfHeader;
 	}
 
 	/**
