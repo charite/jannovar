@@ -187,7 +187,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 */
 	private void checkPedigreeCompatibility(Pedigree pedigree, VCFHeader vcfHeader)
 			throws IncompatiblePedigreeException {
-		if (!pedigree.getMembers().containsAll(vcfHeader.getGenotypeSamples()))
+		if (!pedigree.getNames().containsAll(vcfHeader.getGenotypeSamples()))
 			throw new IncompatiblePedigreeException("The VCF file is not compatible with the pedigree!");
 	}
 
