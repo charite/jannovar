@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -283,30 +285,37 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		else
 			LOGGER.trace("Marking variants as done without any gene");
 
-		// decrease count of variants that lie in gene (that is now ignored)
-		ArrayList<VariantContextCounter> done = new ArrayList<VariantContextCounter>();
+		// Decrease count of variants that lie in gene (that is now ignored)
 		for (VariantContextCounter var : activeVariants.values()) {
 			if (gene != null && isGeneAffectedByChange(gene, var.getVariantContext())) {
 				LOGGER.trace("Gene {} done for variant {}", new Object[] { gene.getName(),
 						var.getVariantContext().getContig() + ":" + var.getVariantContext().getStart() });
 				var.decrement();
 			}
-			if (var.getCounter() == 0)
-				done.add(var);
 		}
 
-		// Sort done by coordinate
-		Collections.sort(done, new Comparator<VariantContextCounter>() {
+		// Comparator for comparing two VariantContextCounter objects
+		Comparator<VariantContextCounter> cmp = new Comparator<VariantContextCounter>() {
 			@Override
 			public int compare(VariantContextCounter lhs, VariantContextCounter rhs) {
 				final int idxLhs = seqDict.getSequence(lhs.getVariantContext().getContig()).getSequenceIndex();
-				final int idxRhs = seqDict.getSequence(lhs.getVariantContext().getContig()).getSequenceIndex();
+				final int idxRhs = seqDict.getSequence(rhs.getVariantContext().getContig()).getSequenceIndex();
 				if (idxLhs != idxRhs)
 					return (idxLhs - idxRhs);
 				else
 					return (lhs.getVariantContext().getStart() - rhs.getVariantContext().getStart());
 			}
-		});
+		};
+
+		// Get leftmost variant that is not processed
+		Optional<VariantContextCounter> leftmost = activeVariants.values().stream().filter(x -> x.getCounter() != 0)
+				.min(cmp);
+		List<VariantContextCounter> done = activeVariants.values().stream()
+				.filter(x -> (!leftmost.isPresent() || cmp.compare(x, leftmost.get()) < 0))
+				.collect(Collectors.toList());
+
+		// Sort done by coordinate
+		Collections.sort(done, cmp);
 
 		// Remove completed variants and write out if passing
 		for (VariantContextCounter var : done) {
