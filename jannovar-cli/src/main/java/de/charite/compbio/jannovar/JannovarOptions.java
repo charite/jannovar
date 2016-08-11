@@ -69,6 +69,9 @@ public final class JannovarOptions {
 	/** whether or not to write out the VCF annotation standard fields */
 	public boolean writeVCFAnnotationStandardInfoFields = true;
 
+	/** whether to use 3 letter amino acid code instead of 1 letter */
+	public boolean useThreeLetterAminoAcidCode = false;
+
 	/** whether or not to escape characters like <code>'='</code> in the <code>ANN</code> VCF field. */
 	public boolean escapeAnnField = true;
 
@@ -149,6 +152,7 @@ public final class JannovarOptions {
 			out.println("UK10K VCF: " + pathVCFUK10K);
 			out.println("UK10K prefix: " + prefixUK10K);
 			out.println("PED file: " + pathPedFile);
+			out.println("Use 3-letter amino acid code: " + useThreeLetterAminoAcidCode);
 		} else if (command == Command.DB_LIST) {
 			out.println("dataSourceFiles: " + dataSourceFiles);
 		}

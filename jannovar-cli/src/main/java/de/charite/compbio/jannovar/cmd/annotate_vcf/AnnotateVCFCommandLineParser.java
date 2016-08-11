@@ -69,7 +69,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 			result.prefixUK10K = cmd.getOptionValue("uk10k-prefix");
 		else
 			result.prefixUK10K = "UK10K_";
-		
+
 		if (cmd.hasOption("pedigree-file"))
 			result.pathPedFile = cmd.getOptionValue("pedigree-file");
 
@@ -83,6 +83,7 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 			result.outputInfix = cmd.getOptionValue("output-infix");
 
 		result.dataFile = cmd.getOptionValue("database");
+		result.useThreeLetterAminoAcidCode = cmd.hasOption("three-letter-amino-acid-code");
 
 		for (String vcfPath : cmd.getOptionValues("vcf-in")) {
 			result.vcfFilePaths.add(vcfPath);
@@ -128,8 +129,11 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		options.addOption(new Option(null, "uk10k-vcf", true,
 				"path to indexed, bgzip-compressed, and normalized UK10K COHORT VCF file"));
 		options.addOption(new Option(null, "uk10k-prefix", true, "prefix to use for UK10K-based VCF INFO fields"));
-		
+
 		options.addOption(new Option(null, "pedigree-file", true, "path to pedigree file"));
+
+		options.addOption(new Option(null, "three-letter-amino-acid-code", false,
+				"use three-letter amino acid code instead of one-letter code"));
 	}
 
 	protected void printHelp() {

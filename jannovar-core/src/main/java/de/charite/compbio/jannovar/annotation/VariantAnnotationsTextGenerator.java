@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.base.Joiner;
 
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 
 // TODO(holtgrem): Test me!
@@ -66,14 +67,14 @@ public abstract class VariantAnnotationsTextGenerator {
 	/**
 	 * @return String with the effect text, comma separated if {@link #getAnnotations} returns more than one element
 	 */
-	public String buildHGVSText() {
+	public String buildHGVSText(AminoAcidCode code) {
 		StringBuilder builder = new StringBuilder();
 		for (Annotation anno : annotations.getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
 				builder.append(StringUtil.concatenate("alt", alleleID + 1, ":"));
-			builder.append(anno.getSymbolAndAnnotation());
+			builder.append(anno.getSymbolAndAnnotation(code));
 		}
 		return builder.toString();
 	}
