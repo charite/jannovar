@@ -85,7 +85,7 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 
 		Assert.assertEquals("1", result.get(1).getContig());
 		Assert.assertEquals(145513533, result.get(1).getStart());
-		Assert.assertNull(result.get(1).getAttribute(KEY));
+		Assert.assertEquals("[ALL_AFFECTED]", result.get(1).getAttribute(KEY).toString());
 
 		Assert.assertEquals("1", result.get(2).getContig());
 		Assert.assertEquals(145513534, result.get(2).getStart());
@@ -97,15 +97,15 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 
 		Assert.assertEquals("1", result.get(4).getContig());
 		Assert.assertEquals(145515899, result.get(4).getStart());
-		Assert.assertNull(result.get(4).getAttribute(KEY));
+		Assert.assertEquals("[ALL_AFFECTED]", result.get(4).getAttribute(KEY).toString());
 
 		Assert.assertEquals("10", result.get(5).getContig());
 		Assert.assertEquals(123239370, result.get(5).getStart());
-		Assert.assertEquals("[AR]", result.get(5).getAttribute(KEY).toString());
+		Assert.assertEquals("[AR, ALL_AFFECTED]", result.get(5).getAttribute(KEY).toString());
 
 		Assert.assertEquals("10", result.get(6).getContig());
 		Assert.assertEquals(123357972, result.get(6).getStart());
-		Assert.assertNull(result.get(6).getAttribute(KEY));
+		Assert.assertEquals("[ALL_AFFECTED]", result.get(6).getAttribute(KEY).toString());
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 
 		Assert.assertEquals("chr1", result.get(1).getContig());
 		Assert.assertEquals(145513533, result.get(1).getStart());
-		Assert.assertNull(result.get(1).getAttribute(KEY));
+		Assert.assertEquals("[ALL_AFFECTED]", result.get(1).getAttribute(KEY).toString());
 
 		Assert.assertEquals("chr1", result.get(2).getContig());
 		Assert.assertEquals(145513534, result.get(2).getStart());
@@ -139,14 +139,15 @@ public class GeneWiseInheritanceProcessorOneAffectedTest {
 
 		Assert.assertEquals("chr1", result.get(4).getContig());
 		Assert.assertEquals(145515899, result.get(4).getStart());
-		Assert.assertNull(result.get(4).getAttribute(KEY));
+		Assert.assertEquals("[ALL_AFFECTED]", result.get(4).getAttribute(KEY).toString());
 
 		Assert.assertEquals("chr10", result.get(5).getContig());
 		Assert.assertEquals(123239370, result.get(5).getStart());
-		Assert.assertEquals("[AR]", result.get(5).getAttribute(KEY).toString());
+		Assert.assertEquals("[AR, ALL_AFFECTED]", result.get(5).getAttribute(KEY).toString());
 
 		Assert.assertEquals("chr10", result.get(6).getContig());
 		Assert.assertEquals(123357972, result.get(6).getStart());
-		Assert.assertNull(result.get(6).getAttribute(KEY));
+		Assert.assertEquals("[ALL_AFFECTED]", result.get(6).getAttribute(KEY).toString());
 	}
+
 }

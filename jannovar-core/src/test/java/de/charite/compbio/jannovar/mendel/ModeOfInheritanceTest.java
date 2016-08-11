@@ -9,7 +9,7 @@ public class ModeOfInheritanceTest {
 
 	@Test
 	public void testSize() {
-		Assert.assertEquals(5, ModeOfInheritance.values().length);
+		Assert.assertEquals(6, ModeOfInheritance.values().length);
 	}
 
 }
