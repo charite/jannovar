@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.charite.compbio.jannovar.Immutable;
 import de.charite.compbio.jannovar.mendel.impl.AbstractMendelianChecker;
+import de.charite.compbio.jannovar.mendel.impl.AllAffectedChecker;
 import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerAD;
 import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerAR;
 import de.charite.compbio.jannovar.mendel.impl.MendelianCheckerXD;
@@ -46,6 +47,7 @@ public final class MendelianInheritanceChecker {
 		builder.put(ModeOfInheritance.AUTOSOMAL_RECESSIVE, new MendelianCheckerAR(this));
 		builder.put(ModeOfInheritance.X_DOMINANT, new MendelianCheckerXD(this));
 		builder.put(ModeOfInheritance.X_RECESSIVE, new MendelianCheckerXR(this));
+		builder.put(ModeOfInheritance.ALL_AFFECTED, new AllAffectedChecker(this));
 		this.checkers = builder.build();
 	}
 

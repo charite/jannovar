@@ -14,10 +14,12 @@ public enum ModeOfInheritance {
 	X_RECESSIVE,
 	/** dominant inheritance on X chromosome */
 	X_DOMINANT,
+	/** all affected carry variant; not really a mode of inheritance, rather an inclusive filter */
+	ALL_AFFECTED,
 	/** value for encoding uninitialized values */
 	ANY;
 
-	/** @return two-letter shortcut for the ModeOfInheritance */
+	/** @return shortcut for the ModeOfInheritance */
 	public String getAbbreviation() {
 		switch (this) {
 		case AUTOSOMAL_DOMINANT:
@@ -28,6 +30,8 @@ public enum ModeOfInheritance {
 			return "XD";
 		case X_RECESSIVE:
 			return "XR";
+		case ALL_AFFECTED:
+			return "ALL_AFFECTED";
 		case ANY:
 		default:
 			return null;
