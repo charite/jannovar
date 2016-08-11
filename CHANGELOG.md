@@ -21,6 +21,7 @@
 
 ### jannovar-core
 
+* Adding annotation for `ALL_AFFECTED` in a pedigree carrying a variant
 * Checking pedigree for compatibility with genotypes on Mendelian inheritance checking
 * Refurbishing `Genotype`, `GenotypeList`, and `GenotypeListBuilder` in `de.charite.compbio.jannovar.mendel`.
 * Moving `ModeOfInheritance` to `de.charite.compbio.jannovar.mendel`.

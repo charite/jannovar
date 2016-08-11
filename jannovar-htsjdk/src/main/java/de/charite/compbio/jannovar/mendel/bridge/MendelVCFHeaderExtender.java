@@ -20,6 +20,8 @@ public class MendelVCFHeaderExtender {
 	public static String XD = "XD";
 	/** Constant for X recessive */
 	public static String XR = "XR";
+	/** Constant for all affected*/
+	public static String ALL_AFFECTED = "ALL_AFFECTED";
 
 	public void extendHeader(VCFHeader vcfHeader) {
 		extendHeader(vcfHeader, "");
@@ -35,7 +37,7 @@ public class MendelVCFHeaderExtender {
 
 	public void extendHeader(VCFHeader vcfHeader, String prefix) {
 		VCFInfoHeaderLine inheritanceLine = new VCFInfoHeaderLine(key(prefix), VCFHeaderLineCount.UNBOUNDED,
-				VCFHeaderLineType.String, "Compatible Mendelian inheritance modes (AD, AR, XD, XR)");
+				VCFHeaderLineType.String, "Compatible Mendelian inheritance modes (AD, AR, XD, XR) or ALL_AFFECTED");
 		vcfHeader.addMetaDataLine(inheritanceLine);
 	}
 
