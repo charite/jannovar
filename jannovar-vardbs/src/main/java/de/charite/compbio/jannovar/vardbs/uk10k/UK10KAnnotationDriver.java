@@ -101,6 +101,9 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 			}
 		}
 
+		if (acList.stream().allMatch(i -> (i == 0)))
+			return; // do not set list of zeroes
+
 		final String attrID = options.getVCFIdentifierPrefix() + infix + "AC";
 		if (!acList.isEmpty())
 			builder.attribute(attrID, acList);
@@ -122,6 +125,9 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 				afList.add(record.getAltAlleleFrequencies().get(alleleNo - 1));
 			}
 		}
+
+		if (afList.stream().allMatch(i -> (i == 0.0)))
+			return; // do not set list of zeroes
 
 		final String attrID = options.getVCFIdentifierPrefix() + infix + "AF";
 		if (!afList.isEmpty())

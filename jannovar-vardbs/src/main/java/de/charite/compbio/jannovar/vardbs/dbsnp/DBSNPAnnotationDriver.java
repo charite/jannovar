@@ -85,6 +85,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 				g5AList.add(0);
 			}
 		}
+
+		if (g5AList.stream().allMatch(i -> (i == 0)))
+			return; // do not set list of zeroes
+
 		if (!g5AList.isEmpty())
 			builder.attribute(idG5A, g5AList);
 	}
@@ -101,6 +105,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 				g5List.add(0);
 			}
 		}
+
+		if (g5List.stream().allMatch(i -> (i == 0)))
+			return; // do not set list of zeroes
+
 		if (!g5List.isEmpty())
 			builder.attribute(idG5, g5List);
 	}
@@ -124,6 +132,9 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			}
 		}
 
+		if (cafList.stream().allMatch(i -> (i == 0.0)))
+			return; // do not set list of zeroes
+
 		if (!cafList.isEmpty())
 			builder.attribute(idCAF, cafList);
 	}
@@ -140,6 +151,10 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 				commonList.add(0);
 			}
 		}
+
+		if (commonList.stream().allMatch(i -> (i == 0)))
+			return; // do not set list of zeroes
+
 		if (!commonList.isEmpty())
 			builder.attribute(idCommon, commonList);
 	}

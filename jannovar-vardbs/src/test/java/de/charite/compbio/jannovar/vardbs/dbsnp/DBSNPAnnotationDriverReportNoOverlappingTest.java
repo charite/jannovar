@@ -68,14 +68,14 @@ public class DBSNPAnnotationDriverReportNoOverlappingTest extends DBSNPAnnotatio
 
 		Assert.assertEquals("rs540538026", annotated.getID());
 
-		Assert.assertEquals(5, annotated.getAttributes().size());
+		Assert.assertEquals(4, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
-		Assert.assertEquals("[CAF, COMMON, G5, G5A, IDS]", keys.toString());
+		Assert.assertEquals("[CAF, COMMON, G5, IDS]", keys.toString());
 
 		Assert.assertEquals("[0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
 		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("G5", null));
-		Assert.assertEquals("[0, 0, 0]", annotated.getAttributeAsString("G5A", null));
+		Assert.assertNull(annotated.getAttributeAsString("G5A", null));
 		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("COMMON", null));
 		Assert.assertEquals("[rs540538026, ., .]", annotated.getAttributeAsString("IDS", null));
 	}
