@@ -31,16 +31,14 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 		result.printProgressBars = true;
 		result.command = JannovarOptions.Command.ANNOTATE_POSITION;
 
-		
-
 		if (cmd.hasOption("verbose"))
 			result.verbosity = 2;
 		if (cmd.hasOption("very-verbose"))
 			result.verbosity = 3;
 
-		
 		result.dataFile = cmd.getOptionValue("database");
-		
+		result.useThreeLetterAminoAcidCode = cmd.hasOption("three-letter-amino-acid-code");
+
 		for (String change : cmd.getOptionValues("change")) {
 			result.chromosomalChanges.add(change);
 		}
@@ -52,16 +50,21 @@ public class AnnotatePositionCommandLineParser extends JannovarAnnotationCommand
 	protected void initializeParser() {
 		super.initializeParser();
 
-		options.addOption(Option.builder("c").longOpt("change").required().hasArgs()
-				.desc("Genomic variant change").build());
+		options.addOption(
+				Option.builder("c").longOpt("change").required().hasArgs().desc("Genomic variant change").build());
+
+		options.addOption(new Option(null, "three-letter-amino-acid-code", false,
+				"use three-letter amino acid code instead of one-letter code"));
 	}
 
 	public void printHelp() {
 		final String HEADER = new StringBuilder().append("Jannovar Command: annotate-pos\n\n")
 				.append("Use this command to annotate a chromosomal change.\n\n")
-				.append("Usage: java -jar de.charite.compbio.jannovar.jar annotate-pos [options] -d <database.ser> -c <CHANGE>\n\n").toString();
-		final String FOOTER = new StringBuilder().append(
-				"\n\nExample: java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'\n\n").toString();
+				.append("Usage: java -jar de.charite.compbio.jannovar.jar annotate-pos [options] -d <database.ser> -c <CHANGE>\n\n")
+				.toString();
+		final String FOOTER = new StringBuilder()
+				.append("\n\nExample: java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'\n\n")
+				.toString();
 
 		System.err.print(HEADER);
 

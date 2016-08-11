@@ -17,6 +17,7 @@ import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -76,7 +77,8 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 				textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
 			else
 				textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
-			annotation = textGenerator.buildHGVSText();
+			annotation = textGenerator.buildHGVSText(
+					options.useThreeLetterAminoAcidCode ? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER);
 			effect = textGenerator.buildEffectText();
 
 			System.out.println(String.format("%s\t%s\t%s", chromosomalChange.toString(), effect, annotation));
@@ -102,8 +104,8 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 	}
 
 	@Override
-	protected JannovarOptions parseCommandLine(String[] argv) throws CommandLineParsingException,
-			HelpRequestedException {
+	protected JannovarOptions parseCommandLine(String[] argv)
+			throws CommandLineParsingException, HelpRequestedException {
 		AnnotatePositionCommandLineParser parser = new AnnotatePositionCommandLineParser();
 		try {
 			return parser.parse(argv);

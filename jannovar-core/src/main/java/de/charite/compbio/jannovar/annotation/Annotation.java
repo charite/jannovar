@@ -108,8 +108,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> effects,
 			AnnotationLocation annoLoc, NucleotideChange genomicNTChange, NucleotideChange cdsNTChange,
 			ProteinChange proteinChange) {
-		this(transcript, change, effects, annoLoc, genomicNTChange, cdsNTChange, proteinChange, ImmutableSortedSet
-				.<AnnotationMessage> of());
+		this(transcript, change, effects, annoLoc, genomicNTChange, cdsNTChange, proteinChange,
+				ImmutableSortedSet.<AnnotationMessage> of());
 	}
 
 	/**
@@ -194,7 +194,9 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return cdsNTChange;
 	}
 
-	/** @return CDS nucleotide change String, including the "p." prefix or the empty string if there is no annotation. */
+	/**
+	 * @return CDS nucleotide change String, including the "p." prefix or the empty string if there is no annotation.
+	 */
 	public String getCDSNTChangeStr() {
 		if (cdsNTChange == null || transcript == null)
 			return "";
@@ -302,13 +304,11 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *
 	 * @return full annotation string or <code>null</code> if {@link #transcript} is <code>null</code>
 	 */
-	public String getSymbolAndAnnotation() {
+	public String getSymbolAndAnnotation(AminoAcidCode code) {
 		if (transcript == null)
 			return null;
-		return Joiner
-				.on(":")
-				.skipNulls()
-				.join(transcript.getGeneSymbol(), transcript.getAccession(), getCDSNTChangeStr(), getProteinChangeStr());
+		return Joiner.on(":").skipNulls().join(transcript.getGeneSymbol(), transcript.getAccession(),
+				getCDSNTChangeStr(), getProteinChangeStr(code));
 	}
 
 	/**

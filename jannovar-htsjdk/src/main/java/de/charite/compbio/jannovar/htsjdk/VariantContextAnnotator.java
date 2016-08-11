@@ -24,6 +24,7 @@ import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -121,8 +122,8 @@ public final class VariantContextAnnotator {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 		this.options = options;
-		this.annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions(
-				options.nt3PrimeShifting));
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap,
+				new AnnotationBuilderOptions(options.nt3PrimeShifting));
 	}
 
 	public ReferenceDictionary getRefDict() {
@@ -267,9 +268,10 @@ public final class VariantContextAnnotator {
 					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 					effectList.add(ann.getMostPathogenicVarType());
 					if (altAlleleCount == 1)
-						hgvsList.add(ann.getSymbolAndAnnotation());
+						hgvsList.add(ann.getSymbolAndAnnotation(AminoAcidCode.ONE_LETTER));
 					else
-						hgvsList.add(Joiner.on("").join("alt", alt, ":", ann.getSymbolAndAnnotation()));
+						hgvsList.add(Joiner.on("").join("alt", alt, ":",
+								ann.getSymbolAndAnnotation(AminoAcidCode.ONE_LETTER)));
 
 					if (options.oneAnnotationOnly)
 						break;
@@ -288,8 +290,8 @@ public final class VariantContextAnnotator {
 	 * @return VariantAnnotations having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
 	 */
 	public VariantAnnotations buildErrorAnnotations(GenomeVariant change) {
-		return new VariantAnnotations(change, ImmutableList.of(new Annotation(ImmutableList
-				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
+		return new VariantAnnotations(change,
+				ImmutableList.of(new Annotation(ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}
 
 }
