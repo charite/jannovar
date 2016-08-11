@@ -5,9 +5,9 @@
 * http://java.dzone.com/articles/deploy-maven-central
 * http://central.sonatype.org/pages/apache-maven.html
 
-## Update the CHANGELOG file
+## Update the CHANGELOG.md file
 
-- Update the CHANGELOG file to reflect the new version.
+- Update the CHANGELOG.md file to reflect the new version.
 - Create a new commit with this version.
 - Do not create a git tag as this will be done by Maven below.
 
