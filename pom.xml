@@ -1,263 +1,287 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>de.charite.compbio</groupId>
-    <artifactId>Jannovar</artifactId>
-    <version>0.17-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>Jannovar</name>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.charite.compbio</groupId>
+	<artifactId>Jannovar</artifactId>
+	<version>0.17-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Jannovar</name>
 
-    <properties>
-        <htsjdk.version>2.5.0</htsjdk.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <log4j.version>2.5</log4j.version>
-    </properties>
+	<properties>
+		<htsjdk.version>2.5.0</htsjdk.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j.version>2.5</log4j.version>
+	</properties>
 
-    <modules>
-        <module>jannovar-core</module>
-        <module>jannovar-inheritance-checker</module>
-        <module>jannovar-htsjdk</module>
-        <module>jannovar-hgvs</module>
-        <module>jannovar-vardbs</module>
-        <module>jannovar-cli</module>
-    </modules>
+	<modules>
+		<module>jannovar-core</module>
+		<module>jannovar-inheritance-checker</module>
+		<module>jannovar-htsjdk</module>
+		<module>jannovar-hgvs</module>
+		<module>jannovar-vardbs</module>
+		<module>jannovar-cli</module>
+	</modules>
 
-    <!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
-        http://java.dzone.com/articles/deploy-maven-central -->
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
+	<!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
+		http://java.dzone.com/articles/deploy-maven-central -->
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>9</version>
+	</parent>
 
-    <!-- License Information for Maven Central -->
-    <licenses>
-        <license>
-            <name>3-clause BSD</name>
-            <url>http://www.opensource.org/licenses/bsd-license.php</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+	<!-- License Information for Maven Central -->
+	<licenses>
+		<license>
+			<name>3-clause BSD</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
-    <!-- Developers Information for Maven Central -->
-    <developers>
-        <developer>
-            <name>Manuel Holtgrewe</name>
-            <email>manuel.holtgrewe@charite.de</email>
-            <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
-        </developer>
-        <developer>
-            <name>Max Schubach</name>
-            <email>max.schubach@charite.de</email>
-            <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
-        </developer>
-        <developer>
-            <name>Marten Jaeger</name>
-            <email>marten.jaeger@charite.de</email>
-            <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
-        </developer>
-        <developer>
-            <name>Peter N Robinson</name>
-            <email>peter.robinson@charite.de</email>
-            <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
-        </developer>
-    </developers>
+	<!-- Developers Information for Maven Central -->
+	<developers>
+		<developer>
+			<name>Manuel Holtgrewe</name>
+			<email>manuel.holtgrewe@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Max Schubach</name>
+			<email>max.schubach@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Marten Jaeger</name>
+			<email>marten.jaeger@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+		<developer>
+			<name>Peter N Robinson</name>
+			<email>peter.robinson@charite.de</email>
+			<organization>Charite Universitaetsmedizin Berlin</organization>
+			<organizationUrl>http://www.charite.de</organizationUrl>
+		</developer>
+	</developers>
 
-    <!-- SCM Information for Maven Central -->
-    <scm>
-        <connection>scm:git:https://github.com/charite/jannovar.git</connection>
-        <developerConnection>scm:git:https://github.com/charite/jannovar.git</developerConnection>
-        <url>scm:git:https://github.com/charite/jannovar.git</url>
-    </scm>
+	<!-- SCM Information for Maven Central -->
+	<scm>
+		<connection>scm:git:https://github.com/charite/jannovar.git</connection>
+		<developerConnection>scm:git:https://github.com/charite/jannovar.git</developerConnection>
+		<url>scm:git:https://github.com/charite/jannovar.git</url>
+	</scm>
 
-    <dependencies>
-        <!--Logging framework -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
-        </dependency>
-        <!-- Logging implementation for test only. -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- JUnit testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<!--Logging framework -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.12</version>
+		</dependency>
+		<!-- Logging implementation for test only. -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- JUnit testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <plugins>
-            <!-- JUnit testing -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
-                <configuration>
-                    <skipTests>false</skipTests>
-                    <forkCount>3</forkCount>
-                    <reuseForks>true</reuseForks>
-                    <argLine>${argLine} -Xms512m -Xmx1024m</argLine>
-                    <systemPropertyVariables>
-                        <user.language>en</user.language>
-                        <user.region>GB</user.region>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
+	<build>
+		<plugins>
+			<!-- JUnit testing -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<skipTests>false</skipTests>
+					<forkCount>3</forkCount>
+					<reuseForks>true</reuseForks>
+					<argLine>${argLine} -Xms512m -Xmx1024m</argLine>
+					<systemPropertyVariables>
+						<user.language>en</user.language>
+						<user.region>GB</user.region>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>1.4.1</version>
-                <executions>
-                    <execution>
-                        <id>enforce</id>
-                        <configuration>
-                            <rules>
-                                <DependencyConvergence />
-                            </rules>
-                        </configuration>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.4.1</version>
+				<executions>
+					<execution>
+						<id>enforce</id>
+						<configuration>
+							<rules>
+								<DependencyConvergence />
+							</rules>
+						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-            <!-- Javadoc generation. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
-                <configuration>
-                    <defaultVersion>${project.version}</defaultVersion>
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>aggregate</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                        <phase>site</phase>
-                        <configuration>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+			<!-- Javadoc generation. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<defaultVersion>${project.version}</defaultVersion>
+					<additionalparam>-Xdoclint:none</additionalparam>
+					<aggregate>true</aggregate>
+					<show>public</show>
+					<nohelp>true</nohelp>
+					<header>${project.artifactId}, ${project.version}</header>
+					<footer>${project.artifactId}, ${project.version}</footer>
+					<doctitle>${project.artifactId}, ${project.version}</doctitle>
+					<destDir>${project.version}</destDir>
+					<reportOutputDirectory>${project.reporting.outputDirectory}/apidocs/api/</reportOutputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>aggregate</id>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+						<phase>site</phase>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-            <!-- Jacoco Coverage Reports -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
-                <executions>
-                    <!-- Prepares the property pointing to the JaCoCo runtime 
-                        agent which is passed as VM argument when Maven the Surefire plugin is executed. -->
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!-- Ensures that the code coverage report for unit tests 
-                        is created after unit tests have been run. -->
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+			<!-- Javadoc to gh-pages -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-publish-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<checkoutDirectory>${project.build.directory}/scmpublish</checkoutDirectory>
+					<checkinComment>Publishing javadoc for
+						${project.artifactId}:${project.version}</checkinComment>
+					<content>${project.reporting.outputDirectory}/apidocs</content>
+					<skipDeletedFiles>true</skipDeletedFiles>
+					<pubScmUrl>scm:git:https://github.com/charite/jannovar.git</pubScmUrl>
+					<scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
+				</configuration>
+			</plugin>
 
-            <!-- Compilation -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <compilerArgument>-Xlint:all</compilerArgument>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
+			<!-- Jacoco Coverage Reports -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.2.201409121644</version>
+				<executions>
+					<!-- Prepares the property pointing to the JaCoCo runtime agent which 
+						is passed as VM argument when Maven the Surefire plugin is executed. -->
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Ensures that the code coverage report for unit tests is created 
+						after unit tests have been run. -->
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-        <!-- Ignore maven-enforce-plugin in Eclipse/m2e -->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-enforcer-plugin</artifactId>
-                                        <versionRange>[1.0.0,)</versionRange>
-                                        <goals>
-                                            <goal>enforce</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+			<!-- Compilation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
 
-    <!-- Sphinx Manual, build with "mvn site". -->
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
-                <reportSets>
-                    <reportSet>
-                        <reports />
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.tomdz.maven</groupId>
-                <artifactId>sphinx-maven-plugin</artifactId>
-                <version>1.0.2</version>
-                <configuration>
-                    <sourceDirectory>${basedir}/manual</sourceDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
+		<!-- Ignore maven-enforce-plugin in Eclipse/m2e -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<!-- Sphinx Manual, build with "mvn site". -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<reportSets>
+					<reportSet>
+						<reports />
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.tomdz.maven</groupId>
+				<artifactId>sphinx-maven-plugin</artifactId>
+				<version>1.0.2</version>
+				<configuration>
+					<sourceDirectory>${basedir}/manual</sourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>

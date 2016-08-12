@@ -34,7 +34,7 @@ public final class Chromosome implements Serializable {
 	private final int chrID;
 
 	/**
-	 * An {@link IntervalArray} that contains all of the {@link TranscriptInfo} objects for transcripts located on this
+	 * An {@link IntervalArray} that contains all of the {@link TranscriptModel} objects for transcripts located on this
 	 * chromosome.
 	 */
 	private final IntervalArray<TranscriptModel> tmIntervalTree;
