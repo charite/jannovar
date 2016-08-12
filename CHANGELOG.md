@@ -19,6 +19,7 @@
 
 ### jannovar-cli
 
+* Updated `default_sources.ini` for latest patches of mouse and human genomes
 * Using one-letter amino acid code by default
 * Removed slf4j2 warning at program startup
 * Checking pedigree for compatibility with VCF file if given
