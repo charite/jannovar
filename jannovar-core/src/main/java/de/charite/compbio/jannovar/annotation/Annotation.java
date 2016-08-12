@@ -257,9 +257,12 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *
 	 * The <code>ALT</code> allele has to be given to this function since we trim away at least the first base of
 	 * <code>REF</code>/<code>ALT</code>.
-	 *
+	 * 
+	 * @param alt
+	 *            alt allele
 	 * @param escape
 	 *            whether or not to escape the invalid VCF characters, e.g. <code>'='</code>.
+	 * @return VCF annotation string
 	 */
 	public String toVCFAnnoString(String alt, boolean escape) {
 		VCFAnnotationData data = new VCFAnnotationData();
@@ -279,6 +282,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 
 	/**
 	 * Forward to {@link #toVCFAnnoString(String, boolean) toVCFAnnoString(alt, true)}.
+	 * 
+	 * @param alt
+	 *            alternateve allele
+	 * @return vcf annotation string
 	 */
 	public String toVCFAnnoString(String alt) {
 		return toVCFAnnoString(alt, true);
@@ -301,6 +308,9 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *
 	 * If this annotation does not have a symbol (e.g., for an intergenic annotation) then just return the annotation
 	 * string, e.g., <code>"KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q"</code>.
+	 * 
+	 * @param code
+	 *            the amino acid code
 	 *
 	 * @return full annotation string or <code>null</code> if {@link #transcript} is <code>null</code>
 	 */

@@ -51,7 +51,7 @@ public class GenotypeListBuilder {
 	}
 
 	/**
-	 * @return new {@link GenotypeCalls}
+	 * @return new {@link GenotypeList}
 	 */
 	public GenotypeList build() {
 		return new GenotypeList(geneID, names, isXChromosomal, callBuilder.build());

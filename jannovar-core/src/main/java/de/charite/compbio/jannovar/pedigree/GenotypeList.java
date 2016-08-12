@@ -54,22 +54,38 @@ public final class GenotypeList {
 		this.calls = calls;
 	}
 
-	/** the name of the gene for this genotype call list */
+	/**
+	 * the name of the gene for this genotype call list
+	 * 
+	 * @return the gene name
+	 */
 	public String getGeneName() {
 		return geneName;
 	}
 
-	/** the list of individual names */
+	/**
+	 * the list of individual names
+	 * 
+	 * @return individual names of pedigree
+	 */
 	public ImmutableList<String> getNames() {
 		return names;
 	}
 
-	/** whether or not the variants are on the X chromsome */
+	/**
+	 * whether or not the variants are on the X chromsome
+	 * 
+	 * @return if genotype on x-chromosome
+	 */
 	public boolean isXChromosomal() {
 		return isXChromosomal;
 	};
 
-	/** the lists of genotype calls, each contains one entry for each individual */
+	/**
+	 * the lists of genotype calls, each contains one entry for each individual
+	 * 
+	 * @return The genotype calls of this list.
+	 */
 	public ImmutableList<ImmutableList<Genotype>> getCalls() {
 		return calls;
 	}
@@ -79,8 +95,10 @@ public final class GenotypeList {
 	 * <code>pedigree</code>.
 	 *
 	 * For this, the order of the names has to be the same as the number of the names. This check is important for the
-	 * {@link PedigreeDiseaseCompatibilityDecorator}, where the names in the pedigree must be the same as the names in
-	 * the genotype list.
+	 * PedigreeDiseaseCompatibilityDecorator, where the names in the pedigree must be the same as the names in the
+	 * genotype list.
+	 * 
+	 * @param pedigree
 	 *
 	 * @return <code>true</code> if the list of {@link #names} is the same as the names of the members of
 	 *         <code>pedigree</code>
