@@ -42,8 +42,8 @@ public final class AminoAcidChange {
 	}
 
 	/**
-	 * @return 0-based position of last changed base in reference, computed from {@link #pos} and the length of
-	 *         {@link #ref}.
+	 * @return 0-based position of last changed base in reference, computed from {@link #getPos} and the length of
+	 *         {@link #getRef}.
 	 */
 	public int getLastPos() {
 		return pos + ref.length() - 1;

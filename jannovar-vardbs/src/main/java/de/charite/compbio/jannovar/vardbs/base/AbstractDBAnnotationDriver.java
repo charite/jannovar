@@ -129,12 +129,11 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 	 * indel.
 	 * 
 	 * @param vc
-	 *            The {@link VariantContex} to annotate
+	 *            The {@link VariantContext} to annotate
 	 * @param dbRecordMatches
 	 *            Map from alternative allele index to annotating <code>RecordType</code> with matching allele
 	 * @param dbRecordOverlaps
 	 *            Map from alternative allele index to annotating <code>RecordType</code> with overlapping positions
-	 * @param arrayList
 	 */
 	protected abstract VariantContext annotateWithDBRecords(VariantContext vc,
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordMatches,

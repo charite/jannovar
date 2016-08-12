@@ -142,8 +142,8 @@ public final class InheritanceVariantContextList {
 	 * <code>pedigree</code>.
 	 *
 	 * For this, the order of the names has to be the same as the number of the names. This check is important for the
-	 * {@link de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator}, where the names in the
-	 * pedigree must be the same as the names in the genotype list.
+	 * <code>PedigreeDiseaseCompatibilityDecorator</code>, where the names in the pedigree must be the same as the names
+	 * in the genotype list.
 	 *
 	 * @return <code>true</code> if the list of {@link #names} is the same as the names of the members of
 	 *         <code>pedigree</code>
@@ -183,8 +183,7 @@ public final class InheritanceVariantContextList {
 	/**
 	 * Getter for all possible associated {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance}.
 	 *
-	 * @return A Set of {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} that are associated with the
-	 *         list.
+	 * @return A Set of {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} that are associated with the list.
 	 */
 	public Set<ModeOfInheritance> getMatchedModeOfInheritances() {
 		Set<ModeOfInheritance> output = new HashSet<ModeOfInheritance>();
@@ -203,7 +202,7 @@ public final class InheritanceVariantContextList {
 	public Map<VariantContext, Set<ModeOfInheritance>> getAnnotatedMap() {
 		Map<VariantContext, Set<ModeOfInheritance>> output = new HashMap<VariantContext, Set<ModeOfInheritance>>();
 		for (InheritanceVariantContext vc : getVcList()) {
-				output.put(vc, vc.getMatchedModesOfInheritance());
+			output.put(vc, vc.getMatchedModesOfInheritance());
 		}
 		return output;
 	}

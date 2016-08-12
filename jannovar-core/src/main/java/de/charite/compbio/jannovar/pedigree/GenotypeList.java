@@ -15,8 +15,6 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * the pedigree file.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
- * 
- * @deprecated Use {@link VariantContextList} instead
  */
 @Immutable
 @Deprecated

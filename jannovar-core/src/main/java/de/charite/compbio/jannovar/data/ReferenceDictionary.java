@@ -30,7 +30,7 @@ import de.charite.compbio.jannovar.Immutable;
  * <li>Assign a length to each contig through {@link #contigLength}. This is used for coordinate transformation from
  * forward to reverse strand. This means that the genome position and interval types keep a reference to a central
  * {@link ReferenceDictionary} object.</li>
- * <ol>
+ * </ol>
  *
  * This class is immutable which makes it safe to share it between many other objects. You can easily construct objects
  * of its type using {@link ReferenceDictionaryBuilder}.
@@ -89,6 +89,8 @@ public class ReferenceDictionary implements Serializable {
 
 	/**
 	 * Print dictionary to <code>System.err</code> for debugging purposes.
+	 *
+	 * @param out {@link PrintStream} to write to
 	 */
 	public void print(PrintStream out) {
 		out.println("contig ID mapping");

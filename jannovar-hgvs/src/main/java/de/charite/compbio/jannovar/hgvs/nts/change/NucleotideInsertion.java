@@ -15,42 +15,121 @@ public class NucleotideInsertion extends NucleotideChange {
 	/** specification of the inserted Nucleotide sequence */
 	private final NucleotideSeqDescription seq;
 
-	/** Build without any sequence description. */
+	/**
+	 * Build without any sequence description
+	 *
+	 * @param onlyPredicted
+	 *            whether or not to add marker for "only predicted"
+	 * @param firstPos
+	 *            begin position of insertion
+	 * @param firstOffset
+	 *            offset for begin position of insertion
+	 * @param lastPos
+	 *            end position of insertion
+	 * @param lastOffset
+	 *            offset for end position of insertion
+	 * @return Resulting {@link NucleotideInsertion}
+	 */
 	public static NucleotideInsertion buildWithOffsetWithoutSeqDescription(boolean onlyPredicted, int firstPos,
 			int firstOffset, int lastPos, int lastOffset) {
-		return new NucleotideInsertion(onlyPredicted,
-				NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset), new NucleotideSeqDescription());
+		return new NucleotideInsertion(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
+				new NucleotideSeqDescription());
 	}
 
-	/** Build with length information */
+	/**
+	 * Build with length information
+	 * 
+	 * @param onlyPredicted
+	 *            whether or not to add marker for "only predicted"
+	 * @param firstPos
+	 *            begin position of insertion
+	 * @param firstOffset
+	 *            offset for begin position of insertion
+	 * @param lastPos
+	 *            end position of insertion
+	 * @param lastOffset
+	 *            offset for end position of insertion
+	 * @param insertedLength
+	 *            the number of inserted bases
+	 * @return Resulting {@link NucleotideInsertion}
+	 */
 	public static NucleotideInsertion buildWithOffsetWithLength(boolean onlyPredicted, int firstPos, int firstOffset,
 			int lastPos, int lastOffset, int insertedLength) {
-		return new NucleotideInsertion(onlyPredicted,
-				NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset), new NucleotideSeqDescription(
-						insertedLength));
+		return new NucleotideInsertion(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
+				new NucleotideSeqDescription(insertedLength));
 	}
 
-	/** Build with sequence */
+	/**
+	 * Build with sequence
+	 * 
+	 * @param onlyPredicted
+	 *            whether or not to add marker for "only predicted"
+	 * @param firstPos
+	 *            begin position of insertion
+	 * @param firstOffset
+	 *            offset for begin position of insertion
+	 * @param lastPos
+	 *            end position of insertion
+	 * @param lastOffset
+	 *            offset for end position of insertion
+	 * @param seq
+	 *            the inserted sequence
+	 * @return Resulting {@link NucleotideInsertion}
+	 */
 	public static NucleotideInsertion buildWithOffsetWithSequence(boolean onlyPredicted, int firstPos, int firstOffset,
 			int lastPos, int lastOffset, String seq) {
-		return new NucleotideInsertion(onlyPredicted,
-				NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset), new NucleotideSeqDescription(seq));
+		return new NucleotideInsertion(onlyPredicted, NucleotideRange.build(firstPos, firstOffset, lastPos, lastOffset),
+				new NucleotideSeqDescription(seq));
 	}
 
-	/** Build without offset and no sequence description. */
+	/**
+	 * Build without offset and no sequence description
+	 * 
+	 * @param onlyPredicted
+	 *            whether or not to add marker for "only predicted"
+	 * @param firstPos
+	 *            begin position of insertion
+	 * @param lastPos
+	 *            end position of insertion
+	 * @return Resulting {@link NucleotideInsertion}
+	 */
 	public static NucleotideInsertion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos) {
 		return new NucleotideInsertion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription());
 	}
 
-	/** Build without offset and with length information */
+	/**
+	 * Build without offset and with length information
+	 * 
+	 * @param onlyPredicted
+	 *            whether or not to add marker for "only predicted"
+	 * @param firstPos
+	 *            begin position of insertion
+	 * @param lastPos
+	 *            end position of insertion
+	 * @param insertedLength
+	 *            the number of inserted bases
+	 * @return Resulting {@link NucleotideInsertion}
+	 */
 	public static NucleotideInsertion buildWithLength(boolean onlyPredicted, int firstPos, int lastPos,
 			int insertedLength) {
 		return new NucleotideInsertion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(insertedLength));
 	}
 
-	/** Build without offset and with sequence */
+	/**
+	 * Build without offset and with sequence
+	 * 
+	 * @param onlyPredicted
+	 *            whether or not to add marker for "only predicted"
+	 * @param firstPos
+	 *            begin position of insertion
+	 * @param lastPos
+	 *            end position of insertion
+	 * @param seq
+	 *            the inserted sequence
+	 * @return Resulting {@link NucleotideInsertion}
+	 */
 	public static NucleotideInsertion buildWithSequence(boolean onlyPredicted, int firstPos, int lastPos, String seq) {
 		return new NucleotideInsertion(onlyPredicted, NucleotideRange.buildWithoutOffset(firstPos, lastPos),
 				new NucleotideSeqDescription(seq));

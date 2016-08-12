@@ -5,11 +5,9 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Builder for {@link GenotypeCalls}.
+ * Builder for {@link GenotypeList}.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
- * 
- *  @deprecated use {@link VariantContextList.Builder} instead.  
  */
 @Deprecated
 public class GenotypeListBuilder {

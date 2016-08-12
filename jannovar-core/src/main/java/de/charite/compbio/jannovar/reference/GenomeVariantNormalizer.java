@@ -36,7 +36,7 @@ public final class GenomeVariantNormalizer {
 	 * Transform an insertion {@link GenomeVariant} to its HGVS-normalized representation.
 	 *
 	 * The algorithm works as follows. <code>String alt = change.getAlt()</code> is inserted into
-	 * <code>transcript.sequence</code> <code>at the position <code>int pos = txPos.getPos()</code>. Then,
+	 * <code>transcript.sequence</code> at the position <code>int pos = txPos.getPos()</code>. Then,
 	 * <code>pos</code> is incremented as long as <code>pos + alt.length() &lt; transcript.sequence.length()</code> and
 	 * <code>transcript.sequence[pos] = transcript.sequence[pos + alt.length()]</code>. The last <code>pos</code>
 	 * fulfilling this condition is then used to construct the resulting {@link GenomeVariant}.

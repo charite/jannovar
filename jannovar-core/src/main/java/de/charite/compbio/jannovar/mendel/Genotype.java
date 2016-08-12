@@ -26,7 +26,7 @@ public class Genotype {
 	/**
 	 * Construct {@link Genotype} with list of allele numbers
 	 * 
-	 * @param alleleNumbers
+	 * @param alleleNumbers The allele numbers to initialize with
 	 */
 	public Genotype(Collection<Integer> alleleNumbers) {
 		this.alleleNumbers = ImmutableList.copyOf(alleleNumbers);

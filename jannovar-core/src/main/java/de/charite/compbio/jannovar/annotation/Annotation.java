@@ -240,7 +240,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	}
 
 	/**
-	 * @return highest {@link PutativeImpact} of all {@link #effects}.
+	 * @return highest {@link PutativeImpact} of all {@link #getEffects}.
 	 */
 	public PutativeImpact getPutativeImpact() {
 		if (effects.isEmpty())

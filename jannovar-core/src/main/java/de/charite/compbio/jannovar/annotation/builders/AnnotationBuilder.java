@@ -36,7 +36,7 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  * Base class for the annotation builder helper classes.
  *
  * The helpers subclass this class and and call the superclass constructor in their constructors. This initializes the
- * decorators for {@link #transcript} and initializes {@link #locAnno} and {@link #dnaAnno}. The annotation building
+ * decorators for {@link #transcript} and initializes protected member such as {@link #locAnno}. The annotation building
  * process is greatly simplified by this.
  *
  * The realizing classes then override {@link #build} and implement their annotation building logic there.
@@ -78,7 +78,7 @@ abstract class AnnotationBuilder {
 	 * Note that {@link #change} will be initialized with normalized positions (shifted to the left) if possible.
 	 *
 	 * @param transcript
-	 *            the {@link TranscriptInfo} to build the annotation for
+	 *            the {@link TranscriptModel} to build the annotation for
 	 * @param change
 	 *            the {@link GenomeVariant} to use for building the annotation
 	 * @param options
@@ -216,10 +216,8 @@ abstract class AnnotationBuilder {
 		// intronic variants have no effect on the protein but splice variants lead to "probably no protein produced"
 		// annotation, as in Mutalyzer.
 		ProteinChange proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
-		if (!Sets.intersection(
-				ImmutableSet.copyOf(varTypes),
-				ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.SPLICE_ACCEPTOR_VARIANT,
-						VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
+		if (!Sets.intersection(ImmutableSet.copyOf(varTypes), ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT, VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
 			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
 				proteinChange);
@@ -315,8 +313,8 @@ abstract class AnnotationBuilder {
 						null, null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
-						null, null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
+						null, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
@@ -325,8 +323,8 @@ abstract class AnnotationBuilder {
 						null, null, null);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
-						null, null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
+						null, null, null);
 		}
 	}
 

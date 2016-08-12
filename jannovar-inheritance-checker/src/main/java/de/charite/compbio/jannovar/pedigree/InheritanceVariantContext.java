@@ -70,7 +70,7 @@ public class InheritanceVariantContext extends VariantContext {
 
 	/**
 	 * Default constructor. Copies the given {@link htsjdk.variant.variantcontext.VariantContext} and sets the
-	 * {@link #matchInheritance} to <code>false</code>.
+	 * {@link #matchedModesOfInheritance} to <code>false</code>.
 	 *
 	 * @param other
 	 *            Other {@link htsjdk.variant.variantcontext.VariantContext} to copy.
@@ -116,7 +116,7 @@ public class InheritanceVariantContext extends VariantContext {
 	}
 
 	/**
-	 * Getter of {@link #matchInheritance}.
+	 * Getter of {@link #matchedModesOfInheritance}.
 	 *
 	 * @return <code>true</code> if the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext} matches
 	 *         the {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance}.
