@@ -31,6 +31,9 @@ import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.Subparser;
+import net.sourceforge.argparse4j.inf.Subparsers;
 
 /**
  * Run annotation steps (read in VCF, write out VCF or Jannovar file format).
@@ -200,6 +203,15 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		} catch (ParseException e) {
 			throw new CommandLineParsingException("Could not parse the command line.", e);
 		}
+	}
+
+	/**
+	 * Register sub parsers in <code>parser</code>
+	 *
+	 * @param subparsers {@link ArgumentParser} to extend with a sub parser
+	 */
+	public static void addSubparser(Subparsers subparsers) {
+		Subparser parser = subparsers.addParser("annotate-vcf").help("Annoate a VCF file with Jannovar");
 	}
 
 }

@@ -22,6 +22,9 @@ import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.Subparser;
+import net.sourceforge.argparse4j.inf.Subparsers;
 
 /**
  * Allows the annotation of a single position.
@@ -112,6 +115,10 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		} catch (ParseException e) {
 			throw new CommandLineParsingException("Problem with command line parsing.", e);
 		}
+	}
+
+	public static void addSubparser(Subparsers subparsers) {
+		Subparser parser = subparsers.addParser("annotate-pos").help("Annotate predicted molecular inpact with Jannovar");
 	}
 
 }

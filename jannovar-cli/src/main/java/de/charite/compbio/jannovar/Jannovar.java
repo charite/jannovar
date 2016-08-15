@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar;
 
-/** Command line functions from apache */
+import java.io.PrintWriter;
+
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
@@ -8,72 +9,42 @@ import de.charite.compbio.jannovar.cmd.annotate_pos.AnnotatePositionCommand;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.AnnotateVCFCommand;
 import de.charite.compbio.jannovar.cmd.db_list.DatabaseListCommand;
 import de.charite.compbio.jannovar.cmd.download.DownloadCommand;
-import de.charite.compbio.jannovar.reference.TranscriptModel;
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentGroup;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Subparsers;
 
 /**
- * This is the driver class for a program called Jannovar. It has two purposes
- * <OL>
- * <LI>Take the UCSC files knownGene.txt, kgXref.txt, knownGeneMrna.txt, and knownToLocusLink.txt, and to create
- * corresponding {@link TranscriptModel} objects and to serialize them. The resulting serialized file can be used both
- * by this program itself (see next item) or by the main Exomizer program to annotated VCF file.
- * <LI>Using the serialized file of {@link TranscriptModel} objects (see above item) annotate a VCF file using
- * annovar-type program logic. Note that this functionality is also used by the main Exomizer program and thus this
- * program can be used as a stand-alone annotator ("Jannovar") or as a way of testing the code for the Exomizer.
- * </OL>
- * <P>
- * To run the "Jannovar" executable:
- * <P>
- * {@code java -Xms1G -Xmx1G -jar Jannovar.jar -V xyz.vcf -D $SERIAL}
- * <P>
- * This will annotate a VCF file. The results of de.charite.compbio.jannovar annotation are shown in the form
- *
- * <PRE>
- * Annotation {original VCF line}
- * </PRE>
- * <P>
- * Just a reminder, to set up annovar to do this, use the following commands.
- *
- * <PRE>
- *   perl annotate_variation.pl --downdb knownGene --buildver hg19 humandb/
- * </PRE>
- *
- * then, to annotate a VCF file called BLA.vcf, we first need to convert it to Annovar input format and run the main
- * annovar program as follows.
- *
- * <PRE>
- * $ perl convert2annovar.pl BLA.vcf -format vcf4 &gt; BLA.av
- * $ perl annotate_variation.pl -buildver hg19 --geneanno BLA.av --dbtype knowngene humandb/
- * </PRE>
- *
- * This will create two files with all variants and a special file with exonic variants.
- * <p>
- * There are three ways of using this program.
- * <ol>
- * <li>To create a serialized version of the UCSC gene definition data. In this case, the command-line flag <b>- S</b>
- * is provide as is the path to the four UCSC files. Then, {@code anno.serialize()} is true and a file <b>ucsc.ser</b>
- * is created.
- * <li>To deserialize the serialized data (<b>ucsc.ser</b>). In this case, the flag <b>- D</b> must be used.
- * <li>To simply read in the UCSC data without creating a serialized file.
- * </ol>
- * Whichever of the three versions is chosen, the user may additionally pass the path to a VCF file using the <b>-v</b>
- * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
- * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
+ * The Jannovar main class is the gateway into the Jannovar CLI application
+ * 
+ * Call Jannovar with `--help` to see details on usage
  *
  * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class Jannovar {
+
 	/** Configuration for the Jannovar program. */
 	JannovarOptions options = null;
 
 	public static void main(String argv[]) {
+		ArgumentParser parser = buildTopLevelParser();
+		try {
+			parser.parseArgs(argv);
+		} catch (ArgumentParserException e) {
+			parser.printHelp(new PrintWriter(System.err, true));
+			System.exit(1);
+		}
+
 		if (argv.length == 0) {
 			// No arguments, print top level help and exit.
 			printTopLevelHelp();
 			System.exit(1);
 		}
-		
+
 		String[] newArgs = new String[argv.length - 1];
 		for (int i = 0; i < newArgs.length; i++) {
 			newArgs[i] = argv[i + 1];
@@ -133,11 +104,27 @@ public final class Jannovar {
 		System.err.println("");
 		System.err.println("Example: java -jar de.charite.compbio.jannovar.jar download -d hg19/ucsc");
 		System.err.println("         java -jar de.charite.compbio.jannovar.jar db-list");
-		System.err
-				.println("         java -jar de.charite.compbio.jannovar.jar annotate -d data/hg19_ucsc.ser -i variants.vcf");
-		System.err
-				.println("         java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'");
+		System.err.println(
+				"         java -jar de.charite.compbio.jannovar.jar annotate -d data/hg19_ucsc.ser -i variants.vcf");
+		System.err.println(
+				"         java -jar de.charite.compbio.jannovar.jar annotate-pos -d data/hg19_ucsc.ser -c 'chr1:12345C>A'");
 		System.err.println("");
+	}
+
+	private static ArgumentParser buildTopLevelParser() {
+		ArgumentParser parser = ArgumentParsers.newArgumentParser("jannovar");
+
+		parser.addArgument("--verbose").action(Arguments.storeTrue()).help("Enable verbose logging");
+		parser.addArgument("--very-verbose").action(Arguments.storeTrue()).help("Enable very verbose logging");
+		
+		// Register sub commands with ArgumentParser
+		Subparsers subparsers = parser.addSubparsers();
+		DownloadCommand.addSubparser(subparsers);
+		DatabaseListCommand.addSubparser(subparsers);
+		AnnotatePositionCommand.addSubparser(subparsers);
+		AnnotateVCFCommand.addSubparser(subparsers);
+
+		return parser;
 	}
 
 }
