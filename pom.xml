@@ -70,9 +70,9 @@
 
 	<!-- SCM Information for Maven Central -->
 	<scm>
-		<connection>scm:git:https://github.com/charite/jannovar.git</connection>
-		<developerConnection>scm:git:https://github.com/charite/jannovar.git</developerConnection>
-		<url>scm:git:https://github.com/charite/jannovar.git</url>
+		<connection>scm:git:git@github.com:charite/jannovar.git</connection>
+		<developerConnection>scm:git:git@github.com:charite/jannovar.git</developerConnection>
+		<url>scm:git:git@github.com:charite/jannovar.git</url>
 	</scm>
 
 	<dependencies>
