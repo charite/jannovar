@@ -90,8 +90,8 @@ public final class VariantAnnotations implements VariantDescription {
 	/**
 	 * Convenience method.
 	 *
-	 * @return {@link VariantEffect} with the highest impact of all in {@link #entries} or
-	 *         {@link VariantEffect.SEQUENCE_VARIANT} if {@link #entries} is empty or has no annotated effects.
+	 * @return {@link VariantEffect} with the highest impact of all in entries or {@link VariantEffect#SEQUENCE_VARIANT}
+	 *         if entries are empty or contain no annotated effects.
 	 */
 	public VariantEffect getHighestImpactEffect() {
 		final Annotation anno = getHighestImpactAnnotation();

@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.writer.VariantContextWriter;
-import htsjdk.variant.vcf.VCFFileReader;
+import htsjdk.variant.vcf.VCFHeader;
 import htsjdk.variant.vcf.VCFHeaderLine;
 
 import java.io.File;
@@ -30,6 +30,9 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	@SuppressWarnings("unused")
 	private final ReferenceDictionary refDict;
 
+	/** VCF header to use */
+	private VCFHeader vcfHeader;
+
 	/** path to VCF file to process */
 	private final String vcfPath;
 
@@ -46,23 +49,33 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 	@SuppressWarnings("unused")
 	private final ImmutableList<String> args;
 
-	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFFileReader reader,
+	public AnnotatedVCFWriter(ReferenceDictionary refDict, VCFHeader vcfHeader,
 			ImmutableMap<Integer, Chromosome> chromosomeMap, String vcfPath, JannovarOptions options,
 			ImmutableList<String> args) {
 		this.refDict = refDict;
-		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap, new VariantContextAnnotator.Options(
-				InfoFields.build(options.writeVCFAnnotationStandardInfoFields, options.writeJannovarInfoFields),
-				!options.showAll, options.escapeAnnField, options.nt3PrimeShifting));
+		this.vcfHeader = vcfHeader;
+		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap,
+				new VariantContextAnnotator.Options(
+						InfoFields.build(options.writeVCFAnnotationStandardInfoFields, options.writeJannovarInfoFields),
+						!options.showAll, options.escapeAnnField, options.nt3PrimeShifting));
 		this.vcfPath = vcfPath;
 		this.options = options;
 		this.args = args;
 
 		final InfoFields fields = InfoFields.build(options.writeVCFAnnotationStandardInfoFields,
 				options.writeJannovarInfoFields);
-		ImmutableSet<VCFHeaderLine> additionalLines = ImmutableSet.of(new VCFHeaderLine("jannovarVersion",
-				JannovarOptions.JANNOVAR_VERSION), new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
-		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(reader.getFileHeader(),
-				getOutFileName(), fields, additionalLines);
+		ImmutableSet<VCFHeaderLine> additionalLines = ImmutableSet.of(
+				new VCFHeaderLine("jannovarVersion", JannovarOptions.JANNOVAR_VERSION),
+				new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
+		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(vcfHeader, getOutFileName(), fields,
+				additionalLines);
+	}
+
+	/**
+	 * @return {@link VCFHeader} that is used
+	 */
+	public VCFHeader getVCFHeader() {
+		return vcfHeader;
 	}
 
 	/**

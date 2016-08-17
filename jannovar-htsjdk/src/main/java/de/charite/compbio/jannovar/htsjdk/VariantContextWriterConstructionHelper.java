@@ -1,14 +1,5 @@
 package de.charite.compbio.jannovar.htsjdk;
 
-import htsjdk.variant.variantcontext.writer.Options;
-import htsjdk.variant.variantcontext.writer.VariantContextWriter;
-import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
-import htsjdk.variant.vcf.VCFFileReader;
-import htsjdk.variant.vcf.VCFHeader;
-import htsjdk.variant.vcf.VCFHeaderLine;
-import htsjdk.variant.vcf.VCFHeaderLineType;
-import htsjdk.variant.vcf.VCFInfoHeaderLine;
-
 import java.io.File;
 import java.io.OutputStream;
 import java.util.Collection;
@@ -16,9 +7,16 @@ import java.util.Collection;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
+import htsjdk.variant.variantcontext.writer.Options;
+import htsjdk.variant.variantcontext.writer.VariantContextWriter;
+import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
+import htsjdk.variant.vcf.VCFHeader;
+import htsjdk.variant.vcf.VCFHeaderLine;
+import htsjdk.variant.vcf.VCFHeaderLineType;
+import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 /**
- * Helper for creating a {@link VariantContextWriter} from a {@link VariantContextReader}.
+ * Helper for creating a {@link VariantContextWriter} from a {@link OutputStream}.
  *
  * Part of the Jannovar-HTSJDK bridge.
  *
@@ -38,6 +36,7 @@ public final class VariantContextWriterConstructionHelper {
 	 *            selection of header fields to write out
 	 * @param additionalHeaderLines
 	 *            additional {@link VCFHeaderLine}s to add
+	 * @return A correct writer for variantContexts
 	 */
 	public static VariantContextWriter openVariantContextWriter(VCFHeader header, OutputStream outStream,
 			InfoFields fields, Collection<VCFHeaderLine> additionalHeaderLines) {
@@ -66,6 +65,7 @@ public final class VariantContextWriterConstructionHelper {
 	 *            selection of header fields to write out
 	 * @param additionalHeaderLines
 	 *            additional {@link VCFHeaderLine}s to add
+	 * @return A correct writer for variantContexts
 	 */
 	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields,
 			Collection<VCFHeaderLine> additionalHeaderLines) {
@@ -86,6 +86,7 @@ public final class VariantContextWriterConstructionHelper {
 	 *            additional {@link VCFHeaderLine}s to add
 	 * @param generateIndex
 	 *            whether or not to generate an index
+	 * @return A correct writer for variantContexts
 	 */
 	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields,
 			Collection<VCFHeaderLine> additionalHeaderLines, boolean generateIndex) {
@@ -120,6 +121,14 @@ public final class VariantContextWriterConstructionHelper {
 
 	/**
 	 * Forward to {@link #openVariantContextWriter(VCFHeader, String, InfoFields, Collection)}.
+	 ** 
+	 * @param header
+	 *            the VCF header to use for the construction
+	 * @param fileName
+	 *            path to output file
+	 * @param fields
+	 *            selection of header fields to write out
+	 * @return A correct writer for variantContexts
 	 */
 	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields) {
 		return openVariantContextWriter(header, fileName, fields, ImmutableList.<VCFHeaderLine> of());

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.compatibilitychecker.InheritanceCompatibilityChecker;
 import htsjdk.variant.variantcontext.VariantContext;
 
@@ -69,7 +70,7 @@ public class InheritanceVariantContext extends VariantContext {
 
 	/**
 	 * Default constructor. Copies the given {@link htsjdk.variant.variantcontext.VariantContext} and sets the
-	 * {@link #matchInheritance} to <code>false</code>.
+	 * {@link #matchedModesOfInheritance} to <code>false</code>.
 	 *
 	 * @param other
 	 *            Other {@link htsjdk.variant.variantcontext.VariantContext} to copy.
@@ -105,7 +106,7 @@ public class InheritanceVariantContext extends VariantContext {
 	/**
 	 * getter of {@link #matchedModesOfInheritance}.
 	 * 
-	 * @return A {@link Set} with {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} that matches with this
+	 * @return A {@link Set} with {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} that matches with this
 	 *         variant.
 	 */
 	public Set<ModeOfInheritance> getMatchedModesOfInheritance() {
@@ -115,10 +116,10 @@ public class InheritanceVariantContext extends VariantContext {
 	}
 
 	/**
-	 * Getter of {@link #matchInheritance}.
+	 * Getter of {@link #matchedModesOfInheritance}.
 	 *
 	 * @return <code>true</code> if the {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext} matches
-	 *         the {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 *         the {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance}.
 	 */
 	public boolean isMatchInheritance() {
 		return getMatchedModesOfInheritance().size() > 0;

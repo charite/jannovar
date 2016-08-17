@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
-import de.charite.compbio.jannovar.impl.parse.UCSCParser;
+import de.charite.compbio.jannovar.impl.parse.ucsc.UCSCParser;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
 
 /**

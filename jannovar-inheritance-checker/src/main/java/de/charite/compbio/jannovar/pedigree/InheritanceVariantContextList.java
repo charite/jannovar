@@ -10,6 +10,7 @@ import java.util.Set;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -137,12 +138,12 @@ public final class InheritanceVariantContextList {
 	}
 
 	/**
-	 * Check whether the {@link #names} of this GenotypeList are the same as the names of the members of
+	 * Check whether the {@link #names} of this GenotypeCalls are the same as the names of the members of
 	 * <code>pedigree</code>.
 	 *
 	 * For this, the order of the names has to be the same as the number of the names. This check is important for the
-	 * {@link de.charite.compbio.jannovar.pedigree.PedigreeDiseaseCompatibilityDecorator}, where the names in the
-	 * pedigree must be the same as the names in the genotype list.
+	 * <code>PedigreeDiseaseCompatibilityDecorator</code>, where the names in the pedigree must be the same as the names
+	 * in the genotype list.
 	 *
 	 * @return <code>true</code> if the list of {@link #names} is the same as the names of the members of
 	 *         <code>pedigree</code>
@@ -164,7 +165,7 @@ public final class InheritanceVariantContextList {
 
 	/**
 	 * Getter for all {@link htsjdk.variant.variantcontext.VariantContext} that matched the
-	 * {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 * {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance}.
 	 *
 	 * @return A List of {@link htsjdk.variant.variantcontext.VariantContext} that are <code>true</code> for
 	 *         {@link de.charite.compbio.jannovar.pedigree.InheritanceVariantContext#isMatchInheritance()}.
@@ -180,10 +181,9 @@ public final class InheritanceVariantContextList {
 	}
 
 	/**
-	 * Getter for all possible associated {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance}.
+	 * Getter for all possible associated {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance}.
 	 *
-	 * @return A Set of {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} that are associated with the
-	 *         list.
+	 * @return A Set of {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} that are associated with the list.
 	 */
 	public Set<ModeOfInheritance> getMatchedModeOfInheritances() {
 		Set<ModeOfInheritance> output = new HashSet<ModeOfInheritance>();
@@ -194,7 +194,7 @@ public final class InheritanceVariantContextList {
 	}
 
 	/**
-	 * Getter for all {@link de.charite.compbio.jannovar.pedigree.ModeOfInheritance} for every variant context
+	 * Getter for all {@link de.charite.compbio.jannovar.mendel.ModeOfInheritance} for every variant context
 	 *
 	 * @return A Map with all {@link htsjdk.variant.variantcontext.VariantContext} and a set to which inheritance mode
 	 *         they belong.
@@ -202,7 +202,7 @@ public final class InheritanceVariantContextList {
 	public Map<VariantContext, Set<ModeOfInheritance>> getAnnotatedMap() {
 		Map<VariantContext, Set<ModeOfInheritance>> output = new HashMap<VariantContext, Set<ModeOfInheritance>>();
 		for (InheritanceVariantContext vc : getVcList()) {
-				output.put(vc, vc.getMatchedModesOfInheritance());
+			output.put(vc, vc.getMatchedModesOfInheritance());
 		}
 		return output;
 	}

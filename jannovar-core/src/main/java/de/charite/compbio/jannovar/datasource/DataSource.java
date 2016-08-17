@@ -32,6 +32,7 @@ public abstract class DataSource {
 	}
 
 	/**
+	 * @param key The key to get the file name for.
 	 * @return name of file with the given key in the data source, e.g. "knownGene.txt.gz" for
 	 *         "knownGene=http://.../knownGene.txt.gz".
 	 * @throws InvalidDataSourceException

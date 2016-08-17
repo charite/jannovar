@@ -12,6 +12,12 @@ public class NucleotideMiscChange extends NucleotideChange {
 
 	/**
 	 * Static factory function that forwards to {@link #NucleotideMiscChange(boolean, NucleotideMiscChangeType)}.
+	 * 
+	 * @param onlyPredicted
+	 *            whether or not to set "only predicted" flag
+	 * @param changeType
+	 *            the {@link NucleotideMiscChangeType} to build for
+	 * @return resulting {@link NucleotideMiscChange}
 	 */
 	public static NucleotideMiscChange build(boolean onlyPredicted, NucleotideMiscChangeType changeType) {
 		return new NucleotideMiscChange(onlyPredicted, changeType);
@@ -19,6 +25,10 @@ public class NucleotideMiscChange extends NucleotideChange {
 
 	/**
 	 * Build from input string.
+	 * 
+	 * @param str
+	 *            <code>String</code> to build from
+	 * @return resulting {@link NucleotideMiscChange}
 	 */
 	public static NucleotideMiscChange buildFromString(String str) {
 		if (str.equals("(?)"))

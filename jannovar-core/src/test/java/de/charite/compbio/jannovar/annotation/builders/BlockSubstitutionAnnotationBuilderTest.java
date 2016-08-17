@@ -146,7 +146,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-195_-193delACGinsCGTT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -158,7 +158,7 @@ public class BlockSubstitutionAnnotationBuilderTest {
 		Assert.assertEquals(infoForward.getAccession(), annotation1.getTranscript().getAccession());
 		Assert.assertEquals(10, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("*58_*60delACGinsCGGTT", annotation1.getCDSNTChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test

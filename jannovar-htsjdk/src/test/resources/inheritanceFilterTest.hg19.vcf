@@ -1,0 +1,16 @@
+##fileformat=VCFv4.1
+##Another comment line.
+##description=This file contains a few variants for inheritance testing. 
+##description=The gene RBM8A matches AUTOSOMAL_DOMINANT (trio, child+father affected, chr1:145513532 -> het affected HOM_REF unaffected) and AUTOSOMAL_RECESSIVE (trio, child affected, chr1:145513532	 + chr1:145513534 -> compoundHet)
+##description=The gene GNRHR2 matches AUTOSOMAL_DOMINANT (trio, child affected, chr1:145515898 deNovo)
+##description=The gene FGFR2 matches AUTOSOMAL_RECESSIVE (trio, child affected, chr1:123239370 HOM_Alt child and HET parents)
+##contig=<ID=chr1,length=249250621>
+##contig=<ID=chr10,length=135534747>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	Seth	Adam	Eva
+chr1	145513532	.	CA	CC	100.15	PASS	GENE=RBM8A	GT:DP	0/1:33	0/1:33	0/0:33
+chr1	145513533	.	T	C	123.15	PASS	GENE=RBM8A	GT:DP	1/1:21	1/1:33	1/1:33
+chr1	145513534	rs12345678	T	C	123.15	PASS	GENE=RBM8A	GT:DP	0/1:21	0/0:33	1/0:33
+chr1	145515898	rs23456789	G	A	260.15	PASS	GENE=GNRHR2	GT:DP	0/1:21	0/0:33	0/0:33
+chr1	145515899	.	G	A	260.15	PASS	GENE=GNRHR2	GT:DP	0/1:21	0/1:33	0/1:33
+chr10	123239370	.	G	A	260.15	PASS	GENE=FGFR2	GT:DP	1/1:21	0/1:33	0/1:33
+chr10	123357972	.	G	A	260.15	PASS	GENE=FGFR2	GT:DP	1/1:21	1/1:33	0/1:33

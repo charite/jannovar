@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
 [![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
-[![API Docs](https://img.shields.io/badge/api-develop-blue.svg?style=flat)](http://charite.github.io/jannovar/api/develop/)
+[![API Docs](https://img.shields.io/badge/api-v0.17-blue.svg?style=flat)](http://charite.github.io/jannovar/api/0.17/)
 
 Jannovar
 ========
@@ -14,7 +14,7 @@ Jannovar is licenced under the BSD2 license.
 More information is available in the [Jannovar
 manual](http://jannovar.readthedocs.org/).
 
-Jannovar is compatible with Java 7 and higher.
+Jannovar is compatible with Java 8 and higher.
 
 Quickstart
 ----------
@@ -27,14 +27,14 @@ After extracting the ZIP file, you can call Jannovar as follows.
 Download the UCSC transcripts for hg19:
 
 ```
-# java -jar jannovar-cli-0.16.jar download -d hg19/ucsc
+# java -jar jannovar-cli-0.17.jar download -d hg19/ucsc
 [...]
 ```
 
 Annotate the example file `small.vcf`:
 
 ```
-# java -jar jannovar-cli-0.16.jar annotate -d data/hg19_ucsc.ser -i examples/small.vcf
+# java -jar jannovar-cli-0.17.jar annotate -d data/hg19_ucsc.ser -i examples/small.vcf
 [...]
 ```
 

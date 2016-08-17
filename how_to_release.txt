@@ -5,6 +5,16 @@
 * http://java.dzone.com/articles/deploy-maven-central
 * http://central.sonatype.org/pages/apache-maven.html
 
+## Update the README.md file
+
+Change the version in the readme.Do not forget the API version in the shield. 
+
+## Update the CHANGELOG.md file
+
+- Update the CHANGELOG.md file to reflect the new version.
+- Create a new commit with this version.
+- Do not create a git tag as this will be done by Maven below.
+
 ## Prepare the Release using Maven
 
     mvn release:prepare
@@ -19,6 +29,12 @@ a tag for the version and also push the tag to Github.
 
 Create the release and push it to Maven central/Sonatype.
 
+## Create javadoc and push it to gh-pages
+
+		mvn clean javadoc:javadoc scm-publish:publish-scm
+
+Important: is uses the actual version set in the main pom!
+
 ## Releasing the Deployment
 
 Read this:
@@ -29,6 +45,11 @@ The publisher backend to Maven Central is here:
 
 * https://oss.sonatype.org/
 
+## Update README and JannovarOptions.java
+
+Open README.md and JannovarOptions.java and update the version there.
+
 ## Maven comments
 
 * "mvn versions:set" is useful for bumping versions
+

@@ -24,6 +24,7 @@ import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -40,6 +41,13 @@ public final class VariantContextAnnotator {
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(VariantContextAnnotator.class);
 
+	/**
+	 * Options class for {@link VariantContextAnnotator}
+	 * 
+	 * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
+	 * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
+	 *
+	 */
 	public static class Options {
 		/** selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN}) */
 		private final InfoFields infoFields;
@@ -56,6 +64,9 @@ public final class VariantContextAnnotator {
 		/** whether or not to perform shifting towards the 3' end of the transcript (defaults to <code>true</code>) */
 		private final boolean nt3PrimeShifting;
 
+		/**
+		 * Constructor
+		 */
 		public Options() {
 			infoFields = InfoFields.VCF_ANN;
 			oneAnnotationOnly = true;
@@ -63,6 +74,21 @@ public final class VariantContextAnnotator {
 			nt3PrimeShifting = true;
 		}
 
+		/**
+		 * 
+		 * constructor using fields
+		 * 
+		 * @param infoFields
+		 *            selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN})
+		 * @param oneAnnotationOnly
+		 *            Whether or not to trim each annotation list to the first (one with highest putative impact),
+		 *            defaults to <code>true</code>
+		 * @param escapeAnnField
+		 *            whether or not to escape values in the ANN field (defaults to <code>true</code>)
+		 * @param nt3PrimeShifting
+		 *            whether or not to perform shifting towards the 3' end of the transcript (defaults to
+		 *            <code>true</code>)
+		 */
 		public Options(InfoFields infoFields, boolean oneAnnotationOnly, boolean escapeAnnField,
 				boolean nt3PrimeShifting) {
 			this.infoFields = infoFields;
@@ -71,18 +97,32 @@ public final class VariantContextAnnotator {
 			this.nt3PrimeShifting = nt3PrimeShifting;
 		}
 
+		/**
+		 * Getter for info fields
+		 * 
+		 * @return info fields to write out
+		 */
 		public InfoFields getInfoFields() {
 			return infoFields;
 		}
 
+		/**
+		 * @return if annotation list is trimmed to first.
+		 */
 		public boolean isOneAnnotationOnly() {
 			return oneAnnotationOnly;
 		}
 
+		/**
+		 * @return Escape values in ANN field
+		 */
 		public boolean isEscapeAnnField() {
 			return escapeAnnField;
 		}
 
+		/**
+		 * @return perform shifting towards 3' end of the transcript
+		 */
 		public boolean isNt3PrimeShifting() {
 			return nt3PrimeShifting;
 		}
@@ -101,6 +141,11 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Construct annotator with default options.
+	 * 
+	 * @param refDict
+	 *            Referencedictionary
+	 * @param chromosomeMap
+	 *            the chomosomal map
 	 */
 	public VariantContextAnnotator(ReferenceDictionary refDict, ImmutableMap<Integer, Chromosome> chromosomeMap) {
 		this(refDict, chromosomeMap, new Options());
@@ -121,22 +166,34 @@ public final class VariantContextAnnotator {
 		this.refDict = refDict;
 		this.chromosomeMap = chromosomeMap;
 		this.options = options;
-		this.annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions(
-				options.nt3PrimeShifting));
+		this.annotator = new VariantAnnotator(refDict, chromosomeMap,
+				new AnnotationBuilderOptions(options.nt3PrimeShifting));
 	}
 
+	/**
+	 * @return The refDict
+	 */
 	public ReferenceDictionary getRefDict() {
 		return refDict;
 	}
 
+	/**
+	 * @return the chromosomal map
+	 */
 	public ImmutableMap<Integer, Chromosome> getChromosomeMap() {
 		return chromosomeMap;
 	}
 
+	/**
+	 * @return get the options of the VCAnnotator
+	 */
 	public Options getOptions() {
 		return options;
 	}
 
+	/**
+	 * @return get the annotator
+	 */
 	public VariantAnnotator getAnnotator() {
 		return annotator;
 	}
@@ -151,7 +208,7 @@ public final class VariantContextAnnotator {
 	 *            {@link VariantContext} describing the variant
 	 * @param alleleID
 	 *            numeric identifier of the allele
-	 * @return {@link GenomeVariant} corresponding to <ocde>vc</code>, guaranteed to be on {@link Strand#FWD}.
+	 * @return {@link GenomeVariant} corresponding to <code>vc</code>, guaranteed to be on {@link Strand#FWD}.
 	 * @throws InvalidCoordinatesException
 	 *             in the case that the reference in <code>vc</code> is not known in {@link #refDict}.
 	 */
@@ -267,9 +324,10 @@ public final class VariantContextAnnotator {
 					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
 					effectList.add(ann.getMostPathogenicVarType());
 					if (altAlleleCount == 1)
-						hgvsList.add(ann.getSymbolAndAnnotation());
+						hgvsList.add(ann.getSymbolAndAnnotation(AminoAcidCode.ONE_LETTER));
 					else
-						hgvsList.add(Joiner.on("").join("alt", alt, ":", ann.getSymbolAndAnnotation()));
+						hgvsList.add(Joiner.on("").join("alt", alt, ":",
+								ann.getSymbolAndAnnotation(AminoAcidCode.ONE_LETTER)));
 
 					if (options.oneAnnotationOnly)
 						break;
@@ -288,8 +346,8 @@ public final class VariantContextAnnotator {
 	 * @return VariantAnnotations having the message set to {@link AnnotationMessage#ERROR_PROBLEM_DURING_ANNOTATION}.
 	 */
 	public VariantAnnotations buildErrorAnnotations(GenomeVariant change) {
-		return new VariantAnnotations(change, ImmutableList.of(new Annotation(ImmutableList
-				.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
+		return new VariantAnnotations(change,
+				ImmutableList.of(new Annotation(ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION))));
 	}
 
 }

@@ -220,7 +220,8 @@ public final class GenomeVariant implements VariantDescription {
 	}
 
 	/**
-	 * A transition is purine <-> purine or pyrimidine <-> pyrimidine. Only applies to single nucleotide subsitutions.
+	 * A transition is between purine and purine or between pyrimidine and pyrimidine. Only applies to single nucleotide
+	 * subsitutions.
 	 *
 	 * @return true if the variant is a SNV and a transition.
 	 */

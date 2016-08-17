@@ -36,7 +36,7 @@ import de.charite.compbio.jannovar.reference.TranscriptSequenceOntologyDecorator
  * Base class for the annotation builder helper classes.
  *
  * The helpers subclass this class and and call the superclass constructor in their constructors. This initializes the
- * decorators for {@link #transcript} and initializes {@link #locAnno} and {@link #dnaAnno}. The annotation building
+ * decorators for {@link #transcript} and initializes protected member such as {@link #locAnno}. The annotation building
  * process is greatly simplified by this.
  *
  * The realizing classes then override {@link #build} and implement their annotation building logic there.
@@ -78,7 +78,7 @@ abstract class AnnotationBuilder {
 	 * Note that {@link #change} will be initialized with normalized positions (shifted to the left) if possible.
 	 *
 	 * @param transcript
-	 *            the {@link TranscriptInfo} to build the annotation for
+	 *            the {@link TranscriptModel} to build the annotation for
 	 * @param change
 	 *            the {@link GenomeVariant} to use for building the annotation
 	 * @param options
@@ -216,10 +216,8 @@ abstract class AnnotationBuilder {
 		// intronic variants have no effect on the protein but splice variants lead to "probably no protein produced"
 		// annotation, as in Mutalyzer.
 		ProteinChange proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE);
-		if (!Sets.intersection(
-				ImmutableSet.copyOf(varTypes),
-				ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT, VariantEffect.SPLICE_ACCEPTOR_VARIANT,
-						VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
+		if (!Sets.intersection(ImmutableSet.copyOf(varTypes), ImmutableSet.of(VariantEffect.SPLICE_DONOR_VARIANT,
+				VariantEffect.SPLICE_ACCEPTOR_VARIANT, VariantEffect.SPLICE_REGION_VARIANT)).isEmpty())
 			proteinChange = ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT);
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
 				proteinChange);
@@ -242,11 +240,29 @@ abstract class AnnotationBuilder {
 			else if ((so.liesInSpliceRegion(lPos) && so.liesInSpliceRegion(pos)))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in 5' or 3' UTR.
-			if (so.liesInFivePrimeUTR(lPos))
-				varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
-			else
-				// so.liesInThreePrimeUTR(pos)
-				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+			if (so.liesInFivePrimeUTR(lPos)) {
+				// Check if variant overlaps really with an UTR
+				if (so.liesInExon(lPos))
+					varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+				}
+			} else {
+				// Check if variant overlaps really with an UTR
+				if (so.liesInExon(lPos))
+					varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+				}
+			}
 		} else {
 			GenomeInterval changeInterval = change.getGenomeInterval();
 			// Check for being a splice site variant. The splice donor, acceptor, and region intervals are disjoint.
@@ -257,11 +273,29 @@ abstract class AnnotationBuilder {
 			else if (so.overlapsWithSpliceRegion(changeInterval))
 				varTypes.addAll(ImmutableList.of(VariantEffect.SPLICE_REGION_VARIANT));
 			// Check for being in 5' or 3' UTR.
-			if (so.overlapsWithFivePrimeUTR(change.getGenomeInterval()))
-				varTypes.add(VariantEffect.FIVE_PRIME_UTR_VARIANT);
-			else
-				// so.overlapsWithThreePrimeUTR(change.getGenomeInterval())
-				varTypes.add(VariantEffect.THREE_PRIME_UTR_VARIANT);
+			if (so.overlapsWithFivePrimeUTR(changeInterval)) {
+				// Check if variant overlaps really with an UTR
+				if (so.overlapsWithExon(changeInterval))
+					varTypes.add(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT);
+				}
+			} else {
+				// Check if variant overlaps really with an UTR
+				if (so.overlapsWithExon(changeInterval))
+					varTypes.add(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT);
+				else {
+					// between two UTRs. check for coding or non-coding transcript.
+					if (transcript.isCoding())
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+					else
+						varTypes.add(VariantEffect.THREE_PRIME_UTR_INTRON_VARIANT);
+				}
+			}
 		}
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
 				ProteinMiscChange.build(true, ProteinMiscChangeType.NO_CHANGE));
@@ -279,8 +313,8 @@ abstract class AnnotationBuilder {
 						null, null, null);
 			else
 				// so.liesInDownstreamRegion(pos))
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
-						null, null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
+						null, null, null);
 		} else {
 			// Non-empty interval, at least one reference base changed/deleted.
 			GenomeInterval changeInterval = change.getGenomeInterval();
@@ -289,8 +323,8 @@ abstract class AnnotationBuilder {
 						null, null, null);
 			else
 				// so.overlapsWithDownstreamRegion(changeInterval)
-				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT),
-						null, null, null, null);
+				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.DOWNSTREAM_GENE_VARIANT), null,
+						null, null, null);
 		}
 	}
 

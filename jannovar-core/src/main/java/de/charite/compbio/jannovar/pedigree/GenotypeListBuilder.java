@@ -8,8 +8,6 @@ import com.google.common.collect.ImmutableList;
  * Builder for {@link GenotypeList}.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
- * 
- *  @deprecated use {@link VariantContextList.Builder} instead.  
  */
 @Deprecated
 public class GenotypeListBuilder {
@@ -29,7 +27,7 @@ public class GenotypeListBuilder {
 	}
 
 	/**
-	 * Set "is X chromosomal" flag of next build GenotypeList.
+	 * Set "is X chromosomal" flag of next build GenotypeCalls.
 	 *
 	 * @param isXChromosomal
 	 *            <code>true</code> if the next built genotype list is X chromosomal

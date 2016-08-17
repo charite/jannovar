@@ -108,8 +108,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	public Annotation(TranscriptModel transcript, GenomeVariant change, Collection<VariantEffect> effects,
 			AnnotationLocation annoLoc, NucleotideChange genomicNTChange, NucleotideChange cdsNTChange,
 			ProteinChange proteinChange) {
-		this(transcript, change, effects, annoLoc, genomicNTChange, cdsNTChange, proteinChange, ImmutableSortedSet
-				.<AnnotationMessage> of());
+		this(transcript, change, effects, annoLoc, genomicNTChange, cdsNTChange, proteinChange,
+				ImmutableSortedSet.<AnnotationMessage> of());
 	}
 
 	/**
@@ -194,7 +194,9 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		return cdsNTChange;
 	}
 
-	/** @return CDS nucleotide change String, including the "p." prefix or the empty string if there is no annotation. */
+	/**
+	 * @return CDS nucleotide change String, including the "p." prefix or the empty string if there is no annotation.
+	 */
 	public String getCDSNTChangeStr() {
 		if (cdsNTChange == null || transcript == null)
 			return "";
@@ -238,7 +240,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	}
 
 	/**
-	 * @return highest {@link PutativeImpact} of all {@link #effects}.
+	 * @return highest {@link PutativeImpact} of all {@link #getEffects}.
 	 */
 	public PutativeImpact getPutativeImpact() {
 		if (effects.isEmpty())
@@ -255,9 +257,12 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *
 	 * The <code>ALT</code> allele has to be given to this function since we trim away at least the first base of
 	 * <code>REF</code>/<code>ALT</code>.
-	 *
+	 * 
+	 * @param alt
+	 *            alt allele
 	 * @param escape
 	 *            whether or not to escape the invalid VCF characters, e.g. <code>'='</code>.
+	 * @return VCF annotation string
 	 */
 	public String toVCFAnnoString(String alt, boolean escape) {
 		VCFAnnotationData data = new VCFAnnotationData();
@@ -265,7 +270,7 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 		data.impact = getPutativeImpact();
 		data.setTranscriptAndChange(transcript, change);
 		data.setAnnoLoc(annoLoc);
-		data.isCoding = transcript.isCoding();
+		data.isCoding = (transcript == null) ? false : transcript.isCoding();
 		data.cdsNTChange = cdsNTChange;
 		data.proteinChange = proteinChange;
 		data.messages = messages;
@@ -277,6 +282,10 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 
 	/**
 	 * Forward to {@link #toVCFAnnoString(String, boolean) toVCFAnnoString(alt, true)}.
+	 * 
+	 * @param alt
+	 *            alternateve allele
+	 * @return vcf annotation string
 	 */
 	public String toVCFAnnoString(String alt) {
 		return toVCFAnnoString(alt, true);
@@ -299,16 +308,17 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	 *
 	 * If this annotation does not have a symbol (e.g., for an intergenic annotation) then just return the annotation
 	 * string, e.g., <code>"KIAA1751:uc001aim.1:exon18:c.T2287C:p.X763Q"</code>.
+	 * 
+	 * @param code
+	 *            the amino acid code
 	 *
 	 * @return full annotation string or <code>null</code> if {@link #transcript} is <code>null</code>
 	 */
-	public String getSymbolAndAnnotation() {
+	public String getSymbolAndAnnotation(AminoAcidCode code) {
 		if (transcript == null)
 			return null;
-		return Joiner
-				.on(":")
-				.skipNulls()
-				.join(transcript.getGeneSymbol(), transcript.getAccession(), getCDSNTChangeStr(), getProteinChangeStr());
+		return Joiner.on(":").skipNulls().join(transcript.getGeneSymbol(), transcript.getAccession(),
+				getCDSNTChangeStr(), getProteinChangeStr(code));
 	}
 
 	/**

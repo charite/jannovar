@@ -130,7 +130,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(1, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("-1dup", anno.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), anno.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -142,7 +142,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(10, anno.getAnnoLoc().getRank());
 		Assert.assertEquals("2067_*1insA", anno.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", anno.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), anno.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), anno.getEffects());
 	}
 
 	@Test
@@ -667,7 +667,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals("-70_-70+1insA", annoInsertionAfterExon1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annoInsertionAfterExon1.getProteinChange().toHGVSString()); // XXX
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT),
 				annoInsertionAfterExon1.getEffects());
 
 		GenomeVariant varInsertionAfterExon2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6641359,
@@ -703,7 +703,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals("-69-1_-69insA", annoInsertionBeforeExon1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annoInsertionBeforeExon1.getProteinChange().toHGVSString());
 		Assert.assertEquals(
-				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_VARIANT),
+				ImmutableSortedSet.of(VariantEffect.SPLICE_REGION_VARIANT, VariantEffect.FIVE_PRIME_UTR_INTRON_VARIANT),
 				annoInsertionBeforeExon1.getEffects());
 
 		GenomeVariant varInsertionBeforeExon2 = new GenomeVariant(new GenomePosition(refDict, Strand.FWD, 1, 6642117,
@@ -750,7 +750,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("*255dup", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -774,7 +774,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(0, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("-37_-36insCTT", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.FIVE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	@Test
@@ -1770,7 +1770,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("*28_*29insTA", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1797,7 +1797,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(4, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("*18_*21dup", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	/**
@@ -1826,7 +1826,7 @@ public class InsertionAnnotationBuilderTest {
 		Assert.assertEquals(8, annotation1.getAnnoLoc().getRank());
 		Assert.assertEquals("*5_*6insGACA", annotation1.getCDSNTChange().toHGVSString());
 		Assert.assertEquals("(=)", annotation1.getProteinChange().toHGVSString());
-		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_VARIANT), annotation1.getEffects());
+		Assert.assertEquals(ImmutableSortedSet.of(VariantEffect.THREE_PRIME_UTR_EXON_VARIANT), annotation1.getEffects());
 	}
 
 	// The following variant from the Platinum Genome project caused problems against hg19/ucsc:

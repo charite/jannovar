@@ -1,5 +1,8 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.annotation.Annotation;
@@ -14,6 +17,8 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public final class AnnotationBuilderDispatcher {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationBuilderDispatcher.class);
 
 	/** transcript to build annotation for */
 	private final TranscriptModel transcript;
@@ -42,13 +47,17 @@ public final class AnnotationBuilderDispatcher {
 
 		switch (change.getType()) {
 		case SNV:
+			LOGGER.debug("Annotating SNV {}", new Object[] { change });
 			return new SNVAnnotationBuilder(transcript, change, options).build();
 		case DELETION:
+			LOGGER.debug("Annotating deletion {}", new Object[] { change });
 			return new DeletionAnnotationBuilder(transcript, change, options).build();
 		case INSERTION:
+			LOGGER.debug("Annotating insertion {}", new Object[] { change });
 			return new InsertionAnnotationBuilder(transcript, change, options).build();
 		case BLOCK_SUBSTITUTION:
 		default:
+			LOGGER.debug("Annotating block substitution {}", new Object[] { change });
 			return new BlockSubstitutionAnnotationBuilder(transcript, change, options).build();
 		}
 	}

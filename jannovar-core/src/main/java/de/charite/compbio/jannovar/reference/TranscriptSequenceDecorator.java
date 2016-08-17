@@ -78,10 +78,15 @@ public final class TranscriptSequenceDecorator {
 	 * @param cdsPos
 	 *            CDS position of the change
 	 * @return the codon affected by a change at the given position
+	 * @throws InvalidCodonException
+	 *             if the requested codon is not accessible
 	 */
-	public String getCodonAt(TranscriptPosition txPos, CDSPosition cdsPos) {
+	public String getCodonAt(TranscriptPosition txPos, CDSPosition cdsPos) throws InvalidCodonException {
 		int frameShift = cdsPos.getPos() % 3;
 		int codonStart = txPos.getPos() - frameShift; // codon start in transcript string
+		if (transcript.getSequence().length() <= codonStart + 3)
+			throw new InvalidCodonException("Could not access codon " + codonStart + " - " + (codonStart + 3)
+					+ ", transcript sequence length is " + transcript.getSequence().length());
 		return transcript.getSequence().substring(codonStart, codonStart + 3);
 	}
 
