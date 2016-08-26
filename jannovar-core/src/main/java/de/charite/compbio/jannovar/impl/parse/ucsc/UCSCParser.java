@@ -17,7 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptSupportLevelsSetterFromLengths;
@@ -138,6 +141,13 @@ public class UCSCParser implements TranscriptParser {
 		else
 			TranscriptSupportLevelsSetterFromLengths.run(this.knownGeneMap.values());
 
+		// Augment information in builders with
+		try {
+			new TranscriptModelBuilderHGNCExtender(basePath, r -> r.getUCSCID()).run(this.knownGeneMap);
+		} catch (JannovarException e) {
+			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
+		}
+
 		// Build result list.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
 		for (Map.Entry<String, TranscriptModelBuilder> entry : knownGeneMap.entrySet()) {
@@ -238,8 +248,9 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse txEnd:" + A[4]);
 		}
-		tib.setTXRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd,
-				PositionType.ONE_BASED).withStrand(strand));
+		tib.setTXRegion(
+				new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), txStart, txEnd, PositionType.ONE_BASED)
+						.withStrand(strand));
 
 		int cdsStart, cdsEnd;
 		try {
@@ -253,8 +264,9 @@ public class UCSCParser implements TranscriptParser {
 		} catch (NumberFormatException e) {
 			throw new TranscriptParseException("Could not parse cdsEnd:" + A[6]);
 		}
-		tib.setCDSRegion(new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd,
-				PositionType.ONE_BASED).withStrand(strand));
+		tib.setCDSRegion(
+				new GenomeInterval(refDict, Strand.FWD, chrID.intValue(), cdsStart, cdsEnd, PositionType.ONE_BASED)
+						.withStrand(strand));
 
 		// Get number of exons.
 		short exonCount;
@@ -282,8 +294,8 @@ public class UCSCParser implements TranscriptParser {
 				exonStarts[i] = Integer.parseInt(B[i]) + 1; // Change 0-based to
 															// 1-based numbering
 			} catch (NumberFormatException e) {
-				String error = String
-						.format("[UCSCKGParser] Malformed exon start at position %d of line %s", i, starts);
+				String error = String.format("[UCSCKGParser] Malformed exon start at position %d of line %s", i,
+						starts);
 				error = String.format("%s. This should never happen, the knownGene.txt file may be corrupted", error);
 				throw new TranscriptParseException(error);
 			}
@@ -375,7 +387,6 @@ public class UCSCParser implements TranscriptParser {
 					throw new TranscriptParseException(msg);
 				}
 				String id = A[0];
-				Integer geneID = Integer.parseInt(A[1]);
 				TranscriptModelBuilder tbi = this.knownGeneMap.get(id);
 				if (tbi == null) {
 					/**
@@ -385,7 +396,7 @@ public class UCSCParser implements TranscriptParser {
 					continue;
 				}
 				foundID++;
-				tbi.setGeneID("ENTREZ" + geneID);
+				tbi.setGeneID(id);
 			}
 			br.close();
 			LOGGER.info("knownToLocusLink contained ids for {} knownGenes (no ids available for {})", foundID,

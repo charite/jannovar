@@ -9,6 +9,7 @@ import org.ini4j.Profile.Section;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.data.JannovarData;
+import de.charite.compbio.jannovar.hgnc.HGNCParser;
 
 /**
  * Base class for all data sources.
@@ -82,6 +83,8 @@ public abstract class DataSource {
 		ImmutableList.Builder<String> builder = new ImmutableList.Builder<String>();
 		for (String key : getURLKeys())
 			builder.add(iniSection.fetch(key));
+		// Always download hgnc_complete_set.txt
+		builder.add(HGNCParser.DOWNLOAD_URL);
 		return builder.build();
 	}
 

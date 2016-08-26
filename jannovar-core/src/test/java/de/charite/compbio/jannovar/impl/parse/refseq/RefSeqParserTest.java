@@ -92,7 +92,13 @@ public class RefSeqParserTest {
 
 		Assert.assertEquals("10658", result.get(0).getGeneID());
 		Assert.assertEquals("CELF1", result.get(0).getGeneSymbol());
-		Assert.assertEquals("{GeneID=10658, HGNC=2549, HPRD=03046, MIM=601074}",
+		Assert.assertEquals(
+				"{CCDS_ID=CCDS7938|CCDS7939|CCDS31482|CCDS53622|CCDS53623, COSMIC_ID=CELF1, "
+						+ "ENSEMBL_GENE_ID=ENSG00000149187, ENTREZ_ID=10658, "
+						+ "HGNC_ALIAS=CUG-BP|hNab50|BRUNOL2|NAB50|CUGBP|NAPOR|EDEN-BP, "
+						+ "HGNC_ID=HGNC:2549, HGNC_PREVIOUS=CUGBP1, HGNC_SYMBOL=CELF1, MGD_ID=MGI:1342295, "
+						+ "OMIM_ID=601074, PUBMED_ID=8948631|9371827, REFSEQ_ACCESSION=NM_006560, "
+						+ "RGD_ID=RGD:1307721, UCSC_ID=uc001nfl.4, UNIPROT_ID=Q92879, VEGA_ID=OTTHUMG00000166526}",
 				result.get(0).getAltGeneIDs().toString());
 	}
 

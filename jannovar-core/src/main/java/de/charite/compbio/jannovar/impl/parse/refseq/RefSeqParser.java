@@ -20,7 +20,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
+import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
 import de.charite.compbio.jannovar.impl.parse.FASTAParser;
 import de.charite.compbio.jannovar.impl.parse.FASTARecord;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
@@ -77,6 +80,13 @@ public class RefSeqParser implements TranscriptParser {
 		// Load features from GFF3 file, clustered by the gene they belong to
 		final String pathGFF = PathUtil.join(basePath, getINIFileName("gff"));
 		Map<String, TranscriptModelBuilder> builders = recordsToBuilders(loadRecords(pathGFF));
+
+		// Augment information in builders with
+		try {
+			new TranscriptModelBuilderHGNCExtender(basePath, r -> r.getEntrezID()).run(builders);
+		} catch (JannovarException e) {
+			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
+		}
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("rna"));
@@ -213,7 +223,7 @@ public class RefSeqParser implements TranscriptParser {
 			builder.setGeneSymbol(geneRecord.getAttributes().get("Name"));
 			final String mrnaName = mrnaRecord.getAttributes().get("Name");
 			builder.setSequence(mrnaName);
-			parseAltGeneIDs(builder, geneRecord);
+			parseGeneID(builder, geneRecord);
 
 			// Iterate over the features, interpreting "exon" and "CDS" entries
 			GenomeInterval txRegion = null;
@@ -273,21 +283,20 @@ public class RefSeqParser implements TranscriptParser {
 	}
 
 	/**
-	 * Parse out alternative geneIDs
+	 * Parse out entrez gene ID
 	 * 
 	 * @param builder
 	 *            The {@link TranscriptModelBuilder} to put the alternative geneIDs to
 	 * @param geneRecord
 	 *            {@link FeatureRecord} with the gene information
 	 */
-	private void parseAltGeneIDs(TranscriptModelBuilder builder, FeatureRecord geneRecord) {
+	private void parseGeneID(TranscriptModelBuilder builder, FeatureRecord geneRecord) {
 		if (!geneRecord.getAttributes().containsKey("Dbxref"))
 			return;
 		for (String token : Splitter.on(',').split(geneRecord.getAttributes().get("Dbxref"))) {
 			List<String> keyValue = Splitter.on(':').limit(2).splitToList(token);
 			if (keyValue.size() != 2)
 				continue;
-			builder.getAltGeneIDs().put(keyValue.get(0), keyValue.get(1));
 			if (keyValue.get(0).equals("GeneID"))
 				builder.setGeneID(keyValue.get(1));
 		}

@@ -139,16 +139,7 @@ public final class TranscriptModel implements Serializable, Comparable<Transcrip
 	/**
 	 * Return mapping containing alternative gene IDs, as parsed from RefSeq GFF3 file
 	 * 
-	 * Popular alternative identifiers (used as keys here):
-	 * 
-	 * <dl>
-	 * <dt>GeneID</dt>
-	 * <dd>String of the Entrez/NCBI gene ID</dd>
-	 * <dt>Genbank</dt>
-	 * <dd>String of the Genbank accession</dd>
-	 * <dt>HGNC</dt>
-	 * <dd>String of the numeric HGNC (Human Gene Nomenclature Committee) identifier</dd>
-	 * </dl>
+	 * The alternative identifiers used are the values of {@link AltGeneIDType} converted to strings.
 	 */
 	public ImmutableSortedMap<String, String> getAltGeneIDs() {
 		return altGeneIDs;
