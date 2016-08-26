@@ -2,6 +2,10 @@
 
 ## develop
 
+### jannovar-cli
+
+* Removing support for old Jannovar-style annotations (#241)
+
 ### jannovar-core
 
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`

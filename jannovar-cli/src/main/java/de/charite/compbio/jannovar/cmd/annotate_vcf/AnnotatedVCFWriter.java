@@ -1,10 +1,5 @@
 package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
-import htsjdk.variant.variantcontext.VariantContext;
-import htsjdk.variant.variantcontext.writer.VariantContextWriter;
-import htsjdk.variant.vcf.VCFHeader;
-import htsjdk.variant.vcf.VCFHeaderLine;
-
 import java.io.File;
 
 import com.google.common.base.Joiner;
@@ -15,11 +10,14 @@ import com.google.common.collect.ImmutableSet;
 import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.htsjdk.InfoFields;
 import de.charite.compbio.jannovar.htsjdk.InvalidCoordinatesException;
 import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
 import de.charite.compbio.jannovar.htsjdk.VariantContextWriterConstructionHelper;
 import de.charite.compbio.jannovar.impl.util.PathUtil;
+import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.writer.VariantContextWriter;
+import htsjdk.variant.vcf.VCFHeader;
+import htsjdk.variant.vcf.VCFHeaderLine;
 
 /**
  * Annotate variant in {@link VariantContext} and write out through HTSJDK (i.e. in VCF/BCF format).
@@ -54,20 +52,16 @@ public class AnnotatedVCFWriter extends AnnotatedVariantWriter {
 			ImmutableList<String> args) {
 		this.refDict = refDict;
 		this.vcfHeader = vcfHeader;
-		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap,
-				new VariantContextAnnotator.Options(
-						InfoFields.build(options.writeVCFAnnotationStandardInfoFields, options.writeJannovarInfoFields),
-						!options.showAll, options.escapeAnnField, options.nt3PrimeShifting));
+		this.annotator = new VariantContextAnnotator(refDict, chromosomeMap, new VariantContextAnnotator.Options(
+				!options.showAll, options.escapeAnnField, options.nt3PrimeShifting));
 		this.vcfPath = vcfPath;
 		this.options = options;
 		this.args = args;
 
-		final InfoFields fields = InfoFields.build(options.writeVCFAnnotationStandardInfoFields,
-				options.writeJannovarInfoFields);
 		ImmutableSet<VCFHeaderLine> additionalLines = ImmutableSet.of(
 				new VCFHeaderLine("jannovarVersion", JannovarOptions.JANNOVAR_VERSION),
 				new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
-		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(vcfHeader, getOutFileName(), fields,
+		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(vcfHeader, getOutFileName(),
 				additionalLines);
 	}
 

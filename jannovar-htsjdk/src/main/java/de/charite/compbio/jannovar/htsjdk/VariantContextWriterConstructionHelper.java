@@ -32,21 +32,19 @@ public final class VariantContextWriterConstructionHelper {
 	 *            the VCF header to use for the construction
 	 * @param outStream
 	 *            {@link OutputStream} to write to
-	 * @param fields
-	 *            selection of header fields to write out
 	 * @param additionalHeaderLines
 	 *            additional {@link VCFHeaderLine}s to add
 	 * @return A correct writer for variantContexts
 	 */
 	public static VariantContextWriter openVariantContextWriter(VCFHeader header, OutputStream outStream,
-			InfoFields fields, Collection<VCFHeaderLine> additionalHeaderLines) {
+			Collection<VCFHeaderLine> additionalHeaderLines) {
 		VariantContextWriterBuilder builder = makeBuilder(header);
 		builder.unsetOption(Options.INDEX_ON_THE_FLY);
 		builder.setOutputStream(outStream);
 
 		// construct VariantContextWriter and write out header
 		VariantContextWriter out = builder.build();
-		final VCFHeader updatedHeader = extendHeaderFields(new VCFHeader(header), fields);
+		final VCFHeader updatedHeader = extendHeaderFields(new VCFHeader(header));
 		for (VCFHeaderLine headerLine : additionalHeaderLines)
 			updatedHeader.addMetaDataLine(headerLine);
 		out.writeHeader(updatedHeader);
@@ -61,15 +59,13 @@ public final class VariantContextWriterConstructionHelper {
 	 *            the VCF header to use for the construction
 	 * @param fileName
 	 *            path to output file
-	 * @param fields
-	 *            selection of header fields to write out
 	 * @param additionalHeaderLines
 	 *            additional {@link VCFHeaderLine}s to add
 	 * @return A correct writer for variantContexts
 	 */
-	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields,
+	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName,
 			Collection<VCFHeaderLine> additionalHeaderLines) {
-		return openVariantContextWriter(header, fileName, fields, additionalHeaderLines, false);
+		return openVariantContextWriter(header, fileName, additionalHeaderLines, false);
 	}
 
 	/**
@@ -80,15 +76,13 @@ public final class VariantContextWriterConstructionHelper {
 	 *            the VCF header to use for the construction
 	 * @param fileName
 	 *            path to output file
-	 * @param fields
-	 *            selection of header fields to write out
 	 * @param additionalHeaderLines
 	 *            additional {@link VCFHeaderLine}s to add
 	 * @param generateIndex
 	 *            whether or not to generate an index
 	 * @return A correct writer for variantContexts
 	 */
-	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields,
+	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName,
 			Collection<VCFHeaderLine> additionalHeaderLines, boolean generateIndex) {
 		VariantContextWriterBuilder builder = makeBuilder(header);
 		builder.setOutputFile(new File(fileName));
@@ -97,7 +91,7 @@ public final class VariantContextWriterConstructionHelper {
 
 		// construct VariantContextWriter and write out header
 		VariantContextWriter out = builder.build();
-		final VCFHeader updatedHeader = extendHeaderFields(new VCFHeader(header), fields);
+		final VCFHeader updatedHeader = extendHeaderFields(new VCFHeader(header));
 		for (VCFHeaderLine headerLine : additionalHeaderLines)
 			updatedHeader.addMetaDataLine(headerLine);
 		out.writeHeader(updatedHeader);
@@ -126,12 +120,10 @@ public final class VariantContextWriterConstructionHelper {
 	 *            the VCF header to use for the construction
 	 * @param fileName
 	 *            path to output file
-	 * @param fields
-	 *            selection of header fields to write out
 	 * @return A correct writer for variantContexts
 	 */
-	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName, InfoFields fields) {
-		return openVariantContextWriter(header, fileName, fields, ImmutableList.<VCFHeaderLine> of());
+	public static VariantContextWriter openVariantContextWriter(VCFHeader header, String fileName) {
+		return openVariantContextWriter(header, fileName, ImmutableList.<VCFHeaderLine> of());
 	}
 
 	/**
@@ -139,27 +131,13 @@ public final class VariantContextWriterConstructionHelper {
 	 *
 	 * @param header
 	 *            the {@link VCFHeader} to extend
-	 * @param fields
-	 *            the {@link InfoFields} to get the field selection from
 	 * @return extended VCFHeader
 	 */
-	public static VCFHeader extendHeaderFields(VCFHeader header, InfoFields fields) {
-		if (fields == InfoFields.EFFECT_HGVS || fields == InfoFields.BOTH) {
-			// add INFO line for EFFECT field
-			VCFInfoHeaderLine effectLine = new VCFInfoHeaderLine("EFFECT", 1, VCFHeaderLineType.String,
-					Annotation.INFO_EFFECT);
-			header.addMetaDataLine(effectLine);
-			// add INFO line for HGVS field
-			VCFInfoHeaderLine hgvsLine = new VCFInfoHeaderLine("HGVS", 1, VCFHeaderLineType.String,
-					Annotation.INFO_HGVS);
-			header.addMetaDataLine(hgvsLine);
-		}
-		if (fields == InfoFields.VCF_ANN || fields == InfoFields.BOTH) {
-			// add INFO line for standardized ANN field
-			VCFInfoHeaderLine annLine = new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String,
-					Annotation.VCF_ANN_DESCRIPTION_STRING);
-			header.addMetaDataLine(annLine);
-		}
+	public static VCFHeader extendHeaderFields(VCFHeader header) {
+		// add INFO line for standardized ANN field
+		VCFInfoHeaderLine annLine = new VCFInfoHeaderLine("ANN", 1, VCFHeaderLineType.String,
+				Annotation.VCF_ANN_DESCRIPTION_STRING);
+		header.addMetaDataLine(annLine);
 		return header;
 	}
 
