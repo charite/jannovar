@@ -2,6 +2,10 @@
 
 ## develop
 
+### jannovar-core
+
+* fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
+
 ## v0.17
 
 ### jped-cli

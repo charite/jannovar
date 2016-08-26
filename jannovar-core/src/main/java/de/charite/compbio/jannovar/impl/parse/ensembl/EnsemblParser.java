@@ -185,6 +185,7 @@ public class EnsemblParser implements TranscriptParser {
 			final List<FeatureRecord> featureRecords = txEntry.getValue();
 
 			final FeatureRecord first = featureRecords.get(0);
+			final String geneName = first.getAttributes().get("gene_name");
 			final String geneID = first.getAttributes().get("gene_id");
 			final String txID = first.getAttributes().get("transcript_id");
 
@@ -194,7 +195,8 @@ public class EnsemblParser implements TranscriptParser {
 			final Strand strand = (first.getStrand() == FeatureRecord.Strand.FORWARD) ? Strand.FWD : Strand.REV;
 			builder.setStrand(strand);
 			builder.setAccession(txID);
-			builder.setGeneSymbol(geneID);
+			builder.setGeneID(geneID);
+			builder.setGeneSymbol(geneName);
 			builder.setSequence(txID);
 
 			// Iterate over the features, interpreting "exon" and "CDS"/"stop_codon" entries
