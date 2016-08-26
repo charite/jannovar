@@ -14,13 +14,14 @@ import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
+import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
+import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
 import de.charite.compbio.jannovar.impl.parse.FASTAParser;
 import de.charite.compbio.jannovar.impl.parse.FASTARecord;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
@@ -45,10 +46,6 @@ public class EnsemblParser implements TranscriptParser {
 
 	/** the logger object to use */
 	private static final Logger LOGGER = LoggerFactory.getLogger(EnsemblParser.class);
-
-	/** List of transcript-level feature types */
-	private static final ImmutableSet<String> TX_LEVEL_FEATURE_TYPES = ImmutableSet.of("mRNA", "ncRNA", "rRNA", "tRNA",
-			"primary_transcript", "transcript");
 
 	/**
 	 * Path to the {@link ReferenceDictionary} to use for name/id and id/length mapping
@@ -80,6 +77,13 @@ public class EnsemblParser implements TranscriptParser {
 		// Load features from GTF file, clustered by the gene they belong to
 		final String pathGTF = PathUtil.join(basePath, getINIFileName("gtf"));
 		Map<String, TranscriptModelBuilder> builders = recordsToBuilders(loadRecords(pathGTF));
+
+		// Augment information in builders with
+		try {
+			new TranscriptModelBuilderHGNCExtender(basePath, r -> r.getEnsemblGeneID()).run(builders);
+		} catch (JannovarException e) {
+			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
+		}
 
 		// Load the FASTA file and assign to the builders.
 		final String pathFASTA = PathUtil.join(basePath, getINIFileName("cdna"));
@@ -176,7 +180,7 @@ public class EnsemblParser implements TranscriptParser {
 			final String txID = (record.getAttributes().get("transcript_id") != null)
 					? record.getAttributes().get("transcript_id") : record.getAttributes().get("transcript_name");
 			if (txID == null)
-				continue;  // skip, no transcript ID
+				continue; // skip, no transcript ID
 			if (!recordsForTX.containsKey(txID))
 				recordsForTX.put(txID, Lists.newArrayList(record));
 			else

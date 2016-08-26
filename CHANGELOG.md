@@ -4,11 +4,13 @@
 
 ### jannovar-cli
 
-* Upgrading from ENSEMBL-74 to ENSEMBL-75
+* Consistently writing out HUGO symbols for gene names, using the `hgnc_complete_set.txt` information downloaded when building the annotation DB
+* Upgrading from ENSEMBL-74 to ENSEMBL-75 for annotation database files
 * Removing support for old Jannovar-style annotations (#241)
 
 ### jannovar-core
 
+* downloading `hgnc_complete_set.txt` together with data sets, `TranscriptModel` objects now consistently contain additional IDs
 * making ENSEMBL parsing more robust (falling back to transcript name if no transcript ID)
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
 
