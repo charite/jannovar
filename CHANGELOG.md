@@ -4,6 +4,7 @@
 
 ### jannovar-cli
 
+* Upgrading from ENSEMBL-74 to ENSEMBL-75
 * Removing support for old Jannovar-style annotations (#241)
 
 ### jannovar-core
