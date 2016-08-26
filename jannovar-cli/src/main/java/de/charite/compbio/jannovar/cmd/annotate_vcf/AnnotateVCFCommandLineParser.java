@@ -75,7 +75,6 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 
 		result.showAll = cmd.hasOption("showall");
 
-		result.writeJannovarInfoFields = cmd.hasOption("old-info-fields");
 		result.writeVCFAnnotationStandardInfoFields = !cmd.hasOption("no-new-info-field");
 		result.escapeAnnField = !cmd.hasOption("no-escape-ann-field");
 		result.nt3PrimeShifting = !cmd.hasOption("no-3-prime-shifting");
@@ -102,8 +101,6 @@ public class AnnotateVCFCommandLineParser extends JannovarAnnotationCommandLineP
 		options.addOption(
 				new Option("o", "output-dir", true, "output directory (default is to write parallel to input file)"));
 
-		options.addOption(new Option(null, "old-info-fields", false,
-				"write out old Jannovar VCF INFO fields \"EFFECT\" and \"HGVS\" (default is off)"));
 		options.addOption(new Option(null, "no-new-info-field", false,
 				"do not write out the new VCF annotation standard INFO field \"ANN\" (default is on)"));
 		options.addOption(new Option(null, "no-escape-ann-field", false,

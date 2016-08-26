@@ -37,49 +37,14 @@ public class JannovarAnnotateVCFTest {
 	public void testOnSmallExample() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), "-d", pathToSmallSer, "-i",inputFilePath };
+		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), "-d", pathToSmallSer, "-i",
+				inputFilePath };
 		System.err.println(Joiner.on(" ").join(argv));
 		new AnnotateVCFCommand(argv).run();
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
 		Assert.assertTrue(f.exists());
 
 		final File expectedFile = new File(this.getClass().getResource("/small.jv.vcf").toURI().getPath());
-		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
-		Assert.assertEquals(expected, actual);
-	}
-
-	// Test on small.vcf (with both INFO field types) and compare with the prepared gold-standard small.bothinfo.jv.vcf
-	@Test
-	public void testOnSmallExampleBothInfoFields() throws JannovarException, URISyntaxException, IOException {
-		final File outFolder = tmpFolder.newFolder();
-		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "--old-info-fields", "-o", outFolder.toString(), "-d", pathToSmallSer,
-				"-i", inputFilePath };
-		System.err.println(Joiner.on(" ").join(argv));
-		new AnnotateVCFCommand(argv).run();
-		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
-		Assert.assertTrue(f.exists());
-
-		final File expectedFile = new File(this.getClass().getResource("/small.bothinfo.jv.vcf").toURI().getPath());
-		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
-		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
-		Assert.assertEquals(expected, actual);
-	}
-
-	// Test on small.vcf (with old INFO fields only) and compare with the prepared gold-standard small.oldinfo.jv.vcf
-	@Test
-	public void testOnSmallExampleOldInfoFields() throws JannovarException, URISyntaxException, IOException {
-		final File outFolder = tmpFolder.newFolder();
-		final String inputFilePath = this.getClass().getResource("/small.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "--old-info-fields", "--no-new-info-field", "-o",
-				outFolder.toString(), "-d",pathToSmallSer, "-i", inputFilePath };
-		System.err.println(Joiner.on(" ").join(argv));
-		new AnnotateVCFCommand(argv).run();
-		File f = new File(outFolder.getAbsolutePath() + File.separator + "small.jv.vcf");
-		Assert.assertTrue(f.exists());
-
-		final File expectedFile = new File(this.getClass().getResource("/small.oldinfo.jv.vcf").toURI().getPath());
 		final String expected = Files.toString(expectedFile, Charsets.UTF_8);
 		final String actual = Files.toString(f, Charsets.UTF_8).replaceAll("##jannovarCommand.*", "##jannovarCommand");
 		Assert.assertEquals(expected, actual);
@@ -92,7 +57,8 @@ public class JannovarAnnotateVCFTest {
 	public void testOnTrailingSemicolons() throws JannovarException, URISyntaxException, IOException {
 		final File outFolder = tmpFolder.newFolder();
 		final String inputFilePath = this.getClass().getResource("/semicolons.vcf").toURI().getPath();
-		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), "-d",pathToSmallSer, "-i", inputFilePath };
+		String[] argv = new String[] { "annotate", "-o", outFolder.toString(), "-d", pathToSmallSer, "-i",
+				inputFilePath };
 		System.err.println(Joiner.on(" ").join(argv));
 		new AnnotateVCFCommand(argv).run();
 		File f = new File(outFolder.getAbsolutePath() + File.separator + "semicolons.jv.vcf");

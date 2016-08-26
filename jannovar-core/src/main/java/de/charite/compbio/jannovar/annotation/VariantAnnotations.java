@@ -13,9 +13,6 @@ import de.charite.compbio.jannovar.reference.VariantDescription;
 /**
  * A list of priority-sorted {@link Annotation} objects.
  *
- * @see AllAnnotationListTextGenerator
- * @see BestAnnotationListTextGenerator
- *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable
