@@ -173,7 +173,10 @@ public class EnsemblParser implements TranscriptParser {
 		// Factorize the records by the transcript ID
 		final HashMap<String, ArrayList<FeatureRecord>> recordsForTX = new HashMap<>();
 		for (FeatureRecord record : records) {
-			final String txID = record.getAttributes().get("transcript_id");
+			final String txID = (record.getAttributes().get("transcript_id") != null)
+					? record.getAttributes().get("transcript_id") : record.getAttributes().get("transcript_name");
+			if (txID == null)
+				continue;  // skip, no transcript ID
 			if (!recordsForTX.containsKey(txID))
 				recordsForTX.put(txID, Lists.newArrayList(record));
 			else

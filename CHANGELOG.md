@@ -9,6 +9,7 @@
 
 ### jannovar-core
 
+* making ENSEMBL parsing more robust (falling back to transcript name if no transcript ID)
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
 
 ## v0.17
