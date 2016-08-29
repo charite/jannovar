@@ -24,25 +24,19 @@ public abstract class JannovarAnnotationCommand extends JannovarCommand {
 	/** Map of Chromosomes, used in the annotation. */
 	protected ImmutableMap<Integer, Chromosome> chromosomeMap = null;
 
-	public JannovarAnnotationCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
-		super(argv);
-	}
-
 	/**
-	 * Deserialize the transcript definition file, as configured in {@link #options}.
+	 * Deserialize the transcript definition file from {@link pathToDataFile}.
 	 *
-	 * To run Jannovar, the user must pass a transcript definition file with the -D flag. This can be one of the files
-	 * ucsc.ser, ensembl.ser, or refseq.ser (or a comparable file) containing a serialized version of the
-	 * TranscriptModel objects created to contain info about the transcript definitions (exon positions etc.) extracted
-	 * from UCSC, Ensembl, or Refseq and necessary for annotation.
-	 *
+	 * @param pathToDataFile
+	 *            String with the path to the data file to deserialize
 	 * @throws JannovarException
 	 *             when there is a problem with the deserialization
 	 * @throws HelpRequestedException
 	 *             when the user requested the help page
 	 */
-	protected void deserializeTranscriptDefinitionFile() throws JannovarException, HelpRequestedException {
-		this.jannovarData = new JannovarDataSerializer(this.options.dataFile).load();
+	protected void deserializeTranscriptDefinitionFile(String pathToDataFile)
+			throws JannovarException, HelpRequestedException {
+		this.jannovarData = new JannovarDataSerializer(pathToDataFile).load();
 		this.refDict = this.jannovarData.getRefDict();
 		this.chromosomeMap = this.jannovarData.getChromosomes();
 	}

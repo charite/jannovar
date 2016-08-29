@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import org.apache.commons.cli.ParseException;
+import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.JannovarException;
-import de.charite.compbio.jannovar.JannovarOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
-import de.charite.compbio.jannovar.cmd.HelpRequestedException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
 import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
@@ -31,6 +29,7 @@ import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
+import net.sourceforge.argparse4j.inf.Namespace;
 
 /**
  * Run annotation steps (read in VCF, write out VCF or Jannovar file format).
@@ -40,11 +39,19 @@ import htsjdk.variant.vcf.VCFHeader;
  */
 public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
+	/** Raw command line arguments */
+	private String[] argv = null;
+
 	/** Progress reporting */
 	private ProgressReporter progressReporter = null;
 
-	public AnnotateVCFCommand(String[] argv) throws CommandLineParsingException, HelpRequestedException {
-		super(argv);
+	/** Configuration */
+	private JannovarAnnotateVCFOptions options;
+
+	public AnnotateVCFCommand(String[] argv, Namespace args) throws CommandLineParsingException {
+		this.argv = argv;
+		this.options = new JannovarAnnotateVCFOptions();
+		this.options.setFromArgs(args);
 	}
 
 	/**
@@ -57,93 +64,93 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	@Override
 	public void run() throws JannovarException {
 		System.err.println("Options");
-		options.print(System.err);
+		System.err.println(options.toString());
 
-		deserializeTranscriptDefinitionFile();
+		System.err.println("Deserializing transcripts...");
+		deserializeTranscriptDefinitionFile(options.getDatabaseFilePath());
 
-		for (String vcfPath : options.vcfFilePaths) {
-			// initialize the VCF reader
-			try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
-				if (this.options.verbosity >= 1) {
-					final SAMSequenceDictionary seqDict = VCFFileReader.getSequenceDictionary(new File(vcfPath));
-					final GenomeRegionListFactoryFromSAMSequenceDictionary factory = new GenomeRegionListFactoryFromSAMSequenceDictionary();
-					this.progressReporter = new ProgressReporter(factory.construct(seqDict), 60);
-					this.progressReporter.printHeader();
-					this.progressReporter.start();
-				}
+		final String vcfPath = options.getPathInputVCF();
 
-				VCFHeader vcfHeader = vcfReader.getFileHeader();
-
-				System.err.println("Annotating VCF...");
-				final long startTime = System.nanoTime();
-
-				Stream<VariantContext> stream = vcfReader.iterator().stream();
-
-				// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
-				if (options.pathVCFDBSNP != null) {
-					DBAnnotationOptions dbSNPOptions = DBAnnotationOptions.createDefaults();
-					dbSNPOptions.setIdentifierPrefix(options.prefixDBSNP);
-					DBVariantContextAnnotator dbSNPAnno = new DBVariantContextAnnotatorFactory()
-							.constructDBSNP(options.pathVCFDBSNP, options.pathFASTARef, dbSNPOptions);
-					dbSNPAnno.extendHeader(vcfHeader);
-					stream = stream.map(dbSNPAnno::annotateVariantContext);
-				}
-
-				// If configured, annotate using ExAC VCF file (extend header to use for writing out)
-				if (options.pathVCFExac != null) {
-					DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
-					exacOptions.setIdentifierPrefix(options.prefixExac);
-					DBVariantContextAnnotator exacAnno = new DBVariantContextAnnotatorFactory()
-							.constructExac(options.pathVCFExac, options.pathFASTARef, exacOptions);
-					exacAnno.extendHeader(vcfHeader);
-					stream = stream.map(exacAnno::annotateVariantContext);
-				}
-
-				// If configured, annotate using UK10K VCF file (extend header to use for writing out)
-				if (options.pathVCFUK10K != null) {
-					DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
-					exacOptions.setIdentifierPrefix(options.prefixUK10K);
-					DBVariantContextAnnotator uk10kAnno = new DBVariantContextAnnotatorFactory()
-							.constructUK10K(options.pathVCFUK10K, options.pathFASTARef, exacOptions);
-					uk10kAnno.extendHeader(vcfHeader);
-					stream = stream.map(uk10kAnno::annotateVariantContext);
-				}
-
-				// Extend header with INHERITANCE filter
-				if (options.pathPedFile != null) {
-					System.err.println("Extending header with INHERITANCE...");
-					new MendelVCFHeaderExtender().extendHeader(vcfHeader, "");
-				}
-
-				// Write result to output file
-				try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath,
-						options, args); VariantContextProcessor sink = buildMendelianProcessors(writer);) {
-					// Make current VC available to progress printer
-					if (this.progressReporter != null)
-						stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
-
-					stream.forEachOrdered(sink::put);
-
-					System.err.println("Wrote annotations to \"" + writer.getOutFileName() + "\"");
-					final long endTime = System.nanoTime();
-					System.err.println(String.format("Annotation and writing took %.2f sec.",
-							(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
-				} catch (IOException e) {
-					throw new JannovarException("Problem opening file", e);
-				}
-			} catch (IncompatiblePedigreeException e) {
-				System.err
-						.println("VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
-			} catch (VariantContextFilterException e) {
-				System.err.println("There was a problem annotating the VCF file");
-				System.err.println("The error message was as follows.  The stack trace below the error "
-						+ "message can help the developers debug the problem.\n");
-				System.err.println(e.getMessage());
-				System.err.println("\n");
-				e.printStackTrace(System.err);
-				return;
+		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
+			if (this.options.getVerbosity() >= 1) {
+				final SAMSequenceDictionary seqDict = VCFFileReader.getSequenceDictionary(new File(vcfPath));
+				final GenomeRegionListFactoryFromSAMSequenceDictionary factory = new GenomeRegionListFactoryFromSAMSequenceDictionary();
+				this.progressReporter = new ProgressReporter(factory.construct(seqDict), 60);
+				this.progressReporter.printHeader();
+				this.progressReporter.start();
 			}
+
+			VCFHeader vcfHeader = vcfReader.getFileHeader();
+
+			System.err.println("Annotating VCF...");
+			final long startTime = System.nanoTime();
+
+			Stream<VariantContext> stream = vcfReader.iterator().stream();
+
+			// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
+			if (options.pathVCFDBSNP != null) {
+				DBAnnotationOptions dbSNPOptions = DBAnnotationOptions.createDefaults();
+				dbSNPOptions.setIdentifierPrefix(options.prefixDBSNP);
+				DBVariantContextAnnotator dbSNPAnno = new DBVariantContextAnnotatorFactory()
+						.constructDBSNP(options.pathVCFDBSNP, options.pathFASTARef, dbSNPOptions);
+				dbSNPAnno.extendHeader(vcfHeader);
+				stream = stream.map(dbSNPAnno::annotateVariantContext);
+			}
+
+			// If configured, annotate using ExAC VCF file (extend header to use for writing out)
+			if (options.pathVCFExac != null) {
+				DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
+				exacOptions.setIdentifierPrefix(options.prefixExac);
+				DBVariantContextAnnotator exacAnno = new DBVariantContextAnnotatorFactory()
+						.constructExac(options.pathVCFExac, options.pathFASTARef, exacOptions);
+				exacAnno.extendHeader(vcfHeader);
+				stream = stream.map(exacAnno::annotateVariantContext);
+			}
+
+			// If configured, annotate using UK10K VCF file (extend header to use for writing out)
+			if (options.pathVCFUK10K != null) {
+				DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();
+				exacOptions.setIdentifierPrefix(options.prefixUK10K);
+				DBVariantContextAnnotator uk10kAnno = new DBVariantContextAnnotatorFactory()
+						.constructUK10K(options.pathVCFUK10K, options.pathFASTARef, exacOptions);
+				uk10kAnno.extendHeader(vcfHeader);
+				stream = stream.map(uk10kAnno::annotateVariantContext);
+			}
+
+			// Extend header with INHERITANCE filter
+			if (options.pathPedFile != null) {
+				System.err.println("Extending header with INHERITANCE...");
+				new MendelVCFHeaderExtender().extendHeader(vcfHeader, "");
+			}
+
+			// Write result to output file
+			try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath, options,
+					ImmutableList.copyOf(argv)); VariantContextProcessor sink = buildMendelianProcessors(writer);) {
+				// Make current VC available to progress printer
+				if (this.progressReporter != null)
+					stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
+
+				stream.forEachOrdered(sink::put);
+
+				System.err.println("Wrote annotations to \"" + options.getPathOutputVCF() + "\"");
+				final long endTime = System.nanoTime();
+				System.err.println(String.format("Annotation and writing took %.2f sec.",
+						(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
+			} catch (IOException e) {
+				throw new JannovarException("Problem opening file", e);
+			}
+		} catch (IncompatiblePedigreeException e) {
+			System.err.println("VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
+		} catch (VariantContextFilterException e) {
+			System.err.println("There was a problem annotating the VCF file");
+			System.err.println("The error message was as follows.  The stack trace below the error "
+					+ "message can help the developers debug the problem.\n");
+			System.err.println(e.getMessage());
+			System.err.println("\n");
+			e.printStackTrace(System.err);
+			return;
 		}
+
 		if (progressReporter != null)
 			progressReporter.done();
 	}
@@ -189,17 +196,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			throws IncompatiblePedigreeException {
 		if (!pedigree.getNames().containsAll(vcfHeader.getGenotypeSamples()))
 			throw new IncompatiblePedigreeException("The VCF file is not compatible with the pedigree!");
-	}
-
-	@Override
-	protected JannovarOptions parseCommandLine(String[] argv)
-			throws CommandLineParsingException, HelpRequestedException {
-		AnnotateVCFCommandLineParser parser = new AnnotateVCFCommandLineParser();
-		try {
-			return parser.parse(argv);
-		} catch (ParseException e) {
-			throw new CommandLineParsingException("Could not parse the command line.", e);
-		}
 	}
 
 }

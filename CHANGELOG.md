@@ -4,9 +4,15 @@
 
 ### jannovar-cli
 
+* CLI changes such that one VCF input and one VCF output path can be used only
+* Replacing apache commons-cli with argparse4j for a more modern and usable CLI
 * Consistently writing out HUGO symbols for gene names, using the `hgnc_complete_set.txt` information downloaded when building the annotation DB
 * Upgrading from ENSEMBL-74 to ENSEMBL-75 for annotation database files
 * Removing support for old Jannovar-style annotations (#241)
+
+### jannovar-htsjdk
+
+* Properly annotating Mendelian inheritance for intergenic variants
 
 ### jannovar-core
 
