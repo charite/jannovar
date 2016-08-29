@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
@@ -31,8 +32,7 @@ final public class DataSourceFactory {
 	 * @throws InvalidDataSourceException
 	 *             on problems with the data source config file
 	 */
-	public DataSourceFactory(DatasourceOptions options, ImmutableList<String> iniFilePaths)
-			throws InvalidDataSourceException {
+	public DataSourceFactory(DatasourceOptions options, List<String> iniFilePaths) throws InvalidDataSourceException {
 		this.options = options;
 
 		ImmutableList.Builder<Ini> inisBuilder = new ImmutableList.Builder<Ini>();
@@ -48,8 +48,8 @@ final public class DataSourceFactory {
 				try {
 					is = new FileInputStream(iniFilePath);
 				} catch (FileNotFoundException e) {
-					throw new InvalidDataSourceException("Problem opening data source file " + iniFilePath + ": "
-							+ e.getMessage());
+					throw new InvalidDataSourceException(
+							"Problem opening data source file " + iniFilePath + ": " + e.getMessage());
 				}
 			}
 			Ini ini = new Ini();
