@@ -67,8 +67,7 @@ public class JannovarAnnotationOptions extends JannovarBaseOptions {
 	public String toString() {
 		return "JannovarAnnotationOptions [useThreeLetterAminoAcidCode=" + useThreeLetterAminoAcidCode
 				+ ", nt3PrimeShifting=" + nt3PrimeShifting + ", showAll=" + showAll + ", databaseFilePath="
-				+ databaseFilePath + ", isReportProgress()=" + isReportProgress() + ", getHttpProxy()=" + getHttpProxy()
-				+ ", getHttpsProxy()=" + getHttpsProxy() + ", getFtpProxy()=" + getFtpProxy() + "]";
+				+ databaseFilePath + ", toString()=" + super.toString() + "]";
 	}
 
 }
