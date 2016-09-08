@@ -2,6 +2,10 @@
 
 ## develop
 
+## v0.17.1
+
+* bugfix of NullPointerException in RefSeqParser while parsing refSeq curated
+
 ## v0.17
 
 ### jped-cli
