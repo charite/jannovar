@@ -19,6 +19,7 @@
 * downloading `hgnc_complete_set.txt` together with data sets, `TranscriptModel` objects now consistently contain additional IDs
 * making ENSEMBL parsing more robust (falling back to transcript name if no transcript ID)
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
+* bugfix of NullPointerException in RefSeqParser while parsing refSeq curated
 
 ## v0.17
 
