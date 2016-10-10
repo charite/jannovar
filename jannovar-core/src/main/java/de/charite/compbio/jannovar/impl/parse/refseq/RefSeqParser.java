@@ -271,7 +271,7 @@ public class RefSeqParser implements TranscriptParser {
 				cdsRegion = new GenomeInterval(txRegion.getGenomeBeginPos(), 0);
 			builder.setCDSRegion(cdsRegion);
 
-			if (onlyCurated() && mrnaName.startsWith("X")) {
+			if (onlyCurated() && (mrnaName == null || mrnaName.startsWith("X"))) {
 				LOGGER.debug("Skipping non-curated transcript {}", new Object[] { mrnaName });
 				continue; // skip non-curated one
 			}
