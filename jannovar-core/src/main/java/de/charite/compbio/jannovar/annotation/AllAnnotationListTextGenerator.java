@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
+import com.google.common.collect.ImmutableList;
+
 import de.charite.compbio.jannovar.Immutable;
 
 // TODO(holtgrewe): Remove me.
@@ -19,8 +21,8 @@ public final class AllAnnotationListTextGenerator extends VariantAnnotationsText
 	}
 
 	@Override
-	protected VariantAnnotations getAnnotations() {
-		return annotations;
+	protected ImmutableList<Annotation> getAnnotations() {
+		return annotations.getAnnotations();
 	}
 
 }
