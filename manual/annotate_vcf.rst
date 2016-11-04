@@ -31,7 +31,7 @@ The first three variant lines of ``examples/small.jv.vcf`` will look as follows.
 Disabling 3' Shifting
 ---------------------
 
-The `HGVS Nomenclature for the description fo sequence variants <http://www.hgvs.org/mutnomen/>`_  requires that variants are to be shifted towards the 3' end of transcripts in case of ambiguities.
+The `HGVS Nomenclature for the description fo sequence variants <http://varnomen.hgvs.org/>`_  requires that variants are to be shifted towards the 3' end of transcripts in case of ambiguities.
 This is in partial conflict with the VCF standard which requires all variant calls to be shifted towards the 3' end of the genome.
 In the case that Jannovar shifted the variants towards the 3' end of the transcript, it will generate a ``INFO_REALIGN_3_PRIME`` information in the message field of the annotation (``ANN`` field).
 

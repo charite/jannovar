@@ -870,7 +870,7 @@ public enum VariantEffect {
 		case STRUCTURAL_VARIANT:
 			return "SO:0001537";
 		case SYNONYMOUS_VARIANT:
-			return "SO:0001819 ";
+			return "SO:0001819";
 		case TF_BINDING_SITE_VARIANT:
 			return "SO:0001782";
 		case THREE_PRIME_UTR_TRUNCATION:
