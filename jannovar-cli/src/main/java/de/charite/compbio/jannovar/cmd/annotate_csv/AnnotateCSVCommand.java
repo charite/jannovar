@@ -127,7 +127,7 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	}
 
 	private String getChromosomalChange(CSVRecord record) {
-		return "chr" + record.get(options.getChr()) + ":" + record.get(options.getPos()) + record.get(options.getRef())
+		return record.get(options.getChr()) + ":" + record.get(options.getPos()) + record.get(options.getRef())
 				+ ">" + record.get(options.getAlt());
 	}
 

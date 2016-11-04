@@ -24,9 +24,8 @@ The value of ``--proxy`` can be overridden by the protocol-specific options.
 
 For most users, it is sufficient to use ``--proxy`` only:
 
-.. code-block:: console
-
-    # java -jar jannovar-cli-|version|.jar download --proxy http://proxy.example.com:8080/ -d hg19/ucsc
+.. parsed-literal::
+    # java -jar jannovar-cli-\ |version|\ .jar download --proxy http://proxy.example.com:8080/ -d hg19/ucsc
 
 Proxy Environment Variables
 ---------------------------

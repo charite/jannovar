@@ -7,15 +7,13 @@ The Jannovar package ``de.charite.compbio.jannovar.filter`` contains functionali
 This functionality is exposed in the ``jped-cli`` program.
 You can get the command line help for ``jped-cli`` as follows:
 
-::
-
-    # java -jar jped-cli-|version|.jar --help
+.. parsed-literal::
+    # java -jar jped-cli-\ |version|\ .jar --help
 
 A basic call looks as follows:
 
-::
-
-    # java -jar jped-cli-0.18.jar -m MODE(S) -p IN.ped -i IN.vcf -o OUT.vcf
+.. parsed-literal::
+    # java -jar jped-cli-\ |version|\ .jar -m MODE(S) -p IN.ped -i IN.vcf -o OUT.vcf
 
 This call of ``jped-cli`` will first read in the pedigree from ``IN.ped``.
 Then, it will read the file ``IN.vcf`` and filter the variants therein for compatibility with the given ``MODE(S)`` of inheritance and the pedigree.

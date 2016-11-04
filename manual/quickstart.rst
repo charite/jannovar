@@ -18,9 +18,8 @@ This short How-To guides you from downloading the Jannovar program to annotating
       If you are behind a proxy then you have to pass its path to the ``--proxy`` option, e.g., ``--proxy http://proxy.example.com:8080``.
       See the section :ref:`proxy_settings` for more information.
 
-   .. code-block:: console
-
-      # java -jar jannovar-cli-|version|.jar download -d hg19/refseq
+.. parsed-literal::
+      # java -jar jannovar-cli-\ |version|\ .jar download -d hg19/refseq
 
    This will create the file ``data/hg19_refseq.ser`` which is a self-contained transcript database and can be used for functional annotation.
 #. Annotate the file ``small.vcf`` from the ``examples`` directory.

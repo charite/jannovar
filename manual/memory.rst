@@ -17,6 +17,5 @@ For example, the following line increases the available memory to 2 GB of RAM.
 If you prefer, then you can also pass these options to the invokation of JVM.
 The following Jannovar invocation allows to use up to 2 GB of RAM:
 
-.. code-block:: bash
-
-    java -Xms2G -Xmx2G -jar jannovar-cli-|version|.jar [...]
+.. parsed-literal::
+    java -Xms2G -Xmx2G -jar jannovar-cli-\ |version|\ .jar [...]
