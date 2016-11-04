@@ -13,7 +13,7 @@ import com.google.common.base.Predicate;
  * gives the sequence ontology (SO) ID and the SO description. Also, the documentation of each value explains whether
  * Jannovar generates this annotation or not.
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter Robinson</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>

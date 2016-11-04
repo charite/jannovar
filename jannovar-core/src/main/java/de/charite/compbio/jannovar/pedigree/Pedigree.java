@@ -14,7 +14,7 @@ import de.charite.compbio.jannovar.Immutable;
 /**
  * Represent one pedigree from a PED file.
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable

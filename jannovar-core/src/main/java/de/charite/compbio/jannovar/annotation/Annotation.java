@@ -21,7 +21,7 @@ import de.charite.compbio.jannovar.reference.VariantDescription;
  *
  * Implements the {@link VariantDescription} interface for quicker access to the variant description information.
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 @Immutable

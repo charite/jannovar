@@ -2,7 +2,6 @@ package de.charite.compbio.jannovar;
 
 import java.util.function.BiFunction;
 
-import de.charite.compbio.jannovar.cmd.JannovarBaseOptions;
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
 import de.charite.compbio.jannovar.cmd.annotate_pos.JannovarAnnotatePosOptions;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions;
@@ -18,7 +17,7 @@ import net.sourceforge.argparse4j.inf.Subparsers;
 /**
  * This is the driver class for a program called Jannovar.
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:peter.robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
@@ -56,6 +55,8 @@ public final class Jannovar {
 		JannovarCommand cmd = factory.apply(argv, args);
 		if (cmd == null)
 			System.exit(1);
+
+		// Execute the command.
 		try {
 			cmd.run();
 		} catch (JannovarException e) {

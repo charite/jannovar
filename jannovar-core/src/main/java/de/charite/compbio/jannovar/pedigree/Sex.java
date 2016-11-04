@@ -3,7 +3,7 @@ package de.charite.compbio.jannovar.pedigree;
 /**
  * Representation of an individual's sex.
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  */
 public enum Sex {
