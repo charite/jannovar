@@ -26,7 +26,7 @@ For most users, it is sufficient to use ``--proxy`` only:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.16.jar download --proxy http://proxy.example.com:8080/ -d hg19/ucsc
+    # java -jar jannovar-cli-|version|.jar download --proxy http://proxy.example.com:8080/ -d hg19/ucsc
 
 Proxy Environment Variables
 ---------------------------

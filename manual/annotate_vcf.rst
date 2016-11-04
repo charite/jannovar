@@ -15,7 +15,7 @@ For example, for annotating the ``small.vcf`` file in the ``examples`` directory
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.18.jar annotate -d data/hg19_ucsc.ser -i examples/small.vcf
+    # java -jar jannovar-cli-|version|.jar annotate -d data/hg19_ucsc.ser -i examples/small.vcf
     [...]
     # ls examples/small.jv.vcf
     small.jv.vcf
@@ -31,7 +31,7 @@ The first three variant lines of ``examples/small.jv.vcf`` will look as follows.
 Disabling 3' Shifting
 ---------------------
 
-The `HGVS Nomenclature for the description fo sequence variants <http://www.hgvs.org/mutnomen/>`_  requires that variants are to be shifted towards the 3' end of transcripts in case of ambiguities.
+The `HGVS Nomenclature for the description fo sequence variants <http://varnomen.hgvs.org/>`_  requires that variants are to be shifted towards the 3' end of transcripts in case of ambiguities.
 This is in partial conflict with the VCF standard which requires all variant calls to be shifted towards the 3' end of the genome.
 In the case that Jannovar shifted the variants towards the 3' end of the transcript, it will generate a ``INFO_REALIGN_3_PRIME`` information in the message field of the annotation (``ANN`` field).
 
@@ -41,7 +41,7 @@ Here is an example of using this command line option:
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.18.jar annotate --no-3-prime-shifting \
+    # java -jar jannovar-cli-|version|.jar annotate --no-3-prime-shifting \
         -d data/hg19_refseq.ser -i examples/small.vcf
 
 The Show-All Option
@@ -52,7 +52,7 @@ You can use the ``--show-all``/``-a`` option to write out all functional annotat
 
 .. code-block:: console
 
-    # java -jar jannovar-cli-0.18.jar annotate --show-all \
+    # java -jar jannovar-cli-|version|.jar annotate --show-all \
         -d data/hg19_refseq.ser -i examples/small.vcf
 
 For example, the first line of ``small.jv.vcf`` will look as follows and contain multiple effects and HGVS annotations.

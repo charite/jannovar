@@ -24,6 +24,8 @@
 * making ENSEMBL parsing more robust (falling back to transcript name if no transcript ID)
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
 * bugfix of NullPointerException in RefSeqParser while parsing refSeq curated
+* bugfix space in SeqOID of SYNONYMOUS_VARIANT 
+* Update link to HGVS Nomenclature 
 
 ## v0.17
 

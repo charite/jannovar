@@ -12,7 +12,7 @@ Prequisites
 
 For building Jannovar, you will need
 
-#. `Java JDK 6 or higher <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_ for compiling Jannovar,
+#. `Java JDK 8 or higher <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`_ for compiling Jannovar,
 #. `Maven 3 <http://maven.apache.org/>`_ for building Jannovar, and
 #. `Git <http://git-scm.com/>`_ for getting the sources.
 
