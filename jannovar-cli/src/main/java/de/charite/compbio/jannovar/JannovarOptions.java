@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
  * example, the proxy setting is only used when downloading data.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 public final class JannovarOptions {

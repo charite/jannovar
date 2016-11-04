@@ -21,7 +21,7 @@ import de.charite.compbio.jannovar.impl.util.DNAUtils;
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  */
 @Immutable
 public final class GenomeVariant implements VariantDescription {

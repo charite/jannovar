@@ -6,7 +6,7 @@ package de.charite.compbio.jannovar.annotation;
  * Decorator for {@link Annotation} for generating annotation text.
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  */
 @Deprecated
 final public class AnnotationTextGenerator {

@@ -59,7 +59,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  * flag. If so, then this file will be annotated using the UCSC data, and a new version of the file will be written to a
  * file called test.vcf.jannovar (assuming the original file was named test.vcf). The
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
@@ -122,7 +122,7 @@ public final class Jannovar {
 	private static void printTopLevelHelp() {
 		System.err.println("Program: de.charite.compbio.jannovar (functional annotation of VCF files)");
 		System.err.println("Version: " + JannovarOptions.JANNOVAR_VERSION);
-		System.err.println("Contact: Peter N Robinson <peter.robinson@charite.de>");
+		System.err.println("Contact: Peter N Robinson <Peter.Robinson@jax.org>");
 		System.err.println("");
 		System.err.println("Usage: java -jar de.charite.compbio.jannovar.jar <command> [options]");
 		System.err.println("");

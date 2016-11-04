@@ -5,7 +5,7 @@ import de.charite.compbio.jannovar.JannovarException;
 /**
  * Exception that occurs during parsing of PEDfiles.
  *
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  */
 public class PedParseException extends JannovarException {
 
