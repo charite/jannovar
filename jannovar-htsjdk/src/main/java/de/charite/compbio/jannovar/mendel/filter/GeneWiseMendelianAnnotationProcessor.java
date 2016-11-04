@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
@@ -105,8 +105,6 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		final int contigID = refDict.getContigNameToID().get(vc.getContig());
 		IntervalArray<Gene> iTree = geneList.getGeneIntervalTree().get(contigID);
 
-		// TODO(holtgrewe): upstream and downstream is ignored...
-
 		// Consider this variant for each affected gene
 		GenomeInterval changeInterval = new GenomeInterval(refDict, Strand.FWD, contigID, vc.getStart() - 1,
 				vc.getEnd());
@@ -192,13 +190,25 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 
 	/**
 	 * Register {@link FlaggedVariant} as active for the given gene.
+	 *
+	 * @throws UncheckedJannovarException
+	 *             on problems with annotation of the variant
 	 */
 	private void putVariantForGene(VariantContext vc, Gene gene) {
 		LOGGER.trace("Assigning variant {} to gene {}", new Object[] { vc, gene });
 		// Register VariantContext as active
 		activeVariants.computeIfAbsent(vc, x -> new VariantContextCounter(x, 0));
-		if (gene == null)
-			return; // done, just marked is as active
+
+		if (gene == null) {
+			// Compute modes of inheritance on its own, don't assign to any gene, just marked as active
+			try {
+				annotator.annotateRecord(vc);
+			} catch (CannotAnnotateMendelianInheritance e) {
+				throw new UncheckedJannovarException("Problem with mendelian variant annotation in variant context", e);
+			}
+			return;
+		}
+
 		activeVariants.get(vc).increment();
 		// Register VariantContext for gene
 		activeGenes.computeIfAbsent(gene, x -> new ArrayList<>());

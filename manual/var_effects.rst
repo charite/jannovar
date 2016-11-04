@@ -63,7 +63,7 @@ MODIFIER         SO:0002017  conserved_intergenic_variant
 MODIFIER         SO:0001537  structural_variant
 MODIFIER         SO:0001580  coding_sequence_variant
 MODIFIER         SO:0001908  intron_variant
-MODIFIER         SO:0001791  exon_variant
+MODIFIER         SO:00018  exon_variant
 MODIFIER         SO:0001568  splicing_variant
 MODIFIER         SO:0001908  miRNA
 MODIFIER         SO:0001564  gene_variant

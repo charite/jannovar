@@ -1,8 +1,5 @@
 package de.charite.compbio.jannovar.htsjdk;
 
-import htsjdk.variant.variantcontext.Allele;
-import htsjdk.variant.variantcontext.VariantContext;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -19,17 +15,17 @@ import de.charite.compbio.jannovar.annotation.Annotation;
 import de.charite.compbio.jannovar.annotation.AnnotationMessage;
 import de.charite.compbio.jannovar.annotation.VariantAnnotations;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
-import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.data.Chromosome;
 import de.charite.compbio.jannovar.data.JannovarData;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
-import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
+import htsjdk.variant.variantcontext.Allele;
+import htsjdk.variant.variantcontext.VariantContext;
 
 /**
  * Helper class for generating {@link VariantAnnotations} objects from {@link VariantContext}s.
@@ -49,9 +45,6 @@ public final class VariantContextAnnotator {
 	 *
 	 */
 	public static class Options {
-		/** selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN}) */
-		private final InfoFields infoFields;
-
 		/**
 		 * Whether or not to trim each annotation list to the first (one with highest putative impact), defaults to
 		 * <code>true</code>
@@ -68,7 +61,6 @@ public final class VariantContextAnnotator {
 		 * Constructor
 		 */
 		public Options() {
-			infoFields = InfoFields.VCF_ANN;
 			oneAnnotationOnly = true;
 			escapeAnnField = true;
 			nt3PrimeShifting = true;
@@ -78,8 +70,6 @@ public final class VariantContextAnnotator {
 		 * 
 		 * constructor using fields
 		 * 
-		 * @param infoFields
-		 *            selection of info fields to write out (defaults to {@link InfoFields#VCF_ANN})
 		 * @param oneAnnotationOnly
 		 *            Whether or not to trim each annotation list to the first (one with highest putative impact),
 		 *            defaults to <code>true</code>
@@ -89,21 +79,10 @@ public final class VariantContextAnnotator {
 		 *            whether or not to perform shifting towards the 3' end of the transcript (defaults to
 		 *            <code>true</code>)
 		 */
-		public Options(InfoFields infoFields, boolean oneAnnotationOnly, boolean escapeAnnField,
-				boolean nt3PrimeShifting) {
-			this.infoFields = infoFields;
+		public Options(boolean oneAnnotationOnly, boolean escapeAnnField, boolean nt3PrimeShifting) {
 			this.oneAnnotationOnly = oneAnnotationOnly;
 			this.escapeAnnField = escapeAnnField;
 			this.nt3PrimeShifting = nt3PrimeShifting;
-		}
-
-		/**
-		 * Getter for info fields
-		 * 
-		 * @return info fields to write out
-		 */
-		public InfoFields getInfoFields() {
-			return infoFields;
 		}
 
 		/**
@@ -291,14 +270,6 @@ public final class VariantContextAnnotator {
 	 * @return modified <code>vc</code>
 	 */
 	public VariantContext applyAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
-		if (options.infoFields == InfoFields.VCF_ANN || options.infoFields == InfoFields.BOTH)
-			applyStandardAnnotations(vc, annos);
-		if (options.infoFields == InfoFields.EFFECT_HGVS || options.infoFields == InfoFields.BOTH)
-			applyOldJannovarAnnotations(vc, annos);
-		return vc;
-	}
-
-	private void applyStandardAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
 		ArrayList<String> annotations = new ArrayList<String>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
 			if (!annos.get(alleleID).getAnnotations().isEmpty()) {
@@ -311,33 +282,8 @@ public final class VariantContextAnnotator {
 			}
 		}
 		vc.getCommonInfo().putAttribute("ANN", Joiner.on(',').join(annotations), true); // true allows overwriting
-	}
 
-	private void applyOldJannovarAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
-		ArrayList<VariantEffect> effectList = new ArrayList<VariantEffect>();
-		ArrayList<String> hgvsList = new ArrayList<String>();
-
-		final int altAlleleCount = vc.getAlternateAlleles().size();
-		for (int alleleID = 0; alleleID < altAlleleCount; ++alleleID) {
-			if (!annos.get(alleleID).getAnnotations().isEmpty()) {
-				for (Annotation ann : annos.get(alleleID).getAnnotations()) {
-					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
-					effectList.add(ann.getMostPathogenicVarType());
-					if (altAlleleCount == 1)
-						hgvsList.add(ann.getSymbolAndAnnotation(AminoAcidCode.ONE_LETTER));
-					else
-						hgvsList.add(Joiner.on("").join("alt", alt, ":",
-								ann.getSymbolAndAnnotation(AminoAcidCode.ONE_LETTER)));
-
-					if (options.oneAnnotationOnly)
-						break;
-				}
-			}
-		}
-
-		FluentIterable<String> effects = FluentIterable.from(effectList).transform(VariantEffect.TO_LEGACY_NAME);
-		vc.getCommonInfo().putAttribute("EFFECT", Joiner.on(',').join(effects), true); // true allows overwriting
-		vc.getCommonInfo().putAttribute("HGVS", Joiner.on(',').join(hgvsList), true); // true allows overwriting
+		return vc;
 	}
 
 	/**

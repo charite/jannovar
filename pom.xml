@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.charite.compbio</groupId>
 	<artifactId>Jannovar</artifactId>
-	<version>0.17</version>
+	<version>0.18-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Jannovar</name>
 
@@ -182,7 +182,7 @@
 						${project.artifactId}:${project.version}</checkinComment>
 					<content>${project.reporting.outputDirectory}/apidocs</content>
 					<skipDeletedFiles>true</skipDeletedFiles>
-					<pubScmUrl>scm:git:https://github.com/charite/jannovar.git</pubScmUrl>
+					<pubScmUrl>scm:git:git@github.com:charite/jannovar.git</pubScmUrl>
 					<scmBranch>gh-pages</scmBranch> <!-- branch with static site -->
 				</configuration>
 			</plugin>
