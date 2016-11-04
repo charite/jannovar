@@ -2,6 +2,10 @@
 
 ## develop
 
+### all
+
+* replace charite email of p. robinson with the new one of jax
+
 ### jannovar-cli
 
 * CLI changes such that one VCF input and one VCF output path can be used only
