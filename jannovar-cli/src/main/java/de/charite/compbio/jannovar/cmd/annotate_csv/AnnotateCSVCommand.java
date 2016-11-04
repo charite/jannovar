@@ -77,13 +77,12 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 			final CSVPrinter printer = options.getFormat().print(out);
 
 			if (options.isHeader()) {
-				List<String> header = new ArrayList<>(parser.getHeaderMap().size() + 3);
+				List<String> header = new ArrayList<>(parser.getHeaderMap().size() + 2);
 				for (Map.Entry<String, Integer> entry : parser.getHeaderMap().entrySet()) {
 					header.add(entry.getValue(), entry.getKey());
 				}
-				header.add(parser.getHeaderMap().size(), "Transcript");
-				header.add(parser.getHeaderMap().size() + 1, "HGVS");
-				header.add(parser.getHeaderMap().size() + 2, "FunctionalClass");
+				header.add(parser.getHeaderMap().size(), "HGVS");
+				header.add(parser.getHeaderMap().size()+1, "FunctionalClass");
 
 				printer.printRecord(header);
 			}
@@ -112,7 +111,6 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 					textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
 				else
 					textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
-				printer.print(annoList.getHighestImpactAnnotation().getTranscript().getAccession());
 
 				printer.print(textGenerator.buildHGVSText(options.isUseThreeLetterAminoAcidCode()
 						? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER));
