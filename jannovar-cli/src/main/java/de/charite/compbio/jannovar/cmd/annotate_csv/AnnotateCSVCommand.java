@@ -3,21 +3,27 @@ package de.charite.compbio.jannovar.cmd.annotate_csv;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
 import de.charite.compbio.jannovar.JannovarException;
+import de.charite.compbio.jannovar.annotation.AllAnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.AnnotationException;
+import de.charite.compbio.jannovar.annotation.BestAnnotationListTextGenerator;
 import de.charite.compbio.jannovar.annotation.VariantAnnotations;
+import de.charite.compbio.jannovar.annotation.VariantAnnotationsTextGenerator;
 import de.charite.compbio.jannovar.annotation.VariantAnnotator;
 import de.charite.compbio.jannovar.annotation.builders.AnnotationBuilderOptions;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.reference.GenomePosition;
 import de.charite.compbio.jannovar.reference.GenomeVariant;
 import de.charite.compbio.jannovar.reference.PositionType;
@@ -34,6 +40,11 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	/** Configuration */
 	private JannovarAnnotateCSVOptions options;
 
+	/**
+	 * @param argv
+	 * @param args
+	 * @throws CommandLineParsingException
+	 */
 	public AnnotateCSVCommand(String argv[], Namespace args) throws CommandLineParsingException {
 		this.options = new JannovarAnnotateCSVOptions();
 		this.options.setFromArgs(args);
@@ -58,17 +69,27 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 
 		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
 
-		CSVParser parser = null;
 		try {
 			Reader in = new FileReader(options.getCsv());
 			final Appendable out = System.out;
-			parser = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
-			
+			CSVParser parser = options.getFormat().parse(in);
 
-			final CSVPrinter printer = CSVFormat.DEFAULT.print(out);
-			
+			final CSVPrinter printer = options.getFormat().print(out);
+
+			if (options.isHeader()) {
+				List<String> header = new ArrayList<>(parser.getHeaderMap().size() + 3);
+				for (Map.Entry<String, Integer> entry : parser.getHeaderMap().entrySet()) {
+					header.add(entry.getValue(), entry.getKey());
+				}
+				header.add(parser.getHeaderMap().size(), "Transcript");
+				header.add(parser.getHeaderMap().size() + 1, "HGVS");
+				header.add(parser.getHeaderMap().size() + 2, "FunctionalClass");
+
+				printer.printRecord(header);
+			}
+
 			for (CSVRecord record : parser) {
-				
+
 				// Parse the chromosomal change string into a GenomeChange object.
 				String chromosomalChange = getChromosomalChange(record);
 				final GenomeVariant genomeChange = parseGenomeChange(chromosomalChange);
@@ -83,11 +104,19 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 					continue;
 				}
 
-				final String effect = annoList.getHighestImpactEffect().name();
 				for (String string : record) {
 					printer.print(string);
 				}
-				printer.print(effect);
+				VariantAnnotationsTextGenerator textGenerator;
+				if (options.isShowAll())
+					textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
+				else
+					textGenerator = new BestAnnotationListTextGenerator(annoList, 0, 1);
+				printer.print(annoList.getHighestImpactAnnotation().getTranscript().getAccession());
+
+				printer.print(textGenerator.buildHGVSText(options.isUseThreeLetterAminoAcidCode()
+						? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER));
+				printer.print(annoList.getHighestImpactEffect());
 				printer.println();
 			}
 			parser.close();
@@ -100,8 +129,8 @@ public class AnnotateCSVCommand extends JannovarAnnotationCommand {
 	}
 
 	private String getChromosomalChange(CSVRecord record) {
-		return "chr"+record.get(options.getChr()) + ":" + record.get(options.getPos()) + record.get(options.getRef()) + ">"
-				+ record.get(options.getAlt());
+		return "chr" + record.get(options.getChr()) + ":" + record.get(options.getPos()) + record.get(options.getRef())
+				+ ">" + record.get(options.getAlt());
 	}
 
 	private GenomeVariant parseGenomeChange(String changeStr) throws JannovarException {
