@@ -28,7 +28,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModel;
  *
  * @author <a href="mailto:manuel.holtgrewe@charite.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:marten.jaeger@charite.de">Marten Jaeger</a>
- * @author <a href="mailto:peter.robinson@charite.de">Peter N Robinson</a>
+ * @author <a href="mailto:Peter.Robinson@jax.org">Peter N Robinson</a>
  */
 public final class VariantAnnotator {
 
