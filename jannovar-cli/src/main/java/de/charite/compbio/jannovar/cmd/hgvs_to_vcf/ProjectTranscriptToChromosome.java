@@ -74,7 +74,6 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		System.err.println("Opening output VCF file...");
 		try (VariantContextWriter writer = openOutputFile()) {
 			processFile(writer);
-			writer.close();
 		}
 	}
 
