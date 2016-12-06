@@ -100,7 +100,7 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 				"Problem in parsing original HGVS variant string, written out as variant at 1:g.1N>N"));
 		header.addMetaDataLine(new VCFInfoHeaderLine("ERROR_MESSAGE", 1, VCFHeaderLineType.String, "Error message"));
 		header.addMetaDataLine(new VCFInfoHeaderLine("ORIG_VAR", 1, VCFHeaderLineType.String,
-				"Original HGVS variant string from input file to tx-to-vcf"));
+				"Original HGVS variant string from input file to hgvs-to-vcf"));
 
 		writer.writeHeader(header);
 
