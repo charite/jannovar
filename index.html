@@ -35,15 +35,7 @@
 <a id="jannovar-a-java-library-for-exome-annotation" class="anchor" href="#jannovar-a-java-library-for-exome-annotation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Jannovar: A Java library for Exome/Genome Annotation</h1>
 
 <p>Transcript-based annotation and pedigree analysis are two basic steps in the computational analysis of whole-exome/genome sequencing experiments in disease-gene discovery projects or diagnostics. Jannovar is a stand-alone Java application as well as a Java library designed to be used in larger software frameworks for exome/genome analysis. Jannovar uses an interval tree to identify all transcripts affected by a given variant, and provides HGVS-compliant annotations for both for variants affecting coding sequences and splice junctions as well as UTR sequences and non-coding RNA transcripts. Jannovar can also perform family-based pedigree analysis with VCF files with data from members of a family segregating a Mendelian disorder. Using a desktop computer, Jannovar requires a few seconds to annotate a typical VCF file with exome/genome data.</p>
-
-<h2>
-<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Jannovar</h2>
-
-<p>Jannovar can be used from the command line to annotate VCF files, but it is also a complete Java programming library that can be used within larger applications.
-For instance, the <a href="http://www.sanger.ac.uk/resources/databases/exomiser/">Exomiser</a> is a Web server that can be used to prioritise candidate genes in exome sequencing studies. 
-<a href="http://compbio.charite.de/PhenIX">PhenIX</a> is a Web server that provides a ranked list of
-candidate genes in diagnostic exome or gene panel sequencing. <a href="https://phenomecentral.org/">Phenome Central</a> is used for genomic matchmaking. </p>
-        
+       
 <h2> Jannovar official manual</h2>
 
           <p>For usage information, installation and other help please visit our <a href="http://jannovar.readthedocs.io/en/master/">Jannovar Manual</a>. Report bugs on GitHub <a href="https://github.com/charite/jannovar/issues">issue tracker</a>
@@ -53,7 +45,15 @@ candidate genes in diagnostic exome or gene panel sequencing. <a href="https://p
   <li>Any details about your local setup that might be helpful in troubleshooting.</li>
   <li>Detailed steps to reproduce the bug.</li>
 </ul>
-          
+     
+<h2>
+<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Software using jannovar</h2>
+
+<p>Jannovar can be used from the command line to annotate VCF files, but it is also a complete Java programming library that can be used within larger applications.
+For instance, the <a href="http://www.sanger.ac.uk/resources/databases/exomiser/">Exomiser</a> is a Web server that can be used to prioritise candidate genes in exome sequencing studies. 
+<a href="http://compbio.charite.de/PhenIX">PhenIX</a> is a Web server that provides a ranked list of
+candidate genes in diagnostic exome or gene panel sequencing. <a href="https://phenomecentral.org/">Phenome Central</a> is used for genomic matchmaking. </p>
+ 
     
 <h2>
 <a id="downloading-the-source-code" class="anchor" href="#downloading-the-source-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial (old version)</h2>
