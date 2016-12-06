@@ -33,7 +33,7 @@ Create the release and push it to Maven central/Sonatype.
 
 		mvn clean javadoc:javadoc scm-publish:publish-scm
 
-Important: is uses the actual version set in the main pom!
+Important: it uses the actual version set in the main pom!
 
 ## Releasing the Deployment
 
