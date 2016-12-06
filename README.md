@@ -34,7 +34,7 @@ Download the UCSC transcripts for hg19:
 Annotate the example file `small.vcf`:
 
 ```
-# java -jar jannovar-cli-0.18.jar annotate -d data/hg19_ucsc.ser -i examples/small.vcf
+# java -jar jannovar-cli-0.18.jar annotate-vcf -d data/hg19_ucsc.ser -i examples/small.vcf -o examples/small.jv.vcf
 [...]
 ```
 
@@ -45,5 +45,5 @@ Inspect the resulting annotated file:
 ```
 
 Also see the
-[Quickstart](http://jannovar.readthedocs.org/en/develop/quickstart.html) section
+[Quickstart](http://jannovar.readthedocs.org/en/master/quickstart.html) section
 in the Jannovar manual.
