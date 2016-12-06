@@ -70,6 +70,7 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
     annotate_csv
     hgvs_to_vcf
     ped_filters
+    jannovar_lib
 
 
 .. toctree::
@@ -81,6 +82,7 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
     memory
     proxy
     datasource
+    faq
 
 
 .. toctree::
