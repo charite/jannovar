@@ -49,10 +49,10 @@ Default
 TDF
 	Tab-delimited format.
 RFC4180
-	Comma separated format as defined by <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>
+	Comma separated format as defined by [RFC4180](http://tools.ietf.org/html/rfc4180).
 Excel
 	Excel file format (using a comma as the value delimiter). Note that the actual value delimiter used by Excel is locale dependent, it might be necessary to customize this format to accommodate to your regional settings.
 MySQL
-	Default MySQL format. This is a tab-delimited format with a LF character as the line separator. Values are not quoted and special characters are escaped with {@code '\'}. The default NULL string is "\\N".
+	Default MySQL format. This is a tab-delimited format with a LF character as the line separator. Values are not quoted and special characters are escaped with `\`. The default `NULL` string is `\\N`.
 
 

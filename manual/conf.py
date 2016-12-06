@@ -203,7 +203,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'Jannovar.tex', u'Jannovar Documentation',
-   u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe', 'manual'),
+   u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max Schubach', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -233,7 +233,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'jannovar', u'Jannovar Documentation',
-     [u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe'], 1)
+     [u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max Schubach'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -247,7 +247,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Jannovar', u'Jannovar Documentation',
-   u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe', 'Jannovar', 'One line description of project.',
+   u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max Schubach', 'Jannovar', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -268,9 +268,9 @@ texinfo_documents = [
 
 # Bibliographic Dublin Core info.
 epub_title = u'Jannovar'
-epub_author = u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe'
-epub_publisher = u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe'
-epub_copyright = u'2015, Peter N Robinson, Marten Jaeger, Manuel Holtgrewe'
+epub_author = u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max Schubach'
+epub_publisher = u'Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max Schubach'
+epub_copyright = u'2015, Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max Schubach'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'Jannovar'
