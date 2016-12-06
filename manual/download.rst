@@ -11,7 +11,7 @@ Each database is linked to a certain release of a reference genome.
 Displaying Available Database
 -----------------------------
 
-.. note:: TODO: link to writing your own INI file
+.. note:: You can use your own datasources by editing the ini file. See datasource_ for more information.
 
 Jannovar has built-in support for the human and mouse genomes in releases ``hg18``, ``hg19``, ``hg38``, ``mm9``, and ``mm10``.
 For each release, the database can originate from the sources ``ucsc``, ``ensembl``, and ``refseq``.
