@@ -3,7 +3,7 @@
 Quickstart
 ==========
 
-This short How-To guides you from downloading the Jannovar program to annotating a VCF file in 5 steps.
+This short How-To guides you from downloading the Jannovar program to annotating a VCF file in 4 steps.
 
 #. Download the current stable release from our `GitHub project <https://github.com/charite/jannovar>`_ by clicking `here <https://github.com/charite/jannovar/releases/download/|version|/jannovar-|version|.zip>`_.
 #. Extract the ZIP archive.
