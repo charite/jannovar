@@ -68,6 +68,7 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
     annotate_vcf
     annotate_pos
     annotate_csv
+    hgvs_to_vcf
     ped_filters
 
 
