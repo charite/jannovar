@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.cmd.tx_to_chrom;
+package de.charite.compbio.jannovar.cmd.hgvs_to_vcf;
 
 import java.io.BufferedReader;
 import java.io.File;

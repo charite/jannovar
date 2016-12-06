@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.cmd.annotate_pos.JannovarAnnotatePosOptions;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions;
 import de.charite.compbio.jannovar.cmd.db_list.JannovarDBListOptions;
 import de.charite.compbio.jannovar.cmd.download.JannovarDownloadOptions;
-import de.charite.compbio.jannovar.cmd.tx_to_chrom.ProjectTranscriptToChromosomeOptions;
+import de.charite.compbio.jannovar.cmd.hgvs_to_vcf.ProjectTranscriptToChromosomeOptions;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;

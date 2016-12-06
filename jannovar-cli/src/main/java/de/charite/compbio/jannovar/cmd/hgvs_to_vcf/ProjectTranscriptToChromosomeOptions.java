@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.cmd.tx_to_chrom;
+package de.charite.compbio.jannovar.cmd.hgvs_to_vcf;
 
 import java.util.function.BiFunction;
 
@@ -53,12 +53,12 @@ public class ProjectTranscriptToChromosomeOptions extends JannovarAnnotationOpti
 			}
 		};
 
-		Subparser subParser = subParsers.addParser("tx-to-chrom", true)
+		Subparser subParser = subParsers.addParser("hgvs-to-vcf", true)
 				.help("project transcript-level to chromosome-level changes").setDefault("cmd", handler);
 		subParser.description("Project transcript-level changes to chromosome level ones");
 		subParser.addArgument("-r", "--reference-fasta").help("Path to reference FASTA file").required(true);
 		subParser.addArgument("-d", "--database").help("Path to database .ser file").required(true);
-		subParser.addArgument("-i", "--input-txt").help("Input file with transcript-level changes, line-by-line")
+		subParser.addArgument("-i", "--input-txt").help("Input file with HGVS transcript-level changes, line-by-line")
 				.required(true);
 		subParser.addArgument("-o", "--output-vcf").help("Output VCF file with chromosome-level changes")
 				.required(true);
