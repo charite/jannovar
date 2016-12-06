@@ -8,6 +8,7 @@
 
 ### jannovar-cli
 
+* Renaming `tx-to-chrom` to `hgvs-to-vcf`, also in Java module names.
 * CLI changes such that one VCF input and one VCF output path can be used only
 * Replacing apache commons-cli with argparse4j for a more modern and usable CLI
 * Consistently writing out HUGO symbols for gene names, using the `hgnc_complete_set.txt` information downloaded when building the annotation DB
