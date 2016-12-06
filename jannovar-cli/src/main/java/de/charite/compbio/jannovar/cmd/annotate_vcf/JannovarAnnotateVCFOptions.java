@@ -97,7 +97,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
 				.dest("escape_ann_field").setDefault(true).action(Arguments.storeFalse());
-		optionalGroup.addArgument("--show-all").help("Show all effects").setDefault(false).action(Arguments.storeFalse());
+		optionalGroup.addArgument("--show-all").help("Show all effects").setDefault(false).action(Arguments.storeTrue());
 		optionalGroup.addArgument("--no-3-prime-shifting").help("Disable shifting towards 3' of transcript")
 				.dest("3_prime_shifting").setDefault(true).action(Arguments.storeFalse());
 		optionalGroup.addArgument("--3-letter-amino-acids").help("Enable usage of 3 letter amino acid codes")
