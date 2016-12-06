@@ -48,7 +48,6 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 		this.vcToRecord = vcToRecord;
 		this.vcfReader = new VCFFileReader(new File(this.vcfPath), true);
 		this.options = options;
-
 	}
 
 	@Override
