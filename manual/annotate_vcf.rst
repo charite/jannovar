@@ -9,7 +9,7 @@ Depending on the configuration, the one effect that is most pathogenic, or all, 
 
 This is done using the ``annotate-vcf`` command.
 You pass the path to an annotation database and one VCF file that should be annotated.
-For each file, the resulting annotated file is written to the file specified by ``-o`` or ``--output-vcf``.
+The resulting annotated file is written to the file specified by ``-o`` or ``--output-vcf``.
 
 For example, for annotating the ``small.vcf`` file (see `small.vcf <https://github.com/charite/jannovar/blob/master/examples/small.vcf>`_) in the ``examples`` directory:
 

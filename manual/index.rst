@@ -15,6 +15,7 @@ Jannovar is a Java-based program and library for the functional annotation of VC
    annotate_vcf
    annotate_pos
    annotate_csv
+   hgvs_to_vcf
    jped
    lib_coordinates
    var_effects
