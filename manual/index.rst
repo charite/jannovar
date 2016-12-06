@@ -72,6 +72,15 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
     ped_filters
     jannovar_lib
 
+.. toctree::
+    :caption: Further annotation
+    :name: jannovar-annotation
+    :maxdepth: 1
+    :hidden:
+
+    annotate_vcf_databases
+    inheritance
+    filter
 
 .. toctree::
     :caption: Tips & Tricks
