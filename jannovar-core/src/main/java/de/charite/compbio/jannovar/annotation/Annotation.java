@@ -381,8 +381,8 @@ public final class Annotation implements VariantDescription, Comparable<Annotati
 	@Override
 	public String toString() {
 		return "Annotation [change=" + change + ", effects=" + effects + ", cdsNTChange=" + cdsNTChange
-				+ ", proteinChange=" + proteinChange.toHGVSString() + ", transcript.getAccession()="
-				+ transcript.getAccession() + "]";
+				+ ", proteinChange=" + (proteinChange == null ? "." : proteinChange.toHGVSString())
+				+ ", transcript.getAccession()=" + transcript.getAccession() + "]";
 	}
 
 	@Override
