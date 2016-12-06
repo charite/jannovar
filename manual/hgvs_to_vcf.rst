@@ -1,9 +1,9 @@
 .. _hgvs_to_vcf:
 
-Getting chromosomal positions of HGVS description
+Convert HGVS to VCF
 ====================
 
-Because Jannovar uses `HGVS <http://varnomen.hgvs.org/>`_ to describe the variant change in atranscript it is also possible to use HGVS strings and get the genomic position. In Jannovar there is a command line interface to decode a list of HGVS notations into a VCF file.
+Because Jannovar uses `HGVS <http://varnomen.hgvs.org/>`_ to describe the variant change in a transcript it is also possible to use HGVS strings and get the genomic position. In Jannovar there is a command line interface to decode a list of HGVS notations into a VCF file.
 
 This is done using the ``hgvs-to-vcf`` command.
 You pass the path to an annotation database that you use in you HGVS code and a file where each line is exactly one HGVS notation. In addition the indexed reference fasta file with a dictionary is needed. The resulting file is a fully supported VCF file. 
