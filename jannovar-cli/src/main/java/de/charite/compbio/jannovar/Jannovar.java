@@ -3,6 +3,7 @@ package de.charite.compbio.jannovar;
 import java.util.function.BiFunction;
 
 import de.charite.compbio.jannovar.cmd.JannovarCommand;
+import de.charite.compbio.jannovar.cmd.annotate_csv.JannovarAnnotateCSVOptions;
 import de.charite.compbio.jannovar.cmd.annotate_pos.JannovarAnnotatePosOptions;
 import de.charite.compbio.jannovar.cmd.annotate_vcf.JannovarAnnotateVCFOptions;
 import de.charite.compbio.jannovar.cmd.db_list.JannovarDBListOptions;
@@ -35,6 +36,7 @@ public final class Jannovar {
 				+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
 		Subparsers subParsers = parser.addSubparsers();
 		JannovarAnnotatePosOptions.setupParser(subParsers);
+		JannovarAnnotateCSVOptions.setupParser(subParsers);
 		JannovarAnnotateVCFOptions.setupParser(subParsers);
 		JannovarDBListOptions.setupParser(subParsers);
 		JannovarDownloadOptions.setupParser(subParsers);

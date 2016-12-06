@@ -13,6 +13,7 @@
 * Consistently writing out HUGO symbols for gene names, using the `hgnc_complete_set.txt` information downloaded when building the annotation DB
 * Upgrading from ENSEMBL-74 to ENSEMBL-75 for annotation database files
 * Removing support for old Jannovar-style annotations (#241)
+* Adding new command for annotating csv files (annotate-csv)
 
 ### jannovar-htsjdk
 
@@ -25,7 +26,8 @@
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
 * bugfix of NullPointerException in RefSeqParser while parsing refSeq curated
 * bugfix space in SeqOID of SYNONYMOUS_VARIANT 
-* Update link to HGVS Nomenclature 
+* Update link to HGVS Nomenclature
+* Now BestAnnotationListTextGenerator shows really the best and not all annotations!
 
 ## v0.17
 

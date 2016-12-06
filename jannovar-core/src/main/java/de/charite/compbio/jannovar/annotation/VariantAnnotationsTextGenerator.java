@@ -1,6 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.hgvs.AminoAcidCode;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
@@ -54,7 +55,7 @@ public abstract class VariantAnnotationsTextGenerator {
 	 */
 	public String buildEffectText() {
 		StringBuilder builder = new StringBuilder();
-		for (Annotation anno : annotations.getAnnotations()) {
+		for (Annotation anno : getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
@@ -69,7 +70,7 @@ public abstract class VariantAnnotationsTextGenerator {
 	 */
 	public String buildHGVSText(AminoAcidCode code) {
 		StringBuilder builder = new StringBuilder();
-		for (Annotation anno : annotations.getAnnotations()) {
+		for (Annotation anno : getAnnotations()) {
 			if (builder.length() != 0)
 				builder.append(',');
 			if (altCount > 1)
@@ -82,6 +83,6 @@ public abstract class VariantAnnotationsTextGenerator {
 	/**
 	 * @return {@link VariantAnnotations} of annotations to generate the annotation text for
 	 */
-	protected abstract VariantAnnotations getAnnotations();
+	protected abstract ImmutableList<Annotation> getAnnotations();
 
 }

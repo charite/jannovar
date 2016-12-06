@@ -20,9 +20,8 @@ Further, the database can be limited to the curated transcripts only when using 
 The genome release names and the source names are joint into database descriptors such as ``hg19/ucsc`` and ``hg38/refseq``.
 You can view the built-in database names using the ``db-list`` Jannovar command:
 
-.. code-block:: console
-
-    # java -jar jannovar-cli-|version|.jar db-list
+.. parsed-literal::
+    # java -jar jannovar-cli-\ |version|\ .jar db-list
     [...]
         hg18/refseq_curated
         hg19/ucsc
@@ -51,8 +50,7 @@ Finally, Jannovar will build a file with the extension ``.ser`` in the directory
 
 Let us now download the RefSeq and UCSC annotations for human release *hg19*:
 
-.. code-block:: console
-
-    # java -jar jannovar-cli-|version|.jar download -d hg19/refseq -d hg19/ucsc
+.. parsed-literal::
+    # java -jar jannovar-cli-\ |version|\ .jar download -d hg19/refseq -d hg19/ucsc
 
 

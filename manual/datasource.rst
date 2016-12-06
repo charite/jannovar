@@ -34,9 +34,8 @@ For example, consider the following definition of human release ``hg19`` from UC
 The section name ``hg19/ucsc`` defines the data source name.
 When saving the above file contents as ``my_ucsc.ini``, you can pass it to the Jannovar ``download`` command ``--data-source-list``/``-s``.
 
-.. code-block:: bash
-
-    java -Xms2G -Xmx2G -jar jannovar-cli-|version|.jar download -s my_ucsc.ini -d hg19/ucsc
+.. parsed-literal::
+    java -Xms2G -Xmx2G -jar jannovar-cli-\ |version|\ .jar download -s my_ucsc.ini -d hg19/ucsc
 
 Your INI file can either add new definitions or override the built-in ones.
 In fact, the definition from above is part of the INI file that is contained in the Jannovar JAR file and used by default.
