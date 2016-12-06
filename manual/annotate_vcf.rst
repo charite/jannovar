@@ -14,7 +14,7 @@ The resulting annotated file is written to the file specified by ``-o`` or ``--o
 For example, for annotating the ``small.vcf`` file (see `small.vcf <https://github.com/charite/jannovar/blob/master/examples/small.vcf>`_) in the ``examples`` directory:
 
 .. parsed-literal::
-    # java -jar jannovar-cli-\ |version|\ .jar annotate-vcf \
+    # java -jar jannovar-cli-\ |version|\ .jar annotate-vcf \\
     -d data/hg19_refseq.ser -i examples/small.vcf -o examples/small.jv.vcf
     [...]
     # ls examples/small.jv.vcf
@@ -40,7 +40,7 @@ Using this switch suppresses this shifting and the variant will be kept as given
 Here is an example of using this command line option:
 
 .. parsed-literal::
-    # java -jar jannovar-cli-\ |version|\ .jar annotate --no-3-prime-shifting \
+    # java -jar jannovar-cli-\ |version|\ .jar annotate --no-3-prime-shifting \\
     -d data/hg19_refseq.ser -i examples/small.vcf -o examples/small.jv.vcf
 
 The Show-All Option
@@ -50,7 +50,7 @@ By default, Jannovar will only write out one most pathogenic variant as predicte
 You can use the ``--show-all`` option to write out all functional annotations:
 
 .. parsed-literal::
-    # java -jar jannovar-cli-\ |version|\ .jar annotate-vcf --show-all \
+    # java -jar jannovar-cli-\ |version|\ .jar annotate-vcf --show-all \\
     -d data/hg19_refseq.ser -i examples/small.vcf -o examples/small.jv.vcf
 
 For example, the first line of ``small.jv.vcf`` will look as follows and contain multiple effects and HGVS annotations.
