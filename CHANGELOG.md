@@ -30,6 +30,13 @@
 * Update link to HGVS Nomenclature
 * Now BestAnnotationListTextGenerator shows really the best and not all annotations!
 
+### Manual
+
+* Documenting cli changes
+* Adding additional sites contributing, FAQ and how to filter
+* Better description of installations and quickstart
+
+
 ## v0.17
 
 ### jped-cli
