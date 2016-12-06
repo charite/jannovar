@@ -1,7 +1,29 @@
-.. _install_from_source:
+.. _installation:
 
+============
 Installation
 ============
+
+
+Pre-built Binaries
+==================
+
+.. note::
+
+    This is the recommended way of installing for normal users.
+
+Pre-built binaries are available from `Maven Central <https://search.maven.org>`_.
+Download jannovar-cli-\ |version| \.jar from `here <http://search.maven.org/#search%7Cga%7C1%7Cjannovar>`_.
+
+
+.. _install_from_source:
+
+Install from Source
+===================
+
+.. note::
+
+    You only need to install from source if you want to develop Jannovar in Java yourself.
 
 There are two options of installing Jannovar.
 The recommended way for most users is to download a prebuilt binary and is well-described in the :ref:`quickstart` section.

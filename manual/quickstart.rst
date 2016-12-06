@@ -19,19 +19,25 @@ This short How-To guides you from downloading the Jannovar program to annotating
       See the section :ref:`proxy_settings` for more information.
 
 .. parsed-literal::
-      # java -jar jannovar-cli-\ |version|\ .jar download -d hg19/refseq
+
+      $ java -jar jannovar-cli-\ |version|\ .jar download -d hg19/refseq
 
    This will create the file ``data/hg19_refseq.ser`` which is a self-contained transcript database and can be used for functional annotation.
+
 #. Annotate the file ``small.vcf`` from the ``examples`` directory.
 
-   .. code-block:: console
+.. parsed-literal::
 
-      # java -jar jannovar-cli-0.18.jar annotate -d data/hg19_refseq.ser -i examples/small.vcf
+      $ java -jar jannovar-cli-\ |version|\ .jar annotate -d data/hg19_refseq.ser -i examples/small.vcf
 
    Jannovar will now load the transcript database from ``data/hg19_refseq.ser`` and then read ``examples/small.vcf`` file.
    Each contained variant in this file will be annotated with an ``EFFECT`` and an ``HGVS`` field in the ``VCF`` info column.
    The ``EFFECT`` field contains an effect, e.g., ``SYNONYMOUS`` and the ``HGVS`` field contains a HGVS representation of the variant.
    The result will be written out to ``small.jv.vcf``.
+
+   .. note::
+
+        The variant effect codes in the output and their mapping to sequence ontology is described `in the Jannovar API documentation <http://charite.github.io/jannovar/api/0.17/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_.
 
    The following excerpt shows the first three variants of the ``small.vcf`` file with their effect and HGVS annotation.
 
@@ -48,6 +54,6 @@ Of course, you can follow the other manual chapters and get more extensive infor
 In addition, here are some external links that can help you in your understanding:
 
 Current VCF Specification
-  can be found in the **hts-specs** project on GitHub `here <https://github.com/samtools/hts-specs>`_.
+  can be found in the **hts-specs** project on `GitHub <https://github.com/samtools/hts-specs>`_.
 HGVS Mutation Nomenclature.
-  is mainainted by the `Human Genome Variation Society <http://www.hgvs.org/>`_ and the nomenclature can be found `here <http://www.hgvs.org/mutnomen/>`_.
+  is mainainted by the `Human Genome Variation Society <http://www.hgvs.org/>`_ and the nomenclature can be found in the `Sequence Variant Nomenclature <http://varnomen.hgvs.org/>`_.

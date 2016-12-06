@@ -64,8 +64,9 @@ If you are proposing a feature:
 
 .. _doc_guidelines:
 
+------------------------
 Documentation Guidelines
-========================
+------------------------
 
 For the documentation, please adhere to the following guidelines:
 
@@ -113,10 +114,11 @@ For the documentation, please adhere to the following guidelines:
     :::::::::
 
 
-.. _doc_setup::
+.. _doc_setup:
 
+-------------------
 Documentation Setup
-===================
+-------------------
 
 For building the documentation, you have to install the Python program Sphinx.
 This is best done in a virtual environment.
@@ -143,8 +145,9 @@ Afterwards, you can always use ``make html`` for building.
     $ make clean && make html  # force rebuild
 
 
+------------
 Get Started!
-============
+------------
 
 Ready to contribute?
 First, create your Java/Documentation development setup as described in `install_from_source`/`doc_setup`.
@@ -178,8 +181,9 @@ First, create your Java/Documentation development setup as described in `install
 7. Submit a pull request through the GitHub website.
 
 
+-----------------------
 Pull Request Guidelines
-=======================
+-----------------------
 
 Before you submit a pull request, check that it meets these guidelines:
 

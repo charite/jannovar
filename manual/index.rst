@@ -38,6 +38,7 @@ Features
 
 - annotation of VCF files for functional impact, supporting different transcript databases (RefSeq, ENSEMBL, UCSC)
 - annotation with information from dbSNP, ExAC, UK10K, ...
+- use `Sequence Ontology <http://charite.github.io/jannovar/api/0.17/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_ for variant effect annotation
 - ... and more
 
 --------
@@ -50,7 +51,7 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
 .. toctree::
     :caption: Installation & Getting Started
     :name: getting-started
-    :maxdepth: 2
+    :maxdepth: 1
     :hidden:
 
     quickstart
@@ -60,21 +61,20 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
 .. toctree::
     :caption: Jannovar Usage
     :name: jannovar-usage
-    :maxdepth: 2
+    :maxdepth: 1
     :hidden:
 
     download
     annotate_vcf
     annotate_pos
     annotate_csv
-    var_effects
     ped_filters
 
 
 .. toctree::
     :caption: Tips & Tricks
     :name: tips-tricks
-    :maxdepth: 2
+    :maxdepth: 1
     :hidden:
 
     memory
@@ -85,8 +85,7 @@ The best place to leave feedback, ask questions, and report bugs is the `Jannova
 .. toctree::
     :caption: Project Info
     :name: project-info
-    :maxdepth: 2
-    :titlesonly:
+    :maxdepth: 1
     :hidden:
 
     contributing
