@@ -15,8 +15,7 @@ This short How-To guides you from downloading the Jannovar program to annotating
 
    .. note::
 
-      If you are behind a proxy then you have to pass its path to the ``--proxy`` option, e.g., ``--proxy http://proxy.example.com:8080``.
-      See the section :ref:`proxy_settings` for more information.
+	If you are behind a proxy then you have to pass its path to the ``--proxy`` option, e.g., ``--proxy http://proxy.example.com:8080``. See the section :ref:`proxy_settings` for more information.
 
     .. parsed-literal::
 
@@ -26,10 +25,11 @@ This short How-To guides you from downloading the Jannovar program to annotating
 
 #. Annotate the file ``small.vcf`` from the ``examples`` directory.
 
-.. parsed-literal::
+   .. parsed-literal::
 
-      $ java -jar jannovar-cli-\ |version|\ .jar annotate -d data/hg19_refseq.ser -i examples/small.vcf
+	$ java -jar jannovar-cli-\ |version|\ .jar annotate -d data/hg19_refseq.ser -i examples/small.vcf
 
+   
    Jannovar will now load the transcript database from ``data/hg19_refseq.ser`` and then read ``examples/small.vcf`` file.
    Each contained variant in this file will be annotated with an ``EFFECT`` and an ``HGVS`` field in the ``VCF`` info column.
    The ``EFFECT`` field contains an effect, e.g., ``SYNONYMOUS`` and the ``HGVS`` field contains a HGVS representation of the variant.
