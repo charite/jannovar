@@ -7,14 +7,14 @@ The main purpose of Jannovar is the annotation of all variants in a VCF file.
 That is, for each annotation, predict the results for all transcripts that can be afflicted by the change.
 Depending on the configuration, the one effect that is most pathogenic, or all, are written out.
 
-This is done using the ``annotate`` command.
-You pass the path to an annotation database and one or more paths to VCF files that are to be annotated.
-For each file, the resulting annotated file is to the current directory, the file name is derived by replacing the file name suffix ``.vcf`` to ``.jv.vcf``.
+This is done using the ``annotate-vcf`` command.
+You pass the path to an annotation database and one VCF file that should be annotated.
+For each file, the resulting annotated file is written to the file specified by ``-o`` or ``--output-vcf``.
 
-For example, for annotating the ``small.vcf`` file in the ``examples`` directory:
+For example, for annotating the ``small.vcf`` file (see `small.vcf <https://github.com/charite/jannovar/blob/master/jannovar-cli/src/test/resources/small.vcf>`_) in the ``examples`` directory:
 
 .. parsed-literal::
-    # java -jar jannovar-cli-\ |version|\ .jar annotate -d data/hg19_ucsc.ser -i examples/small.vcf
+    # java -jar jannovar-cli-\ |version|\ .jar annotate-vcf -d data/hg19_ucsc.ser -i examples/small.vcf -o examples/small.jv.vcf
     [...]
     # ls examples/small.jv.vcf
     small.jv.vcf
