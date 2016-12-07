@@ -45,9 +45,9 @@ The publisher backend to Maven Central is here:
 
 * https://oss.sonatype.org/
 
-## Update README and JannovarOptions.java
+## Update README.md CHANGELOG.md
 
-Open README.md and JannovarOptions.java and update the version there.
+Open README.md and CHANGELOG.md and adjust the files accordingly
 
 ## Maven comments
 
