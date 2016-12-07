@@ -3,14 +3,19 @@ Welcome to Jannovar's documentation!
 ====================================
 
 Jannovar is a Java-based program and library for the functional annotation of VCF files.
-The documentation is split into four parts (accessible through the navigation on the left).
+The documentation is split into five parts (accessible through the navigation on the left).
 
 Installation & Getting Started
     Instructions for the Installation of the program and some examples to get you started.
 
 Jannovar Usage
     An overview of how Jannovar works and documentation and examples for the Jannovar sub commands.
-    Also contains a description of the molecular impact prediction and other annotations from Jannovar.
+    The original and prime feature of Jannovar predicting molecular impact of variants given a transcriptome model.
+    Further features such as the conversion between HGVS and VCF are also described.
+
+Further Annotation
+    This part documents the annotation with different databases and compatible modes of inheritance.
+    Also, it quickly describes how to (hard-)filter your VCF files given annotations using ``bcftools``.
 
 Tips & Tricks
     Further documentation on Jannovar, information on troubleshooting etc.
