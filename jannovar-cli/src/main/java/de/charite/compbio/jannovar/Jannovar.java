@@ -10,6 +10,7 @@ import de.charite.compbio.jannovar.cmd.db_list.JannovarDBListOptions;
 import de.charite.compbio.jannovar.cmd.download.JannovarDownloadOptions;
 import de.charite.compbio.jannovar.cmd.hgvs_to_vcf.ProjectTranscriptToChromosomeOptions;
 import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -25,13 +26,11 @@ import net.sourceforge.argparse4j.inf.Subparsers;
  */
 public final class Jannovar {
 
-	/** the version of the program */
-	public static final String JANNOVAR_VERSION = "0.17";
-
 	public static void main(String argv[]) {
 		// Setup command line parser
 		ArgumentParser parser = ArgumentParsers.newArgumentParser("jannovar-cli");
-		parser.version(JANNOVAR_VERSION);
+		parser.version(getVersion());
+		parser.addArgument("--version").help("Show Jannovar version").action(Arguments.version());
 		parser.description("Jannovar CLI performs a series of VCF annotation tasks, including predicted "
 				+ "molecular impact of variants and annotation of compatible Mendelian inheritance.");
 		Subparsers subParsers = parser.addSubparsers();
@@ -68,4 +67,7 @@ public final class Jannovar {
 		}
 	}
 
+	public static String getVersion() {
+		return Jannovar.class.getPackage().getSpecificationVersion();
+	}
 }

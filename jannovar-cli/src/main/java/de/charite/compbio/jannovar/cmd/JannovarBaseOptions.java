@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import de.charite.compbio.jannovar.Jannovar;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -38,6 +39,9 @@ public class JannovarBaseOptions {
 	 *            {@link ArgumentParser} to setup
 	 */
 	public static void setupParser(ArgumentParser parser) {
+		parser.version(Jannovar.getVersion());
+		parser.addArgument("--version").help("Show Jannovar version").action(Arguments.version());
+
 		ArgumentGroup verboseGroup = parser.addArgumentGroup("Verbosity Options");
 		verboseGroup.addArgument("--report-no-progress").help("Disable progress report, more quiet mode")
 				.dest("report_progress").setDefault(true).action(Arguments.storeFalse());

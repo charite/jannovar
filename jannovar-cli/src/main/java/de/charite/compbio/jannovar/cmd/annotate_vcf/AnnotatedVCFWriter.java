@@ -54,7 +54,7 @@ public class AnnotatedVCFWriter implements Closeable {
 		this.args = args;
 
 		ImmutableSet<VCFHeaderLine> additionalLines = ImmutableSet.of(
-				new VCFHeaderLine("jannovarVersion", Jannovar.JANNOVAR_VERSION),
+				new VCFHeaderLine("jannovarVersion", Jannovar.getVersion()),
 				new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(args)));
 		this.out = VariantContextWriterConstructionHelper.openVariantContextWriter(vcfHeader,
 				options.getPathOutputVCF(), additionalLines);
