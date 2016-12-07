@@ -1,8 +1,8 @@
 .. _jannovar_lib:
 
-=====================
+
 Jannovar as a Library
-=====================
+=======================
 
 You can obtain the Jannovar library JAR files from Maven Central.
 Pre-built binaries are available from `Maven Central <https://search.maven.org>`_.
@@ -13,7 +13,7 @@ Pre-built binaries are available from `Maven Central <https://search.maven.org>`
     Note that you should only use JAR files from version \ |version| \ and not older versions.
     Some modules have been removed (and merged with other modules) in previous versions.
 
-------------------------
+
 Jannovar in your pom.xml
 -------------------------
 

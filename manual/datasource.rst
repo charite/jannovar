@@ -9,7 +9,7 @@ This section describes how to define your own data source.
 
 .. note::
 
-    If you think that your new data source would be useful for others, please send them to us either using our `issue tracker <https://github.com/charite/jannovar/issues>`_ or by sending an email to Peter N Robinson <peter.robinson@charite.de>.
+    If you think that your new data source would be useful for others, please send them to us either using our `issue tracker <https://github.com/charite/jannovar/issues>`_ or by sending an email to Peter N Robinson <peter.robinson@jax.org>.
 
 Datasource INI Files
 --------------------
