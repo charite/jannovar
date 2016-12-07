@@ -1,8 +1,14 @@
 package de.charite.compbio.jannovar.datasource;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.zip.GZIPInputStream;
 
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
@@ -64,8 +70,8 @@ public abstract class JannovarDataFactory {
 	 * @throws FileDownloadException
 	 *             on problems while downloading files.
 	 */
-	public final JannovarData build(String downloadDir, boolean printProgressBars) throws InvalidDataSourceException,
-			TranscriptParseException, FileDownloadException {
+	public final JannovarData build(String downloadDir, boolean printProgressBars)
+			throws InvalidDataSourceException, TranscriptParseException, FileDownloadException {
 		String targetDir = PathUtil.join(downloadDir, dataSource.getName());
 
 		FileDownloader downloader = new FileDownloader(buildOptions(printProgressBars));
@@ -79,6 +85,11 @@ public abstract class JannovarDataFactory {
 				String fileName = new File(src.getPath()).getName();
 				File dest = new File(PathUtil.join(targetDir, fileName));
 				downloader.copyURLToFile(src, dest);
+
+				if (dest.getName().endsWith(".gz")) {
+					checkGZ(dest);
+					LOGGER.info("Downloaded file {} looks like a valid gzip'ed file", new Object[] { dest.getName() });
+				}
 			}
 		} catch (MalformedURLException e) {
 			throw new FileDownloadException("Invalid URL.", e);
@@ -99,6 +110,30 @@ public abstract class JannovarDataFactory {
 		ImmutableList<TranscriptModel> transcripts = parseTranscripts(refDict, targetDir);
 
 		return new JannovarData(refDict, transcripts);
+	}
+
+	/**
+	 * Check whether the given file is a valid gzip file.
+	 *
+	 * @throws FileDownloadException
+	 *             in case of problems with downloaded gzip file
+	 */
+	private void checkGZ(File dest) throws FileDownloadException {
+		try (InputStream in = new BufferedInputStream(new FileInputStream(dest.getAbsolutePath()))) {
+			in.mark(2);
+			int magic = 0;
+			magic = in.read() & 0xff | ((in.read() << 8) & 0xff00);
+			in.reset();
+			if (magic != GZIPInputStream.GZIP_MAGIC) {
+				throw new FileDownloadException("The downloaded file " + dest.getAbsolutePath()
+						+ " is not a valid gzip file. " + "Is your proxy configuration correct?");
+			}
+		} catch (FileNotFoundException e) {
+			throw new FileDownloadException("File " + dest.getAbsolutePath() + " not found. Did the download fail?", e);
+		} catch (IOException e) {
+			throw new FileDownloadException(
+					"Reading from " + dest.getAbsolutePath() + " failed. Did the download fail?", e);
+		}
 	}
 
 	/**
