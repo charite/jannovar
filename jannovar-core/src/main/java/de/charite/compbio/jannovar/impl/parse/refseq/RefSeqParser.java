@@ -343,6 +343,8 @@ public class RefSeqParser implements TranscriptParser {
 					if (parent == null)
 						continue; // ignore
 					final String top = featureToGene.get(parent);
+					if (top == null)
+						continue; // ignore, no gene entry
 					LOGGER.debug("-> parent = {}", new Object[] { parent });
 					LOGGER.debug("-> top = {}", new Object[] { top });
 					featureToGene.put(id, top); // register mapping
