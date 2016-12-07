@@ -11,11 +11,12 @@ Jannovar will then return the effect and the HGVS annotation for each chromosoma
 
 .. parsed-literal::
     # java -jar jannovar-cli-\ |version|\ .jar annotate-pos \\
-    -d data/hg19_ucsc.ser -i 'chr1:12345C>A' 'chr1:12346C>A'
+    -d data/hg19_refseq.ser -c 'chr1:12345C>A' -c 'chr1:12346C>A'
     [...]
     #change     effect  hgvs_annotation
-    chr1:12345C>A       CODING_TRANSCRIPT_INTRON_VARIANT        DDX11L1:uc010nxq.1:c.38+118C>A:p.=
-    chr1:12346C>A       CODING_TRANSCRIPT_INTRON_VARIANT        DDX11L1:uc010nxq.1:c.38+119C>A:p.=
+    chr1:12345C>A   NON_CODING_TRANSCRIPT_INTRON_VARIANT    DDX11L1:NR_046018.2:n.354+118C>A:
+    chr1:12346C>A   NON_CODING_TRANSCRIPT_INTRON_VARIANT    DDX11L1:NR_046018.2:n.354+119C>A:
+
 
 The format for the chromsomal change is as follows:
 
