@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
 [![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
-[![API Docs](https://img.shields.io/badge/api-v0.18-blue.svg?style=flat)](http://charite.github.io/jannovar/api/0.18/)
+[![API Docs](https://img.shields.io/badge/api-v0.18-blue.svg?style=flat)](javadoc.io/doc/de.charite.compbio/jannovar-core/0.18)
 
 Jannovar
 ========
@@ -9,40 +9,12 @@ Functional variant file annotation in Java. Jannovar provides a program for
 the annotation of VCF files and also exposes its functionality through a
 library API.
 
-Jannovar is licenced under the BSD2 license.
+Jannovar is licenced under the 3-clause BSD2 license.
 
 More information is available in the [Jannovar
 manual](http://jannovar.readthedocs.org/).
 
 Jannovar is compatible with Java 8 and higher.
-
-Quickstart
-----------
-
-Download binary files of the current release from our [GitHub release
-page](https://github.com/charite/jannovar/releases).
-
-After extracting the ZIP file, you can call Jannovar as follows.
-
-Download the UCSC transcripts for hg19:
-
-```
-# java -jar jannovar-cli-0.18.jar download -d hg19/ucsc
-[...]
-```
-
-Annotate the example file `small.vcf`:
-
-```
-# java -jar jannovar-cli-0.18.jar annotate-vcf -d data/hg19_ucsc.ser -i examples/small.vcf -o examples/small.jv.vcf
-[...]
-```
-
-Inspect the resulting annotated file:
-
-```
-# less examples/small.jv.vcf
-```
 
 Also see the
 [Quickstart](http://jannovar.readthedocs.org/en/master/quickstart.html) section
