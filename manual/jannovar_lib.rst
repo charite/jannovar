@@ -14,6 +14,14 @@ Pre-built binaries are available from `Maven Central <https://search.maven.org>`
     Some modules have been removed (and merged with other modules) in previous versions.
 
 
+API Documentation
+-----------------
+
+You can find the Jannovar Javadoc API documentation here:
+
+- |api_url|
+
+
 Jannovar in your pom.xml
 -------------------------
 
