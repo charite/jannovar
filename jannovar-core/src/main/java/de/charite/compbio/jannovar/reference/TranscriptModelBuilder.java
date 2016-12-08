@@ -52,7 +52,7 @@ public class TranscriptModelBuilder {
 	private String geneID = null;
 
 	/** Map with alternative gene IDs */
-	private Map<String, String> altGeneIDs = new HashMap<String, String>();;
+	private HashMap<String, String> altGeneIDs = new HashMap<String, String>();;
 
 	/**
 	 * {@link TranscriptInfo#transcriptSupportLevel} of next {@link TranscriptInfo} to build.
@@ -190,7 +190,7 @@ public class TranscriptModelBuilder {
 	/**
 	 * @return alternative gene Ids
 	 */
-	public Map<String, String> getAltGeneIDs() {
+	public HashMap<String, String> getAltGeneIDs() {
 		return altGeneIDs;
 	}
 
