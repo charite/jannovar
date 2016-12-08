@@ -30,7 +30,6 @@ This short How-To guides you from downloading the Jannovar program to annotating
 
 	$ java -jar jannovar-cli-\ |version|\ .jar annotate -d data/hg19_refseq.ser -i examples/small.vcf
 
-   
    Jannovar will now load the transcript database from ``data/hg19_refseq.ser`` and then read ``examples/small.vcf`` file.
    Each contained variant in this file will be annotated with an ``EFFECT`` and an ``HGVS`` field in the ``VCF`` info column.
    The ``EFFECT`` field contains an effect, e.g., ``SYNONYMOUS`` and the ``HGVS`` field contains a HGVS representation of the variant.
@@ -38,7 +37,7 @@ This short How-To guides you from downloading the Jannovar program to annotating
 
    .. note::
 
-        The variant effect codes in the output and their mapping to sequence ontology is described `in the Jannovar API documentation <http://charite.github.io/jannovar/api/0.17/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_.
+        The variant effect codes in the output and their mapping to sequence ontology is described `in the Jannovar API documentation <http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.18/de/charite/compbio/jannovar/annotation/VariantEffect.html>`_.
 
    The following excerpt shows the first three variants of the ``small.vcf`` file with their effect and HGVS annotation.
 

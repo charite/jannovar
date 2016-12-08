@@ -28,12 +28,12 @@ Project Information
 Quick Example
 -------------
 
-.. code-block:: console
+   .. parsed-literal::
 
-    $ java -jar jannovar-\ |version|\ .jar \
+    $ java -jar jannovar-\ |version|\ .jar \\
         download -d hg19/refseq
     [...]
-    $ java -jar jannovar-\ |version|\ .jar \
+    $ java -jar jannovar-\ |version|\ .jar \\
         annotate-vcf -d data/hg19_refseq.ser -i IN.vcf.gz -o OUT.vcf.gz
 
 
@@ -52,6 +52,24 @@ Feedback
 --------
 
 The best place to leave feedback, ask questions, and report bugs is the `Jannovar Issue Tracker <https://github.com/charite/jannovar/issues>`_.
+
+-----------------
+API Documentation
+-----------------
+
+The friendly people at `javadoc.io <https://www.javadoc.io>`_ host our API documentation:
+
+jannovar-core
+    |api_url|
+
+jannovar-hgvs
+    |api_url_hgvs|
+
+jannovar-htsjdk
+    |api_url_htsjdk|
+
+jannovar-vardbs
+    |api_url_vardbs|
 
 
 .. toctree::

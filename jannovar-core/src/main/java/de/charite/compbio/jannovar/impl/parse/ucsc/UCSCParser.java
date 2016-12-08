@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -16,11 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
+import de.charite.compbio.jannovar.hgnc.AltGeneIDType;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParser;
 import de.charite.compbio.jannovar.impl.parse.TranscriptSupportLevelsSetterFromLengths;
@@ -143,7 +146,8 @@ public class UCSCParser implements TranscriptParser {
 
 		// Augment information in builders with
 		try {
-			new TranscriptModelBuilderHGNCExtender(basePath, r -> r.getUCSCID()).run(this.knownGeneMap);
+			new TranscriptModelBuilderHGNCExtender(basePath, r -> Lists.newArrayList(r.getEntrezID()),
+					tx -> tx.getGeneID()).run(this.knownGeneMap);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
 		}
@@ -151,6 +155,11 @@ public class UCSCParser implements TranscriptParser {
 		// Build result list.
 		ImmutableList.Builder<TranscriptModel> result = new ImmutableList.Builder<TranscriptModel>();
 		for (Map.Entry<String, TranscriptModelBuilder> entry : knownGeneMap.entrySet()) {
+			if (entry.getValue().getAltGeneIDs().isEmpty() && entry.getValue().getGeneID() != null) {
+				LOGGER.info("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
+						new Object[] { entry.getValue().getGeneID(), entry.getValue().getAccession() });
+				entry.getValue().getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), entry.getValue().getGeneID());
+			}
 			TranscriptModel info = entry.getValue().build();
 			if (checkTranscriptInfo(info))
 				result.add(info);
@@ -396,7 +405,7 @@ public class UCSCParser implements TranscriptParser {
 					continue;
 				}
 				foundID++;
-				tbi.setGeneID(id);
+				tbi.setGeneID(A[1]);
 			}
 			br.close();
 			LOGGER.info("knownToLocusLink contained ids for {} knownGenes (no ids available for {})", foundID,

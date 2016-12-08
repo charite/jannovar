@@ -12,6 +12,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import re
 import sys
 import os
 
@@ -53,15 +54,31 @@ copyright = u'2015-2016, Peter N Robinson, Marten Jaeger, Manuel Holtgrewe, Max 
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-# The short X.Y version.
-_version = '0.18'
-# The full version, including alpha/beta/rc tags.
-_release = '0.18.0'
+# We parse this out of the pom.xml
+_version = 'UNKNOWN'
+_release = 'VERSION'
+with open(os.path.join(os.path.dirname(__file__), '../pom.xml'), 'rt') as f:
+    for line in f:
+        if '<version>' in line:
+            m = re.match('.*<version>([^<]+)</version>.*', line)
+            if m and len(m.groups()) > 0:
+                _version = m.groups()[0]
+                _release = _version
+            if '-SNAPSHOT' in _version:
+                _version.replace('-SNAPSHOT', '')
+                xs = _version.split('.')
+                if len(xs) > 2:
+                    xs = xs[:2]
+                _version = '.'.join(xs)
+            break
 # Link to the API documentation
-_api_url = 'http://charite.github.io/jannovar/api/{}/'.format(_version)
+_api_url = 'https://javadoc.io/doc/de.charite.compbio/{{}}/{}/'.format(_version)
 
 rst_epilog = '\n'.join((
-    '.. |api_url| replace:: {}'.format(_api_url),
+    '.. |api_url| replace:: {}'.format(_api_url.format('jannovar-core')),
+    '.. |api_url_hgvs| replace:: {}'.format(_api_url.format('jannovar-hgvs')),
+    '.. |api_url_htsjdk| replace:: {}'.format(_api_url.format('jannovar-htsjdk')),
+    '.. |api_url_vardbs| replace:: {}'.format(_api_url.format('jannovar-vardbs')),
     '.. |release| replace:: {}'.format(_release),
     '.. |version| replace:: {}'.format(_version)))
 
