@@ -8,10 +8,10 @@ import de.charite.compbio.jannovar.Immutable;
 
 /**
  * Representation of a genotype in an individual
- * 
+ *
  * Genotypes are represented by lists of integers identifying alleles from a {@link GenotypeCalls}. By convention, the
  * reference allele is represented by the integer <code>0</code>. <code>-1</code> encodes no-call.
- * 
+ *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 @Immutable
@@ -25,7 +25,7 @@ public class Genotype {
 
 	/**
 	 * Construct {@link Genotype} with list of allele numbers
-	 * 
+	 *
 	 * @param alleleNumbers The allele numbers to initialize with
 	 */
 	public Genotype(Collection<Integer> alleleNumbers) {
@@ -65,11 +65,11 @@ public class Genotype {
 	 */
 	public boolean isHet() {
 		if (!isDiploid())
-			return false; // only diploid genotypes cann be heterozygous
-		return ((alleleNumbers.get(0) == REF_CALL && alleleNumbers.get(1) != REF_CALL
-				&& alleleNumbers.get(1) != NO_CALL)
-				|| (alleleNumbers.get(0) != REF_CALL && alleleNumbers.get(0) != NO_CALL
-						&& alleleNumbers.get(1) == REF_CALL));
+			return false; // only diploid genotypes can be heterozygous
+		if (alleleNumbers.get(0) == NO_CALL || alleleNumbers.get(1) == NO_CALL) {
+			return false;
+		}
+		return !alleleNumbers.get(0).equals(alleleNumbers.get(1));
 	}
 
 	/**
@@ -78,23 +78,23 @@ public class Genotype {
 	public boolean isHomRef() {
 		if (alleleNumbers.isEmpty())
 			return false; // empty calls are nothing
-		return alleleNumbers.stream().allMatch(x -> (x == REF_CALL));
+		return alleleNumbers.stream().allMatch(x -> x == REF_CALL);
 	}
 
 	/**
 	 * @return <code>true</code> if the sample is homozygous alt, <code>false</code> otherwise
 	 */
 	public boolean isHomAlt() {
-		if (alleleNumbers.isEmpty())
+		if (alleleNumbers.isEmpty() || isHet())
 			return false; // empty calls are nothing
-		return alleleNumbers.stream().allMatch(x -> (x != REF_CALL && x != NO_CALL));
+		return alleleNumbers.stream().allMatch(x -> x != REF_CALL && x != NO_CALL);
 	}
 
 	/**
 	 * @return <code>true</code> if the genotype is not observed in all alleles
 	 */
 	public boolean isNotObserved() {
-		return alleleNumbers.stream().allMatch(n -> (n == NO_CALL));
+		return alleleNumbers.stream().allMatch(n -> n == NO_CALL);
 	}
 
 	@Override
