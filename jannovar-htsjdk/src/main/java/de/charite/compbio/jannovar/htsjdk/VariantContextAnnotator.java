@@ -1,7 +1,9 @@
 package de.charite.compbio.jannovar.htsjdk;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -262,7 +264,7 @@ public final class VariantContextAnnotator {
 
 	/**
 	 * Write annotations from <code>annos</code> to <code>vc</code>
-	 *
+	 *l
 	 * @param vc
 	 *            {@link VariantContext} to write the annotations to (to INFO column)
 	 * @param annos
@@ -281,7 +283,11 @@ public final class VariantContextAnnotator {
 				}
 			}
 		}
-		vc.getCommonInfo().putAttribute("ANN", Joiner.on(',').join(annotations), true); // true allows overwriting
+
+		// If a VC builder is used before the attributes can be unmodifiable.
+		Map<String, Object> attributes = new HashMap<>(vc.getAttributes());
+		attributes.put("ANN", Joiner.on(',').join(annotations));
+		vc.getCommonInfo().setAttributes(attributes);
 
 		return vc;
 	}
