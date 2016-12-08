@@ -24,6 +24,7 @@ import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
+import de.charite.compbio.jannovar.hgnc.AltGeneIDType;
 import de.charite.compbio.jannovar.impl.parse.FASTAParser;
 import de.charite.compbio.jannovar.impl.parse.FASTARecord;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
@@ -83,9 +84,19 @@ public class RefSeqParser implements TranscriptParser {
 
 		// Augment information in builders with
 		try {
-			new TranscriptModelBuilderHGNCExtender(basePath, r -> r.getEntrezID()).run(builders);
+			new TranscriptModelBuilderHGNCExtender(basePath, r -> Lists.newArrayList(r.getEntrezID()),
+					tx -> tx.getGeneID()).run(builders);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
+		}
+
+		// Use Entrez IDs from RefSeq if no HGNC annotation
+		for (TranscriptModelBuilder val : builders.values()) {
+			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
+				LOGGER.info("Using UCSC Entrez ID {} for transcript {} as HGNC did not provide alternative gene ID",
+						new Object[] { val.getGeneID(), val.getAccession() });
+				val.getAltGeneIDs().put(AltGeneIDType.ENTREZ_ID.toString(), val.getGeneID());
+			}
 		}
 
 		// Load the FASTA file and assign to the builders.

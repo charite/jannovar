@@ -22,6 +22,7 @@ import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.datasource.TranscriptModelBuilderHGNCExtender;
+import de.charite.compbio.jannovar.hgnc.AltGeneIDType;
 import de.charite.compbio.jannovar.impl.parse.FASTAParser;
 import de.charite.compbio.jannovar.impl.parse.FASTARecord;
 import de.charite.compbio.jannovar.impl.parse.TranscriptParseException;
@@ -36,6 +37,7 @@ import de.charite.compbio.jannovar.reference.TranscriptModelBuilder;
 
 // TODO(holtgrewe): Factor out common paths with RefSeqParser
 // TODO(holtgrewe): stop codon part of CDS here?
+// TODO(holtgrewe): linking to Entrez ID is done through HGNC, in the case that there is an Entrez ID but not HGNC entry, we cannot annotate ENSEMBL tx yet
 
 /**
  * Parsing of ENSEMBL GTF files
@@ -80,9 +82,19 @@ public class EnsemblParser implements TranscriptParser {
 
 		// Augment information in builders with
 		try {
-			new TranscriptModelBuilderHGNCExtender(basePath, r -> r.getEnsemblGeneID()).run(builders);
+			new TranscriptModelBuilderHGNCExtender(basePath, r -> Lists.newArrayList(r.getEnsemblGeneID()),
+					tx -> tx.getGeneID()).run(builders);
 		} catch (JannovarException e) {
 			throw new UncheckedJannovarException("Problem extending transcripts with HGNC information", e);
+		}
+
+		// Use Entrez IDs from RefSeq if no HGNC annotation
+		for (TranscriptModelBuilder val : builders.values()) {
+			if (val.getAltGeneIDs().isEmpty() && val.getGeneID() != null) {
+				LOGGER.info("ENSEMBL Gene {} not known to HGNC, only annotating with ENSEMBL_GENE_ID => {} for additional IDs",
+						new Object[] { val.getGeneID(), val.getGeneID() });
+				val.getAltGeneIDs().put(AltGeneIDType.ENSEMBL_GENE_ID.toString(), val.getGeneID());
+			}
 		}
 
 		// Load the FASTA file and assign to the builders.
