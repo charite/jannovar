@@ -1,6 +1,8 @@
 package de.charite.compbio.jannovar.mendel;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
@@ -13,6 +15,8 @@ import de.charite.compbio.jannovar.Immutable;
  * reference allele is represented by the integer <code>0</code>. <code>-1</code> encodes no-call.
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:j.jacobsen@qmul.ac.uk">Jules Jacobsen</a>
+ * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
  */
 @Immutable
 public class Genotype {
@@ -26,7 +30,8 @@ public class Genotype {
 	/**
 	 * Construct {@link Genotype} with list of allele numbers
 	 * 
-	 * @param alleleNumbers The allele numbers to initialize with
+	 * @param alleleNumbers
+	 *            The allele numbers to initialize with
 	 */
 	public Genotype(Collection<Integer> alleleNumbers) {
 		this.alleleNumbers = ImmutableList.copyOf(alleleNumbers);
@@ -61,24 +66,24 @@ public class Genotype {
 	}
 
 	/**
-	 * @return <code>true</code> if the sample is heterozygous, <code>false</code> otherwise
+	 * @return <code>true</code> if the sample is heterozygous. One call can be no_call, <code>false</code> otherwise
 	 */
 	public boolean isHet() {
 		if (!isDiploid())
 			return false; // only diploid genotypes cann be heterozygous
-		return ((alleleNumbers.get(0) == REF_CALL && alleleNumbers.get(1) != REF_CALL
-				&& alleleNumbers.get(1) != NO_CALL)
-				|| (alleleNumbers.get(0) != REF_CALL && alleleNumbers.get(0) != NO_CALL
-						&& alleleNumbers.get(1) == REF_CALL));
+		return !alleleNumbers.get(0).equals(alleleNumbers.get(1)) && !alleleNumbers.stream().allMatch(n -> n == NO_CALL);
+
 	}
 
 	/**
-	 * @return <code>true</code> if the sample is homozygous ref, <code>false</code> otherwise
+	 * @return <code>true</code> if the sample is homozygous ref. Can have exactly one {@value #NO_CALL},
+	 *         <code>false</code> otherwise
 	 */
 	public boolean isHomRef() {
 		if (alleleNumbers.isEmpty())
 			return false; // empty calls are nothing
-		return alleleNumbers.stream().allMatch(x -> (x == REF_CALL));
+		return alleleNumbers.stream().allMatch(x -> x == REF_CALL || x == NO_CALL)
+				&& !alleleNumbers.stream().allMatch(x -> x == NO_CALL);
 	}
 
 	/**
@@ -87,14 +92,25 @@ public class Genotype {
 	public boolean isHomAlt() {
 		if (alleleNumbers.isEmpty())
 			return false; // empty calls are nothing
-		return alleleNumbers.stream().allMatch(x -> (x != REF_CALL && x != NO_CALL));
+		boolean notRefNotNoCall = alleleNumbers.stream().allMatch(x -> x != REF_CALL)
+				&& !alleleNumbers.stream().allMatch(n -> n == NO_CALL);
+		if (!notRefNotNoCall)
+			return false;
+
+		List<Integer> alts = alleleNumbers.stream().filter(n -> n != NO_CALL).collect(Collectors.toList());
+		Integer alt = alts.get(0);
+		for (Integer otherAlt : alts) {
+			if (!alt.equals(otherAlt))
+				return false;
+		}
+		return true;
 	}
 
 	/**
 	 * @return <code>true</code> if the genotype is not observed in all alleles
 	 */
 	public boolean isNotObserved() {
-		return alleleNumbers.stream().allMatch(n -> (n == NO_CALL));
+		return alleleNumbers.stream().allMatch(n -> n == NO_CALL);
 	}
 
 	@Override
