@@ -133,3 +133,11 @@ Annotating AD Variants
 
 The variants at ``chr1:879317`` and ``chr1:879482`` match the autosomal dominant mode of inheritance from the father.
 The remaining variants do not match this mode of inheritance.
+
+
+-------------------------------
+No-calls and Mixed genotypes
+-------------------------------
+
+We implemented the filter that we might loose specificity but not some sensitibvity.Therfore a genotype call of ``./1`` or ``1/.`` can be ``HET`` or ``HOM_ALT``. ``0/.`` or ``./0`` are ``HET`` or ``HOM_REF``. A no-call of ``./.`` is ``NO_CALL`` and will be used only as a wildcard in multi-vcfs but at least one called correct genotype must be observed. For more information see :ref:`ped_filters`.
+
