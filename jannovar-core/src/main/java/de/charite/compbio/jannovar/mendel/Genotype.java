@@ -71,7 +71,9 @@ public class Genotype {
 	public boolean isHet() {
 		if (!isDiploid())
 			return false; // only diploid genotypes cann be heterozygous
-		return !alleleNumbers.get(0).equals(alleleNumbers.get(1)) && !alleleNumbers.stream().allMatch(n -> n == NO_CALL);
+		if (isNotObserved())
+			return false; // we want to have at least one observed call
+		return !alleleNumbers.get(0).equals(alleleNumbers.get(1));
 
 	}
 
@@ -82,8 +84,9 @@ public class Genotype {
 	public boolean isHomRef() {
 		if (alleleNumbers.isEmpty())
 			return false; // empty calls are nothing
-		return alleleNumbers.stream().allMatch(x -> x == REF_CALL || x == NO_CALL)
-				&& !alleleNumbers.stream().allMatch(x -> x == NO_CALL);
+		if (isNotObserved())
+			return false; // we want to have at least one observed call
+		return alleleNumbers.stream().allMatch(x -> x == REF_CALL || x == NO_CALL);
 	}
 
 	/**
@@ -92,14 +95,16 @@ public class Genotype {
 	public boolean isHomAlt() {
 		if (alleleNumbers.isEmpty())
 			return false; // empty calls are nothing
-		boolean notRefNotNoCall = alleleNumbers.stream().allMatch(x -> x != REF_CALL)
-				&& !alleleNumbers.stream().allMatch(n -> n == NO_CALL);
-		if (!notRefNotNoCall)
+		if (isNotObserved())
+			return false; // we want to have at least one observed call
+		
+		boolean noRefCall = alleleNumbers.stream().noneMatch(x -> x == REF_CALL);
+		if (!noRefCall)
 			return false;
 
-		List<Integer> alts = alleleNumbers.stream().filter(n -> n != NO_CALL).collect(Collectors.toList());
-		Integer alt = alts.get(0);
-		for (Integer otherAlt : alts) {
+		List<Integer> calledAlts = alleleNumbers.stream().filter(n -> n != NO_CALL).collect(Collectors.toList());
+		Integer alt = calledAlts.get(0);
+		for (Integer otherAlt : calledAlts) {
 			if (!alt.equals(otherAlt))
 				return false;
 		}
@@ -112,7 +117,7 @@ public class Genotype {
 	public boolean isNotObserved() {
 		return alleleNumbers.stream().allMatch(n -> n == NO_CALL);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Genotype [alleleNumbers=" + alleleNumbers + "]";
