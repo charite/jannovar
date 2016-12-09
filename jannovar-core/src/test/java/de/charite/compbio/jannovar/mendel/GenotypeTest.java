@@ -160,13 +160,22 @@ public class GenotypeTest {
 	}
 	
 	@Test
-	public void testDiploidMultiSampleHetUnk() {
+	public void testDiploidMultiSampleMixed1() {
 		Genotype genotype = new Genotype(Arrays.asList(-1, 2));
 		assertEquals(2, genotype.getPloidy());
 		assertTrue(genotype.isHet());
 		assertFalse(genotype.isHomRef());
 		assertTrue(genotype.isHomAlt());
 	}
+	
+    @Test
+    public void testDiploidMultiSampleMixed2() {
+	Genotype genotype = new Genotype(Arrays.asList(2, -1));
+	assertEquals(2, genotype.getPloidy());
+	assertTrue(genotype.isHet());
+	assertFalse(genotype.isHomRef());
+	assertTrue(genotype.isHomAlt());
+    }
 
 	@Test
 	public void testDiploidMultiSampleHomAlt() {
