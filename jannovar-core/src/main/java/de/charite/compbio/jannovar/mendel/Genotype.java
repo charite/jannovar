@@ -14,6 +14,11 @@ import de.charite.compbio.jannovar.Immutable;
  * Genotypes are represented by lists of integers identifying alleles from a {@link GenotypeCalls}. By convention, the
  * reference allele is represented by the integer <code>0</code>. <code>-1</code> encodes no-call.
  * 
+ * Jannovar will define the zygosity in a very soft way. We do not want to throw too much things away. If all
+ * {@link Genotype} are no-calls then teh gebnotype is not observed. But if we have one {@link Genotype} called and
+ * another is a no-call (e.g 0/.) we will consider fo the no-call all possibilities. So it can be het or homRef. This
+ * behaviour is different to HTSJDK VariantContexed where they have a additional mixed class for such genotypes.
+ * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  * @author <a href="mailto:j.jacobsen@qmul.ac.uk">Jules Jacobsen</a>
  * @author <a href="mailto:max.schubach@charite.de">Max Schubach</a>
@@ -97,7 +102,7 @@ public class Genotype {
 			return false; // empty calls are nothing
 		if (isNotObserved())
 			return false; // we want to have at least one observed call
-		
+
 		boolean noRefCall = alleleNumbers.stream().noneMatch(x -> x == REF_CALL);
 		if (!noRefCall)
 			return false;
@@ -117,7 +122,7 @@ public class Genotype {
 	public boolean isNotObserved() {
 		return alleleNumbers.stream().allMatch(n -> n == NO_CALL);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Genotype [alleleNumbers=" + alleleNumbers + "]";
