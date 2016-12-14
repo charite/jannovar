@@ -2,6 +2,15 @@
 
 ## develop
 
+## jannovar-cli
+
+* better overview on CLI help message
+* if ref-fasta is not set properly a nicer error message will be shown.
+
+## jannovar-vardbs
+
+* Fixing bug with problems of unmodifieable Attributes.
+
 ## v0.19
 
 This is a bugfix release.
