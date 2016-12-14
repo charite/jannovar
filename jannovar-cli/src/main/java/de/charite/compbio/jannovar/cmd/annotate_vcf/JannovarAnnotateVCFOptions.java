@@ -72,9 +72,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				handler);
 		subParser.description("Perform annotation of a single VCF file");
 
-		subParser.addArgument("-i", "--input-vcf").help("Path to input VCF file").required(true);
-		subParser.addArgument("-o", "--output-vcf").help("Path to output VCF file").required(true);
-		subParser.addArgument("-d", "--database").help("Path to database .ser file").required(true);
+		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
+		requiredGroup.addArgument("-i", "--input-vcf").help("Path to input VCF file").required(true);
+		requiredGroup.addArgument("-o", "--output-vcf").help("Path to output VCF file").required(true);
+		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
 
 		ArgumentGroup annotationGroup = subParser.addArgumentGroup("Annotation Arguments (optional)");
 		annotationGroup.addArgument("--pedigree-file").help("Pedigree file to use for Mendelian inheritance annotation")
@@ -85,11 +86,11 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.required(false);
 		annotationGroup.addArgument("--dbsnp-prefix").help("Prefix for dbSNP annotations").setDefault("DBSNP_")
 				.required(false);
-		annotationGroup.addArgument("--exac-vcf").help("Path to ExAC VCF file, activates ExAC annotation")
+		annotationGroup.addArgument("--exac-vcf").help("Path to ExAC VCF file, activates ExAC annotation").nargs("?")
 				.required(false);
 		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations").setDefault("EXAC_")
 				.required(false);
-		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation")
+		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation").nargs("?")
 				.required(false);
 		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations").setDefault("UK10K_")
 				.required(false);
@@ -97,7 +98,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
 				.dest("escape_ann_field").setDefault(true).action(Arguments.storeFalse());
-		optionalGroup.addArgument("--show-all").help("Show all effects").setDefault(false).action(Arguments.storeTrue());
+		optionalGroup.addArgument("--show-all").help("Show all effects").setDefault(false)
+				.action(Arguments.storeTrue());
 		optionalGroup.addArgument("--no-3-prime-shifting").help("Disable shifting towards 3' of transcript")
 				.dest("3_prime_shifting").setDefault(true).action(Arguments.storeFalse());
 		optionalGroup.addArgument("--3-letter-amino-acids").help("Enable usage of 3 letter amino acid codes")
@@ -122,6 +124,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixExac = args.getString("exac_prefix");
 		pathVCFUK10K = args.getString("uk10k_vcf");
 		prefixUK10K = args.getString("uk10k_prefix");
+
+		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null))
+			throw new CommandLineParsingException(
+					"Command --ref-fasta required when using dbSNP, ExAC, or UK10K annotations.");
 	}
 
 	public String getPathInputVCF() {

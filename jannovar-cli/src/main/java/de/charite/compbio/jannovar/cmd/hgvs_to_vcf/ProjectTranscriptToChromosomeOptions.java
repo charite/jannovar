@@ -56,11 +56,12 @@ public class ProjectTranscriptToChromosomeOptions extends JannovarAnnotationOpti
 		Subparser subParser = subParsers.addParser("hgvs-to-vcf", true)
 				.help("project transcript-level to chromosome-level changes").setDefault("cmd", handler);
 		subParser.description("Project transcript-level changes to chromosome level ones");
-		subParser.addArgument("-r", "--reference-fasta").help("Path to reference FASTA file").required(true);
-		subParser.addArgument("-d", "--database").help("Path to database .ser file").required(true);
-		subParser.addArgument("-i", "--input-txt").help("Input file with HGVS transcript-level changes, line-by-line")
+		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
+		requiredGroup.addArgument("-r", "--reference-fasta").help("Path to reference FASTA file").required(true);
+		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
+		requiredGroup.addArgument("-i", "--input-txt").help("Input file with HGVS transcript-level changes, line-by-line")
 				.required(true);
-		subParser.addArgument("-o", "--output-vcf").help("Output VCF file with chromosome-level changes")
+		requiredGroup.addArgument("-o", "--output-vcf").help("Output VCF file with chromosome-level changes")
 				.required(true);
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Optional Arguments");

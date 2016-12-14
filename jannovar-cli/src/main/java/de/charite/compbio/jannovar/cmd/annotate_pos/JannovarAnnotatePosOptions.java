@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationOptions;
 import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
@@ -41,8 +42,9 @@ public class JannovarAnnotatePosOptions extends JannovarAnnotationOptions {
 		Subparser subParser = subParsers.addParser("annotate-pos", true)
 				.help("annotate genomic changes given on the command line").setDefault("cmd", handler);
 		subParser.description("Perform annotation of genomic changes given on the command line");
-		subParser.addArgument("-d", "--database").help("Path to database .ser file").required(true);
-		subParser.addArgument("-c", "--genomic-change").help("Genomic change to annotate, you can give multiple ones")
+		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
+		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
+		requiredGroup.addArgument("-c", "--genomic-change").help("Genomic change to annotate, you can give multiple ones")
 				.action(Arguments.append()).required(true);
 
 		subParser.epilog("Example: java -jar Jannovar.jar annotate-pos -d hg19_refseq.ser -c 'chr1:12345C>A'");

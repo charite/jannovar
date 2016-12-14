@@ -8,6 +8,7 @@ import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationOptions;
 import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
@@ -47,17 +48,19 @@ public class JannovarAnnotateCSVOptions extends JannovarAnnotationOptions {
 		Subparser subParser = subParsers.addParser("annotate-csv", true).help("Annotate a csv file").setDefault("cmd",
 				handler);
 		subParser.description("Perform annotation of genomic changes given on the command line");
-		subParser.addArgument("-d", "--database").help("Path to database .ser file").required(true);
-		subParser.addArgument("-i", "--input").help("CSV file").required(true);
-		subParser.addArgument("-c", "--chr").type(Integer.class).help("Column of chr (1 based)").required(true);
-		subParser.addArgument("-p", "--pos").type(Integer.class).help("Column of pos (1 based)").required(true);
-		subParser.addArgument("-r", "--ref").type(Integer.class).help("Column of ref (1 based)").required(true);
-		subParser.addArgument("-a", "--alt").type(Integer.class).help("Column of alt (1 based)").required(true);
-		subParser.addArgument("-t", "--type").type(CSVFormat.Predefined.class)
+		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
+		requiredGroup.addArgument("-d", "--database").help("Path to database .ser file").required(true);
+		requiredGroup.addArgument("-i", "--input").help("CSV file").required(true);
+		requiredGroup.addArgument("-c", "--chr").type(Integer.class).help("Column of chr (1 based)").required(true);
+		requiredGroup.addArgument("-p", "--pos").type(Integer.class).help("Column of pos (1 based)").required(true);
+		requiredGroup.addArgument("-r", "--ref").type(Integer.class).help("Column of ref (1 based)").required(true);
+		requiredGroup.addArgument("-a", "--alt").type(Integer.class).help("Column of alt (1 based)").required(true);
+		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Additional CSV arguments (optional)");
+		optionalGroup.addArgument("-t", "--type").type(CSVFormat.Predefined.class)
 				.choices(CSVFormat.Predefined.Default, CSVFormat.Predefined.TDF, CSVFormat.Predefined.RFC4180,
 						CSVFormat.Predefined.Excel, CSVFormat.Predefined.MySQL)
 				.help("Type of csv file. ").setDefault(CSVFormat.Predefined.Default);
-		subParser.addArgument("--header").help("Set if the file contains a header. ").setDefault(false)
+		optionalGroup.addArgument("--header").help("Set if the file contains a header. ").setDefault(false)
 				.action(Arguments.storeTrue());
 
 		subParser.epilog(
