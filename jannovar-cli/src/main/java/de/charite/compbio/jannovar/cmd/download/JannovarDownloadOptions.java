@@ -44,12 +44,13 @@ public class JannovarDownloadOptions extends JannovarDBOptions {
 				throw new UncheckedJannovarException("Could not parse command line", e);
 			}
 		};
-
+		
 		Subparser subParser = subParsers.addParser("download", true).help("download transcript databases")
 				.setDefault("cmd", handler);
 		subParser.description("Download transcript database");
-
-		subParser.addArgument("-d", "--database").help("Name of database to download, can be given multiple times")
+		
+		ArgumentGroup requiredGroup = subParser.addArgumentGroup("Required arguments");
+		requiredGroup.addArgument("-d", "--database").help("Name of database to download, can be given multiple times")
 				.setDefault(new ArrayList<String>()).action(Arguments.append()).required(true);
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Optional Arguments");
