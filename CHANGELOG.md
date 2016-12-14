@@ -2,6 +2,26 @@
 
 ## develop
 
+## v0.19
+
+This is a bugfix release.
+
+### manual
+
+* Manual loads version from central POM file now
+* Adjusting manual links to point to `javadoc.io`
+
+### jannovar-core
+
+* Fixing integration of HGNC into the downloaded databases
+    * For UCSC, HGNC records are searched based on the Entrez ID.
+      If HGNC does not know the Entrez then only the Entrez ID from UCSC is written as additional ID.
+    * For RefSeq, linking is done through Entrez ID.
+      If HGNC does not know the Entrez then only the Entrez ID from RefSeq is written as additional ID.
+    * For ENSEMBL linking is done through the ENSEMBL gene id.
+      If this is not known to HGNC then no additional IDs are annotated.
+* Fixing problem with `UnsupportedOperationException` in `jannovar-htsjdk`
+
 ## v0.18
 
 ### all
@@ -28,7 +48,7 @@
 * making ENSEMBL parsing more robust (falling back to transcript name if no transcript ID)
 * fixing bug #248 for ENSEMBL that used `gene_id` for `gene_name`
 * bugfix of NullPointerException in RefSeqParser while parsing refSeq curated
-* bugfix space in SeqOID of SYNONYMOUS_VARIANT 
+* bugfix space in SeqOID of SYNONYMOUS_VARIANT
 * Update link to HGVS Nomenclature
 * Now BestAnnotationListTextGenerator shows really the best and not all annotations!
 
@@ -290,12 +310,12 @@
 ### jannovar-filter
 
 * Splitting into `jped-cli` and `jannovar-filter`
-* Changing public final members to accessors. 
+* Changing public final members to accessors.
 * `jannovar-filter` now has the Jannovar DB as the mandatory first argument.
 
 ### jannovar-htsjdk
 
-* Changing public final members to accessors. 
+* Changing public final members to accessors.
 
 ## v0.12
 
@@ -330,7 +350,7 @@
 * Updating `Annotation` for the variant annotation standard.
 * `TranscriptPosition` and `TranscriptInterval` use zero-based positions now.
 * Reordering values of `VariantType`.
-* Somewhat renaming `VariantType` method names. 
+* Somewhat renaming `VariantType` method names.
 * Removing the `VariantType#size` function in favor of a `static public`
   `final` member.
 * Using log4j/slf4j for I/O in jannovar-core.

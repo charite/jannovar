@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -34,12 +35,17 @@ public class TranscriptModelBuilderHGNCExtender {
 	private final String basePath;
 
 	/** Extract gene ID from {@link HGNCRecord} */
-	Function<HGNCRecord, String> extractor;
+	Function<HGNCRecord, List<String>> extractorHGNC;
 
-	public TranscriptModelBuilderHGNCExtender(String basePath, Function<HGNCRecord, String> extractor) {
+	/** Extract gene ID from {@link TranscriptModelBuilder} */
+	Function<TranscriptModelBuilder, String> extractorTX;
+
+	public TranscriptModelBuilderHGNCExtender(String basePath, Function<HGNCRecord, List<String>> extractorHGNC,
+			Function<TranscriptModelBuilder, String> extractorTX) {
 		super();
 		this.basePath = basePath;
-		this.extractor = extractor;
+		this.extractorHGNC = extractorHGNC;
+		this.extractorTX = extractorTX;
 	}
 
 	/**
@@ -61,16 +67,24 @@ public class TranscriptModelBuilderHGNCExtender {
 
 		// Build data structure for easier access to the records
 		final HashMap<String, HGNCRecord> recordByGeneID = new HashMap<>();
-		for (HGNCRecord record : hgncRecords)
-			recordByGeneID.put(extractor.apply(record), record);
+		for (HGNCRecord record : hgncRecords) {
+			for (String key : extractorHGNC.apply(record)) {
+				recordByGeneID.put(key, record);
+			}
+		}
 
 		// Augment the information in builders
 		for (TranscriptModelBuilder builder : builders.values()) {
-			if (!recordByGeneID.containsKey(builder.getGeneID())) {
-				LOGGER.info("Gene ID not found in HGNC: {}", new Object[] { builder.getGeneID() });
+			if (extractorTX.apply(builder) == null) {
+				LOGGER.info("Transcript {} has no gene ID, not linking to HGNC",
+						new Object[] { builder.getAccession() });
 				continue;
 			}
-			final HGNCRecord hgncRecord = recordByGeneID.get(builder.getGeneID());
+			if (!recordByGeneID.containsKey(extractorTX.apply(builder))) {
+				LOGGER.info("Gene ID not found in HGNC: {}", new Object[] { extractorTX.apply(builder) });
+				continue;
+			}
+			final HGNCRecord hgncRecord = recordByGeneID.get(extractorTX.apply(builder));
 
 			// Update gene symbol/HUGO identifier, after all HGNC is the authority
 			builder.setGeneSymbol(hgncRecord.getSymbol());
