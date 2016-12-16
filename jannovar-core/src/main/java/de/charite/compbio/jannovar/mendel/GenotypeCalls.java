@@ -23,6 +23,8 @@ import de.charite.compbio.jannovar.Immutable;
 @Immutable
 public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
 
+	private final static Genotype GT_NO_CALL = new Genotype(ImmutableList.of(Genotype.NO_CALL));
+
 	/** Type of the chromosome that the variant lies on */
 	private final ChromosomeType chromType;
 	/** Mapping from sample name to {@link Genotype} */
@@ -72,10 +74,16 @@ public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
 	/**
 	 * @param sample
 	 *            name of the sample to return {@link Genotype} for
-	 * @return {@link Genotype} for the given sample
+	 * @return {@link Genotype} for the given sample, a not-observed genotype if the sample is unknown instead of
+	 *         <code>null</code>
 	 */
 	public Genotype getGenotypeForSample(String sample) {
-		return sampleToGenotype.get(sample);
+		Genotype result = sampleToGenotype.get(sample);
+		// TODO(holtgrewe): using Optional<> here would make handling empty return values more elegant in the calling
+		// code such that the behaviour could change then
+		if (result == null)
+			return GT_NO_CALL;
+		return result;
 	}
 
 	/**

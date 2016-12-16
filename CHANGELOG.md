@@ -2,6 +2,10 @@
 
 ## develop
 
+### jannovar-core
+
+* `GenotypeCalls.getGenotypeForSample()` returns a "no-call" genotype now instead of `null`
+
 ### jannovar-htsjdk
 
 * fix to annotation with compatible mode of inheritance (#289)
