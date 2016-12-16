@@ -2,12 +2,17 @@
 
 ## develop
 
-## jannovar-cli
+### jannovar-htsjdk
 
+* fix to annotation with compatible mode of inheritance (#289)
+
+### jannovar-cli
+
+* fix to annotation with compatible mode of inheritance (#289)
 * better overview on CLI help message
 * if ref-fasta is not set properly a nicer error message will be shown.
 
-## jannovar-vardbs
+### jannovar-vardbs
 
 * Fixing bug with problems of unmodifieable Attributes.
 

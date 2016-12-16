@@ -1,0 +1,18 @@
+##fileformat=VCFv4.2
+##INFO=<ID=ANN,Number=1,Type=String,Description="Functional annotations:'Allele|Annotation|Annotation_Impact|Gene_Name|Gene_ID|Feature_Type|Feature_ID|Transcript_BioType|Rank|HGVS.c|HGVS.p|cDNA.pos / cDNA.length|CDS.pos / CDS.length|AA.pos / AA.length|Distance|ERRORS / WARNINGS / INFO'">
+##INFO=<ID=INHERITANCE,Number=.,Type=String,Description="Compatible Mendelian inheritance modes (AD, AR, XD, XR)">
+##contig=<ID=1,length=249250621>
+##contig=<ID=10,length=135534747>
+##description=The gene DDX11L1 matches AUTOSOMAL_DOMINANT and AUTOSOMAL_RECESSIVE
+##description=The gene FAM138A matches AUTOSOMAL_RECESSIVE
+##description=The gene FGFR2 matches AUTOSOMAL_RECESSIVE but is not included in hg19_small.ser
+##description=This file contains a few variants for inheritance testing. 
+##jannovarCommand
+##jannovarVersion
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	index	father	mother
+1	11876	.	CA	CC	100.15	PASS	ANN=CC|non_coding_transcript_exon_variant|LOW|DDX11L1|gene0|transcript|NR_046018.2|Noncoding|1/3|n.4A>C||4/2536||||;GENE=DDX11L1	GT:DP	0/1:33	0/1:33	0/0:33
+1	11880	.	T	C	123.15	PASS	ANN=C|non_coding_transcript_exon_variant|LOW|DDX11L1|gene0|transcript|NR_046018.2|Noncoding|1/3|n.7T>C||7/2536||||;GENE=DDX11L1;INHERITANCE=AR	GT:DP	1/1:21	0/1:33	0/1:33
+1	35723	.	T	C	123.15	PASS	ANN=C|splice_region_variant&non_coding_transcript_exon_variant|MODERATE|FAM138A|gene3|transcript|NR_026818.1|Noncoding|1/3|n.359A>G||359/1471||||;GENE=FAM138A;INHERITANCE=AR	GT:DP	0/1:21	1/0:33	0/0:33
+1	35729	.	G	A	260.15	PASS	ANN=A|non_coding_transcript_exon_variant|LOW|FAM138A|gene3|transcript|NR_026818.1|Noncoding|1/3|n.353C>T||353/1471||||;GENE=FAM138A;INHERITANCE=AR	GT:DP	0/1:21	0/0:33	1/0:33
+10	123239370	.	G	A	260.15	PASS	GENE=FGFR2	GT:DP	1/1:21	0/1:33	0/1:33
+10	123357972	.	G	A	260.15	PASS	GENE=FGFR2	GT:DP	1/1:21	1/1:33	0/1:33

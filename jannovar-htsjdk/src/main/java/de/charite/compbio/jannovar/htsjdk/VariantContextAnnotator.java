@@ -263,8 +263,8 @@ public final class VariantContextAnnotator {
 	}
 
 	/**
-	 * Write annotations from <code>annos</code> to <code>vc</code>
-	 *l
+	 * Write annotations from <code>annos</code> to <code>vc</code> l
+	 * 
 	 * @param vc
 	 *            {@link VariantContext} to write the annotations to (to INFO column)
 	 * @param annos
@@ -286,7 +286,8 @@ public final class VariantContextAnnotator {
 
 		// If a VC builder is used before the attributes can be unmodifiable.
 		Map<String, Object> attributes = new HashMap<>(vc.getAttributes());
-		attributes.put("ANN", Joiner.on(',').join(annotations));
+		if (!annotations.isEmpty())
+			attributes.put("ANN", Joiner.on(',').join(annotations));
 		vc.getCommonInfo().setAttributes(attributes);
 
 		return vc;
