@@ -12,6 +12,7 @@
 
 ### jannovar-cli
 
+* fixing NPE in the case of no `contig` lines
 * improving error message on samples in VCF file that are not in pedigree
 * fix to annotation with compatible mode of inheritance (#289)
 * better overview on CLI help message

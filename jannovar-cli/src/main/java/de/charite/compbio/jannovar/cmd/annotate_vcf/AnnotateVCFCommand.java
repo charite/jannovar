@@ -77,10 +77,15 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 		try (VCFFileReader vcfReader = new VCFFileReader(new File(vcfPath), false)) {
 			if (this.options.getVerbosity() >= 1) {
 				final SAMSequenceDictionary seqDict = VCFFileReader.getSequenceDictionary(new File(vcfPath));
-				final GenomeRegionListFactoryFromSAMSequenceDictionary factory = new GenomeRegionListFactoryFromSAMSequenceDictionary();
-				this.progressReporter = new ProgressReporter(factory.construct(seqDict), 60);
-				this.progressReporter.printHeader();
-				this.progressReporter.start();
+				if (seqDict != null) {
+					final GenomeRegionListFactoryFromSAMSequenceDictionary factory = new GenomeRegionListFactoryFromSAMSequenceDictionary();
+					this.progressReporter = new ProgressReporter(factory.construct(seqDict), 60);
+					this.progressReporter.printHeader();
+					this.progressReporter.start();
+				} else {
+					System.err.println("Progress reporting does not work because VCF file is missing the contig "
+							+ "lines in the header.");
+				}
 			}
 
 			VCFHeader vcfHeader = vcfReader.getFileHeader();
