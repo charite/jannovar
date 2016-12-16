@@ -2,6 +2,10 @@
 
 ## develop
 
+### all
+
+* Change email/organisations in master pom
+
 ### jannovar-core
 
 * `GenotypeCalls.getGenotypeForSample()` returns a "no-call" genotype now instead of `null`
@@ -9,6 +13,7 @@
 ### jannovar-htsjdk
 
 * fix to annotation with compatible mode of inheritance (#289)
+* update to htsjdk 2.8.1
 
 ### jannovar-cli
 
@@ -22,6 +27,7 @@
 ### jannovar-vardbs
 
 * Fixing bug with problems of unmodifieable Attributes.
+* update to htsjdk 2.8.1
 
 ## v0.19
 
