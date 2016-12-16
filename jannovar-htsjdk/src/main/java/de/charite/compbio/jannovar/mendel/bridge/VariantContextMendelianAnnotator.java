@@ -146,7 +146,7 @@ public class VariantContextMendelianAnnotator {
 		for (Entry<ModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
 			ImmutableList.Builder<VariantContext> listBuilder = new ImmutableList.Builder<>();
 			for (GenotypeCalls gc : e.getValue())
-				listBuilder.add((VariantContext) gc.getPayload());
+				listBuilder.add(vcs.get((Integer) gc.getPayload()));
 			builder.put(e.getKey(), listBuilder.build());
 		}
 		return builder.build();
@@ -165,9 +165,10 @@ public class VariantContextMendelianAnnotator {
 		final ImmutableList<String> xNames = ImmutableList.of("x", "X", "23", "chrx", "chrX", "chr23");
 		final ImmutableList<String> mtNames = ImmutableList.of("m", "M", "mt", "MT", "chrm", "chrM", "chrmt", "chrMT");
 
+		int i = 0 ;
 		for (VariantContext vc : vcs) {
 			GenotypeCallsBuilder builder = new GenotypeCallsBuilder();
-			builder.setPayload(vc);
+			builder.setPayload(i++);
 
 			if (xNames.contains(vc.getContig()))
 				builder.setChromType(ChromosomeType.X_CHROMOSOMAL);

@@ -96,34 +96,45 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 
 		// Resolve contig that we work on, trigger start of new contig if necessary
 		final ReferenceDictionary refDict = jannovarData.getRefDict();
-		if (!refDict.getContigNameToID().containsKey(vc.getContig())) {
-			LOGGER.trace("Unknown contig in " + vc.getContig() + ", flushing current contig and writing out.");
+		// The contig name may not be known to the
+		Optional<Integer> contigID = Optional.ofNullable(refDict.getContigNameToID().get(vc.getContig()));
+		Optional<IntervalArray<Gene>> iTree = contigID.map(x -> geneList.getGeneIntervalTree().get(x));
+		// Unknown contig or contig with annotation, simply write out
+		if (!iTree.isPresent()) {
+			LOGGER.trace("Unknown contig or contig without annotation in " + vc.getContig()
+					+ ", flushing current contig and writing out.");
 			markDoneGenes(-1, -1);
 			sink.accept(vc);
 			return;
 		}
-		final int contigID = refDict.getContigNameToID().get(vc.getContig());
-		IntervalArray<Gene> iTree = geneList.getGeneIntervalTree().get(contigID);
 
 		// Consider this variant for each affected gene
-		GenomeInterval changeInterval = new GenomeInterval(refDict, Strand.FWD, contigID, vc.getStart() - 1,
-				vc.getEnd());
-		final IntervalArray<Gene>.QueryResult qr;
-		if (changeInterval.length() == 0)
-			qr = iTree.findOverlappingWithPoint(changeInterval.getBeginPos());
-		else
-			qr = iTree.findOverlappingWithInterval(changeInterval.getBeginPos(), changeInterval.getEndPos());
-
-		if (qr.getEntries().isEmpty()) {
-			putVariantForGene(vc, null);
-		} else {
-			for (Gene gene : qr.getEntries())
-				if (isGeneAffectedByChange(gene, vc))
-					putVariantForGene(vc, gene);
+		Optional<GenomeInterval> changeInterval = contigID
+				.map(x -> new GenomeInterval(refDict, Strand.FWD, x, vc.getStart() - 1, vc.getEnd()));
+		Optional<IntervalArray<Gene>.QueryResult> qr = Optional.empty();
+		if (changeInterval.isPresent()) {
+			if (changeInterval.get().length() == 0)
+				qr = iTree.map(x -> x.findOverlappingWithPoint(changeInterval.get().getBeginPos()));
+			else
+				qr = iTree.map(x -> x.findOverlappingWithInterval(changeInterval.get().getBeginPos(),
+						changeInterval.get().getEndPos()));
 		}
 
-		// Write out all variants left of variant
-		markDoneGenes(contigID, vc.getStart() - 1);
+		if (qr.isPresent()) {
+			if (qr.get().getEntries().isEmpty()) {
+				putVariantForGene(vc, null);
+			} else {
+				for (Gene gene : qr.get().getEntries())
+					if (isGeneAffectedByChange(gene, vc))
+						putVariantForGene(vc, gene);
+			}
+		}
+
+		// Write out all variants left of variant. If contig ID not known then write out everything currently in cache
+		if (contigID.isPresent())
+			markDoneGenes(contigID.get(), vc.getStart() - 1);
+		else
+			markDoneGenes(-1, -1);
 	}
 
 	/**
