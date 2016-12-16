@@ -2,8 +2,11 @@ package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
 import de.charite.compbio.jannovar.JannovarException;
@@ -29,7 +32,6 @@ import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
-import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 /**
@@ -195,8 +197,12 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 */
 	private void checkPedigreeCompatibility(Pedigree pedigree, VCFHeader vcfHeader)
 			throws IncompatiblePedigreeException {
-		if (!pedigree.getNames().containsAll(vcfHeader.getGenotypeSamples()))
-			throw new IncompatiblePedigreeException("The VCF file is not compatible with the pedigree!");
+		List<String> missing = vcfHeader.getGenotypeSamples().stream().filter(x -> !pedigree.getNames().contains(x))
+				.collect(Collectors.toList());
+		if (!missing.isEmpty())
+			throw new IncompatiblePedigreeException(
+					"The VCF file has the following sample names not present in Pedigree: "
+							+ Joiner.on(", ").join(missing));
 	}
 
 }

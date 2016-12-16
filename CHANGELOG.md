@@ -8,6 +8,7 @@
 
 ### jannovar-cli
 
+* improving error message on samples in VCF file that are not in pedigree
 * fix to annotation with compatible mode of inheritance (#289)
 * better overview on CLI help message
 * if ref-fasta is not set properly a nicer error message will be shown.
