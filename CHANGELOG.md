@@ -22,6 +22,7 @@
 ### jannovar-vardbs
 
 * Fixing bug with problems of unmodifieable Attributes.
+* Including Hom/Het/Hemi counds of ExAC (#295)
 
 ## v0.19
 
