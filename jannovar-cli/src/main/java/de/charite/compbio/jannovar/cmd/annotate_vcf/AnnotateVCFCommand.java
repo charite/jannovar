@@ -183,7 +183,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			final Pedigree pedigree = new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
 			checkPedigreeCompatibility(pedigree, writer.getVCFHeader());
 			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
-					pedigree, jannovarData, writer.getVCFHeader().getSequenceDictionary(), vc -> writer.put(vc));
+					pedigree, jannovarData, vc -> writer.put(vc));
 			return new CoordinateSortingChecker(mendelProcessor);
 		} else {
 			return new ConsumerProcessor(vc -> writer.put(vc));

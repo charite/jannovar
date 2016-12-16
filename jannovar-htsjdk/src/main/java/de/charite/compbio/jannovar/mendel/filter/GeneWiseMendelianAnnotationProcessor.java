@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -54,10 +55,10 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	private final VariantContextMendelianAnnotator annotator;
 	/** The {@link JannovarData} to use for extracting the genes from */
 	private JannovarData jannovarData;
-	/** Sequence dictionary for ordering records */
-	private final SAMSequenceDictionary seqDict;
 	/** Next step in pipeline after processing of {@link VariantContext} is complete */
 	private final Consumer<VariantContext> sink;
+	/** Provider for contig name to number conversion */
+	private final ContigInfoProvider contigInfoProvider;
 
 	/** Currently active genes and variants assigned to them. */
 	HashMap<Gene, ArrayList<VariantContext>> activeGenes = new HashMap<>();
@@ -74,25 +75,36 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	 *            the {@link Pedigree} object to use
 	 * @param jannovarData
 	 *            {@link JannovarData} object to use for getting the genes from
-	 * @param seqDict
-	 *            {@link SAMSequenceDictionary} to use for contig order
 	 * @param sink
 	 *            location to write the {@link VariantContext} to
 	 */
 	public GeneWiseMendelianAnnotationProcessor(Pedigree pedigree, JannovarData jannovarData,
-			SAMSequenceDictionary seqDict, Consumer<VariantContext> sink) {
+			Consumer<VariantContext> sink) {
 		this.pedigree = pedigree;
 		this.jannovarData = jannovarData;
-		this.seqDict = seqDict;
 		this.sink = sink;
 
 		this.geneList = buildGeneList(this.jannovarData);
 		this.annotator = new VariantContextMendelianAnnotator(this.pedigree);
+
+		this.contigInfoProvider = new ContigInfoProvider();
 	}
 
 	@Override
 	public void put(VariantContext vc) throws VariantContextFilterException {
 		LOGGER.trace("Putting variant {} into inheritance filter", new Object[] { vc });
+
+		// Map contig name to number of yet unknown
+		if (contigInfoProvider.getCurrentContig() == null
+				|| !contigInfoProvider.getCurrentContig().equals(vc.getContig())) {
+			contigInfoProvider.registerContig(vc.getContig());
+		} else {
+			// Contig already known, check that variants are sorted by contig
+			if (!contigInfoProvider.isContigKnown(vc.getContig()))
+				throw new UncheckedJannovarException("Variants are not sorted by chromome, seeing contig "
+						+ vc.getContig() + " the second time with contig " + contigInfoProvider.getCurrentContig()
+						+ " before the second time");
+		}
 
 		// Resolve contig that we work on, trigger start of new contig if necessary
 		final ReferenceDictionary refDict = jannovarData.getRefDict();
@@ -319,8 +331,8 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		Comparator<VariantContextCounter> cmp = new Comparator<VariantContextCounter>() {
 			@Override
 			public int compare(VariantContextCounter lhs, VariantContextCounter rhs) {
-				final int idxLhs = seqDict.getSequence(lhs.getVariantContext().getContig()).getSequenceIndex();
-				final int idxRhs = seqDict.getSequence(rhs.getVariantContext().getContig()).getSequenceIndex();
+				final int idxLhs = contigInfoProvider.getContigNoForName(lhs.getVariantContext().getContig());
+				final int idxRhs = contigInfoProvider.getContigNoForName(rhs.getVariantContext().getContig());
 				if (idxLhs != idxRhs)
 					return (idxLhs - idxRhs);
 				else
@@ -359,6 +371,56 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			LOGGER.trace("Gene {} is inactive now", new Object[] { gene.getName() });
 			// Mark gene as done
 			activeGenes.remove(gene);
+		}
+	}
+
+	/**
+	 * Handle mapping between contig name and number
+	 */
+	private class ContigInfoProvider {
+
+		private static final int UNKNOWN = -1;
+
+		/** Name of currently processed contig */
+		private String currentContig = null;
+
+		/** Integer for order of next contig */
+		private int nextContigNo = 0;
+
+		/** Mapping from already seen contigs to integer */
+		private Map<String, Integer> contigNameToNo = new HashMap<>();
+
+		/** @return number for given contig name */
+		int getContigNoForName(String name) {
+			if (contigNameToNo.containsKey(name))
+				return contigNameToNo.get(name);
+			else
+				return UNKNOWN;
+		}
+
+		/** @return whether the contig has been seen before */
+		boolean isContigKnown(String name) {
+			return getContigNoForName(name) != UNKNOWN;
+		}
+
+		/**
+		 * Register new contig, returning ID of it
+		 * 
+		 * Also update {@link currentContig} to <code>name</code>
+		 */
+		int registerContig(String name) {
+			if (isContigKnown(name))
+				throw new RuntimeException("Trying to add contig twice " + name);
+			contigNameToNo.put(name, nextContigNo);
+			currentContig = name;
+			return nextContigNo++;
+		}
+
+		/**
+		 * Return name of current contig
+		 */
+		String getCurrentContig() {
+			return currentContig;
 		}
 	}
 
