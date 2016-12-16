@@ -30,6 +30,9 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 			addACHeader(header, prefix, "", "", pop);
 			addANHeader(header, prefix, "", "", pop);
 			addAFHeader(header, prefix, "", "", pop);
+			addACHetHeader(header, prefix, "", "", pop);
+			addACHomHeader(header, prefix, "", "", pop);
+			addACHemiHeader(header, prefix, "", "", pop);
 		}
 		addBestAFHeader(header, prefix, "", "");
 		addBestACHeader(header, prefix, "", "");
@@ -41,6 +44,9 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 				addACHeader(header, prefix, "OVL_", note, pop);
 				addANHeader(header, prefix, "OVL_", note, pop);
 				addAFHeader(header, prefix, "OVL_", note, pop);
+				addACHetHeader(header, prefix, "OVL_", note, pop);
+				addACHomHeader(header, prefix, "OVL_", note, pop);
+				addACHemiHeader(header, prefix, "OVL_", note, pop);
 			}
 			addBestAFHeader(header, prefix, "OVL_", note);
 			addBestACHeader(header, prefix, "OVL_", note);
@@ -95,6 +101,42 @@ public class ExacVCFHeaderExtender extends VCFHeaderExtender {
 			popName = pop + " / " + pop.getLabel() + " population";
 		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "AC_" + pop, VCFHeaderLineCount.A,
 				VCFHeaderLineType.Integer, "Overall number of observed alleles in " + popName + noteInfix);
+		header.addMetaDataLine(line);
+	}
+	
+	/** Add header with het allele counts */
+	private void addACHetHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
+		String popName;
+		if (pop != ExacPopulation.ALL)
+			popName = "all populations";
+		else
+			popName = pop + " / " + pop.getLabel() + " population";
+		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "HET_" + pop, VCFHeaderLineCount.A,
+				VCFHeaderLineType.Integer, "Overall number of observed heterozygous alleles in " + popName + noteInfix);
+		header.addMetaDataLine(line);
+	}
+	
+	/** Add header with hom allele counts */
+	private void addACHomHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
+		String popName;
+		if (pop != ExacPopulation.ALL)
+			popName = "all populations";
+		else
+			popName = pop + " / " + pop.getLabel() + " population";
+		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "HOM_" + pop, VCFHeaderLineCount.A,
+				VCFHeaderLineType.Integer, "Overall number of observed homozygous alleles in " + popName + noteInfix);
+		header.addMetaDataLine(line);
+	}
+	
+	/** Add header with hemi allele counts */
+	private void addACHemiHeader(VCFHeader header, String prefix, String idInfix, String noteInfix, ExacPopulation pop) {
+		String popName;
+		if (pop != ExacPopulation.ALL)
+			popName = "all populations";
+		else
+			popName = pop + " / " + pop.getLabel() + " population";
+		VCFInfoHeaderLine line = new VCFInfoHeaderLine(prefix + idInfix + "HEMI_" + pop, VCFHeaderLineCount.A,
+				VCFHeaderLineType.Integer, "Overall number of observed hemizygous alleles in " + popName + noteInfix);
 		header.addMetaDataLine(line);
 	}
 

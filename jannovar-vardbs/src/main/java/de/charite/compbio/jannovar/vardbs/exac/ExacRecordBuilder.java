@@ -21,6 +21,12 @@ public class ExacRecordBuilder {
 
 	/** Allele counts for each population */
 	private HashMap<ExacPopulation, List<Integer>> alleleCounts;
+	/** Allele het counts for each population */
+	private HashMap<ExacPopulation, List<Integer>> alleleHetCounts;
+	/** Allele hom counts for each population */
+	private HashMap<ExacPopulation, List<Integer>> alleleHomCounts;
+	/** Allele hemicounts for each population */
+	private HashMap<ExacPopulation, List<Integer>> alleleHemiCounts;
 	/** Chromsome counts for each population */
 	private HashMap<ExacPopulation, Integer> chromCounts;
 
@@ -33,11 +39,15 @@ public class ExacRecordBuilder {
 		filter = new ArrayList<>();
 
 		alleleCounts = new HashMap<>();
+		alleleHetCounts = new HashMap<>();
+		alleleHomCounts = new HashMap<>();
+		alleleHemiCounts = new HashMap<>();
 		chromCounts = new HashMap<>();
 	}
 
 	public ExacRecord build() {
-		return new ExacRecord(contig, pos, id, ref, alt, filter, alleleCounts, chromCounts);
+		return new ExacRecord(contig, pos, id, ref, alt, filter, alleleCounts, alleleHetCounts, alleleHomCounts,
+				alleleHemiCounts, chromCounts);
 	}
 
 	public String getContig() {
@@ -91,9 +101,33 @@ public class ExacRecordBuilder {
 	public HashMap<ExacPopulation, List<Integer>> getAlleleCounts() {
 		return alleleCounts;
 	}
+	
+	public HashMap<ExacPopulation, List<Integer>> getAlleleHetCounts() {
+		return alleleHetCounts;
+	}
+	
+	public HashMap<ExacPopulation, List<Integer>> getAlleleHomCounts() {
+		return alleleHomCounts;
+	}
+	
+	public HashMap<ExacPopulation, List<Integer>> getAlleleHemiCounts() {
+		return alleleHemiCounts;
+	}
 
 	public void setAlleleCounts(HashMap<ExacPopulation, List<Integer>> alleleCounts) {
 		this.alleleCounts = alleleCounts;
+	}
+	
+	public void setAlleleHetCounts(HashMap<ExacPopulation, List<Integer>> alleleHetCounts) {
+		this.alleleHetCounts = alleleHetCounts;
+	}
+	
+	public void setAlleleHomCounts(HashMap<ExacPopulation, List<Integer>> alleleHomCounts) {
+		this.alleleHomCounts = alleleHomCounts;
+	}
+	
+	public void setAlleleHemiCounts(HashMap<ExacPopulation, List<Integer>> alleleHemiCounts) {
+		this.alleleHemiCounts = alleleHemiCounts;
 	}
 
 	public HashMap<ExacPopulation, Integer> getChromCounts() {
@@ -107,7 +141,9 @@ public class ExacRecordBuilder {
 	@Override
 	public String toString() {
 		return "ExacRecordBuilder [chrom=" + contig + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", chromCounts=" + chromCounts + "]";
+				+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", alleleHetCounts=" + alleleHetCounts
+				+ ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts + ", chromCounts="
+				+ chromCounts + "]";
 	}
 
 	@Override
@@ -115,6 +151,9 @@ public class ExacRecordBuilder {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((alleleCounts == null) ? 0 : alleleCounts.hashCode());
+		result = prime * result + ((alleleHetCounts == null) ? 0 : alleleHetCounts.hashCode());
+		result = prime * result + ((alleleHomCounts == null) ? 0 : alleleHomCounts.hashCode());
+		result = prime * result + ((alleleHemiCounts == null) ? 0 : alleleHemiCounts.hashCode());
 		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
 		result = prime * result + ((contig == null) ? 0 : contig.hashCode());
 		result = prime * result + ((chromCounts == null) ? 0 : chromCounts.hashCode());
@@ -137,7 +176,22 @@ public class ExacRecordBuilder {
 		if (alleleCounts == null) {
 			if (other.alleleCounts != null)
 				return false;
+		} else if (alleleHetCounts == null) {
+			if (other.alleleHetCounts != null)
+				return false;
+		} else if (alleleHomCounts == null) {
+			if (other.alleleHomCounts != null)
+				return false;
+		} else if (alleleHemiCounts == null) {
+			if (other.alleleHemiCounts != null)
+				return false;
 		} else if (!alleleCounts.equals(other.alleleCounts))
+			return false;
+		else if (!alleleHetCounts.equals(other.alleleHetCounts))
+			return false;
+		else if (!alleleHomCounts.equals(other.alleleHomCounts))
+			return false;
+		else if (!alleleHemiCounts.equals(other.alleleHemiCounts))
 			return false;
 		if (alt == null) {
 			if (other.alt != null)

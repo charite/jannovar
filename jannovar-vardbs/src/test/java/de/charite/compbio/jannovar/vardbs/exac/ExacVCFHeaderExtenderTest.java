@@ -33,9 +33,9 @@ public class ExacVCFHeaderExtenderTest {
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(52, header.getInfoHeaderLines().size());
+		Assert.assertEquals(100, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(52, header.getIDHeaderLines().size());
+		Assert.assertEquals(100, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_AFR"));
@@ -60,6 +60,32 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_ALL"));
+		
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_ALL"));
+		
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AC"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AF"));
 
@@ -85,6 +111,32 @@ public class ExacVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_AN_ALL"));
+		
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HOM_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HEMI_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_HET_ALL"));
+		
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_BEST_AC"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_OVL_BEST_AF"));
 	}
