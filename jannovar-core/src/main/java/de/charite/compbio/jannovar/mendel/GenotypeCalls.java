@@ -134,6 +134,8 @@ public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
 		// Yes, we really need object identity here
 		return (this.hashCode() == obj.hashCode());
 	}

@@ -69,11 +69,12 @@ public class FlatBEDParser implements TranscriptParser {
 		LOGGER.info("Parsing BED...");
 		builders = parseBEDFile(PathUtil.join(basePath, getINIFileName("bed")));
 
+		/*
 		// Load sequence.
 		LOGGER.error("Parsing FASTA...");
 		FlatBEDFastaParser efp = new FlatBEDFastaParser(PathUtil.join(basePath, getINIFileName("dna")), builders,
 				printProgressBars);
-		/*
+
 		int before = builders.size();
 		builders = efp.parse();
 		int after = builders.size();
