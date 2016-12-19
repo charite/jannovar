@@ -8,7 +8,7 @@
     <name>Jannovar</name>
 
     <properties>
-        <htsjdk.version>2.5.0</htsjdk.version>
+        <htsjdk.version>2.8.1</htsjdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <log4j.version>2.5</log4j.version>
     </properties>
@@ -43,27 +43,27 @@
     <developers>
         <developer>
             <name>Manuel Holtgrewe</name>
-            <email>manuel.holtgrewe@charite.de</email>
-            <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
+            <email>Manuel.Holtgrewe@bihealth.de</email>
+            <organization>Berlin Institute of Health</organization>
+            <organizationUrl>https://www.bihealth.org/</organizationUrl>
         </developer>
         <developer>
             <name>Max Schubach</name>
             <email>max.schubach@charite.de</email>
             <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
+            <organizationUrl>https://www.charite.de</organizationUrl>
         </developer>
         <developer>
             <name>Marten Jaeger</name>
             <email>marten.jaeger@charite.de</email>
             <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
+            <organizationUrl>https://www.charite.de</organizationUrl>
         </developer>
         <developer>
             <name>Peter N Robinson</name>
-            <email>peter.robinson@charite.de</email>
-            <organization>Charite Universitaetsmedizin Berlin</organization>
-            <organizationUrl>http://www.charite.de</organizationUrl>
+            <email>peter.robinson@jax.org</email>
+            <organization>The Jackson Laboratory for Genomic Medicine</organization>
+            <organizationUrl>https://www.jax.org</organizationUrl>
         </developer>
     </developers>
 
