@@ -27,6 +27,7 @@
 ### jannovar-vardbs
 
 * Fixing bug with problems of unmodifieable Attributes.
+* Including Hom/Het/Hemi counds of ExAC (#295)
 * update to htsjdk 2.8.1
 
 ## v0.19

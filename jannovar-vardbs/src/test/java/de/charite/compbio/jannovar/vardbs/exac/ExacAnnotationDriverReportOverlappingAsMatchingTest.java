@@ -44,9 +44,9 @@ public class ExacAnnotationDriverReportOverlappingAsMatchingTest extends ExacAnn
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(26, header.getInfoHeaderLines().size());
+		Assert.assertEquals(50, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(26, header.getIDHeaderLines().size());
+		Assert.assertEquals(50, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_AFR"));
@@ -71,6 +71,30 @@ public class ExacAnnotationDriverReportOverlappingAsMatchingTest extends ExacAnn
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AC_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AF_ALL"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_AN_ALL"));
+
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_AFR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_AMR"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_EAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_FIN"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_NFE"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_OTH"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_SAS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HOM_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HEMI_ALL"));
+		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_HET_ALL"));
+
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AC"));
 		Assert.assertNotNull(header.getInfoHeaderLine("EXAC_BEST_AF"));
 	}
@@ -87,12 +111,14 @@ public class ExacAnnotationDriverReportOverlappingAsMatchingTest extends ExacAnn
 
 		Assert.assertEquals(".", annotated.getID());
 
-		Assert.assertEquals(26, annotated.getAttributes().size());
+		Assert.assertEquals(42, annotated.getAttributes().size());
 		ArrayList<String> keys = Lists.newArrayList(annotated.getAttributes().keySet());
 		Collections.sort(keys);
 		Assert.assertEquals("[AC_AFR, AC_ALL, AC_AMR, AC_EAS, AC_FIN, AC_NFE, AC_OTH, AC_SAS, AF_AFR, AF_ALL, "
 				+ "AF_AMR, AF_EAS, AF_FIN, AF_NFE, AF_OTH, AF_SAS, AN_AFR, AN_ALL, AN_AMR, "
-				+ "AN_EAS, AN_FIN, AN_NFE, AN_OTH, AN_SAS, BEST_AC, BEST_AF]", keys.toString());
+				+ "AN_EAS, AN_FIN, AN_NFE, AN_OTH, AN_SAS, BEST_AC, BEST_AF, "
+				+ "HET_AFR, HET_ALL, HET_AMR, HET_EAS, HET_FIN, HET_NFE, HET_OTH, HET_SAS, "
+				+ "HOM_AFR, HOM_ALL, HOM_AMR, HOM_EAS, HOM_FIN, HOM_NFE, HOM_OTH, HOM_SAS]", keys.toString());
 
 		Assert.assertEquals("[2, 2, 2]", annotated.getAttributeAsString("AC_AFR", null));
 		Assert.assertEquals("[2, 2, 2]", annotated.getAttributeAsString("AC_ALL", null));

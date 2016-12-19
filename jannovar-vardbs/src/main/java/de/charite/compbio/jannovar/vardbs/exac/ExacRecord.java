@@ -37,13 +37,21 @@ public class ExacRecord {
 
 	/** Observed alternative allele counts for each population */
 	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Integer>> alleleCounts;
+	/** Observed alternative allele het counts for each population */
+	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Integer>> alleleHetCounts;
+	/** Observed alternative allele hom counts for each population */
+	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Integer>> alleleHomCounts;
+	/** Observed alternative allele hemi counts for each population */
+	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Integer>> alleleHemiCounts;
 	/** Chromsome counts for each population */
 	final private ImmutableSortedMap<ExacPopulation, Integer> chromCounts;
 	/** Observed alternative allele frequencies for each population */
 	final private ImmutableSortedMap<ExacPopulation, ImmutableList<Double>> alleleFrequencies;
 
 	public ExacRecord(String chrom, int pos, String id, String ref, List<String> alt, Collection<String> filter,
-			Map<ExacPopulation, List<Integer>> alleleCounts, Map<ExacPopulation, Integer> chromCounts) {
+			Map<ExacPopulation, List<Integer>> alleleCounts, Map<ExacPopulation, List<Integer>> alleleHetCounts,
+			Map<ExacPopulation, List<Integer>> alleleHomCounts, Map<ExacPopulation, List<Integer>> alleleHemiCounts,
+			Map<ExacPopulation, Integer> chromCounts) {
 		this.chrom = chrom;
 		this.pos = pos;
 		this.id = id;
@@ -56,6 +64,21 @@ public class ExacRecord {
 		for (Entry<ExacPopulation, List<Integer>> e : alleleCounts.entrySet())
 			acBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		this.alleleCounts = acBuilder.build();
+		ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acHetBuilder = ImmutableSortedMap
+				.naturalOrder();
+		for (Entry<ExacPopulation, List<Integer>> e : alleleHetCounts.entrySet())
+			acHetBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+		this.alleleHetCounts = acHetBuilder.build();
+		ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acHomBuilder = ImmutableSortedMap
+				.naturalOrder();
+		for (Entry<ExacPopulation, List<Integer>> e : alleleHomCounts.entrySet())
+			acHomBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+		this.alleleHomCounts = acHomBuilder.build();
+		ImmutableSortedMap.Builder<ExacPopulation, ImmutableList<Integer>> acHemiBuilder = ImmutableSortedMap
+				.naturalOrder();
+		for (Entry<ExacPopulation, List<Integer>> e : alleleHemiCounts.entrySet())
+			acHemiBuilder.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+		this.alleleHemiCounts = acHemiBuilder.build();
 
 		this.chromCounts = ImmutableSortedMap.copyOf(chromCounts.entrySet());
 
@@ -98,6 +121,11 @@ public class ExacRecord {
 	public ImmutableMap<ExacPopulation, ImmutableList<Integer>> getAlleleCounts() {
 		return alleleCounts;
 	}
+	
+	public ImmutableMap<ExacPopulation, ImmutableList<Integer>> getAlleleHemiCounts() {
+		return alleleHemiCounts;
+	}
+	
 
 	public ImmutableMap<ExacPopulation, Integer> getChromCounts() {
 		return chromCounts;
@@ -110,6 +138,21 @@ public class ExacRecord {
 	/** @return Allele count for the given population <code>pop</code>, for each allele, including reference one */
 	public ImmutableList<Integer> getAlleleCounts(ExacPopulation pop) {
 		return alleleCounts.get(pop);
+	}
+
+	/** @return Allele het count for the given population <code>pop</code>, for each allele, including reference one */
+	public ImmutableList<Integer> getAlleleHetCounts(ExacPopulation pop) {
+		return alleleHetCounts.get(pop);
+	}
+
+	/** @return Allele hom count for the given population <code>pop</code>, for each allele, including reference one */
+	public ImmutableList<Integer> getAlleleHomCounts(ExacPopulation pop) {
+		return alleleHomCounts.get(pop);
+	}
+
+	/** @return Allele hemi count for the given population <code>pop</code>, for each allele, including reference one */
+	public ImmutableList<Integer> getAlleleHemiCounts(ExacPopulation pop) {
+		return alleleHemiCounts.get(pop);
 	}
 
 	/**
@@ -148,8 +191,9 @@ public class ExacRecord {
 	@Override
 	public String toString() {
 		return "ExacRecord [chrom=" + chrom + ", pos=" + pos + ", id=" + id + ", ref=" + ref + ", alt=" + alt
-				+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", chromCounts=" + chromCounts
-				+ ", alleleFrequencies=" + alleleFrequencies + "]";
+				+ ", filter=" + filter + ", alleleCounts=" + alleleCounts + ", alleleHetCounts=" + alleleHetCounts
+				+ ", alleleHomCounts=" + alleleHomCounts + ", alleleHemiCounts=" + alleleHemiCounts + ", chromCounts="
+				+ chromCounts + ", alleleFrequencies=" + alleleFrequencies + "]";
 	}
 
 	@Override
@@ -157,6 +201,9 @@ public class ExacRecord {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((alleleCounts == null) ? 0 : alleleCounts.hashCode());
+		result = prime * result + ((alleleHetCounts == null) ? 0 : alleleHetCounts.hashCode());
+		result = prime * result + ((alleleHomCounts == null) ? 0 : alleleHomCounts.hashCode());
+		result = prime * result + ((alleleHemiCounts == null) ? 0 : alleleHemiCounts.hashCode());
 		result = prime * result + ((alleleFrequencies == null) ? 0 : alleleFrequencies.hashCode());
 		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
 		result = prime * result + ((chrom == null) ? 0 : chrom.hashCode());
@@ -180,7 +227,22 @@ public class ExacRecord {
 		if (alleleCounts == null) {
 			if (other.alleleCounts != null)
 				return false;
+		} else if (alleleHetCounts == null) {
+			if (other.alleleHetCounts != null)
+				return false;
+		} else if (alleleHomCounts == null) {
+			if (other.alleleHomCounts != null)
+				return false;
+		} else if (alleleHemiCounts == null) {
+			if (other.alleleHemiCounts != null)
+				return false;
 		} else if (!alleleCounts.equals(other.alleleCounts))
+			return false;
+		else if (!alleleHetCounts.equals(other.alleleHetCounts))
+			return false;
+		else if (!alleleHomCounts.equals(other.alleleHomCounts))
+			return false;
+		else if (!alleleHemiCounts.equals(other.alleleHemiCounts))
 			return false;
 		if (alleleFrequencies == null) {
 			if (other.alleleFrequencies != null)
