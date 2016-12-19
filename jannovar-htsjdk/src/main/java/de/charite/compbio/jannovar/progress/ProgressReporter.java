@@ -88,7 +88,7 @@ public class ProgressReporter extends TimerTask {
 		timer.schedule(this, 0, this.seconds * 1000);
 	}
 
-	public VariantContext getCurrentVC() {
+	public synchronized VariantContext getCurrentVC() {
 		return currentVC;
 	}
 

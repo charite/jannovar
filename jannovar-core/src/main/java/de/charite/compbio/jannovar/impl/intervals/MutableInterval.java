@@ -88,19 +88,20 @@ public class MutableInterval<T> implements java.io.Serializable, Comparable<Muta
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		@SuppressWarnings("rawtypes")
-		Interval other = (Interval) obj;
-		if (begin != other.getBegin())
-			return false;
-		if (end != other.getEnd())
-			return false;
-		if (maxEnd != other.getMaxEnd())
-			return false;
-		if (value == null) {
-			if (other.getValue() != null)
+		if (obj instanceof Interval<?>) {
+			Interval<?> other = (Interval<?>) obj;
+			if (begin != other.getBegin())
 				return false;
-		} else if (!value.equals(other.getValue()))
-			return false;
+			if (end != other.getEnd())
+				return false;
+			if (maxEnd != other.getMaxEnd())
+				return false;
+			if (value == null) {
+				if (other.getValue() != null)
+					return false;
+			} else if (!value.equals(other.getValue()))
+				return false;
+		}
 		return true;
 	}
 
