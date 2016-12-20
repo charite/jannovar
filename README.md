@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/charite/jannovar.svg?branch=master)](https://travis-ci.org/charite/jannovar)
 [![Documentation](https://readthedocs.org/projects/jannovar/badge/?version=master)](http://jannovar.readthedocs.org/)
-[![API Docs](https://img.shields.io/badge/api-v0.19-blue.svg?style=flat)](javadoc.io/doc/de.charite.compbio/jannovar-core/0.19)
+[![API Docs](https://img.shields.io/badge/api-v0.19-blue.svg?style=flat)](http://javadoc.io/doc/de.charite.compbio/jannovar-core/0.20)
 
 Jannovar
 ========
