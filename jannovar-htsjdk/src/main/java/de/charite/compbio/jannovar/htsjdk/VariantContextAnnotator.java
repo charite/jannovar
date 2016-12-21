@@ -223,7 +223,11 @@ public final class VariantContextAnnotator {
 	public void putErrorAnnotation(VariantContext vc, Set<AnnotationMessage> messages) {
 		// TODO(holtgrewe): Do something more elegant way than 15 * "|", needs to be kept in sync with VCFAnnotationData
 		final String annotation = "|||||||||||||||" + Joiner.on('&').join(messages);
-		vc.getCommonInfo().putAttribute("ANN", annotation, true); // true allows overwriting
+
+		// If a VC builder is used before the attributes can be unmodifiable.
+		Map<String, Object> attributes = new HashMap<>(vc.getAttributes());
+		attributes.put("ANN", annotation);
+		vc.getCommonInfo().setAttributes(attributes);
 	}
 
 	/**
