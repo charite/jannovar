@@ -1,6 +1,6 @@
 # Jannovar Changelog
 
-## master
+## develop
 
 ### jannovar-htsjdk
 
