@@ -1,5 +1,11 @@
 # Jannovar Changelog
 
+## master
+
+### jannovar-htsjdk
+
+* Fixing bug with problems of unmodifieable Attributes (error annotation).
+
 ## v0.20
 
 ### all
