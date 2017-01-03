@@ -16,7 +16,7 @@ If the annotation matches the position of the variant an additional string ``OVL
 ExAC
 ----------
 
-The command ``--exac-vcf <EXAC_VCF>`` will add allele frequencies from the ExAC database to the variants. Please download the actual ExAC database as VCF (tested with 0.3.1) from their `website <http://exac.broadinstitute.org/>`_. In addition you will need the actual reference file because we do a local normalization of the variants; command ``--ref-fasta <REF_FASTA>``. With ``--exac-prefix <EXAC_PREFIX>`` you can define the info token used for the annotation. The default is ``EXAC_``.
+The command ``--exac-vcf <EXAC_VCF>`` will add allele frequencies from the ExAC database to the variants. Please download the current veriosn of the ExAC database as VCF (tested with 0.3.1) from their `website <http://exac.broadinstitute.org/>`_. In addition you will need the actual reference file because we do a local normalization of the variants; command ``--ref-fasta <REF_FASTA>`` (a FASTA index file should be present in the same directory; if needed, one can be created with samtools using hte ``faidx`` command). With ``--exac-prefix <EXAC_PREFIX>`` you can define the info token used for the annotation. The default is ``EXAC_``.
 
 .. note::
 
