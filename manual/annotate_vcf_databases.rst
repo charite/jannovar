@@ -40,7 +40,7 @@ For example, the second line (first coding variant) of ``small.jv.vcf`` will loo
 dnSBP
 ----------
 
-The command ``--dbsnp-vcf <DBSNP_VCF>`` will add rsIDs from dbSNP to the variants in the info column and, if the genotype is identical, the ID column will be annotated with te rsID. Please download the actual dbSNP database as VCF for your genome release from the NCBI website. In addition you will need the actual reference file because we do a local normalization of the variants; command ``--ref-fasta <REF_FASTA>``. With ``--dbsnp-prefix <DBSNP_PREFIX>`` you can define the info token used for the annotation of the rsID. The default is ``DBSNP_``.
+The command ``--dbsnp-vcf <DBSNP_VCF>`` will add rsIDs from dbSNP to the variants in the info column and, if the genotype is identical, the ID column will be annotated with te rsID. Please download the latest version of the dbSNP database in VCF format for your genome release from the NCBI website. In addition you will need the actual reference file because we do a local normalization of the variants; command ``--ref-fasta <REF_FASTA>``. With ``--dbsnp-prefix <DBSNP_PREFIX>`` you can define the info token used for the annotation of the rsID. The default is ``DBSNP_``.
 
 Example:
 
