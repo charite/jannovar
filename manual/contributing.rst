@@ -29,23 +29,23 @@ If you are reporting a bug, please include:
 Fix Bugs
 ========
 
-Look through the Bitbucket issues for bugs.
+Look through the Github issues for bugs.
 If you want to start working on a bug then please write short message on the issue tracker to prevent duplicate work.
 
 
 Implement Features
 ==================
 
-Look through the Bitbucket issues for features.
+Look through the Github issues for features.
 If you want to start working on an issue then please write short message on the issue tracker to prevent duplicate work.
 
 
 Write Documentation
 ===================
 
-Snakemake could always use more documentation, whether as part of the official vcfpy docs, in docstrings, or even on the web in blog posts, articles, and such.
+Jannovar could always use more documentation, whether as part of the official vcfpy docs, in docstrings, or even on the web in blog posts, articles, and such.
 
-Snakemake uses `Sphinx <https://sphinx-doc.org>`_ for the user manual (that you are currently reading).
+Jannovar uses `Sphinx <https://sphinx-doc.org>`_ for the user manual (that you are currently reading).
 See `doc_guidelines` on how the documentation reStructuredText is used.
 See `doc_setup` on creating a local setup for building the documentation.
 
