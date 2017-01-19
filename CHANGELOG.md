@@ -1,5 +1,9 @@
 # Jannovar Changelog
 
+### all
+
+* Fixing language in mvn surfire plugin. Now mvn tests work on locale de_DE etc..
+
 ## develop
 
 ### jannovar-htsjdk
