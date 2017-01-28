@@ -84,12 +84,14 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 
 	private Annotation buildFeatureAblationAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
-				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN),
+				messages);
 	}
 
 	private Annotation buildStartLossAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno,
-				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN),
+				messages);
 	}
 
 	/**
@@ -158,7 +160,7 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				handleFrameShiftCase();
 
 			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-					proteinChange);
+					proteinChange, messages);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -190,11 +192,11 @@ public final class DeletionAnnotationBuilder extends AnnotationBuilder {
 				if (aaChange.getPos() == aaChange.getLastPos()) {
 					if (aaChange.getAlt().length() > 0)
 						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(),
-								wtAAFirst, aaChange.getPos(), new ProteinSeqDescription(), new ProteinSeqDescription(
-										aaChange.getAlt()));
+								wtAAFirst, aaChange.getPos(), new ProteinSeqDescription(),
+								new ProteinSeqDescription(aaChange.getAlt()));
 					else
-						proteinChange = ProteinDeletion.buildWithSequence(true, wtAAFirst, aaChange.getPos(),
-								wtAAFirst, aaChange.getPos(), aaChange.getAlt());
+						proteinChange = ProteinDeletion.buildWithSequence(true, wtAAFirst, aaChange.getPos(), wtAAFirst,
+								aaChange.getPos(), aaChange.getAlt());
 				} else {
 					if (aaChange.getAlt().length() > 0)
 						proteinChange = ProteinIndel.buildWithSeqDescription(true, wtAAFirst, aaChange.getPos(),

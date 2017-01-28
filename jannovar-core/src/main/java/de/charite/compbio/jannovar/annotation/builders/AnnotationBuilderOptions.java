@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation.builders;
 
+import de.charite.compbio.jannovar.reference.GenomeVariant;
+
 /**
  * Configuration for the {@link AnnotationBuilder} subclasses.
  *
@@ -12,12 +14,21 @@ public class AnnotationBuilderOptions {
 	 */
 	private final boolean nt3PrimeShifting;
 
+	/**
+	 * whether or not to override transcript sequence with user input, that is
+	 * the sequence in the {@link GenomeVariant} (default is
+	 * <code>false</code>).
+	 */
+	private final boolean overrideTxSeqWithGenomeVariantRef;
+
 	public AnnotationBuilderOptions() {
 		this.nt3PrimeShifting = true;
+		this.overrideTxSeqWithGenomeVariantRef = false;
 	}
 
-	public AnnotationBuilderOptions(boolean nt3PrimeShifting) {
+	public AnnotationBuilderOptions(boolean nt3PrimeShifting, boolean overrideTxSeqWithGenomeVariantRef) {
 		this.nt3PrimeShifting = nt3PrimeShifting;
+		this.overrideTxSeqWithGenomeVariantRef = overrideTxSeqWithGenomeVariantRef;
 	}
 
 	/**
@@ -27,4 +38,13 @@ public class AnnotationBuilderOptions {
 	public boolean isNt3PrimeShifting() {
 		return nt3PrimeShifting;
 	}
+
+	/**
+	 * @return whether or not to override transcript sequence with user input,
+	 *         that is the sequence in the {@link GenomeVariant}
+	 */
+	public boolean isOverrideTxSeqWithGenomeVariantRef() {
+		return overrideTxSeqWithGenomeVariantRef;
+	}
+
 }

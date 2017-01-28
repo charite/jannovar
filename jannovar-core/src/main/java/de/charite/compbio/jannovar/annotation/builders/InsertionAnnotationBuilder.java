@@ -111,19 +111,19 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			NucleotidePointLocationBuilder posBuilder = new NucleotidePointLocationBuilder(transcript);
 			if (change.getAlt().length() == 1) {
 				try {
-					final NucleotideRange range = new NucleotideRange(posBuilder.getNucleotidePointLocation(projector
-							.transcriptToGenomePos(txPos.shifted(-1))), posBuilder.getNucleotidePointLocation(projector
-							.transcriptToGenomePos(txPos.shifted(-1))));
+					final NucleotideRange range = new NucleotideRange(
+							posBuilder.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1))),
+							posBuilder.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1))));
 					return new NucleotideDuplication(false, range, new NucleotideSeqDescription());
 				} catch (ProjectionException e) {
 					throw new RuntimeException("Bug: positions should be valid here", e);
 				}
 			} else {
 				try {
-					final NucleotidePointLocation firstPos = posBuilder.getNucleotidePointLocation(projector
-							.transcriptToGenomePos(txPos.shifted(-change.getAlt().length())));
-					final NucleotidePointLocation lastPos = posBuilder.getNucleotidePointLocation(projector
-							.transcriptToGenomePos(txPos.shifted(-1)));
+					final NucleotidePointLocation firstPos = posBuilder.getNucleotidePointLocation(
+							projector.transcriptToGenomePos(txPos.shifted(-change.getAlt().length())));
+					final NucleotidePointLocation lastPos = posBuilder
+							.getNucleotidePointLocation(projector.transcriptToGenomePos(txPos.shifted(-1)));
 					final NucleotideRange range = new NucleotideRange(firstPos, lastPos);
 					return new NucleotideDuplication(false, range, new NucleotideSeqDescription());
 				} catch (ProjectionException e) {
@@ -220,7 +220,7 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 			}
 
 			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-					proteinChange);
+					proteinChange, messages);
 		}
 
 		private void handleFrameShiftCase() {
@@ -341,9 +341,8 @@ public final class InsertionAnnotationBuilder extends AnnotationBuilder {
 				varTypes.add(VariantEffect.STOP_LOST);
 			} else {
 				// varAA contains no stop codon
-				proteinChange = ProteinExtension.buildWithoutTerminal(true,
-						toString(wtAASeq.charAt(aaChange.getPos())), aaChange.getPos(),
-						toString(varAASeq.charAt(aaChange.getPos())));
+				proteinChange = ProteinExtension.buildWithoutTerminal(true, toString(wtAASeq.charAt(aaChange.getPos())),
+						aaChange.getPos(), toString(varAASeq.charAt(aaChange.getPos())));
 				varTypes.add(VariantEffect.STOP_LOST);
 			}
 		}

@@ -2,9 +2,19 @@
 
 ## develop
 
+### jannovar-cli
+
+* Printing warnings next to the annotations in `annotate-pos`
+
+### jannovar-core
+
+* Making the behaviour of overriding transcripts configurable at least in the code, using default to not do this any more
+* Adding `WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT` to `AnnotationMessage`
+* Properly pushing through warnings from the annotators into the returned `VariantAnnotation` object
+
 ### jannovar-htsjdk
 
-* Fixing bug with problems of unmodifieable Attributes (error annotation).
+* Fixing bug with problems of unmodifiable Attributes (error annotation).
 
 ## v0.20
 

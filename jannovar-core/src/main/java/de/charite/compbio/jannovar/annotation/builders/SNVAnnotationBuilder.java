@@ -95,7 +95,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 		// if this is not the case.
 		if (txPos.getPos() >= transcript.getSequence().length()
 				|| !transcript.getSequence().substring(txPos.getPos(), txPos.getPos() + 1).equals(change.getRef()))
-			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_GENOME);
+			messages.add(AnnotationMessage.WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT);
 
 		// Compute the frame shift and codon start position.
 		int frameShift = cdsPos.getPos() % 3;
@@ -112,8 +112,9 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 					getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.DIFFICULT_TO_PREDICT),
 					ImmutableList.of(AnnotationMessage.ERROR_PROBLEM_DURING_ANNOTATION));
 		}
-		String wtCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
-				change.getRef().charAt(0));
+		String wtCodon = transcriptCodon;
+		if (options.isOverrideTxSeqWithGenomeVariantRef())
+			TranscriptSequenceDecorator.codonWithUpdatedBase(wtCodon, frameShift, change.getRef().charAt(0));
 		String varCodon = TranscriptSequenceDecorator.codonWithUpdatedBase(transcriptCodon, frameShift,
 				change.getAlt().charAt(0));
 
@@ -159,7 +160,7 @@ public final class SNVAnnotationBuilder extends AnnotationBuilder {
 
 		// Build the resulting Annotation.
 		return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-				proteinChange);
+				proteinChange, messages);
 	}
 
 	@Override

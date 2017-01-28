@@ -90,12 +90,13 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 	private Annotation buildFeatureAblationAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.TRANSCRIPT_ABLATION), locAnno,
-				getGenomicNTChange(), getCDSNTChange(), null);
+				getGenomicNTChange(), getCDSNTChange(), null, messages);
 	}
 
 	private Annotation buildStartLossAnnotation() {
 		return new Annotation(transcript, change, ImmutableList.of(VariantEffect.START_LOST), locAnno,
-				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN));
+				getGenomicNTChange(), getCDSNTChange(), ProteinMiscChange.build(true, ProteinMiscChangeType.NO_PROTEIN),
+				messages);
 	}
 
 	/**
@@ -155,15 +156,15 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 			this.refChangeLastPos = refChangeLastPos;
 			// Get the variant change begin position as CDS coordinate, handling introns and positions outside of CDS.
 			this.varChangeBeginPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos());
-			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(changeInterval.getGenomeBeginPos()
-					.shifted(change.getAlt().length() - 1));
+			CDSPosition varChangeLastPos = projector.projectGenomeToCDSPosition(
+					changeInterval.getGenomeBeginPos().shifted(change.getAlt().length() - 1));
 			if (!transcript.getCDSRegion().contains(changeInterval.getGenomeEndPos().shifted(-1)))
 				varChangeLastPos = varChangeLastPos.shifted(-1); // shift if projected to end position
 			this.varChangeLastPos = varChangeLastPos;
 			// "(...+2)/3" => round up integer division result
-			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3, wtAASeq.substring(
-					refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3), varAASeq.substring(
-					varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
+			this.aaChange = new AminoAcidChange(refChangeBeginPos.getPos() / 3,
+					wtAASeq.substring(refChangeBeginPos.getPos() / 3, (refChangeLastPos.getPos() + 1 + 2) / 3),
+					varAASeq.substring(varChangeBeginPos.getPos() / 3, (varChangeLastPos.getPos() + 1 + 2) / 3));
 
 			// Look for stop codon, starting at change position.
 			this.varAAStopPos = varAASeq.indexOf('*', refChangeBeginPos.getPos() / 3);
@@ -176,7 +177,7 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 				handleFrameShiftCase();
 
 			return new Annotation(transcript, change, varTypes, locAnno, getGenomicNTChange(), getCDSNTChange(),
-					proteinChange);
+					proteinChange, messages);
 		}
 
 		private void handleNonFrameShiftCase() {
@@ -221,16 +222,16 @@ public final class BlockSubstitutionAnnotationBuilder extends AnnotationBuilder 
 
 			final String wtAAFirst = Character.toString(wtAASeq.charAt(aaChange.getPos()));
 			final String wtAALast = Character.toString(wtAASeq.charAt(aaChange.getLastPos()));
-			final String insertedAAs = varAASeq.substring(aaChange.getPos(), aaChange.getPos()
-					+ aaChange.getAlt().length());
+			final String insertedAAs = varAASeq.substring(aaChange.getPos(),
+					aaChange.getPos() + aaChange.getAlt().length());
 			final String mutAAFirst = insertedAAs.isEmpty() ? "" : insertedAAs.substring(0, 1);
 
 			// We differentiate the case of replacing a single amino acid and replacing multiple ones. Note that
 			// when the result starts with the stop codon (the alt truncation step reduces it to the case of
 			// "any>*") then we handle it as replacing the first amino acid by the stop codon.
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() > 1)
-				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
-						wtAALast, aaChange.getLastPos());
+				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(), wtAALast,
+						aaChange.getLastPos());
 			if (insertedAAs.isEmpty() && aaChange.getRef().length() == 1)
 				proteinChange = ProteinDeletion.buildWithoutSeqDescription(true, wtAAFirst, aaChange.getPos(),
 						wtAAFirst, aaChange.getPos());

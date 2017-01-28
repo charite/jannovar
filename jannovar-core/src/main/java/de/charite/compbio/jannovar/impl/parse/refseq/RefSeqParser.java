@@ -154,7 +154,7 @@ public class RefSeqParser implements TranscriptParser {
 				assert missingSequence.contains(builder.getAccession());
 				missingSequence.remove(builder.getAccession());
 
-				builder.setAccession(builder.getSequence());
+				builder.setAccession(accession);
 				builder.setSequence(record.getSequence());
 				LOGGER.debug("Found sequence for transcript {}", new Object[] { builder.getAccession() });
 			}
