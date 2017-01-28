@@ -148,7 +148,7 @@ public final class VariantContextAnnotator {
 		this.chromosomeMap = chromosomeMap;
 		this.options = options;
 		this.annotator = new VariantAnnotator(refDict, chromosomeMap,
-				new AnnotationBuilderOptions(options.nt3PrimeShifting));
+				new AnnotationBuilderOptions(options.nt3PrimeShifting, false));
 	}
 
 	/**

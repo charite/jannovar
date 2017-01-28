@@ -76,29 +76,29 @@ public final class StructuralVariantAnnotationBuilder {
 		if (ref.length() == alt.length() && ref.equals(altRC.toString())) { // SV inversion
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null, messages);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
-						ntChange, null, null, messages);
+						ntChange, null, null);
 
 			}
 		} else if (ref.length() == 0) { // SV insertion
 			// if transcript is null it is intergenic
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null, messages);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
-						ntChange, null, null, messages);
+						ntChange, null, null);
 			}
 		} else if (alt.length() == 0) { // SV deletion
 			// if tm is null it is intergenic
 			if (transcript == null) {
 				return new Annotation(null, change, ImmutableList.of(VariantEffect.INTERGENIC_VARIANT,
-						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null, messages);
+						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(this.transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT),
-						annoLoc, ntChange, null, null, messages);
+						annoLoc, ntChange, null, null);
 			}
 		} else { // SV substitution
 			if (transcript == null) {
@@ -106,7 +106,7 @@ public final class StructuralVariantAnnotationBuilder {
 						VariantEffect.STRUCTURAL_VARIANT), null, ntChange, null, null);
 			} else {
 				return new Annotation(transcript, change, ImmutableList.of(VariantEffect.STRUCTURAL_VARIANT), annoLoc,
-						ntChange, null, null, messages);
+						ntChange, null, null);
 			}
 		}
 	}
