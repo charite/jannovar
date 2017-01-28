@@ -101,12 +101,7 @@ public final class PedFileReader {
 	 */
 	private static PedPerson readIndividual(String line) throws PedParseException {
 		try {
-			Iterator<String> it = Splitter.on('\t').split(line.trim()).iterator();
-
-			/*
-			 * public PedPerson(String pedigree, String name, String father, String mother, Sex sex, Disease disease,
-			 * Collection<String> extraFields) {
-			 */
+			Iterator<String> it = Splitter.onPattern("\\s+").split(line.trim()).iterator();
 
 			// parse out core fields
 			String pedigree = it.next();
