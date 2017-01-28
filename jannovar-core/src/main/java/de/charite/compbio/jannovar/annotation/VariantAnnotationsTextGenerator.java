@@ -1,5 +1,7 @@
 package de.charite.compbio.jannovar.annotation;
 
+import java.util.stream.Collectors;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
@@ -78,6 +80,18 @@ public abstract class VariantAnnotationsTextGenerator {
 			builder.append(anno.getSymbolAndAnnotation(code));
 		}
 		return builder.toString();
+	}
+
+	/**
+	 * @return Messages
+	 */
+	public String buildMessages() {
+		return Joiner.on(';').join(getAnnotations().stream().map(a -> Joiner.on(',').join(a.getMessages())).map(s -> {
+			if (s.isEmpty())
+				return ".";
+			else
+				return s;
+		}).collect(Collectors.toList()));
 	}
 
 	/**

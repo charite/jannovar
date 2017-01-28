@@ -12,6 +12,12 @@ public enum AnnotationMessage {
 	/** (E2) The variant's genomic coordinate is greater than chromosome's length. */
 	ERROR_OUT_OF_CHROMOSOME_RANGE,
 	/**
+	 * (Additional warning) This means that the "REF" field in the input VCF file does not match the reference genome. This warning
+	 * may indicate a conflict between input data and data from reference genome (for instance is the input VCF was
+	 * aligned to a different reference genome).
+	 */
+	WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT,
+	/**
 	 * (W1) This means that the "REF" field in the input VCF file does not match the reference genome. This warning
 	 * may indicate a conflict between input data and data from reference genome (for instance is the input VCF was
 	 * aligned to a different reference genome).

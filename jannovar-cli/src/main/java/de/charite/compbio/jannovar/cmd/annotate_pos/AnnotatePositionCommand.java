@@ -57,7 +57,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 		deserializeTranscriptDefinitionFile(options.getDatabaseFilePath());
 
 		final VariantAnnotator annotator = new VariantAnnotator(refDict, chromosomeMap, new AnnotationBuilderOptions());
-		System.out.println("#change\teffect\thgvs_annotation");
+		System.out.println("#change\teffect\thgvs_annotation\tmessages");
 		for (String chromosomalChange : options.getGenomicChanges()) {
 			// Parse the chromosomal change string into a GenomeChange object.
 			final GenomeVariant genomeChange = parseGenomeChange(chromosomalChange);
@@ -75,6 +75,7 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			// Obtain first or all functional annotation(s) and effect(s).
 			final String annotation;
 			final String effect;
+			final String messages;
 			VariantAnnotationsTextGenerator textGenerator;
 			if (options.isShowAll())
 				textGenerator = new AllAnnotationListTextGenerator(annoList, 0, 1);
@@ -83,8 +84,9 @@ public class AnnotatePositionCommand extends JannovarAnnotationCommand {
 			annotation = textGenerator.buildHGVSText(
 					options.isUseThreeLetterAminoAcidCode() ? AminoAcidCode.THREE_LETTER : AminoAcidCode.ONE_LETTER);
 			effect = textGenerator.buildEffectText();
-
-			System.out.println(String.format("%s\t%s\t%s", chromosomalChange.toString(), effect, annotation));
+			messages = textGenerator.buildMessages();
+			
+			System.out.println(String.format("%s\t%s\t%s\t%s", chromosomalChange.toString(), effect, annotation, messages));
 		}
 	}
 
