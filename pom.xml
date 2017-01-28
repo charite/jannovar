@@ -114,10 +114,10 @@
                     <skipTests>false</skipTests>
                     <forkCount>3</forkCount>
                     <reuseForks>true</reuseForks>
-                    <argLine>${argLine} -Xms512m -Xmx1024m</argLine>
+                    <argLine>${argLine} -Xms512m -Xmx1024m -Duser.language=en -Duser.region=US</argLine>
                     <systemPropertyVariables>
                         <user.language>en</user.language>
-                        <user.region>GB</user.region>
+                        <user.region>US</user.region>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
