@@ -128,3 +128,4 @@ jannovar-vardbs
     authors
     history
     license
+    exome_book
