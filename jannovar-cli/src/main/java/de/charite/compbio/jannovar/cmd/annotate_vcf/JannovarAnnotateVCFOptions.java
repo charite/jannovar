@@ -50,6 +50,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Prefix to use for UK10K VCF INFO Fields */
 	public String prefixUK10K;
 
+	/** Path to ClinVar VCF file to use for the annotation */
+	public String pathClinVar;
+
+	/** Prefix to use for ClinVar VCF INFO Fields */
+	public String prefixClinVar;
+
 	/** Path to pedigree file */
 	public String pathPedFile;
 
@@ -94,6 +100,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.required(false);
 		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations").setDefault("UK10K_")
 				.required(false);
+		annotationGroup.addArgument("--clinvar-vcf").help("Path to ClinVar file, activates ClinVar annotation")
+				.nargs("?").required(false);
+		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations").setDefault("CLINVAR_")
+				.required(false);
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
@@ -124,10 +134,13 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixExac = args.getString("exac_prefix");
 		pathVCFUK10K = args.getString("uk10k_vcf");
 		prefixUK10K = args.getString("uk10k_prefix");
+		pathClinVar = args.getString("clinvar_vcf");
+		prefixClinVar = args.getString("clinvar_prefix");
 
-		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null))
+		if (pathFASTARef == null
+				&& (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null || pathClinVar != null))
 			throw new CommandLineParsingException(
-					"Command --ref-fasta required when using dbSNP, ExAC, or UK10K annotations.");
+					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, or ClinVar annotations.");
 	}
 
 	public String getPathInputVCF() {
@@ -154,16 +167,93 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.escapeAnnField = escapeAnnField;
 	}
 
+	public String getPathVCFDBSNP() {
+		return pathVCFDBSNP;
+	}
+
+	public void setPathVCFDBSNP(String pathVCFDBSNP) {
+		this.pathVCFDBSNP = pathVCFDBSNP;
+	}
+
+	public String getPrefixDBSNP() {
+		return prefixDBSNP;
+	}
+
+	public void setPrefixDBSNP(String prefixDBSNP) {
+		this.prefixDBSNP = prefixDBSNP;
+	}
+
+	public String getPathFASTARef() {
+		return pathFASTARef;
+	}
+
+	public void setPathFASTARef(String pathFASTARef) {
+		this.pathFASTARef = pathFASTARef;
+	}
+
+	public String getPathVCFExac() {
+		return pathVCFExac;
+	}
+
+	public void setPathVCFExac(String pathVCFExac) {
+		this.pathVCFExac = pathVCFExac;
+	}
+
+	public String getPrefixExac() {
+		return prefixExac;
+	}
+
+	public void setPrefixExac(String prefixExac) {
+		this.prefixExac = prefixExac;
+	}
+
+	public String getPathVCFUK10K() {
+		return pathVCFUK10K;
+	}
+
+	public void setPathVCFUK10K(String pathVCFUK10K) {
+		this.pathVCFUK10K = pathVCFUK10K;
+	}
+
+	public String getPrefixUK10K() {
+		return prefixUK10K;
+	}
+
+	public void setPrefixUK10K(String prefixUK10K) {
+		this.prefixUK10K = prefixUK10K;
+	}
+
+	public String getPathClinVar() {
+		return pathClinVar;
+	}
+
+	public void setPathClinVar(String pathClinVar) {
+		this.pathClinVar = pathClinVar;
+	}
+
+	public String getPrefixClinVar() {
+		return prefixClinVar;
+	}
+
+	public void setPrefixClinVar(String prefixClinVar) {
+		this.prefixClinVar = prefixClinVar;
+	}
+
+	public String getPathPedFile() {
+		return pathPedFile;
+	}
+
+	public void setPathPedFile(String pathPedFile) {
+		this.pathPedFile = pathPedFile;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
 				+ ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
 				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac + ", prefixExac=" + prefixExac
-				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K + ", pathPedFile=" + pathPedFile
-				+ ", isUseThreeLetterAminoAcidCode()=" + isUseThreeLetterAminoAcidCode() + ", isNt3PrimeShifting()="
-				+ isNt3PrimeShifting() + ", getDatabaseFilePath()=" + getDatabaseFilePath() + ", isReportProgress()="
-				+ isReportProgress() + ", getHttpProxy()=" + getHttpProxy() + ", getHttpsProxy()=" + getHttpsProxy()
-				+ ", getFtpProxy()=" + getFtpProxy() + "]";
+				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar
+				+ ", prefixClinVar=" + prefixClinVar + ", pathPedFile=" + pathPedFile + "]";
 	}
 
 }

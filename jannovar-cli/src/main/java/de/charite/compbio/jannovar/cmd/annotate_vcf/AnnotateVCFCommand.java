@@ -125,6 +125,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(uk10kAnno::annotateVariantContext);
 			}
 
+			// If configured, annotate using ClinVar VCF file (extend header to use for writing out)
+			if (options.pathClinVar != null) {
+				DBAnnotationOptions clinVarOptions = DBAnnotationOptions.createDefaults();
+				clinVarOptions.setIdentifierPrefix(options.prefixClinVar);
+				DBVariantContextAnnotator clinvarAnno = new DBVariantContextAnnotatorFactory()
+						.constructClinVar(options.pathClinVar, options.pathFASTARef, clinVarOptions);
+				clinvarAnno.extendHeader(vcfHeader);
+				stream = stream.map(clinvarAnno::annotateVariantContext);
+			}
+
 			// Extend header with INHERITANCE filter
 			if (options.pathPedFile != null) {
 				System.err.println("Extending header with INHERITANCE...");
