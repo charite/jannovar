@@ -1,13 +1,15 @@
 # Jannovar Changelog
 
+
+## develop
+
 ### all
 
 * Fixing language in mvn surfire plugin. Now mvn tests work on locale de_DE etc..
 
-## develop
-
 ### jannovar-cli
 
+* Adding annotation with ClinVar
 * Printing warnings next to the annotations in `annotate-pos`
 
 ### jannovar-core
@@ -22,6 +24,10 @@
 ### jannovar-htsjdk
 
 * Fixing bug with problems of unmodifiable Attributes (error annotation).
+
+### jannovar-vardbs
+
+* Adding annotation with ClinVar, can annotate all clinvar variants
 
 ## v0.20
 
