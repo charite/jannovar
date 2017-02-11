@@ -43,7 +43,7 @@ public class ExacAnnotationDriverBaseTest {
 		String testVCFPath = tmpDir + "/test_var_in_exac.vcf";
 		PrintWriter writer = new PrintWriter(testVCFPath);
 		writer.write(vcfHeader);
-		writer.write("1\t976962\t.\tC\tA,G,T\t.\t.\t.\tGT\t0/1\n");
+		writer.write("1\t13482\t.\tG\tA,C,T\t.\t.\t.\tGT\t0/1\n");
 		writer.close();
 	
 		vcfReader = new VCFFileReader(new File(testVCFPath), false);
