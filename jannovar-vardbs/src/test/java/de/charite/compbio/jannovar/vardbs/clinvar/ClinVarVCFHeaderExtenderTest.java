@@ -32,32 +32,14 @@ public class ClinVarVCFHeaderExtenderTest {
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(20, header.getInfoHeaderLines().size());
+		Assert.assertEquals(6, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(20, header.getIDHeaderLines().size());
+		Assert.assertEquals(6, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_HGVS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_ALLELE"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_SOURCE"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_ORIGIN"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_SIGNIFICANCE"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_DISEASE_DB"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_DISEASE_DB_ID"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_DISEASE_DB_NAME"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_REVISION_STATUS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_CLINICAL_ACCESSION"));
-
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_HGVS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_ALLELE"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_SOURCE"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_ORIGIN"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_SIGNIFICANCE"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_DISEASE_DB"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_DISEASE_DB_ID"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_DISEASE_DB_NAME"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_REVISION_STATUS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_OVL_CLINICAL_ACCESSION"));
+		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_BASIC_INFO"));
+		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_VAR_INFO"));
+		Assert.assertNotNull(header.getInfoHeaderLine("CLINVAR_DISEASE_INFO"));
 	}
 
 }

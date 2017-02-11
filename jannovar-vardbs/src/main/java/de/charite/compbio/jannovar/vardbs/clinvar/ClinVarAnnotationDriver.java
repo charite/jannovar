@@ -1,10 +1,12 @@
 package de.charite.compbio.jannovar.vardbs.clinvar;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
 
@@ -57,7 +59,6 @@ public class ClinVarAnnotationDriver implements DBAnnotationDriver {
 		this.vcfPath = vcfPath;
 		this.matcher = new AlleleMatcher(fastaPath);
 		this.vcToRecord = new ClinVarVariantContextToRecordConverter();
-		;
 		this.vcfReader = new VCFFileReader(new File(this.vcfPath), true);
 		this.options = options;
 	}
@@ -115,47 +116,99 @@ public class ClinVarAnnotationDriver implements DBAnnotationDriver {
 			final ClinVarRecord clinVarRecord = converter.convert(m.getDBVC());
 			matchMap.putAll(m.getObservedAllele(), clinVarRecord.getAnnotations().get(m.getDbAllele()));
 		}
-
-		ArrayListMultimap<Integer, ClinVarAnnotation> overlapMap = ArrayListMultimap.create();
-		for (GenotypeMatch m : positionOverlaps) {
-			final ClinVarRecord clinVarRecord = converter.convert(m.getDBVC());
-			overlapMap.putAll(m.getObservedAllele(), clinVarRecord.getAnnotations().get(m.getDbAllele()));
-		}
-
 		annotateBuilder(builder, matchMap, "");
-		annotateBuilder(builder, matchMap, "OVL_");
+
+		if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
+			ArrayListMultimap<Integer, ClinVarAnnotation> overlapMap = ArrayListMultimap.create();
+			for (GenotypeMatch m : positionOverlaps) {
+				final ClinVarRecord clinVarRecord = converter.convert(m.getDBVC());
+				overlapMap.putAll(m.getObservedAllele(), clinVarRecord.getAnnotations().get(m.getDbAllele()));
+			}
+			annotateBuilder(builder, matchMap, "OVL_");
+		}
 
 		return builder.make();
 	}
 
 	private void annotateBuilder(VariantContextBuilder builder, ArrayListMultimap<Integer, ClinVarAnnotation> matchMap,
 			String infix) {
-		builder.attribute(options.getVCFIdentifierPrefix() + infix + "HGVS",
-				buildAnnoStringList(matchMap, anno -> anno.getHgvsVariant()));
+		if (matchMap.isEmpty())
+			return; // skip
 
-		// HGVS
-		// ALLELE
-		// SOURCE
-		// ORIGIN
-		// SIGNIFICANCE
-		// DISEASE_DB
-		// DISEASE_DB_ID
-		// DISEASE_DB_NAME
-		// REVISION_STATUS
-		// CLINICAL_ACCESSION
+		List<String> basicInfo = buildBasicInfo(builder, matchMap);
+		if (!basicInfo.isEmpty())
+			builder.attribute(options.getVCFIdentifierPrefix() + infix + "BASIC_INFO", basicInfo);
+		List<String> varInfo = buildVarInfo(builder, matchMap);
+		if (!varInfo.isEmpty())
+			builder.attribute(options.getVCFIdentifierPrefix() + infix + "VAR_INFO", varInfo);
+		List<String> diseaseInfo = buildDiseaseInfo(builder, matchMap);
+		if (!diseaseInfo.isEmpty())
+			builder.attribute(options.getVCFIdentifierPrefix() + infix + "DISEASE_INFO", diseaseInfo);
 	}
 
-	private ArrayList<String> buildAnnoStringList(ArrayListMultimap<Integer, ClinVarAnnotation> matchMap,
-			Function<ClinVarAnnotation, String> fn) {
+	private static String encode(String s) {
+		if (s == null)
+			return "";
+		try {
+			return URLEncoder.encode(s, "utf-8").replaceAll("=", "%3D");
+		} catch (UnsupportedEncodingException e) {
+			return s;
+		}
+	}
+
+	private ArrayList<String> buildBasicInfo(VariantContextBuilder builder,
+			ArrayListMultimap<Integer, ClinVarAnnotation> matchMap) {
 		ArrayList<String> result = new ArrayList<>();
-		for (int alleleNo : matchMap.keys().stream().sorted().toArray(Integer[]::new)) {
-			ArrayList<String> tmp = new ArrayList<>();
-			for (ClinVarAnnotation anno : matchMap.get(alleleNo))
-				tmp.add(fn.apply(anno));
-			String value = Joiner.on('|').join(tmp);
-			if ("".equals(value))
-				value = ".";
-			result.add(value);
+		for (int alleleNo : matchMap.keySet().stream().sorted().toArray(Integer[]::new)) {
+			for (ClinVarAnnotation anno : matchMap.get(alleleNo)) {
+				ArrayList<String> tmp = new ArrayList<>();
+				tmp.add(encode(builder.getAlleles().get(alleleNo).toString()));
+				tmp.add(encode(anno.getHgvsVariant()));
+				tmp.add(Joiner.on("&").join(anno.getOrigin()));
+
+				result.add(Joiner.on('|').useForNull("").join(tmp));
+			}
+		}
+		return result;
+	}
+
+	private ArrayList<String> buildVarInfo(VariantContextBuilder builder,
+			ArrayListMultimap<Integer, ClinVarAnnotation> matchMap) {
+		ArrayList<String> result = new ArrayList<>();
+		for (int alleleNo : matchMap.keySet().stream().sorted().toArray(Integer[]::new)) {
+			for (ClinVarAnnotation anno : matchMap.get(alleleNo)) {
+				for (ClinVarSourceInfo srcInfo : anno.getSourceInfos()) {
+					ArrayList<String> tmp = new ArrayList<>();
+					tmp.add(encode(builder.getAlleles().get(alleleNo).toString()));
+					tmp.add(encode(srcInfo.getDbName()));
+					tmp.add(encode(srcInfo.getDbId()));
+					tmp.add(encode(Joiner.on("&").join(anno.getOrigin())));
+
+					result.add(Joiner.on('|').useForNull("").join(tmp));
+				}
+			}
+		}
+		return result;
+	}
+
+	private ArrayList<String> buildDiseaseInfo(VariantContextBuilder builder,
+			ArrayListMultimap<Integer, ClinVarAnnotation> matchMap) {
+		ArrayList<String> result = new ArrayList<>();
+		for (int alleleNo : matchMap.keySet().stream().sorted().toArray(Integer[]::new)) {
+			for (ClinVarAnnotation anno : matchMap.get(alleleNo)) {
+				for (ClinVarDiseaseInfo diseaseInfo : anno.getDiseaseInfos()) {
+					ArrayList<String> tmp = new ArrayList<>();
+					tmp.add(encode(builder.getAlleles().get(alleleNo).toString()));
+					tmp.add(encode(diseaseInfo.getSignificance().getLabel()));
+					tmp.add(encode(diseaseInfo.getDiseaseDB()));
+					tmp.add(encode(diseaseInfo.getDiseaseDBID()));
+					tmp.add(encode(diseaseInfo.getDiseaseDBName()));
+					tmp.add(encode(diseaseInfo.getRevisionStatus().getLabel()));
+					tmp.add(encode(diseaseInfo.getClinicalAccession()));
+
+					result.add(Joiner.on('|').useForNull("").join(tmp));
+				}
+			}
 		}
 		return result;
 	}

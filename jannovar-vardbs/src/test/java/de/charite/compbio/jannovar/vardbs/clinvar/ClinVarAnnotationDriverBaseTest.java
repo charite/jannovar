@@ -44,7 +44,7 @@ public class ClinVarAnnotationDriverBaseTest {
 		String testVCFPath = tmpDir + "/test_var_in_exac.vcf";
 		PrintWriter writer = new PrintWriter(testVCFPath);
 		writer.write(vcfHeader);
-		writer.write("1\t10108\t.\tG\tA,C,T\t.\t.\t.\tGT\t0/1\n");
+		writer.write("1\t2160305\t.\tG\tA,C,T\t.\t.\t.\tGT\t0/1\n");
 		writer.close();
 
 		vcfReader = new VCFFileReader(new File(testVCFPath), false);

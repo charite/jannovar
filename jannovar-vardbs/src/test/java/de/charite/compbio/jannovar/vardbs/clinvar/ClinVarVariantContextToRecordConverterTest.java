@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.google.common.io.Files;
 
 import de.charite.compbio.jannovar.utils.ResourceUtils;
+import htsjdk.samtools.util.CloseableIterator;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.vcf.VCFFileReader;
 
@@ -31,14 +32,24 @@ public class ClinVarVariantContextToRecordConverterTest {
 	@Test
 	public void test() {
 		ClinVarVariantContextToRecordConverter converter = new ClinVarVariantContextToRecordConverter();
-		VariantContext vc = vcfReader.iterator().next();
+		CloseableIterator<VariantContext> it = vcfReader.iterator();
+		VariantContext vc = null;
+		while (vc == null || !vc.getID().equals("rs387907305"))
+			vc = it.next();
 
 		ClinVarRecord record = converter.convert(vc);
-		Assert.assertEquals("ExacRecord [chrom=1, pos=13371, id=., ref=G, alt=[C], filter=[], alleleCounts={AFR=[0], "
-				+ "AMR=[0], EAS=[0], FIN=[0], NFE=[0], OTH=[0], SAS=[2], ALL=[2]}, chromCounts={AFR=770, "
-				+ "AMR=134, EAS=254, FIN=16, NFE=2116, OTH=90, SAS=5052, ALL=8432}, "
-				+ "alleleFrequencies={AFR=[0.0], AMR=[0.0], EAS=[0.0], FIN=[0.0], NFE=[0.0], OTH=[0.0], "
-				+ "SAS=[3.95882818685669E-4], ALL=[2.3719165085388995E-4]}]", record.toString());
+		Assert.assertEquals("ClinVarRecord [chrom=1, pos=2160305, id=rs387907305, ref=G, alt=[A, T], "
+				+ "annotations={1=[ClinVarAnnotation [alleleMapping=1, hgvsVariant=NC_000001.10:g.2160306G>A, "
+				+ "sourceInfos=[ClinVarAnnotationSourceInfo [dbName=OMIM_Allelic_Variant, dbId=164780.0003], "
+				+ "ClinVarAnnotationSourceInfo [dbName=UniProtKB_(protein), dbId=P12755#VAR_071175]], origin=[BIPARENTAL], "
+				+ "diseaseInfos=[ClinVarDiseaseInfo [significance=PATHOGENIC, diseaseDB=MedGen:OMIM:SNOMED_CT, "
+				+ "diseaseDBID=C1321551:182212:83092002, diseaseDBName=Shprintzen-Goldberg_syndrome, revisionStatus=SINGLE, "
+				+ "ClinicalAccession=RCV000030818.28]]]], 2=[ClinVarAnnotation [alleleMapping=2, hgvsVariant=NC_000001.10:g.2160306G>T, "
+				+ "sourceInfos=[ClinVarAnnotationSourceInfo [dbName=OMIM_Allelic_Variant, dbId=164780.0007], "
+				+ "ClinVarAnnotationSourceInfo [dbName=UniProtKB_(protein), dbId=P12755#VAR_071177]], origin=[UNKNOWN], "
+				+ "diseaseInfos=[ClinVarDiseaseInfo [significance=PATHOGENIC, diseaseDB=MedGen:OMIM:SNOMED_CT, "
+				+ "diseaseDBID=C1321551:182212:83092002, diseaseDBName=Shprintzen-Goldberg_syndrome, revisionStatus=NO_CRITERIA, "
+				+ "ClinicalAccession=RCV000033005.27]]]]}]", record.toString());
 	}
 
 }

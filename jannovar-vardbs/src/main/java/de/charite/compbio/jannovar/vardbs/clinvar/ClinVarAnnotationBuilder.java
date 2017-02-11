@@ -1,5 +1,8 @@
 package de.charite.compbio.jannovar.vardbs.clinvar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Builder for {@link ClinVarAnnotation}
  * 
@@ -7,207 +10,123 @@ package de.charite.compbio.jannovar.vardbs.clinvar;
  */
 public class ClinVarAnnotationBuilder {
 
-	/** Mapping to allele, -1 is no mapping, 0 is reference, 1 is first alt */
-	private String hgvsVariant;
+    /** Mapping to allele, -1 is no mapping, 0 is reference, 1 is first alt */
+    private String hgvsVariant;
 
-	/** HGVS variant string */
-	private int alleleMapping;
+    /** HGVS variant string */
+    private int alleleMapping;
 
-	/** ID of annotation source */
-	private String source;
+    /** Origin of the annotation */
+    private List<ClinVarOrigin> origin;
 
-	/** Origin of the annotation */
-	private ClinVarOrigin origin;
+    /** Variant source information */
+    private List<ClinVarSourceInfo> sourceInfos;
 
-	/** Significance level */
-	private ClinVarSignificance significance;
+    /** Disease information */
+    private List<ClinVarDiseaseInfo> diseaseInfos;
 
-	/** Name of disease DB used */
-	private String diseaseDB;
+    public ClinVarAnnotationBuilder() {
+        hgvsVariant = null;
+        alleleMapping = -1;
+        origin = new ArrayList<>();
+        sourceInfos = new ArrayList<>();
+        diseaseInfos = new ArrayList<>();
+    }
 
-	/** ID of disease in DB */
-	private String diseaseDBID;
+    public ClinVarAnnotation build() {
+        return new ClinVarAnnotation(hgvsVariant, alleleMapping, sourceInfos, origin, diseaseInfos);
+    }
 
-	/** Name of disease in DB */
-	private String diseaseDBName;
+    public String getHgvsVariant() {
+        return hgvsVariant;
+    }
 
-	/** Revision status of the variant */
-	private ClinVarRevisionStatus revisionStatus;
+    public void setHgvsVariant(String hvsVariant) {
+        this.hgvsVariant = hvsVariant;
+    }
 
-	/** Clinical accession of the variant */
-	private String clinicalAccession;
+    public int getAlleleMapping() {
+        return alleleMapping;
+    }
 
-	public ClinVarAnnotationBuilder() {
-		hgvsVariant = null;
-		alleleMapping = -1;
-		source = null;
-		origin = null;
-		significance = ClinVarSignificance.UNCERTAIN;
-		diseaseDB = null;
-		diseaseDBID = null;
-		diseaseDBName = null;
-		revisionStatus = ClinVarRevisionStatus.NO_CRITERIA;
-		clinicalAccession = null;
-	}
+    public void setAlleleMapping(int alleleMapping) {
+        this.alleleMapping = alleleMapping;
+    }
 
-	public ClinVarAnnotation build() {
-		return new ClinVarAnnotation(hgvsVariant, alleleMapping, source, origin, significance, diseaseDB, diseaseDBID,
-				diseaseDBName, revisionStatus, clinicalAccession);
-	}
+    public List<ClinVarOrigin> getOrigin() {
+        return origin;
+    }
 
-	public String getHgvsVariant() {
-		return hgvsVariant;
-	}
+    public void setOrigin(List<ClinVarOrigin> origin) {
+        this.origin = origin;
+    }
 
-	public void setHgvsVariant(String hvsVariant) {
-		this.hgvsVariant = hvsVariant;
-	}
+    public List<ClinVarSourceInfo> getSourceInfos() {
+        return sourceInfos;
+    }
 
-	public int getAlleleMapping() {
-		return alleleMapping;
-	}
+    public void setSourceInfos(List<ClinVarSourceInfo> sourceInfos) {
+        this.sourceInfos = sourceInfos;
+    }
 
-	public void setAlleleMapping(int alleleMapping) {
-		this.alleleMapping = alleleMapping;
-	}
+    public List<ClinVarDiseaseInfo> getDiseaseInfos() {
+        return diseaseInfos;
+    }
 
-	public String getSource() {
-		return source;
-	}
+    public void setDiseaseInfos(List<ClinVarDiseaseInfo> diseaseInfos) {
+        this.diseaseInfos = diseaseInfos;
+    }
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    @Override
+    public String toString() {
+        return "ClinVarAnnotationBuilder [hgvsVariant=" + hgvsVariant + ", alleleMapping=" + alleleMapping + ", origin="
+                + origin + ", sourceInfos=" + sourceInfos + ", diseaseInfos=" + diseaseInfos + "]";
+    }
 
-	public ClinVarOrigin getOrigin() {
-		return origin;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + alleleMapping;
+        result = prime * result + ((diseaseInfos == null) ? 0 : diseaseInfos.hashCode());
+        result = prime * result + ((hgvsVariant == null) ? 0 : hgvsVariant.hashCode());
+        result = prime * result + ((origin == null) ? 0 : origin.hashCode());
+        result = prime * result + ((sourceInfos == null) ? 0 : sourceInfos.hashCode());
+        return result;
+    }
 
-	public void setOrigin(ClinVarOrigin origin) {
-		this.origin = origin;
-	}
-
-	public ClinVarSignificance getSignificance() {
-		return significance;
-	}
-
-	public void setSignificance(ClinVarSignificance significance) {
-		this.significance = significance;
-	}
-
-	public String getDiseaseDB() {
-		return diseaseDB;
-	}
-
-	public void setDiseaseDB(String diseaseDB) {
-		this.diseaseDB = diseaseDB;
-	}
-
-	public String getDiseaseDBID() {
-		return diseaseDBID;
-	}
-
-	public void setDiseaseDBID(String diseaseDBID) {
-		this.diseaseDBID = diseaseDBID;
-	}
-
-	public String getDiseaseDBName() {
-		return diseaseDBName;
-	}
-
-	public void setDiseaseDBName(String diseaseDBName) {
-		this.diseaseDBName = diseaseDBName;
-	}
-
-	public ClinVarRevisionStatus getRevisionStatus() {
-		return revisionStatus;
-	}
-
-	public void setRevisionStatus(ClinVarRevisionStatus revisionStatus) {
-		this.revisionStatus = revisionStatus;
-	}
-
-	public String getclinicalAccession() {
-		return clinicalAccession;
-	}
-
-	public void setClinicalAccession(String clinicalAccession) {
-		this.clinicalAccession = clinicalAccession;
-	}
-
-	@Override
-	public String toString() {
-		return "ClinVarAnnotationBuilder [hvsVariant=" + hgvsVariant + ", alleleMapping=" + alleleMapping + ", source="
-				+ source + ", origin=" + origin + ", significance=" + significance + ", diseaseDB=" + diseaseDB
-				+ ", diseaseDBID=" + diseaseDBID + ", diseaseDBName=" + diseaseDBName + ", revisionStatus="
-				+ revisionStatus + ", clinicalAccession=" + clinicalAccession + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((clinicalAccession == null) ? 0 : clinicalAccession.hashCode());
-		result = prime * result + alleleMapping;
-		result = prime * result + ((diseaseDB == null) ? 0 : diseaseDB.hashCode());
-		result = prime * result + ((diseaseDBID == null) ? 0 : diseaseDBID.hashCode());
-		result = prime * result + ((diseaseDBName == null) ? 0 : diseaseDBName.hashCode());
-		result = prime * result + ((hgvsVariant == null) ? 0 : hgvsVariant.hashCode());
-		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
-		result = prime * result + ((revisionStatus == null) ? 0 : revisionStatus.hashCode());
-		result = prime * result + ((significance == null) ? 0 : significance.hashCode());
-		result = prime * result + ((source == null) ? 0 : source.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ClinVarAnnotationBuilder other = (ClinVarAnnotationBuilder) obj;
-		if (clinicalAccession == null) {
-			if (other.clinicalAccession != null)
-				return false;
-		} else if (!clinicalAccession.equals(other.clinicalAccession))
-			return false;
-		if (alleleMapping != other.alleleMapping)
-			return false;
-		if (diseaseDB == null) {
-			if (other.diseaseDB != null)
-				return false;
-		} else if (!diseaseDB.equals(other.diseaseDB))
-			return false;
-		if (diseaseDBID == null) {
-			if (other.diseaseDBID != null)
-				return false;
-		} else if (!diseaseDBID.equals(other.diseaseDBID))
-			return false;
-		if (diseaseDBName == null) {
-			if (other.diseaseDBName != null)
-				return false;
-		} else if (!diseaseDBName.equals(other.diseaseDBName))
-			return false;
-		if (hgvsVariant == null) {
-			if (other.hgvsVariant != null)
-				return false;
-		} else if (!hgvsVariant.equals(other.hgvsVariant))
-			return false;
-		if (origin != other.origin)
-			return false;
-		if (revisionStatus != other.revisionStatus)
-			return false;
-		if (significance != other.significance)
-			return false;
-		if (source == null) {
-			if (other.source != null)
-				return false;
-		} else if (!source.equals(other.source))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ClinVarAnnotationBuilder other = (ClinVarAnnotationBuilder) obj;
+        if (alleleMapping != other.alleleMapping)
+            return false;
+        if (diseaseInfos == null) {
+            if (other.diseaseInfos != null)
+                return false;
+        } else if (!diseaseInfos.equals(other.diseaseInfos))
+            return false;
+        if (hgvsVariant == null) {
+            if (other.hgvsVariant != null)
+                return false;
+        } else if (!hgvsVariant.equals(other.hgvsVariant))
+            return false;
+        if (origin == null) {
+            if (other.origin != null)
+                return false;
+        } else if (!origin.equals(other.origin))
+            return false;
+        if (sourceInfos == null) {
+            if (other.sourceInfos != null)
+                return false;
+        } else if (!sourceInfos.equals(other.sourceInfos))
+            return false;
+        return true;
+    }
 
 }

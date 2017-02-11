@@ -30,15 +30,15 @@ public enum ClinVarSignificance {
 		case BENIGN:
 			return "benign";
 		case DRUG_RESPONSE:
-			return "drug response";
+			return "drug_response";
 		case HISTOCOMPATIBILITY:
 			return "histocompatibility";
 		case LIKELY_BENIGN:
-			return "likely benign";
+			return "likely_benign";
 		case LIKELY_PATHOGENIC:
-			return "likely pathogenic";
+			return "likely_pathogenic";
 		case NOT_PROVIDED:
-			return "not provided";
+			return "not_provided";
 		case PATHOGENIC:
 			return "pathogenic";
 		case UNCERTAIN:
@@ -47,5 +47,30 @@ public enum ClinVarSignificance {
 		default:
 			return "other";
 		}
+	}
+	
+	public static ClinVarSignificance fromInteger(int i) {
+	    switch (i) {
+	    case 0:
+	        return UNCERTAIN;
+        case 1:
+            return NOT_PROVIDED;
+        case 2:
+            return BENIGN;
+        case 3:
+            return LIKELY_BENIGN;
+        case 4:
+            return LIKELY_PATHOGENIC;
+        case 5:
+            return PATHOGENIC;
+        case 6:
+            return DRUG_RESPONSE;
+        case 7:
+            return HISTOCOMPATIBILITY;
+        case 255:
+            return OTHER;
+	    default:
+	        throw new RuntimeException("Invalid clin var significance number: " + i);
+	    }
 	}
 }
