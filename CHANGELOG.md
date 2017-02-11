@@ -15,6 +15,9 @@
 * Making the behaviour of overriding transcripts configurable at least in the code, using default to not do this any more
 * Adding `WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT` to `AnnotationMessage`
 * Properly pushing through warnings from the annotators into the returned `VariantAnnotation` object
+* Pedigree files are now more compatible to the PLINK format
+	* whitespace separated instead of tab separated (read only, written as TSV)
+	* interpreting any value not in {1, 2} to be "unknown" sex instead (coded as 0) of throwing
 
 ### jannovar-htsjdk
 

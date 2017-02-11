@@ -37,14 +37,12 @@ public enum Sex {
 	 *             if <code>s</code> was not equal to <code>"0"</code>, <code>"1"</code>, or <code>"2"</code>.
 	 */
 	public static Sex toSex(String s) throws PedParseException {
-		if (s.equals("0"))
-			return UNKNOWN;
-		else if (s.equals("1"))
+		if (s.equals("1"))
 			return MALE;
 		else if (s.equals("2"))
 			return FEMALE;
 		else
-			throw new PedParseException("Invalid PED sex value: " + s);
+			return UNKNOWN;
 	}
 
 }
