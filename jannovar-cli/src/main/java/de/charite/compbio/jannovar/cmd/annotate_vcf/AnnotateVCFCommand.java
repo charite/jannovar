@@ -2,6 +2,7 @@ package de.charite.compbio.jannovar.cmd.annotate_vcf;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,6 +13,9 @@ import com.google.common.collect.ImmutableList;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.mendel.filter.ConsumerProcessor;
@@ -23,6 +27,7 @@ import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
 import de.charite.compbio.jannovar.pedigree.PedParseException;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
+import de.charite.compbio.jannovar.pedigree.Person;
 import de.charite.compbio.jannovar.progress.GenomeRegionListFactoryFromSAMSequenceDictionary;
 import de.charite.compbio.jannovar.progress.ProgressReporter;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
@@ -94,6 +99,53 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			final long startTime = System.nanoTime();
 
 			Stream<VariantContext> stream = vcfReader.iterator().stream();
+
+			// If configured, use threshold-based annotation (extend headr to use for writing out)
+			if (options.useThresholdFilters) {
+				// Build options object for threshold filter
+				ThresholdFilterOptions thresholdFilterOptions = new ThresholdFilterOptions(
+						options.getThreshFiltMinGtCovHet(), options.getThreshFiltMinGtCovHomAlt(),
+						options.getThreshFiltMaxCov(), options.getThreshFiltMinGtGq(),
+						options.getThreshFiltMinGtAafHet(), options.getThreshFiltMaxGtAafHet(),
+						options.getThreshFiltMinGtAafHomAlt(), options.getThreshFiltMaxGtAafHomRef());
+				// Add headers
+				new ThresholdFilterHeaderExtender(thresholdFilterOptions).addHeaders(vcfHeader);
+				// Build list of affecteds; take from pedigree file if given. Otherwise, assume one single individual is
+				// always affected and otherwise warn about missing pedigree.
+				ArrayList<String> affecteds = new ArrayList<>();
+				if (options.pathPedFile == null) {
+					if (vcfHeader.getNGenotypeSamples() == 1) {
+						System.err.println(
+								"INFO: No pedigree file given and single individual. Assuming it is affected for the threshold filter");
+					} else {
+						System.err.println(
+								"WARNING: no pedigree file given. Threshold filter will not annotate FILTER field, only genotype FT");
+					}
+				} else {
+					Pedigree pedigree;
+					try {
+						pedigree = loadPedigree();
+					} catch (IOException e) {
+						System.err.println("Problem loading pedigree from " + options.pathPedFile);
+						System.err.println(e.getMessage());
+						System.err.println("\n");
+						e.printStackTrace(System.err);
+						return;
+					}
+					for (Person person : pedigree.getMembers()) {
+						if (person.isAffected())
+							affecteds.add(person.getName());
+					}
+					if (affecteds.isEmpty()) {
+						System.err.println(
+								"WARNING: no affected individual in pedigree. Threshold filter will not modify FILTER field, "
+										+ "only genotype FT");
+					}
+				}
+				ThresholdFilterAnnotator thresholdFilterAnno = new ThresholdFilterAnnotator(thresholdFilterOptions,
+						affecteds);
+				stream = stream.map(thresholdFilterAnno::annotateVariantContext);
+			}
 
 			// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
 			if (options.pathVCFDBSNP != null) {
@@ -174,6 +226,20 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	}
 
 	/**
+	 * Load pedigree from file given in configuration
+	 * 
+	 * @throws PedParseException
+	 *             in the case of problems with parsing pedigrees
+	 * @throws IncompatiblePedigreeException
+	 *             If the pedigree is incompatible with the VCF file
+	 */
+	private Pedigree loadPedigree() throws PedParseException, IOException {
+		final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
+		final PedFileContents pedContents = pedReader.read();
+		return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+	}
+
+	/**
 	 * Construct the mendelian inheritance annotation processors
 	 * 
 	 * @param sink
@@ -188,9 +254,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	private VariantContextProcessor buildMendelianProcessors(AnnotatedVCFWriter writer)
 			throws PedParseException, IOException, IncompatiblePedigreeException {
 		if (options.pathPedFile != null) {
-			final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
-			final PedFileContents pedContents = pedReader.read();
-			final Pedigree pedigree = new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+			final Pedigree pedigree = loadPedigree();
 			checkPedigreeCompatibility(pedigree, writer.getVCFHeader());
 			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
 					pedigree, jannovarData, vc -> writer.put(vc));

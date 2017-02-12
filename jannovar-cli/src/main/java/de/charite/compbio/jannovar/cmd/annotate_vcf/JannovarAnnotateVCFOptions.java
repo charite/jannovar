@@ -6,6 +6,7 @@ import de.charite.compbio.jannovar.UncheckedJannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationOptions;
 import de.charite.compbio.jannovar.cmd.JannovarBaseOptions;
+import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -59,6 +60,33 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Path to pedigree file */
 	public String pathPedFile;
 
+	/** Whether or not to use threshold-based filters */
+	public boolean useThresholdFilters;
+
+	/** Threshold filter: minimal coverage at a site for heterozygous calls */
+	private int threshFiltMinGtCovHet;
+
+	/** Threshold filter: minimal coverage at a site for homozygous calls */
+	private int threshFiltMinGtCovHomAlt;
+
+	/** Threshold filter: maximal coverage at a site for any call */
+	private int threshFiltMaxCov;
+
+	/** Threshold filter: minimal genotype for calls */
+	private int threshFiltMinGtGq;
+
+	/** Threshold filter: minimal alternative allele fraction for heterozygous calls */
+	private double threshFiltMinGtAafHet;
+
+	/** Threshold filter: maximal alternative allele fraction for heterozygous calls */
+	private double threshFiltMaxGtAafHet;
+
+	/** Threshold filter: minimal alternative allele fraction for homozygous alternative calls */
+	private double threshFiltMinGtAafHomAlt;
+
+	/** Threshold filter: maximal alternative allele fraction for homozygous ref calls */
+	private double threshFiltMaxGtAafHomRef;
+
 	/**
 	 * Setup {@link ArgumentParser}
 	 * 
@@ -105,6 +133,31 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations").setDefault("CLINVAR_")
 				.required(false);
 
+		ArgumentGroup threshFilterGroup = subParser.addArgumentGroup("Threshold-filter related arguments");
+		threshFilterGroup.addArgument("--use-gt-threshold-filters").help("Use threshold-based filters on genotypes")
+				.setDefault(false).action(Arguments.storeTrue());
+		ThresholdFilterOptions threshDefaults = ThresholdFilterOptions.buildDefaultOptions();
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het").help("Minimal coverage for het. call")
+				.setDefault(threshDefaults.getMinGtCovHet()).type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-hom-alt").help("Minimal coverage for hom. alt calls")
+				.setDefault(threshDefaults.getMinGtCovHomAlt()).type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-max-cov").help("Maximal coverage for a sample")
+				.setDefault(threshDefaults.getMaxCov()).type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-gq").help("Minimal genotype call quality")
+				.setDefault(threshDefaults.getMinGtGq()).type(Integer.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-aaf-het")
+				.help("Minimal het. call alternate allele fraction").setDefault(threshDefaults.getMinGtAafHet())
+				.type(Double.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-het")
+				.help("Maximal het. call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHet())
+				.type(Double.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-min-aaf-hom-alt")
+				.help("Minimal hom. alt call alternate allele fraction").setDefault(threshDefaults.getMinGtAafHomAlt())
+				.type(Double.class);
+		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-hom-ref")
+				.help("Maximal hom. ref call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHomRef())
+				.type(Double.class);
+
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
 				.dest("escape_ann_field").setDefault(true).action(Arguments.storeFalse());
@@ -136,6 +189,16 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixUK10K = args.getString("uk10k_prefix");
 		pathClinVar = args.getString("clinvar_vcf");
 		prefixClinVar = args.getString("clinvar_prefix");
+
+		useThresholdFilters = args.getBoolean("use_gt_threshold_filters");
+		threshFiltMinGtCovHet = args.getInt("gt_thresh_filt_min_cov_het");
+		threshFiltMinGtCovHomAlt = args.getInt("gt_thresh_filt_min_cov_hom_alt");
+		threshFiltMaxCov = args.getInt("gt_thresh_filt_max_cov");
+		threshFiltMinGtGq = args.getInt("gt_thresh_filt_min_gq");
+		threshFiltMinGtAafHet = args.getDouble("gt_thresh_filt_min_aaf_het");
+		threshFiltMaxGtAafHet = args.getDouble("gt_thresh_filt_max_aaf_het");
+		threshFiltMinGtAafHomAlt = args.getDouble("gt_thresh_filt_min_aaf_hom_alt");
+		threshFiltMaxGtAafHomRef = args.getDouble("gt_thresh_filt_max_aaf_hom_ref");
 
 		if (pathFASTARef == null
 				&& (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null || pathClinVar != null))
@@ -247,13 +310,90 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.pathPedFile = pathPedFile;
 	}
 
+	public boolean isUseThresholdFilters() {
+		return useThresholdFilters;
+	}
+
+	public void setUseThresholdFilters(boolean useThresholdFilters) {
+		this.useThresholdFilters = useThresholdFilters;
+	}
+
+	public int getThreshFiltMinGtCovHet() {
+		return threshFiltMinGtCovHet;
+	}
+
+	public void setThreshFiltMinGtCovHet(int threshFiltMinGtCovHet) {
+		this.threshFiltMinGtCovHet = threshFiltMinGtCovHet;
+	}
+
+	public int getThreshFiltMinGtCovHomAlt() {
+		return threshFiltMinGtCovHomAlt;
+	}
+
+	public void setThreshFiltMinGtCovHomAlt(int threshFiltMinGtCovHomAlt) {
+		this.threshFiltMinGtCovHomAlt = threshFiltMinGtCovHomAlt;
+	}
+
+	public int getThreshFiltMaxCov() {
+		return threshFiltMaxCov;
+	}
+
+	public void setThreshFiltMaxCov(int threshFiltMaxCov) {
+		this.threshFiltMaxCov = threshFiltMaxCov;
+	}
+
+	public int getThreshFiltMinGtGq() {
+		return threshFiltMinGtGq;
+	}
+
+	public void setThreshFiltMinGtGq(int threshFiltMinGtGq) {
+		this.threshFiltMinGtGq = threshFiltMinGtGq;
+	}
+
+	public double getThreshFiltMinGtAafHet() {
+		return threshFiltMinGtAafHet;
+	}
+
+	public void setThreshFiltMinGtAafHet(double threshFiltMinGtAafHet) {
+		this.threshFiltMinGtAafHet = threshFiltMinGtAafHet;
+	}
+
+	public double getThreshFiltMaxGtAafHet() {
+		return threshFiltMaxGtAafHet;
+	}
+
+	public void setThreshFiltMaxGtAafHet(double threshFiltMaxGtAafHet) {
+		this.threshFiltMaxGtAafHet = threshFiltMaxGtAafHet;
+	}
+
+	public double getThreshFiltMinGtAafHomAlt() {
+		return threshFiltMinGtAafHomAlt;
+	}
+
+	public void setThreshFiltMinGtAafHomAlt(double threshFiltMinGtAafHomAlt) {
+		this.threshFiltMinGtAafHomAlt = threshFiltMinGtAafHomAlt;
+	}
+
+	public double getThreshFiltMaxGtAafHomRef() {
+		return threshFiltMaxGtAafHomRef;
+	}
+
+	public void setThreshFiltMaxGtAafHomRef(double threshFiltMaxGtAafHomRef) {
+		this.threshFiltMaxGtAafHomRef = threshFiltMaxGtAafHomRef;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
 				+ ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
 				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac + ", prefixExac=" + prefixExac
 				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar
-				+ ", prefixClinVar=" + prefixClinVar + ", pathPedFile=" + pathPedFile + "]";
+				+ ", prefixClinVar=" + prefixClinVar + ", pathPedFile=" + pathPedFile + ", useThresholdFilters="
+				+ useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
+				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
+				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
+				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
+				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef + "]";
 	}
 
 }

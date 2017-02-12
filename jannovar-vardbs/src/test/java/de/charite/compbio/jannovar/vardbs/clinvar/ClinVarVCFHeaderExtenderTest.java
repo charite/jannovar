@@ -9,10 +9,6 @@ import htsjdk.variant.vcf.VCFHeader;
 
 public class ClinVarVCFHeaderExtenderTest {
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
 	@Test
 	public void test() {
 		VCFHeader header = new VCFHeader();

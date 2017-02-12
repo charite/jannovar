@@ -9,8 +9,16 @@
 
 ### jannovar-cli
 
+* Integrating new jannovar-filter into Jannovar CLI.
+  Filtered genotypes will be passed into the inheritance filter as no-call.
 * Adding annotation with ClinVar
 * Printing warnings next to the annotations in `annotate-pos`
+
+### jannovar-filter
+
+* Adding back as module for threshold-based filtration.
+  This module allows to create genotype-wise soft-filters for low coverage.
+  Also, variants can be soft-filtered based on whether the genotype calls of all affected individuals are filtered out.
 
 ### jannovar-core
 
