@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 
+import de.charite.compbio.jannovar.annotation.VariantEffect;
 import de.charite.compbio.jannovar.mendel.ChromosomeType;
 import de.charite.compbio.jannovar.mendel.GenotypeBuilder;
 import de.charite.compbio.jannovar.mendel.GenotypeCalls;
@@ -35,6 +37,17 @@ import htsjdk.variant.variantcontext.VariantContextBuilder;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class VariantContextMendelianAnnotator {
+
+	// Known variant-wise filters
+	private final static ImmutableSet<String> VAR_FILTERS = ImmutableSet.of("AllAffGtFiltered", "MaxFreqAd",
+			"MaxFreqAr", "OffExome");
+	private final static ImmutableSet<String> VAR_FILTERS_AD = ImmutableSet.of("MaxFreqAd");
+	private final static ImmutableSet<String> VAR_FILTERS_AR = ImmutableSet.of("MaxFreqAr");
+	// Known genotype-wise filters
+	private final static ImmutableSet<String> GT_FILTERS = ImmutableSet.of("MaxCov", "MinGq");
+	private final static ImmutableSet<String> GT_FILTERS_HOM_REF = ImmutableSet.of("MinAafHomRef");
+	private final static ImmutableSet<String> GT_FILTERS_HOM_ALT = ImmutableSet.of("MinCovHomAlt", "MinAafHomAlt");
+	private final static ImmutableSet<String> GT_FILTERS_HET = ImmutableSet.of("MinCovHet", "MinAafHet", "MaxAafHet");
 
 	/** Pedigree to use for checking for Mendelian compatibility */
 	private final Pedigree pedigree;
@@ -69,6 +82,9 @@ public class VariantContextMendelianAnnotator {
 	/**
 	 * Annotate {@link List} of {@link VariantContext} objects
 	 * 
+	 * If <code>self.interpretVariantFilters</code> then the variant contexts to be considered for compound heterozygous
+	 * will be prefiltered to those with appropriately high frequency and not being annotated as synonymous variant.
+	 * 
 	 * @param vcs
 	 *            {@link VariantContext} objects to annotate
 	 * @return An {@link ImmutableList} of {@link VariantContext} copies of <code>vcs</code>
@@ -77,24 +93,46 @@ public class VariantContextMendelianAnnotator {
 	 */
 	public ImmutableList<VariantContext> annotateRecords(List<VariantContext> vcs)
 			throws CannotAnnotateMendelianInheritance {
-		// Convert VariantContext to GenotypeCalls objects
-		List<GenotypeCalls> gcs = buildGenotypeCalls(vcs);
-		ImmutableMap<ModeOfInheritance, ImmutableList<GenotypeCalls>> checkResult;
+		// TODO: filter for synonymous variant currently broken if annotating with all variants... :(
+		final String synonymous = VariantEffect.SYNONYMOUS_VARIANT.getSequenceOntologyTerm();
+
+		// Filter functor for recessive filtration
+		Predicate<VariantContext> keepFreqRecessive;
+		if (interpretVariantFilters) {
+			keepFreqRecessive = vc -> {
+				return !isFiltered(vc.getFilters(), VAR_FILTERS, VAR_FILTERS_AR)
+						&& !vc.getAttributeAsString("ANN", "").contains(synonymous);
+			};
+		} else {
+			keepFreqRecessive = vc -> true;
+		}
+
+		// Create mapping from MOH to genotype calls and pre-filter if configured to do so
+		HashMap<ModeOfInheritance, List<GenotypeCalls>> origCalls = new HashMap<>();
+		origCalls.put(ModeOfInheritance.AUTOSOMAL_DOMINANT, buildGenotypeCalls(vcs));
+		origCalls.put(ModeOfInheritance.X_DOMINANT, origCalls.get(ModeOfInheritance.AUTOSOMAL_DOMINANT));
+		origCalls.put(ModeOfInheritance.AUTOSOMAL_RECESSIVE,
+				buildGenotypeCalls(vcs.stream().filter(keepFreqRecessive).collect(Collectors.toList())));
+		origCalls.put(ModeOfInheritance.X_DOMINANT, origCalls.get(ModeOfInheritance.X_DOMINANT));
+
+		// Filter to compatible records
+		HashMap<ModeOfInheritance, List<GenotypeCalls>> filteredGenotypeCalls = new HashMap<>();
 		try {
-			checkResult = mendelChecker.checkMendelianInheritance(gcs);
+			for (Entry<ModeOfInheritance, List<GenotypeCalls>> e : origCalls.entrySet())
+				filteredGenotypeCalls.put(e.getKey(), mendelChecker.filterCompatibleRecords(e.getValue(), e.getKey()));
 		} catch (IncompatiblePedigreeException e) {
 			throw new CannotAnnotateMendelianInheritance(
 					"Problem with annotating VariantContext for Mendelian inheritance.", e);
 		}
 
 		// Build map of compatible Mendelian inheritance modes for each record
-		HashMap<Integer, ArrayList<String>> map = new HashMap<>();
-		for (Entry<ModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
+		HashMap<Integer, Set<String>> map = new HashMap<>();
+		for (Entry<ModeOfInheritance, List<GenotypeCalls>> e : filteredGenotypeCalls.entrySet()) {
 			final ModeOfInheritance mode = e.getKey();
-			final ImmutableList<GenotypeCalls> calls = e.getValue();
+			final List<GenotypeCalls> calls = e.getValue();
 			for (GenotypeCalls gc : calls) {
 				Integer key = (Integer) gc.getPayload();
-				map.putIfAbsent(key, Lists.newArrayList());
+				map.putIfAbsent(key, new HashSet<String>());
 				switch (mode) {
 				case AUTOSOMAL_DOMINANT:
 					map.get(key).add("AD");
@@ -114,11 +152,29 @@ public class VariantContextMendelianAnnotator {
 			}
 		}
 
+		// Perform non-compound recessive checks
+		int idx = 0;
+		for (VariantContext vc : vcs) {
+			ImmutableMap<ModeOfInheritance, ImmutableList<VariantContext>> compatibleModes = computeCompatibleInheritanceModes(
+					ImmutableList.of(vc));
+			if (compatibleModes.containsKey(ModeOfInheritance.AUTOSOMAL_RECESSIVE)
+					&& !compatibleModes.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).isEmpty()) {
+				map.putIfAbsent(idx, new HashSet<String>());
+				map.get(idx).add("AR");
+			}
+			if (compatibleModes.containsKey(ModeOfInheritance.X_RECESSIVE)
+					&& !compatibleModes.get(ModeOfInheritance.X_RECESSIVE).isEmpty()) {
+				map.putIfAbsent(idx, new HashSet<String>());
+				map.get(idx).add("XR");
+			}
+			idx += 1;
+		}
+
 		// Construct extended VariantContext objects with INHERITED attribute
 		ArrayList<VariantContextBuilder> vcBuilders = new ArrayList<>();
 		for (int i = 0; i < vcs.size(); ++i)
 			vcBuilders.add(new VariantContextBuilder(vcs.get(i)));
-		for (Entry<Integer, ArrayList<String>> e : map.entrySet()) {
+		for (Entry<Integer, Set<String>> e : map.entrySet()) {
 			VariantContextBuilder vcBuilder = vcBuilders.get(e.getKey());
 			vcBuilder.attribute(MendelVCFHeaderExtender.key(), map.values());
 		}
@@ -163,15 +219,6 @@ public class VariantContextMendelianAnnotator {
 		return builder.build();
 	}
 
-	// Known variant-wise filters
-	private final static ImmutableSet<String> VAR_FILTERS = ImmutableSet.of("AllAffGtFiltered", "MaxFreqAd",
-			"MaxFreqAr", "OffExome");
-	// Known genotype-wise filters
-	private final static ImmutableSet<String> GT_FILTERS = ImmutableSet.of("MaxCov", "MinGq");
-	private final static ImmutableSet<String> GT_FILTERS_HOM_REF = ImmutableSet.of("MinAafHomRef");
-	private final static ImmutableSet<String> GT_FILTERS_HOM_ALT = ImmutableSet.of("MinCovHomAlt", "MinAafHomAlt");
-	private final static ImmutableSet<String> GT_FILTERS_HET = ImmutableSet.of("MinCovHet", "MinAafHet", "MaxAafHet");
-
 	/**
 	 * Convert a {@link List} of {@link VariantContext} objects into a list of {@link GenotypeCalls} objects
 	 * 
@@ -188,12 +235,6 @@ public class VariantContextMendelianAnnotator {
 
 		int i = 0;
 		for (VariantContext vc : vcs) {
-			// Ignore if overlap with variant filters
-			if (interpretVariantFilters && isFiltered(vc.getFilters(), VAR_FILTERS)) {
-				i += 1; // important before short-circuiting
-				continue;
-			}
-
 			GenotypeCallsBuilder builder = new GenotypeCallsBuilder();
 			builder.setPayload(i++);
 
