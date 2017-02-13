@@ -1,7 +1,10 @@
 package de.charite.compbio.jannovar.filter.impl.var;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.google.common.collect.ImmutableList;
 
@@ -41,18 +44,42 @@ public class VariantFilterAnnotator {
 	 * @return reference to <code>builder</code> after the update
 	 */
 	public VariantContextBuilder annotateVariant(VariantContextBuilder builder, VariantContext vc, List<Genotype> gts) {
-		if (affecteds.isEmpty())
-			return builder; // short-circuit, nothing to do
-
+		// If all genotype calls are filtered out then add filter to variant-level FILTER column
 		HashSet<String> filters = new HashSet<String>(vc.getFilters());
+		if (!affecteds.isEmpty()) {
+			HashSet<String> unfilteredAffecteds = new HashSet<>(affecteds);
+			for (Genotype gt : gts)
+				if (affecteds.contains(gt.getSampleName()) && gt.isFiltered())
+					unfilteredAffecteds.remove(gt.getSampleName());
+			if (unfilteredAffecteds.isEmpty())
+				filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_ALL_AFFECTED_GTS_FILTERED);
+		}
 
-		HashSet<String> unfilteredAffecteds = new HashSet<>(affecteds);
-		for (Genotype gt : gts)
-			if (affecteds.contains(gt.getSampleName()) && gt.isFiltered())
-				unfilteredAffecteds.remove(gt.getSampleName());
+		// Check best frequency from EXAC
+		final String keyExacBestAf = options.getExacPrefix() + "BEST_AF";
+		@SuppressWarnings("unchecked")
+		final ArrayList<Double> exacBestAfs = ((ArrayList<Double>) vc.getAttribute(keyExacBestAf));
+		final double exacBestAf = (exacBestAfs == null) ? -1 : Collections.max(exacBestAfs);
+		// Check best frequency from dbSNP
+		final String keyDbSnpCaf = options.getDbSnpPrefix() + "CAF";
+		@SuppressWarnings("unchecked")
+		final ArrayList<Double> dbSnpCaf = ((ArrayList<Double>) vc.getAttribute(keyDbSnpCaf));
+		double dbSnpBestAf;
+		try {
+			dbSnpBestAf = (dbSnpCaf == null) ? -1 : Collections.max(dbSnpCaf.subList(1, dbSnpCaf.size()));
+		} catch (NoSuchElementException e) {
+			dbSnpBestAf = 0;
+			System.err.println("FOO");
+		}
+		// Get maximum of both frequencies
+		final double highestAf = Math.max(exacBestAf, dbSnpBestAf);
+		if (highestAf > 0) {
+			if (highestAf > options.getMaxAlleleFrequencyAd())
+				filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AD);
+			if (highestAf > options.getMaxAlleleFrequencyAr())
+				filters.add(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AR);
+		}
 
-		if (unfilteredAffecteds.isEmpty())
-			filters.add(ThresholdFilterHeaderExtender.FILTER_VAr_ALL_AFFECTED_GTS_FILTERED);
 		builder.filters(filters);
 		return builder;
 	}

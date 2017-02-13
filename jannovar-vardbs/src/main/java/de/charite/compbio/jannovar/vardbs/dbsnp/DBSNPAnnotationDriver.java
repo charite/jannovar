@@ -134,6 +134,11 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 
 		if (cafList.stream().allMatch(i -> (i == 0.0)))
 			return; // do not set list of zeroes
+		
+		// Prepend reference frequency
+		double afRef = 1.0 - cafList.stream().mapToDouble(x -> x).sum();
+		afRef = Math.max(afRef, 0);  // no negative values
+		cafList.add(0, afRef);
 
 		if (!cafList.isEmpty())
 			builder.attribute(idCAF, cafList);

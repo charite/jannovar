@@ -73,7 +73,7 @@ public class DBSNPAnnotationDriverReportNoOverlappingTest extends DBSNPAnnotatio
 		Collections.sort(keys);
 		Assert.assertEquals("[CAF, COMMON, G5, IDS]", keys.toString());
 
-		Assert.assertEquals("[0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
+		Assert.assertEquals("[0.97324, 0.02676, 0.0, 0.0]", annotated.getAttributeAsString("CAF", null));
 		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("G5", null));
 		Assert.assertNull(annotated.getAttributeAsString("G5A", null));
 		Assert.assertEquals("[1, 0, 0]", annotated.getAttributeAsString("COMMON", null));

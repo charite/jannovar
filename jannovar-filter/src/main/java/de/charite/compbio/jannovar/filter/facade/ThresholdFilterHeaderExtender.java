@@ -32,7 +32,13 @@ public class ThresholdFilterHeaderExtender {
 	// Variant-wise filter strings
 
 	/** All affected individual's genotypes are filtered */
-	public static String FILTER_VAr_ALL_AFFECTED_GTS_FILTERED = "AllAffGtFiltered";
+	public static String FILTER_VAR_ALL_AFFECTED_GTS_FILTERED = "AllAffGtFiltered";
+
+	/** Highest frequency in any population higher than threshold for AD */
+	public static String FILTER_VAR_MAX_FREQUENCY_AD = "MaxFreqAd";
+
+	/** Highest frequency in any population higher than threshold for AR */
+	public static String FILTER_VAR_MAX_FREQUENCY_AR = "MaxFreqAr";
 
 	/** Configuration */
 	private final ThresholdFilterOptions options;
@@ -48,6 +54,7 @@ public class ThresholdFilterHeaderExtender {
 	 *            The {@link VCFHeader} to extend.
 	 */
 	public void addHeaders(VCFHeader header) {
+		// TODO: add FORMAT field "FT"?
 		header.addMetaDataLine(
 				new VCFFilterHeaderLine(FILTER_GT_MAX_COV, "Genotype has coverage >" + options.getMaxCov()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_COV_HET,
@@ -65,8 +72,13 @@ public class ThresholdFilterHeaderExtender {
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MAX_AAF_HOM_REF,
 				"Genotype has coverage >" + options.getMaxGtAafHomRef()));
 
-		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAr_ALL_AFFECTED_GTS_FILTERED,
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_ALL_AFFECTED_GTS_FILTERED,
 				"The genotype calls of all affected individuals have been filtered for this variant."));
+
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_FREQUENCY_AD,
+				"Variant frequency >" + options.getMaxAlleleFrequencyAd() + " (threshold for AD inheritance)"));
+		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_VAR_MAX_FREQUENCY_AR,
+				"Variant frequency >" + options.getMaxAlleleFrequencyAd() + " (threshold for AR inheritance)"));
 	}
 
 }

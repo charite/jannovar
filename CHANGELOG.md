@@ -16,6 +16,7 @@
 
 ### jannovar-filter
 
+* Adding functionality to add filters based on frequencies found in dbSNP and ExAC
 * Adding back as module for threshold-based filtration.
   This module allows to create genotype-wise soft-filters for low coverage.
   Also, variants can be soft-filtered based on whether the genotype calls of all affected individuals are filtered out.
@@ -35,6 +36,7 @@
 
 ### jannovar-vardbs
 
+* Fixing output of `DBSNP_CAF` to also contain reference allele AF
 * Adding annotation with ClinVar, can annotate all clinvar variants
 
 ## v0.20

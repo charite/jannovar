@@ -87,6 +87,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Threshold filter: maximal alternative allele fraction for homozygous ref calls */
 	private double threshFiltMaxGtAafHomRef;
 
+	/** Threshold filter: maximal allele frequency for autosomal dominant inheritance mode */
+	private double threshFiltMaxAlleleFrequencyAd;
+
+	/** Threshold filter: maximal allele frequency for autosomal recessive inheritance mode */
+	private double threshFiltMaxAlleleFrequencyAr;
+
 	/**
 	 * Setup {@link ArgumentParser}
 	 * 
@@ -134,7 +140,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.required(false);
 
 		ArgumentGroup threshFilterGroup = subParser.addArgumentGroup("Threshold-filter related arguments");
-		threshFilterGroup.addArgument("--use-gt-threshold-filters").help("Use threshold-based filters on genotypes")
+		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters")
 				.setDefault(false).action(Arguments.storeTrue());
 		ThresholdFilterOptions threshDefaults = ThresholdFilterOptions.buildDefaultOptions();
 		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het").help("Minimal coverage for het. call")
@@ -157,6 +163,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		threshFilterGroup.addArgument("--gt-thresh-filt-max-aaf-hom-ref")
 				.help("Maximal hom. ref call alternate allele fraction").setDefault(threshDefaults.getMaxGtAafHomRef())
 				.type(Double.class);
+		threshFilterGroup.addArgument("--var-thresh-max-allele-freq-ad")
+				.help("Maximal allele fraction for autosomal dominant inheritance mode")
+				.setDefault(threshDefaults.getMaxAlleleFrequencyAd()).type(Double.class);
+		threshFilterGroup.addArgument("--var-thresh-max-allele-freq-ar")
+				.help("Maximal allele fraction for autosomal recessive inheritance mode")
+				.setDefault(threshDefaults.getMaxAlleleFrequencyAr()).type(Double.class);
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
@@ -190,7 +202,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		pathClinVar = args.getString("clinvar_vcf");
 		prefixClinVar = args.getString("clinvar_prefix");
 
-		useThresholdFilters = args.getBoolean("use_gt_threshold_filters");
+		useThresholdFilters = args.getBoolean("use_threshold_filters");
 		threshFiltMinGtCovHet = args.getInt("gt_thresh_filt_min_cov_het");
 		threshFiltMinGtCovHomAlt = args.getInt("gt_thresh_filt_min_cov_hom_alt");
 		threshFiltMaxCov = args.getInt("gt_thresh_filt_max_cov");
@@ -199,6 +211,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		threshFiltMaxGtAafHet = args.getDouble("gt_thresh_filt_max_aaf_het");
 		threshFiltMinGtAafHomAlt = args.getDouble("gt_thresh_filt_min_aaf_hom_alt");
 		threshFiltMaxGtAafHomRef = args.getDouble("gt_thresh_filt_max_aaf_hom_ref");
+		threshFiltMaxAlleleFrequencyAd = args.getDouble("var_thresh_max_allele_freq_ad");
+		threshFiltMaxAlleleFrequencyAr = args.getDouble("var_thresh_max_allele_freq_ar");
 
 		if (pathFASTARef == null
 				&& (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null || pathClinVar != null))
@@ -382,6 +396,22 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.threshFiltMaxGtAafHomRef = threshFiltMaxGtAafHomRef;
 	}
 
+	public double getThreshFiltMaxAlleleFrequencyAd() {
+		return threshFiltMaxAlleleFrequencyAd;
+	}
+
+	public void setThreshFiltMaxAlleleFrequencyAD(double threshFiltMaxAlleleFrequencyAd) {
+		this.threshFiltMaxAlleleFrequencyAd = threshFiltMaxAlleleFrequencyAd;
+	}
+
+	public double getThreshFiltMaxAlleleFrequencyAr() {
+		return threshFiltMaxAlleleFrequencyAr;
+	}
+
+	public void setThreshFiltMaxAlleleFrequencyAR(double threshFiltMaxAlleleFrequencyAr) {
+		this.threshFiltMaxAlleleFrequencyAr = threshFiltMaxAlleleFrequencyAr;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
@@ -393,7 +423,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
 				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
 				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
-				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef + "]";
+				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
+				+ ", threshFiltMaxAlleleFrequencyAD=" + threshFiltMaxAlleleFrequencyAd
+				+ ", threshFiltMaxAlleleFrequencyAR=" + threshFiltMaxAlleleFrequencyAr + "]";
 	}
 
 }

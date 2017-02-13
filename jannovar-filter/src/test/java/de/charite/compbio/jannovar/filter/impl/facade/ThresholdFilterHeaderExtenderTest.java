@@ -23,10 +23,10 @@ public class ThresholdFilterHeaderExtenderTest extends TresholdFilterTestBase {
 		new ThresholdFilterHeaderExtender(ThresholdFilterOptions.buildDefaultOptions()).addHeaders(header);
 
 		// Check header after extension
-		Assert.assertEquals(9, header.getFilterLines().size());
+		Assert.assertEquals(11, header.getFilterLines().size());
 		Assert.assertEquals(0, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(9, header.getIDHeaderLines().size());
+		Assert.assertEquals(11, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV));
@@ -37,8 +37,14 @@ public class ThresholdFilterHeaderExtenderTest extends TresholdFilterTestBase {
 		Assert.assertNotNull(header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HET));
 		Assert.assertNotNull(header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MIN_AAF_HOM_ALT));
 		Assert.assertNotNull(header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_AAF_HOM_REF));
+
 		Assert.assertNotNull(
-				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAr_ALL_AFFECTED_GTS_FILTERED));
+				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_ALL_AFFECTED_GTS_FILTERED));
+
+		Assert.assertNotNull(
+				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AD));
+		Assert.assertNotNull(
+				header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_VAR_MAX_FREQUENCY_AR));
 	}
 
 }

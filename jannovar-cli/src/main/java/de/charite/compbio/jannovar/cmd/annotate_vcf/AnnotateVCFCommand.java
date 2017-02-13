@@ -100,53 +100,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 
 			Stream<VariantContext> stream = vcfReader.iterator().stream();
 
-			// If configured, use threshold-based annotation (extend headr to use for writing out)
-			if (options.useThresholdFilters) {
-				// Build options object for threshold filter
-				ThresholdFilterOptions thresholdFilterOptions = new ThresholdFilterOptions(
-						options.getThreshFiltMinGtCovHet(), options.getThreshFiltMinGtCovHomAlt(),
-						options.getThreshFiltMaxCov(), options.getThreshFiltMinGtGq(),
-						options.getThreshFiltMinGtAafHet(), options.getThreshFiltMaxGtAafHet(),
-						options.getThreshFiltMinGtAafHomAlt(), options.getThreshFiltMaxGtAafHomRef());
-				// Add headers
-				new ThresholdFilterHeaderExtender(thresholdFilterOptions).addHeaders(vcfHeader);
-				// Build list of affecteds; take from pedigree file if given. Otherwise, assume one single individual is
-				// always affected and otherwise warn about missing pedigree.
-				ArrayList<String> affecteds = new ArrayList<>();
-				if (options.pathPedFile == null) {
-					if (vcfHeader.getNGenotypeSamples() == 1) {
-						System.err.println(
-								"INFO: No pedigree file given and single individual. Assuming it is affected for the threshold filter");
-					} else {
-						System.err.println(
-								"WARNING: no pedigree file given. Threshold filter will not annotate FILTER field, only genotype FT");
-					}
-				} else {
-					Pedigree pedigree;
-					try {
-						pedigree = loadPedigree();
-					} catch (IOException e) {
-						System.err.println("Problem loading pedigree from " + options.pathPedFile);
-						System.err.println(e.getMessage());
-						System.err.println("\n");
-						e.printStackTrace(System.err);
-						return;
-					}
-					for (Person person : pedigree.getMembers()) {
-						if (person.isAffected())
-							affecteds.add(person.getName());
-					}
-					if (affecteds.isEmpty()) {
-						System.err.println(
-								"WARNING: no affected individual in pedigree. Threshold filter will not modify FILTER field, "
-										+ "only genotype FT");
-					}
-				}
-				ThresholdFilterAnnotator thresholdFilterAnno = new ThresholdFilterAnnotator(thresholdFilterOptions,
-						affecteds);
-				stream = stream.map(thresholdFilterAnno::annotateVariantContext);
-			}
-
 			// If configured, annotate using dbSNP VCF file (extend header to use for writing out)
 			if (options.pathVCFDBSNP != null) {
 				DBAnnotationOptions dbSNPOptions = DBAnnotationOptions.createDefaults();
@@ -185,6 +138,55 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 						.constructClinVar(options.pathClinVar, options.pathFASTARef, clinVarOptions);
 				clinvarAnno.extendHeader(vcfHeader);
 				stream = stream.map(clinvarAnno::annotateVariantContext);
+			}
+
+			// If configured, use threshold-based annotation (extend headr to use for writing out)
+			if (options.useThresholdFilters) {
+				// Build options object for threshold filter
+				ThresholdFilterOptions thresholdFilterOptions = new ThresholdFilterOptions(
+						options.getThreshFiltMinGtCovHet(), options.getThreshFiltMinGtCovHomAlt(),
+						options.getThreshFiltMaxCov(), options.getThreshFiltMinGtGq(),
+						options.getThreshFiltMinGtAafHet(), options.getThreshFiltMaxGtAafHet(),
+						options.getThreshFiltMinGtAafHomAlt(), options.getThreshFiltMaxGtAafHomRef(),
+						options.getPrefixExac(), options.getPrefixDBSNP(), options.getThreshFiltMaxAlleleFrequencyAd(),
+						options.getThreshFiltMaxAlleleFrequencyAr());
+				// Add headers
+				new ThresholdFilterHeaderExtender(thresholdFilterOptions).addHeaders(vcfHeader);
+				// Build list of affecteds; take from pedigree file if given. Otherwise, assume one single individual is
+				// always affected and otherwise warn about missing pedigree.
+				ArrayList<String> affecteds = new ArrayList<>();
+				if (options.pathPedFile == null) {
+					if (vcfHeader.getNGenotypeSamples() == 1) {
+						System.err.println(
+								"INFO: No pedigree file given and single individual. Assuming it is affected for the threshold filter");
+					} else {
+						System.err.println(
+								"WARNING: no pedigree file given. Threshold filter will not annotate FILTER field, only genotype FT");
+					}
+				} else {
+					Pedigree pedigree;
+					try {
+						pedigree = loadPedigree();
+					} catch (IOException e) {
+						System.err.println("Problem loading pedigree from " + options.pathPedFile);
+						System.err.println(e.getMessage());
+						System.err.println("\n");
+						e.printStackTrace(System.err);
+						return;
+					}
+					for (Person person : pedigree.getMembers()) {
+						if (person.isAffected())
+							affecteds.add(person.getName());
+					}
+					if (affecteds.isEmpty()) {
+						System.err.println(
+								"WARNING: no affected individual in pedigree. Threshold filter will not modify FILTER field, "
+										+ "only genotype FT");
+					}
+				}
+				ThresholdFilterAnnotator thresholdFilterAnno = new ThresholdFilterAnnotator(thresholdFilterOptions,
+						affecteds);
+				stream = stream.map(thresholdFilterAnno::annotateVariantContext);
 			}
 
 			// Extend header with INHERITANCE filter
