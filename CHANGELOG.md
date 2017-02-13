@@ -23,6 +23,7 @@
 
 ### jannovar-core
 
+* Changing behaviour of `VariantEffect.isOffExome()` and adding a variant that allows to decide between UTR on/off exome and non-consensus splice region on/off exome
 * Making the behaviour of overriding transcripts configurable at least in the code, using default to not do this any more
 * Adding `WARNING_REF_DOES_NOT_MATCH_TRANSCRIPT` to `AnnotationMessage`
 * Properly pushing through warnings from the annotators into the returned `VariantAnnotation` object
