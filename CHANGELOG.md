@@ -32,6 +32,8 @@
 
 ### jannovar-htsjdk
 
+* Extending interface of `VariantContextAnnotator` for automatic error annotation generation, previously in jannovar-cli
+* Adding `VariantEffectHeaderExtender` class to `jannovar-htsjdk`
 * Fixing bug with problems of unmodifiable Attributes (error annotation).
 
 ### jannovar-vardbs

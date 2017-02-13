@@ -48,7 +48,7 @@ public class ThresholdFilterHeaderExtender {
 	}
 
 	/**
-	 * Add header entries with a given prefix.
+	 * Add header entries.
 	 * 
 	 * @param header
 	 *            The {@link VCFHeader} to extend.

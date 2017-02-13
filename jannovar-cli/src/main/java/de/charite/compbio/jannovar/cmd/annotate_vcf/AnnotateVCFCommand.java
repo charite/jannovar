@@ -10,12 +10,16 @@ import java.util.stream.Stream;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
+import de.charite.compbio.jannovar.Jannovar;
 import de.charite.compbio.jannovar.JannovarException;
 import de.charite.compbio.jannovar.cmd.CommandLineParsingException;
 import de.charite.compbio.jannovar.cmd.JannovarAnnotationCommand;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterAnnotator;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterHeaderExtender;
 import de.charite.compbio.jannovar.filter.facade.ThresholdFilterOptions;
+import de.charite.compbio.jannovar.htsjdk.VariantContextAnnotator;
+import de.charite.compbio.jannovar.htsjdk.VariantContextWriterConstructionHelper;
+import de.charite.compbio.jannovar.htsjdk.VariantEffectHeaderExtender;
 import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.mendel.filter.ConsumerProcessor;
@@ -35,8 +39,10 @@ import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotator;
 import de.charite.compbio.jannovar.vardbs.facade.DBVariantContextAnnotatorFactory;
 import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.variant.variantcontext.VariantContext;
+import htsjdk.variant.variantcontext.writer.VariantContextWriter;
 import htsjdk.variant.vcf.VCFFileReader;
 import htsjdk.variant.vcf.VCFHeader;
+import htsjdk.variant.vcf.VCFHeaderLine;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 /**
@@ -189,15 +195,33 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(thresholdFilterAnno::annotateVariantContext);
 			}
 
+			// Add step for annotating with variant effect
+			VariantEffectHeaderExtender extender = new VariantEffectHeaderExtender();
+			extender.addHeaders(vcfHeader);
+			VariantContextAnnotator annotator = new VariantContextAnnotator(refDict, chromosomeMap,
+					new VariantContextAnnotator.Options(!options.isShowAll(), options.isEscapeAnnField(),
+							options.isNt3PrimeShifting(), options.isOffTargetFilterEnabled(),
+							options.isOffTargetFilterUtrIsOffTarget(),
+							options.isOffTargetFilterIntronicSpliceIsOffTarget()));
+			stream = stream.map(annotator::annotateVariantContext);
+
 			// Extend header with INHERITANCE filter
 			if (options.pathPedFile != null) {
 				System.err.println("Extending header with INHERITANCE...");
 				new MendelVCFHeaderExtender().extendHeader(vcfHeader, "");
 			}
 
-			// Write result to output file
-			try (AnnotatedVCFWriter writer = new AnnotatedVCFWriter(refDict, vcfHeader, chromosomeMap, vcfPath, options,
-					ImmutableList.copyOf(argv)); VariantContextProcessor sink = buildMendelianProcessors(writer);) {
+			// Create VCF output writer
+			ImmutableList<VCFHeaderLine> jvHeaderLines = ImmutableList.of(
+					new VCFHeaderLine("jannovarVersion", Jannovar.getVersion()),
+					new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(argv)));
+
+			// Construct VariantContextWriter, write out header and start annotationg pipeline
+			try (VariantContextWriter vcfWriter = VariantContextWriterConstructionHelper
+					.openVariantContextWriter(vcfHeader, options.getPathOutputVCF(), jvHeaderLines);
+					VariantContextProcessor sink = buildMendelianProcessors(vcfWriter, vcfHeader)) {
+				vcfWriter.writeHeader(vcfHeader);
+
 				// Make current VC available to progress printer
 				if (this.progressReporter != null)
 					stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
@@ -244,7 +268,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	/**
 	 * Construct the mendelian inheritance annotation processors
 	 * 
-	 * @param sink
+	 * @param writer
 	 *            The place to put put the VariantContext to after filtration
 	 * @throws IOException
 	 *             in case of problems with opening the pedigree file
@@ -253,16 +277,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 * @throws IncompatiblePedigreeException
 	 *             If the pedigree is incompatible with the VCF file
 	 */
-	private VariantContextProcessor buildMendelianProcessors(AnnotatedVCFWriter writer)
+	private VariantContextProcessor buildMendelianProcessors(VariantContextWriter writer, VCFHeader vcfHeader)
 			throws PedParseException, IOException, IncompatiblePedigreeException {
 		if (options.pathPedFile != null) {
 			final Pedigree pedigree = loadPedigree();
-			checkPedigreeCompatibility(pedigree, writer.getVCFHeader());
+			checkPedigreeCompatibility(pedigree, vcfHeader);
 			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
-					pedigree, jannovarData, vc -> writer.put(vc));
+					pedigree, jannovarData, vc -> writer.add(vc));
 			return new CoordinateSortingChecker(mendelProcessor);
 		} else {
-			return new ConsumerProcessor(vc -> writer.put(vc));
+			return new ConsumerProcessor(vc -> writer.add(vc));
 		}
 	}
 

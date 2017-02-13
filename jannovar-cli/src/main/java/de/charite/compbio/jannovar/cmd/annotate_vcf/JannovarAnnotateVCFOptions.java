@@ -93,6 +93,15 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Threshold filter: maximal allele frequency for autosomal recessive inheritance mode */
 	private double threshFiltMaxAlleleFrequencyAr;
 
+	/** Enable off target filter */
+	private boolean offTargetFilterEnabled;
+
+	/** Count UTR as off-target */
+	private boolean offTargetFilterUtrIsOffTarget;
+
+	/** Count intronic splice region (non-consensus) as off-target */
+	private boolean offTargetFilterIntronicSpliceIsOffTarget;
+
 	/**
 	 * Setup {@link ArgumentParser}
 	 * 
@@ -140,8 +149,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.required(false);
 
 		ArgumentGroup threshFilterGroup = subParser.addArgumentGroup("Threshold-filter related arguments");
-		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters")
-				.setDefault(false).action(Arguments.storeTrue());
+		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters").setDefault(false)
+				.action(Arguments.storeTrue());
 		ThresholdFilterOptions threshDefaults = ThresholdFilterOptions.buildDefaultOptions();
 		threshFilterGroup.addArgument("--gt-thresh-filt-min-cov-het").help("Minimal coverage for het. call")
 				.setDefault(threshDefaults.getMinGtCovHet()).type(Integer.class);
@@ -169,6 +178,17 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		threshFilterGroup.addArgument("--var-thresh-max-allele-freq-ar")
 				.help("Maximal allele fraction for autosomal recessive inheritance mode")
 				.setDefault(threshDefaults.getMaxAlleleFrequencyAr()).type(Double.class);
+
+		ArgumentGroup offTargetGroup = subParser.addArgumentGroup("Exome on/off target filters");
+		offTargetGroup.addArgument("--enable-off-target-filter")
+				.help("Enable filter for on/off-target based on effect impact").setDefault(false)
+				.action(Arguments.storeTrue());
+		offTargetGroup.addArgument("--utr-is-off-target")
+				.help("Make UTR count as off-target (default is to count UTR as on-target)").setDefault(false)
+				.action(Arguments.storeFalse());
+		offTargetGroup.addArgument("--intronic-splice-is-off-target")
+				.help("Make intronic (non-consensus site) splice region count as off-target (default is to count as on-target)")
+				.setDefault(false).action(Arguments.storeFalse());
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
@@ -213,6 +233,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		threshFiltMaxGtAafHomRef = args.getDouble("gt_thresh_filt_max_aaf_hom_ref");
 		threshFiltMaxAlleleFrequencyAd = args.getDouble("var_thresh_max_allele_freq_ad");
 		threshFiltMaxAlleleFrequencyAr = args.getDouble("var_thresh_max_allele_freq_ar");
+
+		offTargetFilterEnabled = args.getBoolean("enable_off_target_filter");
+		offTargetFilterUtrIsOffTarget = args.getBoolean("utr_is_off_target");
+		offTargetFilterIntronicSpliceIsOffTarget = args.getBoolean("intronic_splice_is_off_target");
 
 		if (pathFASTARef == null
 				&& (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null || pathClinVar != null))
@@ -412,6 +436,38 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.threshFiltMaxAlleleFrequencyAr = threshFiltMaxAlleleFrequencyAr;
 	}
 
+	public boolean isOffTargetFilterEnabled() {
+		return offTargetFilterEnabled;
+	}
+
+	public void setOffTargetFilterEnabled(boolean offTargetFilterEnabled) {
+		this.offTargetFilterEnabled = offTargetFilterEnabled;
+	}
+
+	public boolean isOffTargetFilterUtrIsOffTarget() {
+		return offTargetFilterUtrIsOffTarget;
+	}
+
+	public void setOffTargetFilterUtrIsOffTarget(boolean offTargetFilterUtrIsOffTarget) {
+		this.offTargetFilterUtrIsOffTarget = offTargetFilterUtrIsOffTarget;
+	}
+
+	public boolean isOffTargetFilterIntronicSpliceIsOffTarget() {
+		return offTargetFilterIntronicSpliceIsOffTarget;
+	}
+
+	public void setOffTargetFilterIntronicSpliceIsOffTarget(boolean offTargetFilterIntronicSpliceIsOffTarget) {
+		this.offTargetFilterIntronicSpliceIsOffTarget = offTargetFilterIntronicSpliceIsOffTarget;
+	}
+
+	public void setThreshFiltMaxAlleleFrequencyAd(double threshFiltMaxAlleleFrequencyAd) {
+		this.threshFiltMaxAlleleFrequencyAd = threshFiltMaxAlleleFrequencyAd;
+	}
+
+	public void setThreshFiltMaxAlleleFrequencyAr(double threshFiltMaxAlleleFrequencyAr) {
+		this.threshFiltMaxAlleleFrequencyAr = threshFiltMaxAlleleFrequencyAr;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
@@ -424,8 +480,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
 				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
 				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
-				+ ", threshFiltMaxAlleleFrequencyAD=" + threshFiltMaxAlleleFrequencyAd
-				+ ", threshFiltMaxAlleleFrequencyAR=" + threshFiltMaxAlleleFrequencyAr + "]";
+				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
+				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
+				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
+				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget + "]";
 	}
 
 }
