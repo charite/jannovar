@@ -225,16 +225,19 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 					stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
 
 				stream.forEachOrdered(sink::put);
-
-				System.err.println("Wrote annotations to \"" + options.getPathOutputVCF() + "\"");
-				final long endTime = System.nanoTime();
-				System.err.println(String.format("Annotation and writing took %.2f sec.",
-						(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 			} catch (IOException e) {
 				throw new JannovarException("Problem opening file", e);
 			}
+
+			System.err.println("Wrote annotations to \"" + options.getPathOutputVCF() + "\"");
+			final long endTime = System.nanoTime();
+			System.err.println(String.format("Annotation and writing took %.2f sec.",
+					(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 		} catch (IncompatiblePedigreeException e) {
 			System.err.println("VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
+			System.err.println(e.getMessage());
+			System.err.println("\n");
+			e.printStackTrace(System.err);
 		} catch (VariantContextFilterException e) {
 			System.err.println("There was a problem annotating the VCF file");
 			System.err.println("The error message was as follows.  The stack trace below the error "
@@ -254,8 +257,6 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 * 
 	 * @throws PedParseException
 	 *             in the case of problems with parsing pedigrees
-	 * @throws IncompatiblePedigreeException
-	 *             If the pedigree is incompatible with the VCF file
 	 */
 	private Pedigree loadPedigree() throws PedParseException, IOException {
 		final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
