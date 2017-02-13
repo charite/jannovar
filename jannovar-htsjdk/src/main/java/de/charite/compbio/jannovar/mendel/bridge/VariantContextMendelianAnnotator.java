@@ -1,14 +1,18 @@
 package de.charite.compbio.jannovar.mendel.bridge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
 import de.charite.compbio.jannovar.mendel.ChromosomeType;
@@ -36,10 +40,17 @@ public class VariantContextMendelianAnnotator {
 	private final Pedigree pedigree;
 	/** Implementation class to usee */
 	private final MendelianInheritanceChecker mendelChecker;
+	/** Whether or not to interpret genotype-wise filters */
+	boolean interpretGenotypeFilters;
+	/** Whether or not to interpret variant-wise filters */
+	boolean interpretVariantFilters;
 
-	public VariantContextMendelianAnnotator(Pedigree pedigree) {
+	public VariantContextMendelianAnnotator(Pedigree pedigree, boolean interpretGenotypeFilters,
+			boolean interpretVariantFilters) {
 		this.pedigree = pedigree;
 		this.mendelChecker = new MendelianInheritanceChecker(this.pedigree);
+		this.interpretGenotypeFilters = interpretGenotypeFilters;
+		this.interpretVariantFilters = interpretVariantFilters;
 	}
 
 	/**
@@ -152,6 +163,15 @@ public class VariantContextMendelianAnnotator {
 		return builder.build();
 	}
 
+	// Known variant-wise filters
+	private final static ImmutableSet<String> VAR_FILTERS = ImmutableSet.of("AllAffGtFiltered", "MaxFreqAd",
+			"MaxFreqAr", "OffExome");
+	// Known genotype-wise filters
+	private final static ImmutableSet<String> GT_FILTERS = ImmutableSet.of("MaxCov", "MinGq");
+	private final static ImmutableSet<String> GT_FILTERS_HOM_REF = ImmutableSet.of("MinAafHomRef");
+	private final static ImmutableSet<String> GT_FILTERS_HOM_ALT = ImmutableSet.of("MinCovHomAlt", "MinAafHomAlt");
+	private final static ImmutableSet<String> GT_FILTERS_HET = ImmutableSet.of("MinCovHet", "MinAafHet", "MaxAafHet");
+
 	/**
 	 * Convert a {@link List} of {@link VariantContext} objects into a list of {@link GenotypeCalls} objects
 	 * 
@@ -162,11 +182,18 @@ public class VariantContextMendelianAnnotator {
 	private List<GenotypeCalls> buildGenotypeCalls(Collection<VariantContext> vcs) {
 		ArrayList<GenotypeCalls> result = new ArrayList<>();
 
+		// Somewhat hacky but working inclusion of X and mitochondrial genomes
 		final ImmutableList<String> xNames = ImmutableList.of("x", "X", "23", "chrx", "chrX", "chr23");
 		final ImmutableList<String> mtNames = ImmutableList.of("m", "M", "mt", "MT", "chrm", "chrM", "chrmt", "chrMT");
 
-		int i = 0 ;
+		int i = 0;
 		for (VariantContext vc : vcs) {
+			// Ignore if overlap with variant filters
+			if (interpretVariantFilters && isFiltered(vc.getFilters(), VAR_FILTERS)) {
+				i += 1; // important before short-circuiting
+				continue;
+			}
+
 			GenotypeCallsBuilder builder = new GenotypeCallsBuilder();
 			builder.setPayload(i++);
 
@@ -178,10 +205,30 @@ public class VariantContextMendelianAnnotator {
 				builder.setChromType(ChromosomeType.AUTOSOMAL);
 
 			for (Genotype gt : vc.getGenotypes()) {
+				List<String> gtFilters = new ArrayList<String>();
+				if (gt.getFilters() != null)
+					gtFilters.addAll(Arrays.asList(gt.getFilters().split(";")));
+
+				boolean isFiltered = false;
+				if (gt.isHet()) {
+					if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HET))
+						isFiltered = true;
+				} else if (gt.isHomRef()) {
+					if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HOM_REF))
+						isFiltered = true;
+				} else { // hom-alt or two overlapping hets, treated the same for filtration
+					if (interpretGenotypeFilters && isFiltered(gtFilters, GT_FILTERS, GT_FILTERS_HOM_ALT))
+						isFiltered = true;
+				}
+
 				GenotypeBuilder gtBuilder = new GenotypeBuilder();
 				for (Allele allele : gt.getAlleles()) {
-					final int aIDX = vc.getAlleleIndex(allele);
-					gtBuilder.getAlleleNumbers().add(aIDX);
+					if (isFiltered) {
+						gtBuilder.getAlleleNumbers().add(de.charite.compbio.jannovar.mendel.Genotype.NO_CALL);
+					} else {
+						final int aIDX = vc.getAlleleIndex(allele);
+						gtBuilder.getAlleleNumbers().add(aIDX);
+					}
 				}
 				builder.getSampleToGenotype().put(gt.getSampleName(), gtBuilder.build());
 			}
@@ -190,6 +237,27 @@ public class VariantContextMendelianAnnotator {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Helper function for filtered variants/genotypes
+	 * 
+	 * @return whether or not variant is filtered based on filters
+	 */
+	private boolean isFiltered(Collection<String> vcFilters, Collection<String> filtersA, Collection<String> filtersB) {
+		Set<String> filterIntersection = new HashSet<>(filtersA);
+		filterIntersection.addAll(filtersB);
+		filterIntersection.retainAll(vcFilters);
+		return !filterIntersection.isEmpty();
+	}
+
+	/**
+	 * Helper function for filtered variants/genotypes
+	 * 
+	 * @return whether or not variant is filtered based on filters
+	 */
+	private boolean isFiltered(Collection<String> vcFilters, Collection<String> filtersA) {
+		return isFiltered(vcFilters, filtersA, ImmutableList.<String> of());
 	}
 
 }

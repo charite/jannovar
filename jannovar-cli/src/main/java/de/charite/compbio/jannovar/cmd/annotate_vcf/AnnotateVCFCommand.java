@@ -216,12 +216,10 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 					new VCFHeaderLine("jannovarVersion", Jannovar.getVersion()),
 					new VCFHeaderLine("jannovarCommand", Joiner.on(' ').join(argv)));
 
-			// Construct VariantContextWriter, write out header and start annotationg pipeline
+			// Construct VariantContextWriter and start annotationg pipeline
 			try (VariantContextWriter vcfWriter = VariantContextWriterConstructionHelper
 					.openVariantContextWriter(vcfHeader, options.getPathOutputVCF(), jvHeaderLines);
 					VariantContextProcessor sink = buildMendelianProcessors(vcfWriter, vcfHeader)) {
-				vcfWriter.writeHeader(vcfHeader);
-
 				// Make current VC available to progress printer
 				if (this.progressReporter != null)
 					stream = stream.peek(vc -> this.progressReporter.setCurrentVC(vc));
@@ -283,7 +281,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			final Pedigree pedigree = loadPedigree();
 			checkPedigreeCompatibility(pedigree, vcfHeader);
 			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
-					pedigree, jannovarData, vc -> writer.add(vc));
+					pedigree, jannovarData, vc -> writer.add(vc), options.isInheritanceAnnoUseFilters());
 			return new CoordinateSortingChecker(mendelProcessor);
 		} else {
 			return new ConsumerProcessor(vc -> writer.add(vc));

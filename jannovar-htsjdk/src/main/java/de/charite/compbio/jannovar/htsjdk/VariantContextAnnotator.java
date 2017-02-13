@@ -331,23 +331,28 @@ public final class VariantContextAnnotator {
 	 */
 	public VariantContext applyAnnotations(VariantContext vc, List<VariantAnnotations> annos) {
 		// Whether or not variant is off-target in all annotations
-		boolean offTargetInAll = false;
+		boolean offTargetInAll = true;
 
 		ArrayList<String> annotations = new ArrayList<String>();
 		for (int alleleID = 0; alleleID < vc.getAlternateAlleles().size(); ++alleleID) {
 			if (!annos.get(alleleID).getAnnotations().isEmpty()) {
 				for (Annotation ann : annos.get(alleleID).getAnnotations()) {
-					final String alt = vc.getAlternateAllele(alleleID).getBaseString();
-					annotations.add(ann.toVCFAnnoString(alt));
-					if (options.oneAnnotationOnly)
-						break;
+					boolean offTargetInThis = ann.getEffects().stream()
+							.allMatch(e -> e.isOffExome(options.offTargetFilterUtrIsOffTarget,
+									options.offTargetFilterIntronicSpliceIsOffTarget));
+					offTargetInAll = offTargetInAll && offTargetInThis;
+
+					if (!options.oneAnnotationOnly || annotations.isEmpty()) {
+						final String alt = vc.getAlternateAllele(alleleID).getBaseString();
+						annotations.add(ann.toVCFAnnoString(alt));
+					}
 				}
 			}
 		}
 
 		if (options.isOffTargetFilterEnabled() && (offTargetInAll && !annotations.isEmpty())) {
 			Set<String> filters = new HashSet<>(vc.getFilters());
-			// ASDF
+			filters.add(VariantEffectHeaderExtender.FILTER_EFFECT_OFF_EXOME);
 			vc = new VariantContextBuilder(vc).filters(filters).make();
 		}
 

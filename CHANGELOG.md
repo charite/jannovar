@@ -9,6 +9,7 @@
 
 ### jannovar-cli
 
+* Interpretation of filters in compatible inheritance mode annotation
 * Integrating new jannovar-filter into Jannovar CLI.
   Filtered genotypes will be passed into the inheritance filter as no-call.
 * Adding annotation with ClinVar
@@ -33,6 +34,7 @@
 
 ### jannovar-htsjdk
 
+* Optional interpretation of certain filters in GeneWiseMendelianAnnotationProcessor.
 * Extending interface of `VariantContextAnnotator` for automatic error annotation generation, previously in jannovar-cli
 * Adding `VariantEffectHeaderExtender` class to `jannovar-htsjdk`
 * Fixing bug with problems of unmodifiable Attributes (error annotation).

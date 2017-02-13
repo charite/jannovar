@@ -103,6 +103,13 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	private boolean offTargetFilterIntronicSpliceIsOffTarget;
 
 	/**
+	 * Whether or not to use the variant-wise (AllAffGtFiltered, MaxFreqAd, MaxFreqAr, and OffExome) and genotype-wise
+	 * filters (MaxCov, MinCovHet, MinCovHomAlt, MinGq, MinAafHet, MaxAafHet, MinAafHomAlt, MinAafHomRef) in inheritance
+	 * mode compatibility annotation.
+	 */
+	private boolean inheritanceAnnoUseFilters;
+
+	/**
 	 * Setup {@link ArgumentParser}
 	 * 
 	 * @param subParsers
@@ -147,6 +154,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.nargs("?").required(false);
 		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations").setDefault("CLINVAR_")
 				.required(false);
+		annotationGroup.addArgument("--inheritance-anno-use-filters").help("Use filters in inheritance mode annotation")
+				.setDefault(false).action(Arguments.storeTrue());
 
 		ArgumentGroup threshFilterGroup = subParser.addArgumentGroup("Threshold-filter related arguments");
 		threshFilterGroup.addArgument("--use-threshold-filters").help("Use threshold-based filters").setDefault(false)
@@ -185,10 +194,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.action(Arguments.storeTrue());
 		offTargetGroup.addArgument("--utr-is-off-target")
 				.help("Make UTR count as off-target (default is to count UTR as on-target)").setDefault(false)
-				.action(Arguments.storeFalse());
+				.action(Arguments.storeTrue());
 		offTargetGroup.addArgument("--intronic-splice-is-off-target")
 				.help("Make intronic (non-consensus site) splice region count as off-target (default is to count as on-target)")
-				.setDefault(false).action(Arguments.storeFalse());
+				.setDefault(false).action(Arguments.storeTrue());
 
 		ArgumentGroup optionalGroup = subParser.addArgumentGroup("Other, optional Arguments");
 		optionalGroup.addArgument("--no-escape-ann-field").help("Disable escaping of INFO/ANN field in VCF output")
@@ -221,6 +230,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixUK10K = args.getString("uk10k_prefix");
 		pathClinVar = args.getString("clinvar_vcf");
 		prefixClinVar = args.getString("clinvar_prefix");
+		inheritanceAnnoUseFilters = args.getBoolean("inheritance_anno_use_filters");
 
 		useThresholdFilters = args.getBoolean("use_threshold_filters");
 		threshFiltMinGtCovHet = args.getInt("gt_thresh_filt_min_cov_het");
@@ -468,6 +478,14 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		this.threshFiltMaxAlleleFrequencyAr = threshFiltMaxAlleleFrequencyAr;
 	}
 
+	public boolean isInheritanceAnnoUseFilters() {
+		return inheritanceAnnoUseFilters;
+	}
+
+	public void setInheritanceAnnoUseFilters(boolean inheritanceAnnoUseFilters) {
+		this.inheritanceAnnoUseFilters = inheritanceAnnoUseFilters;
+	}
+
 	@Override
 	public String toString() {
 		return "JannovarAnnotateVCFOptions [escapeAnnField=" + escapeAnnField + ", pathInputVCF=" + pathInputVCF
@@ -483,7 +501,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
 				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
 				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
-				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget + "]";
+				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget
+				+ ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters + "]";
 	}
 
 }
