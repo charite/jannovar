@@ -29,7 +29,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	public void testHighCoverage() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
 		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\t"
-				+ "GT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:10000:10000\n";
+				+ "GT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:20001:10000\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
@@ -40,7 +40,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	@Test
 	public void testHetLowGq() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
-		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:19:5:5\n";
+		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:19:10:5\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
@@ -51,7 +51,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	@Test
 	public void testHetHighAaf() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
-		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:1:9\n";
+		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:10:9\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
@@ -73,7 +73,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	@Test
 	public void testHetLowCoverage() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
-		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:3:4\n";
+		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/1:-14.5,-0.9,0.0:29.0:30:7:4\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
@@ -95,7 +95,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	@Test
 	public void testHomAltLowAaf() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
-		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t1/1:-14.5,-0.9,0.0:29.0:30:4:6\n";
+		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t1/1:-14.5,-0.9,0.0:29.0:30:10:6\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
@@ -106,7 +106,7 @@ public class GenotypeFilterAnnotatorPlatypusCallerTest extends GenotypeFilterTes
 	@Test
 	public void testHomRefHighAaf() throws Exception {
 		String headerLines = PLATYPUS_HEADER;
-		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/0:-14.5,-0.9,0.0:29.0:30:6:4\n";
+		String vcfLine = "1\t17452\t.\tA\tG\t388\tPASS\t.\tGT:GL:GOF:GQ:NR:NV\t0/0:-14.5,-0.9,0.0:29.0:30:10:4\n";
 		VariantContext variant = writeAndReadVcfLine(vcfLine, headerLines);
 
 		Genotype gt = variant.getGenotype("individual");
