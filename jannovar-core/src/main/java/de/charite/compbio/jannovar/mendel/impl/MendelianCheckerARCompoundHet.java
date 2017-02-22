@@ -43,7 +43,10 @@ public class MendelianCheckerARCompoundHet extends AbstractMendelianChecker {
 
 		this.siblings = queryDecorator.buildSiblings();
 	}
-
+    /**
+     *@param calls Genotypes for all pedigree members at all sites of the 'unit' being investigated (e.g., a gene, or a regulon).
+     *@return Genotypes for all variants that are compatible with autosomal recessive compound heterozygous inheritance.
+     */
 	@Override
 	public ImmutableList<GenotypeCalls> filterCompatibleRecords(Collection<GenotypeCalls> calls)
 			throws IncompatiblePedigreeException {
@@ -55,6 +58,9 @@ public class MendelianCheckerARCompoundHet extends AbstractMendelianChecker {
 			return filterCompatibleRecordsMultiSample(autosomalCalls);
 	}
 
+    /** In the single sample case, if we find two or more heterozygous variants, then there is compatibility with
+     * autosomal recessive compound heterozygous inheritance.
+     */
 	ImmutableList<GenotypeCalls> filterCompatibleRecordsSingleSample(Collection<GenotypeCalls> calls) {
 		ImmutableList.Builder<GenotypeCalls> builder = new ImmutableList.Builder<>();
 		for (GenotypeCalls gc : calls) {
@@ -109,6 +115,13 @@ public class MendelianCheckerARCompoundHet extends AbstractMendelianChecker {
 				}
 
 				// If mat and pat variant are heterozygous in an unaffected, check if they are on the same allele or not
+				// The variants in the Candidate are labeled paternal/maternal according to where they were found
+				// ppGT is the genotype of the father of p for the 'paternal' variant
+				// mpGT is the genotype of the mother of p for the 'paternal' variant
+				// pmGT is the genotype of the father of p for the 'maternal' variant
+				// mmGT is the genotype of the mother of p for the 'maternal' variant
+				// If an unaffected person is compound het for a pair of variants and the parents of p eachcontribute one variant, then
+				// it cannot be a cause of autosomal recessive disease since p is unaffected.
 				if (patHet && matHet) {
 					if (c.getPaternal() != null && p.getFather() != null && c.getMaternal() != null
 							&& p.getMother() != null) {
@@ -129,6 +142,9 @@ public class MendelianCheckerARCompoundHet extends AbstractMendelianChecker {
 		return true;
 	}
 
+    /** 
+     * This function looks for candidate pairs of variants in each of the affected-parent trios of the pedigree.
+     * @return A list of {@link Candidate} pairs of variants for each member of the pedigree. */
 	private ArrayList<Candidate> collectTrioCandidates(Collection<GenotypeCalls> calls) {
 		ArrayList<Candidate> result = new ArrayList<Candidate>();
 
@@ -190,6 +206,8 @@ public class MendelianCheckerARCompoundHet extends AbstractMendelianChecker {
 		return result;
 	}
 
+    /** This function takes a candidate pair of compound het variants and checks whether it is compatible with all affecteds in the pedigree.
+     */
 	private boolean isCompatibleWithTriosAroundAffected(Candidate c) {
 		for (Person p : pedigree.getMembers()) {
 			if (p.getDisease() == Disease.AFFECTED) {
@@ -206,6 +224,13 @@ public class MendelianCheckerARCompoundHet extends AbstractMendelianChecker {
 		return true;
 	}
 
+    /** For each person being tested (p is assumed to be affected by an autosomal recessive disease), we test whether the
+     * person has a HET or NOCALL genotype. Both parents (if any) of p mustbe HET or NOCALL for the mutations, whereby one
+     * of the variants must be inherited from the father of p and one from the mother of p (the variant is not filtered out
+     * if some or all of this data is missing). For each of the unaffected siblings of the affected person, it is checked 
+     * whether the sibling is compound het for the variants, inwhich case they are filtered out.
+     * @return true if this candidate pair of variants is compatible with AR compound het inheritance.
+     */
 	private boolean isCompatibleWithTriosAndMaternalPaternalInheritanceAroundAffected(Person p, GenotypeCalls paternal,
 			GenotypeCalls maternal) {
 		// None of the genotypes from the paternal or maternal call lists may be homozygous in the index
