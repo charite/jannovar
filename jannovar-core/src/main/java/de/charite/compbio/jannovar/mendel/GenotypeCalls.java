@@ -25,7 +25,7 @@ public final class GenotypeCalls implements Iterable<Entry<String, Genotype>> {
 
 	private final static Genotype GT_NO_CALL = new Genotype(ImmutableList.of(Genotype.NO_CALL));
 
-	/** Type of the chromosome that the variant lies on */
+	/** Type of the chromosome that the variant lies on (autosomal, X-chromosomal, etc.)*/
 	private final ChromosomeType chromType;
 	/** Mapping from sample name to {@link Genotype} */
 	private final ImmutableSortedMap<String, Genotype> sampleToGenotype;
