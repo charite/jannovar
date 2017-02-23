@@ -15,7 +15,6 @@
 
     <modules>
         <module>jannovar-core</module>
-        <module>jannovar-inheritance-checker</module>
         <module>jannovar-htsjdk</module>
         <module>jannovar-hgvs</module>
         <module>jannovar-vardbs</module>
