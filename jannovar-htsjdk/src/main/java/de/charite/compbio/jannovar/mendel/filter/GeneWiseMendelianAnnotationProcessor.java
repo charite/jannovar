@@ -32,7 +32,6 @@ import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.reference.GenomeInterval;
 import de.charite.compbio.jannovar.reference.Strand;
 import de.charite.compbio.jannovar.reference.TranscriptModel;
-import htsjdk.samtools.SAMSequenceDictionary;
 import htsjdk.variant.variantcontext.VariantContext;
 import htsjdk.variant.variantcontext.VariantContextBuilder;
 import htsjdk.variant.vcf.VCFHeader;
@@ -59,6 +58,10 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	private final Consumer<VariantContext> sink;
 	/** Provider for contig name to number conversion */
 	private final ContigInfoProvider contigInfoProvider;
+	/** Whether or not to interpret genotype-wise filters */
+	private final boolean interpretGenotypeFilters;
+	/** Whether or not to interpret variant-wise filters */
+	private final boolean interpretVariantFilters;
 
 	/** Currently active genes and variants assigned to them. */
 	HashMap<Gene, ArrayList<VariantContext>> activeGenes = new HashMap<>();
@@ -77,15 +80,21 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 	 *            {@link JannovarData} object to use for getting the genes from
 	 * @param sink
 	 *            location to write the {@link VariantContext} to
+	 * @param interpretFilters
+	 *            whether or not to interpret genotype- or variant-wise filters
 	 */
 	public GeneWiseMendelianAnnotationProcessor(Pedigree pedigree, JannovarData jannovarData,
-			Consumer<VariantContext> sink) {
+			Consumer<VariantContext> sink, boolean interpretFilters) {
 		this.pedigree = pedigree;
 		this.jannovarData = jannovarData;
 		this.sink = sink;
 
+		this.interpretGenotypeFilters = interpretFilters;
+		this.interpretVariantFilters = interpretFilters;
+
 		this.geneList = buildGeneList(this.jannovarData);
-		this.annotator = new VariantContextMendelianAnnotator(this.pedigree);
+		this.annotator = new VariantContextMendelianAnnotator(this.pedigree, interpretGenotypeFilters,
+				interpretVariantFilters);
 
 		this.contigInfoProvider = new ContigInfoProvider();
 	}

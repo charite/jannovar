@@ -95,6 +95,8 @@ public enum VariantEffect {
 	 * <a href="http://www.sequenceontology.org/browser/current_svn/term/SO:0002007">SO:0002007</a> An MNV is a multiple
 	 * nucleotide variant (substitution) in which the inserted sequence is the same length as the replaced sequence (is
 	 * a: substitution).
+	 *
+	 * In Jannovar, only used for marking MNVs in coding regions.
 	 */
 	MNV,
 	/**
@@ -935,45 +937,73 @@ public enum VariantEffect {
 	}
 
 	/**
-	 * @return <code>true</code> if the variant effect does not indicate a change affecting the exome, {@link #CUSTOM}
-	 *         is considered on-exome
-	 * @see #isOffTranscript
+	 * Variant of <code>isOffExome()</code> that allows to specify whether UTR and non-consensus intronic splice
+	 * variants count as off-exome or not.
+	 *
+	 * The parameter-less version counts both as on-exome.
+	 *
+	 * @param isUtrOffExome
+	 *            whether or not UTR exons are considered off-exome (start codon gain is always on-exome)
+	 * @param isIntronicSpliceNonConsensusOffExome
+	 *            whether or not intronic splice (non consensus) is considered off-exome
+	 * @return <code>true</code> if the variant effect describes off-exome variant.
 	 */
-	public boolean isOffExome() {
-		// Note that this function is called by isOffTranscript() which allows intronic and UTR changes.
+	public boolean isOffExome(boolean isUtrOffExome, boolean isIntronicSpliceNonConsensusOffExome) {
 		switch (this) {
+		case FIVE_PRIME_UTR_TRUNCATION:
+		case THREE_PRIME_UTR_TRUNCATION:
+		case FIVE_PRIME_UTR_EXON_VARIANT:
+		case THREE_PRIME_UTR_EXON_VARIANT:
+			return isUtrOffExome;
+		case SPLICE_REGION_VARIANT:
+		case SPLICING_VARIANT:
+			return isIntronicSpliceNonConsensusOffExome;
+		case CODING_SEQUENCE_VARIANT:
+		case COMPLEX_SUBSTITUTION:
 		case CUSTOM:
+		case DIRECT_TANDEM_DUPLICATION:
 		case DISRUPTIVE_INFRAME_DELETION:
 		case DISRUPTIVE_INFRAME_INSERTION:
+		case DOWNSTREAM_GENE_VARIANT:
 		case EXON_LOSS_VARIANT:
 		case EXON_VARIANT:
 		case FEATURE_TRUNCATION:
 		case FIVE_PRIME_UTR_PREMATURE_START_CODON_GAIN_VARIANT:
 		case FRAMESHIFT_ELONGATION:
 		case FRAMESHIFT_TRUNCATION:
+		case FRAMESHIFT_VARIANT:
 		case INFRAME_DELETION:
 		case INFRAME_INSERTION:
 		case INITIATOR_CODON_VARIANT:
 		case INTERNAL_FEATURE_ELONGATION:
-		case INTRON_VARIANT:
 		case MISSENSE_VARIANT:
 		case MNV:
 		case NON_CODING_TRANSCRIPT_EXON_VARIANT:
 		case RARE_AMINO_ACID_VARIANT:
 		case SPLICE_ACCEPTOR_VARIANT:
 		case SPLICE_DONOR_VARIANT:
-		case SPLICE_REGION_VARIANT:
-		case SPLICING_VARIANT:
 		case START_LOST:
 		case STOP_GAINED:
 		case STOP_LOST:
 		case STOP_RETAINED_VARIANT:
+		case STRUCTURAL_VARIANT:
 		case SYNONYMOUS_VARIANT:
+		case TF_BINDING_SITE_VARIANT:
 		case TRANSCRIPT_ABLATION:
+		case UPSTREAM_GENE_VARIANT:
 			return false;
 		default:
 			return true;
 		}
+	}
+
+	/**
+	 * @return <code>true</code> if the variant effect does not indicate a change affecting the exome, {@link #CUSTOM}
+	 *         is considered on-exome, splice variants are on-exome, UTR is off-exome
+	 * @see #isOffTranscript
+	 */
+	public boolean isOffExome() {
+		return isOffExome(true, false);
 	}
 
 	/**
@@ -983,17 +1013,14 @@ public enum VariantEffect {
 	 */
 	public boolean isOffTranscript() {
 		// This function first calls isOffExome() to check whether the variant effect is off-exome. Then, this function
-		// also allows intronic and 5'/3' variants.
-		if (!isOffExome())
+		// also allows intronic variants
+		if (!isOffExome(false, false))
 			return false;
 
 		switch (this) {
 		case CODING_TRANSCRIPT_INTRON_VARIANT:
-		case FIVE_PRIME_UTR_TRUNCATION:
 		case FIVE_PRIME_UTR_INTRON_VARIANT:
-		case FIVE_PRIME_UTR_EXON_VARIANT:
 		case THREE_PRIME_UTR_TRUNCATION:
-		case THREE_PRIME_UTR_EXON_VARIANT:
 		case THREE_PRIME_UTR_INTRON_VARIANT:
 		case NON_CODING_TRANSCRIPT_INTRON_VARIANT:
 		case NON_CODING_TRANSCRIPT_VARIANT:

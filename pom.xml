@@ -20,6 +20,7 @@
         <module>jannovar-hgvs</module>
         <module>jannovar-vardbs</module>
         <module>jannovar-cli</module>
+        <module>jannovar-filter</module>
     </modules>
 
     <!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
