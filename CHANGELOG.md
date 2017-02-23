@@ -29,6 +29,11 @@
 
 * Adding annotation with ClinVar, can annotate all clinvar variants
 
+### jannovar-inheritance-checker
+
+* Removing this outdated module.
+  Use the classes in `de.charite.compbio.jannovar.mendel` instead
+
 ## v0.20
 
 ### all
