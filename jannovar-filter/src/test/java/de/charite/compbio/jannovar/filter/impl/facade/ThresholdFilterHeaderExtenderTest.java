@@ -25,8 +25,8 @@ public class ThresholdFilterHeaderExtenderTest extends TresholdFilterTestBase {
 		// Check header after extension
 		Assert.assertEquals(11, header.getFilterLines().size());
 		Assert.assertEquals(0, header.getInfoHeaderLines().size());
-		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(11, header.getIDHeaderLines().size());
+		Assert.assertEquals(1, header.getFormatHeaderLines().size());
+		Assert.assertEquals(12, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getFilterHeaderLine(ThresholdFilterHeaderExtender.FILTER_GT_MAX_COV));

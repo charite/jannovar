@@ -1,7 +1,9 @@
 package de.charite.compbio.jannovar.filter.facade;
 
 import htsjdk.variant.vcf.VCFFilterHeaderLine;
+import htsjdk.variant.vcf.VCFFormatHeaderLine;
 import htsjdk.variant.vcf.VCFHeader;
+import htsjdk.variant.vcf.VCFHeaderLineType;
 
 /**
  * Code for adding headers for threshold-based filters to VCF files
@@ -54,7 +56,10 @@ public class ThresholdFilterHeaderExtender {
 	 *            The {@link VCFHeader} to extend.
 	 */
 	public void addHeaders(VCFHeader header) {
-		// TODO: add FORMAT field "FT"?
+		if (!header.hasFormatLine("FT"))
+			header.addMetaDataLine(
+					new VCFFormatHeaderLine("FT", 1, VCFHeaderLineType.Character, "Filters applied to genotype call"));
+
 		header.addMetaDataLine(
 				new VCFFilterHeaderLine(FILTER_GT_MAX_COV, "Genotype has coverage >" + options.getMaxCov()));
 		header.addMetaDataLine(new VCFFilterHeaderLine(FILTER_GT_MIN_COV_HET,
