@@ -89,7 +89,7 @@ For AR compound heterozygous, the following checks are performed.
      * Let the first two genotypes be ``pp`` and ``mp`` and the second two genotypes be ``pm`` and ``mm``.
      * In the case of ``pp == HET and mp == REF and pm == REF and mm == HET`` and the case of ``pp == REF and mp == HET and pm == HET and mm == REF``, the candidate pairs incompatible and compatible otherwise.  
 
-Autosomal X-Dominant Filter
+X-Dominant Filter
 ---------------------------
 * First of all variants must be X-Chromosomal. 
  * If the pedigree only contains one person then we decide if 
@@ -101,7 +101,7 @@ Autosomal X-Dominant Filter
    * no a affected female has a ``HOM`` call, and
    * no unaffected person has a ``HET`` or ``HOM`` call.
 
-Autosomal X-Recessive Filter
+X-Recessive Filter
 ----------------------------
 The filter first checks for compatibility with X-chromosomal recessive (XR) homozygous and then XR compound heterozygous mode of inheritance. XR is different to the AR filter, because affected males are always hemizygous (homozygous for the callers). So males do not have compund heterozygous variants.
 
