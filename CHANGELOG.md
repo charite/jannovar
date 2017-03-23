@@ -14,6 +14,7 @@
   Filtered genotypes will be passed into the inheritance filter as no-call.
 * Adding annotation with ClinVar
 * Printing warnings next to the annotations in `annotate-pos`
+* AR inheritance annotation of two siblings bugfix (no parents avaiable in comp.het mode) #314
 
 ### jannovar-filter
 
