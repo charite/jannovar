@@ -60,6 +60,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Path to pedigree file */
 	public String pathPedFile;
 
+	/**
+	 * Whether or not to perform compatible inheritance mode annotation with the assumption that the single individual
+	 * is the affected index.
+	 */
+	public boolean annotateAsSingletonPedigree;
+
 	/** Whether or not to use threshold-based filters */
 	public boolean useThresholdFilters;
 
@@ -136,6 +142,9 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		ArgumentGroup annotationGroup = subParser.addArgumentGroup("Annotation Arguments (optional)");
 		annotationGroup.addArgument("--pedigree-file").help("Pedigree file to use for Mendelian inheritance annotation")
 				.required(false);
+		annotationGroup.addArgument("--annotate-as-singleton-pedigree")
+				.help("Annotate VCF file with single individual as singleton pedigree (singleton assumed to be affected)")
+				.required(false).setDefault(false).action(Arguments.storeTrue());
 		annotationGroup.addArgument("--ref-fasta")
 				.help("Path to FAI-indexed reference FASTA file, required for dbSNP/ExAC/UK10K-based annotation");
 		annotationGroup.addArgument("--dbsnp-vcf").help("Path to dbSNP VCF file, activates dbSNP annotation")
@@ -220,6 +229,7 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		pathInputVCF = args.getString("input_vcf");
 		pathOutputVCF = args.getString("output_vcf");
 		pathPedFile = args.getString("pedigree_file");
+		annotateAsSingletonPedigree = args.getBoolean("annotate_as_singleton_pedigree");
 
 		pathFASTARef = args.getString("ref_fasta");
 		pathVCFDBSNP = args.getString("dbsnp_vcf");
@@ -492,17 +502,18 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
 				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac + ", prefixExac=" + prefixExac
 				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar
-				+ ", prefixClinVar=" + prefixClinVar + ", pathPedFile=" + pathPedFile + ", useThresholdFilters="
-				+ useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
-				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
-				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
-				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
-				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
-				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
-				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
-				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
-				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget
-				+ ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters + "]";
+				+ ", prefixClinVar=" + prefixClinVar + ", pathPedFile=" + pathPedFile + ", annotateAsSingletonPedigree="
+				+ annotateAsSingletonPedigree + ", useThresholdFilters=" + useThresholdFilters
+				+ ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet + ", threshFiltMinGtCovHomAlt="
+				+ threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov + ", threshFiltMinGtGq="
+				+ threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet + ", threshFiltMaxGtAafHet="
+				+ threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt=" + threshFiltMinGtAafHomAlt
+				+ ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef + ", threshFiltMaxAlleleFrequencyAd="
+				+ threshFiltMaxAlleleFrequencyAd + ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr
+				+ ", offTargetFilterEnabled=" + offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget="
+				+ offTargetFilterUtrIsOffTarget + ", offTargetFilterIntronicSpliceIsOffTarget="
+				+ offTargetFilterIntronicSpliceIsOffTarget + ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters
+				+ "]";
 	}
 
 }

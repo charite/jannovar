@@ -419,7 +419,8 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 		 */
 		int registerContig(String name) {
 			if (isContigKnown(name))
-				throw new RuntimeException("Trying to add contig twice " + name);
+				throw new RuntimeException("Seeing contig " + name
+						+ " a second time (with other contig name in between). Is your file sorted?");
 			contigNameToNo.put(name, nextContigNo);
 			currentContig = name;
 			return nextContigNo++;
