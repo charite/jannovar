@@ -2,7 +2,7 @@ package de.charite.compbio.jannovar.mendel.filter;
 
 import java.util.TreeSet;
 
-import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.SubModeOfInheritance;
 import htsjdk.variant.variantcontext.VariantContext;
 
 /**
@@ -14,7 +14,7 @@ public class VariantContextCounter {
 
 	private VariantContext variantContext;
 	private int counter;
-	private TreeSet<ModeOfInheritance> compatibleModes;
+	private TreeSet<SubModeOfInheritance> compatibleModes;
 
 	public VariantContextCounter(VariantContext variantContext) {
 		this(variantContext, 0);
@@ -55,15 +55,15 @@ public class VariantContextCounter {
 			throw new RuntimeException("Negative counter " + this.counter);
 	}
 
-	public void addCompatibleMode(ModeOfInheritance mode) {
+	public void addCompatibleMode(SubModeOfInheritance mode) {
 		this.compatibleModes.add(mode);
 	}
 
-	public TreeSet<ModeOfInheritance> getCompatibleModes() {
+	public TreeSet<SubModeOfInheritance> getCompatibleModes() {
 		return compatibleModes;
 	}
 
-	public void setCompatibleModes(TreeSet<ModeOfInheritance> compatibleModes) {
+	public void setCompatibleModes(TreeSet<SubModeOfInheritance> compatibleModes) {
 		this.compatibleModes = compatibleModes;
 	}
 

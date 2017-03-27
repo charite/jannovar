@@ -29,6 +29,7 @@
 
 ### jannovar-core
 
+* Extending API to expose mendelian checks for comp het./ad alt (via `SubModuleOfInheritance` and `MendelianInheritanceChecker`
 * Un-deprecating `BestAnnotationListTextGenerator` and `AllAnnotationListTextGenerator` classes, useful for text-based output formats
 * Changing behaviour of `VariantEffect.isOffExome()` and adding a variant that allows to decide between UTR on/off exome and non-consensus splice region on/off exome
 * Making the behaviour of overriding transcripts configurable at least in the code, using default to not do this any more

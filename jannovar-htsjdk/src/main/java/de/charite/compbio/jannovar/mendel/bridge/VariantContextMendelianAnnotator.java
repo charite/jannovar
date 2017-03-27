@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ import de.charite.compbio.jannovar.mendel.GenotypeCallsBuilder;
 import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
 import de.charite.compbio.jannovar.mendel.MendelianInheritanceChecker;
 import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.SubModeOfInheritance;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import htsjdk.variant.variantcontext.Allele;
 import htsjdk.variant.variantcontext.Genotype;
@@ -108,18 +110,24 @@ public class VariantContextMendelianAnnotator {
 		}
 
 		// Create mapping from MOH to genotype calls and pre-filter if configured to do so
-		HashMap<ModeOfInheritance, List<GenotypeCalls>> origCalls = new HashMap<>();
-		origCalls.put(ModeOfInheritance.AUTOSOMAL_DOMINANT, buildGenotypeCalls(vcs));
-		origCalls.put(ModeOfInheritance.X_DOMINANT, origCalls.get(ModeOfInheritance.AUTOSOMAL_DOMINANT));
-		origCalls.put(ModeOfInheritance.AUTOSOMAL_RECESSIVE,
+		HashMap<SubModeOfInheritance, List<GenotypeCalls>> origCalls = new HashMap<>();
+		origCalls.put(SubModeOfInheritance.AUTOSOMAL_DOMINANT, buildGenotypeCalls(vcs));
+		origCalls.put(SubModeOfInheritance.X_DOMINANT, origCalls.get(SubModeOfInheritance.AUTOSOMAL_DOMINANT));
+		origCalls.put(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_COMP_HET,
 				buildGenotypeCalls(vcs.stream().filter(keepFreqRecessive).collect(Collectors.toList())));
-		origCalls.put(ModeOfInheritance.X_DOMINANT, origCalls.get(ModeOfInheritance.X_DOMINANT));
+		origCalls.put(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_HOM_ALT,
+				origCalls.get(SubModeOfInheritance.AUTOSOMAL_RECESSIVE_HOM_ALT));
+		origCalls.put(SubModeOfInheritance.X_RECESSIVE_COMP_HET,
+				buildGenotypeCalls(vcs.stream().filter(keepFreqRecessive).collect(Collectors.toList())));
+		origCalls.put(SubModeOfInheritance.X_RECESSIVE_HOM_ALT,
+				origCalls.get(SubModeOfInheritance.X_RECESSIVE_HOM_ALT));
 
 		// Filter to compatible records
-		HashMap<ModeOfInheritance, List<GenotypeCalls>> filteredGenotypeCalls = new HashMap<>();
+		HashMap<SubModeOfInheritance, List<GenotypeCalls>> filteredGenotypeCalls = new HashMap<>();
 		try {
-			for (Entry<ModeOfInheritance, List<GenotypeCalls>> e : origCalls.entrySet())
-				filteredGenotypeCalls.put(e.getKey(), mendelChecker.filterCompatibleRecords(e.getValue(), e.getKey()));
+			for (Entry<SubModeOfInheritance, List<GenotypeCalls>> e : origCalls.entrySet())
+				filteredGenotypeCalls.put(e.getKey(),
+						mendelChecker.filterCompatibleRecordsSub(e.getValue(), e.getKey()));
 		} catch (IncompatiblePedigreeException e) {
 			throw new CannotAnnotateMendelianInheritance(
 					"Problem with annotating VariantContext for Mendelian inheritance.", e);
@@ -127,23 +135,34 @@ public class VariantContextMendelianAnnotator {
 
 		// Build map of compatible Mendelian inheritance modes for each record
 		HashMap<Integer, Set<String>> map = new HashMap<>();
-		for (Entry<ModeOfInheritance, List<GenotypeCalls>> e : filteredGenotypeCalls.entrySet()) {
-			final ModeOfInheritance mode = e.getKey();
+		HashMap<Integer, Set<String>> subMap = new HashMap<>();
+		for (Entry<SubModeOfInheritance, List<GenotypeCalls>> e : filteredGenotypeCalls.entrySet()) {
+			final SubModeOfInheritance mode = e.getKey();
 			final List<GenotypeCalls> calls = e.getValue();
 			for (GenotypeCalls gc : calls) {
 				Integer key = (Integer) gc.getPayload();
-				map.putIfAbsent(key, new HashSet<String>());
+				map.putIfAbsent(key, new TreeSet<String>());
+				subMap.putIfAbsent(key, new TreeSet<String>());
 				switch (mode) {
 				case AUTOSOMAL_DOMINANT:
 					map.get(key).add("AD");
 					break;
-				case AUTOSOMAL_RECESSIVE:
+
+				case AUTOSOMAL_RECESSIVE_COMP_HET:
+					subMap.get(key).add(MendelVCFHeaderExtender.AR_COMP_HET);
+				case AUTOSOMAL_RECESSIVE_HOM_ALT:
+					subMap.get(key).add(MendelVCFHeaderExtender.AR_HOM_ALT);
 					map.get(key).add("AR");
 					break;
+
 				case X_DOMINANT:
 					map.get(key).add("XD");
 					break;
-				case X_RECESSIVE:
+
+				case X_RECESSIVE_COMP_HET:
+					subMap.get(key).add(MendelVCFHeaderExtender.XR_COMP_HET);
+				case X_RECESSIVE_HOM_ALT:
+					subMap.get(key).add(MendelVCFHeaderExtender.XR_HOM_ALT);
 					map.get(key).add("XR");
 					break;
 				default:
@@ -152,31 +171,14 @@ public class VariantContextMendelianAnnotator {
 			}
 		}
 
-		// Perform non-compound recessive checks
-		int idx = 0;
-		for (VariantContext vc : vcs) {
-			ImmutableMap<ModeOfInheritance, ImmutableList<VariantContext>> compatibleModes = computeCompatibleInheritanceModes(
-					ImmutableList.of(vc));
-			if (compatibleModes.containsKey(ModeOfInheritance.AUTOSOMAL_RECESSIVE)
-					&& !compatibleModes.get(ModeOfInheritance.AUTOSOMAL_RECESSIVE).isEmpty()) {
-				map.putIfAbsent(idx, new HashSet<String>());
-				map.get(idx).add("AR");
-			}
-			if (compatibleModes.containsKey(ModeOfInheritance.X_RECESSIVE)
-					&& !compatibleModes.get(ModeOfInheritance.X_RECESSIVE).isEmpty()) {
-				map.putIfAbsent(idx, new HashSet<String>());
-				map.get(idx).add("XR");
-			}
-			idx += 1;
-		}
-
-		// Construct extended VariantContext objects with INHERITED attribute
+		// Construct extended VariantContext objects with INHERITED and INHERITANCE_RECESSIVE_DETAIL attributes
 		ArrayList<VariantContextBuilder> vcBuilders = new ArrayList<>();
 		for (int i = 0; i < vcs.size(); ++i)
 			vcBuilders.add(new VariantContextBuilder(vcs.get(i)));
 		for (Entry<Integer, Set<String>> e : map.entrySet()) {
 			VariantContextBuilder vcBuilder = vcBuilders.get(e.getKey());
-			vcBuilder.attribute(MendelVCFHeaderExtender.key(), map.values());
+			vcBuilder.attribute(MendelVCFHeaderExtender.key(), e.getValue());
+			vcBuilder.attribute(MendelVCFHeaderExtender.keySub(), subMap.get(e.getKey()));
 		}
 
 		// Build final result list
@@ -211,6 +213,39 @@ public class VariantContextMendelianAnnotator {
 		// Build final result
 		ImmutableMap.Builder<ModeOfInheritance, ImmutableList<VariantContext>> builder = new ImmutableMap.Builder<>();
 		for (Entry<ModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
+			ImmutableList.Builder<VariantContext> listBuilder = new ImmutableList.Builder<>();
+			for (GenotypeCalls gc : e.getValue())
+				listBuilder.add(vcs.get((Integer) gc.getPayload()));
+			builder.put(e.getKey(), listBuilder.build());
+		}
+		return builder.build();
+	}
+
+	/**
+	 * Compute compatible modes of inheritance for a list of {@link VariantContext} objects
+	 * 
+	 * @param vcs
+	 *            {@link VariantContext} objects to check for compatibility
+	 * @return A {@link Map} from {@link ModeOfInheritance} to the list of {@link VariantContext} in <code>vcs</code>
+	 *         that is compatible with each mode
+	 * @throws CannotAnnotateMendelianInheritance
+	 *             on problems with annotating mendelian inheritance
+	 */
+	public ImmutableMap<SubModeOfInheritance, ImmutableList<VariantContext>> computeCompatibleInheritanceSubModes(
+			List<VariantContext> vcs) throws CannotAnnotateMendelianInheritance {
+		// Perform annotation, preceded by building GenotypeCalls list
+		List<GenotypeCalls> gcs = buildGenotypeCalls(vcs);
+		ImmutableMap<SubModeOfInheritance, ImmutableList<GenotypeCalls>> checkResult;
+		try {
+			checkResult = mendelChecker.checkMendelianInheritanceSub(gcs);
+		} catch (IncompatiblePedigreeException e) {
+			throw new CannotAnnotateMendelianInheritance(
+					"Problem with annotating VariantContext for Mendelian inheritance.", e);
+		}
+
+		// Build final result
+		ImmutableMap.Builder<SubModeOfInheritance, ImmutableList<VariantContext>> builder = new ImmutableMap.Builder<>();
+		for (Entry<SubModeOfInheritance, ImmutableList<GenotypeCalls>> e : checkResult.entrySet()) {
 			ImmutableList.Builder<VariantContext> listBuilder = new ImmutableList.Builder<>();
 			for (GenotypeCalls gc : e.getValue())
 				listBuilder.add(vcs.get((Integer) gc.getPayload()));
