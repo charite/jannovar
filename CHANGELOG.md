@@ -9,6 +9,8 @@
 
 ### jannovar-cli
 
+* Adding `--annotate-as-singleton-pedigree` parameter for annotation of singleton pedigrees without pedigree file (single individual is assumed to be affected)
+* More friendly user message in case of unsorted files on inheritance mode annotation
 * Interpretation of filters in compatible inheritance mode annotation
 * Integrating new jannovar-filter into Jannovar CLI.
   Filtered genotypes will be passed into the inheritance filter as no-call.
@@ -42,6 +44,7 @@
 
 ### jannovar-vardbs
 
+* Fixing header description for exac database
 * Fixing output of `DBSNP_CAF` to also contain reference allele AF
 * Adding annotation with ClinVar, can annotate all clinvar variants
 
