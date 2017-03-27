@@ -39,6 +39,8 @@ public class GenomeRegionSequenceExtractorTest {
 		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.fa", new File(fastaPath));
 		String faiPath = tmpDir + "/ref.fa.fai";
 		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.fa.fai", new File(faiPath));
+		String dictPath = tmpDir + "/ref.dict";
+		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.dict", new File(dictPath));
 		dbPath = tmpDir + "/mini_fbn1.ser";
 		ResourceUtils.copyResourceToFile("/ex_fbn1/mini_fbn1.ser", new File(dbPath));
 	}
@@ -51,7 +53,7 @@ public class GenomeRegionSequenceExtractorTest {
 
 	@Test
 	public void testLoadGenomeInterval() {
-		GenomeRegionSequenceExtractor extractor = new GenomeRegionSequenceExtractor(this.indexedFile);
+		GenomeRegionSequenceExtractor extractor = new GenomeRegionSequenceExtractor(jannovarData, this.indexedFile);
 		GenomeInterval region = new GenomeInterval(new GenomePosition(jannovarData.getRefDict(), Strand.FWD, 1, 99), 51);
 		String seq = extractor.load(region);
 		Assert.assertEquals("CTTTAGGCCTGGGAATCAGGAGTGCTATGACAATTTCCTCCAAAGTGGAGA", seq);

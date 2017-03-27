@@ -175,10 +175,31 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		}
 	}
 
+	/** Map contig name (from genome variant) to contig name in FASTA */
+	private String mapContigToFasta(String contigName) {
+		// Map genome variant's contig to unique ID
+		Integer contigID = jannovarData.getRefDict().getContigNameToID().get(contigName);
+		if (contigID == null)
+			throw new UncheckedJannovarException("Unknown contig name " + contigName);
+		// Try to find matching contig in fasta
+		String nameInFasta = null;
+		for (SAMSequenceRecord record : fasta.getSequenceDictionary().getSequences()) {
+			if (jannovarData.getRefDict().getContigNameToID().containsKey(record.getSequenceName())) {
+				nameInFasta = record.getSequenceName();
+				break;
+			}
+		}
+		if (nameInFasta == null)
+			throw new UncheckedJannovarException("Could not find corresponding contig in FASTA for " + contigName);
+
+		return nameInFasta;
+	}
+
 	private void writeVariant(VariantContextWriter writer, GenomeVariant genomeVar) {
+		String nameInFasta = mapContigToFasta(genomeVar.getChrName());
 		List<Allele> alleles = new ArrayList<Allele>();
 		if (genomeVar.getRef().isEmpty() || genomeVar.getAlt().isEmpty()) {
-			String left = fasta.getSubsequenceAt(genomeVar.getChrName(), genomeVar.getPos(), genomeVar.getPos() + 1)
+			String left = fasta.getSubsequenceAt(nameInFasta, genomeVar.getPos(), genomeVar.getPos() + 1)
 					.getBaseString();
 			alleles.add(Allele.create(left + genomeVar.getRef(), true));
 			alleles.add(Allele.create(left + genomeVar.getAlt(), false));

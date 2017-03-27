@@ -38,7 +38,7 @@ public class NucleotideChangeToGenomeVariantTranslator {
 
 	public NucleotideChangeToGenomeVariantTranslator(JannovarData jvDB, IndexedFastaSequenceFile indexedFasta) {
 		this.jvDB = jvDB;
-		this.seqExtractor = new GenomeRegionSequenceExtractor(indexedFasta);
+		this.seqExtractor = new GenomeRegionSequenceExtractor(jvDB, indexedFasta);
 	}
 
 	/**
