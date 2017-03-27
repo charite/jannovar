@@ -47,6 +47,8 @@ public class NucleotideInversionToGenomeVariantForwardStrandTest {
 		ResourceUtils.copyResourceToFile("/ex_ctns/ref.fa", new File(fastaPath));
 		String faiPath = tmpDir + "/ref.fa.fai";
 		ResourceUtils.copyResourceToFile("/ex_ctns/ref.fa.fai", new File(faiPath));
+		String dictPath = tmpDir + "/ref.dict";
+		ResourceUtils.copyResourceToFile("/ex_ctns/ref.dict", new File(dictPath));
 	}
 
 	@Before

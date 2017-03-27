@@ -47,6 +47,8 @@ public class NucleotideIndelToGenomeVariantReverseStrandTest {
 		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.fa", new File(fastaPath));
 		String faiPath = tmpDir + "/ref.fa.fai";
 		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.fa.fai", new File(faiPath));
+		String dictPath = tmpDir + "/ref.dict";
+		ResourceUtils.copyResourceToFile("/ex_fbn1/ref.dict", new File(dictPath));
 	}
 
 	@Before
