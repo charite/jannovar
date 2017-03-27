@@ -9,6 +9,7 @@
 
 ### jannovar-cli
 
+* Better handling missing `.dict` file for HGVS to VCF translation
 * Interpretation of filters in compatible inheritance mode annotation
 * Integrating new jannovar-filter into Jannovar CLI.
   Filtered genotypes will be passed into the inheritance filter as no-call.

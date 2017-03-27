@@ -113,6 +113,11 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		} catch (FileNotFoundException e) {
 			throw new UncheckedJannovarException("Could not load FASTA index", e);
 		}
+		if (this.fasta.getSequenceDictionary() == null) {
+			throw new UncheckedJannovarException(
+					"FASTA sequence dictionary empty, you have a REFERENCE.dict file (create with Picard "
+							+ "or samtools dict, version >=1.3)");
+		}
 
 		this.translator = new NucleotideChangeToGenomeVariantTranslator(jannovarData, fasta);
 	}

@@ -24,6 +24,11 @@ public class GenomeRegionSequenceExtractor {
 		super();
 		this.jannovarData = jannovarData;
 		this.indexedFile = indexedFile;
+		if (this.indexedFile.getSequenceDictionary() == null) {
+			throw new UncheckedJannovarException(
+					"FASTA file has no sequence dictionary. Are you missing the REFERENCE.dict file? "
+							+ "Hint: create with samtools dict (version >=1.2) or Picard.");
+		}
 	}
 
 	/**
