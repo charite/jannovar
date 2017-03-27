@@ -9,6 +9,7 @@
 
 ### jannovar-cli
 
+* Fixing bug in HGVS to VCF
 * Better handling missing `.dict` file for HGVS to VCF translation
 * Interpretation of filters in compatible inheritance mode annotation
 * Integrating new jannovar-filter into Jannovar CLI.

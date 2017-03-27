@@ -203,8 +203,10 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 	private void writeVariant(VariantContextWriter writer, GenomeVariant genomeVar) {
 		String nameInFasta = mapContigToFasta(genomeVar.getChrName());
 		List<Allele> alleles = new ArrayList<Allele>();
+		int shift = 0;
 		if (genomeVar.getRef().isEmpty() || genomeVar.getAlt().isEmpty()) {
-			String left = fasta.getSubsequenceAt(nameInFasta, genomeVar.getPos(), genomeVar.getPos() + 1)
+			shift = -1;
+			String left = fasta.getSubsequenceAt(nameInFasta, genomeVar.getPos(), genomeVar.getPos())
 					.getBaseString();
 			alleles.add(Allele.create(left + genomeVar.getRef(), true));
 			alleles.add(Allele.create(left + genomeVar.getAlt(), false));
@@ -214,8 +216,8 @@ public class ProjectTranscriptToChromosome extends JannovarAnnotationCommand {
 		}
 
 		VariantContextBuilder builder = new VariantContextBuilder();
-		builder.chr(genomeVar.getChrName()).start(genomeVar.getPos() + 1)
-				.computeEndFromAlleles(alleles, genomeVar.getPos() + 1).alleles(alleles);
+		builder.chr(genomeVar.getChrName()).start(genomeVar.getPos() + shift + 1)
+				.computeEndFromAlleles(alleles, genomeVar.getPos() + shift + 1).alleles(alleles);
 
 		writer.add(builder.make());
 	}
