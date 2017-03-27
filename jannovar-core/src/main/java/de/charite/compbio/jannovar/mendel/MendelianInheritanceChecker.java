@@ -74,6 +74,7 @@ public final class MendelianInheritanceChecker {
 		return builder.build();
 	}
 
+
 	/**
 	 * Perform checking for compatible sub mode of inheritance
 	 * 

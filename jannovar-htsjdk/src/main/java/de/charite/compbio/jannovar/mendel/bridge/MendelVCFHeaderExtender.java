@@ -21,6 +21,15 @@ public class MendelVCFHeaderExtender {
 	/** Constant for X recessive */
 	public static String XR = "XR";
 
+	/** Constant for autosomal recessive hom. alt. */
+	public static String AR_HOM_ALT = "AR_HOM_ALT";
+	/** Constant for autosomal recessive compound het. */
+	public static String AR_COMP_HET = "AR_COMP_HET";
+	/** Constant for X recessive hom. alt. */
+	public static String XR_HOM_ALT = "XR_HOM_ALT";
+	/** Constant for X recessive compound het. */
+	public static String XR_COMP_HET = "XR_COMP_HET";
+
 	public void extendHeader(VCFHeader vcfHeader) {
 		extendHeader(vcfHeader, "");
 	}
@@ -33,10 +42,22 @@ public class MendelVCFHeaderExtender {
 		return prefix + "INHERITANCE";
 	}
 
+	public static String keySub() {
+		return keySub("");
+	}
+
+	public static String keySub(String prefix) {
+		return prefix + "INHERITANCE_RECESSIVE_DETAIL";
+	}
+
 	public void extendHeader(VCFHeader vcfHeader, String prefix) {
 		VCFInfoHeaderLine inheritanceLine = new VCFInfoHeaderLine(key(prefix), VCFHeaderLineCount.UNBOUNDED,
 				VCFHeaderLineType.String, "Compatible Mendelian inheritance modes (AD, AR, XD, XR)");
 		vcfHeader.addMetaDataLine(inheritanceLine);
+		VCFInfoHeaderLine subInheritanceLine = new VCFInfoHeaderLine(keySub(prefix), VCFHeaderLineCount.UNBOUNDED,
+				VCFHeaderLineType.String,
+				"Extra annotation for recessive inheritance sub type (AR_HOM_ALT, AR_COMP_HET, XR_HOM_ALT, XR_COMP_HET)");
+		vcfHeader.addMetaDataLine(subInheritanceLine);
 	}
 
 }

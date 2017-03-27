@@ -17,6 +17,28 @@ public enum ModeOfInheritance {
 	/** value for encoding uninitialized values */
 	ANY;
 
+	/** @return <code>true</code> if is recessive MOI */
+	public boolean isRecessive() {
+		switch (this) {
+		case AUTOSOMAL_RECESSIVE:
+		case X_RECESSIVE:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	/** @return <code>true</code> if is recessive MOI */
+	public boolean isDominant() {
+		switch (this) {
+		case AUTOSOMAL_DOMINANT:
+		case X_DOMINANT:
+			return true;
+		default:
+			return false;
+		}
+	}
+
 	/** @return two-letter shortcut for the ModeOfInheritance */
 	public String getAbbreviation() {
 		switch (this) {

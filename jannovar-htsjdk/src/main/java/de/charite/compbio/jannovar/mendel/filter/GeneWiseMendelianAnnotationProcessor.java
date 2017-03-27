@@ -24,7 +24,7 @@ import de.charite.compbio.jannovar.data.ReferenceDictionary;
 import de.charite.compbio.jannovar.impl.intervals.Interval;
 import de.charite.compbio.jannovar.impl.intervals.IntervalArray;
 import de.charite.compbio.jannovar.mendel.IncompatiblePedigreeException;
-import de.charite.compbio.jannovar.mendel.ModeOfInheritance;
+import de.charite.compbio.jannovar.mendel.SubModeOfInheritance;
 import de.charite.compbio.jannovar.mendel.bridge.CannotAnnotateMendelianInheritance;
 import de.charite.compbio.jannovar.mendel.bridge.MendelVCFHeaderExtender;
 import de.charite.compbio.jannovar.mendel.bridge.VariantContextMendelianAnnotator;
@@ -293,10 +293,10 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			throws VariantContextFilterException, CannotAnnotateMendelianInheritance {
 		// Compute compatible modes for all variants in the gene
 		final ArrayList<VariantContext> variantsForGene = activeGenes.get(gene);
-		ImmutableMap<ModeOfInheritance, ImmutableList<VariantContext>> compatibleMap = annotator
-				.computeCompatibleInheritanceModes(variantsForGene);
+		ImmutableMap<SubModeOfInheritance, ImmutableList<VariantContext>> compatibleMap = annotator
+				.computeCompatibleInheritanceSubModes(variantsForGene);
 		// Annotate the variants with new compatible modes
-		for (Entry<ModeOfInheritance, ImmutableList<VariantContext>> e : compatibleMap.entrySet()) {
+		for (Entry<SubModeOfInheritance, ImmutableList<VariantContext>> e : compatibleMap.entrySet()) {
 			for (VariantContext vc : e.getValue()) {
 				activeVariants.get(vc).addCompatibleMode(e.getKey());
 			}
@@ -364,14 +364,20 @@ public class GeneWiseMendelianAnnotationProcessor implements VariantContextProce
 			activeVariants.remove(var.getVariantContext());
 
 			ArrayList<String> modes = new ArrayList<>();
-			modes.addAll(var.getCompatibleModes().stream().map(m -> m.getAbbreviation()).filter(m -> m != null)
-					.collect(Collectors.toList()));
+			modes.addAll(var.getCompatibleModes().stream().map(m -> m.toModeOfInheritance().getAbbreviation())
+					.filter(m -> m != null).collect(Collectors.toList()));
+			ArrayList<String> arSubModes = new ArrayList<>();
+			arSubModes.addAll(var.getCompatibleModes().stream().filter(m -> m.isRecessive())
+					.map(m -> m.getAbbreviation()).filter(m -> m != null).collect(Collectors.toList()));
 
 			if (modes.isEmpty()) {
 				sink.accept(var.getVariantContext());
 			} else {
 				VariantContextBuilder vcBuilder = new VariantContextBuilder(var.getVariantContext());
-				vcBuilder.attribute(MendelVCFHeaderExtender.key(), modes);
+				if (!modes.isEmpty())
+					vcBuilder.attribute(MendelVCFHeaderExtender.key(), modes);
+				if (!arSubModes.isEmpty())
+					vcBuilder.attribute(MendelVCFHeaderExtender.keySub(), arSubModes);
 				sink.accept(vcBuilder.make());
 			}
 		}

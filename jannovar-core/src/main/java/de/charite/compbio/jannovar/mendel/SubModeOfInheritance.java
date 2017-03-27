@@ -26,6 +26,14 @@ public enum SubModeOfInheritance {
 	X_DOMINANT,
 	/** value for encoding uninitialized values */
 	ANY;
+	
+	public boolean isRecessive() {
+		return toModeOfInheritance().isRecessive();
+	}
+
+	public boolean isDominant() {
+		return toModeOfInheritance().isDominant();
+	}
 
 	/** @return shortcut for the ModeOfInheritance */
 	public String getAbbreviation() {
