@@ -27,11 +27,14 @@ import de.charite.compbio.jannovar.mendel.filter.CoordinateSortingChecker;
 import de.charite.compbio.jannovar.mendel.filter.GeneWiseMendelianAnnotationProcessor;
 import de.charite.compbio.jannovar.mendel.filter.VariantContextFilterException;
 import de.charite.compbio.jannovar.mendel.filter.VariantContextProcessor;
+import de.charite.compbio.jannovar.pedigree.Disease;
 import de.charite.compbio.jannovar.pedigree.PedFileContents;
 import de.charite.compbio.jannovar.pedigree.PedFileReader;
 import de.charite.compbio.jannovar.pedigree.PedParseException;
+import de.charite.compbio.jannovar.pedigree.PedPerson;
 import de.charite.compbio.jannovar.pedigree.Pedigree;
 import de.charite.compbio.jannovar.pedigree.Person;
+import de.charite.compbio.jannovar.pedigree.Sex;
 import de.charite.compbio.jannovar.progress.GenomeRegionListFactoryFromSAMSequenceDictionary;
 import de.charite.compbio.jannovar.progress.ProgressReporter;
 import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
@@ -172,7 +175,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				} else {
 					Pedigree pedigree;
 					try {
-						pedigree = loadPedigree();
+						pedigree = loadPedigree(vcfHeader);
 					} catch (IOException e) {
 						System.err.println("Problem loading pedigree from " + options.pathPedFile);
 						System.err.println(e.getMessage());
@@ -206,7 +209,7 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			stream = stream.map(annotator::annotateVariantContext);
 
 			// Extend header with INHERITANCE filter
-			if (options.pathPedFile != null) {
+			if (options.pathPedFile != null || options.annotateAsSingletonPedigree) {
 				System.err.println("Extending header with INHERITANCE...");
 				new MendelVCFHeaderExtender().extendHeader(vcfHeader, "");
 			}
@@ -234,7 +237,12 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 			System.err.println(String.format("Annotation and writing took %.2f sec.",
 					(endTime - startTime) / 1000.0 / 1000.0 / 1000.0));
 		} catch (IncompatiblePedigreeException e) {
-			System.err.println("VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
+			if (options.pathPedFile != null)
+				System.err
+						.println("VCF file " + vcfPath + " is not compatible to pedigree file " + options.pathPedFile);
+			else
+				System.err.println("VCF file " + vcfPath
+						+ " is not compatible with singleton pedigree annotation (do you have exactly one sample in VCF file?)");
 			System.err.println(e.getMessage());
 			System.err.println("\n");
 			e.printStackTrace(System.err);
@@ -253,22 +261,39 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	}
 
 	/**
-	 * Load pedigree from file given in configuration
+	 * Load pedigree from file given in configuration or construct singleton pedigree
 	 * 
+	 * @param vcfHeader
+	 *            {@link VCFHeader}, for checking compatibility and getting sample name in case of singleton pedigree
+	 *            construction
 	 * @throws PedParseException
 	 *             in the case of problems with parsing pedigrees
 	 */
-	private Pedigree loadPedigree() throws PedParseException, IOException {
-		final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
-		final PedFileContents pedContents = pedReader.read();
-		return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+	private Pedigree loadPedigree(VCFHeader vcfHeader)
+			throws PedParseException, IOException, IncompatiblePedigreeException {
+		if (options.pathPedFile != null) {
+			final PedFileReader pedReader = new PedFileReader(new File(options.pathPedFile));
+			final PedFileContents pedContents = pedReader.read();
+			return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+		} else {
+			if (vcfHeader.getSampleNamesInOrder().size() != 1)
+				throw new IncompatiblePedigreeException(
+						"VCF file does not have exactly one sample but required for singleton pedigree construction");
+			final String sampleName = vcfHeader.getSampleNamesInOrder().get(0);
+			final PedPerson pedPerson = new PedPerson(sampleName, sampleName, "0", "0", Sex.UNKNOWN, Disease.AFFECTED);
+			final PedFileContents pedContents = new PedFileContents(ImmutableList.of(), ImmutableList.of(pedPerson));
+			return new Pedigree(pedContents, pedContents.getIndividuals().get(0).getPedigree());
+		}
 	}
 
 	/**
 	 * Construct the mendelian inheritance annotation processors
 	 * 
 	 * @param writer
-	 *            The place to put put the VariantContext to after filtration
+	 *            the place to put put the VariantContext to after filtration
+	 * @param vcfHeader
+	 *            {@link VCFHeader}, for checking compatibility and getting sample name in case of singleton pedigree
+	 *            construction
 	 * @throws IOException
 	 *             in case of problems with opening the pedigree file
 	 * @throws PedParseException
@@ -278,8 +303,8 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 	 */
 	private VariantContextProcessor buildMendelianProcessors(VariantContextWriter writer, VCFHeader vcfHeader)
 			throws PedParseException, IOException, IncompatiblePedigreeException {
-		if (options.pathPedFile != null) {
-			final Pedigree pedigree = loadPedigree();
+		if (options.pathPedFile != null || options.annotateAsSingletonPedigree) {
+			final Pedigree pedigree = loadPedigree(vcfHeader);
 			checkPedigreeCompatibility(pedigree, vcfHeader);
 			final GeneWiseMendelianAnnotationProcessor mendelProcessor = new GeneWiseMendelianAnnotationProcessor(
 					pedigree, jannovarData, vc -> writer.add(vc), options.isInheritanceAnnoUseFilters());
