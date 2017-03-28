@@ -13,5 +13,6 @@ public enum DBSNPVariantAlleleOrigin {
 	/** Has been reported as somatic variant */
 	SOMATIC,
 	/** Has been reported both as germline and somatic variant */
-	BOTH
+	BOTH;
+	
 }

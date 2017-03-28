@@ -1,4 +1,4 @@
-package de.charite.compbio.jannovar.vardbs.dbsnp;
+package de.charite.compbio.jannovar.vardbs.cosmic;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,7 +8,7 @@ import de.charite.compbio.jannovar.vardbs.base.DBAnnotationOptions;
 import de.charite.compbio.jannovar.vardbs.base.JannovarVarDBException;
 import htsjdk.variant.vcf.VCFHeader;
 
-public class DBSNPVCFHeaderExtenderTest {
+public class CosmicVCFHeaderExtenderTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -29,27 +29,21 @@ public class DBSNPVCFHeaderExtenderTest {
 		options.setReportOverlapping(true);
 		options.setReportOverlappingAsMatching(false);
 
-		new DBSNPVCFHeaderExtender(options).addHeaders(header);
+		new CosmicVCFHeaderExtender(options).addHeaders(header);
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(12, header.getInfoHeaderLines().size());
+		Assert.assertEquals(6, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(12, header.getIDHeaderLines().size());
+		Assert.assertEquals(6, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_CAF"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_SAO"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_COMMON"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_CAF"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_G5"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_G5A"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_IDS"));
-		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_SAO"));
+		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_CNT"));
+		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_SNP"));
+		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_IDS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_OVL_CNT"));
+		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_OVL_SNP"));
+		Assert.assertNotNull(header.getInfoHeaderLine("COSMIC_OVL_IDS"));
 	}
 
 }

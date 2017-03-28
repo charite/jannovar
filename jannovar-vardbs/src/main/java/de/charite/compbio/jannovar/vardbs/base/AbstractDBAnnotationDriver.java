@@ -64,7 +64,7 @@ public abstract class AbstractDBAnnotationDriver<RecordType> implements DBAnnota
 					positionOverlaps.addAll(matcher.positionOverlaps(obsVC, dbVC));
 			}
 
-			// Pick best dbSNP record for each alternative allele
+			// Pick best record for each alternative allele
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsMatch = buildAnnotatingDBRecordsWrapper(
 					genotypeMatches);
 			HashMap<Integer, AnnotatingRecord<RecordType>> dbRecordsOverlap = buildAnnotatingDBRecordsWrapper(

@@ -115,7 +115,10 @@ public class DBVariantContextAnnotatorFactoryTest {
 						+ "description: >5% minor allele frequency in each and all populations\">\n"
 						+ "##INFO=<ID=OVL_IDS,Number=A,Type=String,Description=\"dbSNP cluster identifiers with overlapping "
 						+ "alternative positions, not necessarily matching alleles, for each alternative allele, "
-						+ "separated '|'\">\n" + "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n"
+						+ "separated '|'\">\n"
+						+ "##INFO=<ID=OVL_SAO,Number=A,Type=String,Description=\"Variant allele origin (UNSPECIFIED, GERMLINE, SOMATIC, BOTH)\">\n"
+						+ "##INFO=<ID=SAO,Number=A,Type=String,Description=\"Variant allele origin (UNSPECIFIED, GERMLINE, SOMATIC, BOTH)\">\n"
+						+ "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tindividual\n"
 						+ "1\t11022\trs28775022\tG\tA\t.\t.\tIDS=rs28775022;OVL_IDS=rs28775022\tGT\t0/1\n",
 				outStream.toString());
 	}

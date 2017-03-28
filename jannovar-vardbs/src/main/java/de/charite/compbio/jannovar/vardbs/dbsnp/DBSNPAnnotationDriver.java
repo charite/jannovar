@@ -60,6 +60,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 		annotateInfoG5(vc, "", matchRecords, builder);
 		annotateInfoG5A(vc, "", matchRecords, builder);
 		annotateInfoIDs(vc, "", matchRecords, builder);
+		annotateInfoOrigin(vc, "", matchRecords, builder);
 
 		// Annotate with records with overlapping positions
 		if (options.isReportOverlapping() && !options.isReportOverlappingAsMatching()) {
@@ -68,6 +69,7 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			annotateInfoG5(vc, "OVL_", overlapRecords, builder);
 			annotateInfoG5A(vc, "OVL_", overlapRecords, builder);
 			annotateInfoIDs(vc, "OVL_", overlapRecords, builder);
+			annotateInfoOrigin(vc, "OVL_", overlapRecords, builder);
 		}
 
 		return builder.make();
@@ -144,6 +146,26 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			builder.attribute(idCAF, cafList);
 	}
 
+	private void annotateInfoOrigin(VariantContext vc, String infix,
+			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
+		String idOrigin = options.getVCFIdentifierPrefix() + infix + "SAO";
+		ArrayList<String> originList = new ArrayList<>();
+		for (int i = 1; i < vc.getNAlleles(); ++i) {
+			if (records.get(i) != null) {
+				final DBSNPRecord record = records.get(i).getRecord();
+				originList.add(record.getVariantAlleleOrigin().toString());
+			} else {
+				originList.add(DBSNPVariantAlleleOrigin.UNSPECIFIED.toString());
+			}
+		}
+
+		if (originList.stream().allMatch(s -> ("UNSPECIFIED".equals(s))))
+			return; // do not set list of zeroes
+
+		if (!originList.isEmpty())
+			builder.attribute(idOrigin, originList);
+	}
+
 	private void annotateInfoCommon(VariantContext vc, String infix,
 			HashMap<Integer, AnnotatingRecord<DBSNPRecord>> records, VariantContextBuilder builder) {
 		String idCommon = options.getVCFIdentifierPrefix() + infix + "COMMON";
@@ -186,6 +208,9 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 			else
 				vals.add(Joiner.on('|').join(matchList.get(i - 1)));
 		}
+
+		if (vals.stream().allMatch(s -> ".".equals(s)))
+			return; // do not set list of "."
 
 		builder.attribute(idIDs, vals);
 	}

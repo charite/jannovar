@@ -72,6 +72,10 @@ public class DBSNPVCFHeaderExtender extends VCFHeaderExtender {
 							+ "alternative alleles, separated by '|'");
 			header.addMetaDataLine(matchingRS);
 		}
+
+		VCFInfoHeaderLine infoOrigin = new VCFInfoHeaderLine(prefix + infix + "SAO", VCFHeaderLineCount.A,
+				VCFHeaderLineType.String, "Variant allele origin (UNSPECIFIED, GERMLINE, SOMATIC, BOTH)");
+		header.addMetaDataLine(infoOrigin);
 	}
 
 }
