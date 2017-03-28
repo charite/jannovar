@@ -50,6 +50,7 @@
 
 ### jannovar-vardbs
 
+* Adding annotation with COSMIC
 * Fixing header description for exac database
 * Fixing output of `DBSNP_CAF` to also contain reference allele AF
 * Adding annotation with ClinVar, can annotate all clinvar variants
