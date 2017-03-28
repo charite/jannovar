@@ -1,3 +1,4 @@
+##gff-version 3
 ref	BestRefSeq,Gnomon	gene	39762	66397	.	+	.	ID=gene30667;Name=CTNS;Dbxref=GeneID:1497,HGNC:2518,MIM:606272;description=cystinosin%2C lysosomal cystine transporter;gbkey=Gene;gene=CTNS;gene_synonym=CTNS-LSB,PQLC4;part=1%2F1
 ref	BestRefSeq	mRNA	39762	66397	.	+	.	ID=rna62104;Name=NM_004937.2;Parent=gene30667;Dbxref=GeneID:1497,Genbank:NM_004937.2,HGNC:2518,MIM:606272;gbkey=mRNA;gene=CTNS;product=cystinosin%2C lysosomal cystine transporter%2C transcript variant 2;transcript_id=NM_004937.2
 ref	BestRefSeq	exon	39762	40125	.	+	.	ID=id688675;Parent=rna62104;Dbxref=GeneID:1497,Genbank:NM_004937.2,HGNC:2518,MIM:606272;gbkey=mRNA;gene=CTNS;product=cystinosin%2C lysosomal cystine transporter%2C transcript variant 2;transcript_id=NM_004937.2

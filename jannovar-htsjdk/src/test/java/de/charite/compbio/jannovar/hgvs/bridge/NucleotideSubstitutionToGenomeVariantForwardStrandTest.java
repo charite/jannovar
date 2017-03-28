@@ -133,7 +133,7 @@ public class NucleotideSubstitutionToGenomeVariantForwardStrandTest {
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.63664A>C", gVar.toString());
+		Assert.assertEquals("ref:g.63661T>C", gVar.toString());
 	}
 
 	@Test
@@ -144,18 +144,18 @@ public class NucleotideSubstitutionToGenomeVariantForwardStrandTest {
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.63665C>A", gVar.toString());
+		Assert.assertEquals("ref:g.63662G>A", gVar.toString());
 	}
 
 	@Test
 	public void testPositionWithNegativeOffsetInUTR3() throws CannotTranslateHGVSVariant {
-		String hgvsStr = "NM_004937.2(CTNS):c.*1-1T>A";
+		String hgvsStr = "NM_004937.2(CTNS):c.*1-1A>C";
 		HGVSVariant hgvsVar = new HGVSParser().parseHGVSString(hgvsStr);
 		Assert.assertEquals(hgvsStr, hgvsVar.toHGVSString());
 
 		SingleAlleleNucleotideVariant saVar = (SingleAlleleNucleotideVariant) hgvsVar;
 		GenomeVariant gVar = translator.translateNucleotideVariantToGenomeVariant(saVar);
-		Assert.assertEquals("ref:g.63663T>A", gVar.toString());
+		Assert.assertEquals("ref:g.63660A>C", gVar.toString());
 	}
 
 }

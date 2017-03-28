@@ -109,6 +109,7 @@
                                         replace placeholders with values from the pom e.g. ${project.version} -->
                                     <filtering>true</filtering>
                                     <includes>
+                                        <include>project.properties</include>
                                         <include>application.properties</include>
                                         <include>example.settings</include>
                                         <include>test.settings</include>
