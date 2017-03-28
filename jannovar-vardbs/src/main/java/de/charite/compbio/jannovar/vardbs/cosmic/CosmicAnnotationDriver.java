@@ -137,6 +137,9 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
 				vals.add(Joiner.on('|').join(matchList.get(i - 1)));
 		}
 
+		if (vals.stream().allMatch(s -> ".".equals(s)))
+			return; // do not set list of "."
+
 		builder.attribute(idIDs, vals);
 	}
 

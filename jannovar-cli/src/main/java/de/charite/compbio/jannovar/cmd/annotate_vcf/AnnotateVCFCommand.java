@@ -149,6 +149,16 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(clinvarAnno::annotateVariantContext);
 			}
 
+			// If configured, annotate using COSMIC VCF file (extend header to use for writing out)
+			if (options.pathCosmic != null) {
+				DBAnnotationOptions cosmicOptions = DBAnnotationOptions.createDefaults();
+				cosmicOptions.setIdentifierPrefix(options.prefixCosmic);
+				DBVariantContextAnnotator cosmicAnno = new DBVariantContextAnnotatorFactory()
+						.constructCosmic(options.pathCosmic, options.pathFASTARef, cosmicOptions);
+				cosmicAnno.extendHeader(vcfHeader);
+				stream = stream.map(cosmicAnno::annotateVariantContext);
+			}
+
 			// If configured, use threshold-based annotation (extend headr to use for writing out)
 			if (options.useThresholdFilters) {
 				// Build options object for threshold filter

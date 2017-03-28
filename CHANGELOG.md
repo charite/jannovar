@@ -50,6 +50,7 @@
 
 ### jannovar-vardbs
 
+* Also writing out variant allele origin for dbSNP
 * Adding annotation with COSMIC
 * Fixing header description for exac database
 * Fixing output of `DBSNP_CAF` to also contain reference allele AF

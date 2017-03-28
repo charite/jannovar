@@ -33,9 +33,9 @@ public class DBSNPVCFHeaderExtenderTest {
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(10, header.getInfoHeaderLines().size());
+		Assert.assertEquals(12, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(10, header.getIDHeaderLines().size());
+		Assert.assertEquals(12, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
@@ -43,11 +43,13 @@ public class DBSNPVCFHeaderExtenderTest {
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_SAO"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_COMMON"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_CAF"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_G5"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_G5A"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_IDS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_OVL_SAO"));
 	}
 
 }

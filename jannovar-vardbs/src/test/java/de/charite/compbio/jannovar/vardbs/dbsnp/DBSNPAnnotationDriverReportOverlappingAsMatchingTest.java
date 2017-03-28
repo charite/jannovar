@@ -44,9 +44,9 @@ public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPA
 
 		// Check header after extension
 		Assert.assertEquals(0, header.getFilterLines().size());
-		Assert.assertEquals(5, header.getInfoHeaderLines().size());
+		Assert.assertEquals(6, header.getInfoHeaderLines().size());
 		Assert.assertEquals(0, header.getFormatHeaderLines().size());
-		Assert.assertEquals(5, header.getIDHeaderLines().size());
+		Assert.assertEquals(6, header.getIDHeaderLines().size());
 		Assert.assertEquals(0, header.getOtherHeaderLines().size());
 
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_COMMON"));
@@ -54,6 +54,7 @@ public class DBSNPAnnotationDriverReportOverlappingAsMatchingTest extends DBSNPA
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_G5A"));
 		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_IDS"));
+		Assert.assertNotNull(header.getInfoHeaderLine("DBSNP_SAO"));
 	}
 
 	@Test

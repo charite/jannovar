@@ -57,6 +57,12 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 	/** Prefix to use for ClinVar VCF INFO Fields */
 	public String prefixClinVar;
 
+	/** Path to COSMIC VCF file to use for the annotation */
+	public String pathCosmic;
+
+	/** Prefix to use for COSMIC VCF INFO Fields */
+	public String prefixCosmic;
+
 	/** Path to pedigree file */
 	public String pathPedFile;
 
@@ -151,17 +157,21 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				.required(false);
 		annotationGroup.addArgument("--dbsnp-prefix").help("Prefix for dbSNP annotations").setDefault("DBSNP_")
 				.required(false);
-		annotationGroup.addArgument("--exac-vcf").help("Path to ExAC VCF file, activates ExAC annotation").nargs("?")
+		annotationGroup.addArgument("--exac-vcf").help("Path to ExAC VCF file, activates ExAC annotation")
 				.required(false);
 		annotationGroup.addArgument("--exac-prefix").help("Prefix for ExAC annotations").setDefault("EXAC_")
 				.required(false);
-		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation").nargs("?")
+		annotationGroup.addArgument("--uk10k-vcf").help("Path to UK10K VCF file, activates UK10K annotation")
 				.required(false);
 		annotationGroup.addArgument("--uk10k-prefix").help("Prefix for UK10K annotations").setDefault("UK10K_")
 				.required(false);
 		annotationGroup.addArgument("--clinvar-vcf").help("Path to ClinVar file, activates ClinVar annotation")
-				.nargs("?").required(false);
+				.required(false);
 		annotationGroup.addArgument("--clinvar-prefix").help("Prefix for ClinVar annotations").setDefault("CLINVAR_")
+				.required(false);
+		annotationGroup.addArgument("--cosmic-vcf").help("Path to COSMIC file, activates COSMIC annotation")
+				.required(false);
+		annotationGroup.addArgument("--cosmic-prefix").help("Prefix for COSMIC annotations").setDefault("COSMIC_")
 				.required(false);
 		annotationGroup.addArgument("--inheritance-anno-use-filters").help("Use filters in inheritance mode annotation")
 				.setDefault(false).action(Arguments.storeTrue());
@@ -240,6 +250,8 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		prefixUK10K = args.getString("uk10k_prefix");
 		pathClinVar = args.getString("clinvar_vcf");
 		prefixClinVar = args.getString("clinvar_prefix");
+		pathCosmic = args.getString("cosmic_vcf");
+		prefixCosmic = args.getString("cosmic_prefix");
 		inheritanceAnnoUseFilters = args.getBoolean("inheritance_anno_use_filters");
 
 		useThresholdFilters = args.getBoolean("use_threshold_filters");
@@ -258,10 +270,10 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 		offTargetFilterUtrIsOffTarget = args.getBoolean("utr_is_off_target");
 		offTargetFilterIntronicSpliceIsOffTarget = args.getBoolean("intronic_splice_is_off_target");
 
-		if (pathFASTARef == null
-				&& (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null || pathClinVar != null))
+		if (pathFASTARef == null && (pathVCFDBSNP != null || pathVCFExac != null || pathVCFUK10K != null
+				|| pathClinVar != null || pathCosmic != null))
 			throw new CommandLineParsingException(
-					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, or ClinVar annotations.");
+					"Command --ref-fasta required when using dbSNP, ExAC, UK10K, ClinVar, or COSMIC annotations.");
 	}
 
 	public String getPathInputVCF() {
@@ -358,6 +370,30 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 
 	public void setPrefixClinVar(String prefixClinVar) {
 		this.prefixClinVar = prefixClinVar;
+	}
+
+	public String getPathCosmic() {
+		return pathCosmic;
+	}
+
+	public void setPathCosmic(String pathCosmic) {
+		this.pathCosmic = pathCosmic;
+	}
+
+	public String getPrefixCosmic() {
+		return prefixCosmic;
+	}
+
+	public void setPrefixCosmic(String prefixCosmic) {
+		this.prefixCosmic = prefixCosmic;
+	}
+
+	public boolean isAnnotateAsSingletonPedigree() {
+		return annotateAsSingletonPedigree;
+	}
+
+	public void setAnnotateAsSingletonPedigree(boolean annotateAsSingletonPedigree) {
+		this.annotateAsSingletonPedigree = annotateAsSingletonPedigree;
 	}
 
 	public String getPathPedFile() {
@@ -502,18 +538,18 @@ public class JannovarAnnotateVCFOptions extends JannovarAnnotationOptions {
 				+ ", pathOutputVCF=" + pathOutputVCF + ", pathVCFDBSNP=" + pathVCFDBSNP + ", prefixDBSNP=" + prefixDBSNP
 				+ ", pathFASTARef=" + pathFASTARef + ", pathVCFExac=" + pathVCFExac + ", prefixExac=" + prefixExac
 				+ ", pathVCFUK10K=" + pathVCFUK10K + ", prefixUK10K=" + prefixUK10K + ", pathClinVar=" + pathClinVar
-				+ ", prefixClinVar=" + prefixClinVar + ", pathPedFile=" + pathPedFile + ", annotateAsSingletonPedigree="
-				+ annotateAsSingletonPedigree + ", useThresholdFilters=" + useThresholdFilters
-				+ ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet + ", threshFiltMinGtCovHomAlt="
-				+ threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov + ", threshFiltMinGtGq="
-				+ threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet + ", threshFiltMaxGtAafHet="
-				+ threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt=" + threshFiltMinGtAafHomAlt
-				+ ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef + ", threshFiltMaxAlleleFrequencyAd="
-				+ threshFiltMaxAlleleFrequencyAd + ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr
-				+ ", offTargetFilterEnabled=" + offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget="
-				+ offTargetFilterUtrIsOffTarget + ", offTargetFilterIntronicSpliceIsOffTarget="
-				+ offTargetFilterIntronicSpliceIsOffTarget + ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters
-				+ "]";
+				+ ", prefixClinVar=" + prefixClinVar + ", pathCosmic=" + pathCosmic + ", prefixCosmic=" + prefixCosmic
+				+ ", pathPedFile=" + pathPedFile + ", annotateAsSingletonPedigree=" + annotateAsSingletonPedigree
+				+ ", useThresholdFilters=" + useThresholdFilters + ", threshFiltMinGtCovHet=" + threshFiltMinGtCovHet
+				+ ", threshFiltMinGtCovHomAlt=" + threshFiltMinGtCovHomAlt + ", threshFiltMaxCov=" + threshFiltMaxCov
+				+ ", threshFiltMinGtGq=" + threshFiltMinGtGq + ", threshFiltMinGtAafHet=" + threshFiltMinGtAafHet
+				+ ", threshFiltMaxGtAafHet=" + threshFiltMaxGtAafHet + ", threshFiltMinGtAafHomAlt="
+				+ threshFiltMinGtAafHomAlt + ", threshFiltMaxGtAafHomRef=" + threshFiltMaxGtAafHomRef
+				+ ", threshFiltMaxAlleleFrequencyAd=" + threshFiltMaxAlleleFrequencyAd
+				+ ", threshFiltMaxAlleleFrequencyAr=" + threshFiltMaxAlleleFrequencyAr + ", offTargetFilterEnabled="
+				+ offTargetFilterEnabled + ", offTargetFilterUtrIsOffTarget=" + offTargetFilterUtrIsOffTarget
+				+ ", offTargetFilterIntronicSpliceIsOffTarget=" + offTargetFilterIntronicSpliceIsOffTarget
+				+ ", inheritanceAnnoUseFilters=" + inheritanceAnnoUseFilters + "]";
 	}
 
 }
