@@ -1,3 +1,4 @@
+##gff-version 3
 ref	BestRefSeq	gene	200503	437985	.	-	.	ID=gene28326;Name=FBN1;Dbxref=GeneID:2200,HGNC:3603,MIM:134797;description=fibrillin 1;gbkey=Gene;gene=FBN1;gene_synonym=ACMICD,ECTOL1,FBN,GPHYSD2,MASS,MFS1,OCTD,SGS,SSKS,WMS,WMS2;part=1%2F1
 ref	BestRefSeq	mRNA	200503	437985	.	-	.	ID=rna56757;Name=NM_000138.4;Parent=gene28326;Note=The RefSeq transcript has 1 substitution compared to this genomic sequence;Dbxref=GeneID:2200,Genbank:NM_000138.4,HGNC:3603,MIM:134797;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=FBN1;product=fibrillin 1;transcript_id=NM_000138.4
 ref	BestRefSeq	exon	437772	437985	.	-	.	ID=id629654;Parent=rna56757;Note=The RefSeq transcript has 1 substitution compared to this genomic sequence;Dbxref=GeneID:2200,Genbank:NM_000138.4,HGNC:3603,MIM:134797;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=FBN1;product=fibrillin 1;transcript_id=NM_000138.4

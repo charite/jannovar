@@ -30,6 +30,7 @@
 ### jannovar-core
 
 * Extending API to expose mendelian checks for comp het./ad alt (via `SubModuleOfInheritance` and `MendelianInheritanceChecker`
+* Jannovar version is now written out to database file which allows better error checks and compatibility messages
 * Un-deprecating `BestAnnotationListTextGenerator` and `AllAnnotationListTextGenerator` classes, useful for text-based output formats
 * Changing behaviour of `VariantEffect.isOffExome()` and adding a variant that allows to decide between UTR on/off exome and non-consensus splice region on/off exome
 * Making the behaviour of overriding transcripts configurable at least in the code, using default to not do this any more
@@ -41,6 +42,7 @@
 
 ### jannovar-htsjdk
 
+* Fixing bug in transcript-to-genome translation, in HGVS the stop codon is not part of the CDS but in `TranscriptModel` it is
 * Optional interpretation of certain filters in GeneWiseMendelianAnnotationProcessor.
 * Extending interface of `VariantContextAnnotator` for automatic error annotation generation, previously in jannovar-cli
 * Adding `VariantEffectHeaderExtender` class to `jannovar-htsjdk`

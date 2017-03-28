@@ -66,7 +66,7 @@ public class NucleotidePositionConverterTest {
 	public void testConvertUTR3Position() throws CannotTranslateHGVSVariant {
 		NucleotidePointLocation pos = NucleotidePointLocation.buildDownstreamOfCDS(10);
 		GenomePosition gPos = converter.translateNucleotidePointLocation(tm, pos, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.63674", gPos.toString());
+		Assert.assertEquals("ref:g.63671", gPos.toString());
 	}
 
 	@Test
@@ -90,7 +90,7 @@ public class NucleotidePositionConverterTest {
 		NucleotideRange range = new NucleotideRange(NucleotidePointLocation.buildDownstreamOfCDS(10),
 				NucleotidePointLocation.buildDownstreamOfCDS(20));
 		GenomeInterval gItv = converter.translateNucleotideRange(tm, range, SequenceType.CODING_DNA);
-		Assert.assertEquals("ref:g.63674_63684", gItv.toString());
+		Assert.assertEquals("ref:g.63671_63681", gItv.toString());
 	}
 
 }

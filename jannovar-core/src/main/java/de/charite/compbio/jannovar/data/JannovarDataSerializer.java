@@ -5,12 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
+import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.charite.compbio.jannovar.UncheckedJannovarException;
+import de.charite.compbio.jannovar.data.impl.VersionComparator;
 import de.charite.compbio.jannovar.impl.util.StringUtil;
 
 // NOTE(holtgrem): Part of the public interface of the Jannovar library.
@@ -24,11 +28,30 @@ import de.charite.compbio.jannovar.impl.util.StringUtil;
  */
 public final class JannovarDataSerializer {
 
+	/** magic bytes */
+	private final static byte[] MAGIC_BYTES = { 'J', 'V', 'D', 'B' };
+
+	/** the minimal supported version of Jannovar in this version */
+	private final String minVersion = "0.21-SNAPSHOT";
+
 	/** the logger object to use */
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/** path to file to serialize to or deserialize from */
 	private final String filename;
+
+	/**
+	 * @return version string
+	 */
+	public static String getVersion() {
+		final Properties properties = new Properties();
+		try {
+			properties.load(JannovarDataSerializer.class.getResourceAsStream("/project.properties"));
+		} catch (IOException e) {
+			throw new UncheckedJannovarException("Could not load project.properties for obtaining version", e);
+		}
+		return properties.getProperty("version");
+	}
 
 	/**
 	 * Initialize the (de)serializer with the path to the file to load/save.
@@ -63,8 +86,14 @@ public final class JannovarDataSerializer {
 		ObjectOutputStream oos = null;
 		try {
 			fos = new FileOutputStream(filename);
+			// write magic bytes at top of file (before compression)
+			fos.write(MAGIC_BYTES);
+			fos.flush();
 			gzos = new GZIPOutputStream(fos);
 			oos = new ObjectOutputStream(gzos);
+			// write version
+			final String version = getVersion();
+			oos.writeObject(version);
 			oos.writeObject(data);
 		} catch (IOException i) {
 			error = String.format("Could not serialize data file list: %s", i.toString());
@@ -110,8 +139,19 @@ public final class JannovarDataSerializer {
 		ObjectInputStream in = null;
 		try {
 			fileIn = new FileInputStream(filename);
+			// check magic bytes at top of file
+			byte[] word = new byte[4];
+			fileIn.read(word);
+			if (!Arrays.equals(word, MAGIC_BYTES))
+				throw new UncheckedJannovarException(
+						filename + " does not look like a Jannovar database, magic number incorrect!");
 			gzIn = new GZIPInputStream(fileIn);
 			in = new ObjectInputStream(gzIn);
+			String dbVersion = (String) in.readObject();
+			VersionComparator comp = new VersionComparator();
+			if (comp.compare(dbVersion, minVersion) < 0)
+				throw new UncheckedJannovarException(
+						filename + " was created by Jannovar " + dbVersion + " but we need at least " + minVersion);
 			result = (JannovarData) in.readObject();
 		} catch (IOException i) {
 			error = String.format("Could not deserialize data list: %s", i.toString());
