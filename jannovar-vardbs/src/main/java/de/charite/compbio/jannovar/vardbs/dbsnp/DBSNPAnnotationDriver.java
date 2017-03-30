@@ -250,8 +250,9 @@ final public class DBSNPAnnotationDriver extends AbstractDBAnnotationDriver<DBSN
 					final DBSNPRecord update = matchToRecord.get(m).getRecord();
 					if (update.getAlleleFrequenciesG1K().size() <= alleleNo)
 						continue; // no number to update
-					if ((isMatch && current.getAlleleFrequenciesG1K().get(alleleNo - 1) < update
-							.getAlleleFrequenciesG1K().get(alleleNo - 1))
+					if ((isMatch && (current.getAlleleFrequenciesG1K().size() <= alleleNo
+							|| current.getAlleleFrequenciesG1K().get(alleleNo - 1) < update.getAlleleFrequenciesG1K()
+									.get(alleleNo - 1)))
 							|| (!isMatch
 									&& current.highestAlleleFreqG1KOverall() < update.highestAlleleFreqG1KOverall()))
 						annotatingDBSNPRecord.put(alleleNo, matchToRecord.get(m));
