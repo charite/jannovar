@@ -31,7 +31,7 @@ public final class AlleleMatcher {
 	}
 
 	/**
-	 * Match genotypes of two {@link VariantContext}s
+	 * Match genotypes of two {@link VariantContext}s (chrom, position, ref, and alt have to be equal)
 	 * 
 	 * Indels will be left-shifted and normalized when necessary
 	 * 
@@ -97,6 +97,15 @@ public final class AlleleMatcher {
 		return result;
 	}
 
+	/**
+	 * Convert a {@link VariantContext} to a list of normalized variant descriptions
+	 *
+	 * This will generate one {@link VariantDescription} for each alternative allele in <code>vcf</code>.
+	 *
+	 * @param vc
+	 *            {@link VariantContext} to convert
+	 * @return A {@link Collection} of {@link VariantDescription} objects corresponding to <code>vc</code>
+	 */
 	private Collection<VariantDescription> ctxToVariants(VariantContext vc) {
 		List<VariantDescription> vars = new ArrayList<>();
 		for (int i = 1; i < vc.getNAlleles(); ++i) {

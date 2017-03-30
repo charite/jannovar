@@ -28,7 +28,7 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<UK10KRecord>> pickAnnotatingDBRecords(
 			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<UK10KRecord>> matchToRecord) {
+			HashMap<GenotypeMatch, AnnotatingRecord<UK10KRecord>> matchToRecord, boolean isMatch) {
 		// Pick best annotation for each alternative allele
 		HashMap<Integer, AnnotatingRecord<UK10KRecord>> annotatingRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
@@ -41,8 +41,10 @@ public class UK10KAnnotationDriver extends AbstractDBAnnotationDriver<UK10KRecor
 					final UK10KRecord update = matchToRecord.get(m).getRecord();
 					if (update.getAltAlleleFrequencies().size() <= alleleNo)
 						continue; // no number to update
-					else if (current.getAltAlleleFrequencies().size() <= alleleNo || current.getAltAlleleFrequencies()
-							.get(alleleNo) < update.getAltAlleleFrequencies().get(alleleNo))
+
+					if ((isMatch && current.getAltAlleleFrequencies().get(alleleNo - 1) < update
+							.getAltAlleleFrequencies().get(alleleNo - 1))
+							|| (!isMatch && current.highestAlleleCountOverall() < update.highestAlleleCountOverall()))
 						annotatingRecord.put(alleleNo, matchToRecord.get(m));
 				}
 			}

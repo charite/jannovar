@@ -71,6 +71,10 @@ public class UK10KRecord {
 		return altAlleleCounts;
 	}
 
+	public int highestAlleleCountOverall() {
+		return altAlleleCounts.stream().max(Integer::compare).orElse(0);
+	}
+
 	public int getChromCount() {
 		return chromCount;
 	}

@@ -129,6 +129,26 @@ public class AnnotateVCFCommand extends JannovarAnnotationCommand {
 				stream = stream.map(exacAnno::annotateVariantContext);
 			}
 
+			// If configured, annotate using gnomAD exomes VCF file (extend header to use for writing out)
+			if (options.pathVCFGnomadExomes != null) {
+				DBAnnotationOptions gnomadOptions = DBAnnotationOptions.createDefaults();
+				gnomadOptions.setIdentifierPrefix(options.prefixVCFGnomadExomes);
+				DBVariantContextAnnotator gnomadExomesAnno = new DBVariantContextAnnotatorFactory()
+						.constructGnomad(options.pathVCFGnomadExomes, options.pathFASTARef, gnomadOptions);
+				gnomadExomesAnno.extendHeader(vcfHeader);
+				stream = stream.map(gnomadExomesAnno::annotateVariantContext);
+			}
+
+			// If configured, annotate using gnomAD genomes VCF file (extend header to use for writing out)
+			if (options.pathVCFGnomadExomes != null) {
+				DBAnnotationOptions gnomadOptions = DBAnnotationOptions.createDefaults();
+				gnomadOptions.setIdentifierPrefix(options.prefixVCFGnomadExomes);
+				DBVariantContextAnnotator gnomadGenomesAnno = new DBVariantContextAnnotatorFactory()
+						.constructGnomad(options.pathVCFGnomadExomes, options.pathFASTARef, gnomadOptions);
+				gnomadGenomesAnno.extendHeader(vcfHeader);
+				stream = stream.map(gnomadGenomesAnno::annotateVariantContext);
+			}
+
 			// If configured, annotate using UK10K VCF file (extend header to use for writing out)
 			if (options.pathVCFUK10K != null) {
 				DBAnnotationOptions exacOptions = DBAnnotationOptions.createDefaults();

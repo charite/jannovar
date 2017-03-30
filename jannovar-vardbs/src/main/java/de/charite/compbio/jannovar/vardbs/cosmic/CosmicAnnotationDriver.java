@@ -31,7 +31,7 @@ public class CosmicAnnotationDriver extends AbstractDBAnnotationDriver<CosmicRec
 	@Override
 	protected HashMap<Integer, AnnotatingRecord<CosmicRecord>> pickAnnotatingDBRecords(
 			HashMap<Integer, ArrayList<GenotypeMatch>> annotatingRecords,
-			HashMap<GenotypeMatch, AnnotatingRecord<CosmicRecord>> matchToRecord) {
+			HashMap<GenotypeMatch, AnnotatingRecord<CosmicRecord>> matchToRecord, boolean isMatch) {
 		// Pick best annotation for each alternative allele
 		HashMap<Integer, AnnotatingRecord<CosmicRecord>> annotatingRecord = new HashMap<>();
 		for (Entry<Integer, ArrayList<GenotypeMatch>> entry : annotatingRecords.entrySet()) {
